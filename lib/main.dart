@@ -165,6 +165,37 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String uid;
   late DatabaseReference ref;
+  Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
+    List<String> issues = [];
+
+    devices.forEach((id, raw) {
+      final d = safeMap(raw);
+
+      final name = d["name"]?.toString() ?? id;
+      final status = d["status"]?.toString();
+      final tamper = d["tamper"] == true;
+
+      List<String> problem = [];
+
+      if (status != "closed") {
+        problem.add("Mở");
+      }
+
+      if (tamper) {
+        problem.add("Bị tháo");
+      }
+
+      if (problem.isNotEmpty) {
+        issues.add("$name: ${problem.join(" & ")}");
+      }
+    });
+
+    return {
+      "safe": issues.isEmpty,
+      "issues": issues
+    };
+  }
+
 
   Map<String, dynamic> homes = {};
   String selectedHome = "";
@@ -203,8 +234,11 @@ class _HomePageState extends State<HomePage> {
       final map = safeMap(data);
       final homesData = safeMap(map["homes"]);
 
-      if (selectedHome.isEmpty || !homesData.containsKey(selectedHome)) {
-        selectedHome = homesData.isNotEmpty ? homesData.keys.first : "";
+      if (homesData.isNotEmpty) {
+        // luôn ưu tiên home đầu tiên khi mở app hoặc khi load lại data lần đầu
+        selectedHome = homesData.keys.first;
+      } else {
+        selectedHome = "";
       }
 
       homeOrder = homesData.keys.toList();
@@ -452,83 +486,91 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
             height: 70,
-            padding: EdgeInsets.all(8),
-            child: ReorderableListView(
-              scrollDirection: Axis.horizontal,
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) newIndex--;
-                  final item = homeOrder.removeAt(oldIndex);
-                  homeOrder.insert(newIndex, item);
-                });
-              },
-              children: homeOrder.map((h) {
-                return Container(
-                  key: ValueKey(h),
-                  margin: EdgeInsets.symmetric(horizontal: 6),
-                  child: GestureDetector(
-                    onTap: () => setState(() => selectedHome = h),
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: getHomeColor(h),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(homes[h]?["name"] ?? h,
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-
-          Expanded(
-            child: Column(
+            child: Row(
               children: [
+
+                // ================= ALL HOME (LEFT FIXED) =================
                 Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Devices - $selectedHome"),
-                      Row(
-                        children: [
-                          FloatingActionButton.small(
-                            heroTag: "pair",
-                            onPressed: showPairDialog,
-                            child: Icon(Icons.link),
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AllHomePage(homes: homes),
                           ),
-                          SizedBox(width: 10),
-                          FloatingActionButton.small(
-                            heroTag: "qr",
-                            onPressed: scanQR,
-                            child: Icon(Icons.qr_code_scanner),
+                        );
+                      },
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+
+                          // 🤍 trắng sáng nhẹ (clean premium)
+                          color: Colors.white,
+
+                          // 💡 bóng nhẹ để nổi lên nền
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+
+                        child: Center(
+                          child: Icon(
+                            Icons.dashboard_rounded,
+                            color: Colors.black87, // tương phản đẹp với nền trắng
+                            size: 28,
                           ),
-                        ],
-                      )
-                    ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
 
-                if (pairingCountdown > 0)
-                  Text("Pairing: $pairingCountdown s"),
-
+                // ================= HOME LIST (SCROLLABLE) =================
                 Expanded(
-                  child: ListView(
-                    children: devices.entries.map((e) {
-                      final d = safeMap(e.value);
-
-                      return Card(
-                        color: getDeviceColor(d),
-                        child: ListTile(
-                          title: Text(d["name"]?.toString() ?? e.key),
-                          subtitle: Text(
-                              "${d["status"] ?? "unknown"} | Tamper: ${d["tamper"] == true ? "Bất thường" : "Bình thường"}"),
-                          onLongPress: () => renameDevice(e.key),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => deleteDevice(e.key),
+                  child: ReorderableListView(
+                    scrollDirection: Axis.horizontal,
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        if (newIndex > oldIndex) newIndex--;
+                        final item = homeOrder.removeAt(oldIndex);
+                        homeOrder.insert(newIndex, item);
+                      });
+                    },
+                    children: homeOrder.map((h) {
+                      return Container(
+                        key: ValueKey(h),
+                        margin: EdgeInsets.symmetric(horizontal: 6),
+                        child: GestureDetector(
+                          onTap: () => setState(() => selectedHome = h),
+                          child: Container(
+                            width: 80,
+                            height: 60,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: getHomeColor(h),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              homes[h]?["name"] ?? h,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ),
                       );
@@ -538,8 +580,272 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Builder(
+                    builder: (_) {
+                      final overall = getOverallStatus(devices);
+
+                      return Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: overall["safe"]
+                              ? Colors.green.shade100
+                              : Colors.red.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // ===== STATUS =====
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        overall["safe"] ? Icons.verified : Icons.warning,
+                                        color: overall["safe"] ? Colors.green : Colors.red,
+                                      ),
+                                      SizedBox(width: 6),
+                                      Text(
+                                        overall["safe"]
+                                            ? "ĐÃ AN TOÀN"
+                                            : "CHƯA AN TOÀN",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          color: overall["safe"] ? Colors.green : Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  if (!overall["safe"])
+                                    ...overall["issues"].map<Widget>((e) => Text(
+                                      "- $e",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 13,
+                                      ),
+                                    )),
+                                ],
+                              ),
+                            ),
+
+                            // ===== BUTTONS =====
+                            Row(
+                              children: [
+                                FloatingActionButton.small(
+                                  heroTag: "pair",
+                                  onPressed: showPairDialog,
+                                  child: Icon(Icons.link),
+                                ),
+                                SizedBox(width: 8),
+                                FloatingActionButton.small(
+                                  heroTag: "qr",
+                                  onPressed: scanQR,
+                                  child: Icon(Icons.qr_code_scanner),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                if (pairingCountdown > 0)
+                  Text("Pairing: $pairingCountdown s"),
+
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+
+                        // 📦 VIỀN TOÀN BỘ BẢNG DEVICE
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.15),
+                          width: 1,
+                        ),
+
+                        borderRadius: BorderRadius.circular(16),
+
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+
+                      child: Column(
+                        children: [
+                          // ===== HEADER PANEL =====
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.white.withOpacity(0.1),
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.sensors, color: Colors.white70, size: 18),
+                                SizedBox(width: 6),
+                                Text(
+                                  "DEVICES",
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // ===== DEVICE LIST =====
+                          Expanded(
+                            child: ListView(
+                              children: devices.entries.map((e) {
+                                final d = safeMap(e.value);
+
+                                return Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+
+                                  decoration: BoxDecoration(
+                                    color: getDeviceColor(d).withOpacity(0.9),
+
+                                    borderRadius: BorderRadius.circular(12),
+
+                                    // 👇 VIỀN TỪNG DEVICE
+                                    border: Border.all(
+                                      color: (d["status"] != "closed" || d["tamper"] == true)
+                                          ? Colors.red.shade300
+                                          : Colors.green.shade300,
+                                      width: 1,
+                                    ),
+                                  ),
+
+                                  child: ListTile(
+                                    dense: true,
+
+                                    title: Text(
+                                      d["name"]?.toString() ?? e.key,
+                                      style: TextStyle(fontSize: 13),
+                                    ),
+
+                                    subtitle: Text(
+                                      "${d["status"] ?? "unknown"} | ${d["tamper"] == true ? "Tamper" : "Normal"}",
+                                      style: TextStyle(fontSize: 11),
+                                    ),
+
+                                    onLongPress: () => renameDevice(e.key),
+
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.delete, size: 18),
+                                      onPressed: () => deleteDevice(e.key),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+// ================= ALL HOME PAGE =================
+class AllHomePage extends StatelessWidget {
+  final Map<String, dynamic> homes;
+
+  AllHomePage({required this.homes});
+
+  Map<String, dynamic> safeMap(dynamic data) {
+    if (data == null) return {};
+    return Map<String, dynamic>.from(data as Map);
+  }
+
+  bool isUnsafe(Map dev) {
+    return dev.values.any((d) {
+      final status = d["status"]?.toString();
+      final tamper = d["tamper"] == true;
+      return status != "closed" || tamper;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("All Homes")),
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: GridView.builder(
+          itemCount: homes.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 5, // 👈 1 hàng 5 ô
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemBuilder: (context, index) {
+            final e = homes.entries.elementAt(index);
+            final homeId = e.key;
+            final data = safeMap(e.value);
+            final devices = safeMap(data["devices"]);
+            final unsafe = isUnsafe(devices);
+
+            return InkWell(
+              onTap: () {
+                Navigator.pop(context, homeId); // 👈 optional: quay lại chọn home
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: unsafe ? Colors.red.shade300 : Colors.green.shade300,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      data["name"] ?? homeId,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      )
     );
   }
 }
