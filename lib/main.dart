@@ -1,21 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'firebase_options.dart';
+
+import '../firebase_options.dart';
+import 'all_home_page.dart';
+import 'device_list.dart';
+import 'home_tabs.dart';
+import 'status_panel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(SafeHomeApp());
 }
 
-// ================= ROOT =================
 class SafeHomeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,6 @@ class SafeHomeApp extends StatelessWidget {
   }
 }
 
-// ================= AUTH =================
 class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,6 @@ class AuthGate extends StatelessWidget {
   }
 }
 
-// ================= LOGIN =================
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> submit() async {
     setState(() => error = "");
-
     try {
       if (isLogin) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -63,23 +62,16 @@ class _LoginPageState extends State<LoginPage> {
           password: pass.text.trim(),
         );
       } else {
-        final cred = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
+        final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text.trim(),
           password: pass.text.trim(),
         );
-
         final uid = cred.user!.uid;
-
         await FirebaseDatabase.instance.ref("accounts/$uid").set({
           "homes": {
-            "home1": {"name": "Home 1", "devices": {}}
+            "home1": {"name": "Home 1", "devices": {}},
           },
-          "alarm": {
-            "enabled": false,
-            "start": "23:00",
-            "end": "06:00"
-          }
+          "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
         });
       }
     } on FirebaseAuthException catch (e) {
@@ -114,15 +106,19 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("SafeHome",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              Text(
+                "SafeHome",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
               TextField(
-                  controller: email,
-                  decoration: InputDecoration(labelText: "Email")),
+                controller: email,
+                decoration: InputDecoration(labelText: "Email"),
+              ),
               TextField(
-                  controller: pass,
-                  obscureText: true,
-                  decoration: InputDecoration(labelText: "Password")),
+                controller: pass,
+                obscureText: true,
+                decoration: InputDecoration(labelText: "Password"),
+              ),
 
               if (error.isNotEmpty)
                 Padding(
@@ -144,9 +140,11 @@ class _LoginPageState extends State<LoginPage> {
                     error = "";
                   });
                 },
-                child: Text(isLogin
-                    ? "Chưa có tài khoản? Đăng ký"
-                    : "Đã có tài khoản? Đăng nhập"),
+                child: Text(
+                  isLogin
+                      ? "Chưa có tài khoản? Đăng ký"
+                      : "Đã có tài khoản? Đăng nhập",
+                ),
               ),
             ],
           ),
@@ -163,8 +161,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  PreferredSizeWidget buildSafeHomeAppBar() {
+    return AppBar(
+      title: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.blueAccent.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(Icons.home_rounded, color: Colors.blueAccent, size: 20),
+          ),
+
+          SizedBox(width: 10),
+
+          Text(
+            "SafeHome",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+
+      centerTitle: false,
+
+      elevation: 0,
+    );
+  }
+
   late String uid;
   late DatabaseReference ref;
+
   Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     List<String> issues = [];
 
@@ -190,12 +221,8 @@ class _HomePageState extends State<HomePage> {
       }
     });
 
-    return {
-      "safe": issues.isEmpty,
-      "issues": issues
-    };
+    return {"safe": issues.isEmpty, "issues": issues};
   }
-
 
   Map<String, dynamic> homes = {};
   String selectedHome = "";
@@ -234,17 +261,32 @@ class _HomePageState extends State<HomePage> {
       final map = safeMap(data);
       final homesData = safeMap(map["homes"]);
 
-      if (homesData.isNotEmpty) {
-        // luôn ưu tiên home đầu tiên khi mở app hoặc khi load lại data lần đầu
-        selectedHome = homesData.keys.first;
-      } else {
-        selectedHome = "";
-      }
-
-      homeOrder = homesData.keys.toList();
-
       setState(() {
         homes = homesData;
+
+        final savedOrder = map["homeOrder"];
+
+        if (savedOrder != null) {
+          homeOrder = List<String>.from(savedOrder);
+
+          // thêm home mới chưa có
+          for (final id in homesData.keys) {
+            if (!homeOrder.contains(id)) {
+              homeOrder.add(id);
+            }
+          }
+        } else {
+          homeOrder = homesData.keys.toList();
+        }
+
+        // 🔥 FIX QUAN TRỌNG: chọn home đầu tiên theo ORDER
+        if (homeOrder.isNotEmpty) {
+          if (!homeOrder.contains(selectedHome)) {
+            selectedHome = homeOrder.first; // 👈 HOME NGOÀI CÙNG BÊN PHẢI
+          }
+        } else {
+          selectedHome = "";
+        }
 
         final alarm = safeMap(map["alarm"]);
         alarmEnabled = alarm["enabled"] == true;
@@ -266,7 +308,7 @@ class _HomePageState extends State<HomePage> {
       "homeId": selectedHome,
       "hubId": hubId,
       "requestedBy": uid,
-      "time": DateTime.now().millisecondsSinceEpoch
+      "time": DateTime.now().millisecondsSinceEpoch,
     });
 
     setState(() => pairingCountdown = 60);
@@ -295,11 +337,13 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Hủy")),
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
           ElevatedButton(
-              onPressed: () => Navigator.pop(context, controller.text),
-              child: Text("Pair")),
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text("Pair"),
+          ),
         ],
       ),
     );
@@ -338,8 +382,14 @@ class _HomePageState extends State<HomePage> {
       builder: (_) => AlertDialog(
         title: Text(title),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text("Không")),
-          ElevatedButton(onPressed: () => Navigator.pop(context, true), child: Text("OK")),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("Không"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("OK"),
+          ),
         ],
       ),
     );
@@ -372,8 +422,14 @@ class _HomePageState extends State<HomePage> {
         title: Text("Tên Home"),
         content: TextField(controller: controller),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text("Hủy")),
-          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text), child: Text("OK")),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text("OK"),
+          ),
         ],
       ),
     );
@@ -382,16 +438,18 @@ class _HomePageState extends State<HomePage> {
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$id")
-        .set({"name": name, "devices": {}});
+    await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
+      "name": name,
+      "devices": {},
+    });
   }
 
   // ================= RESTORED FULL FUNCTIONS =================
 
   void renameHome() async {
     final controller = TextEditingController(
-        text: homes[selectedHome]?["name"] ?? selectedHome);
+      text: homes[selectedHome]?["name"] ?? selectedHome,
+    );
 
     final name = await showDialog<String>(
       context: context,
@@ -399,8 +457,14 @@ class _HomePageState extends State<HomePage> {
         title: Text("Rename Home"),
         content: TextField(controller: controller),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text("Hủy")),
-          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text), child: Text("OK")),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text("OK"),
+          ),
         ],
       ),
     );
@@ -414,7 +478,8 @@ class _HomePageState extends State<HomePage> {
 
   void renameDevice(String id) async {
     final controller = TextEditingController(
-        text: getDevices()[id]?["name"] ?? id);
+      text: getDevices()[id]?["name"] ?? id,
+    );
 
     final name = await showDialog<String>(
       context: context,
@@ -422,8 +487,14 @@ class _HomePageState extends State<HomePage> {
         title: Text("Rename Device"),
         content: TextField(controller: controller),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text("Hủy")),
-          ElevatedButton(onPressed: () => Navigator.pop(context, controller.text), child: Text("OK")),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, controller.text),
+            child: Text("OK"),
+          ),
         ],
       ),
     );
@@ -445,7 +516,7 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance.ref("accounts/$uid/alarm").update({
       "enabled": true,
       "start": "${start.hour}:${start.minute}",
-      "end": "${end.hour}:${end.minute}"
+      "end": "${end.hour}:${end.minute}",
     });
   }
 
@@ -454,8 +525,10 @@ class _HomePageState extends State<HomePage> {
     final unsafe = isUnsafe(dev);
     final selected = h == selectedHome;
 
-    if (selected) return unsafe ? Colors.red : Colors.green;
-    return unsafe ? Colors.red.shade200 : Colors.green.shade200;
+    if (selected) {
+      return unsafe ? Colors.red.shade500 : Colors.green.shade500;
+    }
+    return unsafe ? Colors.red.shade300 : Colors.green.shade300;
   }
 
   Color getDeviceColor(Map d) {
@@ -484,368 +557,57 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 70,
-            child: Row(
-              children: [
+          HomeTabs(
+            homes: homes,
+            homeOrder: homeOrder,
+            selectedHome: selectedHome,
 
-                // ================= ALL HOME (LEFT FIXED) =================
-                Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AllHomePage(homes: homes),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
+            onSelect: (h) {
+              setState(() => selectedHome = h);
+            },
 
-                          // 🤍 trắng sáng nhẹ (clean premium)
-                          color: Colors.white,
+            onReorder: (oldIndex, newIndex) async {
+              setState(() {
+                if (newIndex > oldIndex) newIndex--;
 
-                          // 💡 bóng nhẹ để nổi lên nền
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
+                final item = homeOrder.removeAt(oldIndex);
 
-                        child: Center(
-                          child: Icon(
-                            Icons.dashboard_rounded,
-                            color: Colors.black87, // tương phản đẹp với nền trắng
-                            size: 28,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                homeOrder.insert(newIndex, item);
+              });
 
-                // ================= HOME LIST (SCROLLABLE) =================
-                Expanded(
-                  child: ReorderableListView(
-                    scrollDirection: Axis.horizontal,
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        if (newIndex > oldIndex) newIndex--;
-                        final item = homeOrder.removeAt(oldIndex);
-                        homeOrder.insert(newIndex, item);
-                      });
-                    },
-                    children: homeOrder.map((h) {
-                      return Container(
-                        key: ValueKey(h),
-                        margin: EdgeInsets.symmetric(horizontal: 6),
-                        child: GestureDetector(
-                          onTap: () => setState(() => selectedHome = h),
-                          child: Container(
-                            width: 80,
-                            height: 60,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: getHomeColor(h),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              homes[h]?["name"] ?? h,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
+              await FirebaseDatabase.instance
+                  .ref("accounts/$uid/homeOrder")
+                  .set(homeOrder);
+            },
+
+            getHomeColor: getHomeColor,
+
+            onOpenAllHome: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => AllHomePage(homes: homes)),
+              );
+            },
           ),
-
           Expanded(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Builder(
-                    builder: (_) {
-                      final overall = getOverallStatus(devices);
-
-                      return Container(
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: overall["safe"]
-                              ? Colors.green.shade100
-                              : Colors.red.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // ===== STATUS =====
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        overall["safe"] ? Icons.verified : Icons.warning,
-                                        color: overall["safe"] ? Colors.green : Colors.red,
-                                      ),
-                                      SizedBox(width: 6),
-                                      Text(
-                                        overall["safe"]
-                                            ? "ĐÃ AN TOÀN"
-                                            : "CHƯA AN TOÀN",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          color: overall["safe"] ? Colors.green : Colors.red,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  if (!overall["safe"])
-                                    ...overall["issues"].map<Widget>((e) => Text(
-                                      "- $e",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 13,
-                                      ),
-                                    )),
-                                ],
-                              ),
-                            ),
-
-                            // ===== BUTTONS =====
-                            Row(
-                              children: [
-                                FloatingActionButton.small(
-                                  heroTag: "pair",
-                                  onPressed: showPairDialog,
-                                  child: Icon(Icons.link),
-                                ),
-                                SizedBox(width: 8),
-                                FloatingActionButton.small(
-                                  heroTag: "qr",
-                                  onPressed: scanQR,
-                                  child: Icon(Icons.qr_code_scanner),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                StatusPanel(
+                  overall: getOverallStatus(devices),
+                  onPair: showPairDialog,
+                  onQR: scanQR,
                 ),
-
-                if (pairingCountdown > 0)
-                  Text("Pairing: $pairingCountdown s"),
-
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
-
-                        // 📦 VIỀN TOÀN BỘ BẢNG DEVICE
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.15),
-                          width: 1,
-                        ),
-
-                        borderRadius: BorderRadius.circular(16),
-
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),
-
-                      child: Column(
-                        children: [
-                          // ===== HEADER PANEL =====
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.white.withOpacity(0.1),
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.sensors, color: Colors.white70, size: 18),
-                                SizedBox(width: 6),
-                                Text(
-                                  "DEVICES",
-                                  style: TextStyle(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1.2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          // ===== DEVICE LIST =====
-                          Expanded(
-                            child: ListView(
-                              children: devices.entries.map((e) {
-                                final d = safeMap(e.value);
-
-                                return Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-
-                                  decoration: BoxDecoration(
-                                    color: getDeviceColor(d).withOpacity(0.9),
-
-                                    borderRadius: BorderRadius.circular(12),
-
-                                    // 👇 VIỀN TỪNG DEVICE
-                                    border: Border.all(
-                                      color: (d["status"] != "closed" || d["tamper"] == true)
-                                          ? Colors.red.shade300
-                                          : Colors.green.shade300,
-                                      width: 1,
-                                    ),
-                                  ),
-
-                                  child: ListTile(
-                                    dense: true,
-
-                                    title: Text(
-                                      d["name"]?.toString() ?? e.key,
-                                      style: TextStyle(fontSize: 13),
-                                    ),
-
-                                    subtitle: Text(
-                                      "${d["status"] ?? "unknown"} | ${d["tamper"] == true ? "Tamper" : "Normal"}",
-                                      style: TextStyle(fontSize: 11),
-                                    ),
-
-                                    onLongPress: () => renameDevice(e.key),
-
-                                    trailing: IconButton(
-                                      icon: Icon(Icons.delete, size: 18),
-                                      onPressed: () => deleteDevice(e.key),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
+                DeviceList(
+                  devices: devices,
+                  onRename: renameDevice,
+                  onDelete: deleteDevice,
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-// ================= ALL HOME PAGE =================
-class AllHomePage extends StatelessWidget {
-  final Map<String, dynamic> homes;
-
-  AllHomePage({required this.homes});
-
-  Map<String, dynamic> safeMap(dynamic data) {
-    if (data == null) return {};
-    return Map<String, dynamic>.from(data as Map);
-  }
-
-  bool isUnsafe(Map dev) {
-    return dev.values.any((d) {
-      final status = d["status"]?.toString();
-      final tamper = d["tamper"] == true;
-      return status != "closed" || tamper;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("All Homes")),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: GridView.builder(
-          itemCount: homes.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5, // 👈 1 hàng 5 ô
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemBuilder: (context, index) {
-            final e = homes.entries.elementAt(index);
-            final homeId = e.key;
-            final data = safeMap(e.value);
-            final devices = safeMap(data["devices"]);
-            final unsafe = isUnsafe(devices);
-
-            return InkWell(
-              onTap: () {
-                Navigator.pop(context, homeId); // 👈 optional: quay lại chọn home
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: unsafe ? Colors.red.shade300 : Colors.green.shade300,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      data["name"] ?? homeId,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      )
     );
   }
 }
