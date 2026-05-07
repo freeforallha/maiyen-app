@@ -585,7 +585,10 @@ class _HomePageState extends State<HomePage> {
             onOpenAllHome: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => AllHomePage(homes: homes)),
+                MaterialPageRoute(
+                  builder: (_) =>
+                      AllHomePage(homes: homes, homeOrder: homeOrder),
+                ),
               );
             },
           ),

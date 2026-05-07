@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AllHomePage extends StatelessWidget {
   final Map<String, dynamic> homes;
+  final List<String> homeOrder;
 
-  AllHomePage({required this.homes});
+  AllHomePage({required this.homes, required this.homeOrder});
 
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
@@ -25,16 +26,15 @@ class AllHomePage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(6),
         child: GridView.builder(
-          itemCount: homes.length,
+          itemCount: homeOrder.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
           itemBuilder: (context, index) {
-            final e = homes.entries.elementAt(index);
-            final homeId = e.key;
-            final data = safeMap(e.value);
+            final homeId = homeOrder[index];
+            final data = safeMap(homes[homeId]);
             final devices = safeMap(data["devices"]);
             final unsafe = isUnsafe(devices);
 
@@ -48,19 +48,26 @@ class AllHomePage extends StatelessWidget {
                   color: unsafe ? Colors.red.shade300 : Colors.green.shade300,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      data["name"] ?? homeId,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        data["name"] ?? homeId,
+                        textAlign: TextAlign.center,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          height: 1.15,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
