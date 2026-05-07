@@ -161,6 +161,88 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void showDeviceMenu(String deviceId, Map d) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        final status = d["status"]?.toString();
+        final tamper = d["tamper"] == true;
+
+        return Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                d["name"] ?? deviceId,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+
+              SizedBox(height: 15),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    status == "closed" ? Icons.check_circle : Icons.cancel,
+                    color: status == "closed" ? Colors.green : Colors.red,
+                  ),
+                  SizedBox(width: 6),
+                  Text(status == "closed" ? "Đang Đóng" : "Đang Mở"),
+                ],
+              ),
+
+              SizedBox(height: 5),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    tamper ? Icons.warning : Icons.verified,
+                    color: tamper ? Colors.red : Colors.green,
+                  ),
+                  SizedBox(width: 6),
+                  Text(tamper ? "Bị tháo" : "Bình thường"),
+                ],
+              ),
+
+              SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      renameDevice(deviceId);
+                    },
+                    icon: Icon(Icons.edit),
+                    label: Text("Rename"),
+                  ),
+
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      deleteDevice(deviceId);
+                    },
+                    icon: Icon(Icons.delete),
+                    label: Text("Delete"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   PreferredSizeWidget buildSafeHomeAppBar() {
     return AppBar(
       title: Row(
@@ -531,6 +613,159 @@ class _HomePageState extends State<HomePage> {
     return unsafe ? Colors.red.shade300 : Colors.green.shade300;
   }
 
+  void showDeviceDetail(String id) {
+    final d = safeMap(getDevices()[id]);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.grey.shade900,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) {
+        final linkquality = d["linkquality"];
+        final battery = d["battery"];
+        final lastSeen = d["last_seen"];
+        final status = d["status"];
+        final tamper = d["tamper"] == true;
+
+        return Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 50,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      d["name"] ?? id,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.edit_rounded, color: Colors.blueAccent),
+                      iconSize: 18,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        renameDevice(id);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              SizedBox(height: 20),
+
+              infoRow(
+                Icons.sensor_door,
+                "Door",
+                status == "closed" ? "Đang đóng" : "Đang mở",
+              ),
+
+              infoRow(
+                Icons.security,
+                "Tamper",
+                tamper ? "Bị tháo" : "Bình thường",
+              ),
+
+              infoRow(
+                Icons.battery_full,
+                "Battery",
+                battery != null ? "$battery%" : "N/A",
+              ),
+
+              infoRow(
+                Icons.network_cell,
+                "Signal",
+                linkquality != null ? "$linkquality" : "N/A",
+              ),
+
+              infoRow(
+                Icons.access_time,
+                "Last Seen",
+                lastSeen?.toString() ?? "N/A",
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.delete_rounded),
+                    color: Colors.grey.shade400,
+                    iconSize: 22,
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      final ok = await confirm("Xóa device?");
+                      if (ok) deleteDevice(id);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget infoRow(IconData icon, String title, String value) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 14),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white70, size: 20),
+
+          SizedBox(width: 12),
+
+          Text(
+            "$title:",
+            style: TextStyle(color: Colors.white70, fontSize: 15),
+          ),
+
+          Spacer(),
+
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Color getDeviceColor(Map d) {
     final status = d["status"]?.toString();
     final tamper = d["tamper"] == true;
@@ -605,6 +840,7 @@ class _HomePageState extends State<HomePage> {
                   devices: devices,
                   onRename: renameDevice,
                   onDelete: deleteDevice,
+                  onTapDevice: showDeviceDetail,
                 ),
               ],
             ),

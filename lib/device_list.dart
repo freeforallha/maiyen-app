@@ -4,12 +4,14 @@ class DeviceList extends StatelessWidget {
   final Map<String, dynamic> devices;
   final Function(String) onRename;
   final Function(String) onDelete;
+  final Function(String) onTapDevice;
 
   const DeviceList({
     super.key,
     required this.devices,
     required this.onRename,
     required this.onDelete,
+    required this.onTapDevice,
   });
 
   Map<String, dynamic> safeMap(dynamic data) {
@@ -70,20 +72,23 @@ class DeviceList extends StatelessWidget {
 
               // ===== DEVICE LIST =====
               Expanded(
-                child: ListView(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 2.0,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
                   children: devices.entries.map((e) {
                     final d = safeMap(e.value);
 
                     return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      margin: EdgeInsets.all(2),
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
 
                       decoration: BoxDecoration(
                         color: (d["status"] != "closed" || d["tamper"] == true)
                             ? Colors.red.shade100
                             : Colors.green.shade100,
-
                         borderRadius: BorderRadius.circular(12),
-
                         border: Border.all(
                           color:
                               (d["status"] != "closed" || d["tamper"] == true)
@@ -92,82 +97,74 @@ class DeviceList extends StatelessWidget {
                           width: 1,
                         ),
                       ),
-
-                      child: ListTile(
-                        dense: true,
-
-                        title: Text(
-                          d["name"]?.toString() ?? e.key,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                      child: InkWell(
+                        onTap: () => onTapDevice(e.key),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
                           ),
-                        ),
-
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  d["status"] == "closed"
-                                      ? Icons.check_circle
-                                      : Icons.cancel,
-                                  size: 16,
-                                  color: d["status"] == "closed"
-                                      ? Colors.green
-                                      : Colors.red,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            // 👈 CĂN GIỮA
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ===== NAME =====
+                              Text(
+                                d["name"]?.toString() ?? e.key,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 15, // 👈 giảm lại cho gọn
+                                  fontWeight: FontWeight.bold,
                                 ),
+                              ),
 
-                                SizedBox(width: 4),
+                              SizedBox(height: 6),
 
-                                Text(
-                                  d["status"] == "closed"
-                                      ? "Đang Đóng"
-                                      : "Đang Mở",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                              // ===== STATUS 1 =====
+                              Row(
+                                children: [
+                                  Icon(
+                                    d["status"] == "closed"
+                                        ? Icons.check_circle
+                                        : Icons.cancel,
+                                    size: 12,
+                                    color: d["status"] == "closed"
+                                        ? Colors.green
+                                        : Colors.red,
                                   ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 3),
-
-                            Row(
-                              children: [
-                                Icon(
-                                  d["tamper"] == true
-                                      ? Icons.cancel
-                                      : Icons.check_circle,
-                                  size: 16,
-                                  color: d["tamper"] == true
-                                      ? Colors.red
-                                      : Colors.green,
-                                ),
-
-                                SizedBox(width: 4),
-
-                                Text(
-                                  d["tamper"] == true
-                                      ? "Bị tháo"
-                                      : "Bình thường",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
+                                  SizedBox(width: 4),
+                                  Text(
+                                    d["status"] == "closed" ? "Đóng" : "Mở",
+                                    style: TextStyle(fontSize: 11),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                ],
+                              ),
 
-                        onLongPress: () => onRename(e.key),
+                              SizedBox(height: 4),
 
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete, size: 18),
-                          onPressed: () => onDelete(e.key),
+                              // ===== STATUS 2 =====
+                              Row(
+                                children: [
+                                  Icon(
+                                    d["tamper"] == true
+                                        ? Icons.cancel
+                                        : Icons.check_circle,
+                                    size: 12,
+                                    color: d["tamper"] == true
+                                        ? Colors.red
+                                        : Colors.green,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    d["tamper"] == true ? "Tháo" : "OK",
+                                    style: TextStyle(fontSize: 11),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
