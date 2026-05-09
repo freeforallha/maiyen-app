@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../firebase_options.dart';
@@ -12,9 +14,32 @@ import 'device_list.dart';
 import 'home_tabs.dart';
 import 'status_panel.dart';
 
+final FlutterLocalNotificationsPlugin localNotif =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseMessaging.instance.requestPermission();
+
+  const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  await localNotif.initialize(InitializationSettings(android: android));
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'alarm_channel',
+    'Alarm Channel',
+
+    importance: Importance.max,
+    playSound: true,
+  );
+
+  await localNotif
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.createNotificationChannel(channel);
   runApp(SafeHomeApp());
 }
 
@@ -332,6 +357,30 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    FirebaseMessaging.onMessage.listen((message) {
+      final notif = message.notification;
+
+      if (notif == null) return;
+
+      localNotif.show(
+        0,
+        notif.title,
+        notif.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'alarm_channel',
+            'Alarm',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+        ),
+      );
+    });
+    FirebaseMessaging.instance.getToken().then((token) async {
+      print("FCM TOKEN: $token");
+
+      await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
+    });
 
     uid = FirebaseAuth.instance.currentUser!.uid;
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
