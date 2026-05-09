@@ -683,32 +683,32 @@ class _HomePageState extends State<HomePage> {
 
               infoRow(
                 Icons.sensor_door,
-                "Door",
+                "Cửa",
                 status == "closed" ? "Đang đóng" : "Đang mở",
               ),
 
               infoRow(
                 Icons.security,
-                "Tamper",
+                "Tháo/Lắp",
                 tamper ? "Bị tháo" : "Bình thường",
               ),
 
               infoRow(
                 Icons.battery_full,
-                "Battery",
+                "Pin",
                 battery != null ? "$battery%" : "N/A",
               ),
 
               infoRow(
                 Icons.network_cell,
-                "Signal",
+                "Tín Hiệu",
                 linkquality != null ? "$linkquality" : "N/A",
               ),
 
               infoRow(
                 Icons.access_time,
-                "Last Seen",
-                lastSeen?.toString() ?? "N/A",
+                "Cập nhật cuối",
+                formatFullDate(lastSeen),
               ),
               SizedBox(height: 20),
               Center(
@@ -764,6 +764,20 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  String formatFullDate(dynamic ts) {
+    if (ts == null) return "N/A";
+
+    final dt = DateTime.fromMillisecondsSinceEpoch(
+      int.tryParse(ts.toString()) ?? 0,
+    );
+
+    return "${dt.day.toString().padLeft(2, '0')}/"
+        "${dt.month.toString().padLeft(2, '0')}/"
+        "${dt.year} "
+        "${dt.hour.toString().padLeft(2, '0')}:"
+        "${dt.minute.toString().padLeft(2, '0')}";
   }
 
   Color getDeviceColor(Map d) {
