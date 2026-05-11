@@ -6,7 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../firebase_options.dart';
 import 'all_home_page.dart';
@@ -93,6 +92,8 @@ class _LoginPageState extends State<LoginPage> {
         );
         final uid = cred.user!.uid;
         await FirebaseDatabase.instance.ref("accounts/$uid").set({
+          "email": email.text.trim().toLowerCase(),
+
           "homes": {
             "home1": {"name": "Home 1", "devices": {}},
           },
@@ -303,6 +304,16 @@ class _HomePageState extends State<HomePage> {
   late String uid;
   late DatabaseReference ref;
 
+  String getHomeOwnerUid() {
+    final isShared = homes[selectedHome]?["_shared"] == true;
+
+    if (isShared) {
+      return homes[selectedHome]?["_ownerUid"] ?? uid;
+    }
+
+    return uid;
+  }
+
   Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     List<String> issues = [];
 
@@ -376,13 +387,13 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     });
+    uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseMessaging.instance.getToken().then((token) async {
       print("FCM TOKEN: $token");
 
       await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
     });
 
-    uid = FirebaseAuth.instance.currentUser!.uid;
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
 
     ref.onValue.listen((event) {
@@ -391,23 +402,87 @@ class _HomePageState extends State<HomePage> {
 
       final map = safeMap(data);
       final homesData = safeMap(map["homes"]);
-
+      final sharedHomes = safeMap(map["sharedHomes"]);
       setState(() {
         homes = homesData;
+        for (final entry in sharedHomes.entries) {
+          final homeId = entry.key;
+
+          final ownerUid = safeMap(entry.value)["ownerUid"]?.toString();
+
+          if (ownerUid == null) continue;
+
+          FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId")
+              .onValue
+              .listen((sharedEvent) {
+                final sharedData = sharedEvent.snapshot.value;
+
+                // owner đã xóa home
+                if (sharedData == null) {
+                  setState(() {
+                    homes.remove(homeId);
+                    homeOrder.remove(homeId);
+
+                    if (selectedHome == homeId) {
+                      selectedHome = homeOrder.isNotEmpty
+                          ? homeOrder.first
+                          : "";
+                    }
+                  });
+
+                  return;
+                }
+
+                final sharedHome = Map<String, dynamic>.from(sharedData as Map);
+
+                setState(() {
+                  FirebaseDatabase.instance
+                      .ref("accounts/$ownerUid/email")
+                      .get()
+                      .then((emailSnap) {
+                        final ownerEmail =
+                            emailSnap.value?.toString() ?? "Unknown";
+
+                        setState(() {
+                          homes[homeId] = {
+                            ...sharedHome,
+                            "_shared": true,
+                            "_ownerUid": ownerUid,
+                            "_ownerEmail": ownerEmail,
+                          };
+                        });
+                      });
+                });
+              });
+        }
 
         final savedOrder = map["homeOrder"];
 
         if (savedOrder != null) {
           homeOrder = List<String>.from(savedOrder);
 
-          // thêm home mới chưa có
+          // tất cả home hiện có
+          final allHomeIds = {...homesData.keys, ...sharedHomes.keys};
+
+          // xóa home không còn tồn tại
+          homeOrder.removeWhere((id) => !allHomeIds.contains(id));
+
+          // thêm home own mới
           for (final id in homesData.keys) {
             if (!homeOrder.contains(id)) {
               homeOrder.add(id);
             }
           }
+
+          // thêm home shared mới
+          for (final id in sharedHomes.keys) {
+            if (!homeOrder.contains(id)) {
+              homeOrder.add(id);
+            }
+          }
         } else {
-          homeOrder = homesData.keys.toList();
+          homeOrder = [...homesData.keys, ...sharedHomes.keys];
         }
 
         // 🔥 FIX QUAN TRỌNG: chọn home đầu tiên theo ORDER
@@ -434,6 +509,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   void pairSensor(String hubId) {
+    final isShared = homes[selectedHome]?["_shared"] == true;
+
+    // Không cho pair vào home shared
+    if (isShared) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Không thể pair sensor vào Home được share"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     FirebaseDatabase.instance.ref("system/pairing").set({
       "active": true,
       "homeId": selectedHome,
@@ -445,6 +533,7 @@ class _HomePageState extends State<HomePage> {
     setState(() => pairingCountdown = 60);
 
     timer?.cancel();
+
     timer = Timer.periodic(Duration(seconds: 1), (t) {
       if (pairingCountdown <= 0) {
         t.cancel();
@@ -487,23 +576,7 @@ class _HomePageState extends State<HomePage> {
   void scanQR() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => Scaffold(
-          appBar: AppBar(title: Text("Scan QR HUB")),
-          body: MobileScanner(
-            onDetect: (capture) {
-              final barcodes = capture.barcodes;
-              if (barcodes.isEmpty) return;
-
-              final code = barcodes.first.rawValue;
-              if (code == null) return;
-
-              Navigator.pop(context);
-              pairSensor(code);
-            },
-          ),
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => AllHomePage(homeOrder: homeOrder)),
     );
   }
 
@@ -528,20 +601,305 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteHome() async {
+    final isShared = homes[selectedHome]?["_shared"] == true;
+
+    // ================= HOME SHARE =================
+    if (isShared) {
+      final ok = await confirm("Rời khỏi Home này?");
+      if (!ok) return;
+
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/sharedHomes/$selectedHome")
+          .remove();
+
+      setState(() {
+        homes.remove(selectedHome);
+        homeOrder.remove(selectedHome);
+
+        if (homeOrder.isNotEmpty) {
+          selectedHome = homeOrder.first;
+        } else {
+          selectedHome = "";
+        }
+      });
+
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/homeOrder")
+          .set(homeOrder);
+
+      return;
+    }
+
+    // ================= HOME OWN =================
     if (!await confirm("Xóa Home?")) return;
-    FirebaseDatabase.instance.ref("accounts/$uid/homes/$selectedHome").remove();
+
+    final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
+
+    if (accountsSnap.exists) {
+      final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
+
+      for (final entry in accounts.entries) {
+        final otherUid = entry.key;
+
+        await FirebaseDatabase.instance
+            .ref("accounts/$otherUid/sharedHomes/$selectedHome")
+            .remove();
+      }
+    }
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$selectedHome")
+        .remove();
+
+    homeOrder.remove(selectedHome);
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homeOrder")
+        .set(homeOrder);
+  }
+
+  void shareHome() async {
+    final controller = TextEditingController();
+
+    final targetEmail = await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Share Home"),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(hintText: "Email người nhận"),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                Navigator.pop(context, controller.text.trim().toLowerCase()),
+            child: Text("Share"),
+          ),
+        ],
+      ),
+    );
+
+    if (targetEmail == null || targetEmail.isEmpty) return;
+
+    // không share cho chính mình
+    final myEmail = FirebaseAuth.instance.currentUser?.email
+        ?.trim()
+        .toLowerCase();
+
+    if (targetEmail == myEmail) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Không thể share cho chính bạn")));
+      return;
+    }
+
+    // tìm uid theo email
+    final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
+
+    String? targetUid;
+
+    if (accountsSnap.exists) {
+      final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
+
+      for (final entry in accounts.entries) {
+        final data = Map<String, dynamic>.from(entry.value);
+
+        final mail = data["email"]?.toString().trim().toLowerCase();
+
+        if (mail == targetEmail) {
+          targetUid = entry.key;
+          break;
+        }
+      }
+    }
+
+    if (targetUid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Email chưa đăng ký"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // share
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/sharedHomes/$selectedHome")
+        .set({"ownerUid": uid});
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Đã share home")));
   }
 
   void deleteDevice(String id) async {
     if (!await confirm("Xóa Device?")) return;
-    FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$selectedHome/devices/$id")
+
+    final ownerUid = getHomeOwnerUid();
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$ownerUid/homes/$selectedHome/devices/$id")
         .remove();
   }
 
   void logout() async {
     if (!await confirm("Đăng xuất?")) return;
     await FirebaseAuth.instance.signOut();
+  }
+
+  void showSettingsSheet() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.55,
+          minChildSize: 0.4,
+          maxChildSize: 0.92,
+          builder: (_, controller) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+
+              child: ListView(
+                controller: controller,
+                padding: EdgeInsets.all(20),
+                children: [
+                  // ===== HANDLE =====
+                  Center(
+                    child: Container(
+                      width: 50,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 24),
+
+                  // ===== PROFILE =====
+                  Center(
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 42,
+                              backgroundColor: Colors.blue.shade100,
+                              child: Icon(
+                                Icons.person,
+                                size: 42,
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueAccent,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.add_a_photo,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 14),
+
+                        Text(
+                          user?.email ?? "No Email",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        SizedBox(height: 6),
+
+                        Text(
+                          "UID: ${user?.uid ?? ""}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 30),
+
+                  // ===== SHARE =====
+                  ListTile(
+                    leading: Icon(
+                      Icons.share_rounded,
+                      color: Colors.blueAccent,
+                    ),
+
+                    title: Text(
+                      "Share Home",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+
+                    trailing: Icon(Icons.chevron_right),
+
+                    onTap: () {
+                      Navigator.pop(context);
+                      shareHome();
+                    },
+                  ),
+
+                  Divider(),
+
+                  // ===== LOGOUT =====
+                  ListTile(
+                    leading: Icon(Icons.logout_rounded, color: Colors.red),
+
+                    title: Text(
+                      "Logout",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
+                    ),
+
+                    trailing: Icon(Icons.chevron_right),
+
+                    onTap: () async {
+                      Navigator.pop(context);
+                      logout();
+                    },
+                  ),
+
+                  SizedBox(height: 30),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void addHome() async {
@@ -581,7 +939,12 @@ class _HomePageState extends State<HomePage> {
     final controller = TextEditingController(
       text: homes[selectedHome]?["name"] ?? selectedHome,
     );
-
+    if (homes[selectedHome]?["_shared"] == true) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Không thể sửa home được share")));
+      return;
+    }
     final name = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
@@ -602,12 +965,20 @@ class _HomePageState extends State<HomePage> {
 
     if (name == null || name.trim().isEmpty) return;
 
+    final ownerUid = getHomeOwnerUid();
+
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$selectedHome/name")
+        .ref("accounts/$ownerUid/homes/$selectedHome/name")
         .set(name);
   }
 
   void renameDevice(String id) async {
+    if (homes[selectedHome]?["_shared"] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Home được share chỉ có quyền xem")),
+      );
+      return;
+    }
     final controller = TextEditingController(
       text: getDevices()[id]?["name"] ?? id,
     );
@@ -632,19 +1003,29 @@ class _HomePageState extends State<HomePage> {
 
     if (name == null || name.trim().isEmpty) return;
 
+    final ownerUid = getHomeOwnerUid();
+
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$selectedHome/devices/$id/name")
+        .ref("accounts/$ownerUid/homes/$selectedHome/devices/$id/name")
         .set(name);
   }
 
   void setAlarmSchedule() async {
+    if (homes[selectedHome]?["_shared"] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Home được share không thể sửa Alarm")),
+      );
+      return;
+    }
     final s = await showTimePicker(context: context, initialTime: start);
     if (s != null) start = s;
 
     final e = await showTimePicker(context: context, initialTime: end);
     if (e != null) end = e;
 
-    await FirebaseDatabase.instance.ref("accounts/$uid/alarm").update({
+    final ownerUid = getHomeOwnerUid();
+
+    await FirebaseDatabase.instance.ref("accounts/$ownerUid/alarm").update({
       "enabled": true,
       "start": "${start.hour}:${start.minute}",
       "end": "${end.hour}:${end.minute}",
@@ -850,7 +1231,11 @@ class _HomePageState extends State<HomePage> {
           IconButton(icon: Icon(Icons.edit), onPressed: renameHome),
           IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
           IconButton(icon: Icon(Icons.delete), onPressed: deleteHome),
-          IconButton(icon: Icon(Icons.logout), onPressed: logout),
+
+          IconButton(
+            icon: Icon(Icons.settings_rounded),
+            onPressed: showSettingsSheet,
+          ),
         ],
       ),
       body: Column(
@@ -884,8 +1269,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) =>
-                      AllHomePage(homes: homes, homeOrder: homeOrder),
+                  builder: (_) => AllHomePage(homeOrder: homeOrder),
                 ),
               );
             },
@@ -895,8 +1279,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 StatusPanel(
                   overall: getOverallStatus(devices),
-                  onPair: showPairDialog,
-                  onQR: scanQR,
+
+                  onPair: homes[selectedHome]?["_shared"] == true
+                      ? null
+                      : showPairDialog,
+
+                  onQR: homes[selectedHome]?["_shared"] == true ? null : scanQR,
                 ),
                 if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
                 DeviceList(

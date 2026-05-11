@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class StatusPanel extends StatelessWidget {
   final Map<String, dynamic> overall;
-  final VoidCallback onPair;
-  final VoidCallback onQR;
+  final VoidCallback? onPair;
+  final VoidCallback? onQR;
 
   const StatusPanel({
     super.key,

@@ -135,20 +135,42 @@ class HomeTabs extends StatelessWidget {
                           ],
                         ),
 
-                        child: Text(
-                          homes[h]?["name"] ?? h,
+                        child: Builder(
+                          builder: (_) {
+                            final home = homes[h] ?? {};
+                            final isShared = home["_shared"] == true;
 
-                          textAlign: TextAlign.center,
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isShared)
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 2),
+                                    child: Icon(
+                                      Icons.people,
+                                      size: 14,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
 
-                          maxLines: 2,
+                                Text(
+                                  home["name"] ?? h,
 
-                          overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
 
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
+                                  maxLines: 2,
+
+                                  overflow: TextOverflow.ellipsis,
+
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         ),
                       ),
                     ),
