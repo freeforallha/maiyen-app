@@ -16,20 +16,24 @@ import 'status_panel.dart';
 final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
 
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  print("BACKGROUND MESSAGE: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.requestPermission();
-
   const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-
   await localNotif.initialize(InitializationSettings(android: android));
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'alarm_channel',
     'Alarm Channel',
-
     importance: Importance.max,
     playSound: true,
   );
@@ -91,11 +95,15 @@ class _LoginPageState extends State<LoginPage> {
           password: pass.text.trim(),
         );
         final uid = cred.user!.uid;
-        await FirebaseDatabase.instance.ref("accounts/$uid").set({
+        await FirebaseDatabase.instance.ref("accounts/$uid").update({
           "email": email.text.trim().toLowerCase(),
-
           "homes": {
-            "home1": {"name": "Home 1", "devices": {}},
+            "home1": {
+              "name": "Home 1",
+              "devices": {},
+
+              "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
+            },
           },
           "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
         });
@@ -187,6 +195,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Future<void> setupFCM() async {
+    final messaging = FirebaseMessaging.instance;
+
+    final token = await messaging.getToken();
+
+    print("NEW FCM TOKEN: $token");
+
+    if (token != null) {
+      await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
+    }
+
+    // token tự refresh
+    messaging.onTokenRefresh.listen((newToken) async {
+      print("REFRESH TOKEN: $newToken");
+
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/fcmToken")
+          .set(newToken);
+    });
+  }
+
   void showDeviceMenu(String deviceId, Map d) {
     showModalBottomSheet(
       context: context,
@@ -369,6 +398,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen((message) {
+      print("MESSAGE DATA: ${message.data}");
+      print("MESSAGE NOTIF: ${message.notification}");
       final notif = message.notification;
 
       if (notif == null) return;
@@ -388,12 +419,7 @@ class _HomePageState extends State<HomePage> {
       );
     });
     uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseMessaging.instance.getToken().then((token) async {
-      print("FCM TOKEN: $token");
-
-      await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
-    });
-
+    setupFCM();
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
 
     ref.onValue.listen((event) {
@@ -493,9 +519,25 @@ class _HomePageState extends State<HomePage> {
         } else {
           selectedHome = "";
         }
-
-        final alarm = safeMap(map["alarm"]);
+        final currentHome = safeMap(homes[selectedHome]);
+        final alarm = safeMap(currentHome["alarm"]);
         alarmEnabled = alarm["enabled"] == true;
+
+        final startStr = alarm["start"]?.toString() ?? "23:00";
+        final endStr = alarm["end"]?.toString() ?? "06:00";
+
+        final s = startStr.split(":");
+        final e = endStr.split(":");
+
+        start = TimeOfDay(
+          hour: int.tryParse(s[0]) ?? 23,
+          minute: int.tryParse(s[1]) ?? 0,
+        );
+
+        end = TimeOfDay(
+          hour: int.tryParse(e[0]) ?? 6,
+          minute: int.tryParse(e[1]) ?? 0,
+        );
       });
     });
   }
@@ -930,6 +972,8 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
       "name": name,
       "devices": {},
+
+      "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
     });
   }
 
@@ -1025,11 +1069,13 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
 
-    await FirebaseDatabase.instance.ref("accounts/$ownerUid/alarm").update({
-      "enabled": true,
-      "start": "${start.hour}:${start.minute}",
-      "end": "${end.hour}:${end.minute}",
-    });
+    await FirebaseDatabase.instance
+        .ref("accounts/$ownerUid/homes/$selectedHome/alarm")
+        .update({
+          "enabled": true,
+          "start": "${start.hour}:${start.minute}",
+          "end": "${end.hour}:${end.minute}",
+        });
   }
 
   Color getHomeColor(String h) {
