@@ -11,38 +11,20 @@ import '../firebase_options.dart';
 import 'all_home_page.dart';
 import 'device_list.dart';
 import 'home_tabs.dart';
+import 'pages/confirm_dialog.dart';
+import 'pages/device_detail_sheet.dart';
+import 'pages/login_page.dart';
+import 'pages/pair_dialog.dart';
+import 'pages/qr_scan_page.dart';
+import 'pages/settings_sheet.dart';
+import 'services/notification_service.dart';
 import 'status_panel.dart';
-
-final FlutterLocalNotificationsPlugin localNotif =
-    FlutterLocalNotificationsPlugin();
-
-@pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  print("BACKGROUND MESSAGE: ${message.messageId}");
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  await FirebaseMessaging.instance.requestPermission();
-  const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-  await localNotif.initialize(InitializationSettings(android: android));
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'alarm_channel',
-    'Alarm Channel',
-    importance: Importance.max,
-    playSound: true,
-  );
-
-  await localNotif
-      .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin
-      >()
-      ?.createNotificationChannel(channel);
+  await NotificationService.init();
   runApp(SafeHomeApp());
 }
 
@@ -66,124 +48,6 @@ class AuthGate extends StatelessWidget {
         if (!snap.hasData) return LoginPage();
         return HomePage();
       },
-    );
-  }
-}
-
-class LoginPage extends StatefulWidget {
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final email = TextEditingController();
-  final pass = TextEditingController();
-  bool isLogin = true;
-  String error = "";
-
-  Future<void> submit() async {
-    setState(() => error = "");
-    try {
-      if (isLogin) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text.trim(),
-          password: pass.text.trim(),
-        );
-      } else {
-        final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text.trim(),
-          password: pass.text.trim(),
-        );
-        final uid = cred.user!.uid;
-        await FirebaseDatabase.instance.ref("accounts/$uid").update({
-          "email": email.text.trim().toLowerCase(),
-          "homes": {
-            "home1": {
-              "name": "Home 1",
-              "devices": {},
-
-              "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-            },
-          },
-          "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-        });
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        if (e.code == "user-not-found") {
-          error = "Sai tài khoản";
-        } else if (e.code == "wrong-password") {
-          error = "Sai mật khẩu";
-        } else if (e.code == "email-already-in-use") {
-          error = "Email đã tồn tại";
-        } else if (e.code == "weak-password") {
-          error = "Mật khẩu quá yếu";
-        } else {
-          error = e.message ?? "Lỗi đăng nhập";
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          width: 340,
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "SafeHome",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              TextField(
-                controller: email,
-                decoration: InputDecoration(labelText: "Email"),
-              ),
-              TextField(
-                controller: pass,
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Password"),
-              ),
-
-              if (error.isNotEmpty)
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(error, style: TextStyle(color: Colors.red)),
-                ),
-
-              SizedBox(height: 20),
-
-              ElevatedButton(
-                onPressed: submit,
-                child: Text(isLogin ? "Login" : "Sign Up"),
-              ),
-
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isLogin = !isLogin;
-                    error = "";
-                  });
-                },
-                child: Text(
-                  isLogin
-                      ? "Chưa có tài khoản? Đăng ký"
-                      : "Đã có tài khoản? Đăng nhập",
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -585,69 +449,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // ================= PAIR DIALOG =================
-  void showPairDialog() async {
-    final controller = TextEditingController();
-
-    final hubId = await showDialog<String>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Nhập HUB ID"),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(hintText: "vd: HUB_001"),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: Text("Pair"),
-          ),
-        ],
-      ),
-    );
-
-    if (hubId == null || hubId.trim().isEmpty) return;
-    pairSensor(hubId.trim());
-  }
-
-  // ================= QR SCAN =================
-  void scanQR() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => AllHomePage(homeOrder: homeOrder)),
-    );
-  }
-
-  Future<bool> confirm(String title) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text(title),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("Không"),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("OK"),
-          ),
-        ],
-      ),
-    );
-    return result == true;
-  }
-
   void deleteHome() async {
     final isShared = homes[selectedHome]?["_shared"] == true;
 
     // ================= HOME SHARE =================
     if (isShared) {
-      final ok = await confirm("Rời khỏi Home này?");
+      final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
       if (!ok) return;
 
       await FirebaseDatabase.instance
@@ -673,7 +480,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     // ================= HOME OWN =================
-    if (!await confirm("Xóa Home?")) return;
+    if (!await showConfirmDialog(context, "Xóa Home?")) return;
 
     final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
 
@@ -780,7 +587,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteDevice(String id) async {
-    if (!await confirm("Xóa Device?")) return;
+    if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
     final ownerUid = getHomeOwnerUid();
 
@@ -790,158 +597,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void logout() async {
-    if (!await confirm("Đăng xuất?")) return;
+    if (!await showConfirmDialog(context, "Đăng xuất?")) return;
     await FirebaseAuth.instance.signOut();
-  }
-
-  void showSettingsSheet() {
-    final user = FirebaseAuth.instance.currentUser;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.55,
-          minChildSize: 0.4,
-          maxChildSize: 0.92,
-          builder: (_, controller) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-
-              child: ListView(
-                controller: controller,
-                padding: EdgeInsets.all(20),
-                children: [
-                  // ===== HANDLE =====
-                  Center(
-                    child: Container(
-                      width: 50,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 24),
-
-                  // ===== PROFILE =====
-                  Center(
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 42,
-                              backgroundColor: Colors.blue.shade100,
-                              child: Icon(
-                                Icons.person,
-                                size: 42,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding: EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueAccent,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.add_a_photo,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 14),
-
-                        Text(
-                          user?.email ?? "No Email",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-
-                        SizedBox(height: 6),
-
-                        Text(
-                          "UID: ${user?.uid ?? ""}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  SizedBox(height: 30),
-
-                  // ===== SHARE =====
-                  ListTile(
-                    leading: Icon(
-                      Icons.share_rounded,
-                      color: Colors.blueAccent,
-                    ),
-
-                    title: Text(
-                      "Share Home",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    trailing: Icon(Icons.chevron_right),
-
-                    onTap: () {
-                      Navigator.pop(context);
-                      shareHome();
-                    },
-                  ),
-
-                  Divider(),
-
-                  // ===== LOGOUT =====
-                  ListTile(
-                    leading: Icon(Icons.logout_rounded, color: Colors.red),
-
-                    title: Text(
-                      "Logout",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Colors.red,
-                      ),
-                    ),
-
-                    trailing: Icon(Icons.chevron_right),
-
-                    onTap: () async {
-                      Navigator.pop(context);
-                      logout();
-                    },
-                  ),
-
-                  SizedBox(height: 30),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   void addHome() async {
@@ -1089,173 +746,6 @@ class _HomePageState extends State<HomePage> {
     return unsafe ? Colors.red.shade300 : Colors.green.shade300;
   }
 
-  void showDeviceDetail(String id) {
-    final d = safeMap(getDevices()[id]);
-
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.grey.shade900,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (_) {
-        final linkquality = d["linkquality"];
-        final battery = d["battery"];
-        final lastSeen = d["last_seen"];
-        final status = d["status"];
-        final tamper = d["tamper"] == true;
-
-        return Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 50,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 20),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      d["name"] ?? id,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.15),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.edit_rounded, color: Colors.blueAccent),
-                      iconSize: 18,
-                      onPressed: () {
-                        Navigator.pop(context);
-                        renameDevice(id);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              SizedBox(height: 20),
-
-              infoRow(
-                Icons.sensor_door,
-                "Cửa",
-                status == "closed" ? "Đang đóng" : "Đang mở",
-              ),
-
-              infoRow(
-                Icons.security,
-                "Tháo/Lắp",
-                tamper ? "Bị tháo" : "Bình thường",
-              ),
-
-              infoRow(
-                Icons.battery_full,
-                "Pin",
-                battery != null ? "$battery%" : "N/A",
-              ),
-
-              infoRow(
-                Icons.network_cell,
-                "Tín Hiệu",
-                linkquality != null ? "$linkquality" : "N/A",
-              ),
-
-              infoRow(
-                Icons.access_time,
-                "Cập nhật cuối",
-                formatFullDate(lastSeen),
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.delete_rounded),
-                    color: Colors.grey.shade400,
-                    iconSize: 22,
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      final ok = await confirm("Xóa device?");
-                      if (ok) deleteDevice(id);
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget infoRow(IconData icon, String title, String value) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 14),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white70, size: 20),
-
-          SizedBox(width: 12),
-
-          Text(
-            "$title:",
-            style: TextStyle(color: Colors.white70, fontSize: 15),
-          ),
-
-          Spacer(),
-
-          Text(
-            value,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String formatFullDate(dynamic ts) {
-    if (ts == null) return "N/A";
-
-    final dt = DateTime.fromMillisecondsSinceEpoch(
-      int.tryParse(ts.toString()) ?? 0,
-    );
-
-    return "${dt.day.toString().padLeft(2, '0')}/"
-        "${dt.month.toString().padLeft(2, '0')}/"
-        "${dt.year} "
-        "${dt.hour.toString().padLeft(2, '0')}:"
-        "${dt.minute.toString().padLeft(2, '0')}";
-  }
-
   Color getDeviceColor(Map d) {
     final status = d["status"]?.toString();
     final tamper = d["tamper"] == true;
@@ -1280,7 +770,13 @@ class _HomePageState extends State<HomePage> {
 
           IconButton(
             icon: Icon(Icons.settings_rounded),
-            onPressed: showSettingsSheet,
+            onPressed: () {
+              showSettingsSheet(
+                context: context,
+                onShare: shareHome,
+                onLogout: logout,
+              );
+            },
           ),
         ],
       ),
@@ -1311,13 +807,19 @@ class _HomePageState extends State<HomePage> {
 
             getHomeColor: getHomeColor,
 
-            onOpenAllHome: () {
-              Navigator.push(
+            onOpenAllHome: () async {
+              final selected = await Navigator.push<String>(
                 context,
                 MaterialPageRoute(
                   builder: (_) => AllHomePage(homeOrder: homeOrder),
                 ),
               );
+
+              if (selected != null) {
+                setState(() {
+                  selectedHome = selected;
+                });
+              }
             },
           ),
           Expanded(
@@ -1328,16 +830,40 @@ class _HomePageState extends State<HomePage> {
 
                   onPair: homes[selectedHome]?["_shared"] == true
                       ? null
-                      : showPairDialog,
+                      : () async {
+                          final hubId = await showPairDialog(context);
 
-                  onQR: homes[selectedHome]?["_shared"] == true ? null : scanQR,
+                          if (hubId == null || hubId.trim().isEmpty) {
+                            return;
+                          }
+
+                          pairSensor(hubId.trim());
+                        },
+
+                  onQR: homes[selectedHome]?["_shared"] == true
+                      ? null
+                      : () async {
+                          final code = await openQRScanner(context);
+
+                          if (code != null) {
+                            pairSensor(code);
+                          }
+                        },
                 ),
                 if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
                 DeviceList(
                   devices: devices,
                   onRename: renameDevice,
                   onDelete: deleteDevice,
-                  onTapDevice: showDeviceDetail,
+                  onTapDevice: (id) {
+                    showDeviceDetail(
+                      context: context,
+                      id: id,
+                      d: safeMap(getDevices()[id]),
+                      onRename: () => renameDevice(id),
+                      onDelete: () => deleteDevice(id),
+                    );
+                  },
                 ),
               ],
             ),
