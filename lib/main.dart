@@ -5,9 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import '../firebase_options.dart';
 import 'all_home_page.dart';
 import 'device_list.dart';
+import 'firebase_options.dart';
 import 'helpers/home_helper.dart';
 import 'home_tabs.dart';
 import 'pages/confirm_dialog.dart';
@@ -290,7 +290,73 @@ class _HomePageState extends State<HomePage> {
     }
 
     // ================= HOME OWN =================
-    if (!await showConfirmDialog(context, "Xóa Home?")) return;
+    final controller = TextEditingController();
+
+    final ok = await showDialog<bool>(
+      context: context,
+
+      builder: (_) => AlertDialog(
+        title: Text("Xác nhận xoá"),
+
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+
+          children: [
+            Text("Nhập mật khẩu tài khoản để xác nhận."),
+
+            SizedBox(height: 14),
+
+            TextField(
+              controller: controller,
+              obscureText: true,
+
+              decoration: InputDecoration(
+                hintText: "Password",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+
+            child: Text("Huỷ"),
+          ),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+
+            onPressed: () async {
+              try {
+                final user = FirebaseAuth.instance.currentUser!;
+
+                final credential = EmailAuthProvider.credential(
+                  email: user.email!,
+                  password: controller.text.trim(),
+                );
+
+                await user.reauthenticateWithCredential(credential);
+
+                Navigator.pop(context, true);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Sai mật khẩu"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+
+            child: Text("DELETE"),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
 
     final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
 

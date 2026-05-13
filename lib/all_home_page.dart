@@ -379,50 +379,103 @@ class _AllHomePageState extends State<AllHomePage> {
     );
   }
 
-  Future<void> confirmDeleteSelected() async {
-    final first = await showDialog<bool>(
+  Future<void> setSelectedHomesAlarm() async {
+    final start = await showTimePicker(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Delete selected homes?"),
-
-        content: Text("Bạn sắp thao tác với nhiều home."),
-
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-
-            child: Text("Cancel"),
-          ),
-
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-
-            child: Text("Continue"),
-          ),
-        ],
-      ),
+      initialTime: TimeOfDay(hour: 23, minute: 0),
     );
 
-    if (first != true) return;
+    if (start == null) return;
 
-    final second = await showDialog<bool>(
+    final end = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: 6, minute: 0),
+    );
+
+    if (end == null) return;
+
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    for (final homeId in selectedHomes) {
+      final home = safeMap(homes[homeId]);
+
+      final ownerUid = home["_shared"] == true ? home["_ownerUid"] : uid;
+
+      if (ownerUid == null) continue;
+
+      await FirebaseDatabase.instance
+          .ref("accounts/$ownerUid/homes/$homeId/alarm")
+          .update({
+            "enabled": true,
+            "start": "${start.hour}:${start.minute}",
+            "end": "${end.hour}:${end.minute}",
+          });
+    }
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Đã cập nhật Alarm")));
+  }
+
+  Future<void> confirmDeleteSelected() async {
+    final controller = TextEditingController();
+
+    final ok = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Xác nhận lần cuối"),
+        title: Text("Xác nhận xoá"),
 
-        content: Text("Hành động này không thể hoàn tác."),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+
+          children: [
+            Text("Nhập mật khẩu tài khoản để xác nhận xoá."),
+
+            SizedBox(height: 14),
+
+            TextField(
+              controller: controller,
+              obscureText: true,
+
+              decoration: InputDecoration(
+                hintText: "Password",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
 
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
 
-            child: Text("No"),
+            child: Text("Huỷ"),
           ),
 
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
 
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () async {
+              try {
+                final user = FirebaseAuth.instance.currentUser!;
+
+                final credential = EmailAuthProvider.credential(
+                  email: user.email!,
+                  password: controller.text.trim(),
+                );
+
+                await user.reauthenticateWithCredential(credential);
+
+                Navigator.pop(context, true);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Sai mật khẩu"),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
 
             child: Text("DELETE"),
           ),
@@ -430,7 +483,43 @@ class _AllHomePageState extends State<AllHomePage> {
       ),
     );
 
-    if (second != true) return;
+    if (ok != true) return;
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    for (final homeId in selectedHomes) {
+      final home = safeMap(homes[homeId]);
+
+      final isShared = home["_shared"] == true;
+
+      // HOME SHARE -> chỉ rời khỏi
+      if (isShared) {
+        await FirebaseDatabase.instance
+            .ref("accounts/$uid/sharedHomes/$homeId")
+            .remove();
+      }
+      // HOME OWN -> xoá thật
+      else {
+        final accountsSnap = await FirebaseDatabase.instance
+            .ref("accounts")
+            .get();
+
+        if (accountsSnap.exists) {
+          final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
+
+          for (final entry in accounts.entries) {
+            final otherUid = entry.key;
+
+            await FirebaseDatabase.instance
+                .ref("accounts/$otherUid/sharedHomes/$homeId")
+                .remove();
+          }
+        }
+
+        await FirebaseDatabase.instance
+            .ref("accounts/$uid/homes/$homeId")
+            .remove();
+      }
+    }
 
     setState(() {
       selectedHomes.clear();
@@ -438,7 +527,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text("Delete logic chưa được thêm")));
+    ).showSnackBar(SnackBar(content: Text("Đã xoá Home")));
   }
 
   @override
@@ -466,21 +555,87 @@ class _AllHomePageState extends State<AllHomePage> {
       bottomNavigationBar: selectedHomes.isEmpty
           ? null
           : SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(12),
+              child: Container(
+                margin: EdgeInsets.all(12),
 
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
+                padding: EdgeInsets.all(10),
 
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                  ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
 
-                  icon: Icon(Icons.delete),
+                  borderRadius: BorderRadius.circular(22),
 
-                  label: Text("Delete ${selectedHomes.length} Selected Homes"),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 14,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
 
-                  onPressed: confirmDeleteSelected,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+
+                  children: [
+                    ListTile(
+                      leading: Container(
+                        padding: EdgeInsets.all(8),
+
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.12),
+
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Icon(
+                          Icons.schedule_rounded,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+
+                      title: Text(
+                        "Set Alarm Time",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+
+                      subtitle: Text("${selectedHomes.length} homes selected"),
+
+                      trailing: Icon(Icons.chevron_right_rounded),
+
+                      onTap: setSelectedHomesAlarm,
+                    ),
+
+                    Divider(height: 8),
+
+                    ListTile(
+                      leading: Container(
+                        padding: EdgeInsets.all(8),
+
+                        decoration: BoxDecoration(
+                          color: Colors.red.withOpacity(0.12),
+
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Icon(Icons.delete_rounded, color: Colors.red),
+                      ),
+
+                      title: Text(
+                        "Delete Selected Homes",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.red,
+                        ),
+                      ),
+
+                      subtitle: Text("${selectedHomes.length} homes selected"),
+
+                      trailing: Icon(Icons.chevron_right_rounded),
+
+                      onTap: confirmDeleteSelected,
+                    ),
+                  ],
                 ),
               ),
             ),
