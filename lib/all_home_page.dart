@@ -48,6 +48,7 @@ class _AllHomePageState extends State<AllHomePage> {
       if (data == null) return;
 
       final map = Map<String, dynamic>.from(data as Map);
+      customNames = Map<String, String>.from(map["groupNames"] ?? {});
 
       final ownHomes = Map<String, dynamic>.from(map["homes"] ?? {});
       final sharedHomes = Map<String, dynamic>.from(map["sharedHomes"] ?? {});
@@ -65,21 +66,28 @@ class _AllHomePageState extends State<AllHomePage> {
 
         if (ownerUid == null) return;
 
-        FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/homes/$homeId")
-            .onValue
-            .listen((e) {
-              final d = e.snapshot.value;
-              if (d == null) return;
+        FirebaseDatabase.instance.ref("accounts/$ownerUid/email").get().then((
+          emailSnap,
+        ) {
+          final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
 
-              setState(() {
-                homes[homeId] = {
-                  ...Map<String, dynamic>.from(d as Map),
-                  "_shared": true,
-                  "_ownerEmail": v["ownerEmail"] ?? "Unknown",
-                };
+          FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId")
+              .onValue
+              .listen((e) {
+                final d = e.snapshot.value;
+
+                if (d == null) return;
+
+                setState(() {
+                  homes[homeId] = {
+                    ...Map<String, dynamic>.from(d as Map),
+                    "_shared": true,
+                    "_ownerEmail": ownerEmail,
+                  };
+                });
               });
-            });
+        });
       });
     });
   }
@@ -93,7 +101,7 @@ class _AllHomePageState extends State<AllHomePage> {
       final isShared = data["_shared"] == true;
 
       final groupKey = isShared
-          ? (data["_ownerEmail"] ?? "Unknown")
+          ? (data["_ownerUid"] ?? "unknown_uid")
           : "your_homes";
 
       grouped.putIfAbsent(groupKey, () => []);
@@ -137,18 +145,39 @@ class _AllHomePageState extends State<AllHomePage> {
     setState(() {
       customNames[key] = result;
     });
+
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/groupNames/$key")
+        .set(result);
   }
 
   Widget buildSectionTitle(String groupKey, List<String> ids) {
     final isYourHomes = groupKey == "your_homes";
 
+    String ownerText = "";
+    if (!isYourHomes) {
+      final firstHome = safeMap(homes[ids.first]);
+
+      ownerText = firstHome["_ownerEmail"] ?? "Unknown";
+    }
+
+    String subtitle = "";
+
+    if (!isYourHomes) {
+      final firstHome = safeMap(homes[ids.first]);
+
+      subtitle = firstHome["_ownerEmail"] ?? "Unknown";
+    }
+
     final displayName =
-        customNames[groupKey] ?? (isYourHomes ? "Your Homes" : groupKey);
+        customNames[groupKey] ?? (isYourHomes ? "Your Homes" : ownerText);
 
     return Container(
-      margin: EdgeInsets.only(top: 12, bottom: 18),
+      margin: EdgeInsets.only(top: 6, bottom: 8),
 
-      padding: EdgeInsets.all(14),
+      padding: EdgeInsets.all(10),
 
       decoration: BoxDecoration(
         color: Colors.white,
@@ -171,8 +200,8 @@ class _AllHomePageState extends State<AllHomePage> {
           Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 32,
+                height: 32,
 
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.12),
@@ -183,7 +212,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 child: Icon(
                   Icons.other_houses_rounded,
                   color: Colors.blueAccent,
-                  size: 24,
+                  size: 18,
                 ),
               ),
 
@@ -198,14 +227,14 @@ class _AllHomePageState extends State<AllHomePage> {
                       displayName,
 
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
 
                     if (!isYourHomes)
                       Text(
-                        groupKey,
+                        ownerText,
 
                         style: TextStyle(
                           fontSize: 12,
@@ -244,7 +273,7 @@ class _AllHomePageState extends State<AllHomePage> {
             ],
           ),
 
-          SizedBox(height: 16),
+          SizedBox(height: 8),
 
           GridView.builder(
             shrinkWrap: true,
@@ -254,9 +283,9 @@ class _AllHomePageState extends State<AllHomePage> {
             itemCount: ids.length,
 
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 5,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
+              crossAxisCount: 7,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
               childAspectRatio: 1,
             ),
 
@@ -321,29 +350,29 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
 
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(6),
 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            children: [
-              Text(
-                data["name"] ?? homeId,
+          child: SizedBox.expand(
+            child: Center(
+              child: Text(
+                (data["name"] ?? homeId).toString(),
 
                 textAlign: TextAlign.center,
 
-                maxLines: 3,
+                softWrap: true,
+
+                maxLines: 4,
 
                 overflow: TextOverflow.ellipsis,
 
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  height: 1.15,
+                  height: 1.1,
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -467,7 +496,7 @@ class _AllHomePageState extends State<AllHomePage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
 
-            children: [buildSectionTitle(groupKey, ids), SizedBox(height: 18)],
+            children: [buildSectionTitle(groupKey, ids), SizedBox(height: 6)],
           );
         }).toList(),
       ),

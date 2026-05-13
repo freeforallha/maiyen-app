@@ -12,6 +12,7 @@ class HomeTabs extends StatelessWidget {
   final Color Function(String) getHomeColor;
 
   final VoidCallback onOpenAllHome;
+  final ScrollController controller;
 
   const HomeTabs({
     super.key,
@@ -22,6 +23,7 @@ class HomeTabs extends StatelessWidget {
     required this.onReorder,
     required this.getHomeColor,
     required this.onOpenAllHome,
+    required this.controller,
   });
 
   @override
@@ -88,6 +90,7 @@ class HomeTabs extends StatelessWidget {
           // ================= HOME LIST =================
           Expanded(
             child: ReorderableListView(
+              scrollController: controller,
               proxyDecorator: (child, index, animation) {
                 return Material(color: Colors.transparent, child: child);
               },
@@ -142,17 +145,8 @@ class HomeTabs extends StatelessWidget {
 
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (isShared)
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 2),
-                                    child: Icon(
-                                      Icons.people,
-                                      size: 14,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
 
+                              children: [
                                 Text(
                                   home["name"] ?? h,
 
@@ -168,6 +162,16 @@ class HomeTabs extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+
+                                if (isShared) ...[
+                                  SizedBox(height: 3),
+
+                                  Icon(
+                                    Icons.people,
+                                    size: 13,
+                                    color: Colors.white70,
+                                  ),
+                                ],
                               ],
                             );
                           },

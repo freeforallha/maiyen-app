@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../firebase_options.dart';
 import 'all_home_page.dart';
 import 'device_list.dart';
+import 'helpers/home_helper.dart';
 import 'home_tabs.dart';
 import 'pages/confirm_dialog.dart';
 import 'pages/device_detail_sheet.dart';
@@ -17,8 +16,12 @@ import 'pages/login_page.dart';
 import 'pages/pair_dialog.dart';
 import 'pages/qr_scan_page.dart';
 import 'pages/settings_sheet.dart';
+import 'services/fcm_service.dart';
+import 'services/home_listener_service.dart';
+import 'services/home_service.dart';
 import 'services/notification_service.dart';
 import 'status_panel.dart';
+import 'widgets/home_appbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,109 +62,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> setupFCM() async {
-    final messaging = FirebaseMessaging.instance;
-
-    final token = await messaging.getToken();
-
-    print("NEW FCM TOKEN: $token");
-
-    if (token != null) {
-      await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
-    }
-
-    // token tự refresh
-    messaging.onTokenRefresh.listen((newToken) async {
-      print("REFRESH TOKEN: $newToken");
-
-      await FirebaseDatabase.instance
-          .ref("accounts/$uid/fcmToken")
-          .set(newToken);
-    });
-  }
-
-  void showDeviceMenu(String deviceId, Map d) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) {
-        final status = d["status"]?.toString();
-        final tamper = d["tamper"] == true;
-
-        return Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                d["name"] ?? deviceId,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-
-              SizedBox(height: 15),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    status == "closed" ? Icons.check_circle : Icons.cancel,
-                    color: status == "closed" ? Colors.green : Colors.red,
-                  ),
-                  SizedBox(width: 6),
-                  Text(status == "closed" ? "Đang Đóng" : "Đang Mở"),
-                ],
-              ),
-
-              SizedBox(height: 5),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    tamper ? Icons.warning : Icons.verified,
-                    color: tamper ? Colors.red : Colors.green,
-                  ),
-                  SizedBox(width: 6),
-                  Text(tamper ? "Bị tháo" : "Bình thường"),
-                ],
-              ),
-
-              SizedBox(height: 20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      renameDevice(deviceId);
-                    },
-                    icon: Icon(Icons.edit),
-                    label: Text("Rename"),
-                  ),
-
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      deleteDevice(deviceId);
-                    },
-                    icon: Icon(Icons.delete),
-                    label: Text("Delete"),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   PreferredSizeWidget buildSafeHomeAppBar() {
     return AppBar(
       title: Row(
@@ -207,34 +107,6 @@ class _HomePageState extends State<HomePage> {
     return uid;
   }
 
-  Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
-    List<String> issues = [];
-
-    devices.forEach((id, raw) {
-      final d = safeMap(raw);
-
-      final name = d["name"]?.toString() ?? id;
-      final status = d["status"]?.toString();
-      final tamper = d["tamper"] == true;
-
-      List<String> problem = [];
-
-      if (status != "closed") {
-        problem.add("Mở");
-      }
-
-      if (tamper) {
-        problem.add("Bị tháo");
-      }
-
-      if (problem.isNotEmpty) {
-        issues.add("$name: ${problem.join(" & ")}");
-      }
-    });
-
-    return {"safe": issues.isEmpty, "issues": issues};
-  }
-
   Map<String, dynamic> homes = {};
   String selectedHome = "";
 
@@ -247,11 +119,7 @@ class _HomePageState extends State<HomePage> {
 
   int pairingCountdown = 0;
   Timer? timer;
-
-  Map<String, dynamic> safeMap(dynamic data) {
-    if (data == null) return {};
-    return Map<String, dynamic>.from(data as Map);
-  }
+  final ScrollController homeTabController = ScrollController();
 
   Map<String, dynamic> getDevices() {
     final homeData = safeMap(homes[selectedHome]);
@@ -261,29 +129,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.onMessage.listen((message) {
-      print("MESSAGE DATA: ${message.data}");
-      print("MESSAGE NOTIF: ${message.notification}");
-      final notif = message.notification;
 
-      if (notif == null) return;
-
-      localNotif.show(
-        0,
-        notif.title,
-        notif.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            'alarm_channel',
-            'Alarm',
-            importance: Importance.max,
-            priority: Priority.high,
-          ),
-        ),
-      );
-    });
     uid = FirebaseAuth.instance.currentUser!.uid;
-    setupFCM();
+    FCMService.setupFCM(uid: uid);
+
+    FCMService.listenForeground(localNotif: localNotif);
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
 
     ref.onValue.listen((event) {
@@ -295,58 +145,26 @@ class _HomePageState extends State<HomePage> {
       final sharedHomes = safeMap(map["sharedHomes"]);
       setState(() {
         homes = homesData;
-        for (final entry in sharedHomes.entries) {
-          final homeId = entry.key;
+        HomeListenerService.loadSharedHomes(
+          homes: homes,
+          sharedHomes: sharedHomes,
 
-          final ownerUid = safeMap(entry.value)["ownerUid"]?.toString();
+          refresh: () {
+            setState(() {});
+          },
 
-          if (ownerUid == null) continue;
+          onDeleted: (homeId) {
+            setState(() {
+              homes.remove(homeId);
 
-          FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId")
-              .onValue
-              .listen((sharedEvent) {
-                final sharedData = sharedEvent.snapshot.value;
+              homeOrder.remove(homeId);
 
-                // owner đã xóa home
-                if (sharedData == null) {
-                  setState(() {
-                    homes.remove(homeId);
-                    homeOrder.remove(homeId);
-
-                    if (selectedHome == homeId) {
-                      selectedHome = homeOrder.isNotEmpty
-                          ? homeOrder.first
-                          : "";
-                    }
-                  });
-
-                  return;
-                }
-
-                final sharedHome = Map<String, dynamic>.from(sharedData as Map);
-
-                setState(() {
-                  FirebaseDatabase.instance
-                      .ref("accounts/$ownerUid/email")
-                      .get()
-                      .then((emailSnap) {
-                        final ownerEmail =
-                            emailSnap.value?.toString() ?? "Unknown";
-
-                        setState(() {
-                          homes[homeId] = {
-                            ...sharedHome,
-                            "_shared": true,
-                            "_ownerUid": ownerUid,
-                            "_ownerEmail": ownerEmail,
-                          };
-                        });
-                      });
-                });
-              });
-        }
-
+              if (selectedHome == homeId) {
+                selectedHome = homeOrder.isNotEmpty ? homeOrder.first : "";
+              }
+            });
+          },
+        );
         final savedOrder = map["homeOrder"];
 
         if (savedOrder != null) {
@@ -403,14 +221,6 @@ class _HomePageState extends State<HomePage> {
           minute: int.tryParse(e[1]) ?? 0,
         );
       });
-    });
-  }
-
-  bool isUnsafe(Map dev) {
-    return dev.values.any((d) {
-      final status = d["status"]?.toString();
-      final tamper = d["tamper"] == true;
-      return status != "closed" || tamper;
     });
   }
 
@@ -591,9 +401,11 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/devices/$id")
-        .remove();
+    await HomeService.deleteDevice(
+      ownerUid: ownerUid,
+      homeId: selectedHome,
+      deviceId: id,
+    );
   }
 
   void logout() async {
@@ -626,12 +438,7 @@ class _HomePageState extends State<HomePage> {
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
-    await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
-      "name": name,
-      "devices": {},
-
-      "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-    });
+    await HomeService.addHome(uid: uid, id: id, name: name);
   }
 
   // ================= RESTORED FULL FUNCTIONS =================
@@ -668,9 +475,11 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/name")
-        .set(name);
+    await HomeService.renameHome(
+      ownerUid: ownerUid,
+      homeId: selectedHome,
+      name: name,
+    );
   }
 
   void renameDevice(String id) async {
@@ -706,9 +515,12 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/devices/$id/name")
-        .set(name);
+    await HomeService.renameDevice(
+      ownerUid: ownerUid,
+      homeId: selectedHome,
+      deviceId: id,
+      name: name,
+    );
   }
 
   void setAlarmSchedule() async {
@@ -746,43 +558,30 @@ class _HomePageState extends State<HomePage> {
     return unsafe ? Colors.red.shade300 : Colors.green.shade300;
   }
 
-  Color getDeviceColor(Map d) {
-    final status = d["status"]?.toString();
-    final tamper = d["tamper"] == true;
-
-    if (status != "closed" || tamper) return Colors.red.shade200;
-    return Colors.green.shade200;
-  }
-
   @override
   Widget build(BuildContext context) {
     final devices = getDevices();
     final unsafe = isUnsafe(devices);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("SafeHome"),
-        actions: [
-          IconButton(icon: Icon(Icons.schedule), onPressed: setAlarmSchedule),
-          IconButton(icon: Icon(Icons.edit), onPressed: renameHome),
-          IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
-          IconButton(icon: Icon(Icons.delete), onPressed: deleteHome),
+      appBar: buildHomeAppBar(
+        onSchedule: setAlarmSchedule,
+        onRename: renameHome,
+        onAddHome: addHome,
+        onDelete: deleteHome,
 
-          IconButton(
-            icon: Icon(Icons.settings_rounded),
-            onPressed: () {
-              showSettingsSheet(
-                context: context,
-                onShare: shareHome,
-                onLogout: logout,
-              );
-            },
-          ),
-        ],
+        onSettings: () {
+          showSettingsSheet(
+            context: context,
+            onShare: shareHome,
+            onLogout: logout,
+          );
+        },
       ),
       body: Column(
         children: [
           HomeTabs(
+            controller: homeTabController,
             homes: homes,
             homeOrder: homeOrder,
             selectedHome: selectedHome,
@@ -819,6 +618,18 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   selectedHome = selected;
                 });
+
+                final index = homeOrder.indexOf(selected);
+
+                if (index != -1) {
+                  homeTabController.animateTo(
+                    index * 110,
+
+                    duration: Duration(milliseconds: 300),
+
+                    curve: Curves.easeOut,
+                  );
+                }
               }
             },
           ),
