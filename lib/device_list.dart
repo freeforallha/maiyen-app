@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 class DeviceList extends StatelessWidget {
   final Map<String, dynamic> devices;
+
+  final bool isShared;
+  final String ownerEmail;
+
   final Function(String) onRename;
   final Function(String) onDelete;
   final Function(String) onTapDevice;
@@ -9,6 +13,10 @@ class DeviceList extends StatelessWidget {
   const DeviceList({
     super.key,
     required this.devices,
+
+    required this.isShared,
+    required this.ownerEmail,
+
     required this.onRename,
     required this.onDelete,
     required this.onTapDevice,
@@ -101,8 +109,8 @@ class DeviceList extends StatelessWidget {
                       bottom: BorderSide(color: Colors.white.withOpacity(0.1)),
                     ),
                   ),
+
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.sensors, color: Colors.white70, size: 18),
 
@@ -116,6 +124,24 @@ class DeviceList extends StatelessWidget {
                           letterSpacing: 1.2,
                         ),
                       ),
+
+                      if (isShared) ...[
+                        SizedBox(width: 10),
+
+                        Expanded(
+                          child: Text(
+                            "(Chia sẻ bởi $ownerEmail)",
+                            overflow: TextOverflow.ellipsis,
+
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

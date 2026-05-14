@@ -13,9 +13,11 @@ import 'home_tabs.dart';
 import 'pages/confirm_dialog.dart';
 import 'pages/device_detail_sheet.dart';
 import 'pages/login_page.dart';
+import 'pages/notification_list_sheet.dart';
 import 'pages/pair_dialog.dart';
 import 'pages/qr_scan_page.dart';
 import 'pages/settings_sheet.dart';
+import 'pages/share_list_sheet.dart';
 import 'services/fcm_service.dart';
 import 'services/home_listener_service.dart';
 import 'services/home_service.dart';
@@ -62,6 +64,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void openNotificationList(String deviceId) {
+    final ownerUid = getHomeOwnerUid();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+
+      builder: (_) {
+        return NotificationListSheet(
+          ownerUid: ownerUid,
+          homeId: selectedHome,
+          deviceId: deviceId,
+        );
+      },
+    );
+  }
+
   PreferredSizeWidget buildSafeHomeAppBar() {
     return AppBar(
       title: Row(
@@ -267,10 +286,6 @@ class _HomePageState extends State<HomePage> {
       final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
       if (!ok) return;
 
-      await FirebaseDatabase.instance
-          .ref("accounts/$uid/sharedHomes/$selectedHome")
-          .remove();
-
       setState(() {
         homes.remove(selectedHome);
         homeOrder.remove(selectedHome);
@@ -453,9 +468,22 @@ class _HomePageState extends State<HomePage> {
     }
 
     // share
+    // share
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/sharedHomes/$selectedHome")
         .set({"ownerUid": uid});
+
+    // lưu share list
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/shareList/$selectedHome/$targetUid")
+        .set({
+          "email": targetEmail,
+          "sharedAt": DateTime.now().millisecondsSinceEpoch,
+        });
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Đã share home")));
 
     ScaffoldMessenger.of(
       context,
@@ -639,7 +667,17 @@ class _HomePageState extends State<HomePage> {
         onSettings: () {
           showSettingsSheet(
             context: context,
+
             onShare: shareHome,
+
+            onShareList: () {
+              showShareListSheet(
+                context: context,
+                ownerUid: uid,
+                homeId: selectedHome,
+              );
+            },
+
             onLogout: logout,
           );
         },
@@ -730,6 +768,12 @@ class _HomePageState extends State<HomePage> {
                 if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
                 DeviceList(
                   devices: devices,
+
+                  isShared: homes[selectedHome]?["_shared"] == true,
+
+                  ownerEmail:
+                      homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+
                   onRename: renameDevice,
                   onDelete: deleteDevice,
                   onTapDevice: (id) {
@@ -737,8 +781,12 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       id: id,
                       d: safeMap(getDevices()[id]),
+
                       onRename: () => renameDevice(id),
+
                       onDelete: () => deleteDevice(id),
+
+                      onNotification: () => openNotificationList(id),
                     );
                   },
                 ),

@@ -6,6 +6,7 @@ void showDeviceDetail({
   required Map d,
   required VoidCallback onRename,
   required VoidCallback onDelete,
+  required VoidCallback onNotification,
 }) {
   final linkquality = d["linkquality"];
   final battery = d["battery"];
@@ -41,8 +42,41 @@ void showDeviceDetail({
                 ),
 
                 IconButton(
+                  onPressed: onNotification,
+
+                  icon: Container(
+                    padding: EdgeInsets.all(8),
+
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Icon(
+                      Icons.receipt_long_rounded,
+                      color: Colors.amber,
+                      size: 22,
+                    ),
+                  ),
+                ),
+
+                IconButton(
                   onPressed: onRename,
-                  icon: Icon(Icons.edit, color: Colors.white),
+
+                  icon: Container(
+                    padding: EdgeInsets.all(8),
+
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Icon(
+                      Icons.edit_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -53,12 +87,16 @@ void showDeviceDetail({
               Icons.sensor_door,
               "Cửa",
               status == "closed" ? "Đang đóng" : "Đang mở",
+              valueColor: status == "closed"
+                  ? Colors.white
+                  : Colors.red.shade300,
             ),
 
             infoRow(
               Icons.security,
               "Tháo/Lắp",
               tamper ? "Bị tháo" : "Bình thường",
+              valueColor: tamper ? Colors.red.shade300 : Colors.white,
             ),
 
             infoRow(
@@ -98,7 +136,12 @@ void showDeviceDetail({
   );
 }
 
-Widget infoRow(IconData icon, String title, String value) {
+Widget infoRow(
+  IconData icon,
+  String title,
+  String value, {
+  Color valueColor = Colors.white,
+}) {
   return Padding(
     padding: EdgeInsets.only(bottom: 14),
     child: Row(
@@ -113,7 +156,7 @@ Widget infoRow(IconData icon, String title, String value) {
 
         Text(
           value,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: valueColor, fontWeight: FontWeight.bold),
         ),
       ],
     ),

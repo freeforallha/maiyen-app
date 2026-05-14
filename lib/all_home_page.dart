@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import 'pages/share_list_sheet.dart';
+
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -83,6 +85,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   homes[homeId] = {
                     ...Map<String, dynamic>.from(d as Map),
                     "_shared": true,
+                    "_ownerUid": ownerUid,
                     "_ownerEmail": ownerEmail,
                   };
                 });
@@ -96,6 +99,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final Map<String, List<String>> grouped = {};
 
     for (final homeId in widget.homeOrder) {
+      if (!homes.containsKey(homeId)) continue;
       final data = safeMap(homes[homeId]);
 
       final isShared = data["_shared"] == true;
@@ -117,7 +121,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final result = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Rename Group"),
+        title: Text("Đổi tên nhóm"),
 
         content: TextField(
           controller: controller,
@@ -128,7 +132,7 @@ class _AllHomePageState extends State<AllHomePage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
 
-            child: Text("Cancel"),
+            child: Text("Quay lại"),
           ),
 
           ElevatedButton(
@@ -143,7 +147,11 @@ class _AllHomePageState extends State<AllHomePage> {
     if (result == null) return;
 
     setState(() {
-      customNames[key] = result;
+      for (final id in selectedHomes) {
+        homes.remove(id);
+      }
+
+      selectedHomes.clear();
     });
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -349,31 +357,35 @@ class _AllHomePageState extends State<AllHomePage> {
               : null,
         ),
 
-        child: Padding(
-          padding: EdgeInsets.all(6),
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(6),
 
-          child: SizedBox.expand(
-            child: Center(
-              child: Text(
-                (data["name"] ?? homeId).toString(),
+              child: SizedBox.expand(
+                child: Center(
+                  child: Text(
+                    (data["name"] ?? homeId).toString(),
 
-                textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
 
-                softWrap: true,
+                    softWrap: true,
 
-                maxLines: 4,
+                    maxLines: 4,
 
-                overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
 
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  height: 1.1,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      height: 1.1,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -417,19 +429,58 @@ class _AllHomePageState extends State<AllHomePage> {
     ).showSnackBar(SnackBar(content: Text("Đã cập nhật Alarm")));
   }
 
+  void openShareList(String homeId) {
+    final home = safeMap(homes[homeId]);
+
+    // home shared -> không có quyền
+    if (home["_shared"] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Home được share không có quyền quản lý Share List"),
+        ),
+      );
+      return;
+    }
+
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    showShareListSheet(context: context, ownerUid: uid, homeId: homeId);
+  }
+
   Future<void> confirmDeleteSelected() async {
     final controller = TextEditingController();
 
+    final sharedCount = selectedHomes.where((id) {
+      final home = safeMap(homes[id]);
+
+      return home["_shared"] == true;
+    }).length;
+
+    final ownCount = selectedHomes.length - sharedCount;
+
+    String message = "";
+
+    if (sharedCount > 0 && ownCount > 0) {
+      message =
+          "Các home của bạn sẽ bị xoá.\n"
+          "Các home được chia sẻ sẽ được rời khỏi.";
+    } else if (sharedCount > 0) {
+      message = "Bạn sẽ rời khỏi các home được chia sẻ.";
+    } else {
+      message = "Các home đã chọn sẽ bị xoá vĩnh viễn.";
+    }
+
     final ok = await showDialog<bool>(
       context: context,
+
       builder: (_) => AlertDialog(
-        title: Text("Xác nhận xoá"),
+        title: Text("Xác nhận"),
 
         content: Column(
           mainAxisSize: MainAxisSize.min,
 
           children: [
-            Text("Nhập mật khẩu tài khoản để xác nhận xoá."),
+            Text(message),
 
             SizedBox(height: 14),
 
@@ -438,7 +489,7 @@ class _AllHomePageState extends State<AllHomePage> {
               obscureText: true,
 
               decoration: InputDecoration(
-                hintText: "Password",
+                hintText: "Mật khẩu",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -477,13 +528,16 @@ class _AllHomePageState extends State<AllHomePage> {
               }
             },
 
-            child: Text("DELETE"),
+            child: Text(
+              sharedCount > 0 && ownCount == 0 ? "Rời khỏi" : "Tiếp tục",
+            ),
           ),
         ],
       ),
     );
 
     if (ok != true) return;
+
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
     for (final homeId in selectedHomes) {
@@ -491,13 +545,13 @@ class _AllHomePageState extends State<AllHomePage> {
 
       final isShared = home["_shared"] == true;
 
-      // HOME SHARE -> chỉ rời khỏi
+      // ===== HOME ĐƯỢC SHARE =====
       if (isShared) {
         await FirebaseDatabase.instance
             .ref("accounts/$uid/sharedHomes/$homeId")
             .remove();
       }
-      // HOME OWN -> xoá thật
+      // ===== HOME CỦA MÌNH =====
       else {
         final accountsSnap = await FirebaseDatabase.instance
             .ref("accounts")
@@ -525,9 +579,13 @@ class _AllHomePageState extends State<AllHomePage> {
       selectedHomes.clear();
     });
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Đã xoá Home")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          sharedCount > 0 && ownCount == 0 ? "Đã rời khỏi home" : "Đã cập nhật",
+        ),
+      ),
+    );
   }
 
   @override
@@ -536,7 +594,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Homes"),
+        title: Text("Tất cả Home"),
 
         actions: [
           if (selectedHomes.isNotEmpty)
@@ -595,7 +653,7 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Set Alarm Time",
+                        "Đặt báo thức các home",
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
 
@@ -605,7 +663,353 @@ class _AllHomePageState extends State<AllHomePage> {
 
                       onTap: setSelectedHomesAlarm,
                     ),
+                    ListTile(
+                      leading: Container(
+                        padding: EdgeInsets.all(8),
 
+                        decoration: BoxDecoration(
+                          color: Colors.green.withOpacity(0.12),
+
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Icon(Icons.share_rounded, color: Colors.green),
+                      ),
+
+                      title: Text(
+                        "Chia sẻ các Home",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+
+                      subtitle: Text("${selectedHomes.length} homes selected"),
+
+                      trailing: Icon(Icons.chevron_right_rounded),
+
+                      onTap: () async {
+                        final controller = TextEditingController();
+
+                        final targetEmail = await showDialog<String>(
+                          context: context,
+
+                          builder: (_) => AlertDialog(
+                            title: Text("Chia sẻ Home"),
+
+                            content: TextField(
+                              controller: controller,
+
+                              decoration: InputDecoration(
+                                hintText: "Email người nhận",
+                              ),
+                            ),
+
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+
+                                child: Text("Huỷ"),
+                              ),
+
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                    context,
+                                    controller.text.trim().toLowerCase(),
+                                  );
+                                },
+
+                                child: Text("Chia sẻ"),
+                              ),
+                            ],
+                          ),
+                        );
+
+                        if (targetEmail == null || targetEmail.isEmpty) return;
+
+                        final accountsSnap = await FirebaseDatabase.instance
+                            .ref("accounts")
+                            .get();
+
+                        String? targetUid;
+
+                        if (accountsSnap.exists) {
+                          final accounts = Map<String, dynamic>.from(
+                            accountsSnap.value as Map,
+                          );
+
+                          for (final entry in accounts.entries) {
+                            final data = Map<String, dynamic>.from(entry.value);
+
+                            final mail = data["email"]
+                                ?.toString()
+                                .trim()
+                                .toLowerCase();
+
+                            if (mail == targetEmail) {
+                              targetUid = entry.key;
+                              break;
+                            }
+                          }
+                        }
+
+                        if (targetUid == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Email chưa đăng ký")),
+                          );
+                          return;
+                        }
+
+                        final myUid = FirebaseAuth.instance.currentUser!.uid;
+
+                        for (final homeId in selectedHomes) {
+                          final home = safeMap(homes[homeId]);
+
+                          // chỉ share home own
+                          if (home["_shared"] == true) continue;
+
+                          await FirebaseDatabase.instance
+                              .ref("accounts/$targetUid/sharedHomes/$homeId")
+                              .set({"ownerUid": myUid});
+
+                          // lưu share list
+                          await FirebaseDatabase.instance
+                              .ref(
+                                "accounts/$myUid/shareList/$homeId/$targetUid",
+                              )
+                              .set({
+                                "email": targetEmail,
+                                "sharedAt":
+                                    DateTime.now().millisecondsSinceEpoch,
+                              });
+                        }
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Đã chia sẻ homes")),
+                        );
+                      },
+                    ),
+
+                    Divider(height: 8),
+
+                    ListTile(
+                      leading: Container(
+                        padding: EdgeInsets.all(8),
+
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.12),
+
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+
+                        child: Icon(
+                          Icons.people_alt_rounded,
+                          color: Colors.orange,
+                        ),
+                      ),
+
+                      title: Text(
+                        "Mở List chia sẻ Home",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+
+                      subtitle: Text("${selectedHomes.length} homes selected"),
+
+                      trailing: Icon(Icons.chevron_right_rounded),
+
+                      onTap: () async {
+                        final uid = FirebaseAuth.instance.currentUser!.uid;
+
+                        final ownHomes = selectedHomes.where((id) {
+                          final home = safeMap(homes[id]);
+
+                          return home["_shared"] != true;
+                        }).toList();
+
+                        if (ownHomes.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Không có home nào bạn sở hữu"),
+                            ),
+                          );
+
+                          return;
+                        }
+
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+
+                          builder: (_) {
+                            return StatefulBuilder(
+                              builder: (context, setSheetState) {
+                                return Container(
+                                  padding: EdgeInsets.all(16),
+
+                                  constraints: BoxConstraints(
+                                    maxHeight:
+                                        MediaQuery.of(context).size.height *
+                                        0.8,
+                                  ),
+
+                                  child: FutureBuilder(
+                                    future: FirebaseDatabase.instance
+                                        .ref("accounts/$uid/shareList")
+                                        .get(),
+
+                                    builder: (context, snap) {
+                                      if (!snap.hasData) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+
+                                      final raw = snap.data!.value == null
+                                          ? {}
+                                          : Map<String, dynamic>.from(
+                                              snap.data!.value as Map,
+                                            );
+
+                                      return ListView(
+                                        children: ownHomes.map((homeId) {
+                                          final home = safeMap(homes[homeId]);
+
+                                          final homeName =
+                                              home["name"]?.toString() ??
+                                              homeId;
+
+                                          final users = safeMap(raw[homeId]);
+
+                                          return Container(
+                                            margin: EdgeInsets.only(bottom: 16),
+
+                                            padding: EdgeInsets.all(14),
+
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+
+                                              borderRadius:
+                                                  BorderRadius.circular(18),
+
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.05),
+                                                  blurRadius: 10,
+                                                ),
+                                              ],
+                                            ),
+
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+
+                                              children: [
+                                                Text(
+                                                  homeName,
+
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 10),
+
+                                                if (users.isEmpty)
+                                                  Text(
+                                                    "Chưa share cho ai",
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+
+                                                ...users.entries.map((e) {
+                                                  final targetUid = e.key;
+
+                                                  final data =
+                                                      Map<String, dynamic>.from(
+                                                        e.value,
+                                                      );
+
+                                                  final email =
+                                                      data["email"] ??
+                                                      "Unknown";
+
+                                                  return Container(
+                                                    margin: EdgeInsets.only(
+                                                      bottom: 8,
+                                                    ),
+
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.grey.shade100,
+
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            14,
+                                                          ),
+                                                    ),
+
+                                                    child: ListTile(
+                                                      dense: true,
+
+                                                      leading: CircleAvatar(
+                                                        radius: 16,
+
+                                                        child: Icon(
+                                                          Icons.person,
+                                                          size: 18,
+                                                        ),
+                                                      ),
+
+                                                      title: Text(email),
+
+                                                      trailing: IconButton(
+                                                        icon: Icon(
+                                                          Icons.delete_rounded,
+                                                          color: Colors.red,
+                                                        ),
+
+                                                        onPressed: () async {
+                                                          await FirebaseDatabase
+                                                              .instance
+                                                              .ref(
+                                                                "accounts/$targetUid/sharedHomes/$homeId",
+                                                              )
+                                                              .remove();
+
+                                                          await FirebaseDatabase
+                                                              .instance
+                                                              .ref(
+                                                                "accounts/$uid/shareList/$homeId/$targetUid",
+                                                              )
+                                                              .remove();
+
+                                                          setSheetState(() {
+                                                            users.remove(
+                                                              targetUid,
+                                                            );
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+
+                    Divider(height: 8),
                     Divider(height: 8),
 
                     ListTile(
@@ -622,7 +1026,7 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Delete Selected Homes",
+                        "Xoá các Home đã chọn ?",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.red,
