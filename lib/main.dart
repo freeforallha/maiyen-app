@@ -143,6 +143,14 @@ class _HomePageState extends State<HomePage> {
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
 
+  String formatTime(String t) {
+    final parts = t.split(":");
+    final h = int.tryParse(parts[0]) ?? 0;
+    final m = int.tryParse(parts[1]) ?? 0;
+
+    return "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}";
+  }
+
   Map<String, dynamic> getDevices() {
     final homeData = safeMap(homes[selectedHome]);
     return safeMap(homeData["devices"]);
@@ -226,11 +234,10 @@ class _HomePageState extends State<HomePage> {
           selectedHome = "";
         }
         final currentHome = safeMap(homes[selectedHome]);
-        final isShared = currentHome["_shared"] == true;
 
-        final alarm = isShared
-            ? safeMap(currentHome["_customAlarm"] ?? currentHome["alarm"])
-            : safeMap(currentHome["alarm"]);
+        final alarm = safeMap(
+          currentHome["_customAlarm"] ?? currentHome["alarm"],
+        );
         alarmEnabled = alarm["enabled"] == true;
 
         final startStr = alarm["start"]?.toString() ?? "23:00";
@@ -644,11 +651,19 @@ class _HomePageState extends State<HomePage> {
   void setAlarmSchedule() async {
     final s = await showTimePicker(context: context, initialTime: start);
 
-    if (s != null) start = s;
+    if (s != null) {
+      setState(() {
+        start = s;
+      });
+    }
 
     final e = await showTimePicker(context: context, initialTime: end);
 
-    if (e != null) end = e;
+    if (e != null) {
+      setState(() {
+        end = e;
+      });
+    }
 
     final isShared = homes[selectedHome]?["_shared"] == true;
 
@@ -658,8 +673,10 @@ class _HomePageState extends State<HomePage> {
           .ref("accounts/$uid/sharedHomes/$selectedHome/alarm")
           .update({
             "enabled": true,
-            "start": "${start.hour}:${start.minute}",
-            "end": "${end.hour}:${end.minute}",
+            "start":
+                "${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}",
+            "end":
+                "${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}",
           });
 
       setState(() {
@@ -683,6 +700,15 @@ class _HomePageState extends State<HomePage> {
           "start": "${start.hour}:${start.minute}",
           "end": "${end.hour}:${end.minute}",
         });
+    setState(() {
+      homes[selectedHome]?["alarm"] = {
+        "enabled": true,
+        "start": "${start.hour}:${start.minute}",
+        "end": "${end.hour}:${end.minute}",
+      };
+
+      alarmEnabled = true;
+    });
   }
 
   Color getHomeColor(String h) {
@@ -743,7 +769,33 @@ class _HomePageState extends State<HomePage> {
             selectedHome: selectedHome,
 
             onSelect: (h) {
-              setState(() => selectedHome = h);
+              final currentHome = safeMap(homes[h]);
+
+              final alarm = safeMap(
+                currentHome["_customAlarm"] ?? currentHome["alarm"],
+              );
+
+              final startStr = alarm["start"]?.toString() ?? "23:00";
+              final endStr = alarm["end"]?.toString() ?? "06:00";
+
+              final s = startStr.split(":");
+              final e = endStr.split(":");
+
+              setState(() {
+                selectedHome = h;
+
+                alarmEnabled = alarm["enabled"] == true;
+
+                start = TimeOfDay(
+                  hour: int.tryParse(s[0]) ?? 23,
+                  minute: int.tryParse(s[1]) ?? 0,
+                );
+
+                end = TimeOfDay(
+                  hour: int.tryParse(e[0]) ?? 6,
+                  minute: int.tryParse(e[1]) ?? 0,
+                );
+              });
             },
 
             onReorder: (oldIndex, newIndex) async {
@@ -811,8 +863,21 @@ class _HomePageState extends State<HomePage> {
                         },
 
                   // 👇 THÊM 2 DÒNG NÀY
-                  alarmStart: start.format(context),
-                  alarmEnd: end.format(context),
+                  alarmStart: formatTime(
+                    safeMap(
+                          homes[selectedHome]?["_customAlarm"] ??
+                              homes[selectedHome]?["alarm"],
+                        )["start"]?.toString() ??
+                        "--:--",
+                  ),
+
+                  alarmEnd: formatTime(
+                    safeMap(
+                          homes[selectedHome]?["_customAlarm"] ??
+                              homes[selectedHome]?["alarm"],
+                        )["end"]?.toString() ??
+                        "--:--",
+                  ),
                 ),
                 if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
                 DeviceList(

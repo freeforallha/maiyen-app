@@ -40,7 +40,9 @@ class StatusPanel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
+                  overall["safe"]
+                      ? "ĐÃ AN TOÀN"
+                      : "CHƯA AN TOÀN - KIỂM TRA LẠI !",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

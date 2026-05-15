@@ -58,7 +58,14 @@ class _AllHomePageState extends State<AllHomePage> {
       final ownHomes = Map<String, dynamic>.from(map["homes"] ?? {});
       final sharedHomes = Map<String, dynamic>.from(map["sharedHomes"] ?? {});
 
-      final Map<String, dynamic> merged = {...ownHomes};
+      final Map<String, dynamic> merged = {};
+
+      // chỉ add home thật sự sở hữu
+      ownHomes.forEach((key, value) {
+        if (!sharedHomes.containsKey(key)) {
+          merged[key] = value;
+        }
+      });
 
       setState(() {
         homes = merged;
@@ -430,21 +437,30 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
+    final updates = <String, dynamic>{};
+
     for (final homeId in selectedHomes) {
       final home = safeMap(homes[homeId]);
 
-      final ownerUid = home["_shared"] == true ? home["_ownerUid"] : uid;
+      final isShared = home["_shared"] == true;
 
-      if (ownerUid == null) continue;
+      final alarmData = {
+        "enabled": true,
+        "start": "${start.hour}:${start.minute}",
+        "end": "${end.hour}:${end.minute}",
+      };
 
-      await FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId/alarm")
-          .update({
-            "enabled": true,
-            "start": "${start.hour}:${start.minute}",
-            "end": "${end.hour}:${end.minute}",
-          });
+      // HOME SHARE
+      if (isShared) {
+        updates["accounts/$uid/sharedHomes/$homeId/alarm"] = alarmData;
+      }
+      // HOME OWN
+      else {
+        updates["accounts/$uid/homes/$homeId/alarm"] = alarmData;
+      }
     }
+
+    await FirebaseDatabase.instance.ref().update(updates);
 
     ScaffoldMessenger.of(
       context,

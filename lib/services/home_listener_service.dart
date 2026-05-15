@@ -40,6 +40,8 @@ class HomeListenerService {
             homes[homeId] = {
               ...sharedHome,
 
+              "alarm": safeMap(sharedHome["alarm"]),
+
               "_shared": true,
               "_ownerUid": ownerUid,
               "_ownerEmail": ownerEmail,
