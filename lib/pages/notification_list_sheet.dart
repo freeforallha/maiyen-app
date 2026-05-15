@@ -118,7 +118,8 @@ class NotificationListSheet extends StatelessWidget {
                         lower.contains("đóng") ||
                         lower.contains("bình thường") ||
                         lower.contains("đã tắt") ||
-                        lower.contains("kết nối lại");
+                        lower.contains("kết nối lại") ||
+                        lower.contains("cập nhật cảm biến");
 
                     final textColor = isSafe
                         ? Colors.black
@@ -144,6 +145,9 @@ class NotificationListSheet extends StatelessWidget {
                     } else if (type == "battery") {
                       icon = Icons.battery_alert_rounded;
                       color = Colors.amber;
+                    } else if (type == "heartbeat") {
+                      icon = Icons.sync_rounded;
+                      color = Colors.green;
                     }
 
                     return ListTile(

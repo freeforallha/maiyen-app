@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showSettingsSheet({
+  required VoidCallback onShareRequests,
   required BuildContext context,
   required VoidCallback onShare,
   required VoidCallback onShareList,
@@ -105,7 +106,12 @@ void showSettingsSheet({
               color: Colors.green,
               onTap: onShareList,
             ),
-
+            tile(
+              icon: Icons.mail_rounded,
+              title: "Lời mời share",
+              color: Colors.orange,
+              onTap: onShareRequests,
+            ),
             tile(
               icon: Icons.logout_rounded,
               title: "Đăng xuất",

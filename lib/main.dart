@@ -18,6 +18,7 @@ import 'pages/pair_dialog.dart';
 import 'pages/qr_scan_page.dart';
 import 'pages/settings_sheet.dart';
 import 'pages/share_list_sheet.dart';
+import 'pages/share_request_sheet.dart';
 import 'services/fcm_service.dart';
 import 'services/home_listener_service.dart';
 import 'services/home_service.dart';
@@ -64,6 +65,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> shareRequests = {};
+
   void openNotificationList(String deviceId) {
     final ownerUid = getHomeOwnerUid();
 
@@ -162,7 +165,9 @@ class _HomePageState extends State<HomePage> {
       final map = safeMap(data);
       final homesData = safeMap(map["homes"]);
       final sharedHomes = safeMap(map["sharedHomes"]);
+      final requests = safeMap(map["shareRequests"]);
       setState(() {
+        shareRequests = requests;
         homes = homesData;
         HomeListenerService.loadSharedHomes(
           homes: homes,
@@ -470,8 +475,13 @@ class _HomePageState extends State<HomePage> {
     // share
     // share
     await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/sharedHomes/$selectedHome")
-        .set({"ownerUid": uid});
+        .ref("accounts/$targetUid/shareRequests/$selectedHome")
+        .set({
+          "ownerUid": uid,
+          "homeId": selectedHome,
+          "ownerEmail": myEmail,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
 
     // lưu share list
     await FirebaseDatabase.instance
@@ -666,6 +676,13 @@ class _HomePageState extends State<HomePage> {
 
         onSettings: () {
           showSettingsSheet(
+            onShareRequests: () {
+              showShareRequestSheet(
+                context: context,
+                requests: shareRequests,
+                uid: uid,
+              );
+            },
             context: context,
 
             onShare: shareHome,

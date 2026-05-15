@@ -19,6 +19,9 @@ class _AllHomePageState extends State<AllHomePage> {
   Set<String> selectedHomes = {};
 
   Map<String, String> customNames = {};
+  String search = "";
+  final TextEditingController searchController = TextEditingController();
+  bool isSearching = false;
 
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
@@ -101,6 +104,11 @@ class _AllHomePageState extends State<AllHomePage> {
     for (final homeId in widget.homeOrder) {
       if (!homes.containsKey(homeId)) continue;
       final data = safeMap(homes[homeId]);
+      final name = (data["name"] ?? homeId).toString().toLowerCase();
+
+      if (search.isNotEmpty && !name.contains(search)) {
+        continue;
+      }
 
       final isShared = data["_shared"] == true;
 
@@ -129,16 +137,39 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
 
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  final c = TextEditingController(text: search);
 
-            child: Text("Quay lại"),
-          ),
-
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text.trim()),
-
-            child: Text("OK"),
+                  return AlertDialog(
+                    title: Text("Tìm Home"),
+                    content: TextField(
+                      controller: c,
+                      decoration: InputDecoration(hintText: "Nhập tên home..."),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text("Huỷ"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            search = c.text.toLowerCase().trim();
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: Text("OK"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
@@ -594,17 +625,41 @@ class _AllHomePageState extends State<AllHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tất cả Home"),
+        title: isSearching
+            ? TextField(
+                controller: searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Tìm home...",
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    search = value.toLowerCase().trim();
+                  });
+                },
+              )
+            : Text("Tất cả Home"),
 
         actions: [
+          IconButton(
+            icon: Icon(isSearching ? Icons.close : Icons.search),
+            onPressed: () {
+              setState(() {
+                if (isSearching) {
+                  search = "";
+                  searchController.clear();
+                }
+                isSearching = !isSearching;
+              });
+            },
+          ),
+
           if (selectedHomes.isNotEmpty)
             IconButton(
               icon: Icon(Icons.close),
-
               onPressed: () {
-                setState(() {
-                  selectedHomes.clear();
-                });
+                setState(() => selectedHomes.clear());
               },
             ),
         ],
