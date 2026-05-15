@@ -20,7 +20,7 @@ void showSettingsSheet({
       margin: EdgeInsets.only(bottom: 10),
 
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(18),
       ),
 
@@ -30,7 +30,7 @@ void showSettingsSheet({
           height: 38,
 
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
           ),
 
@@ -78,7 +78,7 @@ void showSettingsSheet({
 
             CircleAvatar(
               radius: 28,
-              backgroundColor: Colors.blue.withOpacity(0.1),
+              backgroundColor: Colors.blue.withValues(alpha: 0.1),
 
               child: Icon(Icons.person, size: 30, color: Colors.blue),
             ),
@@ -110,7 +110,7 @@ void showSettingsSheet({
             Container(
               margin: EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.08),
+                color: Colors.orange.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: ListTile(
@@ -118,7 +118,7 @@ void showSettingsSheet({
                   width: 38,
                   height: 38,
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.15),
+                    color: Colors.orange.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(Icons.mail_rounded, color: Colors.orange),

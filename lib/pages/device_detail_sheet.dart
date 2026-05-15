@@ -48,7 +48,7 @@ void showDeviceDetail({
                     padding: EdgeInsets.all(8),
 
                     decoration: BoxDecoration(
-                      color: Colors.amber.withOpacity(0.12),
+                      color: Colors.amber..withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
 
@@ -67,7 +67,7 @@ void showDeviceDetail({
                     padding: EdgeInsets.all(8),
 
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
                     ),
 

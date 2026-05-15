@@ -82,9 +82,12 @@ class DeviceList extends StatelessWidget {
         padding: EdgeInsets.all(12),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
+            color: Colors.white.withValues(alpha: 0.05),
 
-            border: Border.all(color: Colors.white.withOpacity(0.15), width: 1),
+            border: Border.all(
+              color: Colors.white..withValues(alpha: 0.15),
+              width: 1,
+            ),
 
             borderRadius: BorderRadius.circular(16),
 
@@ -106,7 +109,9 @@ class DeviceList extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      bottom: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
                     ),
                   ),
 

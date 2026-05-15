@@ -44,7 +44,7 @@ class HomeTabs extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
                     splashColor: Colors.transparent,
-                    highlightColor: Colors.white.withOpacity(0.08),
+                    highlightColor: Colors.white.withValues(alpha: 0.08),
                     onTap: onOpenAllHome,
                     child: Container(
                       width: 75,
@@ -147,20 +147,29 @@ class HomeTabs extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
 
                               children: [
-                                Text(
-                                  home["name"] ?? h,
+                                Builder(
+                                  builder: (_) {
+                                    final displayName =
+                                        home["_customName"] ??
+                                        home["name"] ??
+                                        h;
 
-                                  textAlign: TextAlign.center,
+                                    return Text(
+                                      displayName,
 
-                                  maxLines: 2,
+                                      textAlign: TextAlign.center,
 
-                                  overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
 
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                      overflow: TextOverflow.ellipsis,
+
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    );
+                                  },
                                 ),
 
                                 if (isShared) ...[

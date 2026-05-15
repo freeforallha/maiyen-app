@@ -12,7 +12,9 @@ class HomeListenerService {
     for (final entry in sharedHomes.entries) {
       final homeId = entry.key;
 
-      final ownerUid = safeMap(entry.value)["ownerUid"]?.toString();
+      final sharedConfig = safeMap(entry.value);
+
+      final ownerUid = sharedConfig["ownerUid"]?.toString();
 
       if (ownerUid == null) continue;
 
@@ -37,9 +39,13 @@ class HomeListenerService {
 
             homes[homeId] = {
               ...sharedHome,
+
               "_shared": true,
               "_ownerUid": ownerUid,
               "_ownerEmail": ownerEmail,
+
+              "_customName": sharedConfig["customName"],
+              "_customAlarm": sharedConfig["alarm"],
             };
 
             refresh();

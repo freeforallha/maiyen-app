@@ -202,14 +202,6 @@ class _AllHomePageState extends State<AllHomePage> {
       ownerText = firstHome["_ownerEmail"] ?? "Unknown";
     }
 
-    String subtitle = "";
-
-    if (!isYourHomes) {
-      final firstHome = safeMap(homes[ids.first]);
-
-      subtitle = firstHome["_ownerEmail"] ?? "Unknown";
-    }
-
     final displayName =
         customNames[groupKey] ?? (isYourHomes ? "Your Homes" : ownerText);
 
@@ -225,7 +217,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 14,
             offset: Offset(0, 4),
           ),
@@ -243,8 +235,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 height: 32,
 
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.12),
-
+                  color: Colors.blue.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
 
@@ -680,7 +671,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       blurRadius: 14,
                       offset: Offset(0, 4),
                     ),
@@ -696,7 +687,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         padding: EdgeInsets.all(8),
 
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.12),
+                          color: Colors.blue.withValues(alpha: 0.12),
 
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -723,8 +714,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         padding: EdgeInsets.all(8),
 
                         decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.12),
-
+                          color: Colors.green.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
 
@@ -850,8 +840,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         padding: EdgeInsets.all(8),
 
                         decoration: BoxDecoration(
-                          color: Colors.orange.withOpacity(0.12),
-
+                          color: Colors.orange.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
 
@@ -947,7 +936,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                               boxShadow: [
                                                 BoxShadow(
                                                   color: Colors.black
-                                                      .withOpacity(0.05),
+                                                      .withValues(alpha: 0.05),
                                                   blurRadius: 10,
                                                 ),
                                               ],
@@ -1072,8 +1061,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         padding: EdgeInsets.all(8),
 
                         decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.12),
-
+                          color: Colors.red.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
 

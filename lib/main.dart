@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             padding: EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: Colors.blueAccent.withOpacity(0.15),
+              color: Colors.blueAccent.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(Icons.home_rounded, color: Colors.blueAccent, size: 20),
@@ -226,7 +226,11 @@ class _HomePageState extends State<HomePage> {
           selectedHome = "";
         }
         final currentHome = safeMap(homes[selectedHome]);
-        final alarm = safeMap(currentHome["alarm"]);
+        final isShared = currentHome["_shared"] == true;
+
+        final alarm = isShared
+            ? safeMap(currentHome["_customAlarm"] ?? currentHome["alarm"])
+            : safeMap(currentHome["alarm"]);
         alarmEnabled = alarm["enabled"] == true;
 
         final startStr = alarm["start"]?.toString() ?? "23:00";
@@ -543,15 +547,16 @@ class _HomePageState extends State<HomePage> {
   // ================= RESTORED FULL FUNCTIONS =================
 
   void renameHome() async {
-    final controller = TextEditingController(
-      text: homes[selectedHome]?["name"] ?? selectedHome,
-    );
-    if (homes[selectedHome]?["_shared"] == true) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Không thể sửa home được share")));
-      return;
-    }
+    final isShared = homes[selectedHome]?["_shared"] == true;
+
+    final currentName = isShared
+        ? (homes[selectedHome]?["_customName"] ??
+              homes[selectedHome]?["name"] ??
+              selectedHome)
+        : (homes[selectedHome]?["name"] ?? selectedHome);
+
+    final controller = TextEditingController(text: currentName);
+
     final name = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
@@ -572,6 +577,20 @@ class _HomePageState extends State<HomePage> {
 
     if (name == null || name.trim().isEmpty) return;
 
+    // HOME SHARE -> lưu riêng cho user hiện tại
+    if (isShared) {
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/sharedHomes/$selectedHome/customName")
+          .set(name);
+
+      setState(() {
+        homes[selectedHome]?["_customName"] = name;
+      });
+
+      return;
+    }
+
+    // HOME OWN
     final ownerUid = getHomeOwnerUid();
 
     await HomeService.renameHome(
@@ -623,18 +642,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setAlarmSchedule() async {
-    if (homes[selectedHome]?["_shared"] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Home được share không thể sửa Alarm")),
-      );
-      return;
-    }
     final s = await showTimePicker(context: context, initialTime: start);
+
     if (s != null) start = s;
 
     final e = await showTimePicker(context: context, initialTime: end);
+
     if (e != null) end = e;
 
+    final isShared = homes[selectedHome]?["_shared"] == true;
+
+    // HOME SHARE -> lưu alarm riêng
+    if (isShared) {
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/sharedHomes/$selectedHome/alarm")
+          .update({
+            "enabled": true,
+            "start": "${start.hour}:${start.minute}",
+            "end": "${end.hour}:${end.minute}",
+          });
+
+      setState(() {
+        homes[selectedHome]?["_customAlarm"] = {
+          "enabled": true,
+          "start": "${start.hour}:${start.minute}",
+          "end": "${end.hour}:${end.minute}",
+        };
+      });
+
+      return;
+    }
+
+    // HOME OWN
     final ownerUid = getHomeOwnerUid();
 
     await FirebaseDatabase.instance
@@ -660,7 +699,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final devices = getDevices();
-    final unsafe = isUnsafe(devices);
 
     return Scaffold(
       appBar: buildHomeAppBar(
