@@ -490,11 +490,6 @@ class _HomePageState extends State<HomePage> {
           "email": targetEmail,
           "sharedAt": DateTime.now().millisecondsSinceEpoch,
         });
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Đã share home")));
-
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text("Đã share home")));
@@ -674,19 +669,22 @@ class _HomePageState extends State<HomePage> {
         onAddHome: addHome,
         onDelete: deleteHome,
 
+        // 👇 THÊM DÒNG NÀY
+        inviteCount: shareRequests.length,
+
         onSettings: () {
           showSettingsSheet(
+            context: context,
+            inviteCount: shareRequests.length,
             onShareRequests: () {
               showShareRequestSheet(
                 context: context,
+                inviteCount: shareRequests.length,
                 requests: shareRequests,
                 uid: uid,
               );
             },
-            context: context,
-
             onShare: shareHome,
-
             onShareList: () {
               showShareListSheet(
                 context: context,
@@ -694,7 +692,6 @@ class _HomePageState extends State<HomePage> {
                 homeId: selectedHome,
               );
             },
-
             onLogout: logout,
           );
         },
@@ -764,11 +761,7 @@ class _HomePageState extends State<HomePage> {
                       ? null
                       : () async {
                           final hubId = await showPairDialog(context);
-
-                          if (hubId == null || hubId.trim().isEmpty) {
-                            return;
-                          }
-
+                          if (hubId == null || hubId.trim().isEmpty) return;
                           pairSensor(hubId.trim());
                         },
 
@@ -776,11 +769,12 @@ class _HomePageState extends State<HomePage> {
                       ? null
                       : () async {
                           final code = await openQRScanner(context);
-
-                          if (code != null) {
-                            pairSensor(code);
-                          }
+                          if (code != null) pairSensor(code);
                         },
+
+                  // 👇 THÊM 2 DÒNG NÀY
+                  alarmStart: start.format(context),
+                  alarmEnd: end.format(context),
                 ),
                 if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
                 DeviceList(

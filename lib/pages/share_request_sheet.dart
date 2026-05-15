@@ -5,6 +5,7 @@ void showShareRequestSheet({
   required BuildContext context,
   required Map<String, dynamic> requests,
   required String uid,
+  required int inviteCount,
 }) {
   showModalBottomSheet(
     context: context,

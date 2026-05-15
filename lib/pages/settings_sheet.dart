@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showSettingsSheet({
-  required VoidCallback onShareRequests,
   required BuildContext context,
+  required VoidCallback onShareRequests,
   required VoidCallback onShare,
   required VoidCallback onShareList,
   required VoidCallback onLogout,
+  required int inviteCount,
 }) {
   final user = FirebaseAuth.instance.currentUser;
-
   Widget tile({
     required IconData icon,
     required String title,
@@ -106,11 +106,51 @@ void showSettingsSheet({
               color: Colors.green,
               onTap: onShareList,
             ),
-            tile(
-              icon: Icons.mail_rounded,
-              title: "Lời mời share",
-              color: Colors.orange,
-              onTap: onShareRequests,
+
+            Container(
+              margin: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: ListTile(
+                leading: Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(Icons.mail_rounded, color: Colors.orange),
+                ),
+
+                title: Row(
+                  children: [
+                    Text(
+                      "Lời mời share",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+
+                    if (inviteCount > 0) ...[
+                      SizedBox(width: 8),
+                      Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          "$inviteCount",
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+
+                trailing: Icon(Icons.chevron_right_rounded),
+                onTap: onShareRequests,
+              ),
             ),
             tile(
               icon: Icons.logout_rounded,

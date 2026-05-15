@@ -4,12 +4,16 @@ class StatusPanel extends StatelessWidget {
   final Map<String, dynamic> overall;
   final VoidCallback? onPair;
   final VoidCallback? onQR;
+  final String alarmStart;
+  final String alarmEnd;
 
   const StatusPanel({
     super.key,
     required this.overall,
     required this.onPair,
     required this.onQR,
+    required this.alarmStart,
+    required this.alarmEnd,
   });
 
   @override
@@ -24,57 +28,36 @@ class StatusPanel extends StatelessWidget {
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        overall["safe"] ? Icons.verified : Icons.warning,
-                        color: overall["safe"] ? Colors.green : Colors.red,
-                      ),
-
-                      SizedBox(width: 6),
-
-                      Text(
-                        overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: overall["safe"] ? Colors.green : Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  if (!overall["safe"])
-                    ...overall["issues"].map<Widget>(
-                      (e) => Text(
-                        "- $e",
-                        style: TextStyle(color: Colors.red, fontSize: 13),
-                      ),
-                    ),
-                ],
-              ),
+            Icon(
+              overall["safe"] ? Icons.verified : Icons.warning,
+              color: overall["safe"] ? Colors.green : Colors.red,
             ),
 
-            Row(
+            SizedBox(width: 6),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FloatingActionButton.small(
-                  heroTag: "pair",
-                  onPressed: onPair,
-                  child: Icon(Icons.link),
+                Text(
+                  overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: overall["safe"] ? Colors.green : Colors.red,
+                  ),
                 ),
 
-                SizedBox(width: 8),
+                SizedBox(height: 2),
 
-                FloatingActionButton.small(
-                  heroTag: "qr",
-                  onPressed: onQR,
-                  child: Icon(Icons.qr_code_scanner),
+                // 👇 DÒNG MỚI: alarm nhỏ, không đậm
+                Text(
+                  "⏰ Báo động: $alarmStart - $alarmEnd",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.black54,
+                  ),
                 ),
               ],
             ),
