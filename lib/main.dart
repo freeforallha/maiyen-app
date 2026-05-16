@@ -262,7 +262,6 @@ class _HomePageState extends State<HomePage> {
   void pairSensor(String hubId) {
     final isShared = homes[selectedHome]?["_shared"] == true;
 
-    // Không cho pair vào home shared
     if (isShared) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -273,11 +272,19 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    FirebaseDatabase.instance.ref("system/pairing").set({
+    // 🔥 FIX: khai báo ownerUid đúng cách
+    final ownerUid = getHomeOwnerUid();
+
+    final requestId =
+        "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
+
+    FirebaseDatabase.instance.ref("pair_requests/$requestId").set({
       "active": true,
+      "hubId": hubId.trim(),
       "homeId": selectedHome,
-      "hubId": hubId,
+      "ownerUid": ownerUid, // ✔ giờ không lỗi nữa
       "requestedBy": uid,
+      "duration": 60,
       "time": DateTime.now().millisecondsSinceEpoch,
     });
 
