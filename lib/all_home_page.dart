@@ -581,12 +581,22 @@ class _AllHomePageState extends State<AllHomePage> {
     for (final homeId in selectedHomes) {
       final home = safeMap(homes[homeId]);
 
-      final isShared = home["_shared"] == true;
-
+      final isShared = home.containsKey("_ownerUid");
       // ===== HOME ĐƯỢC SHARE =====
       if (isShared) {
+        final ownerUid = home["_ownerUid"];
+
         await FirebaseDatabase.instance
             .ref("accounts/$uid/sharedHomes/$homeId")
+            .remove();
+
+        await FirebaseDatabase.instance
+            .ref("sharedByHome/$homeId/$uid")
+            .remove();
+
+        // 🔥 remove khỏi share list của owner
+        await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/shareList/$homeId/$uid")
             .remove();
       }
       // ===== HOME CỦA MÌNH =====
@@ -828,8 +838,15 @@ class _AllHomePageState extends State<AllHomePage> {
                           if (home["_shared"] == true) continue;
 
                           await FirebaseDatabase.instance
-                              .ref("accounts/$targetUid/sharedHomes/$homeId")
-                              .set({"ownerUid": myUid});
+                              .ref("accounts/$targetUid/shareRequests/$homeId")
+                              .set({
+                                "ownerUid": myUid,
+                                "homeId": homeId,
+                                "ownerEmail":
+                                    FirebaseAuth.instance.currentUser?.email ??
+                                    "",
+                                "time": DateTime.now().millisecondsSinceEpoch,
+                              });
 
                           // lưu share list
                           await FirebaseDatabase.instance

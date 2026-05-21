@@ -61,13 +61,6 @@ class StatusPanel extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  if (!overall["safe"])
-                    ...overall["issues"].map<Widget>(
-                      (e) => Text(
-                        "- $e",
-                        style: TextStyle(color: Colors.red, fontSize: 13),
-                      ),
-                    ),
                 ],
               ),
             ),

@@ -103,12 +103,17 @@ Future<void> showShareListSheet({
                       icon: Icon(Icons.remove_circle, color: Colors.red),
 
                       onPressed: () async {
-                        // xóa khỏi sharedHomes người nhận
+                        // xóa shared home
                         await FirebaseDatabase.instance
                             .ref("accounts/$targetUid/sharedHomes/$homeId")
                             .remove();
 
-                        // xóa khỏi shareList owner
+                        // xóa sharedByHome
+                        await FirebaseDatabase.instance
+                            .ref("sharedByHome/$homeId/$targetUid")
+                            .remove();
+
+                        // xóa shareList
                         await FirebaseDatabase.instance
                             .ref(
                               "accounts/$ownerUid/shareList/$homeId/$targetUid",

@@ -305,13 +305,32 @@ class _HomePageState extends State<HomePage> {
     final isShared = homes[selectedHome]?["_shared"] == true;
 
     // ================= HOME SHARE =================
+    // ================= HOME SHARE =================
     if (isShared) {
       final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
       if (!ok) return;
 
+      final leavingHomeId = selectedHome;
+      final ownerUid = homes[leavingHomeId]?["_ownerUid"];
+
+      // xoá sharedHomes
+      await FirebaseDatabase.instance
+          .ref("accounts/$uid/sharedHomes/$leavingHomeId")
+          .remove();
+
+      // xoá sharedByHome
+      await FirebaseDatabase.instance
+          .ref("sharedByHome/$leavingHomeId/$uid")
+          .remove();
+      if (ownerUid != null) {
+        await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/shareList/$leavingHomeId/$uid")
+            .remove();
+      }
+
       setState(() {
-        homes.remove(selectedHome);
-        homeOrder.remove(selectedHome);
+        homes.remove(leavingHomeId);
+        homeOrder.remove(leavingHomeId);
 
         if (homeOrder.isNotEmpty) {
           selectedHome = homeOrder.first;
@@ -396,19 +415,22 @@ class _HomePageState extends State<HomePage> {
 
     if (ok != true) return;
 
-    final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
+    final sharedSnap = await FirebaseDatabase.instance
+        .ref("sharedByHome/$selectedHome")
+        .get();
 
-    if (accountsSnap.exists) {
-      final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
+    if (sharedSnap.exists) {
+      final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
 
-      for (final entry in accounts.entries) {
-        final otherUid = entry.key;
-
+      for (final sharedUid in sharedMap.keys) {
         await FirebaseDatabase.instance
-            .ref("accounts/$otherUid/sharedHomes/$selectedHome")
+            .ref("accounts/$sharedUid/sharedHomes/$selectedHome")
             .remove();
       }
     }
+
+    // remove global shared index
+    await FirebaseDatabase.instance.ref("sharedByHome/$selectedHome").remove();
 
     await FirebaseDatabase.instance
         .ref("accounts/$uid/homes/$selectedHome")
@@ -508,6 +530,8 @@ class _HomePageState extends State<HomePage> {
           "email": targetEmail,
           "sharedAt": DateTime.now().millisecondsSinceEpoch,
         });
+    // ================= GLOBAL SHARED INDEX =================
+
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text("Đã share home")));
