@@ -8,8 +8,6 @@ class HomeTabs extends StatelessWidget {
   final Function(String) onSelect;
   final Future<void> Function(int, int) onReorder;
   final Color Function(String) getHomeColor;
-  final VoidCallback onOpenAllHome;
-  final Function(String) onDoubleTapHome;
   final ScrollController controller;
 
   const HomeTabs({
@@ -20,8 +18,6 @@ class HomeTabs extends StatelessWidget {
     required this.onSelect,
     required this.onReorder,
     required this.getHomeColor,
-    required this.onOpenAllHome,
-    required this.onDoubleTapHome,
     required this.controller,
   });
 
@@ -35,54 +31,7 @@ class HomeTabs extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start, // FIX TRỤC CHÍNH
         children: [
-          // ================= ALL HOME =================
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: GestureDetector(
-              onTap: onOpenAllHome,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  width: itemWidth,
-                  height: itemHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.blueGrey.shade700,
-                        Colors.blueGrey.shade900,
-                      ],
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.dashboard_rounded,
-                          color: Colors.white, size: 22),
-                      SizedBox(height: 4),
-                      Text(
-                        "ALL",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+
 
           // ================= HOME LIST =================
           Expanded(
@@ -102,7 +51,6 @@ class HomeTabs extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   child: GestureDetector(
                     onTap: () => onSelect(h),
-                    onDoubleTap: () => onDoubleTapHome(h),
 
                     child: Align(
                       alignment: Alignment.topCenter, // FIX TRỤC

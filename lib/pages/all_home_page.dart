@@ -14,6 +14,21 @@ class AllHomePage extends StatefulWidget {
 }
 
 class _AllHomePageState extends State<AllHomePage> {
+  bool isAllSafe() {
+    if (homes.isEmpty) return true;
+
+    for (final home in homes.values) {
+      final devices = safeMap(home["devices"]);
+
+      final unsafe = devices.values.any(
+            (d) => d["status"] != "closed" || d["tamper"] == true,
+      );
+
+      if (unsafe) return false;
+    }
+
+    return true;
+  }
   Map<String, dynamic> homes = {};
 
   Set<String> selectedHomes = {};
@@ -642,39 +657,62 @@ class _AllHomePageState extends State<AllHomePage> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: isSearching
             ? TextField(
-                controller: searchController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: "Tìm home...",
-                  border: InputBorder.none,
+          controller: searchController,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: "Tìm home...",
+            border: InputBorder.none,
+          ),
+          onChanged: (value) {
+            setState(() {
+              search = value.toLowerCase().trim();
+            });
+          },
+        )
+            : RichText(
+          text: TextSpan(
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+            ),
+            children: [
+              TextSpan(
+                text: "Safe",
+                style: TextStyle(
+                  color: isAllSafe() ? Colors.green : Colors.red,
+                  fontWeight: FontWeight.w800,
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    search = value.toLowerCase().trim();
-                  });
-                },
-              )
-            : Text("Tất cả Home"),
+              ),
+              const TextSpan(
+                text: "Home",
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+        ),
 
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),
             onPressed: () {
               setState(() {
-                if (isSearching) {
+                isSearching = !isSearching;
+
+                if (!isSearching) {
                   search = "";
                   searchController.clear();
                 }
-                isSearching = !isSearching;
               });
             },
           ),
 
           if (selectedHomes.isNotEmpty)
             IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 setState(() => selectedHomes.clear());
               },

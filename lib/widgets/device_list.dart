@@ -81,7 +81,7 @@ class DeviceList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(6),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.05),
@@ -121,9 +121,9 @@ class DeviceList extends StatelessWidget {
                       final lastSeenLabel = formatLastSeenLabel(d["last_seen"]);
 
                       return Container(
-                        margin: EdgeInsets.all(2),
+                        margin: EdgeInsets.zero,
                         padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                          horizontal: 6,
                           vertical: 6,
                         ),
 

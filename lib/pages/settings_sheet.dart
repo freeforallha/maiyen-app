@@ -7,9 +7,13 @@ void showSettingsSheet({
   required VoidCallback onShare,
   required VoidCallback onShareList,
   required VoidCallback onLogout,
+  required VoidCallback onAlarm,
+  required VoidCallback onRenameHome,
+  required VoidCallback onDeleteHome,
   required int inviteCount,
 }) {
   final user = FirebaseAuth.instance.currentUser;
+
   Widget tile({
     required IconData icon,
     required String title,
@@ -17,30 +21,26 @@ void showSettingsSheet({
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(18),
       ),
-
       child: ListTile(
         leading: Container(
           width: 38,
           height: 38,
-
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
           ),
-
           child: Icon(icon, color: color),
         ),
-
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
-
-        trailing: Icon(Icons.chevron_right_rounded),
-
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        trailing: const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
       ),
     );
@@ -49,50 +49,45 @@ void showSettingsSheet({
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
-
+    isScrollControlled: true,
     builder: (_) {
       return Container(
-        padding: EdgeInsets.all(20),
-
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
           color: Colors.white,
-
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
-
         child: Column(
           mainAxisSize: MainAxisSize.min,
-
           children: [
+            // drag handle
             Container(
               width: 42,
               height: 5,
-
               decoration: BoxDecoration(
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
+            const SizedBox(height: 18),
 
-            SizedBox(height: 18),
+            // ===== HOME SETTINGS =====
 
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: Colors.blue.withValues(alpha: 0.1),
-
-              child: Icon(Icons.person, size: 30, color: Colors.blue),
+            tile(
+              icon: Icons.schedule,
+              title: "Giờ báo động",
+              color: Colors.deepPurple,
+              onTap: onAlarm,
             ),
 
-            SizedBox(height: 12),
-
-            Text(
-              user?.email ?? "",
-
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            tile(
+              icon: Icons.edit,
+              title: "Sửa tên Home",
+              color: Colors.teal,
+              onTap: onRenameHome,
             ),
 
-            SizedBox(height: 22),
-
+            // ===== SHARE =====
             tile(
               icon: Icons.share_rounded,
               title: "Chia sẻ Home",
@@ -107,8 +102,9 @@ void showSettingsSheet({
               onTap: onShareList,
             ),
 
+            // ===== INVITE =====
             Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                 color: Colors.orange.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(18),
@@ -121,45 +117,47 @@ void showSettingsSheet({
                     color: Colors.orange.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(Icons.mail_rounded, color: Colors.orange),
+                  child: const Icon(Icons.mail_rounded, color: Colors.orange),
                 ),
-
                 title: Row(
                   children: [
-                    Text(
+                    const Text(
                       "Lời mời share",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-
                     if (inviteCount > 0) ...[
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
                         child: Text(
                           "$inviteCount",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ],
                   ],
                 ),
-
-                trailing: Icon(Icons.chevron_right_rounded),
+                trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: onShareRequests,
               ),
             ),
+
+            const SizedBox(height: 8),
+
             tile(
-              icon: Icons.logout_rounded,
-              title: "Đăng xuất",
+              icon: Icons.delete_forever,
+              title: "Xoá Home",
               color: Colors.red,
-              onTap: onLogout,
+              onTap: onDeleteHome,
             ),
 
-            SizedBox(height: 10),
           ],
         ),
       );
