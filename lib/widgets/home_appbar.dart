@@ -1,47 +1,32 @@
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget buildHomeAppBar({
-  required VoidCallback onSchedule,
-  required VoidCallback onRename,
-  required VoidCallback onAddHome,
-  required VoidCallback onDelete,
-  required VoidCallback onSettings,
-  required int inviteCount,
-}) {
+PreferredSizeWidget buildHomeAppBar() {
   return AppBar(
-    title: Text("SafeHome"),
-    actions: [
-      IconButton(icon: Icon(Icons.schedule), onPressed: onSchedule),
-      IconButton(icon: Icon(Icons.edit), onPressed: onRename),
-      IconButton(icon: Icon(Icons.add_home), onPressed: onAddHome),
-      IconButton(icon: Icon(Icons.delete), onPressed: onDelete),
+    title: Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Colors.blueAccent.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(Icons.home_rounded, color: Colors.blueAccent, size: 20),
+        ),
 
-      Stack(
-        children: [
-          IconButton(icon: Icon(Icons.settings_rounded), onPressed: onSettings),
+        SizedBox(width: 10),
 
-          if (inviteCount > 0)
-            Positioned(
-              right: 6,
-              top: 6,
-              child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  "$inviteCount",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    ],
+        Text(
+          "SafeHome",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    ),
+
+    centerTitle: false,
+    elevation: 0,
   );
 }

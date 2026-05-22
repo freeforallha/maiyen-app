@@ -23,8 +23,14 @@ class StatusPanel extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: overall["safe"] ? Colors.green.shade100 : Colors.red.shade100,
-          borderRadius: BorderRadius.circular(12),
+          color: Colors.white.withValues(alpha: 0.05),
+
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.12),
+            width: 1,
+          ),
+
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,23 +71,26 @@ class StatusPanel extends StatelessWidget {
               ),
             ),
 
-            Row(
-              children: [
-                FloatingActionButton.small(
-                  heroTag: "pair",
-                  onPressed: onPair,
-                  child: Icon(Icons.link),
-                ),
+            if (onPair != null || onQR != null)
+              Row(
+                children: [
+                  if (onPair != null)
+                    FloatingActionButton.small(
+                      heroTag: "pair",
+                      onPressed: onPair,
+                      child: Icon(Icons.link),
+                    ),
 
-                SizedBox(width: 8),
+                  if (onPair != null && onQR != null) SizedBox(width: 8),
 
-                FloatingActionButton.small(
-                  heroTag: "qr",
-                  onPressed: onQR,
-                  child: Icon(Icons.qr_code_scanner),
-                ),
-              ],
-            ),
+                  if (onQR != null)
+                    FloatingActionButton.small(
+                      heroTag: "qr",
+                      onPressed: onQR,
+                      child: Icon(Icons.qr_code_scanner),
+                    ),
+                ],
+              ),
           ],
         ),
       ),

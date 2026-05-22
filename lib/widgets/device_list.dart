@@ -5,12 +5,14 @@ class DeviceList extends StatelessWidget {
 
   final bool isShared;
   final String ownerEmail;
+  final Widget? header;
 
   final Function(String) onRename;
   final Function(String) onDelete;
   final Function(String) onTapDevice;
 
   const DeviceList({
+    this.header,
     super.key,
     required this.devices,
 
@@ -104,52 +106,7 @@ class DeviceList extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: Column(
               children: [
-                // ===== HEADER =====
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.1),
-                      ),
-                    ),
-                  ),
-
-                  child: Row(
-                    children: [
-                      Icon(Icons.sensors, color: Colors.white70, size: 18),
-
-                      SizedBox(width: 6),
-
-                      Text(
-                        "DEVICES",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-
-                      if (isShared) ...[
-                        SizedBox(width: 10),
-
-                        Expanded(
-                          child: Text(
-                            "(Chia sẻ bởi $ownerEmail)",
-                            overflow: TextOverflow.ellipsis,
-
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                if (header != null) header!,
 
                 // ===== DEVICE LIST =====
                 Expanded(

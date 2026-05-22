@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/share_list_sheet.dart';
+import 'share_list_sheet.dart';
 
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;

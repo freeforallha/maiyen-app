@@ -5,11 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'all_home_page.dart';
-import 'device_list.dart';
 import 'firebase_options.dart';
 import 'helpers/home_helper.dart';
-import 'home_tabs.dart';
+import 'pages/all_home_page.dart';
 import 'pages/confirm_dialog.dart';
 import 'pages/device_detail_sheet.dart';
 import 'pages/login_page.dart';
@@ -23,8 +21,9 @@ import 'services/fcm_service.dart';
 import 'services/home_listener_service.dart';
 import 'services/home_service.dart';
 import 'services/notification_service.dart';
-import 'status_panel.dart';
-import 'widgets/home_appbar.dart';
+import 'widgets/device_list.dart';
+import 'widgets/home_tabs.dart';
+import 'widgets/status_panel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -756,41 +755,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final devices = getDevices();
-
     return Scaffold(
-      appBar: buildHomeAppBar(
-        onSchedule: setAlarmSchedule,
-        onRename: renameHome,
-        onAddHome: addHome,
-        onDelete: deleteHome,
-
-        // 👇 THÊM DÒNG NÀY
-        inviteCount: shareRequests.length,
-
-        onSettings: () {
-          showSettingsSheet(
-            context: context,
-            inviteCount: shareRequests.length,
-            onShareRequests: () {
-              showShareRequestSheet(
-                context: context,
-                inviteCount: shareRequests.length,
-                requests: shareRequests,
-                uid: uid,
-              );
-            },
-            onShare: shareHome,
-            onShareList: () {
-              showShareListSheet(
-                context: context,
-                ownerUid: uid,
-                homeId: selectedHome,
-              );
-            },
-            onLogout: logout,
-          );
-        },
-      ),
+      appBar: buildSafeHomeAppBar(),
       body: Column(
         children: [
           HomeTabs(
@@ -845,6 +811,59 @@ class _HomePageState extends State<HomePage> {
 
             getHomeColor: getHomeColor,
 
+            onDoubleTapHome: (h) async {
+              setState(() {
+                selectedHome = h;
+              });
+
+              showModalBottomSheet(
+                context: context,
+
+                builder: (_) {
+                  return SafeArea(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.schedule),
+                          title: Text("Giờ báo động"),
+
+                          onTap: () {
+                            Navigator.pop(context);
+                            setAlarmSchedule();
+                          },
+                        ),
+
+                        ListTile(
+                          leading: Icon(Icons.edit),
+                          title: Text("Sửa tên Home"),
+
+                          onTap: () {
+                            Navigator.pop(context);
+                            renameHome();
+                          },
+                        ),
+
+                        ListTile(
+                          leading: Icon(Icons.delete, color: Colors.red),
+                          title: Text(
+                            "Xoá Home",
+                            style: TextStyle(color: Colors.red),
+                          ),
+
+                          onTap: () {
+                            Navigator.pop(context);
+                            deleteHome();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+
             onOpenAllHome: () async {
               final selected = await Navigator.push<String>(
                 context,
@@ -872,73 +891,234 @@ class _HomePageState extends State<HomePage> {
               }
             },
           ),
+
           Expanded(
-            child: Column(
-              children: [
-                StatusPanel(
-                  overall: getOverallStatus(devices),
+            child: DeviceList(
+              devices: devices,
 
-                  onPair: homes[selectedHome]?["_shared"] == true
-                      ? null
-                      : () async {
-                          final hubId = await showPairDialog(context);
-                          if (hubId == null || hubId.trim().isEmpty) return;
-                          pairSensor(hubId.trim());
-                        },
+              header: Column(
+                children: [
+                  StatusPanel(
+                    overall: getOverallStatus(devices),
 
-                  onQR: homes[selectedHome]?["_shared"] == true
-                      ? null
-                      : () async {
-                          final code = await openQRScanner(context);
-                          if (code != null) pairSensor(code);
-                        },
+                    onPair: null,
+                    onQR: null,
 
-                  // 👇 THÊM 2 DÒNG NÀY
-                  alarmStart: formatTime(
-                    safeMap(
-                          homes[selectedHome]?["_customAlarm"] ??
-                              homes[selectedHome]?["alarm"],
-                        )["start"]?.toString() ??
-                        "--:--",
+                    alarmStart: formatTime(
+                      safeMap(
+                        homes[selectedHome]?["_customAlarm"] ??
+                            homes[selectedHome]?["alarm"],
+                      )["start"]?.toString() ??
+                          "--:--",
+                    ),
+
+                    alarmEnd: formatTime(
+                      safeMap(
+                        homes[selectedHome]?["_customAlarm"] ??
+                            homes[selectedHome]?["alarm"],
+                      )["end"]?.toString() ??
+                          "--:--",
+                    ),
                   ),
 
-                  alarmEnd: formatTime(
-                    safeMap(
-                          homes[selectedHome]?["_customAlarm"] ??
-                              homes[selectedHome]?["alarm"],
-                        )["end"]?.toString() ??
-                        "--:--",
-                  ),
-                ),
-                if (pairingCountdown > 0) Text("Pairing: $pairingCountdown s"),
-                DeviceList(
-                  devices: devices,
+                  if (pairingCountdown > 0)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Text("Pairing: $pairingCountdown s"),
+                    ),
+                ],
+              ),
 
-                  isShared: homes[selectedHome]?["_shared"] == true,
+              isShared: homes[selectedHome]?["_shared"] == true,
 
-                  ownerEmail:
-                      homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+              ownerEmail:
+              homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
 
-                  onRename: renameDevice,
-                  onDelete: deleteDevice,
-                  onTapDevice: (id) {
-                    showDeviceDetail(
-                      context: context,
-                      id: id,
-                      d: safeMap(getDevices()[id]),
+              onRename: renameDevice,
+              onDelete: deleteDevice,
 
-                      onRename: () => renameDevice(id),
+              onTapDevice: (id) {
+                showDeviceDetail(
+                  context: context,
+                  id: id,
+                  d: safeMap(getDevices()[id]),
 
-                      onDelete: () => deleteDevice(id),
+                  onRename: () => renameDevice(id),
 
-                      onNotification: () => openNotificationList(id),
-                    );
-                  },
-                ),
-              ],
+                  onDelete: () => deleteDevice(id),
+
+                  onNotification: () => openNotificationList(id),
+                );
+              },
             ),
           ),
         ],
+      ),
+
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: EdgeInsets.all(12),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          decoration: BoxDecoration(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+            children: [
+              IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 12,
+                      color: Colors.blueAccent.withValues(alpha: 0.35),
+                    ),
+                  ],
+                ),
+
+                child: IconButton(
+                  icon: Icon(Icons.qr_code_scanner, color: Colors.white),
+
+                  onPressed: homes[selectedHome]?["_shared"] == true
+                      ? null
+                      : () async {
+                          final result = await showModalBottomSheet<String>(
+                            context: context,
+                            isScrollControlled: true,
+
+                            builder: (_) {
+                              return SafeArea(
+                                child: Padding(
+                                  padding: EdgeInsets.all(20),
+
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+
+                                    children: [
+                                      Text(
+                                        "Pair Sensor",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+
+                                      SizedBox(height: 20),
+
+                                      SizedBox(
+                                        width: double.infinity,
+
+                                        child: ElevatedButton.icon(
+                                          icon: Icon(Icons.qr_code_scanner),
+                                          label: Text("Scan QR Code"),
+
+                                          onPressed: () async {
+                                            Navigator.pop(context, "__SCAN__");
+                                          },
+                                        ),
+                                      ),
+
+                                      SizedBox(height: 10),
+
+                                      TextButton.icon(
+                                        icon: Icon(Icons.keyboard),
+                                        label: Text("Nhập HUB ID thủ công"),
+
+                                        onPressed: () async {
+                                          Navigator.pop(context, "__MANUAL__");
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+
+                          if (result == "__SCAN__") {
+                            final code = await openQRScanner(context);
+
+                            if (code != null) {
+                              pairSensor(code);
+                            }
+                          }
+
+                          if (result == "__MANUAL__") {
+                            final hubId = await showPairDialog(context);
+
+                            if (hubId == null || hubId.trim().isEmpty) return;
+
+                            pairSensor(hubId.trim());
+                          }
+                        },
+                ),
+              ),
+
+              Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.settings_rounded),
+
+                    onPressed: () {
+                      showSettingsSheet(
+                        context: context,
+                        inviteCount: shareRequests.length,
+
+                        onShareRequests: () {
+                          showShareRequestSheet(
+                            context: context,
+                            inviteCount: shareRequests.length,
+                            requests: shareRequests,
+                            uid: uid,
+                          );
+                        },
+
+                        onShare: shareHome,
+
+                        onShareList: () {
+                          showShareListSheet(
+                            context: context,
+                            ownerUid: uid,
+                            homeId: selectedHome,
+                          );
+                        },
+
+                        onLogout: logout,
+                      );
+                    },
+                  ),
+
+                  if (shareRequests.length > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+
+                        child: Text(
+                          "${shareRequests.length}",
+
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
