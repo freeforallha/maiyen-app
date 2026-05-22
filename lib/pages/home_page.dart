@@ -455,11 +455,6 @@ class _HomePageState extends State<HomePage> {
           selectedHome = "";
         }
       });
-
-      await FirebaseDatabase.instance
-          .ref("accounts/$uid/homeOrder")
-          .set(homeOrder);
-
       return;
     }
 
@@ -752,10 +747,53 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/homes/$homeId")
         .set(homeData);
+    final targetOrderSnap = await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/homeOrder")
+        .get();
+
+    List<dynamic> targetOrder = [];
+
+    if (targetOrderSnap.exists) {
+      targetOrder = List<dynamic>.from(targetOrderSnap.value as List);
+    }
+
+    if (!targetOrder.contains(homeId)) {
+      targetOrder.add(homeId);
+    }
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/homeOrder")
+        .set(targetOrder);
 
 // ===== 4. DELETE FROM OLD OWNER =====
     await FirebaseDatabase.instance
         .ref("accounts/$uid/homes/$homeId")
+        .remove();
+    final myOrderSnap = await FirebaseDatabase.instance
+        .ref("accounts/$uid/homeOrder")
+        .get();
+
+    List<dynamic> myOrder = [];
+
+    if (myOrderSnap.exists) {
+      myOrder = List<dynamic>.from(myOrderSnap.value as List);
+    }
+
+    myOrder.remove(homeId);
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homeOrder")
+        .set(myOrder);
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/sharedHomes/$homeId")
+        .remove();
+
+    await FirebaseDatabase.instance
+        .ref("sharedByHome/$homeId/$targetUid")
+        .remove();
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/shareList/$homeId/$targetUid")
         .remove();
 
 
