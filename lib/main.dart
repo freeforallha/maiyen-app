@@ -64,6 +64,74 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void showAccountSheet(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ===== AVATAR =====
+              CircleAvatar(
+                radius: 35,
+                backgroundImage: (user?.photoURL != null)
+                    ? NetworkImage(user!.photoURL!)
+                    : null,
+                child: (user?.photoURL == null)
+                    ? const Icon(Icons.person, size: 40)
+                    : null,
+              ),
+
+              const SizedBox(height: 12),
+
+              // ===== EMAIL =====
+              Text(
+                user?.email ?? "No email",
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ===== UID =====
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  "UID:\n${user?.uid ?? 'Unknown'}",
+                  style: const TextStyle(fontSize: 13),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ===== CLOSE BUTTON =====
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Đóng"),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   Map<String, dynamic> shareRequests = {};
 
   void openNotificationList(String deviceId) {
@@ -84,34 +152,63 @@ class _HomePageState extends State<HomePage> {
   }
 
   PreferredSizeWidget buildSafeHomeAppBar() {
+    final user = FirebaseAuth.instance.currentUser;
+    final photoUrl = user?.photoURL;
+
+    final devices = getDevices();
+
+    // ===== SMART SAFE LOGIC =====
+    final isSafe = !devices.values.any(
+          (d) => d["status"] != "closed" || d["tamper"] == true,
+    );
+
     return AppBar(
-      title: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: Colors.blueAccent.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(Icons.home_rounded, color: Colors.blueAccent, size: 20),
-          ),
+      centerTitle: true,
+      elevation: 0,
 
-          SizedBox(width: 10),
-
-          Text(
-            "SafeHome",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.5,
-            ),
+      // ===== TITLE SAFEHOME =====
+      title: RichText(
+        text: TextSpan(
+          style: const TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
           ),
-        ],
+          children: [
+            TextSpan(
+              text: "Safe",
+              style: TextStyle(
+                color: isSafe ? Colors.green : Colors.red,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const TextSpan(
+              text: "Home",
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
+        ),
       ),
 
-      centerTitle: false,
-
-      elevation: 0,
+      // ===== AVATAR =====
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: GestureDetector(
+            onTap: () => showAccountSheet(context),
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.grey.shade300,
+              backgroundImage: (photoUrl != null)
+                  ? NetworkImage(photoUrl)
+                  : null,
+              child: (photoUrl == null)
+                  ? const Icon(Icons.person, size: 18, color: Colors.black54)
+                  : null,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
