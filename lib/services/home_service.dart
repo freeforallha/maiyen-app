@@ -41,6 +41,9 @@ class HomeService {
       "name": name,
       "devices": {},
       "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
+
+      "_ownerUid": uid,
+      "_shared": false,
     });
   }
 }

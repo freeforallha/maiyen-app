@@ -30,6 +30,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   void showAccountSheet(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -652,7 +653,143 @@ class _HomePageState extends State<HomePage> {
       context,
     ).showSnackBar(SnackBar(content: Text("Đã share home")));
   }
+  void transferOwner() async {
+    final controller = TextEditingController();
 
+    final targetEmail = await showDialog<String>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Chuyển quyền chủ nhà"),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: "Email người nhận quyền",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(
+              context,
+              controller.text.trim().toLowerCase(),
+            ),
+            child: Text("Tiếp tục"),
+          ),
+        ],
+      ),
+    );
+
+    if (targetEmail == null || targetEmail.isEmpty) return;
+
+    // ===== 1. FIND UID =====
+    final snap = await FirebaseDatabase.instance.ref("accounts").get();
+    if (!snap.exists) return;
+
+    String? targetUid;
+
+    final accounts = Map<String, dynamic>.from(snap.value as Map);
+
+    for (final entry in accounts.entries) {
+      final data = Map<String, dynamic>.from(entry.value);
+      final email = data["email"]?.toString().toLowerCase();
+
+      if (email == targetEmail) {
+        targetUid = entry.key;
+        break;
+      }
+    }
+
+    if (targetUid == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Không tìm thấy user"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // ===== 2. CONFIRM =====
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Xác nhận"),
+        content: Text("Chuyển quyền Home này cho $targetEmail ?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("Hủy"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+
+    // ===== 3. TRANSFER OWNER =====
+    final homeId = selectedHome;
+
+// ===== 1. GET CURRENT HOME DATA =====
+    final currentSnap = await FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$homeId")
+        .get();
+
+    if (!currentSnap.exists) return;
+
+    final homeData = Map<String, dynamic>.from(currentSnap.value as Map);
+
+// ===== 2. UPDATE OWNER UID =====
+    homeData["_ownerUid"] = targetUid;
+
+// ===== 3. WRITE TO NEW OWNER =====
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/homes/$homeId")
+        .set(homeData);
+
+// ===== 4. DELETE FROM OLD OWNER =====
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$homeId")
+        .remove();
+
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/sharedHomes/$homeId")
+        .remove();
+
+    await FirebaseDatabase.instance
+        .ref("sharedByHome/$homeId/$uid")
+        .remove();
+
+    // ===== 4. UPDATE LOCAL =====
+    setState(() {
+      homes.remove(homeId);
+      homeOrder.remove(homeId);
+
+      if (homeOrder.isNotEmpty) {
+        selectedHome = homeOrder.first;
+      } else {
+        selectedHome = "";
+      }
+    });
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homeOrder")
+        .set(homeOrder);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (homeOrder.isNotEmpty) {
+        final index = homeOrder.indexOf(selectedHome);
+        if (index != -1) {
+          homeTabController.jumpTo(index * 110);
+        }
+      }
+    });
+  }
   void deleteDevice(String id) async {
     if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
@@ -1104,6 +1241,8 @@ class _HomePageState extends State<HomePage> {
 
                     onPressed: () {
                       showSettingsSheet(
+                        homeId: selectedHome,
+                        onTransferOwner: transferOwner,
                         onAlarm: setAlarmSchedule,
                         onRenameHome: renameHome,
                         onDeleteHome: deleteHome,

@@ -111,10 +111,11 @@ class DeviceList extends StatelessWidget {
                 // ===== DEVICE LIST =====
                 Expanded(
                   child: GridView.count(
+                    padding: EdgeInsets.all(8),
                     crossAxisCount: 2,
-                    childAspectRatio: 1.55,
-                    crossAxisSpacing: 6,
-                    mainAxisSpacing: 6,
+                    childAspectRatio: 1.6,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 10,
                     children: devices.entries.map((e) {
                       final d = safeMap(e.value);
                       final lastSeen = d["last_seen_text"] ?? "--";
@@ -129,13 +130,13 @@ class DeviceList extends StatelessWidget {
 
                         decoration: BoxDecoration(
                           color:
-                              (d["status"] != "closed" || d["tamper"] == true)
+                          (d["status"] != "closed" || d["tamper"] == true)
                               ? Colors.red.shade100
                               : Colors.green.shade100,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color:
-                                (d["status"] != "closed" || d["tamper"] == true)
+                            (d["status"] != "closed" || d["tamper"] == true)
                                 ? Colors.red.shade300
                                 : Colors.green.shade300,
                             width: 1,
@@ -149,18 +150,16 @@ class DeviceList extends StatelessWidget {
                               vertical: 10,
                             ),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              // 👈 CĂN GIỮA
+                              mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // ===== NAME =====
-                                Spacer(),
                                 Text(
                                   d["name"]?.toString() ?? e.key,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     height: 1.0,
                                   ),
@@ -170,43 +169,44 @@ class DeviceList extends StatelessWidget {
                                 // ===== STATUS =====
                                 Row(
                                   children: [
-                                    Icon(
-                                      d["status"] == "closed"
-                                          ? Icons.check_circle
-                                          : Icons.cancel,
-                                      size: 18,
-                                      color: d["status"] == "closed"
-                                          ? Colors.green
-                                          : Colors.red,
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          d["status"] == "closed"
+                                              ? Icons.check_circle
+                                              : Icons.cancel,
+                                          size: 16,
+                                          color: d["status"] == "closed"
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          d["status"] == "closed" ? "Đóng" : "Mở",
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                      ],
                                     ),
 
-                                    SizedBox(width: 4),
+                                    SizedBox(width: 16), // 👈 khoảng cách chuẩn
 
-                                    Text(
-                                      d["status"] == "closed" ? "Đóng" : "Mở",
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-
-                                    SizedBox(width: 12),
-
-                                    Icon(
-                                      d["tamper"] == true
-                                          ? Icons.cancel
-                                          : Icons.check_circle,
-                                      size: 18,
-                                      color: d["tamper"] == true
-                                          ? Colors.red
-                                          : Colors.green,
-                                    ),
-
-                                    SizedBox(width: 4),
-
-                                    Text(
-                                      d["tamper"] == true
-                                          ? "Bị tháo"
-                                          : "BT"
-                                                "",
-                                      style: TextStyle(fontSize: 14),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          d["tamper"] == true
+                                              ? Icons.cancel
+                                              : Icons.check_circle,
+                                          size: 16,
+                                          color: d["tamper"] == true
+                                              ? Colors.red
+                                              : Colors.green,
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          d["tamper"] == true ? "Bị tháo" : "BT",
+                                          style: TextStyle(fontSize: 13),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -237,12 +237,12 @@ class DeviceList extends StatelessWidget {
                                   ],
                                 ),
 
-                                SizedBox(height: 2),
-
                                 Text(
                                   lastSeen,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 11,
                                     color: Colors.black54,
                                   ),
                                 ),

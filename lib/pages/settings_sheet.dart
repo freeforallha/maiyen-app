@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showSettingsSheet({
+  required String homeId,
   required BuildContext context,
   required VoidCallback onShareRequests,
   required VoidCallback onShare,
@@ -11,6 +12,7 @@ void showSettingsSheet({
   required VoidCallback onRenameHome,
   required VoidCallback onDeleteHome,
   required int inviteCount,
+  required VoidCallback onTransferOwner,
 }) {
   final user = FirebaseAuth.instance.currentUser;
 
@@ -69,8 +71,23 @@ void showSettingsSheet({
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            const SizedBox(height: 18),
 
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 14),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: SelectableText(
+                "HomeID: $homeId",
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
             // ===== HOME SETTINGS =====
 
             tile(
@@ -148,7 +165,12 @@ void showSettingsSheet({
                 onTap: onShareRequests,
               ),
             ),
-
+            tile(
+              icon: Icons.swap_horiz,
+              title: "Chuyển quyền chủ nhà",
+              color: Colors.purple,
+              onTap: onTransferOwner,
+            ),
             const SizedBox(height: 8),
 
             tile(
