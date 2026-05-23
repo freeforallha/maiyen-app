@@ -16,117 +16,113 @@ void showDeviceDetail({
 
   showModalBottomSheet(
     context: context,
-    backgroundColor: Colors.grey.shade900,
+    backgroundColor: Colors.transparent,
     isScrollControlled: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
     builder: (_) {
-      return Padding(
-        padding: EdgeInsets.all(20),
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // drag handle
+            Center(
+              child: Container(
+                width: 42,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            /// HEADER
             Row(
               children: [
                 Expanded(
                   child: Text(
                     d["name"] ?? id,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
 
-                IconButton(
-                  onPressed: onNotification,
-
-                  icon: Container(
-                    padding: EdgeInsets.all(8),
-
-                    decoration: BoxDecoration(
-                      color: Colors.amber..withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Icon(
-                      Icons.receipt_long_rounded,
-                      color: Colors.amber,
-                      size: 22,
-                    ),
-                  ),
+                _iconButton(
+                  icon: Icons.notifications_active_rounded,
+                  color: Colors.amber,
+                  onTap: onNotification,
                 ),
 
-                IconButton(
-                  onPressed: onRename,
+                const SizedBox(width: 8),
 
-                  icon: Container(
-                    padding: EdgeInsets.all(8),
-
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Icon(
-                      Icons.edit_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
+                _iconButton(
+                  icon: Icons.edit_rounded,
+                  color: Colors.teal,
+                  onTap: onRename,
                 ),
               ],
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 18),
 
-            infoRow(
-              Icons.sensor_door,
-              "Cửa",
-              status == "closed" ? "Đang đóng" : "Đang mở",
-              valueColor: status == "closed"
-                  ? Colors.white
-                  : Colors.red.shade300,
+            /// INFO LIST
+            _infoRow(
+              icon: Icons.sensor_door_rounded,
+              color: Colors.blue,
+              title: "Cửa",
+              value: status == "closed" ? "Đang đóng" : "Đang mở",
+              valueColor:
+              status == "closed" ? Colors.black87 : Colors.redAccent,
             ),
 
-            infoRow(
-              Icons.security,
-              "Tháo/Lắp",
-              tamper ? "Bị tháo" : "Bình thường",
-              valueColor: tamper ? Colors.red.shade300 : Colors.white,
+            _infoRow(
+              icon: Icons.warning_amber_rounded,
+              color: Colors.orange,
+              title: "Tháo/Lắp",
+              value: tamper ? "Bị tháo" : "Bình thường",
+              valueColor: tamper ? Colors.redAccent : Colors.black87,
             ),
 
-            infoRow(
-              Icons.battery_full,
-              "Pin",
-              battery != null ? "$battery%" : "N/A",
+            _infoRow(
+              icon: Icons.battery_full_rounded,
+              color: Colors.green,
+              title: "Pin",
+              value: battery != null ? "$battery%" : "N/A",
             ),
 
-            infoRow(
-              Icons.network_cell,
-              "Tín Hiệu",
-              linkquality != null ? "$linkquality" : "N/A",
+            _infoRow(
+              icon: Icons.network_cell_rounded,
+              color: Colors.purple,
+              title: "Tín hiệu",
+              value: linkquality != null ? "$linkquality" : "N/A",
             ),
 
-            infoRow(
-              Icons.access_time,
-              "Cập nhật cuối",
-              formatFullDate(lastSeen),
+            _infoRow(
+              icon: Icons.access_time_rounded,
+              color: Colors.indigo,
+              title: "Cập nhật cuối",
+              value: formatFullDate(lastSeen),
             ),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 22),
 
+            /// DELETE BUTTON
             Center(
-              child: IconButton(
-                onPressed: onDelete,
-                icon: Icon(
-                  Icons.delete_outline,
-                  color: Colors.redAccent,
-                  size: 30,
-                ),
+              child: _iconButton(
+                icon: Icons.delete_forever_rounded,
+                color: Colors.red,
+                size: 26,
+                onTap: onDelete,
               ),
             ),
           ],
@@ -136,33 +132,72 @@ void showDeviceDetail({
   );
 }
 
-Widget infoRow(
-  IconData icon,
-  String title,
-  String value, {
-  Color valueColor = Colors.white,
+/// ================= ICON STYLE (GIỐNG SHARE SHEET) =================
+Widget _iconButton({
+  required IconData icon,
+  required Color color,
+  required VoidCallback onTap,
+  double size = 20,
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(12),
+    child: Container(
+      width: 42,
+      height: 42,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(icon, color: color, size: size),
+    ),
+  );
+}
+
+/// ================= INFO ROW =================
+Widget _infoRow({
+  required IconData icon,
+  required Color color,
+  required String title,
+  required String value,
+  Color valueColor = Colors.black87,
 }) {
   return Padding(
-    padding: EdgeInsets.only(bottom: 14),
+    padding: const EdgeInsets.only(bottom: 14),
     child: Row(
       children: [
-        Icon(icon, color: Colors.white70, size: 20),
+        Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: color, size: 18),
+        ),
 
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
 
-        Text("$title:", style: TextStyle(color: Colors.white70)),
+        Text(
+          title,
+          style: const TextStyle(color: Colors.black54),
+        ),
 
-        Spacer(),
+        const Spacer(),
 
         Text(
           value,
-          style: TextStyle(color: valueColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: valueColor,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     ),
   );
 }
 
+/// ================= DATE =================
 String formatFullDate(dynamic ts) {
   if (ts == null) return "N/A";
 

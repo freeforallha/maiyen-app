@@ -596,7 +596,7 @@ class _AllHomePageState extends State<AllHomePage> {
     for (final homeId in selectedHomes) {
       final home = safeMap(homes[homeId]);
 
-      final isShared = home.containsKey("_ownerUid");
+      final isShared = home["_shared"] == true;
       // ===== HOME ĐƯỢC SHARE =====
       if (isShared) {
         final ownerUid = home["_ownerUid"];
@@ -763,11 +763,11 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Đặt báo thức các home",
+                        "Đặt báo thức nhà đã chọn",
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
 
-                      subtitle: Text("${selectedHomes.length} homes selected"),
+                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
 
                       trailing: Icon(Icons.chevron_right_rounded),
 
@@ -786,11 +786,11 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Chia sẻ các Home",
+                        "Chia sẻ nhà đã chọn",
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
 
-                      subtitle: Text("${selectedHomes.length} homes selected"),
+                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
 
                       trailing: Icon(Icons.chevron_right_rounded),
 
@@ -801,7 +801,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           context: context,
 
                           builder: (_) => AlertDialog(
-                            title: Text("Chia sẻ Home"),
+                            title: Text("Chia sẻ nhà"),
 
                             content: TextField(
                               controller: controller,
@@ -899,7 +899,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         }
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Đã chia sẻ homes")),
+                          SnackBar(content: Text("Đã chia sẻ nhà")),
                         );
                       },
                     ),
@@ -922,11 +922,11 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Mở List chia sẻ Home",
+                        "Mở List chia sẻ nhà",
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
 
-                      subtitle: Text("${selectedHomes.length} homes selected"),
+                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
 
                       trailing: Icon(Icons.chevron_right_rounded),
 
@@ -942,7 +942,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         if (ownHomes.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Không có home nào bạn sở hữu"),
+                              content: Text("Không có nhà nào bạn sở hữu"),
                             ),
                           );
 
@@ -1140,14 +1140,14 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
 
                       title: Text(
-                        "Xoá các Home đã chọn ?",
+                        "Xoá các nhà đã chọn ?",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.red,
                         ),
                       ),
 
-                      subtitle: Text("${selectedHomes.length} homes selected"),
+                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
 
                       trailing: Icon(Icons.chevron_right_rounded),
 

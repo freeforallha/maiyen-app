@@ -60,12 +60,28 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 12),
 
               // ===== EMAIL =====
-              Text(
-                user?.email ?? "No email",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              Column(
+                children: [
+                  Text(
+                    user?.email ?? "No email",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    "UID: ${user?.uid ?? 'Unknown'}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 16),
@@ -78,39 +94,44 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Text(
-                  "UID:\n${user?.uid ?? 'Unknown'}",
-                  style: const TextStyle(fontSize: 13),
-                ),
-              ),
+                              ),
 
               const SizedBox(height: 18),
 
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: ListTile(
+                  leading: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                  icon: const Icon(Icons.logout),
-                  label: const Text(
-                    "Đăng xuất",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                    child: const Icon(
+                      Icons.logout_rounded,
+                      color: Colors.red,
+                      size: 20,
                     ),
                   ),
-                  onPressed: () async {
+                  title: const Text(
+                    "Đăng xuất",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.chevron_right_rounded),
+                  onTap: () async {
                     Navigator.pop(context);
                     logout();
                   },
                 ),
-              ),
+              )
 
             ],
           ),
@@ -851,7 +872,7 @@ class _HomePageState extends State<HomePage> {
     final name = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Tên Home"),
+        title: Text("Thêm nhà mới"),
         content: TextField(controller: controller),
         actions: [
           TextButton(

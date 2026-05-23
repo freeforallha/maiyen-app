@@ -99,7 +99,7 @@ void showSettingsSheet({
 
             tile(
               icon: Icons.edit,
-              title: "Sửa tên Home",
+              title: "Sửa tên nhà",
               color: Colors.teal,
               onTap: onRenameHome,
             ),
@@ -107,14 +107,14 @@ void showSettingsSheet({
             // ===== SHARE =====
             tile(
               icon: Icons.share_rounded,
-              title: "Chia sẻ Home",
+              title: "Chia sẻ nhà",
               color: Colors.blue,
               onTap: onShare,
             ),
 
             tile(
               icon: Icons.people_alt_rounded,
-              title: "List chia sẻ",
+              title: "Thành viên trong nhà",
               color: Colors.green,
               onTap: onShareList,
             ),
@@ -139,7 +139,7 @@ void showSettingsSheet({
                 title: Row(
                   children: [
                     const Text(
-                      "Lời mời share",
+                      "Lời mời gia nhập",
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     if (inviteCount > 0) ...[
@@ -175,7 +175,7 @@ void showSettingsSheet({
 
             tile(
               icon: Icons.delete_forever,
-              title: "Xoá Home",
+              title: "Xoá Nhà",
               color: Colors.red,
               onTap: onDeleteHome,
             ),
