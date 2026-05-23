@@ -51,13 +51,15 @@ class _QRScanPageState extends State<_QRScanPage>
           MobileScanner(
             controller: widget.controller,
 
-            onDetect: (capture) {
+            onDetect: (capture) async {
               final barcode = capture.barcodes.first;
-
               final code = barcode.rawValue;
 
               if (code == null) return;
 
+              await widget.controller.stop(); // 👈 QUAN TRỌNG
+
+              if (!mounted) return;
               Navigator.pop(context, code);
             },
           ),
