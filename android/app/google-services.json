@@ -13,7 +13,20 @@
           "package_name": "com.example.safehome_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "83888615408-p9jalk2b7pmtioalsoldd45clhq39ngc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safehome_app",
+            "certificate_hash": "57635c6e9ad3f9d9c69794826e538d00901a4e1d"
+          }
+        },
+        {
+          "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDEYXZZz9AJA1N8ulrGLa-6u-nB1-opWv4"
@@ -21,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "83888615408-jlm9qme2qpansgnheauhs88fb6g02r82.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.safehomeApp"
+              }
+            }
+          ]
         }
       }
     }
