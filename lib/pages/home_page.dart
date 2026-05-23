@@ -12,7 +12,7 @@ import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
 import '../widgets/status_panel.dart';
-
+import '../widgets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
 import 'confirm_dialog.dart';
 import 'device_detail_sheet.dart';
@@ -30,124 +30,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  void showAccountSheet(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
-              // ===== AVATAR =====
-              CircleAvatar(
-                radius: 35,
-                backgroundImage: (user?.photoURL != null)
-                    ? NetworkImage(user!.photoURL!)
-                    : null,
-                child: (user?.photoURL == null)
-                    ? const Icon(Icons.person, size: 40)
-                    : null,
-              ),
-
-              const SizedBox(height: 12),
-
-              // ===== EMAIL =====
-              Column(
-                children: [
-                  Text(
-                    user?.email ?? "No email",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    "UID: ${user?.uid ?? 'Unknown'}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.grey.shade600,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // ===== UID =====
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                              ),
-
-              const SizedBox(height: 18),
-
-              Container(
-                margin: const EdgeInsets.only(top: 8),
-                decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: ListTile(
-                  leading: Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.logout_rounded,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                  ),
-                  title: const Text(
-                    "Đăng xuất",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    logout();
-                  },
-                ),
-              )
-
-            ],
-          ),
-        );
-      },
-    );
-  }
   Map<String, dynamic> shareRequests = {};
-
   void openNotificationList(String deviceId) {
     final ownerUid = getHomeOwnerUid();
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-
       builder: (_) {
         return NotificationListSheet(
           ownerUid: ownerUid,
@@ -237,16 +125,45 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.only(right: 12),
           child: GestureDetector(
-            onTap: () => showAccountSheet(context),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.grey.shade300,
-              backgroundImage: (photoUrl != null)
-                  ? NetworkImage(photoUrl)
-                  : null,
-              child: (photoUrl == null)
-                  ? const Icon(Icons.person, size: 18, color: Colors.black54)
-                  : null,
+            onTap: () => AccountAvatarSheet.show(
+              context: context,
+              logout: logout,
+              userName: userName,
+              userGender: userGender,
+              userDob: userDob,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: Colors.grey.shade300,
+                  backgroundImage: (photoUrl != null)
+                      ? NetworkImage(photoUrl)
+                      : null,
+                  child: (photoUrl == null)
+                      ? const Icon(Icons.person,
+                      size: 18, color: Colors.black54)
+                      : null,
+                ),
+
+                const SizedBox(height: 2),
+
+                SizedBox(
+                  width: 50,
+                  child: Text(
+                    userName.isNotEmpty ? userName : "User",
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      height: 1.0,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -256,6 +173,9 @@ class _HomePageState extends State<HomePage> {
 
   late String uid;
   late DatabaseReference ref;
+  String userName = "";
+  String userGender = "";
+  String userDob = "";
 
   String getHomeOwnerUid() {
     final isShared = homes[selectedHome]?["_shared"] == true;
@@ -312,8 +232,14 @@ class _HomePageState extends State<HomePage> {
       final homesData = safeMap(map["homes"]);
       final sharedHomes = safeMap(map["sharedHomes"]);
       final requests = safeMap(map["shareRequests"]);
+      print("RAW USER DATA: $map");
+      print("USER INFO KEYS: ${map.keys}");
+      print("NAME FIELD: ${map["name"]}");
       setState(() {
         shareRequests = requests;
+        userName = map["name"]?.toString() ?? "";
+        userGender = map["gender"]?.toString() ?? "";
+        userDob = map["dob"]?.toString() ?? "";
         homes = homesData;
         HomeListenerService.loadSharedHomes(
           homes: homes,
@@ -442,7 +368,6 @@ class _HomePageState extends State<HomePage> {
   void deleteHome() async {
     final isShared = homes[selectedHome]?["_shared"] == true;
 
-    // ================= HOME SHARE =================
     // ================= HOME SHARE =================
     if (isShared) {
       final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
@@ -1109,6 +1034,7 @@ class _HomePageState extends State<HomePage> {
                 );
               });
             },
+
 
             onReorder: (oldIndex, newIndex) async {
               setState(() {

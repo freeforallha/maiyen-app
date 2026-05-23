@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'profile_setup_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,33 +13,98 @@ class _LoginPageState extends State<LoginPage> {
   bool isLogin = true;
   String error = "";
 
+  // =========================
+  // RESET PASSWORD
+  // =========================
+  void _showResetPasswordDialog() {
+    final controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Khôi phục mật khẩu"),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: "Nhập email của bạn",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Huỷ"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final emailInput = controller.text.trim();
+                if (emailInput.isEmpty) return;
+
+                try {
+                  await FirebaseAuth.instance.sendPasswordResetEmail(
+                    email: emailInput,
+                  );
+
+                  if (!mounted) return;
+                  Navigator.pop(context);
+
+                  setState(() {
+                    error = "Đã gửi email khôi phục";
+                  });
+                } catch (e) {
+                  setState(() {
+                    error = "Không gửi được email";
+                  });
+                }
+              },
+              child: const Text("Gửi"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // =========================
+  // LOGIN / SIGNUP
+  // =========================
   Future<void> submit() async {
     setState(() => error = "");
+
     try {
       if (isLogin) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text.trim(),
           password: pass.text.trim(),
         );
-      } else {
-        final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text.trim(),
-          password: pass.text.trim(),
-        );
-        final uid = cred.user!.uid;
-        await FirebaseDatabase.instance.ref("accounts/$uid").update({
-          "email": email.text.trim().toLowerCase(),
-          "homes": {
-            "home1": {
-              "name": "Home 1",
-              "devices": {},
 
-              "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-            },
-          },
-          "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-        });
+        return;
       }
+
+      final cred =
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text.trim(),
+        password: pass.text.trim(),
+      );
+
+      final user = cred.user;
+      if (user == null) {
+        setState(() => error = "Không tạo được user");
+        return;
+      }
+
+      final uid = user.uid;
+
+      if (!mounted) return;
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => ProfileSetupPage(
+            uid: uid,
+            email: email.text.trim().toLowerCase(),
+          ),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == "user-not-found") {
@@ -54,6 +119,10 @@ class _LoginPageState extends State<LoginPage> {
           error = e.message ?? "Lỗi đăng nhập";
         }
       });
+    } catch (e) {
+      setState(() {
+        error = "Lỗi hệ thống";
+      });
     }
   }
 
@@ -63,40 +132,55 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Container(
           width: 340,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+            boxShadow: const [
+              BoxShadow(color: Colors.black12, blurRadius: 10),
+            ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "SafeHome",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
+
               TextField(
                 controller: email,
-                decoration: InputDecoration(labelText: "Email"),
+                decoration: const InputDecoration(labelText: "Email"),
               ),
+
               TextField(
                 controller: pass,
                 obscureText: true,
-                decoration: InputDecoration(labelText: "Password"),
+                decoration: const InputDecoration(labelText: "Password"),
               ),
 
               if (error.isNotEmpty)
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(error, style: TextStyle(color: Colors.red)),
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    error,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               ElevatedButton(
                 onPressed: submit,
                 child: Text(isLogin ? "Login" : "Sign Up"),
+              ),
+
+              TextButton(
+                onPressed: _showResetPasswordDialog,
+                child: const Text(
+                  "Quên mật khẩu?",
+                  style: TextStyle(color: Colors.blue),
+                ),
               ),
 
               TextButton(
