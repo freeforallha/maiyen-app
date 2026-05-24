@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import 'home_page.dart';
+
 class ProfileSetupPage extends StatefulWidget {
   final String uid;
   final String email;
@@ -17,21 +19,102 @@ class ProfileSetupPage extends StatefulWidget {
 
 class _ProfileSetupPageState extends State<ProfileSetupPage> {
   final nameController = TextEditingController();
-  String gender = "male";
-  DateTime? dob;
+  final dayController = TextEditingController();
+  final monthController = TextEditingController();
+  final yearController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  String gender = "Nam";
+  bool saving = false;
+  String error = "";
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    dayController.dispose();
+    monthController.dispose();
+    yearController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  List<String> _suggestNumbers({
+    required String input,
+    required int start,
+    required int end,
+    int pad = 0,
+  }) {
+    if (input.trim().isEmpty) return [];
+
+    return List.generate(end - start + 1, (i) {
+      final value = start + i;
+      return pad > 0 ? value.toString().padLeft(pad, '0') : value.toString();
+    }).where((v) => v.startsWith(input.trim())).toList();
+  }
+
+  Widget _autoBox({
+    required String label,
+    required TextEditingController controller,
+    required List<String> Function(String input) suggestions,
+  }) {
+    return Autocomplete<String>(
+      optionsBuilder: (value) => suggestions(value.text),
+      onSelected: (value) {
+        controller.text = value;
+      },
+      fieldViewBuilder: (context, autoController, focusNode, onSubmit) {
+        autoController.text = controller.text;
+        autoController.selection = TextSelection.fromPosition(
+          TextPosition(offset: autoController.text.length),
+        );
+
+        return TextField(
+          controller: autoController,
+          focusNode: focusNode,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(labelText: label),
+          onChanged: (value) {
+            controller.text = value;
+          },
+        );
+      },
+    );
+  }
 
   Future<void> submit() async {
-    if (nameController.text.trim().isEmpty || dob == null) return;
+    setState(() => error = "");
+
+    final name = nameController.text.trim();
+    final day = dayController.text.trim().padLeft(2, '0');
+    final month = monthController.text.trim().padLeft(2, '0');
+    final year = yearController.text.trim();
+
+    if (name.isEmpty || day.isEmpty || month.isEmpty || year.isEmpty) {
+      setState(() => error = "Vui lòng nhập đủ thông tin");
+      return;
+    }
+
+    final homeId = "home_${DateTime.now().millisecondsSinceEpoch}";
+    final dob = "$year-$month-$day";
+
+    setState(() => saving = true);
 
     await FirebaseDatabase.instance.ref("accounts/${widget.uid}").set({
       "email": widget.email,
-      "name": nameController.text.trim(),
-      "gender": gender,
-      "dob": dob!.toIso8601String(),
+
+      "profile": {
+        "name": name,
+        "gender": gender,
+        "dob": dob,
+        "phone": phoneController.text.trim(),
+        "photoUrl": "",
+      },
 
       "homes": {
-        "home1": {
-          "name": "Home 1",
+        homeId: {
+          "name": "Nhà của tôi",
+          "_ownerUid": widget.uid,
+          "_shared": false,
           "devices": {},
           "alarm": {
             "enabled": false,
@@ -41,75 +124,160 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         }
       },
 
-      "alarm": {
-        "enabled": false,
-        "start": "23:00",
-        "end": "06:00",
-      },
+      "homeOrder": [homeId],
+      "shareRequests": {},
+      "shareList": {},
+      "sharedHomes": {},
     });
 
-    Navigator.pop(context); // quay lại app sau khi lưu
-  }
+    if (!mounted) return;
 
-  Future<void> pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-      initialDate: DateTime(2000),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => HomePage()),
+          (route) => false,
     );
-
-    if (picked != null) {
-      setState(() => dob = picked);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Complete Profile")),
-      body: Padding(
-        padding: EdgeInsets.all(16),
+      appBar: AppBar(
+        title: const Text("Thiết lập tài khoản"),
+        automaticallyImplyLeading: false,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
               controller: nameController,
-              decoration: InputDecoration(labelText: "Tên"),
+              decoration: const InputDecoration(labelText: "Tên"),
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 20),
 
-            DropdownButton<String>(
-              value: gender,
-              items: [
-                DropdownMenuItem(value: "male", child: Text("Nam")),
-                DropdownMenuItem(value: "female", child: Text("Nữ")),
-              ],
-              onChanged: (v) {
-                setState(() => gender = v!);
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                labelText: "Số điện thoại",
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Ngày sinh",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
+            ),
+
+            RadioGroup<String>(
+              groupValue: gender,
+              onChanged: (value) {
+                if (value == null) return;
+                setState(() => gender = value);
               },
+              child: const Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<String>(
+                      value: "Nam",
+                      title: Text("Nam"),
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      value: "Nữ",
+                      title: Text("Nữ"),
+                    ),
+                  ),
+                ],
+              ),
             ),
 
-            SizedBox(height: 12),
+            const SizedBox(height: 20),
+
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Ngày sinh",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
+            ),
+
+            const SizedBox(height: 10),
 
             Row(
               children: [
-                Text(dob == null
-                    ? "Chưa chọn ngày sinh"
-                    : dob!.toLocal().toString().split(" ")[0]),
-                Spacer(),
-                ElevatedButton(
-                  onPressed: pickDate,
-                  child: Text("Chọn ngày"),
+                Expanded(
+                  child: _autoBox(
+                    label: "Ngày",
+                    controller: dayController,
+                    suggestions: (input) => _suggestNumbers(
+                      input: input,
+                      start: 1,
+                      end: 31,
+                      pad: 2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _autoBox(
+                    label: "Tháng",
+                    controller: monthController,
+                    suggestions: (input) => _suggestNumbers(
+                      input: input,
+                      start: 1,
+                      end: 12,
+                      pad: 2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _autoBox(
+                    label: "Năm",
+                    controller: yearController,
+                    suggestions: (input) => _suggestNumbers(
+                      input: input,
+                      start: 1950,
+                      end: DateTime.now().year,
+                    ),
+                  ),
                 ),
               ],
             ),
 
-            Spacer(),
+            if (error.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text(
+                  error,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
 
-            ElevatedButton(
-              onPressed: submit,
-              child: Text("Hoàn tất"),
+            const SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                onPressed: saving ? null : submit,
+                child: saving
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                  "Hoàn tất",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
           ],
         ),

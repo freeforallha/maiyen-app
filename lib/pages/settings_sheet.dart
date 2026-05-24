@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 void showSettingsSheet({
   required String homeId,
+  required String homeName,
+  required String homeAddress,
   required BuildContext context,
   required VoidCallback onShareRequests,
   required VoidCallback onShare,
@@ -72,20 +74,71 @@ void showSettingsSheet({
               ),
             ),
 
+            const SizedBox(height: 14),
+
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(12),
-              margin: const EdgeInsets.only(bottom: 14),
+              margin: const EdgeInsets.only(top: 12, bottom: 14),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: SelectableText(
-                "HomeID: $homeId",
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text(
+                        "🏡",
+                        style: TextStyle(fontSize: 22),
+                      ),
+
+                      const SizedBox(width: 8),
+
+                      Expanded(
+                        child: Text(
+                          homeName.isNotEmpty ? homeName : "Chưa đặt tên",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SelectableText(
+                        "HomeID: $homeId",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+
+                      if (homeAddress.trim().isNotEmpty) ...[
+                        const SizedBox(height: 4),
+
+                        Text(
+                          "📍 $homeAddress",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ],
               ),
             ),
             // ===== HOME SETTINGS =====

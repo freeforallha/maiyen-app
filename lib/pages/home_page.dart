@@ -22,7 +22,8 @@ import 'qr_scan_page.dart';
 import 'settings_sheet.dart';
 import 'share_list_sheet.dart';
 import 'share_request_sheet.dart';
-
+import 'edit_profile_page.dart';
+import 'home_chat_sheet.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -48,8 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   PreferredSizeWidget buildSafeHomeAppBar() {
     final user = FirebaseAuth.instance.currentUser;
-    final photoUrl = user?.photoURL;
-
+    final photoUrl = userPhotoUrl.isNotEmpty ? userPhotoUrl : user?.photoURL;
     final devices = getDevices();
 
     // ===== SMART SAFE LOGIC =====
@@ -128,9 +128,25 @@ class _HomePageState extends State<HomePage> {
             onTap: () => AccountAvatarSheet.show(
               context: context,
               logout: logout,
+
+              onEditProfile: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditProfilePage(
+                      userName: userName,
+                      userGender: userGender,
+                      userDob: userDob,
+                      userPhone: userPhone,
+                    )
+                  ),
+                );
+              },
+
               userName: userName,
               userGender: userGender,
               userDob: userDob,
+              userPhone: userPhone,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -176,6 +192,8 @@ class _HomePageState extends State<HomePage> {
   String userName = "";
   String userGender = "";
   String userDob = "";
+  String userPhone = "";
+  String userPhotoUrl = "";
 
   String getHomeOwnerUid() {
     final isShared = homes[selectedHome]?["_shared"] == true;
@@ -237,9 +255,13 @@ class _HomePageState extends State<HomePage> {
       print("NAME FIELD: ${map["name"]}");
       setState(() {
         shareRequests = requests;
-        userName = map["name"]?.toString() ?? "";
-        userGender = map["gender"]?.toString() ?? "";
-        userDob = map["dob"]?.toString() ?? "";
+        final profile = safeMap(map["profile"]);
+
+        userName = profile["name"]?.toString() ?? map["name"]?.toString() ?? "";
+        userGender = profile["gender"]?.toString() ?? map["gender"]?.toString() ?? "";
+        userDob = profile["dob"]?.toString() ?? map["dob"]?.toString() ?? "";
+        userPhone = profile["phone"]?.toString() ?? map["phone"]?.toString() ?? "";
+        userPhotoUrl = profile["photoUrl"]?.toString() ?? "";
         homes = homesData;
         HomeListenerService.loadSharedHomes(
           homes: homes,
@@ -324,18 +346,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void pairSensor(String hubId) {
-    final isShared = homes[selectedHome]?["_shared"] == true;
-
-    if (isShared) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Không thể pair sensor vào Home được share"),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
     // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
 
@@ -528,6 +538,7 @@ class _HomePageState extends State<HomePage> {
 
     if (targetEmail == null || targetEmail.isEmpty) return;
 
+
     // không share cho chính mình
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
@@ -569,8 +580,26 @@ class _HomePageState extends State<HomePage> {
       );
       return;
     }
+    final targetSnap = await FirebaseDatabase.instance
+        .ref("accounts/$targetUid")
+        .get();
 
-    // share
+    final targetData = targetSnap.value == null
+        ? {}
+        : Map<String, dynamic>.from(targetSnap.value as Map);
+
+    final targetProfile = targetData["profile"] == null
+        ? {}
+        : Map<String, dynamic>.from(targetData["profile"] as Map);
+
+    await FirebaseDatabase.instance
+        .ref("sharedByHome/$selectedHome/$targetUid")
+        .set({
+      "email": targetData["email"] ?? targetEmail,
+      "name": targetProfile["name"] ?? targetData["name"] ?? "",
+      "photoUrl": targetProfile["photoUrl"] ?? targetData["photoUrl"] ?? "",
+      "sharedAt": DateTime.now().millisecondsSinceEpoch,
+    });
     // share
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/shareRequests/$selectedHome")
@@ -623,7 +652,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+
     if (targetEmail == null || targetEmail.isEmpty) return;
+
 
     // ===== 1. FIND UID =====
     final snap = await FirebaseDatabase.instance.ref("accounts").get();
@@ -688,6 +719,10 @@ class _HomePageState extends State<HomePage> {
 
 // ===== 2. UPDATE OWNER UID =====
     homeData["_ownerUid"] = targetUid;
+    // xóa trạng thái shared cũ nếu có
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/sharedHomes/$homeId")
+        .remove();
 
 // ===== 3. WRITE TO NEW OWNER =====
     await FirebaseDatabase.instance
@@ -711,44 +746,40 @@ class _HomePageState extends State<HomePage> {
         .ref("accounts/$targetUid/homeOrder")
         .set(targetOrder);
 
-// ===== 4. DELETE FROM OLD OWNER =====
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$homeId")
-        .remove();
-    final myOrderSnap = await FirebaseDatabase.instance
-        .ref("accounts/$uid/homeOrder")
-        .get();
+// ===== 4. OLD OWNER -> MEMBER =====
 
-    List<dynamic> myOrder = [];
-
-    if (myOrderSnap.exists) {
-      myOrder = List<dynamic>.from(myOrderSnap.value as List);
-    }
-
-    myOrder.remove(homeId);
-
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/homeOrder")
-        .set(myOrder);
-    await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/sharedHomes/$homeId")
-        .remove();
-
-    await FirebaseDatabase.instance
-        .ref("sharedByHome/$homeId/$targetUid")
-        .remove();
-
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/shareList/$homeId/$targetUid")
-        .remove();
-
-
+// thêm vào sharedHomes
     await FirebaseDatabase.instance
         .ref("accounts/$uid/sharedHomes/$homeId")
-        .remove();
+        .set({
+      "ownerUid": targetUid,
+    });
+
+// thêm vào sharedByHome
+    final mySnap = await FirebaseDatabase.instance
+        .ref("accounts/$uid")
+        .get();
+
+    final myData = mySnap.value is Map
+        ? Map<String, dynamic>.from(mySnap.value as Map)
+        : <String, dynamic>{};
+
+    final myProfile = myData["profile"] is Map
+        ? Map<String, dynamic>.from(myData["profile"] as Map)
+        : <String, dynamic>{};
 
     await FirebaseDatabase.instance
         .ref("sharedByHome/$homeId/$uid")
+        .set({
+      "email": myData["email"] ?? "",
+      "name": myProfile["name"] ?? "",
+      "photoUrl": myProfile["photoUrl"] ?? "",
+      "sharedAt": DateTime.now().millisecondsSinceEpoch,
+    });
+
+// xóa home own cũ
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$homeId")
         .remove();
 
     // ===== 4. UPDATE LOCAL =====
@@ -792,31 +823,76 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addHome() async {
-    final controller = TextEditingController();
+    final nameController = TextEditingController();
+    final addressController = TextEditingController();
 
-    final name = await showDialog<String>(
+    final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Thêm nhà mới"),
-        content: TextField(controller: controller),
+        title: const Text("Thêm nhà mới"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: "Tên nhà",
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: addressController,
+              decoration: const InputDecoration(
+                labelText: "Địa chỉ",
+              ),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
+            child: const Text("Hủy"),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: Text("OK"),
+            onPressed: () {
+              Navigator.pop(context, {
+                "name": nameController.text.trim(),
+                "address": addressController.text.trim(),
+              });
+            },
+            child: const Text("OK"),
           ),
         ],
       ),
     );
 
-    if (name == null || name.trim().isEmpty) return;
+    if (result == null) return;
+
+    final name = result["name"] ?? "";
+    final address = result["address"] ?? "";
+
+    if (name.trim().isEmpty) return;
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
-    await HomeService.addHome(uid: uid, id: id, name: name);
+    await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
+      "name": name,
+      "address": address,
+      "_ownerUid": uid,
+      "_shared": false,
+      "devices": {},
+      "alarm": {
+        "enabled": false,
+        "start": "23:00",
+        "end": "06:00",
+      },
+    });
+
+    homeOrder.add(id);
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homeOrder")
+        .set(homeOrder);
   }
 
   // ================= RESTORED FULL FUNCTIONS =================
@@ -1105,11 +1181,8 @@ class _HomePageState extends State<HomePage> {
                   context: context,
                   id: id,
                   d: safeMap(getDevices()[id]),
-
                   onRename: () => renameDevice(id),
-
                   onDelete: () => deleteDevice(id),
-
                   onNotification: () => openNotificationList(id),
                 );
               },
@@ -1128,6 +1201,17 @@ class _HomePageState extends State<HomePage> {
 
             children: [
               IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
+              IconButton(
+                icon: const Icon(Icons.chat_bubble_rounded),
+                onPressed: () {
+                  showHomeChatSheet(
+                    context: context,
+                    homeId: selectedHome,
+                    userName: userName,
+                    userPhotoUrl: userPhotoUrl,
+                  );
+                },
+              ),
 
               Container(
                 decoration: BoxDecoration(
@@ -1144,9 +1228,7 @@ class _HomePageState extends State<HomePage> {
                 child: IconButton(
                   icon: Icon(Icons.qr_code_scanner, color: Colors.white),
 
-                  onPressed: homes[selectedHome]?["_shared"] == true
-                      ? null
-                      : () async {
+                  onPressed: () async {
                     final result = await showModalBottomSheet<String>(
                       context: context,
                       isScrollControlled: true,
@@ -1227,6 +1309,11 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       showSettingsSheet(
                         homeId: selectedHome,
+                        homeName:
+                        homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+                        homeAddress:
+                        homes[selectedHome]?["address"]?.toString() ?? "",
+
                         onTransferOwner: transferOwner,
                         onAlarm: setAlarmSchedule,
                         onRenameHome: renameHome,
@@ -1248,11 +1335,10 @@ class _HomePageState extends State<HomePage> {
                         onShareList: () {
                           showShareListSheet(
                             context: context,
-                            ownerUid: uid,
+                            ownerUid: getHomeOwnerUid(),
                             homeId: selectedHome,
                           );
                         },
-
                         onLogout: logout,
                       );
                     },

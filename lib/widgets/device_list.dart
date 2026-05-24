@@ -15,10 +15,8 @@ class DeviceList extends StatelessWidget {
     this.header,
     super.key,
     required this.devices,
-
     required this.isShared,
     required this.ownerEmail,
-
     required this.onRename,
     required this.onDelete,
     required this.onTapDevice,
@@ -27,31 +25,6 @@ class DeviceList extends StatelessWidget {
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
     return Map<String, dynamic>.from(data as Map);
-  }
-
-  String formatLastSeen(dynamic ts) {
-    if (ts == null) return "--";
-
-    final dt = DateTime.fromMillisecondsSinceEpoch(ts);
-    final now = DateTime.now();
-
-    final today = DateTime(now.year, now.month, now.day);
-    final targetDay = DateTime(dt.year, dt.month, dt.day);
-
-    final diff = today.difference(targetDay).inDays;
-
-    final time =
-        "${dt.hour.toString().padLeft(2, '0')}:"
-        "${dt.minute.toString().padLeft(2, '0')}";
-
-    if (diff == 0) {
-      return "Hôm nay $time";
-    } else if (diff == 1) {
-      return "Hôm qua $time";
-    } else {
-      return "${dt.day.toString().padLeft(2, '0')}/"
-          "${dt.month.toString().padLeft(2, '0')}";
-    }
   }
 
   String formatLastSeenLabel(dynamic ts) {
@@ -68,32 +41,156 @@ class DeviceList extends StatelessWidget {
 
     final diff = today.difference(targetDay).inDays;
 
-    if (diff == 0) {
-      return "Hôm nay";
-    } else if (diff == 1) {
-      return "Hôm qua";
-    } else {
-      return "$diff ngày trước";
-    }
+    if (diff == 0) return "Hôm nay";
+    if (diff == 1) return "Hôm qua";
+
+    return "$diff ngày trước";
+  }
+
+  Widget _deviceCard({
+    required BuildContext context,
+    required String id,
+    required Map<String, dynamic> d,
+    required bool compact,
+  }) {
+    final isUnsafe = d["status"] != "closed" || d["tamper"] == true;
+    final lastSeen = d["last_seen_text"] ?? "--";
+    final lastSeenLabel = formatLastSeenLabel(d["last_seen"]);
+
+    final titleSize = compact ? 14.0 : 16.0;
+    final textSize = compact ? 12.0 : 13.0;
+    final smallTextSize = compact ? 10.5 : 12.0;
+    final padding = compact ? 8.0 : 10.0;
+
+    return InkWell(
+      onTap: () => onTapDevice(id),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: EdgeInsets.all(padding),
+        decoration: BoxDecoration(
+          color: isUnsafe ? Colors.red.shade100 : Colors.green.shade100,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isUnsafe ? Colors.red.shade300 : Colors.green.shade300,
+            width: 1,
+          ),
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: compact ? 132 : 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  d["name"]?.toString() ?? id,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: titleSize,
+                    fontWeight: FontWeight.bold,
+                    height: 1.05,
+                  ),
+                ),
+
+                const SizedBox(height: 6),
+
+                Row(
+                  children: [
+                    Icon(
+                      d["status"] == "closed"
+                          ? Icons.check_circle
+                          : Icons.cancel,
+                      size: compact ? 15 : 16,
+                      color: d["status"] == "closed"
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      d["status"] == "closed" ? "Đóng" : "Mở",
+                      style: TextStyle(fontSize: textSize),
+                    ),
+
+                    SizedBox(width: compact ? 10 : 14),
+
+                    Icon(
+                      d["tamper"] == true
+                          ? Icons.cancel
+                          : Icons.check_circle,
+                      size: compact ? 15 : 16,
+                      color: d["tamper"] == true
+                          ? Colors.red
+                          : Colors.green,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      d["tamper"] == true ? "Bị tháo" : "BT",
+                      style: TextStyle(fontSize: textSize),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 4),
+
+                Row(
+                  children: [
+                    Text(
+                      "Cập nhật:",
+                      style: TextStyle(
+                        fontSize: smallTextSize,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      child: Text(
+                        lastSeenLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: smallTextSize,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Text(
+                  lastSeen,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: compact ? 10 : 11,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(6),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.05),
-
             border: Border.all(
-              color: Colors.white..withValues(alpha: 0.15),
+              color: Colors.white.withValues(alpha: 0.15),
               width: 1,
             ),
-
             borderRadius: BorderRadius.circular(16),
-
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 10,
@@ -101,161 +198,42 @@ class DeviceList extends StatelessWidget {
               ),
             ],
           ),
+          child: Column(
+            children: [
+              if (header != null) header!,
 
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Column(
-              children: [
-                if (header != null) header!,
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final compact = constraints.maxWidth < 390;
 
-                // ===== DEVICE LIST =====
-                Expanded(
-                  child: GridView.count(
-                    padding: EdgeInsets.all(8),
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.6,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 10,
-                    children: devices.entries.map((e) {
-                      final d = safeMap(e.value);
-                      final lastSeen = d["last_seen_text"] ?? "--";
-                      final lastSeenLabel = formatLastSeenLabel(d["last_seen"]);
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.all(8),
+                      child: Wrap(
+                        spacing: compact ? 10 : 16,
+                        runSpacing: 10,
+                        children: devices.entries.map((entry) {
+                          final d = safeMap(entry.value);
 
-                      return Container(
-                        margin: EdgeInsets.zero,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 6,
-                        ),
+                          final itemWidth =
+                              (constraints.maxWidth - (compact ? 10 : 16) - 16) / 2;
 
-                        decoration: BoxDecoration(
-                          color:
-                          (d["status"] != "closed" || d["tamper"] == true)
-                              ? Colors.red.shade100
-                              : Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color:
-                            (d["status"] != "closed" || d["tamper"] == true)
-                                ? Colors.red.shade300
-                                : Colors.green.shade300,
-                            width: 1,
-                          ),
-                        ),
-                        child: InkWell(
-                          onTap: () => onTapDevice(e.key),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 10,
+                          return SizedBox(
+                            width: itemWidth,
+                            child: _deviceCard(
+                              context: context,
+                              id: entry.key,
+                              d: d,
+                              compact: compact,
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // ===== NAME =====
-                                Text(
-                                  d["name"]?.toString() ?? e.key,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.0,
-                                  ),
-                                ),
-
-                                SizedBox(height: 6),
-                                // ===== STATUS =====
-                                Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          d["status"] == "closed"
-                                              ? Icons.check_circle
-                                              : Icons.cancel,
-                                          size: 16,
-                                          color: d["status"] == "closed"
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          d["status"] == "closed" ? "Đóng" : "Mở",
-                                          style: TextStyle(fontSize: 13),
-                                        ),
-                                      ],
-                                    ),
-
-                                    SizedBox(width: 16), // 👈 khoảng cách chuẩn
-
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          d["tamper"] == true
-                                              ? Icons.cancel
-                                              : Icons.check_circle,
-                                          size: 16,
-                                          color: d["tamper"] == true
-                                              ? Colors.red
-                                              : Colors.green,
-                                        ),
-                                        SizedBox(width: 4),
-                                        Text(
-                                          d["tamper"] == true ? "Bị tháo" : "BT",
-                                          style: TextStyle(fontSize: 13),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 4),
-
-                                // ===== LAST UPDATE =====
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Cập nhật:",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 6),
-
-                                    Text(
-                                      lastSeenLabel,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                Text(
-                                  lastSeen,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    color: Colors.black54,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -42,30 +42,53 @@ class StatusPanel extends StatelessWidget {
                 children: [
                   Row(
                     children: [
+                      const Text(
+                        "🏡",
+                        style: TextStyle(fontSize: 24),
+                      ),
+
+                      const SizedBox(width: 8),
+
                       Icon(
                         overall["safe"] ? Icons.verified : Icons.warning,
                         color: overall["safe"] ? Colors.green : Colors.red,
+                        size: 20,
                       ),
 
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
 
-                      Text(
-                        overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: overall["safe"] ? Colors.green : Colors.red,
+                      Expanded(
+                        child: Text(
+                          overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: overall["safe"] ? Colors.green : Colors.red,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Text(
-                    "Alarm: $alarmStart - $alarmEnd",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.alarm_rounded,
+                        size: 15,
+                        color: Colors.deepPurple,
+                      ),
+
+                      const SizedBox(width: 5),
+
+                      Text(
+                        "$alarmStart - $alarmEnd",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

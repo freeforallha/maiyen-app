@@ -63,7 +63,7 @@ class HomeTabs extends StatelessWidget {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
                               width: itemWidth,
-                              height: itemHeight,
+                              height: 66,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 6),
                               decoration: BoxDecoration(
@@ -95,16 +95,20 @@ class HomeTabs extends StatelessWidget {
                                       color: Colors.white,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
+                                      height: 1.05,
                                     ),
                                   ),
 
                                   const SizedBox(height: 4),
 
                                   if (home["_shared"] == true)
-                                    const Icon(
-                                      Icons.people,
-                                      size: 14,
-                                      color: Colors.white70,
+                                    const Padding(
+                                      padding: EdgeInsets.only(top: 6),
+                                      child: Icon(
+                                        Icons.people,
+                                        size: 11,
+                                        color: Colors.white70,
+                                      ),
                                     ),
                                 ],
                               ),
@@ -114,8 +118,8 @@ class HomeTabs extends StatelessWidget {
                           // ================= INDICATOR =================
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
-                            margin: const EdgeInsets.only(top: 6),
-                            height: 3,
+                            margin: const EdgeInsets.only(top: 3),
+                            height: 2,
                             width: isSelected ? itemWidth * 0.5 : 0,
                             decoration: BoxDecoration(
                               color: Colors.blueAccent,

@@ -163,9 +163,11 @@ class AccountAvatarSheet {
   static void show({
     required BuildContext context,
     required VoidCallback logout,
+    required VoidCallback onEditProfile,
     required String userName,
     required String userGender,
     required String userDob,
+    required String userPhone,
   }) {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -259,16 +261,51 @@ class AccountAvatarSheet {
                       const SizedBox(height: 16),
 
                       // AVATAR
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.grey.shade200,
-                        backgroundImage: (user?.photoURL != null)
-                            ? NetworkImage(user!.photoURL!)
-                            : null,
-                        child: (user?.photoURL == null)
-                            ? const Icon(Icons.person,
-                            size: 42, color: Colors.grey)
-                            : null,
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.grey.shade200,
+                            backgroundImage: (user?.photoURL != null)
+                                ? NetworkImage(user!.photoURL!)
+                                : null,
+                            child: (user?.photoURL == null)
+                                ? const Icon(
+                              Icons.person,
+                              size: 42,
+                              color: Colors.grey,
+                            )
+                                : null,
+                          ),
+
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pop(ctx);
+                                onEditProfile();
+                              },
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 12),
@@ -308,6 +345,8 @@ class AccountAvatarSheet {
                             infoRow("Tên", userName),
                             const SizedBox(height: 8),
                             infoRow("Giới tính", userGender),
+                            const SizedBox(height: 8),
+                            infoRow("Số điện thoại", userPhone),
                             const SizedBox(height: 8),
                             infoRow(
                               "Ngày sinh",
