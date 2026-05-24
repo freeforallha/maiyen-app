@@ -4,6 +4,7 @@ import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'set_password_page.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -34,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
 
       final user = cred.user;
       if (user == null) return;
+
       final hasPassword = user.providerData.any(
             (p) => p.providerId == "password",
       );
@@ -205,120 +207,186 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  Widget buildLogo() {
+    return Column(
+      children: [
+        const Icon(
+          Icons.home_rounded,
+          size: 76,
+          color: Colors.green,
+        ),
+
+        const SizedBox(height: 10),
+
+        RichText(
+          text: const TextSpan(
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.4,
+            ),
+            children: [
+              TextSpan(
+                text: "Safe",
+                style: TextStyle(color: Colors.green),
+              ),
+              TextSpan(
+                text: "Home",
+                style: TextStyle(color: Colors.black87),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade50,
+
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 24),
-          child: Center(
-            child: Container(
-              width: 340,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 10),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "SafeHome",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
 
-                  TextField(
-                    controller: email,
-                    decoration: const InputDecoration(labelText: "Email"),
-                  ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
 
-                  TextField(
-                    controller: pass,
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: "Password"),
-                  ),
-
-                  if (error.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        error,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    ),
-
-                  const SizedBox(height: 20),
-
-                  ElevatedButton(
-                    onPressed: submit,
-                    child: Text(isLogin ? "Đăng nhập" : "Đăng ký mới"),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  GestureDetector(
-                    onTap: signInWithGoogle,
                     child: Container(
-                      width: 54,
-                      height: 54,
+                      width: 340,
+                      padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
+                        borderRadius: BorderRadius.circular(18),
+                        boxShadow: const [
                           BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black.withValues(alpha: 0.08),
+                            color: Colors.black12,
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
                           ),
                         ],
-                        border: Border.all(
-                          color: Colors.grey.shade300,
-                        ),
                       ),
-                      child: const Center(
-                        child: Text(
-                          "G",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.red,
+
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          buildLogo(),
+
+                          const SizedBox(height: 22),
+
+                          TextField(
+                            controller: email,
+                            decoration: const InputDecoration(
+                              labelText: "Email",
+                              prefixIcon: Icon(Icons.email_rounded),
+                            ),
                           ),
-                        ),
+
+                          const SizedBox(height: 10),
+
+                          TextField(
+                            controller: pass,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelText: "Password",
+                              prefixIcon: Icon(Icons.lock_rounded),
+                            ),
+                          ),
+
+                          if (error.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Text(
+                                error,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
+
+                          const SizedBox(height: 22),
+
+                          SizedBox(
+                            width: double.infinity,
+                            height: 46,
+                            child: ElevatedButton(
+                              onPressed: submit,
+                              child: Text(
+                                isLogin ? "Đăng nhập" : "Đăng ký mới",
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          GestureDetector(
+                            onTap: signInWithGoogle,
+                            child: Container(
+                              width: 54,
+                              height: 54,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    color: Colors.black.withValues(alpha: 0.08),
+                                  ),
+                                ],
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "G",
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 4),
+
+                          TextButton(
+                            onPressed: _showResetPasswordDialog,
+                            child: const Text(
+                              "Quên mật khẩu?",
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isLogin = !isLogin;
+                                error = "";
+                              });
+                            },
+                            child: Text(
+                              isLogin
+                                  ? "Chưa có tài khoản? Đăng ký"
+                                  : "Đã có tài khoản? Đăng nhập",
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-
-                  TextButton(
-                    onPressed: _showResetPasswordDialog,
-                    child: const Text(
-                      "Quên mật khẩu?",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isLogin = !isLogin;
-                        error = "";
-                      });
-                    },
-                    child: Text(
-                      isLogin
-                          ? "Chưa có tài khoản? Đăng ký"
-                          : "Đã có tài khoản? Đăng nhập",
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
