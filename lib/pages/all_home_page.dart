@@ -74,12 +74,12 @@ class _AllHomePageState extends State<AllHomePage> {
       final sharedHomes = Map<String, dynamic>.from(map["sharedHomes"] ?? {});
 
       final Map<String, dynamic> merged = {};
+      final Set<String> addedHomeIds = {};
 
       // chỉ add home thật sự sở hữu
       ownHomes.forEach((key, value) {
-        if (!sharedHomes.containsKey(key)) {
-          merged[key] = value;
-        }
+        merged[key] = value;
+        addedHomeIds.add(key);
       });
 
       setState(() {
@@ -88,6 +88,8 @@ class _AllHomePageState extends State<AllHomePage> {
 
       // 🔥 shared homes listener FIX (KHÔNG tạo lại liên tục)
       sharedHomes.forEach((homeId, value) {
+        if (addedHomeIds.contains(homeId)) return;
+        addedHomeIds.add(homeId);
         final v = Map<String, dynamic>.from(value);
         final ownerUid = v["ownerUid"];
 
@@ -122,8 +124,10 @@ class _AllHomePageState extends State<AllHomePage> {
 
   Map<String, List<String>> groupedHomes() {
     final Map<String, List<String>> grouped = {};
-
+    final seen = <String>{};
     for (final homeId in widget.homeOrder) {
+      if (seen.contains(homeId)) continue;
+      seen.add(homeId);
       if (!homes.containsKey(homeId)) continue;
       final data = safeMap(homes[homeId]);
       final name = (data["name"] ?? homeId).toString().toLowerCase();
@@ -497,7 +501,13 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
-    showShareListSheet(context: context, ownerUid: uid, homeId: homeId);
+    showShareListSheet(
+      context: context,
+      ownerUid: uid,
+      homeId: homeId,
+      canManageMembers: true,
+      isOwner: true,
+    );
   }
 
   Future<void> confirmDeleteSelected() async {

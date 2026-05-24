@@ -204,6 +204,26 @@ class _HomePageState extends State<HomePage> {
 
     return uid;
   }
+  String getMyRole() {
+    final currentHome = homes[selectedHome];
+
+    if (currentHome == null) return "member";
+
+    if (currentHome["_shared"] != true) {
+      return "owner";
+    }
+
+    return currentHome["_role"]?.toString() ?? "member";
+  }
+
+  bool isOwner() => getMyRole() == "owner";
+
+  bool isAdmin() => getMyRole() == "admin";
+
+  bool canManageHome() {
+    final role = getMyRole();
+    return role == "owner" || role == "admin";
+  }
 
   Map<String, dynamic> homes = {};
   String selectedHome = "";
@@ -563,6 +583,7 @@ class _HomePageState extends State<HomePage> {
         final data = Map<String, dynamic>.from(entry.value);
 
         final mail = data["email"]?.toString().trim().toLowerCase();
+        print("CHECK ACCOUNT EMAIL: $mail | TARGET: $targetEmail | UID: ${entry.key}");
 
         if (mail == targetEmail) {
           targetUid = entry.key;
@@ -595,6 +616,7 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance
         .ref("sharedByHome/$selectedHome/$targetUid")
         .set({
+      "role": "member",
       "email": targetData["email"] ?? targetEmail,
       "name": targetProfile["name"] ?? targetData["name"] ?? "",
       "photoUrl": targetProfile["photoUrl"] ?? targetData["photoUrl"] ?? "",
@@ -1173,8 +1195,25 @@ class _HomePageState extends State<HomePage> {
               ownerEmail:
               homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
 
-              onRename: renameDevice,
-              onDelete: deleteDevice,
+              onRename: canManageHome()
+                  ? renameDevice
+                  : (_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Bạn không có quyền sửa thiết bị"),
+                  ),
+                );
+              },
+
+              onDelete: canManageHome()
+                  ? deleteDevice
+                  : (_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Bạn không có quyền xoá thiết bị"),
+                  ),
+                );
+              },
 
               onTapDevice: (id) {
                 showDeviceDetail(
@@ -1229,6 +1268,14 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.qr_code_scanner, color: Colors.white),
 
                   onPressed: () async {
+                    if (!canManageHome()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Bạn không có quyền pair thiết bị"),
+                        ),
+                      );
+                      return;
+                    }
                     final result = await showModalBottomSheet<String>(
                       context: context,
                       isScrollControlled: true,
@@ -1314,11 +1361,21 @@ class _HomePageState extends State<HomePage> {
                         homeAddress:
                         homes[selectedHome]?["address"]?.toString() ?? "",
 
-                        onTransferOwner: transferOwner,
-                        onAlarm: setAlarmSchedule,
-                        onRenameHome: renameHome,
-                        onDeleteHome: deleteHome,
-                        context: context,
+                        onTransferOwner: isOwner() ? transferOwner : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Chỉ chủ nhà mới được chuyển quyền")),
+                          );
+                        },                        onAlarm: setAlarmSchedule,
+                        onRenameHome: canManageHome() ? renameHome : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Bạn không có quyền sửa tên nhà")),
+                          );
+                        },
+                        onDeleteHome: isOwner() ? deleteHome : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Chỉ chủ nhà mới được xoá nhà")),
+                          );
+                        },                        context: context,
                         inviteCount: shareRequests.length,
 
                         onShareRequests: () {
@@ -1330,10 +1387,15 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
 
-                        onShare: shareHome,
-
+                        onShare: canManageHome() ? shareHome : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Bạn không có quyền chia sẻ nhà")),
+                          );
+                        },
                         onShareList: () {
                           showShareListSheet(
+                            canManageMembers: canManageHome(),
+                            isOwner: isOwner(),
                             context: context,
                             ownerUid: getHomeOwnerUid(),
                             homeId: selectedHome,

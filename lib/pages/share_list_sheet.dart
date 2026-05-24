@@ -5,6 +5,8 @@ Future<void> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
   required String homeId,
+  required bool canManageMembers,
+  required bool isOwner,
 }) async {
   final db = FirebaseDatabase.instance;
 
@@ -70,6 +72,7 @@ Future<void> showShareListSheet({
       "email": email,
       "name": name,
       "photoUrl": photoUrl,
+      "role": raw["role"]?.toString() ?? "member",
     };
   }
 
@@ -199,6 +202,7 @@ Future<void> showShareListSheet({
                   final email = member["email"]?.toString() ?? "Loading...";
                   final name = member["name"]?.toString() ?? email;
                   final photoUrl = member["photoUrl"]?.toString() ?? "";
+                  final role = member["role"]?.toString() ?? "member";
 
                   return Container(
                     margin: const EdgeInsets.only(bottom: 10),
@@ -241,10 +245,66 @@ Future<void> showShareListSheet({
                             ],
                           ),
                         ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: role == "admin"
+                                ? Colors.deepPurple.withValues(alpha: 0.12)
+                                : Colors.blueGrey.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Text(
+                            role.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: role == "admin" ? Colors.deepPurple : Colors.blueGrey,
+                            ),
+                          ),
+                        ),
+                        if (isOwner) ...[
+                          PopupMenuButton<String>(
+                            icon: const Icon(Icons.manage_accounts_rounded),
 
-                        IconButton(
-                          icon: const Icon(
-                            Icons.remove_circle,
+                            onSelected: (value) async {
+                              await db
+                                  .ref("sharedByHome/$homeId/$targetUid/role")
+                                  .set(value);
+
+                              if (!context.mounted) return;
+
+                              Navigator.pop(context);
+
+                              showShareListSheet(
+                                context: context,
+                                ownerUid: ownerUid,
+                                homeId: homeId,
+                                canManageMembers: canManageMembers,
+                                isOwner: isOwner,
+                              );
+                            },
+
+                            itemBuilder: (_) => [
+                              const PopupMenuItem(
+                                value: "member",
+                                child: Text("Member"),
+                              ),
+
+                              const PopupMenuItem(
+                                value: "admin",
+                                child: Text("Admin"),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(width: 4),
+                        ],
+
+                        const SizedBox(width: 6),
+                        if (canManageMembers)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.remove_circle,
                             color: Colors.red,
                           ),
                           onPressed: () async {

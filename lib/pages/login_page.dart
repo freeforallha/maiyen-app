@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:firebase_database/firebase_database.dart';
+import 'set_password_page.dart';
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -29,7 +30,56 @@ class _LoginPageState extends State<LoginPage> {
         idToken: googleAuth.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final cred = await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final user = cred.user;
+      if (user == null) return;
+      final hasPassword = user.providerData.any(
+            (p) => p.providerId == "password",
+      );
+
+      if (!hasPassword) {
+        if (!context.mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const SetPasswordPage(),
+          ),
+        );
+
+        return;
+      }
+
+      final ref = FirebaseDatabase.instance.ref("accounts/${user.uid}");
+      final snap = await ref.get();
+
+      if (!snap.exists) {
+        await ref.set({
+          "email": user.email ?? "",
+          "profile": {
+            "name": user.displayName ?? "",
+            "gender": "",
+            "dob": "",
+            "phone": "",
+            "photoUrl": user.photoURL ?? "",
+          },
+          "homes": {},
+          "homeOrder": [],
+          "shareRequests": {},
+          "shareList": {},
+          "sharedHomes": {},
+        });
+      } else {
+        await ref.update({
+          "email": user.email ?? "",
+        });
+
+        await ref.child("profile").update({
+          "photoUrl": user.photoURL ?? "",
+          "name": user.displayName ?? "",
+        });
+      }
     } catch (e, stack) {
       setState(() {
         error = "Google login error: $e";
