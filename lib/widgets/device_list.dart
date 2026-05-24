@@ -62,115 +62,115 @@ class DeviceList extends StatelessWidget {
     final smallTextSize = compact ? 10.5 : 12.0;
     final padding = compact ? 8.0 : 10.0;
 
-    return InkWell(
-      onTap: () => onTapDevice(id),
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: EdgeInsets.all(padding),
-        decoration: BoxDecoration(
-          color: isUnsafe ? Colors.red.shade100 : Colors.green.shade100,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isUnsafe ? Colors.red.shade300 : Colors.green.shade300,
-            width: 1,
+    return Align(
+      alignment: Alignment.topLeft,
+      child: InkWell(
+        onTap: () => onTapDevice(id),
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(padding),
+          decoration: BoxDecoration(
+            color: isUnsafe ? Colors.red.shade100 : Colors.green.shade100,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isUnsafe ? Colors.red.shade300 : Colors.green.shade300,
+              width: 1,
+            ),
           ),
-        ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: Alignment.topLeft,
-          child: SizedBox(
-            width: compact ? 132 : 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  d["name"]?.toString() ?? id,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: titleSize,
-                    fontWeight: FontWeight.bold,
-                    height: 1.05,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                d["name"]?.toString() ?? id,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: titleSize,
+                  fontWeight: FontWeight.bold,
+                  height: 1.05,
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    d["status"] == "closed"
+                        ? Icons.check_circle
+                        : Icons.cancel,
+                    size: compact ? 15 : 16,
+                    color: d["status"] == "closed" ? Colors.green : Colors.red,
                   ),
-                ),
 
-                const SizedBox(height: 6),
+                  const SizedBox(width: 4),
 
-                Row(
-                  children: [
-                    Icon(
-                      d["status"] == "closed"
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      size: compact ? 15 : 16,
-                      color: d["status"] == "closed"
-                          ? Colors.green
-                          : Colors.red,
+                  Text(
+                    d["status"] == "closed" ? "Đóng" : "Mở",
+                    style: TextStyle(fontSize: textSize),
+                  ),
+
+                  SizedBox(width: compact ? 10 : 14),
+
+                  Icon(
+                    d["tamper"] == true ? Icons.cancel : Icons.check_circle,
+                    size: compact ? 15 : 16,
+                    color: d["tamper"] == true ? Colors.red : Colors.green,
+                  ),
+
+                  const SizedBox(width: 4),
+
+                  Text(
+                    d["tamper"] == true ? "Bị tháo" : "BT",
+                    style: TextStyle(fontSize: textSize),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 5),
+
+              Row(
+                children: [
+                  Text(
+                    "Cập nhật:",
+                    style: TextStyle(
+                      fontSize: smallTextSize,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      d["status"] == "closed" ? "Đóng" : "Mở",
-                      style: TextStyle(fontSize: textSize),
-                    ),
+                  ),
 
-                    SizedBox(width: compact ? 10 : 14),
+                  const SizedBox(width: 5),
 
-                    Icon(
-                      d["tamper"] == true
-                          ? Icons.cancel
-                          : Icons.check_circle,
-                      size: compact ? 15 : 16,
-                      color: d["tamper"] == true
-                          ? Colors.red
-                          : Colors.green,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      d["tamper"] == true ? "Bị tháo" : "BT",
-                      style: TextStyle(fontSize: textSize),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 4),
-
-                Row(
-                  children: [
-                    Text(
-                      "Cập nhật:",
+                  Expanded(
+                    child: Text(
+                      lastSeenLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: smallTextSize,
                         color: Colors.black54,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    Flexible(
-                      child: Text(
-                        lastSeenLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: smallTextSize,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                Text(
-                  lastSeen,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: compact ? 10 : 11,
-                    color: Colors.black54,
                   ),
+                ],
+              ),
+
+              const SizedBox(height: 2),
+
+              Text(
+                lastSeen,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: compact ? 10 : 11,
+                  color: Colors.black54,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -206,28 +206,33 @@ class DeviceList extends StatelessWidget {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final compact = constraints.maxWidth < 390;
+                    final spacing = compact ? 10.0 : 16.0;
+                    final itemWidth =
+                        (constraints.maxWidth - spacing - 16) / 2;
 
                     return SingleChildScrollView(
                       padding: const EdgeInsets.all(8),
-                      child: Wrap(
-                        spacing: compact ? 10 : 16,
-                        runSpacing: 10,
-                        children: devices.entries.map((entry) {
-                          final d = safeMap(entry.value);
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Wrap(
+                          spacing: spacing,
+                          runSpacing: 10,
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          children: devices.entries.map((entry) {
+                            final d = safeMap(entry.value);
 
-                          final itemWidth =
-                              (constraints.maxWidth - (compact ? 10 : 16) - 16) / 2;
-
-                          return SizedBox(
-                            width: itemWidth,
-                            child: _deviceCard(
-                              context: context,
-                              id: entry.key,
-                              d: d,
-                              compact: compact,
-                            ),
-                          );
-                        }).toList(),
+                            return SizedBox(
+                              width: itemWidth,
+                              child: _deviceCard(
+                                context: context,
+                                id: entry.key,
+                                d: d,
+                                compact: compact,
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     );
                   },
