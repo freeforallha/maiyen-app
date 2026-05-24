@@ -13,7 +13,10 @@ void showHomeChatSheet({
 
   final controller = TextEditingController();
   final chatRef = FirebaseDatabase.instance.ref("homeChats/$homeId/messages");
+  final readRef = FirebaseDatabase.instance
+      .ref("homeChats/$homeId/lastRead/${user.uid}");
 
+  readRef.set(DateTime.now().millisecondsSinceEpoch);
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -199,12 +202,14 @@ void showHomeChatSheet({
                         controller.clear();
 
                         await chatRef.push().set({
+
                           "uid": user.uid,
                           "name": userName,
                           "photoUrl": userPhotoUrl,
                           "text": text,
                           "time": DateTime.now().millisecondsSinceEpoch,
                         });
+                        await readRef.set(DateTime.now().millisecondsSinceEpoch);
                       },
                     ),
                   ),

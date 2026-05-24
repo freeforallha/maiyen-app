@@ -38,7 +38,7 @@ class AccountAvatarSheet {
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 10,
-                      color: Colors.black.withOpacity(0.15),
+                      color: Colors.black.withValues(alpha: 0.15),
                     ),
                   ],
                 ),
@@ -133,7 +133,6 @@ class AccountAvatarSheet {
     try {
       final db = FirebaseDatabase.instance;
 
-      // 1. Re-auth trước
       final credential = EmailAuthProvider.credential(
         email: user.email!,
         password: password,
@@ -141,22 +140,71 @@ class AccountAvatarSheet {
 
       await user.reauthenticateWithCredential(credential);
 
-      // 2. Xoá toàn bộ realtime DB
-      await db.ref("accounts/$uid").remove();
-      await db.ref("sharedByHome/$uid").remove();
+      final accountSnap = await db.ref("accounts/$uid").get();
 
-      // 3. Xoá auth user
+      final accountData = accountSnap.value is Map
+          ? Map<String, dynamic>.from(accountSnap.value as Map)
+          : <String, dynamic>{};
+
+      final ownHomes = accountData["homes"] is Map
+          ? Map<String, dynamic>.from(accountData["homes"] as Map)
+          : <String, dynamic>{};
+
+      final sharedHomes = accountData["sharedHomes"] is Map
+          ? Map<String, dynamic>.from(accountData["sharedHomes"] as Map)
+          : <String, dynamic>{};
+
+      final updates = <String, dynamic?>{};
+
+      // user là OWNER
+      for (final homeId in ownHomes.keys) {
+        final sharedSnap = await db.ref("sharedByHome/$homeId").get();
+
+        if (sharedSnap.exists) {
+          final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
+
+          for (final memberUid in sharedMap.keys) {
+            updates["accounts/$memberUid/sharedHomes/$homeId"] = null;
+          }
+        }
+
+        updates["sharedByHome/$homeId"] = null;
+        updates["homeChats/$homeId"] = null;
+      }
+
+      // user là MEMBER trong home người khác
+      for (final homeId in sharedHomes.keys) {
+        final sharedInfo = sharedHomes[homeId] is Map
+            ? Map<String, dynamic>.from(sharedHomes[homeId])
+            : <String, dynamic>{};
+
+        final ownerUid = sharedInfo["ownerUid"];
+
+        updates["sharedByHome/$homeId/$uid"] = null;
+
+        if (ownerUid != null) {
+          updates["accounts/$ownerUid/shareList/$homeId/$uid"] = null;
+        }
+      }
+
+      // xoá account user cuối cùng, KHÔNG xoá accounts/$uid/homes/... riêng nữa
+      updates["accounts/$uid"] = null;
+
+      await db.ref().update(updates);
+
       await user.delete();
+
+      if (!context.mounted) return;
 
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Đã xoá tài khoản"),
-        ),
+        const SnackBar(content: Text("Đã xoá tài khoản")),
       );
     } on FirebaseAuthException catch (e) {
       showTopMessage(context, "Xoá thất bại: ${e.message ?? 'Unknown error'}");
+    } catch (e) {
+      showTopMessage(context, "Lỗi xoá account: $e");
     }
   }
 

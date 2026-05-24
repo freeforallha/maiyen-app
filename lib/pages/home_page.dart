@@ -32,6 +32,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> shareRequests = {};
+  int unreadChatCount = 0;
+  Map<String, int> unreadChatByHome = {};
   void openNotificationList(String deviceId) {
     final ownerUid = getHomeOwnerUid();
     showModalBottomSheet(
@@ -362,6 +364,66 @@ class _HomePageState extends State<HomePage> {
           minute: int.tryParse(e[1]) ?? 0,
         );
       });
+    });
+    FirebaseDatabase.instance
+        .ref("homeChats")
+        .onValue
+        .listen((event) {
+      final data = event.snapshot.value;
+
+      if (data == null) return;
+
+      final allChats = Map<String, dynamic>.from(data as Map);
+
+      int total = 0;
+      final perHome = <String, int>{};
+
+      for (final homeId in homes.keys){
+        final home = allChats[homeId];
+
+        if (home == null) continue;
+
+        final map = Map<String, dynamic>.from(home);
+
+        final messagesRaw = map["messages"];
+        final readRaw = map["lastRead"];
+
+        if (messagesRaw == null) continue;
+
+        final messages = Map<String, dynamic>.from(messagesRaw);
+
+        int lastRead = 0;
+
+        if (readRaw != null) {
+          final reads = Map<String, dynamic>.from(readRaw);
+
+          lastRead = reads[uid] ?? 0;
+        }
+
+        int homeUnread = 0;
+
+        for (final msg in messages.values) {
+          final m = Map<String, dynamic>.from(msg);
+
+          final time = m["time"] ?? 0;
+          final sender = m["uid"] ?? "";
+
+
+          if (sender != uid && time > lastRead) {
+            total++;
+            homeUnread++;
+          }
+        }if (homeUnread > 0) {
+          perHome[homeId] = homeUnread;
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          unreadChatCount = total;
+          unreadChatByHome = perHome;
+        });
+      }
     });
   }
 
@@ -1096,6 +1158,7 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           HomeTabs(
+            unreadChatByHome: unreadChatByHome,
             controller: homeTabController,
             homes: homes,
             homeOrder: homeOrder,
@@ -1240,16 +1303,43 @@ class _HomePageState extends State<HomePage> {
 
             children: [
               IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
-              IconButton(
-                icon: const Icon(Icons.chat_bubble_rounded),
-                onPressed: () {
-                  showHomeChatSheet(
-                    context: context,
-                    homeId: selectedHome,
-                    userName: userName,
-                    userPhotoUrl: userPhotoUrl,
-                  );
-                },
+              Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chat_bubble_rounded),
+                    onPressed: () {
+                      showHomeChatSheet(
+                        context: context,
+                        homeId: selectedHome,
+                        userName: userName,
+                        userPhotoUrl: userPhotoUrl,
+                      );
+                    },
+                  ),
+
+                  if (unreadChatCount > 0)
+                    Positioned(
+                      right: 2,
+                      top: 2,
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          unreadChatCount > 99
+                              ? "99+"
+                              : unreadChatCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
 
               Container(
