@@ -8,6 +8,7 @@ import '../services/fcm_service.dart';
 import '../services/home_listener_service.dart';
 import '../services/home_service.dart';
 import '../services/notification_service.dart';
+import '../helpers/safe_home_app.dart';
 
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
@@ -261,7 +262,10 @@ class _HomePageState extends State<HomePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     FCMService.setupFCM(uid: uid);
 
-    FCMService.listenForeground(localNotif: localNotif);
+    FCMService.listenForeground(
+      localNotif: localNotif,
+      navigatorKey: appNavigatorKey,
+    );
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
 
     ref.onValue.listen((event) {

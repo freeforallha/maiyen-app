@@ -258,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   ElevatedButton(
                     onPressed: submit,
-                    child: Text(isLogin ? "Login" : "Sign Up"),
+                    child: Text(isLogin ? "Đăng nhập" : "Đăng ký mới"),
                   ),
 
                   const SizedBox(height: 12),
