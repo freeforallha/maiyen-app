@@ -27,24 +27,42 @@ class DeviceList extends StatelessWidget {
     return Map<String, dynamic>.from(data as Map);
   }
 
-  String formatLastSeenLabel(dynamic ts) {
-    if (ts == null) return "--";
+  bool isDeviceOnline(dynamic ts) {
+    if (ts == null) return false;
 
-    final dt = DateTime.fromMillisecondsSinceEpoch(
-      int.tryParse(ts.toString()) ?? 0,
-    );
+    final value = int.tryParse(ts.toString());
+    if (value == null || value <= 0) return false;
 
+    final lastSeen = DateTime.fromMillisecondsSinceEpoch(value);
     final now = DateTime.now();
 
-    final today = DateTime(now.year, now.month, now.day);
-    final targetDay = DateTime(dt.year, dt.month, dt.day);
+    return now.difference(lastSeen).inMinutes <= 120;
+  }
 
-    final diff = today.difference(targetDay).inDays;
+  String formatAgo(dynamic ts) {
+    if (ts == null) return "--";
 
-    if (diff == 0) return "Hôm nay";
-    if (diff == 1) return "Hôm qua";
+    final value = int.tryParse(ts.toString());
+    if (value == null || value <= 0) return "--";
 
-    return "$diff ngày trước";
+    final dt = DateTime.fromMillisecondsSinceEpoch(value);
+    final diff = DateTime.now().difference(dt);
+
+    if (diff.inMinutes < 1) return "Vừa xong";
+
+    if (diff.inHours < 1) {
+      return "${diff.inMinutes} phút trước";
+    }
+
+    if (diff.inHours < 24) {
+      final h = diff.inHours;
+      final m = diff.inMinutes % 60;
+
+      if (m == 0) return "${h}h trước";
+      return "${h}h${m}' trước";
+    }
+
+    return "${diff.inDays} ngày trước";
   }
 
   Widget _deviceCard({
@@ -54,8 +72,8 @@ class DeviceList extends StatelessWidget {
     required bool compact,
   }) {
     final isUnsafe = d["status"] != "closed" || d["tamper"] == true;
-    final lastSeen = d["last_seen_text"] ?? "--";
-    final lastSeenLabel = formatLastSeenLabel(d["last_seen"]);
+    final online = isDeviceOnline(d["last_seen"]);
+    final eventAgo = formatAgo(d["last_event"]);
 
     final titleSize = compact ? 14.0 : 16.0;
     final textSize = compact ? 12.0 : 13.0;
@@ -130,6 +148,42 @@ class DeviceList extends StatelessWidget {
                 ],
               ),
 
+              const SizedBox(height: 6),
+
+              Row(
+                children: [
+                  Text(
+                    "Trạng thái:",
+                    style: TextStyle(
+                      fontSize: smallTextSize,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(width: 5),
+
+                  Container(
+                    width: 9,
+                    height: 9,
+                    decoration: BoxDecoration(
+                      color: online ? Colors.green : Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+
+                  const SizedBox(width: 5),
+
+                  Text(
+                    online ? "Online" : "Offline",
+                    style: TextStyle(
+                      fontSize: smallTextSize,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+
               const SizedBox(height: 5),
 
               Row(
@@ -147,7 +201,7 @@ class DeviceList extends StatelessWidget {
 
                   Expanded(
                     child: Text(
-                      lastSeenLabel,
+                      eventAgo,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -157,18 +211,6 @@ class DeviceList extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 2),
-
-              Text(
-                lastSeen,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: compact ? 10 : 11,
-                  color: Colors.black54,
-                ),
               ),
             ],
           ),

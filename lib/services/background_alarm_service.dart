@@ -23,35 +23,45 @@ Future<void> firebaseMessagingBackgroundHandler(
     ),
   );
 
-  const androidDetails = AndroidNotificationDetails(
-    'alarm_siren_channel',
-    'Alarm Siren',
+  final type = message.data['type']?.toString() ?? 'alarm';
+  final isSchedule = type == 'schedule_notification';
+
+  final title = message.notification?.title ??
+      message.data['title'] ??
+      (isSchedule ? '🏡 SAFEHOME' : 'SafeHome Alarm');
+
+  final body = message.notification?.body ??
+      message.data['body'] ??
+      (isSchedule ? 'Đã đến giờ kiểm tra SafeHome' : 'Alarm triggered');
+
+  final androidDetails = AndroidNotificationDetails(
+    isSchedule
+        ? 'safehome_schedule_fullscreen_channel'
+        : 'alarm_siren_channel',
+    isSchedule ? 'SafeHome Schedule Fullscreen' : 'Alarm Siren',
     importance: Importance.max,
     priority: Priority.high,
-    category: AndroidNotificationCategory.alarm,
+    category: isSchedule
+        ? AndroidNotificationCategory.reminder
+        : AndroidNotificationCategory.alarm,
     fullScreenIntent: true,
-    playSound: true,
-    enableVibration: true,
-    sound: RawResourceAndroidNotificationSound('alarm_siren'),
+
+    // Schedule: full màn hình nhưng không âm, không rung.
+    // Alarm thật: có âm còi + rung.
+    playSound: !isSchedule,
+    enableVibration: !isSchedule,
+    sound: isSchedule
+        ? null
+        : const RawResourceAndroidNotificationSound('alarm_siren'),
   );
-
-  final title =
-      message.notification?.title ??
-          message.data['title'] ??
-          'SafeHome Alarm';
-
-  final body =
-      message.notification?.body ??
-          message.data['body'] ??
-          'Alarm triggered';
 
   await backgroundLocalNotif.show(
     DateTime.now().millisecondsSinceEpoch ~/ 1000,
-    title,
-    body,
+    title.toString(),
+    body.toString(),
     NotificationDetails(
       android: androidDetails,
     ),
-    payload: "alarm",
+    payload: isSchedule ? 'schedule_notification' : 'alarm',
   );
 }

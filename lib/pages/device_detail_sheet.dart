@@ -11,6 +11,7 @@ void showDeviceDetail({
   final linkquality = d["linkquality"];
   final battery = d["battery"];
   final lastSeen = d["last_seen"];
+  final lastEvent = d["last_event"];
   final status = d["status"];
   final tamper = d["tamper"] == true;
 
@@ -110,10 +111,15 @@ void showDeviceDetail({
             _infoRow(
               icon: Icons.access_time_rounded,
               color: Colors.indigo,
-              title: "Cập nhật cuối",
+              title: "Tự cập nhật cuối",
               value: formatFullDate(lastSeen),
             ),
-
+            _infoRow(
+              icon: Icons.history_rounded,
+              color: Colors.deepOrange,
+              title: "Event cuối",
+              value: formatFullDate(lastEvent),
+            ),
             const SizedBox(height: 22),
 
             /// DELETE BUTTON
@@ -205,5 +211,8 @@ String formatFullDate(dynamic ts) {
     int.tryParse(ts.toString()) ?? 0,
   );
 
-  return "${dt.day}/${dt.month}/${dt.year} ${dt.hour}:${dt.minute}";
+  final hh = dt.hour.toString().padLeft(2, '0');
+  final mm = dt.minute.toString().padLeft(2, '0');
+
+  return "${dt.day}/${dt.month}/${dt.year} $hh:$mm";
 }

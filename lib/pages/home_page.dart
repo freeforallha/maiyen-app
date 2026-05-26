@@ -25,6 +25,7 @@ import 'share_list_sheet.dart';
 import 'share_request_sheet.dart';
 import 'edit_profile_page.dart';
 import 'home_chat_sheet.dart';
+import 'schedule_sheet.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -249,7 +250,35 @@ class _HomePageState extends State<HomePage> {
 
     return "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}";
   }
+  String formatAlarmSchedules() {
+    final currentHome = safeMap(homes[selectedHome]);
 
+    final schedules = safeMap(currentHome["schedules"]);
+
+    final alarmsRaw = schedules["alarms"];
+
+    if (alarmsRaw == null) return "--:--";
+
+    final alarms = List<Map<String, dynamic>>.from(
+      (alarmsRaw as List).map(
+            (e) => Map<String, dynamic>.from(e),
+      ),
+    );
+
+    final enabled = alarms
+        .where((e) => e["enabled"] == true)
+        .toList();
+
+    if (enabled.isEmpty) {
+      return "Chưa bật";
+    }
+
+    if (enabled.length == 1) {
+      return "${enabled.first["start"]} - ${enabled.first["end"]}";
+    }
+
+    return "${enabled.length} khung giờ";
+  }
   Map<String, dynamic> getDevices() {
     final homeData = safeMap(homes[selectedHome]);
     return safeMap(homeData["devices"]);
@@ -288,12 +317,23 @@ class _HomePageState extends State<HomePage> {
         userDob = profile["dob"]?.toString() ?? map["dob"]?.toString() ?? "";
         userPhone = profile["phone"]?.toString() ?? map["phone"]?.toString() ?? "";
         userPhotoUrl = profile["photoUrl"]?.toString() ?? "";
-        homes = homesData;
+        homes.removeWhere((key, value) {
+          final home = safeMap(value);
+          final isShared = home["_shared"] == true;
+
+          return !isShared && !homesData.containsKey(key);
+        });
+
+// Cập nhật home chính chủ.
+        for (final entry in homesData.entries) {
+          homes[entry.key] = entry.value;
+        }
         HomeListenerService.loadSharedHomes(
           homes: homes,
           sharedHomes: sharedHomes,
 
           refresh: () {
+            if (!mounted) return;
             setState(() {});
           },
 
@@ -1079,7 +1119,25 @@ class _HomePageState extends State<HomePage> {
       name: name,
     );
   }
+  void setNotificationSchedule() async {
+    final t = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 23, minute: 0),
+    );
 
+    if (t == null) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          "Đã chọn giờ Notification: ${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}",
+        ),
+      ),
+    );
+
+    // Tạm thời chỉ set UI trước.
+    // Bước sau mình sẽ nối lưu Firebase + backend gửi notification 23h.
+  }
   void setAlarmSchedule() async {
     final s = await showTimePicker(context: context, initialTime: start);
 
@@ -1231,22 +1289,39 @@ class _HomePageState extends State<HomePage> {
 
                     onPair: null,
                     onQR: null,
+                    onScheduleNotification: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) {
+                          return ScheduleSheet(
+                            ownerUid: getHomeOwnerUid(),
+                            homeId: selectedHome,
+                            isShared: homes[selectedHome]?["_shared"] == true,
+                            type: "notification",
+                          );
+                        },
+                      );
+                    },
 
-                    alarmStart: formatTime(
-                      safeMap(
-                        homes[selectedHome]?["_customAlarm"] ??
-                            homes[selectedHome]?["alarm"],
-                      )["start"]?.toString() ??
-                          "--:--",
-                    ),
-
-                    alarmEnd: formatTime(
-                      safeMap(
-                        homes[selectedHome]?["_customAlarm"] ??
-                            homes[selectedHome]?["alarm"],
-                      )["end"]?.toString() ??
-                          "--:--",
-                    ),
+                    onScheduleAlarm: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (_) {
+                          return ScheduleSheet(
+                            ownerUid: getHomeOwnerUid(),
+                            homeId: selectedHome,
+                            isShared: homes[selectedHome]?["_shared"] == true,
+                            type: "alarm",
+                          );
+                        },
+                      );
+                    },
+                    alarmStart: formatAlarmSchedules(),
+                    alarmEnd: "",
                   ),
 
                   if (pairingCountdown > 0)
@@ -1459,7 +1534,7 @@ class _HomePageState extends State<HomePage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Chỉ chủ nhà mới được chuyển quyền")),
                           );
-                        },                        onAlarm: setAlarmSchedule,
+                        },
                         onRenameHome: canManageHome() ? renameHome : () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Bạn không có quyền sửa tên nhà")),

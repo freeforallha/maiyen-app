@@ -10,7 +10,6 @@ void showSettingsSheet({
   required VoidCallback onShare,
   required VoidCallback onShareList,
   required VoidCallback onLogout,
-  required VoidCallback onAlarm,
   required VoidCallback onRenameHome,
   required VoidCallback onDeleteHome,
   required int inviteCount,
@@ -97,14 +96,36 @@ void showSettingsSheet({
                       const SizedBox(width: 8),
 
                       Expanded(
-                        child: Text(
-                          homeName.isNotEmpty ? homeName : "Chưa đặt tên",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.w700,
-                          ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                homeName.isNotEmpty ? homeName : "Chưa đặt tên",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+
+                            GestureDetector(
+                              onTap: onRenameHome,
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.teal.withValues(alpha: 0.10),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Icon(
+                                  Icons.edit_rounded,
+                                  size: 17,
+                                  color: Colors.teal,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -140,21 +161,6 @@ void showSettingsSheet({
                   ),
                 ],
               ),
-            ),
-            // ===== HOME SETTINGS =====
-
-            tile(
-              icon: Icons.schedule,
-              title: "Giờ báo động",
-              color: Colors.deepPurple,
-              onTap: onAlarm,
-            ),
-
-            tile(
-              icon: Icons.edit,
-              title: "Sửa tên nhà",
-              color: Colors.teal,
-              onTap: onRenameHome,
             ),
 
             // ===== SHARE =====

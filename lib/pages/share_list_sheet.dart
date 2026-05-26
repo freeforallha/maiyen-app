@@ -271,6 +271,10 @@ Future<void> showShareListSheet({
                                   .ref("sharedByHome/$homeId/$targetUid/role")
                                   .set(value);
 
+                              await db
+                                  .ref("accounts/$targetUid/sharedHomes/$homeId/role")
+                                  .set(value);
+
                               if (!context.mounted) return;
 
                               Navigator.pop(context);

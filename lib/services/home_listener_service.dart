@@ -22,36 +22,37 @@ class HomeListenerService {
           .ref("accounts/$ownerUid/homes/$homeId")
           .onValue
           .listen((sharedEvent) async {
-            final sharedData = sharedEvent.snapshot.value;
+        final sharedData = sharedEvent.snapshot.value;
 
-            if (sharedData == null) {
-              onDeleted(homeId);
-              return;
-            }
+        if (sharedData == null) {
+          onDeleted(homeId);
+          return;
+        }
 
-            final sharedHome = Map<String, dynamic>.from(sharedData as Map);
+        final sharedHome = Map<String, dynamic>.from(sharedData as Map);
 
-            final emailSnap = await FirebaseDatabase.instance
-                .ref("accounts/$ownerUid/email")
-                .get();
+        final emailSnap = await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/email")
+            .get();
 
-            final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
+        final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
 
-            homes[homeId] = {
-              ...sharedHome,
+        homes[homeId] = {
+          ...sharedHome,
 
-              "alarm": safeMap(sharedHome["alarm"]),
+          "alarm": safeMap(sharedHome["alarm"]),
 
-              "_shared": true,
-              "_ownerUid": ownerUid,
-              "_ownerEmail": ownerEmail,
+          "_shared": true,
+          "_ownerUid": ownerUid,
+          "_ownerEmail": ownerEmail,
 
-              "_customName": sharedConfig["customName"],
-              "_customAlarm": sharedConfig["alarm"],
-            };
+          "_customName": sharedConfig["customName"],
+          "_customAlarm": sharedConfig["alarm"],
+          "_role": sharedConfig["role"] ?? "member",
+        };
 
-            refresh();
-          });
+        refresh();
+      });
     }
   }
 }
