@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import '../helpers/firebase_paths.dart';
 
 void showShareRequestSheet({
   required BuildContext context,
@@ -21,18 +22,15 @@ void showShareRequestSheet({
             required String ownerUid,
           }) async {
             await FirebaseDatabase.instance
-                .ref("accounts/$uid/sharedHomes/$homeId")
-                .set({
+                .ref(FirebasePaths.sharedHome(uid, homeId))                .set({
               "ownerUid": ownerUid,
             });
 
             await FirebaseDatabase.instance
-                .ref("sharedByHome/$homeId/$uid")
-                .set(true);
+                .ref(FirebasePaths.sharedMember(homeId, uid))                .set(true);
 
             await FirebaseDatabase.instance
-                .ref("accounts/$uid/shareRequests/$homeId")
-                .remove();
+                .ref(FirebasePaths.shareRequest(uid, homeId))                .remove();
           }
 
           Future<void> acceptSelected() async {
@@ -83,8 +81,7 @@ void showShareRequestSheet({
 
             for (final homeId in selected) {
               await FirebaseDatabase.instance
-                  .ref("accounts/$uid/shareRequests/$homeId")
-                  .remove();
+                  .ref(FirebasePaths.shareRequest(uid, homeId))                  .remove();
             }
 
             Navigator.pop(context);

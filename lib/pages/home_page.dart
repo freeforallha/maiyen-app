@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../helpers/firebase_paths.dart';
 
 import '../helpers/home_helper.dart';
 import '../services/fcm_service.dart';
@@ -285,7 +286,7 @@ class _HomePageState extends State<HomePage> {
     FCMService.listenForeground(
       localNotif: localNotif,
     );
-    ref = FirebaseDatabase.instance.ref("accounts/$uid");
+    ref = FirebaseDatabase.instance.ref(FirebasePaths.account(uid));
 
     ref.onValue.listen((event) {
       final data = event.snapshot.value;
@@ -398,7 +399,7 @@ class _HomePageState extends State<HomePage> {
       });
     });
     FirebaseDatabase.instance
-        .ref("homeChats")
+        .ref(FirebasePaths.homeChats())
         .onValue
         .listen((event) {
       final data = event.snapshot.value;
@@ -466,7 +467,7 @@ class _HomePageState extends State<HomePage> {
     final requestId =
         "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
 
-    FirebaseDatabase.instance.ref("pair_requests/$requestId").set({
+    FirebaseDatabase.instance.ref(FirebasePaths.pairRequest(requestId)).set({
       "active": true,
       "hubId": hubId.trim(),
       "homeId": selectedHome,
@@ -502,17 +503,15 @@ class _HomePageState extends State<HomePage> {
 
       // xoá sharedHomes
       await FirebaseDatabase.instance
-          .ref("accounts/$uid/sharedHomes/$leavingHomeId")
+          .ref(FirebasePaths.sharedHome(uid, leavingHomeId))
           .remove();
 
       // xoá sharedByHome
       await FirebaseDatabase.instance
-          .ref("sharedByHome/$leavingHomeId/$uid")
-          .remove();
+          .ref(FirebasePaths.sharedMember(leavingHomeId, uid))          .remove();
       if (ownerUid != null) {
         await FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/shareList/$leavingHomeId/$uid")
-            .remove();
+            .ref("${FirebasePaths.shareList(ownerUid, leavingHomeId)}/$uid")            .remove();
       }
 
       setState(() {
@@ -599,7 +598,7 @@ class _HomePageState extends State<HomePage> {
     if (ok != true) return;
 
     final sharedSnap = await FirebaseDatabase.instance
-        .ref("sharedByHome/$selectedHome")
+        .ref(FirebasePaths.sharedByHome(selectedHome))
         .get();
 
     if (sharedSnap.exists) {
@@ -607,22 +606,21 @@ class _HomePageState extends State<HomePage> {
 
       for (final sharedUid in sharedMap.keys) {
         await FirebaseDatabase.instance
-            .ref("accounts/$sharedUid/sharedHomes/$selectedHome")
+            .ref(FirebasePaths.sharedHome(sharedUid, selectedHome))
             .remove();
       }
     }
 
     // remove global shared index
-    await FirebaseDatabase.instance.ref("sharedByHome/$selectedHome").remove();
+    await FirebaseDatabase.instance.ref(FirebasePaths.sharedByHome(selectedHome)).remove();
 
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$selectedHome")
-        .remove();
+        .ref(FirebasePaths.home(uid, selectedHome))        .remove();
 
     homeOrder.remove(selectedHome);
 
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homeOrder")
+        .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
   }
 
@@ -698,7 +696,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     final targetSnap = await FirebaseDatabase.instance
-        .ref("accounts/$targetUid")
+        .ref(FirebasePaths.account(targetUid))
         .get();
 
     final targetData = targetSnap.value == null
@@ -710,7 +708,7 @@ class _HomePageState extends State<HomePage> {
         : Map<String, dynamic>.from(targetData["profile"] as Map);
 
     await FirebaseDatabase.instance
-        .ref("sharedByHome/$selectedHome/$targetUid")
+        .ref(FirebasePaths.sharedMember(selectedHome, targetUid))
         .set({
       "role": "member",
       "email": targetData["email"] ?? targetEmail,
@@ -720,7 +718,7 @@ class _HomePageState extends State<HomePage> {
     });
     // share
     await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/shareRequests/$selectedHome")
+        .ref(FirebasePaths.shareRequest(targetUid, selectedHome))
         .set({
       "ownerUid": uid,
       "homeId": selectedHome,
@@ -730,7 +728,7 @@ class _HomePageState extends State<HomePage> {
 
     // lưu share list
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/shareList/$selectedHome/$targetUid")
+        .ref("${FirebasePaths.shareList(uid, selectedHome)}/$targetUid")
         .set({
       "email": targetEmail,
       "sharedAt": DateTime.now().millisecondsSinceEpoch,
@@ -828,7 +826,7 @@ class _HomePageState extends State<HomePage> {
 
 // ===== 1. GET CURRENT HOME DATA =====
     final currentSnap = await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$homeId")
+        .ref(FirebasePaths.home(uid, homeId))
         .get();
 
     if (!currentSnap.exists) return;
@@ -839,15 +837,13 @@ class _HomePageState extends State<HomePage> {
     homeData["_ownerUid"] = targetUid;
     // xóa trạng thái shared cũ nếu có
     await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/sharedHomes/$homeId")
-        .remove();
+        .ref(FirebasePaths.sharedHome(targetUid, homeId))        .remove();
 
 // ===== 3. WRITE TO NEW OWNER =====
     await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/homes/$homeId")
-        .set(homeData);
+        .ref(FirebasePaths.home(targetUid, homeId))        .set(homeData);
     final targetOrderSnap = await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/homeOrder")
+        .ref(FirebasePaths.homeOrder(targetUid))
         .get();
 
     List<dynamic> targetOrder = [];
@@ -861,22 +857,19 @@ class _HomePageState extends State<HomePage> {
     }
 
     await FirebaseDatabase.instance
-        .ref("accounts/$targetUid/homeOrder")
-        .set(targetOrder);
+        .ref(FirebasePaths.homeOrder(targetUid))        .set(targetOrder);
 
 // ===== 4. OLD OWNER -> MEMBER =====
 
 // thêm vào sharedHomes
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/sharedHomes/$homeId")
-        .set({
+        .ref(FirebasePaths.sharedHome(uid, homeId))        .set({
       "ownerUid": targetUid,
     });
 
 // thêm vào sharedByHome
     final mySnap = await FirebaseDatabase.instance
-        .ref("accounts/$uid")
-        .get();
+        .ref(FirebasePaths.account(uid))        .get();
 
     final myData = mySnap.value is Map
         ? Map<String, dynamic>.from(mySnap.value as Map)
@@ -887,8 +880,7 @@ class _HomePageState extends State<HomePage> {
         : <String, dynamic>{};
 
     await FirebaseDatabase.instance
-        .ref("sharedByHome/$homeId/$uid")
-        .set({
+        .ref(FirebasePaths.sharedMember(homeId, uid))        .set({
       "email": myData["email"] ?? "",
       "name": myProfile["name"] ?? "",
       "photoUrl": myProfile["photoUrl"] ?? "",
@@ -897,8 +889,7 @@ class _HomePageState extends State<HomePage> {
 
 // xóa home own cũ
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$homeId")
-        .remove();
+        .ref(FirebasePaths.home(uid, homeId))        .remove();
 
     // ===== 4. UPDATE LOCAL =====
     setState(() {
@@ -912,7 +903,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homeOrder")
+        .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (homeOrder.isNotEmpty) {
@@ -993,23 +984,16 @@ class _HomePageState extends State<HomePage> {
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
-    await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
-      "name": name,
-      "address": address,
-      "_ownerUid": uid,
-      "_shared": false,
-      "devices": {},
-      "alarm": {
-        "enabled": false,
-        "start": "23:00",
-        "end": "06:00",
-      },
-    });
-
+    await HomeService.addHome(
+      uid: uid,
+      id: id,
+      name: name,
+      address: address,
+    );
     homeOrder.add(id);
 
     await FirebaseDatabase.instance
-        .ref("accounts/$uid/homeOrder")
+        .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
   }
 
@@ -1049,7 +1033,7 @@ class _HomePageState extends State<HomePage> {
     // HOME SHARE -> lưu riêng cho user hiện tại
     if (isShared) {
       await FirebaseDatabase.instance
-          .ref("accounts/$uid/sharedHomes/$selectedHome/customName")
+          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
           .set(name);
 
       setState(() {
@@ -1178,7 +1162,7 @@ class _HomePageState extends State<HomePage> {
               });
 
               await FirebaseDatabase.instance
-                  .ref("accounts/$uid/homeOrder")
+                  .ref(FirebasePaths.homeOrder(uid))
                   .set(homeOrder);
             },
 
@@ -1523,7 +1507,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     timer?.cancel();
-    homeTabController.dispose();
     super.dispose();
   }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../helpers/firebase_paths.dart';
 import 'notification_service.dart';
 
 class FCMService {
@@ -17,13 +18,11 @@ class FCMService {
     final token = await messaging.getToken();
 
     if (token != null) {
-      await FirebaseDatabase.instance.ref("accounts/$uid/fcmToken").set(token);
+      await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(token);
     }
 
     messaging.onTokenRefresh.listen((newToken) async {
-      await FirebaseDatabase.instance
-          .ref("accounts/$uid/fcmToken")
-          .set(newToken);
+      await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(newToken);
     });
   }
 

@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import '../helpers/firebase_paths.dart';
 Future<void> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
@@ -10,7 +10,7 @@ Future<void> showShareListSheet({
 }) async {
   final db = FirebaseDatabase.instance;
 
-  final ownerSnap = await db.ref("accounts/$ownerUid").get();
+  final ownerSnap = await db.ref(FirebasePaths.account(ownerUid)).get();
 
   final ownerData = ownerSnap.value is Map
       ? Map<String, dynamic>.from(ownerSnap.value as Map)
@@ -24,7 +24,7 @@ Future<void> showShareListSheet({
   final ownerName = ownerProfile["name"]?.toString() ?? "";
   final ownerPhotoUrl = ownerProfile["photoUrl"]?.toString() ?? "";
 
-  final snap = await db.ref("sharedByHome/$homeId").get();
+  final snap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
 
   final users = snap.value is Map
       ? Map<String, dynamic>.from(snap.value as Map)
@@ -38,7 +38,7 @@ Future<void> showShareListSheet({
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
 
-    final accountSnap = await db.ref("accounts/$memberUid").get();
+    final accountSnap = await db.ref(FirebasePaths.account(memberUid)).get();
 
     final account = accountSnap.value is Map
         ? Map<String, dynamic>.from(accountSnap.value as Map)
@@ -272,11 +272,11 @@ Future<void> showShareListSheet({
 
                             onSelected: (value) async {
                               await db
-                                  .ref("sharedByHome/$homeId/$targetUid/role")
+                                  .ref("${FirebasePaths.sharedMember(homeId, targetUid)}/role")
                                   .set(value);
 
                               await db
-                                  .ref("accounts/$targetUid/sharedHomes/$homeId/role")
+                                  .ref("${FirebasePaths.sharedHome(targetUid, homeId)}/role")
                                   .set(value);
 
                               if (!context.mounted) return;
@@ -317,12 +317,11 @@ Future<void> showShareListSheet({
                           ),
                           onPressed: () async {
                             await db
-                                .ref("accounts/$targetUid/sharedHomes/$homeId")
+                                .ref(FirebasePaths.sharedHome(targetUid, homeId))
                                 .remove();
 
                             await db
-                                .ref("sharedByHome/$homeId/$targetUid")
-                                .remove();
+                                .ref(FirebasePaths.sharedMember(homeId, targetUid))                                .remove();
 
                             await db
                                 .ref(

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'share_list_sheet.dart';
-
+import '../helpers/firebase_paths.dart';
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -16,9 +16,9 @@ void showHomeChatSheet({
   if (user == null) return;
 
   final controller = TextEditingController();
-  final chatRef = FirebaseDatabase.instance.ref("homeChats/$homeId/messages");
+  final chatRef = FirebaseDatabase.instance.ref(FirebasePaths.homeMessages(homeId));
   final readRef = FirebaseDatabase.instance
-      .ref("homeChats/$homeId/lastRead/${user.uid}");
+      .ref(FirebasePaths.homeLastRead(homeId, user.uid));
 
   readRef.set(DateTime.now().millisecondsSinceEpoch);
   showModalBottomSheet(

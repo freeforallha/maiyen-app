@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 
+import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
 
 class HomeListenerService {
@@ -10,7 +11,7 @@ class HomeListenerService {
     required Function(String homeId) onDeleted,
   }) async {
     for (final entry in sharedHomes.entries) {
-      final homeId = entry.key;
+      final homeId = entry.key.toString();
 
       final sharedConfig = safeMap(entry.value);
 
@@ -19,7 +20,7 @@ class HomeListenerService {
       if (ownerUid == null) continue;
 
       FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId")
+          .ref(FirebasePaths.home(ownerUid, homeId))
           .onValue
           .listen((sharedEvent) async {
         final sharedData = sharedEvent.snapshot.value;
@@ -31,9 +32,8 @@ class HomeListenerService {
 
         final sharedHome = Map<String, dynamic>.from(sharedData as Map);
 
-        final emailSnap = await FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/email")
-            .get();
+        final emailSnap =
+        await FirebaseDatabase.instance.ref(FirebasePaths.accountEmail(ownerUid)).get();
 
         final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
 
@@ -50,6 +50,7 @@ class HomeListenerService {
           "_customAlarm": sharedConfig["alarm"],
           "_role": sharedConfig["role"] ?? "member",
         };
+
         if (homes.isEmpty) return;
         refresh();
       });
