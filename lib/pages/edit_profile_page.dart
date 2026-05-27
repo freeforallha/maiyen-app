@@ -151,6 +151,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> saveProfile() async {
+    if (saving) return;
     if (user == null) return;
 
     setState(() {
@@ -176,7 +177,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
           "${yearController.text}-${monthController.text}-${dayController.text}";
 
       // update auth
-      await user!.updateDisplayName(nameController.text.trim());
+      final cleanName = nameController.text.trim();
+
+      if (cleanName.isNotEmpty) {
+        await user!.updateDisplayName(cleanName);
+      }
 
       if (photoUrl != null) {
         await user!.updatePhotoURL(photoUrl);
@@ -241,9 +246,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                   backgroundImage: pickedImage != null
                       ? FileImage(pickedImage!)
-                      : (avatarUrl != null
+                      : (avatarUrl != null && avatarUrl.isNotEmpty)
                       ? NetworkImage(avatarUrl)
-                      : null) as ImageProvider?,
+                      : null,
 
                   child: avatarUrl == null && pickedImage == null
                       ? const Icon(
@@ -423,8 +428,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onPressed: saving ? null : saveProfile,
 
                 child: saving
-                    ? const CircularProgressIndicator(
-                  color: Colors.white,
+                    ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.4,
+                    color: Colors.white,
+                  ),
                 )
                     : const Text(
                   "Lưu thay đổi",

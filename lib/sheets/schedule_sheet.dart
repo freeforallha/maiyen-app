@@ -37,31 +37,36 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
   Future<void> load() async {
     final snap = await ref.get();
+
     if (!snap.exists) return;
 
     final data = Map<String, dynamic>.from(snap.value as Map);
 
     setState(() {
       alarms = List<Map<String, dynamic>>.from(
-        (data["alarms"] ?? []).map((e) => Map<String, dynamic>.from(e)),
+        (data["alarms"] ?? []).map(
+              (e) => Map<String, dynamic>.from(e),
+        ),
       );
 
       notifications = List<Map<String, dynamic>>.from(
-        (data["notifications"] ?? []).map((e) => Map<String, dynamic>.from(e)),
+        (data["notifications"] ?? []).map(
+              (e) => Map<String, dynamic>.from(e),
+        ),
       );
     });
   }
 
-  Future<void> saveAlarm() async {
-    await ref.child("alarms").set(alarms);
-  }
-
-  Future<void> saveNotification() async {
-    await ref.child("notifications").set(notifications);
+  Future<void> saveSchedules() async {
+    await ref.update({
+      "alarms": alarms,
+      "notifications": notifications,
+    });
   }
 
   bool isValidTime(String value) {
     final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
+
     return reg.hasMatch(value.trim());
   }
 
@@ -79,7 +84,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       text: parts[1],
     );
 
-    final suggestions = [
+    const suggestions = [
       ["22", "00"],
       ["23", "00"],
       ["05", "00"],
@@ -161,11 +166,13 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
             ElevatedButton(
               onPressed: () {
-                final h =
-                hourController.text.trim().padLeft(2, '0');
+                final h = hourController.text
+                    .trim()
+                    .padLeft(2, '0');
 
-                final m =
-                minuteController.text.trim().padLeft(2, '0');
+                final m = minuteController.text
+                    .trim()
+                    .padLeft(2, '0');
 
                 final value = "$h:$m";
 
@@ -176,6 +183,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       backgroundColor: Colors.red,
                     ),
                   );
+
                   return;
                 }
 
@@ -212,7 +220,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       });
     });
 
-    saveAlarm();
+    saveSchedules();
   }
 
   Future<void> editAlarm(int index) async {
@@ -237,7 +245,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       alarms[index]["end"] = end;
     });
 
-    saveAlarm();
+    saveSchedules();
   }
 
   Future<void> addNotification() async {
@@ -255,7 +263,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       });
     });
 
-    saveNotification();
+    saveSchedules();
   }
 
   Future<void> editNotification(int index) async {
@@ -272,12 +280,15 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       notifications[index]["time"] = time;
     });
 
-    saveNotification();
+    saveSchedules();
   }
 
   Widget sectionTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, top: 12),
+      padding: const EdgeInsets.only(
+        bottom: 10,
+        top: 12,
+      ),
       child: Row(
         children: [
           Text(
@@ -295,7 +306,6 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   @override
   Widget build(BuildContext context) {
     final isAlarm = widget.type == "alarm";
-    final isNotification = widget.type == "notification";
 
     return SafeArea(
       child: Container(
@@ -321,7 +331,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
               const SizedBox(height: 18),
 
               Text(
-                isAlarm ? "Hẹn giờ Alarm" : "Hẹn giờ Notification",
+                isAlarm
+                    ? "Hẹn giờ Alarm"
+                    : "Hẹn giờ Notification",
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -348,7 +360,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           setState(() {
                             alarms[i]["enabled"] = v;
                           });
-                          saveAlarm();
+
+                          saveSchedules();
                         },
                       ),
 
@@ -361,25 +374,28 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                           const SizedBox(width: 10),
 
-                          Text("${item["start"]} - ${item["end"]}"),
+                          Text(
+                            "${item["start"]} - ${item["end"]}",
+                          ),
                         ],
                       ),
 
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
                           IconButton(
                             icon: const Icon(Icons.edit_rounded),
                             onPressed: () => editAlarm(i),
                           ),
+
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () async {
                               setState(() {
                                 alarms.removeAt(i);
                               });
-                              saveAlarm();
+
+                              saveSchedules();
                             },
                           ),
                         ],
@@ -393,12 +409,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: addAlarm,
                     icon: const Icon(Icons.add),
-                    label: const Text("Thêm khung giờ Alarm"),
+                    label: const Text(
+                      "Thêm khung giờ Alarm",
+                    ),
                   ),
                 ),
               ],
 
-              if (isNotification) ...[
+              if (!isAlarm) ...[
                 sectionTitle("Notification"),
 
                 ...notifications.asMap().entries.map((e) {
@@ -418,7 +436,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           setState(() {
                             notifications[i]["enabled"] = v;
                           });
-                          saveNotification();
+
+                          saveSchedules();
                         },
                       ),
 
@@ -431,7 +450,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                           const SizedBox(width: 10),
 
-                          Text(item["time"]?.toString() ?? "--:--"),
+                          Text(
+                            item["time"]?.toString() ?? "--:--",
+                          ),
                         ],
                       ),
 
@@ -442,13 +463,15 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                             icon: const Icon(Icons.edit_rounded),
                             onPressed: () => editNotification(i),
                           ),
+
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () async {
                               setState(() {
                                 notifications.removeAt(i);
                               });
-                              saveNotification();
+
+                              saveSchedules();
                             },
                           ),
                         ],
@@ -462,7 +485,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: addNotification,
                     icon: const Icon(Icons.add),
-                    label: const Text("Thêm giờ Notification"),
+                    label: const Text(
+                      "Thêm giờ Notification",
+                    ),
                   ),
                 ),
               ],

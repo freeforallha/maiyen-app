@@ -5,6 +5,9 @@ final FlutterLocalNotificationsPlugin localNotif =
 FlutterLocalNotificationsPlugin();
 
 class NotificationService {
+  static String lastScheduleBody =
+      "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -31,6 +34,22 @@ class NotificationService {
       playSound: true,
     );
 
+    const alarmSirenChannel = AndroidNotificationChannel(
+      'alarm_siren_channel',
+      'Alarm Siren',
+      importance: Importance.max,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('alarm_siren'),
+    );
+
+    const scheduleFullscreenChannel = AndroidNotificationChannel(
+      'safehome_schedule_fullscreen_channel',
+      'SafeHome Schedule Fullscreen',
+      description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+      importance: Importance.max,
+      playSound: false,
+    );
+
     const reminderChannel = AndroidNotificationChannel(
       'safehome_reminder_channel',
       'SafeHome Reminder',
@@ -44,6 +63,8 @@ class NotificationService {
         AndroidFlutterLocalNotificationsPlugin>();
 
     await androidPlugin?.createNotificationChannel(alarmChannel);
+    await androidPlugin?.createNotificationChannel(alarmSirenChannel);
+    await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
   }
 
@@ -51,19 +72,23 @@ class NotificationService {
     required bool isSafe,
     String reason = '',
   }) async {
-    final title = isSafe ? 'SafeHome ✅ ĐÃ AN TOÀN' : 'SafeHome ⚠️ CHƯA AN TOÀN';
+    final cleanReason = reason.trim();
+
+    lastScheduleBody = isSafe
+        ? "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi."
+        : cleanReason.isEmpty
+        ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
+        : "⚠️ CHƯA AN TOÀN\n$cleanReason";
+
+    final title = isSafe
+        ? 'SafeHome ✅ ĐÃ AN TOÀN'
+        : 'SafeHome ⚠️ CHƯA AN TOÀN';
 
     final body = isSafe
         ? 'Hãy an tâm nghỉ ngơi.'
-        : reason.trim().isEmpty
+        : cleanReason.isEmpty
         ? 'Có thiết bị chưa an toàn.'
-        : 'Lý do: ${reason.trim()}';
-
-    final bigText = isSafe
-        ? '✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.'
-        : reason.trim().isEmpty
-        ? '⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn.'
-        : '⚠️ CHƯA AN TOÀN\nLý do: ${reason.trim()}';
+        : cleanReason;
 
     final androidDetails = AndroidNotificationDetails(
       'safehome_reminder_channel',
@@ -76,7 +101,7 @@ class NotificationService {
       fullScreenIntent: false,
       category: AndroidNotificationCategory.reminder,
       styleInformation: BigTextStyleInformation(
-        bigText,
+        lastScheduleBody,
         contentTitle: title,
         summaryText: 'SafeHome',
       ),
@@ -87,6 +112,7 @@ class NotificationService {
       title,
       body,
       NotificationDetails(android: androidDetails),
+      payload: "schedule_notification|$lastScheduleBody",
     );
   }
 }

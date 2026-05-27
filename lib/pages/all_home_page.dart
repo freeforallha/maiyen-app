@@ -1,8 +1,7 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
-import 'share_list_sheet.dart';
 
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
@@ -55,15 +54,17 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   late DatabaseReference ref;
-
-  @override
+  final List<StreamSubscription> listeners = [];
   @override
   void initState() {
     super.initState();
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
 
-    FirebaseDatabase.instance.ref("accounts/$uid").onValue.listen((event) {
+    final sub = FirebaseDatabase.instance
+        .ref("accounts/$uid")
+        .onValue
+        .listen((event) {
       final data = event.snapshot.value;
       if (data == null) return;
 
@@ -100,26 +101,29 @@ class _AllHomePageState extends State<AllHomePage> {
         ) {
           final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
 
-          FirebaseDatabase.instance
+          final sharedSub = FirebaseDatabase.instance
               .ref("accounts/$ownerUid/homes/$homeId")
               .onValue
               .listen((e) {
-                final d = e.snapshot.value;
+            final d = e.snapshot.value;
 
-                if (d == null) return;
+            if (d == null) return;
 
-                setState(() {
-                  homes[homeId] = {
-                    ...Map<String, dynamic>.from(d as Map),
-                    "_shared": true,
-                    "_ownerUid": ownerUid,
-                    "_ownerEmail": ownerEmail,
-                  };
-                });
-              });
+            setState(() {
+              homes[homeId] = {
+                ...Map<String, dynamic>.from(d as Map),
+                "_shared": true,
+                "_ownerUid": ownerUid,
+                "_ownerEmail": ownerEmail,
+              };
+            });
+          });
+
+          listeners.add(sharedSub);
         });
       });
     });
+    listeners.add(sub);
   }
 
   Map<String, List<String>> groupedHomes() {
@@ -163,39 +167,15 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
 
         actions: [
-          IconButton(
-            icon: Icon(Icons.search),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Huỷ"),
+          ),
+          ElevatedButton(
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) {
-                  final c = TextEditingController(text: search);
-
-                  return AlertDialog(
-                    title: Text("Tìm Home"),
-                    content: TextField(
-                      controller: c,
-                      decoration: InputDecoration(hintText: "Nhập tên home..."),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Huỷ"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            search = c.text.toLowerCase().trim();
-                          });
-                          Navigator.pop(context);
-                        },
-                        child: Text("OK"),
-                      ),
-                    ],
-                  );
-                },
-              );
+              Navigator.pop(context, controller.text.trim());
             },
+            child: const Text("Lưu"),
           ),
         ],
       ),
@@ -486,31 +466,7 @@ class _AllHomePageState extends State<AllHomePage> {
     ).showSnackBar(SnackBar(content: Text("Đã cập nhật Alarm")));
   }
 
-  void openShareList(String homeId) {
-    final home = safeMap(homes[homeId]);
-
-    // home shared -> không có quyền
-    if (home["_shared"] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Home được share không có quyền quản lý Share List"),
-        ),
-      );
-      return;
-    }
-
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-
-    showShareListSheet(
-      context: context,
-      ownerUid: uid,
-      homeId: homeId,
-      canManageMembers: true,
-      isOwner: true,
-    );
-  }
-
-  Future<void> confirmDeleteSelected() async {
+    Future<void> confirmDeleteSelected() async {
     final controller = TextEditingController();
 
     final sharedCount = selectedHomes.where((id) {
@@ -1135,7 +1091,6 @@ class _AllHomePageState extends State<AllHomePage> {
                     ),
 
                     Divider(height: 8),
-                    Divider(height: 8),
 
                     ListTile(
                       leading: Container(
@@ -1184,5 +1139,15 @@ class _AllHomePageState extends State<AllHomePage> {
         }).toList(),
       ),
     );
+  }
+  @override
+  void dispose() {
+    for (final l in listeners) {
+      l.cancel();
+    }
+
+    searchController.dispose();
+
+    super.dispose();
   }
 }

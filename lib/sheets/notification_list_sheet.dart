@@ -15,7 +15,6 @@ class NotificationListSheet extends StatelessWidget {
 
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
-
     return Map<String, dynamic>.from(data as Map);
   }
 
@@ -37,27 +36,22 @@ class NotificationListSheet extends StatelessWidget {
     return Container(
       height: 500,
       padding: const EdgeInsets.all(16),
-
       child: Column(
         children: [
-          Row(
-            children: const [
+          const Row(
+            children: [
               Icon(Icons.receipt_long_rounded, color: Colors.blueAccent),
-
+              SizedBox(width: 8),
               Text(
                 "Thông báo",
-
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-
           const SizedBox(height: 16),
-
           Expanded(
             child: StreamBuilder(
               stream: ref.onValue,
-
               builder: (context, snap) {
                 if (!snap.hasData) {
                   return const Center(child: CircularProgressIndicator());
@@ -75,36 +69,28 @@ class NotificationListSheet extends StatelessWidget {
                 }
 
                 final map = safeMap(data);
-
                 final list = map.entries.toList();
 
-                // mới nhất lên đầu
                 list.sort((a, b) {
-                  final ta = a.value["time"] ?? 0;
-                  final tb = b.value["time"] ?? 0;
-
+                  final ta = safeMap(a.value)["time"] ?? 0;
+                  final tb = safeMap(b.value)["time"] ?? 0;
                   return tb.compareTo(ta);
                 });
 
                 return ListView.separated(
                   itemCount: list.length,
-
                   separatorBuilder: (_, __) => const Divider(height: 1),
-
                   itemBuilder: (_, i) {
                     final item = safeMap(list[i].value);
 
                     String text = item["text"]?.toString() ?? "";
-
                     final type = item["type"]?.toString() ?? "";
-
-                    // ===== DỊCH THÔNG BÁO =====
 
                     text = text
                         .replaceAll("Door opened", "Cửa mở")
                         .replaceAll("Door closed", "Cửa đóng")
                         .replaceAll("Tamper detected", "Phát hiện cạy phá")
-                        .replaceAll("Tamper cleared", "Temper bình thường")
+                        .replaceAll("Tamper cleared", "Tamper bình thường")
                         .replaceAll("Motion detected", "Phát hiện chuyển động")
                         .replaceAll("Battery low", "Pin yếu")
                         .replaceAll("Device offline", "Thiết bị mất kết nối")
@@ -114,29 +100,22 @@ class NotificationListSheet extends StatelessWidget {
 
                     final lower = text.toLowerCase();
 
-                    final isSafe =
-                        lower.contains("đóng") ||
+                    final isSafe = lower.contains("đóng") ||
                         lower.contains("bình thường") ||
                         lower.contains("đã tắt") ||
                         lower.contains("kết nối lại") ||
-                        lower.contains("cập nhật cảm biến");
-
-                    final textColor = isSafe
-                        ? Colors.black
-                        : Colors.red.shade300;
+                        lower.contains("cập nhật");
 
                     final time = item["time"] ?? 0;
-
                     final dt = DateTime.fromMillisecondsSinceEpoch(time);
 
                     IconData icon = Icons.notifications;
-
                     Color color = Colors.blueAccent;
 
                     if (type == "tamper") {
                       icon = Icons.warning_amber_rounded;
                       color = Colors.red;
-                    } else if (type == "door") {
+                    } else if (type == "door" || type == "status") {
                       icon = Icons.sensor_door_rounded;
                       color = Colors.orange;
                     } else if (type == "motion") {
@@ -152,24 +131,19 @@ class NotificationListSheet extends StatelessWidget {
 
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-
                       leading: CircleAvatar(
                         backgroundColor: color.withValues(alpha: 0.12),
-
                         child: Icon(icon, color: color),
                       ),
-
                       title: Text(
                         text,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: textColor,
+                          color: isSafe ? Colors.black : Colors.red.shade300,
                         ),
                       ),
-
                       subtitle: Text(
                         formatTime(dt),
-
                         style: TextStyle(
                           color: isSafe ? Colors.grey : Colors.red.shade200,
                         ),

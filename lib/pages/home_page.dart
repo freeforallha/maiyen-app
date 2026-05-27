@@ -8,24 +8,22 @@ import '../services/fcm_service.dart';
 import '../services/home_listener_service.dart';
 import '../services/home_service.dart';
 import '../services/notification_service.dart';
-import '../helpers/safe_home_app.dart';
-
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
 import '../widgets/status_panel.dart';
-import '../widgets/account_avatar_sheet.dart';
+import '../sheets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
-import 'confirm_dialog.dart';
-import 'device_detail_sheet.dart';
-import 'notification_list_sheet.dart';
-import 'pair_dialog.dart';
+import '../dialogs/confirm_dialog.dart';
+import '../sheets/device_detail_sheet.dart';
+import '../sheets/notification_list_sheet.dart' as notif_sheet;
+import '../dialogs/pair_dialog.dart';
 import 'qr_scan_page.dart';
-import 'settings_sheet.dart';
-import 'share_list_sheet.dart';
-import 'share_request_sheet.dart';
+import '../sheets/settings_sheet.dart';
+import '../sheets/share_list_sheet.dart';
+import '../sheets/share_request_sheet.dart';
 import 'edit_profile_page.dart';
-import 'home_chat_sheet.dart';
-import 'schedule_sheet.dart';
+import '../sheets/home_chat_sheet.dart';
+import '../sheets/schedule_sheet.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       context: context,
       isScrollControlled: true,
       builder: (_) {
-        return NotificationListSheet(
+        return notif_sheet.NotificationListSheet(
           ownerUid: ownerUid,
           homeId: selectedHome,
           deviceId: deviceId,
@@ -243,14 +241,7 @@ class _HomePageState extends State<HomePage> {
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
 
-  String formatTime(String t) {
-    final parts = t.split(":");
-    final h = int.tryParse(parts[0]) ?? 0;
-    final m = int.tryParse(parts[1]) ?? 0;
-
-    return "${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}";
-  }
-  String formatAlarmSchedules() {
+    String formatAlarmSchedules() {
     final currentHome = safeMap(homes[selectedHome]);
 
     final schedules = safeMap(currentHome["schedules"]);
@@ -293,7 +284,6 @@ class _HomePageState extends State<HomePage> {
 
     FCMService.listenForeground(
       localNotif: localNotif,
-      navigatorKey: appNavigatorKey,
     );
     ref = FirebaseDatabase.instance.ref("accounts/$uid");
 
@@ -305,9 +295,7 @@ class _HomePageState extends State<HomePage> {
       final homesData = safeMap(map["homes"]);
       final sharedHomes = safeMap(map["sharedHomes"]);
       final requests = safeMap(map["shareRequests"]);
-      print("RAW USER DATA: $map");
-      print("USER INFO KEYS: ${map.keys}");
-      print("NAME FIELD: ${map["name"]}");
+
       setState(() {
         shareRequests = requests;
         final profile = safeMap(map["profile"]);
@@ -559,6 +547,7 @@ class _HomePageState extends State<HomePage> {
 
             TextField(
               controller: controller,
+
               obscureText: true,
 
               decoration: InputDecoration(
@@ -646,6 +635,7 @@ class _HomePageState extends State<HomePage> {
         title: Text("Share Home"),
         content: TextField(
           controller: controller,
+
           decoration: InputDecoration(hintText: "Email người nhận"),
         ),
         actions: [
@@ -1119,87 +1109,6 @@ class _HomePageState extends State<HomePage> {
       name: name,
     );
   }
-  void setNotificationSchedule() async {
-    final t = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 23, minute: 0),
-    );
-
-    if (t == null) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          "Đã chọn giờ Notification: ${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}",
-        ),
-      ),
-    );
-
-    // Tạm thời chỉ set UI trước.
-    // Bước sau mình sẽ nối lưu Firebase + backend gửi notification 23h.
-  }
-  void setAlarmSchedule() async {
-    final s = await showTimePicker(context: context, initialTime: start);
-
-    if (s != null) {
-      setState(() {
-        start = s;
-      });
-    }
-
-    final e = await showTimePicker(context: context, initialTime: end);
-
-    if (e != null) {
-      setState(() {
-        end = e;
-      });
-    }
-
-    final isShared = homes[selectedHome]?["_shared"] == true;
-
-    // HOME SHARE -> lưu alarm riêng
-    if (isShared) {
-      await FirebaseDatabase.instance
-          .ref("accounts/$uid/sharedHomes/$selectedHome/alarm")
-          .update({
-        "enabled": true,
-        "start":
-        "${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}",
-        "end":
-        "${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}",
-      });
-
-      setState(() {
-        homes[selectedHome]?["_customAlarm"] = {
-          "enabled": true,
-          "start": "${start.hour}:${start.minute}",
-          "end": "${end.hour}:${end.minute}",
-        };
-      });
-
-      return;
-    }
-
-    // HOME OWN
-    final ownerUid = getHomeOwnerUid();
-
-    await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/alarm")
-        .update({
-      "enabled": true,
-      "start": "${start.hour}:${start.minute}",
-      "end": "${end.hour}:${end.minute}",
-    });
-    setState(() {
-      homes[selectedHome]?["alarm"] = {
-        "enabled": true,
-        "start": "${start.hour}:${start.minute}",
-        "end": "${end.hour}:${end.minute}",
-      };
-
-      alarmEnabled = true;
-    });
-  }
 
   Color getHomeColor(String h) {
     final dev = safeMap(homes[h]?["devices"]);
@@ -1388,10 +1297,15 @@ class _HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.chat_bubble_rounded),
                     onPressed: () {
                       showHomeChatSheet(
+
                         context: context,
                         homeId: selectedHome,
                         userName: userName,
                         userPhotoUrl: userPhotoUrl,
+                        ownerUid: getHomeOwnerUid(),
+                        canManageMembers: canManageHome(),
+                        isOwner: isOwner(),
+
                       );
                     },
                   ),
@@ -1550,7 +1464,6 @@ class _HomePageState extends State<HomePage> {
                         onShareRequests: () {
                           showShareRequestSheet(
                             context: context,
-                            inviteCount: shareRequests.length,
                             requests: shareRequests,
                             uid: uid,
                           );
@@ -1606,5 +1519,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    timer?.cancel();
+    homeTabController.dispose();
+    super.dispose();
   }
 }

@@ -82,60 +82,92 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
   }
 
   Future<void> submit() async {
-    setState(() => error = "");
+    if (saving) return;
 
-    final name = nameController.text.trim();
-    final day = dayController.text.trim().padLeft(2, '0');
-    final month = monthController.text.trim().padLeft(2, '0');
-    final year = yearController.text.trim();
-
-    if (name.isEmpty || day.isEmpty || month.isEmpty || year.isEmpty) {
-      setState(() => error = "Vui lòng nhập đủ thông tin");
-      return;
-    }
-
-    final homeId = "home_${DateTime.now().millisecondsSinceEpoch}";
-    final dob = "$year-$month-$day";
-
-    setState(() => saving = true);
-
-    await FirebaseDatabase.instance.ref("accounts/${widget.uid}").set({
-      "email": widget.email,
-
-      "profile": {
-        "name": name,
-        "gender": gender,
-        "dob": dob,
-        "phone": phoneController.text.trim(),
-        "photoUrl": "",
-      },
-
-      "homes": {
-        homeId: {
-          "name": "Nhà của tôi",
-          "_ownerUid": widget.uid,
-          "_shared": false,
-          "devices": {},
-          "alarm": {
-            "enabled": false,
-            "start": "23:00",
-            "end": "06:00",
-          },
-        }
-      },
-
-      "homeOrder": [homeId],
-      "shareRequests": {},
-      "shareList": {},
-      "sharedHomes": {},
+    setState(() {
+      saving = true;
+      error = "";
     });
 
-    if (!mounted) return;
+    try {
+      final name = nameController.text.trim();
 
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => HomePage()),
-          (route) => false,
-    );
+      final day = dayController.text
+          .trim()
+          .padLeft(2, '0');
+
+      final month = monthController.text
+          .trim()
+          .padLeft(2, '0');
+
+      final year = yearController.text.trim();
+
+      if (name.isEmpty ||
+          day.isEmpty ||
+          month.isEmpty ||
+          year.isEmpty) {
+        setState(() {
+          error = "Vui lòng nhập đủ thông tin";
+          saving = false;
+        });
+
+        return;
+      }
+
+      final homeId =
+          "home_${DateTime.now().millisecondsSinceEpoch}";
+
+      final dob = "$year-$month-$day";
+
+      await FirebaseDatabase.instance
+          .ref("accounts/${widget.uid}")
+          .set({
+        "email": widget.email,
+
+        "profile": {
+          "name": name,
+          "gender": gender,
+          "dob": dob,
+          "phone": phoneController.text.trim(),
+          "photoUrl": "",
+        },
+
+        "homes": {
+          homeId: {
+            "name": "Nhà của tôi",
+            "_ownerUid": widget.uid,
+            "_shared": false,
+            "devices": {},
+            "alarm": {
+              "enabled": false,
+              "start": "23:00",
+              "end": "06:00",
+            },
+          }
+        },
+
+        "homeOrder": [homeId],
+        "shareRequests": {},
+        "shareList": {},
+        "sharedHomes": {},
+      });
+
+      if (!mounted) return;
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => HomePage(),
+        ),
+            (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        error = "Không thể lưu thông tin";
+        saving = false;
+      });
+    }
   }
 
   @override
@@ -165,14 +197,6 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
             ),
 
             const SizedBox(height: 20),
-
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Ngày sinh",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-              ),
-            ),
 
             RadioGroup<String>(
               groupValue: gender,
@@ -269,7 +293,14 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               child: ElevatedButton(
                 onPressed: saving ? null : submit,
                 child: saving
-                    ? const CircularProgressIndicator(color: Colors.white)
+                    ? const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.4,
+                    color: Colors.white,
+                  ),
+                )
                     : const Text(
                   "Hoàn tất",
                   style: TextStyle(

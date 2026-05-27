@@ -16,8 +16,15 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLogin = true;
   String error = "";
+  bool loading = false;
 
   Future<void> signInWithGoogle() async {
+    if (loading) return;
+
+    setState(() {
+      loading = true;
+      error = "";
+    });
     try {
       setState(() => error = "");
 
@@ -89,6 +96,11 @@ class _LoginPageState extends State<LoginPage> {
 
       debugPrint("Google Sign-In ERROR: $e");
       debugPrint("Google Sign-In STACK: $stack");
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
   }
 
@@ -143,6 +155,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> submit() async {
+    if (loading) return;
+
+    setState(() {
+      loading = true;
+      error = "";
+    });
     setState(() => error = "");
 
     try {
@@ -196,6 +214,11 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       setState(() {
         error = "Lỗi hệ thống";
+      });
+    }
+    if (mounted) {
+      setState(() {
+        loading = false;
       });
     }
   }
@@ -316,8 +339,17 @@ class _LoginPageState extends State<LoginPage> {
                             width: double.infinity,
                             height: 46,
                             child: ElevatedButton(
-                              onPressed: submit,
-                              child: Text(
+                              onPressed: loading ? null : submit,
+                              child: loading
+                                  ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  : Text(
                                 isLogin ? "Đăng nhập" : "Đăng ký mới",
                               ),
                             ),

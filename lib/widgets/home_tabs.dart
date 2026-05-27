@@ -45,13 +45,7 @@ class HomeTabs extends StatelessWidget {
         proxyDecorator: (child, index, animation) {
           return Material(
             color: Colors.transparent,
-            child: ScaleTransition(
-              scale: Tween<double>(
-                begin: 1.0,
-                end: 1.06,
-              ).animate(animation),
-              child: child,
-            ),
+            child: child,
           );
         },
         itemBuilder: (context, index) {

@@ -64,7 +64,7 @@ class StatusPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -122,7 +122,10 @@ class StatusPanel extends StatelessWidget {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          alarmEnd.isEmpty ? alarmStart : "$alarmStart - $alarmEnd",                          style: const TextStyle(
+                          alarmEnd.isEmpty
+                              ? alarmStart
+                              : "$alarmStart - $alarmEnd",
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,
                             fontWeight: FontWeight.w500,

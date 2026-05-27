@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
-import '../helpers/safe_home_app.dart';
+
+import '../app/safe_home_app.dart';
+
 class FullscreenAlarmPage extends StatelessWidget {
   final String title;
   final String body;
+  final bool silentMode;
 
   const FullscreenAlarmPage({
     super.key,
     required this.title,
     required this.body,
+    this.silentMode = false,
   });
+
+  void close(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AuthGate(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = silentMode
+        ? const Color(0xFF1E293B)
+        : const Color(0xFFB00020);
+
+    final icon = silentMode
+        ? Icons.shield_moon_rounded
+        : Icons.notifications_active_rounded;
+
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: const Color(0xFFB00020),
+        backgroundColor: bgColor,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -30,8 +51,8 @@ class FullscreenAlarmPage extends StatelessWidget {
                     color: Colors.white.withValues(alpha: 0.16),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.notifications_active_rounded,
+                  child: Icon(
+                    icon,
                     color: Colors.white,
                     size: 64,
                   ),
@@ -39,10 +60,12 @@ class FullscreenAlarmPage extends StatelessWidget {
 
                 const SizedBox(height: 28),
 
-                const Text(
-                  "BÁO ĐỘNG SAFHOME",
+                Text(
+                  silentMode
+                      ? "SAFEHOME REMINDER"
+                      : "BÁO ĐỘNG SAFEHOME",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -88,12 +111,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => AuthGate()),
-                      );
-                    },
+                    onPressed: () => close(context),
                   ),
                 ),
 
@@ -108,18 +126,15 @@ class FullscreenAlarmPage extends StatelessWidget {
                       side: const BorderSide(color: Colors.white70),
                     ),
                     icon: const Icon(Icons.close_rounded),
-                    label: const Text(
-                      "TẮT CẢNH BÁO",
-                      style: TextStyle(
+                    label: Text(
+                      silentMode
+                          ? "ĐÓNG"
+                          : "TẮT CẢNH BÁO",
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (_) => AuthGate()),
-                      );
-                    },
+                    onPressed: () => close(context),
                   ),
                 ),
               ],

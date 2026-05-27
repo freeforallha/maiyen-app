@@ -50,7 +50,7 @@ class HomeListenerService {
           "_customAlarm": sharedConfig["alarm"],
           "_role": sharedConfig["role"] ?? "member",
         };
-
+        if (homes.isEmpty) return;
         refresh();
       });
     }

@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
+import '../helpers/firebase_paths.dart';
+
 class HomeService {
   static Future<void> renameDevice({
     required String ownerUid,
@@ -8,7 +10,7 @@ class HomeService {
     required String name,
   }) async {
     await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$homeId/devices/$deviceId/name")
+        .ref("${FirebasePaths.device(ownerUid, homeId, deviceId)}/name")
         .set(name);
   }
 
@@ -18,7 +20,7 @@ class HomeService {
     required String deviceId,
   }) async {
     await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$homeId/devices/$deviceId")
+        .ref(FirebasePaths.device(ownerUid, homeId, deviceId))
         .remove();
   }
 
@@ -28,7 +30,7 @@ class HomeService {
     required String name,
   }) async {
     await FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$homeId/name")
+        .ref("${FirebasePaths.home(ownerUid, homeId)}/name")
         .set(name);
   }
 
@@ -36,14 +38,23 @@ class HomeService {
     required String uid,
     required String id,
     required String name,
+    String address = "",
   }) async {
-    await FirebaseDatabase.instance.ref("accounts/$uid/homes/$id").set({
+    await FirebaseDatabase.instance.ref(FirebasePaths.home(uid, id)).set({
       "name": name,
-      "devices": {},
-      "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-
+      "address": address,
       "_ownerUid": uid,
       "_shared": false,
+      "devices": {},
+      "alarm": {
+        "enabled": false,
+        "start": "23:00",
+        "end": "06:00",
+      },
+      "schedules": {
+        "alarms": [],
+        "notifications": [],
+      },
     });
   }
 }

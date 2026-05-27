@@ -28,7 +28,7 @@ class AlarmLaunchGate extends StatefulWidget {
 
 class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
   bool checked = false;
-  bool openedByAlarm = false;
+  String payload = "";
 
   @override
   void initState() {
@@ -37,12 +37,15 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
   }
 
   Future<void> checkLaunch() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
     final details = await localNotif.getNotificationAppLaunchDetails();
 
-    final payload = details?.notificationResponse?.payload ?? "";
+    payload = details?.notificationResponse?.payload ?? "";
+
+    if (!mounted) return;
 
     setState(() {
-      openedByAlarm = payload == "alarm";
       checked = true;
     });
   }
@@ -53,10 +56,23 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       return const SafeHomeSplash();
     }
 
-    if (openedByAlarm) {
+    if (payload == "alarm") {
       return const FullscreenAlarmPage(
         title: "Báo động SafeHome",
         body: "Có cảnh báo an ninh cần kiểm tra ngay.",
+      );
+    }
+
+    if (payload == "schedule_notification" ||
+        payload.startsWith("schedule_notification|")) {
+      final body = payload.startsWith("schedule_notification|")
+          ? payload.replaceFirst("schedule_notification|", "")
+          : NotificationService.lastScheduleBody;
+
+      return FullscreenAlarmPage(
+        title: "🏡 SafeHome",
+        body: body,
+        silentMode: true,
       );
     }
 
@@ -69,13 +85,11 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
-
       builder: (context, snap) {
         return FutureBuilder(
           future: Future.delayed(
             const Duration(milliseconds: 1200),
           ),
-
           builder: (context, delaySnap) {
             if (delaySnap.connectionState != ConnectionState.done) {
               return const SafeHomeSplash();
@@ -130,23 +144,18 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: FadeTransition(
         opacity: fade,
-
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-
             children: [
               const Icon(
                 Icons.home_rounded,
                 size: 78,
                 color: Colors.green,
               ),
-
               const SizedBox(height: 18),
-
               RichText(
                 text: const TextSpan(
                   style: TextStyle(
@@ -154,20 +163,14 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
                   ),
-
                   children: [
                     TextSpan(
                       text: "Safe",
-                      style: TextStyle(
-                        color: Colors.green,
-                      ),
+                      style: TextStyle(color: Colors.green),
                     ),
-
                     TextSpan(
                       text: "Home",
-                      style: TextStyle(
-                        color: Colors.black87,
-                      ),
+                      style: TextStyle(color: Colors.black87),
                     ),
                   ],
                 ),

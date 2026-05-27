@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 
 Map<String, dynamic> safeMap(dynamic data) {
   if (data == null) return {};
-  return Map<String, dynamic>.from(data as Map);
+
+  if (data is Map<String, dynamic>) {
+    return data;
+  }
+
+  if (data is Map) {
+    return Map<String, dynamic>.from(data);
+  }
+
+  return {};
 }
 
 Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
-  List<String> issues = [];
+  final issues = <String>[];
 
   devices.forEach((id, raw) {
     final d = safeMap(raw);
@@ -15,7 +24,7 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     final status = d["status"]?.toString();
     final tamper = d["tamper"] == true;
 
-    List<String> problem = [];
+    final problem = <String>[];
 
     if (status != "closed") {
       problem.add("Mở");
@@ -30,11 +39,16 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     }
   });
 
-  return {"safe": issues.isEmpty, "issues": issues};
+  return {
+    "safe": issues.isEmpty,
+    "issues": issues,
+  };
 }
 
-bool isUnsafe(Map dev) {
-  return dev.values.any((d) {
+bool isUnsafe(Map<dynamic, dynamic> devices) {
+  return devices.values.any((raw) {
+    final d = safeMap(raw);
+
     final status = d["status"]?.toString();
     final tamper = d["tamper"] == true;
 
@@ -42,13 +56,10 @@ bool isUnsafe(Map dev) {
   });
 }
 
-Color getDeviceColor(Map d) {
-  final status = d["status"]?.toString();
-  final tamper = d["tamper"] == true;
+Color getDeviceColor(Map<dynamic, dynamic> raw) {
+  final d = safeMap(raw);
 
-  if (status != "closed" || tamper) {
-    return Colors.red.shade200;
-  }
-
-  return Colors.green.shade200;
+  return isUnsafe({"device": d})
+      ? Colors.red.shade200
+      : Colors.green.shade200;
 }

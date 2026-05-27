@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void showDeviceDetail({
   required BuildContext context,
   required String id,
-  required Map d,
+  required Map<String, dynamic> d,
   required VoidCallback onRename,
   required VoidCallback onDelete,
   required VoidCallback onNotification,
@@ -49,7 +49,9 @@ void showDeviceDetail({
               children: [
                 Expanded(
                   child: Text(
-                    d["name"] ?? id,
+                    (d["name"]?.toString().trim().isNotEmpty == true)
+                        ? d["name"].toString().trim()
+                        : id,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -207,9 +209,13 @@ Widget _infoRow({
 String formatFullDate(dynamic ts) {
   if (ts == null) return "N/A";
 
-  final dt = DateTime.fromMillisecondsSinceEpoch(
-    int.tryParse(ts.toString()) ?? 0,
-  );
+  final ms = int.tryParse(ts.toString());
+
+  if (ms == null || ms <= 0) {
+    return "N/A";
+  }
+
+  final dt = DateTime.fromMillisecondsSinceEpoch(ms);
 
   final hh = dt.hour.toString().padLeft(2, '0');
   final mm = dt.minute.toString().padLeft(2, '0');

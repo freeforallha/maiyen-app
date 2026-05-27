@@ -87,8 +87,12 @@ Future<void> showShareListSheet({
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 46,
@@ -344,7 +348,7 @@ Future<void> showShareListSheet({
               );
             }),
           ],
-        ),
+        ),)
       );
     },
   );

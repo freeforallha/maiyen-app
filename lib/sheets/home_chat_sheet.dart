@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'share_list_sheet.dart';
 
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
   required String userName,
   required String userPhotoUrl,
+  required String ownerUid,
+  required bool canManageMembers,
+  required bool isOwner,
 }) {
   final user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
@@ -46,16 +50,34 @@ void showHomeChatSheet({
 
               const SizedBox(height: 14),
 
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.chat_bubble_rounded),
-                  SizedBox(width: 10),
-                  Text(
+                  const Icon(Icons.chat_bubble_rounded),
+
+                  const SizedBox(width: 10),
+
+                  const Text(
                     "Chat trong nhà",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                     ),
+                  ),
+
+                  const Spacer(),
+
+                  IconButton(
+                    tooltip: "Xem thành viên",
+                    icon: const Icon(Icons.people_alt_rounded),
+                    onPressed: () {
+                      showShareListSheet(
+                        context: context,
+                        ownerUid: ownerUid,
+                        homeId: homeId,
+                        canManageMembers: canManageMembers,
+                        isOwner: isOwner,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -96,6 +118,8 @@ void showHomeChatSheet({
                         final name = msg["name"]?.toString() ?? "User";
                         final text = msg["text"]?.toString() ?? "";
                         final photoUrl = msg["photoUrl"]?.toString() ?? "";
+                        final time = msg["time"];
+                        final timeText = formatChatTime(time);
 
                         return Align(
                           alignment: isMe
@@ -148,9 +172,24 @@ void showHomeChatSheet({
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                        Text(
-                                          text,
-                                          style: const TextStyle(fontSize: 14),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              text,
+                                              style: const TextStyle(fontSize: 14),
+                                            ),
+
+                                            const SizedBox(height: 4),
+
+                                            Text(
+                                              timeText,
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Colors.grey.shade600,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -171,6 +210,26 @@ void showHomeChatSheet({
                   Expanded(
                     child: TextField(
                       controller: controller,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) async {
+                        final text = controller.text.trim();
+
+                        if (text.isEmpty) return;
+
+                        controller.clear();
+
+                        await chatRef.push().set({
+                          "uid": user.uid,
+                          "name": userName,
+                          "photoUrl": userPhotoUrl,
+                          "text": text,
+                          "time": DateTime.now().millisecondsSinceEpoch,
+                        });
+
+                        await readRef.set(
+                          DateTime.now().millisecondsSinceEpoch,
+                        );
+                      },
                       minLines: 1,
                       maxLines: 3,
                       decoration: InputDecoration(
@@ -220,5 +279,19 @@ void showHomeChatSheet({
         ),
       );
     },
+  ).whenComplete(() {
+    controller.dispose();
+  });
+}
+String formatChatTime(dynamic ts) {
+  if (ts == null) return "--:--";
+
+  final dt = DateTime.fromMillisecondsSinceEpoch(
+    int.tryParse(ts.toString()) ?? 0,
   );
+
+  final hh = dt.hour.toString().padLeft(2, '0');
+  final mm = dt.minute.toString().padLeft(2, '0');
+
+  return "$hh:$mm";
 }

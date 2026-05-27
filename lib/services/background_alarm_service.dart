@@ -3,9 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../firebase_options.dart';
-
-final FlutterLocalNotificationsPlugin backgroundLocalNotif =
-FlutterLocalNotificationsPlugin();
+import 'notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(
@@ -17,51 +15,68 @@ Future<void> firebaseMessagingBackgroundHandler(
 
   const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  await backgroundLocalNotif.initialize(
-    const InitializationSettings(
-      android: androidInit,
-    ),
+  await localNotif.initialize(
+    const InitializationSettings(android: androidInit),
   );
 
   final type = message.data['type']?.toString() ?? 'alarm';
   final isSchedule = type == 'schedule_notification';
 
-  final title = message.notification?.title ??
-      message.data['title'] ??
+  final title = message.notification?.title?.toString() ??
+      message.data['title']?.toString() ??
       (isSchedule ? '🏡 SAFEHOME' : 'SafeHome Alarm');
 
-  final body = message.notification?.body ??
-      message.data['body'] ??
-      (isSchedule ? 'Đã đến giờ kiểm tra SafeHome' : 'Alarm triggered');
+  final body = isSchedule
+      ? _buildScheduleBody(message.data)
+      : message.notification?.body?.toString() ??
+      message.data['body']?.toString() ??
+      'Alarm triggered';
 
-  final androidDetails = AndroidNotificationDetails(
-    isSchedule
-        ? 'safehome_schedule_fullscreen_channel'
-        : 'alarm_siren_channel',
-    isSchedule ? 'SafeHome Schedule Fullscreen' : 'Alarm Siren',
-    importance: Importance.max,
-    priority: Priority.high,
-    category: isSchedule
-        ? AndroidNotificationCategory.reminder
-        : AndroidNotificationCategory.alarm,
-    fullScreenIntent: true,
+  final channelId = isSchedule
+      ? 'safehome_schedule_fullscreen_channel'
+      : 'alarm_siren_channel';
 
-    // Schedule: full màn hình nhưng không âm, không rung.
-    // Alarm thật: có âm còi + rung.
-    playSound: !isSchedule,
-    enableVibration: !isSchedule,
-    sound: isSchedule
-        ? null
-        : const RawResourceAndroidNotificationSound('alarm_siren'),
-  );
+  final channelName =
+  isSchedule ? 'SafeHome Schedule Fullscreen' : 'Alarm Siren';
 
-  await backgroundLocalNotif.show(
+  await localNotif.show(
     DateTime.now().millisecondsSinceEpoch ~/ 1000,
-    title.toString(),
-    body.toString(),
+    title,
+    body,
     NotificationDetails(
-      android: androidDetails,
+      android: AndroidNotificationDetails(
+        channelId,
+        channelName,
+        importance: Importance.max,
+        priority: Priority.high,
+        category: isSchedule
+            ? AndroidNotificationCategory.reminder
+            : AndroidNotificationCategory.alarm,
+        fullScreenIntent: true,
+        playSound: !isSchedule,
+        enableVibration: !isSchedule,
+        sound: isSchedule
+            ? null
+            : const RawResourceAndroidNotificationSound('alarm_siren'),
+      ),
     ),
-    payload: isSchedule ? 'schedule_notification' : 'alarm',
+    payload: isSchedule ? 'schedule_notification|$body' : 'alarm',
   );
+}
+
+String _buildScheduleBody(Map<String, dynamic> data) {
+  final isSafeText = data['isSafe']?.toString() ?? 'true';
+
+  final isSafe =
+      isSafeText == 'true' || isSafeText == '1' || isSafeText == 'yes';
+
+  final reason = data['reason']?.toString().trim() ?? '';
+
+  NotificationService.lastScheduleBody = isSafe
+      ? '✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.'
+      : reason.isEmpty
+      ? '⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn.'
+      : '⚠️ CHƯA AN TOÀN\n$reason';
+
+  return NotificationService.lastScheduleBody;
 }

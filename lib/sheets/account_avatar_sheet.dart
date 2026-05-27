@@ -59,14 +59,13 @@ class AccountAvatarSheet {
     overlay.insert(entry);
 
     Future.delayed(const Duration(seconds: 5), () {
-      entry.remove();
+      if (entry.mounted) {
+        entry.remove();
+      }
     });
   }
   static Future<void> _showDeleteConfirmDialog(
       BuildContext context,
-      String userName,
-      String userGender,
-      String userDob,
       ) async {
     final passwordController = TextEditingController();
 
@@ -114,12 +113,16 @@ class AccountAvatarSheet {
       },
     );
 
-    if (ok != true) return;
+    if (ok != true) {
+      passwordController.dispose();
+      return;
+    }
 
     await _deleteAccount(
       context,
       passwordController.text.trim(),
     );
+    passwordController.dispose();
   }
   static Future<void> _deleteAccount(
       BuildContext context,
@@ -154,8 +157,7 @@ class AccountAvatarSheet {
           ? Map<String, dynamic>.from(accountData["sharedHomes"] as Map)
           : <String, dynamic>{};
 
-      final updates = <String, dynamic?>{};
-
+      final updates = <String, dynamic>{};
       // user là OWNER
       for (final homeId in ownHomes.keys) {
         final sharedSnap = await db.ref("sharedByHome/$homeId").get();
@@ -291,6 +293,9 @@ class AccountAvatarSheet {
                   color: Colors.white,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                 ),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+                ),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
                   child: Column(
@@ -314,7 +319,8 @@ class AccountAvatarSheet {
                           CircleAvatar(
                             radius: 40,
                             backgroundColor: Colors.grey.shade200,
-                            backgroundImage: (user?.photoURL != null)
+                            backgroundImage:
+                            (user?.photoURL?.isNotEmpty == true)
                                 ? NetworkImage(user!.photoURL!)
                                 : null,
                             child: (user?.photoURL == null)
@@ -421,8 +427,7 @@ class AccountAvatarSheet {
                         icon: Icons.delete_forever_rounded,
                         title: "Xoá tài khoản",
                         onTap: () {
-                          _showDeleteConfirmDialog(ctx, userName, userGender, userDob);
-                        },
+                          _showDeleteConfirmDialog(ctx);                        },
                       ),
                     ],
                   ),
