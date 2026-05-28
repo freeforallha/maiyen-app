@@ -8,6 +8,9 @@ import '../helpers/home_helper.dart';
 import '../services/fcm_service.dart';
 import '../services/home_listener_service.dart';
 import '../services/home_service.dart';
+import '../services/home_state_parser.dart';
+import '../services/chat_service.dart';
+import '../services/share_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
@@ -241,8 +244,7 @@ class _HomePageState extends State<HomePage> {
   int pairingCountdown = 0;
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
-
-    String formatAlarmSchedules() {
+  String formatAlarmSchedules() {
     final currentHome = safeMap(homes[selectedHome]);
 
     final schedules = safeMap(currentHome["schedules"]);
@@ -299,13 +301,13 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         shareRequests = requests;
-        final profile = safeMap(map["profile"]);
+        final profile = HomeStateParser.parseProfile(map);
 
-        userName = profile["name"]?.toString() ?? map["name"]?.toString() ?? "";
-        userGender = profile["gender"]?.toString() ?? map["gender"]?.toString() ?? "";
-        userDob = profile["dob"]?.toString() ?? map["dob"]?.toString() ?? "";
-        userPhone = profile["phone"]?.toString() ?? map["phone"]?.toString() ?? "";
-        userPhotoUrl = profile["photoUrl"]?.toString() ?? "";
+        userName = profile["name"] ?? "";
+        userGender = profile["gender"] ?? "";
+        userDob = profile["dob"] ?? "";
+        userPhone = profile["phone"] ?? "";
+        userPhotoUrl = profile["photoUrl"] ?? "";
         homes.removeWhere((key, value) {
           final home = safeMap(value);
           final isShared = home["_shared"] == true;
@@ -338,33 +340,12 @@ class _HomePageState extends State<HomePage> {
             });
           },
         );
-        final savedOrder = map["homeOrder"];
-
-        if (savedOrder != null) {
-          homeOrder = List<String>.from(savedOrder);
-
-          // tất cả home hiện có
-          final allHomeIds = {...homesData.keys, ...sharedHomes.keys};
-
-          // xóa home không còn tồn tại
-          homeOrder.removeWhere((id) => !allHomeIds.contains(id));
-
-          // thêm home own mới
-          for (final id in homesData.keys) {
-            if (!homeOrder.contains(id)) {
-              homeOrder.add(id);
-            }
-          }
-
-          // thêm home shared mới
-          for (final id in sharedHomes.keys) {
-            if (!homeOrder.contains(id)) {
-              homeOrder.add(id);
-            }
-          }
-        } else {
-          homeOrder = [...homesData.keys, ...sharedHomes.keys];
-        }
+        homeOrder = HomeStateParser.parseHomeOrder(
+          account: map,
+          homesData: homesData,
+          sharedHomes: sharedHomes,
+          selectedHome: selectedHome,
+        );
 
         // 🔥 FIX QUAN TRỌNG: chọn home đầu tiên theo ORDER
         if (homeOrder.isNotEmpty) {
@@ -375,33 +356,14 @@ class _HomePageState extends State<HomePage> {
           selectedHome = "";
         }
         final currentHome = safeMap(homes[selectedHome]);
+        final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
-        final alarm = safeMap(
-          currentHome["_customAlarm"] ?? currentHome["alarm"],
-        );
-        alarmEnabled = alarm["enabled"] == true;
-
-        final startStr = alarm["start"]?.toString() ?? "23:00";
-        final endStr = alarm["end"]?.toString() ?? "06:00";
-
-        final s = startStr.split(":");
-        final e = endStr.split(":");
-
-        start = TimeOfDay(
-          hour: int.tryParse(s[0]) ?? 23,
-          minute: int.tryParse(s[1]) ?? 0,
-        );
-
-        end = TimeOfDay(
-          hour: int.tryParse(e[0]) ?? 6,
-          minute: int.tryParse(e[1]) ?? 0,
-        );
+        alarmEnabled = parsedAlarm["enabled"];
+        start = parsedAlarm["start"];
+        end = parsedAlarm["end"];
       });
     });
-    FirebaseDatabase.instance
-        .ref(FirebasePaths.homeChats())
-        .onValue
-        .listen((event) {
+    ChatService.chatStream().listen((event) {
       final data = event.snapshot.value;
 
       if (data == null) return;
@@ -502,16 +464,12 @@ class _HomePageState extends State<HomePage> {
       final ownerUid = homes[leavingHomeId]?["_ownerUid"];
 
       // xoá sharedHomes
-      await FirebaseDatabase.instance
-          .ref(FirebasePaths.sharedHome(uid, leavingHomeId))
-          .remove();
-
-      // xoá sharedByHome
-      await FirebaseDatabase.instance
-          .ref(FirebasePaths.sharedMember(leavingHomeId, uid))          .remove();
       if (ownerUid != null) {
-        await FirebaseDatabase.instance
-            .ref("${FirebasePaths.shareList(ownerUid, leavingHomeId)}/$uid")            .remove();
+        await ShareService.leaveSharedHome(
+          uid: uid,
+          ownerUid: ownerUid,
+          homeId: leavingHomeId,
+        );
       }
 
       setState(() {
@@ -597,43 +555,24 @@ class _HomePageState extends State<HomePage> {
 
     if (ok != true) return;
 
-    final sharedSnap = await FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedByHome(selectedHome))
-        .get();
-
-    if (sharedSnap.exists) {
-      final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
-
-      for (final sharedUid in sharedMap.keys) {
-        await FirebaseDatabase.instance
-            .ref(FirebasePaths.sharedHome(sharedUid, selectedHome))
-            .remove();
-      }
-    }
-
-    // remove global shared index
-    await FirebaseDatabase.instance.ref(FirebasePaths.sharedByHome(selectedHome)).remove();
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.home(uid, selectedHome))        .remove();
-
+    await ShareService.deleteOwnedHome(
+      ownerUid: uid,
+      homeId: selectedHome,
+    );
     homeOrder.remove(selectedHome);
 
     await FirebaseDatabase.instance
         .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
   }
-
   void shareHome() async {
     final controller = TextEditingController();
-
     final targetEmail = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
         title: Text("Share Home"),
         content: TextField(
           controller: controller,
-
           decoration: InputDecoration(hintText: "Email người nhận"),
         ),
         actions: [
@@ -649,43 +588,21 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-
     if (targetEmail == null || targetEmail.isEmpty) return;
-
-
     // không share cho chính mình
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
         .toLowerCase();
-
     if (targetEmail == myEmail) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Không thể share cho chính bạn")));
       return;
     }
-
     // tìm uid theo email
-    final accountsSnap = await FirebaseDatabase.instance.ref("accounts").get();
-
-    String? targetUid;
-
-    if (accountsSnap.exists) {
-      final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
-
-      for (final entry in accounts.entries) {
-        final data = Map<String, dynamic>.from(entry.value);
-
-        final mail = data["email"]?.toString().trim().toLowerCase();
-        print("CHECK ACCOUNT EMAIL: $mail | TARGET: $targetEmail | UID: ${entry.key}");
-
-        if (mail == targetEmail) {
-          targetUid = entry.key;
-          break;
-        }
-      }
-    }
-
+    final targetUid = await ShareService.findUidByEmail(
+      targetEmail,
+    );
     if (targetUid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -695,44 +612,19 @@ class _HomePageState extends State<HomePage> {
       );
       return;
     }
-    final targetSnap = await FirebaseDatabase.instance
-        .ref(FirebasePaths.account(targetUid))
-        .get();
+    final targetData = await ShareService.loadAccount(
+      targetUid,
+    );
 
-    final targetData = targetSnap.value == null
-        ? {}
-        : Map<String, dynamic>.from(targetSnap.value as Map);
+    await ShareService.sendShareRequest(
+      ownerUid: uid,
+      targetUid: targetUid,
+      homeId: selectedHome,
+      ownerEmail: myEmail ?? "",
+      targetData: targetData,
+      targetEmail: targetEmail,
+    );
 
-    final targetProfile = targetData["profile"] == null
-        ? {}
-        : Map<String, dynamic>.from(targetData["profile"] as Map);
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedMember(selectedHome, targetUid))
-        .set({
-      "role": "member",
-      "email": targetData["email"] ?? targetEmail,
-      "name": targetProfile["name"] ?? targetData["name"] ?? "",
-      "photoUrl": targetProfile["photoUrl"] ?? targetData["photoUrl"] ?? "",
-      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-    });
-    // share
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.shareRequest(targetUid, selectedHome))
-        .set({
-      "ownerUid": uid,
-      "homeId": selectedHome,
-      "ownerEmail": myEmail,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
-
-    // lưu share list
-    await FirebaseDatabase.instance
-        .ref("${FirebasePaths.shareList(uid, selectedHome)}/$targetUid")
-        .set({
-      "email": targetEmail,
-      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-    });
     // ================= GLOBAL SHARED INDEX =================
 
     ScaffoldMessenger.of(
@@ -821,75 +713,13 @@ class _HomePageState extends State<HomePage> {
 
     if (ok != true) return;
 
-    // ===== 3. TRANSFER OWNER =====
     final homeId = selectedHome;
 
-// ===== 1. GET CURRENT HOME DATA =====
-    final currentSnap = await FirebaseDatabase.instance
-        .ref(FirebasePaths.home(uid, homeId))
-        .get();
-
-    if (!currentSnap.exists) return;
-
-    final homeData = Map<String, dynamic>.from(currentSnap.value as Map);
-
-// ===== 2. UPDATE OWNER UID =====
-    homeData["_ownerUid"] = targetUid;
-    // xóa trạng thái shared cũ nếu có
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedHome(targetUid, homeId))        .remove();
-
-// ===== 3. WRITE TO NEW OWNER =====
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.home(targetUid, homeId))        .set(homeData);
-    final targetOrderSnap = await FirebaseDatabase.instance
-        .ref(FirebasePaths.homeOrder(targetUid))
-        .get();
-
-    List<dynamic> targetOrder = [];
-
-    if (targetOrderSnap.exists) {
-      targetOrder = List<dynamic>.from(targetOrderSnap.value as List);
-    }
-
-    if (!targetOrder.contains(homeId)) {
-      targetOrder.add(homeId);
-    }
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.homeOrder(targetUid))        .set(targetOrder);
-
-// ===== 4. OLD OWNER -> MEMBER =====
-
-// thêm vào sharedHomes
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedHome(uid, homeId))        .set({
-      "ownerUid": targetUid,
-    });
-
-// thêm vào sharedByHome
-    final mySnap = await FirebaseDatabase.instance
-        .ref(FirebasePaths.account(uid))        .get();
-
-    final myData = mySnap.value is Map
-        ? Map<String, dynamic>.from(mySnap.value as Map)
-        : <String, dynamic>{};
-
-    final myProfile = myData["profile"] is Map
-        ? Map<String, dynamic>.from(myData["profile"] as Map)
-        : <String, dynamic>{};
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedMember(homeId, uid))        .set({
-      "email": myData["email"] ?? "",
-      "name": myProfile["name"] ?? "",
-      "photoUrl": myProfile["photoUrl"] ?? "",
-      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-    });
-
-// xóa home own cũ
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.home(uid, homeId))        .remove();
+    await ShareService.transferOwner(
+      oldOwnerUid: uid,
+      newOwnerUid: targetUid,
+      homeId: homeId,
+    );
 
     // ===== 4. UPDATE LOCAL =====
     setState(() {
@@ -1121,33 +951,17 @@ class _HomePageState extends State<HomePage> {
 
             onSelect: (h) {
               if (h == selectedHome) return;
-
               final currentHome = safeMap(homes[h]);
-
-              final alarm = safeMap(
-                currentHome["_customAlarm"] ?? currentHome["alarm"],
-              );
-
-              final startStr = alarm["start"]?.toString() ?? "23:00";
-              final endStr = alarm["end"]?.toString() ?? "06:00";
-
-              final s = startStr.split(":");
-              final e = endStr.split(":");
-
+              final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
               setState(() {
+                alarmEnabled = parsedAlarm["enabled"];
+
+                start = parsedAlarm["start"];
+
+                end = parsedAlarm["end"];
                 selectedHome = h;
 
-                alarmEnabled = alarm["enabled"] == true;
 
-                start = TimeOfDay(
-                  hour: int.tryParse(s[0]) ?? 23,
-                  minute: int.tryParse(s[1]) ?? 0,
-                );
-
-                end = TimeOfDay(
-                  hour: int.tryParse(e[0]) ?? 6,
-                  minute: int.tryParse(e[1]) ?? 0,
-                );
               });
             },
 

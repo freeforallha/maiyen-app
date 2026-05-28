@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'share_list_sheet.dart';
 import '../helpers/firebase_paths.dart';
+import '../services/chat_service.dart';
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -20,7 +21,10 @@ void showHomeChatSheet({
   final readRef = FirebaseDatabase.instance
       .ref(FirebasePaths.homeLastRead(homeId, user.uid));
 
-  readRef.set(DateTime.now().millisecondsSinceEpoch);
+  ChatService.markAsRead(
+    homeId: homeId,
+    uid: user.uid,
+  );
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -279,9 +283,7 @@ void showHomeChatSheet({
         ),
       );
     },
-  ).whenComplete(() {
-    controller.dispose();
-  });
+  );
 }
 String formatChatTime(dynamic ts) {
   if (ts == null) return "--:--";

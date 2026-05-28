@@ -23,6 +23,11 @@ class FirebasePaths {
       String homeId,
       ) =>
       "accounts/$uid/homes/$homeId";
+  static String schedules(
+      String uid,
+      String homeId,
+      ) =>
+      "accounts/$uid/homes/$homeId/schedules";
 
   static String devices(
       String uid,
@@ -99,4 +104,5 @@ class FirebasePaths {
 
   static String pairRequest(String requestId) =>
       "pair_requests/$requestId";
+
 }

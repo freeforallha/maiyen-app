@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import '../helpers/firebase_paths.dart';
 class ScheduleSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -25,7 +25,10 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
   DatabaseReference get ref {
     return FirebaseDatabase.instance.ref(
-      "accounts/${widget.ownerUid}/homes/${widget.homeId}/schedules",
+      FirebasePaths.schedules(
+        widget.ownerUid,
+        widget.homeId,
+      ),
     );
   }
 

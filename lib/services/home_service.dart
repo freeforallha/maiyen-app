@@ -1,7 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-
 import '../helpers/firebase_paths.dart';
-
 class HomeService {
   static Future<void> renameDevice({
     required String ownerUid,
