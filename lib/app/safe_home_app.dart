@@ -5,9 +5,9 @@ import '../pages/login_page.dart';
 import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import '../services/notification_service.dart';
+import '../services/auto_login_service.dart';
 
-final GlobalKey<NavigatorState> appNavigatorKey =
-GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatelessWidget {
   @override
@@ -80,26 +80,65 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
   }
 }
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends StatefulWidget {
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  bool ready = false;
+  User? user;
+
+  @override
+  void initState() {
+    super.initState();
+    checkAuth();
+  }
+
+  Future<void> checkAuth() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    user = FirebaseAuth.instance.currentUser;
+
+    debugPrint("AUTH CHECK UID = ${user?.uid}");
+    debugPrint("AUTH CHECK EMAIL = ${user?.email}");
+
+    if (user == null) {
+      try {
+        debugPrint("TRY AUTO LOGIN...");
+
+        user = await AutoLoginService.tryAutoLogin();
+
+        debugPrint("AUTO LOGIN RESULT = ${user?.uid}");
+      } catch (e) {
+        debugPrint("AUTO LOGIN ERROR = $e");
+      }
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      ready = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!ready) {
+      return const SafeHomeSplash();
+    }
+
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: FirebaseAuth.instance.userChanges(),
+      initialData: user,
       builder: (context, snap) {
-        return FutureBuilder(
-          future: Future.delayed(
-            const Duration(milliseconds: 1200),
-          ),
-          builder: (context, delaySnap) {
-            if (delaySnap.connectionState != ConnectionState.done) {
-              return const SafeHomeSplash();
-            }
+        final currentUser = snap.data ?? FirebaseAuth.instance.currentUser;
 
-            if (!snap.hasData) return LoginPage();
+        if (currentUser == null) {
+          return LoginPage();
+        }
 
-            return HomePage();
-          },
-        );
+        return HomePage();
       },
     );
   }

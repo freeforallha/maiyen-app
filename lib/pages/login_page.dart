@@ -4,6 +4,7 @@ import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'set_password_page.dart';
+import '../services/auto_login_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -170,6 +171,11 @@ class _LoginPageState extends State<LoginPage> {
           password: pass.text.trim(),
         );
 
+        await AutoLoginService.saveLogin(
+          email: email.text.trim(),
+          password: pass.text.trim(),
+        );
+
         return;
       }
 
@@ -180,17 +186,17 @@ class _LoginPageState extends State<LoginPage> {
 
       final user = cred.user;
 
-      if (user == null) {
-        setState(() => error = "Không tạo được user");
-        return;
-      }
+      await AutoLoginService.saveLogin(
+        email: email.text.trim(),
+        password: pass.text.trim(),
+      );
 
       if (!mounted) return;
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => ProfileSetupPage(
-            uid: user.uid,
+            uid: user?.uid ?? "",
             email: email.text.trim().toLowerCase(),
           ),
         ),

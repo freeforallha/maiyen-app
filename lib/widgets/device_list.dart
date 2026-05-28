@@ -221,8 +221,7 @@ class DeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
+    return Padding(
         padding: const EdgeInsets.all(6),
         child: Container(
           decoration: BoxDecoration(
@@ -283,7 +282,7 @@ class DeviceList extends StatelessWidget {
             ],
           ),
         ),
-      ),
+      
     );
   }
 }
