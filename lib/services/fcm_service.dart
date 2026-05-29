@@ -6,6 +6,8 @@ import '../helpers/firebase_paths.dart';
 import 'notification_service.dart';
 
 class FCMService {
+  static bool _foregroundListening = false;
+
   static Future<void> setupFCM({required String uid}) async {
     final messaging = FirebaseMessaging.instance;
 
@@ -29,6 +31,9 @@ class FCMService {
   static void listenForeground({
     required FlutterLocalNotificationsPlugin localNotif,
   }) {
+    if (_foregroundListening) return;
+    _foregroundListening = true;
+
     FirebaseMessaging.onMessage.listen((message) async {
       final type = message.data["type"]?.toString() ?? "alarm";
       final isSchedule = type == "schedule_notification";
@@ -63,17 +68,19 @@ class FCMService {
         body,
         const NotificationDetails(
           android: AndroidNotificationDetails(
-            'alarm_channel',
-            'Alarm',
+            'alarm_siren_channel',
+            'Alarm Siren',
+            channelDescription: 'Báo động SafeHome có âm thanh còi',
             importance: Importance.max,
-            priority: Priority.high,
+            priority: Priority.max,
             category: AndroidNotificationCategory.alarm,
             fullScreenIntent: true,
             playSound: true,
             enableVibration: true,
+            sound: RawResourceAndroidNotificationSound('alarm_siren'),
           ),
         ),
-        payload: 'alarm',
+        payload: 'alarm|${message.data["uid"] ?? ""}|${message.data["homeId"] ?? ""}',
       );
     });
   }

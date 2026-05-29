@@ -6,9 +6,7 @@ import '../firebase_options.dart';
 import 'notification_service.dart';
 
 @pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(
-    RemoteMessage message,
-    ) async {
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -19,48 +17,90 @@ Future<void> firebaseMessagingBackgroundHandler(
     const InitializationSettings(android: androidInit),
   );
 
+  final androidPlugin =
+  localNotif.resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>();
+
+  const alarmSirenChannel = AndroidNotificationChannel(
+    'alarm_siren_channel',
+    'Alarm Siren',
+    description: 'Báo động SafeHome có âm thanh còi',
+    importance: Importance.max,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('alarm_siren'),
+  );
+
+  const scheduleFullscreenChannel = AndroidNotificationChannel(
+    'safehome_schedule_fullscreen_channel',
+    'SafeHome Schedule Fullscreen',
+    description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+    importance: Importance.max,
+    playSound: false,
+  );
+
+  await androidPlugin?.createNotificationChannel(alarmSirenChannel);
+  await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
+
   final type = message.data['type']?.toString() ?? 'alarm';
   final isSchedule = type == 'schedule_notification';
 
-  final title = message.notification?.title?.toString() ??
+  if (isSchedule) {
+    final body = _buildScheduleBody(message.data);
+
+    await localNotif.show(
+      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      '🏡 SafeHome',
+      body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'safehome_schedule_fullscreen_channel',
+          'SafeHome Schedule Fullscreen',
+          channelDescription: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+          importance: Importance.max,
+          priority: Priority.high,
+          category: AndroidNotificationCategory.reminder,
+          fullScreenIntent: true,
+          playSound: false,
+          enableVibration: false,
+        ),
+      ),
+      payload: 'schedule_notification|$body',
+    );
+
+    return;
+  }
+
+  final title =
       message.data['title']?.toString() ??
-      (isSchedule ? '🏡 SAFEHOME' : 'SafeHome Alarm');
+          message.notification?.title?.toString() ??
+          '🚨 BÁO ĐỘNG SAFEHOME';
 
-  final body = isSchedule
-      ? _buildScheduleBody(message.data)
-      : message.notification?.body?.toString() ??
+  final body =
       message.data['body']?.toString() ??
-      'Alarm triggered';
+          message.notification?.body?.toString() ??
+          'Có cảnh báo an ninh cần kiểm tra ngay.';
 
-  final channelId = isSchedule
-      ? 'safehome_schedule_fullscreen_channel'
-      : 'alarm_siren_channel';
-
-  final channelName =
-  isSchedule ? 'SafeHome Schedule Fullscreen' : 'Alarm Siren';
+  await localNotif.cancel(999999);
 
   await localNotif.show(
     DateTime.now().millisecondsSinceEpoch ~/ 1000,
     title,
     body,
-    NotificationDetails(
+    const NotificationDetails(
       android: AndroidNotificationDetails(
-        channelId,
-        channelName,
+        'alarm_siren_channel',
+        'Alarm Siren',
+        channelDescription: 'Báo động SafeHome có âm thanh còi',
         importance: Importance.max,
-        priority: Priority.high,
-        category: isSchedule
-            ? AndroidNotificationCategory.reminder
-            : AndroidNotificationCategory.alarm,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.alarm,
         fullScreenIntent: true,
-        playSound: !isSchedule,
-        enableVibration: !isSchedule,
-        sound: isSchedule
-            ? null
-            : const RawResourceAndroidNotificationSound('alarm_siren'),
+        playSound: true,
+        enableVibration: true,
+        sound: RawResourceAndroidNotificationSound('alarm_siren'),
       ),
     ),
-    payload: isSchedule ? 'schedule_notification|$body' : 'alarm',
+    payload: 'alarm|${message.data['uid'] ?? ''}|${message.data['homeId'] ?? ''}',
   );
 }
 

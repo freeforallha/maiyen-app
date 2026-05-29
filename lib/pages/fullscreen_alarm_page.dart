@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../app/safe_home_app.dart';
 
 class FullscreenAlarmPage extends StatelessWidget {
@@ -7,20 +8,75 @@ class FullscreenAlarmPage extends StatelessWidget {
   final String body;
   final bool silentMode;
 
+  final String uid;
+  final String homeId;
+
   const FullscreenAlarmPage({
     super.key,
     required this.title,
     required this.body,
     this.silentMode = false,
+    this.uid = "",
+    this.homeId = "",
   });
+  Future<void> muteRepeatForCurrentCycle(
+      BuildContext context,
+      ) async {
+    if (uid.isEmpty || homeId.isEmpty) return;
 
-  void close(BuildContext context) {
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$homeId/alarmMute")
+        .set({
+      "muted": true,
+      "createdAt": DateTime.now().millisecondsSinceEpoch,
+    });
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Đã tắt báo lại trong chu kỳ hiện tại",
+        ),
+      ),
+    );
+  }
+  void openHome(BuildContext context) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => AuthGate(),
       ),
     );
+  }
+
+  Future<void> confirmStopAlarm(BuildContext context) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Xác nhận tắt cảnh báo"),
+          content: const Text(
+            "Chỉ chủ nhà hoặc người có quyền mới nên tắt cảnh báo.\n\nBạn chắc chắn muốn tắt cảnh báo?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("HỦY"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("XÁC NHẬN"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (ok != true) return;
+
+    SystemNavigator.pop();
   }
 
   @override
@@ -61,9 +117,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                 const SizedBox(height: 28),
 
                 Text(
-                  silentMode
-                      ? "SAFEHOME REMINDER"
-                      : "BÁO ĐỘNG SAFEHOME",
+                  silentMode ? "SAFEHOME REMINDER" : "BÁO ĐỘNG SAFEHOME",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white70,
@@ -111,31 +165,54 @@ class FullscreenAlarmPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onPressed: () => close(context),
+                    onPressed: () => openHome(context),
                   ),
                 ),
 
-                const SizedBox(height: 14),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white70),
-                    ),
-                    icon: const Icon(Icons.close_rounded),
-                    label: Text(
-                      silentMode
-                          ? "ĐÓNG"
-                          : "TẮT CẢNH BÁO",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                const SizedBox(height: 18),
+                if (!silentMode && uid.isNotEmpty && homeId.isNotEmpty) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.white70),
                       ),
+                      icon: const Icon(Icons.notifications_off_rounded),
+                      label: const Text(
+                        "TẮT BÁO LẠI TRONG CHU KỲ NÀY",
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () => muteRepeatForCurrentCycle(context),
                     ),
-                    onPressed: () => close(context),
                   ),
+
+                  const SizedBox(height: 10),
+                ],
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white70,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.power_settings_new_rounded,
+                    size: 18,
+                  ),
+                  label: Text(
+                    silentMode ? "Đóng" : "Tắt cảnh báo",
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () => confirmStopAlarm(context),
                 ),
               ],
             ),

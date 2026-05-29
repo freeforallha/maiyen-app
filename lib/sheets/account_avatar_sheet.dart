@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../services/native_alarm_permission_service.dart';
 class AccountAvatarSheet {
   static void showTopMessage(
       BuildContext context,
@@ -411,7 +412,94 @@ class AccountAvatarSheet {
                       ),
 
                       const SizedBox(height: 10),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          leading: Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              Icons.security_rounded,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          title: const Text(
+                            "Cài đặt bảo mật",
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                          onTap: () async {
+                            final canUse =
+                            await NativeAlarmPermissionService.canUseFullScreenIntent();
 
+                            if (!ctx.mounted) return;
+
+                            showModalBottomSheet(
+                              context: ctx,
+                              builder: (_) {
+                                return SafeArea(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.security_rounded,
+                                          size: 48,
+                                          color: Colors.blue,
+                                        ),
+
+                                        const SizedBox(height: 12),
+
+                                        const Text(
+                                          "Cài đặt bảo mật",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+
+                                        const SizedBox(height: 20),
+
+                                        ListTile(
+                                          leading: Icon(
+                                            canUse
+                                                ? Icons.check_circle
+                                                : Icons.warning_amber_rounded,
+                                            color: canUse
+                                                ? Colors.green
+                                                : Colors.orange,
+                                          ),
+                                          title: const Text(
+                                            "Báo động toàn màn hình",
+                                          ),
+                                          subtitle: Text(
+                                            canUse
+                                                ? "Đã được cấp quyền"
+                                                : "Chưa được cấp quyền",
+                                          ),
+                                          onTap: () async {
+                                            await NativeAlarmPermissionService
+                                                .openFullScreenIntentSettings();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
                       // LOGOUT
                       dangerTile(
                         icon: Icons.logout_rounded,

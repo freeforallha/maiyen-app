@@ -246,9 +246,7 @@ class _HomePageState extends State<HomePage> {
   final ScrollController homeTabController = ScrollController();
   String formatAlarmSchedules() {
     final currentHome = safeMap(homes[selectedHome]);
-
     final schedules = safeMap(currentHome["schedules"]);
-
     final alarmsRaw = schedules["alarms"];
 
     if (alarmsRaw == null) return "--:--";
@@ -259,16 +257,26 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    final enabled = alarms
-        .where((e) => e["enabled"] == true)
-        .toList();
+    final enabled = alarms.where((e) => e["enabled"] == true).toList();
 
     if (enabled.isEmpty) {
       return "Chưa bật";
     }
 
+    String repeatText(dynamic value) {
+      final minutes = int.tryParse(value?.toString() ?? "0") ?? 0;
+
+      if (minutes == 15) return " • Lặp 15'";
+      if (minutes == 30) return " • Lặp 30'";
+      if (minutes == 60) return " • Lặp 1h";
+
+      return " • Không lặp";
+    }
+
     if (enabled.length == 1) {
-      return "${enabled.first["start"]} - ${enabled.first["end"]}";
+      final item = enabled.first;
+
+      return "${item["start"]} - ${item["end"]}${repeatText(item["repeatMinutes"])}";
     }
 
     return "${enabled.length} khung giờ";

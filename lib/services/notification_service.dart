@@ -1,12 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import '../app/safe_home_app.dart';
+import '../pages/fullscreen_alarm_page.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
 FlutterLocalNotificationsPlugin();
 
 class NotificationService {
-  static String lastScheduleBody =
-      "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+  static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
 
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
@@ -25,6 +28,36 @@ class NotificationService {
 
     await localNotif.initialize(
       const InitializationSettings(android: android),
+      onDidReceiveNotificationResponse: (response) {
+        final payload = response.payload ?? '';
+
+        if (payload == 'alarm') {
+          appNavigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => const FullscreenAlarmPage(
+                title: '🚨 BÁO ĐỘNG SAFEHOME',
+                body: 'Có cảnh báo an ninh cần kiểm tra ngay.',
+                silentMode: false,
+              ),
+            ),
+          );
+          return;
+        }
+
+        if (payload.startsWith('schedule_notification|')) {
+          final body = payload.replaceFirst('schedule_notification|', '');
+
+          appNavigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => FullscreenAlarmPage(
+                title: '🏡 SafeHome Reminder',
+                body: body,
+                silentMode: true,
+              ),
+            ),
+          );
+        }
+      },
     );
 
     const alarmChannel = AndroidNotificationChannel(
@@ -80,9 +113,8 @@ class NotificationService {
         ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
         : "⚠️ CHƯA AN TOÀN\n$cleanReason";
 
-    final title = isSafe
-        ? 'SafeHome ✅ ĐÃ AN TOÀN'
-        : 'SafeHome ⚠️ CHƯA AN TOÀN';
+    final title =
+    isSafe ? 'SafeHome ✅ ĐÃ AN TOÀN' : 'SafeHome ⚠️ CHƯA AN TOÀN';
 
     final body = isSafe
         ? 'Hãy an tâm nghỉ ngơi.'

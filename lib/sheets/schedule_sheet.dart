@@ -66,7 +66,75 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       "notifications": notifications,
     });
   }
+  String repeatLabel(dynamic value) {
+    final minutes = int.tryParse(value?.toString() ?? "0") ?? 0;
 
+    if (minutes == 15) return "Báo lại mỗi 15 phút";
+    if (minutes == 30) return "Báo lại mỗi 30 phút";
+    if (minutes == 60) return "Báo lại mỗi 1 giờ";
+
+    return "Không báo lại";
+  }
+
+  Future<int?> openRepeatInput({
+    required int initial,
+  }) async {
+    int selected = initial;
+
+    return showDialog<int>(
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            Widget option({
+              required int value,
+              required String title,
+            }) {
+              final isSelected = selected == value;
+
+              return ListTile(
+                leading: Icon(
+                  isSelected
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_off,
+                  color: isSelected ? Colors.red : Colors.grey,
+                ),
+                title: Text(title),
+                onTap: () {
+                  setDialogState(() {
+                    selected = value;
+                  });
+                },
+              );
+            }
+
+            return AlertDialog(
+              title: const Text("Báo lại khi vẫn chưa an toàn"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  option(value: 0, title: "Không báo lại"),
+                  option(value: 15, title: "Mỗi 15 phút"),
+                  option(value: 30, title: "Mỗi 30 phút"),
+                  option(value: 60, title: "Mỗi 1 giờ"),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Huỷ"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context, selected),
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
   bool isValidTime(String value) {
     final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
 
@@ -215,11 +283,18 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (end == null) return;
 
+    final repeatMinutes = await openRepeatInput(
+      initial: 15,
+    );
+
+    if (repeatMinutes == null) return;
+
     setState(() {
       alarms.add({
         "enabled": true,
         "start": start,
         "end": end,
+        "repeatMinutes": repeatMinutes,
       });
     });
 
@@ -243,9 +318,16 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (end == null) return;
 
+    final repeatMinutes = await openRepeatInput(
+      initial: current["repeatMinutes"] ?? 15,
+    );
+
+    if (repeatMinutes == null) return;
+
     setState(() {
       alarms[index]["start"] = start;
       alarms[index]["end"] = end;
+      alarms[index]["repeatMinutes"] = repeatMinutes;
     });
 
     saveSchedules();
@@ -368,17 +450,35 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         },
                       ),
 
-                      title: Row(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(
-                            Icons.shield_moon_rounded,
-                            color: Colors.red,
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.shield_moon_rounded,
+                                color: Colors.red,
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              Text(
+                                "${item["start"]} - ${item["end"]}",
+                              ),
+                            ],
                           ),
 
-                          const SizedBox(width: 10),
+                          const SizedBox(height: 4),
 
-                          Text(
-                            "${item["start"]} - ${item["end"]}",
+                          Padding(
+                            padding: const EdgeInsets.only(left: 34),
+                            child: Text(
+                              repeatLabel(item["repeatMinutes"]),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
                           ),
                         ],
                       ),

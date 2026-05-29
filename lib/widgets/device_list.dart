@@ -282,7 +282,7 @@ class DeviceList extends StatelessWidget {
             ],
           ),
         ),
-      
+
     );
   }
 }
