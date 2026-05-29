@@ -28,6 +28,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     importance: Importance.max,
     playSound: true,
     sound: RawResourceAndroidNotificationSound('alarm_siren'),
+    audioAttributesUsage: AudioAttributesUsage.alarm,
   );
 
   const scheduleFullscreenChannel = AndroidNotificationChannel(
@@ -100,7 +101,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         sound: RawResourceAndroidNotificationSound('alarm_siren'),
       ),
     ),
-    payload: 'alarm|${message.data['uid'] ?? ''}|${message.data['homeId'] ?? ''}',
+    payload: 'alarm',
   );
 }
 

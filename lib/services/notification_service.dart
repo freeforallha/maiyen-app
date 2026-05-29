@@ -68,11 +68,12 @@ class NotificationService {
     );
 
     const alarmSirenChannel = AndroidNotificationChannel(
-      'alarm_siren_channel',
-      'Alarm Siren',
+      'alarm_siren_channel_v2',
+      'Alarm Siren V2',
       importance: Importance.max,
       playSound: true,
       sound: RawResourceAndroidNotificationSound('alarm_siren'),
+      audioAttributesUsage: AudioAttributesUsage.alarm,
     );
 
     const scheduleFullscreenChannel = AndroidNotificationChannel(

@@ -56,17 +56,10 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       return const SafeHomeSplash();
     }
 
-    if (payload == "alarm" || payload.startsWith("alarm|")) {
-      final parts = payload.split("|");
-
-      final alarmUid = parts.length > 1 ? parts[1] : "";
-      final alarmHomeId = parts.length > 2 ? parts[2] : "";
-
-      return FullscreenAlarmPage(
+    if (payload == "alarm") {
+      return const FullscreenAlarmPage(
         title: "Báo động SafeHome",
         body: "Có cảnh báo an ninh cần kiểm tra ngay.",
-        uid: alarmUid,
-        homeId: alarmHomeId,
       );
     }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import '../app/safe_home_app.dart';
 
 class FullscreenAlarmPage extends StatelessWidget {
@@ -8,39 +8,13 @@ class FullscreenAlarmPage extends StatelessWidget {
   final String body;
   final bool silentMode;
 
-  final String uid;
-  final String homeId;
-
   const FullscreenAlarmPage({
     super.key,
     required this.title,
     required this.body,
     this.silentMode = false,
-    this.uid = "",
-    this.homeId = "",
   });
-  Future<void> muteRepeatForCurrentCycle(
-      BuildContext context,
-      ) async {
-    if (uid.isEmpty || homeId.isEmpty) return;
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$homeId/alarmMute")
-        .set({
-      "muted": true,
-      "createdAt": DateTime.now().millisecondsSinceEpoch,
-    });
-
-    if (!context.mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          "Đã tắt báo lại trong chu kỳ hiện tại",
-        ),
-      ),
-    );
-  }
   void openHome(BuildContext context) {
     Navigator.pushReplacement(
       context,
@@ -170,29 +144,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 18),
-                if (!silentMode && uid.isNotEmpty && homeId.isNotEmpty) ...[
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.white70),
-                      ),
-                      icon: const Icon(Icons.notifications_off_rounded),
-                      label: const Text(
-                        "TẮT BÁO LẠI TRONG CHU KỲ NÀY",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () => muteRepeatForCurrentCycle(context),
-                    ),
-                  ),
 
-                  const SizedBox(height: 10),
-                ],
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.white70,

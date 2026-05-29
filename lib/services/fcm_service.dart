@@ -78,9 +78,10 @@ class FCMService {
             playSound: true,
             enableVibration: true,
             sound: RawResourceAndroidNotificationSound('alarm_siren'),
+            audioAttributesUsage: AudioAttributesUsage.alarm,
           ),
         ),
-        payload: 'alarm|${message.data["uid"] ?? ""}|${message.data["homeId"] ?? ""}',
+        payload: 'alarm',
       );
     });
   }
