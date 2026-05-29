@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app/safe_home_app.dart';
 
-class FullscreenAlarmPage extends StatelessWidget {
+class FullscreenAlarmPage extends StatefulWidget {
   final String title;
   final String body;
   final bool silentMode;
@@ -15,7 +17,55 @@ class FullscreenAlarmPage extends StatelessWidget {
     this.silentMode = false,
   });
 
+  @override
+  State<FullscreenAlarmPage> createState() => _FullscreenAlarmPageState();
+}
+
+class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
+  Timer? timer;
+  int remainingSeconds = 600;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.silentMode) {
+      timer = Timer.periodic(const Duration(seconds: 1), (t) {
+        if (remainingSeconds <= 1) {
+          t.cancel();
+
+          if (mounted) {
+            SystemNavigator.pop();
+          }
+
+          return;
+        }
+
+        if (!mounted) return;
+
+        setState(() {
+          remainingSeconds--;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  String formatRemainingTime() {
+    final minutes = remainingSeconds ~/ 60;
+    final seconds = remainingSeconds % 60;
+
+    return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+  }
+
   void openHome(BuildContext context) {
+    timer?.cancel();
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -25,6 +75,12 @@ class FullscreenAlarmPage extends StatelessWidget {
   }
 
   Future<void> confirmStopAlarm(BuildContext context) async {
+    if (widget.silentMode) {
+      timer?.cancel();
+      SystemNavigator.pop();
+      return;
+    }
+
     final ok = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -50,16 +106,17 @@ class FullscreenAlarmPage extends StatelessWidget {
 
     if (ok != true) return;
 
+    timer?.cancel();
     SystemNavigator.pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = silentMode
+    final bgColor = widget.silentMode
         ? const Color(0xFF1E293B)
         : const Color(0xFFB00020);
 
-    final icon = silentMode
+    final icon = widget.silentMode
         ? Icons.shield_moon_rounded
         : Icons.notifications_active_rounded;
 
@@ -91,7 +148,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                 const SizedBox(height: 28),
 
                 Text(
-                  silentMode ? "SAFEHOME REMINDER" : "BÁO ĐỘNG SAFEHOME",
+                  widget.silentMode ? "SAFEHOME REMINDER" : "BÁO ĐỘNG SAFEHOME",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white70,
@@ -104,7 +161,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 Text(
-                  title,
+                  widget.title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
@@ -116,7 +173,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                 const SizedBox(height: 14),
 
                 Text(
-                  body,
+                  widget.body,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
@@ -124,6 +181,45 @@ class FullscreenAlarmPage extends StatelessWidget {
                     height: 1.35,
                   ),
                 ),
+
+                if (widget.silentMode) ...[
+                  const SizedBox(height: 22),
+
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Tự đóng sau",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        Text(
+                          formatRemainingTime(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
 
                 const Spacer(),
 
@@ -158,7 +254,7 @@ class FullscreenAlarmPage extends StatelessWidget {
                     size: 18,
                   ),
                   label: Text(
-                    silentMode ? "Đóng" : "Tắt cảnh báo",
+                    widget.silentMode ? "ĐÓNG" : "TẮT CẢNH BÁO",
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
