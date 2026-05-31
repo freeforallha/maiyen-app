@@ -31,7 +31,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   bool get isReminder => widget.silentMode;
   bool get isSafeReminder => isReminder && widget.body.contains('ĐÃ AN TOÀN');
-  bool get isUnsafeReminder => isReminder && widget.body.contains('CHƯA AN TOÀN');
 
   @override
   void initState() {
@@ -85,6 +84,36 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final seconds = remainingSeconds % 60;
 
     return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+  }
+
+  List<String> buildIssueList() {
+    String text = widget.body
+        .replaceAll('⚠️', '')
+        .replaceAll('✅', '')
+        .replaceAll('CHƯA AN TOÀN', '')
+        .replaceAll('ĐÃ AN TOÀN', '')
+        .replaceAll('Hãy an tâm nghỉ ngơi.', '')
+        .trim();
+
+    text = text.replaceFirst(RegExp(r'^Nhà\s+'), 'Nhà ');
+
+    final parts = text
+        .split(RegExp(r',|\n'))
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+
+    if (parts.isEmpty) {
+      return isSafeReminder
+          ? ['Tất cả thiết bị đang an toàn']
+          : ['Có thiết bị cần kiểm tra'];
+    }
+
+    if (parts.length > 4) {
+      return [...parts.take(4), '...'];
+    }
+
+    return parts;
   }
 
   Future<void> stopAlarmSound() async {
@@ -184,9 +213,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         ? "Nhà đã an toàn"
         : "Nhà chưa an toàn";
 
-    final String buttonText = !isReminder ? "KIỂM TRA NGAY" : "KIỂM TRA NHÀ";
+    final String repeatText = !isReminder
+        ? "Nếu vấn đề chưa được xử lý, cảnh báo sẽ tiếp tục hiện lại theo chu kỳ đã cài: 15 / 30 / 60 phút."
+        : "Nếu vấn đề chưa được xử lý, nhắc nhở sẽ tiếp tục hiện lại theo lịch đã cài.";
 
-    final String closeText = !isReminder ? "TẮT CẢNH BÁO" : "ĐÓNG NHẮC NHỞ";
+    final issueList = buildIssueList();
 
     return PopScope(
       canPop: false,
@@ -201,7 +232,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(22, 28, 22, 26),
+                  padding: const EdgeInsets.fromLTRB(22, 24, 22, 24),
                   decoration: BoxDecoration(
                     color: cardColor,
                     borderRadius: BorderRadius.circular(32),
@@ -216,8 +247,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                   child: Column(
                     children: [
                       Container(
-                        width: 96,
-                        height: 96,
+                        width: 92,
+                        height: 92,
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.16),
                           shape: BoxShape.circle,
@@ -229,11 +260,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         child: Icon(
                           icon,
                           color: Colors.white,
-                          size: 56,
+                          size: 54,
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 22),
 
                       Text(
                         header,
@@ -259,21 +290,110 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         ),
                       ),
 
+                      const SizedBox(height: 20),
+
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.13),
+                          borderRadius: BorderRadius.circular(22),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.16),
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.fact_check_rounded,
+                                  color: Colors.white70,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  "Cần kiểm tra nhanh",
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            ...issueList.map(
+                                  (item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "• ",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          height: 1.3,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                       const SizedBox(height: 16),
 
-                      Text(
-                        widget.body,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          height: 1.38,
-                          fontWeight: FontWeight.w500,
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.13),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.repeat_rounded,
+                              color: Colors.white70,
+                              size: 21,
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                repeatText,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  height: 1.35,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 
                       if (isReminder) ...[
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
 
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -316,9 +436,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                   height: 58,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.home_rounded),
-                    label: Text(
-                      buttonText,
-                      style: const TextStyle(
+                    label: const Text(
+                      "KIỂM TRA NHÀ",
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -344,7 +464,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     size: 19,
                   ),
                   label: Text(
-                    closeText,
+                    isReminder ? "ĐÓNG NHẮC NHỞ" : "TẮT CẢNH BÁO",
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,

@@ -233,14 +233,27 @@ class _HomePageState extends State<HomePage> {
 
   Map<String, dynamic> homes = {};
   String selectedHome = "";
-
+  Map<String, dynamic> alarmSettings = {};
   List<String> homeOrder = [];
 
   TimeOfDay start = TimeOfDay(hour: 23, minute: 0);
   TimeOfDay end = TimeOfDay(hour: 6, minute: 0);
 
   bool alarmEnabled = false;
+  Future<void> setAlarmEnabled(bool enabled) async {
+    final homeId = selectedHome;
 
+    setState(() {
+      alarmEnabled = enabled;
+      alarmSettings[homeId] = {
+        "enabled": enabled,
+      };
+    });
+
+    await FirebaseDatabase.instance
+        .ref("accounts/$uid/alarmSettings/$homeId/enabled")
+        .set(enabled);
+  }
   int pairingCountdown = 0;
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
@@ -306,9 +319,10 @@ class _HomePageState extends State<HomePage> {
       final homesData = safeMap(map["homes"]);
       final sharedHomes = safeMap(map["sharedHomes"]);
       final requests = safeMap(map["shareRequests"]);
-
+      final userAlarmSettings = safeMap(map["alarmSettings"]);
       setState(() {
         shareRequests = requests;
+        alarmSettings = userAlarmSettings;
         final profile = HomeStateParser.parseProfile(map);
 
         userName = profile["name"] ?? "";
@@ -366,7 +380,11 @@ class _HomePageState extends State<HomePage> {
         final currentHome = safeMap(homes[selectedHome]);
         final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
-        alarmEnabled = parsedAlarm["enabled"];
+        final userAlarmSetting = safeMap(
+          map["alarmSettings"]?[selectedHome],
+        );
+
+        alarmEnabled = userAlarmSetting["enabled"] != false;
         start = parsedAlarm["start"];
         end = parsedAlarm["end"];
       });
@@ -959,17 +977,15 @@ class _HomePageState extends State<HomePage> {
 
             onSelect: (h) {
               if (h == selectedHome) return;
+
               final currentHome = safeMap(homes[h]);
               final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+
               setState(() {
-                alarmEnabled = parsedAlarm["enabled"];
-
-                start = parsedAlarm["start"];
-
-                end = parsedAlarm["end"];
                 selectedHome = h;
-
-
+                alarmEnabled = safeMap(alarmSettings[h])["enabled"] != false;
+                start = parsedAlarm["start"];
+                end = parsedAlarm["end"];
               });
             },
 
@@ -1001,7 +1017,8 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   StatusPanel(
                     overall: getOverallStatus(devices),
-
+                    alarmEnabled: alarmEnabled,
+                    onAlarmEnabledChanged: setAlarmEnabled,
                     onPair: null,
                     onQR: null,
                     onScheduleNotification: () {

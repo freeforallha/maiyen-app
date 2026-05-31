@@ -7,6 +7,9 @@ class StatusPanel extends StatelessWidget {
   final String alarmStart;
   final String alarmEnd;
 
+  final bool alarmEnabled;
+  final ValueChanged<bool>? onAlarmEnabledChanged;
+
   final VoidCallback? onScheduleNotification;
   final VoidCallback? onScheduleAlarm;
 
@@ -17,45 +20,78 @@ class StatusPanel extends StatelessWidget {
     required this.onQR,
     required this.alarmStart,
     required this.alarmEnd,
+    this.alarmEnabled = true,
+    this.onAlarmEnabledChanged,
     this.onScheduleNotification,
     this.onScheduleAlarm,
   });
 
   void _showScheduleOptions(BuildContext context) {
+    bool localAlarmEnabled = alarmEnabled;
+
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: const Icon(
-                    Icons.notifications_active_rounded,
-                    color: Colors.orange,
-                  ),
-                  title: const Text("Hẹn giờ Notification"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onScheduleNotification?.call();
-                  },
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SwitchListTile(
+                      value: localAlarmEnabled,
+                      activeThumbColor: Colors.red,
+                      secondary: const Icon(
+                        Icons.crisis_alert_rounded,
+                        color: Colors.red,
+                      ),
+                      title: const Text(
+                        "Nhận cảnh báo Alarm",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: const Text(
+                        "Bật/tắt alarm cho tài khoản này trong nhà hiện tại",
+                      ),
+                      onChanged: (value) {
+                        setModalState(() {
+                          localAlarmEnabled = value;
+                        });
+
+                        onAlarmEnabledChanged?.call(value);
+                      },
+                    ),
+
+                    const Divider(),
+
+                    ListTile(
+                      leading: const Icon(
+                        Icons.notifications_active_rounded,
+                        color: Colors.orange,
+                      ),
+                      title: const Text("Hẹn giờ Notification"),
+                      onTap: () {
+                        Navigator.pop(context);
+                        onScheduleNotification?.call();
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.shield_moon_rounded,
+                        color: Colors.deepPurple,
+                      ),
+                      title: const Text("Hẹn giờ Alarm"),
+                      onTap: () {
+                        Navigator.pop(context);
+                        onScheduleAlarm?.call();
+                      },
+                    ),
+                  ],
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.shield_moon_rounded,
-                    color: Colors.deepPurple,
-                  ),
-                  title: const Text("Hẹn giờ Alarm"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    onScheduleAlarm?.call();
-                  },
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -63,10 +99,12 @@ class StatusPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alarmText = alarmEnabled ? "Alarm đang bật" : "Alarm đã tắt";
+
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.05),
           border: Border.all(
@@ -115,20 +153,23 @@ class StatusPanel extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.more_time_rounded,
+                        Icon(
+                          alarmEnabled
+                              ? Icons.notifications_active_rounded
+                              : Icons.notifications_off_rounded,
                           size: 17,
-                          color: Colors.deepPurple,
+                          color: alarmEnabled ? Colors.deepPurple : Colors.grey,
                         ),
                         const SizedBox(width: 5),
-                        Text(
-                          alarmEnd.isEmpty
-                              ? alarmStart
-                              : "$alarmStart - $alarmEnd",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w500,
+                        Flexible(
+                          child: Text(
+                            "$alarmText • ${alarmEnd.isEmpty ? alarmStart : "$alarmStart - $alarmEnd"}",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
@@ -145,14 +186,15 @@ class StatusPanel extends StatelessWidget {
                     FloatingActionButton.small(
                       heroTag: "pair",
                       onPressed: onPair,
-                      child: Icon(Icons.link),
+                      child: const Icon(Icons.link),
                     ),
-                  if (onPair != null && onQR != null) SizedBox(width: 8),
+                  if (onPair != null && onQR != null)
+                    const SizedBox(width: 8),
                   if (onQR != null)
                     FloatingActionButton.small(
                       heroTag: "qr",
                       onPressed: onQR,
-                      child: Icon(Icons.qr_code_scanner),
+                      child: const Icon(Icons.qr_code_scanner),
                     ),
                 ],
               ),
