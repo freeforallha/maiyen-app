@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../services/notification_service.dart';
+
 import '../app/safe_home_app.dart';
+import '../services/notification_service.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
   final String title;
@@ -28,6 +29,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   final AudioPlayer alarmPlayer = AudioPlayer();
 
+  bool get isReminder => widget.silentMode;
+  bool get isSafeReminder => isReminder && widget.body.contains('ĐÃ AN TOÀN');
+  bool get isUnsafeReminder => isReminder && widget.body.contains('CHƯA AN TOÀN');
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +51,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   void startSilentTimer() {
+    timer?.cancel();
+
     timer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (remainingSeconds <= 1) {
         t.cancel();
@@ -99,13 +106,20 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     );
   }
 
+  Future<void> closeReminder() async {
+    timer?.cancel();
+    await stopAlarmSound();
+    SystemNavigator.pop();
+  }
+
   Future<void> confirmStopAlarm(BuildContext context) async {
     if (widget.silentMode) {
-      startSilentTimer();
-    } else {
-      localNotif.cancel(999999);
-      startAlarmSound();
+      await closeReminder();
+      return;
     }
+
+    localNotif.cancel(999999);
+    startAlarmSound();
 
     final ok = await showDialog<bool>(
       context: context,
@@ -140,13 +154,39 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = widget.silentMode
-        ? const Color(0xFF1E293B)
-        : const Color(0xFFB00020);
+    final Color bgColor = !isReminder
+        ? const Color(0xFF7F1D1D)
+        : isSafeReminder
+        ? const Color(0xFF064E3B)
+        : const Color(0xFF78350F);
 
-    final icon = widget.silentMode
-        ? Icons.shield_moon_rounded
-        : Icons.notifications_active_rounded;
+    final Color cardColor = !isReminder
+        ? const Color(0xFF991B1B)
+        : isSafeReminder
+        ? const Color(0xFF065F46)
+        : const Color(0xFF92400E);
+
+    final IconData icon = !isReminder
+        ? Icons.crisis_alert_rounded
+        : isSafeReminder
+        ? Icons.verified_user_rounded
+        : Icons.warning_amber_rounded;
+
+    final String header = !isReminder
+        ? "BÁO ĐỘNG KHẨN CẤP"
+        : isSafeReminder
+        ? "NHẮC NHỞ AN TOÀN"
+        : "NHẮC NHỞ CẦN KIỂM TRA";
+
+    final String mainTitle = !isReminder
+        ? "SafeHome Alarm"
+        : isSafeReminder
+        ? "Nhà đã an toàn"
+        : "Nhà chưa an toàn";
+
+    final String buttonText = !isReminder ? "KIỂM TRA NGAY" : "KIỂM TRA NHÀ";
+
+    final String closeText = !isReminder ? "TẮT CẢNH BÁO" : "ĐÓNG NHẮC NHỞ";
 
     return PopScope(
       canPop: false,
@@ -154,138 +194,160 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         backgroundColor: bgColor,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(22),
             child: Column(
               children: [
                 const Spacer(),
 
                 Container(
-                  width: 110,
-                  height: 110,
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(22, 28, 22, 26),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.16),
-                    shape: BoxShape.circle,
+                    color: cardColor,
+                    borderRadius: BorderRadius.circular(32),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        blurRadius: 30,
+                        offset: const Offset(0, 14),
+                      ),
+                    ],
                   ),
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 64,
-                  ),
-                ),
-
-                const SizedBox(height: 28),
-
-                Text(
-                  widget.silentMode ? "SAFEHOME REMINDER" : "BÁO ĐỘNG SAFEHOME",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-
-                const SizedBox(height: 14),
-
-                Text(
-                  widget.body,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    height: 1.35,
-                  ),
-                ),
-
-                if (widget.silentMode) ...[
-                  const SizedBox(height: 22),
-
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 18,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Tự đóng sau",
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 96,
+                        height: 96,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.16),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.25),
+                            width: 1.5,
                           ),
                         ),
+                        child: Icon(
+                          icon,
+                          color: Colors.white,
+                          size: 56,
+                        ),
+                      ),
 
-                        const SizedBox(height: 4),
+                      const SizedBox(height: 24),
 
-                        Text(
-                          formatRemainingTime(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.2,
+                      Text(
+                        header,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.4,
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Text(
+                        mainTitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 31,
+                          fontWeight: FontWeight.w900,
+                          height: 1.1,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      Text(
+                        widget.body,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          height: 1.38,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+
+                      if (isReminder) ...[
+                        const SizedBox(height: 24),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.timer_rounded,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "Tự đóng sau ${formatRemainingTime()}",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
+                    ],
                   ),
-                ],
+                ),
 
                 const Spacer(),
 
                 SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: 58,
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.visibility_rounded),
-                    label: const Text(
-                      "KIỂM TRA NHÀ",
-                      style: TextStyle(
+                    icon: const Icon(Icons.home_rounded),
+                    label: Text(
+                      buttonText,
+                      style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                     onPressed: () => openHome(context),
                   ),
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
 
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.white70,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 8,
+                      horizontal: 16,
+                      vertical: 10,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.power_settings_new_rounded,
-                    size: 18,
+                  icon: Icon(
+                    isReminder
+                        ? Icons.close_rounded
+                        : Icons.power_settings_new_rounded,
+                    size: 19,
                   ),
                   label: Text(
-                    widget.silentMode ? "ĐÓNG" : "TẮT CẢNH BÁO",
+                    closeText,
                     style: const TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   onPressed: () => confirmStopAlarm(context),

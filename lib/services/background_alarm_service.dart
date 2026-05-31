@@ -47,8 +47,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (isSchedule) {
     final body = _buildScheduleBody(message.data);
 
+    await localNotif.cancel(999998);
+
     await localNotif.show(
-      999999,
+      999998,
       '🏡 SafeHome',
       body,
       const NotificationDetails(
