@@ -14,7 +14,7 @@ class FCMService {
     await messaging.requestPermission(
       alert: true,
       badge: true,
-      sound: true,
+      sound: false,
     );
 
     final token = await messaging.getToken();
@@ -68,20 +68,19 @@ class FCMService {
         body,
         const NotificationDetails(
           android: AndroidNotificationDetails(
-            'alarm_siren_channel',
-            'Alarm Siren',
-            channelDescription: 'Báo động SafeHome có âm thanh còi',
+            'alarm_channel_silent_v3',
+            'Alarm Channel Silent V3',
+            channelDescription:
+            'Alarm notification chỉ cảnh báo, không tự mở fullscreen',
             importance: Importance.max,
             priority: Priority.max,
             category: AndroidNotificationCategory.alarm,
-            fullScreenIntent: true,
-            playSound: true,
+            fullScreenIntent: false,
+            playSound: false,
             enableVibration: true,
-            sound: RawResourceAndroidNotificationSound('alarm_siren'),
-            audioAttributesUsage: AudioAttributesUsage.alarm,
           ),
         ),
-        payload: 'alarm',
+        payload: 'open_home',
       );
     });
   }

@@ -15,13 +15,13 @@ class NotificationService {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
-      sound: true,
+      sound: false,
     );
 
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
-      sound: true,
+      sound: false,
     );
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -31,16 +31,7 @@ class NotificationService {
       onDidReceiveNotificationResponse: (response) {
         final payload = response.payload ?? '';
 
-        if (payload == 'alarm') {
-          appNavigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => const FullscreenAlarmPage(
-                title: '🚨 BÁO ĐỘNG SAFEHOME',
-                body: 'Có cảnh báo an ninh cần kiểm tra ngay.',
-                silentMode: false,
-              ),
-            ),
-          );
+        if (payload == 'alarm' || payload == 'open_home') {
           return;
         }
 
@@ -61,19 +52,12 @@ class NotificationService {
     );
 
     const alarmChannel = AndroidNotificationChannel(
-      'alarm_channel',
-      'Alarm Channel',
+      'alarm_channel_silent_v3',
+      'Alarm Channel Silent V3',
+      description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
       importance: Importance.max,
-      playSound: true,
-    );
-
-    const alarmSirenChannel = AndroidNotificationChannel(
-      'alarm_siren_channel_v2',
-      'Alarm Siren V2',
-      importance: Importance.max,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('alarm_siren'),
-      audioAttributesUsage: AudioAttributesUsage.alarm,
+      playSound: false,
+      enableVibration: true,
     );
 
     const scheduleFullscreenChannel = AndroidNotificationChannel(
@@ -97,7 +81,6 @@ class NotificationService {
         AndroidFlutterLocalNotificationsPlugin>();
 
     await androidPlugin?.createNotificationChannel(alarmChannel);
-    await androidPlugin?.createNotificationChannel(alarmSirenChannel);
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
   }

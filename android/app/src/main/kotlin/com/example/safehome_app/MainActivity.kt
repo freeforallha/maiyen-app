@@ -1,11 +1,13 @@
 package com.example.safehome_app
 
+import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
@@ -24,13 +26,17 @@ class MainActivity : FlutterActivity() {
             channelName
         ).setMethodCallHandler { call, result ->
             when (call.method) {
-                "canUseFullScreenIntent" -> {
-                    result.success(canUseFullScreenIntent())
-                }
+                "canUseFullScreenIntent" -> result.success(canUseFullScreenIntent())
 
                 "openFullScreenIntentSettings" -> {
                     openFullScreenIntentSettings()
                     result.success(true)
+                }
+
+                "isAlarmScreenLaunch" -> result.success(isAlarmScreenLaunch())
+
+                "getSafeHomeAction" -> {
+                    result.success(intent?.getStringExtra("safehome_action") ?: "")
                 }
 
                 else -> result.notImplemented()
@@ -41,6 +47,11 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableAlarmScreenMode()
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
     }
 
     override fun onResume() {
@@ -60,6 +71,16 @@ class MainActivity : FlutterActivity() {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         )
+    }
+
+    private fun isAlarmScreenLaunch(): Boolean {
+        val keyguardManager =
+            getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        val powerManager =
+            getSystemService(Context.POWER_SERVICE) as PowerManager
+
+        return keyguardManager.isKeyguardLocked || !powerManager.isInteractive
     }
 
     private fun canUseFullScreenIntent(): Boolean {

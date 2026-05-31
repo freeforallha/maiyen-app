@@ -21,14 +21,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   localNotif.resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>();
 
-  const alarmSirenChannel = AndroidNotificationChannel(
-    'alarm_siren_channel',
-    'Alarm Siren',
-    description: 'Báo động SafeHome có âm thanh còi',
+  const alarmChannel = AndroidNotificationChannel(
+    'alarm_channel_silent_v3',
+    'Alarm Channel Silent V3',
+    description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
     importance: Importance.max,
-    playSound: true,
-    sound: RawResourceAndroidNotificationSound('alarm_siren'),
-    audioAttributesUsage: AudioAttributesUsage.alarm,
+    playSound: false,
+    enableVibration: true,
   );
 
   const scheduleFullscreenChannel = AndroidNotificationChannel(
@@ -39,7 +38,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     playSound: false,
   );
 
-  await androidPlugin?.createNotificationChannel(alarmSirenChannel);
+  await androidPlugin?.createNotificationChannel(alarmChannel);
   await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
 
   final type = message.data['type']?.toString() ?? 'alarm';
@@ -49,7 +48,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final body = _buildScheduleBody(message.data);
 
     await localNotif.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      999999,
       '🏡 SafeHome',
       body,
       const NotificationDetails(
@@ -84,24 +83,24 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await localNotif.cancel(999999);
 
   await localNotif.show(
-    DateTime.now().millisecondsSinceEpoch ~/ 1000,
+    999999,
     title,
     body,
     const NotificationDetails(
       android: AndroidNotificationDetails(
-        'alarm_siren_channel',
-        'Alarm Siren',
-        channelDescription: 'Báo động SafeHome có âm thanh còi',
+        'alarm_channel_silent_v3',
+        'Alarm Channel Silent V3',
+        channelDescription:
+        'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,
         priority: Priority.max,
         category: AndroidNotificationCategory.alarm,
         fullScreenIntent: true,
-        playSound: true,
+        playSound: false,
         enableVibration: true,
-        sound: RawResourceAndroidNotificationSound('alarm_siren'),
       ),
     ),
-    payload: 'alarm',
+    payload: 'open_home',
   );
 }
 

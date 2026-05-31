@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import '../services/notification_service.dart';
 import '../app/safe_home_app.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
@@ -25,34 +26,50 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   Timer? timer;
   int remainingSeconds = 600;
 
+  final AudioPlayer alarmPlayer = AudioPlayer();
+
   @override
   void initState() {
     super.initState();
 
     if (widget.silentMode) {
-      timer = Timer.periodic(const Duration(seconds: 1), (t) {
-        if (remainingSeconds <= 1) {
-          t.cancel();
+      startSilentTimer();
+    } else {
+      startAlarmSound();
+    }
+  }
 
-          if (mounted) {
-            SystemNavigator.pop();
-          }
+  Future<void> startAlarmSound() async {
+    await alarmPlayer.setReleaseMode(ReleaseMode.loop);
+    await alarmPlayer.setVolume(1.0);
+    await alarmPlayer.play(AssetSource('alarm.mp3'));
+  }
 
-          return;
+  void startSilentTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (remainingSeconds <= 1) {
+        t.cancel();
+
+        if (mounted) {
+          SystemNavigator.pop();
         }
 
-        if (!mounted) return;
+        return;
+      }
 
-        setState(() {
-          remainingSeconds--;
-        });
+      if (!mounted) return;
+
+      setState(() {
+        remainingSeconds--;
       });
-    }
+    });
   }
 
   @override
   void dispose() {
     timer?.cancel();
+    alarmPlayer.stop();
+    alarmPlayer.dispose();
     super.dispose();
   }
 
@@ -63,8 +80,16 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
   }
 
-  void openHome(BuildContext context) {
+  Future<void> stopAlarmSound() async {
+    await alarmPlayer.stop();
+    await localNotif.cancel(999999);
+  }
+
+  Future<void> openHome(BuildContext context) async {
     timer?.cancel();
+    await stopAlarmSound();
+
+    if (!context.mounted) return;
 
     Navigator.pushReplacement(
       context,
@@ -76,9 +101,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   Future<void> confirmStopAlarm(BuildContext context) async {
     if (widget.silentMode) {
-      timer?.cancel();
-      SystemNavigator.pop();
-      return;
+      startSilentTimer();
+    } else {
+      localNotif.cancel(999999);
+      startAlarmSound();
     }
 
     final ok = await showDialog<bool>(
@@ -107,6 +133,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     if (ok != true) return;
 
     timer?.cancel();
+    await stopAlarmSound();
+
     SystemNavigator.pop();
   }
 

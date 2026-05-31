@@ -6,7 +6,7 @@ import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import '../services/notification_service.dart';
 import '../services/auto_login_service.dart';
-
+import 'package:flutter/services.dart';
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatelessWidget {
@@ -27,7 +27,12 @@ class AlarmLaunchGate extends StatefulWidget {
 }
 
 class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
+  static const MethodChannel nativeAlarmChannel =
+  MethodChannel("safehome/native_alarm_permission");
+
   bool checked = false;
+  bool isAlarmScreenLaunch = false;
+
   String payload = "";
 
   @override
@@ -42,7 +47,19 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     final details = await localNotif.getNotificationAppLaunchDetails();
 
     payload = details?.notificationResponse?.payload ?? "";
+    if (payload == "open_home") {
+      try {
+        isAlarmScreenLaunch =
+            await nativeAlarmChannel.invokeMethod<bool>(
+              "isAlarmScreenLaunch",
+            ) ??
+                false;
 
+        if (isAlarmScreenLaunch) {
+          payload = "alarm";
+        }
+      } catch (_) {}
+    }
     if (!mounted) return;
 
     setState(() {
@@ -55,7 +72,9 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     if (!checked) {
       return const SafeHomeSplash();
     }
-
+    if (payload == "open_home") {
+      return AuthGate();
+    }
     if (payload == "alarm") {
       return const FullscreenAlarmPage(
         title: "Báo động SafeHome",
