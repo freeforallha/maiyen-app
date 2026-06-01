@@ -47,7 +47,11 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     final details = await localNotif.getNotificationAppLaunchDetails();
 
     payload = details?.notificationResponse?.payload ?? "";
-    if (payload == "open_home") {
+
+    if (payload.startsWith("alarm_summary|")) {
+      // giữ nguyên payload
+    }
+    else if (payload == "open_home") {
       try {
         isAlarmScreenLaunch =
             await nativeAlarmChannel.invokeMethod<bool>(
@@ -79,6 +83,26 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       return const FullscreenAlarmPage(
         title: "Báo động SafeHome",
         body: "Có cảnh báo an ninh cần kiểm tra ngay.",
+      );
+    }
+
+    if (payload.startsWith("alarm_summary|")) {
+      final parts = payload.split("|");
+
+      final body =
+      parts.length > 1
+          ? Uri.decodeComponent(parts[1])
+          : "Có cảnh báo cần kiểm tra";
+
+      final alarmItems =
+      parts.length > 2
+          ? Uri.decodeComponent(parts[2])
+          : "";
+
+      return FullscreenAlarmPage(
+        title: "🚨 SafeHome",
+        body: body,
+        alarmItemsJson: alarmItems,
       );
     }
 

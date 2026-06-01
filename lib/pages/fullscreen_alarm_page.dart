@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -6,17 +7,17 @@ import 'package:flutter/services.dart';
 
 import '../app/safe_home_app.dart';
 import '../services/notification_service.dart';
-
 class FullscreenAlarmPage extends StatefulWidget {
   final String title;
   final String body;
   final bool silentMode;
-
+  final String alarmItemsJson;
   const FullscreenAlarmPage({
     super.key,
     required this.title,
     required this.body,
     this.silentMode = false,
+    this.alarmItemsJson = "",
   });
 
   @override
@@ -115,7 +116,56 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     return parts;
   }
+  Map<String, List<String>> buildAlarmItems() {
+    try {
+      if (widget.alarmItemsJson.isEmpty) {
+        return {};
+      }
 
+      final List<dynamic> items = jsonDecode(widget.alarmItemsJson);
+
+      final Map<String, List<String>> result = {};
+
+      for (final item in items) {
+        final homeName = item["homeName"]?.toString() ?? "Nhà";
+        final reason = item["reason"]?.toString() ?? "";
+
+        result.putIfAbsent(homeName, () => []);
+
+        if (!result[homeName]!.contains(reason)) {
+          result[homeName]!.add(reason);
+        }
+      }
+
+      return result;
+    } catch (_) {
+      return {};
+    }
+  }
+  Map<String, String> buildNextAlarmMap() {
+    try {
+      if (widget.alarmItemsJson.isEmpty) {
+        return {};
+      }
+
+      final List<dynamic> items = jsonDecode(widget.alarmItemsJson);
+
+      final Map<String, String> result = {};
+
+      for (final item in items) {
+        final homeName = item["homeName"]?.toString() ?? "Nhà";
+        final nextAlarm = item["nextAlarm"]?.toString() ?? "";
+
+        if (nextAlarm.isNotEmpty) {
+          result[homeName] = nextAlarm;
+        }
+      }
+
+      return result;
+    } catch (_) {
+      return {};
+    }
+  }
   Future<void> stopAlarmSound() async {
     await alarmPlayer.stop();
     await localNotif.cancel(999999);
@@ -213,11 +263,19 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         ? "Nhà đã an toàn"
         : "Nhà chưa an toàn";
 
-    final String repeatText = !isReminder
-        ? "Nếu vấn đề chưa được xử lý, cảnh báo sẽ tiếp tục hiện lại theo chu kỳ đã cài: 15 / 30 / 60 phút."
-        : "Nếu vấn đề chưa được xử lý, nhắc nhở sẽ tiếp tục hiện lại theo lịch đã cài.";
-
+    final groupedItems = buildAlarmItems();
+    final nextAlarmMap = buildNextAlarmMap();
     final issueList = buildIssueList();
+
+    String repeatText;
+
+    if (!isReminder && nextAlarmMap.isNotEmpty) {
+      repeatText = "Nếu vấn đề không được xử lý, hệ thống sẽ tự động báo lại vào:\n\n${nextAlarmMap.entries.map((e) => "${e.key} → ${e.value}").join("\n")}";
+    } else {
+      repeatText = isReminder
+          ? "Nếu vấn đề chưa được xử lý, nhắc nhở sẽ tiếp tục hiện lại theo lịch đã cài."
+          : "Nếu vấn đề chưa được xử lý, cảnh báo sẽ tiếp tục hiện lại theo lịch đã cài.";
+    }
 
     return PopScope(
       canPop: false,
@@ -226,7 +284,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(22),
-            child: Column(
+            child: Column
               children: [
                 const Spacer(),
 
@@ -326,35 +384,54 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
                             const SizedBox(height: 12),
 
-                            ...issueList.map(
-                                  (item) => Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "• ",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        item,
+                            if (groupedItems.isNotEmpty)
+                              ...groupedItems.entries.map(
+                                    (entry) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 14),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        entry.key,
                                         style: const TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
-                                          height: 1.3,
-                                          fontWeight: FontWeight.w600,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w900,
                                         ),
                                       ),
+                                      const SizedBox(height: 6),
+
+                                      ...entry.value.map(
+                                            (reason) => Padding(
+                                          padding: const EdgeInsets.only(left: 12, bottom: 4),
+                                          child: Text(
+                                            "• $reason",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            else
+                              ...issueList.map(
+                                    (item) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ),

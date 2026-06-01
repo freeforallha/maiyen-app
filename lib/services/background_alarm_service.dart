@@ -82,6 +82,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           message.notification?.body?.toString() ??
           'Có cảnh báo an ninh cần kiểm tra ngay.';
 
+  final alarmItems = message.data['alarmItems']?.toString() ?? '';
+
+  final payload =
+      'alarm_summary|${Uri.encodeComponent(body)}|${Uri.encodeComponent(alarmItems)}';
+
   await localNotif.cancel(999999);
 
   await localNotif.show(
@@ -102,7 +107,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         enableVibration: true,
       ),
     ),
-    payload: 'open_home',
+    payload: payload,
   );
 }
 

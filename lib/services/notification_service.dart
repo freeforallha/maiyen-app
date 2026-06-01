@@ -31,6 +31,30 @@ class NotificationService {
       onDidReceiveNotificationResponse: (response) {
         final payload = response.payload ?? '';
 
+        if (payload.startsWith('alarm_summary|')) {
+          final parts = payload.split('|');
+
+          final body = parts.length > 1
+              ? Uri.decodeComponent(parts[1])
+              : 'Có cảnh báo cần kiểm tra';
+
+          final alarmItems = parts.length > 2
+              ? Uri.decodeComponent(parts[2])
+              : '';
+
+          appNavigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => FullscreenAlarmPage(
+                title: '🚨 SafeHome',
+                body: body,
+                alarmItemsJson: alarmItems,
+              ),
+            ),
+          );
+
+          return;
+        }
+
         if (payload == 'alarm' || payload == 'open_home') {
           return;
         }
