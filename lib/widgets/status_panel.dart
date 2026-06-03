@@ -6,6 +6,8 @@ class StatusPanel extends StatelessWidget {
   final VoidCallback? onQR;
   final String alarmStart;
   final String alarmEnd;
+  final String environmentText;
+  final VoidCallback? onEnvironmentTap;
 
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
@@ -20,6 +22,8 @@ class StatusPanel extends StatelessWidget {
     required this.onQR,
     required this.alarmStart,
     required this.alarmEnd,
+    required this.environmentText,
+    this.onEnvironmentTap,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
     this.onScheduleNotification,
@@ -100,19 +104,31 @@ class StatusPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final alarmText = alarmEnabled ? "Alarm đang bật" : "Alarm đã tắt";
+    final level = overall["level"]?.toString() ?? "safe";
+
+    final statusColor = level == "danger"
+        ? Colors.red
+        : level == "warning"
+        ? Colors.orange
+        : Colors.green;
+
+    final statusText = level == "danger"
+        ? "CHƯA AN TOÀN"
+        : level == "warning"
+        ? "CẦN CHÚ Ý"
+        : "ĐÃ AN TOÀN";
+
+    final statusIcon = level == "danger"
+        ? Icons.warning_rounded
+        : level == "warning"
+        ? Icons.info_rounded
+        : Icons.verified_rounded;
 
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.12),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(14),
-        ),
+        decoration: const BoxDecoration(),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,19 +142,47 @@ class StatusPanel extends StatelessWidget {
                       const Text("🏡", style: TextStyle(fontSize: 24)),
                       const SizedBox(width: 8),
                       Icon(
-                        overall["safe"] ? Icons.verified : Icons.warning,
-                        color: overall["safe"] ? Colors.green : Colors.red,
+                        statusIcon,
+                        color: statusColor,
                         size: 20,
                       ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          overall["safe"] ? "ĐÃ AN TOÀN" : "CHƯA AN TOÀN",
+                          statusText,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
-                            color: overall["safe"] ? Colors.green : Colors.red,
+                            color: statusColor,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: onEnvironmentTap,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                            left: 6,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.thermostat_rounded,
+                                color: Colors.blue,
+                                size: 15,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                environmentText,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

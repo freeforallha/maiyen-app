@@ -14,6 +14,7 @@ void showSettingsSheet({
   required VoidCallback onDeleteHome,
   required int inviteCount,
   required VoidCallback onTransferOwner,
+  required VoidCallback onAllDevices,
 }) {
   final user = FirebaseAuth.instance.currentUser;
 
@@ -230,6 +231,14 @@ void showSettingsSheet({
               color: Colors.purple,
               onTap: onTransferOwner,
             ),
+            const SizedBox(height: 8),
+            tile(
+              icon: Icons.sensors_rounded,
+              title: "Toàn bộ thiết bị SafeHome",
+              color: Colors.indigo,
+              onTap: onAllDevices,
+            ),
+
             const SizedBox(height: 8),
 
             tile(

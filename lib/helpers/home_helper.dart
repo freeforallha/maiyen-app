@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 Map<String, dynamic> safeMap(dynamic data) {
   if (data == null) return {};
@@ -15,37 +14,76 @@ Map<String, dynamic> safeMap(dynamic data) {
 }
 
 Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
-  final issues = <String>[];
+  final dangerIssues = <String>[];
+  final warningIssues = <String>[];
 
   devices.forEach((id, raw) {
     final d = safeMap(raw);
 
     final name = d["name"]?.toString() ?? id;
+    final type = d["type"]?.toString() ?? "door";
     final status = d["status"]?.toString();
     final tamper = d["tamper"] == true;
 
-    final problem = <String>[];
+    final battery = int.tryParse(d["battery"]?.toString() ?? "");
+    final linkquality = int.tryParse(d["linkquality"]?.toString() ?? "");
+    final lastSeen = int.tryParse(d["last_seen"]?.toString() ?? "");
 
-    if (status != "closed") {
-      problem.add("Mở");
+    final danger = <String>[];
+    final warning = <String>[];
+
+    if (type == "sos" && status == "triggered") {
+      danger.add("SOS");
+    } else if (type == "smoke" && (d["smoke"] == true || status == "alarm")) {
+      danger.add("Có khói");
+    } else if (type == "door" && status != "closed") {
+      danger.add("Mở");
     }
 
     if (tamper) {
-      problem.add("Bị tháo");
+      danger.add("Bị tháo");
     }
 
-    if (problem.isNotEmpty) {
-      issues.add("$name: ${problem.join(" & ")}");
+    if (battery != null && battery <= 20) {
+      warning.add("Pin yếu");
+    }
+
+    if (linkquality != null && linkquality > 0 && linkquality < 40) {
+      warning.add("Sóng yếu");
+    }
+
+    if (lastSeen != null && lastSeen > 0) {
+      final lastSeenTime = DateTime.fromMillisecondsSinceEpoch(lastSeen);
+      final offlineHours = DateTime.now().difference(lastSeenTime).inHours;
+
+      if (offlineHours >= 2) {
+        warning.add("Offline lâu");
+      }
+    }
+
+    if (danger.isNotEmpty) {
+      dangerIssues.add("$name: ${danger.join(" & ")}");
+    }
+
+    if (warning.isNotEmpty) {
+      warningIssues.add("$name: ${warning.join(" & ")}");
     }
   });
 
-  return {
-    "safe": issues.isEmpty,
-    "issues": issues,
-  };
-}
+  final level = dangerIssues.isNotEmpty
+      ? "danger"
+      : warningIssues.isNotEmpty
+      ? "warning"
+      : "safe";
 
-bool isUnsafe(Map<dynamic, dynamic> devices) {
+  return {
+    "safe": level == "safe",
+    "level": level,
+    "dangerIssues": dangerIssues,
+    "warningIssues": warningIssues,
+    "issues": [...dangerIssues, ...warningIssues],
+  };
+}bool isUnsafe(Map<dynamic, dynamic> devices) {
   return devices.values.any((raw) {
     final d = safeMap(raw);
 
@@ -54,12 +92,4 @@ bool isUnsafe(Map<dynamic, dynamic> devices) {
 
     return status != "closed" || tamper;
   });
-}
-
-Color getDeviceColor(Map<dynamic, dynamic> raw) {
-  final d = safeMap(raw);
-
-  return isUnsafe({"device": d})
-      ? Colors.red.shade200
-      : Colors.green.shade200;
 }

@@ -27,16 +27,8 @@ class DeviceList extends StatelessWidget {
     return Map<String, dynamic>.from(data as Map);
   }
 
-  bool isDeviceOnline(dynamic ts) {
-    if (ts == null) return false;
-
-    final value = int.tryParse(ts.toString());
-    if (value == null || value <= 0) return false;
-
-    final lastSeen = DateTime.fromMillisecondsSinceEpoch(value);
-    final now = DateTime.now();
-
-    return now.difference(lastSeen).inMinutes <= 120;
+  bool isDeviceOnline(Map<String, dynamic> d) {
+    return d["availability"] == "online";
   }
 
   String formatAgo(dynamic ts) {
@@ -65,152 +57,322 @@ class DeviceList extends StatelessWidget {
     return "${diff.inDays} ngày trước";
   }
 
+  bool isDeviceUnsafe(Map<String, dynamic> d) {
+    final type = d["type"]?.toString() ?? "door";
+
+    if (type == "smoke") {
+      return d["smoke"] == true || d["tamper"] == true;
+    }
+
+    if (type == "sos") {
+      return false;
+    }
+
+    if (type == "door" ||
+        type == "window" ||
+        type == "gate" ||
+        type == "lock") {
+      return d["contact"] == false || d["tamper"] == true;
+    }
+
+    return d["tamper"] == true;
+  }
+
+  String getDeviceGroup(String type) {
+    switch (type) {
+      case "door":
+      case "window":
+      case "gate":
+      case "lock":
+        return "An ninh ra/vào";
+
+      case "smoke":
+      case "gas":
+      case "flood":
+      case "sos":
+        return "Nguy hiểm khẩn cấp";
+
+      case "temperature":
+      case "humidity":
+      case "air_quality":
+      case "pm25":
+      case "co2":
+      case "repeater":
+      case "router":
+      case "hub":
+      case "coordinator":
+        return "__HIDDEN__";
+
+      default:
+        return "__HIDDEN__";
+    }
+  }
+
+  Widget buildDeviceIconBadge({
+    required String type,
+    required bool isUnsafe,
+    required bool compact,
+  }) {
+    if (type == "smoke") {
+      return Icon(
+        Icons.smoke_free_rounded,
+        size: compact ? 28 : 32,
+        color: Colors.deepOrange,
+      );
+    }
+
+    if (type == "sos") {
+      return Icon(
+        Icons.emergency_rounded,
+        size: compact ? 28 : 32,
+        color: Colors.red,
+      );
+    }
+
+    return Icon(
+      Icons.door_front_door_rounded,
+      size: compact ? 28 : 32,
+      color: isUnsafe ? Colors.brown.shade700 : Colors.brown.shade500,
+    );
+  }
+
   Widget _deviceCard({
     required BuildContext context,
     required String id,
     required Map<String, dynamic> d,
     required bool compact,
   }) {
-    final isUnsafe = d["status"] != "closed" || d["tamper"] == true;
-    final online = isDeviceOnline(d["last_seen"]);
+    final type = d["type"]?.toString() ?? "door";
+    final isUnsafe = isDeviceUnsafe(d);
+    final online = isDeviceOnline(d);
     final eventAgo = formatAgo(d["last_event"]);
 
     final titleSize = compact ? 14.0 : 16.0;
     final textSize = compact ? 12.0 : 13.0;
     final smallTextSize = compact ? 10.5 : 12.0;
-    final padding = compact ? 8.0 : 10.0;
+    final padding = compact ? 9.0 : 11.0;
+
+    final bgColor = isUnsafe ? Colors.red.shade100 : Colors.green.shade100;
+    final borderColor = isUnsafe ? Colors.red.shade300 : Colors.green.shade300;
+
+    if (type == "door" ||
+        type == "window" ||
+        type == "gate" ||
+        type == "lock") {
+      final isClosed = d["contact"] == true;
+      final tamper = d["tamper"] == true;
+
+      return Align(
+        alignment: Alignment.topLeft,
+        child: InkWell(
+          onTap: () => onTapDevice(id),
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: borderColor,
+                width: 1,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    buildDeviceIconBadge(
+                      type: type,
+                      isUnsafe: isUnsafe,
+                      compact: compact,
+                    ),
+                    const SizedBox(width: 7),
+                    Expanded(
+                      child: Text(
+                        d["name"]?.toString() ?? id,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: titleSize,
+                          fontWeight: FontWeight.w900,
+                          height: 1.05,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 9),
+
+                Row(
+                  children: [
+                    Icon(
+                      isClosed ? Icons.check_circle : Icons.cancel,
+                      size: compact ? 15 : 16,
+                      color: isClosed ? Colors.green : Colors.red,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      isClosed ? "Đóng" : "Mở",
+                      style: TextStyle(
+                        fontSize: textSize,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    Icon(
+                      tamper ? Icons.cancel : Icons.check_circle,
+                      size: compact ? 15 : 16,
+                      color: tamper ? Colors.red : Colors.green,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      tamper ? "Bị tháo" : "BT",
+                      style: TextStyle(
+                        fontSize: textSize,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 7),
+
+                Text(
+                  "${isClosed ? "Đóng" : "Mở"}: $eventAgo",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: smallTextSize,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: online ? Colors.green : Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      online ? "Online" : "Offline",
+                      style: TextStyle(
+                        fontSize: smallTextSize,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    String subtitle;
+
+    switch (type) {
+      case "smoke":
+        subtitle = d["smoke"] == true ? "Có khói" : "Bình thường";
+        break;
+
+      case "sos":
+        subtitle = online ? "Online" : "Offline";
+        break;
+
+      default:
+        subtitle = online ? "Online" : "Offline";
+    }
 
     return Align(
       alignment: Alignment.topLeft,
       child: InkWell(
         onTap: () => onTapDevice(id),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.all(padding),
+          padding: EdgeInsets.all(compact ? 10 : 12),
           decoration: BoxDecoration(
-            color: isUnsafe ? Colors.red.shade100 : Colors.green.shade100,
-            borderRadius: BorderRadius.circular(12),
+            color: bgColor,
+            borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isUnsafe ? Colors.red.shade300 : Colors.green.shade300,
+              color: borderColor,
               width: 1,
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Text(
-                d["name"]?.toString() ?? id,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: titleSize,
-                  fontWeight: FontWeight.bold,
-                  height: 1.05,
-                ),
+              buildDeviceIconBadge(
+                type: type,
+                isUnsafe: isUnsafe,
+                compact: compact,
               ),
-
-              const SizedBox(height: 8),
-
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    d["status"] == "closed"
-                        ? Icons.check_circle
-                        : Icons.cancel,
-                    size: compact ? 15 : 16,
-                    color: d["status"] == "closed" ? Colors.green : Colors.red,
-                  ),
-
-                  const SizedBox(width: 4),
-
-                  Text(
-                    d["status"] == "closed" ? "Đóng" : "Mở",
-                    style: TextStyle(fontSize: textSize),
-                  ),
-
-                  SizedBox(width: compact ? 10 : 14),
-
-                  Icon(
-                    d["tamper"] == true ? Icons.cancel : Icons.check_circle,
-                    size: compact ? 15 : 16,
-                    color: d["tamper"] == true ? Colors.red : Colors.green,
-                  ),
-
-                  const SizedBox(width: 4),
-
-                  Text(
-                    d["tamper"] == true ? "Bị tháo" : "BT",
-                    style: TextStyle(fontSize: textSize),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 6),
-
-              Row(
-                children: [
-                  Text(
-                    "Trạng thái:",
-                    style: TextStyle(
-                      fontSize: smallTextSize,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(width: 5),
-
-                  Container(
-                    width: 9,
-                    height: 9,
-                    decoration: BoxDecoration(
-                      color: online ? Colors.green : Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-
-                  const SizedBox(width: 5),
-
-                  Text(
-                    online ? "Online" : "Offline",
-                    style: TextStyle(
-                      fontSize: smallTextSize,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 5),
-
-              Row(
-                children: [
-                  Text(
-                    "Cập nhật:",
-                    style: TextStyle(
-                      fontSize: smallTextSize,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(width: 5),
-
-                  Expanded(
-                    child: Text(
-                      eventAgo,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      d["name"]?.toString() ?? id,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: smallTextSize,
-                        color: Colors.black54,
+                        fontSize: titleSize,
+                        fontWeight: FontWeight.w900,
+                        height: 1.05,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: textSize,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: online ? Colors.green : Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          online ? "Online" : "Offline",
+                          style: TextStyle(
+                            fontSize: smallTextSize,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -222,67 +384,93 @@ class DeviceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(6),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.15),
-              width: 1,
+      padding: const EdgeInsets.all(6),
+      child: Column(
+        children: [
+          if (header != null) header!,
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final compact = constraints.maxWidth < 390;
+                final spacing = compact ? 10.0 : 16.0;
+                final itemWidth = (constraints.maxWidth - spacing - 16) / 2;
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(8),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final groupName in [
+                          "An ninh ra/vào",
+                          "Nguy hiểm khẩn cấp",
+                        ]) ...[
+                          Builder(
+                            builder: (_) {
+                              final groupEntries = devices.entries.where((entry) {
+                                final d = safeMap(entry.value);
+                                final type = d["type"]?.toString() ?? "door";
+                                return getDeviceGroup(type) == groupName;
+                              }).toList();
+
+                              if (groupEntries.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 2,
+                                      top: 10,
+                                      bottom: 8,
+                                    ),
+                                    child: Text(
+                                      groupName,
+                                      style: TextStyle(
+                                        fontSize: compact ? 13 : 14,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                  Wrap(
+                                    spacing: spacing,
+                                    runSpacing: 10,
+                                    alignment: WrapAlignment.start,
+                                    crossAxisAlignment:
+                                    WrapCrossAlignment.start,
+                                    children: groupEntries.map((entry) {
+                                      final d = safeMap(entry.value);
+
+                                      return SizedBox(
+                                        width: itemWidth,
+                                        child: _deviceCard(
+                                          context: context,
+                                          id: entry.key,
+                                          d: d,
+                                          compact: compact,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  const SizedBox(height: 8),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
           ),
-          child: Column(
-            children: [
-              if (header != null) header!,
-
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final compact = constraints.maxWidth < 390;
-                    final spacing = compact ? 10.0 : 16.0;
-                    final itemWidth =
-                        (constraints.maxWidth - spacing - 16) / 2;
-
-                    return SingleChildScrollView(
-                      padding: const EdgeInsets.all(8),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Wrap(
-                          spacing: spacing,
-                          runSpacing: 10,
-                          alignment: WrapAlignment.start,
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          children: devices.entries.map((entry) {
-                            final d = safeMap(entry.value);
-
-                            return SizedBox(
-                              width: itemWidth,
-                              child: _deviceCard(
-                                context: context,
-                                id: entry.key,
-                                d: d,
-                                compact: compact,
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-
+        ],
+      ),
     );
   }
 }

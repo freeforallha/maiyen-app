@@ -28,6 +28,7 @@ import '../sheets/share_request_sheet.dart';
 import 'edit_profile_page.dart';
 import '../sheets/home_chat_sheet.dart';
 import '../sheets/schedule_sheet.dart';
+import '../sheets/all_devices_sheet.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -53,145 +54,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  PreferredSizeWidget buildSafeHomeAppBar() {
-    final user = FirebaseAuth.instance.currentUser;
-    final photoUrl = userPhotoUrl.isNotEmpty ? userPhotoUrl : user?.photoURL;
-    final devices = getDevices();
 
-    // ===== SMART SAFE LOGIC =====
-    final isSafe = !devices.values.any(
-          (d) => d["status"] != "closed" || d["tamper"] == true,
-    );
-
-    return AppBar(
-      centerTitle: true,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.grid_view_rounded,
-          color: Colors.black,
-          size: 26,
-        ),
-        onPressed: () async {
-          final selected = await Navigator.push<String>(
-            context,
-            MaterialPageRoute(
-              builder: (_) => AllHomePage(homeOrder: homeOrder),
-            ),
-          );
-
-          if (selected != null) {
-            setState(() {
-              selectedHome = selected;
-            });
-
-            final index = homeOrder.indexOf(selected);
-            if (index != -1) {
-              homeTabController.animateTo(
-                index * 110,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
-            }
-          }
-        },
-      ),
-
-      // ===== TITLE SAFEHOME =====
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.5,
-              ),
-              children: [
-                TextSpan(
-                  text: "Safe",
-                  style: TextStyle(
-                    color: isSafe ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const TextSpan(
-                  text: "Home",
-                  style: TextStyle(color: Colors.black),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-
-      // ===== AVATAR =====
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: GestureDetector(
-            onTap: () => AccountAvatarSheet.show(
-              context: context,
-              logout: logout,
-
-              onEditProfile: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EditProfilePage(
-                      userName: userName,
-                      userGender: userGender,
-                      userDob: userDob,
-                      userPhone: userPhone,
-                    )
-                  ),
-                );
-              },
-
-              userName: userName,
-              userGender: userGender,
-              userDob: userDob,
-              userPhone: userPhone,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: Colors.grey.shade300,
-                  backgroundImage: (photoUrl != null)
-                      ? NetworkImage(photoUrl)
-                      : null,
-                  child: (photoUrl == null)
-                      ? const Icon(Icons.person,
-                      size: 18, color: Colors.black54)
-                      : null,
-                ),
-
-                const SizedBox(height: 2),
-
-                SizedBox(
-                  width: 50,
-                  child: Text(
-                    userName.isNotEmpty ? userName : "User",
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      height: 1.0,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
   late String uid;
   late DatabaseReference ref;
@@ -298,7 +161,41 @@ class _HomePageState extends State<HomePage> {
     final homeData = safeMap(homes[selectedHome]);
     return safeMap(homeData["devices"]);
   }
+  Map<String, dynamic>? getTemperatureDevice() {
+    final devices = getDevices();
 
+    for (final entry in devices.entries) {
+      final d = safeMap(entry.value);
+
+      if (d["type"] == "temperature") {
+        return {
+          "id": entry.key,
+          "data": d,
+        };
+      }
+    }
+
+    return null;
+  }
+  String getHomeEnvironmentText() {
+    final devices = getDevices();
+
+    for (final item in devices.values) {
+      final d = safeMap(item);
+
+      if (d["type"] == "temperature") {
+        final temp = d["temperature"];
+        final humidity = d["humidity"];
+
+        final tempText = temp != null ? "$temp°C" : "--";
+        final humidityText = humidity != null ? "$humidity%" : "--";
+
+        return "$tempText / $humidityText";
+      }
+    }
+
+    return "--°C / --%";
+  }
   @override
   void initState() {
     super.initState();
@@ -965,144 +862,195 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final devices = getDevices();
     return Scaffold(
-      appBar: buildSafeHomeAppBar(),
-      body: Column(
-        children: [
-          HomeTabs(
-            unreadChatByHome: unreadChatByHome,
-            controller: homeTabController,
-            homes: homes,
-            homeOrder: homeOrder,
-            selectedHome: selectedHome,
-
-            onSelect: (h) {
-              if (h == selectedHome) return;
-
-              final currentHome = safeMap(homes[h]);
-              final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-              setState(() {
-                selectedHome = h;
-                alarmEnabled = safeMap(alarmSettings[h])["enabled"] != false;
-                start = parsedAlarm["start"];
-                end = parsedAlarm["end"];
-              });
-            },
-
-
-            onReorder: (oldIndex, newIndex) async {
-              setState(() {
-                if (newIndex > oldIndex) newIndex--;
-
-                final item = homeOrder.removeAt(oldIndex);
-
-                homeOrder.insert(newIndex, item);
-              });
-
-              await FirebaseDatabase.instance
-                  .ref(FirebasePaths.homeOrder(uid))
-                  .set(homeOrder);
-            },
-
-            getHomeColor: getHomeColor,
-
-
-          ),
-
-          Expanded(
-            child: DeviceList(
-              devices: devices,
-
-              header: Column(
-                children: [
-                  StatusPanel(
-                    overall: getOverallStatus(devices),
-                    alarmEnabled: alarmEnabled,
-                    onAlarmEnabledChanged: setAlarmEnabled,
-                    onPair: null,
-                    onQR: null,
-                    onScheduleNotification: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) {
-                          return ScheduleSheet(
-                            ownerUid: getHomeOwnerUid(),
-                            homeId: selectedHome,
-                            isShared: homes[selectedHome]?["_shared"] == true,
-                            type: "notification",
-                          );
-                        },
-                      );
-                    },
-
-                    onScheduleAlarm: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (_) {
-                          return ScheduleSheet(
-                            ownerUid: getHomeOwnerUid(),
-                            homeId: selectedHome,
-                            isShared: homes[selectedHome]?["_shared"] == true,
-                            type: "alarm",
-                          );
-                        },
-                      );
-                    },
-                    alarmStart: formatAlarmSchedules(),
-                    alarmEnd: "",
-                  ),
-
-                  if (pairingCountdown > 0)
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Text("Pairing: $pairingCountdown s"),
-                    ),
-                ],
-              ),
-
-              isShared: homes[selectedHome]?["_shared"] == true,
-
-              ownerEmail:
-              homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
-
-              onRename: canManageHome()
-                  ? renameDevice
-                  : (_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Bạn không có quyền sửa thiết bị"),
-                  ),
-                );
-              },
-
-              onDelete: canManageHome()
-                  ? deleteDevice
-                  : (_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Bạn không có quyền xoá thiết bị"),
-                  ),
-                );
-              },
-
-              onTapDevice: (id) {
-                showDeviceDetail(
-                  context: context,
-                  id: id,
-                  d: safeMap(getDevices()[id]),
-                  onRename: () => renameDevice(id),
-                  onDelete: () => deleteDevice(id),
-                  onNotification: () => openNotificationList(id),
-                );
-              },
+        backgroundColor: const Color(0xFFF4F7FB),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFFDDF7E8),
+                Color(0xFFF1FCF5),
+                Color(0xFFFFFFFF),
+              ],
             ),
           ),
-        ],
-      ),
+          child: SafeArea(
+            child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.grid_view_rounded),
+                  onPressed: () async {
+                    final selected = await Navigator.push<String>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AllHomePage(homeOrder: homeOrder),
+                      ),
+                    );
+
+                    if (selected != null) {
+                      setState(() {
+                        selectedHome = selected;
+                      });
+
+                      final index = homeOrder.indexOf(selected);
+
+                      if (index != -1) {
+                        homeTabController.animateTo(
+                          index * 110,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      }
+                    }
+                  },
+                ),
+
+                Expanded(
+                  child: HomeTabs(
+                    unreadChatByHome: unreadChatByHome,
+                    controller: homeTabController,
+                    homes: homes,
+                    homeOrder: homeOrder,
+                    selectedHome: selectedHome,
+                    onSelect: (h) {
+                      if (h == selectedHome) return;
+
+                      final currentHome = safeMap(homes[h]);
+                      final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+
+                      setState(() {
+                        selectedHome = h;
+                        alarmEnabled = safeMap(alarmSettings[h])["enabled"] != false;
+                        start = parsedAlarm["start"];
+                        end = parsedAlarm["end"];
+                      });
+                    },
+                    onReorder: (oldIndex, newIndex) async {
+                      setState(() {
+                        if (newIndex > oldIndex) newIndex--;
+
+                        final item = homeOrder.removeAt(oldIndex);
+                        homeOrder.insert(newIndex, item);
+                      });
+
+                      await FirebaseDatabase.instance
+                          .ref(FirebasePaths.homeOrder(uid))
+                          .set(homeOrder);
+                    },
+                    getHomeColor: getHomeColor,
+                  ),
+                ),
+              ],
+            ),
+
+
+            Expanded(
+              child: DeviceList(
+                devices: devices,
+                header: Column(
+                  children: [
+
+                    StatusPanel(
+                      environmentText: getHomeEnvironmentText(),
+                      onEnvironmentTap: () {
+                        final tempDevice = getTemperatureDevice();
+
+                        if (tempDevice == null) return;
+
+                        showDeviceDetail(
+                          context: context,
+                          id: tempDevice["id"],
+                          d: tempDevice["data"],
+                          onRename: () => renameDevice(tempDevice["id"]),
+                          onDelete: () => deleteDevice(tempDevice["id"]),
+                          onNotification: () => openNotificationList(tempDevice["id"]),
+                        );
+                      },
+                      overall: getOverallStatus(devices),
+                      alarmEnabled: alarmEnabled,
+                      onAlarmEnabledChanged: setAlarmEnabled,
+                      onPair: null,
+                      onQR: null,
+                      onScheduleNotification: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return ScheduleSheet(
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                              isShared: homes[selectedHome]?["_shared"] == true,
+                              type: "notification",
+                            );
+                          },
+                        );
+                      },
+                      onScheduleAlarm: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return ScheduleSheet(
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                              isShared: homes[selectedHome]?["_shared"] == true,
+                              type: "alarm",
+                            );
+                          },
+                        );
+                      },
+                      alarmStart: formatAlarmSchedules(),
+                      alarmEnd: "",
+
+                    ),
+
+                    if (pairingCountdown > 0)
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8),
+                        child: Text("Pairing: $pairingCountdown s"),
+                      ),
+                  ],
+                ),
+                isShared: homes[selectedHome]?["_shared"] == true,
+                ownerEmail: homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+                onRename: canManageHome()
+                    ? renameDevice
+                    : (_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Bạn không có quyền sửa thiết bị"),
+                    ),
+                  );
+                },
+                onDelete: canManageHome()
+                    ? deleteDevice
+                    : (_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Bạn không có quyền xoá thiết bị"),
+                    ),
+                  );
+                },
+                onTapDevice: (id) {
+                  showDeviceDetail(
+                    context: context,
+                    id: id,
+                    d: safeMap(getDevices()[id]),
+                    onRename: () => renameDevice(id),
+                    onDelete: () => deleteDevice(id),
+                    onNotification: () => openNotificationList(id),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),),
 
       bottomNavigationBar: SafeArea(
         child: Container(
@@ -1113,6 +1061,31 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
             children: [
+              IconButton(
+                icon: const Icon(Icons.person_rounded),
+                onPressed: () => AccountAvatarSheet.show(
+                  context: context,
+                  logout: logout,
+                  onEditProfile: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditProfilePage(
+                          userName: userName,
+                          userGender: userGender,
+                          userDob: userDob,
+                          userPhone: userPhone,
+                        ),
+                      ),
+                    );
+                  },
+                  userName: userName,
+                  userGender: userGender,
+                  userDob: userDob,
+                  userPhone: userPhone,
+                ),
+              ),
+
               IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
               Stack(
                 children: [
@@ -1261,12 +1234,18 @@ class _HomePageState extends State<HomePage> {
 
                     onPressed: () {
                       showSettingsSheet(
+
                         homeId: selectedHome,
                         homeName:
                         homes[selectedHome]?["name"]?.toString() ?? selectedHome,
                         homeAddress:
                         homes[selectedHome]?["address"]?.toString() ?? "",
-
+                        onAllDevices: () {
+                          showAllDevicesSheet(
+                            context: context,
+                            devices: getDevices(),
+                          );
+                        },
                         onTransferOwner: isOwner() ? transferOwner : () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Chỉ chủ nhà mới được chuyển quyền")),

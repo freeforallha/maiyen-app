@@ -284,7 +284,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(22),
-            child: Column
+            child: Column(
               children: [
                 const Spacer(),
 

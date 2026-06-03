@@ -23,8 +23,6 @@ class HomeTabs extends StatelessWidget {
     required this.unreadChatByHome,
   });
 
-  static const double itemWidth = 82;
-
   @override
   Widget build(BuildContext context) {
     final seen = <String>{};
@@ -35,132 +33,145 @@ class HomeTabs extends StatelessWidget {
         .toList();
 
     return SizedBox(
-      height: 72,
-      child: ReorderableListView.builder(
-        scrollDirection: Axis.horizontal,
-        buildDefaultDragHandles: false,
-        scrollController: controller,
-        itemCount: visibleHomes.length,
-        onReorderItem: onReorder,
-        proxyDecorator: (child, index, animation) {
-          return Material(
-            color: Colors.transparent,
-            child: child,
-          );
+      height: 62,
+      child: ShaderMask(
+        shaderCallback: (rect) {
+          return const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.transparent,
+              Colors.white,
+              Colors.white,
+              Colors.transparent,
+            ],
+            stops: [0.0, 0.04, 0.86, 1.0],
+          ).createShader(rect);
         },
-        itemBuilder: (context, index) {
-          final h = visibleHomes[index];
-          final isSelected = h == selectedHome;
-          final home = Map<String, dynamic>.from(homes[h] ?? {});
+        blendMode: BlendMode.dstIn,
+        child: ReorderableListView.builder(
+          padding: const EdgeInsets.only(left: 6, right: 80, top: 8, bottom: 8),
+          scrollDirection: Axis.horizontal,
+          buildDefaultDragHandles: false,
+          scrollController: controller,
+          itemCount: visibleHomes.length,
+          onReorderItem: onReorder,
+          proxyDecorator: (child, index, animation) {
+            return Material(
+              color: Colors.transparent,
+              child: child,
+            );
+          },
+          itemBuilder: (context, index) {
+            final h = visibleHomes[index];
+            final isSelected = h == selectedHome;
+            final home = Map<String, dynamic>.from(homes[h] ?? {});
+            final unread = unreadChatByHome[h] ?? 0;
 
-          return RepaintBoundary(
-            key: ValueKey("home_tab_$h"),
-            child: ReorderableDelayedDragStartListener(
-              index: index,
-              child: Container(
-                width: itemWidth,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
+            final baseColor = getHomeColor(h);
+
+            return RepaintBoundary(
+              key: ValueKey("home_tab_$h"),
+              child: ReorderableDelayedDragStartListener(
+                index: index,
                 child: GestureDetector(
                   onTap: () => onSelect(h),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Opacity(
-                        opacity: isSelected ? 1.0 : 0.45,
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: itemWidth,
-                              height: 66,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: getHomeColor(h),
-                                borderRadius: BorderRadius.circular(16),
-                                border: isSelected
-                                    ? Border.all(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    curve: Curves.easeOut,
+                    width: isSelected ? 158 : 138,
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? baseColor
+                          : baseColor.withValues(alpha: 0.38),
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(
+                        color: isSelected
+                            ? Colors.white.withValues(alpha: 0.75)
+                            : Colors.white.withValues(alpha: 0.45),
+                        width: 1.1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: baseColor.withValues(
+                            alpha: isSelected ? 0.28 : 0.10,
+                          ),
+                          blurRadius: isSelected ? 16 : 8,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Center(
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.22),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  home["_shared"] == true
+                                      ? Icons.people_alt_rounded
+                                      : Icons.home_rounded,
+                                  size: 17,
                                   color: Colors.white,
-                                  width: 2,
-                                )
-                                    : null,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 3),
-                                  ),
-                                ],
+                                ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    home["_customName"] ?? home["name"] ?? h,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.05,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  if (home["_shared"] == true)
-                                    const Icon(
-                                      Icons.people,
-                                      size: 11,
-                                      color: Colors.white70,
-                                    ),
-                                ],
-                              ),
-                            ),
 
-                            if ((unreadChatByHome[h] ?? 0) > 0)
-                              Positioned(
-                                right: 4,
-                                bottom: 4,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Text(
-                                    unreadChatByHome[h]! > 99
-                                        ? "99+"
-                                        : unreadChatByHome[h].toString(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              const SizedBox(width: 9),
+
+                              Expanded(
+                                child: Text(
+                                  home["_customName"] ?? home["name"] ?? h,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: isSelected ? 14 : 13,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.0,
                                   ),
                                 ),
                               ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
-                      Container(
-                        margin: const EdgeInsets.only(top: 3),
-                        height: 2,
-                        width: isSelected ? itemWidth * 0.5 : 0,
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ],
+                        if (unread > 0)
+                          Positioned(
+                            right: -4,
+                            top: -5,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                unread > 99 ? "99+" : unread.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
