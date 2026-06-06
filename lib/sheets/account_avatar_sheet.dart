@@ -219,6 +219,8 @@ class AccountAvatarSheet {
     required String userGender,
     required String userDob,
     required String userPhone,
+    required int inviteCount,
+    required VoidCallback onShareRequests,
   }) {
     final user = FirebaseAuth.instance.currentUser;
 
@@ -410,7 +412,56 @@ class AccountAvatarSheet {
                           ],
                         ),
                       ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: ListTile(
+                          leading: Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.mail_rounded, color: Colors.orange),
+                          ),
+                          title: Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  "Lời mời gia nhập",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              if (inviteCount > 0)
+                                Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    "$inviteCount",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            Navigator.pop(ctx);
+                            onShareRequests();
+                          },
+                        ),
+                      ),
 
+                      const SizedBox(height: 10),
                       const SizedBox(height: 10),
                       Container(
                         margin: const EdgeInsets.only(top: 10),

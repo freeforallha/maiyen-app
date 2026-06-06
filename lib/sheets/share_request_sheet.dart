@@ -18,19 +18,43 @@ void showShareRequestSheet({
       return StatefulBuilder(
         builder: (context, setSheetState) {
           Future<void> acceptRequest({
-            required String homeId,
-            required String ownerUid,
+            required String requestKey,
+            required Map<String, dynamic> data,
           }) async {
+            final homeId = data["homeId"]?.toString() ?? "";
+            final targetUid = data["targetUid"]?.toString() ?? "";
+            final targetEmail = data["targetEmail"]?.toString() ?? "";
+            final targetName = data["targetName"]?.toString() ?? "";
+
+            if (homeId.isEmpty || targetUid.isEmpty) return;
+
             await FirebaseDatabase.instance
-                .ref(FirebasePaths.sharedHome(uid, homeId))                .set({
-              "ownerUid": ownerUid,
+                .ref(FirebasePaths.sharedHome(targetUid, homeId))
+                .set({
+              "ownerUid": uid,
+              "role": "member",
             });
 
             await FirebaseDatabase.instance
-                .ref(FirebasePaths.sharedMember(homeId, uid))                .set(true);
+                .ref(FirebasePaths.sharedMember(homeId, targetUid))
+                .set({
+              "role": "member",
+              "email": targetEmail,
+              "name": targetName,
+              "sharedAt": DateTime.now().millisecondsSinceEpoch,
+            });
 
             await FirebaseDatabase.instance
-                .ref(FirebasePaths.shareRequest(uid, homeId))                .remove();
+                .ref("${FirebasePaths.shareList(uid, homeId)}/$targetUid")
+                .set({
+              "email": targetEmail,
+              "name": targetName,
+              "sharedAt": DateTime.now().millisecondsSinceEpoch,
+            });
+
+            await FirebaseDatabase.instance
+                .ref("accounts/$uid/shareRequests/$requestKey")
+                .remove();
           }
 
           Future<void> acceptSelected() async {
@@ -40,13 +64,11 @@ void showShareRequestSheet({
               if (raw == null) continue;
 
               final data = Map<String, dynamic>.from(raw);
-              final ownerUid = data["ownerUid"]?.toString() ?? "";
 
-              if (ownerUid.isEmpty) continue;
 
               await acceptRequest(
-                homeId: homeId,
-                ownerUid: ownerUid,
+                requestKey: homeId,
+                data: data,
               );
             }
 
@@ -208,10 +230,11 @@ void showShareRequestSheet({
                               list[i].value,
                             );
 
-                            final ownerUid =
-                                data["ownerUid"]?.toString() ?? "";
                             final email =
-                                data["ownerEmail"]?.toString() ?? "Unknown";
+                                data["targetEmail"]?.toString() ?? "Unknown";
+
+                            final name =
+                                data["targetName"]?.toString() ?? "";
                             final isSelected = selected.contains(homeId);
 
                             return Card(
@@ -241,12 +264,12 @@ void showShareRequestSheet({
                                   },
                                 ),
                                 title: Text(
-                                  email,
+                                  name.isEmpty ? email : name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 subtitle: Text(
-                                  homeId,
+                                  email,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -273,12 +296,10 @@ void showShareRequestSheet({
                                         Icons.check,
                                         color: Colors.green,
                                       ),
-                                      onPressed: ownerUid.isEmpty
-                                          ? null
-                                          : () async {
+                                      onPressed: () async {
                                         await acceptRequest(
-                                          homeId: homeId,
-                                          ownerUid: ownerUid,
+                                          requestKey: homeId,
+                                          data: data,
                                         );
 
                                         Navigator.pop(context);

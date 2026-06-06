@@ -125,10 +125,17 @@ class StatusPanel extends StatelessWidget {
         : Icons.verified_rounded;
 
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         padding: const EdgeInsets.all(12),
-        decoration: const BoxDecoration(),
+       decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.white,
+          width: 1.2,
+        ),
+      ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

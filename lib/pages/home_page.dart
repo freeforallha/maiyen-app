@@ -29,7 +29,8 @@ import 'edit_profile_page.dart';
 import '../sheets/home_chat_sheet.dart';
 import '../sheets/schedule_sheet.dart';
 import '../sheets/all_devices_sheet.dart';
-
+import '../sheets/home_event_sheet.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -344,7 +345,56 @@ class _HomePageState extends State<HomePage> {
       }
     });
   }
+  Future<void> handleScannedQR(String code) async {
+    final value = code.trim();
 
+    if (value.startsWith("safehome_join|")) {
+      final parts = value.split("|");
+
+      if (parts.length != 3) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("QR gia nhập không hợp lệ")),
+        );
+        return;
+      }
+
+      final ownerUid = parts[1];
+      final homeId = parts[2];
+
+      if (ownerUid == uid) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Bạn đang là chủ nhà này")),
+        );
+        return;
+      }
+
+      final myEmail = FirebaseAuth.instance.currentUser?.email
+          ?.trim()
+          .toLowerCase();
+
+      final targetData = await ShareService.loadAccount(uid);
+
+      await FirebaseDatabase.instance
+          .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
+          .set({
+        "homeId": homeId,
+        "targetUid": uid,
+        "targetEmail": myEmail ?? "",
+        "targetName": targetData["name"] ?? "",
+        "targetPhone": targetData["phone"] ?? "",
+        "type": "join_request",
+        "time": DateTime.now().millisecondsSinceEpoch,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Đã gửi yêu cầu gia nhập nhà")),
+      );
+
+      return;
+    }
+
+    pairSensor(value);
+  }
   void pairSensor(String hubId) {
     // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
@@ -490,54 +540,113 @@ class _HomePageState extends State<HomePage> {
   }
   void shareHome() async {
     final controller = TextEditingController();
-    final targetEmail = await showDialog<String>(
+    final qrData = "safehome_join|$uid|$selectedHome";
+
+    final targetEmail = await showModalBottomSheet<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Share Home"),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(hintText: "Email người nhận"),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Chia sẻ nhà",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    labelText: "Email người nhận",
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                const Text(
+                  "Hoặc quét QR để xin gia nhập nhà",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+
+                const SizedBox(height: 12),
+
+                QrImageView(
+                  data: qrData,
+                  version: QrVersions.auto,
+                  size: 180,
+                ),
+
+                const SizedBox(height: 18),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(
+                        context,
+                        controller.text.trim().toLowerCase(),
+                      );
+                    },
+                    child: const Text("Gửi lời mời"),
+                  ),
+                ),
+              ],
+            ),
           ),
-          ElevatedButton(
-            onPressed: () =>
-                Navigator.pop(context, controller.text.trim().toLowerCase()),
-            child: Text("Share"),
-          ),
-        ],
-      ),
+        );
+      },
     );
+
     if (targetEmail == null || targetEmail.isEmpty) return;
-    // không share cho chính mình
+
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
         .toLowerCase();
+
     if (targetEmail == myEmail) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Không thể share cho chính bạn")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Không thể share cho chính bạn")),
+      );
       return;
     }
-    // tìm uid theo email
-    final targetUid = await ShareService.findUidByEmail(
-      targetEmail,
-    );
+
+    final targetUid = await ShareService.findUidByEmail(targetEmail);
+
     if (targetUid == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Email chưa đăng ký"),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
-    final targetData = await ShareService.loadAccount(
-      targetUid,
-    );
+
+    final targetData = await ShareService.loadAccount(targetUid);
 
     await ShareService.sendShareRequest(
       ownerUid: uid,
@@ -548,11 +657,9 @@ class _HomePageState extends State<HomePage> {
       targetEmail: targetEmail,
     );
 
-    // ================= GLOBAL SHARED INDEX =================
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Đã share home")));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Đã share home")),
+    );
   }
   void transferOwner() async {
     final controller = TextEditingController();
@@ -697,15 +804,35 @@ class _HomePageState extends State<HomePage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Tên nhà",
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: addressController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Địa chỉ",
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           ],
@@ -862,7 +989,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final devices = getDevices();
     return Scaffold(
-        backgroundColor: const Color(0xFFF4F7FB),
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -931,9 +1059,12 @@ class _HomePageState extends State<HomePage> {
                       },
                       onReorder: (oldIndex, newIndex) async {
                         setState(() {
-                          if (newIndex > oldIndex) newIndex--;
-
                           final item = homeOrder.removeAt(oldIndex);
+
+                          if (newIndex > homeOrder.length) {
+                            newIndex = homeOrder.length;
+                          }
+
                           homeOrder.insert(newIndex, item);
                         });
 
@@ -1020,39 +1151,94 @@ class _HomePageState extends State<HomePage> {
                       homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
                       onRename: canManageHome() ? renameDevice : (_) {},
                       onDelete: canManageHome() ? deleteDevice : (_) {},
+                      onPairSensor: () async {
+                        if (!canManageHome()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Bạn không có quyền pair thiết bị"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        final result = await showModalBottomSheet<String>(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (_) {
+                            return SafeArea(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Quét QR",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton.icon(
+                                        icon: const Icon(Icons.qr_code_scanner),
+                                        label: const Text(
+                                          "Quét QR để thêm thiết bị hoặc xin gia nhập",
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context, "__SCAN__");
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextButton.icon(
+                                      icon: const Icon(Icons.keyboard),
+                                      label: const Text("Nhập HUB ID thủ công"),
+                                      onPressed: () {
+                                        Navigator.pop(context, "__MANUAL__");
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+                        if (result == "__SCAN__") {
+                          final code = await openQRScanner(context);
+
+                          if (code != null) {
+                            await handleScannedQR(code);
+                          }
+                        }
+
+                        if (result == "__MANUAL__") {
+                          final hubId = await showPairDialog(context);
+
+                          if (hubId == null || hubId.trim().isEmpty) return;
+
+                          pairSensor(hubId.trim());
+                        }
+                      },
                       onTapDevice: (id) {
                         showDeviceDetail(
                           context: context,
                           id: id,
                           d: safeMap(getDevices()[id]),
-                          onRename: () => renameDevice(id),
-                          onDelete: () => deleteDevice(id),
+                          onRename: canManageHome()
+                              ? () => renameDevice(id)
+                              : null,
+                          onDelete: canManageHome()
+                              ? () => deleteDevice(id)
+                              : null,
                           onNotification: () => openNotificationList(id),
                         );
                       },
                     ),
 
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      height: 95,
-                      child: IgnorePointer(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white.withValues(alpha: 0),
-                                Colors.white.withValues(alpha: 0.88),
-                                Colors.white,
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+
                   ],
                 ),
               ),
@@ -1063,18 +1249,7 @@ class _HomePageState extends State<HomePage> {
 
 
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFFFFFFFF).withValues(alpha: 0),
-              const Color(0xFFFFFFFF).withValues(alpha: 0.92),
-              const Color(0xFFFFFFFF),
-            ],
-            stops: const [0.0, 0.35, 1.0],
-          ),
-        ),
+        color: Colors.transparent,
         padding: const EdgeInsets.only(top: 22),
         child: SafeArea(
           top: false,
@@ -1083,36 +1258,21 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.person_rounded),
-                  onPressed: () => AccountAvatarSheet.show(
-                    context: context,
-                    logout: logout,
-                    onEditProfile: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => EditProfilePage(
-                            userName: userName,
-                            userGender: userGender,
-                            userDob: userDob,
-                            userPhone: userPhone,
-                          ),
-                        ),
-                      );
-                    },
-                    userName: userName,
-                    userGender: userGender,
-                    userDob: userDob,
-                    userPhone: userPhone,
-                  ),
-                ),
+
 
                 IconButton(
                   icon: const Icon(Icons.add_home),
                   onPressed: addHome,
                 ),
-
+                IconButton(
+                  icon: const Icon(Icons.notifications_rounded),
+                  onPressed: () {
+                    showHomeEventSheet(
+                      context: context,
+                      uid: uid,
+                    );
+                  },
+                ),
                 Stack(
                   children: [
                     IconButton(
@@ -1154,90 +1314,6 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
 
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 12,
-                        color: Colors.blueAccent.withValues(alpha: 0.35),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
-                    onPressed: () async {
-                      if (!canManageHome()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Bạn không có quyền pair thiết bị"),
-                          ),
-                        );
-                        return;
-                      }
-
-                      final result = await showModalBottomSheet<String>(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (_) {
-                          return SafeArea(
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Text(
-                                    "Pair Sensor",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ElevatedButton.icon(
-                                      icon: const Icon(Icons.qr_code_scanner),
-                                      label: const Text("Scan QR Code"),
-                                      onPressed: () async {
-                                        Navigator.pop(context, "__SCAN__");
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextButton.icon(
-                                    icon: const Icon(Icons.keyboard),
-                                    label: const Text("Nhập HUB ID thủ công"),
-                                    onPressed: () async {
-                                      Navigator.pop(context, "__MANUAL__");
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-
-                      if (result == "__SCAN__") {
-                        final code = await openQRScanner(context);
-
-                        if (code != null) {
-                          pairSensor(code);
-                        }
-                      }
-
-                      if (result == "__MANUAL__") {
-                        final hubId = await showPairDialog(context);
-
-                        if (hubId == null || hubId.trim().isEmpty) return;
-
-                        pairSensor(hubId.trim());
-                      }
-                    },
-                  ),
-                ),
 
                 Stack(
                   children: [
@@ -1254,6 +1330,39 @@ class _HomePageState extends State<HomePage> {
                             showAllDevicesSheet(
                               context: context,
                               devices: getDevices(),
+                            );
+                          },
+                          onAccount: () {
+                            AccountAvatarSheet.show(
+                              context: context,
+                              logout: logout,
+                              onEditProfile: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => EditProfilePage(
+                                      userName: userName,
+                                      userGender: userGender,
+                                      userDob: userDob,
+                                      userPhone: userPhone,
+
+                                    ),
+                                  ),
+                                );
+                              },
+                              userName: userName,
+                              userGender: userGender,
+                              userDob: userDob,
+                              userPhone: userPhone,
+                              inviteCount: shareRequests.length,
+
+                              onShareRequests: () {
+                                showShareRequestSheet(
+                                  context: context,
+                                  requests: shareRequests,
+                                  uid: uid,
+                                );
+                              },
                             );
                           },
                           onTransferOwner: isOwner() ? transferOwner : () {
@@ -1308,16 +1417,24 @@ class _HomePageState extends State<HomePage> {
                     ),
                     if (shareRequests.isNotEmpty)
                       Positioned(
-                        right: 6,
-                        top: 6,
+                        right: 2,
+                        top: 2,
                         child: Container(
-                          padding: const EdgeInsets.all(4),
+                          constraints: const BoxConstraints(
+                            minWidth: 18,
+                            minHeight: 18,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
                           decoration: const BoxDecoration(
                             color: Colors.red,
                             shape: BoxShape.circle,
                           ),
                           child: Text(
                             "${shareRequests.length}",
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,

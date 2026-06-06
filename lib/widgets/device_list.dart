@@ -10,6 +10,7 @@ class DeviceList extends StatelessWidget {
   final Function(String) onRename;
   final Function(String) onDelete;
   final Function(String) onTapDevice;
+  final VoidCallback onPairSensor;
 
   const DeviceList({
     this.header,
@@ -20,6 +21,7 @@ class DeviceList extends StatelessWidget {
     required this.onRename,
     required this.onDelete,
     required this.onTapDevice,
+    required this.onPairSensor,
   });
 
   Map<String, dynamic> safeMap(dynamic data) {
@@ -338,7 +340,7 @@ class DeviceList extends StatelessWidget {
                                 return getDeviceGroup(type) == groupName;
                               }).toList();
 
-                              if (groupEntries.isEmpty) {
+                              if (groupEntries.isEmpty && groupName != "An ninh ra/vào") {
                                 return const SizedBox.shrink();
                               }
 
@@ -351,13 +353,64 @@ class DeviceList extends StatelessWidget {
                                       top: 10,
                                       bottom: 8,
                                     ),
-                                    child: Text(
-                                      groupName,
-                                      style: TextStyle(
-                                        fontSize: compact ? 13 : 14,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black87,
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: groupEntries.isEmpty
+                                              ? const SizedBox.shrink()
+                                              : Text(
+                                            groupName,
+                                            style: TextStyle(
+                                              fontSize: compact ? 13 : 14,
+                                              fontWeight: FontWeight.w900,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+
+                                        if (groupName == "An ninh ra/vào")
+                                          InkWell(
+                                            borderRadius: BorderRadius.circular(14),
+                                            onTap: onPairSensor,
+                                            child: Container(
+                                              height: 36,
+                                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(14),
+                                                border: Border.all(
+                                                  color: Colors.blue.withValues(alpha: 0.20),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black.withValues(alpha: 0.04),
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: const Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    Icons.add_circle_outline_rounded,
+                                                    size: 18,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  SizedBox(width: 6),
+                                                  Text(
+                                                    "Thêm",
+                                                    style: TextStyle(
+                                                      color: Colors.blue,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                      ],
                                     ),
                                   ),
                                   Wrap(

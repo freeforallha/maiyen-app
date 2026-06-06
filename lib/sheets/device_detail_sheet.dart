@@ -4,8 +4,8 @@ void showDeviceDetail({
   required BuildContext context,
   required String id,
   required Map<String, dynamic> d,
-  required VoidCallback onRename,
-  required VoidCallback onDelete,
+  VoidCallback? onRename,
+  VoidCallback? onDelete,
   required VoidCallback onNotification,
 }) {
   final deviceType = d["type"]?.toString() ?? "door";
@@ -111,11 +111,12 @@ void showDeviceDetail({
                   onTap: onNotification,
                 ),
                 const SizedBox(width: 8),
-                _iconButton(
-                  icon: Icons.edit_rounded,
-                  color: Colors.teal,
-                  onTap: onRename,
-                ),
+                if (onRename != null)
+                  _iconButton(
+                    icon: Icons.edit_rounded,
+                    color: Colors.teal,
+                    onTap: onRename,
+                  ),
               ],
             ),
 
@@ -202,14 +203,15 @@ void showDeviceDetail({
 
             const SizedBox(height: 22),
 
-            Center(
-              child: _iconButton(
-                icon: Icons.delete_forever_rounded,
-                color: Colors.red,
-                size: 26,
-                onTap: onDelete,
+            if (onDelete != null)
+              Center(
+                child: _iconButton(
+                  icon: Icons.delete_forever_rounded,
+                  color: Colors.red,
+                  size: 26,
+                  onTap: onDelete,
+                ),
               ),
-            ),
           ],
         ),
       );

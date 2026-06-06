@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 void showSettingsSheet({
@@ -15,9 +14,8 @@ void showSettingsSheet({
   required int inviteCount,
   required VoidCallback onTransferOwner,
   required VoidCallback onAllDevices,
+  required VoidCallback onAccount,
 }) {
-  final user = FirebaseAuth.instance.currentUser;
-
   Widget tile({
     required IconData icon,
     required String title,
@@ -54,7 +52,7 @@ void showSettingsSheet({
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
-    builder: (_) {
+    builder: (sheetContext) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
@@ -64,7 +62,6 @@ void showSettingsSheet({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // drag handle
             Container(
               width: 42,
               height: 5,
@@ -89,11 +86,7 @@ void showSettingsSheet({
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        "🏡",
-                        style: TextStyle(fontSize: 22),
-                      ),
-
+                      const Text("🏡", style: TextStyle(fontSize: 22)),
                       const SizedBox(width: 8),
 
                       Expanded(
@@ -126,6 +119,49 @@ void showSettingsSheet({
                                 ),
                               ),
                             ),
+
+                            const SizedBox(width: 6),
+
+                            GestureDetector(
+                              onTap: onShareRequests,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange.withValues(alpha: 0.10),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(
+                                      Icons.person_add_alt_1_rounded,
+                                      size: 17,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                  if (inviteCount > 0)
+                                    Positioned(
+                                      right: -5,
+                                      top: -5,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Text(
+                                          "$inviteCount",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -134,42 +170,40 @@ void showSettingsSheet({
 
                   const SizedBox(height: 6),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SelectableText(
-                        "HomeID: $homeId",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-
-                      if (homeAddress.trim().isNotEmpty) ...[
-                        const SizedBox(height: 4),
-
-                        Text(
-                          "📍 $homeAddress",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade700,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ],
+                  SelectableText(
+                    "HomeID: $homeId",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+
+                  if (homeAddress.trim().isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      "📍 $homeAddress",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
 
-            // ===== SHARE =====
             tile(
               icon: Icons.share_rounded,
               title: "Chia sẻ nhà",
               color: Colors.blue,
-              onTap: onShare,
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  onShare();
+                });
+              },
             ),
 
             tile(
@@ -179,59 +213,22 @@ void showSettingsSheet({
               onTap: onShareList,
             ),
 
-            // ===== INVITE =====
-            Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.orange.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: ListTile(
-                leading: Container(
-                  width: 38,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.mail_rounded, color: Colors.orange),
-                ),
-                title: Row(
-                  children: [
-                    const Text(
-                      "Lời mời gia nhập",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    if (inviteCount > 0) ...[
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          "$inviteCount",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                trailing: const Icon(Icons.chevron_right_rounded),
-                onTap: onShareRequests,
-              ),
-            ),
             tile(
               icon: Icons.swap_horiz,
               title: "Chuyển quyền chủ nhà",
               color: Colors.purple,
               onTap: onTransferOwner,
             ),
+
             const SizedBox(height: 8),
+
+            tile(
+              icon: Icons.person_rounded,
+              title: "Tài khoản cá nhân",
+              color: Colors.teal,
+              onTap: onAccount,
+            ),
+
             tile(
               icon: Icons.sensors_rounded,
               title: "Toàn bộ thiết bị SafeHome",
@@ -247,7 +244,6 @@ void showSettingsSheet({
               color: Colors.red,
               onTap: onDeleteHome,
             ),
-
           ],
         ),
       );
