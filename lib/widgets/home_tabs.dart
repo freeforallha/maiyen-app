@@ -88,18 +88,16 @@ class HomeTabs extends StatelessWidget {
                           : baseColor.withValues(alpha: 0.38),
                       borderRadius: BorderRadius.circular(22),
                       border: Border.all(
-                        color: isSelected
-                            ? Colors.white.withValues(alpha: 0.75)
-                            : Colors.white.withValues(alpha: 0.45),
-                        width: 1.1,
+                        color: Colors.white,
+                        width: isSelected ? 2.2 : 0.8,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: baseColor.withValues(
-                            alpha: isSelected ? 0.28 : 0.10,
+                          color: Colors.black.withValues(
+                            alpha: isSelected ? 0.10 : 0.04,
                           ),
-                          blurRadius: isSelected ? 16 : 8,
-                          offset: const Offset(0, 6),
+                          blurRadius: isSelected ? 10 : 6,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
@@ -124,9 +122,7 @@ class HomeTabs extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               ),
-
                               const SizedBox(width: 9),
-
                               Expanded(
                                 child: Text(
                                   home["_customName"] ?? home["name"] ?? h,

@@ -41,20 +41,28 @@ class DeviceList extends StatelessWidget {
     final diff = DateTime.now().difference(dt);
 
     if (diff.inMinutes < 1) return "Vừa xong";
-
-    if (diff.inHours < 1) {
-      return "${diff.inMinutes} phút trước";
-    }
+    if (diff.inHours < 1) return "${diff.inMinutes} phút trước";
 
     if (diff.inHours < 24) {
       final h = diff.inHours;
       final m = diff.inMinutes % 60;
-
       if (m == 0) return "${h}h trước";
       return "${h}h${m}' trước";
     }
 
-    return "${diff.inDays} ngày trước";
+    if (diff.inDays < 30) return "${diff.inDays} ngày trước";
+
+    final months = (diff.inDays / 30).floor();
+    return "$months tháng trước";
+  }
+
+  bool isSosActive(Map<String, dynamic> d) {
+    final activeUntil =
+        int.tryParse(d["sos_active_until"]?.toString() ?? "0") ?? 0;
+
+    if (activeUntil <= 0) return false;
+
+    return DateTime.now().millisecondsSinceEpoch < activeUntil;
   }
 
   bool isDeviceUnsafe(Map<String, dynamic> d) {
@@ -65,7 +73,7 @@ class DeviceList extends StatelessWidget {
     }
 
     if (type == "sos") {
-      return false;
+      return isSosActive(d);
     }
 
     if (type == "door" ||
@@ -92,48 +100,71 @@ class DeviceList extends StatelessWidget {
       case "sos":
         return "Nguy hiểm khẩn cấp";
 
-      case "temperature":
-      case "humidity":
-      case "air_quality":
-      case "pm25":
-      case "co2":
-      case "repeater":
-      case "router":
-      case "hub":
-      case "coordinator":
-        return "__HIDDEN__";
-
       default:
         return "__HIDDEN__";
     }
   }
 
-  Widget buildDeviceIconBadge({
-    required String type,
-    required bool isUnsafe,
-    required bool compact,
-  }) {
+  IconData getDeviceIcon(String type) {
+    switch (type) {
+      case "door":
+        return Icons.sensor_door_outlined;
+
+      case "window":
+        return Icons.window_rounded;
+
+      case "gate":
+        return Icons.garage_rounded;
+
+      case "lock":
+        return Icons.lock_rounded;
+
+      case "smoke":
+        return Icons.local_fire_department_rounded;
+
+      case "sos":
+        return Icons.warning_amber_rounded;
+
+      default:
+        return Icons.devices_rounded;
+    }
+  }
+
+  String getMainStatus(Map<String, dynamic> d) {
+    final type = d["type"]?.toString() ?? "door";
+
     if (type == "smoke") {
-      return Icon(
-        Icons.smoke_free_rounded,
-        size: compact ? 28 : 32,
-        color: Colors.deepOrange,
-      );
+      if (d["tamper"] == true) return "Bị tháo";
+      return d["smoke"] == true ? "Có khói" : "Bình thường";
     }
 
     if (type == "sos") {
-      return Icon(
-        Icons.emergency_rounded,
-        size: compact ? 28 : 32,
-        color: Colors.red,
-      );
+      return isSosActive(d) ? "Đã kích hoạt" : "Sẵn sàng";
     }
 
-    return Icon(
-      Icons.door_front_door_rounded,
-      size: compact ? 28 : 32,
-      color: isUnsafe ? Colors.brown.shade700 : Colors.brown.shade500,
-    );
+    if (d["tamper"] == true) return "Bị tháo";
+
+    return d["contact"] == true ? "Đang đóng" : "Đang mở";
+  }
+
+  String getTimeText(Map<String, dynamic> d) {
+    return formatAgo(d["last_event"]);
+  }
+
+  Color getAccentColor(Map<String, dynamic> d) {
+    return isDeviceUnsafe(d) ? Colors.red.shade500 : Colors.green.shade600;
+  }
+
+  Color getSoftBackground(Map<String, dynamic> d) {
+    return isDeviceUnsafe(d)
+        ? Colors.red.withValues(alpha: 0.055)
+        : Colors.green.withValues(alpha: 0.055);
+  }
+
+  Color getSoftBorder(Map<String, dynamic> d) {
+    return isDeviceUnsafe(d)
+        ? Colors.red.withValues(alpha: 0.28)
+        : Colors.green.withValues(alpha: 0.24);
   }
 
   Widget _deviceCard({
@@ -143,230 +174,121 @@ class DeviceList extends StatelessWidget {
     required bool compact,
   }) {
     final type = d["type"]?.toString() ?? "door";
-    final isUnsafe = isDeviceUnsafe(d);
     final online = isDeviceOnline(d);
-    final eventAgo = formatAgo(d["last_event"]);
+    final accentColor = getAccentColor(d);
 
-    final titleSize = compact ? 14.0 : 16.0;
-    final textSize = compact ? 12.0 : 13.0;
-    final smallTextSize = compact ? 10.5 : 12.0;
-    final padding = compact ? 9.0 : 11.0;
-
-    final bgColor = isUnsafe ? Colors.red.shade100 : Colors.green.shade100;
-    final borderColor = isUnsafe ? Colors.red.shade300 : Colors.green.shade300;
-
-    if (type == "door" ||
-        type == "window" ||
-        type == "gate" ||
-        type == "lock") {
-      final isClosed = d["contact"] == true;
-      final tamper = d["tamper"] == true;
-
-      return Align(
-        alignment: Alignment.topLeft,
-        child: InkWell(
-          onTap: () => onTapDevice(id),
-          borderRadius: BorderRadius.circular(14),
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(padding),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: borderColor,
-                width: 1,
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    buildDeviceIconBadge(
-                      type: type,
-                      isUnsafe: isUnsafe,
-                      compact: compact,
-                    ),
-                    const SizedBox(width: 7),
-                    Expanded(
-                      child: Text(
-                        d["name"]?.toString() ?? id,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: titleSize,
-                          fontWeight: FontWeight.w900,
-                          height: 1.05,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 9),
-
-                Row(
-                  children: [
-                    Icon(
-                      isClosed ? Icons.check_circle : Icons.cancel,
-                      size: compact ? 15 : 16,
-                      color: isClosed ? Colors.green : Colors.red,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      isClosed ? "Đóng" : "Mở",
-                      style: TextStyle(
-                        fontSize: textSize,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    Icon(
-                      tamper ? Icons.cancel : Icons.check_circle,
-                      size: compact ? 15 : 16,
-                      color: tamper ? Colors.red : Colors.green,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      tamper ? "Bị tháo" : "BT",
-                      style: TextStyle(
-                        fontSize: textSize,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 7),
-
-                Text(
-                  "${isClosed ? "Đóng" : "Mở"}: $eventAgo",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: smallTextSize,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-
-                const SizedBox(height: 5),
-
-                Row(
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: online ? Colors.green : Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      online ? "Online" : "Offline",
-                      style: TextStyle(
-                        fontSize: smallTextSize,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    String subtitle;
-
-    switch (type) {
-      case "smoke":
-        subtitle = d["smoke"] == true ? "Có khói" : "Bình thường";
-        break;
-
-      case "sos":
-        subtitle = online ? "Online" : "Offline";
-        break;
-
-      default:
-        subtitle = online ? "Online" : "Offline";
-    }
+    final titleSize = compact ? 13.5 : 15.0;
+    final statusSize = compact ? 14.0 : 15.5;
+    final smallTextSize = compact ? 10.5 : 11.5;
 
     return Align(
       alignment: Alignment.topLeft,
       child: InkWell(
         onTap: () => onTapDevice(id),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(18),
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(compact ? 10 : 12),
           decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(14),
+            color: Colors.white.withValues(alpha: 0.88),
+            borderRadius: BorderRadius.circular(18),
             border: Border.all(
-              color: borderColor,
+              color: getSoftBorder(d),
               width: 1,
             ),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+                color: Colors.black.withValues(alpha: 0.035),
+              ),
+            ],
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildDeviceIconBadge(
-                type: type,
-                isUnsafe: isUnsafe,
-                compact: compact,
-              ),
-              const SizedBox(width: 10),
+
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Icon(
+                          getDeviceIcon(type),
+                          size: compact ? 16 : 18,
+                          color: accentColor,
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            d["name"]?.toString() ?? id,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: titleSize,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.black87,
+                              height: 1.05,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 7),
+
                     Text(
-                      d["name"]?.toString() ?? id,
+                      getMainStatus(d),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: titleSize,
-                        fontWeight: FontWeight.w900,
+                        fontSize: statusSize,
+                        fontWeight: FontWeight.w800,
+                        color: accentColor,
                         height: 1.05,
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Text(
-                      subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: textSize,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+
+                    const SizedBox(height: 6),
+
+
+
                     const SizedBox(height: 4),
+
                     Row(
                       children: [
+                        Expanded(
+                          child: Text(
+                            getTimeText(d),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: smallTextSize,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+
                         Container(
-                          width: 8,
-                          height: 8,
+                          width: 6,
+                          height: 6,
                           decoration: BoxDecoration(
                             color: online ? Colors.green : Colors.red,
                             shape: BoxShape.circle,
                           ),
                         ),
+
                         const SizedBox(width: 4),
+
                         Text(
-                          online ? "Online" : "Offline",
+                          online ? "On" : "Off",
                           style: TextStyle(
                             fontSize: smallTextSize,
-                            color: Colors.black54,
                             fontWeight: FontWeight.w600,
+                            color: Colors.black54,
                           ),
                         ),
                       ],
@@ -408,9 +330,11 @@ class DeviceList extends StatelessWidget {
                         ]) ...[
                           Builder(
                             builder: (_) {
-                              final groupEntries = devices.entries.where((entry) {
+                              final groupEntries =
+                              devices.entries.where((entry) {
                                 final d = safeMap(entry.value);
                                 final type = d["type"]?.toString() ?? "door";
+
                                 return getDeviceGroup(type) == groupName;
                               }).toList();
 

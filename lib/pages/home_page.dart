@@ -863,460 +863,473 @@ class _HomePageState extends State<HomePage> {
     final devices = getDevices();
     return Scaffold(
         backgroundColor: const Color(0xFFF4F7FB),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFDDF7E8),
-                Color(0xFFF1FCF5),
-                Color(0xFFFFFFFF),
-              ],
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFDDF7E8),
+              Color(0xFFF1FCF5),
+              Color(0xFFFFFFFF),
+            ],
           ),
-          child: SafeArea(
-            child: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.grid_view_rounded),
-                  onPressed: () async {
-                    final selected = await Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AllHomePage(homeOrder: homeOrder),
-                      ),
-                    );
-
-                    if (selected != null) {
-                      setState(() {
-                        selectedHome = selected;
-                      });
-
-                      final index = homeOrder.indexOf(selected);
-
-                      if (index != -1) {
-                        homeTabController.animateTo(
-                          index * 110,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      }
-                    }
-                  },
-                ),
-
-                Expanded(
-                  child: HomeTabs(
-                    unreadChatByHome: unreadChatByHome,
-                    controller: homeTabController,
-                    homes: homes,
-                    homeOrder: homeOrder,
-                    selectedHome: selectedHome,
-                    onSelect: (h) {
-                      if (h == selectedHome) return;
-
-                      final currentHome = safeMap(homes[h]);
-                      final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-                      setState(() {
-                        selectedHome = h;
-                        alarmEnabled = safeMap(alarmSettings[h])["enabled"] != false;
-                        start = parsedAlarm["start"];
-                        end = parsedAlarm["end"];
-                      });
-                    },
-                    onReorder: (oldIndex, newIndex) async {
-                      setState(() {
-                        if (newIndex > oldIndex) newIndex--;
-
-                        final item = homeOrder.removeAt(oldIndex);
-                        homeOrder.insert(newIndex, item);
-                      });
-
-                      await FirebaseDatabase.instance
-                          .ref(FirebasePaths.homeOrder(uid))
-                          .set(homeOrder);
-                    },
-                    getHomeColor: getHomeColor,
-                  ),
-                ),
-              ],
-            ),
-
-
-            Expanded(
-              child: DeviceList(
-                devices: devices,
-                header: Column(
-                  children: [
-
-                    StatusPanel(
-                      environmentText: getHomeEnvironmentText(),
-                      onEnvironmentTap: () {
-                        final tempDevice = getTemperatureDevice();
-
-                        if (tempDevice == null) return;
-
-                        showDeviceDetail(
-                          context: context,
-                          id: tempDevice["id"],
-                          d: tempDevice["data"],
-                          onRename: () => renameDevice(tempDevice["id"]),
-                          onDelete: () => deleteDevice(tempDevice["id"]),
-                          onNotification: () => openNotificationList(tempDevice["id"]),
-                        );
-                      },
-                      overall: getOverallStatus(devices),
-                      alarmEnabled: alarmEnabled,
-                      onAlarmEnabledChanged: setAlarmEnabled,
-                      onPair: null,
-                      onQR: null,
-                      onScheduleNotification: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) {
-                            return ScheduleSheet(
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              isShared: homes[selectedHome]?["_shared"] == true,
-                              type: "notification",
-                            );
-                          },
-                        );
-                      },
-                      onScheduleAlarm: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) {
-                            return ScheduleSheet(
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              isShared: homes[selectedHome]?["_shared"] == true,
-                              type: "alarm",
-                            );
-                          },
-                        );
-                      },
-                      alarmStart: formatAlarmSchedules(),
-                      alarmEnd: "",
-
-                    ),
-
-                    if (pairingCountdown > 0)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 8),
-                        child: Text("Pairing: $pairingCountdown s"),
-                      ),
-                  ],
-                ),
-                isShared: homes[selectedHome]?["_shared"] == true,
-                ownerEmail: homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
-                onRename: canManageHome()
-                    ? renameDevice
-                    : (_) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Bạn không có quyền sửa thiết bị"),
-                    ),
-                  );
-                },
-                onDelete: canManageHome()
-                    ? deleteDevice
-                    : (_) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Bạn không có quyền xoá thiết bị"),
-                    ),
-                  );
-                },
-                onTapDevice: (id) {
-                  showDeviceDetail(
-                    context: context,
-                    id: id,
-                    d: safeMap(getDevices()[id]),
-                    onRename: () => renameDevice(id),
-                    onDelete: () => deleteDevice(id),
-                    onNotification: () => openNotificationList(id),
-                  );
-                },
-              ),
-            ),
-          ],
         ),
-      ),),
-
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          margin: EdgeInsets.all(12),
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          decoration: BoxDecoration(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-
+        child: SafeArea(
+          child: Column(
             children: [
-              IconButton(
-                icon: const Icon(Icons.person_rounded),
-                onPressed: () => AccountAvatarSheet.show(
-                  context: context,
-                  logout: logout,
-                  onEditProfile: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EditProfilePage(
-                          userName: userName,
-                          userGender: userGender,
-                          userDob: userDob,
-                          userPhone: userPhone,
-                        ),
-                      ),
-                    );
-                  },
-                  userName: userName,
-                  userGender: userGender,
-                  userDob: userDob,
-                  userPhone: userPhone,
-                ),
-              ),
-
-              IconButton(icon: Icon(Icons.add_home), onPressed: addHome),
-              Stack(
+              Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.chat_bubble_rounded),
-                    onPressed: () {
-                      showHomeChatSheet(
-
-                        context: context,
-                        homeId: selectedHome,
-                        userName: userName,
-                        userPhotoUrl: userPhotoUrl,
-                        ownerUid: getHomeOwnerUid(),
-                        canManageMembers: canManageHome(),
-                        isOwner: isOwner(),
-
+                    icon: const Icon(Icons.grid_view_rounded),
+                    onPressed: () async {
+                      final selected = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AllHomePage(homeOrder: homeOrder),
+                        ),
                       );
+
+                      if (selected != null) {
+                        setState(() {
+                          selectedHome = selected;
+                        });
+
+                        final index = homeOrder.indexOf(selected);
+
+                        if (index != -1) {
+                          homeTabController.animateTo(
+                            index * 110,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
+                        }
+                      }
                     },
                   ),
 
-                  if (unreadChatCount > 0)
-                    Positioned(
-                      right: 2,
-                      top: 2,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          unreadChatCount > 99
-                              ? "99+"
-                              : unreadChatCount.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                  Expanded(
+                    child: HomeTabs(
+                      unreadChatByHome: unreadChatByHome,
+                      controller: homeTabController,
+                      homes: homes,
+                      homeOrder: homeOrder,
+                      selectedHome: selectedHome,
+                      onSelect: (h) {
+                        if (h == selectedHome) return;
+
+                        final currentHome = safeMap(homes[h]);
+                        final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+
+                        setState(() {
+                          selectedHome = h;
+                          alarmEnabled =
+                              safeMap(alarmSettings[h])["enabled"] != false;
+                          start = parsedAlarm["start"];
+                          end = parsedAlarm["end"];
+                        });
+                      },
+                      onReorder: (oldIndex, newIndex) async {
+                        setState(() {
+                          if (newIndex > oldIndex) newIndex--;
+
+                          final item = homeOrder.removeAt(oldIndex);
+                          homeOrder.insert(newIndex, item);
+                        });
+
+                        await FirebaseDatabase.instance
+                            .ref(FirebasePaths.homeOrder(uid))
+                            .set(homeOrder);
+                      },
+                      getHomeColor: getHomeColor,
                     ),
+                  ),
                 ],
               ),
 
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 12,
-                      color: Colors.blueAccent.withValues(alpha: 0.35),
+              Expanded(
+                child: Stack(
+                  children: [
+                    DeviceList(
+                      devices: devices,
+                      header: Column(
+                        children: [
+                          StatusPanel(
+                            environmentText: getHomeEnvironmentText(),
+                            onEnvironmentTap: () {
+                              final tempDevice = getTemperatureDevice();
+
+                              if (tempDevice == null) return;
+
+                              showDeviceDetail(
+                                context: context,
+                                id: tempDevice["id"],
+                                d: tempDevice["data"],
+                                onRename: () => renameDevice(tempDevice["id"]),
+                                onDelete: () => deleteDevice(tempDevice["id"]),
+                                onNotification: () =>
+                                    openNotificationList(tempDevice["id"]),
+                              );
+                            },
+                            overall: getOverallStatus(devices),
+                            alarmEnabled: alarmEnabled,
+                            onAlarmEnabledChanged: setAlarmEnabled,
+                            onPair: null,
+                            onQR: null,
+                            onScheduleNotification: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => ScheduleSheet(
+                                  ownerUid: getHomeOwnerUid(),
+                                  homeId: selectedHome,
+                                  isShared:
+                                  homes[selectedHome]?["_shared"] == true,
+                                  type: "notification",
+                                ),
+                              );
+                            },
+                            onScheduleAlarm: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => ScheduleSheet(
+                                  ownerUid: getHomeOwnerUid(),
+                                  homeId: selectedHome,
+                                  isShared:
+                                  homes[selectedHome]?["_shared"] == true,
+                                  type: "alarm",
+                                ),
+                              );
+                            },
+                            alarmStart: formatAlarmSchedules(),
+                            alarmEnd: "",
+                          ),
+
+                          if (pairingCountdown > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text("Pairing: $pairingCountdown s"),
+                            ),
+                        ],
+                      ),
+                      isShared: homes[selectedHome]?["_shared"] == true,
+                      ownerEmail:
+                      homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+                      onRename: canManageHome() ? renameDevice : (_) {},
+                      onDelete: canManageHome() ? deleteDevice : (_) {},
+                      onTapDevice: (id) {
+                        showDeviceDetail(
+                          context: context,
+                          id: id,
+                          d: safeMap(getDevices()[id]),
+                          onRename: () => renameDevice(id),
+                          onDelete: () => deleteDevice(id),
+                          onNotification: () => openNotificationList(id),
+                        );
+                      },
                     ),
-                  ],
-                ),
 
-                child: IconButton(
-                  icon: Icon(Icons.qr_code_scanner, color: Colors.white),
-
-                  onPressed: () async {
-                    if (!canManageHome()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Bạn không có quyền pair thiết bị"),
-                        ),
-                      );
-                      return;
-                    }
-                    final result = await showModalBottomSheet<String>(
-                      context: context,
-                      isScrollControlled: true,
-
-                      builder: (_) {
-                        return SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.all(20),
-
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-
-                              children: [
-                                Text(
-                                  "Pair Sensor",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-
-                                SizedBox(height: 20),
-
-                                SizedBox(
-                                  width: double.infinity,
-
-                                  child: ElevatedButton.icon(
-                                    icon: Icon(Icons.qr_code_scanner),
-                                    label: Text("Scan QR Code"),
-
-                                    onPressed: () async {
-                                      Navigator.pop(context, "__SCAN__");
-                                    },
-                                  ),
-                                ),
-
-                                SizedBox(height: 10),
-
-                                TextButton.icon(
-                                  icon: Icon(Icons.keyboard),
-                                  label: Text("Nhập HUB ID thủ công"),
-
-                                  onPressed: () async {
-                                    Navigator.pop(context, "__MANUAL__");
-                                  },
-                                ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      height: 95,
+                      child: IgnorePointer(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white.withValues(alpha: 0),
+                                Colors.white.withValues(alpha: 0.88),
+                                Colors.white,
                               ],
                             ),
                           ),
-                        );
-                      },
-                    );
-
-                    if (result == "__SCAN__") {
-                      final code = await openQRScanner(context);
-
-                      if (code != null) {
-                        pairSensor(code);
-                      }
-                    }
-
-                    if (result == "__MANUAL__") {
-                      final hubId = await showPairDialog(context);
-
-                      if (hubId == null || hubId.trim().isEmpty) return;
-
-                      pairSensor(hubId.trim());
-                    }
-                  },
-                ),
-              ),
-
-              Stack(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.settings_rounded),
-
-                    onPressed: () {
-                      showSettingsSheet(
-
-                        homeId: selectedHome,
-                        homeName:
-                        homes[selectedHome]?["name"]?.toString() ?? selectedHome,
-                        homeAddress:
-                        homes[selectedHome]?["address"]?.toString() ?? "",
-                        onAllDevices: () {
-                          showAllDevicesSheet(
-                            context: context,
-                            devices: getDevices(),
-                          );
-                        },
-                        onTransferOwner: isOwner() ? transferOwner : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Chỉ chủ nhà mới được chuyển quyền")),
-                          );
-                        },
-                        onRenameHome: canManageHome() ? renameHome : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Bạn không có quyền sửa tên nhà")),
-                          );
-                        },
-                        onDeleteHome: isOwner() ? deleteHome : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Chỉ chủ nhà mới được xoá nhà")),
-                          );
-                        },                        context: context,
-                        inviteCount: shareRequests.length,
-
-                        onShareRequests: () {
-                          showShareRequestSheet(
-                            context: context,
-                            requests: shareRequests,
-                            uid: uid,
-                          );
-                        },
-
-                        onShare: canManageHome() ? shareHome : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Bạn không có quyền chia sẻ nhà")),
-                          );
-                        },
-                        onShareList: () {
-                          showShareListSheet(
-                            canManageMembers: canManageHome(),
-                            isOwner: isOwner(),
-                            context: context,
-                            ownerUid: getHomeOwnerUid(),
-                            homeId: selectedHome,
-                          );
-                        },
-                        onLogout: logout,
-                      );
-                    },
-                  ),
-
-                  if (shareRequests.length > 0)
-                    Positioned(
-                      right: 6,
-                      top: 6,
-
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-
-                        child: Text(
-                          "${shareRequests.length}",
-
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
                         ),
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
             ],
+          ),
+        ),
+      ),
+
+
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFFFFFFFF).withValues(alpha: 0),
+              const Color(0xFFFFFFFF).withValues(alpha: 0.92),
+              const Color(0xFFFFFFFF),
+            ],
+            stops: const [0.0, 0.35, 1.0],
+          ),
+        ),
+        padding: const EdgeInsets.only(top: 22),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.person_rounded),
+                  onPressed: () => AccountAvatarSheet.show(
+                    context: context,
+                    logout: logout,
+                    onEditProfile: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditProfilePage(
+                            userName: userName,
+                            userGender: userGender,
+                            userDob: userDob,
+                            userPhone: userPhone,
+                          ),
+                        ),
+                      );
+                    },
+                    userName: userName,
+                    userGender: userGender,
+                    userDob: userDob,
+                    userPhone: userPhone,
+                  ),
+                ),
+
+                IconButton(
+                  icon: const Icon(Icons.add_home),
+                  onPressed: addHome,
+                ),
+
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.chat_bubble_rounded),
+                      onPressed: () {
+                        showHomeChatSheet(
+                          context: context,
+                          homeId: selectedHome,
+                          userName: userName,
+                          userPhotoUrl: userPhotoUrl,
+                          ownerUid: getHomeOwnerUid(),
+                          canManageMembers: canManageHome(),
+                          isOwner: isOwner(),
+                        );
+                      },
+                    ),
+                    if (unreadChatCount > 0)
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            unreadChatCount > 99
+                                ? "99+"
+                                : unreadChatCount.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 12,
+                        color: Colors.blueAccent.withValues(alpha: 0.35),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                    onPressed: () async {
+                      if (!canManageHome()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Bạn không có quyền pair thiết bị"),
+                          ),
+                        );
+                        return;
+                      }
+
+                      final result = await showModalBottomSheet<String>(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (_) {
+                          return SafeArea(
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Text(
+                                    "Pair Sensor",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      icon: const Icon(Icons.qr_code_scanner),
+                                      label: const Text("Scan QR Code"),
+                                      onPressed: () async {
+                                        Navigator.pop(context, "__SCAN__");
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  TextButton.icon(
+                                    icon: const Icon(Icons.keyboard),
+                                    label: const Text("Nhập HUB ID thủ công"),
+                                    onPressed: () async {
+                                      Navigator.pop(context, "__MANUAL__");
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+
+                      if (result == "__SCAN__") {
+                        final code = await openQRScanner(context);
+
+                        if (code != null) {
+                          pairSensor(code);
+                        }
+                      }
+
+                      if (result == "__MANUAL__") {
+                        final hubId = await showPairDialog(context);
+
+                        if (hubId == null || hubId.trim().isEmpty) return;
+
+                        pairSensor(hubId.trim());
+                      }
+                    },
+                  ),
+                ),
+
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.settings_rounded),
+                      onPressed: () {
+                        showSettingsSheet(
+                          homeId: selectedHome,
+                          homeName:
+                          homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+                          homeAddress:
+                          homes[selectedHome]?["address"]?.toString() ?? "",
+                          onAllDevices: () {
+                            showAllDevicesSheet(
+                              context: context,
+                              devices: getDevices(),
+                            );
+                          },
+                          onTransferOwner: isOwner() ? transferOwner : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Chỉ chủ nhà mới được chuyển quyền"),
+                              ),
+                            );
+                          },
+                          onRenameHome: canManageHome() ? renameHome : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Bạn không có quyền sửa tên nhà"),
+                              ),
+                            );
+                          },
+                          onDeleteHome: isOwner() ? deleteHome : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Chỉ chủ nhà mới được xoá nhà"),
+                              ),
+                            );
+                          },
+                          context: context,
+                          inviteCount: shareRequests.length,
+                          onShareRequests: () {
+                            showShareRequestSheet(
+                              context: context,
+                              requests: shareRequests,
+                              uid: uid,
+                            );
+                          },
+                          onShare: canManageHome() ? shareHome : () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Bạn không có quyền chia sẻ nhà"),
+                              ),
+                            );
+                          },
+                          onShareList: () {
+                            showShareListSheet(
+                              canManageMembers: canManageHome(),
+                              isOwner: isOwner(),
+                              context: context,
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                            );
+                          },
+                          onLogout: logout,
+                        );
+                      },
+                    ),
+                    if (shareRequests.isNotEmpty)
+                      Positioned(
+                        right: 6,
+                        top: 6,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            "${shareRequests.length}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

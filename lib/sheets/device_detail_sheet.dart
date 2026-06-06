@@ -168,7 +168,7 @@ void showDeviceDetail({
                 icon: Icons.battery_full_rounded,
                 color: battery != null && battery < 20 ? Colors.red : Colors.green,
                 title: "Pin",
-                value: battery != null ? "$battery%" : "N/A",
+                value: getBatteryText(d),
               ),
 
             _infoRow(
@@ -381,4 +381,22 @@ String formatFullDate(dynamic value) {
   final mm = dt.minute.toString().padLeft(2, '0');
 
   return "${dt.day}/${dt.month}/${dt.year} $hh:$mm";
+}
+String getBatteryText(Map<String, dynamic> d) {
+  final battery = d["battery"];
+  final batteryLow = d["battery_low"];
+  final batteryStatus = d["battery_status"]?.toString();
+
+  if (battery != null) {
+    return "$battery%";
+  }
+
+  if (batteryLow != null) {
+    return batteryLow == true ? "Pin yếu" : "OK";
+  }
+
+  if (batteryStatus == "ok") return "OK";
+  if (batteryStatus == "low") return "Pin yếu";
+
+  return "N/A";
 }
