@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
+import '../helpers/top_toast.dart';
 Future<void> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
@@ -8,11 +10,15 @@ Future<void> showShareListSheet({
   required bool canManageMembers,
   required bool isOwner,
 }) async {
+  final myUid = FirebaseAuth.instance.currentUser!.uid;
   final db = FirebaseDatabase.instance;
 
   final ownerSnap = await db.ref(FirebasePaths.account(ownerUid)).get();
 
   final ownerData = ownerSnap.value is Map
+
+
+
       ? Map<String, dynamic>.from(ownerSnap.value as Map)
       : <String, dynamic>{};
 
@@ -309,12 +315,14 @@ Future<void> showShareListSheet({
                         ],
 
                         const SizedBox(width: 6),
-                        if (canManageMembers)
+                        if (canManageMembers || targetUid == myUid)
                           IconButton(
-                            icon: const Icon(
-                              Icons.remove_circle,
-                            color: Colors.red,
-                          ),
+                            icon: Icon(
+                              targetUid == myUid
+                                  ? Icons.logout_rounded
+                                  : Icons.remove_circle,
+                              color: Colors.red,
+                            ),
                           onPressed: () async {
                             await db
                                 .ref(FirebasePaths.sharedHome(targetUid, homeId))
@@ -333,10 +341,13 @@ Future<void> showShareListSheet({
 
                             Navigator.pop(context);
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Đã thu hồi quyền share"),
-                              ),
+                            showTopToast(
+                              context,
+                              targetUid == myUid
+                                  ? "Đã rời khỏi nhà"
+                                  : "Đã thu hồi quyền share",
+                              color: Colors.green,
+                              icon: Icons.check_circle_rounded,
                             );
                           },
                         ),

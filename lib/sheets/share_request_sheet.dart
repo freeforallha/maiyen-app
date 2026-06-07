@@ -1,7 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
-
+import '../services/share_service.dart';
+import '../services/home_notification_service.dart';
 void showShareRequestSheet({
   required BuildContext context,
   required Map<String, dynamic> requests,
@@ -22,16 +23,32 @@ void showShareRequestSheet({
             required Map<String, dynamic> data,
           }) async {
             final homeId = data["homeId"]?.toString() ?? "";
-            final targetUid = data["targetUid"]?.toString() ?? "";
-            final targetEmail = data["targetEmail"]?.toString() ?? "";
-            final targetName = data["targetName"]?.toString() ?? "";
-
+            final targetUid = data["targetUid"]?.toString().isNotEmpty == true
+                ? data["targetUid"].toString()
+                : uid;
+            final ownerUid = data["ownerUid"]?.toString() ?? "";
             if (homeId.isEmpty || targetUid.isEmpty) return;
+
+            final account = await ShareService.loadAccount(targetUid);
+
+            final profile = account["profile"] is Map
+                ? Map<String, dynamic>.from(account["profile"] as Map)
+                : <String, dynamic>{};
+
+            final targetEmail =
+            data["targetEmail"]?.toString().isNotEmpty == true
+                ? data["targetEmail"].toString()
+                : account["email"]?.toString() ?? "";
+
+            final targetName =
+            data["targetName"]?.toString().isNotEmpty == true
+                ? data["targetName"].toString()
+                : profile["name"]?.toString() ?? "";
 
             await FirebaseDatabase.instance
                 .ref(FirebasePaths.sharedHome(targetUid, homeId))
                 .set({
-              "ownerUid": uid,
+              "ownerUid": ownerUid,
               "role": "member",
             });
 
@@ -55,8 +72,42 @@ void showShareRequestSheet({
             await FirebaseDatabase.instance
                 .ref("accounts/$uid/shareRequests/$requestKey")
                 .remove();
-          }
 
+          }
+          Future<void> acceptTransferOwner({
+            required String requestKey,
+            required Map<String, dynamic> data,
+          }) async {
+            final homeId = data["homeId"]?.toString() ?? "";
+            final oldOwnerUid = data["oldOwnerUid"]?.toString() ?? "";
+            final newOwnerUid = data["newOwnerUid"]?.toString() ?? "";
+
+            if (homeId.isEmpty || oldOwnerUid.isEmpty || newOwnerUid.isEmpty) return;
+
+            await ShareService.transferOwner(
+              oldOwnerUid: oldOwnerUid,
+              newOwnerUid: newOwnerUid,
+              homeId: homeId,
+            );
+            await HomeNotificationService.addNotification(
+              uid: newOwnerUid,
+              type: "transfer_owner_accepted",
+              title: "Bạn đã trở thành chủ nhà",
+              message: "Bạn đã nhận quyền chủ nhà thành công.",
+              homeId: homeId,
+            );
+
+            await HomeNotificationService.addNotification(
+              uid: oldOwnerUid,
+              type: "transfer_owner_accepted",
+              title: "Chuyển quyền chủ nhà thành công",
+              message: "Người nhận đã chấp nhận quyền chủ nhà.",
+              homeId: homeId,
+            );
+            await FirebaseDatabase.instance
+                .ref("accounts/$uid/shareRequests/$requestKey")
+                .remove();
+          }
           Future<void> acceptSelected() async {
             for (final homeId in selected) {
               final raw = requests[homeId];
@@ -66,10 +117,20 @@ void showShareRequestSheet({
               final data = Map<String, dynamic>.from(raw);
 
 
-              await acceptRequest(
-                requestKey: homeId,
-                data: data,
-              );
+              final type =
+                  data["type"]?.toString() ?? "share_request";
+
+              if (type == "transfer_owner_request") {
+                await acceptTransferOwner(
+                  requestKey: homeId,
+                  data: data,
+                );
+              } else {
+                await acceptRequest(
+                  requestKey: homeId,
+                  data: data,
+                );
+              }
             }
 
             Navigator.pop(context);
@@ -235,6 +296,8 @@ void showShareRequestSheet({
 
                             final name =
                                 data["targetName"]?.toString() ?? "";
+                            final type =
+                                data["type"]?.toString() ?? "share_request";
                             final isSelected = selected.contains(homeId);
 
                             return Card(
@@ -264,12 +327,16 @@ void showShareRequestSheet({
                                   },
                                 ),
                                 title: Text(
-                                  name.isEmpty ? email : name,
+                                  type == "transfer_owner_request"
+                                      ? "👑 Nhận quyền chủ nhà"
+                                      : (name.isEmpty ? email : name),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 subtitle: Text(
-                                  email,
+                                  type == "transfer_owner_request"
+                                      ? "Yêu cầu chuyển quyền chủ nhà"
+                                      : email,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -297,10 +364,20 @@ void showShareRequestSheet({
                                         color: Colors.green,
                                       ),
                                       onPressed: () async {
-                                        await acceptRequest(
-                                          requestKey: homeId,
-                                          data: data,
-                                        );
+                                        final type =
+                                            data["type"]?.toString() ?? "share_request";
+
+                                        if (type == "transfer_owner_request") {
+                                          await acceptTransferOwner(
+                                            requestKey: homeId,
+                                            data: data,
+                                          );
+                                        } else {
+                                          await acceptRequest(
+                                            requestKey: homeId,
+                                            data: data,
+                                          );
+                                        }
 
                                         Navigator.pop(context);
                                       },

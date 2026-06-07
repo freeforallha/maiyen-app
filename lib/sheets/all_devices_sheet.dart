@@ -68,16 +68,16 @@ void showAllDevicesSheet({
                   color: Colors.brown,
                   items: [
                     {
-                      "name": "Cảm biến cửa",
+                      "name": "Mở/Đóng cửa",
                       "count": countDevice(devices, ["door"]),
                     },
                     {
-                      "name": "Cảm biến cửa sổ",
-                      "count": 0,
+                      "name": "Khoá/Mở cửa",
+                      "count": countDevice(devices, ["lock", "door_lock"]),
                     },
                     {
-                      "name": "Khoá cửa",
-                      "count": 0,
+                      "name": "Phát hiện chuyển động",
+                      "count": countDevice(devices, ["motion"]),
                     },
                   ],
                 ),
@@ -136,15 +136,15 @@ void showAllDevicesSheet({
                   color: Colors.deepPurple,
                   items: [
                     {
-                      "name": "Bộ mở rộng sóng Zigbee",
+                      "name": "Bộ mở rộng sóng",
                       "count": countDevice(devices, ["repeater"]),
                     },
                     {
-                      "name": "Hub SafeHome",
+                      "name": "Bộ điều khiển trung tâm",
                       "count": 0,
                     },
                     {
-                      "name": "Coordinator Zigbee",
+                      "name": "Hệ thống điện",
                       "count": 0,
                     },
                   ],

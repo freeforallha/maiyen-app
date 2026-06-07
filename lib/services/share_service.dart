@@ -97,6 +97,12 @@ class ShareService {
 
     await _db.ref(FirebasePaths.sharedHome(newOwnerUid, homeId)).remove();
 
+    await _db.ref(FirebasePaths.sharedMember(homeId, newOwnerUid)).remove();
+
+    await _db
+        .ref("${FirebasePaths.shareList(oldOwnerUid, homeId)}/$newOwnerUid")
+        .remove();
+
     await _db.ref(FirebasePaths.home(newOwnerUid, homeId)).set(homeData);
 
     final targetOrderSnap = await _db

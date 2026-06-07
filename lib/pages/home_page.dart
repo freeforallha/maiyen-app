@@ -32,6 +32,8 @@ import '../sheets/all_devices_sheet.dart';
 import '../sheets/home_event_sheet.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../sheets/alarm_device_sheet.dart';
+import '../helpers/top_toast.dart';
+import '../services/home_notification_service.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -41,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> shareRequests = {};
   int unreadChatCount = 0;
   Map<String, int> unreadChatByHome = {};
+  int unreadHomeNotificationCount = 0;
   void openNotificationList(String deviceId) {
     final ownerUid = getHomeOwnerUid();
     showModalBottomSheet(
@@ -239,7 +242,19 @@ class _HomePageState extends State<HomePage> {
 
           refresh: () {
             if (!mounted) return;
-            setState(() {});
+
+            setState(() {
+              homeOrder = HomeStateParser.parseHomeOrder(
+                account: map,
+                homesData: homesData,
+                sharedHomes: sharedHomes,
+                selectedHome: selectedHome,
+              );
+
+              if (homeOrder.isNotEmpty && !homeOrder.contains(selectedHome)) {
+                selectedHome = homeOrder.first;
+              }
+            });
           },
 
           onDeleted: (homeId) {
@@ -282,6 +297,32 @@ class _HomePageState extends State<HomePage> {
       });
     });
     ChatService.chatStream().listen((event) {
+      FirebaseDatabase.instance
+          .ref("accounts/$uid/notifications")
+          .onValue
+          .listen((event) {
+        final data = event.snapshot.value;
+
+        int count = 0;
+
+        if (data is Map) {
+          final map = Map<String, dynamic>.from(data);
+
+          for (final item in map.values) {
+            final n = Map<String, dynamic>.from(item as Map);
+
+            if (n["read"] != true) {
+              count++;
+            }
+          }
+        }
+
+        if (!mounted) return;
+
+        setState(() {
+          unreadHomeNotificationCount = count;
+        });
+      });
       final data = event.snapshot.value;
 
       if (data == null) return;
@@ -345,8 +386,11 @@ class _HomePageState extends State<HomePage> {
       final parts = value.split("|");
 
       if (parts.length != 3) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("QR gia nhập nhiều nhà không hợp lệ")),
+        showTopToast(
+          context,
+          "QR gia nhập nhiều nhà không hợp lệ",
+          color: Colors.red,
+          icon: Icons.qr_code_scanner_rounded,
         );
         return;
       }
@@ -358,8 +402,11 @@ class _HomePageState extends State<HomePage> {
           .toList();
 
       if (ownerUid == uid) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Bạn đang là chủ các nhà này")),
+        showTopToast(
+          context,
+          "Bạn đang là chủ các nhà này",
+          color: Colors.orange,
+          icon: Icons.home_rounded,
         );
         return;
       }
@@ -375,6 +422,7 @@ class _HomePageState extends State<HomePage> {
             .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
             .set({
           "homeId": homeId,
+          "ownerUid": ownerUid,
           "targetUid": uid,
           "targetEmail": myEmail ?? "",
           "targetName": targetData["name"] ?? "",
@@ -384,10 +432,11 @@ class _HomePageState extends State<HomePage> {
         });
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Đã gửi yêu cầu gia nhập ${homeIds.length} nhà"),
-        ),
+      showTopToast(
+        context,
+        "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
+        color: Colors.green,
+        icon: Icons.check_circle_rounded,
       );
 
       return;
@@ -396,8 +445,11 @@ class _HomePageState extends State<HomePage> {
       final parts = value.split("|");
 
       if (parts.length != 3) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("QR gia nhập không hợp lệ")),
+        showTopToast(
+          context,
+          "QR gia nhập không hợp lệ",
+          color: Colors.red,
+          icon: Icons.qr_code_rounded,
         );
         return;
       }
@@ -406,8 +458,11 @@ class _HomePageState extends State<HomePage> {
       final homeId = parts[2];
 
       if (ownerUid == uid) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Bạn đang là chủ nhà này")),
+        showTopToast(
+          context,
+          "Bạn đang là chủ nhà này",
+          color: Colors.orange,
+          icon: Icons.info_outline_rounded,
         );
         return;
       }
@@ -422,6 +477,7 @@ class _HomePageState extends State<HomePage> {
           .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
           .set({
         "homeId": homeId,
+        "ownerUid": ownerUid,
         "targetUid": uid,
         "targetEmail": myEmail ?? "",
         "targetName": targetData["name"] ?? "",
@@ -430,8 +486,11 @@ class _HomePageState extends State<HomePage> {
         "time": DateTime.now().millisecondsSinceEpoch,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Đã gửi yêu cầu gia nhập nhà")),
+      showTopToast(
+        context,
+        "Đã gửi yêu cầu gia nhập nhà",
+        color: Colors.green,
+        icon: Icons.check_circle_rounded,
       );
 
       return;
@@ -555,11 +614,11 @@ class _HomePageState extends State<HomePage> {
 
                 Navigator.pop(context, true);
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Sai mật khẩu"),
-                    backgroundColor: Colors.red,
-                  ),
+                showTopToast(
+                  context,
+                  "Sai mật khẩu",
+                  color: Colors.red,
+                  icon: Icons.error_outline_rounded,
                 );
               }
             },
@@ -666,26 +725,29 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
-
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
         .toLowerCase();
 
     if (targetEmail == myEmail) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Không thể share cho chính bạn")),
+      showTopToast(
+        context,
+        "Không thể share cho chính bạn",
+        color: Colors.orange,
+        icon: Icons.warning_amber_rounded,
       );
       return;
     }
 
+
     final targetUid = await ShareService.findUidByEmail(targetEmail);
 
     if (targetUid == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Email chưa đăng ký"),
-          backgroundColor: Colors.red,
-        ),
+      showTopToast(
+        context,
+        "Email chưa đăng ký",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
       );
       return;
     }
@@ -701,43 +763,111 @@ class _HomePageState extends State<HomePage> {
       targetEmail: targetEmail,
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Đã share home")),
+    showTopToast(
+      context,
+      "Đã share home",
+      color: Colors.green,
+      icon: Icons.check_circle_rounded,
     );
   }
   void transferOwner() async {
     final controller = TextEditingController();
-
-    final targetEmail = await showDialog<String>(
+    final passwordController = TextEditingController();
+    final targetEmail = await showModalBottomSheet<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Chuyển quyền chủ nhà"),
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: "Email người nhận quyền",
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(
-              context,
-              controller.text.trim().toLowerCase(),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
             ),
-            child: Text("Tiếp tục"),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(26),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Chuyển quyền chủ nhà",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+                const SizedBox(height: 12),
+
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Mật khẩu tài khoản",
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    labelText: "Email chủ nhà mới",
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 18),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.swap_horiz),
+                    label: const Text("Tiếp tục"),
+                    onPressed: () {
+                      Navigator.pop(
+                        context,
+                        controller.text.trim().toLowerCase(),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
 
 
     if (targetEmail == null || targetEmail.isEmpty) return;
-
-
+    final myEmail = FirebaseAuth.instance.currentUser?.email
+        ?.trim()
+        .toLowerCase();
+    if (targetEmail == myEmail) {
+      showTopToast(
+        context,
+        "Không thể chuyển quyền cho chính bạn",
+        color: Colors.orange,
+        icon: Icons.warning_amber_rounded,
+      );
+      return;
+    }
     // ===== 1. FIND UID =====
     final snap = await FirebaseDatabase.instance.ref("accounts").get();
     if (!snap.exists) return;
@@ -757,67 +887,141 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (targetUid == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Không tìm thấy user"),
-          backgroundColor: Colors.red,
-        ),
+      showTopToast(
+        context,
+        "Không tìm thấy user",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
       );
       return;
     }
 
     // ===== 2. CONFIRM =====
-    final ok = await showDialog<bool>(
+    final ok = await showModalBottomSheet<bool>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Xác nhận"),
-        content: Text("Chuyển quyền Home này cho $targetEmail ?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text("Hủy"),
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(26),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.orange,
+                  size: 46,
+                ),
+
+                const SizedBox(height: 12),
+
+                const Text(
+                  "Xác nhận chuyển quyền",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                Text(
+                  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail ?",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                    color: Colors.black87,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Hủy"),
+                      ),
+                    ),
+
+                    const SizedBox(width: 12),
+
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Chuyển"),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text("OK"),
-          ),
-        ],
-      ),
+        );
+      },
     );
 
     if (ok != true) return;
+    final user = FirebaseAuth.instance.currentUser!;
 
+    try {
+      final credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: passwordController.text.trim(),
+      );
+
+      await user.reauthenticateWithCredential(credential);
+    } catch (e) {
+      showTopToast(
+        context,
+        "Sai mật khẩu",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+      return;
+    }
     final homeId = selectedHome;
 
-    await ShareService.transferOwner(
-      oldOwnerUid: uid,
-      newOwnerUid: targetUid,
+    await FirebaseDatabase.instance
+        .ref("accounts/$targetUid/shareRequests/transfer_${homeId}_$uid")
+        .set({
+      "type": "transfer_owner_request",
+      "homeId": homeId,
+      "oldOwnerUid": uid,
+      "newOwnerUid": targetUid,
+      "ownerEmail": myEmail ?? "",
+      "targetEmail": targetEmail,
+      "homeName": homes[homeId]?["name"]?.toString() ?? homeId,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    });
+    await HomeNotificationService.addNotification(
+      uid: targetUid,
+      type: "transfer_owner_request",
+      title: "Yêu cầu chuyển quyền chủ nhà",
+      message: "${myEmail ?? "Một chủ nhà"} muốn chuyển quyền nhà ${homes[homeId]?["name"] ?? homeId} cho bạn.",
       homeId: homeId,
     );
+    showTopToast(
+      context,
+      "Đã gửi yêu cầu chuyển quyền chủ nhà",
+      color: Colors.green,
+      icon: Icons.check_circle_rounded,
+    );
 
-    // ===== 4. UPDATE LOCAL =====
-    setState(() {
-      homes.remove(homeId);
-      homeOrder.remove(homeId);
-
-      if (homeOrder.isNotEmpty) {
-        selectedHome = homeOrder.first;
-      } else {
-        selectedHome = "";
+    return;
       }
-    });
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.homeOrder(uid))
-        .set(homeOrder);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (homeOrder.isNotEmpty) {
-        final index = homeOrder.indexOf(selectedHome);
-        if (index != -1) {
-          homeTabController.jumpTo(index * 110);
-        }
-      }
-    });
-  }
   void deleteDevice(String id) async {
     if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
@@ -979,8 +1183,11 @@ class _HomePageState extends State<HomePage> {
 
   void renameDevice(String id) async {
     if (homes[selectedHome]?["_shared"] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Home được share chỉ có quyền xem")),
+      showTopToast(
+        context,
+        "Home được share chỉ có quyền xem",
+        color: Colors.orange,
+        icon: Icons.lock_rounded,
       );
       return;
     }
@@ -1195,10 +1402,11 @@ class _HomePageState extends State<HomePage> {
                       onDelete: canManageHome() ? deleteDevice : (_) {},
                       onPairSensor: () async {
                         if (!canManageHome()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Bạn không có quyền pair thiết bị"),
-                            ),
+                          showTopToast(
+                            context,
+                            "Bạn không có quyền thêm thiết bị",
+                            color: Colors.orange,
+                            icon: Icons.lock_rounded,
                           );
                           return;
                         }
@@ -1306,14 +1514,49 @@ class _HomePageState extends State<HomePage> {
                   icon: const Icon(Icons.add_home),
                   onPressed: addHome,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.notifications_rounded),
-                  onPressed: () {
-                    showHomeEventSheet(
-                      context: context,
-                      uid: uid,
-                    );
-                  },
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.notifications_rounded),
+                      onPressed: () {
+                        showHomeEventSheet(
+                          context: context,
+                          uid: uid,
+                        );
+                      },
+                    ),
+
+                    if (unreadHomeNotificationCount > 0)
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            minWidth: 18,
+                            minHeight: 18,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 2,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            unreadHomeNotificationCount > 99
+                                ? "99+"
+                                : unreadHomeNotificationCount.toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 Stack(
                   children: [
@@ -1408,25 +1651,28 @@ class _HomePageState extends State<HomePage> {
                               },
                             );
                           },
-                          onTransferOwner: isOwner() ? transferOwner : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Chỉ chủ nhà mới được chuyển quyền"),
-                              ),
+                          onDeleteHome: isOwner() ? deleteHome : () {
+                            showTopToast(
+                              context,
+                              "Chỉ chủ nhà mới được xoá nhà",
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
                             );
                           },
                           onRenameHome: canManageHome() ? renameHome : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Bạn không có quyền sửa tên nhà"),
-                              ),
+                            showTopToast(
+                              context,
+                              "Bạn không có quyền sửa tên nhà",
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
                             );
                           },
-                          onDeleteHome: isOwner() ? deleteHome : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Chỉ chủ nhà mới được xoá nhà"),
-                              ),
+                          onTransferOwner: isOwner() ? transferOwner : () {
+                            showTopToast(
+                              context,
+                              "Chỉ chủ nhà mới được chuyển quyền",
+                              color: Colors.orange,
+                              icon: Icons.admin_panel_settings_rounded,
                             );
                           },
                           context: context,
@@ -1439,10 +1685,11 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           onShare: canManageHome() ? shareHome : () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Bạn không có quyền chia sẻ nhà"),
-                              ),
+                            showTopToast(
+                              context,
+                              "Bạn không có quyền chia sẻ nhà",
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
                             );
                           },
                           onShareList: () {

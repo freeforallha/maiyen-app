@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import '../helpers/top_toast.dart';
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -152,11 +152,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 final value = "$h:$m";
 
                 if (!isValidTime(value)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Giờ không hợp lệ"),
-                      backgroundColor: Colors.red,
-                    ),
+                  showTopToast(
+                    context,
+                    "Giờ không hợp lệ",
+                    color: Colors.red,
+                    icon: Icons.error_outline_rounded,
                   );
                   return;
                 }

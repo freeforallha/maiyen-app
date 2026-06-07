@@ -5,7 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import '../helpers/top_toast.dart';
 class EditProfilePage extends StatefulWidget {
   final String userName;
   final String userGender;
@@ -200,18 +200,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Đã lưu thông tin"),
-        ),
+      showTopToast(
+        context,
+        "Đã lưu thông tin",
+        color: Colors.green,
+        icon: Icons.check_circle_rounded,
       );
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Lỗi lưu profile: $e"),
-        ),
+      showTopToast(
+        context,
+        "Lỗi lưu profile",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
       );
     }
 

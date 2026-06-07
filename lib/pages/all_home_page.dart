@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../helpers/top_toast.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -503,8 +504,11 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     if (updates.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Không có thiết bị an ninh nào để cài alarm")),
+      showTopToast(
+        context,
+        "Không có thiết bị an ninh nào để cài alarm",
+        color: Colors.orange,
+        icon: Icons.warning_amber_rounded,
       );
       return;
     }
@@ -601,11 +605,11 @@ class _AllHomePageState extends State<AllHomePage> {
 
                 Navigator.pop(context, true);
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text("Sai mật khẩu"),
-                    backgroundColor: Colors.red,
-                  ),
+                showTopToast(
+                  context,
+                  "Sai mật khẩu",
+                  color: Colors.red,
+                  icon: Icons.error_outline_rounded,
                 );
               }
             },
@@ -671,12 +675,11 @@ class _AllHomePageState extends State<AllHomePage> {
       selectedHomes.clear();
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          sharedCount > 0 && ownCount == 0 ? "Đã rời khỏi home" : "Đã cập nhật",
-        ),
-      ),
+    showTopToast(
+      context,
+      sharedCount > 0 && ownCount == 0 ? "Đã rời khỏi home" : "Đã cập nhật",
+      color: Colors.green,
+      icon: Icons.check_circle_rounded,
     );
   }
 
@@ -954,8 +957,11 @@ class _AllHomePageState extends State<AllHomePage> {
                         }
 
                         if (targetUid == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Email chưa đăng ký")),
+                          showTopToast(
+                            context,
+                            "Email chưa đăng ký",
+                            color: Colors.red,
+                            icon: Icons.error_outline_rounded,
                           );
                           return;
                         }
@@ -1060,10 +1066,11 @@ class _AllHomePageState extends State<AllHomePage> {
                         }).toList();
 
                         if (ownHomes.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Không có nhà nào bạn sở hữu"),
-                            ),
+                          showTopToast(
+                            context,
+                            "Không có nhà nào bạn có quyền quản lý",
+                            color: Colors.orange,
+                            icon: Icons.lock_rounded,
                           );
 
                           return;

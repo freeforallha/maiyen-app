@@ -128,7 +128,15 @@ void showHomeEventSheet({
                               "${item["message"] ?? ""}\n${formatTime(item["time"])}",
                             ),
                             isThreeLine: true,
-                            onTap: () {},
+                            onTap: () async {
+                              final id = item["id"]?.toString() ?? "";
+
+                              if (id.isEmpty) return;
+
+                              await FirebaseDatabase.instance
+                                  .ref("accounts/$uid/notifications/$id/read")
+                                  .set(true);
+                            },
                           ),
                         );
                       },
