@@ -22,11 +22,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       AndroidFlutterLocalNotificationsPlugin>();
 
   const alarmChannel = AndroidNotificationChannel(
-    'alarm_channel_silent_v3',
-    'Alarm Channel Silent V3',
-    description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+    'alarm_channel_siren_v1',
+    'Alarm Channel Siren V1',
+    description: 'Alarm notification phát âm thanh khi app chạy nền',
     importance: Importance.max,
-    playSound: false,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('alarm_siren'),
+    audioAttributesUsage: AudioAttributesUsage.alarm,
     enableVibration: true,
   );
 
@@ -95,8 +97,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     body,
     const NotificationDetails(
       android: AndroidNotificationDetails(
-        'alarm_channel_silent_v3',
-        'Alarm Channel Silent V3',
+        'alarm_channel_siren_v1',
+        'Alarm Channel Siren V1',
         channelDescription:
         'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,

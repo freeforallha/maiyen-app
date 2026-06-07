@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../app/safe_home_app.dart';
 import '../services/notification_service.dart';
 class FullscreenAlarmPage extends StatefulWidget {
@@ -99,7 +98,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     text = text.replaceFirst(RegExp(r'^Nhà\s+'), 'Nhà ');
 
     final parts = text
-        .split(RegExp(r',|\n'))
+        .split(RegExp(r'[,\\n]'))
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
@@ -177,11 +176,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (!context.mounted) return;
 
-    Navigator.pushReplacement(
-      context,
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => AuthGate(),
       ),
+          (route) => false,
     );
   }
 
