@@ -62,25 +62,31 @@ class FCMService {
               message.data["body"]?.toString() ??
               "Có cảnh báo an ninh cần kiểm tra ngay.";
 
-      await localNotif.show(
-        DateTime.now().millisecondsSinceEpoch ~/ 1000,
-        title,
-        body,
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'alarm_channel_silent_v3',
-            'Alarm Channel Silent V3',
-            channelDescription:
-            'Alarm notification chỉ cảnh báo, không tự mở fullscreen',
-            importance: Importance.max,
-            priority: Priority.max,
-            category: AndroidNotificationCategory.alarm,
-            fullScreenIntent: false,
-            playSound: false,
-            enableVibration: true,
-          ),
-        ),
-        payload: 'open_home',
+      NotificationService.openAlarmPage(
+        title: title,
+        body: body,
+      );
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      final type = message.data["type"]?.toString() ?? "alarm";
+
+      if (type != "alarm") return;
+
+      final title =
+          message.data["title"]?.toString() ??
+              "🚨 SafeHome";
+
+      final body =
+          message.data["body"]?.toString() ??
+              "Có cảnh báo an ninh cần kiểm tra ngay.";
+
+      final alarmItems = message.data["alarmItems"]?.toString() ?? "";
+
+      NotificationService.openAlarmPage(
+        title: title,
+        body: body,
+        alarmItemsJson: alarmItems,
       );
     });
   }

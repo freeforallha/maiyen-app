@@ -4,6 +4,7 @@ void showSettingsSheet({
   required String homeId,
   required String homeName,
   required String homeAddress,
+  required String role,
   required BuildContext context,
   required VoidCallback onShareRequests,
   required VoidCallback onShare,
@@ -93,14 +94,37 @@ void showSettingsSheet({
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                homeName.isNotEmpty ? homeName : "Chưa đặt tên",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      homeName.isNotEmpty ? homeName : "Chưa đặt tên",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 6),
+
+                                  Icon(
+                                    role == "owner"
+                                        ? Icons.workspace_premium_rounded
+                                        : role == "admin"
+                                        ? Icons.admin_panel_settings_rounded
+                                        : Icons.person_rounded,
+                                    size: 18,
+                                    color: role == "owner"
+                                        ? Colors.amber
+                                        : role == "admin"
+                                        ? Colors.deepPurple
+                                        : Colors.blueGrey,
+                                  ),
+                                ],
                               ),
                             ),
 

@@ -72,7 +72,7 @@ class HomeTabs extends StatelessWidget {
 
             return RepaintBoundary(
               key: ValueKey("home_tab_$h"),
-              child: ReorderableDragStartListener(
+              child: ReorderableDelayedDragStartListener(
                 index: index,
                 child: GestureDetector(
                   onTap: () => onSelect(h),

@@ -30,7 +30,17 @@ class DeviceList extends StatelessWidget {
   }
 
   bool isDeviceOnline(Map<String, dynamic> d) {
-    return d["availability"] == "online";
+    if (d["availability"] == "online") return true;
+
+    final lastSeenText = d["last_seen"]?.toString();
+    if (lastSeenText == null || lastSeenText.isEmpty) return false;
+
+    final lastSeen = DateTime.tryParse(lastSeenText);
+    if (lastSeen == null) return false;
+
+    final diff = DateTime.now().toUtc().difference(lastSeen.toUtc());
+
+    return diff.inHours < 2;
   }
 
   String formatAgo(dynamic ts) {

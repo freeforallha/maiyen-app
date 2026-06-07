@@ -418,7 +418,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
               Text(
                 isAlarm
                     ? "Hẹn giờ Alarm"
-                    : "Hẹn giờ Notification",
+                    : "Hẹn giờ Reminder",
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -520,7 +520,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
               ],
 
               if (!isAlarm) ...[
-                sectionTitle("Notification"),
+                sectionTitle("Reminder"),
 
                 ...notifications.asMap().entries.map((e) {
                   final i = e.key;

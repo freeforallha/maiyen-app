@@ -31,6 +31,7 @@ import '../sheets/schedule_sheet.dart';
 import '../sheets/all_devices_sheet.dart';
 import '../sheets/home_event_sheet.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../sheets/alarm_device_sheet.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -122,41 +123,34 @@ class _HomePageState extends State<HomePage> {
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
   String formatAlarmSchedules() {
-    final currentHome = safeMap(homes[selectedHome]);
-    final schedules = safeMap(currentHome["schedules"]);
-    final alarmsRaw = schedules["alarms"];
+    final devices = getDevices();
 
-    if (alarmsRaw == null) return "--:--";
+    final securityDevices = devices.values.where((item) {
+      final d = safeMap(item);
+      final type = d["type"]?.toString();
 
-    final alarms = List<Map<String, dynamic>>.from(
-      (alarmsRaw as List).map(
-            (e) => Map<String, dynamic>.from(e),
-      ),
-    );
+      return type == "door" || type == "door_lock" || type == "motion";
+    }).toList();
 
-    final enabled = alarms.where((e) => e["enabled"] == true).toList();
+    final enabled = securityDevices.where((item) {
+      final d = safeMap(item);
+      final alarm = safeMap(d["alarm"]);
+
+      return alarm["enabled"] == true;
+    }).toList();
 
     if (enabled.isEmpty) {
       return "Chưa bật";
     }
 
-    String repeatText(dynamic value) {
-      final minutes = int.tryParse(value?.toString() ?? "0") ?? 0;
-
-      if (minutes == 15) return " • Lặp 15'";
-      if (minutes == 30) return " • Lặp 30'";
-      if (minutes == 60) return " • Lặp 1h";
-
-      return " • Không lặp";
-    }
-
     if (enabled.length == 1) {
-      final item = enabled.first;
+      final d = safeMap(enabled.first);
+      final alarm = safeMap(d["alarm"]);
 
-      return "${item["start"]} - ${item["end"]}${repeatText(item["repeatMinutes"])}";
+      return "${alarm["start"] ?? "--:--"} - ${alarm["end"] ?? "--:--"}";
     }
 
-    return "${enabled.length} khung giờ";
+    return "${enabled.length} thiết bị alarm";
   }
   Map<String, dynamic> getDevices() {
     final homeData = safeMap(homes[selectedHome]);
@@ -347,7 +341,57 @@ class _HomePageState extends State<HomePage> {
   }
   Future<void> handleScannedQR(String code) async {
     final value = code.trim();
+    if (value.startsWith("safehome_join_multi|")) {
+      final parts = value.split("|");
 
+      if (parts.length != 3) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("QR gia nhập nhiều nhà không hợp lệ")),
+        );
+        return;
+      }
+
+      final ownerUid = parts[1];
+      final homeIds = parts[2]
+          .split(",")
+          .where((e) => e.trim().isNotEmpty)
+          .toList();
+
+      if (ownerUid == uid) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Bạn đang là chủ các nhà này")),
+        );
+        return;
+      }
+
+      final myEmail = FirebaseAuth.instance.currentUser?.email
+          ?.trim()
+          .toLowerCase();
+
+      final targetData = await ShareService.loadAccount(uid);
+
+      for (final homeId in homeIds) {
+        await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
+            .set({
+          "homeId": homeId,
+          "targetUid": uid,
+          "targetEmail": myEmail ?? "",
+          "targetName": targetData["name"] ?? "",
+          "targetPhone": targetData["phone"] ?? "",
+          "type": "join_request",
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Đã gửi yêu cầu gia nhập ${homeIds.length} nhà"),
+        ),
+      );
+
+      return;
+    }
     if (value.startsWith("safehome_join|")) {
       final parts = value.split("|");
 
@@ -1126,12 +1170,10 @@ class _HomePageState extends State<HomePage> {
                                 context: context,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
-                                builder: (_) => ScheduleSheet(
+                                builder: (_) => AlarmDeviceSheet(
                                   ownerUid: getHomeOwnerUid(),
                                   homeId: selectedHome,
-                                  isShared:
-                                  homes[selectedHome]?["_shared"] == true,
-                                  type: "alarm",
+                                  devices: getDevices(),
                                 ),
                               );
                             },
@@ -1326,6 +1368,7 @@ class _HomePageState extends State<HomePage> {
                           homes[selectedHome]?["name"]?.toString() ?? selectedHome,
                           homeAddress:
                           homes[selectedHome]?["address"]?.toString() ?? "",
+                          role: getMyRole(),
                           onAllDevices: () {
                             showAllDevicesSheet(
                               context: context,

@@ -36,7 +36,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   @override
   void initState() {
     super.initState();
-
+    NotificationService.stopAlarmNotification();
     if (widget.silentMode) {
       startSilentTimer();
     } else {

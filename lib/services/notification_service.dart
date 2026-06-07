@@ -9,6 +9,9 @@ final FlutterLocalNotificationsPlugin localNotif =
 FlutterLocalNotificationsPlugin();
 
 class NotificationService {
+  static Future<void> stopAlarmNotification() async {
+    await localNotif.cancel(999999);
+  }
   static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
 
   static Future<void> init() async {
@@ -56,6 +59,15 @@ class NotificationService {
         }
 
         if (payload == 'alarm' || payload == 'open_home') {
+          appNavigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => const FullscreenAlarmPage(
+                title: '🚨 SafeHome',
+                body: 'Có cảnh báo an ninh cần kiểm tra ngay.',
+              ),
+            ),
+          );
+
           return;
         }
 
@@ -108,7 +120,21 @@ class NotificationService {
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
   }
-
+  static void openAlarmPage({
+    required String title,
+    required String body,
+    String alarmItemsJson = '',
+  }) {
+    appNavigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (_) => FullscreenAlarmPage(
+          title: title,
+          body: body,
+          alarmItemsJson: alarmItemsJson,
+        ),
+      ),
+    );
+  }
   static Future<void> showSafetyReminder({
     required bool isSafe,
     String reason = '',

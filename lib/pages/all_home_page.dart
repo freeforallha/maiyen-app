@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -115,6 +115,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 "_shared": true,
                 "_ownerUid": ownerUid,
                 "_ownerEmail": ownerEmail,
+                "_role": v["role"] ?? "member",
               };
             });
           });
@@ -420,50 +421,112 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Future<void> setSelectedHomesAlarm() async {
-    final start = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: 23, minute: 0),
-    );
+    Future<String?> inputTime(String title, String initial) async {
+      final parts = initial.split(":");
+      final h = TextEditingController(text: parts[0]);
+      final m = TextEditingController(text: parts[1]);
 
+      return showDialog<String>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(title),
+          content: Row(
+            children: [
+              Expanded(child: TextField(controller: h, maxLength: 2, decoration: const InputDecoration(labelText: "Giờ"))),
+              const Text(" : "),
+              Expanded(child: TextField(controller: m, maxLength: 2, decoration: const InputDecoration(labelText: "Phút"))),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Huỷ")),
+            ElevatedButton(
+              onPressed: () {
+                final value = "${h.text.trim().padLeft(2, '0')}:${m.text.trim().padLeft(2, '0')}";
+                Navigator.pop(context, value);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final start = await inputTime("Giờ bắt đầu Alarm", "23:00");
     if (start == null) return;
 
-    final end = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: 6, minute: 0),
-    );
-
+    final end = await inputTime("Giờ kết thúc Alarm", "06:00");
     if (end == null) return;
 
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final alarmData = {
+      "enabled": true,
+      "start": start,
+      "end": end,
+      "repeatMinutes": 30,
+    };
 
+    final uid = FirebaseAuth.instance.currentUser!.uid;
     final updates = <String, dynamic>{};
+
+    int updatedDevices = 0;
+    int skippedHomes = 0;
 
     for (final homeId in selectedHomes) {
       final home = safeMap(homes[homeId]);
-
       final isShared = home["_shared"] == true;
+      final role = home["_role"]?.toString() ?? "member";
 
-      final alarmData = {
-        "enabled": true,
-        "start": "${start.hour}:${start.minute}",
-        "end": "${end.hour}:${end.minute}",
-      };
+      final canManage = !isShared || role == "owner" || role == "admin";
 
-      // HOME SHARE
-      if (isShared) {
-        updates["accounts/$uid/sharedHomes/$homeId/alarm"] = alarmData;
+      if (!canManage) {
+        skippedHomes++;
+        continue;
       }
-      // HOME OWN
-      else {
-        updates["accounts/$uid/homes/$homeId/alarm"] = alarmData;
+
+      final ownerUid = isShared ? home["_ownerUid"] : uid;
+      final devices = safeMap(home["devices"]);
+
+      for (final entry in devices.entries) {
+        final deviceId = entry.key;
+        final device = safeMap(entry.value);
+        final type = device["type"]?.toString();
+
+        final isSecurity =
+            type == "door" || type == "door_lock" || type == "motion";
+
+        if (!isSecurity) continue;
+
+        updates["accounts/$ownerUid/homes/$homeId/devices/$deviceId/alarm"] =
+            alarmData;
+
+        updatedDevices++;
       }
+    }
+
+    if (updates.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Không có thiết bị an ninh nào để cài alarm")),
+      );
+      return;
     }
 
     await FirebaseDatabase.instance.ref().update(updates);
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Đã cập nhật Alarm")));
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Cài Alarm hoàn tất"),
+        content: Text(
+          "Đã cài alarm cho $updatedDevices thiết bị."
+              "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
     Future<void> confirmDeleteSelected() async {
@@ -762,40 +825,104 @@ class _AllHomePageState extends State<AllHomePage> {
 
                       onTap: () async {
                         final controller = TextEditingController();
+                        final ownerUid = FirebaseAuth.instance.currentUser!.uid;
 
-                        final targetEmail = await showDialog<String>(
+                        final qrData =
+                            "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
+                        final targetEmail = await showModalBottomSheet<String>(
                           context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return SafeArea(
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  top: 20,
+                                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 42,
+                                      height: 5,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade300,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    const Text(
+                                      "Chia sẻ nhà đã chọn",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                    const Text(
+                                      "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
 
-                          builder: (_) => AlertDialog(
-                            title: Text("Chia sẻ nhà"),
+                                    const SizedBox(height: 12),
 
-                            content: TextField(
-                              controller: controller,
+                                    QrImageView(
+                                      data: qrData,
+                                      version: QrVersions.auto,
+                                      size: 190,
+                                    ),
 
-                              decoration: InputDecoration(
-                                hintText: "Email người nhận",
+                                    const SizedBox(height: 18),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      "${selectedHomes.length} nhà đã chọn",
+                                      style: TextStyle(
+                                        color: Colors.grey.shade600,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    TextField(
+                                      controller: controller,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: InputDecoration(
+                                        prefixIcon: const Icon(Icons.email_rounded),
+                                        labelText: "Email người nhận",
+                                        filled: true,
+                                        fillColor: Colors.grey.shade100,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 18),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ElevatedButton.icon(
+                                        icon: const Icon(Icons.share_rounded),
+                                        label: const Text("Chia sẻ"),
+                                        onPressed: () {
+                                          Navigator.pop(
+                                            context,
+                                            controller.text.trim().toLowerCase(),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-
-                                child: Text("Huỷ"),
-                              ),
-
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                    controller.text.trim().toLowerCase(),
-                                  );
-                                },
-
-                                child: Text("Chia sẻ"),
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         );
 
                         if (targetEmail == null || targetEmail.isEmpty) return;
@@ -835,11 +962,23 @@ class _AllHomePageState extends State<AllHomePage> {
 
                         final myUid = FirebaseAuth.instance.currentUser!.uid;
 
+                        int skipped = 0;
+
                         for (final homeId in selectedHomes) {
                           final home = safeMap(homes[homeId]);
 
                           // chỉ share home own
-                          if (home["_shared"] == true) continue;
+                          final role = home["_role"]?.toString() ?? "member";
+
+                          final canShare =
+                              home["_shared"] != true ||
+                                  role == "owner" ||
+                                  role == "admin";
+
+                          if (!canShare) {
+                            skipped++;
+                            continue;
+                          }
 
                           await FirebaseDatabase.instance
                               .ref("accounts/$targetUid/shareRequests/$homeId")
@@ -864,8 +1003,22 @@ class _AllHomePageState extends State<AllHomePage> {
                               });
                         }
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Đã chia sẻ nhà")),
+                        showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text("Chia sẻ hoàn tất"),
+                            content: Text(
+                              skipped > 0
+                                  ? "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ."
+                                  : "Đã chia sẻ nhà thành công.",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("OK"),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
@@ -901,8 +1054,9 @@ class _AllHomePageState extends State<AllHomePage> {
 
                         final ownHomes = selectedHomes.where((id) {
                           final home = safeMap(homes[id]);
+                          final role = home["role"]?.toString();
 
-                          return home["_shared"] != true;
+                          return home["_shared"] != true || role == "owner" || role == "admin";
                         }).toList();
 
                         if (ownHomes.isEmpty) {

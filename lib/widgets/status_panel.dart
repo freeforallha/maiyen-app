@@ -74,7 +74,7 @@ class StatusPanel extends StatelessWidget {
                         Icons.notifications_active_rounded,
                         color: Colors.orange,
                       ),
-                      title: const Text("Hẹn giờ Notification"),
+                        title: const Text("Hẹn giờ Reminder"),
                       onTap: () {
                         Navigator.pop(context);
                         onScheduleNotification?.call();
