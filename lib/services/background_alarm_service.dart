@@ -44,14 +44,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await androidPlugin?.createNotificationChannel(alarmChannel);
   await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
 
-  final type = message.data['type']?.toString() ?? 'alarm';
+  final type = message.data['type']?.toString() ?? '';
   final isSchedule = type == 'schedule_notification';
+  final isAlarm = type == 'alarm';
+
+  if (!isSchedule && !isAlarm) {
+    return;
+  }
 
   if (isSchedule) {
     final body = _buildScheduleBody(message.data);
 
     await localNotif.cancel(999998);
-
+    await localNotif.cancel(999999);
     await localNotif.show(
       999998,
       '🏡 SafeHome',

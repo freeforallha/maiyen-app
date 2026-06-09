@@ -53,17 +53,8 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       // giữ nguyên payload
     }
     else if (payload == "open_home") {
-      try {
-        isAlarmScreenLaunch =
-            await nativeAlarmChannel.invokeMethod<bool>(
-              "isAlarmScreenLaunch",
-            ) ??
-                false;
-
-        if (isAlarmScreenLaunch) {
-          payload = "alarm";
-        }
-      } catch (_) {}
+      // Không tự ép open_home thành alarm nữa.
+      // Alarm thật đã có payload riêng: alarm hoặc alarm_summary|.
     }
     if (!mounted) return;
 

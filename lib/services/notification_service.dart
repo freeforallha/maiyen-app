@@ -13,6 +13,10 @@ class NotificationService {
   static Future<void> stopAlarmNotification() async {
     await localNotif.cancel(999999);
   }
+
+  static Future<void> stopReminderNotification() async {
+    await localNotif.cancel(999998);
+  }
   static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
   static String lastReminderItemsJson = "";
   static Future<void> init() async {

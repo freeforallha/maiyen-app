@@ -35,12 +35,15 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   bool get isSafeReminder => isReminder && widget.body.contains('ĐÃ AN TOÀN');
 
   @override
+  @override
   void initState() {
     super.initState();
-    NotificationService.stopAlarmNotification();
+
     if (widget.silentMode) {
+      NotificationService.stopReminderNotification();
       startSilentTimer();
     } else {
+      NotificationService.stopAlarmNotification();
       startAlarmSound();
     }
   }
