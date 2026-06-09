@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -106,6 +107,27 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       );
     }
 
+    if (payload.startsWith("schedule_notification::")) {
+      String body = NotificationService.lastScheduleBody;
+      String reminderItemsJson = NotificationService.lastReminderItemsJson;
+
+      try {
+        final raw = payload.replaceFirst("schedule_notification::", "");
+        final data = Map<String, dynamic>.from(jsonDecode(raw));
+
+        body = data["body"]?.toString() ?? body;
+        reminderItemsJson =
+            data["reminderItems"]?.toString() ?? reminderItemsJson;
+      } catch (_) {}
+
+      return FullscreenAlarmPage(
+        title: "🏡 SafeHome",
+        body: body,
+        silentMode: true,
+        reminderItemsJson: reminderItemsJson,
+      );
+    }
+
     if (payload == "schedule_notification" ||
         payload.startsWith("schedule_notification|")) {
       final body = payload.startsWith("schedule_notification|")
@@ -116,6 +138,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
         title: "🏡 SafeHome",
         body: body,
         silentMode: true,
+        reminderItemsJson: NotificationService.lastReminderItemsJson,
       );
     }
 

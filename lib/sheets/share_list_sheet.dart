@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
+import '../services/home_notification_service.dart';
+
 Future<void> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
@@ -284,7 +286,15 @@ Future<void> showShareListSheet({
                               await db
                                   .ref("${FirebasePaths.sharedHome(targetUid, homeId)}/role")
                                   .set(value);
-
+                              await HomeNotificationService.addNotification(
+                                uid: targetUid,
+                                type: "role_changed",
+                                title: "Quyền trong nhà đã thay đổi",
+                                message: value == "admin"
+                                    ? "Bạn đã được nâng quyền thành Admin."
+                                    : "Quyền của bạn đã được chuyển về Member.",
+                                homeId: homeId,
+                              );
                               if (!context.mounted) return;
 
                               Navigator.pop(context);
@@ -324,6 +334,20 @@ Future<void> showShareListSheet({
                               color: Colors.red,
                             ),
                           onPressed: () async {
+                            await HomeNotificationService.addNotification(
+                              uid: targetUid,
+                              type: "member_removed",
+                              title: "Đã bị xoá khỏi nhà",
+                              message: "Bạn đã bị xoá khỏi một nhà được chia sẻ.",
+                              homeId: homeId,
+                            );
+                            await HomeNotificationService.addNotification(
+                              uid: ownerUid,
+                              type: "member_removed",
+                              title: "Đã xoá thành viên",
+                              message: "$name đã bị xoá khỏi nhà.",
+                              homeId: homeId,
+                            );
                             await db
                                 .ref(FirebasePaths.sharedHome(targetUid, homeId))
                                 .remove();

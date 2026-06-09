@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-
+import '../services/home_notification_service.dart';
 import '../helpers/firebase_paths.dart';
 
 class ShareService {
@@ -148,7 +148,57 @@ class ShareService {
     required String uid,
     required String ownerUid,
     required String homeId,
+
   }) async {
+    final sharedHomeSnap = await _db
+        .ref(FirebasePaths.sharedHome(uid, homeId))
+        .get();
+
+    String realOwnerUid = ownerUid;
+
+    if (sharedHomeSnap.exists && sharedHomeSnap.value is Map) {
+      final sharedHomeData = Map<String, dynamic>.from(
+        sharedHomeSnap.value as Map,
+      );
+
+      final foundOwnerUid = sharedHomeData["ownerUid"]?.toString() ?? "";
+
+      if (foundOwnerUid.isNotEmpty) {
+        realOwnerUid = foundOwnerUid;
+      }
+    }
+
+    if (realOwnerUid.isEmpty) return;
+
+    final homeSnap = await _db
+        .ref(FirebasePaths.home(realOwnerUid, homeId))
+        .get();
+
+    String homeName = homeId;
+    final userData = await loadAccount(uid);
+
+    final userProfile = userData["profile"] is Map
+        ? Map<String, dynamic>.from(userData["profile"] as Map)
+        : <String, dynamic>{};
+
+    final memberName = userProfile["name"]?.toString().trim().isNotEmpty == true
+        ? userProfile["name"].toString()
+        : userData["email"]?.toString() ?? "Một thành viên";
+    if (homeSnap.exists) {
+      final homeData = Map<String, dynamic>.from(
+        homeSnap.value as Map,
+      );
+
+      homeName = homeData["name"]?.toString() ?? homeId;
+    }
+    print("LEAVE_HOME_DEBUG uid=$uid ownerUid=$ownerUid realOwnerUid=$realOwnerUid homeId=$homeId");
+    await HomeNotificationService.addNotification(
+      uid: realOwnerUid,
+      type: "member_leave",
+      title: "Thành viên rời nhà",
+      message: "$memberName đã rời khỏi nhà \"$homeName\".",
+      homeId: homeId,
+    );
     await _db.ref(FirebasePaths.sharedHome(uid, homeId)).remove();
 
     await _db.ref(FirebasePaths.sharedMember(homeId, uid)).remove();

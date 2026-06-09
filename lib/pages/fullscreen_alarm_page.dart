@@ -11,11 +11,13 @@ class FullscreenAlarmPage extends StatefulWidget {
   final String body;
   final bool silentMode;
   final String alarmItemsJson;
+  final String reminderItemsJson;
   const FullscreenAlarmPage({
     super.key,
     required this.title,
     required this.body,
     this.silentMode = false,
+    this.reminderItemsJson = "",
     this.alarmItemsJson = "",
   });
 
@@ -42,7 +44,198 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       startAlarmSound();
     }
   }
+  Widget _buildReminderUI(BuildContext context) {
+    final bool safe = isSafeReminder;
+    final issueMap = buildReminderIssueMap();
+    final Color accent = safe ? Colors.green : Colors.orange;
+    final Color bg1 = safe ? const Color(0xFFDDF7E8) : const Color(0xFFFFF3E0);
+    final Color bg2 = safe ? const Color(0xFFF1FCF5) : const Color(0xFFFFFBF5);
 
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: bg1,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [bg1, bg2, Colors.white],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(22),
+              child: Column(
+                children: [
+                  const Spacer(),
+
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(22),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.88),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: accent.withValues(alpha: 0.22),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: accent.withValues(alpha: 0.14),
+                          blurRadius: 32,
+                          offset: const Offset(0, 14),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          safe ? "🏡" : "⚠️",
+                          style: const TextStyle(fontSize: 46),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        Text(
+                          safe ? "Nhà đã an toàn" : "Hãy kiểm tra lại",                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: accent,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+                        const SizedBox(height: 10),
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+
+                              ...issueMap.entries.map(
+                                    (entry) => Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.75),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: accent.withValues(alpha: 0.16),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        entry.key,
+                                        style: TextStyle(
+                                          color: accent,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+
+                                      ...entry.value.map(
+                                            (item) => Padding(
+                                          padding: const EdgeInsets.only(bottom: 6),
+                                          child: Text(
+                                            "- $item",
+                                            style: const TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.timer_rounded,
+                              color: Colors.grey.shade600,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "Tự đóng sau ${formatRemainingTime()}",
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const Spacer(),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      icon: const Icon(Icons.home_rounded),
+                      label: const Text(
+                        "KIỂM TRA NHÀ",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      onPressed: () => openHome(context),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  TextButton(
+                    onPressed: closeReminder,
+                    child: Text(
+                      "ĐÓNG NHẮC NHỞ",
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   Future<void> startAlarmSound() async {
     await alarmPlayer.setReleaseMode(ReleaseMode.loop);
     await alarmPlayer.setVolume(1.0);
@@ -86,34 +279,68 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
   }
 
-  List<String> buildIssueList() {
-    String text = widget.body
-        .replaceAll('⚠️', '')
-        .replaceAll('✅', '')
-        .replaceAll('CHƯA AN TOÀN', '')
-        .replaceAll('ĐÃ AN TOÀN', '')
-        .replaceAll('Hãy an tâm nghỉ ngơi.', '')
+  Map<String, List<String>> buildReminderIssueMap() {
+    if (isSafeReminder) {
+      return {
+        "SafeHome": ["Tất cả thiết bị đang ổn định"],
+      };
+    }
+
+    final jsonText = widget.reminderItemsJson.trim();
+
+    if (jsonText.isNotEmpty) {
+      try {
+        final List<dynamic> items = jsonDecode(jsonText);
+        final Map<String, List<String>> result = {};
+
+        for (final item in items) {
+          if (item is! Map) continue;
+
+          final homeName = item["homeName"]?.toString().trim();
+          final reasonsRaw = item["reasons"];
+
+          final reasons = reasonsRaw is List
+              ? reasonsRaw
+              .map((e) => e.toString().trim())
+              .where((e) => e.isNotEmpty)
+              .take(4)
+              .toList()
+              : <String>[];
+
+          if (homeName != null && homeName.isNotEmpty) {
+            result[homeName] = reasons.isEmpty
+                ? ["Có mục cần kiểm tra"]
+                : reasons;
+
+            if (reasonsRaw is List && reasonsRaw.length > 4) {
+              result[homeName]!.add("...");
+            }
+          }
+        }
+
+        if (result.isNotEmpty) return result;
+      } catch (_) {
+        // Nếu JSON lỗi thì fallback xuống body.
+      }
+    }
+
+    final bodyText = widget.body
+        .replaceAll("⚠️", "")
+        .replaceAll("!", "")
+        .replaceAll("CHƯA AN TOÀN", "")
+        .replaceAll("ĐÃ AN TOÀN", "")
         .trim();
 
-    text = text.replaceFirst(RegExp(r'^Nhà\s+'), 'Nhà ');
-
-    final parts = text
-        .split(RegExp(r'[,\\n]'))
+    final issues = bodyText
+        .split(RegExp(r'[,\n]'))
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
+        .take(4)
         .toList();
 
-    if (parts.isEmpty) {
-      return isSafeReminder
-          ? ['Tất cả thiết bị đang an toàn']
-          : ['Có thiết bị cần kiểm tra'];
-    }
-
-    if (parts.length > 4) {
-      return [...parts.take(4), '...'];
-    }
-
-    return parts;
+    return {
+      "Nhà": issues.isEmpty ? ["Có mục cần kiểm tra"] : issues,
+    };
   }
   Map<String, List<String>> buildAlarmItems() {
     try {
@@ -232,6 +459,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (isReminder) {
+      return _buildReminderUI(context);
+    }
     final Color bgColor = !isReminder
         ? const Color(0xFF7F1D1D)
         : isSafeReminder
@@ -264,8 +494,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     final groupedItems = buildAlarmItems();
     final nextAlarmMap = buildNextAlarmMap();
-    final issueList = buildIssueList();
-
     String repeatText;
 
     if (!isReminder && nextAlarmMap.isNotEmpty) {
@@ -418,15 +646,17 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                 ),
                               )
                             else
-                              ...issueList.map(
-                                    (item) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                              ...groupedItems.entries.expand(
+                                    (entry) => entry.value.map(
+                                      (reason) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: Text(
+                                      reason,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ),

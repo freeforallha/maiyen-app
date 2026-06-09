@@ -68,7 +68,20 @@ void showShareRequestSheet({
               "name": targetName,
               "sharedAt": DateTime.now().millisecondsSinceEpoch,
             });
-
+            await HomeNotificationService.addNotification(
+              uid: targetUid,
+              type: "join_request_accepted",
+              title: "Yêu cầu gia nhập được chấp nhận",
+              message: "Bạn đã được thêm vào nhà thành công.",
+              homeId: homeId,
+            );
+            await HomeNotificationService.addNotification(
+              uid: ownerUid,
+              type: "member_join",
+              title: "Thành viên mới",
+              message: "${targetName.isNotEmpty ? targetName : targetEmail} đã chấp nhận lời mời và tham gia nhà.",
+              homeId: homeId,
+            );
             await FirebaseDatabase.instance
                 .ref("accounts/$uid/shareRequests/$requestKey")
                 .remove();
@@ -163,8 +176,26 @@ void showShareRequestSheet({
             if (ok != true) return;
 
             for (final homeId in selected) {
+              final raw = requests[homeId];
+
+              if (raw != null) {
+                final data = Map<String, dynamic>.from(raw);
+
+                final ownerUid = data["ownerUid"]?.toString() ?? "";
+
+                if (ownerUid.isNotEmpty) {
+                  await HomeNotificationService.addNotification(
+                    uid: ownerUid,
+                    type: "share_request_denied",
+                    title: "Lời mời bị từ chối",
+                    message: "Một người dùng đã từ chối lời mời tham gia nhà.",
+                    homeId: homeId,
+                  );
+                }
+              }
               await FirebaseDatabase.instance
-                  .ref(FirebasePaths.shareRequest(uid, homeId))                  .remove();
+                  .ref(FirebasePaths.shareRequest(uid, homeId))
+                  .remove();
             }
 
             Navigator.pop(context);

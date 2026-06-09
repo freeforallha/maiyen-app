@@ -211,8 +211,7 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     final displayName =
-        customNames[groupKey] ?? (isYourHomes ? "Your Homes" : ownerText);
-
+        customNames[groupKey] ?? (isYourHomes ? "Nhà của tôi" : ownerText);
     return Container(
       margin: EdgeInsets.only(top: 6, bottom: 8),
 
@@ -688,7 +687,11 @@ class _AllHomePageState extends State<AllHomePage> {
     final grouped = groupedHomes();
 
     return Scaffold(
+      backgroundColor: const Color(0xFFDDF7E8),
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
         centerTitle: true,
         title: isSearching
             ? TextField(
@@ -704,27 +707,41 @@ class _AllHomePageState extends State<AllHomePage> {
             });
           },
         )
-            : RichText(
-          text: TextSpan(
-            style: const TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.5,
+            : Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "🏡",
+              style: const TextStyle(fontSize: 26),
             ),
-            children: [
-              TextSpan(
-                text: "Safe",
+
+            const SizedBox(width: 8),
+
+            RichText(
+              text: const TextSpan(
                 style: TextStyle(
-                  color: isAllSafe() ? Colors.green : Colors.red,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
                 ),
+                children: [
+                  TextSpan(
+                    text: "Safe",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Home",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
-              const TextSpan(
-                text: "Home",
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
 
         actions: [
@@ -1284,20 +1301,33 @@ class _AllHomePageState extends State<AllHomePage> {
               ),
             ),
 
-      body: ListView(
-        padding: EdgeInsets.all(10),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFFDDF7E8),
+              Color(0xFFF1FCF5),
+              Color(0xFFFFFFFF),
+            ],
+          ),
+        ),
+        child: ListView(
+          padding: const EdgeInsets.all(10),
+          children: grouped.entries.map((entry) {
+            final groupKey = entry.key;
+            final ids = entry.value;
 
-        children: grouped.entries.map((entry) {
-          final groupKey = entry.key;
-
-          final ids = entry.value;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [buildSectionTitle(groupKey, ids), SizedBox(height: 6)],
-          );
-        }).toList(),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildSectionTitle(groupKey, ids),
+                const SizedBox(height: 6),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
   }

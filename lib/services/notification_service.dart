@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,7 +14,7 @@ class NotificationService {
     await localNotif.cancel(999999);
   }
   static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
-
+  static String lastReminderItemsJson = "";
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -35,7 +36,7 @@ class NotificationService {
         final payload = response.payload ?? '';
 
         if (payload.startsWith('alarm_summary|')) {
-          final parts = payload.split('|');
+          final parts = payload.split('|||');
 
           final body = parts.length > 1
               ? Uri.decodeComponent(parts[1])
@@ -71,8 +72,18 @@ class NotificationService {
           return;
         }
 
-        if (payload.startsWith('schedule_notification|')) {
-          final body = payload.replaceFirst('schedule_notification|', '');
+        if (payload.startsWith('schedule_notification::')) {
+          String body = lastScheduleBody;
+          String reminderItemsJson = lastReminderItemsJson;
+
+          try {
+            final raw = payload.replaceFirst('schedule_notification::', '');
+            final data = Map<String, dynamic>.from(jsonDecode(raw));
+
+            body = data["body"]?.toString() ?? body;
+            reminderItemsJson =
+                data["reminderItems"]?.toString() ?? reminderItemsJson;
+          } catch (_) {}
 
           appNavigatorKey.currentState?.push(
             MaterialPageRoute(
@@ -80,9 +91,27 @@ class NotificationService {
                 title: '🏡 SafeHome Reminder',
                 body: body,
                 silentMode: true,
+                reminderItemsJson: reminderItemsJson,
               ),
             ),
           );
+
+          return;
+        }
+
+        if (payload == 'schedule_notification') {
+          appNavigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => FullscreenAlarmPage(
+                title: '🏡 SafeHome Reminder',
+                body: lastScheduleBody,
+                silentMode: true,
+                reminderItemsJson: lastReminderItemsJson,
+              ),
+            ),
+          );
+
+          return;
         }
       },
     );
@@ -138,9 +167,10 @@ class NotificationService {
   static Future<void> showSafetyReminder({
     required bool isSafe,
     String reason = '',
+    String reminderItemsJson = '',
   }) async {
     final cleanReason = reason.trim();
-
+    lastReminderItemsJson = reminderItemsJson;
     lastScheduleBody = isSafe
         ? "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi."
         : cleanReason.isEmpty
@@ -178,7 +208,7 @@ class NotificationService {
       title,
       body,
       NotificationDetails(android: androidDetails),
-      payload: "schedule_notification|$lastScheduleBody",
+      payload: "schedule_notification",
     );
   }
 }

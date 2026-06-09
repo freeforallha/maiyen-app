@@ -43,11 +43,13 @@ class FCMService {
           isSafeText == "true" || isSafeText == "1" || isSafeText == "yes";
 
       final reason = message.data["reason"]?.toString() ?? "";
+      final reminderItems = message.data["reminderItems"]?.toString() ?? "";
 
       if (isSchedule) {
         await NotificationService.showSafetyReminder(
           isSafe: isSafe,
           reason: reason,
+          reminderItemsJson: reminderItems,
         );
         return;
       }

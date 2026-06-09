@@ -121,6 +121,15 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance
         .ref("accounts/$uid/alarmSettings/$homeId/enabled")
         .set(enabled);
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "alarm_setting_changed",
+      title: enabled ? "Đã bật Alarm" : "Đã tắt Alarm",
+      message: enabled
+          ? "Bạn đã bật Alarm cho nhà này."
+          : "Bạn đã tắt Alarm cho nhà này.",
+      homeId: homeId,
+    );
   }
   int pairingCountdown = 0;
   Timer? timer;
@@ -295,8 +304,7 @@ class _HomePageState extends State<HomePage> {
         start = parsedAlarm["start"];
         end = parsedAlarm["end"];
       });
-    });
-    ChatService.chatStream().listen((event) {
+    });ChatService.chatStream().listen((event) {
       FirebaseDatabase.instance
           .ref("accounts/$uid/notifications")
           .onValue
@@ -430,6 +438,14 @@ class _HomePageState extends State<HomePage> {
           "type": "join_request",
           "time": DateTime.now().millisecondsSinceEpoch,
         });
+        await HomeNotificationService.addNotification(
+          uid: ownerUid,
+          type: "join_request",
+          title: "Yêu cầu gia nhập nhà",
+          message:
+          "${myEmail ?? "Một người dùng"} đang xin gia nhập một trong các nhà của bạn.",
+          homeId: homeId,
+        );
       }
 
       showTopToast(
@@ -485,7 +501,14 @@ class _HomePageState extends State<HomePage> {
         "type": "join_request",
         "time": DateTime.now().millisecondsSinceEpoch,
       });
-
+      await HomeNotificationService.addNotification(
+        uid: ownerUid,
+        type: "join_request",
+        title: "Yêu cầu gia nhập nhà",
+        message:
+        "${myEmail ?? "Một người dùng"} đang xin gia nhập nhà \"$homeId\".",
+        homeId: homeId,
+      );
       showTopToast(
         context,
         "Đã gửi yêu cầu gia nhập nhà",
@@ -498,15 +521,14 @@ class _HomePageState extends State<HomePage> {
 
     pairSensor(value);
   }
-  void pairSensor(String hubId) {
+  void pairSensor(String hubId) async {
     // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
 
     final requestId =
         "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
 
-    FirebaseDatabase.instance.ref(FirebasePaths.pairRequest(requestId)).set({
-      "active": true,
+    await FirebaseDatabase.instance.ref(FirebasePaths.pairRequest(requestId)).set({      "active": true,
       "hubId": hubId.trim(),
       "homeId": selectedHome,
       "ownerUid": ownerUid, // ✔ giờ không lỗi nữa
@@ -514,7 +536,13 @@ class _HomePageState extends State<HomePage> {
       "duration": 60,
       "time": DateTime.now().millisecondsSinceEpoch,
     });
-
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "pair_started",
+      title: "Đã mở chế độ thêm thiết bị",
+      message: "Bạn đã mở chế độ thêm thiết bị trong 60 giây.",
+      homeId: selectedHome,
+    );
     setState(() => pairingCountdown = 60);
 
     timer?.cancel();
@@ -537,16 +565,12 @@ class _HomePageState extends State<HomePage> {
       if (!ok) return;
 
       final leavingHomeId = selectedHome;
-      final ownerUid = homes[leavingHomeId]?["_ownerUid"];
 
-      // xoá sharedHomes
-      if (ownerUid != null) {
-        await ShareService.leaveSharedHome(
-          uid: uid,
-          ownerUid: ownerUid,
-          homeId: leavingHomeId,
-        );
-      }
+      await ShareService.leaveSharedHome(
+        uid: uid,
+        ownerUid: "",
+        homeId: leavingHomeId,
+      );
 
       setState(() {
         homes.remove(leavingHomeId);
@@ -631,11 +655,24 @@ class _HomePageState extends State<HomePage> {
 
     if (ok != true) return;
 
+    final deletedHomeId = selectedHome;
+    final deletedHomeName =
+        homes[deletedHomeId]?["name"]?.toString() ?? deletedHomeId;
+
     await ShareService.deleteOwnedHome(
       ownerUid: uid,
-      homeId: selectedHome,
+      homeId: deletedHomeId,
     );
-    homeOrder.remove(selectedHome);
+
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "home_deleted",
+      title: "Đã xoá nhà",
+      message: "Bạn đã xoá nhà \"$deletedHomeName\".",
+      homeId: deletedHomeId,
+    );
+
+    homeOrder.remove(deletedHomeId);
 
     await FirebaseDatabase.instance
         .ref(FirebasePaths.homeOrder(uid))
@@ -762,7 +799,14 @@ class _HomePageState extends State<HomePage> {
       targetData: targetData,
       targetEmail: targetEmail,
     );
-
+    await HomeNotificationService.addNotification(
+      uid: targetUid,
+      type: "share_request",
+      title: "Lời mời chia sẻ nhà",
+      message:
+      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"${homes[selectedHome]?["name"] ?? selectedHome}\".",
+      homeId: selectedHome,
+    );
     showTopToast(
       context,
       "Đã share home",
@@ -1010,7 +1054,16 @@ class _HomePageState extends State<HomePage> {
       uid: targetUid,
       type: "transfer_owner_request",
       title: "Yêu cầu chuyển quyền chủ nhà",
-      message: "${myEmail ?? "Một chủ nhà"} muốn chuyển quyền nhà ${homes[homeId]?["name"] ?? homeId} cho bạn.",
+      message:
+      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"${homes[homeId]?["name"] ?? homeId}\" cho bạn.",
+      homeId: homeId,
+    );
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "transfer_owner_request",
+      title: "Đã gửi yêu cầu chuyển quyền",
+      message:
+      "Bạn đã gửi yêu cầu chuyển quyền chủ nhà cho $targetEmail.",
       homeId: homeId,
     );
     showTopToast(
@@ -1026,9 +1079,18 @@ class _HomePageState extends State<HomePage> {
     if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
     final ownerUid = getHomeOwnerUid();
-
+    final deviceName =
+        getDevices()[id]?["name"]?.toString() ?? id;
     await HomeService.deleteDevice(
       ownerUid: ownerUid,
+      homeId: selectedHome,
+      deviceId: id,
+    );
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "device_deleted",
+      title: "Đã xoá thiết bị",
+      message: "Bạn đã xoá thiết bị \"$deviceName\".",
       homeId: selectedHome,
       deviceId: id,
     );
@@ -1105,10 +1167,31 @@ class _HomePageState extends State<HomePage> {
 
     if (result == null) return;
 
-    final name = result["name"] ?? "";
+    final rawName = result["name"] ?? "";
     final address = result["address"] ?? "";
 
-    if (name.trim().isEmpty) return;
+    if (rawName.trim().isEmpty) return;
+
+    String makeUniqueHomeName(String baseName) {
+      final existingNames = homes.values
+          .map((h) => safeMap(h)["name"]?.toString().trim())
+          .where((n) => n != null && n.isNotEmpty)
+          .cast<String>()
+          .toSet();
+
+      if (!existingNames.contains(baseName)) {
+        return baseName;
+      }
+
+      int index = 1;
+      while (existingNames.contains("$baseName.$index")) {
+        index++;
+      }
+
+      return "$baseName.$index";
+    }
+
+    final name = makeUniqueHomeName(rawName.trim());
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
@@ -1123,6 +1206,13 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance
         .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "home_created",
+      title: "Đã tạo nhà mới",
+      message: "Bạn đã tạo nhà \"$name\".",
+      homeId: id,
+    );
   }
 
   // ================= RESTORED FULL FUNCTIONS =================
@@ -1179,6 +1269,13 @@ class _HomePageState extends State<HomePage> {
       homeId: selectedHome,
       name: name,
     );
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "home_renamed",
+      title: "Đã đổi tên nhà",
+      message: "Bạn đã đổi tên nhà thành \"$name\".",
+      homeId: selectedHome,
+    );
   }
 
   void renameDevice(String id) async {
@@ -1222,6 +1319,14 @@ class _HomePageState extends State<HomePage> {
       homeId: selectedHome,
       deviceId: id,
       name: name,
+    );
+    await HomeNotificationService.addNotification(
+      uid: uid,
+      type: "device_renamed",
+      title: "Đã đổi tên thiết bị",
+      message: "Bạn đã đổi tên thiết bị thành \"$name\".",
+      homeId: selectedHome,
+      deviceId: id,
     );
   }
 
@@ -1613,9 +1718,56 @@ class _HomePageState extends State<HomePage> {
                           homes[selectedHome]?["address"]?.toString() ?? "",
                           role: getMyRole(),
                           onAllDevices: () {
+                            final devices = getDevices();
+
+                            if (devices.isEmpty) {
+                              showTopToast(
+                                context,
+                                "Không có thiết bị",
+                                color: Colors.orange,
+                                icon: Icons.sensors_off_rounded,
+                              );
+                              return;
+                            }
+
+                            if (devices.length == 1) {
+                              final entry = devices.entries.first;
+
+                              Navigator.pop(context);
+
+                              showDeviceDetail(
+                                context: context,
+                                id: entry.key,
+                                d: safeMap(entry.value),
+                                onRename: canManageHome()
+                                    ? () => renameDevice(entry.key)
+                                    : null,
+                                onDelete: canManageHome()
+                                    ? () => deleteDevice(entry.key)
+                                    : null,
+                                onNotification: () => openNotificationList(entry.key),
+                              );
+
+                              return;
+                            }
+
                             showAllDevicesSheet(
                               context: context,
-                              devices: getDevices(),
+                              devices: devices,
+                              onTapDevice: (id) {
+                                showDeviceDetail(
+                                  context: context,
+                                  id: id,
+                                  d: safeMap(getDevices()[id]),
+                                  onRename: canManageHome()
+                                      ? () => renameDevice(id)
+                                      : null,
+                                  onDelete: canManageHome()
+                                      ? () => deleteDevice(id)
+                                      : null,
+                                  onNotification: () => openNotificationList(id),
+                                );
+                              },
                             );
                           },
                           onAccount: () {
