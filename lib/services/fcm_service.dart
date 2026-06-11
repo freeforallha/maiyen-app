@@ -64,9 +64,12 @@ class FCMService {
               message.data["body"]?.toString() ??
               "Có cảnh báo an ninh cần kiểm tra ngay.";
 
+      final alarmItems = message.data["alarmItems"]?.toString() ?? "";
+
       NotificationService.openAlarmPage(
         title: title,
         body: body,
+        alarmItemsJson: alarmItems,
       );
     });
 

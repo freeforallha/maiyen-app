@@ -19,6 +19,8 @@ class NotificationService {
   }
   static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
   static String lastReminderItemsJson = "";
+  static String lastAlarmItemsJson = "";
+  static String lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -40,8 +42,7 @@ class NotificationService {
         final payload = response.payload ?? '';
 
         if (payload.startsWith('alarm_summary|')) {
-          final parts = payload.split('|||');
-
+          final parts = payload.split('|');
           final body = parts.length > 1
               ? Uri.decodeComponent(parts[1])
               : 'Có cảnh báo cần kiểm tra';
@@ -50,27 +51,20 @@ class NotificationService {
               ? Uri.decodeComponent(parts[2])
               : '';
 
-          appNavigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => FullscreenAlarmPage(
-                title: '🚨 SafeHome',
-                body: body,
-                alarmItemsJson: alarmItems,
-              ),
-            ),
+          NotificationService.openAlarmPage(
+            title: '🚨 SafeHome',
+            body: body,
+            alarmItemsJson: alarmItems,
           );
 
           return;
         }
 
         if (payload == 'alarm' || payload == 'open_home') {
-          appNavigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => const FullscreenAlarmPage(
-                title: '🚨 SafeHome',
-                body: 'Có cảnh báo an ninh cần kiểm tra ngay.',
-              ),
-            ),
+          NotificationService.openAlarmPage(
+            title: '🚨 SafeHome',
+            body: lastAlarmBody,
+            alarmItemsJson: lastAlarmItemsJson,
           );
 
           return;
@@ -153,20 +147,72 @@ class NotificationService {
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
   }
+  static const String alarmRouteName = "fullscreen_alarm";
+  static final List<Map<String, dynamic>> activeAlarmItems = [];
+
+  static String _alarmKey(Map<String, dynamic> item) {
+    return [
+      item["homeName"] ?? "",
+      item["deviceId"] ?? "",
+      item["deviceName"] ?? item["name"] ?? "",
+      item["type"] ?? "",
+      item["reason"] ?? "",
+    ].join("|");
+  }
+
+  static void _addAlarmItems(String alarmItemsJson) {
+    try {
+      final decoded = jsonDecode(alarmItemsJson);
+
+      if (decoded is! List) return;
+
+      final existingKeys = activeAlarmItems.map(_alarmKey).toSet();
+
+      for (final item in decoded) {
+        if (item is! Map) continue;
+
+        final map = Map<String, dynamic>.from(item);
+        final key = _alarmKey(map);
+
+        if (!existingKeys.contains(key)) {
+          activeAlarmItems.add(map);
+          existingKeys.add(key);
+        }
+      }
+    } catch (_) {}
+  }
+
   static void openAlarmPage({
     required String title,
     required String body,
     String alarmItemsJson = '',
   }) {
-    appNavigatorKey.currentState?.push(
+    lastAlarmBody = body;
+    lastAlarmItemsJson = alarmItemsJson;
+
+    _addAlarmItems(alarmItemsJson);
+
+    final mergedAlarmItemsJson = activeAlarmItems.isEmpty
+        ? alarmItemsJson
+        : jsonEncode(activeAlarmItems);
+
+    appNavigatorKey.currentState?.pushAndRemoveUntil(
       MaterialPageRoute(
+        settings: const RouteSettings(name: alarmRouteName),
         builder: (_) => FullscreenAlarmPage(
           title: title,
           body: body,
-          alarmItemsJson: alarmItemsJson,
+          alarmItemsJson: mergedAlarmItemsJson,
         ),
       ),
+          (route) => route.settings.name != alarmRouteName,
     );
+  }
+
+  static void clearActiveAlarms() {
+    activeAlarmItems.clear();
+    lastAlarmItemsJson = "";
+    lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
   }
   static Future<void> showSafetyReminder({
     required bool isSafe,
