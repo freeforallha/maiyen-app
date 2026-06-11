@@ -333,47 +333,68 @@ Future<void> showShareListSheet({
                                   : Icons.remove_circle,
                               color: Colors.red,
                             ),
-                          onPressed: () async {
-                            await HomeNotificationService.addNotification(
-                              uid: targetUid,
-                              type: "member_removed",
-                              title: "Đã bị xoá khỏi nhà",
-                              message: "Bạn đã bị xoá khỏi một nhà được chia sẻ.",
-                              homeId: homeId,
-                            );
-                            await HomeNotificationService.addNotification(
-                              uid: ownerUid,
-                              type: "member_removed",
-                              title: "Đã xoá thành viên",
-                              message: "$name đã bị xoá khỏi nhà.",
-                              homeId: homeId,
-                            );
-                            await db
-                                .ref(FirebasePaths.sharedHome(targetUid, homeId))
-                                .remove();
+                            onPressed: () async {
+                              final ok = await showDialog<bool>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text(targetUid == myUid ? "Rời khỏi nhà?" : "Xoá thành viên?"),
+                                  content: Text(
+                                    targetUid == myUid
+                                        ? "Bạn chắc chắn muốn rời khỏi nhà này?"
+                                        : "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, false),
+                                      child: const Text("Huỷ"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () => Navigator.pop(context, true),
+                                      child: const Text("Đồng ý"),
+                                    ),
+                                  ],
+                                ),
+                              );
 
-                            await db
-                                .ref(FirebasePaths.sharedMember(homeId, targetUid))                                .remove();
+                              if (ok != true) return;
 
-                            await db
-                                .ref(
-                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                            )
-                                .remove();
+                              await db.ref(FirebasePaths.sharedHome(targetUid, homeId)).remove();
+                              await db.ref(FirebasePaths.sharedMember(homeId, targetUid)).remove();
+                              await db.ref("accounts/$ownerUid/shareList/$homeId/$targetUid").remove();
 
-                            if (!context.mounted) return;
+                              try {
+                                await HomeNotificationService.addNotification(
+                                  uid: targetUid,
+                                  type: "member_removed",
+                                  title: targetUid == myUid ? "Đã rời khỏi nhà" : "Đã bị xoá khỏi nhà",
+                                  message: targetUid == myUid
+                                      ? "Bạn đã rời khỏi một nhà được chia sẻ."
+                                      : "Bạn đã bị xoá khỏi một nhà được chia sẻ.",
+                                  homeId: homeId,
+                                );
 
-                            Navigator.pop(context);
+                                await HomeNotificationService.addNotification(
+                                  uid: ownerUid,
+                                  type: "member_removed",
+                                  title: targetUid == myUid ? "Thành viên đã rời khỏi nhà" : "Đã xoá thành viên",
+                                  message: targetUid == myUid
+                                      ? "$name đã rời khỏi nhà."
+                                      : "$name đã bị xoá khỏi nhà.",
+                                  homeId: homeId,
+                                );
+                              } catch (_) {}
 
-                            showTopToast(
-                              context,
-                              targetUid == myUid
-                                  ? "Đã rời khỏi nhà"
-                                  : "Đã thu hồi quyền share",
-                              color: Colors.green,
-                              icon: Icons.check_circle_rounded,
-                            );
-                          },
+                              if (!context.mounted) return;
+
+                              Navigator.pop(context);
+
+                              showTopToast(
+                                context,
+                                targetUid == myUid ? "Đã rời khỏi nhà" : "Đã xoá thành viên",
+                                color: Colors.green,
+                                icon: Icons.check_circle_rounded,
+                              );
+                            },
                         ),
                       ],
                     ),

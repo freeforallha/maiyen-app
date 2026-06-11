@@ -383,8 +383,8 @@ class DeviceList extends StatelessWidget {
                                             borderRadius: BorderRadius.circular(14),
                                             onTap: onPairSensor,
                                             child: Container(
+                                              width: 36,
                                               height: 36,
-                                              padding: const EdgeInsets.symmetric(horizontal: 12),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.circular(14),
@@ -399,24 +399,10 @@ class DeviceList extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              child: const Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    Icons.add_circle_outline_rounded,
-                                                    size: 18,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  SizedBox(width: 6),
-                                                  Text(
-                                                    "Thêm",
-                                                    style: TextStyle(
-                                                      color: Colors.blue,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                ],
+                                              child: const Icon(
+                                                Icons.add_rounded,
+                                                size: 22,
+                                                color: Colors.blue,
                                               ),
                                             ),
                                           ),

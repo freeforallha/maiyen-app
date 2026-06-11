@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'share_list_sheet.dart';
-import '../helpers/firebase_paths.dart';
 import '../services/chat_service.dart';
+
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -17,23 +17,47 @@ void showHomeChatSheet({
   if (user == null) return;
 
   final controller = TextEditingController();
-  final chatRef = FirebaseDatabase.instance.ref(FirebasePaths.homeMessages(homeId));
-  final readRef = FirebaseDatabase.instance
-      .ref(FirebasePaths.homeLastRead(homeId, user.uid));
 
-  ChatService.markAsRead(
-    homeId: homeId,
-    uid: user.uid,
-  );
+  ChatService.markAsRead(homeId: homeId, uid: user.uid);
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) {
+      Future<void> sendCurrentMessage() async {
+        final text = controller.text.trim();
+
+        if (text.isEmpty) return;
+        if (text.length > ChatService.maxMessageLength) {
+          ScaffoldMessenger.maybeOf(
+            ctx,
+          )?.showSnackBar(const SnackBar(content: Text("Tin nhắn quá dài")));
+          return;
+        }
+
+        controller.clear();
+
+        try {
+          await ChatService.sendMessage(
+            homeId: homeId,
+            uid: user.uid,
+            userName: userName,
+            userPhotoUrl: userPhotoUrl,
+            text: text,
+          );
+        } catch (_) {
+          controller.text = text;
+
+          if (!ctx.mounted) return;
+
+          ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
+            const SnackBar(content: Text("Không gửi được tin nhắn")),
+          );
+        }
+      }
+
       return Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom,
-        ),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: Container(
           height: MediaQuery.of(ctx).size.height * 0.72,
           padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
@@ -62,10 +86,7 @@ void showHomeChatSheet({
 
                   const Text(
                     "Chat trong nhà",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
 
                   const Spacer(),
@@ -90,7 +111,7 @@ void showHomeChatSheet({
 
               Expanded(
                 child: StreamBuilder<DatabaseEvent>(
-                  stream: chatRef.orderByChild("time").limitToLast(80).onValue,
+                  stream: ChatService.messagesStream(homeId),
                   builder: (context, snapshot) {
                     final data = snapshot.data?.snapshot.value;
 
@@ -115,8 +136,9 @@ void showHomeChatSheet({
                       padding: const EdgeInsets.only(bottom: 8),
                       itemCount: messages.length,
                       itemBuilder: (_, index) {
-                        final msg =
-                        Map<String, dynamic>.from(messages[index].value);
+                        final msg = Map<String, dynamic>.from(
+                          messages[index].value,
+                        );
 
                         final isMe = msg["uid"] == user.uid;
                         final name = msg["name"]?.toString() ?? "User";
@@ -152,7 +174,7 @@ void showHomeChatSheet({
                                   child: Container(
                                     constraints: BoxConstraints(
                                       maxWidth:
-                                      MediaQuery.of(ctx).size.width * 0.68,
+                                          MediaQuery.of(ctx).size.width * 0.68,
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 12,
@@ -166,7 +188,7 @@ void showHomeChatSheet({
                                     ),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         if (!isMe)
                                           Text(
@@ -177,11 +199,14 @@ void showHomeChatSheet({
                                             ),
                                           ),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
                                             Text(
                                               text,
-                                              style: const TextStyle(fontSize: 14),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
                                             ),
 
                                             const SizedBox(height: 4),
@@ -215,25 +240,7 @@ void showHomeChatSheet({
                     child: TextField(
                       controller: controller,
                       textInputAction: TextInputAction.send,
-                      onSubmitted: (_) async {
-                        final text = controller.text.trim();
-
-                        if (text.isEmpty) return;
-
-                        controller.clear();
-
-                        await chatRef.push().set({
-                          "uid": user.uid,
-                          "name": userName,
-                          "photoUrl": userPhotoUrl,
-                          "text": text,
-                          "time": DateTime.now().millisecondsSinceEpoch,
-                        });
-
-                        await readRef.set(
-                          DateTime.now().millisecondsSinceEpoch,
-                        );
-                      },
+                      onSubmitted: (_) => sendCurrentMessage(),
                       minLines: 1,
                       maxLines: 3,
                       decoration: InputDecoration(
@@ -258,22 +265,7 @@ void showHomeChatSheet({
                         color: Colors.white,
                         size: 18,
                       ),
-                      onPressed: () async {
-                        final text = controller.text.trim();
-                        if (text.isEmpty) return;
-
-                        controller.clear();
-
-                        await chatRef.push().set({
-
-                          "uid": user.uid,
-                          "name": userName,
-                          "photoUrl": userPhotoUrl,
-                          "text": text,
-                          "time": DateTime.now().millisecondsSinceEpoch,
-                        });
-                        await readRef.set(DateTime.now().millisecondsSinceEpoch);
-                      },
+                      onPressed: sendCurrentMessage,
                     ),
                   ),
                 ],
@@ -283,8 +275,9 @@ void showHomeChatSheet({
         ),
       );
     },
-  );
+  ).whenComplete(controller.dispose);
 }
+
 String formatChatTime(dynamic ts) {
   if (ts == null) return "--:--";
 

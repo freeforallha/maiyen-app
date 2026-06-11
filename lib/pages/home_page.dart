@@ -34,6 +34,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -59,8 +60,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-
   late String uid;
   late DatabaseReference ref;
   String userName = "";
@@ -78,6 +77,7 @@ class _HomePageState extends State<HomePage> {
 
     return uid;
   }
+
   String getMyRole() {
     final currentHome = homes[selectedHome];
 
@@ -104,6 +104,53 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> alarmSettings = {};
   List<String> homeOrder = [];
 
+  List<String> mergeVisibleHomeOrder(List<String> visibleOrder) {
+    final visibleIds = visibleOrder.toSet();
+    final nextOrder = <String>[];
+    final seen = <String>{};
+    var visibleIndex = 0;
+
+    void addHomeId(String homeId) {
+      if (seen.add(homeId)) {
+        nextOrder.add(homeId);
+      }
+    }
+
+    for (final homeId in homeOrder) {
+      if (visibleIds.contains(homeId)) {
+        if (visibleIndex < visibleOrder.length) {
+          addHomeId(visibleOrder[visibleIndex]);
+          visibleIndex++;
+        }
+      } else {
+        addHomeId(homeId);
+      }
+    }
+
+    while (visibleIndex < visibleOrder.length) {
+      addHomeId(visibleOrder[visibleIndex]);
+      visibleIndex++;
+    }
+
+    for (final homeId in homes.keys) {
+      addHomeId(homeId);
+    }
+
+    return nextOrder;
+  }
+
+  Future<void> reorderHomeTabs(List<String> visibleOrder) async {
+    final nextOrder = mergeVisibleHomeOrder(visibleOrder);
+
+    setState(() {
+      homeOrder = nextOrder;
+    });
+
+    await FirebaseDatabase.instance
+        .ref(FirebasePaths.homeOrder(uid))
+        .set(nextOrder);
+  }
+
   TimeOfDay start = TimeOfDay(hour: 23, minute: 0);
   TimeOfDay end = TimeOfDay(hour: 6, minute: 0);
 
@@ -113,9 +160,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       alarmEnabled = enabled;
-      alarmSettings[homeId] = {
-        "enabled": enabled,
-      };
+      alarmSettings[homeId] = {"enabled": enabled};
     });
 
     await FirebaseDatabase.instance
@@ -131,9 +176,109 @@ class _HomePageState extends State<HomePage> {
       homeId: homeId,
     );
   }
+
   int pairingCountdown = 0;
   Timer? timer;
   final ScrollController homeTabController = ScrollController();
+  StreamSubscription<DatabaseEvent>? accountSubscription;
+  StreamSubscription<DatabaseEvent>? notificationSubscription;
+  final Map<String, StreamSubscription<DatabaseEvent>> homeChatSubscriptions =
+      {};
+
+  void startNotificationListener() {
+    notificationSubscription?.cancel();
+    notificationSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/notifications")
+        .onValue
+        .listen((event) {
+          final data = event.snapshot.value;
+          var count = 0;
+
+          if (data is Map) {
+            final map = Map<String, dynamic>.from(data);
+
+            for (final item in map.values) {
+              if (item is! Map) continue;
+
+              final notification = Map<String, dynamic>.from(item);
+
+              if (notification["read"] != true) {
+                count++;
+              }
+            }
+          }
+
+          if (!mounted) return;
+
+          setState(() {
+            unreadHomeNotificationCount = count;
+          });
+        });
+  }
+
+  void syncHomeChatListeners() {
+    if (!mounted) return;
+
+    final activeHomeIds = homes.keys.where((id) => id.isNotEmpty).toSet();
+    final removedHomeIds = homeChatSubscriptions.keys
+        .where((homeId) => !activeHomeIds.contains(homeId))
+        .toList();
+    var changedUnread = false;
+
+    for (final homeId in removedHomeIds) {
+      homeChatSubscriptions.remove(homeId)?.cancel();
+      changedUnread = unreadChatByHome.remove(homeId) != null || changedUnread;
+    }
+
+    for (final homeId in activeHomeIds) {
+      if (homeChatSubscriptions.containsKey(homeId)) continue;
+
+      homeChatSubscriptions[homeId] = ChatService.homeChatStream(homeId).listen(
+        (event) {
+          final unread = ChatService.unreadCount(
+            homeChat: event.snapshot.value,
+            uid: uid,
+          );
+
+          if (!mounted) return;
+
+          setState(() {
+            if (unread > 0) {
+              unreadChatByHome[homeId] = unread;
+            } else {
+              unreadChatByHome.remove(homeId);
+            }
+
+            unreadChatCount = unreadChatByHome.values.fold<int>(
+              0,
+              (total, count) => total + count,
+            );
+          });
+        },
+        onError: (_) {
+          if (!mounted) return;
+
+          setState(() {
+            unreadChatByHome.remove(homeId);
+            unreadChatCount = unreadChatByHome.values.fold<int>(
+              0,
+              (total, count) => total + count,
+            );
+          });
+        },
+      );
+    }
+
+    if (changedUnread) {
+      setState(() {
+        unreadChatCount = unreadChatByHome.values.fold<int>(
+          0,
+          (total, count) => total + count,
+        );
+      });
+    }
+  }
+
   String formatAlarmSchedules() {
     final devices = getDevices();
 
@@ -164,10 +309,12 @@ class _HomePageState extends State<HomePage> {
 
     return "${enabled.length} thiết bị alarm";
   }
+
   Map<String, dynamic> getDevices() {
     final homeData = safeMap(homes[selectedHome]);
     return safeMap(homeData["devices"]);
   }
+
   Map<String, dynamic>? getTemperatureDevice() {
     final devices = getDevices();
 
@@ -175,15 +322,13 @@ class _HomePageState extends State<HomePage> {
       final d = safeMap(entry.value);
 
       if (d["type"] == "temperature") {
-        return {
-          "id": entry.key,
-          "data": d,
-        };
+        return {"id": entry.key, "data": d};
       }
     }
 
     return null;
   }
+
   String getHomeEnvironmentText() {
     final devices = getDevices();
 
@@ -203,6 +348,7 @@ class _HomePageState extends State<HomePage> {
 
     return "--°C / --%";
   }
+
   @override
   void initState() {
     super.initState();
@@ -210,12 +356,11 @@ class _HomePageState extends State<HomePage> {
     uid = FirebaseAuth.instance.currentUser!.uid;
     FCMService.setupFCM(uid: uid);
 
-    FCMService.listenForeground(
-      localNotif: localNotif,
-    );
+    FCMService.listenForeground(localNotif: localNotif);
     ref = FirebaseDatabase.instance.ref(FirebasePaths.account(uid));
+    startNotificationListener();
 
-    ref.onValue.listen((event) {
+    accountSubscription = ref.onValue.listen((event) {
       final data = event.snapshot.value;
       if (data == null) return;
 
@@ -241,7 +386,7 @@ class _HomePageState extends State<HomePage> {
           return !isShared && !homesData.containsKey(key);
         });
 
-// Cập nhật home chính chủ.
+        // Cập nhật home chính chủ.
         for (final entry in homesData.entries) {
           homes[entry.key] = entry.value;
         }
@@ -264,6 +409,8 @@ class _HomePageState extends State<HomePage> {
                 selectedHome = homeOrder.first;
               }
             });
+
+            syncHomeChatListeners();
           },
 
           onDeleted: (homeId) {
@@ -276,6 +423,8 @@ class _HomePageState extends State<HomePage> {
                 selectedHome = homeOrder.isNotEmpty ? homeOrder.first : "";
               }
             });
+
+            syncHomeChatListeners();
           },
         );
         homeOrder = HomeStateParser.parseHomeOrder(
@@ -296,98 +445,17 @@ class _HomePageState extends State<HomePage> {
         final currentHome = safeMap(homes[selectedHome]);
         final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
-        final userAlarmSetting = safeMap(
-          map["alarmSettings"]?[selectedHome],
-        );
+        final userAlarmSetting = safeMap(map["alarmSettings"]?[selectedHome]);
 
         alarmEnabled = userAlarmSetting["enabled"] != false;
         start = parsedAlarm["start"];
         end = parsedAlarm["end"];
       });
-    });ChatService.chatStream().listen((event) {
-      FirebaseDatabase.instance
-          .ref("accounts/$uid/notifications")
-          .onValue
-          .listen((event) {
-        final data = event.snapshot.value;
 
-        int count = 0;
-
-        if (data is Map) {
-          final map = Map<String, dynamic>.from(data);
-
-          for (final item in map.values) {
-            final n = Map<String, dynamic>.from(item as Map);
-
-            if (n["read"] != true) {
-              count++;
-            }
-          }
-        }
-
-        if (!mounted) return;
-
-        setState(() {
-          unreadHomeNotificationCount = count;
-        });
-      });
-      final data = event.snapshot.value;
-
-      if (data == null) return;
-
-      final allChats = Map<String, dynamic>.from(data as Map);
-
-      int total = 0;
-      final perHome = <String, int>{};
-
-      for (final homeId in homes.keys){
-        final home = allChats[homeId];
-
-        if (home == null) continue;
-
-        final map = Map<String, dynamic>.from(home);
-
-        final messagesRaw = map["messages"];
-        final readRaw = map["lastRead"];
-
-        if (messagesRaw == null) continue;
-
-        final messages = Map<String, dynamic>.from(messagesRaw);
-
-        int lastRead = 0;
-
-        if (readRaw != null) {
-          final reads = Map<String, dynamic>.from(readRaw);
-
-          lastRead = reads[uid] ?? 0;
-        }
-
-        int homeUnread = 0;
-
-        for (final msg in messages.values) {
-          final m = Map<String, dynamic>.from(msg);
-
-          final time = m["time"] ?? 0;
-          final sender = m["uid"] ?? "";
-
-
-          if (sender != uid && time > lastRead) {
-            total++;
-            homeUnread++;
-          }
-        }if (homeUnread > 0) {
-          perHome[homeId] = homeUnread;
-        }
-      }
-
-      if (mounted) {
-        setState(() {
-          unreadChatCount = total;
-          unreadChatByHome = perHome;
-        });
-      }
+      syncHomeChatListeners();
     });
   }
+
   Future<void> handleScannedQR(String code) async {
     final value = code.trim();
     if (value.startsWith("safehome_join_multi|")) {
@@ -429,21 +497,21 @@ class _HomePageState extends State<HomePage> {
         await FirebaseDatabase.instance
             .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
             .set({
-          "homeId": homeId,
-          "ownerUid": ownerUid,
-          "targetUid": uid,
-          "targetEmail": myEmail ?? "",
-          "targetName": targetData["name"] ?? "",
-          "targetPhone": targetData["phone"] ?? "",
-          "type": "join_request",
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
+              "homeId": homeId,
+              "ownerUid": ownerUid,
+              "targetUid": uid,
+              "targetEmail": myEmail ?? "",
+              "targetName": targetData["name"] ?? "",
+              "targetPhone": targetData["phone"] ?? "",
+              "type": "join_request",
+              "time": DateTime.now().millisecondsSinceEpoch,
+            });
         await HomeNotificationService.addNotification(
           uid: ownerUid,
           type: "join_request",
           title: "Yêu cầu gia nhập nhà",
           message:
-          "${myEmail ?? "Một người dùng"} đang xin gia nhập một trong các nhà của bạn.",
+              "${myEmail ?? "Một người dùng"} đang xin gia nhập một trong các nhà của bạn.",
           homeId: homeId,
         );
       }
@@ -492,21 +560,21 @@ class _HomePageState extends State<HomePage> {
       await FirebaseDatabase.instance
           .ref("accounts/$ownerUid/shareRequests/${homeId}_$uid")
           .set({
-        "homeId": homeId,
-        "ownerUid": ownerUid,
-        "targetUid": uid,
-        "targetEmail": myEmail ?? "",
-        "targetName": targetData["name"] ?? "",
-        "targetPhone": targetData["phone"] ?? "",
-        "type": "join_request",
-        "time": DateTime.now().millisecondsSinceEpoch,
-      });
+            "homeId": homeId,
+            "ownerUid": ownerUid,
+            "targetUid": uid,
+            "targetEmail": myEmail ?? "",
+            "targetName": targetData["name"] ?? "",
+            "targetPhone": targetData["phone"] ?? "",
+            "type": "join_request",
+            "time": DateTime.now().millisecondsSinceEpoch,
+          });
       await HomeNotificationService.addNotification(
         uid: ownerUid,
         type: "join_request",
         title: "Yêu cầu gia nhập nhà",
         message:
-        "${myEmail ?? "Một người dùng"} đang xin gia nhập nhà \"$homeId\".",
+            "${myEmail ?? "Một người dùng"} đang xin gia nhập nhà \"$homeId\".",
         homeId: homeId,
       );
       showTopToast(
@@ -521,6 +589,7 @@ class _HomePageState extends State<HomePage> {
 
     pairSensor(value);
   }
+
   void pairSensor(String hubId) async {
     // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
@@ -528,14 +597,17 @@ class _HomePageState extends State<HomePage> {
     final requestId =
         "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
 
-    await FirebaseDatabase.instance.ref(FirebasePaths.pairRequest(requestId)).set({      "active": true,
-      "hubId": hubId.trim(),
-      "homeId": selectedHome,
-      "ownerUid": ownerUid, // ✔ giờ không lỗi nữa
-      "requestedBy": uid,
-      "duration": 60,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
+    await FirebaseDatabase.instance
+        .ref(FirebasePaths.pairRequest(requestId))
+        .set({
+          "active": true,
+          "hubId": hubId.trim(),
+          "homeId": selectedHome,
+          "ownerUid": ownerUid, // ✔ giờ không lỗi nữa
+          "requestedBy": uid,
+          "duration": 60,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "pair_started",
@@ -659,10 +731,7 @@ class _HomePageState extends State<HomePage> {
     final deletedHomeName =
         homes[deletedHomeId]?["name"]?.toString() ?? deletedHomeId;
 
-    await ShareService.deleteOwnedHome(
-      ownerUid: uid,
-      homeId: deletedHomeId,
-    );
+    await ShareService.deleteOwnedHome(ownerUid: uid, homeId: deletedHomeId);
 
     await HomeNotificationService.addNotification(
       uid: uid,
@@ -678,6 +747,7 @@ class _HomePageState extends State<HomePage> {
         .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
   }
+
   void shareHome() async {
     final controller = TextEditingController();
     final qrData = "safehome_join|$uid|$selectedHome";
@@ -704,10 +774,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const Text(
                   "Chia sẻ nhà",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
 
                 const SizedBox(height: 18),
@@ -734,11 +801,7 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 12),
 
-                QrImageView(
-                  data: qrData,
-                  version: QrVersions.auto,
-                  size: 180,
-                ),
+                QrImageView(data: qrData, version: QrVersions.auto, size: 180),
 
                 const SizedBox(height: 18),
 
@@ -776,7 +839,6 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-
     final targetUid = await ShareService.findUidByEmail(targetEmail);
 
     if (targetUid == null) {
@@ -804,7 +866,7 @@ class _HomePageState extends State<HomePage> {
       type: "share_request",
       title: "Lời mời chia sẻ nhà",
       message:
-      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"${homes[selectedHome]?["name"] ?? selectedHome}\".",
+          "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"${homes[selectedHome]?["name"] ?? selectedHome}\".",
       homeId: selectedHome,
     );
     showTopToast(
@@ -814,6 +876,7 @@ class _HomePageState extends State<HomePage> {
       icon: Icons.check_circle_rounded,
     );
   }
+
   void transferOwner() async {
     final controller = TextEditingController();
     final passwordController = TextEditingController();
@@ -832,19 +895,14 @@ class _HomePageState extends State<HomePage> {
             ),
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(26),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   "Chuyển quyền chủ nhà",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
 
                 const SizedBox(height: 18),
@@ -898,7 +956,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
 
-
     if (targetEmail == null || targetEmail.isEmpty) return;
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
@@ -950,9 +1007,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(26),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -967,10 +1022,7 @@ class _HomePageState extends State<HomePage> {
 
                 const Text(
                   "Xác nhận chuyển quyền",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
 
                 const SizedBox(height: 12),
@@ -1041,29 +1093,28 @@ class _HomePageState extends State<HomePage> {
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/shareRequests/transfer_${homeId}_$uid")
         .set({
-      "type": "transfer_owner_request",
-      "homeId": homeId,
-      "oldOwnerUid": uid,
-      "newOwnerUid": targetUid,
-      "ownerEmail": myEmail ?? "",
-      "targetEmail": targetEmail,
-      "homeName": homes[homeId]?["name"]?.toString() ?? homeId,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
+          "type": "transfer_owner_request",
+          "homeId": homeId,
+          "oldOwnerUid": uid,
+          "newOwnerUid": targetUid,
+          "ownerEmail": myEmail ?? "",
+          "targetEmail": targetEmail,
+          "homeName": homes[homeId]?["name"]?.toString() ?? homeId,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
     await HomeNotificationService.addNotification(
       uid: targetUid,
       type: "transfer_owner_request",
       title: "Yêu cầu chuyển quyền chủ nhà",
       message:
-      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"${homes[homeId]?["name"] ?? homeId}\" cho bạn.",
+          "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"${homes[homeId]?["name"] ?? homeId}\" cho bạn.",
       homeId: homeId,
     );
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "transfer_owner_request",
       title: "Đã gửi yêu cầu chuyển quyền",
-      message:
-      "Bạn đã gửi yêu cầu chuyển quyền chủ nhà cho $targetEmail.",
+      message: "Bạn đã gửi yêu cầu chuyển quyền chủ nhà cho $targetEmail.",
       homeId: homeId,
     );
     showTopToast(
@@ -1074,13 +1125,13 @@ class _HomePageState extends State<HomePage> {
     );
 
     return;
-      }
+  }
+
   void deleteDevice(String id) async {
     if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
     final ownerUid = getHomeOwnerUid();
-    final deviceName =
-        getDevices()[id]?["name"]?.toString() ?? id;
+    final deviceName = getDevices()[id]?["name"]?.toString() ?? id;
     await HomeService.deleteDevice(
       ownerUid: ownerUid,
       homeId: selectedHome,
@@ -1195,12 +1246,7 @@ class _HomePageState extends State<HomePage> {
 
     final id = "home_${DateTime.now().millisecondsSinceEpoch}";
 
-    await HomeService.addHome(
-      uid: uid,
-      id: id,
-      name: name,
-      address: address,
-    );
+    await HomeService.addHome(uid: uid, id: id, name: name, address: address);
     homeOrder.add(id);
 
     await FirebaseDatabase.instance
@@ -1222,8 +1268,8 @@ class _HomePageState extends State<HomePage> {
 
     final currentName = isShared
         ? (homes[selectedHome]?["_customName"] ??
-        homes[selectedHome]?["name"] ??
-        selectedHome)
+              homes[selectedHome]?["name"] ??
+              selectedHome)
         : (homes[selectedHome]?["name"] ?? selectedHome);
 
     final controller = TextEditingController(text: currentName);
@@ -1352,11 +1398,7 @@ class _HomePageState extends State<HomePage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFDDF7E8),
-              Color(0xFFF1FCF5),
-              Color(0xFFFFFFFF),
-            ],
+            colors: [Color(0xFFDDF7E8), Color(0xFFF1FCF5), Color(0xFFFFFFFF)],
           ),
         ),
         child: SafeArea(
@@ -1364,32 +1406,46 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.grid_view_rounded),
-                    onPressed: () async {
-                      final selected = await Navigator.push<String>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => AllHomePage(homeOrder: homeOrder),
+                  SizedBox(
+                    width: 54,
+                    height: 62,
+                    child: Center(
+                      child: Material(
+                        color: const Color(0xFFEAF9F0),
+                        elevation: 2,
+                        shadowColor: Colors.black.withValues(alpha: 0.08),
+                        shape: const CircleBorder(),
+                        clipBehavior: Clip.antiAlias,
+                        child: IconButton(
+                          icon: const Icon(Icons.grid_view_rounded),
+                          onPressed: () async {
+                            final selected = await Navigator.push<String>(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    AllHomePage(homeOrder: homeOrder),
+                              ),
+                            );
+
+                            if (selected != null) {
+                              setState(() {
+                                selectedHome = selected;
+                              });
+
+                              final index = homeOrder.indexOf(selected);
+
+                              if (index != -1) {
+                                homeTabController.animateTo(
+                                  index * 110,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeOut,
+                                );
+                              }
+                            }
+                          },
                         ),
-                      );
-
-                      if (selected != null) {
-                        setState(() {
-                          selectedHome = selected;
-                        });
-
-                        final index = homeOrder.indexOf(selected);
-
-                        if (index != -1) {
-                          homeTabController.animateTo(
-                            index * 110,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                          );
-                        }
-                      }
-                    },
+                      ),
+                    ),
                   ),
 
                   Expanded(
@@ -1403,7 +1459,9 @@ class _HomePageState extends State<HomePage> {
                         if (h == selectedHome) return;
 
                         final currentHome = safeMap(homes[h]);
-                        final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+                        final parsedAlarm = HomeStateParser.parseAlarm(
+                          currentHome,
+                        );
 
                         setState(() {
                           selectedHome = h;
@@ -1413,21 +1471,7 @@ class _HomePageState extends State<HomePage> {
                           end = parsedAlarm["end"];
                         });
                       },
-                      onReorder: (oldIndex, newIndex) async {
-                        setState(() {
-                          final item = homeOrder.removeAt(oldIndex);
-
-                          if (newIndex > homeOrder.length) {
-                            newIndex = homeOrder.length;
-                          }
-
-                          homeOrder.insert(newIndex, item);
-                        });
-
-                        await FirebaseDatabase.instance
-                            .ref(FirebasePaths.homeOrder(uid))
-                            .set(homeOrder);
-                      },
+                      onReorder: reorderHomeTabs,
                       getHomeColor: getHomeColor,
                     ),
                   ),
@@ -1472,7 +1516,7 @@ class _HomePageState extends State<HomePage> {
                                   ownerUid: getHomeOwnerUid(),
                                   homeId: selectedHome,
                                   isShared:
-                                  homes[selectedHome]?["_shared"] == true,
+                                      homes[selectedHome]?["_shared"] == true,
                                   type: "notification",
                                 ),
                               );
@@ -1502,7 +1546,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       isShared: homes[selectedHome]?["_shared"] == true,
                       ownerEmail:
-                      homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+                          homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
                       onRename: canManageHome() ? renameDevice : (_) {},
                       onDelete: canManageHome() ? deleteDevice : (_) {},
                       onPairSensor: () async {
@@ -1592,8 +1636,6 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-
-
                   ],
                 ),
               ),
@@ -1601,7 +1643,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
 
       bottomNavigationBar: Container(
         color: Colors.transparent,
@@ -1613,10 +1654,8 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-
-
                 IconButton(
-                  icon: const Icon(Icons.add_home),
+                  icon: const Icon(Icons.add_home_work_rounded),
                   onPressed: addHome,
                 ),
                 Stack(
@@ -1624,10 +1663,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       icon: const Icon(Icons.notifications_rounded),
                       onPressed: () {
-                        showHomeEventSheet(
-                          context: context,
-                          uid: uid,
-                        );
+                        showHomeEventSheet(context: context, uid: uid);
                       },
                     ),
 
@@ -1704,7 +1740,6 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
 
-
                 Stack(
                   children: [
                     IconButton(
@@ -1713,9 +1748,10 @@ class _HomePageState extends State<HomePage> {
                         showSettingsSheet(
                           homeId: selectedHome,
                           homeName:
-                          homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+                              homes[selectedHome]?["name"]?.toString() ??
+                              selectedHome,
                           homeAddress:
-                          homes[selectedHome]?["address"]?.toString() ?? "",
+                              homes[selectedHome]?["address"]?.toString() ?? "",
                           role: getMyRole(),
                           onAllDevices: () {
                             final devices = getDevices();
@@ -1745,7 +1781,8 @@ class _HomePageState extends State<HomePage> {
                                 onDelete: canManageHome()
                                     ? () => deleteDevice(entry.key)
                                     : null,
-                                onNotification: () => openNotificationList(entry.key),
+                                onNotification: () =>
+                                    openNotificationList(entry.key),
                               );
 
                               return;
@@ -1765,7 +1802,8 @@ class _HomePageState extends State<HomePage> {
                                   onDelete: canManageHome()
                                       ? () => deleteDevice(id)
                                       : null,
-                                  onNotification: () => openNotificationList(id),
+                                  onNotification: () =>
+                                      openNotificationList(id),
                                 );
                               },
                             );
@@ -1783,7 +1821,6 @@ class _HomePageState extends State<HomePage> {
                                       userGender: userGender,
                                       userDob: userDob,
                                       userPhone: userPhone,
-
                                     ),
                                   ),
                                 );
@@ -1794,56 +1831,95 @@ class _HomePageState extends State<HomePage> {
                               userPhone: userPhone,
                               inviteCount: shareRequests.length,
 
-                              onShareRequests: () {
-                                showShareRequestSheet(
+                              onShareRequests: () async {
+                                final changed = await showShareRequestSheet(
                                   context: context,
                                   requests: shareRequests,
                                   uid: uid,
                                 );
+
+                                if (changed == true) {
+                                  final snap = await FirebaseDatabase.instance
+                                      .ref("accounts/$uid/shareRequests")
+                                      .get();
+
+                                  if (!mounted) return;
+
+                                  setState(() {
+                                    shareRequests = snap.value == null
+                                        ? {}
+                                        : Map<String, dynamic>.from(
+                                            snap.value as Map,
+                                          );
+                                  });
+                                }
                               },
                             );
                           },
-                          onDeleteHome: isOwner() ? deleteHome : () {
-                            showTopToast(
-                              context,
-                              "Chỉ chủ nhà mới được xoá nhà",
-                              color: Colors.orange,
-                              icon: Icons.lock_rounded,
-                            );
-                          },
-                          onRenameHome: canManageHome() ? renameHome : () {
-                            showTopToast(
-                              context,
-                              "Bạn không có quyền sửa tên nhà",
-                              color: Colors.orange,
-                              icon: Icons.lock_rounded,
-                            );
-                          },
-                          onTransferOwner: isOwner() ? transferOwner : () {
-                            showTopToast(
-                              context,
-                              "Chỉ chủ nhà mới được chuyển quyền",
-                              color: Colors.orange,
-                              icon: Icons.admin_panel_settings_rounded,
-                            );
-                          },
+                          onDeleteHome: isOwner()
+                              ? deleteHome
+                              : () {
+                                  showTopToast(
+                                    context,
+                                    "Chỉ chủ nhà mới được xoá nhà",
+                                    color: Colors.orange,
+                                    icon: Icons.lock_rounded,
+                                  );
+                                },
+                          onRenameHome: canManageHome()
+                              ? renameHome
+                              : () {
+                                  showTopToast(
+                                    context,
+                                    "Bạn không có quyền sửa tên nhà",
+                                    color: Colors.orange,
+                                    icon: Icons.lock_rounded,
+                                  );
+                                },
+                          onTransferOwner: isOwner()
+                              ? transferOwner
+                              : () {
+                                  showTopToast(
+                                    context,
+                                    "Chỉ chủ nhà mới được chuyển quyền",
+                                    color: Colors.orange,
+                                    icon: Icons.admin_panel_settings_rounded,
+                                  );
+                                },
                           context: context,
                           inviteCount: shareRequests.length,
-                          onShareRequests: () {
-                            showShareRequestSheet(
+                          onShareRequests: () async {
+                            final changed = await showShareRequestSheet(
                               context: context,
                               requests: shareRequests,
                               uid: uid,
                             );
+
+                            if (changed == true) {
+                              final snap = await FirebaseDatabase.instance
+                                  .ref("accounts/$uid/shareRequests")
+                                  .get();
+
+                              setState(() {
+                                shareRequests = snap.value == null
+                                    ? {}
+                                    : Map<String, dynamic>.from(
+                                        snap.value as Map,
+                                      );
+                              });
+                              Navigator.pop(context);
+                            }
                           },
-                          onShare: canManageHome() ? shareHome : () {
-                            showTopToast(
-                              context,
-                              "Bạn không có quyền chia sẻ nhà",
-                              color: Colors.orange,
-                              icon: Icons.lock_rounded,
-                            );
-                          },
+                          onShare: canManageHome()
+                              ? shareHome
+                              : () {
+                                  showTopToast(
+                                    context,
+                                    "Bạn không có quyền chia sẻ nhà",
+                                    color: Colors.orange,
+                                    icon: Icons.lock_rounded,
+                                  );
+                                },
                           onShareList: () {
                             showShareListSheet(
                               canManageMembers: canManageHome(),
@@ -1894,9 +1970,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   @override
   void dispose() {
     timer?.cancel();
+    accountSubscription?.cancel();
+    notificationSubscription?.cancel();
+    for (final subscription in homeChatSubscriptions.values) {
+      subscription.cancel();
+    }
+    homeChatSubscriptions.clear();
+    homeTabController.dispose();
     super.dispose();
   }
 }

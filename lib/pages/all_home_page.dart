@@ -200,6 +200,29 @@ class _AllHomePageState extends State<AllHomePage> {
         .set(result);
   }
 
+  Widget _buildMiniActionButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 34,
+        height: 34,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+          color: color,
+        ),
+      ),
+    );
+  }
   Widget buildSectionTitle(String groupKey, List<String> ids) {
     final isYourHomes = groupKey == "your_homes";
 
@@ -219,16 +242,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(22),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 14,
-            offset: Offset(0, 4),
-          ),
-        ],
       ),
 
       child: Column(
@@ -282,19 +296,25 @@ class _AllHomePageState extends State<AllHomePage> {
                 ),
               ),
 
-              IconButton(
-                onPressed: () {
+              _buildMiniActionButton(
+                icon: Icons.edit_rounded,
+                color: Colors.blueAccent,
+                onTap: () {
                   renameGroup(groupKey);
                 },
-
-                icon: Icon(Icons.edit_rounded, color: Colors.blueAccent),
               ),
 
-              IconButton(
-                onPressed: () {
+              const SizedBox(width: 8),
+
+              _buildMiniActionButton(
+                icon: ids.every((id) => selectedHomes.contains(id))
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank_rounded,
+                color: Colors.green,
+                onTap: () {
                   setState(() {
                     final allSelected = ids.every(
-                      (id) => selectedHomes.contains(id),
+                          (id) => selectedHomes.contains(id),
                     );
 
                     if (allSelected) {
@@ -304,8 +324,6 @@ class _AllHomePageState extends State<AllHomePage> {
                     }
                   });
                 },
-
-                icon: Icon(Icons.done_all_rounded, color: Colors.green),
               ),
             ],
           ),
@@ -769,565 +787,493 @@ class _AllHomePageState extends State<AllHomePage> {
         ],
       ),
 
-      bottomNavigationBar: selectedHomes.isEmpty
-          ? null
-          : SafeArea(
-              child: Container(
-                margin: EdgeInsets.all(12),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFFDDF7E8),
+                  Color(0xFFF1FCF5),
+                  Color(0xFFFFFFFF),
+                ],
+              ),
+            ),
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                selectedHomes.isEmpty ? 10 : 370,
+              ),
+              children: grouped.entries.map((entry) {
+                final groupKey = entry.key;
+                final ids = entry.value;
 
-                padding: EdgeInsets.all(10),
-
-                decoration: BoxDecoration(
-                  color: Colors.white,
-
-                  borderRadius: BorderRadius.circular(22),
-
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 14,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ListTile(
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
+                    buildSectionTitle(groupKey, ids),
+                    const SizedBox(height: 6),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
 
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.12),
-
-                          borderRadius: BorderRadius.circular(12),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 260),
+            curve: Curves.easeOutCubic,
+            left: 12,
+            right: 12,
+            bottom: selectedHomes.isEmpty ? -360 : 12,
+            child: SafeArea(
+              top: false,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: selectedHomes.isEmpty ? 0 : 1,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.schedule_rounded,
+                            color: Colors.blueAccent,
+                          ),
                         ),
-
-                        child: Icon(
-                          Icons.schedule_rounded,
-                          color: Colors.blueAccent,
+                        title: const Text(
+                          "Đặt báo thức nhà đã chọn",
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
+                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: setSelectedHomesAlarm,
                       ),
 
-                      title: Text(
-                        "Đặt báo thức nhà đã chọn",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-
-                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
-
-                      trailing: Icon(Icons.chevron_right_rounded),
-
-                      onTap: setSelectedHomesAlarm,
-                    ),
-                    ListTile(
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
-
-                        decoration: BoxDecoration(
-                          color: Colors.green.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.share_rounded, color: Colors.green),
                         ),
+                        title: const Text(
+                          "Chia sẻ nhà đã chọn",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () async {
+                          final controller = TextEditingController();
+                          final ownerUid = FirebaseAuth.instance.currentUser!.uid;
 
-                        child: Icon(Icons.share_rounded, color: Colors.green),
-                      ),
+                          final qrData =
+                              "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
 
-                      title: Text(
-                        "Chia sẻ nhà đã chọn",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-
-                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
-
-                      trailing: Icon(Icons.chevron_right_rounded),
-
-                      onTap: () async {
-                        final controller = TextEditingController();
-                        final ownerUid = FirebaseAuth.instance.currentUser!.uid;
-
-                        final qrData =
-                            "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
-                        final targetEmail = await showModalBottomSheet<String>(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) {
-                            return SafeArea(
-                              child: Container(
-                                padding: EdgeInsets.only(
-                                  left: 20,
-                                  right: 20,
-                                  top: 20,
-                                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                                ),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 42,
-                                      height: 5,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
+                          final targetEmail = await showModalBottomSheet<String>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) {
+                              return SafeArea(
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    top: 20,
+                                    bottom:
+                                    MediaQuery.of(context).viewInsets.bottom + 20,
+                                  ),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(26),
                                     ),
-                                    const SizedBox(height: 18),
-                                    const Text(
-                                      "Chia sẻ nhà đã chọn",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "Hoặc quét QR để xin gia nhập các nhà đã chọn",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 12),
-
-                                    QrImageView(
-                                      data: qrData,
-                                      version: QrVersions.auto,
-                                      size: 190,
-                                    ),
-
-                                    const SizedBox(height: 18),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      "${selectedHomes.length} nhà đã chọn",
-                                      style: TextStyle(
-                                        color: Colors.grey.shade600,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 18),
-                                    TextField(
-                                      controller: controller,
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(Icons.email_rounded),
-                                        labelText: "Email người nhận",
-                                        filled: true,
-                                        fillColor: Colors.grey.shade100,
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(16),
-                                          borderSide: BorderSide.none,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 42,
+                                        height: 5,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade300,
+                                          borderRadius: BorderRadius.circular(20),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 18),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton.icon(
-                                        icon: const Icon(Icons.share_rounded),
-                                        label: const Text("Chia sẻ"),
-                                        onPressed: () {
-                                          Navigator.pop(
-                                            context,
-                                            controller.text.trim().toLowerCase(),
-                                          );
-                                        },
+                                      const SizedBox(height: 18),
+                                      const Text(
+                                        "Chia sẻ nhà đã chọn",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      const Text(
+                                        "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      QrImageView(
+                                        data: qrData,
+                                        version: QrVersions.auto,
+                                        size: 190,
+                                      ),
+                                      const SizedBox(height: 18),
+                                      Text(
+                                        "${selectedHomes.length} nhà đã chọn",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 18),
+                                      TextField(
+                                        controller: controller,
+                                        keyboardType: TextInputType.emailAddress,
+                                        decoration: InputDecoration(
+                                          prefixIcon:
+                                          const Icon(Icons.email_rounded),
+                                          labelText: "Email người nhận",
+                                          filled: true,
+                                          fillColor: Colors.grey.shade100,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(16),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 18),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton.icon(
+                                          icon: const Icon(Icons.share_rounded),
+                                          label: const Text("Chia sẻ"),
+                                          onPressed: () {
+                                            Navigator.pop(
+                                              context,
+                                              controller.text.trim().toLowerCase(),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-
-                        if (targetEmail == null || targetEmail.isEmpty) return;
-
-                        final accountsSnap = await FirebaseDatabase.instance
-                            .ref("accounts")
-                            .get();
-
-                        String? targetUid;
-
-                        if (accountsSnap.exists) {
-                          final accounts = Map<String, dynamic>.from(
-                            accountsSnap.value as Map,
+                              );
+                            },
                           );
 
-                          for (final entry in accounts.entries) {
-                            final data = Map<String, dynamic>.from(entry.value);
+                          if (targetEmail == null || targetEmail.isEmpty) return;
 
-                            final mail = data["email"]
-                                ?.toString()
-                                .trim()
-                                .toLowerCase();
+                          final accountsSnap =
+                          await FirebaseDatabase.instance.ref("accounts").get();
 
-                            if (mail == targetEmail) {
-                              targetUid = entry.key;
-                              break;
+                          String? targetUid;
+
+                          if (accountsSnap.exists) {
+                            final accounts =
+                            Map<String, dynamic>.from(accountsSnap.value as Map);
+
+                            for (final entry in accounts.entries) {
+                              final data = Map<String, dynamic>.from(entry.value);
+                              final mail =
+                              data["email"]?.toString().trim().toLowerCase();
+
+                              if (mail == targetEmail) {
+                                targetUid = entry.key;
+                                break;
+                              }
                             }
                           }
-                        }
 
-                        if (targetUid == null) {
-                          showTopToast(
-                            context,
-                            "Email chưa đăng ký",
-                            color: Colors.red,
-                            icon: Icons.error_outline_rounded,
-                          );
-                          return;
-                        }
-
-                        final myUid = FirebaseAuth.instance.currentUser!.uid;
-
-                        int skipped = 0;
-
-                        for (final homeId in selectedHomes) {
-                          final home = safeMap(homes[homeId]);
-
-                          // chỉ share home own
-                          final role = home["_role"]?.toString() ?? "member";
-
-                          final canShare =
-                              home["_shared"] != true ||
-                                  role == "owner" ||
-                                  role == "admin";
-
-                          if (!canShare) {
-                            skipped++;
-                            continue;
+                          if (targetUid == null) {
+                            showTopToast(
+                              context,
+                              "Email chưa đăng ký",
+                              color: Colors.red,
+                              icon: Icons.error_outline_rounded,
+                            );
+                            return;
                           }
 
-                          await FirebaseDatabase.instance
-                              .ref("accounts/$targetUid/shareRequests/$homeId")
-                              .set({
-                                "ownerUid": myUid,
-                                "homeId": homeId,
-                                "ownerEmail":
-                                    FirebaseAuth.instance.currentUser?.email ??
-                                    "",
-                                "time": DateTime.now().millisecondsSinceEpoch,
-                              });
+                          final myUid = FirebaseAuth.instance.currentUser!.uid;
+                          int skipped = 0;
 
-                          // lưu share list
-                          await FirebaseDatabase.instance
-                              .ref(
-                                "accounts/$myUid/shareList/$homeId/$targetUid",
-                              )
-                              .set({
-                                "email": targetEmail,
-                                "sharedAt":
-                                    DateTime.now().millisecondsSinceEpoch,
-                              });
-                        }
+                          for (final homeId in selectedHomes) {
+                            final home = safeMap(homes[homeId]);
+                            final role = home["_role"]?.toString() ?? "member";
 
-                        showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                            title: const Text("Chia sẻ hoàn tất"),
-                            content: Text(
-                              skipped > 0
-                                  ? "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ."
-                                  : "Đã chia sẻ nhà thành công.",
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("OK"),
+                            final canShare = home["_shared"] != true ||
+                                role == "owner" ||
+                                role == "admin";
+
+                            if (!canShare) {
+                              skipped++;
+                              continue;
+                            }
+
+                            await FirebaseDatabase.instance
+                                .ref("accounts/$targetUid/shareRequests/$homeId")
+                                .set({
+                              "ownerUid": myUid,
+                              "homeId": homeId,
+                              "ownerEmail":
+                              FirebaseAuth.instance.currentUser?.email ?? "",
+                              "time": DateTime.now().millisecondsSinceEpoch,
+                            });
+
+                            await FirebaseDatabase.instance
+                                .ref("accounts/$myUid/shareList/$homeId/$targetUid")
+                                .set({
+                              "email": targetEmail,
+                              "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                            });
+                          }
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text("Chia sẻ hoàn tất"),
+                              content: Text(
+                                skipped > 0
+                                    ? "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ."
+                                    : "Đã chia sẻ nhà thành công.",
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-
-                    Divider(height: 8),
-
-                    ListTile(
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
-
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-
-                        child: Icon(
-                          Icons.people_alt_rounded,
-                          color: Colors.orange,
-                        ),
-                      ),
-
-                      title: Text(
-                        "Mở List chia sẻ nhà",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-
-                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
-
-                      trailing: Icon(Icons.chevron_right_rounded),
-
-                      onTap: () async {
-                        final uid = FirebaseAuth.instance.currentUser!.uid;
-
-                        final ownHomes = selectedHomes.where((id) {
-                          final home = safeMap(homes[id]);
-                          final role = home["role"]?.toString();
-
-                          return home["_shared"] != true || role == "owner" || role == "admin";
-                        }).toList();
-
-                        if (ownHomes.isEmpty) {
-                          showTopToast(
-                            context,
-                            "Không có nhà nào bạn có quyền quản lý",
-                            color: Colors.orange,
-                            icon: Icons.lock_rounded,
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
                           );
+                        },
+                      ),
 
-                          return;
-                        }
+                      const Divider(height: 8),
 
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.people_alt_rounded,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        title: const Text(
+                          "Mở List chia sẻ nhà",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () async {
+                          final uid = FirebaseAuth.instance.currentUser!.uid;
 
-                          builder: (_) {
-                            return StatefulBuilder(
-                              builder: (context, setSheetState) {
-                                return Container(
-                                  padding: EdgeInsets.all(16),
+                          final ownHomes = selectedHomes.where((id) {
+                            final home = safeMap(homes[id]);
+                            final role = home["role"]?.toString();
 
-                                  constraints: BoxConstraints(
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height *
-                                        0.8,
-                                  ),
+                            return home["_shared"] != true ||
+                                role == "owner" ||
+                                role == "admin";
+                          }).toList();
 
-                                  child: FutureBuilder(
-                                    future: FirebaseDatabase.instance
-                                        .ref("accounts/$uid/shareList")
-                                        .get(),
-
-                                    builder: (context, snap) {
-                                      if (!snap.hasData) {
-                                        return Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-
-                                      final raw = snap.data!.value == null
-                                          ? {}
-                                          : Map<String, dynamic>.from(
-                                              snap.data!.value as Map,
-                                            );
-
-                                      return ListView(
-                                        children: ownHomes.map((homeId) {
-                                          final home = safeMap(homes[homeId]);
-
-                                          final homeName =
-                                              home["name"]?.toString() ??
-                                              homeId;
-
-                                          final users = safeMap(raw[homeId]);
-
-                                          return Container(
-                                            margin: EdgeInsets.only(bottom: 16),
-
-                                            padding: EdgeInsets.all(14),
-
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-
-                                              borderRadius:
-                                                  BorderRadius.circular(18),
-
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withValues(alpha: 0.05),
-                                                  blurRadius: 10,
-                                                ),
-                                              ],
-                                            ),
-
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-
-                                              children: [
-                                                Text(
-                                                  homeName,
-
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-
-                                                SizedBox(height: 10),
-
-                                                if (users.isEmpty)
-                                                  Text(
-                                                    "Chưa share cho ai",
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-
-                                                ...users.entries.map((e) {
-                                                  final targetUid = e.key;
-
-                                                  final data =
-                                                      Map<String, dynamic>.from(
-                                                        e.value,
-                                                      );
-
-                                                  final email =
-                                                      data["email"] ??
-                                                      "Unknown";
-
-                                                  return Container(
-                                                    margin: EdgeInsets.only(
-                                                      bottom: 8,
-                                                    ),
-
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          Colors.grey.shade100,
-
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            14,
-                                                          ),
-                                                    ),
-
-                                                    child: ListTile(
-                                                      dense: true,
-
-                                                      leading: CircleAvatar(
-                                                        radius: 16,
-
-                                                        child: Icon(
-                                                          Icons.person,
-                                                          size: 18,
-                                                        ),
-                                                      ),
-
-                                                      title: Text(email),
-
-                                                      trailing: IconButton(
-                                                        icon: Icon(
-                                                          Icons.delete_rounded,
-                                                          color: Colors.red,
-                                                        ),
-
-                                                        onPressed: () async {
-                                                          await FirebaseDatabase
-                                                              .instance
-                                                              .ref(
-                                                                "accounts/$targetUid/sharedHomes/$homeId",
-                                                              )
-                                                              .remove();
-
-                                                          await FirebaseDatabase
-                                                              .instance
-                                                              .ref(
-                                                                "accounts/$uid/shareList/$homeId/$targetUid",
-                                                              )
-                                                              .remove();
-
-                                                          setSheetState(() {
-                                                            users.remove(
-                                                              targetUid,
-                                                            );
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
+                          if (ownHomes.isEmpty) {
+                            showTopToast(
+                              context,
+                              "Không có nhà nào bạn có quyền quản lý",
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
                             );
-                          },
-                        );
-                      },
-                    ),
+                            return;
+                          }
 
-                    Divider(height: 8),
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (_) {
+                              return StatefulBuilder(
+                                builder: (context, setSheetState) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(16),
+                                    constraints: BoxConstraints(
+                                      maxHeight:
+                                      MediaQuery.of(context).size.height * 0.8,
+                                    ),
+                                    child: FutureBuilder(
+                                      future: FirebaseDatabase.instance
+                                          .ref("accounts/$uid/shareList")
+                                          .get(),
+                                      builder: (context, snap) {
+                                        if (!snap.hasData) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
 
-                    ListTile(
-                      leading: Container(
-                        padding: EdgeInsets.all(8),
+                                        final raw = snap.data!.value == null
+                                            ? {}
+                                            : Map<String, dynamic>.from(
+                                          snap.data!.value as Map,
+                                        );
 
-                        decoration: BoxDecoration(
-                          color: Colors.red.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                                        return ListView(
+                                          children: ownHomes.map((homeId) {
+                                            final home = safeMap(homes[homeId]);
+                                            final homeName =
+                                                home["name"]?.toString() ?? homeId;
+                                            final users = safeMap(raw[homeId]);
 
-                        child: Icon(Icons.delete_rounded, color: Colors.red),
+                                            return Container(
+                                              margin:
+                                              const EdgeInsets.only(bottom: 16),
+                                              padding: const EdgeInsets.all(14),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                BorderRadius.circular(18),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    homeName,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  if (users.isEmpty)
+                                                    const Text(
+                                                      "Chưa share cho ai",
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ...users.entries.map((e) {
+                                                    final targetUid = e.key;
+                                                    final data =
+                                                    Map<String, dynamic>.from(
+                                                      e.value,
+                                                    );
+
+                                                    final email =
+                                                        data["email"] ?? "Unknown";
+
+                                                    return Container(
+                                                      margin: const EdgeInsets.only(
+                                                        bottom: 8,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey.shade100,
+                                                        borderRadius:
+                                                        BorderRadius.circular(14),
+                                                      ),
+                                                      child: ListTile(
+                                                        dense: true,
+                                                        leading: const CircleAvatar(
+                                                          radius: 16,
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            size: 18,
+                                                          ),
+                                                        ),
+                                                        title: Text(email),
+                                                        trailing: IconButton(
+                                                          icon: const Icon(
+                                                            Icons.delete_rounded,
+                                                            color: Colors.red,
+                                                          ),
+                                                          onPressed: () async {
+                                                            await FirebaseDatabase
+                                                                .instance
+                                                                .ref(
+                                                              "accounts/$targetUid/sharedHomes/$homeId",
+                                                            )
+                                                                .remove();
+
+                                                            await FirebaseDatabase
+                                                                .instance
+                                                                .ref(
+                                                              "accounts/$uid/shareList/$homeId/$targetUid",
+                                                            )
+                                                                .remove();
+
+                                                            setSheetState(() {
+                                                              users.remove(targetUid);
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                                ],
+                                              ),
+                                            );
+                                          }).toList(),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
                       ),
 
-                      title: Text(
-                        "Xoá các nhà đã chọn ?",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.red,
+                      const Divider(height: 8),
+
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.delete_rounded, color: Colors.red),
                         ),
+                        title: const Text(
+                          "Xoá các nhà đã chọn ?",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                          ),
+                        ),
+                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: confirmDeleteSelected,
                       ),
-
-                      subtitle: Text("${selectedHomes.length} nhà đã chọn"),
-
-                      trailing: Icon(Icons.chevron_right_rounded),
-
-                      onTap: confirmDeleteSelected,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFDDF7E8),
-              Color(0xFFF1FCF5),
-              Color(0xFFFFFFFF),
-            ],
           ),
-        ),
-        child: ListView(
-          padding: const EdgeInsets.all(10),
-          children: grouped.entries.map((entry) {
-            final groupKey = entry.key;
-            final ids = entry.value;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildSectionTitle(groupKey, ids),
-                const SizedBox(height: 6),
-              ],
-            );
-          }).toList(),
-        ),
+        ],
       ),
     );
   }

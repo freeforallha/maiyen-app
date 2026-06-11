@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
+
 class HomeStateParser {
   static Map<String, dynamic> parseProfile(Map<String, dynamic> account) {
     final profile = safeMap(account["profile"]);
 
     return {
       "name": profile["name"]?.toString() ?? account["name"]?.toString() ?? "",
-      "gender": profile["gender"]?.toString() ?? account["gender"]?.toString() ?? "",
+      "gender":
+          profile["gender"]?.toString() ?? account["gender"]?.toString() ?? "",
       "dob": profile["dob"]?.toString() ?? account["dob"]?.toString() ?? "",
-      "phone": profile["phone"]?.toString() ?? account["phone"]?.toString() ?? "",
+      "phone":
+          profile["phone"]?.toString() ?? account["phone"]?.toString() ?? "",
       "photoUrl": profile["photoUrl"]?.toString() ?? "",
     };
   }
@@ -40,14 +43,20 @@ class HomeStateParser {
       order = [...homesData.keys, ...sharedHomes.keys];
     }
 
-    return order;
+    final uniqueOrder = <String>[];
+    final seen = <String>{};
+
+    for (final id in order) {
+      if (seen.add(id)) {
+        uniqueOrder.add(id);
+      }
+    }
+
+    return uniqueOrder;
   }
-  static Map<String, dynamic> parseAlarm(
-      Map<String, dynamic> home,
-      ) {
-    final alarm = safeMap(
-      home["_customAlarm"] ?? home["alarm"],
-    );
+
+  static Map<String, dynamic> parseAlarm(Map<String, dynamic> home) {
+    final alarm = safeMap(home["_customAlarm"] ?? home["alarm"]);
 
     final startStr = alarm["start"]?.toString() ?? "23:00";
     final endStr = alarm["end"]?.toString() ?? "06:00";

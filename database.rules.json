@@ -1,0 +1,108 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "accounts": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid && (!data.exists() || !newData.exists())",
+        "email": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "profile": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "fcmToken": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "homes": {
+          "$homeId": {
+            ".write": "auth != null && (auth.uid == $uid || (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid && root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin') || (!newData.exists() && root.child('accounts').child(auth.uid).child('homes').child($homeId).child('_ownerUid').val() == auth.uid && data.child('_ownerUid').val() == $uid))"
+          }
+        },
+        "homeOrder": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "alarmSettings": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "groupNames": {
+          ".write": "auth != null && auth.uid == $uid"
+        },
+        "shareRequests": {
+          "$requestId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && (auth.uid == $uid || newData.child('ownerUid').val() == auth.uid || newData.child('targetUid').val() == auth.uid || data.child('ownerUid').val() == auth.uid || data.child('targetUid').val() == auth.uid)"
+          }
+        },
+        "sharedHomes": {
+          "$homeId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || (auth.uid == $uid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()))"
+          }
+        },
+        "shareList": {
+          "$homeId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && auth.uid == $uid && root.child('accounts').child(auth.uid).child('homes').child($homeId).exists()"
+          }
+        },
+        "notifications": {
+          "$notificationId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && (auth.uid == $uid || newData.child('senderUid').val() == auth.uid || data.child('senderUid').val() == auth.uid)"
+          }
+        }
+      }
+    },
+    "sharedByHome": {
+      "$homeId": {
+        ".read": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists() || data.child(auth.uid).exists())",
+        "$memberUid": {
+          ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || (auth.uid == $memberUid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()))"
+        }
+      }
+    },
+    "homeChats": {
+      "$homeId": {
+        ".read": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists())",
+        "messages": {
+          "$messageId": {
+            ".write": "auth != null && !data.exists() && newData.exists() && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists()) && newData.child('uid').val() == auth.uid",
+            ".validate": "newData.hasChildren(['uid', 'text', 'time'])",
+            "uid": {
+              ".validate": "newData.isString() && newData.val() == auth.uid"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "photoUrl": {
+              ".validate": "newData.isString() && newData.val().length <= 500"
+            },
+            "text": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 1000"
+            },
+            "time": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 300000"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "lastRead": {
+          "$uid": {
+            ".write": "auth != null && auth.uid == $uid && newData.exists() && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists())",
+            ".validate": "newData.isNumber() && (newData.val() <= now + 1000) && (newData.val() >= now - 300000) && (!data.exists() || data.val() > now + 1000 || newData.val() >= data.val())"
+          }
+        }
+      }
+    },
+    "pair_requests": {
+      "$requestId": {
+        ".read": "auth != null && (data.child('requestedBy').val() == auth.uid || data.child('ownerUid').val() == auth.uid)",
+        ".write": "auth != null && newData.child('requestedBy').val() == auth.uid && newData.child('active').val() == true && newData.child('duration').isNumber() && newData.child('duration').val() <= 60 && root.child('accounts').child(newData.child('ownerUid').val()).child('homes').child(newData.child('homeId').val()).exists() && (auth.uid == newData.child('ownerUid').val() || (root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('ownerUid').val() == newData.child('ownerUid').val() && root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('role').val() == 'admin'))"
+      }
+    }
+  }
+}

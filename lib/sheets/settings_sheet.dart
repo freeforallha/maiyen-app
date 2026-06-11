@@ -147,7 +147,12 @@ void showSettingsSheet({
                             const SizedBox(width: 6),
 
                             GestureDetector(
-                              onTap: onShareRequests,
+                              onTap: () {
+                                Navigator.of(sheetContext).pop();
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  onShareRequests();
+                                });
+                              },
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
