@@ -98,7 +98,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   Map<String, List<String>> buildReminderIssueMap() {
     if (isSafeReminder) {
       return {
-        "SafeHome": ["Tất cả thiết bị đang ổn định"],
+        "SafeHome": ["Hãy an tâm nghỉ ngơi"],
       };
     }
 
@@ -421,8 +421,13 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final issueMap = buildReminderIssueMap();
 
     final Color accent = safe ? Colors.green : Colors.orange;
-    final Color bg1 = safe ? const Color(0xFFDDF7E8) : const Color(0xFFFFF3E0);
-    final Color bg2 = safe ? const Color(0xFFF1FCF5) : const Color(0xFFFFFBF5);
+    final Color bg1 = safe
+        ? const Color(0xFF0E2B1A)
+        : const Color(0xFF3A2508);
+
+    final Color bg2 = safe
+        ? const Color(0xFF163824)
+        : const Color(0xFF4A2D08);
 
     return PopScope(
       canPop: false,
@@ -446,7 +451,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(22),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
                         color: accent.withValues(alpha: 0.22),
@@ -461,18 +466,44 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     ),
                     child: Column(
                       children: [
-                        Text(
-                          safe ? "🏡" : "⚠️",
-                          style: const TextStyle(fontSize: 46),
+                        Container(
+                          width: 92,
+                          height: 92,
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.12),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: accent.withValues(alpha: 0.22),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Icon(
+                            safe
+                                ? Icons.verified_user_rounded
+                                : Icons.warning_amber_rounded,
+                            color: accent,
+                            size: 52,
+                          ),
                         ),
                         const SizedBox(height: 14),
                         Text(
-                          safe ? "Nhà đã an toàn" : "Hãy kiểm tra lại",
+                          safe
+                              ? "ĐÃ AN TOÀN"
+                              : "CẦN KIỂM TRA",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: accent,
                             fontSize: 28,
                             fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          "SafeHome Security Reminder",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 18),

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'dart:io';
 import '../app/safe_home_app.dart';
 import '../pages/fullscreen_alarm_page.dart';
 
@@ -36,8 +36,17 @@ class NotificationService {
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
 
+    const ios = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: false,
+    );
+
     await localNotif.initialize(
-      const InitializationSettings(android: android),
+      const InitializationSettings(
+        android: android,
+        iOS: ios,
+      ),
       onDidReceiveNotificationResponse: (response) {
         final payload = response.payload ?? '';
 
@@ -114,38 +123,40 @@ class NotificationService {
       },
     );
 
-    const alarmChannel = AndroidNotificationChannel(
-      'alarm_channel_silent_v3',
-      'Alarm Channel Silent V3',
-      description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
-      importance: Importance.max,
-      playSound: false,
-      enableVibration: true,
-    );
+    if (Platform.isAndroid) {
+      const alarmChannel = AndroidNotificationChannel(
+        'alarm_channel_silent_v3',
+        'Alarm Channel Silent V3',
+        description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+        importance: Importance.max,
+        playSound: false,
+        enableVibration: true,
+      );
 
-    const scheduleFullscreenChannel = AndroidNotificationChannel(
-      'safehome_schedule_fullscreen_channel',
-      'SafeHome Schedule Fullscreen',
-      description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
-      importance: Importance.max,
-      playSound: false,
-    );
+      const scheduleFullscreenChannel = AndroidNotificationChannel(
+        'safehome_schedule_fullscreen_channel',
+        'SafeHome Schedule Fullscreen',
+        description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+        importance: Importance.max,
+        playSound: false,
+      );
 
-    const reminderChannel = AndroidNotificationChannel(
-      'safehome_reminder_channel',
-      'SafeHome Reminder',
-      description: 'Nhắc nhở an toàn nhẹ nhàng',
-      importance: Importance.high,
-      playSound: false,
-    );
+      const reminderChannel = AndroidNotificationChannel(
+        'safehome_reminder_channel',
+        'SafeHome Reminder',
+        description: 'Nhắc nhở an toàn nhẹ nhàng',
+        importance: Importance.high,
+        playSound: false,
+      );
 
-    final androidPlugin =
-    localNotif.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin =
+      localNotif.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
 
-    await androidPlugin?.createNotificationChannel(alarmChannel);
-    await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
-    await androidPlugin?.createNotificationChannel(reminderChannel);
+      await androidPlugin?.createNotificationChannel(alarmChannel);
+      await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
+      await androidPlugin?.createNotificationChannel(reminderChannel);
+    }
   }
   static const String alarmRouteName = "fullscreen_alarm";
   static final List<Map<String, dynamic>> activeAlarmItems = [];
@@ -253,11 +264,20 @@ class NotificationService {
       ),
     );
 
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: false,
+    );
+
     await localNotif.show(
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title,
       body,
-      NotificationDetails(android: androidDetails),
+      NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      ),
       payload: "schedule_notification",
     );
   }

@@ -29,18 +29,100 @@ class DeviceList extends StatelessWidget {
     return Map<String, dynamic>.from(data as Map);
   }
 
-  bool isDeviceOnline(Map<String, dynamic> d) {
-    if (d["availability"] == "online") return true;
+  double heartbeatLimitHours(String type) {
+    switch (type) {
+      case "temperature":
+        return 2;
+
+      case "repeater":
+        return 1;
+
+      case "smoke":
+        return 24;
+
+      case "door":
+      case "window":
+      case "lock":
+      case "gate":
+      case "sos":
+      default:
+        return 6;
+    }
+  }
+
+  String getConnectionStatus(Map<String, dynamic> d) {
+    final type = d["type"]?.toString() ?? "door";
+    final availability = d["availability"]?.toString().toLowerCase() ?? "";
+
+    if (availability == "online") {
+      return "on";
+    }
 
     final lastSeenText = d["last_seen"]?.toString();
-    if (lastSeenText == null || lastSeenText.isEmpty) return false;
+    if (lastSeenText == null || lastSeenText.isEmpty) {
+      return availability == "offline" ? "off" : "warn";
+    }
 
     final lastSeen = DateTime.tryParse(lastSeenText);
-    if (lastSeen == null) return false;
+    if (lastSeen == null) {
+      return availability == "offline" ? "off" : "warn";
+    }
 
-    final diff = DateTime.now().toUtc().difference(lastSeen.toUtc());
+    final ageHours =
+        DateTime.now().toUtc().difference(lastSeen.toUtc()).inMinutes / 60;
 
-    return diff.inHours < 2;
+    final limit = heartbeatLimitHours(type);
+    final offlineLimit = limit * 1.3;
+
+    if (availability == "offline") {
+      if (ageHours <= 12) {
+        return "warn";
+      }
+
+      if (ageHours > offlineLimit) {
+        return "off";
+      }
+
+      return "warn";
+    }
+
+    if (ageHours <= limit) {
+      return "on";
+    }
+
+    if (ageHours <= offlineLimit) {
+      return "warn";
+    }
+
+    return "off";
+  }
+
+  Color getConnectionColor(String status) {
+    switch (status) {
+      case "on":
+        return Colors.green;
+
+      case "warn":
+        return Colors.orange;
+
+      case "off":
+      default:
+        return Colors.red;
+    }
+  }
+
+  String getConnectionText(String status) {
+    switch (status) {
+      case "on":
+        return "On";
+
+      case "warn":
+        return "!";
+
+      case "off":
+      default:
+        return "Off";
+    }
   }
 
   String formatAgo(dynamic ts) {
@@ -174,6 +256,16 @@ class DeviceList extends StatelessWidget {
   }
 
   Color getSoftBorder(Map<String, dynamic> d) {
+    final connectionStatus = getConnectionStatus(d);
+
+    if (connectionStatus == "warn") {
+      return Colors.orange.withValues(alpha: 0.32);
+    }
+
+    if (connectionStatus == "off") {
+      return Colors.red.withValues(alpha: 0.32);
+    }
+
     return isDeviceUnsafe(d)
         ? Colors.red.withValues(alpha: 0.28)
         : Colors.green.withValues(alpha: 0.24);
@@ -186,7 +278,7 @@ class DeviceList extends StatelessWidget {
     required bool compact,
   }) {
     final type = d["type"]?.toString() ?? "door";
-    final online = isDeviceOnline(d);
+    final connectionStatus = getConnectionStatus(d);
     final accentColor = getAccentColor(d);
 
     final titleSize = compact ? 13.5 : 15.0;
@@ -288,15 +380,14 @@ class DeviceList extends StatelessWidget {
                           width: 6,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: online ? Colors.green : Colors.red,
-                            shape: BoxShape.circle,
+                            color: getConnectionColor(connectionStatus),                            shape: BoxShape.circle,
                           ),
                         ),
 
                         const SizedBox(width: 4),
 
                         Text(
-                          online ? "On" : "Off",
+                          getConnectionText(connectionStatus),
                           style: TextStyle(
                             fontSize: smallTextSize,
                             fontWeight: FontWeight.w600,
