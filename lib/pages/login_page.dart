@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'set_password_page.dart';
 import '../services/auto_login_service.dart';
-
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -65,31 +64,53 @@ class _LoginPageState extends State<LoginPage> {
       final snap = await ref.get();
 
       if (!snap.exists) {
-        await ref.set({
-          "email": user.email ?? "",
-          "profile": {
-            "name": user.displayName ?? "",
-            "gender": "",
-            "dob": "",
-            "phone": "",
-            "photoUrl": user.photoURL ?? "",
-          },
-          "homes": {},
-          "homeOrder": [],
-          "shareRequests": {},
-          "shareList": {},
-          "sharedHomes": {},
-        });
-      } else {
-        await ref.update({
-          "email": user.email ?? "",
-        });
+        if (!context.mounted) return;
 
-        await ref.child("profile").update({
-          "photoUrl": user.photoURL ?? "",
-          "name": user.displayName ?? "",
-        });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProfileSetupPage(
+              uid: user.uid,
+              email: user.email ?? "",
+            ),
+          ),
+        );
+
+        return;
       }
+
+      await ref.update({
+        "email": user.email ?? "",
+      });
+
+      final profileSnap = await ref.child("profile").get();
+      final profile = profileSnap.value is Map
+          ? Map<String, dynamic>.from(profileSnap.value as Map)
+          : <String, dynamic>{};
+
+      final name = profile["name"]?.toString().trim() ?? "";
+      final gender = profile["gender"]?.toString().trim() ?? "";
+      final phone = profile["phone"]?.toString().trim() ?? "";
+
+      if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
+        if (!context.mounted) return;
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProfileSetupPage(
+              uid: user.uid,
+              email: user.email ?? "",
+            ),
+          ),
+        );
+
+        return;
+      }
+
+      await ref.child("profile").update({
+        "photoUrl": user.photoURL ?? "",
+      });
     } catch (e, stack) {
       setState(() {
         error = "Google login error: $e";
@@ -393,6 +414,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 12),
+
 
                           const SizedBox(height: 4),
 

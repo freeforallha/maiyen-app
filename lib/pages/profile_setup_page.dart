@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'home_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'login_page.dart';
 class ProfileSetupPage extends StatefulWidget {
   final String uid;
   final String email;
@@ -102,7 +103,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
       final year = yearController.text.trim();
 
+      final phone = phoneController.text.trim();
+
       if (name.isEmpty ||
+          phone.isEmpty ||
+          gender.isEmpty ||
           day.isEmpty ||
           month.isEmpty ||
           year.isEmpty) {
@@ -119,38 +124,52 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
       final dob = "$year-$month-$day";
 
-      await FirebaseDatabase.instance
-          .ref("accounts/${widget.uid}")
-          .set({
-        "email": widget.email,
+      final accountRef =
+      FirebaseDatabase.instance.ref("accounts/${widget.uid}");
 
+      final accountSnap = await accountRef.get();
+
+      final oldData = accountSnap.value is Map
+          ? Map<String, dynamic>.from(accountSnap.value as Map)
+          : <String, dynamic>{};
+
+      final oldHomes = oldData["homes"];
+      final oldHomeOrder = oldData["homeOrder"];
+
+      final hasHomes = oldHomes is Map && oldHomes.isNotEmpty;
+      await accountRef.update({
+        "email": widget.email,
         "profile": {
           "name": name,
           "gender": gender,
           "dob": dob,
-          "phone": phoneController.text.trim(),
-          "photoUrl": "",
+          "phone": phone,
+          "photoUrl": oldData["profile"] is Map
+              ? (Map<String, dynamic>.from(oldData["profile"] as Map)["photoUrl"] ?? "")
+              : "",
         },
-
-        "homes": {
-          homeId: {
-            "name": "Nhà của tôi",
-            "_ownerUid": widget.uid,
-            "_shared": false,
-            "devices": {},
-            "alarm": {
-              "enabled": false,
-              "start": "23:00",
-              "end": "06:00",
-            },
-          }
-        },
-
-        "homeOrder": [homeId],
-        "shareRequests": {},
-        "shareList": {},
-        "sharedHomes": {},
+        "shareRequests": oldData["shareRequests"] ?? {},
+        "shareList": oldData["shareList"] ?? {},
+        "sharedHomes": oldData["sharedHomes"] ?? {},
       });
+
+      if (!hasHomes) {
+        await accountRef.child("homes/$homeId").set({
+          "name": "Nhà của tôi",
+          "_ownerUid": widget.uid,
+          "_shared": false,
+          "devices": {},
+          "alarm": {
+            "enabled": false,
+            "start": "23:00",
+            "end": "06:00",
+          },
+        });
+
+        await accountRef.child("homeOrder").set([homeId]);
+      } else if (oldHomeOrder == null) {
+        await accountRef.child("homeOrder").set((oldHomes as Map).keys.toList());
+      }
 
       if (!mounted) return;
 
@@ -175,7 +194,19 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Thiết lập tài khoản"),
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+
+            if (!context.mounted) return;
+
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => LoginPage()),
+                  (route) => false,
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -193,6 +224,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
                 labelText: "Số điện thoại",
+                helperText: "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp",
+                prefixIcon: Icon(Icons.phone_rounded),
               ),
             ),
 

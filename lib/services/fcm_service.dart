@@ -11,19 +11,26 @@ class FCMService {
   static Future<void> setupFCM({required String uid}) async {
     final messaging = FirebaseMessaging.instance;
 
-    await messaging.requestPermission(
+    final settings = await messaging.requestPermission(
       alert: true,
       badge: true,
-      sound: false,
+      sound: true,
     );
 
+    print("🔔 Permission: ${settings.authorizationStatus}");
+
+    final apnsToken = await messaging.getAPNSToken();
+    print("🍎 APNS TOKEN: $apnsToken");
+
     final token = await messaging.getToken();
+    print("🔥 FCM TOKEN: $token");
 
     if (token != null) {
       await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(token);
     }
 
     messaging.onTokenRefresh.listen((newToken) async {
+      print("🔥 FCM TOKEN REFRESH: $newToken");
       await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(newToken);
     });
   }

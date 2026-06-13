@@ -34,7 +34,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
-
+import '../services/auto_login_service.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -1149,6 +1149,12 @@ class _HomePageState extends State<HomePage> {
 
   void logout() async {
     if (!await showConfirmDialog(context, "Đăng xuất?")) return;
+
+    Navigator.of(context, rootNavigator: true).popUntil((route) => route.isFirst);
+
+    await Future.delayed(const Duration(milliseconds: 150));
+
+    await AutoLoginService.clearLogin();
     await FirebaseAuth.instance.signOut();
   }
 

@@ -8,6 +8,8 @@ import '../pages/fullscreen_alarm_page.dart';
 import '../services/notification_service.dart';
 import '../services/auto_login_service.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
+import '../pages/profile_setup_page.dart';
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatelessWidget {
@@ -195,7 +197,35 @@ class _AuthGateState extends State<AuthGate> {
           return LoginPage();
         }
 
-        return HomePage();
+        return FutureBuilder<DatabaseEvent>(
+          future: FirebaseDatabase.instance
+              .ref("accounts/${currentUser.uid}/profile")
+              .once(),
+          builder: (context, profileSnap) {
+            if (!profileSnap.hasData) {
+              return const SafeHomeSplash();
+            }
+
+            final value = profileSnap.data!.snapshot.value;
+
+            final profile = value is Map
+                ? Map<String, dynamic>.from(value)
+                : <String, dynamic>{};
+
+            final name = profile["name"]?.toString().trim() ?? "";
+            final gender = profile["gender"]?.toString().trim() ?? "";
+            final phone = profile["phone"]?.toString().trim() ?? "";
+
+            if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
+              return ProfileSetupPage(
+                uid: currentUser.uid,
+                email: currentUser.email ?? "",
+              );
+            }
+
+            return HomePage();
+          },
+        );
       },
     );
   }
