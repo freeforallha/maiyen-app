@@ -159,11 +159,6 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
           "_ownerUid": widget.uid,
           "_shared": false,
           "devices": {},
-          "alarm": {
-            "enabled": false,
-            "start": "23:00",
-            "end": "06:00",
-          },
         });
 
         await accountRef.child("homeOrder").set([homeId]);

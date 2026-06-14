@@ -275,7 +275,7 @@ void showHomeChatSheet({
         ),
       );
     },
-  ).whenComplete(controller.dispose);
+  );
 }
 
 String formatChatTime(dynamic ts) {

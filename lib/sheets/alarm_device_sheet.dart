@@ -19,11 +19,28 @@ class AlarmDeviceSheet extends StatefulWidget {
 
 class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   Map<String, dynamic> devices = {};
-
+  String mode = "home";
+  @override
   @override
   void initState() {
     super.initState();
+
     devices = Map<String, dynamic>.from(widget.devices);
+
+    FirebaseDatabase.instance
+        .ref("accounts/${widget.ownerUid}/customRules/${widget.homeId}/mode")
+        .get()
+        .then((snap) {
+      if (!mounted) return;
+
+      final value = snap.value?.toString();
+
+      if (value == "custom" || value == "home") {
+        setState(() {
+          mode = value!;
+        });
+      }
+    });
   }
 
   bool isSecurityDevice(Map d) {
@@ -51,10 +68,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final realDeviceId =
         device["_deviceId"]?.toString() ?? deviceId;
 
+    final path = mode == "custom"
+        ? "accounts/$ownerUid/customRules/$homeId/devices/$realDeviceId/alarm"
+        : "accounts/$ownerUid/homes/$homeId/devices/$realDeviceId/alarm";
+
     await FirebaseDatabase.instance
-        .ref(
-      "accounts/$ownerUid/homes/$homeId/devices/$realDeviceId/alarm",
-    )
+        .ref(path)
         .set(alarm);
   }
 
@@ -269,7 +288,36 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 16),
 
+            SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(
+                  value: "home",
+                  label: Text("Theo lịch của nhà"),
+                  icon: Icon(Icons.home_rounded),
+                ),
+                ButtonSegment(
+                  value: "custom",
+                  label: Text("Tùy chỉnh riêng"),
+                  icon: Icon(Icons.person_rounded),
+                ),
+              ],
+              selected: {mode},
+              onSelectionChanged: (value) async {
+                final nextMode = value.first;
+
+                setState(() {
+                  mode = nextMode;
+                });
+
+                await FirebaseDatabase.instance
+                    .ref("accounts/${widget.ownerUid}/customRules/${widget.homeId}/mode")
+                    .set(nextMode);
+              },
+            ),
+
+            const SizedBox(height: 16),
             const SizedBox(height: 16),
 
             Flexible(
