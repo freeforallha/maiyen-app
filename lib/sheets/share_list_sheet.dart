@@ -5,12 +5,13 @@ import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 
-Future<void> showShareListSheet({
+Future<bool?> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
   required String homeId,
   required bool canManageMembers,
   required bool isOwner,
+  VoidCallback? onSelfLeave,
 }) async {
   final myUid = FirebaseAuth.instance.currentUser!.uid;
   final db = FirebaseDatabase.instance;
@@ -84,11 +85,11 @@ Future<void> showShareListSheet({
     };
   }
 
-  showModalBottomSheet(
+  return showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       return Container(
         padding: const EdgeInsets.all(18),
         decoration: const BoxDecoration(
@@ -279,13 +280,10 @@ Future<void> showShareListSheet({
                             icon: const Icon(Icons.manage_accounts_rounded),
 
                             onSelected: (value) async {
-                              await db
-                                  .ref("${FirebasePaths.sharedMember(homeId, targetUid)}/role")
-                                  .set(value);
-
-                              await db
-                                  .ref("${FirebasePaths.sharedHome(targetUid, homeId)}/role")
-                                  .set(value);
+                              await db.ref().update({
+                                "${FirebasePaths.sharedMember(homeId, targetUid)}/role": value,
+                                "${FirebasePaths.sharedHome(targetUid, homeId)}/role": value,
+                              });
                               await HomeNotificationService.addNotification(
                                 uid: targetUid,
                                 type: "role_changed",
@@ -305,6 +303,7 @@ Future<void> showShareListSheet({
                                 homeId: homeId,
                                 canManageMembers: canManageMembers,
                                 isOwner: isOwner,
+                                onSelfLeave: onSelfLeave,
                               );
                             },
 
@@ -325,7 +324,11 @@ Future<void> showShareListSheet({
                         ],
 
                         const SizedBox(width: 6),
-                        if (canManageMembers || targetUid == myUid)
+                        if (
+                        targetUid == myUid ||
+                            isOwner ||
+                            (canManageMembers && role == "member")
+                        )
                           IconButton(
                             icon: Icon(
                               targetUid == myUid
@@ -334,8 +337,9 @@ Future<void> showShareListSheet({
                               color: Colors.red,
                             ),
                             onPressed: () async {
+
                               final ok = await showDialog<bool>(
-                                context: context,
+                                context: sheetContext,
                                 builder: (_) => AlertDialog(
                                   title: Text(targetUid == myUid ? "Rời khỏi nhà?" : "Xoá thành viên?"),
                                   content: Text(
@@ -358,39 +362,23 @@ Future<void> showShareListSheet({
 
                               if (ok != true) return;
 
+                              if (targetUid == myUid) {
+                                Navigator.of(sheetContext).pop(true);
+
+                                await db.ref(FirebasePaths.sharedHome(targetUid, homeId)).remove();
+                                await db.ref(FirebasePaths.sharedMember(homeId, targetUid)).remove();
+                                await db.ref("accounts/$ownerUid/shareList/$homeId/$targetUid").remove();
+
+                                return;
+                              }
+
                               await db.ref(FirebasePaths.sharedHome(targetUid, homeId)).remove();
                               await db.ref(FirebasePaths.sharedMember(homeId, targetUid)).remove();
                               await db.ref("accounts/$ownerUid/shareList/$homeId/$targetUid").remove();
 
-                              try {
-                                await HomeNotificationService.addNotification(
-                                  uid: targetUid,
-                                  type: "member_removed",
-                                  title: targetUid == myUid ? "Đã rời khỏi nhà" : "Đã bị xoá khỏi nhà",
-                                  message: targetUid == myUid
-                                      ? "Bạn đã rời khỏi một nhà được chia sẻ."
-                                      : "Bạn đã bị xoá khỏi một nhà được chia sẻ.",
-                                  homeId: homeId,
-                                );
-
-                                await HomeNotificationService.addNotification(
-                                  uid: ownerUid,
-                                  type: "member_removed",
-                                  title: targetUid == myUid ? "Thành viên đã rời khỏi nhà" : "Đã xoá thành viên",
-                                  message: targetUid == myUid
-                                      ? "$name đã rời khỏi nhà."
-                                      : "$name đã bị xoá khỏi nhà.",
-                                  homeId: homeId,
-                                );
-                              } catch (_) {}
-
-                              if (!context.mounted) return;
-
-                              Navigator.pop(context);
-
                               showTopToast(
-                                context,
-                                targetUid == myUid ? "Đã rời khỏi nhà" : "Đã xoá thành viên",
+                                sheetContext,
+                                "Đã xoá thành viên",
                                 color: Colors.green,
                                 icon: Icons.check_circle_rounded,
                               );

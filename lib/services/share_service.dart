@@ -49,31 +49,21 @@ class ShareService {
   }) async {
     final targetProfile = targetData["profile"] == null
         ? {}
-        : Map<String, dynamic>.from(
-      targetData["profile"] as Map,
-    );
+        : Map<String, dynamic>.from(targetData["profile"] as Map);
 
-    await _db.ref(FirebasePaths.sharedMember(homeId, targetUid)).set({
-      "role": "member",
-      "email": targetData["email"] ?? targetEmail,
-      "name": targetProfile["name"] ?? "",
-      "photoUrl": targetProfile["photoUrl"] ?? "",
-      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-    });
-
-    await _db.ref(FirebasePaths.shareRequest(targetUid, homeId)).set({
+    final requestData = {
+      "type": "share_request",
       "ownerUid": ownerUid,
       "homeId": homeId,
+      "targetUid": targetUid,
+      "targetEmail": targetData["email"] ?? targetEmail,
+      "targetName": targetProfile["name"] ?? "",
+      "targetPhotoUrl": targetProfile["photoUrl"] ?? "",
       "ownerEmail": ownerEmail,
       "time": DateTime.now().millisecondsSinceEpoch,
-    });
+    };
 
-    await _db
-        .ref("${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid")
-        .set({
-      "email": targetEmail,
-      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-    });
+    await _db.ref(FirebasePaths.shareRequest(targetUid, homeId)).set(requestData);
   }
 
   static Future<void> transferOwner({

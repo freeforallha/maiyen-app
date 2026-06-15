@@ -5,6 +5,7 @@ import '../helpers/home_helper.dart';
 
 class HomeListenerService {
   static Future<void> loadSharedHomes({
+    required String uid,
     required Map<String, dynamic> homes,
     required Map sharedHomes,
     required Function() refresh,
@@ -48,7 +49,13 @@ class HomeListenerService {
 
           "_customName": sharedConfig["customName"],
           "_customAlarm": sharedConfig["alarm"],
-          "_role": sharedConfig["role"] ?? "member",
+          "_role": (await FirebaseDatabase.instance
+              .ref("${FirebasePaths.sharedMember(homeId, uid)}/role")
+              .get())
+              .value
+              ?.toString() ??
+              sharedConfig["role"] ??
+              "member",
         };
 
         if (homes.isEmpty) return;

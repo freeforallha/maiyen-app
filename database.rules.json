@@ -32,19 +32,19 @@
         "shareRequests": {
           "$requestId": {
             ".read": "auth != null && auth.uid == $uid",
-            ".write": "auth != null && (auth.uid == $uid || newData.child('ownerUid').val() == auth.uid || newData.child('targetUid').val() == auth.uid || data.child('ownerUid').val() == auth.uid || data.child('targetUid').val() == auth.uid)"
+            ".write": "auth != null && (auth.uid == $uid || newData.child('ownerUid').val() == auth.uid || newData.child('targetUid').val() == auth.uid || (newData.exists() && newData.child('homeId').exists() && newData.child('ownerUid').exists() && root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('ownerUid').val() == newData.child('ownerUid').val() && root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('role').val() == 'admin') || data.child('ownerUid').val() == auth.uid || data.child('targetUid').val() == auth.uid || (!newData.exists() && data.child('homeId').exists() && data.child('ownerUid').exists() && root.child('accounts').child(auth.uid).child('sharedHomes').child(data.child('homeId').val()).child('ownerUid').val() == data.child('ownerUid').val() && root.child('accounts').child(auth.uid).child('sharedHomes').child(data.child('homeId').val()).child('role').val() == 'admin'))"
           }
         },
         "sharedHomes": {
           "$homeId": {
             ".read": "auth != null && auth.uid == $uid",
-            ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || (auth.uid == $uid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()))"
+            ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || (auth.uid == $uid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()) || (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin' && (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == newData.child('ownerUid').val() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == data.child('ownerUid').val())))"
           }
         },
         "shareList": {
           "$homeId": {
             ".read": "auth != null && auth.uid == $uid",
-            ".write": "auth != null && auth.uid == $uid && root.child('accounts').child(auth.uid).child('homes').child($homeId).exists()"
+            ".write": "auth != null && ((auth.uid == $uid && root.child('accounts').child(auth.uid).child('homes').child($homeId).exists()) || (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid && root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin'))"
           }
         },
         "notifications": {
@@ -59,7 +59,7 @@
       "$homeId": {
         ".read": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists() || data.child(auth.uid).exists())",
         "$memberUid": {
-          ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || (auth.uid == $memberUid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()))"
+          ".write": "auth != null && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin' || (auth.uid == $memberUid && root.child('accounts').child(auth.uid).child('shareRequests').child($homeId).exists()))"
         }
       }
     },

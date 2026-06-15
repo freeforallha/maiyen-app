@@ -128,9 +128,10 @@ void showSettingsSheet({
                               ),
                             ),
 
-                            GestureDetector(
-                              onTap: onRenameHome,
-                              child: Container(
+                            if (role == "owner" || role == "admin")
+                              GestureDetector(
+                                onTap: onRenameHome,
+                                child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: Colors.teal.withValues(alpha: 0.10),
@@ -145,7 +146,7 @@ void showSettingsSheet({
                             ),
 
                             const SizedBox(width: 6),
-
+                            if (role == "owner" || role == "admin")
                             GestureDetector(
                               onTap: () {
                                 Navigator.of(sheetContext).pop();
@@ -239,15 +240,22 @@ void showSettingsSheet({
               icon: Icons.people_alt_rounded,
               title: "Thành viên trong nhà",
               color: Colors.green,
-              onTap: onShareList,
+              onTap: () {
+                Navigator.of(sheetContext).pop();
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  onShareList();
+                });
+              },
             ),
 
-            tile(
-              icon: Icons.swap_horiz,
-              title: "Chuyển quyền chủ nhà",
-              color: Colors.purple,
-              onTap: onTransferOwner,
-            ),
+            if (role == "owner")
+              tile(
+                icon: Icons.swap_horiz,
+                title: "Chuyển quyền chủ nhà",
+                color: Colors.purple,
+                onTap: onTransferOwner,
+              ),
 
             const SizedBox(height: 8),
 
@@ -267,12 +275,13 @@ void showSettingsSheet({
 
             const SizedBox(height: 8),
 
-            tile(
-              icon: Icons.delete_forever,
-              title: "Xoá Nhà",
-              color: Colors.red,
-              onTap: onDeleteHome,
-            ),
+            if (role == "owner")
+              tile(
+                icon: Icons.delete_forever,
+                title: "Xoá Nhà",
+                color: Colors.red,
+                onTap: onDeleteHome,
+              ),
           ],
         ),
       );

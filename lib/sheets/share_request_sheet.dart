@@ -10,29 +10,82 @@ Future<bool?> showShareRequestSheet({
   required Map<String, dynamic> requests,
   required String uid,
 }) {
+  final items = Map<String, dynamic>.from(requests);
+  final selected = <String>{};
+
   return showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) {
-      final items = Map<String, dynamic>.from(requests);
-      final selected = <String>{};
+
+      Future<void> removeRequestFromAllApprovers({
+        required String requestKey,
+        required String ownerUid,
+        required String homeId,
+        required String currentUid,
+        required bool syncApprovers,
+      }) async {
+        final updates = <String, Object?>{
+          "accounts/$currentUid/shareRequests/$requestKey": null,
+          "accounts/$ownerUid/shareRequests/$requestKey": null,
+        };
+
+        final snap = await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/shareRequests/$requestKey")
+            .get();
+
+        if (snap.value is Map) {
+          final data = Map<String, dynamic>.from(snap.value as Map);
+          final targetUid = data["targetUid"]?.toString() ?? "";
+
+          if (targetUid.isNotEmpty) {
+            updates["accounts/$targetUid/shareRequests/$requestKey"] = null;
+          }
+        }
+
+        final sharedSnap = await FirebaseDatabase.instance
+            .ref("sharedByHome/$homeId")
+            .get();
+
+        final sharedMap = sharedSnap.value is Map
+            ? Map<String, dynamic>.from(sharedSnap.value as Map)
+            : <String, dynamic>{};
+
+        for (final entry in sharedMap.entries) {
+          final memberUid = entry.key.toString();
+          final memberData = entry.value is Map
+              ? Map<String, dynamic>.from(entry.value as Map)
+              : <String, dynamic>{};
+
+          if (memberData["role"] == "admin") {
+            updates["accounts/$memberUid/shareRequests/$requestKey"] = null;
+          }
+        }
+
+        await FirebaseDatabase.instance.ref().update(updates);
+      }
 
       return StatefulBuilder(
         builder: (context, setSheetState) {
-          final list = items.entries.toList();
-
-          Future<void> acceptOne(String requestKey, Map<String, dynamic> data) async {
+          Future<void> acceptOne(
+            String requestKey,
+            Map<String, dynamic> data,
+          ) async {
             final homeId = data["homeId"]?.toString() ?? "";
+            final ownerUid = data["ownerUid"]?.toString().isNotEmpty == true
+                ? data["ownerUid"].toString()
+                : data["oldOwnerUid"]?.toString() ?? "";
+            final fallbackTargetUid = requestKey.startsWith("${homeId}_")
+                ? requestKey.substring(homeId.length + 1)
+                : uid;
             final targetUid = data["targetUid"]?.toString().isNotEmpty == true
                 ? data["targetUid"].toString()
-                : uid;
-            final ownerUid = data["ownerUid"]?.toString() ?? "";
+                : fallbackTargetUid;
 
             if (homeId.isEmpty || targetUid.isEmpty || ownerUid.isEmpty) return;
 
             final type = data["type"]?.toString() ?? "share_request";
-
             if (type == "transfer_owner_request") {
               await ShareService.transferOwner(
                 oldOwnerUid: data["oldOwnerUid"]?.toString() ?? "",
@@ -40,42 +93,64 @@ Future<bool?> showShareRequestSheet({
                 homeId: homeId,
               );
             } else {
-              final account = await ShareService.loadAccount(targetUid);
-              final profile = account["profile"] is Map
-                  ? Map<String, dynamic>.from(account["profile"] as Map)
-                  : <String, dynamic>{};
+              var targetEmail = data["targetEmail"]?.toString() ?? "";
+              var targetName = data["targetName"]?.toString() ?? "";
+              var targetPhotoUrl = data["targetPhotoUrl"]?.toString() ?? "";
 
-              final targetEmail = data["targetEmail"]?.toString().isNotEmpty == true
-                  ? data["targetEmail"].toString()
-                  : account["email"]?.toString() ?? "";
+              if (targetUid == uid &&
+                  (targetEmail.isEmpty ||
+                      targetName.isEmpty ||
+                      targetPhotoUrl.isEmpty)) {
+                try {
+                  final account = await ShareService.loadAccount(uid);
+                  final profile = account["profile"] is Map
+                      ? Map<String, dynamic>.from(account["profile"] as Map)
+                      : <String, dynamic>{};
 
-              final targetName = data["targetName"]?.toString().isNotEmpty == true
-                  ? data["targetName"].toString()
-                  : profile["name"]?.toString() ?? "";
+                  targetEmail = targetEmail.isNotEmpty
+                      ? targetEmail
+                      : account["email"]?.toString() ?? "";
+                  targetName = targetName.isNotEmpty
+                      ? targetName
+                      : profile["name"]?.toString() ?? "";
+                  targetPhotoUrl = targetPhotoUrl.isNotEmpty
+                      ? targetPhotoUrl
+                      : profile["photoUrl"]?.toString() ?? "";
+                } catch (e) {
+                  debugPrint("LOAD_SELF_ACCOUNT_FOR_SHARE_ERROR: $e");
+                }
+              }
+
+              final memberData = <String, Object?>{
+                "role": "member",
+                "email": targetEmail,
+                "name": targetName,
+                "sharedAt": DateTime.now().millisecondsSinceEpoch,
+              };
+
+              if (targetPhotoUrl.isNotEmpty) {
+                memberData["photoUrl"] = targetPhotoUrl;
+              }
 
               await FirebaseDatabase.instance
                   .ref(FirebasePaths.sharedHome(targetUid, homeId))
-                  .set({
-                "ownerUid": ownerUid,
-                "role": "member",
-              });
+                  .set({"ownerUid": ownerUid, "role": "member"});
 
               await FirebaseDatabase.instance
                   .ref(FirebasePaths.sharedMember(homeId, targetUid))
-                  .set({
-                "role": "member",
-                "email": targetEmail,
-                "name": targetName,
-                "sharedAt": DateTime.now().millisecondsSinceEpoch,
-              });
+                  .set(memberData);
 
-              await FirebaseDatabase.instance
-                  .ref("${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid")
-                  .set({
-                "email": targetEmail,
-                "name": targetName,
-                "sharedAt": DateTime.now().millisecondsSinceEpoch,
-              });
+              if (type == "join_request") {
+                await FirebaseDatabase.instance
+                    .ref(
+                      "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
+                    )
+                    .set({
+                      "email": targetEmail,
+                      "name": targetName,
+                      "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                    });
+              }
 
               try {
                 await HomeNotificationService.addNotification(
@@ -88,25 +163,52 @@ Future<bool?> showShareRequestSheet({
               } catch (_) {}
             }
 
-            await FirebaseDatabase.instance
-                .ref("accounts/$uid/shareRequests/$requestKey")
-                .remove();
+            await removeRequestFromAllApprovers(
+              requestKey: requestKey,
+              ownerUid: ownerUid,
+              homeId: homeId,
+              currentUid: uid,
+              syncApprovers: true,
+            );
 
             setSheetState(() {
               items.remove(requestKey);
               selected.remove(requestKey);
             });
+
+            if (items.isEmpty && context.mounted) {
+              Navigator.pop(context, true);
+              return;
+            }
           }
 
           Future<void> denyOne(String requestKey) async {
-            await FirebaseDatabase.instance
-                .ref("accounts/$uid/shareRequests/$requestKey")
-                .remove();
+            final data = Map<String, dynamic>.from(items[requestKey] ?? {});
+            final homeId = data["homeId"]?.toString() ?? "";
+            final ownerUid = data["ownerUid"]?.toString() ?? "";
+
+            if (homeId.isNotEmpty && ownerUid.isNotEmpty) {
+              await removeRequestFromAllApprovers(
+                requestKey: requestKey,
+                ownerUid: ownerUid,
+                homeId: homeId,
+                currentUid: uid,
+                syncApprovers: true,
+              );
+            } else {
+              await FirebaseDatabase.instance
+                  .ref("accounts/$uid/shareRequests/$requestKey")
+                  .remove();
+            }
 
             setSheetState(() {
               items.remove(requestKey);
               selected.remove(requestKey);
             });
+
+            if (items.isEmpty && context.mounted) {
+              Navigator.pop(context, true);
+            }
           }
 
           return SafeArea(
@@ -159,7 +261,7 @@ Future<bool?> showShareRequestSheet({
                           ),
                         ),
                         Text(
-                          "${list.length}",
+                          "${items.length}",
                           style: TextStyle(
                             color: Colors.grey.shade700,
                             fontWeight: FontWeight.w700,
@@ -170,7 +272,7 @@ Future<bool?> showShareRequestSheet({
 
                     const SizedBox(height: 16),
 
-                    if (list.isEmpty)
+                    if (items.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 44),
                         child: Column(
@@ -192,18 +294,22 @@ Future<bool?> showShareRequestSheet({
                       Flexible(
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: list.length,
+                          itemCount: items.length,
                           itemBuilder: (_, i) {
+                            final list = items.entries.toList();
                             final requestKey = list[i].key;
-                            final data = Map<String, dynamic>.from(list[i].value);
-                            final type = data["type"]?.toString() ?? "share_request";
+                            final data = Map<String, dynamic>.from(
+                              list[i].value,
+                            );
+                            final type =
+                                data["type"]?.toString() ?? "share_request";
 
                             final email = data["targetEmail"]?.toString() ?? "";
                             final name = data["targetName"]?.toString() ?? "";
                             final homeName =
                                 data["homeName"]?.toString() ??
-                                    data["homeId"]?.toString() ??
-                                    "Home";
+                                data["homeId"]?.toString() ??
+                                "Home";
 
                             final title = type == "transfer_owner_request"
                                 ? "Nhận quyền chủ nhà"
@@ -233,14 +339,21 @@ Future<bool?> showShareRequestSheet({
                                   Row(
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor: type == "transfer_owner_request"
-                                            ? Colors.purple.withValues(alpha: 0.12)
-                                            : Colors.green.withValues(alpha: 0.12),
+                                        backgroundColor:
+                                            type == "transfer_owner_request"
+                                            ? Colors.purple.withValues(
+                                                alpha: 0.12,
+                                              )
+                                            : Colors.green.withValues(
+                                                alpha: 0.12,
+                                              ),
                                         child: Icon(
                                           type == "transfer_owner_request"
-                                              ? Icons.admin_panel_settings_rounded
+                                              ? Icons
+                                                    .admin_panel_settings_rounded
                                               : Icons.home_rounded,
-                                          color: type == "transfer_owner_request"
+                                          color:
+                                              type == "transfer_owner_request"
                                               ? Colors.purple
                                               : Colors.green,
                                         ),
@@ -248,7 +361,8 @@ Future<bool?> showShareRequestSheet({
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               title,
@@ -291,7 +405,25 @@ Future<bool?> showShareRequestSheet({
                                             backgroundColor: Colors.green,
                                             foregroundColor: Colors.white,
                                           ),
-                                          onPressed: () => acceptOne(requestKey, data),
+                                          onPressed: () async {
+                                            try {
+                                              await acceptOne(requestKey, data);
+                                            } catch (e, st) {
+                                              debugPrint("ACCEPT_REQUEST_ERROR: $e");
+                                              debugPrint("ACCEPT_REQUEST_STACK: $st");
+                                              if (!context.mounted) return;
+
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          },
                                           child: const Text("Chấp nhận"),
                                         ),
                                       ),
