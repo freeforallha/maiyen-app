@@ -7,6 +7,7 @@ import '../services/chat_service.dart';
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
+  required String homeName,
   required String userName,
   required String userPhotoUrl,
   required String ownerUid,
@@ -17,7 +18,19 @@ void showHomeChatSheet({
   if (user == null) return;
 
   final controller = TextEditingController();
+  final scrollController = ScrollController();
 
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!scrollController.hasClients) return;
+
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    });
+  }
   ChatService.markAsRead(homeId: homeId, uid: user.uid);
   showModalBottomSheet(
     context: context,
@@ -84,9 +97,16 @@ void showHomeChatSheet({
 
                   const SizedBox(width: 10),
 
-                  const Text(
-                    "Chat trong nhà",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  Expanded(
+                    child: Text(
+                      homeName.isNotEmpty ? homeName : "Chat trong nhà",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
 
                   const Spacer(),
@@ -99,6 +119,7 @@ void showHomeChatSheet({
                         context: context,
                         ownerUid: ownerUid,
                         homeId: homeId,
+                        homeName: homeName,
                         canManageMembers: canManageMembers,
                         isOwner: isOwner,
                       );
@@ -132,7 +153,10 @@ void showHomeChatSheet({
                         return (av["time"] ?? 0).compareTo(bv["time"] ?? 0);
                       });
 
+                    scrollToBottom();
+
                     return ListView.builder(
+                      controller: scrollController,
                       padding: const EdgeInsets.only(bottom: 8),
                       itemCount: messages.length,
                       itemBuilder: (_, index) {

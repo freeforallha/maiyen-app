@@ -651,7 +651,12 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    pairSensor(value);
+    pairSensor(value);showTopToast(
+      context,
+      "QR này không phải mã xin gia nhập nhà",
+      color: Colors.red,
+      icon: Icons.qr_code_2_rounded,
+    );
   }
 
   void pairSensor(String hubId) async {
@@ -729,72 +734,156 @@ class _HomePageState extends State<HomePage> {
     // ================= HOME OWN =================
     final controller = TextEditingController();
 
-    final ok = await showDialog<bool>(
+    final confirmOk = await showModalBottomSheet<bool>(
       context: context,
-
-      builder: (_) => AlertDialog(
-        title: Text("Xác nhận xoá"),
-
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-
-          children: [
-            Text("Nhập mật khẩu tài khoản để xác nhận."),
-
-            SizedBox(height: 14),
-
-            TextField(
-              controller: controller,
-
-              obscureText: true,
-
-              decoration: InputDecoration(
-                hintText: "Password",
-                border: OutlineInputBorder(),
-              ),
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
-          ],
-        ),
-
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-
-            child: Text("Huỷ"),
-          ),
-
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-
-            onPressed: () async {
-              try {
-                final user = FirebaseAuth.instance.currentUser!;
-
-                final credential = EmailAuthProvider.credential(
-                  email: user.email!,
-                  password: controller.text.trim(),
-                );
-
-                await user.reauthenticateWithCredential(credential);
-
-                Navigator.pop(context, true);
-              } catch (e) {
-                showTopToast(
-                  context,
-                  "Sai mật khẩu",
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
                   color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              }
-            },
-
-            child: Text("DELETE"),
+                  size: 48,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Xác nhận xoá nhà",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Huỷ"),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Tiếp tục"),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
 
-    if (ok != true) return;
+    if (confirmOk != true) return;
+
+    final passwordOk = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.lock_outline_rounded,
+                  color: Colors.red,
+                  size: 44,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Nhập mật khẩu",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: controller,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Mật khẩu tài khoản",
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.delete_forever_rounded),
+                    label: const Text("Xoá nhà"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      try {
+                        final user = FirebaseAuth.instance.currentUser!;
+
+                        final credential = EmailAuthProvider.credential(
+                          email: user.email!,
+                          password: controller.text.trim(),
+                        );
+
+                        await user.reauthenticateWithCredential(credential);
+
+                        Navigator.pop(context, true);
+                      } catch (e) {
+                        showTopToast(
+                          context,
+                          "Sai mật khẩu",
+                          color: Colors.red,
+                          icon: Icons.error_outline_rounded,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (passwordOk != true) return;
 
     final deletedHomeId = selectedHome;
     final deletedHomeName =
@@ -816,7 +905,46 @@ class _HomePageState extends State<HomePage> {
         .ref(FirebasePaths.homeOrder(uid))
         .set(homeOrder);
   }
+  void showJoinHomeQR() {
+    final shareOwnerUid = getHomeOwnerUid();
+    final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
 
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "QR của nhà này",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 18),
+                QrImageView(
+                  data: qrData,
+                  version: QrVersions.auto,
+                  size: 220,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
   void shareHome() async {
     final controller = TextEditingController();
     final shareOwnerUid = getHomeOwnerUid();
@@ -827,74 +955,103 @@ class _HomePageState extends State<HomePage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  "Chia sẻ nhà",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            final email = controller.text.trim().toLowerCase();
+            final emailOk = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
+
+            return SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  top: 20,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
                 ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            "Chia sẻ nhà",
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: "Quét QR để xin gia nhập nhà",
+                          icon: const Icon(Icons.qr_code_scanner_rounded),
+                          onPressed: () async {
+                            Navigator.pop(context, null);
 
-                const SizedBox(height: 18),
+                            final code = await openQRScanner(
+                              context,
+                              title: "Xin gia nhập nhà",
+                              subtitle: "Quét mã QR chia sẻ nhà",
+                            );
 
-                TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    labelText: "Email người nhận",
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
+                            if (code != null) {
+                              await handleScannedQR(code);
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                  ),
+
+                    const SizedBox(height: 18),
+
+                    TextField(
+                      controller: controller,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (_) => setSheetState(() {}),
+                      decoration: InputDecoration(
+                        labelText: "Email người nhận",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: emailOk
+                            ? IconButton(
+                          icon: const Icon(Icons.send_rounded),
+                          onPressed: () {
+                            Navigator.pop(context, email);
+                          },
+                        )
+                            : null,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    const Text(
+                      "Mời thành viên bằng mã QR",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    QrImageView(data: qrData, version: QrVersions.auto, size: 180),
+
+                    const SizedBox(height: 12),
+
+                                      ],
                 ),
-
-                const SizedBox(height: 18),
-
-                const Text(
-                  "Hoặc quét QR để xin gia nhập nhà",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-
-                const SizedBox(height: 12),
-
-                QrImageView(data: qrData, version: QrVersions.auto, size: 180),
-
-                const SizedBox(height: 18),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(
-                        context,
-                        controller.text.trim().toLowerCase(),
-                      );
-                    },
-                    child: const Text("Gửi lời mời"),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
+
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
         .toLowerCase();
@@ -931,14 +1088,16 @@ class _HomePageState extends State<HomePage> {
       targetData: targetData,
       targetEmail: targetEmail,
     );
+
     await HomeNotificationService.addNotification(
       uid: targetUid,
       type: "share_request",
       title: "Lời mời chia sẻ nhà",
       message:
-          "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"${homes[selectedHome]?["name"] ?? selectedHome}\".",
+      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"${homes[selectedHome]?["name"] ?? selectedHome}\".",
       homeId: selectedHome,
     );
+
     showTopToast(
       context,
       "Đã share home",
@@ -949,7 +1108,6 @@ class _HomePageState extends State<HomePage> {
 
   void transferOwner() async {
     final controller = TextEditingController();
-    final passwordController = TextEditingController();
     final targetEmail = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
@@ -978,47 +1136,46 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 18),
                 const SizedBox(height: 12),
 
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Mật khẩu tài khoản",
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    labelText: "Email chủ nhà mới",
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
+
+                StatefulBuilder(
+                  builder: (context, setEmailState) {
+                    final email = controller.text.trim().toLowerCase();
+
+                    final emailOk = RegExp(
+                      r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                    ).hasMatch(email);
+
+                    return TextField(
+                      controller: controller,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (_) => setEmailState(() {}),
+                      decoration: InputDecoration(
+                        labelText: "Email người nhận",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: emailOk
+                            ? IconButton(
+                          icon: const Icon(Icons.send_rounded),
+                          onPressed: () {
+                            Navigator.pop(
+                              context,
+                              controller.text.trim().toLowerCase(),
+                            );
+                          },
+                        )
+                            : null,
+                      ),
+                    );
+                  },
                 ),
 
                 const SizedBox(height: 18),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.swap_horiz),
-                    label: const Text("Tiếp tục"),
-                    onPressed: () {
-                      Navigator.pop(
-                        context,
-                        controller.text.trim().toLowerCase(),
-                      );
-                    },
-                  ),
-                ),
+
               ],
             ),
           ),
@@ -1140,6 +1297,34 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (ok != true) return;
+    final passwordController = TextEditingController();
+
+    final passwordOk = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Xác nhận mật khẩu"),
+        content: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: const InputDecoration(
+            labelText: "Mật khẩu tài khoản",
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Huỷ"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Xác nhận"),
+          ),
+        ],
+      ),
+    );
+
+    if (passwordOk != true) return;
     final user = FirebaseAuth.instance.currentUser!;
 
     try {
@@ -1653,7 +1838,7 @@ class _HomePageState extends State<HomePage> {
                                       child: ElevatedButton.icon(
                                         icon: const Icon(Icons.qr_code_scanner),
                                         label: const Text(
-                                          "Quét QR để thêm thiết bị hoặc xin gia nhập",
+                                          "Quét QR để thêm thiết bị",
                                         ),
                                         onPressed: () {
                                           Navigator.pop(context, "__SCAN__");
@@ -1679,7 +1864,7 @@ class _HomePageState extends State<HomePage> {
                           final code = await openQRScanner(context);
 
                           if (code != null) {
-                            await handleScannedQR(code);
+                            pairSensor(code);
                           }
                         }
 
@@ -1777,6 +1962,9 @@ class _HomePageState extends State<HomePage> {
                         showHomeChatSheet(
                           context: context,
                           homeId: selectedHome,
+                          homeName:
+                          homes[selectedHome]?["name"]?.toString() ??
+                              selectedHome,
                           userName: userName,
                           userPhotoUrl: userPhotoUrl,
                           ownerUid: getHomeOwnerUid(),
@@ -1965,6 +2153,9 @@ class _HomePageState extends State<HomePage> {
                               context: context,
                               ownerUid: getHomeOwnerUid(),
                               homeId: selectedHome,
+                              homeName:
+                              homes[selectedHome]?["name"]?.toString() ??
+                                  selectedHome,
                             );
 
                             if (selfLeft == true && context.mounted) {

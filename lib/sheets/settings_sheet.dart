@@ -144,54 +144,6 @@ void showSettingsSheet({
                                 ),
                               ),
                             ),
-
-                            const SizedBox(width: 6),
-                            if (role == "owner" || role == "admin")
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(sheetContext).pop();
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  onShareRequests();
-                                });
-                              },
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange.withValues(alpha: 0.10),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: const Icon(
-                                      Icons.person_add_alt_1_rounded,
-                                      size: 17,
-                                      color: Colors.orange,
-                                    ),
-                                  ),
-                                  if (inviteCount > 0)
-                                    Positioned(
-                                      right: -5,
-                                      top: -5,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Text(
-                                          "$inviteCount",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -259,11 +211,58 @@ void showSettingsSheet({
 
             const SizedBox(height: 8),
 
-            tile(
-              icon: Icons.person_rounded,
-              title: "Tài khoản cá nhân",
-              color: Colors.teal,
-              onTap: onAccount,
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.teal.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: ListTile(
+                leading: Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.teal.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(
+                    Icons.person_rounded,
+                    color: Colors.teal,
+                  ),
+                ),
+                title: Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        "Tài khoản cá nhân",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+
+                    if (inviteCount > 0)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          inviteCount > 99 ? "99+" : "$inviteCount",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: onAccount,
+              ),
             ),
 
             tile(

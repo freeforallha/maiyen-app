@@ -9,6 +9,7 @@ Future<bool?> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
   required String homeId,
+  required String homeName,
   required bool canManageMembers,
   required bool isOwner,
   VoidCallback? onSelfLeave,
@@ -114,13 +115,20 @@ Future<bool?> showShareListSheet({
 
             const SizedBox(height: 18),
 
-            const Row(
+            Row(
               children: [
-                Icon(Icons.people_alt_rounded),
-                SizedBox(width: 10),
-                Text(
-                  "Thành viên trong nhà",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                const Icon(Icons.people_alt_rounded),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    homeName.isNotEmpty ? homeName : "Thành viên trong nhà",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -258,86 +266,9 @@ Future<bool?> showShareListSheet({
                             ],
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: role == "admin"
-                                ? Colors.deepPurple.withValues(alpha: 0.12)
-                                : Colors.blueGrey.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Text(
-                            role.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: role == "admin" ? Colors.deepPurple : Colors.blueGrey,
-                            ),
-                          ),
-                        ),
-                        if (isOwner) ...[
-                          PopupMenuButton<String>(
-                            icon: const Icon(Icons.manage_accounts_rounded),
-
-                            onSelected: (value) async {
-                              await db.ref().update({
-                                "${FirebasePaths.sharedMember(homeId, targetUid)}/role": value,
-                                "${FirebasePaths.sharedHome(targetUid, homeId)}/role": value,
-                              });
-                              await HomeNotificationService.addNotification(
-                                uid: targetUid,
-                                type: "role_changed",
-                                title: "Quyền trong nhà đã thay đổi",
-                                message: value == "admin"
-                                    ? "Bạn đã được nâng quyền thành Admin."
-                                    : "Quyền của bạn đã được chuyển về Member.",
-                                homeId: homeId,
-                              );
-                              if (!context.mounted) return;
-
-                              Navigator.pop(context);
-
-                              showShareListSheet(
-                                context: context,
-                                ownerUid: ownerUid,
-                                homeId: homeId,
-                                canManageMembers: canManageMembers,
-                                isOwner: isOwner,
-                                onSelfLeave: onSelfLeave,
-                              );
-                            },
-
-                            itemBuilder: (_) => [
-                              const PopupMenuItem(
-                                value: "member",
-                                child: Text("Member"),
-                              ),
-
-                              const PopupMenuItem(
-                                value: "admin",
-                                child: Text("Admin"),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(width: 4),
-                        ],
-
-                        const SizedBox(width: 6),
-                        if (
-                        targetUid == myUid ||
-                            isOwner ||
-                            (canManageMembers && role == "member")
-                        )
-                          IconButton(
-                            icon: Icon(
-                              targetUid == myUid
-                                  ? Icons.logout_rounded
-                                  : Icons.remove_circle,
-                              color: Colors.red,
-                            ),
-                            onPressed: () async {
-
+                        PopupMenuButton<String>(
+                          onSelected: (value) async {
+                            if (value == "delete") {
                               final ok = await showDialog<bool>(
                                 context: sheetContext,
                                 builder: (_) => AlertDialog(
@@ -382,7 +313,78 @@ Future<bool?> showShareListSheet({
                                 color: Colors.green,
                                 icon: Icons.check_circle_rounded,
                               );
-                            },
+
+                              return;
+                            }
+
+                            await db.ref().update({
+                              "${FirebasePaths.sharedMember(homeId, targetUid)}/role": value,
+                              "${FirebasePaths.sharedHome(targetUid, homeId)}/role": value,
+                            });
+
+                            await HomeNotificationService.addNotification(
+                              uid: targetUid,
+                              type: "role_changed",
+                              title: "Quyền trong nhà đã thay đổi",
+                              message: value == "admin"
+                                  ? "Bạn đã được nâng quyền thành Admin."
+                                  : "Quyền của bạn đã được chuyển về Member.",
+                              homeId: homeId,
+                            );
+
+                            if (!context.mounted) return;
+
+                            Navigator.pop(context);
+
+                            showShareListSheet(
+                              context: context,
+                              ownerUid: ownerUid,
+                              homeId: homeId,
+                              homeName: homeName,
+                              canManageMembers: canManageMembers,
+                              isOwner: isOwner,
+                              onSelfLeave: onSelfLeave,
+                            );
+                          },
+                          itemBuilder: (_) => [
+                            const PopupMenuItem(
+                              value: "member",
+                              child: Text("Member"),
+                            ),
+                            const PopupMenuItem(
+                              value: "admin",
+                              child: Text("Admin"),
+                            ),
+                            if (
+                            targetUid == myUid ||
+                                isOwner ||
+                                (canManageMembers && role == "member")
+                            )
+                              PopupMenuItem(
+                                value: "delete",
+                                child: Text(
+                                  targetUid == myUid ? "Rời khỏi nhà" : "Xoá thành viên",
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
+                          ],
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: role == "admin"
+                                  ? Colors.deepPurple.withValues(alpha: 0.12)
+                                  : Colors.blueGrey.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child: Text(
+                              role.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: role == "admin" ? Colors.deepPurple : Colors.blueGrey,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),

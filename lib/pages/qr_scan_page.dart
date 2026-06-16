@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-Future<String?> openQRScanner(BuildContext context) async {
+Future<String?> openQRScanner(
+    BuildContext context, {
+      String title = "Quét QR HUB",
+      String subtitle = "Đưa mã QR vào giữa khung",
+    }) async {
   final controller = MobileScannerController();
 
   return Navigator.push<String>(
     context,
     MaterialPageRoute(
-      builder: (_) => _QRScanPage(controller: controller),
+      builder: (_) => _QRScanPage(
+        controller: controller,
+        title: title,
+        subtitle: subtitle,
+      ),
     ),
   );
 }
 
 class _QRScanPage extends StatefulWidget {
   final MobileScannerController controller;
+  final String title;
+  final String subtitle;
 
-  const _QRScanPage({required this.controller});
+  const _QRScanPage({
+    required this.controller,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   State<_QRScanPage> createState() => _QRScanPageState();
@@ -69,9 +83,7 @@ class _QRScanPageState extends State<_QRScanPage>
             controller: widget.controller,
             onDetect: handleDetect,
           ),
-
           Container(color: Colors.black.withValues(alpha: 0.45)),
-
           Center(
             child: Container(
               width: 260,
@@ -109,27 +121,26 @@ class _QRScanPageState extends State<_QRScanPage>
               ),
             ),
           ),
-
-          const Positioned(
+          Positioned(
             bottom: 140,
             left: 24,
             right: 24,
             child: Column(
               children: [
                 Text(
-                  "Quét QR HUB",
+                  widget.title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  "Đưa mã QR vào giữa khung",
+                  widget.subtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 15,
                   ),
@@ -137,7 +148,6 @@ class _QRScanPageState extends State<_QRScanPage>
               ],
             ),
           ),
-
           Positioned(
             top: 55,
             left: 12,

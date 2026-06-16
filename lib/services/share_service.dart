@@ -6,25 +6,21 @@ class ShareService {
   static final _db = FirebaseDatabase.instance;
 
   static Future<String?> findUidByEmail(String email) async {
-    final snap = await _db.ref("accounts").get();
+    final targetEmail = email.trim().toLowerCase();
 
-    if (!snap.exists) return null;
+    final snap = await _db
+        .ref("accounts")
+        .orderByChild("email")
+        .equalTo(targetEmail)
+        .get();
 
-    final accounts = Map<String, dynamic>.from(
-      snap.value as Map,
-    );
+    if (!snap.exists || snap.value == null) return null;
 
-    for (final entry in accounts.entries) {
-      final data = Map<String, dynamic>.from(entry.value);
+    final accounts = Map<String, dynamic>.from(snap.value as Map);
 
-      final mail = data["email"]?.toString().trim().toLowerCase();
+    if (accounts.isEmpty) return null;
 
-      if (mail == email.trim().toLowerCase()) {
-        return entry.key;
-      }
-    }
-
-    return null;
+    return accounts.keys.first.toString();
   }
 
   static Future<Map<String, dynamic>> loadAccount(String uid) async {

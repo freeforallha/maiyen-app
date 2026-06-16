@@ -573,73 +573,177 @@ class _AllHomePageState extends State<AllHomePage> {
       message = "Các home đã chọn sẽ bị xoá vĩnh viễn.";
     }
 
-    final ok = await showDialog<bool>(
+    final confirmOk = await showModalBottomSheet<bool>(
       context: context,
-
-      builder: (_) => AlertDialog(
-        title: Text("Xác nhận"),
-
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-
-          children: [
-            Text(message),
-
-            SizedBox(height: 14),
-
-            TextField(
-              controller: controller,
-              obscureText: true,
-
-              decoration: InputDecoration(
-                hintText: "Mật khẩu",
-                border: OutlineInputBorder(),
-              ),
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
-          ],
-        ),
-
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-
-            child: Text("Huỷ"),
-          ),
-
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-
-            onPressed: () async {
-              try {
-                final user = FirebaseAuth.instance.currentUser!;
-
-                final credential = EmailAuthProvider.credential(
-                  email: user.email!,
-                  password: controller.text.trim(),
-                );
-
-                await user.reauthenticateWithCredential(credential);
-
-                Navigator.pop(context, true);
-              } catch (e) {
-                showTopToast(
-                  context,
-                  "Sai mật khẩu",
-                  color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              }
-            },
-
-            child: Text(
-              sharedCount > 0 && ownCount == 0 ? "Rời khỏi" : "Tiếp tục",
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  sharedCount > 0 && ownCount == 0
+                      ? Icons.logout_rounded
+                      : Icons.warning_amber_rounded,
+                  color: sharedCount > 0 && ownCount == 0
+                      ? Colors.orange
+                      : Colors.red,
+                  size: 48,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  sharedCount > 0 && ownCount == 0
+                      ? "Xác nhận rời nhà"
+                      : "Xác nhận xoá nhà",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text("Huỷ"),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: sharedCount > 0 && ownCount == 0
+                              ? Colors.orange
+                              : Colors.red,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text("Tiếp tục"),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
 
-    if (ok != true) return;
+    if (confirmOk != true) return;
+
+    final passwordOk = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.lock_outline_rounded,
+                  color: Colors.red,
+                  size: 44,
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Nhập mật khẩu",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: controller,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Mật khẩu tài khoản",
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: Icon(
+                      sharedCount > 0 && ownCount == 0
+                          ? Icons.logout_rounded
+                          : Icons.delete_forever_rounded,
+                    ),
+                    label: Text(
+                      sharedCount > 0 && ownCount == 0
+                          ? "Rời khỏi nhà"
+                          : "Xoá nhà",
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: sharedCount > 0 && ownCount == 0
+                          ? Colors.orange
+                          : Colors.red,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () async {
+                      try {
+                        final user = FirebaseAuth.instance.currentUser!;
+
+                        final credential = EmailAuthProvider.credential(
+                          email: user.email!,
+                          password: controller.text.trim(),
+                        );
+
+                        await user.reauthenticateWithCredential(credential);
+
+                        Navigator.pop(context, true);
+                      } catch (e) {
+                        showTopToast(
+                          context,
+                          "Sai mật khẩu",
+                          color: Colors.red,
+                          icon: Icons.error_outline_rounded,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (passwordOk != true) return;
 
     final uid = FirebaseAuth.instance.currentUser!.uid;
 

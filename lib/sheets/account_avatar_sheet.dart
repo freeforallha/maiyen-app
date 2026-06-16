@@ -432,7 +432,7 @@ class AccountAvatarSheet {
                             children: [
                               const Expanded(
                                 child: Text(
-                                  "Lời mời gia nhập",
+                                  "Yêu cầu & lời mời",
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
