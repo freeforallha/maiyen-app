@@ -1538,22 +1538,92 @@ class _HomePageState extends State<HomePage> {
 
     final controller = TextEditingController(text: currentName);
 
-    final name = await showDialog<String>(
+    final name = await showModalBottomSheet<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Rename Home"),
-        content: TextField(controller: controller),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            ),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(26),
+              ),
+            ),
+            child: StatefulBuilder(
+              builder: (context, setSheetState) {
+                final textOk = controller.text.trim().isNotEmpty;
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.home_rounded,
+                      color: Colors.blue,
+                      size: 44,
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    const Text(
+                      "Đổi tên nhà",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    TextField(
+                      controller: controller,
+                      onChanged: (_) => setSheetState(() {}),
+                      decoration: InputDecoration(
+                        labelText: "Tên nhà",
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: textOk
+                            ? IconButton(
+                          icon: const Icon(Icons.check_rounded),
+                          onPressed: () {
+                            Navigator.pop(
+                              context,
+                              controller.text.trim(),
+                            );
+                          },
+                        )
+                            : null,
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Text(
+                      "Tên này sẽ hiển thị trên tất cả màn hình của nhà.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: Text("OK"),
-          ),
-        ],
-      ),
+        );
+      },
     );
 
     if (name == null || name.trim().isEmpty) return;
@@ -1997,7 +2067,109 @@ class _HomePageState extends State<HomePage> {
                       ),
                   ],
                 ),
+                IconButton(
+                  icon: Icon(
+                    Icons.crisis_alert_rounded,
+                    color: alarmEnabled
+                        ? Colors.red
+                        : Colors.grey.shade500,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) {
+                        bool localAlarmEnabled = alarmEnabled;
 
+                        return StatefulBuilder(
+                          builder: (context, setModalState) {
+                            return SafeArea(
+                              child: Padding(
+                                padding: const EdgeInsets.all(18),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SwitchListTile(
+                                      value: localAlarmEnabled,
+                                      activeThumbColor: Colors.red,
+                                      secondary: const Icon(
+                                        Icons.crisis_alert_rounded,
+                                        color: Colors.red,
+                                      ),
+                                      title: const Text(
+                                        "Nhận cảnh báo Alarm",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: const Text(
+                                        "Bật/tắt alarm cho tài khoản này",
+                                      ),
+                                      onChanged: (value) {
+                                        setModalState(() {
+                                          localAlarmEnabled = value;
+                                        });
+
+                                        setAlarmEnabled(value);
+                                      },
+                                    ),
+
+                                    const Divider(),
+
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.notifications_active_rounded,
+                                        color: Colors.orange,
+                                      ),
+                                      title: const Text("Hẹn giờ Reminder"),
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (_) => ScheduleSheet(
+                                            ownerUid: getHomeOwnerUid(),
+                                            homeId: selectedHome,
+                                            isShared:
+                                            homes[selectedHome]?["_shared"] == true,
+                                            type: "notification",
+                                          ),
+                                        );
+                                      },
+                                    ),
+
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.shield_moon_rounded,
+                                        color: Colors.deepPurple,
+                                      ),
+                                      title: const Text("Hẹn giờ Alarm"),
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (_) => AlarmDeviceSheet(
+                                            ownerUid: getHomeOwnerUid(),
+                                            homeId: selectedHome,
+                                            devices: getDevices(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
                 Stack(
                   children: [
                     IconButton(

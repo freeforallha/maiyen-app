@@ -1,4 +1,3 @@
-
 Map<String, dynamic> safeMap(dynamic data) {
   if (data == null) return {};
 
@@ -48,16 +47,36 @@ DateTime? parseLastSeen(dynamic value) {
   return DateTime.tryParse(text);
 }
 
+bool isSosActive(Map<String, dynamic> d) {
+  final status = d["status"]?.toString();
+  final activeUntil =
+      int.tryParse(d["sos_active_until"]?.toString() ?? "") ?? 0;
+
+  return status == "triggered" ||
+      activeUntil > DateTime.now().millisecondsSinceEpoch;
+}
+
 Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
   final dangerIssues = <String>[];
   final warningIssues = <String>[];
+  final safeSummary = <String>[];
+
+  int doorCount = 0;
+  int closedDoorCount = 0;
+  int deviceCount = 0;
+  double? temperature;
+  double? humidity;
+  DateTime? newestLastSeen;
 
   devices.forEach((id, raw) {
     final d = safeMap(raw);
 
+    deviceCount++;
+
     final name = d["name"]?.toString() ?? id;
     final type = d["type"]?.toString() ?? "door";
     final status = d["status"]?.toString();
+    final contact = d["contact"];
     final tamper = d["tamper"] == true;
 
     final battery = int.tryParse(d["battery"]?.toString() ?? "");
@@ -67,21 +86,41 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     final danger = <String>[];
     final warning = <String>[];
 
+    if (type == "temperature") {
+      temperature = double.tryParse(d["temperature"]?.toString() ?? "");
+      humidity = double.tryParse(d["humidity"]?.toString() ?? "");
+
+      if (temperature != null && temperature! >= 34) {
+        warning.add("Nhiệt độ cao");
+      }
+
+      if (humidity != null && humidity! >= 80) {
+        warning.add("Độ ẩm cao");
+      }
+    }
+
     if (type == "sos") {
-      if (status == "triggered") {
+      if (isSosActive(d)) {
         danger.add("SOS");
       }
     } else if (type == "smoke") {
       if (d["smoke"] == true || status == "alarm") {
         danger.add("Có khói");
       }
-    } else if (
-    type == "door" ||
+    } else if (type == "door" ||
         type == "window" ||
         type == "lock" ||
         type == "gate") {
-      if (status != "closed") {
-        danger.add("Mở");
+      doorCount++;
+
+      final isClosed = contact == true || status == "closed";
+
+      if (isClosed && !tamper) {
+        closedDoorCount++;
+      }
+
+      if (!isClosed) {
+        danger.add("Đang mở");
       }
     }
 
@@ -98,8 +137,13 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     }
 
     if (lastSeenTime != null) {
+      if (newestLastSeen == null || lastSeenTime.isAfter(newestLastSeen!)) {
+        newestLastSeen = lastSeenTime;
+      }
+
       final ageHours =
-          DateTime.now().toUtc().difference(lastSeenTime.toUtc()).inMinutes / 60;
+          DateTime.now().toUtc().difference(lastSeenTime.toUtc()).inMinutes /
+              60;
 
       final limit = heartbeatLimitHours(type);
       final offlineLimit = limit * 1.3;
@@ -120,6 +164,40 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     }
   });
 
+  if (doorCount > 0) {
+    safeSummary.add("$closedDoorCount/$doorCount cửa đã đóng an toàn");
+  }
+
+  if (temperature != null || humidity != null) {
+    final tempText =
+    temperature != null ? "${temperature!.toStringAsFixed(0)}°C" : "--°C";
+    final humText =
+    humidity != null ? "${humidity!.toStringAsFixed(0)}%" : "--%";
+
+    safeSummary.add("Môi trường hiện tại: $tempText / $humText");
+  }
+
+  if (deviceCount > 0) {
+    safeSummary.add("$deviceCount thiết bị đang được theo dõi");
+  }
+
+  if (newestLastSeen != null) {
+    final minutes =
+        DateTime.now().toUtc().difference(newestLastSeen!.toUtc()).inMinutes;
+
+    if (minutes < 60) {
+      safeSummary.add("Thiết bị vừa cập nhật $minutes phút trước");
+    } else {
+      safeSummary.add(
+        "Thiết bị gần nhất cập nhật ${(minutes / 60).floor()} giờ trước",
+      );
+    }
+  }
+
+  if (safeSummary.isEmpty) {
+    safeSummary.add("Chưa có dữ liệu thiết bị để đánh giá");
+  }
+
   final level = dangerIssues.isNotEmpty
       ? "danger"
       : warningIssues.isNotEmpty
@@ -132,6 +210,7 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
     "issues": [...dangerIssues, ...warningIssues],
+    "safeSummary": safeSummary,
   };
 }
 
@@ -141,24 +220,25 @@ bool isUnsafe(Map<dynamic, dynamic> devices) {
 
     final type = d["type"]?.toString() ?? "door";
     final status = d["status"]?.toString();
+    final contact = d["contact"];
     final tamper = d["tamper"] == true;
 
     if (tamper) return true;
 
     if (type == "sos") {
-      return status == "triggered";
+      return isSosActive(d);
     }
 
     if (type == "smoke") {
       return d["smoke"] == true || status == "alarm";
     }
 
-    if (
-    type == "door" ||
+    if (type == "door" ||
         type == "window" ||
         type == "lock" ||
         type == "gate") {
-      return status != "closed";
+      final isClosed = contact == true || status == "closed";
+      return !isClosed;
     }
 
     return false;
