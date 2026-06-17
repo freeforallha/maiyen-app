@@ -1,9 +1,13 @@
+import 'package:firebase_database/firebase_database.dart';
+
 import 'package:flutter/material.dart';
 
 void showDeviceDetail({
   required BuildContext context,
   required String id,
   required Map<String, dynamic> d,
+  required String ownerUid,
+  required String homeId,
   VoidCallback? onRename,
   VoidCallback? onDelete,
   required VoidCallback onNotification,
@@ -23,7 +27,7 @@ void showDeviceDetail({
   final tamper = d["tamper"] == true;
   final temperature = d["temperature"];
   final humidity = d["humidity"];
-
+  final roomId = d["roomId"]?.toString() ?? "unassigned";
   final health = _getDeviceHealth(
     availability: availability,
     battery: battery,
@@ -178,7 +182,12 @@ void showDeviceDetail({
               title: "Tín hiệu",
               value: linkquality != null ? "$linkquality" : "N/A",
             ),
-
+            _roomPickerRow(
+              ownerUid: ownerUid,
+              homeId: homeId,
+              deviceId: id,
+              currentRoomId: roomId,
+            ),
             _infoRow(
               icon: Icons.access_time_rounded,
               color: Colors.indigo,
@@ -348,7 +357,98 @@ Widget _infoRow({
     ),
   );
 }
+Widget _roomPickerRow({
+  required String ownerUid,
+  required String homeId,
+  required String deviceId,
+  required String currentRoomId,
+}) {
+  return Builder(
+    builder: (context) {
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () async {
+          final roomsSnap = await FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId/rooms")
+              .get();
 
+          final rooms = roomsSnap.value is Map
+              ? Map<String, dynamic>.from(roomsSnap.value as Map)
+              : <String, dynamic>{};
+
+          final selectedRoom = await showModalBottomSheet<String>(
+            context: context,
+            builder: (_) {
+              return SafeArea(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: rooms.entries.map((entry) {
+                    final room = entry.value is Map
+                        ? Map<String, dynamic>.from(entry.value)
+                        : <String, dynamic>{};
+
+                    final roomName =
+                        room["name"]?.toString() ?? entry.key;
+
+                    return ListTile(
+                      leading: Icon(
+                        entry.key == currentRoomId
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_off,
+                      ),
+                      title: Text(roomName),
+                      onTap: () {
+                        Navigator.pop(context, entry.key);
+                      },
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          );
+
+          if (selectedRoom == null ||
+              selectedRoom == currentRoomId) {
+            return;
+          }
+
+          await FirebaseDatabase.instance
+              .ref(
+            "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
+          )
+              .set(selectedRoom);
+
+          Navigator.pop(context);
+        },
+        child: FutureBuilder<DataSnapshot>(
+          future: FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId")
+              .get(),
+          builder: (context, snapshot) {
+            String roomName = currentRoomId;
+
+            final value = snapshot.data?.value;
+
+            if (value is Map) {
+              final room = Map<String, dynamic>.from(value);
+
+              roomName =
+                  room["name"]?.toString() ??
+                      currentRoomId;
+            }
+
+            return _infoRow(
+              icon: Icons.meeting_room_rounded,
+              color: Colors.orange,
+              title: "Phòng",
+              value: roomName,
+            );
+          },
+        ),
+      );
+    },
+  );
+}
 int? _toInt(dynamic value) {
   if (value == null) return null;
   if (value is int) return value;

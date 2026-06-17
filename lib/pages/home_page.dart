@@ -35,7 +35,7 @@ import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_login_service.dart';
-
+import '../sheets/room_management_sheet.dart';
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -102,6 +102,7 @@ class _HomePageState extends State<HomePage> {
 
   Map<String, dynamic> homes = {};
   String selectedHome = "";
+  String selectedRoomId = "overview";
   Map<String, dynamic> alarmSettings = {};
   Map<String, dynamic> homeEvents = {};
   List<String> homeOrder = [];
@@ -333,7 +334,10 @@ class _HomePageState extends State<HomePage> {
     final homeData = safeMap(homes[selectedHome]);
     return safeMap(homeData["devices"]);
   }
-
+  Map<String, dynamic> getRooms() {
+    final homeData = safeMap(homes[selectedHome]);
+    return safeMap(homeData["rooms"]);
+  }
   Map<String, dynamic>? getTemperatureDevice() {
     final devices = getDevices();
 
@@ -480,6 +484,14 @@ class _HomePageState extends State<HomePage> {
           }
         } else {
           selectedHome = "";
+        }
+        if (selectedHome.isNotEmpty) {
+          unawaited(
+            HomeService.ensureHomeRoomModel(
+              ownerUid: getHomeOwnerUid(),
+              homeId: selectedHome,
+            ),
+          );
         }
         final currentHome = safeMap(homes[selectedHome]);
         final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
@@ -1852,6 +1864,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     DeviceList(
                       devices: devices,
+                      selectedRoomId: selectedRoomId,
                       header: Column(
                         children: [
                           StatusPanel(
@@ -1866,6 +1879,8 @@ class _HomePageState extends State<HomePage> {
                                 context: context,
                                 id: tempDevice["id"],
                                 d: tempDevice["data"],
+                                ownerUid: getHomeOwnerUid(),
+                                homeId: selectedHome,
                                 onRename: () => renameDevice(tempDevice["id"]),
                                 onDelete: () => deleteDevice(tempDevice["id"]),
                                 onNotification: () =>
@@ -1906,7 +1921,93 @@ class _HomePageState extends State<HomePage> {
                             alarmStart: formatAlarmSchedules(),
                             alarmEnd: "",
                           ),
+                          const SizedBox(height: 10),
 
+                          Builder(
+                            builder: (_) {
+                              final rooms = getRooms();
+
+                              final tabs = <Map<String, String>>[
+                                {
+                                  "id": "overview",
+                                  "name":
+                                  homes[selectedHome]?["name"]?.toString() ??
+                                      "Nhà",
+                                },
+                              ];
+
+                              for (final entry in rooms.entries) {
+                                if (entry.key == "unassigned") continue;
+                                final room = safeMap(entry.value);
+
+                                tabs.add({
+                                  "id": entry.key,
+                                  "name": room["name"]?.toString() ?? entry.key,
+                                });
+                              }
+
+                              return SizedBox(
+                                height: 42,
+                                child: ListView.separated(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: tabs.length,
+                                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                  itemBuilder: (_, index) {
+                                    final tab = tabs[index];
+                                    final roomId = tab["id"]!;
+
+                                    final selected = selectedRoomId == roomId;
+
+                                    return InkWell(
+                                      borderRadius: BorderRadius.circular(8),
+                                      onTap: () {
+                                        setState(() {
+                                          selectedRoomId = roomId;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              tab["name"]!,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight:
+                                                selected ? FontWeight.w700 : FontWeight.w500,
+                                                color: selected
+                                                    ? Colors.black87
+                                                    : Colors.black.withValues(alpha: 0.45),
+                                              ),
+                                            ),
+
+                                            const SizedBox(height: 4),
+
+                                            AnimatedContainer(
+                                              duration: const Duration(milliseconds: 180),
+                                              curve: Curves.easeOut,
+                                              height: 2,
+                                              width: selected
+                                                  ? (tab["name"]!.length * 8.5)
+                                                  : 0,
+                                              decoration: BoxDecoration(
+                                                color: Colors.black87,
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                           if (pairingCountdown > 0)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8),
@@ -1996,6 +2097,8 @@ class _HomePageState extends State<HomePage> {
                           context: context,
                           id: id,
                           d: safeMap(getDevices()[id]),
+                          ownerUid: getHomeOwnerUid(),
+                          homeId: selectedHome,
                           onRename: canManageHome()
                               ? () => renameDevice(id)
                               : null,
@@ -2250,6 +2353,8 @@ class _HomePageState extends State<HomePage> {
                                 context: context,
                                 id: entry.key,
                                 d: safeMap(entry.value),
+                                ownerUid: getHomeOwnerUid(),
+                                homeId: selectedHome,
                                 onRename: canManageHome()
                                     ? () => renameDevice(entry.key)
                                     : null,
@@ -2271,6 +2376,8 @@ class _HomePageState extends State<HomePage> {
                                   context: context,
                                   id: id,
                                   d: safeMap(getDevices()[id]),
+                                  ownerUid: getHomeOwnerUid(),
+                                  homeId: selectedHome,
                                   onRename: canManageHome()
                                       ? () => renameDevice(id)
                                       : null,
@@ -2363,6 +2470,13 @@ class _HomePageState extends State<HomePage> {
                             }
                           },
                           onShare: shareHome,
+                          onRooms: () {
+                            showRoomManagementSheet(
+                              context: context,
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                            );
+                          },
                           onShareList: () async {
                             final selfLeft = await showShareListSheet(
                               canManageMembers: canManageHome(),

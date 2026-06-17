@@ -9,6 +9,7 @@ void showSettingsSheet({
   required VoidCallback onShareRequests,
   required VoidCallback onShare,
   required VoidCallback onShareList,
+  required VoidCallback onRooms,
   required VoidCallback onLogout,
   required VoidCallback onRenameHome,
   required VoidCallback onDeleteHome,
@@ -200,7 +201,18 @@ void showSettingsSheet({
                 });
               },
             ),
+            tile(
+              icon: Icons.meeting_room_rounded,
+              title: "Quản lý phòng",
+              color: Colors.orange,
+              onTap: () {
+                Navigator.of(sheetContext).pop();
 
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  onRooms();
+                });
+              },
+            ),
             if (role == "owner")
               tile(
                 icon: Icons.swap_horiz,

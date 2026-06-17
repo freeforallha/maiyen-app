@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DeviceList extends StatelessWidget {
   final Map<String, dynamic> devices;
-
+  final String selectedRoomId;
   final bool isShared;
   final String ownerEmail;
   final Widget? header;
@@ -22,6 +22,7 @@ class DeviceList extends StatelessWidget {
     required this.onDelete,
     required this.onTapDevice,
     required this.onPairSensor,
+    required this.selectedRoomId,
   });
 
   Map<String, dynamic> safeMap(dynamic data) {
@@ -438,7 +439,18 @@ class DeviceList extends StatelessWidget {
                                 final d = safeMap(entry.value);
                                 final type = d["type"]?.toString() ?? "door";
 
-                                return getDeviceGroup(type) == groupName;
+                                if (getDeviceGroup(type) != groupName) {
+                                  return false;
+                                }
+
+                                if (selectedRoomId == "overview") {
+                                  return true;
+                                }
+
+                                final roomId =
+                                    d["roomId"]?.toString() ?? "unassigned";
+
+                                return roomId == selectedRoomId;
                               }).toList();
 
                               if (groupEntries.isEmpty && groupName != "An ninh ra/vào") {
