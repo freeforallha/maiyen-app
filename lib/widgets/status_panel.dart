@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../helpers/home_helper.dart';
 
 class StatusPanel extends StatefulWidget {
   final Map<String, dynamic> overall;
@@ -8,6 +9,7 @@ class StatusPanel extends StatefulWidget {
   final String alarmStart;
   final String alarmEnd;
   final String environmentText;
+  final Map<String, dynamic> homeEvents;
   final VoidCallback? onEnvironmentTap;
 
   final bool alarmEnabled;
@@ -23,6 +25,7 @@ class StatusPanel extends StatefulWidget {
     required this.alarmStart,
     required this.alarmEnd,
     required this.environmentText,
+    required this.homeEvents,
     this.onEnvironmentTap,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
@@ -60,7 +63,72 @@ class _StatusPanelState extends State<StatusPanel> {
     List<String>.from(widget.overall["warningIssues"] ?? const []);
     final safeSummary =
     List<String>.from(widget.overall["safeSummary"] ?? const []);
+    final events = widget.homeEvents.values
+        .map((e) => safeMap(e))
+        .toList();
 
+    events.sort((a, b) {
+      final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
+      final tb = int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
+      return tb.compareTo(ta);
+    });
+    final recentEvents = events.take(20).toList();
+
+    int openCount = 0;
+    int smokeCount = 0;
+    int sosCount = 0;
+
+    for (final event in recentEvents) {
+      final text = (event["text"] ?? "").toString().toLowerCase();
+
+      if (text.contains("mở")) {
+        openCount++;
+      }
+
+      if (text.contains("khói")) {
+        smokeCount++;
+      }
+
+      if (text.contains("sos")) {
+        sosCount++;
+      }
+    }
+
+    final aiSummary = <String>[];
+
+    if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
+      aiSummary.add("Nhà đang có dấu hiệu cần kiểm tra, bạn nên cẩn thận xem lại .");
+
+      if (dangerIssues.isNotEmpty) {
+        aiSummary.add("${dangerIssues.length} vấn đề đang cần xử lý ngay.");
+      }
+
+      if (warningIssues.isNotEmpty) {
+        aiSummary.add("${warningIssues.length} dấu hiệu nên được kiểm tra thêm.");
+      }
+
+      if (openCount > 0) {
+        aiSummary.add("Gần đây cửa đã được mở $openCount lần.");
+      }
+    } else {
+      aiSummary.add("Nhà đang ổn, bạn có thể yên tâm.");
+
+      if (recentEvents.isNotEmpty) {
+        aiSummary.add("Hôm nay có ${recentEvents.length} hoạt động được ghi nhận.");
+      }
+
+      if (openCount > 0) {
+        aiSummary.add("Cửa được sử dụng $openCount lần gần đây.");
+      }
+
+      if (smokeCount == 0 && sosCount == 0) {
+        aiSummary.add("Không có dấu hiệu khói hoặc SOS bất thường.");
+      }
+    }
+
+    if (aiSummary.length == 1) {
+      aiSummary.add("Chưa có nhiều hoạt động mới để phân tích sâu hơn.");
+    }
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -91,8 +159,19 @@ class _StatusPanelState extends State<StatusPanel> {
                   ...warningIssues.map((e) => _issueRow(e, Colors.orange)),
                   const SizedBox(height: 12),
                 ],
-                _sectionTitle("Tổng quan hôm nay", Colors.green),
-                ...safeSummary.map((e) => _issueRow(e, Colors.green)),
+                _sectionTitle("🤖 Đánh giá tự động", Colors.blue),
+
+                ...aiSummary.map(
+                      (e) => _issueRow(e, Colors.blue),
+                ),
+
+                const SizedBox(height: 12),
+
+                _sectionTitle("📊 Tổng quan hôm nay", Colors.green),
+
+                ...safeSummary.map(
+                      (e) => _issueRow(e, Colors.green),
+                ),
               ],
             ),
           ),
@@ -173,9 +252,53 @@ class _StatusPanelState extends State<StatusPanel> {
         ? Icons.info_rounded
         : Icons.verified_rounded;
 
-    final subtitle = issues.isNotEmpty
-        ? "${issues.length} vấn đề cần xử lý"
-        : "Ngôi nhà hoạt động bình thường";
+    final events = widget.homeEvents.values
+        .map((e) => safeMap(e))
+        .toList();
+
+    events.sort((a, b) {
+      final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
+      final tb = int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
+      return tb.compareTo(ta);
+    });
+
+    final recentEvents = events.take(20).toList();
+
+    int openCount = 0;
+    int smokeCount = 0;
+    int sosCount = 0;
+
+    for (final event in recentEvents) {
+      final text = (event["text"] ?? "").toString().toLowerCase();
+
+      if (text.contains("mở")) {
+        openCount++;
+      }
+
+      if (text.contains("khói")) {
+        smokeCount++;
+      }
+
+      if (text.contains("sos")) {
+        sosCount++;
+      }
+    }
+
+    String subtitle;
+
+    if (issues.isNotEmpty) {
+      subtitle = "Phát hiện ${issues.length} vấn đề cần xử lý";
+    } else if (smokeCount > 0) {
+      subtitle = "Hôm nay đã ghi nhận cảnh báo khói";
+    } else if (sosCount > 0) {
+      subtitle = "Hôm nay đã ghi nhận cảnh báo SOS";
+    } else if (openCount > 0) {
+      subtitle = "Hôm nay các cửa đã được sử dụng $openCount lần";
+    } else if (recentEvents.isNotEmpty) {
+      subtitle = "Đã ghi nhận ${recentEvents.length} hoạt động gần đây";
+    } else {
+      subtitle = "Ngôi nhà đang hoạt động ổn định";
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),

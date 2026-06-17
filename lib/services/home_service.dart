@@ -44,6 +44,13 @@ class HomeService {
       "_ownerUid": uid,
       "_shared": false,
       "devices": {},
+      "rooms": {
+        "unassigned": {
+          "name": "Chưa phân phòng",
+          "icon": "home",
+          "order": 0,
+        },
+      },
       "alarm": {
         "enabled": false,
         "start": "23:00",

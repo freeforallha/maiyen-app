@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> homes = {};
   String selectedHome = "";
   Map<String, dynamic> alarmSettings = {};
+  Map<String, dynamic> homeEvents = {};
   List<String> homeOrder = [];
 
   List<String> mergeVisibleHomeOrder(List<String> visibleOrder) {
@@ -183,6 +184,7 @@ class _HomePageState extends State<HomePage> {
   final ScrollController homeTabController = ScrollController();
   StreamSubscription<DatabaseEvent>? accountSubscription;
   StreamSubscription<DatabaseEvent>? notificationSubscription;
+  StreamSubscription<DatabaseEvent>? homeEventsSubscription;
   final Map<String, StreamSubscription<DatabaseEvent>> homeChatSubscriptions =
       {};
 
@@ -216,7 +218,23 @@ class _HomePageState extends State<HomePage> {
           });
         });
   }
+  void startHomeEventsListener() {
+    homeEventsSubscription?.cancel();
 
+    if (selectedHome.isEmpty) return;
+
+    homeEventsSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/homes/$selectedHome/events")
+        .limitToLast(50)
+        .onValue
+        .listen((event) {
+      if (!mounted) return;
+
+      setState(() {
+        homeEvents = safeMap(event.snapshot.value);
+      });
+    });
+  }
   void syncHomeChatListeners() {
     if (!mounted) return;
 
@@ -726,7 +744,7 @@ class _HomePageState extends State<HomePage> {
           selectedHome = homeOrder.isNotEmpty ? homeOrder.first : "";
         }
       });
-
+      startHomeEventsListener();
       syncHomeChatListeners();
       return;
     }
@@ -1387,16 +1405,41 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
     final deviceName = getDevices()[id]?["name"]?.toString() ?? id;
-    await HomeService.deleteDevice(
-      ownerUid: ownerUid,
-      homeId: selectedHome,
-      deviceId: id,
-    );
+
+    try {
+      await FirebaseDatabase.instance
+          .ref("device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id")
+          .set({
+        "ownerUid": ownerUid,
+        "homeId": selectedHome,
+        "deviceId": id,
+        "deviceName": deviceName,
+        "requestedBy": uid,
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "status": "pending",
+      });
+
+      showTopToast(
+        context,
+        "Đã gửi yêu cầu xoá thiết bị",
+        color: Colors.green,
+        icon: Icons.check_circle_rounded,
+      );
+    } catch (e) {
+      showTopToast(
+        context,
+        "Không gửi được yêu cầu xoá: $e",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+      return;
+    }
+
     await HomeNotificationService.addNotification(
       uid: uid,
-      type: "device_deleted",
-      title: "Đã xoá thiết bị",
-      message: "Bạn đã xoá thiết bị \"$deviceName\".",
+      type: "device_delete_requested",
+      title: "Đang xoá thiết bị",
+      message: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi Zigbee2MQTT.",
       homeId: selectedHome,
       deviceId: id,
     );
@@ -1795,6 +1838,7 @@ class _HomePageState extends State<HomePage> {
                           start = parsedAlarm["start"];
                           end = parsedAlarm["end"];
                         });
+                        startHomeEventsListener();
                       },
                       onReorder: reorderHomeTabs,
                       getHomeColor: getHomeColor,
@@ -1812,6 +1856,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           StatusPanel(
                             environmentText: getHomeEnvironmentText(),
+                            homeEvents: homeEvents,
                             onEnvironmentTap: () {
                               final tempDevice = getTemperatureDevice();
 
