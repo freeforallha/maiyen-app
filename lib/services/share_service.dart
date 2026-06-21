@@ -189,7 +189,7 @@ class ShareService {
 
     await _db.ref(FirebasePaths.sharedMember(homeId, uid)).remove();
 
-    await _db.ref("${FirebasePaths.shareList(ownerUid, homeId)}/$uid").remove();
+    await _db.ref("${FirebasePaths.shareList(realOwnerUid, homeId)}/$uid").remove();
   }
   static Future<void> deleteOwnedHome({
     required String ownerUid,

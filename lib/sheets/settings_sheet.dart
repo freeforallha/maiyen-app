@@ -13,7 +13,7 @@ void showSettingsSheet({
   required VoidCallback onLogout,
   required VoidCallback onRenameHome,
   required VoidCallback onDeleteHome,
-  required int inviteCount,
+  required ValueNotifier<int> inviteCountNotifier,
   required VoidCallback onTransferOwner,
   required VoidCallback onAllDevices,
   required VoidCallback onAccount,
@@ -251,25 +251,31 @@ void showSettingsSheet({
                       ),
                     ),
 
-                    if (inviteCount > 0)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          inviteCount > 99 ? "99+" : "$inviteCount",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
+                    ValueListenableBuilder<int>(
+                      valueListenable: inviteCountNotifier,
+                      builder: (_, inviteCount, __) {
+                        if (inviteCount <= 0) return const SizedBox.shrink();
+
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
                           ),
-                        ),
-                      ),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            inviteCount > 99 ? "99+" : "$inviteCount",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
                 trailing: const Icon(Icons.chevron_right_rounded),

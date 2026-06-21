@@ -34,11 +34,7 @@ Future<bool?> showShareListSheet({
   final ownerName = ownerProfile["name"]?.toString() ?? "";
   final ownerPhotoUrl = ownerProfile["photoUrl"]?.toString() ?? "";
 
-  final snap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
 
-  final users = snap.value is Map
-      ? Map<String, dynamic>.from(snap.value as Map)
-      : <String, dynamic>{};
 
   Future<Map<String, dynamic>> loadMember(
       String memberUid,
@@ -203,195 +199,233 @@ Future<bool?> showShareListSheet({
               ),
             ),
 
-            if (users.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: Text(
-                  "Chưa share cho ai",
-                  style: TextStyle(color: Colors.grey.shade600),
-                ),
-              ),
+            StreamBuilder<DatabaseEvent>(
+              stream: db.ref(FirebasePaths.sharedByHome(homeId)).onValue,
+              builder: (context, snapshot) {
+                final raw = snapshot.data?.snapshot.value;
+                final users = raw is Map
+                    ? Map<String, dynamic>.from(raw)
+                    : <String, dynamic>{};
 
-            ...users.entries.map((e) {
-              final targetUid = e.key;
-
-              return FutureBuilder<Map<String, dynamic>>(
-                future: loadMember(targetUid, e.value),
-                builder: (context, snapshot) {
-                  final member = snapshot.data ?? {};
-
-                  final email = member["email"]?.toString() ?? "Loading...";
-                  final name = member["name"]?.toString() ?? email;
-                  final photoUrl = member["photoUrl"]?.toString() ?? "";
-                  final role = member["role"]?.toString() ?? "member";
-
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(18),
+                if (users.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30),
+                    child: Text(
+                      "Chưa share cho ai",
+                      style: TextStyle(color: Colors.grey.shade600),
                     ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: photoUrl.isNotEmpty
-                              ? NetworkImage(photoUrl)
-                              : null,
-                          child: photoUrl.isEmpty
-                              ? const Icon(Icons.person)
-                              : null,
-                        ),
+                  );
+                }
 
-                        const SizedBox(width: 12),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: users.entries.map((e) {
+                    final targetUid = e.key;
 
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                email,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                            ],
+                    return FutureBuilder<Map<String, dynamic>>(
+                      future: loadMember(targetUid, e.value),
+                      builder: (context, snapshot) {
+                        final member = snapshot.data ?? {};
+
+                        final email = member["email"]?.toString() ?? "Loading...";
+                        final name = member["name"]?.toString() ?? email;
+                        final photoUrl = member["photoUrl"]?.toString() ?? "";
+                        final role = member["role"]?.toString() ?? "member";
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                        ),
-                        PopupMenuButton<String>(
-                          onSelected: (value) async {
-                            if (value == "delete") {
-                              final ok = await showDialog<bool>(
-                                context: sheetContext,
-                                builder: (_) => AlertDialog(
-                                  title: Text(targetUid == myUid ? "Rời khỏi nhà?" : "Xoá thành viên?"),
-                                  content: Text(
-                                    targetUid == myUid
-                                        ? "Bạn chắc chắn muốn rời khỏi nhà này?"
-                                        : "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context, false),
-                                      child: const Text("Huỷ"),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: photoUrl.isNotEmpty
+                                    ? NetworkImage(photoUrl)
+                                    : null,
+                                child: photoUrl.isEmpty
+                                    ? const Icon(Icons.person)
+                                    : null,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      targetUid == myUid ? "$name (Bạn)" : name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: targetUid == myUid ? Colors.blue : null,
+                                      ),
                                     ),
-                                    ElevatedButton(
-                                      onPressed: () => Navigator.pop(context, true),
-                                      child: const Text("Đồng ý"),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      email,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey.shade700,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              );
+                              ),
+                              if (targetUid == myUid ||
+                                  isOwner ||
+                                  (canManageMembers && role == "member"))
+                                PopupMenuButton<String>(
+                                  onSelected: (value) async {
+                                    if (value == "delete") {
+                                      final ok = await showDialog<bool>(
+                                        context: sheetContext,
+                                        builder: (_) => AlertDialog(
+                                          title: Text(
+                                            targetUid == myUid
+                                                ? "Rời khỏi nhà?"
+                                                : "Xoá thành viên?",
+                                          ),
+                                          content: Text(
+                                            targetUid == myUid
+                                                ? "Bạn chắc chắn muốn rời khỏi nhà này?"
+                                                : "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, false),
+                                              child: const Text("Huỷ"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () => Navigator.pop(context, true),
+                                              child: const Text("Đồng ý"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
 
-                              if (ok != true) return;
+                                      if (ok != true) return;
 
-                              if (targetUid == myUid) {
-                                Navigator.of(sheetContext).pop(true);
+                                      await db
+                                          .ref(FirebasePaths.sharedHome(targetUid, homeId))
+                                          .remove();
+                                      await db
+                                          .ref(FirebasePaths.sharedMember(homeId, targetUid))
+                                          .remove();
+                                      await db
+                                          .ref("accounts/$ownerUid/shareList/$homeId/$targetUid")
+                                          .remove();
 
-                                await db.ref(FirebasePaths.sharedHome(targetUid, homeId)).remove();
-                                await db.ref(FirebasePaths.sharedMember(homeId, targetUid)).remove();
-                                await db.ref("accounts/$ownerUid/shareList/$homeId/$targetUid").remove();
+                                      if (targetUid == myUid) {
+                                        Navigator.of(sheetContext).pop(true);
+                                        return;
+                                      }
 
-                                return;
-                              }
+                                      showTopToast(
+                                        sheetContext,
+                                        "Đã xoá thành viên",
+                                        color: Colors.green,
+                                        icon: Icons.check_circle_rounded,
+                                      );
 
-                              await db.ref(FirebasePaths.sharedHome(targetUid, homeId)).remove();
-                              await db.ref(FirebasePaths.sharedMember(homeId, targetUid)).remove();
-                              await db.ref("accounts/$ownerUid/shareList/$homeId/$targetUid").remove();
+                                      return;
+                                    }
 
-                              showTopToast(
-                                sheetContext,
-                                "Đã xoá thành viên",
-                                color: Colors.green,
-                                icon: Icons.check_circle_rounded,
-                              );
+                                    if (!isOwner) return;
 
-                              return;
-                            }
+                                    await db.ref().update({
+                                      "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
+                                      value,
+                                      "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
+                                      value,
+                                    });
 
-                            await db.ref().update({
-                              "${FirebasePaths.sharedMember(homeId, targetUid)}/role": value,
-                              "${FirebasePaths.sharedHome(targetUid, homeId)}/role": value,
-                            });
-
-                            await HomeNotificationService.addNotification(
-                              uid: targetUid,
-                              type: "role_changed",
-                              title: "Quyền trong nhà đã thay đổi",
-                              message: value == "admin"
-                                  ? "Bạn đã được nâng quyền thành Admin."
-                                  : "Quyền của bạn đã được chuyển về Member.",
-                              homeId: homeId,
-                            );
-
-                            if (!context.mounted) return;
-
-                            Navigator.pop(context);
-
-                            showShareListSheet(
-                              context: context,
-                              ownerUid: ownerUid,
-                              homeId: homeId,
-                              homeName: homeName,
-                              canManageMembers: canManageMembers,
-                              isOwner: isOwner,
-                              onSelfLeave: onSelfLeave,
-                            );
-                          },
-                          itemBuilder: (_) => [
-                            const PopupMenuItem(
-                              value: "member",
-                              child: Text("Member"),
-                            ),
-                            const PopupMenuItem(
-                              value: "admin",
-                              child: Text("Admin"),
-                            ),
-                            if (
-                            targetUid == myUid ||
-                                isOwner ||
-                                (canManageMembers && role == "member")
-                            )
-                              PopupMenuItem(
-                                value: "delete",
-                                child: Text(
-                                  targetUid == myUid ? "Rời khỏi nhà" : "Xoá thành viên",
-                                  style: const TextStyle(color: Colors.red),
+                                    await HomeNotificationService.addNotification(
+                                      uid: targetUid,
+                                      type: "role_changed",
+                                      title: "Quyền trong nhà đã thay đổi",
+                                      message: value == "admin"
+                                          ? "Bạn đã được nâng quyền thành Admin."
+                                          : "Quyền của bạn đã được chuyển về Member.",
+                                      homeId: homeId,
+                                    );
+                                  },
+                                  itemBuilder: (_) => [
+                                    if (isOwner) ...[
+                                      const PopupMenuItem(
+                                        value: "member",
+                                        child: Text("Member"),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: "admin",
+                                        child: Text("Admin"),
+                                      ),
+                                    ],
+                                    PopupMenuItem(
+                                      value: "delete",
+                                      child: Text(
+                                        targetUid == myUid
+                                            ? "Rời khỏi nhà"
+                                            : "Xoá thành viên",
+                                        style: const TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: role == "admin"
+                                          ? Colors.deepPurple.withValues(alpha: 0.12)
+                                          : Colors.blueGrey.withValues(alpha: 0.12),
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Text(
+                                      role.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: role == "admin"
+                                            ? Colors.deepPurple
+                                            : Colors.blueGrey,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: role == "admin"
+                                        ? Colors.deepPurple.withValues(alpha: 0.12)
+                                        : Colors.blueGrey.withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Text(
+                                    role.toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                      color: role == "admin"
+                                          ? Colors.deepPurple
+                                          : Colors.blueGrey,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                          ],
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: role == "admin"
-                                  ? Colors.deepPurple.withValues(alpha: 0.12)
-                                  : Colors.blueGrey.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: Text(
-                              role.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w700,
-                                color: role == "admin" ? Colors.deepPurple : Colors.blueGrey,
-                              ),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            }),
+                        );
+                      },
+                    );
+                  }).toList(),
+                );
+              },
+            ),
           ],
         ),)
       );

@@ -109,6 +109,11 @@ class HomeService {
           "icon": "home",
           "order": 0,
         },
+        "living_room": {
+          "name": "Phòng khách",
+          "icon": "living",
+          "order": 1,
+        },
       },
       "alarm": {
         "enabled": false,

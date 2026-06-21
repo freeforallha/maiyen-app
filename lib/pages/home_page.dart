@@ -36,6 +36,8 @@ import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_login_service.dart';
 import '../sheets/room_management_sheet.dart';
+import '../widgets/room_tabs.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -43,6 +45,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> shareRequests = {};
+  final ValueNotifier<int> inviteCountNotifier = ValueNotifier(0);
   int unreadChatCount = 0;
   Map<String, int> unreadChatByHome = {};
   int unreadHomeNotificationCount = 0;
@@ -225,7 +228,9 @@ class _HomePageState extends State<HomePage> {
     if (selectedHome.isEmpty) return;
 
     homeEventsSubscription = FirebaseDatabase.instance
-        .ref("accounts/$uid/homes/$selectedHome/events")
+        .ref(
+      "accounts/${getHomeOwnerUid()}/homes/$selectedHome/events",
+    )
         .limitToLast(50)
         .onValue
         .listen((event) {
@@ -386,6 +391,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       shareRequests = requests;
+      inviteCountNotifier.value = requests.length;
     });
   }
 
@@ -413,6 +419,7 @@ class _HomePageState extends State<HomePage> {
       final userAlarmSettings = safeMap(map["alarmSettings"]);
       setState(() {
         shareRequests = requests;
+        inviteCountNotifier.value = requests.length;
         alarmSettings = userAlarmSettings;
         final profile = HomeStateParser.parseProfile(map);
 
@@ -509,6 +516,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> handleScannedQR(String code) async {
     final value = code.trim();
+    debugPrint("QR_DEBUG value=$value");
     if (value.startsWith("safehome_join_multi|")) {
       final parts = value.split("|");
 
@@ -577,7 +585,14 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-        await FirebaseDatabase.instance.ref().update(updates);
+        try {
+          debugPrint("QR_JOIN_UPDATES=$updates");
+          await FirebaseDatabase.instance.ref().update(updates);
+          debugPrint("QR_JOIN_UPDATE_OK");
+        } catch (e, st) {
+          debugPrint("QR_JOIN_UPDATE_ERROR: $e");
+          debugPrint("QR_JOIN_UPDATE_STACK: $st");
+        }
         await HomeNotificationService.addNotification(
           uid: ownerUid,
           type: "join_request",
@@ -701,9 +716,12 @@ class _HomePageState extends State<HomePage> {
         .set({
           "active": true,
           "hubId": hubId.trim(),
-          "homeId": selectedHome,
-          "ownerUid": ownerUid, // ✔ giờ không lỗi nữa
-          "requestedBy": uid,
+      "homeId": selectedHome,
+      "ownerUid": ownerUid,
+      "requestedBy": uid,
+      "roomId": selectedRoomId == "overview"
+          ? "unassigned"
+          : selectedRoomId,
           "duration": 60,
           "time": DateTime.now().millisecondsSinceEpoch,
         });
@@ -1923,89 +1941,27 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 10),
 
-                          Builder(
-                            builder: (_) {
-                              final rooms = getRooms();
+                          RoomTabs(
+                            rooms: getRooms(),
+                            homeName: homes[selectedHome]?["name"]?.toString() ?? "Nhà",
+                            selectedRoomId: selectedRoomId,
+                            onSelect: (roomId) {
+                              setState(() {
+                                selectedRoomId = roomId;
+                              });
+                            },
+                            onReorder: (roomIds) async {
+                              final ownerUid = getHomeOwnerUid();
 
-                              final tabs = <Map<String, String>>[
-                                {
-                                  "id": "overview",
-                                  "name":
-                                  homes[selectedHome]?["name"]?.toString() ??
-                                      "Nhà",
-                                },
-                              ];
+                              final updates = <String, Object?>{};
 
-                              for (final entry in rooms.entries) {
-                                if (entry.key == "unassigned") continue;
-                                final room = safeMap(entry.value);
-
-                                tabs.add({
-                                  "id": entry.key,
-                                  "name": room["name"]?.toString() ?? entry.key,
-                                });
+                              for (var i = 0; i < roomIds.length; i++) {
+                                updates[
+                                "accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"
+                                ] = i + 1;
                               }
 
-                              return SizedBox(
-                                height: 42,
-                                child: ListView.separated(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: tabs.length,
-                                  separatorBuilder: (_, __) => const SizedBox(width: 8),
-                                  itemBuilder: (_, index) {
-                                    final tab = tabs[index];
-                                    final roomId = tab["id"]!;
-
-                                    final selected = selectedRoomId == roomId;
-
-                                    return InkWell(
-                                      borderRadius: BorderRadius.circular(8),
-                                      onTap: () {
-                                        setState(() {
-                                          selectedRoomId = roomId;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              tab["name"]!,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight:
-                                                selected ? FontWeight.w700 : FontWeight.w500,
-                                                color: selected
-                                                    ? Colors.black87
-                                                    : Colors.black.withValues(alpha: 0.45),
-                                              ),
-                                            ),
-
-                                            const SizedBox(height: 4),
-
-                                            AnimatedContainer(
-                                              duration: const Duration(milliseconds: 180),
-                                              curve: Curves.easeOut,
-                                              height: 2,
-                                              width: selected
-                                                  ? (tab["name"]!.length * 8.5)
-                                                  : 0,
-                                              decoration: BoxDecoration(
-                                                color: Colors.black87,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
+                              await FirebaseDatabase.instance.ref().update(updates);
                             },
                           ),
                           if (pairingCountdown > 0)
@@ -2411,7 +2367,7 @@ class _HomePageState extends State<HomePage> {
                               userGender: userGender,
                               userDob: userDob,
                               userPhone: userPhone,
-                              inviteCount: shareRequests.length,
+                              inviteCountNotifier: inviteCountNotifier,
 
                               onShareRequests: () async {
                                 final changed = await showShareRequestSheet(
@@ -2457,7 +2413,7 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                           context: context,
-                          inviteCount: shareRequests.length,
+                          inviteCountNotifier: inviteCountNotifier,
                           onShareRequests: () async {
                             final changed = await showShareRequestSheet(
                               context: context,

@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 class ScheduleSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -20,10 +21,27 @@ class ScheduleSheet extends StatefulWidget {
 }
 
 class _ScheduleSheetState extends State<ScheduleSheet> {
+  String get currentUid =>
+      FirebaseAuth.instance.currentUser?.uid ??
+          widget.ownerUid;
+
+  bool get isSharedUser =>
+      currentUid != widget.ownerUid;
+  String reminderMode = "home";
   List<Map<String, dynamic>> alarms = [];
   List<Map<String, dynamic>> notifications = [];
 
   DatabaseReference get ref {
+    if (
+    widget.type == "notification" &&
+        isSharedUser &&
+        reminderMode == "custom"
+    ) {
+      return FirebaseDatabase.instance.ref(
+        "accounts/$currentUid/customRules/${widget.homeId}/notifications",
+      );
+    }
+
     return FirebaseDatabase.instance.ref(
       FirebasePaths.schedules(
         widget.ownerUid,
@@ -35,13 +53,51 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   @override
   void initState() {
     super.initState();
-    load();
+
+    if (widget.type == "notification" && isSharedUser) {
+      FirebaseDatabase.instance
+          .ref(
+        "accounts/$currentUid/customRules/${widget.homeId}/mode",
+      )
+          .get()
+          .then((snap) {
+        final value = snap.value?.toString();
+
+        if (value == "custom" || value == "home") {
+          setState(() {
+            reminderMode = value!;
+          });
+        }
+
+        load();
+      });
+    } else {
+      load();
+    }
   }
 
   Future<void> load() async {
     final snap = await ref.get();
 
     if (!snap.exists) return;
+
+    if (
+    widget.type == "notification" &&
+        isSharedUser &&
+        reminderMode == "custom"
+    ) {
+      final data = Map<String, dynamic>.from(snap.value as Map);
+
+      setState(() {
+        notifications = List<Map<String, dynamic>>.from(
+          (data["items"] ?? []).map(
+                (e) => Map<String, dynamic>.from(e),
+          ),
+        );
+      });
+
+      return;
+    }
 
     final data = Map<String, dynamic>.from(snap.value as Map);
 
@@ -61,6 +117,18 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   }
 
   Future<void> saveSchedules() async {
+    if (
+    widget.type == "notification" &&
+        isSharedUser &&
+        reminderMode == "custom"
+    ) {
+      await ref.set({
+        "items": notifications,
+      });
+
+      return;
+    }
+
     await ref.update({
       "alarms": alarms,
       "notifications": notifications,
@@ -391,7 +459,10 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   @override
   Widget build(BuildContext context) {
     final isAlarm = widget.type == "alarm";
-
+    final canEditCurrentReminder =
+        isAlarm ||
+            !isSharedUser ||
+            reminderMode == "custom";
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(18),
@@ -424,7 +495,56 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              if (!isAlarm && isSharedUser) ...[
+                const SizedBox(height: 14),
 
+                SegmentedButton<String>(
+                  segments: const [
+                    ButtonSegment(
+                      value: "home",
+                      label: Text("Theo nhà"),
+                      icon: Icon(Icons.home_rounded),
+                    ),
+                    ButtonSegment(
+                      value: "custom",
+                      label: Text("Riêng tôi"),
+                      icon: Icon(Icons.person_rounded),
+                    ),
+                  ],
+                  selected: {reminderMode},
+                  onSelectionChanged: (value) async {
+                    final nextMode = value.first;
+
+                    await FirebaseDatabase.instance
+                        .ref(
+                      "accounts/$currentUid/customRules/${widget.homeId}/mode",
+                    )
+                        .set(nextMode);
+
+                    setState(() {
+                      reminderMode = nextMode;
+
+                      alarms.clear();
+                      notifications.clear();
+                    });
+
+                    await load();
+                  },
+                ),
+
+                const SizedBox(height: 10),
+
+                Text(
+                  reminderMode == "home"
+                      ? "Đang sử dụng reminder của chủ nhà"
+                      : "Đang sử dụng reminder riêng của bạn",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+              ],
               if (isAlarm) ...[
                 sectionTitle("Alarm"),
 
@@ -441,13 +561,15 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                     child: ListTile(
                       leading: Switch(
                         value: item["enabled"] == true,
-                        onChanged: (v) async {
+                        onChanged: canEditCurrentReminder
+                            ? (v) async {
                           setState(() {
-                            alarms[i]["enabled"] = v;
+                            notifications[i]["enabled"] = v;
                           });
 
                           saveSchedules();
-                        },
+                        }
+                            : null,
                       ),
 
                       title: Column(
@@ -535,13 +657,15 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                     child: ListTile(
                       leading: Switch(
                         value: item["enabled"] == true,
-                        onChanged: (v) async {
+                        onChanged: canEditCurrentReminder
+                            ? (v) async {
                           setState(() {
                             notifications[i]["enabled"] = v;
                           });
 
                           saveSchedules();
-                        },
+                        }
+                            : null,
                       ),
 
                       title: Row(
@@ -564,18 +688,22 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit_rounded),
-                            onPressed: () => editNotification(i),
+                            onPressed: canEditCurrentReminder
+                                ? () => editNotification(i)
+                                : null,
                           ),
 
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
-                            onPressed: () async {
+                            onPressed: canEditCurrentReminder
+                                ? () async {
                               setState(() {
                                 notifications.removeAt(i);
                               });
 
                               saveSchedules();
-                            },
+                            }
+                                : null,
                           ),
                         ],
                       ),
@@ -586,7 +714,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: addNotification,
+                    onPressed: canEditCurrentReminder ? addNotification : null,
                     icon: const Icon(Icons.add),
                     label: const Text(
                       "Thêm giờ Notification",

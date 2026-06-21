@@ -219,7 +219,7 @@ class AccountAvatarSheet {
     required String userGender,
     required String userDob,
     required String userPhone,
-    required int inviteCount,
+    required ValueNotifier<int> inviteCountNotifier,
     required VoidCallback onShareRequests,
   }) {
     final user = FirebaseAuth.instance.currentUser;
@@ -436,21 +436,29 @@ class AccountAvatarSheet {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              if (inviteCount > 0)
-                                Container(
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Text(
-                                    "$inviteCount",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
+                              ValueListenableBuilder<int>(
+                                valueListenable: inviteCountNotifier,
+                                builder: (_, inviteCount, __) {
+                                  if (inviteCount <= 0) {
+                                    return const SizedBox.shrink();
+                                  }
+
+                                  return Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
                                     ),
-                                  ),
-                                ),
+                                    child: Text(
+                                      "$inviteCount",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                           trailing: const Icon(Icons.chevron_right_rounded),

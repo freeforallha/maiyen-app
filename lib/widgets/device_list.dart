@@ -463,7 +463,7 @@ class DeviceList extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                       left: 2,
-                                      top: 10,
+                                      top: 2,
                                       bottom: 8,
                                     ),
                                     child: Row(

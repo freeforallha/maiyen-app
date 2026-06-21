@@ -69,13 +69,17 @@ class NotificationService {
           return;
         }
 
-        if (payload == 'alarm' || payload == 'open_home') {
+        if (payload == 'alarm') {
           NotificationService.openAlarmPage(
             title: '🚨 SafeHome',
             body: lastAlarmBody,
             alarmItemsJson: lastAlarmItemsJson,
           );
 
+          return;
+        }
+
+        if (payload == 'open_home') {
           return;
         }
 
@@ -250,6 +254,8 @@ class NotificationService {
     final androidDetails = AndroidNotificationDetails(
       'safehome_reminder_channel',
       'SafeHome Reminder',
+      visibility: NotificationVisibility.public,
+      autoCancel: false,
       channelDescription: 'Nhắc nhở an toàn nhẹ nhàng',
       importance: Importance.high,
       priority: Priority.high,
@@ -271,7 +277,7 @@ class NotificationService {
     );
 
     await localNotif.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      999998,
       title,
       body,
       NotificationDetails(
