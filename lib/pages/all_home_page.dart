@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../helpers/top_toast.dart';
+import '../helpers/home_helper.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -37,8 +38,11 @@ class _AllHomePageState extends State<AllHomePage> {
   String search = "";
   final TextEditingController searchController = TextEditingController();
   bool isSearching = false;
+  int summaryIndex = 0;
+  Timer? summaryTimer;
 
   Map<String, dynamic> safeMap(dynamic data) {
+
     if (data == null) return {};
 
     return Map<String, dynamic>.from(data as Map);
@@ -53,79 +57,403 @@ class _AllHomePageState extends State<AllHomePage> {
       return status != "closed" || tamper;
     });
   }
+  List<String> buildAllHomeSummaries() {
+    int safeCount = 0;
+    int warningCount = 0;
+    int dangerCount = 0;
 
-  late DatabaseReference ref;
-  final List<StreamSubscription> listeners = [];
+    final dangerReasons = <String>{};
+    final warningReasons = <String>{};
+
+    for (final home in homes.values) {
+      final devices = safeMap(home["devices"]);
+      final status = getOverallStatus(devices);
+      final level = status["level"]?.toString() ?? "safe";
+
+      if (level == "danger") {
+        dangerCount++;
+
+        for (final item in (status["dangerIssues"] as List? ?? [])) {
+          dangerReasons.add(item.toString());
+        }
+      } else if (level == "warning") {
+        warningCount++;
+
+        for (final item in (status["warningIssues"] as List? ?? [])) {
+          warningReasons.add(item.toString());
+        }
+      } else {
+        safeCount++;
+      }
+    }
+
+    final summaries = <String>[];
+
+    if (dangerCount > 0) {
+      summaries.add(
+        "🚨 $dangerCount nhà không an toàn"
+            "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+      );
+    }
+
+    if (warningCount > 0) {
+      summaries.add(
+        "⚠️ $warningCount nhà cần chú ý"
+            "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+      );
+    }
+
+    if (safeCount > 0) {
+      summaries.add("✅ $safeCount nhà an toàn");
+    }
+
+    return summaries.isEmpty ? ["🏡 Chưa có nhà nào"] : summaries;
+  }
+  void showAllHomeSummarySheet() {
+    int sheetIndex = summaryIndex;
+    Timer? sheetTimer;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            sheetTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
+              setSheetState(() {
+                sheetIndex++;
+              });
+            });
+
+            final safeHomes = <Map<String, dynamic>>[];
+            final warningHomes = <Map<String, dynamic>>[];
+            final dangerHomes = <Map<String, dynamic>>[];
+
+            for (final entry in homes.entries) {
+              final homeId = entry.key;
+              final home = safeMap(entry.value);
+              final name = home["name"]?.toString() ?? homeId;
+              final status = getOverallStatus(safeMap(home["devices"]));
+              final level = status["level"]?.toString() ?? "safe";
+
+              final issues = level == "danger"
+                  ? (status["dangerIssues"] as List? ?? [])
+                  : level == "warning"
+                  ? (status["warningIssues"] as List? ?? [])
+                  : <dynamic>[];
+
+              final item = {
+                "id": homeId,
+                "name": name,
+                "issues": issues.map((e) => e.toString()).toList(),
+              };
+
+              if (level == "danger") {
+                dangerHomes.add(item);
+              } else if (level == "warning") {
+                warningHomes.add(item);
+              } else {
+                safeHomes.add(item);
+              }
+            }
+
+            Widget homeRow(Map<String, dynamic> item, Color color) {
+              final homeId = item["id"]?.toString() ?? "";
+              final name = item["name"]?.toString() ?? "";
+              final issues = List<String>.from(item["issues"] ?? []);
+              final message = issues.isEmpty
+                  ? "Cần kiểm tra"
+                  : issues[sheetIndex % issues.length];
+
+              return InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, homeId);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 9),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 6,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 700),
+                          child: Text(
+                            message,
+                            key: ValueKey("$homeId-$message"),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: color,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            Widget section({
+              required String title,
+              required IconData icon,
+              required Color color,
+              required List<Map<String, dynamic>> items,
+              required bool compact,
+            }) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(icon, color: color, size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          "$title (${items.length})",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (items.isEmpty)
+                      Text(
+                        "Không có",
+                        style: TextStyle(color: Colors.grey.shade600),
+                      )
+                    else if (compact)
+                      ...items.map((e) => homeRow(e, color))
+                    else
+                      Wrap(
+                        children: items.asMap().entries.map((entry) {
+                          final index = entry.key;
+                          final item = entry.value;
+                          final homeId = item["id"]?.toString() ?? "";
+                          final name = item["name"]?.toString() ?? "";
+
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context, homeId);
+                            },
+                            child: Text(
+                              index == items.length - 1 ? name : "$name, ",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: color,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                  ],
+                ),
+              );
+            }
+
+            return SafeArea(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF7FAF8),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 46,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Tổng hợp trạng thái",
+                      style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${homes.length} nhà đang được theo dõi",
+                      style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                    ),
+                    const SizedBox(height: 20),
+                    section(
+                      title: "Không an toàn",
+                      icon: Icons.warning_amber_rounded,
+                      color: Colors.red,
+                      items: dangerHomes,
+                      compact: true,
+                    ),
+                    section(
+                      title: "Cần chú ý",
+                      icon: Icons.info_outline_rounded,
+                      color: Colors.orange,
+                      items: warningHomes,
+                      compact: true,
+                    ),
+                    section(
+                      title: "An toàn",
+                      icon: Icons.check_circle_rounded,
+                      color: Colors.green,
+                      items: safeHomes,
+                      compact: false,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      sheetTimer?.cancel();
+    });
+  }
+  StreamSubscription<DatabaseEvent>? ownHomesSubscription;
+  StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
+  StreamSubscription<DatabaseEvent>? groupNamesSubscription;
+
+  final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions = {};
+  @override
   @override
   void initState() {
     super.initState();
-
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-
-    final sub = FirebaseDatabase.instance
-        .ref("accounts/$uid")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
-      if (data == null) return;
-
-      final map = Map<String, dynamic>.from(data as Map);
-      customNames = Map<String, String>.from(map["groupNames"] ?? {});
-
-      final ownHomes = Map<String, dynamic>.from(map["homes"] ?? {});
-      final sharedHomes = Map<String, dynamic>.from(map["sharedHomes"] ?? {});
-
-      final Map<String, dynamic> merged = {};
-      final Set<String> addedHomeIds = {};
-
-      // chỉ add home thật sự sở hữu
-      ownHomes.forEach((key, value) {
-        merged[key] = value;
-        addedHomeIds.add(key);
-      });
+    summaryTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted) return;
 
       setState(() {
-        homes = merged;
+        summaryIndex++;
       });
+    });
+    final uid = FirebaseAuth.instance.currentUser!.uid;
 
-      // 🔥 shared homes listener FIX (KHÔNG tạo lại liên tục)
-      sharedHomes.forEach((homeId, value) {
-        if (addedHomeIds.contains(homeId)) return;
-        addedHomeIds.add(homeId);
-        final v = Map<String, dynamic>.from(value);
-        final ownerUid = v["ownerUid"];
+    ownHomesSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/homes")
+        .onValue
+        .listen((event) {
+      final ownHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
 
-        if (ownerUid == null) return;
+      if (!mounted) return;
 
-        FirebaseDatabase.instance.ref("accounts/$ownerUid/email").get().then((
-          emailSnap,
-        ) {
+      setState(() {
+        homes.removeWhere((key, value) {
+          final home = safeMap(value);
+          return home["_shared"] != true;
+        });
+
+        for (final entry in ownHomes.entries) {
+          homes[entry.key] = entry.value;
+        }
+      });
+    });
+
+    sharedHomesSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/sharedHomes")
+        .onValue
+        .listen((event) {
+      final sharedHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
+
+      final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
+
+      for (final oldId in sharedHomeSubscriptions.keys.toList()) {
+        if (!activeIds.contains(oldId)) {
+          sharedHomeSubscriptions.remove(oldId)?.cancel();
+
+          if (mounted) {
+            setState(() {
+              homes.remove(oldId);
+            });
+          }
+        }
+      }
+
+      for (final entry in sharedHomes.entries) {
+        final homeId = entry.key.toString();
+
+        if (sharedHomeSubscriptions.containsKey(homeId)) continue;
+
+        final sharedInfo = safeMap(entry.value);
+        final ownerUid = sharedInfo["ownerUid"]?.toString() ?? "";
+        final role = sharedInfo["role"]?.toString() ?? "member";
+
+        if (ownerUid.isEmpty) continue;
+
+        FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/email")
+            .get()
+            .then((emailSnap) {
           final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
 
-          final sharedSub = FirebaseDatabase.instance
+          final sub = FirebaseDatabase.instance
               .ref("accounts/$ownerUid/homes/$homeId")
               .onValue
-              .listen((e) {
-            final d = e.snapshot.value;
+              .listen((homeEvent) {
+            final rawHome = homeEvent.snapshot.value;
 
-            if (d == null) return;
+            if (rawHome == null) return;
+
+            final newHome = {
+              ...Map<String, dynamic>.from(rawHome as Map),
+              "_shared": true,
+              "_ownerUid": ownerUid,
+              "_ownerEmail": ownerEmail,
+              "_role": role,
+            };
+
+            if (!mounted) return;
 
             setState(() {
-              homes[homeId] = {
-                ...Map<String, dynamic>.from(d as Map),
-                "_shared": true,
-                "_ownerUid": ownerUid,
-                "_ownerEmail": ownerEmail,
-                "_role": v["role"] ?? "member",
-              };
+              homes[homeId] = newHome;
             });
           });
 
-          listeners.add(sharedSub);
+          sharedHomeSubscriptions[homeId] = sub;
         });
+      }
+    });
+
+    groupNamesSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/groupNames")
+        .onValue
+        .listen((event) {
+      final names = event.snapshot.value is Map
+          ? Map<String, String>.from(event.snapshot.value as Map)
+          : <String, String>{};
+
+      if (!mounted) return;
+
+      setState(() {
+        customNames = names;
       });
     });
-    listeners.add(sub);
   }
 
   Map<String, List<String>> groupedHomes() {
@@ -229,128 +557,119 @@ class _AllHomePageState extends State<AllHomePage> {
     String ownerText = "";
     if (!isYourHomes) {
       final firstHome = safeMap(homes[ids.first]);
-
       ownerText = firstHome["_ownerEmail"] ?? "Unknown";
     }
 
     final displayName =
         customNames[groupKey] ?? (isYourHomes ? "Nhà của tôi" : ownerText);
-    return Container(
-      margin: EdgeInsets.only(top: 6, bottom: 8),
 
-      padding: EdgeInsets.all(10),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
-      ),
-
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
+          InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {
+              final allSelected = ids.every(
+                    (id) => selectedHomes.contains(id),
+              );
 
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-
-                child: Icon(
-                  Icons.other_houses_rounded,
-                  color: Colors.blueAccent,
-                  size: 18,
-                ),
-              ),
-
-              SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-
-                  children: [
-                    Text(
-                      displayName,
-
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-
-                    if (!isYourHomes)
-                      Text(
-                        ownerText,
-
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (_) {
+                  return SafeArea(
+                    child: Container(
+                      padding: const EdgeInsets.all(18),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(26),
                         ),
                       ),
-                  ],
-                ),
-              ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(
+                              Icons.edit_rounded,
+                              color: Colors.blueAccent,
+                            ),
+                            title: const Text("Đổi tên nhóm"),
+                            onTap: () {
+                              Navigator.pop(context);
+                              renameGroup(groupKey);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              allSelected
+                                  ? Icons.check_box_rounded
+                                  : Icons.check_box_outline_blank_rounded,
+                              color: Colors.green,
+                            ),
+                            title: Text(
+                              allSelected
+                                  ? "Bỏ chọn toàn bộ nhóm"
+                                  : "Chọn toàn bộ nhóm",
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
 
-              _buildMiniActionButton(
-                icon: Icons.edit_rounded,
-                color: Colors.blueAccent,
-                onTap: () {
-                  renameGroup(groupKey);
+                              setState(() {
+                                if (allSelected) {
+                                  selectedHomes.removeAll(ids);
+                                } else {
+                                  selectedHomes.addAll(ids);
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6, bottom: 10),
+              child: Row(
+                children: [
+                  Text(
+                    displayName,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    "(${ids.length})",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                ],
               ),
-
-              const SizedBox(width: 8),
-
-              _buildMiniActionButton(
-                icon: ids.every((id) => selectedHomes.contains(id))
-                    ? Icons.check_box_rounded
-                    : Icons.check_box_outline_blank_rounded,
-                color: Colors.green,
-                onTap: () {
-                  setState(() {
-                    final allSelected = ids.every(
-                          (id) => selectedHomes.contains(id),
-                    );
-
-                    if (allSelected) {
-                      selectedHomes.removeAll(ids);
-                    } else {
-                      selectedHomes.addAll(ids);
-                    }
-                  });
-                },
-              ),
-            ],
+            ),
           ),
 
-          SizedBox(height: 8),
-
-          GridView.builder(
-            shrinkWrap: true,
-
-            physics: NeverScrollableScrollPhysics(),
-
-            itemCount: ids.length,
-
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 7,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-              childAspectRatio: 1,
-            ),
-
-            itemBuilder: (context, index) {
-              final homeId = ids[index];
-
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: ids.map((homeId) {
               final data = safeMap(homes[homeId]);
 
-              return buildHomeCard(context, homeId, data);
-            },
+              return SizedBox(
+                width: 55,
+                height: 55,
+                child: buildHomeCard(context, homeId, data),
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -364,10 +683,9 @@ class _AllHomePageState extends State<AllHomePage> {
   ) {
     final devices = safeMap(data["devices"]);
 
-    final unsafe = isUnsafe(devices);
+    final status = getOverallStatus(devices);
 
     final selected = selectedHomes.contains(homeId);
-
     return InkWell(
       onTap: () {
         if (selectedHomes.isNotEmpty) {
@@ -395,7 +713,11 @@ class _AllHomePageState extends State<AllHomePage> {
 
       child: Container(
         decoration: BoxDecoration(
-          color: unsafe ? Colors.red.shade300 : Colors.green.shade300,
+          color: status["level"] == "danger"
+              ? Colors.red.shade300
+              : status["level"] == "warning"
+              ? Colors.orange.shade300
+              : Colors.green.shade300,
 
           borderRadius: BorderRadius.circular(14),
 
@@ -450,16 +772,34 @@ class _AllHomePageState extends State<AllHomePage> {
           title: Text(title),
           content: Row(
             children: [
-              Expanded(child: TextField(controller: h, maxLength: 2, decoration: const InputDecoration(labelText: "Giờ"))),
+              Expanded(
+                child: TextField(
+                  controller: h,
+                  maxLength: 2,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Giờ"),
+                ),
+              ),
               const Text(" : "),
-              Expanded(child: TextField(controller: m, maxLength: 2, decoration: const InputDecoration(labelText: "Phút"))),
+              Expanded(
+                child: TextField(
+                  controller: m,
+                  maxLength: 2,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Phút"),
+                ),
+              ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Huỷ")),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Huỷ"),
+            ),
             ElevatedButton(
               onPressed: () {
-                final value = "${h.text.trim().padLeft(2, '0')}:${m.text.trim().padLeft(2, '0')}";
+                final value =
+                    "${h.text.trim().padLeft(2, '0')}:${m.text.trim().padLeft(2, '0')}";
                 Navigator.pop(context, value);
               },
               child: const Text("OK"),
@@ -469,61 +809,174 @@ class _AllHomePageState extends State<AllHomePage> {
       );
     }
 
-    final start = await inputTime("Giờ bắt đầu Alarm", "23:00");
-    if (start == null) return;
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(18),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(
+                    Icons.notifications_active_rounded,
+                    color: Colors.orange,
+                  ),
+                  title: const Text("Đặt Home Reminder"),
+                  subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                  onTap: () => Navigator.pop(context, "reminder"),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.shield_moon_rounded,
+                    color: Colors.red,
+                  ),
+                  title: const Text("Đặt Home Alarm"),
+                  subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                  onTap: () => Navigator.pop(context, "alarm"),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
 
-    final end = await inputTime("Giờ kết thúc Alarm", "06:00");
-    if (end == null) return;
+    if (action == null) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Xác nhận thay đổi"),
+        content: const Text(
+          "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
+              "Những thành viên đang sử dụng chế độ 'Theo nhà' sẽ bị ảnh hưởng.\n"
+              "Các cài đặt Reminder/Alarm cá nhân (Riêng tôi) sẽ không bị thay đổi.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Huỷ"),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Tiếp tục"),
+          ),
+        ],
+      ),
+    );
 
-    final alarmData = {
-      "enabled": true,
-      "start": start,
-      "end": end,
-      "repeatMinutes": 30,
-    };
-
+    if (confirmed != true) return;
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final updates = <String, dynamic>{};
 
+    int updatedHomes = 0;
     int updatedDevices = 0;
     int skippedHomes = 0;
 
-    for (final homeId in selectedHomes) {
-      final home = safeMap(homes[homeId]);
-      final isShared = home["_shared"] == true;
-      final role = home["_role"]?.toString() ?? "member";
+    if (action == "reminder") {
+      final time = await inputTime("Giờ Reminder", "22:30");
+      if (time == null) return;
 
-      final canManage = !isShared || role == "owner" || role == "admin";
+      for (final homeId in selectedHomes) {
+        final home = safeMap(homes[homeId]);
+        final isShared = home["_shared"] == true;
+        final role = home["_role"]?.toString() ?? "member";
 
-      if (!canManage) {
-        skippedHomes++;
-        continue;
+        final canManage = !isShared || role == "owner" || role == "admin";
+
+        if (!canManage) {
+          skippedHomes++;
+          continue;
+        }
+
+        final ownerUid = isShared ? home["_ownerUid"]?.toString() ?? uid : uid;
+        final schedules = safeMap(home["schedules"]);
+        final currentNotificationsRaw = schedules["notifications"];
+
+        final currentNotifications = currentNotificationsRaw is List
+            ? List<Map<String, dynamic>>.from(
+          currentNotificationsRaw.map(
+                (e) => Map<String, dynamic>.from(e),
+          ),
+        )
+            : <Map<String, dynamic>>[];
+
+        currentNotifications.add({
+          "enabled": true,
+          "time": time,
+        });
+
+        updates["accounts/$ownerUid/homes/$homeId/schedules/notifications"] =
+            currentNotifications;
+
+        updatedHomes++;
       }
+    }
 
-      final ownerUid = isShared ? home["_ownerUid"] : uid;
-      final devices = safeMap(home["devices"]);
+    if (action == "alarm") {
+      final start = await inputTime("Giờ bắt đầu Alarm", "23:00");
+      if (start == null) return;
 
-      for (final entry in devices.entries) {
-        final deviceId = entry.key;
-        final device = safeMap(entry.value);
-        final type = device["type"]?.toString();
+      final end = await inputTime("Giờ kết thúc Alarm", "06:00");
+      if (end == null) return;
 
-        final isSecurity =
-            type == "door" || type == "door_lock" || type == "motion";
+      final alarmData = {
+        "enabled": true,
+        "start": start,
+        "end": end,
+        "repeatMinutes": 30,
+      };
 
-        if (!isSecurity) continue;
+      for (final homeId in selectedHomes) {
+        final home = safeMap(homes[homeId]);
+        final isShared = home["_shared"] == true;
+        final role = home["_role"]?.toString() ?? "member";
 
-        updates["accounts/$ownerUid/homes/$homeId/devices/$deviceId/alarm"] =
-            alarmData;
+        final canManage = !isShared || role == "owner" || role == "admin";
 
-        updatedDevices++;
+        if (!canManage) {
+          skippedHomes++;
+          continue;
+        }
+
+        final ownerUid = isShared ? home["_ownerUid"]?.toString() ?? uid : uid;
+        final devices = safeMap(home["devices"]);
+
+        var homeUpdated = false;
+
+        for (final entry in devices.entries) {
+          final deviceId = entry.key;
+          final device = safeMap(entry.value);
+          final type = device["type"]?.toString();
+
+          final isSecurity =
+              type == "door" || type == "door_lock" || type == "motion";
+
+          if (!isSecurity) continue;
+
+          updates["accounts/$ownerUid/homes/$homeId/devices/$deviceId/alarm"] =
+              alarmData;
+
+          updatedDevices++;
+          homeUpdated = true;
+        }
+
+        if (homeUpdated) {
+          updatedHomes++;
+        }
       }
     }
 
     if (updates.isEmpty) {
       showTopToast(
         context,
-        "Không có thiết bị an ninh nào để cài alarm",
+        "Không có nhà nào đủ điều kiện để cài",
         color: Colors.orange,
         icon: Icons.warning_amber_rounded,
       );
@@ -535,9 +988,12 @@ class _AllHomePageState extends State<AllHomePage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Cài Alarm hoàn tất"),
+        title: const Text("Cài đặt hoàn tất"),
         content: Text(
-          "Đã cài alarm cho $updatedDevices thiết bị."
+          action == "reminder"
+              ? "Đã cài Reminder cho $updatedHomes nhà."
+              "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}"
+              : "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
               "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
         ),
         actions: [
@@ -829,41 +1285,36 @@ class _AllHomePageState extends State<AllHomePage> {
             });
           },
         )
-            : Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "🏡",
-              style: const TextStyle(fontSize: 26),
-            ),
-
-            const SizedBox(width: 8),
-
-            RichText(
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
+            : InkWell(
+          borderRadius: BorderRadius.circular(999),
+          onTap: showAllHomeSummarySheet,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+              child: Text(
+                buildAllHomeSummaries()[
+                summaryIndex % buildAllHomeSummaries().length],
+                key: ValueKey(
+                  buildAllHomeSummaries()[
+                  summaryIndex % buildAllHomeSummaries().length],
                 ),
-                children: [
-                  TextSpan(
-                    text: "Safe",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "Home",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.grey.shade800,
+                ),
               ),
             ),
-          ],
+          ),
         ),
 
         actions: [
@@ -960,7 +1411,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                         ),
                         title: const Text(
-                          "Đặt báo thức nhà đã chọn",
+                          "Đặt Reminder / Alarm nhà đã chọn",
                           style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text("${selectedHomes.length} nhà đã chọn"),
@@ -1383,10 +1834,16 @@ class _AllHomePageState extends State<AllHomePage> {
   }
   @override
   void dispose() {
-    for (final l in listeners) {
-      l.cancel();
+    ownHomesSubscription?.cancel();
+    sharedHomesSubscription?.cancel();
+    groupNamesSubscription?.cancel();
+
+    for (final sub in sharedHomeSubscriptions.values) {
+      sub.cancel();
     }
 
+    sharedHomeSubscriptions.clear();
+    summaryTimer?.cancel();
     searchController.dispose();
 
     super.dispose();

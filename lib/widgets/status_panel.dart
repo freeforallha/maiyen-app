@@ -235,10 +235,10 @@ class _StatusPanelState extends State<StatusPanel> {
     final isWarning = level == "warning";
 
     final statusColor = isDanger
-        ? Colors.red
+        ? Colors.red.shade500
         : isWarning
-        ? Colors.orange
-        : Colors.green;
+        ? Colors.orange.shade500
+        : Colors.green.shade500;
 
     final statusText = isDanger
         ? "CHƯA AN TOÀN"
@@ -356,7 +356,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: issues.isNotEmpty
-                            ? Colors.red.shade700
+                            ? statusColor
                             : Colors.black54,
                       ),
                     ),
@@ -402,7 +402,15 @@ class _StatusPanelState extends State<StatusPanel> {
     );
   }
 
-  Widget _line(String text, bool danger, {Key? key}) {
+  Widget _line(String text, bool hasIssue, {Key? key}) {
+    final level = widget.overall["level"]?.toString() ?? "safe";
+
+    final color = level == "danger"
+        ? Colors.red.shade500
+        : level == "warning"
+        ? Colors.orange.shade500
+        : Colors.black54;
+
     return Text(
       "• $text",
       key: key,
@@ -412,7 +420,7 @@ class _StatusPanelState extends State<StatusPanel> {
       style: TextStyle(
         fontSize: 12,
         height: 1.25,
-        color: danger ? Colors.red.shade700 : Colors.black54,
+        color: hasIssue ? color : Colors.black54,
         fontWeight: FontWeight.w600,
       ),
     );

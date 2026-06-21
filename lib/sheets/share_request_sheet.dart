@@ -85,6 +85,23 @@ Future<bool?> showShareRequestSheet({
 
             if (homeId.isEmpty || targetUid.isEmpty || ownerUid.isEmpty) return;
 
+            if (targetUid == ownerUid) {
+              await removeRequestFromAllApprovers(
+                requestKey: requestKey,
+                ownerUid: ownerUid,
+                homeId: homeId,
+                currentUid: uid,
+                syncApprovers: true,
+              );
+
+              setSheetState(() {
+                items.remove(requestKey);
+                selected.remove(requestKey);
+              });
+
+              return;
+            }
+
             final type = data["type"]?.toString() ?? "share_request";
             if (type == "transfer_owner_request") {
               await ShareService.transferOwner(

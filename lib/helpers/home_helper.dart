@@ -56,6 +56,33 @@ bool isSosActive(Map<String, dynamic> d) {
       activeUntil > DateTime.now().millisecondsSinceEpoch;
 }
 
+bool isNowInAlarmTime(Map<String, dynamic> d) {
+  final alarm = safeMap(d["alarm"]);
+
+  if (alarm["enabled"] != true) return false;
+
+  final startText = alarm["start"]?.toString() ?? "23:00";
+  final endText = alarm["end"]?.toString() ?? "06:00";
+
+  int toMinute(String text) {
+    final parts = text.split(":");
+    final h = int.tryParse(parts.isNotEmpty ? parts[0] : "") ?? 0;
+    final m = int.tryParse(parts.length > 1 ? parts[1] : "") ?? 0;
+    return h * 60 + m;
+  }
+
+  final now = DateTime.now();
+  final nowMin = now.hour * 60 + now.minute;
+  final startMin = toMinute(startText);
+  final endMin = toMinute(endText);
+
+  if (startMin > endMin) {
+    return nowMin >= startMin || nowMin <= endMin;
+  }
+
+  return nowMin >= startMin && nowMin <= endMin;
+}
+
 Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
   final dangerIssues = <String>[];
   final warningIssues = <String>[];
@@ -120,7 +147,11 @@ Map<String, dynamic> getOverallStatus(Map<String, dynamic> devices) {
       }
 
       if (!isClosed) {
-        danger.add("Đang mở");
+        if (isNowInAlarmTime(d)) {
+          danger.add("Đang mở trong giờ Alarm");
+        } else {
+          warning.add("Đang mở");
+        }
       }
     }
 

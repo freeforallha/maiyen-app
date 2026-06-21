@@ -6,12 +6,13 @@ class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
   final Map<String, dynamic> devices;
-
+  final bool canManageHome;
   const AlarmDeviceSheet({
     super.key,
     required this.ownerUid,
     required this.homeId,
     required this.devices,
+    required this.canManageHome,
   });
 
   @override
@@ -249,7 +250,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   );
 
                   final alarm = alarmOf(deviceId);
-                  final readOnly = mode == "home" && isSharedUser;
+                  final readOnly =
+                      mode == "home" &&
+                          isSharedUser &&
+                          !widget.canManageHome;
                   final expanded = expandedDeviceId == deviceId;
 
                   return Container(

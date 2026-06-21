@@ -112,10 +112,12 @@ class HomeTabs extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? baseColor
-                            : baseColor.withValues(alpha: 0.38),
+                            : baseColor.withValues(alpha: 0.16),
                         borderRadius: BorderRadius.circular(22),
                         border: Border.all(
-                          color: Colors.white,
+                          color: isSelected
+                              ? baseColor.withValues(alpha: 0.90)
+                              : baseColor.withValues(alpha: 0.35),
                           width: isSelected ? 2.2 : 0.8,
                         ),
                         boxShadow: [

@@ -7,13 +7,14 @@ class ScheduleSheet extends StatefulWidget {
   final String homeId;
   final bool isShared;
   final String type;
-
+  final bool canManageHome;
   const ScheduleSheet({
     super.key,
     required this.ownerUid,
     required this.homeId,
     required this.isShared,
     required this.type,
+    required this.canManageHome,
   });
 
   @override
@@ -461,7 +462,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     final isAlarm = widget.type == "alarm";
     final canEditCurrentReminder =
         isAlarm ||
-            !isSharedUser ||
+            widget.canManageHome ||
             reminderMode == "custom";
     return SafeArea(
       child: Container(

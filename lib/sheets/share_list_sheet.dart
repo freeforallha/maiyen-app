@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 Future<bool?> showShareListSheet({
   required BuildContext context,
   required String ownerUid,
@@ -72,16 +72,30 @@ Future<bool?> showShareListSheet({
     raw["photoUrl"]?.toString().isNotEmpty == true
         ? raw["photoUrl"].toString()
         : profile["photoUrl"]?.toString() ?? "";
-
+    final phone =
+        profile["phone"]?.toString() ??
+            account["phone"]?.toString() ??
+            "";
     return {
       "uid": memberUid,
       "email": email,
       "name": name,
       "photoUrl": photoUrl,
+      "phone": phone,
       "role": raw["role"]?.toString() ?? "member",
     };
   }
+  Color roleColor(String role) {
+    if (role == "owner") return Colors.blue.shade700;
+    if (role == "admin") return Colors.deepPurple.shade700;
+    return Colors.blueGrey.shade700;
+  }
 
+  IconData roleIcon(String role) {
+    if (role == "owner") return Icons.workspace_premium_rounded;
+    if (role == "admin") return Icons.admin_panel_settings_rounded;
+    return Icons.person_rounded;
+  }
   return showModalBottomSheet<bool>(
     context: context,
     isScrollControlled: true,
@@ -157,13 +171,29 @@ Future<bool?> showShareListSheet({
 
                   Expanded(
                     child: Column(
+
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          ownerName.isNotEmpty ? ownerName : ownerEmail,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        Row(
+                          children: [
+                            Icon(
+                              roleIcon("owner"),
+                              size: 15,
+                              color: roleColor("owner"),
+                            ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              child: Text(
+                                ownerName.isNotEmpty ? ownerName : ownerEmail,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  color: roleColor("owner"),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -206,7 +236,7 @@ Future<bool?> showShareListSheet({
                 final users = raw is Map
                     ? Map<String, dynamic>.from(raw)
                     : <String, dynamic>{};
-
+                users.remove(ownerUid);
                 if (users.isEmpty) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 30),
@@ -231,7 +261,7 @@ Future<bool?> showShareListSheet({
                         final name = member["name"]?.toString() ?? email;
                         final photoUrl = member["photoUrl"]?.toString() ?? "";
                         final role = member["role"]?.toString() ?? "member";
-
+                        final phone = member["phone"]?.toString() ?? "";
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           padding: const EdgeInsets.all(14),
@@ -252,14 +282,29 @@ Future<bool?> showShareListSheet({
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
+
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      targetUid == myUid ? "$name (Bạn)" : name,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: targetUid == myUid ? Colors.blue : null,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          roleIcon(role),
+                                          size: 15,
+                                          color: roleColor(role),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Expanded(
+                                          child: Text(
+                                            targetUid == myUid ? "$name (Bạn)" : name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              color: roleColor(role),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
@@ -272,6 +317,28 @@ Future<bool?> showShareListSheet({
                                   ],
                                 ),
                               ),
+                              if (phone.isNotEmpty)
+                                IconButton(
+                                  tooltip: "Gọi điện",
+                                  icon: const Icon(
+                                    Icons.phone_rounded,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () async {
+                                    final uri = Uri(scheme: "tel", path: phone);
+
+                                    if (await canLaunchUrl(uri)) {
+                                      await launchUrl(uri);
+                                    } else {
+                                      showTopToast(
+                                        sheetContext,
+                                        "Không mở được ứng dụng gọi điện",
+                                        color: Colors.red,
+                                        icon: Icons.phone_disabled_rounded,
+                                      );
+                                    }
+                                  },
+                                ),
                               if (targetUid == myUid ||
                                   isOwner ||
                                   (canManageMembers && role == "member"))

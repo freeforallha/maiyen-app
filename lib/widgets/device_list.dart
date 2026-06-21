@@ -247,7 +247,31 @@ class DeviceList extends StatelessWidget {
   }
 
   Color getAccentColor(Map<String, dynamic> d) {
-    return isDeviceUnsafe(d) ? Colors.red.shade500 : Colors.green.shade600;
+    final type = d["type"]?.toString() ?? "door";
+
+    if (d["tamper"] == true) {
+      return Colors.red.shade500;
+    }
+
+    if (type == "door" ||
+        type == "window" ||
+        type == "gate" ||
+        type == "lock") {
+      if (d["contact"] == false) {
+        return Colors.orange.shade500;
+      }
+    }
+
+    if (type == "smoke" &&
+        (d["smoke"] == true || d["tamper"] == true)) {
+      return Colors.red.shade500;
+    }
+
+    if (type == "sos" && isSosActive(d)) {
+      return Colors.red.shade500;
+    }
+
+    return Colors.green.shade600;
   }
 
   Color getSoftBackground(Map<String, dynamic> d) {

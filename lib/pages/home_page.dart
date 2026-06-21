@@ -1775,14 +1775,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   Color getHomeColor(String h) {
-    final dev = safeMap(homes[h]?["devices"]);
-    final unsafe = isUnsafe(dev);
+    final devices = safeMap(homes[h]?["devices"]);
+
+    final overall = getOverallStatus(devices);
+    final level = overall["level"]?.toString() ?? "safe";
+
     final selected = h == selectedHome;
 
-    if (selected) {
-      return unsafe ? Colors.red.shade500 : Colors.green.shade500;
+    if (level == "danger") {
+      return selected
+          ? Colors.red.shade500
+          : Colors.red.shade300;
     }
-    return unsafe ? Colors.red.shade300 : Colors.green.shade300;
+
+    if (level == "warning") {
+      return selected
+          ? Colors.orange.shade500
+          : Colors.orange.shade300;
+    }
+
+    return selected
+        ? Colors.green.shade500
+        : Colors.green.shade300;
   }
 
   @override
@@ -1907,7 +1921,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             overall: getOverallStatus(devices),
                             alarmEnabled: alarmEnabled,
-                            onAlarmEnabledChanged: setAlarmEnabled,
+                            onAlarmEnabledChanged: canManageHome() ? setAlarmEnabled : null,
                             onPair: null,
                             onQR: null,
                             onScheduleNotification: () {
@@ -1918,9 +1932,9 @@ class _HomePageState extends State<HomePage> {
                                 builder: (_) => ScheduleSheet(
                                   ownerUid: getHomeOwnerUid(),
                                   homeId: selectedHome,
-                                  isShared:
-                                      homes[selectedHome]?["_shared"] == true,
+                                  isShared: homes[selectedHome]?["_shared"] == true,
                                   type: "notification",
+                                  canManageHome: canManageHome(),
                                 ),
                               );
                             },
@@ -1933,6 +1947,7 @@ class _HomePageState extends State<HomePage> {
                                   ownerUid: getHomeOwnerUid(),
                                   homeId: selectedHome,
                                   devices: getDevices(),
+                                  canManageHome: canManageHome(),
                                 ),
                               );
                             },
@@ -2219,51 +2234,56 @@ class _HomePageState extends State<HomePage> {
 
                                     const Divider(),
 
-                                    ListTile(
-                                      leading: const Icon(
-                                        Icons.notifications_active_rounded,
-                                        color: Colors.orange,
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.notifications_active_rounded,
+                                          color: Colors.orange,
+                                        ),
+                                        title: const Text("Hẹn giờ Reminder"),
+                                        onTap: () {
+
+
+                                          Navigator.pop(context);
+
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (_) => ScheduleSheet(
+                                              ownerUid: getHomeOwnerUid(),
+                                              homeId: selectedHome,
+                                              isShared: homes[selectedHome]?["_shared"] == true,
+                                              type: "notification",
+                                              canManageHome: canManageHome(),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      title: const Text("Hẹn giờ Reminder"),
-                                      onTap: () {
-                                        Navigator.pop(context);
 
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => ScheduleSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            isShared:
-                                            homes[selectedHome]?["_shared"] == true,
-                                            type: "notification",
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.shield_moon_rounded,
+                                          color: Colors.deepPurple,
+                                        ),
+                                        title: const Text("Hẹn giờ Alarm"),
+                                        onTap: () {
 
-                                    ListTile(
-                                      leading: const Icon(
-                                        Icons.shield_moon_rounded,
-                                        color: Colors.deepPurple,
+
+                                          Navigator.pop(context);
+
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (_) => AlarmDeviceSheet(
+                                              ownerUid: getHomeOwnerUid(),
+                                              homeId: selectedHome,
+                                              devices: getDevices(),
+                                              canManageHome: canManageHome(),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      title: const Text("Hẹn giờ Alarm"),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => AlarmDeviceSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            devices: getDevices(),
-                                          ),
-                                        );
-                                      },
-                                    ),
                                   ],
                                 ),
                               ),

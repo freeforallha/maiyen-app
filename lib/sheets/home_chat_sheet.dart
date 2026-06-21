@@ -3,7 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'share_list_sheet.dart';
 import '../services/chat_service.dart';
-
+import '../helpers/firebase_paths.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../helpers/top_toast.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -19,6 +22,10 @@ void showHomeChatSheet({
 
   final controller = TextEditingController();
   final scrollController = ScrollController();
+  final memberRoleCache = <String, String>{};
+  final focusNode = FocusNode();
+
+  bool showEmoji = false;
 
   void scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -31,12 +38,138 @@ void showHomeChatSheet({
       );
     });
   }
+  Future<void> openCallMemberSheet({
+    required BuildContext sheetContext,
+    required String memberUid,
+    required String name,
+  }) async {
+    if (memberUid.isEmpty) {
+      showTopToast(
+        sheetContext,
+        "Không tìm thấy người dùng",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+      return;
+    }
+
+    String phone = "";
+
+    try {
+      final snap = await FirebaseDatabase.instance
+          .ref(FirebasePaths.account(memberUid))
+          .get();
+
+      final account = snap.value is Map
+          ? Map<String, dynamic>.from(snap.value as Map)
+          : <String, dynamic>{};
+
+      final profile = account["profile"] is Map
+          ? Map<String, dynamic>.from(account["profile"] as Map)
+          : <String, dynamic>{};
+
+      phone =
+          profile["phone"]?.toString() ??
+              account["phone"]?.toString() ??
+              "";
+    } catch (e) {
+      showTopToast(
+        sheetContext,
+        "Không đọc được số điện thoại",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+      return;
+    }
+
+    if (!sheetContext.mounted) return;
+
+    showModalBottomSheet(
+      context: sheetContext,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (phone.trim().isEmpty)
+                  const Text("Thành viên này chưa có số điện thoại")
+                else
+                  ListTile(
+                    leading: const Icon(
+                      Icons.phone_rounded,
+                      color: Colors.green,
+                    ),
+                    title: Text(phone),
+                    subtitle: const Text("Gọi điện"),
+                    onTap: () async {
+                      final uri = Uri(
+                        scheme: "tel",
+                        path: phone.replaceAll(" ", ""),
+                      );
+
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri);
+                      } else {
+                        showTopToast(
+                          sheetContext,
+                          "Không mở được ứng dụng gọi điện",
+                          color: Colors.red,
+                          icon: Icons.phone_disabled_rounded,
+                        );
+                      }
+                    },
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Future<String> getMemberRole(String uid) async {
+    if (uid == ownerUid) return "owner";
+
+    if (memberRoleCache.containsKey(uid)) {
+      return memberRoleCache[uid]!;
+    }
+
+    final snap = await FirebaseDatabase.instance
+        .ref(FirebasePaths.sharedMember(homeId, uid))
+        .get();
+
+    final data = snap.value is Map
+        ? Map<String, dynamic>.from(snap.value as Map)
+        : <String, dynamic>{};
+
+    final role = data["role"]?.toString() ?? "member";
+
+    memberRoleCache[uid] = role;
+    return role;
+  }
   ChatService.markAsRead(homeId: homeId, uid: user.uid);
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) {
+      return StatefulBuilder(
+        builder: (context, setState) {
       Future<void> sendCurrentMessage() async {
         final text = controller.text.trim();
 
@@ -166,6 +299,7 @@ void showHomeChatSheet({
 
                         final isMe = msg["uid"] == user.uid;
                         final name = msg["name"]?.toString() ?? "User";
+                        final senderUid = msg["uid"]?.toString() ?? "";
                         final text = msg["text"]?.toString() ?? "";
                         final photoUrl = msg["photoUrl"]?.toString() ?? "";
                         final time = msg["time"];
@@ -182,16 +316,22 @@ void showHomeChatSheet({
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 if (!isMe)
-                                  CircleAvatar(
-                                    radius: 14,
-                                    backgroundImage: photoUrl.isNotEmpty
-                                        ? NetworkImage(photoUrl)
-                                        : null,
-                                    child: photoUrl.isEmpty
-                                        ? const Icon(Icons.person, size: 15)
-                                        : null,
+                                  GestureDetector(
+                                    onTap: () => openCallMemberSheet(
+                                      sheetContext: ctx,
+                                      memberUid: msg["uid"]?.toString() ?? "",
+                                      name: name,
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: 14,
+                                      backgroundImage: photoUrl.isNotEmpty
+                                          ? NetworkImage(photoUrl)
+                                          : null,
+                                      child: photoUrl.isEmpty
+                                          ? const Icon(Icons.person, size: 15)
+                                          : null,
+                                    ),
                                   ),
-
                                 if (!isMe) const SizedBox(width: 6),
 
                                 Flexible(
@@ -215,18 +355,59 @@ void showHomeChatSheet({
                                           CrossAxisAlignment.start,
                                       children: [
                                         if (!isMe)
-                                          Text(
-                                            name,
-                                            style: const TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                          FutureBuilder<String>(
+                                            future: getMemberRole(senderUid),
+                                            builder: (context, roleSnap) {
+                                              final role = roleSnap.data ?? "member";
+
+                                              final icon = role == "owner"
+                                                  ? Icons.workspace_premium_rounded
+                                                  : role == "admin"
+                                                  ? Icons.admin_panel_settings_rounded
+                                                  : Icons.person_rounded;
+
+                                              final color = role == "owner"
+                                                  ? Colors.blue.shade700
+                                                  : role == "admin"
+                                                  ? Colors.deepPurple.shade700
+                                                  : Colors.blueGrey.shade700;
+
+                                              return GestureDetector(
+                                                onTap: () => openCallMemberSheet(
+                                                  sheetContext: ctx,
+                                                  memberUid: senderUid,
+                                                  name: name,
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      icon,
+                                                      size: 13,
+                                                      color: color,
+                                                    ),
+                                                    const SizedBox(width: 4),
+                                                    Flexible(
+                                                      child: Text(
+                                                        name,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.w800,
+                                                          color: color,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
                                           ),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            Text(
+                                            SelectableText(
                                               text,
                                               style: const TextStyle(
                                                 fontSize: 14,
@@ -260,11 +441,30 @@ void showHomeChatSheet({
 
               Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(Icons.emoji_emotions_outlined),
+                    onPressed: () {
+                      FocusScope.of(ctx).unfocus();
+
+                      setState(() {
+                        showEmoji = !showEmoji;
+                      });
+                    },
+                  ),
+
                   Expanded(
                     child: TextField(
                       controller: controller,
+                      focusNode: focusNode,
                       textInputAction: TextInputAction.send,
                       onSubmitted: (_) => sendCurrentMessage(),
+                      onTap: () {
+                        if (showEmoji) {
+                          setState(() {
+                            showEmoji = false;
+                          });
+                        }
+                      },
                       minLines: 1,
                       maxLines: 3,
                       decoration: InputDecoration(
@@ -294,10 +494,37 @@ void showHomeChatSheet({
                   ),
                 ],
               ),
+              if (showEmoji)
+                if (showEmoji)
+                  SizedBox(
+                    height: 280,
+                    child: EmojiPicker(
+                      textEditingController: controller,
+                      config: Config(
+                        height: 280,
+                        checkPlatformCompatibility: false,
+                        emojiViewConfig: EmojiViewConfig(
+                          emojiSizeMax: 28,
+                          columns: 7,
+                          backgroundColor: Colors.white,
+                        ),
+                        categoryViewConfig: CategoryViewConfig(
+                          backgroundColor: Colors.white,
+                          iconColor: Colors.grey,
+                          iconColorSelected: Colors.blue,
+                        ),
+                        bottomActionBarConfig: const BottomActionBarConfig(
+                          backgroundColor: Colors.white,
+                          buttonColor: Colors.white,
+                          buttonIconColor: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
             ],
           ),
         ),
-      );
+      );},);
     },
   );
 }
