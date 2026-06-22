@@ -26,12 +26,16 @@ class FCMService {
     print("🔥 FCM TOKEN: $token");
 
     if (token != null) {
-      await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(token);
+      await FirebaseDatabase.instance
+          .ref(FirebasePaths.fcmToken(uid))
+          .set(token);
     }
 
     messaging.onTokenRefresh.listen((newToken) async {
       print("🔥 FCM TOKEN REFRESH: $newToken");
-      await FirebaseDatabase.instance.ref(FirebasePaths.fcmToken(uid)).set(newToken);
+      await FirebaseDatabase.instance
+          .ref(FirebasePaths.fcmToken(uid))
+          .set(newToken);
     });
   }
 
@@ -49,14 +53,23 @@ class FCMService {
       final isSafe =
           isSafeText == "true" || isSafeText == "1" || isSafeText == "yes";
 
-      final reason = message.data["reason"]?.toString() ?? "";
+      final reasonCode = message.data["reason"]?.toString() ?? "";
       final reminderItems = message.data["reminderItems"]?.toString() ?? "";
+      final scheduleBody = message.data["body"]?.toString() ?? "";
+
+      final forceShow =
+          message.data["forceShow"]?.toString() == "true";
+
+      final displayReason =
+      forceShow && scheduleBody.isNotEmpty ? scheduleBody : reasonCode;
 
       if (isSchedule) {
         await NotificationService.showSafetyReminder(
           isSafe: isSafe,
-          reason: reason,
+          reason: displayReason,
           reminderItemsJson: reminderItems,
+          title: message.data["title"]?.toString() ?? "",
+          forceShow: forceShow,
         );
         return;
       }
@@ -66,7 +79,7 @@ class FCMService {
               message.data["title"]?.toString() ??
               "SafeHome Alarm";
 
-      final body =
+      final alarmBody =
           message.notification?.body?.toString() ??
               message.data["body"]?.toString() ??
               "Có cảnh báo an ninh cần kiểm tra ngay.";
@@ -75,7 +88,7 @@ class FCMService {
 
       NotificationService.openAlarmPage(
         title: title,
-        body: body,
+        body: alarmBody,
         alarmItemsJson: alarmItems,
       );
     });
@@ -85,11 +98,9 @@ class FCMService {
 
       if (type != "alarm") return;
 
-      final title =
-          message.data["title"]?.toString() ??
-              "🚨 SafeHome";
+      final title = message.data["title"]?.toString() ?? "🚨 SafeHome";
 
-      final body =
+      final alarmBody =
           message.data["body"]?.toString() ??
               "Có cảnh báo an ninh cần kiểm tra ngay.";
 
@@ -97,7 +108,7 @@ class FCMService {
 
       NotificationService.openAlarmPage(
         title: title,
-        body: body,
+        body: alarmBody,
         alarmItemsJson: alarmItems,
       );
     });

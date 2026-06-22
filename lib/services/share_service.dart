@@ -30,9 +30,7 @@ class ShareService {
       return {};
     }
 
-    return Map<String, dynamic>.from(
-      snap.value as Map,
-    );
+    return Map<String, dynamic>.from(snap.value as Map);
   }
 
   static Future<void> sendShareRequest({
@@ -59,7 +57,9 @@ class ShareService {
       "time": DateTime.now().millisecondsSinceEpoch,
     };
 
-    await _db.ref(FirebasePaths.shareRequest(targetUid, homeId)).set(requestData);
+    await _db
+        .ref(FirebasePaths.shareRequest(targetUid, homeId))
+        .set(requestData);
   }
 
   static Future<void> transferOwner({
@@ -67,16 +67,15 @@ class ShareService {
     required String newOwnerUid,
     required String homeId,
   }) async {
-    final currentSnap = await _db.ref(FirebasePaths.home(oldOwnerUid, homeId))
+    final currentSnap = await _db
+        .ref(FirebasePaths.home(oldOwnerUid, homeId))
         .get();
 
     if (!currentSnap.exists) {
       throw Exception("Không tìm thấy Home hiện tại");
     }
 
-    final homeData = Map<String, dynamic>.from(
-      currentSnap.value as Map,
-    );
+    final homeData = Map<String, dynamic>.from(currentSnap.value as Map);
 
     homeData["_ownerUid"] = newOwnerUid;
     homeData["_shared"] = false;
@@ -118,9 +117,7 @@ class ShareService {
         ? Map<String, dynamic>.from(oldOwnerData["profile"] as Map)
         : <String, dynamic>{};
 
-    await _db
-        .ref(FirebasePaths.sharedMember(homeId, oldOwnerUid))
-        .set({
+    await _db.ref(FirebasePaths.sharedMember(homeId, oldOwnerUid)).set({
       "role": "member",
       "email": oldOwnerData["email"] ?? "",
       "name": oldOwnerProfile["name"] ?? oldOwnerData["name"] ?? "",
@@ -130,11 +127,11 @@ class ShareService {
 
     await _db.ref(FirebasePaths.home(oldOwnerUid, homeId)).remove();
   }
+
   static Future<void> leaveSharedHome({
     required String uid,
     required String ownerUid,
     required String homeId,
-
   }) async {
     final sharedHomeSnap = await _db
         .ref(FirebasePaths.sharedHome(uid, homeId))
@@ -171,52 +168,50 @@ class ShareService {
         ? userProfile["name"].toString()
         : userData["email"]?.toString() ?? "Một thành viên";
     if (homeSnap.exists) {
-      final homeData = Map<String, dynamic>.from(
-        homeSnap.value as Map,
-      );
+      final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
 
       homeName = homeData["name"]?.toString() ?? homeId;
     }
-    print("LEAVE_HOME_DEBUG uid=$uid ownerUid=$ownerUid realOwnerUid=$realOwnerUid homeId=$homeId");
-    await HomeNotificationService.addNotification(
-      uid: realOwnerUid,
+    print(
+      "LEAVE_HOME_DEBUG uid=$uid ownerUid=$ownerUid realOwnerUid=$realOwnerUid homeId=$homeId",
+    );
+    await HomeNotificationService.notifyHome(
+      ownerUid: realOwnerUid,
+      homeId: homeId,
       type: "member_leave",
+      category: "member",
+      severity: "warning",
       title: "Thành viên rời nhà",
       message: "$memberName đã rời khỏi nhà \"$homeName\".",
-      homeId: homeId,
+      entityType: "member",
+      entityId: uid,
+      includeActor: false,
     );
     await _db.ref(FirebasePaths.sharedHome(uid, homeId)).remove();
 
     await _db.ref(FirebasePaths.sharedMember(homeId, uid)).remove();
 
-    await _db.ref("${FirebasePaths.shareList(realOwnerUid, homeId)}/$uid").remove();
+    await _db
+        .ref("${FirebasePaths.shareList(realOwnerUid, homeId)}/$uid")
+        .remove();
   }
+
   static Future<void> deleteOwnedHome({
     required String ownerUid,
     required String homeId,
   }) async {
-    final sharedSnap = await _db
-        .ref(FirebasePaths.sharedByHome(homeId))
-        .get();
+    final sharedSnap = await _db.ref(FirebasePaths.sharedByHome(homeId)).get();
 
     if (sharedSnap.exists) {
-      final sharedMap = Map<String, dynamic>.from(
-        sharedSnap.value as Map,
-      );
+      final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
 
       for (final sharedUid in sharedMap.keys) {
-        await _db
-            .ref(FirebasePaths.sharedHome(sharedUid, homeId))
-            .remove();
+        await _db.ref(FirebasePaths.sharedHome(sharedUid, homeId)).remove();
       }
     }
 
-    await _db
-        .ref(FirebasePaths.sharedByHome(homeId))
-        .remove();
+    await _db.ref(FirebasePaths.sharedByHome(homeId)).remove();
 
-    await _db
-        .ref(FirebasePaths.home(ownerUid, homeId))
-        .remove();
+    await _db.ref(FirebasePaths.home(ownerUid, homeId)).remove();
   }
 }

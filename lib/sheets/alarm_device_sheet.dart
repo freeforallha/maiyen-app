@@ -147,27 +147,157 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final m = time.minute.toString().padLeft(2, "0");
     return "$h:$m";
   }
+  bool isValidTime(String value) {
+    final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
+    return reg.hasMatch(value.trim());
+  }
 
+  Future<String?> openTimeTextInput({
+    required String title,
+    required String initial,
+  }) async {
+    final parts = initial.split(":");
+
+    final hourController = TextEditingController(
+      text: parts[0],
+    );
+
+    final minuteController = TextEditingController(
+      text: parts[1],
+    );
+
+    const suggestions = [
+      ["23", "00"],
+      ["00", "00"],
+      ["01", "00"],
+      ["04", "00"],
+      ["05", "00"],
+      ["06", "00"],
+    ];
+
+    return showDialog<String>(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(title),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: hourController,
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Giờ",
+                        counterText: "",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      ":",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: minuteController,
+                      keyboardType: TextInputType.number,
+                      maxLength: 2,
+                      decoration: const InputDecoration(
+                        labelText: "Phút",
+                        counterText: "",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Column(
+                children: [
+                  Row(
+                    children: suggestions.take(3).map((s) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: ActionChip(
+                            label: Text("${s[0]}:${s[1]}"),
+                            onPressed: () {
+                              hourController.text = s[0];
+                              minuteController.text = s[1];
+                            },
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: suggestions.skip(3).map((s) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: ActionChip(
+                            label: Text("${s[0]}:${s[1]}"),
+                            onPressed: () {
+                              hourController.text = s[0];
+                              minuteController.text = s[1];
+                            },
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Huỷ"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final value =
+                    "${hourController.text.padLeft(2, '0')}:${minuteController.text.padLeft(2, '0')}";
+
+                if (!isValidTime(value)) return;
+
+                Navigator.pop(context, value);
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> pickTime({
     required String deviceId,
     required Map<String, dynamic> alarm,
     required String field,
   }) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: parseTime(alarm[field]?.toString() ?? "23:00"),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
+    final picked = await openTimeTextInput(
+      title: field == "start"
+          ? "Chọn giờ bắt đầu Alarm"
+          : "Chọn giờ kết thúc Alarm",
+      initial: alarm[field]?.toString() ?? "23:00",
     );
 
     if (picked == null) return;
 
     final nextAlarm = Map<String, dynamic>.from(alarm);
-    nextAlarm[field] = formatTime(picked);
+    nextAlarm[field] = picked;
 
     await saveAlarm(deviceId, nextAlarm);
   }

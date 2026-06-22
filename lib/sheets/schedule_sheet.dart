@@ -225,8 +225,10 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     );
 
     const suggestions = [
-      ["22", "00"],
       ["23", "00"],
+      ["00", "00"],
+      ["01", "00"],
+      ["04", "00"],
       ["05", "00"],
       ["06", "00"],
     ];
@@ -283,17 +285,52 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
               const SizedBox(height: 14),
 
-              Wrap(
-                spacing: 8,
-                children: suggestions.map((s) {
-                  return ActionChip(
-                    label: Text("${s[0]}:${s[1]}"),
-                    onPressed: () {
-                      hourController.text = s[0];
-                      minuteController.text = s[1];
-                    },
-                  );
-                }).toList(),
+              Column(
+                children: [
+                  Row(
+                    children: suggestions.take(3).map((s) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ActionChip(
+                              label: Center(
+                                child: Text("${s[0]}:${s[1]}"),
+                              ),
+                              onPressed: () {
+                                hourController.text = s[0];
+                                minuteController.text = s[1];
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: suggestions.skip(3).map((s) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ActionChip(
+                              label: Center(
+                                child: Text("${s[0]}:${s[1]}"),
+                              ),
+                              onPressed: () {
+                                hourController.text = s[0];
+                                minuteController.text = s[1];
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -369,7 +406,59 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     saveSchedules();
   }
+  Future<void> openReminderOptionSheet(int index) async {
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(18),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.edit_rounded),
+                  title: const Text("Sửa giờ Reminder"),
+                  onTap: () => Navigator.pop(context, "edit"),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: Colors.red,
+                  ),
+                  title: const Text(
+                    "Xoá Reminder",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onTap: () => Navigator.pop(context, "delete"),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
 
+    if (action == "edit") {
+      await editNotification(index);
+      return;
+    }
+
+    if (action == "delete") {
+      setState(() {
+        notifications.removeAt(index);
+      });
+
+      await saveSchedules();
+    }
+  }
   Future<void> editAlarm(int index) async {
     final current = alarms[index];
 
@@ -404,7 +493,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
   Future<void> addNotification() async {
     final time = await openTimeInput(
-      title: "Giờ Notification",
+      title: "Giờ Reminder",
       initial: "22:30",
     );
 
@@ -560,50 +649,56 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: ListTile(
-                      leading: Switch(
-                        value: item["enabled"] == true,
-                        onChanged: canEditCurrentReminder
-                            ? (v) async {
-                          setState(() {
-                            notifications[i]["enabled"] = v;
-                          });
-
-                          saveSchedules();
-                        }
-                            : null,
+                      dense: true,
+                      visualDensity: const VisualDensity(
+                        horizontal: -2,
+                        vertical: -2,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 0,
                       ),
 
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.shield_moon_rounded,
-                                color: Colors.red,
-                              ),
 
-                              const SizedBox(width: 10),
-
-                              Text(
-                                "${item["start"]} - ${item["end"]}",
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 4),
-
-                          Padding(
-                            padding: const EdgeInsets.only(left: 34),
-                            child: Text(
+                      title: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.shield_moon_rounded,
+                                  size: 18,
+                                  color: Colors.red,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "${item["start"]} - ${item["end"]}",
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
                               repeatLabel(item["repeatMinutes"]),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey.shade600,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
 
                       trailing: Row(
@@ -644,7 +739,29 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
               if (!isAlarm) ...[
                 sectionTitle("Reminder"),
-
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 14),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline_rounded,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 ...notifications.asMap().entries.map((e) {
                   final i = e.key;
                   final item = e.value;
@@ -656,7 +773,16 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: ListTile(
-                      leading: Switch(
+                      dense: true,
+                      visualDensity: const VisualDensity(
+                        horizontal: -2,
+                        vertical: -2,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 0,
+                      ),
+                      trailing: Switch(
                         value: item["enabled"] == true,
                         onChanged: canEditCurrentReminder
                             ? (v) async {
@@ -668,46 +794,40 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         }
                             : null,
                       ),
-
-                      title: Row(
-                        children: [
-                          const Icon(
-                            Icons.notifications_active_rounded,
-                            color: Colors.orange,
+                      title: GestureDetector(
+                        onTap: canEditCurrentReminder
+                            ? () => openReminderOptionSheet(i)
+                            : null,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
                           ),
-
-                          const SizedBox(width: 10),
-
-                          Text(
-                            item["time"]?.toString() ?? "--:--",
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.schedule_rounded,
+                                size: 18,
+                                color: Colors.orange,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                item["time"]?.toString() ?? "--:--",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
 
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_rounded),
-                            onPressed: canEditCurrentReminder
-                                ? () => editNotification(i)
-                                : null,
-                          ),
-
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: canEditCurrentReminder
-                                ? () async {
-                              setState(() {
-                                notifications.removeAt(i);
-                              });
-
-                              saveSchedules();
-                            }
-                                : null,
-                          ),
-                        ],
-                      ),
                     ),
                   );
                 }),
@@ -718,7 +838,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                     onPressed: canEditCurrentReminder ? addNotification : null,
                     icon: const Icon(Icons.add),
                     label: const Text(
-                      "Thêm giờ Notification",
+                        "Thêm Reminder",
                     ),
                   ),
                 ),

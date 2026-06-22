@@ -14,9 +14,12 @@ class StatusPanel extends StatefulWidget {
 
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
+
+  final VoidCallback? onAlarmPauseToday;
+
   final VoidCallback? onScheduleNotification;
   final VoidCallback? onScheduleAlarm;
-
+  final String alarmPauseText;
   const StatusPanel({
     super.key,
     required this.overall,
@@ -29,8 +32,12 @@ class StatusPanel extends StatefulWidget {
     this.onEnvironmentTap,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
+
+    this.onAlarmPauseToday,
+
     this.onScheduleNotification,
     this.onScheduleAlarm,
+    required this.alarmPauseText,
   });
 
   @override
@@ -251,7 +258,8 @@ class _StatusPanelState extends State<StatusPanel> {
         : isWarning
         ? Icons.info_rounded
         : Icons.verified_rounded;
-
+    final alarmPauseSet = widget.alarmPauseText != "Chưa thiết lập";
+    final alarmPauseColor = alarmPauseSet ? Colors.orange.shade700 : Colors.black54;
     final events = widget.homeEvents.values
         .map((e) => safeMap(e))
         .toList();
@@ -344,9 +352,25 @@ class _StatusPanelState extends State<StatusPanel> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 8),
-
+              InkWell(
+                onTap: widget.onAlarmPauseToday,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Tạm dừng Alarm : ${widget.alarmPauseText}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: alarmPauseColor,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -361,8 +385,37 @@ class _StatusPanelState extends State<StatusPanel> {
                       ),
                     ),
                   ),
+
+                ],
+              ),
+
+              const SizedBox(height: 7),
+              _line(firstLine, issues.isNotEmpty),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      layoutBuilder: (currentChild, previousChildren) {
+                        return Stack(
+                          alignment: Alignment.centerLeft,
+                          children: [
+                            ...previousChildren,
+                            if (currentChild != null) currentChild,
+                          ],
+                        );
+                      },
+                      child: _line(
+                        secondLine,
+                        issues.isNotEmpty,
+                        key: ValueKey(secondLine),
+                      ),
+                    ),
+                  ),
+
                   Text(
-                    "Xem chi tiết →",
+                    "Chi tiết",
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.blue.shade700,
@@ -372,29 +425,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 ],
               ),
 
-              const SizedBox(height: 7),
 
-              _line(firstLine, issues.isNotEmpty),
-
-              const SizedBox(height: 4),
-
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 350),
-                layoutBuilder: (currentChild, previousChildren) {
-                  return Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      ...previousChildren,
-                      if (currentChild != null) currentChild,
-                    ],
-                  );
-                },
-                child: _line(
-                  secondLine,
-                  issues.isNotEmpty,
-                  key: ValueKey(secondLine),
-                ),
-              ),
             ],
           ),
         ),

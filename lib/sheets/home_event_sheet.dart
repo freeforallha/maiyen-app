@@ -1,30 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-void showHomeEventSheet({
-  required BuildContext context,
-  required String uid,
-}) {
-  FirebaseDatabase.instance
-      .ref("accounts/$uid/notifications")
-      .get()
-      .then((snap) async {
-    if (!snap.exists || snap.value is! Map) return;
+import '../services/home_notification_service.dart';
 
-    final raw = Map<String, dynamic>.from(snap.value as Map);
-    final updates = <String, dynamic>{};
-
-    for (final entry in raw.entries) {
-      final data = Map<String, dynamic>.from(entry.value);
-      if (data["read"] != true) {
-        updates["accounts/$uid/notifications/${entry.key}/read"] = true;
-      }
-    }
-
-    if (updates.isNotEmpty) {
-      await FirebaseDatabase.instance.ref().update(updates);
-    }
-  });
+void showHomeEventSheet({required BuildContext context, required String uid}) {
+  HomeNotificationService.markAllAsRead(uid: uid);
 
   String formatTime(dynamic value) {
     final ts = int.tryParse(value?.toString() ?? "0") ?? 0;
@@ -41,6 +21,34 @@ void showHomeEventSheet({
 
   IconData iconForType(String type) {
     switch (type) {
+      case "home_created":
+      case "home_renamed":
+      case "home_deleted":
+        return Icons.home_rounded;
+      case "alarm_setting_changed":
+        return Icons.crisis_alert_rounded;
+      case "pair_started":
+        return Icons.add_link_rounded;
+      case "device_renamed":
+      case "device_delete_requested":
+        return Icons.sensors_rounded;
+      case "device_contact":
+        return Icons.sensor_door_rounded;
+      case "device_smoke":
+      case "device_smoke_clear":
+        return Icons.local_fire_department_rounded;
+      case "device_sos":
+      case "device_sos_clear":
+        return Icons.sos_rounded;
+      case "device_tamper":
+      case "device_tamper_clear":
+        return Icons.warning_amber_rounded;
+      case "device_battery_low":
+        return Icons.battery_alert_rounded;
+      case "device_connection":
+        return Icons.wifi_rounded;
+      case "device_environment":
+        return Icons.device_thermostat_rounded;
       case "security":
         return Icons.security_rounded;
       case "chat":
@@ -63,13 +71,38 @@ void showHomeEventSheet({
         return Icons.admin_panel_settings_rounded;
       case "transfer_owner_accepted":
         return Icons.workspace_premium_rounded;
+      case "role_changed":
+        return Icons.manage_accounts_rounded;
       default:
         return Icons.notifications_rounded;
     }
   }
 
-  Color colorForType(String type) {
+  Color colorForType(String type, String severity) {
+    switch (severity) {
+      case "critical":
+        return Colors.red;
+      case "warning":
+        return Colors.orange;
+      case "success":
+        return Colors.green;
+    }
+
     switch (type) {
+      case "home_created":
+      case "home_renamed":
+        return Colors.teal;
+      case "home_deleted":
+        return Colors.red;
+      case "alarm_setting_changed":
+        return Colors.deepOrange;
+      case "pair_started":
+        return Colors.indigo;
+      case "device_renamed":
+      case "device_delete_requested":
+        return Colors.blueGrey;
+      case "chat":
+        return Colors.green;
       case "share_request":
         return Colors.blue;
       case "share_request_accepted":
@@ -85,6 +118,8 @@ void showHomeEventSheet({
       case "transfer_owner_request":
         return Colors.purple;
       case "transfer_owner_accepted":
+        return Colors.deepPurple;
+      case "role_changed":
         return Colors.deepPurple;
       default:
         return Colors.blue;
@@ -158,9 +193,7 @@ void showHomeEventSheet({
                         );
 
                         if (ok == true) {
-                          await FirebaseDatabase.instance
-                              .ref("accounts/$uid/notifications")
-                              .remove();
+                          await HomeNotificationService.clearAll(uid: uid);
 
                           if (context.mounted) {
                             Navigator.pop(context);
@@ -184,9 +217,7 @@ void showHomeEventSheet({
                   builder: (context, snapshot) {
                     if (!snapshot.hasData ||
                         snapshot.data!.snapshot.value == null) {
-                      return const Center(
-                        child: Text("Chưa có thông báo nào"),
-                      );
+                      return const Center(child: Text("Chưa có thông báo nào"));
                     }
 
                     final raw = Map<String, dynamic>.from(
@@ -212,6 +243,7 @@ void showHomeEventSheet({
                       itemBuilder: (context, index) {
                         final item = items[index];
                         final type = item["type"]?.toString() ?? "system";
+                        final severity = item["severity"]?.toString() ?? "info";
                         final read = item["read"] == true;
 
                         return Material(
@@ -222,8 +254,9 @@ void showHomeEventSheet({
                           child: ListTile(
                             leading: Icon(
                               iconForType(type),
-                              color:
-                              read ? Colors.grey : colorForType(type),
+                              color: read
+                                  ? Colors.grey
+                                  : colorForType(type, severity),
                             ),
                             title: Text(
                               item["title"]?.toString() ?? "Thông báo",

@@ -8,9 +8,7 @@ import 'notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -18,9 +16,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     const InitializationSettings(android: androidInit),
   );
 
-  final androidPlugin =
-  localNotif.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
+  final androidPlugin = localNotif
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >();
 
   const alarmChannel = AndroidNotificationChannel(
     'alarm_channel_siren_v1',
@@ -54,12 +53,14 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   if (isSchedule) {
     final body = _buildScheduleBody(message.data);
-
+    final title = message.data['title']?.toString().trim().isNotEmpty == true
+        ? message.data['title'].toString().trim()
+        : 'Nhà';
     await localNotif.cancel(999998);
     await localNotif.cancel(999999);
     await localNotif.show(
       999998,
-      '🏡 SafeHome',
+      title,
       body,
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -74,10 +75,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           enableVibration: false,
         ),
       ),
-      payload: 'schedule_notification::${jsonEncode({
-        "body": body,
-        "reminderItems": message.data['reminderItems']?.toString() ?? '',
-      })}',
+      payload:
+          'schedule_notification::${jsonEncode({"title": title, "body": body, "reminderItems": message.data['reminderItems']?.toString() ?? ''})}',
     );
 
     return;
@@ -85,13 +84,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final title =
       message.data['title']?.toString() ??
-          message.notification?.title?.toString() ??
-          '🚨 BÁO ĐỘNG SAFEHOME';
+      message.notification?.title?.toString() ??
+      '🚨 BÁO ĐỘNG SAFEHOME';
 
   final body =
       message.data['body']?.toString() ??
-          message.notification?.body?.toString() ??
-          'Có cảnh báo an ninh cần kiểm tra ngay.';
+      message.notification?.body?.toString() ??
+      'Có cảnh báo an ninh cần kiểm tra ngay.';
 
   final alarmItems = message.data['alarmItems']?.toString() ?? '';
 
@@ -109,7 +108,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         'alarm_channel_siren_v1',
         'Alarm Channel Siren V1',
         channelDescription:
-        'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+            'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,
         priority: Priority.max,
         category: AndroidNotificationCategory.alarm,

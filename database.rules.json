@@ -17,7 +17,14 @@
         },
         "homes": {
           "$homeId": {
-            ".write": "auth != null && (auth.uid == $uid || (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid && root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin') || (!newData.exists() && root.child('accounts').child(auth.uid).child('homes').child($homeId).child('_ownerUid').val() == auth.uid && data.child('_ownerUid').val() == $uid))"
+            ".read": "auth != null && (auth.uid == $uid || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid)",
+            ".write": "auth != null && (auth.uid == $uid || (root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid && root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('role').val() == 'admin') || (!newData.exists() && root.child('accounts').child(auth.uid).child('homes').child($homeId).child('_ownerUid').val() == auth.uid && data.child('_ownerUid').val() == $uid))",
+            "events": {
+              ".indexOn": ["time"],
+              "$eventId": {
+                ".write": "auth != null && (auth.uid == $uid || ((newData.child('senderUid').val() == auth.uid || data.child('senderUid').val() == auth.uid) && root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid))"
+              }
+            }
           }
         },
         "homeOrder": {
@@ -48,6 +55,7 @@
           }
         },
         "notifications": {
+          ".indexOn": ["time"],
           "$notificationId": {
             ".read": "auth != null && auth.uid == $uid",
             ".write": "auth != null && (auth.uid == $uid || newData.child('senderUid').val() == auth.uid || data.child('senderUid').val() == auth.uid)"
@@ -102,6 +110,12 @@
       "$requestId": {
         ".read": "auth != null && (data.child('requestedBy').val() == auth.uid || data.child('ownerUid').val() == auth.uid)",
         ".write": "auth != null && newData.child('requestedBy').val() == auth.uid && newData.child('active').val() == true && newData.child('duration').isNumber() && newData.child('duration').val() <= 60 && root.child('accounts').child(newData.child('ownerUid').val()).child('homes').child(newData.child('homeId').val()).exists() && (auth.uid == newData.child('ownerUid').val() || (root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('ownerUid').val() == newData.child('ownerUid').val() && root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('role').val() == 'admin'))"
+      }
+    },
+    "alarm_pause_requests": {
+      "$requestId": {
+        ".read": "auth != null && (data.child('createdByUid').val() == auth.uid || data.child('ownerUid').val() == auth.uid || root.child('accounts').child(auth.uid).child('sharedHomes').child(data.child('homeId').val()).child('ownerUid').val() == data.child('ownerUid').val())",
+        ".write": "auth != null && !data.exists() && newData.child('status').val() == 'pending' && newData.child('createdByUid').val() == auth.uid && newData.child('ownerUid').isString() && newData.child('homeId').isString() && root.child('accounts').child(newData.child('ownerUid').val()).child('homes').child(newData.child('homeId').val()).exists() && (auth.uid == newData.child('ownerUid').val() || root.child('accounts').child(auth.uid).child('sharedHomes').child(newData.child('homeId').val()).child('ownerUid').val() == newData.child('ownerUid').val()) && (newData.child('action').val() == 'remove' || (newData.child('date').isString() && newData.child('start').isString() && newData.child('end').isString()))"
       }
     }
   }

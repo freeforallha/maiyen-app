@@ -13,10 +13,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final email = TextEditingController();
   final pass = TextEditingController();
+  final confirmPass = TextEditingController();
 
   bool isLogin = true;
   String error = "";
   bool loading = false;
+  bool rememberLogin = true;
 
   Future<void> signInWithGoogle() async {
     if (loading) return;
@@ -192,14 +194,31 @@ class _LoginPageState extends State<LoginPage> {
           password: pass.text.trim(),
         );
 
-        await AutoLoginService.saveLogin(
-          email: email.text.trim(),
-          password: pass.text.trim(),
-        );
+        if (rememberLogin) {
+          await AutoLoginService.saveLogin(
+            email: email.text.trim(),
+            password: pass.text.trim(),
+          );
+        } else {
+          await AutoLoginService.clearLogin();
+        }
+
+        if (mounted) {
+          setState(() {
+            loading = false;
+          });
+        }
 
         return;
       }
+      if (pass.text.trim() != confirmPass.text.trim()) {
+        setState(() {
+          error = "Mật khẩu xác nhận không khớp";
+        });
 
+        loading = false;
+        return;
+      }
       final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(),
         password: pass.text.trim(),
@@ -249,11 +268,30 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
+  @override
+  void initState() {
+    super.initState();
 
+    AutoLoginService.loadSavedLogin().then((saved) {
+      if (!mounted) return;
+
+      final savedEmail = saved["email"] ?? "";
+      final savedPassword = saved["password"] ?? "";
+
+      if (savedEmail.isNotEmpty && savedPassword.isNotEmpty) {
+        setState(() {
+          email.text = savedEmail;
+          pass.text = savedPassword;
+          rememberLogin = true;
+        });
+      }
+    });
+  }
   @override
   void dispose() {
     email.dispose();
     pass.dispose();
+    confirmPass.dispose();
     super.dispose();
   }
 
@@ -350,6 +388,31 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
 
+                          if (!isLogin) ...[
+                            const SizedBox(height: 10),
+
+                            TextField(
+                              controller: confirmPass,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                labelText: "Xác nhận mật khẩu",
+                                prefixIcon: Icon(Icons.lock_outline_rounded),
+                              ),
+                            ),
+                          ],
+                          if (isLogin)
+                            CheckboxListTile(
+                              value: rememberLogin,
+                              onChanged: (value) {
+                                setState(() {
+                                  rememberLogin = value ?? true;
+                                });
+                              },
+                              dense: true,
+                              contentPadding: EdgeInsets.zero,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: const Text("Ghi nhớ tài khoản"),
+                            ),
                           if (error.isNotEmpty)
                             Padding(
                               padding: const EdgeInsets.only(top: 12),
@@ -432,6 +495,9 @@ class _LoginPageState extends State<LoginPage> {
                               setState(() {
                                 isLogin = !isLogin;
                                 error = "";
+
+                                pass.clear();
+                                confirmPass.clear();
                               });
                             },
                             child: Text(

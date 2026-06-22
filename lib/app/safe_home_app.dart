@@ -10,6 +10,7 @@ import '../services/auto_login_service.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../pages/profile_setup_page.dart';
+
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatelessWidget {
@@ -30,8 +31,9 @@ class AlarmLaunchGate extends StatefulWidget {
 }
 
 class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
-  static const MethodChannel nativeAlarmChannel =
-  MethodChannel("safehome/native_alarm_permission");
+  static const MethodChannel nativeAlarmChannel = MethodChannel(
+    "safehome/native_alarm_permission",
+  );
 
   bool checked = false;
   bool isAlarmScreenLaunch = false;
@@ -53,8 +55,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
 
     if (payload.startsWith("alarm_summary|")) {
       // giữ nguyên payload
-    }
-    else if (payload == "open_home") {
+    } else if (payload == "open_home") {
       // Không tự ép open_home thành alarm nữa.
       // Alarm thật đã có payload riêng: alarm hoặc alarm_summary|.
     }
@@ -83,15 +84,11 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     if (payload.startsWith("alarm_summary|")) {
       final parts = payload.split("|");
 
-      final body =
-      parts.length > 1
+      final body = parts.length > 1
           ? Uri.decodeComponent(parts[1])
           : "Có cảnh báo cần kiểm tra";
 
-      final alarmItems =
-      parts.length > 2
-          ? Uri.decodeComponent(parts[2])
-          : "";
+      final alarmItems = parts.length > 2 ? Uri.decodeComponent(parts[2]) : "";
 
       return FullscreenAlarmPage(
         title: "🚨 SafeHome",
@@ -101,6 +98,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     }
 
     if (payload.startsWith("schedule_notification::")) {
+      String title = NotificationService.lastScheduleTitle;
       String body = NotificationService.lastScheduleBody;
       String reminderItemsJson = NotificationService.lastReminderItemsJson;
 
@@ -108,13 +106,14 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
         final raw = payload.replaceFirst("schedule_notification::", "");
         final data = Map<String, dynamic>.from(jsonDecode(raw));
 
+        title = data["title"]?.toString() ?? title;
         body = data["body"]?.toString() ?? body;
         reminderItemsJson =
             data["reminderItems"]?.toString() ?? reminderItemsJson;
       } catch (_) {}
 
       return FullscreenAlarmPage(
-        title: "🏡 SafeHome",
+        title: title,
         body: body,
         silentMode: true,
         reminderItemsJson: reminderItemsJson,
@@ -128,7 +127,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
           : NotificationService.lastScheduleBody;
 
       return FullscreenAlarmPage(
-        title: "🏡 SafeHome",
+        title: NotificationService.lastScheduleTitle,
         body: body,
         silentMode: true,
         reminderItemsJson: NotificationService.lastReminderItemsJson,
@@ -252,10 +251,7 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
       duration: const Duration(milliseconds: 900),
     );
 
-    fade = CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeOut,
-    );
+    fade = CurvedAnimation(parent: controller, curve: Curves.easeOut);
 
     controller.forward();
   }
@@ -276,11 +272,7 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.home_rounded,
-                size: 78,
-                color: Colors.green,
-              ),
+              const Icon(Icons.home_rounded, size: 78, color: Colors.green),
               const SizedBox(height: 18),
               RichText(
                 text: const TextSpan(

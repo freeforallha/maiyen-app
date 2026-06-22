@@ -26,7 +26,15 @@ class AutoLoginService {
     await _storage.delete(key: _emailKey);
     await _storage.delete(key: _passKey);
   }
+  static Future<Map<String, String?>> loadSavedLogin() async {
+    final savedEmail = await _storage.read(key: _emailKey);
+    final savedPassword = await _storage.read(key: _passKey);
 
+    return {
+      "email": savedEmail,
+      "password": savedPassword,
+    };
+  }
   static Future<User?> tryAutoLogin() async {
     final email = await _storage.read(key: _emailKey);
     final password = await _storage.read(key: _passKey);

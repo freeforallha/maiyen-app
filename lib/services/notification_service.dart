@@ -7,7 +7,7 @@ import '../app/safe_home_app.dart';
 import '../pages/fullscreen_alarm_page.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 class NotificationService {
   static Future<void> stopAlarmNotification() async {
@@ -17,7 +17,9 @@ class NotificationService {
   static Future<void> stopReminderNotification() async {
     await localNotif.cancel(999998);
   }
+
   static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+  static String lastScheduleTitle = "Nhà";
   static String lastReminderItemsJson = "";
   static String lastAlarmItemsJson = "";
   static String lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
@@ -28,11 +30,12 @@ class NotificationService {
       sound: false,
     );
 
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: false,
-    );
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+          alert: true,
+          badge: true,
+          sound: false,
+        );
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -43,10 +46,7 @@ class NotificationService {
     );
 
     await localNotif.initialize(
-      const InitializationSettings(
-        android: android,
-        iOS: ios,
-      ),
+      const InitializationSettings(android: android, iOS: ios),
       onDidReceiveNotificationResponse: (response) {
         final payload = response.payload ?? '';
 
@@ -84,6 +84,7 @@ class NotificationService {
         }
 
         if (payload.startsWith('schedule_notification::')) {
+          String title = 'Nhà';
           String body = lastScheduleBody;
           String reminderItemsJson = lastReminderItemsJson;
 
@@ -91,15 +92,18 @@ class NotificationService {
             final raw = payload.replaceFirst('schedule_notification::', '');
             final data = Map<String, dynamic>.from(jsonDecode(raw));
 
+            title = data["title"]?.toString() ?? title;
             body = data["body"]?.toString() ?? body;
             reminderItemsJson =
                 data["reminderItems"]?.toString() ?? reminderItemsJson;
           } catch (_) {}
 
+          lastScheduleTitle = title;
+
           appNavigatorKey.currentState?.push(
             MaterialPageRoute(
               builder: (_) => FullscreenAlarmPage(
-                title: '🏡 SafeHome Reminder',
+                title: title,
                 body: body,
                 silentMode: true,
                 reminderItemsJson: reminderItemsJson,
@@ -114,7 +118,7 @@ class NotificationService {
           appNavigatorKey.currentState?.push(
             MaterialPageRoute(
               builder: (_) => FullscreenAlarmPage(
-                title: '🏡 SafeHome Reminder',
+                title: lastScheduleTitle,
                 body: lastScheduleBody,
                 silentMode: true,
                 reminderItemsJson: lastReminderItemsJson,
@@ -131,7 +135,8 @@ class NotificationService {
       const alarmChannel = AndroidNotificationChannel(
         'alarm_channel_silent_v3',
         'Alarm Channel Silent V3',
-        description: 'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+        description:
+            'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,
         playSound: false,
         enableVibration: true,
@@ -153,15 +158,17 @@ class NotificationService {
         playSound: false,
       );
 
-      final androidPlugin =
-      localNotif.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin = localNotif
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
 
       await androidPlugin?.createNotificationChannel(alarmChannel);
       await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
       await androidPlugin?.createNotificationChannel(reminderChannel);
     }
   }
+
   static const String alarmRouteName = "fullscreen_alarm";
   static final List<Map<String, dynamic>> activeAlarmItems = [];
 
@@ -220,7 +227,7 @@ class NotificationService {
           alarmItemsJson: mergedAlarmItemsJson,
         ),
       ),
-          (route) => route.settings.name != alarmRouteName,
+      (route) => route.settings.name != alarmRouteName,
     );
   }
 
@@ -229,12 +236,32 @@ class NotificationService {
     lastAlarmItemsJson = "";
     lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
   }
+
   static Future<void> showSafetyReminder({
     required bool isSafe,
     String reason = '',
     String reminderItemsJson = '',
+    String title = '',
+    bool forceShow = false,
   }) async {
     final cleanReason = reason.trim();
+    final cleanTitle = title.trim();
+    lastScheduleTitle = cleanTitle.isNotEmpty ? cleanTitle : "Nhà";
+
+    if (forceShow) {
+      appNavigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (_) => FullscreenAlarmPage(
+            title: lastScheduleTitle,
+            body: reason.isEmpty
+                ? 'Có thay đổi về tạm dừng Alarm hôm nay.'
+                : reason,
+            silentMode: true,
+            reminderItemsJson: reminderItemsJson,
+          ),
+        ),
+      );
+    }
     lastReminderItemsJson = reminderItemsJson;
     lastScheduleBody = isSafe
         ? "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi."
@@ -242,8 +269,9 @@ class NotificationService {
         ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
         : "⚠️ CHƯA AN TOÀN\n$cleanReason";
 
-    final title =
-    isSafe ? 'SafeHome ✅ ĐÃ AN TOÀN' : 'SafeHome ⚠️ CHƯA AN TOÀN';
+    final notificationTitle = isSafe
+        ? 'SafeHome ✅ ĐÃ AN TOÀN'
+        : 'SafeHome ⚠️ CHƯA AN TOÀN';
 
     final body = isSafe
         ? 'Hãy an tâm nghỉ ngơi.'
@@ -265,7 +293,7 @@ class NotificationService {
       category: AndroidNotificationCategory.reminder,
       styleInformation: BigTextStyleInformation(
         lastScheduleBody,
-        contentTitle: title,
+        contentTitle: notificationTitle,
         summaryText: 'SafeHome',
       ),
     );
@@ -278,12 +306,9 @@ class NotificationService {
 
     await localNotif.show(
       999998,
-      title,
+      notificationTitle,
       body,
-      NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      ),
+      NotificationDetails(android: androidDetails, iOS: iosDetails),
       payload: "schedule_notification",
     );
   }

@@ -39,6 +39,17 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   bool get isSafeReminder =>
       isReminder && widget.body.toUpperCase().contains("ĐÃ AN TOÀN");
 
+  String get reminderHomeName {
+    final raw = widget.title.trim();
+    final lower = raw.toLowerCase();
+
+    if (raw.isEmpty || lower.contains("safehome")) {
+      return "Nhà";
+    }
+
+    return raw;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,62 +107,22 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Map<String, List<String>> buildReminderIssueMap() {
+    final homeName = reminderHomeName;
+
     if (isSafeReminder) {
       return {
-        "SafeHome": ["Hãy an tâm nghỉ ngơi"],
+        homeName: ["Hãy an tâm nghỉ ngơi"],
       };
-    }
-
-    final jsonText = widget.reminderItemsJson.trim();
-
-    if (jsonText.isNotEmpty) {
-      try {
-        final List<dynamic> items = jsonDecode(jsonText);
-        final Map<String, List<String>> result = {};
-
-        for (final item in items) {
-          if (item is! Map) continue;
-
-          final homeName = item["homeName"]?.toString().trim();
-          final reasonsRaw = item["reasons"];
-
-          final reasons = reasonsRaw is List
-              ? reasonsRaw
-              .map((e) => e.toString().trim())
-              .where((e) => e.isNotEmpty)
-              .take(4)
-              .toList()
-              : <String>[];
-
-          if (homeName != null && homeName.isNotEmpty) {
-            result[homeName] = reasons.isEmpty ? ["Có mục cần kiểm tra"] : reasons;
-
-            if (reasonsRaw is List && reasonsRaw.length > 4) {
-              result[homeName]!.add("...");
-            }
-          }
-        }
-
-        if (result.isNotEmpty) return result;
-      } catch (_) {}
     }
 
     final bodyText = widget.body
         .replaceAll("⚠️", "")
-        .replaceAll("!", "")
         .replaceAll("CHƯA AN TOÀN", "")
         .replaceAll("ĐÃ AN TOÀN", "")
         .trim();
 
-    final issues = bodyText
-        .split(RegExp(r'[,\n]'))
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .take(4)
-        .toList();
-
     return {
-      "Nhà": issues.isEmpty ? ["Có mục cần kiểm tra"] : issues,
+      homeName: [bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra"],
     };
   }
 
@@ -287,8 +258,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       final name = item["name"]?.toString().trim();
       final reason = item["reason"]?.toString().trim();
 
-      final realHomeName =
-      homeName == null || homeName.isEmpty ? "Nhà" : homeName;
+      final realHomeName = homeName == null || homeName.isEmpty
+          ? "Nhà"
+          : homeName;
 
       String text = "";
 
@@ -363,10 +335,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     if (!context.mounted) return;
 
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => AuthGate(),
-      ),
-          (route) => false,
+      MaterialPageRoute(builder: (_) => AuthGate()),
+      (route) => false,
     );
   }
 
@@ -419,15 +389,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   Widget _buildReminderUI(BuildContext context) {
     final safe = isSafeReminder;
     final issueMap = buildReminderIssueMap();
+    const reminderSubtitle = "SafeHome Security Reminder";
 
     final Color accent = safe ? Colors.green : Colors.orange;
-    final Color bg1 = safe
-        ? const Color(0xFF0E2B1A)
-        : const Color(0xFF3A2508);
+    final Color bg1 = safe ? const Color(0xFF0E2B1A) : const Color(0xFF3A2508);
 
-    final Color bg2 = safe
-        ? const Color(0xFF163824)
-        : const Color(0xFF4A2D08);
+    final Color bg2 = safe ? const Color(0xFF163824) : const Color(0xFF4A2D08);
 
     return PopScope(
       canPop: false,
@@ -453,9 +420,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                        color: accent.withValues(alpha: 0.22),
-                      ),
+                      border: Border.all(color: accent.withValues(alpha: 0.22)),
                       boxShadow: [
                         BoxShadow(
                           color: accent.withValues(alpha: 0.14),
@@ -487,9 +452,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         ),
                         const SizedBox(height: 14),
                         Text(
-                          safe
-                              ? "ĐÃ AN TOÀN"
-                              : "CẦN KIỂM TRA",
+                          safe ? "ĐÃ AN TOÀN" : "CẦN KIỂM TRA",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: accent,
@@ -499,11 +462,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          "SafeHome Security Reminder",
+                          reminderSubtitle,
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(height: 18),
@@ -540,10 +503,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                     ),
                                     const SizedBox(height: 8),
                                     ...entry.value.map(
-                                          (item) => Padding(
-                                        padding: const EdgeInsets.only(bottom: 6),
+                                      (item) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 6,
+                                        ),
                                         child: Text(
-                                          "• $item",
+                                          item,
                                           style: const TextStyle(
                                             color: Colors.black87,
                                             fontSize: 14,
@@ -679,11 +644,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                             width: 1.5,
                           ),
                         ),
-                        child: Icon(
-                          alarmIcon(type),
-                          color: accent,
-                          size: 52,
-                        ),
+                        child: Icon(alarmIcon(type), color: accent, size: 52),
                       ),
 
                       const SizedBox(height: 18),
@@ -740,10 +701,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                   ),
                                   const SizedBox(height: 8),
                                   ...entry.value.map(
-                                        (reason) => Padding(
+                                    (reason) => Padding(
                                       padding: const EdgeInsets.only(bottom: 6),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Icon(
                                             Icons.warning_amber_rounded,
@@ -845,16 +807,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                       vertical: 10,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.power_settings_new_rounded,
-                    size: 19,
-                  ),
+                  icon: const Icon(Icons.power_settings_new_rounded, size: 19),
                   label: const Text(
                     "TẮT CẢNH BÁO",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
                   ),
                   onPressed: () => confirmStopAlarm(context),
                 ),
