@@ -97,6 +97,15 @@ class FirebasePaths {
       ) =>
       "homeChats/$homeId/lastRead/$uid";
 
+  static String homeTyping(String homeId) =>
+      "homeChats/$homeId/typing";
+
+  static String homeTypingMember(
+      String homeId,
+      String uid,
+      ) =>
+      "homeChats/$homeId/typing/$uid";
+
   // ================= PAIR =================
 
   static String pairRequests() =>

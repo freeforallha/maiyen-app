@@ -13,54 +13,58 @@ class HomeListenerService {
   }) async {
     for (final entry in sharedHomes.entries) {
       final homeId = entry.key.toString();
-
       final sharedConfig = safeMap(entry.value);
 
-      final ownerUid = sharedConfig["ownerUid"]?.toString();
+      final ownerUid =
+          sharedConfig["ownerUid"]?.toString().trim() ?? "";
 
-      if (ownerUid == null) continue;
+      if (ownerUid.isEmpty) {
+        continue;
+      }
 
       FirebaseDatabase.instance
           .ref(FirebasePaths.home(ownerUid, homeId))
           .onValue
-          .listen((sharedEvent) async {
-        final sharedData = sharedEvent.snapshot.value;
+          .listen(
+            (sharedEvent) {
+          final sharedData = sharedEvent.snapshot.value;
 
-        if (sharedData == null) {
-          onDeleted(homeId);
-          return;
-        }
+          if (sharedData == null) {
+            onDeleted(homeId);
+            return;
+          }
 
-        final sharedHome = Map<String, dynamic>.from(sharedData as Map);
+          final sharedHome = safeMap(sharedData);
 
-        final emailSnap =
-        await FirebaseDatabase.instance.ref(FirebasePaths.accountEmail(ownerUid)).get();
+          homes[homeId] = {
+            ...sharedHome,
 
-        final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
+            "alarm": safeMap(sharedHome["alarm"]),
 
-        homes[homeId] = {
-          ...sharedHome,
+            "_shared": true,
+            "_ownerUid": ownerUid,
 
-          "alarm": safeMap(sharedHome["alarm"]),
+            // Không đọc accounts/$ownerUid/email nữa vì Rules chặn.
+            "_ownerEmail":
+            sharedConfig["ownerEmail"]?.toString() ?? "",
 
-          "_shared": true,
-          "_ownerUid": ownerUid,
-          "_ownerEmail": ownerEmail,
+            "_customName": sharedConfig["customName"],
+            "_customAlarm": sharedConfig["alarm"],
 
-          "_customName": sharedConfig["customName"],
-          "_customAlarm": sharedConfig["alarm"],
-          "_role": (await FirebaseDatabase.instance
-              .ref("${FirebasePaths.sharedMember(homeId, uid)}/role")
-              .get())
-              .value
-              ?.toString() ??
-              sharedConfig["role"] ??
-              "member",
-        };
+            // Role đã có sẵn trong sharedHomes của tài khoản hiện tại.
+            "_role":
+            sharedConfig["role"]?.toString() ?? "member",
+          };
 
-        if (homes.isEmpty) return;
-        refresh();
-      });
+          refresh();
+        },
+        onError: (error) {
+          print(
+            "SHARED HOME LISTENER ERROR: "
+                "$ownerUid/$homeId - $error",
+          );
+        },
+      );
     }
   }
 }

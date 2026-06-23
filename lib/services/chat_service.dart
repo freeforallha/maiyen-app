@@ -2,8 +2,23 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../helpers/firebase_paths.dart';
 
+class ChatTypingMember {
+  const ChatTypingMember({
+    required this.uid,
+    required this.name,
+    required this.photoUrl,
+    required this.updatedAt,
+  });
+
+  final String uid;
+  final String name;
+  final String photoUrl;
+  final int updatedAt;
+}
+
 class ChatService {
   static const int maxMessageLength = 1000;
+  static const int typingStaleMillis = 12000;
   static const Map<String, String> _serverTimestamp = {".sv": "timestamp"};
 
   static Stream<DatabaseEvent> homeChatStream(String homeId) {
@@ -17,6 +32,12 @@ class ChatService {
         .ref(FirebasePaths.homeMessages(homeId))
         .orderByChild("time")
         .limitToLast(limit)
+        .onValue;
+  }
+
+  static Stream<DatabaseEvent> typingStream(String homeId) {
+    return FirebaseDatabase.instance
+        .ref(FirebasePaths.homeTyping(homeId))
         .onValue;
   }
 
@@ -64,6 +85,65 @@ class ChatService {
         .set(_serverTimestamp);
   }
 
+  static Future<void> setTyping({
+    required String homeId,
+    required String uid,
+    required String userName,
+    required String userPhotoUrl,
+    required bool isTyping,
+  }) async {
+    final ref = FirebaseDatabase.instance.ref(
+      FirebasePaths.homeTypingMember(homeId, uid),
+    );
+
+    if (!isTyping) {
+      await ref.remove();
+      return;
+    }
+
+    await ref.set({
+      "name": _limited(userName, 80),
+      "photoUrl": _limited(userPhotoUrl, 500),
+      "updatedAt": _serverTimestamp,
+    });
+  }
+
+  static List<ChatTypingMember> activeTypingMembers({
+    required dynamic typing,
+    required String currentUid,
+    DateTime? now,
+  }) {
+    if (typing == null || typing is! Map) return const [];
+
+    final currentMillis = (now ?? DateTime.now()).millisecondsSinceEpoch;
+    final staleBefore = currentMillis - typingStaleMillis;
+    final typingMap = Map<String, dynamic>.from(typing);
+    final members = <ChatTypingMember>[];
+
+    for (final entry in typingMap.entries) {
+      final memberUid = entry.key.toString();
+
+      if (memberUid == currentUid || entry.value is! Map) continue;
+
+      final member = Map<String, dynamic>.from(entry.value as Map);
+      final updatedAt = _asMillis(member["updatedAt"]);
+
+      if (updatedAt <= 0 || updatedAt < staleBefore) continue;
+
+      members.add(
+        ChatTypingMember(
+          uid: memberUid,
+          name: member["name"]?.toString() ?? "",
+          photoUrl: member["photoUrl"]?.toString() ?? "",
+          updatedAt: updatedAt,
+        ),
+      );
+    }
+
+    members.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return members;
+  }
+
   static int unreadCount({required dynamic homeChat, required String uid}) {
     if (homeChat == null) return 0;
     if (homeChat is! Map) return 0;
@@ -104,5 +184,13 @@ class ChatService {
     if (value is double) return value.toInt();
 
     return int.tryParse(value?.toString() ?? "") ?? 0;
+  }
+
+  static String _limited(String value, int maxLength) {
+    final trimmed = value.trim();
+
+    if (trimmed.length <= maxLength) return trimmed;
+
+    return trimmed.substring(0, maxLength);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,6 +31,78 @@ void showHomeChatSheet({
   final focusNode = FocusNode();
 
   bool showEmoji = false;
+  Timer? typingHeartbeatTimer;
+  bool isTypingPresenceActive = false;
+  bool isChatSheetClosed = false;
+
+  void writeTypingPresence(bool isTyping) {
+    ChatService.setTyping(
+      homeId: homeId,
+      uid: user.uid,
+      userName: userName,
+      userPhotoUrl: userPhotoUrl,
+      isTyping: isTyping,
+    ).catchError((_) {});
+  }
+
+  void stopTypingHeartbeat() {
+    typingHeartbeatTimer?.cancel();
+    typingHeartbeatTimer = null;
+  }
+
+  void syncTypingPresence({bool forceWrite = false}) {
+    if (isChatSheetClosed) return;
+
+    final hasDraft = controller.text.trim().isNotEmpty;
+
+    if (!hasDraft) {
+      stopTypingHeartbeat();
+
+      if (isTypingPresenceActive) {
+        isTypingPresenceActive = false;
+        writeTypingPresence(false);
+      }
+
+      return;
+    }
+
+    if (!isTypingPresenceActive || forceWrite) {
+      isTypingPresenceActive = true;
+      writeTypingPresence(true);
+    }
+
+    typingHeartbeatTimer ??= Timer.periodic(const Duration(seconds: 5), (_) {
+      if (isChatSheetClosed || controller.text.trim().isEmpty) {
+        stopTypingHeartbeat();
+
+        if (isTypingPresenceActive) {
+          isTypingPresenceActive = false;
+          writeTypingPresence(false);
+        }
+
+        return;
+      }
+
+      writeTypingPresence(true);
+    });
+  }
+
+  void handleDraftChanged() {
+    syncTypingPresence();
+  }
+
+  void clearTypingPresence() {
+    isChatSheetClosed = true;
+    stopTypingHeartbeat();
+    controller.removeListener(handleDraftChanged);
+
+    if (isTypingPresenceActive) {
+      isTypingPresenceActive = false;
+      writeTypingPresence(false);
+    }
+  }
+
+  controller.addListener(handleDraftChanged);
 
   void scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -210,10 +283,11 @@ void showHomeChatSheet({
                   homeId: homeId,
                   type: "chat",
                   category: "chat",
-                  title: "Tin nhắn mới",
-                  message: "$senderName: $preview",
+                  title: "Tin nhắn mới trong $homeName",
+                  message: "$senderName trong \"$homeName\": $preview",
                   entityType: "chat",
                   entityId: homeId,
+                  homeName: homeName,
                   includeActor: false,
                 );
               } catch (_) {}
@@ -504,6 +578,11 @@ void showHomeChatSheet({
                     ),
                   ),
 
+                  _TypingIndicator(
+                    typingStream: ChatService.typingStream(homeId),
+                    currentUid: user.uid,
+                  ),
+
                   Row(
                     children: [
                       IconButton(
@@ -610,7 +689,12 @@ void showHomeChatSheet({
         },
       );
     },
-  );
+  ).whenComplete(() {
+    clearTypingPresence();
+    controller.dispose();
+    scrollController.dispose();
+    focusNode.dispose();
+  });
 }
 
 String formatChatTime(dynamic ts) {
@@ -624,4 +708,163 @@ String formatChatTime(dynamic ts) {
   final mm = dt.minute.toString().padLeft(2, '0');
 
   return "$hh:$mm";
+}
+
+class _TypingIndicator extends StatefulWidget {
+  const _TypingIndicator({
+    required this.typingStream,
+    required this.currentUid,
+  });
+
+  final Stream<DatabaseEvent> typingStream;
+  final String currentUid;
+
+  @override
+  State<_TypingIndicator> createState() => _TypingIndicatorState();
+}
+
+class _TypingIndicatorState extends State<_TypingIndicator> {
+  Timer? _staleRefreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _staleRefreshTimer = Timer.periodic(const Duration(seconds: 2), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _staleRefreshTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DatabaseEvent>(
+      stream: widget.typingStream,
+      builder: (context, snapshot) {
+        final members = ChatService.activeTypingMembers(
+          typing: snapshot.data?.snapshot.value,
+          currentUid: widget.currentUid,
+        );
+
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 180),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: (child, animation) {
+            return SizeTransition(
+              sizeFactor: animation,
+              child: FadeTransition(opacity: animation, child: child),
+            );
+          },
+          child: members.isEmpty
+              ? const SizedBox.shrink(key: ValueKey("typing-empty"))
+              : _buildIndicator(context, members),
+        );
+      },
+    );
+  }
+
+  Widget _buildIndicator(BuildContext context, List<ChatTypingMember> members) {
+    final colors = Theme.of(context).colorScheme;
+
+    return Padding(
+      key: ValueKey(members.map((member) => member.uid).join("|")),
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 34),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.shade50,
+          borderRadius: BorderRadius.circular(17),
+        ),
+        child: Row(
+          children: [
+            _buildAvatars(members),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                _typingLabel(members),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.blueGrey.shade700,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            Icon(Icons.more_horiz_rounded, color: colors.primary, size: 18),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatars(List<ChatTypingMember> members) {
+    final previewMembers = members.take(3).toList();
+
+    return SizedBox(
+      width: 24 + math.max(0, previewMembers.length - 1) * 14,
+      height: 24,
+      child: Stack(
+        children: [
+          for (var index = 0; index < previewMembers.length; index++)
+            Positioned(
+              left: index * 14,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: CircleAvatar(
+                  radius: 11,
+                  backgroundColor: Colors.blueGrey.shade100,
+                  backgroundImage: previewMembers[index].photoUrl.isNotEmpty
+                      ? NetworkImage(previewMembers[index].photoUrl)
+                      : null,
+                  child: previewMembers[index].photoUrl.isEmpty
+                      ? Icon(
+                          Icons.person_rounded,
+                          size: 13,
+                          color: Colors.blueGrey.shade500,
+                        )
+                      : null,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _typingLabel(List<ChatTypingMember> members) {
+    final names = members.map(_typingName).toList();
+
+    if (names.length == 1) {
+      return "${names.first} đang chuẩn bị gửi tin...";
+    }
+
+    if (names.length == 2) {
+      return "${names[0]} và ${names[1]} đang chuẩn bị gửi tin...";
+    }
+
+    return "${names.first} và ${names.length - 1} người khác đang chuẩn bị gửi tin...";
+  }
+
+  String _typingName(ChatTypingMember member) {
+    final name = member.name.trim();
+
+    if (name.isEmpty) return "Một thành viên";
+
+    return name;
+  }
 }

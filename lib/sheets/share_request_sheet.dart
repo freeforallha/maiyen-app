@@ -18,7 +18,6 @@ Future<bool?> showShareRequestSheet({
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) {
-
       Future<void> removeRequestFromAllApprovers({
         required String requestKey,
         required String ownerUid,
@@ -26,44 +25,9 @@ Future<bool?> showShareRequestSheet({
         required String currentUid,
         required bool syncApprovers,
       }) async {
-        final updates = <String, Object?>{
-          "accounts/$currentUid/shareRequests/$requestKey": null,
-          "accounts/$ownerUid/shareRequests/$requestKey": null,
-        };
-
-        final snap = await FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/shareRequests/$requestKey")
-            .get();
-
-        if (snap.value is Map) {
-          final data = Map<String, dynamic>.from(snap.value as Map);
-          final targetUid = data["targetUid"]?.toString() ?? "";
-
-          if (targetUid.isNotEmpty) {
-            updates["accounts/$targetUid/shareRequests/$requestKey"] = null;
-          }
-        }
-
-        final sharedSnap = await FirebaseDatabase.instance
-            .ref("sharedByHome/$homeId")
-            .get();
-
-        final sharedMap = sharedSnap.value is Map
-            ? Map<String, dynamic>.from(sharedSnap.value as Map)
-            : <String, dynamic>{};
-
-        for (final entry in sharedMap.entries) {
-          final memberUid = entry.key.toString();
-          final memberData = entry.value is Map
-              ? Map<String, dynamic>.from(entry.value as Map)
-              : <String, dynamic>{};
-
-          if (memberData["role"] == "admin") {
-            updates["accounts/$memberUid/shareRequests/$requestKey"] = null;
-          }
-        }
-
-        await FirebaseDatabase.instance.ref().update(updates);
+        await FirebaseDatabase.instance
+            .ref("accounts/$currentUid/shareRequests/$requestKey")
+            .remove();
       }
 
       return StatefulBuilder(
@@ -84,6 +48,12 @@ Future<bool?> showShareRequestSheet({
                 : fallbackTargetUid;
 
             if (homeId.isEmpty || targetUid.isEmpty || ownerUid.isEmpty) return;
+
+            final homeName = await HomeNotificationService.resolveHomeName(
+              homeId: homeId,
+              ownerUid: ownerUid,
+              providedHomeName: data["homeName"]?.toString(),
+            );
 
             if (targetUid == ownerUid) {
               await removeRequestFromAllApprovers(
@@ -170,12 +140,24 @@ Future<bool?> showShareRequestSheet({
               }
 
               try {
-                await HomeNotificationService.addNotification(
-                  uid: targetUid,
-                  type: "join_request_accepted",
-                  title: "Yêu cầu gia nhập được chấp nhận",
-                  message: "Bạn đã được thêm vào nhà thành công.",
+                final memberName = targetName.trim().isNotEmpty
+                    ? targetName.trim()
+                    : targetEmail.trim().isNotEmpty
+                    ? targetEmail.trim()
+                    : "Một thành viên";
+
+                await HomeNotificationService.notifyHome(
+                  ownerUid: ownerUid,
                   homeId: homeId,
+                  type: "member_join",
+                  category: "member",
+                  severity: "success",
+                  title: "Thành viên mới",
+                  message: "$memberName đã gia nhập nhà \"$homeName\".",
+                  actorUid: targetUid,
+                  entityType: "member",
+                  entityId: targetUid,
+                  homeName: homeName,
                 );
               } catch (_) {}
             }
@@ -323,10 +305,13 @@ Future<bool?> showShareRequestSheet({
 
                             final email = data["targetEmail"]?.toString() ?? "";
                             final name = data["targetName"]?.toString() ?? "";
+                            final rawHomeName =
+                                data["homeName"]?.toString().trim() ?? "";
                             final homeName =
-                                data["homeName"]?.toString() ??
-                                data["homeId"]?.toString() ??
-                                "Home";
+                                rawHomeName.isNotEmpty &&
+                                    !rawHomeName.startsWith("home_")
+                                ? rawHomeName
+                                : "Nhà chưa đặt tên";
 
                             final title = type == "transfer_owner_request"
                                 ? "Nhận quyền chủ nhà"
@@ -426,8 +411,12 @@ Future<bool?> showShareRequestSheet({
                                             try {
                                               await acceptOne(requestKey, data);
                                             } catch (e, st) {
-                                              debugPrint("ACCEPT_REQUEST_ERROR: $e");
-                                              debugPrint("ACCEPT_REQUEST_STACK: $st");
+                                              debugPrint(
+                                                "ACCEPT_REQUEST_ERROR: $e",
+                                              );
+                                              debugPrint(
+                                                "ACCEPT_REQUEST_STACK: $st",
+                                              );
                                               if (!context.mounted) return;
 
                                               ScaffoldMessenger.of(

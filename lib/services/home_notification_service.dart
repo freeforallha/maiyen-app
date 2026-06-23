@@ -18,10 +18,19 @@ class HomeNotificationService {
     String? actorUid,
     String? entityType,
     String? entityId,
+    String? ownerUid,
+    String? homeName,
     Map<String, dynamic>? data,
   }) async {
     final currentUid = FirebaseAuth.instance.currentUser?.uid;
     final resolvedSenderUid = senderUid ?? currentUid ?? uid;
+    final resolvedHomeName = await resolveHomeName(
+      homeId: homeId,
+      ownerUid: ownerUid,
+      notificationUid: uid,
+      providedHomeName: homeName,
+    );
+    final notificationData = _withHomeName(data, resolvedHomeName);
     final now = DateTime.now().millisecondsSinceEpoch;
     final listRef = FirebaseDatabase.instance.ref(
       "accounts/$uid/notifications",
@@ -34,15 +43,16 @@ class HomeNotificationService {
         "type": type,
         "category": category,
         "severity": severity,
-        "title": title,
+        "title": _titleWithHomeName(title, resolvedHomeName),
         "message": message,
         "homeId": homeId,
+        "homeName": resolvedHomeName,
         "deviceId": deviceId,
         "senderUid": resolvedSenderUid,
         "actorUid": actorUid ?? resolvedSenderUid,
         "entityType": entityType,
         "entityId": entityId ?? deviceId,
-        "data": data,
+        "data": notificationData,
         "time": now,
         "read": false,
       }),
@@ -66,6 +76,7 @@ class HomeNotificationService {
     String? actorUid,
     String? entityType,
     String? entityId,
+    String? homeName,
     Map<String, dynamic>? data,
     Iterable<String>? recipientUids,
     bool includeActor = true,
@@ -79,6 +90,12 @@ class HomeNotificationService {
     final recipients = recipientUids == null
         ? await homeRecipientUids(ownerUid: ownerUid, homeId: homeId)
         : recipientUids.toSet();
+    final resolvedHomeName = await resolveHomeName(
+      homeId: homeId,
+      ownerUid: ownerUid,
+      providedHomeName: homeName,
+    );
+    final notificationData = _withHomeName(data, resolvedHomeName);
 
     if (!includeActor) {
       recipients.remove(resolvedActorUid);
@@ -90,15 +107,16 @@ class HomeNotificationService {
       "type": type,
       "category": category,
       "severity": severity,
-      "title": title,
+      "title": _titleWithHomeName(title, resolvedHomeName),
       "message": message,
       "homeId": homeId,
+      "homeName": resolvedHomeName,
       "deviceId": deviceId,
       "senderUid": resolvedSenderUid,
       "actorUid": resolvedActorUid,
       "entityType": entityType,
       "entityId": entityId ?? deviceId,
-      "data": data,
+      "data": notificationData,
       "time": now,
       "read": false,
     });
@@ -171,6 +189,32 @@ class HomeNotificationService {
     }
 
     return recipients;
+  }
+
+  static Future<String> resolveHomeName({
+    required String homeId,
+    String? ownerUid,
+    String? notificationUid,
+    String? providedHomeName,
+  }) async {
+    final provided = _cleanHomeName(providedHomeName);
+
+    if (provided.isNotEmpty) return provided;
+
+    final ownerName = await _readHomeName(ownerUid, homeId);
+
+    if (ownerName.isNotEmpty) return ownerName;
+
+    final accountName = await _readHomeName(notificationUid, homeId);
+
+    if (accountName.isNotEmpty) return accountName;
+
+    final sharedOwnerUid = await _readSharedOwnerUid(notificationUid, homeId);
+    final sharedName = await _readHomeName(sharedOwnerUid, homeId);
+
+    if (sharedName.isNotEmpty) return sharedName;
+
+    return "Nhà chưa đặt tên";
   }
 
   static Future<void> markAsRead({
@@ -314,5 +358,70 @@ class HomeNotificationService {
     }
 
     return result;
+  }
+
+  static Map<String, dynamic> _withHomeName(
+    Map<String, dynamic>? data,
+    String homeName,
+  ) {
+    final result = _compact(data ?? <String, dynamic>{});
+    final existingHomeName = _cleanHomeName(result["homeName"]?.toString());
+
+    result["homeName"] = existingHomeName.isNotEmpty
+        ? existingHomeName
+        : homeName;
+
+    return result;
+  }
+
+  static String _titleWithHomeName(String title, String homeName) {
+    final cleanTitle = title.trim().isNotEmpty ? title.trim() : "Thông báo";
+
+    if (_containsHomeName(cleanTitle, homeName)) {
+      return cleanTitle;
+    }
+
+    return "[$homeName] $cleanTitle";
+  }
+
+  static bool _containsHomeName(String text, String homeName) {
+    return text.toLowerCase().contains(homeName.toLowerCase());
+  }
+
+  static String _cleanHomeName(String? value) {
+    final name = value?.trim() ?? "";
+
+    if (name.isEmpty) return "";
+    if (name.startsWith("home_")) return "";
+
+    return name;
+  }
+
+  static Future<String> _readHomeName(String? ownerUid, String homeId) async {
+    if (ownerUid == null || ownerUid.isEmpty || homeId.isEmpty) return "";
+
+    try {
+      final snap = await FirebaseDatabase.instance
+          .ref("accounts/$ownerUid/homes/$homeId/name")
+          .get();
+
+      return _cleanHomeName(snap.value?.toString());
+    } catch (_) {
+      return "";
+    }
+  }
+
+  static Future<String> _readSharedOwnerUid(String? uid, String homeId) async {
+    if (uid == null || uid.isEmpty || homeId.isEmpty) return "";
+
+    try {
+      final snap = await FirebaseDatabase.instance
+          .ref("accounts/$uid/sharedHomes/$homeId/ownerUid")
+          .get();
+
+      return snap.value?.toString() ?? "";
+    } catch (_) {
+      return "";
+    }
   }
 }

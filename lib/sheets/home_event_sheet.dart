@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../services/home_notification_service.dart';
 
-void showHomeEventSheet({required BuildContext context, required String uid}) {
+void showHomeEventSheet({
+  required BuildContext context,
+  required String uid,
+  String Function(String homeId)? homeNameForId,
+  Future<void> Function(Map<String, dynamic> notification)? onTapNotification,
+}) {
   HomeNotificationService.markAllAsRead(uid: uid);
 
   String formatTime(dynamic value) {
@@ -17,6 +22,44 @@ void showHomeEventSheet({required BuildContext context, required String uid}) {
     if (diff.inHours < 1) return "${diff.inMinutes} phút trước";
     if (diff.inDays < 1) return "${diff.inHours} giờ trước";
     return "${diff.inDays} ngày trước";
+  }
+
+  String cleanHomeName(String? value) {
+    final name = value?.trim() ?? "";
+
+    if (name.isEmpty || name.startsWith("home_")) return "";
+
+    return name;
+  }
+
+  String displayHomeName(Map<String, dynamic> item) {
+    final data = item["data"] is Map
+        ? Map<String, dynamic>.from(item["data"] as Map)
+        : <String, dynamic>{};
+    final storedName = cleanHomeName(
+      item["homeName"]?.toString() ?? data["homeName"]?.toString(),
+    );
+
+    if (storedName.isNotEmpty) return storedName;
+
+    final homeId = item["homeId"]?.toString() ?? "";
+
+    if (homeId.isEmpty || homeNameForId == null) return "";
+
+    return cleanHomeName(homeNameForId(homeId));
+  }
+
+  String displayTitle(Map<String, dynamic> item, String homeName) {
+    final title = item["title"]?.toString().trim().isNotEmpty == true
+        ? item["title"].toString().trim()
+        : "Thông báo";
+
+    if (homeName.isEmpty ||
+        title.toLowerCase().contains(homeName.toLowerCase())) {
+      return title;
+    }
+
+    return "[$homeName] $title";
   }
 
   IconData iconForType(String type) {
@@ -106,6 +149,7 @@ void showHomeEventSheet({required BuildContext context, required String uid}) {
       case "share_request":
         return Colors.blue;
       case "share_request_accepted":
+      case "member_join":
         return Colors.green;
       case "member_leave":
         return Colors.orange;
@@ -245,6 +289,8 @@ void showHomeEventSheet({required BuildContext context, required String uid}) {
                         final type = item["type"]?.toString() ?? "system";
                         final severity = item["severity"]?.toString() ?? "info";
                         final read = item["read"] == true;
+                        final homeName = displayHomeName(item);
+                        final timeText = formatTime(item["time"]);
 
                         return Material(
                           color: read
@@ -259,7 +305,7 @@ void showHomeEventSheet({required BuildContext context, required String uid}) {
                                   : colorForType(type, severity),
                             ),
                             title: Text(
-                              item["title"]?.toString() ?? "Thông báo",
+                              displayTitle(item, homeName),
                               style: TextStyle(
                                 fontWeight: read
                                     ? FontWeight.w500
@@ -267,16 +313,27 @@ void showHomeEventSheet({required BuildContext context, required String uid}) {
                               ),
                             ),
                             subtitle: Text(
-                              "${item["message"] ?? ""}\n${formatTime(item["time"])}",
+                              homeName.isNotEmpty
+                                  ? "${item["message"] ?? ""}\n$homeName • $timeText"
+                                  : "${item["message"] ?? ""}\n$timeText",
                             ),
                             isThreeLine: true,
                             onTap: () async {
                               final id = item["id"]?.toString() ?? "";
-                              if (id.isEmpty) return;
 
-                              await FirebaseDatabase.instance
-                                  .ref("accounts/$uid/notifications/$id/read")
-                                  .set(true);
+                              if (id.isNotEmpty) {
+                                await FirebaseDatabase.instance
+                                    .ref("accounts/$uid/notifications/$id/read")
+                                    .set(true);
+                              }
+
+                              if (onTapNotification == null) return;
+
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+
+                              await onTapNotification(item);
                             },
                           ),
                         );

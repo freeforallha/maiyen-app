@@ -9,18 +9,22 @@ class ShareService {
     final targetEmail = email.trim().toLowerCase();
 
     final snap = await _db
-        .ref("accounts")
+        .ref("userDirectory")
         .orderByChild("email")
         .equalTo(targetEmail)
         .get();
 
-    if (!snap.exists || snap.value == null) return null;
+    if (!snap.exists || snap.value is! Map) {
+      return null;
+    }
 
-    final accounts = Map<String, dynamic>.from(snap.value as Map);
+    final users = Map<String, dynamic>.from(snap.value as Map);
 
-    if (accounts.isEmpty) return null;
+    if (users.isEmpty) {
+      return null;
+    }
 
-    return accounts.keys.first.toString();
+    return users.keys.first.toString();
   }
 
   static Future<Map<String, dynamic>> loadAccount(String uid) async {
@@ -33,10 +37,21 @@ class ShareService {
     return Map<String, dynamic>.from(snap.value as Map);
   }
 
+  static Future<Map<String, dynamic>> loadDirectoryUser(String uid) async {
+    final snap = await _db.ref("userDirectory/$uid").get();
+
+    if (!snap.exists || snap.value is! Map) {
+      return {};
+    }
+
+    return Map<String, dynamic>.from(snap.value as Map);
+  }
+
   static Future<void> sendShareRequest({
     required String ownerUid,
     required String targetUid,
     required String homeId,
+    String? homeName,
     required String ownerEmail,
     required Map<String, dynamic> targetData,
     required String targetEmail,
@@ -44,11 +59,17 @@ class ShareService {
     final targetProfile = targetData["profile"] == null
         ? {}
         : Map<String, dynamic>.from(targetData["profile"] as Map);
+    final resolvedHomeName = await HomeNotificationService.resolveHomeName(
+      homeId: homeId,
+      ownerUid: ownerUid,
+      providedHomeName: homeName,
+    );
 
     final requestData = {
       "type": "share_request",
       "ownerUid": ownerUid,
       "homeId": homeId,
+      "homeName": resolvedHomeName,
       "targetUid": targetUid,
       "targetEmail": targetData["email"] ?? targetEmail,
       "targetName": targetProfile["name"] ?? "",
@@ -157,7 +178,7 @@ class ShareService {
         .ref(FirebasePaths.home(realOwnerUid, homeId))
         .get();
 
-    String homeName = homeId;
+    String homeName = "Nhà chưa đặt tên";
     final userData = await loadAccount(uid);
 
     final userProfile = userData["profile"] is Map
@@ -170,7 +191,11 @@ class ShareService {
     if (homeSnap.exists) {
       final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
 
-      homeName = homeData["name"]?.toString() ?? homeId;
+      final resolvedName = homeData["name"]?.toString().trim() ?? "";
+
+      if (resolvedName.isNotEmpty) {
+        homeName = resolvedName;
+      }
     }
     print(
       "LEAVE_HOME_DEBUG uid=$uid ownerUid=$ownerUid realOwnerUid=$realOwnerUid homeId=$homeId",
@@ -185,6 +210,7 @@ class ShareService {
       message: "$memberName đã rời khỏi nhà \"$homeName\".",
       entityType: "member",
       entityId: uid,
+      homeName: homeName,
       includeActor: false,
     );
     await _db.ref(FirebasePaths.sharedHome(uid, homeId)).remove();

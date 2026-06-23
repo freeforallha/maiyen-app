@@ -103,6 +103,24 @@
             ".write": "auth != null && auth.uid == $uid && newData.exists() && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists())",
             ".validate": "newData.isNumber() && (newData.val() <= now + 1000) && (newData.val() >= now - 300000) && (!data.exists() || data.val() > now + 1000 || newData.val() >= data.val())"
           }
+        },
+        "typing": {
+          "$uid": {
+            ".write": "auth != null && auth.uid == $uid && (root.child('accounts').child(auth.uid).child('homes').child($homeId).exists() || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).exists())",
+            ".validate": "!newData.exists() || newData.hasChildren(['name', 'photoUrl', 'updatedAt'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 80"
+            },
+            "photoUrl": {
+              ".validate": "newData.isString() && newData.val().length <= 500"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() <= now + 1000 && newData.val() >= now - 300000"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
         }
       }
     },

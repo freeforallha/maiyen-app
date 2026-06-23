@@ -334,9 +334,15 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (!context.mounted) return;
 
-    Navigator.of(context).pushAndRemoveUntil(
+    final navigator = Navigator.of(context);
+
+    if (navigator.canPop()) {
+      navigator.pop();
+      return;
+    }
+
+    navigator.pushReplacement(
       MaterialPageRoute(builder: (_) => AuthGate()),
-      (route) => false,
     );
   }
 
