@@ -3243,7 +3243,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
-                    if (unreadChatCount > 0)
+                    if ((unreadChatByHome[selectedHome] ?? 0) > 0)
                       Positioned(
                         right: 2,
                         top: 2,
@@ -3254,9 +3254,9 @@ class _HomePageState extends State<HomePage> {
                             shape: BoxShape.circle,
                           ),
                           child: Text(
-                            unreadChatCount > 99
+                            (unreadChatByHome[selectedHome] ?? 0) > 99
                                 ? "99+"
-                                : unreadChatCount.toString(),
+                                : (unreadChatByHome[selectedHome] ?? 0).toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 9,

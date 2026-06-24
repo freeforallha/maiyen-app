@@ -23,7 +23,39 @@ class HomeNotificationService {
     Map<String, dynamic>? data,
   }) async {
     final currentUid = FirebaseAuth.instance.currentUser?.uid;
-    final resolvedSenderUid = senderUid ?? currentUid ?? uid;
+
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
+      );
+    }
+
+    if (uid != currentUid &&
+        ((ownerUid?.trim().isEmpty ?? true) ||
+            homeId.trim().isEmpty)) {
+      throw StateError(
+        "Thông báo gửi sang tài khoản khác phải có ownerUid và homeId",
+      );
+    }
+
+    if (senderUid != null &&
+        senderUid.trim().isNotEmpty &&
+        senderUid.trim() != currentUid) {
+      throw StateError(
+        "senderUid không khớp tài khoản đang đăng nhập",
+      );
+    }
+
+    if (actorUid != null &&
+        actorUid.trim().isNotEmpty &&
+        actorUid.trim() != currentUid) {
+      throw StateError(
+        "actorUid không khớp tài khoản đang đăng nhập",
+      );
+    }
+
+    final resolvedSenderUid = currentUid;
+    final resolvedActorUid = currentUid;
     final resolvedHomeName = await resolveHomeName(
       homeId: homeId,
       ownerUid: ownerUid,
@@ -43,13 +75,14 @@ class HomeNotificationService {
         "type": type,
         "category": category,
         "severity": severity,
-        "title": _titleWithHomeName(title, resolvedHomeName),
+        "title": _cleanTitle(title),
         "message": message,
         "homeId": homeId,
+        "ownerUid": ownerUid,
         "homeName": resolvedHomeName,
         "deviceId": deviceId,
         "senderUid": resolvedSenderUid,
-        "actorUid": actorUid ?? resolvedSenderUid,
+        "actorUid": resolvedActorUid,
         "entityType": entityType,
         "entityId": entityId ?? deviceId,
         "data": notificationData,
@@ -85,8 +118,28 @@ class HomeNotificationService {
     if (ownerUid.isEmpty || homeId.isEmpty) return;
 
     final currentUid = FirebaseAuth.instance.currentUser?.uid;
-    final resolvedSenderUid = senderUid ?? currentUid ?? ownerUid;
-    final resolvedActorUid = actorUid ?? resolvedSenderUid;
+
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
+      );
+    }
+
+    if (senderUid != null &&
+        senderUid.trim().isNotEmpty &&
+        senderUid.trim() != currentUid) {
+      throw StateError(
+        "senderUid không khớp tài khoản đang đăng nhập",
+      );
+    }
+
+    final resolvedSenderUid = currentUid;
+
+    final resolvedActorUid =
+    actorUid != null && actorUid.trim().isNotEmpty
+        ? actorUid.trim()
+        : currentUid;
+
     final recipients = recipientUids == null
         ? await homeRecipientUids(ownerUid: ownerUid, homeId: homeId)
         : recipientUids.toSet();
@@ -107,9 +160,10 @@ class HomeNotificationService {
       "type": type,
       "category": category,
       "severity": severity,
-      "title": _titleWithHomeName(title, resolvedHomeName),
+      "title": _cleanTitle(title),
       "message": message,
       "homeId": homeId,
+      "ownerUid": ownerUid,
       "homeName": resolvedHomeName,
       "deviceId": deviceId,
       "senderUid": resolvedSenderUid,
@@ -374,14 +428,10 @@ class HomeNotificationService {
     return result;
   }
 
-  static String _titleWithHomeName(String title, String homeName) {
-    final cleanTitle = title.trim().isNotEmpty ? title.trim() : "Thông báo";
+  static String _cleanTitle(String title) {
+    final cleanTitle = title.trim();
 
-    if (_containsHomeName(cleanTitle, homeName)) {
-      return cleanTitle;
-    }
-
-    return "[$homeName] $cleanTitle";
+    return cleanTitle.isNotEmpty ? cleanTitle : "Thông báo";
   }
 
   static bool _containsHomeName(String text, String homeName) {

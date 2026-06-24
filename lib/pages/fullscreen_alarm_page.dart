@@ -34,13 +34,19 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   final AudioPlayer alarmPlayer = AudioPlayer();
 
+  late String currentReminderTitle;
+  late String currentReminderBody;
+  late String currentReminderItemsJson;
+  late String currentAlarmBody;
+  late String currentAlarmItemsJson;
   bool get isReminder => widget.silentMode;
 
   bool get isSafeReminder =>
-      isReminder && widget.body.toUpperCase().contains("ĐÃ AN TOÀN");
+      isReminder &&
+          currentReminderBody.toUpperCase().contains("ĐÃ AN TOÀN");
 
   String get reminderHomeName {
-    final raw = widget.title.trim();
+    final raw = currentReminderTitle.trim();
     final lower = raw.toLowerCase();
 
     if (raw.isEmpty || lower.contains("safehome")) {
@@ -54,15 +60,94 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   void initState() {
     super.initState();
 
+    currentReminderTitle = widget.title;
+    currentReminderBody = widget.body;
+    currentReminderItemsJson = widget.reminderItemsJson;
+    currentAlarmBody = widget.body;
+    currentAlarmItemsJson = widget.alarmItemsJson;
     if (widget.silentMode) {
-      NotificationService.stopReminderNotification();
+      _loadLatestReminderSession();
+
+      NotificationService.reminderRevision.addListener(
+        _onReminderSessionChanged,
+      );
+
+      // Không xoá notification khi Reminder tự mở fullscreen.
       startSilentTimer();
     } else {
-      NotificationService.stopAlarmNotification();
-      startAlarmSound();
+      _loadLatestAlarmSession();
+
+      NotificationService.alarmRevision.addListener(
+        _onAlarmSessionChanged,
+      );
+
+      _startAlarmMode();
+    }
+  }
+  Future<void> _startAlarmMode() async {
+    // Fullscreen đã mở thì huỷ notification còi dự phòng trước.
+    await NotificationService.stopAlarmNotification();
+
+    if (!mounted) return;
+
+    await startAlarmSound();
+  }
+  void _loadLatestReminderSession() {
+    final latestTitle =
+    NotificationService.lastScheduleTitle.trim();
+
+    final latestBody =
+    NotificationService.lastScheduleBody.trim();
+
+    final latestItems =
+    NotificationService.lastReminderItemsJson.trim();
+
+    if (latestTitle.isNotEmpty) {
+      currentReminderTitle = latestTitle;
+    }
+
+    if (latestBody.isNotEmpty) {
+      currentReminderBody = latestBody;
+    }
+
+    if (latestItems.isNotEmpty) {
+      currentReminderItemsJson = latestItems;
     }
   }
 
+  void _onReminderSessionChanged() {
+    if (!mounted || !widget.silentMode) return;
+
+    setState(() {
+      _loadLatestReminderSession();
+
+      // Reminder mới tới thì tính lại 10 phút.
+      remainingSeconds = 600;
+    });
+  }
+  void _loadLatestAlarmSession() {
+    final latestBody =
+    NotificationService.lastAlarmBody.trim();
+
+    final latestItems =
+    NotificationService.lastAlarmItemsJson.trim();
+
+    if (latestBody.isNotEmpty) {
+      currentAlarmBody = latestBody;
+    }
+
+    if (latestItems.isNotEmpty) {
+      currentAlarmItemsJson = latestItems;
+    }
+  }
+
+  void _onAlarmSessionChanged() {
+    if (!mounted || widget.silentMode) return;
+
+    setState(() {
+      _loadLatestAlarmSession();
+    });
+  }
   Future<void> startAlarmSound() async {
     await alarmPlayer.setReleaseMode(ReleaseMode.loop);
     await alarmPlayer.setVolume(1.0);
@@ -93,9 +178,24 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   @override
   void dispose() {
+    if (widget.silentMode) {
+      NotificationService.reminderRevision.removeListener(
+        _onReminderSessionChanged,
+      );
+
+      NotificationService.markReminderPageClosed();
+    } else {
+      NotificationService.alarmRevision.removeListener(
+        _onAlarmSessionChanged,
+      );
+
+      NotificationService.markAlarmPageClosed();
+    }
+
     timer?.cancel();
     alarmPlayer.stop();
     alarmPlayer.dispose();
+
     super.dispose();
   }
 
@@ -107,6 +207,60 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Map<String, List<String>> buildReminderIssueMap() {
+    final Map<String, List<String>> result = {};
+
+    try {
+      final raw = currentReminderItemsJson.trim();
+
+      if (raw.isNotEmpty) {
+        final decoded = jsonDecode(raw);
+
+        if (decoded is List) {
+          for (final item in decoded) {
+            if (item is! Map) continue;
+
+            final data = Map<String, dynamic>.from(item);
+
+            final homeName =
+            data["homeName"]?.toString().trim().isNotEmpty == true
+                ? data["homeName"].toString().trim()
+                : "Nhà";
+
+            final rawReasons = data["reasons"];
+            final reasons = <String>[];
+
+            if (rawReasons is List) {
+              for (final reason in rawReasons) {
+                final text = reason?.toString().trim() ?? "";
+
+                if (text.isNotEmpty && !reasons.contains(text)) {
+                  reasons.add(text);
+                }
+              }
+            }
+
+            result.putIfAbsent(homeName, () => []);
+
+            if (reasons.isEmpty) {
+              if (!result[homeName]!.contains("Đã an toàn")) {
+                result[homeName]!.add("Đã an toàn");
+              }
+            } else {
+              for (final reason in reasons) {
+                if (!result[homeName]!.contains(reason)) {
+                  result[homeName]!.add(reason);
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (_) {}
+
+    if (result.isNotEmpty) {
+      return result;
+    }
+
     final homeName = reminderHomeName;
 
     if (isSafeReminder) {
@@ -115,20 +269,22 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       };
     }
 
-    final bodyText = widget.body
+    final bodyText = currentReminderBody
         .replaceAll("⚠️", "")
         .replaceAll("CHƯA AN TOÀN", "")
         .replaceAll("ĐÃ AN TOÀN", "")
         .trim();
 
     return {
-      homeName: [bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra"],
+      homeName: [
+        bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra",
+      ],
     };
   }
 
   List<Map<String, dynamic>> alarmItems() {
     try {
-      final text = widget.alarmItemsJson.trim();
+      final text = currentAlarmItemsJson.trim();
       if (text.isEmpty) return [];
 
       final decoded = jsonDecode(text);
@@ -190,8 +346,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     final allText = [
       widget.title,
-      widget.body,
-      widget.alarmItemsJson,
+      currentAlarmBody,
+      currentAlarmItemsJson,
     ].join(" ");
 
     return detectTypeFromText(allText);
@@ -293,7 +449,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (result.isNotEmpty) return result;
 
-    final body = widget.body.trim();
+    final body = currentAlarmBody.trim();
     if (body.isNotEmpty && body.length < 160) {
       return {
         "SafeHome": [body],
@@ -331,6 +487,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   Future<void> openHome(BuildContext context) async {
     timer?.cancel();
     await stopAlarmSound();
+
+    if (!widget.silentMode) {
+      NotificationService.clearActiveAlarms();
+    }
 
     if (!context.mounted) return;
 
@@ -388,10 +548,47 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     timer?.cancel();
     await stopAlarmSound();
+    NotificationService.clearActiveAlarms();
 
     SystemNavigator.pop();
   }
-
+  Widget _buildFadedScrollArea({
+    required Widget child,
+  }) {
+    return Expanded(
+      child: ShaderMask(
+        blendMode: BlendMode.dstIn,
+        shaderCallback: (bounds) {
+          return const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.black,
+              Colors.black,
+              Colors.transparent,
+            ],
+            stops: [
+              0.0,
+              0.08,
+              0.88,
+              1.0,
+            ],
+          ).createShader(bounds);
+        },
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(
+            0,
+            40,
+            0,
+            46,
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
   Widget _buildReminderUI(BuildContext context) {
     final safe = isSafeReminder;
     final issueMap = buildReminderIssueMap();
@@ -419,8 +616,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               padding: const EdgeInsets.all(22),
               child: Column(
                 children: [
-                  const Spacer(),
-                  Container(
+              _buildFadedScrollArea(
+              child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(22),
                     decoration: BoxDecoration(
@@ -540,8 +737,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         ),
                       ],
                     ),
-                  ),
-                  const Spacer(),
+              ),
+              ),
+
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -621,9 +820,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             padding: const EdgeInsets.all(22),
             child: Column(
               children: [
-                const Spacer(),
-
-                Container(
+            _buildFadedScrollArea(
+            child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
                   decoration: BoxDecoration(
@@ -775,9 +973,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                       ),
                     ],
                   ),
-                ),
+            ),
+            ),
 
-                const Spacer(),
+                const SizedBox(height: 16),
 
                 SizedBox(
                   width: double.infinity,

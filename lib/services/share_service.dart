@@ -12,6 +12,7 @@ class ShareService {
         .ref("userDirectory")
         .orderByChild("email")
         .equalTo(targetEmail)
+        .limitToFirst(1)
         .get();
 
     if (!snap.exists || snap.value is! Map) {

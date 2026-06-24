@@ -23,6 +23,202 @@ class NotificationService {
   static String lastReminderItemsJson = "";
   static String lastAlarmItemsJson = "";
   static String lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
+  static const String reminderRouteName = "fullscreen_reminder";
+
+  static bool _reminderPageOpen = false;
+
+  static final ValueNotifier<int> reminderRevision =
+  ValueNotifier<int>(0);
+
+  static void markReminderPageClosed() {
+    _reminderPageOpen = false;
+  }
+
+  static List<Map<String, dynamic>> _decodeReminderItems(String raw) {
+    try {
+      final text = raw.trim();
+
+      if (text.isEmpty) return [];
+
+      final decoded = jsonDecode(text);
+
+      if (decoded is! List) return [];
+
+      return decoded
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  static void _mergeReminderSession({
+    required String title,
+    required String body,
+    required bool isSafe,
+    required String reminderItemsJson,
+  }) {
+    final existingItems =
+    _decodeReminderItems(lastReminderItemsJson);
+
+    final incomingItems =
+    _decodeReminderItems(reminderItemsJson);
+
+    if (incomingItems.isEmpty) {
+      final cleanBody = body
+          .replaceAll("⚠️", "")
+          .replaceAll("✅", "")
+          .replaceAll("CHƯA AN TOÀN", "")
+          .replaceAll("ĐÃ AN TOÀN", "")
+          .trim();
+
+      incomingItems.add({
+        "homeId": "",
+        "homeName": title.trim().isEmpty ? "Nhà" : title.trim(),
+        "reasons": isSafe
+            ? <String>[]
+            : <String>[
+          cleanBody.isEmpty
+              ? "Có mục cần kiểm tra"
+              : cleanBody,
+        ],
+      });
+    }
+
+    final merged = <String, Map<String, dynamic>>{};
+
+    for (final item in [
+      ...existingItems,
+      ...incomingItems,
+    ]) {
+      final homeId =
+          item["homeId"]?.toString().trim() ?? "";
+
+      final homeName =
+      item["homeName"]?.toString().trim().isNotEmpty == true
+          ? item["homeName"].toString().trim()
+          : "Nhà";
+
+      final key = homeId.isNotEmpty
+          ? homeId
+          : homeName.toLowerCase();
+
+      final reasons = <String>[];
+      final rawReasons = item["reasons"];
+
+      if (rawReasons is List) {
+        for (final reason in rawReasons) {
+          final text = reason?.toString().trim() ?? "";
+
+          if (text.isNotEmpty && !reasons.contains(text)) {
+            reasons.add(text);
+          }
+        }
+      }
+
+      final current = merged.putIfAbsent(
+        key,
+            () => {
+          "homeId": homeId,
+          "homeName": homeName,
+          "reasons": <String>[],
+        },
+      );
+
+      final currentReasons = List<String>.from(
+        current["reasons"] as List,
+      );
+
+      for (final reason in reasons) {
+        if (!currentReasons.contains(reason)) {
+          currentReasons.add(reason);
+        }
+      }
+
+      current["reasons"] = currentReasons;
+    }
+
+    final mergedItems = merged.values.toList();
+
+    final hasUnsafe = mergedItems.any((item) {
+      final reasons = item["reasons"];
+
+      return reasons is List && reasons.isNotEmpty;
+    });
+
+    lastReminderItemsJson = jsonEncode(mergedItems);
+
+    lastScheduleTitle = mergedItems.length == 1
+        ? mergedItems.first["homeName"]?.toString() ?? "Nhà"
+        : "SafeHome Reminder";
+
+    if (!hasUnsafe) {
+      lastScheduleBody =
+      "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+      return;
+    }
+
+    final issueLines = <String>[];
+
+    for (final item in mergedItems) {
+      final reasons = item["reasons"];
+
+      if (reasons is! List || reasons.isEmpty) continue;
+
+      final homeName =
+          item["homeName"]?.toString() ?? "Nhà";
+
+      issueLines.add(
+        "$homeName: ${reasons.join(", ")}",
+      );
+    }
+
+    lastScheduleBody =
+    "⚠️ CHƯA AN TOÀN\n${issueLines.join("\n")}";
+  }
+
+  static void openOrMergeReminderPage({
+    required String title,
+    required String body,
+    required bool isSafe,
+    String reminderItemsJson = "",
+  }) {
+    _mergeReminderSession(
+      title: title,
+      body: body,
+      isSafe: isSafe,
+      reminderItemsJson: reminderItemsJson,
+    );
+
+    reminderRevision.value++;
+
+    if (_reminderPageOpen) {
+      return;
+    }
+
+    final navigator = appNavigatorKey.currentState;
+
+    if (navigator == null) return;
+
+    _reminderPageOpen = true;
+
+    navigator
+        .push(
+      MaterialPageRoute(
+        settings: const RouteSettings(
+          name: reminderRouteName,
+        ),
+        builder: (_) => FullscreenAlarmPage(
+          title: lastScheduleTitle,
+          body: lastScheduleBody,
+          silentMode: true,
+          reminderItemsJson: lastReminderItemsJson,
+        ),
+      ),
+    )
+        .whenComplete(markReminderPageClosed);
+  }
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -47,7 +243,7 @@ class NotificationService {
 
     await localNotif.initialize(
       const InitializationSettings(android: android, iOS: ios),
-      onDidReceiveNotificationResponse: (response) {
+      onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload ?? '';
 
         if (payload.startsWith('alarm_summary|')) {
@@ -84,46 +280,51 @@ class NotificationService {
         }
 
         if (payload.startsWith('schedule_notification::')) {
+          await NotificationService.stopReminderNotification();
+
           String title = 'Nhà';
           String body = lastScheduleBody;
           String reminderItemsJson = lastReminderItemsJson;
 
           try {
-            final raw = payload.replaceFirst('schedule_notification::', '');
-            final data = Map<String, dynamic>.from(jsonDecode(raw));
+            final raw = payload.replaceFirst(
+              'schedule_notification::',
+              '',
+            );
+
+            final data = Map<String, dynamic>.from(
+              jsonDecode(raw),
+            );
 
             title = data["title"]?.toString() ?? title;
             body = data["body"]?.toString() ?? body;
             reminderItemsJson =
-                data["reminderItems"]?.toString() ?? reminderItemsJson;
+                data["reminderItems"]?.toString() ??
+                    reminderItemsJson;
           } catch (_) {}
 
-          lastScheduleTitle = title;
-
-          appNavigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => FullscreenAlarmPage(
-                title: title,
-                body: body,
-                silentMode: true,
-                reminderItemsJson: reminderItemsJson,
-              ),
-            ),
+          openOrMergeReminderPage(
+            title: title,
+            body: body,
+            isSafe: body
+                .toUpperCase()
+                .contains("ĐÃ AN TOÀN"),
+            reminderItemsJson: reminderItemsJson,
           );
 
           return;
         }
 
         if (payload == 'schedule_notification') {
-          appNavigatorKey.currentState?.push(
-            MaterialPageRoute(
-              builder: (_) => FullscreenAlarmPage(
-                title: lastScheduleTitle,
-                body: lastScheduleBody,
-                silentMode: true,
-                reminderItemsJson: lastReminderItemsJson,
-              ),
-            ),
+          await NotificationService.stopReminderNotification();
+
+          openOrMergeReminderPage(
+            title: lastScheduleTitle,
+            body: lastScheduleBody,
+            isSafe: lastScheduleBody
+                .toUpperCase()
+                .contains("ĐÃ AN TOÀN"),
+            reminderItemsJson: lastReminderItemsJson,
           );
 
           return;
@@ -162,7 +363,12 @@ class NotificationService {
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
           >();
+      final fullScreenPermission =
+      await androidPlugin?.requestFullScreenIntentPermission();
 
+      debugPrint(
+        "FULL_SCREEN_INTENT_PERMISSION: $fullScreenPermission",
+      );
       await androidPlugin?.createNotificationChannel(alarmChannel);
       await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
       await androidPlugin?.createNotificationChannel(reminderChannel);
@@ -170,7 +376,17 @@ class NotificationService {
   }
 
   static const String alarmRouteName = "fullscreen_alarm";
+
+  static bool _alarmPageOpen = false;
+
+  static final ValueNotifier<int> alarmRevision =
+  ValueNotifier<int>(0);
+
   static final List<Map<String, dynamic>> activeAlarmItems = [];
+
+  static void markAlarmPageClosed() {
+    _alarmPageOpen = false;
+  }
 
   static String _alarmKey(Map<String, dynamic> item) {
     return [
@@ -210,25 +426,39 @@ class NotificationService {
     String alarmItemsJson = '',
   }) {
     lastAlarmBody = body;
-    lastAlarmItemsJson = alarmItemsJson;
 
     _addAlarmItems(alarmItemsJson);
 
-    final mergedAlarmItemsJson = activeAlarmItems.isEmpty
+    lastAlarmItemsJson = activeAlarmItems.isEmpty
         ? alarmItemsJson
         : jsonEncode(activeAlarmItems);
 
-    appNavigatorKey.currentState?.pushAndRemoveUntil(
+    alarmRevision.value++;
+
+    if (_alarmPageOpen) {
+      return;
+    }
+
+    final navigator = appNavigatorKey.currentState;
+
+    if (navigator == null) return;
+
+    _alarmPageOpen = true;
+
+    navigator
+        .push(
       MaterialPageRoute(
-        settings: const RouteSettings(name: alarmRouteName),
+        settings: const RouteSettings(
+          name: alarmRouteName,
+        ),
         builder: (_) => FullscreenAlarmPage(
           title: title,
-          body: body,
-          alarmItemsJson: mergedAlarmItemsJson,
+          body: lastAlarmBody,
+          alarmItemsJson: lastAlarmItemsJson,
         ),
       ),
-      (route) => route.settings.name != alarmRouteName,
-    );
+    )
+        .whenComplete(markAlarmPageClosed);
   }
 
   static void clearActiveAlarms() {
@@ -246,28 +476,19 @@ class NotificationService {
   }) async {
     final cleanReason = reason.trim();
     final cleanTitle = title.trim();
-    lastScheduleTitle = cleanTitle.isNotEmpty ? cleanTitle : "Nhà";
 
-    if (forceShow) {
-      appNavigatorKey.currentState?.push(
-        MaterialPageRoute(
-          builder: (_) => FullscreenAlarmPage(
-            title: lastScheduleTitle,
-            body: reason.isEmpty
-                ? 'Có thay đổi về tạm dừng Alarm hôm nay.'
-                : reason,
-            silentMode: true,
-            reminderItemsJson: reminderItemsJson,
-          ),
-        ),
-      );
-    }
-    lastReminderItemsJson = reminderItemsJson;
-    lastScheduleBody = isSafe
+    final reminderBody = isSafe
         ? "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi."
         : cleanReason.isEmpty
         ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
         : "⚠️ CHƯA AN TOÀN\n$cleanReason";
+
+    openOrMergeReminderPage(
+      title: cleanTitle.isNotEmpty ? cleanTitle : "Nhà",
+      body: reminderBody,
+      isSafe: isSafe,
+      reminderItemsJson: reminderItemsJson,
+    );
 
     final notificationTitle = isSafe
         ? 'SafeHome ✅ ĐÃ AN TOÀN'

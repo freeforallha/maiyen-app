@@ -49,17 +49,58 @@ void showHomeEventSheet({
     return cleanHomeName(homeNameForId(homeId));
   }
 
-  String displayTitle(Map<String, dynamic> item, String homeName) {
-    final title = item["title"]?.toString().trim().isNotEmpty == true
-        ? item["title"].toString().trim()
-        : "Thông báo";
+  String removeRepeatedHomeName(String text, String homeName) {
+    var result = text.trim();
+    final cleanName = homeName.trim();
 
-    if (homeName.isEmpty ||
-        title.toLowerCase().contains(homeName.toLowerCase())) {
-      return title;
+    if (result.isEmpty || cleanName.isEmpty) {
+      return result;
     }
 
-    return "[$homeName] $title";
+    final escapedName = RegExp.escape(cleanName);
+
+    // Xoá dạng: [Tên nhà] Tiêu đề
+    result = result.replaceFirst(
+      RegExp(
+        '^\\s*\\[$escapedName\\]\\s*',
+        caseSensitive: false,
+      ),
+      '',
+    );
+
+    // Xoá các dạng:
+    // trong "Tên nhà"
+    // cho nhà "Tên nhà"
+    // tại nhà "Tên nhà"
+    // ở nhà "Tên nhà"
+    result = result.replaceAll(
+      RegExp(
+        '\\s+(?:trong|cho\\s+nhà|tại\\s+nhà|ở\\s+nhà)'
+            '\\s+["“”]?$escapedName["“”]?',
+        caseSensitive: false,
+      ),
+      '',
+    );
+
+    result = result
+        .replaceAll(RegExp(r'\s+([,.!?])'), r'$1')
+        .replaceAll(RegExp(r'\s{2,}'), ' ')
+        .trim();
+
+    return result;
+  }
+
+  String displayTitle(Map<String, dynamic> item, String homeName) {
+    final rawTitle = item["title"]?.toString().trim() ?? "";
+    final title = removeRepeatedHomeName(rawTitle, homeName);
+
+    return title.isNotEmpty ? title : "Thông báo";
+  }
+
+  String displayMessage(Map<String, dynamic> item, String homeName) {
+    final rawMessage = item["message"]?.toString().trim() ?? "";
+
+    return removeRepeatedHomeName(rawMessage, homeName);
   }
 
   IconData iconForType(String type) {
@@ -314,8 +355,8 @@ void showHomeEventSheet({
                             ),
                             subtitle: Text(
                               homeName.isNotEmpty
-                                  ? "${item["message"] ?? ""}\n$homeName • $timeText"
-                                  : "${item["message"] ?? ""}\n$timeText",
+                                  ? "${displayMessage(item, homeName)}\n$homeName • $timeText"
+                                  : "${displayMessage(item, homeName)}\n$timeText",
                             ),
                             isThreeLine: true,
                             onTap: () async {

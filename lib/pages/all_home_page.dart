@@ -397,34 +397,46 @@ class _AllHomePageState extends State<AllHomePage> {
 
       for (final entry in sharedHomes.entries) {
         final homeId = entry.key.toString();
-
-        if (sharedHomeSubscriptions.containsKey(homeId)) continue;
-
         final sharedInfo = safeMap(entry.value);
-        final ownerUid = sharedInfo["ownerUid"]?.toString() ?? "";
-        final role = sharedInfo["role"]?.toString() ?? "member";
 
-        if (ownerUid.isEmpty) continue;
+        final ownerUid =
+            sharedInfo["ownerUid"]?.toString().trim() ?? "";
 
-        FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/email")
-            .get()
-            .then((emailSnap) {
-          final ownerEmail = emailSnap.value?.toString() ?? "Unknown";
+        final role =
+            sharedInfo["role"]?.toString().trim() ?? "member";
 
-          final sub = FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId")
-              .onValue
-              .listen((homeEvent) {
+        if (ownerUid.isEmpty) {
+          continue;
+        }
+
+        if (sharedHomeSubscriptions.containsKey(homeId)) {
+          continue;
+        }
+
+        final sub = FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/homes/$homeId")
+            .onValue
+            .listen(
+              (homeEvent) {
             final rawHome = homeEvent.snapshot.value;
 
-            if (rawHome == null) return;
+            if (rawHome is! Map) {
+              if (!mounted) return;
+
+              setState(() {
+                homes.remove(homeId);
+              });
+
+              return;
+            }
 
             final newHome = {
-              ...Map<String, dynamic>.from(rawHome as Map),
+              ...Map<String, dynamic>.from(rawHome),
               "_shared": true,
               "_ownerUid": ownerUid,
-              "_ownerEmail": ownerEmail,
+              "_ownerEmail": "",
+              "_ownerName": "",
+              "_ownerPhotoUrl": "",
               "_role": role,
             };
 
@@ -433,9 +445,54 @@ class _AllHomePageState extends State<AllHomePage> {
             setState(() {
               homes[homeId] = newHome;
             });
-          });
+          },
+          onError: (Object error) {
+            debugPrint(
+              "ALL_HOME_SHARED_HOME_ERROR "
+                  "$ownerUid/$homeId: $error",
+            );
+          },
+        );
 
-          sharedHomeSubscriptions[homeId] = sub;
+        sharedHomeSubscriptions[homeId] = sub;
+
+        FirebaseDatabase.instance
+            .ref("userDirectory/$ownerUid")
+            .get()
+            .then((directorySnap) {
+          final directory = safeMap(directorySnap.value);
+
+          final ownerEmail =
+              directory["email"]?.toString().trim() ?? "";
+
+          final ownerName =
+              directory["name"]?.toString().trim() ?? "";
+
+          final ownerPhotoUrl =
+              directory["photoUrl"]?.toString().trim() ?? "";
+
+          if (!mounted) return;
+
+          setState(() {
+            final currentHome = safeMap(homes[homeId]);
+
+            if (currentHome.isEmpty) {
+              return;
+            }
+
+            homes[homeId] = {
+              ...currentHome,
+              "_ownerEmail": ownerEmail,
+              "_ownerName": ownerName,
+              "_ownerPhotoUrl": ownerPhotoUrl,
+              "_role": role,
+            };
+          });
+        }).catchError((Object error) {
+          debugPrint(
+            "ALL_HOME_USER_DIRECTORY_ERROR "
+                "$ownerUid: $error",
+          );
         });
       }
     });

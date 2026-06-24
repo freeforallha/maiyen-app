@@ -137,20 +137,26 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
       final oldHomeOrder = oldData["homeOrder"];
 
       final hasHomes = oldHomes is Map && oldHomes.isNotEmpty;
-      await accountRef.update({
-        "email": widget.email,
-        "profile": {
-          "name": name,
-          "gender": gender,
-          "dob": dob,
-          "phone": phone,
-          "photoUrl": oldData["profile"] is Map
-              ? (Map<String, dynamic>.from(oldData["profile"] as Map)["photoUrl"] ?? "")
-              : "",
-        },
-        "shareRequests": oldData["shareRequests"] ?? {},
-        "shareList": oldData["shareList"] ?? {},
-        "sharedHomes": oldData["sharedHomes"] ?? {},
+      final authenticatedEmail =
+      FirebaseAuth.instance.currentUser?.email?.trim();
+
+      if (authenticatedEmail == null || authenticatedEmail.isEmpty) {
+        throw Exception("Không tìm thấy email Firebase Auth");
+      }
+
+      await accountRef.child("email").set(authenticatedEmail);
+
+      await accountRef.child("profile").set({
+        "name": name,
+        "gender": gender,
+        "dob": dob,
+        "phone": phone,
+        "photoUrl": oldData["profile"] is Map
+            ? (Map<String, dynamic>.from(
+          oldData["profile"] as Map,
+        )["photoUrl"] ??
+            "")
+            : "",
       });
 
       if (!hasHomes) {

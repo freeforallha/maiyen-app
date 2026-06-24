@@ -81,9 +81,13 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-      await ref.update({
-        "email": user.email ?? "",
-      });
+      final authenticatedEmail = user.email?.trim();
+
+      if (authenticatedEmail == null || authenticatedEmail.isEmpty) {
+        throw Exception("Không tìm thấy email Firebase Auth");
+      }
+
+      await ref.child("email").set(authenticatedEmail);
 
       final profileSnap = await ref.child("profile").get();
       final profile = profileSnap.value is Map
@@ -185,63 +189,71 @@ class _LoginPageState extends State<LoginPage> {
       loading = true;
       error = "";
     });
-    setState(() => error = "");
 
     try {
+      final emailInput = email.text.trim();
+      final passwordInput = pass.text.trim();
+
+      if (emailInput.isEmpty || passwordInput.isEmpty) {
+        throw Exception("Vui lòng nhập email và mật khẩu");
+      }
+
       if (isLogin) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text.trim(),
-          password: pass.text.trim(),
-        );
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: emailInput,
+          password: passwordInput,
+        )
+            .timeout(const Duration(seconds: 20));
 
         if (rememberLogin) {
           await AutoLoginService.saveLogin(
-            email: email.text.trim(),
-            password: pass.text.trim(),
-          );
+            email: emailInput,
+            password: passwordInput,
+          ).timeout(const Duration(seconds: 10));
         } else {
-          await AutoLoginService.clearLogin();
-        }
-
-        if (mounted) {
-          setState(() {
-            loading = false;
-          });
+          await AutoLoginService.clearLogin()
+              .timeout(const Duration(seconds: 10));
         }
 
         return;
       }
-      if (pass.text.trim() != confirmPass.text.trim()) {
-        setState(() {
-          error = "Mật khẩu xác nhận không khớp";
-        });
 
-        loading = false;
-        return;
+      if (passwordInput != confirmPass.text.trim()) {
+        throw Exception("Mật khẩu xác nhận không khớp");
       }
-      final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text.trim(),
-        password: pass.text.trim(),
-      );
+
+      final cred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailInput,
+        password: passwordInput,
+      )
+          .timeout(const Duration(seconds: 20));
 
       final user = cred.user;
 
+      if (user == null) {
+        throw Exception("Không thể tạo tài khoản");
+      }
+
       await AutoLoginService.saveLogin(
-        email: email.text.trim(),
-        password: pass.text.trim(),
-      );
+        email: emailInput,
+        password: passwordInput,
+      ).timeout(const Duration(seconds: 10));
 
       if (!mounted) return;
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => ProfileSetupPage(
-            uid: user?.uid ?? "",
-            email: email.text.trim().toLowerCase(),
+            uid: user.uid,
+            email: user.email ?? emailInput,
           ),
         ),
       );
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
       setState(() {
         if (e.code == "user-not-found") {
           error = "Sai tài khoản";
@@ -257,15 +269,25 @@ class _LoginPageState extends State<LoginPage> {
           error = e.message ?? "Lỗi đăng nhập";
         }
       });
-    } catch (e) {
+
+      debugPrint(
+        "EMAIL_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}",
+      );
+    } catch (e, stack) {
+      if (!mounted) return;
+
       setState(() {
-        error = "Lỗi hệ thống";
+        error = e.toString().replaceFirst("Exception: ", "");
       });
-    }
-    if (mounted) {
-      setState(() {
-        loading = false;
-      });
+
+      debugPrint("EMAIL_LOGIN_ERROR: $e");
+      debugPrint("EMAIL_LOGIN_STACK: $stack");
+    } finally {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
   }
   @override
