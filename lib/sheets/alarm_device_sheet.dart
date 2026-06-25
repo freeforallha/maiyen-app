@@ -114,7 +114,23 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       String deviceId,
       Map<String, dynamic> alarm,
       ) async {
-    final device = Map<String, dynamic>.from(devices[deviceId] ?? {});
+    if (mode == "home" && !widget.canManageHome) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Bạn không có quyền sửa lịch Alarm của nhà",
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+
+    final device = Map<String, dynamic>.from(
+      devices[deviceId] ?? {},
+    );
     final homeId = device["_homeId"]?.toString() ?? widget.homeId;
     final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
 

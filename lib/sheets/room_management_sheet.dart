@@ -1,18 +1,55 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 Future<void> showRoomManagementSheet({
   required BuildContext context,
   required String ownerUid,
   required String homeId,
-}) {
+}) async {
+  final currentUid = FirebaseAuth.instance.currentUser?.uid;
+
+  if (currentUid == null || currentUid.isEmpty) {
+    return;
+  }
+
+  if (currentUid != ownerUid) {
+    final accessSnap = await FirebaseDatabase.instance
+        .ref("accounts/$currentUid/sharedHomes/$homeId")
+        .get();
+
+    final access = accessSnap.value is Map
+        ? Map<String, dynamic>.from(accessSnap.value as Map)
+        : <String, dynamic>{};
+
+    final sharedOwnerUid =
+        access["ownerUid"]?.toString() ?? "";
+
+    final role = access["role"]?.toString() ?? "member";
+
+    if (sharedOwnerUid != ownerUid || role != "admin") {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Bạn không có quyền quản lý phòng",
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+  }
+
+  if (!context.mounted) return;
+
   final homeRef = FirebaseDatabase.instance.ref(
     "accounts/$ownerUid/homes/$homeId",
   );
 
   final roomsRef = homeRef.child("rooms");
 
-  return showModalBottomSheet(
+  await showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     enableDrag: false,

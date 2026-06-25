@@ -129,10 +129,9 @@ void showSettingsSheet({
                               ),
                             ),
 
-                            if (role == "owner" || role == "admin")
-                              GestureDetector(
-                                onTap: onRenameHome,
-                                child: Container(
+                            GestureDetector(
+                              onTap: onRenameHome,
+                              child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: Colors.teal.withValues(alpha: 0.10),
@@ -177,17 +176,19 @@ void showSettingsSheet({
               ),
             ),
 
-            tile(
-              icon: Icons.share_rounded,
-              title: "Chia sẻ nhà",
-              color: Colors.blue,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  onShare();
-                });
-              },
-            ),
+            if (role == "owner" || role == "admin")
+              tile(
+                icon: Icons.share_rounded,
+                title: "Chia sẻ nhà",
+                color: Colors.blue,
+                onTap: () {
+                  Navigator.of(sheetContext).pop();
+
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onShare();
+                  });
+                },
+              ),
 
             tile(
               icon: Icons.people_alt_rounded,
@@ -201,18 +202,19 @@ void showSettingsSheet({
                 });
               },
             ),
-            tile(
-              icon: Icons.meeting_room_rounded,
-              title: "Quản lý phòng",
-              color: Colors.orange,
-              onTap: () {
-                Navigator.of(sheetContext).pop();
+            if (role == "owner" || role == "admin")
+              tile(
+                icon: Icons.meeting_room_rounded,
+                title: "Quản lý phòng",
+                color: Colors.orange,
+                onTap: () {
+                  Navigator.of(sheetContext).pop();
 
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  onRooms();
-                });
-              },
-            ),
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onRooms();
+                  });
+                },
+              ),
             if (role == "owner")
               tile(
                 icon: Icons.swap_horiz,

@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import '../services/home_notification_service.dart';
 import '../helpers/firebase_paths.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class ShareService {
   static final _db = FirebaseDatabase.instance;
 
@@ -57,10 +57,69 @@ class ShareService {
     required Map<String, dynamic> targetData,
     required String targetEmail,
   }) async {
-    final targetProfile = targetData["profile"] == null
-        ? {}
-        : Map<String, dynamic>.from(targetData["profile"] as Map);
-    final resolvedHomeName = await HomeNotificationService.resolveHomeName(
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
+      );
+    }
+
+    if (ownerUid.trim().isEmpty ||
+        targetUid.trim().isEmpty ||
+        homeId.trim().isEmpty) {
+      throw ArgumentError(
+        "ownerUid, targetUid và homeId không được để trống",
+      );
+    }
+
+    if (targetUid == currentUid) {
+      throw StateError(
+        "Không thể gửi lời mời cho chính mình",
+      );
+    }
+
+    if (currentUid != ownerUid) {
+      final accessSnap = await _db
+          .ref("accounts/$currentUid/sharedHomes/$homeId")
+          .get();
+
+      final access = accessSnap.value is Map
+          ? Map<String, dynamic>.from(
+        accessSnap.value as Map,
+      )
+          : <String, dynamic>{};
+
+      final sharedOwnerUid =
+          access["ownerUid"]?.toString() ?? "";
+
+      final role = access["role"]?.toString() ?? "member";
+
+      if (sharedOwnerUid != ownerUid || role != "admin") {
+        throw StateError(
+          "Bạn không có quyền chia sẻ nhà này",
+        );
+      }
+    }
+
+    final homeSnap = await _db
+        .ref(FirebasePaths.home(ownerUid, homeId))
+        .get();
+
+    if (!homeSnap.exists) {
+      throw StateError(
+        "Không tìm thấy nhà cần chia sẻ",
+      );
+    }
+
+    final targetProfile = targetData["profile"] is Map
+        ? Map<String, dynamic>.from(
+      targetData["profile"] as Map,
+    )
+        : targetData;
+
+    final resolvedHomeName =
+    await HomeNotificationService.resolveHomeName(
       homeId: homeId,
       ownerUid: ownerUid,
       providedHomeName: homeName,
@@ -72,15 +131,25 @@ class ShareService {
       "homeId": homeId,
       "homeName": resolvedHomeName,
       "targetUid": targetUid,
-      "targetEmail": targetData["email"] ?? targetEmail,
-      "targetName": targetProfile["name"] ?? "",
-      "targetPhotoUrl": targetProfile["photoUrl"] ?? "",
-      "ownerEmail": ownerEmail,
+      "targetEmail":
+      targetData["email"]?.toString().trim().isNotEmpty == true
+          ? targetData["email"].toString().trim()
+          : targetEmail.trim().toLowerCase(),
+      "targetName":
+      targetProfile["name"]?.toString().trim() ?? "",
+      "targetPhotoUrl":
+      targetProfile["photoUrl"]?.toString().trim() ?? "",
+      "ownerEmail": ownerEmail.trim().toLowerCase(),
       "time": DateTime.now().millisecondsSinceEpoch,
     };
 
     await _db
-        .ref(FirebasePaths.shareRequest(targetUid, homeId))
+        .ref(
+      FirebasePaths.shareRequest(
+        targetUid,
+        homeId,
+      ),
+    )
         .set(requestData);
   }
 
@@ -89,65 +158,203 @@ class ShareService {
     required String newOwnerUid,
     required String homeId,
   }) async {
-    final currentSnap = await _db
-        .ref(FirebasePaths.home(oldOwnerUid, homeId))
-        .get();
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
-    if (!currentSnap.exists) {
-      throw Exception("Không tìm thấy Home hiện tại");
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
+      );
     }
 
-    final homeData = Map<String, dynamic>.from(currentSnap.value as Map);
+    if (oldOwnerUid.trim().isEmpty ||
+        newOwnerUid.trim().isEmpty ||
+        homeId.trim().isEmpty) {
+      throw ArgumentError(
+        "Thông tin chuyển quyền không hợp lệ",
+      );
+    }
+
+    if (currentUid != newOwnerUid) {
+      throw StateError(
+        "Chỉ người nhận được chỉ định mới có thể nhận quyền chủ nhà",
+      );
+    }
+
+    if (oldOwnerUid == newOwnerUid) {
+      throw StateError(
+        "Không thể chuyển quyền cho chính chủ nhà hiện tại",
+      );
+    }
+
+    final requestKey =
+        "transfer_${homeId}_$oldOwnerUid";
+
+    final requestSnap = await _db
+        .ref(
+      "accounts/$newOwnerUid/shareRequests/$requestKey",
+    )
+        .get();
+
+    if (!requestSnap.exists || requestSnap.value is! Map) {
+      throw StateError(
+        "Không tìm thấy yêu cầu chuyển quyền hợp lệ",
+      );
+    }
+
+    final request = Map<String, dynamic>.from(
+      requestSnap.value as Map,
+    );
+
+    final validRequest =
+        request["type"]?.toString() ==
+            "transfer_owner_request" &&
+            request["homeId"]?.toString() == homeId &&
+            request["oldOwnerUid"]?.toString() ==
+                oldOwnerUid &&
+            request["newOwnerUid"]?.toString() ==
+                newOwnerUid;
+
+    if (!validRequest) {
+      throw StateError(
+        "Yêu cầu chuyển quyền không khớp",
+      );
+    }
+
+    final currentSnap = await _db
+        .ref(
+      FirebasePaths.home(
+        oldOwnerUid,
+        homeId,
+      ),
+    )
+        .get();
+
+    if (!currentSnap.exists ||
+        currentSnap.value is! Map) {
+      throw StateError(
+        "Không tìm thấy nhà hiện tại",
+      );
+    }
+
+    final homeData = Map<String, dynamic>.from(
+      currentSnap.value as Map,
+    );
+
+    final storedOwnerUid =
+        homeData["_ownerUid"]?.toString() ?? oldOwnerUid;
+
+    if (storedOwnerUid != oldOwnerUid) {
+      throw StateError(
+        "Chủ sở hữu hiện tại không khớp",
+      );
+    }
 
     homeData["_ownerUid"] = newOwnerUid;
     homeData["_shared"] = false;
 
-    await _db.ref(FirebasePaths.sharedHome(newOwnerUid, homeId)).remove();
+    final targetSharedHomeRef = _db.ref(
+      FirebasePaths.sharedHome(
+        newOwnerUid,
+        homeId,
+      ),
+    );
 
-    await _db.ref(FirebasePaths.sharedMember(homeId, newOwnerUid)).remove();
+    final targetSharedHomeSnap =
+    await targetSharedHomeRef.get();
+
+    if (targetSharedHomeSnap.exists) {
+      await targetSharedHomeRef.remove();
+
+      await _db
+          .ref(
+        FirebasePaths.sharedMember(
+          homeId,
+          newOwnerUid,
+        ),
+      )
+          .remove();
+
+      await _db
+          .ref(
+        "${FirebasePaths.shareList(oldOwnerUid, homeId)}/$newOwnerUid",
+      )
+          .remove();
+    }
 
     await _db
-        .ref("${FirebasePaths.shareList(oldOwnerUid, homeId)}/$newOwnerUid")
-        .remove();
-
-    await _db.ref(FirebasePaths.home(newOwnerUid, homeId)).set(homeData);
+        .ref(
+      FirebasePaths.home(
+        newOwnerUid,
+        homeId,
+      ),
+    )
+        .set(homeData);
 
     final targetOrderSnap = await _db
-        .ref(FirebasePaths.homeOrder(newOwnerUid))
+        .ref(
+      FirebasePaths.homeOrder(newOwnerUid),
+    )
         .get();
 
-    List<dynamic> targetOrder = [];
+    final targetOrder = <dynamic>[];
 
-    if (targetOrderSnap.exists && targetOrderSnap.value is List) {
-      targetOrder = List<dynamic>.from(targetOrderSnap.value as List);
+    if (targetOrderSnap.value is List) {
+      targetOrder.addAll(
+        List<dynamic>.from(
+          targetOrderSnap.value as List,
+        ).where((value) => value != null),
+      );
     }
 
     if (!targetOrder.contains(homeId)) {
       targetOrder.add(homeId);
     }
 
-    await _db.ref(FirebasePaths.homeOrder(newOwnerUid)).set(targetOrder);
+    await _db
+        .ref(
+      FirebasePaths.homeOrder(newOwnerUid),
+    )
+        .set(targetOrder);
 
-    await _db.ref(FirebasePaths.sharedHome(oldOwnerUid, homeId)).set({
+    await _db
+        .ref(
+      FirebasePaths.sharedHome(
+        oldOwnerUid,
+        homeId,
+      ),
+    )
+        .set({
       "ownerUid": newOwnerUid,
       "role": "member",
     });
 
-    final oldOwnerData = await loadAccount(oldOwnerUid);
+    final oldOwnerData =
+    await loadDirectoryUser(oldOwnerUid);
 
-    final oldOwnerProfile = oldOwnerData["profile"] is Map
-        ? Map<String, dynamic>.from(oldOwnerData["profile"] as Map)
-        : <String, dynamic>{};
-
-    await _db.ref(FirebasePaths.sharedMember(homeId, oldOwnerUid)).set({
+    await _db
+        .ref(
+      FirebasePaths.sharedMember(
+        homeId,
+        oldOwnerUid,
+      ),
+    )
+        .set({
       "role": "member",
-      "email": oldOwnerData["email"] ?? "",
-      "name": oldOwnerProfile["name"] ?? oldOwnerData["name"] ?? "",
-      "photoUrl": oldOwnerProfile["photoUrl"] ?? oldOwnerData["photoUrl"] ?? "",
+      "email": oldOwnerData["email"]?.toString() ?? "",
+      "name": oldOwnerData["name"]?.toString() ?? "",
+      "photoUrl":
+      oldOwnerData["photoUrl"]?.toString() ?? "",
       "sharedAt": DateTime.now().millisecondsSinceEpoch,
     });
 
-    await _db.ref(FirebasePaths.home(oldOwnerUid, homeId)).remove();
+    await _db
+        .ref(
+      FirebasePaths.home(
+        oldOwnerUid,
+        homeId,
+      ),
+    )
+        .remove();
   }
 
   static Future<void> leaveSharedHome({
@@ -155,90 +362,239 @@ class ShareService {
     required String ownerUid,
     required String homeId,
   }) async {
-    final sharedHomeSnap = await _db
-        .ref(FirebasePaths.sharedHome(uid, homeId))
-        .get();
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
-    String realOwnerUid = ownerUid;
-
-    if (sharedHomeSnap.exists && sharedHomeSnap.value is Map) {
-      final sharedHomeData = Map<String, dynamic>.from(
-        sharedHomeSnap.value as Map,
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
       );
-
-      final foundOwnerUid = sharedHomeData["ownerUid"]?.toString() ?? "";
-
-      if (foundOwnerUid.isNotEmpty) {
-        realOwnerUid = foundOwnerUid;
-      }
     }
 
-    if (realOwnerUid.isEmpty) return;
+    if (uid != currentUid) {
+      throw StateError(
+        "Không thể rời nhà thay cho tài khoản khác",
+      );
+    }
 
-    final homeSnap = await _db
-        .ref(FirebasePaths.home(realOwnerUid, homeId))
+    if (homeId.trim().isEmpty) {
+      throw ArgumentError(
+        "homeId không được để trống",
+      );
+    }
+
+    final sharedHomeSnap = await _db
+        .ref(
+      FirebasePaths.sharedHome(
+        currentUid,
+        homeId,
+      ),
+    )
         .get();
 
-    String homeName = "Nhà chưa đặt tên";
-    final userData = await loadAccount(uid);
+    if (!sharedHomeSnap.exists ||
+        sharedHomeSnap.value is! Map) {
+      throw StateError(
+        "Không tìm thấy quyền truy cập nhà đã chia sẻ",
+      );
+    }
 
-    final userProfile = userData["profile"] is Map
-        ? Map<String, dynamic>.from(userData["profile"] as Map)
-        : <String, dynamic>{};
+    final sharedHomeData = Map<String, dynamic>.from(
+      sharedHomeSnap.value as Map,
+    );
 
-    final memberName = userProfile["name"]?.toString().trim().isNotEmpty == true
-        ? userProfile["name"].toString()
-        : userData["email"]?.toString() ?? "Một thành viên";
-    if (homeSnap.exists) {
-      final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
+    final realOwnerUid =
+        sharedHomeData["ownerUid"]?.toString().trim() ?? "";
 
-      final resolvedName = homeData["name"]?.toString().trim() ?? "";
+    if (realOwnerUid.isEmpty) {
+      throw StateError(
+        "Không xác định được chủ nhà",
+      );
+    }
+
+    if (realOwnerUid == currentUid) {
+      throw StateError(
+        "Chủ nhà không thể rời khỏi chính nhà của mình",
+      );
+    }
+
+    if (ownerUid.trim().isNotEmpty &&
+        ownerUid.trim() != realOwnerUid) {
+      throw StateError(
+        "Thông tin chủ nhà không khớp",
+      );
+    }
+
+    final homeSnap = await _db
+        .ref(
+      FirebasePaths.home(
+        realOwnerUid,
+        homeId,
+      ),
+    )
+        .get();
+
+    var homeName = "Nhà chưa đặt tên";
+
+    if (homeSnap.value is Map) {
+      final homeData = Map<String, dynamic>.from(
+        homeSnap.value as Map,
+      );
+
+      final resolvedName =
+          homeData["name"]?.toString().trim() ?? "";
 
       if (resolvedName.isNotEmpty) {
         homeName = resolvedName;
       }
     }
-    print(
-      "LEAVE_HOME_DEBUG uid=$uid ownerUid=$ownerUid realOwnerUid=$realOwnerUid homeId=$homeId",
-    );
-    await HomeNotificationService.notifyHome(
-      ownerUid: realOwnerUid,
-      homeId: homeId,
-      type: "member_leave",
-      category: "member",
-      severity: "warning",
-      title: "Thành viên rời nhà",
-      message: "$memberName đã rời khỏi nhà \"$homeName\".",
-      entityType: "member",
-      entityId: uid,
-      homeName: homeName,
-      includeActor: false,
-    );
-    await _db.ref(FirebasePaths.sharedHome(uid, homeId)).remove();
 
-    await _db.ref(FirebasePaths.sharedMember(homeId, uid)).remove();
+    final userData = await loadAccount(currentUid);
 
-    await _db
-        .ref("${FirebasePaths.shareList(realOwnerUid, homeId)}/$uid")
-        .remove();
+    final userProfile = userData["profile"] is Map
+        ? Map<String, dynamic>.from(
+      userData["profile"] as Map,
+    )
+        : <String, dynamic>{};
+
+    final profileName =
+        userProfile["name"]?.toString().trim() ?? "";
+
+    final accountEmail =
+        userData["email"]?.toString().trim() ?? "";
+
+    final memberName = profileName.isNotEmpty
+        ? profileName
+        : accountEmail.isNotEmpty
+        ? accountEmail
+        : "Một thành viên";
+
+    try {
+      await HomeNotificationService.notifyHome(
+        ownerUid: realOwnerUid,
+        homeId: homeId,
+        type: "member_leave",
+        category: "member",
+        severity: "warning",
+        title: "Thành viên rời nhà",
+        message:
+        "$memberName đã rời khỏi nhà \"$homeName\".",
+        entityType: "member",
+        entityId: currentUid,
+        homeName: homeName,
+        includeActor: false,
+      );
+    } catch (_) {
+      // Lỗi thông báo không được ngăn người dùng rời nhà.
+    }
+
+    await _db.ref().update({
+      FirebasePaths.sharedHome(
+        currentUid,
+        homeId,
+      ): null,
+      FirebasePaths.sharedMember(
+        homeId,
+        currentUid,
+      ): null,
+      "${FirebasePaths.shareList(realOwnerUid, homeId)}/$currentUid":
+      null,
+    });
   }
 
   static Future<void> deleteOwnedHome({
     required String ownerUid,
     required String homeId,
   }) async {
-    final sharedSnap = await _db.ref(FirebasePaths.sharedByHome(homeId)).get();
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
-    if (sharedSnap.exists) {
-      final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
+    if (currentUid == null || currentUid.isEmpty) {
+      throw StateError(
+        "Không có tài khoản Firebase Auth đang đăng nhập",
+      );
+    }
+
+    if (ownerUid != currentUid) {
+      throw StateError(
+        "Chỉ chủ nhà mới được xoá nhà",
+      );
+    }
+
+    if (homeId.trim().isEmpty) {
+      throw ArgumentError(
+        "homeId không được để trống",
+      );
+    }
+
+    final homeSnap = await _db
+        .ref(
+      FirebasePaths.home(
+        currentUid,
+        homeId,
+      ),
+    )
+        .get();
+
+    if (!homeSnap.exists || homeSnap.value is! Map) {
+      throw StateError(
+        "Không tìm thấy nhà cần xoá",
+      );
+    }
+
+    final homeData = Map<String, dynamic>.from(
+      homeSnap.value as Map,
+    );
+
+    final storedOwnerUid =
+        homeData["_ownerUid"]?.toString() ?? currentUid;
+
+    if (storedOwnerUid != currentUid) {
+      throw StateError(
+        "Tài khoản hiện tại không phải chủ nhà",
+      );
+    }
+
+    final sharedSnap = await _db
+        .ref(
+      FirebasePaths.sharedByHome(homeId),
+    )
+        .get();
+
+    final updates = <String, Object?>{};
+
+    if (sharedSnap.value is Map) {
+      final sharedMap = Map<String, dynamic>.from(
+        sharedSnap.value as Map,
+      );
 
       for (final sharedUid in sharedMap.keys) {
-        await _db.ref(FirebasePaths.sharedHome(sharedUid, homeId)).remove();
+        final memberUid = sharedUid.toString();
+
+        if (memberUid.isEmpty || memberUid == currentUid) {
+          continue;
+        }
+
+        updates[
+        FirebasePaths.sharedHome(
+          memberUid,
+          homeId,
+        )
+        ] = null;
       }
     }
 
-    await _db.ref(FirebasePaths.sharedByHome(homeId)).remove();
+    updates[FirebasePaths.sharedByHome(homeId)] = null;
 
-    await _db.ref(FirebasePaths.home(ownerUid, homeId)).remove();
+    updates[
+    "${FirebasePaths.shareList(currentUid, homeId)}"
+    ] = null;
+
+    updates[
+    FirebasePaths.home(
+      currentUid,
+      homeId,
+    )
+    ] = null;
+
+    await _db.ref().update(updates);
   }
 }

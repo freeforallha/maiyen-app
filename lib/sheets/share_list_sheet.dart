@@ -39,45 +39,29 @@ Future<bool?> showShareListSheet({
   final ownerPhotoUrl = ownerRaw["photoUrl"]?.toString() ?? "";
 
   Future<Map<String, dynamic>> loadMember(
-    String memberUid,
-    dynamic rawValue,
-  ) async {
+      String memberUid,
+      dynamic rawValue,
+      ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
 
-    final accountSnap = await db.ref(FirebasePaths.account(memberUid)).get();
-
-    final account = accountSnap.value is Map
-        ? Map<String, dynamic>.from(accountSnap.value as Map)
-        : <String, dynamic>{};
-
-    final profile = account["profile"] is Map
-        ? Map<String, dynamic>.from(account["profile"] as Map)
-        : <String, dynamic>{};
-
     final email =
-        raw["email"]?.toString() ?? account["email"]?.toString() ?? "Unknown";
+    raw["email"]?.toString().trim().isNotEmpty == true
+        ? raw["email"].toString().trim()
+        : "Không có email";
 
-    final name = raw["name"]?.toString().isNotEmpty == true
-        ? raw["name"].toString()
-        : profile["name"]?.toString().isNotEmpty == true
-        ? profile["name"].toString()
-        : account["name"]?.toString().isNotEmpty == true
-        ? account["name"].toString()
+    final name =
+    raw["name"]?.toString().trim().isNotEmpty == true
+        ? raw["name"].toString().trim()
         : email;
 
-    final photoUrl = raw["photoUrl"]?.toString().isNotEmpty == true
-        ? raw["photoUrl"].toString()
-        : profile["photoUrl"]?.toString() ?? "";
-    final phone =
-        profile["phone"]?.toString() ?? account["phone"]?.toString() ?? "";
     return {
       "uid": memberUid,
       "email": email,
       "name": name,
-      "photoUrl": photoUrl,
-      "phone": phone,
+      "photoUrl": raw["photoUrl"]?.toString() ?? "",
+      "phone": raw["phone"]?.toString() ?? "",
       "role": raw["role"]?.toString() ?? "member",
     };
   }
@@ -359,6 +343,30 @@ Future<bool?> showShareListSheet({
                                     (canManageMembers && role == "member"))
                                   PopupMenuButton<String>(
                                     onSelected: (value) async {
+                                      final canDeleteTarget =
+                                          targetUid == myUid ||
+                                              isOwner ||
+                                              (canManageMembers && role == "member");
+
+                                      if (value == "delete" && !canDeleteTarget) {
+                                        showTopToast(
+                                          sheetContext,
+                                          "Bạn không có quyền xoá thành viên này",
+                                          color: Colors.orange,
+                                          icon: Icons.lock_rounded,
+                                        );
+                                        return;
+                                      }
+
+                                      if ((value == "member" || value == "admin") && !isOwner) {
+                                        showTopToast(
+                                          sheetContext,
+                                          "Chỉ chủ nhà mới được thay đổi vai trò",
+                                          color: Colors.orange,
+                                          icon: Icons.lock_rounded,
+                                        );
+                                        return;
+                                      }
                                       if (value == "delete") {
                                         final ok = await showDialog<bool>(
                                           context: sheetContext,

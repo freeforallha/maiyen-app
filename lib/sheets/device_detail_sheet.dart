@@ -187,6 +187,7 @@ void showDeviceDetail({
               homeId: homeId,
               deviceId: id,
               currentRoomId: roomId,
+              canEdit: onRename != null || onDelete != null,
             ),
             _infoRow(
               icon: Icons.access_time_rounded,
@@ -362,21 +363,28 @@ Widget _roomPickerRow({
   required String homeId,
   required String deviceId,
   required String currentRoomId,
+  required bool canEdit,
 }) {
   return Builder(
     builder: (context) {
       return InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () async {
+        onTap: canEdit
+            ? () async {
           final roomsSnap = await FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId/rooms")
+              .ref(
+            "accounts/$ownerUid/homes/$homeId/rooms",
+          )
               .get();
 
           final rooms = roomsSnap.value is Map
-              ? Map<String, dynamic>.from(roomsSnap.value as Map)
+              ? Map<String, dynamic>.from(
+            roomsSnap.value as Map,
+          )
               : <String, dynamic>{};
 
-          final selectedRoom = await showModalBottomSheet<String>(
+          final selectedRoom =
+          await showModalBottomSheet<String>(
             context: context,
             builder: (_) {
               return SafeArea(
@@ -384,11 +392,14 @@ Widget _roomPickerRow({
                   shrinkWrap: true,
                   children: rooms.entries.map((entry) {
                     final room = entry.value is Map
-                        ? Map<String, dynamic>.from(entry.value)
+                        ? Map<String, dynamic>.from(
+                      entry.value as Map,
+                    )
                         : <String, dynamic>{};
 
                     final roomName =
-                        room["name"]?.toString() ?? entry.key;
+                        room["name"]?.toString() ??
+                            entry.key;
 
                     return ListTile(
                       leading: Icon(
@@ -398,7 +409,10 @@ Widget _roomPickerRow({
                       ),
                       title: Text(roomName),
                       onTap: () {
-                        Navigator.pop(context, entry.key);
+                        Navigator.pop(
+                          context,
+                          entry.key,
+                        );
                       },
                     );
                   }).toList(),
@@ -418,11 +432,16 @@ Widget _roomPickerRow({
           )
               .set(selectedRoom);
 
-          Navigator.pop(context);
-        },
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        }
+            : null,
         child: FutureBuilder<DataSnapshot>(
           future: FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId")
+              .ref(
+            "accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId",
+          )
               .get(),
           builder: (context, snapshot) {
             String roomName = currentRoomId;
@@ -433,13 +452,16 @@ Widget _roomPickerRow({
               final room = Map<String, dynamic>.from(value);
 
               roomName =
-                  room["name"]?.toString() ??
-                      currentRoomId;
+                  room["name"]?.toString() ?? currentRoomId;
             }
 
             return _infoRow(
-              icon: Icons.meeting_room_rounded,
-              color: Colors.orange,
+              icon: canEdit
+                  ? Icons.meeting_room_rounded
+                  : Icons.lock_outline_rounded,
+              color: canEdit
+                  ? Colors.orange
+                  : Colors.grey,
               title: "Phòng",
               value: roomName,
             );

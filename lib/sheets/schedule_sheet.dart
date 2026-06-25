@@ -118,11 +118,26 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   }
 
   Future<void> saveSchedules() async {
-    if (
-    widget.type == "notification" &&
-        isSharedUser &&
-        reminderMode == "custom"
-    ) {
+    final isCustomReminder =
+        widget.type == "notification" &&
+            isSharedUser &&
+            reminderMode == "custom";
+
+    if (!isCustomReminder && !widget.canManageHome) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Bạn không có quyền sửa lịch chung của nhà",
+            ),
+          ),
+        );
+      }
+
+      return;
+    }
+
+    if (isCustomReminder) {
       await ref.set({
         "items": notifications,
       });
@@ -549,10 +564,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   @override
   Widget build(BuildContext context) {
     final isAlarm = widget.type == "alarm";
+    final canEditAlarm = widget.canManageHome;
     final canEditCurrentReminder =
-        isAlarm ||
-            widget.canManageHome ||
-            reminderMode == "custom";
+        widget.canManageHome || reminderMode == "custom";
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(18),
@@ -706,18 +720,22 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit_rounded),
-                            onPressed: () => editAlarm(i),
+                            onPressed: canEditAlarm
+                                ? () => editAlarm(i)
+                                : null,
                           ),
 
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
-                            onPressed: () async {
+                            onPressed: canEditAlarm
+                                ? () async {
                               setState(() {
                                 alarms.removeAt(i);
                               });
 
                               saveSchedules();
-                            },
+                            }
+                                : null,
                           ),
                         ],
                       ),
@@ -728,7 +746,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: addAlarm,
+                    onPressed: canEditAlarm ? addAlarm : null,
                     icon: const Icon(Icons.add),
                     label: const Text(
                       "Thêm khung giờ Alarm",

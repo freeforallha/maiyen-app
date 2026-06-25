@@ -1121,12 +1121,16 @@ class _HomePageState extends State<HomePage> {
         } else {
           selectedHome = "";
         }
-        if (selectedHome.isNotEmpty) {
+        if (selectedHome.isNotEmpty && canManageHome()) {
           unawaited(
             HomeService.ensureHomeRoomModel(
               ownerUid: getHomeOwnerUid(),
               homeId: selectedHome,
-            ),
+            ).catchError((Object error) {
+              debugPrint(
+                "ENSURE_HOME_ROOM_MODEL_ERROR: $error",
+              );
+            }),
           );
         }
         final currentHome = safeMap(homes[selectedHome]);
@@ -1336,6 +1340,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void pairSensor(String hubId) async {
+    if (!canManageHome()) {
+      showTopToast(
+        context,
+        "Bạn không có quyền thêm thiết bị",
+        color: Colors.orange,
+        icon: Icons.lock_rounded,
+      );
+      return;
+    }
+
     // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
@@ -1893,22 +1907,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     // ===== 1. FIND UID =====
-    final snap = await FirebaseDatabase.instance.ref("accounts").get();
-    if (!snap.exists) return;
-
-    String? targetUid;
-
-    final accounts = Map<String, dynamic>.from(snap.value as Map);
-
-    for (final entry in accounts.entries) {
-      final data = Map<String, dynamic>.from(entry.value);
-      final email = data["email"]?.toString().toLowerCase();
-
-      if (email == targetEmail) {
-        targetUid = entry.key;
-        break;
-      }
-    }
+    final targetUid = await ShareService.findUidByEmail(targetEmail);
 
     if (targetUid == null) {
       showTopToast(
@@ -2089,6 +2088,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void deleteDevice(String id) async {
+    if (!canManageHome()) {
+      showTopToast(
+        context,
+        "Bạn không có quyền xoá thiết bị",
+        color: Colors.orange,
+        icon: Icons.lock_rounded,
+      );
+      return;
+    }
+
     if (!await showConfirmDialog(context, "Xóa Device?")) return;
 
     final ownerUid = getHomeOwnerUid();
@@ -2646,11 +2655,12 @@ class _HomePageState extends State<HomePage> {
 
   void renameHome() async {
     final isShared = homes[selectedHome]?["_shared"] == true;
+    final usePersonalName = isShared && !canManageHome();
 
-    final currentName = isShared
+    final currentName = usePersonalName
         ? (homes[selectedHome]?["_customName"] ??
-              homes[selectedHome]?["name"] ??
-              selectedHome)
+        homes[selectedHome]?["name"] ??
+        selectedHome)
         : (homes[selectedHome]?["name"] ?? selectedHome);
 
     final controller = TextEditingController(text: currentName);
@@ -2744,9 +2754,12 @@ class _HomePageState extends State<HomePage> {
     if (name == null || name.trim().isEmpty) return;
 
     // HOME SHARE -> lưu riêng cho user hiện tại
-    if (isShared) {
+    // Member dùng tên riêng; Owner/Admin sửa tên thật của nhà.
+    if (usePersonalName) {
       await FirebaseDatabase.instance
-          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
+          .ref(
+        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
+      )
           .set(name);
 
       setState(() {
@@ -2756,7 +2769,6 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    // HOME OWN
     final ownerUid = getHomeOwnerUid();
 
     await HomeService.renameHome(
@@ -2764,6 +2776,22 @@ class _HomePageState extends State<HomePage> {
       homeId: selectedHome,
       name: name,
     );
+
+// Xóa tên riêng cũ của Admin để không che tên thật vừa đổi.
+    if (isShared) {
+      await FirebaseDatabase.instance
+          .ref(
+        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
+      )
+          .remove();
+    }
+
+    if (mounted) {
+      setState(() {
+        homes[selectedHome]?["name"] = name;
+        homes[selectedHome]?.remove("_customName");
+      });
+    }
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
       homeId: selectedHome,
@@ -2983,8 +3011,12 @@ class _HomePageState extends State<HomePage> {
                                 d: tempDevice["data"],
                                 ownerUid: getHomeOwnerUid(),
                                 homeId: selectedHome,
-                                onRename: () => renameDevice(tempDevice["id"]),
-                                onDelete: () => deleteDevice(tempDevice["id"]),
+                                onRename: canManageHome()
+                                    ? () => renameDevice(tempDevice["id"])
+                                    : null,
+                                onDelete: canManageHome()
+                                    ? () => deleteDevice(tempDevice["id"])
+                                    : null,
                                 onNotification: () =>
                                     openNotificationList(tempDevice["id"]),
                               );
@@ -3041,18 +3073,28 @@ class _HomePageState extends State<HomePage> {
                               });
                             },
                             onReorder: (roomIds) async {
-                              final ownerUid = getHomeOwnerUid();
+                              if (!canManageHome()) {
+                                showTopToast(
+                                  context,
+                                  "Bạn không có quyền sắp xếp phòng",
+                                  color: Colors.orange,
+                                  icon: Icons.lock_rounded,
+                                );
+                                return;
+                              }
 
+                              final ownerUid = getHomeOwnerUid();
                               final updates = <String, Object?>{};
 
                               for (var i = 0; i < roomIds.length; i++) {
-                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
-                                    i + 1;
+                                updates[
+                                "accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"
+                                ] = i + 1;
                               }
 
-                              await FirebaseDatabase.instance.ref().update(
-                                updates,
-                              );
+                              if (updates.isNotEmpty) {
+                                await FirebaseDatabase.instance.ref().update(updates);
+                              }
                             },
                           ),
                           if (pairingCountdown > 0)
@@ -3520,16 +3562,7 @@ class _HomePageState extends State<HomePage> {
                                     icon: Icons.lock_rounded,
                                   );
                                 },
-                          onRenameHome: canManageHome()
-                              ? renameHome
-                              : () {
-                                  showTopToast(
-                                    context,
-                                    "Bạn không có quyền sửa tên nhà",
-                                    color: Colors.orange,
-                                    icon: Icons.lock_rounded,
-                                  );
-                                },
+                          onRenameHome: renameHome,
                           onTransferOwner: isOwner()
                               ? transferOwner
                               : () {

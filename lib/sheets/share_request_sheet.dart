@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/firebase_paths.dart';
 import '../services/share_service.dart';
 import '../services/home_notification_service.dart';
@@ -12,6 +12,56 @@ Future<bool?> showShareRequestSheet({
 }) {
   final items = Map<String, dynamic>.from(requests);
   final selected = <String>{};
+  final db = FirebaseDatabase.instance;
+
+  final authenticatedUid =
+      FirebaseAuth.instance.currentUser?.uid ?? "";
+
+  if (authenticatedUid.isEmpty || authenticatedUid != uid) {
+    return Future<bool?>.value(false);
+  }
+
+  Future<bool> canHandleRequest(
+      Map<String, dynamic> data,
+      ) async {
+    final type = data["type"]?.toString() ?? "share_request";
+    final homeId = data["homeId"]?.toString() ?? "";
+
+    if (type == "share_request") {
+      return data["targetUid"]?.toString() == uid;
+    }
+
+    if (type == "transfer_owner_request") {
+      return data["newOwnerUid"]?.toString() == uid;
+    }
+
+    if (type == "join_request") {
+      final ownerUid = data["ownerUid"]?.toString() ?? "";
+
+      if (ownerUid.isEmpty || homeId.isEmpty) {
+        return false;
+      }
+
+      if (uid == ownerUid) {
+        return true;
+      }
+
+      final accessSnap = await db
+          .ref("accounts/$uid/sharedHomes/$homeId")
+          .get();
+
+      final access = accessSnap.value is Map
+          ? Map<String, dynamic>.from(
+        accessSnap.value as Map,
+      )
+          : <String, dynamic>{};
+
+      return access["ownerUid"]?.toString() == ownerUid &&
+          access["role"]?.toString() == "admin";
+    }
+
+    return false;
+  }
 
   return showModalBottomSheet<bool>(
     context: context,
@@ -36,6 +86,19 @@ Future<bool?> showShareRequestSheet({
             String requestKey,
             Map<String, dynamic> data,
           ) async {
+            if (!await canHandleRequest(data)) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Bạn không có quyền chấp nhận yêu cầu này",
+                    ),
+                  ),
+                );
+              }
+
+              return;
+            }
             final homeId = data["homeId"]?.toString() ?? "";
             final ownerUid = data["ownerUid"]?.toString().isNotEmpty == true
                 ? data["ownerUid"].toString()
@@ -182,7 +245,24 @@ Future<bool?> showShareRequestSheet({
           }
 
           Future<void> denyOne(String requestKey) async {
-            final data = Map<String, dynamic>.from(items[requestKey] ?? {});
+            final data = Map<String, dynamic>.from(
+              items[requestKey] ?? <String, dynamic>{},
+            );
+
+            if (!await canHandleRequest(data)) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Bạn không có quyền từ chối yêu cầu này",
+                    ),
+                  ),
+                );
+              }
+
+              return;
+            }
+
             final homeId = data["homeId"]?.toString() ?? "";
             final ownerUid = data["ownerUid"]?.toString() ?? "";
 
@@ -196,7 +276,9 @@ Future<bool?> showShareRequestSheet({
               );
             } else {
               await FirebaseDatabase.instance
-                  .ref("accounts/$uid/shareRequests/$requestKey")
+                  .ref(
+                "accounts/$uid/shareRequests/$requestKey",
+              )
                   .remove();
             }
 
