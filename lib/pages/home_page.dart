@@ -39,6 +39,8 @@ import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -1127,9 +1129,7 @@ class _HomePageState extends State<HomePage> {
               ownerUid: getHomeOwnerUid(),
               homeId: selectedHome,
             ).catchError((Object error) {
-              debugPrint(
-                "ENSURE_HOME_ROOM_MODEL_ERROR: $error",
-              );
+              debugPrint("ENSURE_HOME_ROOM_MODEL_ERROR: $error");
             }),
           );
         }
@@ -1225,19 +1225,24 @@ class _HomePageState extends State<HomePage> {
           debugPrint("QR_JOIN_UPDATE_ERROR: $e");
           debugPrint("QR_JOIN_UPDATE_STACK: $st");
         }
-        await HomeNotificationService.addNotification(
-          uid: ownerUid,
+        await HomeNotificationService.notifyHome(
+          ownerUid: ownerUid,
+          homeId: homeId,
+          recipientUid: ownerUid,
           type: "join_request",
           title: "Yêu cầu gia nhập nhà",
           message: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-          homeId: homeId,
-          ownerUid: ownerUid,
           homeName: homeName,
           category: "member",
+          severity: "info",
           entityType: "member",
           entityId: uid,
+          includeActor: false,
+          writeHomeTimeline: false,
         );
       }
+
+      if (!mounted) return;
 
       showTopToast(
         context,
@@ -1308,18 +1313,24 @@ class _HomePageState extends State<HomePage> {
       };
 
       await FirebaseDatabase.instance.ref().update(updates);
-      await HomeNotificationService.addNotification(
-        uid: ownerUid,
+      await HomeNotificationService.notifyHome(
+        ownerUid: ownerUid,
+        homeId: homeId,
+        recipientUid: ownerUid,
         type: "join_request",
         title: "Yêu cầu gia nhập nhà",
         message: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-        homeId: homeId,
-        ownerUid: ownerUid,
         homeName: homeName,
         category: "member",
+        severity: "info",
         entityType: "member",
         entityId: uid,
+        includeActor: false,
+        writeHomeTimeline: false,
       );
+
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Đã gửi yêu cầu gia nhập nhà",
@@ -1401,6 +1412,8 @@ class _HomePageState extends State<HomePage> {
     if (isShared) {
       final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
       if (!ok) return;
+      if (!mounted) return;
+
       Navigator.of(
         context,
         rootNavigator: true,
@@ -1495,19 +1508,20 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (confirmOk != true) return;
+    if (!mounted) return;
 
     final passwordOk = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) {
+      builder: (sheetContext) {
         return SafeArea(
           child: Container(
             padding: EdgeInsets.only(
               left: 20,
               right: 20,
               top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
             ),
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -1561,10 +1575,14 @@ class _HomePageState extends State<HomePage> {
 
                         await user.reauthenticateWithCredential(credential);
 
-                        Navigator.pop(context, true);
+                        if (!sheetContext.mounted) return;
+
+                        Navigator.pop(sheetContext, true);
                       } catch (e) {
+                        if (!sheetContext.mounted) return;
+
                         showTopToast(
-                          context,
+                          sheetContext,
                           "Sai mật khẩu",
                           color: Colors.red,
                           icon: Icons.error_outline_rounded,
@@ -1757,6 +1775,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
+    if (!mounted) return;
 
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
@@ -1776,6 +1795,8 @@ class _HomePageState extends State<HomePage> {
     final targetUid = await ShareService.findUidByEmail(targetEmail);
 
     if (targetUid == null) {
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Email chưa đăng ký",
@@ -1797,19 +1818,24 @@ class _HomePageState extends State<HomePage> {
       targetEmail: targetEmail,
     );
 
-    await HomeNotificationService.addNotification(
-      uid: targetUid,
+    await HomeNotificationService.notifyHome(
+      ownerUid: shareOwnerUid,
+      homeId: selectedHome,
+      recipientUid: targetUid,
       type: "share_request",
       title: "Lời mời chia sẻ nhà",
       message:
-          "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"$homeName\".",
-      homeId: selectedHome,
-      ownerUid: shareOwnerUid,
+      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"$homeName\".",
       homeName: homeName,
       category: "member",
+      severity: "info",
       entityType: "home",
       entityId: selectedHome,
+      includeActor: false,
+      writeHomeTimeline: false,
     );
+
+    if (!mounted) return;
 
     showTopToast(
       context,
@@ -1894,6 +1920,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
+    if (!mounted) return;
+
     final myEmail = FirebaseAuth.instance.currentUser?.email
         ?.trim()
         .toLowerCase();
@@ -1910,6 +1938,8 @@ class _HomePageState extends State<HomePage> {
     final targetUid = await ShareService.findUidByEmail(targetEmail);
 
     if (targetUid == null) {
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Không tìm thấy user",
@@ -1920,6 +1950,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     // ===== 2. CONFIRM =====
+    if (!mounted) return;
+
     final ok = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -1992,6 +2024,8 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (ok != true) return;
+    if (!mounted) return;
+
     final passwordController = TextEditingController();
 
     final passwordOk = await showDialog<bool>(
@@ -2030,6 +2064,8 @@ class _HomePageState extends State<HomePage> {
 
       await user.reauthenticateWithCredential(credential);
     } catch (e) {
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Sai mật khẩu",
@@ -2053,17 +2089,21 @@ class _HomePageState extends State<HomePage> {
           "homeName": homeName,
           "time": DateTime.now().millisecondsSinceEpoch,
         });
-    await HomeNotificationService.addNotification(
-      uid: targetUid,
+    await HomeNotificationService.notifyHome(
+      ownerUid: uid,
+      homeId: homeId,
+      recipientUid: targetUid,
       type: "transfer_owner_request",
       title: "Yêu cầu chuyển quyền chủ nhà",
       message:
-          "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
-      homeId: homeId,
-      ownerUid: uid,
+      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
       homeName: homeName,
+      category: "member",
+      severity: "info",
       entityType: "home",
       entityId: homeId,
+      includeActor: false,
+      writeHomeTimeline: false,
     );
     await HomeNotificationService.addNotification(
       uid: uid,
@@ -2077,6 +2117,9 @@ class _HomePageState extends State<HomePage> {
       entityType: "home",
       entityId: homeId,
     );
+
+    if (!mounted) return;
+
     showTopToast(
       context,
       "Đã gửi yêu cầu chuyển quyền chủ nhà",
@@ -2119,6 +2162,8 @@ class _HomePageState extends State<HomePage> {
             "status": "pending",
           });
 
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Đã gửi yêu cầu xoá thiết bị",
@@ -2126,6 +2171,8 @@ class _HomePageState extends State<HomePage> {
         icon: Icons.check_circle_rounded,
       );
     } catch (e) {
+      if (!mounted) return;
+
       showTopToast(
         context,
         "Không gửi được yêu cầu xoá: $e",
@@ -2153,6 +2200,7 @@ class _HomePageState extends State<HomePage> {
 
   void logout() async {
     if (!await showConfirmDialog(context, "Đăng xuất?")) return;
+    if (!mounted) return;
 
     Navigator.of(
       context,
@@ -2589,6 +2637,8 @@ class _HomePageState extends State<HomePage> {
                             });
                           }
 
+                          if (!context.mounted) return;
+
                           Navigator.pop(context);
                         },
                       ),
@@ -2638,6 +2688,8 @@ class _HomePageState extends State<HomePage> {
                               });
                             }
 
+                            if (!context.mounted) return;
+
                             Navigator.pop(context);
                           },
                         ),
@@ -2659,8 +2711,8 @@ class _HomePageState extends State<HomePage> {
 
     final currentName = usePersonalName
         ? (homes[selectedHome]?["_customName"] ??
-        homes[selectedHome]?["name"] ??
-        selectedHome)
+              homes[selectedHome]?["name"] ??
+              selectedHome)
         : (homes[selectedHome]?["name"] ?? selectedHome);
 
     final controller = TextEditingController(text: currentName);
@@ -2757,9 +2809,7 @@ class _HomePageState extends State<HomePage> {
     // Member dùng tên riêng; Owner/Admin sửa tên thật của nhà.
     if (usePersonalName) {
       await FirebaseDatabase.instance
-          .ref(
-        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
-      )
+          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
           .set(name);
 
       setState(() {
@@ -2777,12 +2827,10 @@ class _HomePageState extends State<HomePage> {
       name: name,
     );
 
-// Xóa tên riêng cũ của Admin để không che tên thật vừa đổi.
+    // Xóa tên riêng cũ của Admin để không che tên thật vừa đổi.
     if (isShared) {
       await FirebaseDatabase.instance
-          .ref(
-        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
-      )
+          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
           .remove();
     }
 
@@ -3087,13 +3135,14 @@ class _HomePageState extends State<HomePage> {
                               final updates = <String, Object?>{};
 
                               for (var i = 0; i < roomIds.length; i++) {
-                                updates[
-                                "accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"
-                                ] = i + 1;
+                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
+                                    i + 1;
                               }
 
                               if (updates.isNotEmpty) {
-                                await FirebaseDatabase.instance.ref().update(updates);
+                                await FirebaseDatabase.instance.ref().update(
+                                  updates,
+                                );
                               }
                             },
                           ),
@@ -3166,6 +3215,8 @@ class _HomePageState extends State<HomePage> {
                         );
 
                         if (result == "__SCAN__") {
+                          if (!context.mounted) return;
+
                           final code = await openQRScanner(context);
 
                           if (code != null) {
@@ -3174,6 +3225,8 @@ class _HomePageState extends State<HomePage> {
                         }
 
                         if (result == "__MANUAL__") {
+                          if (!context.mounted) return;
+
                           final hubId = await showPairDialog(context);
 
                           if (hubId == null || hubId.trim().isEmpty) return;
@@ -3298,7 +3351,8 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             (unreadChatByHome[selectedHome] ?? 0) > 99
                                 ? "99+"
-                                : (unreadChatByHome[selectedHome] ?? 0).toString(),
+                                : (unreadChatByHome[selectedHome] ?? 0)
+                                      .toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 9,

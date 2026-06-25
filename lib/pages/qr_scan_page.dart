@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 Future<String?> openQRScanner(
-    BuildContext context, {
-      String title = "Quét QR HUB",
-      String subtitle = "Đưa mã QR vào giữa khung",
-    }) async {
+  BuildContext context, {
+  String title = "Quét QR HUB",
+  String subtitle = "Đưa mã QR vào giữa khung",
+}) async {
   final controller = MobileScannerController();
 
   return Navigator.push<String>(
     context,
     MaterialPageRoute(
-      builder: (_) => _QRScanPage(
-        controller: controller,
-        title: title,
-        subtitle: subtitle,
-      ),
+      builder: (_) =>
+          _QRScanPage(controller: controller, title: title, subtitle: subtitle),
     ),
   );
 }
@@ -79,10 +76,7 @@ class _QRScanPageState extends State<_QRScanPage>
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          MobileScanner(
-            controller: widget.controller,
-            onDetect: handleDetect,
-          ),
+          MobileScanner(controller: widget.controller, onDetect: handleDetect),
           Container(color: Colors.black.withValues(alpha: 0.45)),
           Center(
             child: Container(
@@ -96,7 +90,7 @@ class _QRScanPageState extends State<_QRScanPage>
                 children: [
                   AnimatedBuilder(
                     animation: scanController,
-                    builder: (_, __) {
+                    builder: (_, _) {
                       return Positioned(
                         top: 220 * scanController.value,
                         left: 12,
@@ -140,10 +134,7 @@ class _QRScanPageState extends State<_QRScanPage>
                 Text(
                   widget.subtitle,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 15,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 15),
                 ),
               ],
             ),

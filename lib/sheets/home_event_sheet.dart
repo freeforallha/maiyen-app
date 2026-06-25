@@ -61,10 +61,7 @@ void showHomeEventSheet({
 
     // Xoá dạng: [Tên nhà] Tiêu đề
     result = result.replaceFirst(
-      RegExp(
-        '^\\s*\\[$escapedName\\]\\s*',
-        caseSensitive: false,
-      ),
+      RegExp('^\\s*\\[$escapedName\\]\\s*', caseSensitive: false),
       '',
     );
 
@@ -76,7 +73,7 @@ void showHomeEventSheet({
     result = result.replaceAll(
       RegExp(
         '\\s+(?:trong|cho\\s+nhà|tại\\s+nhà|ở\\s+nhà)'
-            '\\s+["“”]?$escapedName["“”]?',
+        '\\s+["“”]?$escapedName["“”]?',
         caseSensitive: false,
       ),
       '',
@@ -324,7 +321,7 @@ void showHomeEventSheet({
                     return ListView.separated(
                       padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
                       itemCount: items.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         final item = items[index];
                         final type = item["type"]?.toString() ?? "system";

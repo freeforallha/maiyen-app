@@ -171,14 +171,18 @@ void showDeviceDetail({
             if (deviceType != "repeater")
               _infoRow(
                 icon: Icons.battery_full_rounded,
-                color: battery != null && battery < 20 ? Colors.red : Colors.green,
+                color: battery != null && battery < 20
+                    ? Colors.red
+                    : Colors.green,
                 title: "Pin",
                 value: getBatteryText(d),
               ),
 
             _infoRow(
               icon: Icons.network_cell_rounded,
-              color: linkquality != null && linkquality < 50 ? Colors.red : Colors.purple,
+              color: linkquality != null && linkquality < 50
+                  ? Colors.red
+                  : Colors.purple,
               title: "Tín hiệu",
               value: linkquality != null ? "$linkquality" : "N/A",
             ),
@@ -339,25 +343,20 @@ Widget _infoRow({
           child: Icon(icon, color: color, size: 18),
         ),
         const SizedBox(width: 12),
-        Text(
-          title,
-          style: const TextStyle(color: Colors.black54),
-        ),
+        Text(title, style: const TextStyle(color: Colors.black54)),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: TextStyle(
-              color: valueColor,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(color: valueColor, fontWeight: FontWeight.w600),
           ),
         ),
       ],
     ),
   );
 }
+
 Widget _roomPickerRow({
   required String ownerUid,
   required String homeId,
@@ -371,77 +370,65 @@ Widget _roomPickerRow({
         borderRadius: BorderRadius.circular(12),
         onTap: canEdit
             ? () async {
-          final roomsSnap = await FirebaseDatabase.instance
-              .ref(
-            "accounts/$ownerUid/homes/$homeId/rooms",
-          )
-              .get();
+                final roomsSnap = await FirebaseDatabase.instance
+                    .ref("accounts/$ownerUid/homes/$homeId/rooms")
+                    .get();
 
-          final rooms = roomsSnap.value is Map
-              ? Map<String, dynamic>.from(
-            roomsSnap.value as Map,
-          )
-              : <String, dynamic>{};
+                final rooms = roomsSnap.value is Map
+                    ? Map<String, dynamic>.from(roomsSnap.value as Map)
+                    : <String, dynamic>{};
 
-          final selectedRoom =
-          await showModalBottomSheet<String>(
-            context: context,
-            builder: (_) {
-              return SafeArea(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: rooms.entries.map((entry) {
-                    final room = entry.value is Map
-                        ? Map<String, dynamic>.from(
-                      entry.value as Map,
-                    )
-                        : <String, dynamic>{};
+                if (!context.mounted) return;
 
-                    final roomName =
-                        room["name"]?.toString() ??
-                            entry.key;
+                final selectedRoom = await showModalBottomSheet<String>(
+                  context: context,
+                  builder: (_) {
+                    return SafeArea(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: rooms.entries.map((entry) {
+                          final room = entry.value is Map
+                              ? Map<String, dynamic>.from(entry.value as Map)
+                              : <String, dynamic>{};
 
-                    return ListTile(
-                      leading: Icon(
-                        entry.key == currentRoomId
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_off,
+                          final roomName =
+                              room["name"]?.toString() ?? entry.key;
+
+                          return ListTile(
+                            leading: Icon(
+                              entry.key == currentRoomId
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_off,
+                            ),
+                            title: Text(roomName),
+                            onTap: () {
+                              Navigator.pop(context, entry.key);
+                            },
+                          );
+                        }).toList(),
                       ),
-                      title: Text(roomName),
-                      onTap: () {
-                        Navigator.pop(
-                          context,
-                          entry.key,
-                        );
-                      },
                     );
-                  }).toList(),
-                ),
-              );
-            },
-          );
+                  },
+                );
 
-          if (selectedRoom == null ||
-              selectedRoom == currentRoomId) {
-            return;
-          }
+                if (selectedRoom == null || selectedRoom == currentRoomId) {
+                  return;
+                }
 
-          await FirebaseDatabase.instance
-              .ref(
-            "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
-          )
-              .set(selectedRoom);
+                await FirebaseDatabase.instance
+                    .ref(
+                      "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
+                    )
+                    .set(selectedRoom);
 
-          if (context.mounted) {
-            Navigator.pop(context);
-          }
-        }
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              }
             : null,
         child: FutureBuilder<DataSnapshot>(
           future: FirebaseDatabase.instance
-              .ref(
-            "accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId",
-          )
+              .ref("accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId")
               .get(),
           builder: (context, snapshot) {
             String roomName = currentRoomId;
@@ -451,17 +438,14 @@ Widget _roomPickerRow({
             if (value is Map) {
               final room = Map<String, dynamic>.from(value);
 
-              roomName =
-                  room["name"]?.toString() ?? currentRoomId;
+              roomName = room["name"]?.toString() ?? currentRoomId;
             }
 
             return _infoRow(
               icon: canEdit
                   ? Icons.meeting_room_rounded
                   : Icons.lock_outline_rounded,
-              color: canEdit
-                  ? Colors.orange
-                  : Colors.grey,
+              color: canEdit ? Colors.orange : Colors.grey,
               title: "Phòng",
               value: roomName,
             );
@@ -471,6 +455,7 @@ Widget _roomPickerRow({
     },
   );
 }
+
 int? _toInt(dynamic value) {
   if (value == null) return null;
   if (value is int) return value;
@@ -506,6 +491,7 @@ String formatFullDate(dynamic value) {
 
   return "${dt.day}/${dt.month}/${dt.year} $hh:$mm";
 }
+
 String getBatteryText(Map<String, dynamic> d) {
   final battery = d["battery"];
   final batteryLow = d["battery_low"];

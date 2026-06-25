@@ -5,7 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'set_password_page.dart';
 import '../services/auto_login_service.dart';
+
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -46,17 +49,15 @@ class _LoginPageState extends State<LoginPage> {
       if (user == null) return;
 
       final hasPassword = user.providerData.any(
-            (p) => p.providerId == "password",
+        (p) => p.providerId == "password",
       );
 
       if (!hasPassword) {
-        if (!context.mounted) return;
+        if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => const SetPasswordPage(),
-          ),
+          MaterialPageRoute(builder: (_) => const SetPasswordPage()),
         );
 
         return;
@@ -66,15 +67,13 @@ class _LoginPageState extends State<LoginPage> {
       final snap = await ref.get();
 
       if (!snap.exists) {
-        if (!context.mounted) return;
+        if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => ProfileSetupPage(
-              uid: user.uid,
-              email: user.email ?? "",
-            ),
+            builder: (_) =>
+                ProfileSetupPage(uid: user.uid, email: user.email ?? ""),
           ),
         );
 
@@ -99,24 +98,20 @@ class _LoginPageState extends State<LoginPage> {
       final phone = profile["phone"]?.toString().trim() ?? "";
 
       if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
-        if (!context.mounted) return;
+        if (!mounted) return;
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => ProfileSetupPage(
-              uid: user.uid,
-              email: user.email ?? "",
-            ),
+            builder: (_) =>
+                ProfileSetupPage(uid: user.uid, email: user.email ?? ""),
           ),
         );
 
         return;
       }
 
-      await ref.child("profile").update({
-        "photoUrl": user.photoURL ?? "",
-      });
+      await ref.child("profile").update({"photoUrl": user.photoURL ?? ""});
     } catch (e, stack) {
       setState(() {
         error = "Google login error: $e";
@@ -142,9 +137,7 @@ class _LoginPageState extends State<LoginPage> {
           title: const Text("Khôi phục mật khẩu"),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(
-              hintText: "Nhập email của bạn",
-            ),
+            decoration: const InputDecoration(hintText: "Nhập email của bạn"),
           ),
           actions: [
             TextButton(
@@ -201,9 +194,9 @@ class _LoginPageState extends State<LoginPage> {
       if (isLogin) {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-          email: emailInput,
-          password: passwordInput,
-        )
+              email: emailInput,
+              password: passwordInput,
+            )
             .timeout(const Duration(seconds: 20));
 
         if (rememberLogin) {
@@ -212,8 +205,9 @@ class _LoginPageState extends State<LoginPage> {
             password: passwordInput,
           ).timeout(const Duration(seconds: 10));
         } else {
-          await AutoLoginService.clearLogin()
-              .timeout(const Duration(seconds: 10));
+          await AutoLoginService.clearLogin().timeout(
+            const Duration(seconds: 10),
+          );
         }
 
         return;
@@ -225,9 +219,9 @@ class _LoginPageState extends State<LoginPage> {
 
       final cred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-        email: emailInput,
-        password: passwordInput,
-      )
+            email: emailInput,
+            password: passwordInput,
+          )
           .timeout(const Duration(seconds: 20));
 
       final user = cred.user;
@@ -245,10 +239,8 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => ProfileSetupPage(
-            uid: user.uid,
-            email: user.email ?? emailInput,
-          ),
+          builder: (_) =>
+              ProfileSetupPage(uid: user.uid, email: user.email ?? emailInput),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -270,9 +262,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
 
-      debugPrint(
-        "EMAIL_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}",
-      );
+      debugPrint("EMAIL_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}");
     } catch (e, stack) {
       if (!mounted) return;
 
@@ -290,6 +280,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -309,6 +300,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
   }
+
   @override
   void dispose() {
     email.dispose();
@@ -320,11 +312,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildLogo() {
     return Column(
       children: [
-        const Icon(
-          Icons.home_rounded,
-          size: 76,
-          color: Colors.green,
-        ),
+        const Icon(Icons.home_rounded, size: 76, color: Colors.green),
 
         const SizedBox(height: 10),
 
@@ -361,9 +349,7 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
 
                 child: Center(
                   child: Padding(
@@ -454,16 +440,14 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: loading ? null : submit,
                               child: loading
                                   ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.4,
-                                  color: Colors.white,
-                                ),
-                              )
-                                  : Text(
-                                isLogin ? "Đăng nhập" : "Đăng ký mới",
-                              ),
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.4,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(isLogin ? "Đăng nhập" : "Đăng ký mới"),
                             ),
                           ),
 
@@ -483,9 +467,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Colors.black.withValues(alpha: 0.08),
                                   ),
                                 ],
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                ),
+                                border: Border.all(color: Colors.grey.shade300),
                               ),
                               child: const Center(
                                 child: Text(
@@ -500,7 +482,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 12),
-
 
                           const SizedBox(height: 4),
 

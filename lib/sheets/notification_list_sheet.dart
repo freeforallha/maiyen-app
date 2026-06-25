@@ -79,7 +79,7 @@ class NotificationListSheet extends StatelessWidget {
 
                 return ListView.separated(
                   itemCount: list.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  separatorBuilder: (_, _) => const Divider(height: 1),
                   itemBuilder: (_, i) {
                     final item = safeMap(list[i].value);
 
@@ -100,7 +100,8 @@ class NotificationListSheet extends StatelessWidget {
 
                     final lower = text.toLowerCase();
 
-                    final isSafe = lower.contains("đóng") ||
+                    final isSafe =
+                        lower.contains("đóng") ||
                         lower.contains("bình thường") ||
                         lower.contains("đã tắt") ||
                         lower.contains("kết nối lại") ||

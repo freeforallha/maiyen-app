@@ -40,10 +40,7 @@ void showSettingsSheet({
           ),
           child: Icon(icon, color: color),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
       ),
@@ -100,7 +97,9 @@ void showSettingsSheet({
                                 children: [
                                   Flexible(
                                     child: Text(
-                                      homeName.isNotEmpty ? homeName : "Chưa đặt tên",
+                                      homeName.isNotEmpty
+                                          ? homeName
+                                          : "Chưa đặt tên",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
@@ -239,10 +238,7 @@ void showSettingsSheet({
                     color: Colors.teal.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(
-                    Icons.person_rounded,
-                    color: Colors.teal,
-                  ),
+                  child: const Icon(Icons.person_rounded, color: Colors.teal),
                 ),
                 title: Row(
                   children: [
@@ -255,7 +251,7 @@ void showSettingsSheet({
 
                     ValueListenableBuilder<int>(
                       valueListenable: inviteCountNotifier,
-                      builder: (_, inviteCount, __) {
+                      builder: (_, inviteCount, _) {
                         if (inviteCount <= 0) return const SizedBox.shrink();
 
                         return Container(

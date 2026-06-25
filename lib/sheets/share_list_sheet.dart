@@ -39,20 +39,18 @@ Future<bool?> showShareListSheet({
   final ownerPhotoUrl = ownerRaw["photoUrl"]?.toString() ?? "";
 
   Future<Map<String, dynamic>> loadMember(
-      String memberUid,
-      dynamic rawValue,
-      ) async {
+    String memberUid,
+    dynamic rawValue,
+  ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
 
-    final email =
-    raw["email"]?.toString().trim().isNotEmpty == true
+    final email = raw["email"]?.toString().trim().isNotEmpty == true
         ? raw["email"].toString().trim()
         : "Không có email";
 
-    final name =
-    raw["name"]?.toString().trim().isNotEmpty == true
+    final name = raw["name"]?.toString().trim().isNotEmpty == true
         ? raw["name"].toString().trim()
         : email;
 
@@ -77,6 +75,8 @@ Future<bool?> showShareListSheet({
     if (role == "admin") return Icons.admin_panel_settings_rounded;
     return Icons.person_rounded;
   }
+
+  if (!context.mounted) return null;
 
   return showModalBottomSheet<bool>(
     context: context,
@@ -329,6 +329,8 @@ Future<bool?> showShareListSheet({
                                       if (await canLaunchUrl(uri)) {
                                         await launchUrl(uri);
                                       } else {
+                                        if (!sheetContext.mounted) return;
+
                                         showTopToast(
                                           sheetContext,
                                           "Không mở được ứng dụng gọi điện",
@@ -345,10 +347,12 @@ Future<bool?> showShareListSheet({
                                     onSelected: (value) async {
                                       final canDeleteTarget =
                                           targetUid == myUid ||
-                                              isOwner ||
-                                              (canManageMembers && role == "member");
+                                          isOwner ||
+                                          (canManageMembers &&
+                                              role == "member");
 
-                                      if (value == "delete" && !canDeleteTarget) {
+                                      if (value == "delete" &&
+                                          !canDeleteTarget) {
                                         showTopToast(
                                           sheetContext,
                                           "Bạn không có quyền xoá thành viên này",
@@ -358,7 +362,9 @@ Future<bool?> showShareListSheet({
                                         return;
                                       }
 
-                                      if ((value == "member" || value == "admin") && !isOwner) {
+                                      if ((value == "member" ||
+                                              value == "admin") &&
+                                          !isOwner) {
                                         showTopToast(
                                           sheetContext,
                                           "Chỉ chủ nhà mới được thay đổi vai trò",
@@ -425,9 +431,13 @@ Future<bool?> showShareListSheet({
                                             .remove();
 
                                         if (targetUid == myUid) {
+                                          if (!sheetContext.mounted) return;
+
                                           Navigator.of(sheetContext).pop(true);
                                           return;
                                         }
+
+                                        if (!sheetContext.mounted) return;
 
                                         showTopToast(
                                           sheetContext,

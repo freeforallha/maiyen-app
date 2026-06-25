@@ -568,7 +568,7 @@ class _AllHomePageState extends State<AllHomePage> {
       ),
     );
 
-    if (result == null) return;
+    if (result == null || !mounted) return;
 
     setState(() {
       for (final id in selectedHomes) {
@@ -585,29 +585,7 @@ class _AllHomePageState extends State<AllHomePage> {
         .set(result);
   }
 
-  Widget _buildMiniActionButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 34,
-        height: 34,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: color,
-        ),
-      ),
-    );
-  }
+
   Widget buildSectionTitle(String groupKey, List<String> ids) {
     final isYourHomes = groupKey == "your_homes";
 
@@ -906,6 +884,8 @@ class _AllHomePageState extends State<AllHomePage> {
     );
 
     if (action == null) return;
+    if (!mounted) return;
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
@@ -1029,7 +1009,7 @@ class _AllHomePageState extends State<AllHomePage> {
         }
       }
     }
-
+    if (!mounted) return;
     if (updates.isEmpty) {
       showTopToast(
         context,
@@ -1041,6 +1021,8 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     await FirebaseDatabase.instance.ref().update(updates);
+
+    if (!mounted) return;
 
     showDialog(
       context: context,
@@ -1161,6 +1143,7 @@ class _AllHomePageState extends State<AllHomePage> {
     );
 
     if (confirmOk != true) return;
+    if (!mounted) return;
 
     final passwordOk = await showModalBottomSheet<bool>(
       context: context,
@@ -1237,8 +1220,12 @@ class _AllHomePageState extends State<AllHomePage> {
 
                         await user.reauthenticateWithCredential(credential);
 
+                        if (!mounted) return;
+
                         Navigator.pop(context, true);
                       } catch (e) {
+                        if (!mounted) return;
+
                         showTopToast(
                           context,
                           "Sai mật khẩu",
@@ -1304,6 +1291,8 @@ class _AllHomePageState extends State<AllHomePage> {
             .remove();
       }
     }
+
+    if (!mounted) return;
 
     setState(() {
       selectedHomes.clear();
@@ -1614,6 +1603,7 @@ class _AllHomePageState extends State<AllHomePage> {
                               }
                             }
                           }
+                          if (!context.mounted) return;
 
                           if (targetUid == null) {
                             showTopToast(
@@ -1658,6 +1648,7 @@ class _AllHomePageState extends State<AllHomePage> {
                               "sharedAt": DateTime.now().millisecondsSinceEpoch,
                             });
                           }
+                          if (!context.mounted) return;
 
                           showDialog(
                             context: context,

@@ -64,15 +64,16 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   void _showStatusSummary(BuildContext context) {
-    final dangerIssues =
-    List<String>.from(widget.overall["dangerIssues"] ?? const []);
-    final warningIssues =
-    List<String>.from(widget.overall["warningIssues"] ?? const []);
-    final safeSummary =
-    List<String>.from(widget.overall["safeSummary"] ?? const []);
-    final events = widget.homeEvents.values
-        .map((e) => safeMap(e))
-        .toList();
+    final dangerIssues = List<String>.from(
+      widget.overall["dangerIssues"] ?? const [],
+    );
+    final warningIssues = List<String>.from(
+      widget.overall["warningIssues"] ?? const [],
+    );
+    final safeSummary = List<String>.from(
+      widget.overall["safeSummary"] ?? const [],
+    );
+    final events = widget.homeEvents.values.map((e) => safeMap(e)).toList();
 
     events.sort((a, b) {
       final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
@@ -104,14 +105,18 @@ class _StatusPanelState extends State<StatusPanel> {
     final aiSummary = <String>[];
 
     if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
-      aiSummary.add("Nhà đang có dấu hiệu cần kiểm tra, bạn nên cẩn thận xem lại .");
+      aiSummary.add(
+        "Nhà đang có dấu hiệu cần kiểm tra, bạn nên cẩn thận xem lại .",
+      );
 
       if (dangerIssues.isNotEmpty) {
         aiSummary.add("${dangerIssues.length} vấn đề đang cần xử lý ngay.");
       }
 
       if (warningIssues.isNotEmpty) {
-        aiSummary.add("${warningIssues.length} dấu hiệu nên được kiểm tra thêm.");
+        aiSummary.add(
+          "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
+        );
       }
 
       if (openCount > 0) {
@@ -121,7 +126,9 @@ class _StatusPanelState extends State<StatusPanel> {
       aiSummary.add("Nhà đang ổn, bạn có thể yên tâm.");
 
       if (recentEvents.isNotEmpty) {
-        aiSummary.add("Hôm nay có ${recentEvents.length} hoạt động được ghi nhận.");
+        aiSummary.add(
+          "Hôm nay có ${recentEvents.length} hoạt động được ghi nhận.",
+        );
       }
 
       if (openCount > 0) {
@@ -168,17 +175,13 @@ class _StatusPanelState extends State<StatusPanel> {
                 ],
                 _sectionTitle("🤖 Đánh giá tự động", Colors.blue),
 
-                ...aiSummary.map(
-                      (e) => _issueRow(e, Colors.blue),
-                ),
+                ...aiSummary.map((e) => _issueRow(e, Colors.blue)),
 
                 const SizedBox(height: 12),
 
                 _sectionTitle("📊 Tổng quan hôm nay", Colors.green),
 
-                ...safeSummary.map(
-                      (e) => _issueRow(e, Colors.green),
-                ),
+                ...safeSummary.map((e) => _issueRow(e, Colors.green)),
               ],
             ),
           ),
@@ -228,8 +231,9 @@ class _StatusPanelState extends State<StatusPanel> {
   Widget build(BuildContext context) {
     final level = widget.overall["level"]?.toString() ?? "safe";
     final issues = List<String>.from(widget.overall["issues"] ?? const []);
-    final safeSummary =
-    List<String>.from(widget.overall["safeSummary"] ?? const []);
+    final safeSummary = List<String>.from(
+      widget.overall["safeSummary"] ?? const [],
+    );
 
     final allLines = issues.isNotEmpty ? issues : safeSummary;
     final firstLine = allLines.isNotEmpty ? allLines.first : "Chưa có dữ liệu";
@@ -259,10 +263,10 @@ class _StatusPanelState extends State<StatusPanel> {
         ? Icons.info_rounded
         : Icons.verified_rounded;
     final alarmPauseSet = widget.alarmPauseText != "Chưa thiết lập";
-    final alarmPauseColor = alarmPauseSet ? Colors.orange.shade700 : Colors.black54;
-    final events = widget.homeEvents.values
-        .map((e) => safeMap(e))
-        .toList();
+    final alarmPauseColor = alarmPauseSet
+        ? Colors.orange.shade700
+        : Colors.black54;
+    final events = widget.homeEvents.values.map((e) => safeMap(e)).toList();
 
     events.sort((a, b) {
       final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
@@ -379,13 +383,10 @@ class _StatusPanelState extends State<StatusPanel> {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w800,
-                        color: issues.isNotEmpty
-                            ? statusColor
-                            : Colors.black54,
+                        color: issues.isNotEmpty ? statusColor : Colors.black54,
                       ),
                     ),
                   ),
-
                 ],
               ),
 
@@ -400,10 +401,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       layoutBuilder: (currentChild, previousChildren) {
                         return Stack(
                           alignment: Alignment.centerLeft,
-                          children: [
-                            ...previousChildren,
-                            if (currentChild != null) currentChild,
-                          ],
+                          children: [...previousChildren, ?currentChild],
                         );
                       },
                       child: _line(
@@ -424,8 +422,6 @@ class _StatusPanelState extends State<StatusPanel> {
                   ),
                 ],
               ),
-
-
             ],
           ),
         ),

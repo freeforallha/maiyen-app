@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../helpers/firebase_paths.dart';
@@ -17,13 +18,13 @@ class FCMService {
       sound: true,
     );
 
-    print("🔔 Permission: ${settings.authorizationStatus}");
+    debugPrint("🔔 Permission: ${settings.authorizationStatus}");
 
     final apnsToken = await messaging.getAPNSToken();
-    print("🍎 APNS TOKEN: $apnsToken");
+    debugPrint("🍎 APNS TOKEN: $apnsToken");
 
     final token = await messaging.getToken();
-    print("🔥 FCM TOKEN: $token");
+    debugPrint("🔥 FCM TOKEN: $token");
 
     if (token != null) {
       await FirebaseDatabase.instance
@@ -32,7 +33,7 @@ class FCMService {
     }
 
     messaging.onTokenRefresh.listen((newToken) async {
-      print("🔥 FCM TOKEN REFRESH: $newToken");
+      debugPrint("🔥 FCM TOKEN REFRESH: $newToken");
       await FirebaseDatabase.instance
           .ref(FirebasePaths.fcmToken(uid))
           .set(newToken);
@@ -57,11 +58,11 @@ class FCMService {
       final reminderItems = message.data["reminderItems"]?.toString() ?? "";
       final scheduleBody = message.data["body"]?.toString() ?? "";
 
-      final forceShow =
-          message.data["forceShow"]?.toString() == "true";
+      final forceShow = message.data["forceShow"]?.toString() == "true";
 
-      final displayReason =
-      forceShow && scheduleBody.isNotEmpty ? scheduleBody : reasonCode;
+      final displayReason = forceShow && scheduleBody.isNotEmpty
+          ? scheduleBody
+          : reasonCode;
 
       if (isSchedule) {
         await NotificationService.showSafetyReminder(
@@ -76,13 +77,13 @@ class FCMService {
 
       final title =
           message.notification?.title?.toString() ??
-              message.data["title"]?.toString() ??
-              "SafeHome Alarm";
+          message.data["title"]?.toString() ??
+          "SafeHome Alarm";
 
       final alarmBody =
           message.notification?.body?.toString() ??
-              message.data["body"]?.toString() ??
-              "Có cảnh báo an ninh cần kiểm tra ngay.";
+          message.data["body"]?.toString() ??
+          "Có cảnh báo an ninh cần kiểm tra ngay.";
 
       final alarmItems = message.data["alarmItems"]?.toString() ?? "";
 
@@ -102,7 +103,7 @@ class FCMService {
 
       final alarmBody =
           message.data["body"]?.toString() ??
-              "Có cảnh báo an ninh cần kiểm tra ngay.";
+          "Có cảnh báo an ninh cần kiểm tra ngay.";
 
       final alarmItems = message.data["alarmItems"]?.toString() ?? "";
 

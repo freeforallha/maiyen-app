@@ -169,7 +169,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
         await accountRef.child("homeOrder").set([homeId]);
       } else if (oldHomeOrder == null) {
-        await accountRef.child("homeOrder").set((oldHomes as Map).keys.toList());
+        await accountRef.child("homeOrder").set(oldHomes.keys.toList());
       }
 
       if (!mounted) return;

@@ -149,6 +149,8 @@ void showHomeChatSheet({
       phone =
           profile["phone"]?.toString() ?? account["phone"]?.toString() ?? "";
     } catch (e) {
+      if (!sheetContext.mounted) return;
+
       showTopToast(
         sheetContext,
         "Không đọc được số điện thoại",
@@ -202,6 +204,8 @@ void showHomeChatSheet({
                       if (await canLaunchUrl(uri)) {
                         await launchUrl(uri);
                       } else {
+                        if (!sheetContext.mounted) return;
+
                         showTopToast(
                           sheetContext,
                           "Không mở được ứng dụng gọi điện",

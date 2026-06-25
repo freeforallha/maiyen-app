@@ -7,33 +7,34 @@ import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import '../services/notification_service.dart';
 import '../services/auto_login_service.dart';
-import 'package:flutter/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../pages/profile_setup_page.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatelessWidget {
+  const SafeHomeApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: appNavigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(useMaterial3: true),
-      home: AlarmLaunchGate(),
+      home: const AlarmLaunchGate(),
     );
   }
 }
 
 class AlarmLaunchGate extends StatefulWidget {
+  const AlarmLaunchGate({super.key});
+
   @override
   State<AlarmLaunchGate> createState() => _AlarmLaunchGateState();
 }
 
 class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
-  static const MethodChannel nativeAlarmChannel = MethodChannel(
-    "safehome/native_alarm_permission",
-  );
+
 
   bool checked = false;
   bool isAlarmScreenLaunch = false;
@@ -72,7 +73,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       return const SafeHomeSplash();
     }
     if (payload == "open_home") {
-      return AuthGate();
+      return const AuthGate();
     }
     if (payload == "alarm") {
       return const FullscreenAlarmPage(
@@ -134,11 +135,13 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       );
     }
 
-    return AuthGate();
+    return const AuthGate();
   }
 }
 
 class AuthGate extends StatefulWidget {
+  const AuthGate({super.key});
+
   @override
   State<AuthGate> createState() => _AuthGateState();
 }

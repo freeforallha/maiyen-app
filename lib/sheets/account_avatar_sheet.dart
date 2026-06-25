@@ -2,12 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../services/native_alarm_permission_service.dart';
+
 class AccountAvatarSheet {
   static void showTopMessage(
-      BuildContext context,
-      String message, {
-        Color color = Colors.red,
-      }) {
+    BuildContext context,
+    String message, {
+    Color color = Colors.red,
+  }) {
     final overlay = Overlay.of(context);
     late OverlayEntry entry;
 
@@ -65,9 +66,8 @@ class AccountAvatarSheet {
       }
     });
   }
-  static Future<void> _showDeleteConfirmDialog(
-      BuildContext context,
-      ) async {
+
+  static Future<void> _showDeleteConfirmDialog(BuildContext context) async {
     final passwordController = TextEditingController();
 
     final ok = await showDialog<bool>(
@@ -93,9 +93,7 @@ class AccountAvatarSheet {
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  hintText: "Password",
-                ),
+                decoration: const InputDecoration(hintText: "Password"),
               ),
             ],
           ),
@@ -119,16 +117,19 @@ class AccountAvatarSheet {
       return;
     }
 
-    await _deleteAccount(
-      context,
-      passwordController.text.trim(),
-    );
+    if (!context.mounted) {
+      passwordController.dispose();
+      return;
+    }
+
+    await _deleteAccount(context, passwordController.text.trim());
     passwordController.dispose();
   }
+
   static Future<void> _deleteAccount(
-      BuildContext context,
-      String password,
-      ) async {
+    BuildContext context,
+    String password,
+  ) async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
@@ -201,9 +202,9 @@ class AccountAvatarSheet {
 
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Đã xoá tài khoản")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Đã xoá tài khoản")));
     } on FirebaseAuthException catch (e) {
       showTopMessage(context, "Xoá thất bại: ${e.message ?? 'Unknown error'}");
     } catch (e) {
@@ -230,19 +231,13 @@ class AccountAvatarSheet {
         children: [
           Text(
             label,
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 13,
-            ),
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
           ),
           Flexible(
             child: Text(
               value.isEmpty ? "Chưa cập nhật" : value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
             ),
           ),
         ],
@@ -284,305 +279,307 @@ class AccountAvatarSheet {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-        builder: (ctx) {
-          return AnimatedPadding(
-            duration: const Duration(milliseconds: 150),
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(ctx).viewInsets.bottom,
-            ),
-            child: SafeArea(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                ),
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(ctx).size.height * 0.9,
-                ),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // HANDLE
-                      Container(
-                        width: 40,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+      builder: (ctx) {
+        return AnimatedPadding(
+          duration: const Duration(milliseconds: 150),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
+          child: SafeArea(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // HANDLE
+                    Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
                       ),
+                    ),
 
-                      const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                      // AVATAR
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundColor: Colors.grey.shade200,
-                            backgroundImage:
-                            (user?.photoURL?.isNotEmpty == true)
-                                ? NetworkImage(user!.photoURL!)
-                                : null,
-                            child: (user?.photoURL == null)
-                                ? const Icon(
-                              Icons.person,
-                              size: 42,
-                              color: Colors.grey,
-                            )
-                                : null,
-                          ),
+                    // AVATAR
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.grey.shade200,
+                          backgroundImage: (user?.photoURL?.isNotEmpty == true)
+                              ? NetworkImage(user!.photoURL!)
+                              : null,
+                          child: (user?.photoURL == null)
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 42,
+                                  color: Colors.grey,
+                                )
+                              : null,
+                        ),
 
-                          Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.pop(ctx);
-                                onEditProfile();
-                              },
-                              child: Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.edit,
-                                  size: 15,
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              onEditProfile();
+                            },
+                            child: Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
                                   color: Colors.white,
+                                  width: 2,
                                 ),
                               ),
+                              child: const Icon(
+                                Icons.edit,
+                                size: 15,
+                                color: Colors.white,
+                              ),
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Text(
+                      user?.email ?? "No email",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    Text(
+                      "UID: ${user?.uid ?? 'Unknown'}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // INFO BOX
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          infoRow("Tên", userName),
+                          const SizedBox(height: 8),
+                          infoRow("Giới tính", userGender),
+                          const SizedBox(height: 8),
+                          infoRow("Số điện thoại", userPhone),
+                          const SizedBox(height: 8),
+                          infoRow(
+                            "Ngày sinh",
+                            userDob.isNotEmpty ? userDob.split('T')[0] : "",
                           ),
                         ],
                       ),
-
-                      const SizedBox(height: 12),
-
-                      Text(
-                        user?.email ?? "No email",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(18),
                       ),
-
-                      const SizedBox(height: 6),
-
-                      Text(
-                        "UID: ${user?.uid ?? 'Unknown'}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                      child: ListTile(
+                        leading: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.mail_rounded,
+                            color: Colors.orange,
+                          ),
                         ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // INFO BOX
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        title: Row(
                           children: [
-                            infoRow("Tên", userName),
-                            const SizedBox(height: 8),
-                            infoRow("Giới tính", userGender),
-                            const SizedBox(height: 8),
-                            infoRow("Số điện thoại", userPhone),
-                            const SizedBox(height: 8),
-                            infoRow(
-                              "Ngày sinh",
-                              userDob.isNotEmpty ? userDob.split('T')[0] : "",
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: ListTile(
-                          leading: Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
-                              color: Colors.orange.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(Icons.mail_rounded, color: Colors.orange),
-                          ),
-                          title: Row(
-                            children: [
-                              const Expanded(
-                                child: Text(
-                                  "Yêu cầu & lời mời",
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
+                            const Expanded(
+                              child: Text(
+                                "Yêu cầu & lời mời",
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
-                              ValueListenableBuilder<int>(
-                                valueListenable: inviteCountNotifier,
-                                builder: (_, inviteCount, __) {
-                                  if (inviteCount <= 0) {
-                                    return const SizedBox.shrink();
-                                  }
-
-                                  return Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Text(
-                                      "$inviteCount",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          trailing: const Icon(Icons.chevron_right_rounded),
-                          onTap: () {
-                            Navigator.pop(ctx);
-                            onShareRequests();
-                          },
-                        ),
-                      ),
-
-                      const SizedBox(height: 10),
-                      const SizedBox(height: 10),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: ListTile(
-                          leading: Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(
-                              Icons.security_rounded,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          title: const Text(
-                            "Cài đặt bảo mật",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          trailing: const Icon(Icons.chevron_right_rounded),
-                          onTap: () async {
-                            final canUse =
-                            await NativeAlarmPermissionService.canUseFullScreenIntent();
+                            ValueListenableBuilder<int>(
+                              valueListenable: inviteCountNotifier,
+                              builder: (_, inviteCount, _) {
+                                if (inviteCount <= 0) {
+                                  return const SizedBox.shrink();
+                                }
 
-                            if (!ctx.mounted) return;
-
-                            showModalBottomSheet(
-                              context: ctx,
-                              builder: (_) {
-                                return SafeArea(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const Icon(
-                                          Icons.security_rounded,
-                                          size: 48,
-                                          color: Colors.blue,
-                                        ),
-
-                                        const SizedBox(height: 12),
-
-                                        const Text(
-                                          "Cài đặt bảo mật",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 20),
-
-                                        ListTile(
-                                          leading: Icon(
-                                            canUse
-                                                ? Icons.check_circle
-                                                : Icons.warning_amber_rounded,
-                                            color: canUse
-                                                ? Colors.green
-                                                : Colors.orange,
-                                          ),
-                                          title: const Text(
-                                            "Báo động toàn màn hình",
-                                          ),
-                                          subtitle: Text(
-                                            canUse
-                                                ? "Đã được cấp quyền"
-                                                : "Chưa được cấp quyền",
-                                          ),
-                                          onTap: () async {
-                                            await NativeAlarmPermissionService
-                                                .openFullScreenIntentSettings();
-                                          },
-                                        ),
-                                      ],
+                                return Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Text(
+                                    "$inviteCount",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 );
                               },
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ),
-                      // LOGOUT
-                      dangerTile(
-                        icon: Icons.logout_rounded,
-                        title: "Đăng xuất",
+                        trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () {
                           Navigator.pop(ctx);
-                          logout();
+                          onShareRequests();
                         },
                       ),
+                    ),
 
-                      // DELETE
-                      dangerTile(
-                        icon: Icons.delete_forever_rounded,
-                        title: "Xoá tài khoản",
-                        onTap: () {
-                          _showDeleteConfirmDialog(ctx);                        },
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 10),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(18),
                       ),
-                    ],
-                  ),
+                      child: ListTile(
+                        leading: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.security_rounded,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        title: const Text(
+                          "Cài đặt bảo mật",
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () async {
+                          final canUse =
+                              await NativeAlarmPermissionService.canUseFullScreenIntent();
+
+                          if (!ctx.mounted) return;
+
+                          showModalBottomSheet(
+                            context: ctx,
+                            builder: (_) {
+                              return SafeArea(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.security_rounded,
+                                        size: 48,
+                                        color: Colors.blue,
+                                      ),
+
+                                      const SizedBox(height: 12),
+
+                                      const Text(
+                                        "Cài đặt bảo mật",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+
+                                      const SizedBox(height: 20),
+
+                                      ListTile(
+                                        leading: Icon(
+                                          canUse
+                                              ? Icons.check_circle
+                                              : Icons.warning_amber_rounded,
+                                          color: canUse
+                                              ? Colors.green
+                                              : Colors.orange,
+                                        ),
+                                        title: const Text(
+                                          "Báo động toàn màn hình",
+                                        ),
+                                        subtitle: Text(
+                                          canUse
+                                              ? "Đã được cấp quyền"
+                                              : "Chưa được cấp quyền",
+                                        ),
+                                        onTap: () async {
+                                          await NativeAlarmPermissionService.openFullScreenIntentSettings();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    // LOGOUT
+                    dangerTile(
+                      icon: Icons.logout_rounded,
+                      title: "Đăng xuất",
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        logout();
+                      },
+                    ),
+
+                    // DELETE
+                    dangerTile(
+                      icon: Icons.delete_forever_rounded,
+                      title: "Xoá tài khoản",
+                      onTap: () {
+                        _showDeleteConfirmDialog(ctx);
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        }
+          ),
+        );
+      },
     );
   }
 }

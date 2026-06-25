@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
@@ -15,8 +16,7 @@ class HomeListenerService {
       final homeId = entry.key.toString();
       final sharedConfig = safeMap(entry.value);
 
-      final ownerUid =
-          sharedConfig["ownerUid"]?.toString().trim() ?? "";
+      final ownerUid = sharedConfig["ownerUid"]?.toString().trim() ?? "";
 
       if (ownerUid.isEmpty) {
         continue;
@@ -27,44 +27,42 @@ class HomeListenerService {
           .onValue
           .listen(
             (sharedEvent) {
-          final sharedData = sharedEvent.snapshot.value;
+              final sharedData = sharedEvent.snapshot.value;
 
-          if (sharedData == null) {
-            onDeleted(homeId);
-            return;
-          }
+              if (sharedData == null) {
+                onDeleted(homeId);
+                return;
+              }
 
-          final sharedHome = safeMap(sharedData);
+              final sharedHome = safeMap(sharedData);
 
-          homes[homeId] = {
-            ...sharedHome,
+              homes[homeId] = {
+                ...sharedHome,
 
-            "alarm": safeMap(sharedHome["alarm"]),
+                "alarm": safeMap(sharedHome["alarm"]),
 
-            "_shared": true,
-            "_ownerUid": ownerUid,
+                "_shared": true,
+                "_ownerUid": ownerUid,
 
-            // Không đọc accounts/$ownerUid/email nữa vì Rules chặn.
-            "_ownerEmail":
-            sharedConfig["ownerEmail"]?.toString() ?? "",
+                // Không đọc accounts/$ownerUid/email nữa vì Rules chặn.
+                "_ownerEmail": sharedConfig["ownerEmail"]?.toString() ?? "",
 
-            "_customName": sharedConfig["customName"],
-            "_customAlarm": sharedConfig["alarm"],
+                "_customName": sharedConfig["customName"],
+                "_customAlarm": sharedConfig["alarm"],
 
-            // Role đã có sẵn trong sharedHomes của tài khoản hiện tại.
-            "_role":
-            sharedConfig["role"]?.toString() ?? "member",
-          };
+                // Role đã có sẵn trong sharedHomes của tài khoản hiện tại.
+                "_role": sharedConfig["role"]?.toString() ?? "member",
+              };
 
-          refresh();
-        },
-        onError: (error) {
-          print(
-            "SHARED HOME LISTENER ERROR: "
+              refresh();
+            },
+            onError: (error) {
+              debugPrint(
+                "SHARED HOME LISTENER ERROR: "
                 "$ownerUid/$homeId - $error",
+              );
+            },
           );
-        },
-      );
     }
   }
 }

@@ -142,7 +142,7 @@ class DeviceList extends StatelessWidget {
       final h = diff.inHours;
       final m = diff.inMinutes % 60;
       if (m == 0) return "${h}h trước";
-      return "${h}h${m}' trước";
+      return "${h}h$m' trước";
     }
 
     if (diff.inDays < 30) return "${diff.inDays} ngày trước";
@@ -262,8 +262,7 @@ class DeviceList extends StatelessWidget {
       }
     }
 
-    if (type == "smoke" &&
-        (d["smoke"] == true || d["tamper"] == true)) {
+    if (type == "smoke" && (d["smoke"] == true || d["tamper"] == true)) {
       return Colors.red.shade500;
     }
 
@@ -321,10 +320,7 @@ class DeviceList extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.88),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: getSoftBorder(d),
-              width: 1,
-            ),
+            border: Border.all(color: getSoftBorder(d), width: 1),
             boxShadow: [
               BoxShadow(
                 blurRadius: 10,
@@ -336,7 +332,6 @@ class DeviceList extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -382,8 +377,6 @@ class DeviceList extends StatelessWidget {
 
                     const SizedBox(height: 6),
 
-
-
                     const SizedBox(height: 4),
 
                     Row(
@@ -405,7 +398,8 @@ class DeviceList extends StatelessWidget {
                           width: 6,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: getConnectionColor(connectionStatus),                            shape: BoxShape.circle,
+                            color: getConnectionColor(connectionStatus),
+                            shape: BoxShape.circle,
                           ),
                         ),
 
@@ -437,7 +431,7 @@ class DeviceList extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       child: Column(
         children: [
-          if (header != null) header!,
+          ?header,
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -458,8 +452,9 @@ class DeviceList extends StatelessWidget {
                         ]) ...[
                           Builder(
                             builder: (_) {
-                              final groupEntries =
-                              devices.entries.where((entry) {
+                              final groupEntries = devices.entries.where((
+                                entry,
+                              ) {
                                 final d = safeMap(entry.value);
                                 final type = d["type"]?.toString() ?? "door";
 
@@ -477,7 +472,8 @@ class DeviceList extends StatelessWidget {
                                 return roomId == selectedRoomId;
                               }).toList();
 
-                              if (groupEntries.isEmpty && groupName != "An ninh ra/vào") {
+                              if (groupEntries.isEmpty &&
+                                  groupName != "An ninh ra/vào") {
                                 return const SizedBox.shrink();
                               }
 
@@ -496,31 +492,39 @@ class DeviceList extends StatelessWidget {
                                           child: groupEntries.isEmpty
                                               ? const SizedBox.shrink()
                                               : Text(
-                                            groupName,
-                                            style: TextStyle(
-                                              fontSize: compact ? 13 : 14,
-                                              fontWeight: FontWeight.w900,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
+                                                  groupName,
+                                                  style: TextStyle(
+                                                    fontSize: compact ? 13 : 14,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.black87,
+                                                  ),
+                                                ),
                                         ),
 
                                         if (groupName == "An ninh ra/vào")
                                           InkWell(
-                                            borderRadius: BorderRadius.circular(14),
+                                            borderRadius: BorderRadius.circular(
+                                              14,
+                                            ),
                                             onTap: onPairSensor,
                                             child: Container(
                                               width: 36,
                                               height: 36,
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                borderRadius: BorderRadius.circular(14),
+                                                borderRadius:
+                                                    BorderRadius.circular(14),
                                                 border: Border.all(
-                                                  color: Colors.blue.withValues(alpha: 0.20),
+                                                  color: Colors.blue.withValues(
+                                                    alpha: 0.20,
+                                                  ),
                                                 ),
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black.withValues(alpha: 0.04),
+                                                    color: Colors.black
+                                                        .withValues(
+                                                          alpha: 0.04,
+                                                        ),
                                                     blurRadius: 8,
                                                     offset: const Offset(0, 2),
                                                   ),
@@ -541,7 +545,7 @@ class DeviceList extends StatelessWidget {
                                     runSpacing: 10,
                                     alignment: WrapAlignment.start,
                                     crossAxisAlignment:
-                                    WrapCrossAlignment.start,
+                                        WrapCrossAlignment.start,
                                     children: groupEntries.map((entry) {
                                       final d = safeMap(entry.value);
 

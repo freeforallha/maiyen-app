@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 
 class HomeNotificationService {
   static const int maxNotifications = 120;
-  static const int maxHomeEvents = 240;
 
   static Future<void> addNotification({
     required String uid,
@@ -22,7 +21,8 @@ class HomeNotificationService {
     String? homeName,
     Map<String, dynamic>? data,
   }) async {
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
+    final currentUid =
+        FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid == null || currentUid.isEmpty) {
       throw StateError(
@@ -30,11 +30,12 @@ class HomeNotificationService {
       );
     }
 
-    if (uid != currentUid &&
-        ((ownerUid?.trim().isEmpty ?? true) ||
-            homeId.trim().isEmpty)) {
-      throw StateError(
-        "Thông báo gửi sang tài khoản khác phải có ownerUid và homeId",
+    final cleanTargetUid = uid.trim();
+    final cleanHomeId = homeId.trim();
+
+    if (cleanTargetUid.isEmpty || cleanHomeId.isEmpty) {
+      throw ArgumentError(
+        "Thông báo thiếu uid hoặc homeId",
       );
     }
 
@@ -54,46 +55,106 @@ class HomeNotificationService {
       );
     }
 
-    final resolvedSenderUid = currentUid;
-    final resolvedActorUid = currentUid;
+    // Mọi thông báo gửi sang tài khoản khác đều đi qua backend.
+    if (cleanTargetUid != currentUid) {
+      var resolvedOwnerUid =
+          ownerUid?.trim() ?? "";
+
+      if (resolvedOwnerUid.isEmpty) {
+        final ownHomeSnap = await FirebaseDatabase.instance
+            .ref(
+          "accounts/$currentUid/homes/$cleanHomeId",
+        )
+            .get();
+
+        if (ownHomeSnap.exists) {
+          resolvedOwnerUid = currentUid;
+        }
+      }
+
+      if (resolvedOwnerUid.isEmpty) {
+        final sharedOwnerSnap =
+        await FirebaseDatabase.instance
+            .ref(
+          "accounts/$currentUid/sharedHomes/$cleanHomeId/ownerUid",
+        )
+            .get();
+
+        resolvedOwnerUid =
+            sharedOwnerSnap.value?.toString().trim() ??
+                "";
+      }
+
+      if (resolvedOwnerUid.isEmpty) {
+        throw StateError(
+          "Không xác định được chủ nhà cho thông báo gửi sang tài khoản khác",
+        );
+      }
+
+      await notifyHome(
+        ownerUid: resolvedOwnerUid,
+        homeId: cleanHomeId,
+        recipientUid: cleanTargetUid,
+        type: type,
+        title: title,
+        message: message,
+        category: category,
+        severity: severity,
+        deviceId: deviceId,
+        senderUid: currentUid,
+        entityType: entityType,
+        entityId: entityId,
+        homeName: homeName,
+        data: data,
+        includeActor: false,
+        writeHomeTimeline: false,
+      );
+
+      return;
+    }
+
     final resolvedHomeName = await resolveHomeName(
-      homeId: homeId,
+      homeId: cleanHomeId,
       ownerUid: ownerUid,
-      notificationUid: uid,
+      notificationUid: currentUid,
       providedHomeName: homeName,
     );
-    final notificationData = _withHomeName(data, resolvedHomeName);
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final listRef = FirebaseDatabase.instance.ref(
-      "accounts/$uid/notifications",
-    );
-    final ref = listRef.push();
 
-    await ref.set(
+    final now =
+        DateTime.now().millisecondsSinceEpoch;
+
+    final listRef = FirebaseDatabase.instance.ref(
+      "accounts/$currentUid/notifications",
+    );
+
+    final notificationRef = listRef.push();
+
+    await notificationRef.set(
       _compact({
-        "id": ref.key,
+        "id": notificationRef.key,
         "type": type,
         "category": category,
         "severity": severity,
         "title": _cleanTitle(title),
         "message": message,
-        "homeId": homeId,
+        "homeId": cleanHomeId,
         "ownerUid": ownerUid,
         "homeName": resolvedHomeName,
         "deviceId": deviceId,
-        "senderUid": resolvedSenderUid,
-        "actorUid": resolvedActorUid,
+        "senderUid": currentUid,
+        "actorUid": currentUid,
         "entityType": entityType,
         "entityId": entityId ?? deviceId,
-        "data": notificationData,
+        "data": _withHomeName(
+          data,
+          resolvedHomeName,
+        ),
         "time": now,
         "read": false,
       }),
     );
 
-    if (uid == currentUid) {
-      await _cleanupOldNotifications(uid);
-    }
+    await _cleanupOldNotifications(currentUid);
   }
 
   static Future<void> notifyHome({
@@ -111,13 +172,24 @@ class HomeNotificationService {
     String? entityId,
     String? homeName,
     Map<String, dynamic>? data,
+    String? recipientUid,
     Iterable<String>? recipientUids,
     bool includeActor = true,
     bool writeHomeTimeline = true,
   }) async {
-    if (ownerUid.isEmpty || homeId.isEmpty) return;
+    final cleanOwnerUid = ownerUid.trim();
+    final cleanHomeId = homeId.trim();
+    final cleanType = type.trim();
+    final cleanCategory = category.trim();
+    final cleanSeverity = severity.trim();
+    final cleanMessage = message.trim();
 
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
+    if (cleanOwnerUid.isEmpty || cleanHomeId.isEmpty) {
+      return;
+    }
+
+    final currentUid =
+        FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid == null || currentUid.isEmpty) {
       throw StateError(
@@ -133,93 +205,75 @@ class HomeNotificationService {
       );
     }
 
-    final resolvedSenderUid = currentUid;
+    if (recipientUids != null) {
+      throw StateError(
+        "Kênh backend chỉ hỗ trợ một recipientUid",
+      );
+    }
 
-    final resolvedActorUid =
-    actorUid != null && actorUid.trim().isNotEmpty
-        ? actorUid.trim()
-        : currentUid;
+    if (cleanType.isEmpty ||
+        cleanCategory.isEmpty ||
+        cleanSeverity.isEmpty ||
+        cleanMessage.isEmpty) {
+      throw ArgumentError(
+        "Thông báo thiếu type, category, severity hoặc message",
+      );
+    }
 
-    final recipients = recipientUids == null
-        ? await homeRecipientUids(ownerUid: ownerUid, homeId: homeId)
-        : recipientUids.toSet();
+    String? cleanOptional(String? value) {
+      final clean = value?.trim() ?? "";
+
+      return clean.isEmpty ? null : clean;
+    }
+
+    final cleanRecipientUid =
+    cleanOptional(recipientUid);
+
+    final isTargeted =
+        cleanRecipientUid != null;
+
     final resolvedHomeName = await resolveHomeName(
-      homeId: homeId,
-      ownerUid: ownerUid,
+      homeId: cleanHomeId,
+      ownerUid: cleanOwnerUid,
       providedHomeName: homeName,
     );
-    final notificationData = _withHomeName(data, resolvedHomeName);
 
-    if (!includeActor) {
-      recipients.remove(resolvedActorUid);
-    }
+    final now =
+        DateTime.now().millisecondsSinceEpoch;
 
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final root = FirebaseDatabase.instance.ref();
-    final payload = _compact({
-      "type": type,
-      "category": category,
-      "severity": severity,
-      "title": _cleanTitle(title),
-      "message": message,
-      "homeId": homeId,
-      "ownerUid": ownerUid,
-      "homeName": resolvedHomeName,
-      "deviceId": deviceId,
-      "senderUid": resolvedSenderUid,
-      "actorUid": resolvedActorUid,
-      "entityType": entityType,
-      "entityId": entityId ?? deviceId,
-      "data": notificationData,
-      "time": now,
-      "read": false,
-    });
+    final requestRef = FirebaseDatabase.instance
+        .ref("home_notification_requests")
+        .push();
 
-    final updates = <String, Object?>{};
-
-    if (writeHomeTimeline) {
-      final eventRef = FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId/events")
-          .push();
-
-      updates["accounts/$ownerUid/homes/$homeId/events/${eventRef.key}"] = {
-        ...payload,
-        "id": eventRef.key,
-      };
-    }
-
-    for (final uid in recipients.where((value) => value.isNotEmpty)) {
-      final notificationRef = FirebaseDatabase.instance
-          .ref("accounts/$uid/notifications")
-          .push();
-
-      updates["accounts/$uid/notifications/${notificationRef.key}"] = {
-        ...payload,
-        "id": notificationRef.key,
-      };
-    }
-
-    if (updates.isEmpty) return;
-
-    try {
-      await root.update(updates);
-    } catch (_) {
-      if (!writeHomeTimeline) rethrow;
-
-      updates.removeWhere((path, _) => path.contains("/events/"));
-
-      if (updates.isNotEmpty) {
-        await root.update(updates);
-      }
-    }
-
-    if (currentUid != null) {
-      await _cleanupOldNotifications(currentUid);
-    }
-
-    if (currentUid == ownerUid) {
-      await _cleanupOldHomeEvents(ownerUid: ownerUid, homeId: homeId);
-    }
+    await requestRef.set(
+      _compact({
+        "status": "pending",
+        "requestedBy": currentUid,
+        "ownerUid": cleanOwnerUid,
+        "homeId": cleanHomeId,
+        "recipientUid": cleanRecipientUid,
+        "type": cleanType,
+        "category": cleanCategory,
+        "severity": cleanSeverity,
+        "title": _cleanTitle(title),
+        "message": cleanMessage,
+        "homeName": resolvedHomeName,
+        "deviceId": cleanOptional(deviceId),
+        "entityType": cleanOptional(entityType),
+        "entityId": cleanOptional(
+          entityId ?? deviceId,
+        ),
+        "data": _withHomeName(
+          data,
+          resolvedHomeName,
+        ),
+        "includeActor":
+        isTargeted ? false : includeActor,
+        "writeHomeTimeline":
+        isTargeted ? false : writeHomeTimeline,
+        "time": now,
+      }),
+    );
   }
 
   static Future<Set<String>> homeRecipientUids({
@@ -349,50 +403,6 @@ class HomeNotificationService {
     } catch (_) {}
   }
 
-  static Future<void> _cleanupOldHomeEvents({
-    required String ownerUid,
-    required String homeId,
-  }) async {
-    try {
-      final snap = await FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId/events")
-          .orderByChild("time")
-          .get();
-
-      if (!snap.exists || snap.value is! Map) return;
-
-      final raw = Map<String, dynamic>.from(snap.value as Map);
-
-      if (raw.length <= maxHomeEvents) return;
-
-      final items = raw.entries.toList();
-
-      items.sort((a, b) {
-        if (a.value is! Map || b.value is! Map) return 0;
-
-        final aData = Map<String, dynamic>.from(a.value as Map);
-        final bData = Map<String, dynamic>.from(b.value as Map);
-
-        final aTime = int.tryParse(aData["time"]?.toString() ?? "0") ?? 0;
-        final bTime = int.tryParse(bData["time"]?.toString() ?? "0") ?? 0;
-
-        return aTime.compareTo(bTime);
-      });
-
-      final removeCount = raw.length - maxHomeEvents;
-      final updates = <String, Object?>{};
-
-      for (int i = 0; i < removeCount; i++) {
-        updates["accounts/$ownerUid/homes/$homeId/events/${items[i].key}"] =
-            null;
-      }
-
-      if (updates.isNotEmpty) {
-        await FirebaseDatabase.instance.ref().update(updates);
-      }
-    } catch (_) {}
-  }
-
   static Map<String, dynamic> _compact(Map<String, dynamic> value) {
     final result = <String, dynamic>{};
 
@@ -434,9 +444,7 @@ class HomeNotificationService {
     return cleanTitle.isNotEmpty ? cleanTitle : "Thông báo";
   }
 
-  static bool _containsHomeName(String text, String homeName) {
-    return text.toLowerCase().contains(homeName.toLowerCase());
-  }
+
 
   static String _cleanHomeName(String? value) {
     final name = value?.trim() ?? "";

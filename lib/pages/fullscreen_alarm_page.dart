@@ -521,6 +521,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     await localNotif.cancel(999999);
     await startAlarmSound();
 
+    if (!context.mounted) return;
+
     final ok = await showDialog<bool>(
       context: context,
       barrierDismissible: false,

@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 Future<void> showRoomManagementSheet({
   required BuildContext context,
   required String ownerUid,
@@ -21,19 +22,14 @@ Future<void> showRoomManagementSheet({
         ? Map<String, dynamic>.from(accessSnap.value as Map)
         : <String, dynamic>{};
 
-    final sharedOwnerUid =
-        access["ownerUid"]?.toString() ?? "";
+    final sharedOwnerUid = access["ownerUid"]?.toString() ?? "";
 
     final role = access["role"]?.toString() ?? "member";
 
     if (sharedOwnerUid != ownerUid || role != "admin") {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "Bạn không có quyền quản lý phòng",
-            ),
-          ),
+          const SnackBar(content: Text("Bạn không có quyền quản lý phòng")),
         );
       }
 
@@ -75,19 +71,24 @@ Future<void> showRoomManagementSheet({
                   .where((entry) => entry.key == "unassigned")
                   .toList();
 
-              final normalEntries = rooms.entries
-                  .where((entry) => entry.key != "unassigned")
-                  .toList()
-                ..sort((a, b) {
-                  final ao = a.value is Map ? (a.value["order"] ?? 999) : 999;
-                  final bo = b.value is Map ? (b.value["order"] ?? 999) : 999;
-                  return ao.compareTo(bo);
-                });
+              final normalEntries =
+                  rooms.entries
+                      .where((entry) => entry.key != "unassigned")
+                      .toList()
+                    ..sort((a, b) {
+                      final ao = a.value is Map
+                          ? (a.value["order"] ?? 999)
+                          : 999;
+                      final bo = b.value is Map
+                          ? (b.value["order"] ?? 999)
+                          : 999;
+                      return ao.compareTo(bo);
+                    });
 
               Future<void> renameRoom(
-                  String roomId,
-                  Map<String, dynamic> room,
-                  ) async {
+                String roomId,
+                Map<String, dynamic> room,
+              ) async {
                 final controller = TextEditingController(
                   text: room["name"]?.toString() ?? "",
                 );
@@ -98,9 +99,7 @@ Future<void> showRoomManagementSheet({
                     title: const Text("Đổi tên phòng"),
                     content: TextField(
                       controller: controller,
-                      decoration: const InputDecoration(
-                        hintText: "Tên phòng",
-                      ),
+                      decoration: const InputDecoration(hintText: "Tên phòng"),
                     ),
                     actions: [
                       TextButton(
@@ -119,9 +118,7 @@ Future<void> showRoomManagementSheet({
 
                 if (newName == null || newName.isEmpty) return;
 
-                await roomsRef.child(roomId).update({
-                  "name": newName,
-                });
+                await roomsRef.child(roomId).update({"name": newName});
               }
 
               Future<void> deleteRoom(String roomId) async {
@@ -161,8 +158,7 @@ Future<void> showRoomManagementSheet({
                       : <String, dynamic>{};
 
                   if (device["roomId"] == roomId) {
-                    updates["devices/${deviceEntry.key}/roomId"] =
-                    "unassigned";
+                    updates["devices/${deviceEntry.key}/roomId"] = "unassigned";
                   }
                 }
 
@@ -172,8 +168,8 @@ Future<void> showRoomManagementSheet({
               }
 
               Future<void> addRoom(
-                  List<MapEntry<dynamic, dynamic>> allEntries,
-                  ) async {
+                List<MapEntry<dynamic, dynamic>> allEntries,
+              ) async {
                 final controller = TextEditingController();
 
                 final roomName = await showDialog<String>(
@@ -210,14 +206,15 @@ Future<void> showRoomManagementSheet({
                       ? Map<String, dynamic>.from(entry.value)
                       : <String, dynamic>{};
 
-                  final existing =
-                  (room["name"]?.toString() ?? "").trim().toLowerCase();
+                  final existing = (room["name"]?.toString() ?? "")
+                      .trim()
+                      .toLowerCase();
 
                   if (existing == normalized) {
+                    if (!context.mounted) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Tên phòng đã tồn tại"),
-                      ),
+                      const SnackBar(content: Text("Tên phòng đã tồn tại")),
                     );
                     return;
                   }
@@ -279,9 +276,7 @@ Future<void> showRoomManagementSheet({
                       shrinkWrap: true,
                       buildDefaultDragHandles: false,
                       itemCount: normalEntries.length,
-                      onReorder: (oldIndex, newIndex) async {
-                        if (newIndex > oldIndex) newIndex--;
-
+                      onReorderItem: (oldIndex, newIndex) async {
                         final items = [...normalEntries];
                         final moved = items.removeAt(oldIndex);
                         items.insert(newIndex, moved);
@@ -306,8 +301,7 @@ Future<void> showRoomManagementSheet({
                           child: Material(
                             color: Colors.white,
                             child: ListTile(
-                              leading:
-                              const Icon(Icons.drag_handle_rounded),
+                              leading: const Icon(Icons.drag_handle_rounded),
                               title: Text(
                                 room["name"]?.toString() ?? entry.key,
                               ),
@@ -344,10 +338,8 @@ Future<void> showRoomManagementSheet({
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () => addRoom([
-                        ...unassignedEntry,
-                        ...normalEntries,
-                      ]),
+                      onPressed: () =>
+                          addRoom([...unassignedEntry, ...normalEntries]),
                       icon: const Icon(Icons.add_rounded),
                       label: const Text("Thêm phòng"),
                     ),
