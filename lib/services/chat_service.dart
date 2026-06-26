@@ -19,7 +19,9 @@ class ChatTypingMember {
 class ChatService {
   static const int maxMessageLength = 1000;
   static const int typingStaleMillis = 12000;
-  static const Map<String, String> _serverTimestamp = {".sv": "timestamp"};
+  static const Map<String, String> _serverTimestamp = {
+    ".sv": "timestamp",
+  };
 
   static Stream<DatabaseEvent> homeChatStream(String homeId) {
     return FirebaseDatabase.instance
@@ -27,7 +29,10 @@ class ChatService {
         .onValue;
   }
 
-  static Stream<DatabaseEvent> messagesStream(String homeId, {int limit = 80}) {
+  static Stream<DatabaseEvent> messagesStream(
+      String homeId, {
+        int limit = 80,
+      }) {
     return FirebaseDatabase.instance
         .ref(FirebasePaths.homeMessages(homeId))
         .orderByChild("time")
@@ -41,7 +46,7 @@ class ChatService {
         .onValue;
   }
 
-  static Future<void> sendMessage({
+  static Future<String> sendMessage({
     required String homeId,
     required String uid,
     required String userName,
@@ -50,7 +55,10 @@ class ChatService {
   }) async {
     final trimmedText = text.trim();
 
-    if (trimmedText.isEmpty) return;
+    if (trimmedText.isEmpty) {
+      throw ArgumentError("Message is empty");
+    }
+
     if (trimmedText.length > maxMessageLength) {
       throw ArgumentError("Message is too long");
     }
@@ -58,6 +66,7 @@ class ChatService {
     final messageRef = FirebaseDatabase.instance
         .ref(FirebasePaths.homeMessages(homeId))
         .push();
+
     final messageId = messageRef.key;
 
     if (messageId == null) {
@@ -74,6 +83,8 @@ class ChatService {
       },
       FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
     });
+
+    return messageId;
   }
 
   static Future<void> markAsRead({
@@ -115,7 +126,9 @@ class ChatService {
   }) {
     if (typing == null || typing is! Map) return const [];
 
-    final currentMillis = (now ?? DateTime.now()).millisecondsSinceEpoch;
+    final currentMillis =
+        (now ?? DateTime.now()).millisecondsSinceEpoch;
+
     final staleBefore = currentMillis - typingStaleMillis;
     final typingMap = Map<String, dynamic>.from(typing);
     final members = <ChatTypingMember>[];
@@ -123,12 +136,19 @@ class ChatService {
     for (final entry in typingMap.entries) {
       final memberUid = entry.key.toString();
 
-      if (memberUid == currentUid || entry.value is! Map) continue;
+      if (memberUid == currentUid || entry.value is! Map) {
+        continue;
+      }
 
-      final member = Map<String, dynamic>.from(entry.value as Map);
+      final member = Map<String, dynamic>.from(
+        entry.value as Map,
+      );
+
       final updatedAt = _asMillis(member["updatedAt"]);
 
-      if (updatedAt <= 0 || updatedAt < staleBefore) continue;
+      if (updatedAt <= 0 || updatedAt < staleBefore) {
+        continue;
+      }
 
       members.add(
         ChatTypingMember(
@@ -140,26 +160,39 @@ class ChatService {
       );
     }
 
-    members.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    members.sort(
+          (a, b) => b.updatedAt.compareTo(a.updatedAt),
+    );
+
     return members;
   }
 
-  static int unreadCount({required dynamic homeChat, required String uid}) {
-    if (homeChat == null) return 0;
-    if (homeChat is! Map) return 0;
+  static int unreadCount({
+    required dynamic homeChat,
+    required String uid,
+  }) {
+    if (homeChat == null || homeChat is! Map) {
+      return 0;
+    }
 
     final chat = Map<String, dynamic>.from(homeChat);
     final messagesRaw = chat["messages"];
 
-    if (messagesRaw == null) return 0;
-    if (messagesRaw is! Map) return 0;
+    if (messagesRaw == null || messagesRaw is! Map) {
+      return 0;
+    }
 
     final messages = Map<String, dynamic>.from(messagesRaw);
     final lastRead = _lastReadTime(chat["lastRead"], uid);
     var count = 0;
 
     for (final messageRaw in messages.values) {
-      final message = Map<String, dynamic>.from(messageRaw as Map);
+      if (messageRaw is! Map) continue;
+
+      final message = Map<String, dynamic>.from(
+        messageRaw,
+      );
+
       final sender = message["uid"]?.toString() ?? "";
       final time = _asMillis(message["time"]);
 
@@ -171,11 +204,18 @@ class ChatService {
     return count;
   }
 
-  static int _lastReadTime(dynamic lastReadRaw, String uid) {
-    if (lastReadRaw == null) return 0;
-    if (lastReadRaw is! Map) return 0;
+  static int _lastReadTime(
+      dynamic lastReadRaw,
+      String uid,
+      ) {
+    if (lastReadRaw == null || lastReadRaw is! Map) {
+      return 0;
+    }
 
-    final lastRead = Map<String, dynamic>.from(lastReadRaw);
+    final lastRead = Map<String, dynamic>.from(
+      lastReadRaw,
+    );
+
     return _asMillis(lastRead[uid]);
   }
 

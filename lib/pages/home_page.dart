@@ -51,6 +51,8 @@ class _HomePageState extends State<HomePage> {
   int unreadChatCount = 0;
   Map<String, int> unreadChatByHome = {};
   int unreadHomeNotificationCount = 0;
+  Map<String, String>? _pendingChatOpenRequest;
+  bool _openingChatFromNotification = false;
   void openNotificationList(String deviceId) {
     final ownerUid = getHomeOwnerUid();
     showModalBottomSheet(
@@ -147,6 +149,64 @@ class _HomePageState extends State<HomePage> {
       onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
       onNotification: () => openNotificationList(deviceId),
     );
+  }
+
+  void _handleChatOpenRequest() {
+    final request = NotificationService.chatOpenRequest.value;
+
+    if (request == null) return;
+
+    _pendingChatOpenRequest =
+    Map<String, String>.from(request);
+
+    unawaited(_tryOpenPendingChat());
+  }
+
+  Future<void> _tryOpenPendingChat() async {
+    if (!mounted || _openingChatFromNotification) {
+      return;
+    }
+
+    final request = _pendingChatOpenRequest;
+
+    if (request == null) return;
+
+    final homeId = request["homeId"]?.trim() ?? "";
+
+    if (homeId.isEmpty || !homes.containsKey(homeId)) {
+      return;
+    }
+
+    _openingChatFromNotification = true;
+    _pendingChatOpenRequest = null;
+    NotificationService.chatOpenRequest.value = null;
+
+    selectHomeFromNotification(homeId);
+
+    await WidgetsBinding.instance.endOfFrame;
+    await Future<void>.delayed(
+      const Duration(milliseconds: 250),
+    );
+
+    if (!mounted ||
+        selectedHome != homeId ||
+        !homes.containsKey(homeId)) {
+      _openingChatFromNotification = false;
+      return;
+    }
+
+    showHomeChatSheet(
+      context: context,
+      homeId: homeId,
+      homeName: getHomeDisplayName(homeId),
+      userName: userName,
+      userPhotoUrl: userPhotoUrl,
+      ownerUid: getHomeOwnerUid(),
+      canManageMembers: canManageHome(),
+      isOwner: isOwner(),
+    );
+
+    _openingChatFromNotification = false;
   }
 
   Future<void> openHomeNotificationTarget(
@@ -1068,6 +1128,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     uid = FirebaseAuth.instance.currentUser!.uid;
+
+    NotificationService.chatOpenRequest.addListener(
+      _handleChatOpenRequest,
+    );
+    _handleChatOpenRequest();
+
     FCMService.setupFCM(uid: uid);
 
     FCMService.listenForeground(localNotif: localNotif);
@@ -1197,6 +1263,7 @@ class _HomePageState extends State<HomePage> {
       startHomeEventsListener();
       syncHomeChatListeners();
       syncDeviceNotificationBridge();
+      unawaited(_tryOpenPendingChat());
     });
   }
 
@@ -2943,27 +3010,51 @@ class _HomePageState extends State<HomePage> {
 
     if (name == null || name.trim().isEmpty) return;
 
+    final newName = name.trim();
+
+    if (newName == oldDeviceName.trim()) {
+      return;
+    }
+
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
+    final emailName = FirebaseAuth.instance.currentUser?.email
+        ?.split("@")
+        .first
+        .trim() ??
+        "";
+    final actorName = userName.trim().isNotEmpty
+        ? userName.trim()
+        : emailName.isNotEmpty
+        ? emailName
+        : "Một thành viên";
 
     await HomeService.renameDevice(
       ownerUid: ownerUid,
       homeId: selectedHome,
       deviceId: id,
-      name: name,
+      name: newName,
     );
+
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
       homeId: selectedHome,
       type: "device_renamed",
       category: "device",
+      severity: "info",
       title: "Đã đổi tên thiết bị",
       message:
-      "Thiết bị \"$oldDeviceName\" trong nhà \"$homeName\" đã được đổi tên thành \"$name\".",
+      "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
       deviceId: id,
       entityType: "device",
       entityId: id,
       homeName: homeName,
+      includeActor: true,
+      data: {
+        "actorName": actorName,
+        "oldName": oldDeviceName,
+        "newName": newName,
+      },
     );
   }
   Future<void> runFirebaseSecurityTest() async {
@@ -4047,6 +4138,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    NotificationService.chatOpenRequest.removeListener(
+      _handleChatOpenRequest,
+    );
     timer?.cancel();
     accountSubscription?.cancel();
     notificationSubscription?.cancel();

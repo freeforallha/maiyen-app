@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,57 +8,111 @@ import '../firebase_options.dart';
 import 'notification_service.dart';
 
 @pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+Future<void> firebaseMessagingBackgroundHandler(
+    RemoteMessage message,
+    ) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const androidInit =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
 
   await localNotif.initialize(
-    const InitializationSettings(android: androidInit),
+    const InitializationSettings(
+      android: androidInit,
+    ),
   );
 
   final androidPlugin = localNotif
       .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin
-      >();
+      AndroidFlutterLocalNotificationsPlugin>();
 
   const alarmChannel = AndroidNotificationChannel(
     'alarm_channel_siren_v1',
     'Alarm Channel Siren V1',
-    description: 'Alarm notification phát âm thanh khi app chạy nền',
+    description:
+    'Alarm notification phát âm thanh khi app chạy nền',
     importance: Importance.max,
     playSound: true,
-    sound: RawResourceAndroidNotificationSound('alarm_siren'),
-    audioAttributesUsage: AudioAttributesUsage.alarm,
+    sound: RawResourceAndroidNotificationSound(
+      'alarm_siren',
+    ),
+    audioAttributesUsage:
+    AudioAttributesUsage.alarm,
     enableVibration: true,
   );
 
-  const scheduleFullscreenChannel = AndroidNotificationChannel(
+  const scheduleFullscreenChannel =
+  AndroidNotificationChannel(
     'safehome_schedule_fullscreen_channel',
     'SafeHome Schedule Fullscreen',
-    description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+    description:
+    'Nhắc nhở SafeHome toàn màn hình không âm thanh',
     importance: Importance.max,
     playSound: false,
   );
 
-  await androidPlugin?.createNotificationChannel(alarmChannel);
-  await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
+  const chatChannel = AndroidNotificationChannel(
+    'safehome_chat_channel_v1',
+    'Tin nhắn HomeChat',
+    description:
+    'Tin nhắn mới trong các nhà SafeHome',
+    importance: Importance.high,
+    playSound: true,
+    enableVibration: true,
+  );
 
-  final type = message.data['type']?.toString() ?? '';
-  final isSchedule = type == 'schedule_notification';
-  final isAlarm = type == 'alarm';
+  await androidPlugin?.createNotificationChannel(
+    alarmChannel,
+  );
+
+  await androidPlugin?.createNotificationChannel(
+    scheduleFullscreenChannel,
+  );
+
+  await androidPlugin?.createNotificationChannel(
+    chatChannel,
+  );
+
+  final type =
+      message.data['type']?.toString() ?? '';
+
+  if (type == 'chat') {
+    await _showBackgroundChatNotification(
+      message.data,
+    );
+    return;
+  }
+
+  final isSchedule =
+      type == 'schedule_notification';
+
+  final isAlarm =
+      type == 'alarm';
 
   if (!isSchedule && !isAlarm) {
     return;
   }
 
   if (isSchedule) {
-    final body = _buildScheduleBody(message.data);
-    final title = message.data['title']?.toString().trim().isNotEmpty == true
-        ? message.data['title'].toString().trim()
+    final body =
+    _buildScheduleBody(message.data);
+
+    final title =
+    message.data['title']
+        ?.toString()
+        .trim()
+        .isNotEmpty ==
+        true
+        ? message.data['title']
+        .toString()
+        .trim()
         : 'Nhà';
+
     await localNotif.cancel(999998);
     await localNotif.cancel(999999);
+
     await localNotif.show(
       999998,
       title,
@@ -66,17 +121,26 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         android: AndroidNotificationDetails(
           'safehome_schedule_fullscreen_channel',
           'SafeHome Schedule Fullscreen',
-          channelDescription: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+          channelDescription:
+          'Nhắc nhở SafeHome toàn màn hình không âm thanh',
           importance: Importance.max,
           priority: Priority.high,
-          category: AndroidNotificationCategory.reminder,
+          category:
+          AndroidNotificationCategory.reminder,
           fullScreenIntent: true,
           playSound: false,
           enableVibration: false,
         ),
       ),
       payload:
-          'schedule_notification::${jsonEncode({"title": title, "body": body, "reminderItems": message.data['reminderItems']?.toString() ?? ''})}',
+      'schedule_notification::${jsonEncode({
+        "title": title,
+        "body": body,
+        "reminderItems":
+        message.data['reminderItems']
+            ?.toString() ??
+            '',
+      })}',
     );
 
     return;
@@ -84,18 +148,20 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final title =
       message.data['title']?.toString() ??
-      message.notification?.title?.toString() ??
-      '🚨 BÁO ĐỘNG SAFEHOME';
+          message.notification?.title?.toString() ??
+          '🚨 BÁO ĐỘNG SAFEHOME';
 
   final body =
       message.data['body']?.toString() ??
-      message.notification?.body?.toString() ??
-      'Có cảnh báo an ninh cần kiểm tra ngay.';
+          message.notification?.body?.toString() ??
+          'Có cảnh báo an ninh cần kiểm tra ngay.';
 
-  final alarmItems = message.data['alarmItems']?.toString() ?? '';
+  final alarmItems =
+      message.data['alarmItems']?.toString() ?? '';
 
   final payload =
-      'alarm_summary|${Uri.encodeComponent(body)}|${Uri.encodeComponent(alarmItems)}';
+      'alarm_summary|${Uri.encodeComponent(body)}|'
+      '${Uri.encodeComponent(alarmItems)}';
 
   await localNotif.cancel(999999);
 
@@ -108,10 +174,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         'alarm_channel_siren_v1',
         'Alarm Channel Siren V1',
         channelDescription:
-            'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+        'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,
         priority: Priority.max,
-        category: AndroidNotificationCategory.alarm,
+        category:
+        AndroidNotificationCategory.alarm,
         fullScreenIntent: true,
         playSound: false,
         enableVibration: true,
@@ -121,13 +188,115 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   );
 }
 
-String _buildScheduleBody(Map<String, dynamic> data) {
-  final isSafeText = data['isSafe']?.toString() ?? 'true';
+Future<void> _showBackgroundChatNotification(
+    Map<String, dynamic> data,
+    ) async {
+  final homeId =
+      data['homeId']?.toString().trim() ?? '';
+
+  if (homeId.isEmpty) {
+    return;
+  }
+
+  final homeName =
+      data['homeName']?.toString().trim() ?? '';
+
+  final senderName =
+      data['senderName']?.toString().trim() ?? '';
+
+  final unreadCount = int.tryParse(
+    data['unreadCount']?.toString() ?? '1',
+  ) ??
+      1;
+
+  final rawTitle =
+      data['title']?.toString().trim() ?? '';
+
+  final rawBody =
+      data['body']?.toString().trim() ?? '';
+
+  final title = rawTitle.isNotEmpty
+      ? rawTitle
+      : unreadCount > 1
+      ? '${homeName.isNotEmpty ? homeName : "HomeChat"} · '
+      '$unreadCount tin nhắn mới'
+      : homeName.isNotEmpty
+      ? homeName
+      : 'Tin nhắn HomeChat';
+
+  final body = rawBody.isNotEmpty
+      ? rawBody
+      : senderName.isNotEmpty
+      ? '$senderName đã gửi một tin nhắn'
+      : 'Bạn có tin nhắn mới';
+
+  final payload =
+      'home_chat::${jsonEncode({
+    "homeId": homeId,
+    "homeName": homeName,
+    "ownerUid":
+    data['ownerUid']?.toString() ?? '',
+    "messageId":
+    data['messageId']?.toString() ?? '',
+  })}';
+
+  final notificationId =
+  _chatNotificationId(homeId);
+
+  await localNotif.cancel(notificationId);
+
+  await localNotif.show(
+    notificationId,
+    title,
+    body,
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        'safehome_chat_channel_v1',
+        'Tin nhắn HomeChat',
+        channelDescription:
+        'Tin nhắn mới trong các nhà SafeHome',
+        importance: Importance.high,
+        priority: Priority.high,
+        category:
+        AndroidNotificationCategory.message,
+        playSound: true,
+        enableVibration: true,
+        tag: 'home_chat_$homeId',
+        styleInformation:
+        BigTextStyleInformation(
+          body,
+          contentTitle: title,
+        ),
+      ),
+    ),
+    payload: payload,
+  );
+}
+
+int _chatNotificationId(String homeId) {
+  var hash = 0;
+
+  for (final codeUnit in homeId.codeUnits) {
+    hash =
+    ((hash * 31) + codeUnit) & 0x7fffffff;
+  }
+
+  return 200000 + (hash % 700000);
+}
+
+String _buildScheduleBody(
+    Map<String, dynamic> data,
+    ) {
+  final isSafeText =
+      data['isSafe']?.toString() ?? 'true';
 
   final isSafe =
-      isSafeText == 'true' || isSafeText == '1' || isSafeText == 'yes';
+      isSafeText == 'true' ||
+          isSafeText == '1' ||
+          isSafeText == 'yes';
 
-  final reason = data['reason']?.toString().trim() ?? '';
+  final reason =
+      data['reason']?.toString().trim() ?? '';
 
   NotificationService.lastScheduleBody = isSafe
       ? '✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.'

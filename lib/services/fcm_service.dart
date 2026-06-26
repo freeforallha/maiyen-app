@@ -34,10 +34,20 @@ class FCMService {
 
     messaging.onTokenRefresh.listen((newToken) async {
       debugPrint("🔥 FCM TOKEN REFRESH: $newToken");
+
       await FirebaseDatabase.instance
           .ref(FirebasePaths.fcmToken(uid))
           .set(newToken);
     });
+
+    final initialMessage = await messaging.getInitialMessage();
+
+    if (initialMessage != null &&
+        initialMessage.data["type"]?.toString() == "chat") {
+      NotificationService.requestOpenHomeChat(
+        initialMessage.data,
+      );
+    }
   }
 
   static void listenForeground({
@@ -47,7 +57,15 @@ class FCMService {
     _foregroundListening = true;
 
     FirebaseMessaging.onMessage.listen((message) async {
-      final type = message.data["type"]?.toString() ?? "alarm";
+      final type = message.data["type"]?.toString() ?? "";
+
+      if (type == "chat") {
+        await NotificationService.showChatNotification(
+          data: message.data,
+        );
+        return;
+      }
+
       final isSchedule = type == "schedule_notification";
 
       final isSafeText = message.data["isSafe"]?.toString() ?? "true";
@@ -75,15 +93,19 @@ class FCMService {
         return;
       }
 
+      if (type != "alarm") {
+        return;
+      }
+
       final title =
           message.notification?.title?.toString() ??
-          message.data["title"]?.toString() ??
-          "SafeHome Alarm";
+              message.data["title"]?.toString() ??
+              "SafeHome Alarm";
 
       final alarmBody =
           message.notification?.body?.toString() ??
-          message.data["body"]?.toString() ??
-          "Có cảnh báo an ninh cần kiểm tra ngay.";
+              message.data["body"]?.toString() ??
+              "Có cảnh báo an ninh cần kiểm tra ngay.";
 
       final alarmItems = message.data["alarmItems"]?.toString() ?? "";
 
@@ -95,7 +117,14 @@ class FCMService {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      final type = message.data["type"]?.toString() ?? "alarm";
+      final type = message.data["type"]?.toString() ?? "";
+
+      if (type == "chat") {
+        NotificationService.requestOpenHomeChat(
+          message.data,
+        );
+        return;
+      }
 
       if (type != "alarm") return;
 
@@ -103,7 +132,7 @@ class FCMService {
 
       final alarmBody =
           message.data["body"]?.toString() ??
-          "Có cảnh báo an ninh cần kiểm tra ngay.";
+              "Có cảnh báo an ninh cần kiểm tra ngay.";
 
       final alarmItems = message.data["alarmItems"]?.toString() ?? "";
 

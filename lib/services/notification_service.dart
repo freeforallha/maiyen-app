@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +8,173 @@ import '../app/safe_home_app.dart';
 import '../pages/fullscreen_alarm_page.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 class NotificationService {
+  static final ValueNotifier<Map<String, String>?> chatOpenRequest =
+  ValueNotifier<Map<String, String>?>(null);
+
+  static String? _activeHomeChatId;
+
+  static void markHomeChatOpened(String homeId) {
+    final cleanHomeId = homeId.trim();
+
+    if (cleanHomeId.isEmpty) return;
+
+    _activeHomeChatId = cleanHomeId;
+
+    unawaited(
+      localNotif.cancel(
+        _chatNotificationId(cleanHomeId),
+      ),
+    );
+  }
+
+  static void markHomeChatClosed(String homeId) {
+    if (_activeHomeChatId == homeId.trim()) {
+      _activeHomeChatId = null;
+    }
+  }
+
+  static void requestOpenHomeChat(
+      Map<String, dynamic> rawData,
+      ) {
+    final homeId =
+        rawData["homeId"]?.toString().trim() ?? "";
+
+    if (homeId.isEmpty) return;
+
+    chatOpenRequest.value = {
+      "homeId": homeId,
+      "homeName":
+      rawData["homeName"]?.toString().trim() ?? "",
+      "ownerUid":
+      rawData["ownerUid"]?.toString().trim() ?? "",
+      "messageId":
+      rawData["messageId"]?.toString().trim() ?? "",
+      "nonce":
+      DateTime.now().microsecondsSinceEpoch.toString(),
+    };
+  }
+
+  static bool _handleHomeChatPayload(String payload) {
+    if (!payload.startsWith("home_chat::")) {
+      return false;
+    }
+
+    try {
+      final raw = payload.replaceFirst(
+        "home_chat::",
+        "",
+      );
+
+      final decoded = jsonDecode(raw);
+
+      if (decoded is Map) {
+        requestOpenHomeChat(
+          Map<String, dynamic>.from(decoded),
+        );
+      }
+    } catch (_) {}
+
+    return true;
+  }
+
+  static Future<void> showChatNotification({
+    required Map<String, dynamic> data,
+  }) async {
+    final homeId =
+        data["homeId"]?.toString().trim() ?? "";
+
+    if (homeId.isEmpty ||
+        _activeHomeChatId == homeId) {
+      return;
+    }
+
+    final homeName =
+        data["homeName"]?.toString().trim() ?? "";
+    final senderName =
+        data["senderName"]?.toString().trim() ?? "";
+    final rawTitle =
+        data["title"]?.toString().trim() ?? "";
+    final rawBody =
+        data["body"]?.toString().trim() ?? "";
+
+    final unreadCount = int.tryParse(
+      data["unreadCount"]?.toString() ?? "1",
+    ) ??
+        1;
+
+    final title = rawTitle.isNotEmpty
+        ? rawTitle
+        : unreadCount > 1
+        ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
+        "$unreadCount tin nhắn mới"
+        : homeName.isNotEmpty
+        ? homeName
+        : "Tin nhắn HomeChat";
+
+    final body = rawBody.isNotEmpty
+        ? rawBody
+        : senderName.isNotEmpty
+        ? "$senderName đã gửi một tin nhắn"
+        : "Bạn có tin nhắn mới";
+
+    final androidDetails =
+    AndroidNotificationDetails(
+      "safehome_chat_channel_v1",
+      "Tin nhắn HomeChat",
+      channelDescription:
+      "Tin nhắn mới trong các nhà SafeHome",
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+      category:
+      AndroidNotificationCategory.message,
+      styleInformation: BigTextStyleInformation(
+        body,
+        contentTitle: title,
+      ),
+    );
+
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    final payload = "home_chat::${jsonEncode({
+      "homeId": homeId,
+      "homeName": homeName,
+      "ownerUid":
+      data["ownerUid"]?.toString() ?? "",
+      "messageId":
+      data["messageId"]?.toString() ?? "",
+    })}";
+
+    await localNotif.show(
+      _chatNotificationId(homeId),
+      title,
+      body,
+      NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      ),
+      payload: payload,
+    );
+  }
+
+  static int _chatNotificationId(String homeId) {
+    var hash = 0;
+
+    for (final codeUnit in homeId.codeUnits) {
+      hash =
+      ((hash * 31) + codeUnit) & 0x7fffffff;
+    }
+
+    return 200000 + (hash % 700000);
+  }
   static Future<void> stopAlarmNotification() async {
     await localNotif.cancel(999999);
   }
@@ -228,10 +393,10 @@ class NotificationService {
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: false,
-        );
+      alert: true,
+      badge: true,
+      sound: false,
+    );
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -245,6 +410,10 @@ class NotificationService {
       const InitializationSettings(android: android, iOS: ios),
       onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload ?? '';
+
+        if (_handleHomeChatPayload(payload)) {
+          return;
+        }
 
         if (payload.startsWith('alarm_summary|')) {
           final parts = payload.split('|');
@@ -332,12 +501,22 @@ class NotificationService {
       },
     );
 
+    final launchDetails =
+    await localNotif.getNotificationAppLaunchDetails();
+
+    if (launchDetails?.didNotificationLaunchApp == true) {
+      final launchPayload =
+          launchDetails?.notificationResponse?.payload ?? "";
+
+      _handleHomeChatPayload(launchPayload);
+    }
+
     if (Platform.isAndroid) {
       const alarmChannel = AndroidNotificationChannel(
         'alarm_channel_silent_v3',
         'Alarm Channel Silent V3',
         description:
-            'Alarm notification chỉ mở fullscreen, không phát âm thanh',
+        'Alarm notification chỉ mở fullscreen, không phát âm thanh',
         importance: Importance.max,
         playSound: false,
         enableVibration: true,
@@ -359,10 +538,19 @@ class NotificationService {
         playSound: false,
       );
 
+      const chatChannel = AndroidNotificationChannel(
+        'safehome_chat_channel_v1',
+        'Tin nhắn HomeChat',
+        description: 'Tin nhắn mới trong các nhà SafeHome',
+        importance: Importance.high,
+        playSound: true,
+        enableVibration: true,
+      );
+
       final androidPlugin = localNotif
           .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin
-          >();
+          AndroidFlutterLocalNotificationsPlugin
+      >();
       final fullScreenPermission =
       await androidPlugin?.requestFullScreenIntentPermission();
 
@@ -372,6 +560,7 @@ class NotificationService {
       await androidPlugin?.createNotificationChannel(alarmChannel);
       await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
       await androidPlugin?.createNotificationChannel(reminderChannel);
+      await androidPlugin?.createNotificationChannel(chatChannel);
     }
   }
 

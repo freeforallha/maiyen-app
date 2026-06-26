@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'share_list_sheet.dart';
 import '../services/chat_service.dart';
 import '../services/home_notification_service.dart';
+import '../services/notification_service.dart';
 import '../helpers/firebase_paths.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../helpers/top_toast.dart';
@@ -41,6 +42,12 @@ void showHomeChatSheet({
   Timer? typingHeartbeatTimer;
   bool isTypingPresenceActive = false;
   bool isChatSheetClosed = false;
+  bool hasJumpedToLatestMessage = false;
+  bool unreadSnapshotStarted = false;
+  bool showUnreadNotice = false;
+  int initialUnreadCount = 0;
+  int initialLastRead = 0;
+  int previousMessageCount = 0;
 
   void writeTypingPresence(bool isTyping) {
     ChatService.setTyping(
@@ -111,19 +118,18 @@ void showHomeChatSheet({
 
   controller.addListener(handleDraftChanged);
 
-  void scrollToBottom() {
+  void animateToLatestMessage() {
     if (isChatSheetClosed) return;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (isChatSheetClosed ||
-          !scrollController.hasClients) {
+      if (isChatSheetClosed || !scrollController.hasClients) {
         return;
       }
 
       scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 250),
-        curve: Curves.easeOut,
+        scrollController.position.minScrollExtent,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
       );
     });
   }
@@ -396,10 +402,7 @@ void showHomeChatSheet({
   }
 
 
-  ChatService.markAsRead(
-    homeId: homeId,
-    uid: user.uid,
-  );
+  NotificationService.markHomeChatOpened(homeId);
 
   showModalBottomSheet(
     context: context,
@@ -408,6 +411,59 @@ void showHomeChatSheet({
     builder: (ctx) {
       return StatefulBuilder(
         builder: (context, setState) {
+          if (!unreadSnapshotStarted) {
+            unreadSnapshotStarted = true;
+
+            unawaited(() async {
+              try {
+                final snapshot = await FirebaseDatabase.instance
+                    .ref("homeChats/$homeId")
+                    .get();
+
+                final raw = snapshot.value is Map
+                    ? Map<String, dynamic>.from(
+                  snapshot.value as Map,
+                )
+                    : <String, dynamic>{};
+
+                final lastReadRaw = raw["lastRead"];
+                final lastReadMap = lastReadRaw is Map
+                    ? Map<String, dynamic>.from(lastReadRaw)
+                    : <String, dynamic>{};
+
+                initialLastRead = int.tryParse(
+                  lastReadMap[user.uid]?.toString() ?? "0",
+                ) ??
+                    0;
+
+                initialUnreadCount = ChatService.unreadCount(
+                  homeChat: raw,
+                  uid: user.uid,
+                );
+              } catch (_) {
+                initialUnreadCount = 0;
+                initialLastRead = 0;
+              }
+
+              try {
+                await ChatService.markAsRead(
+                  homeId: homeId,
+                  uid: user.uid,
+                );
+              } catch (_) {
+                // Không để lỗi cập nhật trạng thái đọc làm hỏng Home Chat.
+              }
+
+              if (isChatSheetClosed || !ctx.mounted) {
+                return;
+              }
+
+              setState(() {
+                showUnreadNotice = initialUnreadCount > 0;
+              });
+            }());
+          }
+
           void moveSearchResult(int delta) {
             if (currentSearchResultIds.isEmpty) {
               return;
@@ -462,7 +518,7 @@ void showHomeChatSheet({
               currentSearchResultIds = [];
             });
 
-            scrollToBottom();
+            animateToLatestMessage();
           }
 
           Future<void> sendCurrentMessage() async {
@@ -479,7 +535,7 @@ void showHomeChatSheet({
             controller.clear();
 
             try {
-              await ChatService.sendMessage(
+              final messageId = await ChatService.sendMessage(
                 homeId: homeId,
                 uid: user.uid,
                 userName: userName,
@@ -500,12 +556,19 @@ void showHomeChatSheet({
                   homeId: homeId,
                   type: "chat",
                   category: "chat",
+                  severity: "info",
                   title: "Tin nhắn mới trong $homeName",
-                  message: "$senderName trong \"$homeName\": $preview",
+                  message: "$senderName: $preview",
                   entityType: "chat",
-                  entityId: homeId,
+                  entityId: messageId,
                   homeName: homeName,
                   includeActor: false,
+                  writeHomeTimeline: false,
+                  data: {
+                    "messageId": messageId,
+                    "senderName": senderName,
+                    "text": text,
+                  },
                 );
               } catch (_) {}
             } catch (_) {
@@ -799,194 +862,294 @@ void showHomeChatSheet({
                             });
                           }
 
-                          if (!isSearching) {
-                            scrollToBottom();
+                          var loadedUnreadCount = 0;
+
+                          if (initialUnreadCount > 0) {
+                            for (final entry in messages) {
+                              final rawMessage =
+                              Map<String, dynamic>.from(entry.value);
+                              final senderUid =
+                                  rawMessage["uid"]?.toString() ?? "";
+                              final messageTime = int.tryParse(
+                                rawMessage["time"]?.toString() ?? "0",
+                              ) ??
+                                  0;
+
+                              if (senderUid != user.uid &&
+                                  messageTime > initialLastRead) {
+                                loadedUnreadCount++;
+                              }
+                            }
                           }
 
-                          return ListView.builder(
-                            controller: scrollController,
-                            padding: const EdgeInsets.only(bottom: 8),
-                            itemCount: messages.length,
-                            itemBuilder: (_, index) {
-                              final messageEntry = messages[index];
-                              final messageId =
-                              messageEntry.key.toString();
+                          final hiddenUnreadCount = math.max(
+                            0,
+                            initialUnreadCount - loadedUnreadCount,
+                          );
 
-                              final msg = Map<String, dynamic>.from(
-                                messageEntry.value,
-                              );
+                          final unreadNoticeCount = hiddenUnreadCount > 0
+                              ? hiddenUnreadCount
+                              : initialUnreadCount > 8
+                              ? initialUnreadCount
+                              : 0;
 
-                              final isMe = msg["uid"] == user.uid;
-                              final name = msg["name"]?.toString() ?? "User";
-                              final senderUid = msg["uid"]?.toString() ?? "";
-                              final text = msg["text"]?.toString() ?? "";
-                              final photoUrl = msg["photoUrl"]?.toString() ?? "";
-                              final time = msg["time"];
-                              final timeText = formatChatTime(time);
+                          if (!isSearching && !hasJumpedToLatestMessage) {
+                            hasJumpedToLatestMessage = true;
+                          } else if (!isSearching &&
+                              messages.length > previousMessageCount &&
+                              scrollController.hasClients) {
+                            final distanceFromBottom =
+                                scrollController.position.pixels -
+                                    scrollController.position.minScrollExtent;
 
-                              return KeyedSubtree(
-                                key: messageKeys.putIfAbsent(
-                                  messageId,
-                                      () => GlobalKey(),
-                                ),
-                                child: Align(
-                                  alignment: isMe
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
+                            if (distanceFromBottom <= 140) {
+                              animateToLatestMessage();
+                            }
+                          }
+
+                          previousMessageCount = messages.length;
+
+                          return Column(
+                            children: [
+                              if (showUnreadNotice &&
+                                  unreadNoticeCount > 0)
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      showUnreadNotice = false;
+                                    });
+                                  },
                                   child: Container(
-                                    margin: const EdgeInsets.only(bottom: 10),
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 9,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.withValues(
+                                        alpha: 0.08,
+                                      ),
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
                                     child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        if (!isMe)
-                                          GestureDetector(
-                                            onTap: () => openCallMemberSheet(
-                                              sheetContext: ctx,
-                                              memberUid:
-                                              msg["uid"]?.toString() ?? "",
-                                              name: name,
-                                            ),
-                                            child: CircleAvatar(
-                                              radius: 14,
-                                              backgroundImage: photoUrl.isNotEmpty
-                                                  ? NetworkImage(photoUrl)
-                                                  : null,
-                                              child: photoUrl.isEmpty
-                                                  ? const Icon(
-                                                Icons.person,
-                                                size: 15,
-                                              )
-                                                  : null,
+                                        const Icon(
+                                          Icons.mark_chat_unread_rounded,
+                                          size: 18,
+                                          color: Colors.blue,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            "Còn $unreadNoticeCount tin nhắn "
+                                                "chưa đọc",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.blue,
                                             ),
                                           ),
-                                        if (!isMe) const SizedBox(width: 6),
-
-                                        Flexible(
-                                          child: Container(
-                                            constraints: BoxConstraints(
-                                              maxWidth:
-                                              MediaQuery.of(ctx).size.width *
-                                                  0.68,
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 12,
-                                              vertical: 9,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: isMe
-                                                  ? Colors.blue.shade100
-                                                  : Colors.grey.shade100,
-                                              borderRadius: BorderRadius.circular(
-                                                16,
-                                              ),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                if (!isMe)
-                                                  FutureBuilder<String>(
-                                                    future: getMemberRole(
-                                                      senderUid,
-                                                    ),
-                                                    builder: (context, roleSnap) {
-                                                      final role =
-                                                          roleSnap.data ?? "member";
-
-                                                      final icon = role == "owner"
-                                                          ? Icons
-                                                          .workspace_premium_rounded
-                                                          : role == "admin"
-                                                          ? Icons
-                                                          .admin_panel_settings_rounded
-                                                          : Icons.person_rounded;
-
-                                                      final color = role == "owner"
-                                                          ? Colors.blue.shade700
-                                                          : role == "admin"
-                                                          ? Colors
-                                                          .deepPurple
-                                                          .shade700
-                                                          : Colors
-                                                          .blueGrey
-                                                          .shade700;
-
-                                                      return GestureDetector(
-                                                        onTap: () =>
-                                                            openCallMemberSheet(
-                                                              sheetContext: ctx,
-                                                              memberUid: senderUid,
-                                                              name: name,
-                                                            ),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                          MainAxisSize.min,
-                                                          children: [
-                                                            Icon(
-                                                              icon,
-                                                              size: 13,
-                                                              color: color,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            Flexible(
-                                                              child: Text.rich(
-                                                                highlightedSpan(
-                                                                  name,
-                                                                  TextStyle(
-                                                                    fontSize: 11,
-                                                                    fontWeight:
-                                                                    FontWeight
-                                                                        .w800,
-                                                                    color: color,
-                                                                  ),
-                                                                ),
-                                                                overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                                  children: [
-                                                    SelectableText.rich(
-                                                      highlightedSpan(
-                                                        text,
-                                                        const TextStyle(
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                    const SizedBox(height: 4),
-
-                                                    Text(
-                                                      timeText,
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        color: Colors.grey.shade600,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.close_rounded,
+                                          size: 17,
+                                          color: Colors.blue,
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              );
-                            },
+                              Expanded(
+                                child: ListView.builder(
+                                  controller: scrollController,
+                                  reverse: true,
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  itemCount: messages.length,
+                                  itemBuilder: (_, index) {
+                                    final messageEntry =
+                                    messages[messages.length - 1 - index];
+                                    final messageId =
+                                    messageEntry.key.toString();
+
+                                    final msg = Map<String, dynamic>.from(
+                                      messageEntry.value,
+                                    );
+
+                                    final isMe = msg["uid"] == user.uid;
+                                    final name = msg["name"]?.toString() ?? "User";
+                                    final senderUid = msg["uid"]?.toString() ?? "";
+                                    final text = msg["text"]?.toString() ?? "";
+                                    final photoUrl = msg["photoUrl"]?.toString() ?? "";
+                                    final time = msg["time"];
+                                    final timeText = formatChatTime(time);
+
+                                    return KeyedSubtree(
+                                      key: messageKeys.putIfAbsent(
+                                        messageId,
+                                            () => GlobalKey(),
+                                      ),
+                                      child: Align(
+                                        alignment: isMe
+                                            ? Alignment.centerRight
+                                            : Alignment.centerLeft,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(bottom: 10),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              if (!isMe)
+                                                GestureDetector(
+                                                  onTap: () => openCallMemberSheet(
+                                                    sheetContext: ctx,
+                                                    memberUid:
+                                                    msg["uid"]?.toString() ?? "",
+                                                    name: name,
+                                                  ),
+                                                  child: CircleAvatar(
+                                                    radius: 14,
+                                                    backgroundImage: photoUrl.isNotEmpty
+                                                        ? NetworkImage(photoUrl)
+                                                        : null,
+                                                    child: photoUrl.isEmpty
+                                                        ? const Icon(
+                                                      Icons.person,
+                                                      size: 15,
+                                                    )
+                                                        : null,
+                                                  ),
+                                                ),
+                                              if (!isMe) const SizedBox(width: 6),
+
+                                              Flexible(
+                                                child: Container(
+                                                  constraints: BoxConstraints(
+                                                    maxWidth:
+                                                    MediaQuery.of(ctx).size.width *
+                                                        0.68,
+                                                  ),
+                                                  padding: const EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 9,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: isMe
+                                                        ? Colors.blue.shade100
+                                                        : Colors.grey.shade100,
+                                                    borderRadius: BorderRadius.circular(
+                                                      16,
+                                                    ),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      if (!isMe)
+                                                        FutureBuilder<String>(
+                                                          future: getMemberRole(
+                                                            senderUid,
+                                                          ),
+                                                          builder: (context, roleSnap) {
+                                                            final role =
+                                                                roleSnap.data ?? "member";
+
+                                                            final icon = role == "owner"
+                                                                ? Icons
+                                                                .workspace_premium_rounded
+                                                                : role == "admin"
+                                                                ? Icons
+                                                                .admin_panel_settings_rounded
+                                                                : Icons.person_rounded;
+
+                                                            final color = role == "owner"
+                                                                ? Colors.blue.shade700
+                                                                : role == "admin"
+                                                                ? Colors
+                                                                .deepPurple
+                                                                .shade700
+                                                                : Colors
+                                                                .blueGrey
+                                                                .shade700;
+
+                                                            return GestureDetector(
+                                                              onTap: () =>
+                                                                  openCallMemberSheet(
+                                                                    sheetContext: ctx,
+                                                                    memberUid: senderUid,
+                                                                    name: name,
+                                                                  ),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                MainAxisSize.min,
+                                                                children: [
+                                                                  Icon(
+                                                                    icon,
+                                                                    size: 13,
+                                                                    color: color,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Flexible(
+                                                                    child: Text.rich(
+                                                                      highlightedSpan(
+                                                                        name,
+                                                                        TextStyle(
+                                                                          fontSize: 11,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w800,
+                                                                          color: color,
+                                                                        ),
+                                                                      ),
+                                                                      overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                        children: [
+                                                          SelectableText.rich(
+                                                            highlightedSpan(
+                                                              text,
+                                                              const TextStyle(
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ),
+
+                                                          const SizedBox(height: 4),
+
+                                                          Text(
+                                                            timeText,
+                                                            style: TextStyle(
+                                                              fontSize: 10,
+                                                              color: Colors.grey.shade600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),
@@ -1105,6 +1268,7 @@ void showHomeChatSheet({
       );
     },
   ).whenComplete(() async {
+    NotificationService.markHomeChatClosed(homeId);
     clearTypingPresence();
     searchFocusNode.unfocus();
     focusNode.unfocus();
