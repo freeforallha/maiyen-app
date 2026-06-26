@@ -83,9 +83,9 @@ Future<bool?> showShareRequestSheet({
       return StatefulBuilder(
         builder: (context, setSheetState) {
           Future<void> acceptOne(
-            String requestKey,
-            Map<String, dynamic> data,
-          ) async {
+              String requestKey,
+              Map<String, dynamic> data,
+              ) async {
             if (!await canHandleRequest(data)) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -146,11 +146,14 @@ Future<bool?> showShareRequestSheet({
               var targetEmail = data["targetEmail"]?.toString() ?? "";
               var targetName = data["targetName"]?.toString() ?? "";
               var targetPhotoUrl = data["targetPhotoUrl"]?.toString() ?? "";
+              var targetPhone =
+                  data["targetPhone"]?.toString().trim() ?? "";
 
               if (targetUid == uid &&
                   (targetEmail.isEmpty ||
                       targetName.isEmpty ||
-                      targetPhotoUrl.isEmpty)) {
+                      targetPhotoUrl.isEmpty ||
+                      targetPhone.isEmpty)) {
                 try {
                   final account = await ShareService.loadAccount(uid);
                   final profile = account["profile"] is Map
@@ -166,6 +169,9 @@ Future<bool?> showShareRequestSheet({
                   targetPhotoUrl = targetPhotoUrl.isNotEmpty
                       ? targetPhotoUrl
                       : profile["photoUrl"]?.toString() ?? "";
+                  targetPhone = targetPhone.isNotEmpty
+                      ? targetPhone
+                      : profile["phone"]?.toString().trim() ?? "";
                 } catch (e) {
                   debugPrint("LOAD_SELF_ACCOUNT_FOR_SHARE_ERROR: $e");
                 }
@@ -190,16 +196,26 @@ Future<bool?> showShareRequestSheet({
                   .ref(FirebasePaths.sharedMember(homeId, targetUid))
                   .set(memberData);
 
+              if (targetPhone.isNotEmpty) {
+                await FirebaseDatabase.instance
+                    .ref(
+                  "homeMemberContacts/$homeId/$targetUid",
+                )
+                    .set({
+                  "phone": targetPhone,
+                });
+              }
+
               if (type == "join_request") {
                 await FirebaseDatabase.instance
                     .ref(
-                      "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
-                    )
+                  "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
+                )
                     .set({
-                      "email": targetEmail,
-                      "name": targetName,
-                      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-                    });
+                  "email": targetEmail,
+                  "name": targetName,
+                  "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                });
               }
 
               try {
@@ -390,8 +406,8 @@ Future<bool?> showShareRequestSheet({
                             final rawHomeName =
                                 data["homeName"]?.toString().trim() ?? "";
                             final homeName =
-                                rawHomeName.isNotEmpty &&
-                                    !rawHomeName.startsWith("home_")
+                            rawHomeName.isNotEmpty &&
+                                !rawHomeName.startsWith("home_")
                                 ? rawHomeName
                                 : "Nhà chưa đặt tên";
 
@@ -424,20 +440,20 @@ Future<bool?> showShareRequestSheet({
                                     children: [
                                       CircleAvatar(
                                         backgroundColor:
-                                            type == "transfer_owner_request"
+                                        type == "transfer_owner_request"
                                             ? Colors.purple.withValues(
-                                                alpha: 0.12,
-                                              )
+                                          alpha: 0.12,
+                                        )
                                             : Colors.green.withValues(
-                                                alpha: 0.12,
-                                              ),
+                                          alpha: 0.12,
+                                        ),
                                         child: Icon(
                                           type == "transfer_owner_request"
                                               ? Icons
-                                                    .admin_panel_settings_rounded
+                                              .admin_panel_settings_rounded
                                               : Icons.home_rounded,
                                           color:
-                                              type == "transfer_owner_request"
+                                          type == "transfer_owner_request"
                                               ? Colors.purple
                                               : Colors.green,
                                         ),
@@ -446,7 +462,7 @@ Future<bool?> showShareRequestSheet({
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               title,

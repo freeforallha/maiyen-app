@@ -12,6 +12,7 @@ void showSettingsSheet({
   required VoidCallback onRooms,
   required VoidCallback onLogout,
   required VoidCallback onRenameHome,
+  required VoidCallback onSecurityTest,
   required VoidCallback onDeleteHome,
   required ValueNotifier<int> inviteCountNotifier,
   required VoidCallback onTransferOwner,
@@ -45,6 +46,47 @@ void showSettingsSheet({
         onTap: onTap,
       ),
     );
+  }
+
+  int hiddenSecurityTapCount = 0;
+  DateTime? lastHiddenSecurityTapAt;
+
+  void handleHiddenSecurityTap(
+      BuildContext sheetContext,
+      ) {
+    if (role != "owner") {
+      return;
+    }
+
+    final now = DateTime.now();
+
+    final isContinuous =
+        lastHiddenSecurityTapAt != null &&
+            now
+                .difference(lastHiddenSecurityTapAt!)
+                .inMilliseconds <=
+                1500;
+
+    if (isContinuous) {
+      hiddenSecurityTapCount++;
+    } else {
+      hiddenSecurityTapCount = 1;
+    }
+
+    lastHiddenSecurityTapAt = now;
+
+    if (hiddenSecurityTapCount < 5) {
+      return;
+    }
+
+    hiddenSecurityTapCount = 0;
+    lastHiddenSecurityTapAt = null;
+
+    Navigator.of(sheetContext).pop();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      onSecurityTest();
+    });
   }
 
   showModalBottomSheet(
@@ -96,15 +138,28 @@ void showSettingsSheet({
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Flexible(
-                                    child: Text(
-                                      homeName.isNotEmpty
-                                          ? homeName
-                                          : "Chưa đặt tên",
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w700,
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        handleHiddenSecurityTap(
+                                          sheetContext,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 4,
+                                        ),
+                                        child: Text(
+                                          homeName.isNotEmpty
+                                              ? homeName
+                                              : "Chưa đặt tên",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -128,18 +183,29 @@ void showSettingsSheet({
                               ),
                             ),
 
-                            GestureDetector(
-                              onTap: onRenameHome,
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Colors.teal.withValues(alpha: 0.10),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: const Icon(
-                                  Icons.edit_rounded,
-                                  size: 17,
-                                  color: Colors.teal,
+                            Tooltip(
+                              message: "Đổi tên nhà",
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(sheetContext).pop();
+
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    onRenameHome();
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal.withValues(
+                                      alpha: 0.10,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit_rounded,
+                                    size: 17,
+                                    color: Colors.teal,
+                                  ),
                                 ),
                               ),
                             ),

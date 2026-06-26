@@ -18,30 +18,87 @@ Future<bool?> showShareListSheet({
   final myUid = FirebaseAuth.instance.currentUser!.uid;
   final db = FirebaseDatabase.instance;
 
-  final membersSnap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
+  final membersSnap = await db
+      .ref(FirebasePaths.sharedByHome(homeId))
+      .get();
 
   final membersData = membersSnap.value is Map
-      ? Map<String, dynamic>.from(membersSnap.value as Map)
+      ? Map<String, dynamic>.from(
+    membersSnap.value as Map,
+  )
       : <String, dynamic>{};
 
   final ownerRaw = membersData[ownerUid] is Map
-      ? Map<String, dynamic>.from(membersData[ownerUid] as Map)
+      ? Map<String, dynamic>.from(
+    membersData[ownerUid] as Map,
+  )
       : <String, dynamic>{};
 
-  final ownerEmail = ownerRaw["email"]?.toString().trim().isNotEmpty == true
-      ? ownerRaw["email"].toString()
+  final ownerDirectorySnap = await db
+      .ref("userDirectory/$ownerUid")
+      .get();
+
+  final ownerDirectory = ownerDirectorySnap.value is Map
+      ? Map<String, dynamic>.from(
+    ownerDirectorySnap.value as Map,
+  )
+      : <String, dynamic>{};
+
+  final directoryEmail =
+      ownerDirectory["email"]?.toString().trim() ?? "";
+
+  final rawEmail =
+      ownerRaw["email"]?.toString().trim() ?? "";
+
+  final ownerEmail = directoryEmail.isNotEmpty
+      ? directoryEmail
+      : rawEmail.isNotEmpty
+      ? rawEmail
       : "Chủ nhà";
 
-  final ownerName = ownerRaw["name"]?.toString().trim().isNotEmpty == true
-      ? ownerRaw["name"].toString()
-      : "Chủ nhà";
+  final directoryName =
+      ownerDirectory["name"]?.toString().trim() ?? "";
 
-  final ownerPhotoUrl = ownerRaw["photoUrl"]?.toString() ?? "";
+  final rawName =
+      ownerRaw["name"]?.toString().trim() ?? "";
+
+  final ownerName = directoryName.isNotEmpty
+      ? directoryName
+      : rawName.isNotEmpty
+      ? rawName
+      : ownerEmail;
+
+  final directoryPhotoUrl =
+      ownerDirectory["photoUrl"]?.toString().trim() ?? "";
+
+  final rawPhotoUrl =
+      ownerRaw["photoUrl"]?.toString().trim() ?? "";
+
+  final ownerPhotoUrl = directoryPhotoUrl.isNotEmpty
+      ? directoryPhotoUrl
+      : rawPhotoUrl;
+
+  var ownerPhone = ownerRaw["phone"]?.toString().trim() ?? "";
+
+  try {
+    final ownerContactSnap = await db
+        .ref("homeMemberContacts/$homeId/$ownerUid/phone")
+        .get();
+
+    final contactPhone =
+        ownerContactSnap.value?.toString().trim() ?? "";
+
+    if (contactPhone.isNotEmpty) {
+      ownerPhone = contactPhone;
+    }
+  } catch (_) {
+    // Dùng số dự phòng trong dữ liệu thành viên nếu có.
+  }
 
   Future<Map<String, dynamic>> loadMember(
-    String memberUid,
-    dynamic rawValue,
-  ) async {
+      String memberUid,
+      dynamic rawValue,
+      ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
@@ -54,14 +111,67 @@ Future<bool?> showShareListSheet({
         ? raw["name"].toString().trim()
         : email;
 
+    var phone = raw["phone"]?.toString().trim() ?? "";
+
+    try {
+      final phoneSnap = await db
+          .ref("homeMemberContacts/$homeId/$memberUid/phone")
+          .get();
+
+      final contactPhone =
+          phoneSnap.value?.toString().trim() ?? "";
+
+      if (contactPhone.isNotEmpty) {
+        phone = contactPhone;
+      }
+    } catch (_) {
+      // Giữ số dự phòng trong sharedByHome nếu có.
+    }
+
     return {
       "uid": memberUid,
       "email": email,
       "name": name,
       "photoUrl": raw["photoUrl"]?.toString() ?? "",
-      "phone": raw["phone"]?.toString() ?? "",
+      "phone": phone,
       "role": raw["role"]?.toString() ?? "member",
     };
+  }
+
+  Future<void> callPhone({
+    required BuildContext callContext,
+    required String phone,
+  }) async {
+    final cleanPhone = phone.trim();
+
+    if (cleanPhone.isEmpty) {
+      showTopToast(
+        callContext,
+        "Thành viên chưa cập nhật số điện thoại",
+        color: Colors.orange,
+        icon: Icons.phone_disabled_rounded,
+      );
+      return;
+    }
+
+    final uri = Uri(
+      scheme: "tel",
+      path: cleanPhone.replaceAll(" ", ""),
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+      return;
+    }
+
+    if (!callContext.mounted) return;
+
+    showTopToast(
+      callContext,
+      "Không mở được ứng dụng gọi điện",
+      color: Colors.red,
+      icon: Icons.phone_disabled_rounded,
+    );
   }
 
   Color roleColor(String role) {
@@ -185,6 +295,25 @@ Future<bool?> showShareListSheet({
                       ),
                     ),
 
+                    if (ownerUid != myUid)
+                      IconButton(
+                        tooltip: ownerPhone.isNotEmpty
+                            ? "Gọi điện"
+                            : "Chưa có số điện thoại",
+                        icon: Icon(
+                          ownerPhone.isNotEmpty
+                              ? Icons.phone_rounded
+                              : Icons.phone_disabled_rounded,
+                          color: ownerPhone.isNotEmpty
+                              ? Colors.green
+                              : Colors.grey.shade400,
+                        ),
+                        onPressed: () => callPhone(
+                          callContext: sheetContext,
+                          phone: ownerPhone,
+                        ),
+                      ),
+
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10,
@@ -240,14 +369,14 @@ Future<bool?> showShareListSheet({
                           final member = snapshot.data ?? rawMember;
 
                           final email =
-                              member["email"]?.toString().trim().isNotEmpty ==
-                                  true
+                          member["email"]?.toString().trim().isNotEmpty ==
+                              true
                               ? member["email"].toString()
                               : "Không có email";
 
                           final name =
-                              member["name"]?.toString().trim().isNotEmpty ==
-                                  true
+                          member["name"]?.toString().trim().isNotEmpty ==
+                              true
                               ? member["name"].toString()
                               : email;
 
@@ -277,7 +406,7 @@ Future<bool?> showShareListSheet({
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -313,32 +442,23 @@ Future<bool?> showShareListSheet({
                                     ],
                                   ),
                                 ),
-                                if (phone.isNotEmpty)
+                                if (targetUid != myUid)
                                   IconButton(
-                                    tooltip: "Gọi điện",
-                                    icon: const Icon(
-                                      Icons.phone_rounded,
-                                      color: Colors.green,
+                                    tooltip: phone.isNotEmpty
+                                        ? "Gọi điện"
+                                        : "Chưa có số điện thoại",
+                                    icon: Icon(
+                                      phone.isNotEmpty
+                                          ? Icons.phone_rounded
+                                          : Icons.phone_disabled_rounded,
+                                      color: phone.isNotEmpty
+                                          ? Colors.green
+                                          : Colors.grey.shade400,
                                     ),
-                                    onPressed: () async {
-                                      final uri = Uri(
-                                        scheme: "tel",
-                                        path: phone,
-                                      );
-
-                                      if (await canLaunchUrl(uri)) {
-                                        await launchUrl(uri);
-                                      } else {
-                                        if (!sheetContext.mounted) return;
-
-                                        showTopToast(
-                                          sheetContext,
-                                          "Không mở được ứng dụng gọi điện",
-                                          color: Colors.red,
-                                          icon: Icons.phone_disabled_rounded,
-                                        );
-                                      }
-                                    },
+                                    onPressed: () => callPhone(
+                                      callContext: sheetContext,
+                                      phone: phone,
+                                    ),
                                   ),
                                 if (targetUid == myUid ||
                                     isOwner ||
@@ -347,9 +467,9 @@ Future<bool?> showShareListSheet({
                                     onSelected: (value) async {
                                       final canDeleteTarget =
                                           targetUid == myUid ||
-                                          isOwner ||
-                                          (canManageMembers &&
-                                              role == "member");
+                                              isOwner ||
+                                              (canManageMembers &&
+                                                  role == "member");
 
                                       if (value == "delete" &&
                                           !canDeleteTarget) {
@@ -363,7 +483,7 @@ Future<bool?> showShareListSheet({
                                       }
 
                                       if ((value == "member" ||
-                                              value == "admin") &&
+                                          value == "admin") &&
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
@@ -410,24 +530,30 @@ Future<bool?> showShareListSheet({
 
                                         await db
                                             .ref(
-                                              FirebasePaths.sharedHome(
-                                                targetUid,
-                                                homeId,
-                                              ),
-                                            )
+                                          "homeMemberContacts/$homeId/$targetUid",
+                                        )
+                                            .remove();
+
+                                        await db
+                                            .ref(
+                                          FirebasePaths.sharedHome(
+                                            targetUid,
+                                            homeId,
+                                          ),
+                                        )
                                             .remove();
                                         await db
                                             .ref(
-                                              FirebasePaths.sharedMember(
-                                                homeId,
-                                                targetUid,
-                                              ),
-                                            )
+                                          FirebasePaths.sharedMember(
+                                            homeId,
+                                            targetUid,
+                                          ),
+                                        )
                                             .remove();
                                         await db
                                             .ref(
-                                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                                            )
+                                          "accounts/$ownerUid/shareList/$homeId/$targetUid",
+                                        )
                                             .remove();
 
                                         if (targetUid == myUid) {
@@ -453,9 +579,9 @@ Future<bool?> showShareListSheet({
 
                                       await db.ref().update({
                                         "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
-                                            value,
+                                        value,
                                         "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
-                                            value,
+                                        value,
                                       });
 
                                       await HomeNotificationService.addNotification(
@@ -504,11 +630,11 @@ Future<bool?> showShareListSheet({
                                       decoration: BoxDecoration(
                                         color: role == "admin"
                                             ? Colors.deepPurple.withValues(
-                                                alpha: 0.12,
-                                              )
+                                          alpha: 0.12,
+                                        )
                                             : Colors.blueGrey.withValues(
-                                                alpha: 0.12,
-                                              ),
+                                          alpha: 0.12,
+                                        ),
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       child: Text(
@@ -532,11 +658,11 @@ Future<bool?> showShareListSheet({
                                     decoration: BoxDecoration(
                                       color: role == "admin"
                                           ? Colors.deepPurple.withValues(
-                                              alpha: 0.12,
-                                            )
+                                        alpha: 0.12,
+                                      )
                                           : Colors.blueGrey.withValues(
-                                              alpha: 0.12,
-                                            ),
+                                        alpha: 0.12,
+                                      ),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Text(

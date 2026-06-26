@@ -105,9 +105,82 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   Future<void> saveMode(String nextMode) async {
-    await FirebaseDatabase.instance
-        .ref("accounts/$currentUid/customRules/${widget.homeId}/mode")
-        .set(nextMode);
+    final rulesRef = FirebaseDatabase.instance.ref(
+      "accounts/$currentUid/customRules/${widget.homeId}",
+    );
+
+    if (nextMode == "custom") {
+      final updates = <String, Object?>{
+        "mode": "custom",
+      };
+
+      final nextCustomAlarms = <String, dynamic>{};
+
+      for (final entry in devices.entries) {
+        final deviceId = entry.key.toString();
+        final rawDevice = entry.value;
+
+        if (rawDevice is! Map) {
+          continue;
+        }
+
+        final device = Map<String, dynamic>.from(
+          rawDevice,
+        );
+
+        if (!isSecurityDevice(device)) {
+          continue;
+        }
+
+        final rawRealDeviceId =
+            device["_deviceId"]?.toString().trim() ?? "";
+
+        final realDeviceId = rawRealDeviceId.isNotEmpty
+            ? rawRealDeviceId
+            : deviceId;
+
+        final rawAlarm =
+            customAlarms[deviceId] ??
+                customAlarms[realDeviceId] ??
+                homeAlarms[deviceId] ??
+                homeAlarms[realDeviceId];
+
+        final alarm = rawAlarm is Map
+            ? Map<String, dynamic>.from(rawAlarm)
+            : _defaultAlarm();
+
+        nextCustomAlarms[deviceId] =
+        Map<String, dynamic>.from(alarm);
+
+        updates["devices/$realDeviceId/alarm"] =
+        Map<String, dynamic>.from(alarm);
+      }
+
+      await rulesRef.update(updates);
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        customAlarms = nextCustomAlarms;
+        mode = "custom";
+        expandedDeviceId = "";
+      });
+
+      return;
+    }
+
+    await rulesRef.child("mode").set("home");
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      mode = "home";
+      expandedDeviceId = "";
+    });
   }
 
   Future<void> saveAlarm(
@@ -360,11 +433,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               selected: {mode},
               onSelectionChanged: (value) async {
                 final nextMode = value.first;
-
-                setState(() {
-                  mode = nextMode;
-                  expandedDeviceId = "";
-                });
 
                 await saveMode(nextMode);
               },

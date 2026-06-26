@@ -439,134 +439,171 @@ class DeviceList extends StatelessWidget {
                 final spacing = compact ? 10.0 : 16.0;
                 final itemWidth = (constraints.maxWidth - spacing - 16) / 2;
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(8),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  switchInCurve: Curves.easeOutCubic,
+                  switchOutCurve: Curves.easeInCubic,
+                  layoutBuilder: (currentChild, previousChildren) {
+                    return Stack(
+                      alignment: Alignment.topLeft,
                       children: [
-                        for (final groupName in [
-                          "An ninh ra/vào",
-                          "Nguy hiểm khẩn cấp",
-                        ]) ...[
-                          Builder(
-                            builder: (_) {
-                              final groupEntries = devices.entries.where((
-                                entry,
-                              ) {
-                                final d = safeMap(entry.value);
-                                final type = d["type"]?.toString() ?? "door";
+                        ...previousChildren,
+                        if (currentChild != null) currentChild,
+                      ],
+                    );
+                  },
+                  transitionBuilder: (child, animation) {
+                    final curved = CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                      reverseCurve: Curves.easeInCubic,
+                    );
 
-                                if (getDeviceGroup(type) != groupName) {
-                                  return false;
+                    final slide = Tween<Offset>(
+                      begin: const Offset(0.035, 0),
+                      end: Offset.zero,
+                    ).animate(curved);
+
+                    return FadeTransition(
+                      opacity: curved,
+                      child: SlideTransition(
+                        position: slide,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: SingleChildScrollView(
+                    key: ValueKey(
+                      "device_room_$selectedRoomId",
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final groupName in [
+                            "An ninh ra/vào",
+                            "Nguy hiểm khẩn cấp",
+                          ]) ...[
+                            Builder(
+                              builder: (_) {
+                                final groupEntries = devices.entries.where((
+                                    entry,
+                                    ) {
+                                  final d = safeMap(entry.value);
+                                  final type = d["type"]?.toString() ?? "door";
+
+                                  if (getDeviceGroup(type) != groupName) {
+                                    return false;
+                                  }
+
+                                  if (selectedRoomId == "overview") {
+                                    return true;
+                                  }
+
+                                  final roomId =
+                                      d["roomId"]?.toString() ?? "unassigned";
+
+                                  return roomId == selectedRoomId;
+                                }).toList();
+
+                                if (groupEntries.isEmpty &&
+                                    groupName != "An ninh ra/vào") {
+                                  return const SizedBox.shrink();
                                 }
 
-                                if (selectedRoomId == "overview") {
-                                  return true;
-                                }
-
-                                final roomId =
-                                    d["roomId"]?.toString() ?? "unassigned";
-
-                                return roomId == selectedRoomId;
-                              }).toList();
-
-                              if (groupEntries.isEmpty &&
-                                  groupName != "An ninh ra/vào") {
-                                return const SizedBox.shrink();
-                              }
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 2,
-                                      top: 2,
-                                      bottom: 8,
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: groupEntries.isEmpty
-                                              ? const SizedBox.shrink()
-                                              : Text(
-                                                  groupName,
-                                                  style: TextStyle(
-                                                    fontSize: compact ? 13 : 14,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.black87,
-                                                  ),
-                                                ),
-                                        ),
-
-                                        if (groupName == "An ninh ra/vào")
-                                          InkWell(
-                                            borderRadius: BorderRadius.circular(
-                                              14,
-                                            ),
-                                            onTap: onPairSensor,
-                                            child: Container(
-                                              width: 36,
-                                              height: 36,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(14),
-                                                border: Border.all(
-                                                  color: Colors.blue.withValues(
-                                                    alpha: 0.20,
-                                                  ),
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withValues(
-                                                          alpha: 0.04,
-                                                        ),
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: const Icon(
-                                                Icons.add_rounded,
-                                                size: 22,
-                                                color: Colors.blue,
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 2,
+                                        top: 2,
+                                        bottom: 8,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: groupEntries.isEmpty
+                                                ? const SizedBox.shrink()
+                                                : Text(
+                                              groupName,
+                                              style: TextStyle(
+                                                fontSize: compact ? 13 : 14,
+                                                fontWeight: FontWeight.w900,
+                                                color: Colors.black87,
                                               ),
                                             ),
                                           ),
-                                      ],
-                                    ),
-                                  ),
-                                  Wrap(
-                                    spacing: spacing,
-                                    runSpacing: 10,
-                                    alignment: WrapAlignment.start,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    children: groupEntries.map((entry) {
-                                      final d = safeMap(entry.value);
 
-                                      return SizedBox(
-                                        width: itemWidth,
-                                        child: _deviceCard(
-                                          context: context,
-                                          id: entry.key,
-                                          d: d,
-                                          compact: compact,
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                  const SizedBox(height: 8),
-                                ],
-                              );
-                            },
-                          ),
+                                          if (groupName == "An ninh ra/vào")
+                                            InkWell(
+                                              borderRadius: BorderRadius.circular(
+                                                14,
+                                              ),
+                                              onTap: onPairSensor,
+                                              child: Container(
+                                                width: 36,
+                                                height: 36,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                  BorderRadius.circular(14),
+                                                  border: Border.all(
+                                                    color: Colors.blue.withValues(
+                                                      alpha: 0.20,
+                                                    ),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withValues(
+                                                        alpha: 0.04,
+                                                      ),
+                                                      blurRadius: 8,
+                                                      offset: const Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.add_rounded,
+                                                  size: 22,
+                                                  color: Colors.blue,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                    Wrap(
+                                      spacing: spacing,
+                                      runSpacing: 10,
+                                      alignment: WrapAlignment.start,
+                                      crossAxisAlignment:
+                                      WrapCrossAlignment.start,
+                                      children: groupEntries.map((entry) {
+                                        final d = safeMap(entry.value);
+
+                                        return SizedBox(
+                                          width: itemWidth,
+                                          child: _deviceCard(
+                                            context: context,
+                                            id: entry.key,
+                                            d: d,
+                                            compact: compact,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
                 );
