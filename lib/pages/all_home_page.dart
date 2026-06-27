@@ -1331,36 +1331,124 @@ class _AllHomePageState extends State<AllHomePage> {
             });
           },
         )
-            : InkWell(
-          borderRadius: BorderRadius.circular(999),
-          onTap: showAllHomeSummarySheet,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: Text(
-                buildAllHomeSummaries()[
-                summaryIndex % buildAllHomeSummaries().length],
-                key: ValueKey(
-                  buildAllHomeSummaries()[
-                  summaryIndex % buildAllHomeSummaries().length],
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.grey.shade800,
+            : Builder(
+          builder: (context) {
+            final summaries = buildAllHomeSummaries();
+            final summary =
+            summaries[summaryIndex % summaries.length];
+
+            final bool isDanger = summary.startsWith("🚨");
+            final bool isWarning = summary.startsWith("⚠️");
+            final bool isSafe = summary.startsWith("✅");
+
+            final Color statusColor = isDanger
+                ? Colors.red
+                : isWarning
+                ? Colors.orange
+                : isSafe
+                ? Colors.green
+                : Colors.blueGrey;
+
+            final IconData statusIcon = isDanger
+                ? Icons.warning_amber_rounded
+                : isWarning
+                ? Icons.info_outline_rounded
+                : isSafe
+                ? Icons.check_circle_outline_rounded
+                : Icons.home_outlined;
+
+            final cleanSummary = summary
+                .replaceFirst("🚨 ", "")
+                .replaceFirst("⚠️ ", "")
+                .replaceFirst("✅ ", "")
+                .replaceFirst("🏡 ", "");
+
+            return Tooltip(
+              message: "Xem tổng hợp trạng thái",
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(18),
+                  onTap: showAllHomeSummarySheet,
+                  child: Container(
+                    height: 40,
+                    constraints: const BoxConstraints(
+                      minWidth: 150,
+                      maxWidth: 275,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(
+                      7,
+                      4,
+                      8,
+                      4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.88),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: statusColor.withValues(alpha: 0.22),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.045),
+                          blurRadius: 10,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 450),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: child,
+                        );
+                      },
+                      child: Row(
+                        key: ValueKey(summary),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: statusColor.withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              statusIcon,
+                              size: 18,
+                              color: statusColor,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              cleanSummary,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 13,
+                                height: 1,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.grey.shade800,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 3),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            size: 18,
+                            color: statusColor.withValues(alpha: 0.8),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
 
         actions: [

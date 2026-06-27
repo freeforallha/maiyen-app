@@ -318,7 +318,9 @@ Future<bool?> showShareRequestSheet({
                 padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
                 decoration: const BoxDecoration(
                   color: Color(0xFFF7FAF8),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -348,10 +350,10 @@ Future<bool?> showShareRequestSheet({
                           ),
                         ),
                         const SizedBox(width: 12),
-                        Expanded(
+                        const Expanded(
                           child: Text(
-                            "Lời mời chia sẻ",
-                            style: const TextStyle(
+                            "Yêu cầu & lời mời",
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
                             ),
@@ -381,8 +383,10 @@ Future<bool?> showShareRequestSheet({
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "Không có lời mời nào",
-                              style: TextStyle(color: Colors.grey.shade600),
+                              "Không có yêu cầu hoặc lời mời nào",
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                              ),
                             ),
                           ],
                         ),
@@ -398,26 +402,79 @@ Future<bool?> showShareRequestSheet({
                             final data = Map<String, dynamic>.from(
                               list[i].value,
                             );
+
                             final type =
                                 data["type"]?.toString() ?? "share_request";
 
-                            final email = data["targetEmail"]?.toString() ?? "";
-                            final name = data["targetName"]?.toString() ?? "";
+                            final isJoinRequest = type == "join_request";
+                            final isTransferOwner =
+                                type == "transfer_owner_request";
+
+                            final targetEmail =
+                                data["targetEmail"]?.toString().trim() ?? "";
+                            final targetName =
+                                data["targetName"]?.toString().trim() ?? "";
+                            final ownerEmail =
+                                data["ownerEmail"]?.toString().trim() ?? "";
+                            final ownerName =
+                                data["ownerName"]?.toString().trim() ?? "";
+
                             final rawHomeName =
                                 data["homeName"]?.toString().trim() ?? "";
-                            final homeName =
-                            rawHomeName.isNotEmpty &&
+
+                            final homeName = rawHomeName.isNotEmpty &&
                                 !rawHomeName.startsWith("home_")
                                 ? rawHomeName
                                 : "Nhà chưa đặt tên";
 
-                            final title = type == "transfer_owner_request"
-                                ? "Nhận quyền chủ nhà"
-                                : (name.isNotEmpty ? name : "Lời mời chia sẻ");
+                            final Color color = isJoinRequest
+                                ? Colors.orange
+                                : isTransferOwner
+                                ? Colors.purple
+                                : Colors.green;
 
-                            final subtitle = type == "transfer_owner_request"
-                                ? "Bạn được mời nhận quyền chủ nhà $homeName"
-                                : email;
+                            final IconData icon = isJoinRequest
+                                ? Icons.person_add_alt_1_rounded
+                                : isTransferOwner
+                                ? Icons.admin_panel_settings_rounded
+                                : Icons.home_work_rounded;
+
+                            final String badgeText = isJoinRequest
+                                ? "Lời xin vào nhà"
+                                : isTransferOwner
+                                ? "Chuyển quyền chủ nhà"
+                                : "Lời mời gia nhập";
+
+                            late final String title;
+                            late final String subtitle;
+
+                            if (isJoinRequest) {
+                              title = targetName.isNotEmpty
+                                  ? targetName
+                                  : targetEmail.isNotEmpty
+                                  ? targetEmail
+                                  : "Một người dùng SafeHome";
+
+                              subtitle = targetEmail.isNotEmpty &&
+                                  targetName.isNotEmpty
+                                  ? "$targetEmail\nXin gia nhập \"$homeName\""
+                                  : "Xin gia nhập \"$homeName\"";
+                            } else if (isTransferOwner) {
+                              title = "Nhận quyền chủ nhà";
+                              subtitle =
+                              "Bạn được mời nhận quyền nhà \"$homeName\"";
+                            } else {
+                              title = ownerName.isNotEmpty
+                                  ? ownerName
+                                  : ownerEmail.isNotEmpty
+                                  ? ownerEmail
+                                  : "Lời mời từ chủ nhà";
+
+                              subtitle = ownerEmail.isNotEmpty &&
+                                  ownerName.isNotEmpty
+                                  ? "$ownerEmail\nMời bạn gia nhập \"$homeName\""
+                                  : "Mời bạn gia nhập \"$homeName\"";
+                            }
 
                             return Container(
                               margin: const EdgeInsets.only(bottom: 12),
@@ -427,7 +484,9 @@ Future<bool?> showShareRequestSheet({
                                 borderRadius: BorderRadius.circular(22),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.05),
+                                    color: Colors.black.withValues(
+                                      alpha: 0.05,
+                                    ),
                                     blurRadius: 14,
                                     offset: const Offset(0, 6),
                                   ),
@@ -437,25 +496,15 @@ Future<bool?> showShareRequestSheet({
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         backgroundColor:
-                                        type == "transfer_owner_request"
-                                            ? Colors.purple.withValues(
-                                          alpha: 0.12,
-                                        )
-                                            : Colors.green.withValues(
-                                          alpha: 0.12,
-                                        ),
+                                        color.withValues(alpha: 0.12),
                                         child: Icon(
-                                          type == "transfer_owner_request"
-                                              ? Icons
-                                              .admin_panel_settings_rounded
-                                              : Icons.home_rounded,
-                                          color:
-                                          type == "transfer_owner_request"
-                                              ? Colors.purple
-                                              : Colors.green,
+                                          icon,
+                                          color: color,
                                         ),
                                       ),
                                       const SizedBox(width: 12),
@@ -464,10 +513,34 @@ Future<bool?> showShareRequestSheet({
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: [
+                                            Container(
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: color.withValues(
+                                                  alpha: 0.12,
+                                                ),
+                                                borderRadius:
+                                                BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                badgeText,
+                                                style: TextStyle(
+                                                  fontSize: 10.5,
+                                                  fontWeight: FontWeight.w800,
+                                                  color: color,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 7),
                                             Text(
                                               title,
                                               maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                              overflow:
+                                              TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w800,
                                               ),
@@ -475,10 +548,12 @@ Future<bool?> showShareRequestSheet({
                                             const SizedBox(height: 3),
                                             Text(
                                               subtitle,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              overflow:
+                                              TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 12,
+                                                height: 1.35,
                                                 color: Colors.grey.shade600,
                                               ),
                                             ),
@@ -494,7 +569,8 @@ Future<bool?> showShareRequestSheet({
                                     children: [
                                       Expanded(
                                         child: OutlinedButton(
-                                          onPressed: () => denyOne(requestKey),
+                                          onPressed: () =>
+                                              denyOne(requestKey),
                                           child: const Text("Từ chối"),
                                         ),
                                       ),
@@ -502,12 +578,15 @@ Future<bool?> showShareRequestSheet({
                                       Expanded(
                                         child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
+                                            backgroundColor: color,
                                             foregroundColor: Colors.white,
                                           ),
                                           onPressed: () async {
                                             try {
-                                              await acceptOne(requestKey, data);
+                                              await acceptOne(
+                                                requestKey,
+                                                data,
+                                              );
                                             } catch (e, st) {
                                               debugPrint(
                                                 "ACCEPT_REQUEST_ERROR: $e",
@@ -515,20 +594,26 @@ Future<bool?> showShareRequestSheet({
                                               debugPrint(
                                                 "ACCEPT_REQUEST_STACK: $st",
                                               );
+
                                               if (!context.mounted) return;
 
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
                                                   content: Text(
-                                                    "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                    isJoinRequest
+                                                        ? "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại."
+                                                        : "Không thể chấp nhận lời mời. Vui lòng thử lại.",
                                                   ),
                                                 ),
                                               );
                                             }
                                           },
-                                          child: const Text("Chấp nhận"),
+                                          child: Text(
+                                            isJoinRequest
+                                                ? "Cho phép"
+                                                : "Chấp nhận",
+                                          ),
                                         ),
                                       ),
                                     ],
