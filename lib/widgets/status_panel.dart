@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../helpers/home_helper.dart';
+import '../safehome_theme.dart';
 
 class StatusPanel extends StatefulWidget {
   final Map<String, dynamic> overall;
@@ -20,6 +23,7 @@ class StatusPanel extends StatefulWidget {
   final VoidCallback? onScheduleNotification;
   final VoidCallback? onScheduleAlarm;
   final String alarmPauseText;
+
   const StatusPanel({
     super.key,
     required this.overall,
@@ -32,9 +36,7 @@ class StatusPanel extends StatefulWidget {
     this.onEnvironmentTap,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
-
     this.onAlarmPauseToday,
-
     this.onScheduleNotification,
     this.onScheduleAlarm,
     required this.alarmPauseText,
@@ -51,9 +53,13 @@ class _StatusPanelState extends State<StatusPanel> {
   @override
   void initState() {
     super.initState();
+
     _timer = Timer.periodic(const Duration(seconds: 4), (_) {
       if (!mounted) return;
-      setState(() => _broadcastIndex++);
+
+      setState(() {
+        _broadcastIndex++;
+      });
     });
   }
 
@@ -61,6 +67,378 @@ class _StatusPanelState extends State<StatusPanel> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  Color _statusColor(String level) {
+    if (level == "danger") {
+      return SafeHomeColors.danger;
+    }
+
+    if (level == "warning") {
+      return SafeHomeColors.warning;
+    }
+
+    return SafeHomeColors.safe;
+  }
+
+  IconData _statusIcon(String level) {
+    if (level == "danger") {
+      return Icons.warning_amber_rounded;
+    }
+
+    if (level == "warning") {
+      return Icons.info_outline_rounded;
+    }
+
+    return Icons.verified_rounded;
+  }
+
+  String _statusText(String level) {
+    if (level == "danger") {
+      return "CHƯA AN TOÀN";
+    }
+
+    if (level == "warning") {
+      return "CẦN CHÚ Ý";
+    }
+
+    return "ĐÃ AN TOÀN";
+  }
+
+  List<Map<String, dynamic>> _sortedRecentEvents() {
+    final events = widget.homeEvents.values
+        .map((item) => safeMap(item))
+        .toList();
+
+    events.sort((a, b) {
+      final first =
+          int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
+      final second =
+          int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
+
+      return second.compareTo(first);
+    });
+
+    return events.take(20).toList();
+  }
+
+  Map<String, int> _eventCounts(
+      List<Map<String, dynamic>> recentEvents,
+      ) {
+    int openCount = 0;
+    int smokeCount = 0;
+    int sosCount = 0;
+
+    for (final event in recentEvents) {
+      final text =
+      (event["text"] ?? "").toString().toLowerCase();
+
+      if (text.contains("mở")) {
+        openCount++;
+      }
+
+      if (text.contains("khói")) {
+        smokeCount++;
+      }
+
+      if (text.contains("sos")) {
+        sosCount++;
+      }
+    }
+
+    return {
+      "open": openCount,
+      "smoke": smokeCount,
+      "sos": sosCount,
+    };
+  }
+
+  List<String> _buildAutomaticSummary({
+    required List<String> dangerIssues,
+    required List<String> warningIssues,
+    required List<Map<String, dynamic>> recentEvents,
+    required Map<String, int> eventCounts,
+  }) {
+    final summary = <String>[];
+    final openCount = eventCounts["open"] ?? 0;
+    final smokeCount = eventCounts["smoke"] ?? 0;
+    final sosCount = eventCounts["sos"] ?? 0;
+
+    if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
+      summary.add(
+        "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
+      );
+
+      if (dangerIssues.isNotEmpty) {
+        summary.add(
+          "${dangerIssues.length} vấn đề đang cần xử lý ngay.",
+        );
+      }
+
+      if (warningIssues.isNotEmpty) {
+        summary.add(
+          "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
+        );
+      }
+
+      if (openCount > 0) {
+        summary.add(
+          "Gần đây cửa đã được mở $openCount lần.",
+        );
+      }
+    } else {
+      summary.add(
+        "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
+      );
+
+      if (recentEvents.isNotEmpty) {
+        summary.add(
+          "Có ${recentEvents.length} hoạt động gần đây được ghi nhận.",
+        );
+      }
+
+      if (openCount > 0) {
+        summary.add(
+          "Cửa được sử dụng $openCount lần gần đây.",
+        );
+      }
+
+      if (smokeCount == 0 && sosCount == 0) {
+        summary.add(
+          "Không có dấu hiệu khói hoặc SOS bất thường.",
+        );
+      }
+    }
+
+    if (summary.length == 1) {
+      summary.add(
+        "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
+      );
+    }
+
+    return summary;
+  }
+
+  void _showScheduleOptions(BuildContext context) {
+    bool localAlarmEnabled = widget.alarmEnabled;
+
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(
+                  18,
+                  8,
+                  18,
+                  18,
+                ),
+                decoration: const BoxDecoration(
+                  color: SafeHomeColors.surface,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.primarySoft,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Icon(
+                            Icons.shield_rounded,
+                            color: SafeHomeColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "An ninh ra/vào",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: SafeHomeColors.textPrimary,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                "Cài đặt cảnh báo cho nhà hiện tại",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color:
+                                  SafeHomeColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.surfaceSoft,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: SwitchListTile(
+                        value: localAlarmEnabled,
+                        activeThumbColor: SafeHomeColors.primary,
+                        activeTrackColor: SafeHomeColors.primarySoft,
+                        secondary: Icon(
+                          localAlarmEnabled
+                              ? Icons.notifications_active_rounded
+                              : Icons.notifications_off_rounded,
+                          color: localAlarmEnabled
+                              ? SafeHomeColors.primary
+                              : SafeHomeColors.textSecondary,
+                        ),
+                        title: const Text(
+                          "Nhận cảnh báo Alarm",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        subtitle: Text(
+                          localAlarmEnabled
+                              ? "Đang bật cho tài khoản này"
+                              : "Đang tắt cho tài khoản này",
+                        ),
+                        onChanged: (value) {
+                          setSheetState(() {
+                            localAlarmEnabled = value;
+                          });
+
+                          widget.onAlarmEnabledChanged?.call(value);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _actionTile(
+                      icon: Icons.notifications_none_rounded,
+                      title: "Hẹn giờ Reminder",
+                      subtitle: "Nhắc kiểm tra nhà theo thời gian",
+                      color: SafeHomeColors.warning,
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onScheduleNotification?.call();
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _actionTile(
+                      icon: Icons.shield_moon_rounded,
+                      title: "Hẹn giờ Alarm",
+                      subtitle: widget.alarmStart.trim().isEmpty
+                          ? "Chưa thiết lập"
+                          : widget.alarmStart,
+                      color: SafeHomeColors.danger,
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onScheduleAlarm?.call();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _actionTile({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: SafeHomeColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          padding: const EdgeInsets.all(13),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: SafeHomeColors.border,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.11),
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 21,
+                ),
+              ),
+              const SizedBox(width: 11),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: SafeHomeColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        color: SafeHomeColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: SafeHomeColors.textSecondary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _showStatusSummary(BuildContext context) {
@@ -73,115 +451,112 @@ class _StatusPanelState extends State<StatusPanel> {
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
     );
-    final events = widget.homeEvents.values.map((e) => safeMap(e)).toList();
 
-    events.sort((a, b) {
-      final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
-      final tb = int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
-      return tb.compareTo(ta);
-    });
-    final recentEvents = events.take(20).toList();
+    final recentEvents = _sortedRecentEvents();
+    final eventCounts = _eventCounts(recentEvents);
 
-    int openCount = 0;
-    int smokeCount = 0;
-    int sosCount = 0;
+    final automaticSummary = _buildAutomaticSummary(
+      dangerIssues: dangerIssues,
+      warningIssues: warningIssues,
+      recentEvents: recentEvents,
+      eventCounts: eventCounts,
+    );
 
-    for (final event in recentEvents) {
-      final text = (event["text"] ?? "").toString().toLowerCase();
-
-      if (text.contains("mở")) {
-        openCount++;
-      }
-
-      if (text.contains("khói")) {
-        smokeCount++;
-      }
-
-      if (text.contains("sos")) {
-        sosCount++;
-      }
-    }
-
-    final aiSummary = <String>[];
-
-    if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
-      aiSummary.add(
-        "Nhà đang có dấu hiệu cần kiểm tra, bạn nên cẩn thận xem lại .",
-      );
-
-      if (dangerIssues.isNotEmpty) {
-        aiSummary.add("${dangerIssues.length} vấn đề đang cần xử lý ngay.");
-      }
-
-      if (warningIssues.isNotEmpty) {
-        aiSummary.add(
-          "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
-        );
-      }
-
-      if (openCount > 0) {
-        aiSummary.add("Gần đây cửa đã được mở $openCount lần.");
-      }
-    } else {
-      aiSummary.add("Nhà đang ổn, bạn có thể yên tâm.");
-
-      if (recentEvents.isNotEmpty) {
-        aiSummary.add(
-          "Hôm nay có ${recentEvents.length} hoạt động được ghi nhận.",
-        );
-      }
-
-      if (openCount > 0) {
-        aiSummary.add("Cửa được sử dụng $openCount lần gần đây.");
-      }
-
-      if (smokeCount == 0 && sosCount == 0) {
-        aiSummary.add("Không có dấu hiệu khói hoặc SOS bất thường.");
-      }
-    }
-
-    if (aiSummary.length == 1) {
-      aiSummary.add("Chưa có nhiều hoạt động mới để phân tích sâu hơn.");
-    }
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
         return SafeArea(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 22),
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.86,
+            ),
+            padding: const EdgeInsets.fromLTRB(
+              18,
+              8,
+              18,
+              20,
+            ),
             decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Tổng hợp trạng thái nhà",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+                Container(
+                  width: 46,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
                 ),
-                const SizedBox(height: 14),
-                if (dangerIssues.isNotEmpty) ...[
-                  _sectionTitle("Cần xử lý ngay", Colors.red),
-                  ...dangerIssues.map((e) => _issueRow(e, Colors.red)),
-                  const SizedBox(height: 12),
-                ],
-                if (warningIssues.isNotEmpty) ...[
-                  _sectionTitle("Cần kiểm tra", Colors.orange),
-                  ...warningIssues.map((e) => _issueRow(e, Colors.orange)),
-                  const SizedBox(height: 12),
-                ],
-                _sectionTitle("🤖 Đánh giá tự động", Colors.blue),
-
-                ...aiSummary.map((e) => _issueRow(e, Colors.blue)),
-
-                const SizedBox(height: 12),
-
-                _sectionTitle("📊 Tổng quan hôm nay", Colors.green),
-
-                ...safeSummary.map((e) => _issueRow(e, Colors.green)),
+                const Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Tổng hợp trạng thái nhà",
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w900,
+                          color: SafeHomeColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.insights_rounded,
+                      color: SafeHomeColors.primary,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      if (dangerIssues.isNotEmpty) ...[
+                        _summarySection(
+                          title: "Cần xử lý ngay",
+                          icon: Icons.warning_amber_rounded,
+                          color: SafeHomeColors.danger,
+                          items: dangerIssues,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      if (warningIssues.isNotEmpty) ...[
+                        _summarySection(
+                          title: "Cần kiểm tra",
+                          icon: Icons.info_outline_rounded,
+                          color: SafeHomeColors.warning,
+                          items: warningIssues,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      _summarySection(
+                        title: "Đánh giá tự động",
+                        icon: Icons.auto_awesome_rounded,
+                        color: SafeHomeColors.info,
+                        items: automaticSummary,
+                      ),
+                      const SizedBox(height: 12),
+                      _summarySection(
+                        title: "Tổng quan hôm nay",
+                        icon: Icons.bar_chart_rounded,
+                        color: SafeHomeColors.safe,
+                        items: safeSummary.isEmpty
+                            ? const [
+                          "Chưa có dữ liệu tổng quan",
+                        ]
+                            : safeSummary,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -190,35 +565,98 @@ class _StatusPanelState extends State<StatusPanel> {
     );
   }
 
-  static Widget _sectionTitle(String text, Color color) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w900,
-          color: color,
+  static Widget _summarySection({
+    required String title,
+    required IconData icon,
+    required Color color,
+    required List<String> items,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: SafeHomeColors.surface,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: color.withValues(alpha: 0.13),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.11),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...items.map(
+                (item) => _summaryItem(
+              text: item,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  static Widget _issueRow(String text, Color color) {
+  static Widget _summaryItem({
+    required String text,
+    required Color color,
+  }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.circle, size: 7, color: color),
-          const SizedBox(width: 9),
+          Container(
+            width: 6,
+            height: 6,
+            margin: const EdgeInsets.only(
+              top: 6,
+              right: 9,
+            ),
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
           Expanded(
             child: Text(
               text,
               style: const TextStyle(
-                fontSize: 14,
-                height: 1.3,
+                fontSize: 13.5,
+                height: 1.35,
                 fontWeight: FontWeight.w600,
-                color: Colors.black87,
+                color: SafeHomeColors.textPrimary,
               ),
             ),
           ),
@@ -229,227 +667,300 @@ class _StatusPanelState extends State<StatusPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final level = widget.overall["level"]?.toString() ?? "safe";
-    final issues = List<String>.from(widget.overall["issues"] ?? const []);
+    final level =
+        widget.overall["level"]?.toString() ?? "safe";
+
+    final issues = List<String>.from(
+      widget.overall["issues"] ?? const [],
+    );
+
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
     );
 
     final allLines = issues.isNotEmpty ? issues : safeSummary;
-    final firstLine = allLines.isNotEmpty ? allLines.first : "Chưa có dữ liệu";
-    final rotatingLines = allLines.length > 1 ? allLines.skip(1).toList() : [];
+
+    final firstLine = allLines.isNotEmpty
+        ? allLines.first
+        : "Chưa có dữ liệu trạng thái";
+
+    final rotatingLines = allLines.length > 1
+        ? allLines.skip(1).toList()
+        : <String>[];
+
     final secondLine = rotatingLines.isNotEmpty
-        ? rotatingLines[_broadcastIndex % rotatingLines.length]
+        ? rotatingLines[
+    _broadcastIndex % rotatingLines.length
+    ]
         : "Bấm vào để xem chi tiết";
 
-    final isDanger = level == "danger";
-    final isWarning = level == "warning";
+    final statusColor = _statusColor(level);
+    final statusIcon = _statusIcon(level);
+    final statusText = _statusText(level);
 
-    final statusColor = isDanger
-        ? Colors.red.shade500
-        : isWarning
-        ? Colors.orange.shade500
-        : Colors.green.shade500;
+    final alarmPauseSet =
+        widget.alarmPauseText != "Chưa thiết lập";
 
-    final statusText = isDanger
-        ? "CHƯA AN TOÀN"
-        : isWarning
-        ? "CẦN CHÚ Ý"
-        : "ĐÃ AN TOÀN";
+    final recentEvents = _sortedRecentEvents();
+    final eventCounts = _eventCounts(recentEvents);
 
-    final statusIcon = isDanger
-        ? Icons.warning_rounded
-        : isWarning
-        ? Icons.info_rounded
-        : Icons.verified_rounded;
-    final alarmPauseSet = widget.alarmPauseText != "Chưa thiết lập";
-    final alarmPauseColor = alarmPauseSet
-        ? Colors.orange.shade700
-        : Colors.black54;
-    final events = widget.homeEvents.values.map((e) => safeMap(e)).toList();
-
-    events.sort((a, b) {
-      final ta = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
-      final tb = int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
-      return tb.compareTo(ta);
-    });
-
-    final recentEvents = events.take(20).toList();
-
-    int openCount = 0;
-    int smokeCount = 0;
-    int sosCount = 0;
-
-    for (final event in recentEvents) {
-      final text = (event["text"] ?? "").toString().toLowerCase();
-
-      if (text.contains("mở")) {
-        openCount++;
-      }
-
-      if (text.contains("khói")) {
-        smokeCount++;
-      }
-
-      if (text.contains("sos")) {
-        sosCount++;
-      }
-    }
+    final openCount = eventCounts["open"] ?? 0;
+    final smokeCount = eventCounts["smoke"] ?? 0;
+    final sosCount = eventCounts["sos"] ?? 0;
 
     String subtitle;
 
     if (issues.isNotEmpty) {
-      subtitle = "Phát hiện ${issues.length} vấn đề cần xử lý";
+      subtitle =
+      "Phát hiện ${issues.length} vấn đề cần xử lý";
     } else if (smokeCount > 0) {
       subtitle = "Hôm nay đã ghi nhận cảnh báo khói";
     } else if (sosCount > 0) {
       subtitle = "Hôm nay đã ghi nhận cảnh báo SOS";
     } else if (openCount > 0) {
-      subtitle = "Hôm nay các cửa đã được sử dụng $openCount lần";
+      subtitle =
+      "Hôm nay các cửa đã được sử dụng $openCount lần";
     } else if (recentEvents.isNotEmpty) {
-      subtitle = "Đã ghi nhận ${recentEvents.length} hoạt động gần đây";
+      subtitle =
+      "Đã ghi nhận ${recentEvents.length} hoạt động gần đây";
     } else {
       subtitle = "Ngôi nhà đang hoạt động ổn định";
     }
 
+    final environment = widget.environmentText
+        .replaceAll("/", " | ")
+        .replaceAll("  ", " ")
+        .trim();
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: InkWell(
-        onTap: () => _showStatusSummary(context),
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 15, 16, 15),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.48),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white, width: 1.2),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(statusIcon, color: statusColor, size: 23),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      statusText,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: statusColor,
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: widget.onEnvironmentTap,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Text(
-                      "🌡 ${widget.environmentText.replaceAll("/", "|")}",
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ),
-                ],
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _showStatusSummary(context),
+          borderRadius: BorderRadius.circular(22),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              14,
+              11,
+              14,
+              10,
+            ),
+            decoration: BoxDecoration(
+              color: SafeHomeColors.surface,
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(
+                color: statusColor.withValues(alpha: 0.11),
               ),
-              InkWell(
-                onTap: widget.onAlarmPauseToday,
-                child: Row(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.035),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Icon(
+                      statusIcon,
+                      color: statusColor,
+                      size: 19,
+                    ),
+                    const SizedBox(width: 7),
                     Expanded(
                       child: Text(
-                        "Tạm dừng Alarm : ${widget.alarmPauseText}",
+                        statusText,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 13,
-                          color: alarmPauseColor,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 18,
+                          height: 1,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -0.2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: widget.onEnvironmentTap,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                          vertical: 3,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.thermostat_rounded,
+                              size: 15,
+                              color: SafeHomeColors.textSecondary,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              environment,
+                              style: const TextStyle(
+                                fontSize: 11.2,
+                                height: 1,
+                                fontWeight: FontWeight.w800,
+                                color: SafeHomeColors.textPrimary,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        color: issues.isNotEmpty ? statusColor : Colors.black54,
+                if (widget.onAlarmPauseToday != null) ...[
+                  const SizedBox(height: 7),
+                  InkWell(
+                    onTap: widget.onAlarmPauseToday,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 2,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.pause_circle_outline_rounded,
+                            size: 15,
+                            color: alarmPauseSet
+                                ? SafeHomeColors.warning
+                                : SafeHomeColors.textSecondary,
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              "Tạm dừng Alarm: ${widget.alarmPauseText}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11.2,
+                                height: 1.15,
+                                fontWeight: FontWeight.w700,
+                                color: alarmPauseSet
+                                    ? SafeHomeColors.warning
+                                    : SafeHomeColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ],
-              ),
-
-              const SizedBox(height: 7),
-              _line(firstLine, issues.isNotEmpty),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 350),
-                      layoutBuilder: (currentChild, previousChildren) {
-                        return Stack(
-                          alignment: Alignment.centerLeft,
-                          children: [...previousChildren, ?currentChild],
-                        );
-                      },
-                      child: _line(
-                        secondLine,
-                        issues.isNotEmpty,
-                        key: ValueKey(secondLine),
+                const SizedBox(height: 7),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12.2,
+                    height: 1.15,
+                    fontWeight: FontWeight.w800,
+                    color: issues.isNotEmpty
+                        ? statusColor
+                        : SafeHomeColors.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                _statusLine(
+                  text: firstLine,
+                  color: issues.isNotEmpty
+                      ? statusColor
+                      : SafeHomeColors.textSecondary,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child: _statusLine(
+                          key: ValueKey(secondLine),
+                          text: secondLine,
+                          color: issues.isNotEmpty
+                              ? statusColor
+                              : SafeHomeColors.textSecondary,
+                        ),
                       ),
                     ),
-                  ),
-
-                  Text(
-                    "Chi tiết",
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.blue.shade700,
-                      fontWeight: FontWeight.w800,
+                    const SizedBox(width: 8),
+                    const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Chi tiết",
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            height: 1,
+                            fontWeight: FontWeight.w900,
+                            color: SafeHomeColors.textPrimary,
+                          ),
+                        ),
+                        SizedBox(width: 1),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          size: 16,
+                          color: SafeHomeColors.textPrimary,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _line(String text, bool hasIssue, {Key? key}) {
-    final level = widget.overall["level"]?.toString() ?? "safe";
-
-    final color = level == "danger"
-        ? Colors.red.shade500
-        : level == "warning"
-        ? Colors.orange.shade500
-        : Colors.black54;
-
-    return Text(
-      "• $text",
+  Widget _statusLine({
+    Key? key,
+    required String text,
+    required Color color,
+  }) {
+    return Row(
       key: key,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        fontSize: 12,
-        height: 1.25,
-        color: hasIssue ? color : Colors.black54,
-        fontWeight: FontWeight.w600,
-      ),
+      children: [
+        Container(
+          width: 5,
+          height: 5,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 7),
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              height: 1.15,
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

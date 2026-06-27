@@ -37,6 +37,7 @@ import '../services/home_notification_service.dart';
 import '../services/auto_login_service.dart';
 import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
+import '../safehome_theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -1825,7 +1826,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         IconButton(
                           tooltip: "Quét QR để xin gia nhập nhà",
-                          icon: const Icon(Icons.qr_code_scanner_rounded),
+                          icon: const Icon(Icons.center_focus_strong_rounded),
                           onPressed: () async {
                             Navigator.pop(context, null);
 
@@ -2511,6 +2512,7 @@ class _HomePageState extends State<HomePage> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      showDragHandle: false,
       backgroundColor: Colors.transparent,
       builder: (_) {
         return StatefulBuilder(
@@ -2529,6 +2531,15 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(
+                      width: 44,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
                     const Text(
                       "⏸️ Tạm tắt Alarm hôm nay",
                       style: TextStyle(
@@ -3348,98 +3359,242 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final devices = getDevices();
+    const sectionGap = 6.0;
+
     return Scaffold(
       extendBody: true,
-      backgroundColor: Colors.transparent,
-      body: Container(
+      backgroundColor: SafeHomeColors.background,
+      body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFFDDF7E8), Color(0xFFF1FCF5), Color(0xFFFFFFFF)],
+            stops: [0, 0.46, 1],
+            colors: [
+              Color(0xFFF3F8F5),
+              SafeHomeColors.background,
+              Color(0xFFFFFFFF),
+            ],
           ),
         ),
         child: SafeArea(
           child: Column(
             children: [
-              Row(
-                children: [
-                  SizedBox(
-                    width: 54,
-                    height: 62,
-                    child: Center(
-                      child: Material(
-                        color: const Color(0xFFEAF9F0),
-                        elevation: 2,
-                        shadowColor: Colors.black.withValues(alpha: 0.08),
-                        shape: const CircleBorder(),
-                        clipBehavior: Clip.antiAlias,
-                        child: IconButton(
-                          icon: const Icon(Icons.grid_view_rounded),
-                          onPressed: () async {
-                            final selected = await Navigator.push<String>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    AllHomePage(homeOrder: homeOrder),
-                              ),
-                            );
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+                child: SizedBox(
+                  height: 36,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Material(
+                          color: SafeHomeColors.surface,
+                          borderRadius: BorderRadius.circular(11),
+                          clipBehavior: Clip.antiAlias,
+                          child: InkWell(
+                            onTap: () async {
+                              final selected =
+                              await Navigator.push<String>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AllHomePage(
+                                    homeOrder: homeOrder,
+                                  ),
+                                ),
+                              );
 
-                            if (selected != null) {
+                              if (selected == null) return;
+
                               setState(() {
                                 selectedHome = selected;
                               });
 
-                              final index = homeOrder.indexOf(selected);
+                              final index =
+                              homeOrder.indexOf(selected);
 
-                              if (index != -1) {
+                              if (index != -1 &&
+                                  homeTabController.hasClients) {
                                 homeTabController.animateTo(
                                   index * 110,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeOut,
+                                  duration: const Duration(
+                                    milliseconds: 300,
+                                  ),
+                                  curve: Curves.easeOutCubic,
                                 );
                               }
-                            }
-                          },
+                            },
+                            borderRadius: BorderRadius.circular(11),
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: SafeHomeColors.border,
+                                ),
+                                borderRadius:
+                                BorderRadius.circular(11),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(
+                                      alpha: 0.035,
+                                    ),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.grid_view_rounded,
+                                size: 18,
+                                color: SafeHomeColors.textPrimary,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 29,
+                            height: 1,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -1.1,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "Safe",
+                              style: TextStyle(
+                                color: SafeHomeColors.primary,
+                              ),
+                            ),
+                            TextSpan(
+                              text: "Home",
+                              style: TextStyle(
+                                color: SafeHomeColors.textPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                showHomeEventSheet(
+                                  context: context,
+                                  uid: uid,
+                                  homeNameForId:
+                                  getHomeDisplayName,
+                                  onTapNotification:
+                                  openHomeNotificationTarget,
+                                );
+                              },
+                              padding: EdgeInsets.zero,
+                              constraints:
+                              const BoxConstraints.tightFor(
+                                width: 32,
+                                height: 32,
+                              ),
+                              splashRadius: 18,
+                              iconSize: 21,
+                              tooltip: "Thông báo Home",
+                              icon: const Icon(
+                                Icons.notifications_rounded,
+                                color: SafeHomeColors.info,
+                              ),
+                            ),
+                            if (unreadHomeNotificationCount > 0)
+                              Positioned(
+                                right: -3,
+                                top: -3,
+                                child: Container(
+                                  constraints:
+                                  const BoxConstraints(
+                                    minWidth: 17,
+                                    minHeight: 17,
+                                  ),
+                                  alignment: Alignment.center,
+                                  padding:
+                                  const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                    SafeHomeColors.danger,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color:
+                                      SafeHomeColors.surface,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    unreadHomeNotificationCount >
+                                        99
+                                        ? "99+"
+                                        : unreadHomeNotificationCount
+                                        .toString(),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      height: 1,
+                                      fontWeight:
+                                      FontWeight.w900,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-
-                  Expanded(
-                    child: HomeTabs(
-                      unreadChatByHome: unreadChatByHome,
-                      controller: homeTabController,
-                      homes: homes,
-                      homeOrder: homeOrder,
-                      selectedHome: selectedHome,
-                      onSelect: (h) {
-                        if (h == selectedHome) return;
-
-                        final currentHome = safeMap(homes[h]);
-                        final parsedAlarm = HomeStateParser.parseAlarm(
-                          currentHome,
-                        );
-
-                        setState(() {
-                          selectedHome = h;
-                          alarmEnabled =
-                              safeMap(alarmSettings[h])["enabled"] != false;
-                          start = parsedAlarm["start"];
-                          end = parsedAlarm["end"];
-                          alarmPauseToday = safeMap(
-                            currentHome["alarmPauseToday"],
-                          );
-                        });
-
-                        startHomeEventsListener();
-                      },
-                      onReorder: reorderHomeTabs,
-                      getHomeColor: getHomeColor,
-                    ),
-                  ),
-                ],
+                ),
               ),
+              const SizedBox(height: sectionGap),
+
+              Padding(
+                padding: EdgeInsets.zero,
+                child: HomeTabs(
+                  unreadChatByHome: unreadChatByHome,
+                  controller: homeTabController,
+                  homes: homes,
+                  homeOrder: homeOrder,
+                  selectedHome: selectedHome,
+                  onSelect: (h) {
+                    if (h == selectedHome) return;
+
+                    final currentHome = safeMap(homes[h]);
+                    final parsedAlarm =
+                    HomeStateParser.parseAlarm(currentHome);
+
+                    setState(() {
+                      selectedHome = h;
+                      alarmEnabled =
+                          safeMap(alarmSettings[h])["enabled"] !=
+                              false;
+                      start = parsedAlarm["start"];
+                      end = parsedAlarm["end"];
+                      alarmPauseToday = safeMap(
+                        currentHome["alarmPauseToday"],
+                      );
+                    });
+
+                    startHomeEventsListener();
+                  },
+                  onReorder: reorderHomeTabs,
+                  getHomeColor: getHomeColor,
+                ),
+              ),
+              const SizedBox(height: sectionGap),
 
               Expanded(
                 child: Stack(
@@ -3532,7 +3687,7 @@ class _HomePageState extends State<HomePage> {
                             alarmStart: formatAlarmSchedules(),
                             alarmEnd: "",
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: sectionGap),
 
                           RoomTabs(
                             rooms: getRooms(),
@@ -3684,71 +3839,63 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      bottomNavigationBar: Container(
-        color: Colors.transparent,
-        padding: const EdgeInsets.only(top: 22),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        minimum: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+        child: Container(
+          height: 68,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8,
+            vertical: 7,
+          ),
+          decoration: BoxDecoration(
+            color: SafeHomeColors.surface.withValues(alpha: 0.97),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: SafeHomeColors.border,
+              width: 0.9,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.075),
+                blurRadius: 24,
+                offset: const Offset(0, 9),
+              ),
+            ],
+          ),
+          child: IconButtonTheme(
+            data: IconButtonThemeData(
+              style: IconButton.styleFrom(
+                minimumSize: const Size(46, 46),
+                maximumSize: const Size(46, 46),
+                padding: EdgeInsets.zero,
+                foregroundColor: SafeHomeColors.textSecondary,
+                backgroundColor: Colors.transparent,
+                hoverColor: SafeHomeColors.primarySoft,
+                highlightColor: SafeHomeColors.primarySoft,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
 
                 IconButton(
-                  icon: const Icon(Icons.add_home_work_rounded),
+                  icon: const Icon(
+                    Icons.add_home_work_rounded,
+                    color: SafeHomeColors.primary,
+                  ),
                   onPressed: addHome,
                 ),
                 Stack(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.notifications_rounded),
-                      onPressed: () {
-                        showHomeEventSheet(
-                          context: context,
-                          uid: uid,
-                          homeNameForId: getHomeDisplayName,
-                          onTapNotification: openHomeNotificationTarget,
-                        );
-                      },
-                    ),
-
-                    if (unreadHomeNotificationCount > 0)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: 18,
-                            minHeight: 18,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 2,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            unreadHomeNotificationCount > 99
-                                ? "99+"
-                                : unreadHomeNotificationCount.toString(),
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
+                      icon: const Icon(
+                        Icons.chat_bubble_rounded,
+                        color: SafeHomeColors.primary,
                       ),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.chat_bubble_rounded),
                       onPressed: () {
                         showHomeChatSheet(
                           context: context,
@@ -3770,9 +3917,13 @@ class _HomePageState extends State<HomePage> {
                         top: 2,
                         child: Container(
                           padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.danger,
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              color: SafeHomeColors.surface,
+                              width: 1.5,
+                            ),
                           ),
                           child: Text(
                             (unreadChatByHome[selectedHome] ?? 0) > 99
@@ -3792,22 +3943,49 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                   icon: Icon(
                     Icons.crisis_alert_rounded,
-                    color: alarmEnabled ? Colors.red : Colors.grey.shade500,
+                    color: alarmEnabled
+                        ? SafeHomeColors.danger
+                        : SafeHomeColors.textSecondary,
                   ),
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
+                      showDragHandle: false,
+                      backgroundColor: Colors.transparent,
                       builder: (_) {
                         bool localAlarmEnabled = alarmEnabled;
 
                         return StatefulBuilder(
                           builder: (context, setModalState) {
                             return SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.all(18),
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(
+                                  18,
+                                  10,
+                                  18,
+                                  18,
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: SafeHomeColors.surface,
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(26),
+                                  ),
+                                ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
+                                    Container(
+                                      width: 44,
+                                      height: 5,
+                                      margin: const EdgeInsets.only(
+                                        bottom: 10,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: SafeHomeColors.border,
+                                        borderRadius:
+                                        BorderRadius.circular(999),
+                                      ),
+                                    ),
                                     SwitchListTile(
                                       value: localAlarmEnabled,
                                       activeThumbColor: Colors.red,
@@ -3927,7 +4105,10 @@ class _HomePageState extends State<HomePage> {
                 Stack(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.settings_rounded),
+                      icon: const Icon(
+                        Icons.settings_rounded,
+                        color: SafeHomeColors.textSecondary,
+                      ),
                       onPressed: () {
                         showSettingsSheet(
                           homeId: selectedHome,
@@ -4111,9 +4292,13 @@ class _HomePageState extends State<HomePage> {
                             horizontal: 5,
                             vertical: 2,
                           ),
-                          decoration: const BoxDecoration(
-                            color: Colors.red,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.danger,
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              color: SafeHomeColors.surface,
+                              width: 1.5,
+                            ),
                           ),
                           child: Text(
                             "${shareRequests.length}",

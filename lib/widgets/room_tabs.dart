@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../safehome_theme.dart';
+
 class RoomTabs extends StatefulWidget {
   final Map<String, dynamic> rooms;
   final String homeName;
@@ -22,7 +24,8 @@ class RoomTabs extends StatefulWidget {
 }
 
 class _RoomTabsState extends State<RoomTabs> {
-  static const Duration _animationDuration = Duration(milliseconds: 220);
+  static const Duration _animationDuration =
+  Duration(milliseconds: 220);
 
   late List<String> _roomOrder;
   bool _savingOrder = false;
@@ -52,7 +55,9 @@ class _RoomTabsState extends State<RoomTabs> {
     }
   }
 
-  List<String> _orderedRoomIds(Map<String, dynamic> rooms) {
+  List<String> _orderedRoomIds(
+      Map<String, dynamic> rooms,
+      ) {
     final entries = rooms.entries
         .where((entry) => entry.key != "unassigned")
         .toList()
@@ -65,13 +70,19 @@ class _RoomTabsState extends State<RoomTabs> {
             ? Map<String, dynamic>.from(b.value as Map)
             : <String, dynamic>{};
 
-        final aOrder = int.tryParse(aData["order"]?.toString() ?? "") ?? 999;
-        final bOrder = int.tryParse(bData["order"]?.toString() ?? "") ?? 999;
+        final aOrder =
+            int.tryParse(aData["order"]?.toString() ?? "") ??
+                999;
+        final bOrder =
+            int.tryParse(bData["order"]?.toString() ?? "") ??
+                999;
 
         return aOrder.compareTo(bOrder);
       });
 
-    return entries.map((entry) => entry.key.toString()).toList();
+    return entries
+        .map((entry) => entry.key.toString())
+        .toList();
   }
 
   String _roomName(String roomId) {
@@ -86,7 +97,10 @@ class _RoomTabsState extends State<RoomTabs> {
     return name.isNotEmpty ? name : roomId;
   }
 
-  Future<void> _handleReorder(int oldIndex, int newIndex) async {
+  Future<void> _handleReorder(
+      int oldIndex,
+      int newIndex,
+      ) async {
     if (oldIndex == 0) return;
 
     final previousOrder = List<String>.from(_roomOrder);
@@ -109,7 +123,9 @@ class _RoomTabsState extends State<RoomTabs> {
     });
 
     try {
-      await widget.onReorder(List<String>.from(movable));
+      await widget.onReorder(
+        List<String>.from(movable),
+      );
     } catch (_) {
       if (!mounted) return;
 
@@ -125,10 +141,12 @@ class _RoomTabsState extends State<RoomTabs> {
     final tabs = <Map<String, String>>[
       {
         "id": "overview",
-        "name": widget.homeName.isNotEmpty ? widget.homeName : "Nhà",
+        "name": widget.homeName.trim().isNotEmpty
+            ? widget.homeName.trim()
+            : "Nhà",
       },
       ..._roomOrder
-          .where((roomId) => widget.rooms.containsKey(roomId))
+          .where(widget.rooms.containsKey)
           .map(
             (roomId) => {
           "id": roomId,
@@ -138,81 +156,89 @@ class _RoomTabsState extends State<RoomTabs> {
     ];
 
     return SizedBox(
-      height: 42,
-      child: ReorderableListView.builder(
-        scrollDirection: Axis.horizontal,
-        buildDefaultDragHandles: false,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: tabs.length,
-        onReorderItem: _handleReorder,
-        proxyDecorator: _buildDragProxy,
-        autoScrollerVelocityScalar: 70,
-        itemBuilder: (context, index) {
-          final tab = tabs[index];
-          final roomId = tab["id"]!;
-          final name = tab["name"]!;
-          final selected = widget.selectedRoomId == roomId;
+      height: 48,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 0,
+            child: Container(
+              height: 1,
+              color: SafeHomeColors.border,
+            ),
+          ),
+          Positioned.fill(
+            child: ShaderMask(
+              shaderCallback: (rect) {
+                return const LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [
+                    Colors.transparent,
+                    Colors.white,
+                    Colors.white,
+                    Colors.transparent,
+                  ],
+                  stops: [0, 0.025, 0.95, 1],
+                ).createShader(rect);
+              },
+              blendMode: BlendMode.dstIn,
+              child: ReorderableListView.builder(
+                scrollDirection: Axis.horizontal,
+                buildDefaultDragHandles: false,
+                padding: const EdgeInsets.fromLTRB(
+                  12,
+                  0,
+                  30,
+                  0,
+                ),
+                itemCount: tabs.length,
+                onReorderItem: _handleReorder,
+                proxyDecorator: _buildDragProxy,
+                autoScrollerVelocityScalar: 70,
+                itemBuilder: (context, index) {
+                  final tab = tabs[index];
+                  final roomId = tab["id"]!;
+                  final name = tab["name"]!;
+                  final selected =
+                      widget.selectedRoomId == roomId;
 
-          final child = InkWell(
-            borderRadius: BorderRadius.circular(8),
-            onTap: () {
-              if (!selected) {
-                widget.onSelect(roomId);
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedDefaultTextStyle(
-                    duration: _animationDuration,
-                    curve: Curves.easeOutCubic,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight:
-                      selected ? FontWeight.w700 : FontWeight.w500,
-                      color: selected
-                          ? Colors.black87
-                          : Colors.black.withValues(alpha: 0.45),
+                  final tabContent = _RoomTabItem(
+                    name: name,
+                    selected: selected,
+                    onTap: () {
+                      if (!selected) {
+                        widget.onSelect(roomId);
+                      }
+                    },
+                  );
+
+                  if (index == 0) {
+                    return Container(
+                      key: const ValueKey(
+                        "room_tab_overview",
+                      ),
+                      margin:
+                      const EdgeInsets.only(right: 2),
+                      child: tabContent,
+                    );
+                  }
+
+                  return ReorderableDelayedDragStartListener(
+                    key: ValueKey("room_tab_$roomId"),
+                    index: index,
+                    child: Container(
+                      margin:
+                      const EdgeInsets.only(right: 2),
+                      child: tabContent,
                     ),
-                    child: Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  AnimatedContainer(
-                    duration: _animationDuration,
-                    curve: Curves.easeOutCubic,
-                    height: 2,
-                    width: selected
-                        ? (name.runes.length * 8.5).clamp(22.0, 110.0).toDouble()
-                        : 0,
-                    decoration: BoxDecoration(
-                      color: Colors.black87,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
-          );
-
-          if (index == 0) {
-            return Container(
-              key: const ValueKey("room_tab_overview"),
-              child: child,
-            );
-          }
-
-          return ReorderableDelayedDragStartListener(
-            key: ValueKey("room_tab_$roomId"),
-            index: index,
-            child: child,
-          );
-        },
+          ),
+        ],
       ),
     );
   }
@@ -233,15 +259,100 @@ class _RoomTabsState extends State<RoomTabs> {
         final t = curved.value;
 
         return Transform.scale(
-          scale: 1 + (0.035 * t),
+          scale: 1 + (0.025 * t),
           child: Material(
             color: Colors.transparent,
-            elevation: 8 * t,
-            shadowColor: Colors.black.withValues(alpha: 0.14 * t),
-            child: child,
+            child: Container(
+              decoration: BoxDecoration(
+                color: SafeHomeColors.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: SafeHomeColors.primary.withValues(
+                    alpha: 0.18,
+                  ),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(
+                      alpha: 0.10 * t,
+                    ),
+                    blurRadius: 14 * t,
+                    offset: Offset(0, 5 * t),
+                  ),
+                ],
+              ),
+              child: child,
+            ),
           ),
         );
       },
+    );
+  }
+}
+
+class _RoomTabItem extends StatelessWidget {
+  final String name;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _RoomTabItem({
+    required this.name,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: name,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: AnimatedOpacity(
+            duration: _RoomTabsState._animationDuration,
+            curve: Curves.easeOutCubic,
+            opacity: selected ? 1 : 0.45,
+            child: AnimatedContainer(
+              duration:
+              _RoomTabsState._animationDuration,
+              curve: Curves.easeOutCubic,
+              constraints: const BoxConstraints(
+                minWidth: 56,
+                maxWidth: 132,
+              ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 5,
+              ),
+              color: Colors.transparent,
+              alignment: Alignment.center,
+              child: AnimatedDefaultTextStyle(
+                duration: _RoomTabsState._animationDuration,
+                curve: Curves.easeOutCubic,
+                style: TextStyle(
+                  fontSize: selected ? 16 : 13.5,
+                  fontWeight: selected
+                      ? FontWeight.w900
+                      : FontWeight.w600,
+                  color: selected
+                      ? SafeHomeColors.textPrimary
+                      : SafeHomeColors.textSecondary,
+                  letterSpacing: selected ? -0.2 : -0.05,
+                ),
+                child: Text(
+                  name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

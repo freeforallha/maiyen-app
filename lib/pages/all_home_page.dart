@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
+import '../safehome_theme.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -590,16 +591,21 @@ class _AllHomePageState extends State<AllHomePage> {
     final isYourHomes = groupKey == "your_homes";
 
     String ownerText = "";
-    if (!isYourHomes) {
+
+    if (!isYourHomes && ids.isNotEmpty) {
       final firstHome = safeMap(homes[ids.first]);
-      ownerText = firstHome["_ownerEmail"] ?? "Unknown";
+      ownerText =
+          firstHome["_ownerEmail"]?.toString() ?? "Unknown";
     }
 
-    final displayName =
-        customNames[groupKey] ?? (isYourHomes ? "Nhà của tôi" : ownerText);
+    final displayName = customNames[groupKey] ??
+        (isYourHomes ? "Nhà của tôi" : ownerText);
 
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 14),
+      padding: const EdgeInsets.only(
+        top: 8,
+        bottom: 12,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -607,18 +613,24 @@ class _AllHomePageState extends State<AllHomePage> {
             borderRadius: BorderRadius.circular(10),
             onTap: () {
               final allSelected = ids.every(
-                    (id) => selectedHomes.contains(id),
+                selectedHomes.contains,
               );
 
               showModalBottomSheet(
                 context: context,
+                showDragHandle: false,
                 backgroundColor: Colors.transparent,
                 builder: (_) {
                   return SafeArea(
                     child: Container(
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.fromLTRB(
+                        16,
+                        10,
+                        16,
+                        18,
+                      ),
                       decoration: const BoxDecoration(
-                        color: Colors.white,
+                        color: SafeHomeColors.surface,
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(26),
                         ),
@@ -626,10 +638,21 @@ class _AllHomePageState extends State<AllHomePage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          Container(
+                            width: 44,
+                            height: 5,
+                            margin:
+                            const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.border,
+                              borderRadius:
+                              BorderRadius.circular(999),
+                            ),
+                          ),
                           ListTile(
                             leading: const Icon(
                               Icons.edit_rounded,
-                              color: Colors.blueAccent,
+                              color: SafeHomeColors.info,
                             ),
                             title: const Text("Đổi tên nhóm"),
                             onTap: () {
@@ -641,8 +664,9 @@ class _AllHomePageState extends State<AllHomePage> {
                             leading: Icon(
                               allSelected
                                   ? Icons.check_box_rounded
-                                  : Icons.check_box_outline_blank_rounded,
-                              color: Colors.green,
+                                  : Icons
+                                  .check_box_outline_blank_rounded,
+                              color: SafeHomeColors.primary,
                             ),
                             title: Text(
                               allSelected
@@ -669,30 +693,34 @@ class _AllHomePageState extends State<AllHomePage> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.only(left: 6, bottom: 10),
+              padding: const EdgeInsets.only(
+                left: 2,
+                bottom: 8,
+              ),
               child: Row(
                 children: [
                   Text(
                     displayName,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.grey.shade800,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                      color: SafeHomeColors.textPrimary,
+                      letterSpacing: -0.15,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 5),
                   Text(
                     "(${ids.length})",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade500,
+                    style: const TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      color: SafeHomeColors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -702,7 +730,11 @@ class _AllHomePageState extends State<AllHomePage> {
               return SizedBox(
                 width: 55,
                 height: 55,
-                child: buildHomeCard(context, homeId, data),
+                child: buildHomeCard(
+                  context,
+                  homeId,
+                  data,
+                ),
               );
             }).toList(),
           ),
@@ -712,15 +744,29 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Widget buildHomeCard(
-    BuildContext context,
-    String homeId,
-    Map<String, dynamic> data,
-  ) {
+      BuildContext context,
+      String homeId,
+      Map<String, dynamic> data,
+      ) {
     final devices = safeMap(data["devices"]);
-
     final status = getOverallStatus(devices);
-
+    final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
+
+    final statusColor = level == "danger"
+        ? SafeHomeColors.danger
+        : level == "warning"
+        ? SafeHomeColors.warning
+        : SafeHomeColors.safe;
+
+    final rawName = data["_customName"] ??
+        data["name"] ??
+        homeId;
+
+    final displayName = rawName.toString().trim().isEmpty
+        ? "Nhà"
+        : rawName.toString().trim();
+
     return InkWell(
       onTap: () {
         if (selectedHomes.isNotEmpty) {
@@ -737,58 +783,61 @@ class _AllHomePageState extends State<AllHomePage> {
 
         Navigator.pop(context, homeId);
       },
-
       onLongPress: () {
         setState(() {
           selectedHomes.add(homeId);
         });
       },
-
       borderRadius: BorderRadius.circular(14),
-
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: status["level"] == "danger"
-              ? Colors.red.shade300
-              : status["level"] == "warning"
-              ? Colors.orange.shade300
-              : Colors.green.shade300,
-
+          color: selected
+              ? SafeHomeColors.primarySoft
+              : SafeHomeColors.surface,
           borderRadius: BorderRadius.circular(14),
-
-          border: selected
-              ? Border.all(color: Colors.blueAccent, width: 4)
-              : null,
+          border: Border.all(
+            color: selected
+                ? SafeHomeColors.primary
+                : statusColor.withValues(alpha: 0.68),
+            width: selected ? 2.4 : 1.25,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.035),
+              blurRadius: 7,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
-
         child: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.all(6),
-
-              child: SizedBox.expand(
-                child: Center(
-                  child: Text(
-                    (data["name"] ?? homeId).toString(),
-
-                    textAlign: TextAlign.center,
-
-                    softWrap: true,
-
-                    maxLines: 4,
-
-                    overflow: TextOverflow.ellipsis,
-
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      height: 1.1,
-                    ),
-                  ),
+            Center(
+              child: Text(
+                displayName,
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 11.5,
+                  height: 1.05,
+                  fontWeight: FontWeight.w800,
+                  color: statusColor,
                 ),
               ),
             ),
+            if (selected)
+              const Positioned(
+                right: 1,
+                bottom: 1,
+                child: Icon(
+                  Icons.check_circle_rounded,
+                  size: 12,
+                  color: SafeHomeColors.primary,
+                ),
+              ),
           ],
         ),
       ),
@@ -1045,7 +1094,7 @@ class _AllHomePageState extends State<AllHomePage> {
     );
   }
 
-    Future<void> confirmDeleteSelected() async {
+  Future<void> confirmDeleteSelected() async {
     final controller = TextEditingController();
 
     final sharedCount = selectedHomes.where((id) {
@@ -1060,7 +1109,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (sharedCount > 0 && ownCount > 0) {
       message =
-          "Các home của bạn sẽ bị xoá.\n"
+      "Các home của bạn sẽ bị xoá.\n"
           "Các home được chia sẻ sẽ được rời khỏi.";
     } else if (sharedCount > 0) {
       message = "Bạn sẽ rời khỏi các home được chia sẻ.";
@@ -1311,7 +1360,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final grouped = groupedHomes();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFDDF7E8),
+      backgroundColor: SafeHomeColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -1324,6 +1373,8 @@ class _AllHomePageState extends State<AllHomePage> {
           decoration: const InputDecoration(
             hintText: "Tìm home...",
             border: InputBorder.none,
+            filled: false,
+            contentPadding: EdgeInsets.zero,
           ),
           onChanged: (value) {
             setState(() {
@@ -1331,124 +1382,43 @@ class _AllHomePageState extends State<AllHomePage> {
             });
           },
         )
-            : Builder(
-          builder: (context) {
-            final summaries = buildAllHomeSummaries();
-            final summary =
-            summaries[summaryIndex % summaries.length];
-
-            final bool isDanger = summary.startsWith("🚨");
-            final bool isWarning = summary.startsWith("⚠️");
-            final bool isSafe = summary.startsWith("✅");
-
-            final Color statusColor = isDanger
-                ? Colors.red
-                : isWarning
-                ? Colors.orange
-                : isSafe
-                ? Colors.green
-                : Colors.blueGrey;
-
-            final IconData statusIcon = isDanger
-                ? Icons.warning_amber_rounded
-                : isWarning
-                ? Icons.info_outline_rounded
-                : isSafe
-                ? Icons.check_circle_outline_rounded
-                : Icons.home_outlined;
-
-            final cleanSummary = summary
-                .replaceFirst("🚨 ", "")
-                .replaceFirst("⚠️ ", "")
-                .replaceFirst("✅ ", "")
-                .replaceFirst("🏡 ", "");
-
-            return Tooltip(
-              message: "Xem tổng hợp trạng thái",
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(18),
-                  onTap: showAllHomeSummarySheet,
-                  child: Container(
-                    height: 40,
-                    constraints: const BoxConstraints(
-                      minWidth: 150,
-                      maxWidth: 275,
-                    ),
-                    padding: const EdgeInsets.fromLTRB(
-                      7,
-                      4,
-                      8,
-                      4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.88),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: statusColor.withValues(alpha: 0.22),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.045),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 450),
-                      transitionBuilder: (child, animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                      child: Row(
-                        key: ValueKey(summary),
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: statusColor.withValues(alpha: 0.12),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              statusIcon,
-                              size: 18,
-                              color: statusColor,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              cleanSummary,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 13,
-                                height: 1,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.grey.shade800,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 3),
-                          Icon(
-                            Icons.chevron_right_rounded,
-                            size: 18,
-                            color: statusColor.withValues(alpha: 0.8),
-                          ),
-                        ],
+            : Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: showAllHomeSummarySheet,
+            borderRadius: BorderRadius.circular(10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 4,
+              ),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Safe",
+                      style: TextStyle(
+                        color: SafeHomeColors.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
                       ),
                     ),
-                  ),
+                    TextSpan(
+                      text: "AllHome",
+                      style: TextStyle(
+                        color:
+                        SafeHomeColors.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
+            ),
+          ),
         ),
 
         actions: [
@@ -1479,23 +1449,13 @@ class _AllHomePageState extends State<AllHomePage> {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFDDF7E8),
-                  Color(0xFFF1FCF5),
-                  Color(0xFFFFFFFF),
-                ],
-              ),
-            ),
+            color: SafeHomeColors.background,
             child: ListView(
               padding: EdgeInsets.fromLTRB(
-                10,
-                10,
-                10,
-                selectedHomes.isEmpty ? 10 : 370,
+                12,
+                6,
+                12,
+                selectedHomes.isEmpty ? 16 : 370,
               ),
               children: grouped.entries.map((entry) {
                 final groupKey = entry.key;
