@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 
 class DeviceList extends StatelessWidget {
@@ -333,7 +334,9 @@ class DeviceList extends StatelessWidget {
         type == "gate" ||
         type == "lock") {
       if (d["contact"] == false) {
-        return SafeHomeColors.warning;
+        return isNowInAlarmTime(d)
+            ? SafeHomeColors.danger
+            : SafeHomeColors.warning;
       }
     }
 
@@ -392,7 +395,9 @@ class DeviceList extends StatelessWidget {
     getConnectionDescription(d, connectionStatus);
     final accentColor = getAccentColor(d);
 
-    final cardStatusColor = connectionStatus == "off"
+    final cardStatusColor =
+    accentColor == SafeHomeColors.danger ||
+        connectionStatus == "off"
         ? SafeHomeColors.danger
         : connectionStatus == "warn"
         ? SafeHomeColors.warning

@@ -124,6 +124,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     startHomeEventsListener();
+    startAlarmPauseListener();
   }
 
   void openDeviceFromNotification(String deviceId) {
@@ -283,6 +284,7 @@ class _HomePageState extends State<HomePage> {
   String selectedHome = "";
   String selectedRoomId = "overview";
   Map<String, dynamic> alarmSettings = {};
+  Map<String, dynamic> customRulesByHome = {};
   Map<String, dynamic> homeEvents = {};
 
   Map<String, dynamic> alarmPauseToday = {};
@@ -519,8 +521,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> showAlarmReceiveReminder() async {
-    final info = getHomeAlarmReminderInfo();
-
     await showDialog<void>(
       context: context,
       builder: (_) {
@@ -528,11 +528,10 @@ class _HomePageState extends State<HomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text("Lưu ý nhận cảnh báo Alarm"),
-          content: Text(
-            "Cảnh báo đang được cài đặt \"${info["mode"]}\" từ "
-                "${info["start"]} → ${info["end"]}.\n\n"
-                "Hãy kiểm tra kĩ để tránh cảnh báo làm phiền bạn.",
+          title: const Text("Lưu ý khi bật Alarm"),
+          content: const Text(
+            "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
+                "Hãy kiểm tra kỹ cấu hình để tránh cảnh báo làm phiền bạn.",
           ),
           actions: [
             TextButton(
@@ -609,7 +608,9 @@ class _HomePageState extends State<HomePage> {
   StreamSubscription<DatabaseEvent>? accountSubscription;
   StreamSubscription<DatabaseEvent>? notificationSubscription;
   StreamSubscription<DatabaseEvent>? homeEventsSubscription;
+  StreamSubscription<DatabaseEvent>? alarmPauseSubscription;
   String _homeEventsListenKey = "";
+  String _alarmPauseListenKey = "";
   final Map<String, StreamSubscription<DatabaseEvent>> homeChatSubscriptions =
   {};
 
@@ -673,6 +674,70 @@ class _HomePageState extends State<HomePage> {
         homeEvents = safeMap(event.snapshot.value);
       });
     });
+  }
+
+  void startAlarmPauseListener() {
+    if (selectedHome.isEmpty) {
+      alarmPauseSubscription?.cancel();
+      alarmPauseSubscription = null;
+      _alarmPauseListenKey = "";
+
+      if (mounted && alarmPauseToday.isNotEmpty) {
+        setState(() {
+          alarmPauseToday = {};
+        });
+      }
+
+      return;
+    }
+
+    final homeId = selectedHome;
+    final ownerUid = getHomeOwnerUid();
+    final listenKey = "$ownerUid/$homeId";
+
+    if (_alarmPauseListenKey == listenKey &&
+        alarmPauseSubscription != null) {
+      return;
+    }
+
+    alarmPauseSubscription?.cancel();
+    _alarmPauseListenKey = listenKey;
+
+    alarmPauseSubscription = FirebaseDatabase.instance
+        .ref(
+      "accounts/$ownerUid/homes/$homeId/alarmPauseToday",
+    )
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted ||
+            selectedHome != homeId ||
+            _alarmPauseListenKey != listenKey) {
+          return;
+        }
+
+        final pause = safeMap(event.snapshot.value);
+
+        setState(() {
+          alarmPauseToday = pause;
+
+          final cachedHome = safeMap(homes[homeId]);
+
+          if (pause.isEmpty) {
+            cachedHome.remove("alarmPauseToday");
+          } else {
+            cachedHome["alarmPauseToday"] = pause;
+          }
+
+          homes[homeId] = cachedHome;
+        });
+      },
+      onError: (Object error) {
+        debugPrint(
+          "ALARM_PAUSE_LISTENER_ERROR: $error",
+        );
+      },
+    );
   }
 
   void syncHomeChatListeners() {
@@ -989,35 +1054,221 @@ class _HomePageState extends State<HomePage> {
     return name.isNotEmpty ? name : deviceId;
   }
 
+  bool _hasEnabledScheduleValue(dynamic raw) {
+    if (raw is List) {
+      return raw.any((item) {
+        final schedule = safeMap(item);
+        return schedule["enabled"] == true;
+      });
+    }
+
+    if (raw is Map) {
+      return raw.values.any((item) {
+        final schedule = safeMap(item);
+        return schedule["enabled"] == true;
+      });
+    }
+
+    return false;
+  }
+
+  Future<bool> hasEnabledReminderSchedule() async {
+    try {
+      final isShared =
+          homes[selectedHome]?["_shared"] == true;
+
+      if (isShared) {
+        final modeSnap = await FirebaseDatabase.instance
+            .ref(
+          "accounts/$uid/customRules/$selectedHome/mode",
+        )
+            .get();
+
+        if (modeSnap.value?.toString() == "custom") {
+          final customSnap = await FirebaseDatabase.instance
+              .ref(
+            "accounts/$uid/customRules/"
+                "$selectedHome/notifications/items",
+          )
+              .get();
+
+          return _hasEnabledScheduleValue(customSnap.value);
+        }
+      }
+
+      final homeSnap = await FirebaseDatabase.instance
+          .ref(
+        "accounts/${getHomeOwnerUid()}/homes/"
+            "$selectedHome/schedules/notifications",
+      )
+          .get();
+
+      return _hasEnabledScheduleValue(homeSnap.value);
+    } catch (_) {
+      return false;
+    }
+  }
+
   String formatAlarmSchedules() {
+    if (!alarmEnabled || selectedHome.isEmpty) {
+      return "Tắt";
+    }
+
     final devices = getDevices();
+    final selectedRules = safeMap(
+      customRulesByHome[selectedHome],
+    );
 
-    final securityDevices = devices.values.where((item) {
-      final d = safeMap(item);
-      final type = d["type"]?.toString();
+    final useCustomMode =
+        selectedRules["mode"]?.toString() == "custom";
 
-      return type == "door" || type == "door_lock" || type == "motion";
-    }).toList();
+    final customDevices = safeMap(
+      selectedRules["devices"],
+    );
 
-    final enabled = securityDevices.where((item) {
-      final d = safeMap(item);
-      final alarm = safeMap(d["alarm"]);
+    final intervals = <Map<String, int>>[];
 
-      return alarm["enabled"] == true;
-    }).toList();
+    int? parseClock(dynamic raw) {
+      final value = raw?.toString().trim() ?? "";
+      final parts = value.split(":");
 
-    if (enabled.isEmpty) {
-      return "Chưa bật";
+      if (parts.length != 2) {
+        return null;
+      }
+
+      final hour = int.tryParse(parts[0]);
+      final minute = int.tryParse(parts[1]);
+
+      if (hour == null ||
+          minute == null ||
+          hour < 0 ||
+          hour > 23 ||
+          minute < 0 ||
+          minute > 59) {
+        return null;
+      }
+
+      return hour * 60 + minute;
     }
 
-    if (enabled.length == 1) {
-      final d = safeMap(enabled.first);
-      final alarm = safeMap(d["alarm"]);
+    String formatClock(int totalMinutes) {
+      final normalized =
+          ((totalMinutes % 1440) + 1440) % 1440;
+      final hour = normalized ~/ 60;
+      final minute = normalized % 60;
 
-      return "${alarm["start"] ?? "--:--"} - ${alarm["end"] ?? "--:--"}";
+      return "${hour.toString().padLeft(2, "0")}:"
+          "${minute.toString().padLeft(2, "0")}";
     }
 
-    return "${enabled.length} thiết bị alarm";
+    for (final entry in devices.entries) {
+      final deviceId = entry.key.toString();
+      final device = safeMap(entry.value);
+      final realDeviceId =
+          device["_deviceId"]?.toString() ?? deviceId;
+
+      final homeAlarm = safeMap(device["alarm"]);
+      final customDevice = safeMap(
+        customDevices[realDeviceId],
+      );
+      final customAlarm = safeMap(
+        customDevice["alarm"],
+      );
+
+      // Giống AlarmDeviceSheet:
+      // mode Riêng tôi dùng custom nếu có,
+      // nếu chưa có thì kế thừa lịch Theo nhà.
+      final alarm = useCustomMode && customAlarm.isNotEmpty
+          ? customAlarm
+          : homeAlarm;
+
+      if (alarm["enabled"] != true) {
+        continue;
+      }
+
+      final startMinutes = parseClock(alarm["start"]);
+      final endMinutes = parseClock(alarm["end"]);
+
+      if (startMinutes == null || endMinutes == null) {
+        continue;
+      }
+
+      intervals.add({
+        "start": startMinutes,
+        "end": endMinutes,
+      });
+    }
+
+    if (intervals.isEmpty) {
+      return "Tắt";
+    }
+
+    if (intervals.length == 1) {
+      return "${formatClock(intervals.first["start"]!)} → "
+          "${formatClock(intervals.first["end"]!)}";
+    }
+
+    // Tìm một khoảng liên tục ngắn nhất nhưng bao phủ toàn bộ
+    // các lịch Alarm, kể cả lịch đi qua 00:00.
+    int? bestStart;
+    int? bestEnd;
+    var bestSpan = 1 << 30;
+
+    final candidateCuts = <int>{
+      for (final interval in intervals)
+        interval["start"]!,
+      for (final interval in intervals)
+        interval["end"]!,
+    };
+
+    for (final cut in candidateCuts) {
+      var minStart = 1 << 30;
+      var maxEnd = -(1 << 30);
+
+      for (final interval in intervals) {
+        final startMinutes = interval["start"]!;
+        final endMinutes = interval["end"]!;
+
+        var duration =
+            (endMinutes - startMinutes + 1440) % 1440;
+
+        // Cùng giờ bắt đầu/kết thúc được hiểu là cả ngày.
+        if (duration == 0) {
+          duration = 1440;
+        }
+
+        final mappedStart =
+            (startMinutes - cut + 1440) % 1440;
+        final mappedEnd = mappedStart + duration;
+
+        if (mappedStart < minStart) {
+          minStart = mappedStart;
+        }
+
+        if (mappedEnd > maxEnd) {
+          maxEnd = mappedEnd;
+        }
+      }
+
+      final span = maxEnd - minStart;
+
+      if (span < bestSpan) {
+        bestSpan = span;
+        bestStart = cut + minStart;
+        bestEnd = cut + maxEnd;
+      }
+    }
+
+    if (bestStart == null || bestEnd == null) {
+      return "Tắt";
+    }
+
+    if (bestSpan >= 1440) {
+      return "Cả ngày";
+    }
+
+    return "${formatClock(bestStart)} → "
+        "${formatClock(bestEnd)}";
   }
 
   Map<String, dynamic> getDevices() {
@@ -1152,10 +1403,13 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
 
       final userAlarmSettings = safeMap(map["alarmSettings"]);
+      final userCustomRules = safeMap(map["customRules"]);
+
       setState(() {
         shareRequests = requests;
         inviteCountNotifier.value = requests.length;
         alarmSettings = userAlarmSettings;
+        customRulesByHome = userCustomRules;
         final profile = HomeStateParser.parseProfile(map);
 
         userName = profile["name"] ?? "";
@@ -1262,6 +1516,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
       startHomeEventsListener();
+      startAlarmPauseListener();
       syncHomeChatListeners();
       syncDeviceNotificationBridge();
       unawaited(_tryOpenPendingChat());
@@ -3569,6 +3824,9 @@ class _HomePageState extends State<HomePage> {
                   homes: homes,
                   homeOrder: homeOrder,
                   selectedHome: selectedHome,
+                  currentUserName: userName,
+                  currentUserEmail:
+                  FirebaseAuth.instance.currentUser?.email ?? "",
                   onSelect: (h) {
                     if (h == selectedHome) return;
 
@@ -3589,6 +3847,7 @@ class _HomePageState extends State<HomePage> {
                     });
 
                     startHomeEventsListener();
+                    startAlarmPauseListener();
                   },
                   onReorder: reorderHomeTabs,
                   getHomeColor: getHomeColor,
@@ -3607,7 +3866,7 @@ class _HomePageState extends State<HomePage> {
                           StatusPanel(
                             alarmPauseText: (() {
                               if (alarmPauseToday.isEmpty) {
-                                return "Chưa thiết lập";
+                                return "Tắt";
                               }
 
                               final now = DateTime.now();
@@ -3616,12 +3875,26 @@ class _HomePageState extends State<HomePage> {
                                   "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
 
                               if (alarmPauseToday["date"] != today) {
-                                return "Chưa thiết lập";
+                                return "Tắt";
                               }
 
-                              return "${alarmPauseToday["start"] ?? "--:--"} → "
-                                  "${alarmPauseToday["end"] ?? "--:--"}"
-                                  "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${alarmPauseToday["reason"]}" : ""}";
+                              final startText =
+                                  alarmPauseToday["start"]
+                                      ?.toString()
+                                      .trim() ??
+                                      "";
+                              final endText =
+                                  alarmPauseToday["end"]
+                                      ?.toString()
+                                      .trim() ??
+                                      "";
+
+                              if (startText.isEmpty ||
+                                  endText.isEmpty) {
+                                return "Tắt";
+                              }
+
+                              return "$startText → $endText";
                             })(),
                             onAlarmPauseToday: () {
                               openAlarmPauseSheetWithReminder();
@@ -3947,7 +4220,12 @@ class _HomePageState extends State<HomePage> {
                         ? SafeHomeColors.danger
                         : SafeHomeColors.textSecondary,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    final reminderEnabled =
+                    await hasEnabledReminderSchedule();
+
+                    if (!mounted) return;
+
                     showModalBottomSheet(
                       context: context,
                       showDragHandle: false,
@@ -3986,43 +4264,92 @@ class _HomePageState extends State<HomePage> {
                                         BorderRadius.circular(999),
                                       ),
                                     ),
-                                    SwitchListTile(
-                                      value: localAlarmEnabled,
-                                      activeThumbColor: Colors.red,
-                                      secondary: const Icon(
-                                        Icons.crisis_alert_rounded,
-                                        color: Colors.red,
+                                    ListTile(
+                                      leading: Icon(
+                                        Icons.shield_moon_rounded,
+                                        color: localAlarmEnabled
+                                            ? SafeHomeColors.primary
+                                            : SafeHomeColors.textSecondary
+                                            .withValues(alpha: 0.45),
                                       ),
-                                      title: const Text(
-                                        "Nhận cảnh báo Alarm",
+                                      title: Text(
+                                        "Hẹn giờ Alarm",
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w800,
+                                          color: localAlarmEnabled
+                                              ? SafeHomeColors.textPrimary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.55),
                                         ),
                                       ),
-                                      subtitle: const Text(
-                                        "Bật/tắt alarm cho tài khoản này",
+                                      subtitle: Text(
+                                        localAlarmEnabled
+                                            ? (formatAlarmSchedules()
+                                            .trim()
+                                            .isEmpty
+                                            ? "Chưa thiết lập thời gian"
+                                            : formatAlarmSchedules())
+                                            : "Đang tắt",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: localAlarmEnabled
+                                              ? SafeHomeColors.textSecondary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.45),
+                                        ),
                                       ),
-                                      onChanged: (value) async {
-                                        setModalState(() {
-                                          localAlarmEnabled = value;
-                                        });
+                                      trailing: Switch(
+                                        value: localAlarmEnabled,
+                                        activeThumbColor:
+                                        SafeHomeColors.primary,
+                                        activeTrackColor:
+                                        SafeHomeColors.primary
+                                            .withValues(alpha: 0.28),
+                                        onChanged: (value) async {
+                                          setModalState(() {
+                                            localAlarmEnabled = value;
+                                          });
 
-                                        await setAlarmEnabled(value);
+                                          await setAlarmEnabled(value);
 
-                                        if (value && context.mounted) {
-                                          await showAlarmReceiveReminder();
-                                        }
+                                          if (value && context.mounted) {
+                                            await showAlarmReceiveReminder();
+                                          }
+                                        },
+                                      ),
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (_) => AlarmDeviceSheet(
+                                            ownerUid: getHomeOwnerUid(),
+                                            homeId: selectedHome,
+                                            devices: getDevices(),
+                                            canManageHome: canManageHome(),
+                                          ),
+                                        );
                                       },
                                     ),
                                     ListTile(
                                       leading: Icon(
                                         Icons.pause_circle_filled_rounded,
-                                        color: Colors.orange.shade700,
+                                        color: alarmPauseToday.isNotEmpty
+                                            ? SafeHomeColors.warning
+                                            : SafeHomeColors.textSecondary
+                                            .withValues(alpha: 0.45),
                                       ),
-                                      title: const Text(
+                                      title: Text(
                                         "Tạm tắt Alarm hôm nay",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
+                                          color: alarmPauseToday.isNotEmpty
+                                              ? SafeHomeColors.textPrimary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.55),
                                         ),
                                       ),
                                       subtitle: Text(
@@ -4030,6 +4357,14 @@ class _HomePageState extends State<HomePage> {
                                             ? "Chưa thiết lập"
                                             : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
                                             "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${alarmPauseToday["reason"]}" : ""}",
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: alarmPauseToday.isNotEmpty
+                                              ? SafeHomeColors.textSecondary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.45),
+                                        ),
                                       ),
                                       onTap: () async {
                                         Navigator.pop(context);
@@ -4043,13 +4378,35 @@ class _HomePageState extends State<HomePage> {
                                       },
                                     ),
                                     const Divider(),
-
                                     ListTile(
-                                      leading: const Icon(
+                                      leading: Icon(
                                         Icons.notifications_active_rounded,
-                                        color: Colors.orange,
+                                        color: reminderEnabled
+                                            ? SafeHomeColors.primary
+                                            : SafeHomeColors.textSecondary
+                                            .withValues(alpha: 0.45),
                                       ),
-                                      title: const Text("Hẹn giờ Reminder"),
+                                      title: Text(
+                                        "Hẹn giờ Reminder",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: reminderEnabled
+                                              ? SafeHomeColors.textPrimary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.55),
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        reminderEnabled
+                                            ? "Đã thiết lập"
+                                            : "Chưa thiết lập",
+                                        style: TextStyle(
+                                          color: reminderEnabled
+                                              ? SafeHomeColors.textSecondary
+                                              : SafeHomeColors.textSecondary
+                                              .withValues(alpha: 0.45),
+                                        ),
+                                      ),
                                       onTap: () {
                                         Navigator.pop(context);
 
@@ -4064,29 +4421,6 @@ class _HomePageState extends State<HomePage> {
                                             homes[selectedHome]?["_shared"] ==
                                                 true,
                                             type: "notification",
-                                            canManageHome: canManageHome(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-
-                                    ListTile(
-                                      leading: const Icon(
-                                        Icons.shield_moon_rounded,
-                                        color: Colors.deepPurple,
-                                      ),
-                                      title: const Text("Hẹn giờ Alarm"),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => AlarmDeviceSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            devices: getDevices(),
                                             canManageHome: canManageHome(),
                                           ),
                                         );
@@ -4330,6 +4664,7 @@ class _HomePageState extends State<HomePage> {
     accountSubscription?.cancel();
     notificationSubscription?.cancel();
     homeEventsSubscription?.cancel();
+    alarmPauseSubscription?.cancel();
     for (final subscription in homeChatSubscriptions.values) {
       subscription.cancel();
     }

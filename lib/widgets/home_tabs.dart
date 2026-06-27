@@ -12,6 +12,8 @@ class HomeTabs extends StatelessWidget {
   final Color Function(String) getHomeColor;
   final ScrollController controller;
   final Map<String, int> unreadChatByHome;
+  final String currentUserName;
+  final String currentUserEmail;
 
   const HomeTabs({
     super.key,
@@ -23,7 +25,187 @@ class HomeTabs extends StatelessWidget {
     required this.getHomeColor,
     required this.controller,
     required this.unreadChatByHome,
+    required this.currentUserName,
+    required this.currentUserEmail,
   });
+
+  void _showSelectedHomeInfo({
+    required BuildContext context,
+    required Map<String, dynamic> home,
+    required String displayName,
+    required bool isShared,
+  }) {
+    final address = home["address"]?.toString().trim() ?? "";
+
+    final ownerName = isShared
+        ? home["_ownerName"]?.toString().trim() ?? ""
+        : currentUserName.trim();
+
+    final ownerEmail = isShared
+        ? home["_ownerEmail"]?.toString().trim() ?? ""
+        : currentUserEmail.trim();
+
+    final ownerDisplay = ownerName.isNotEmpty
+        ? ownerName
+        : ownerEmail.isNotEmpty
+        ? ownerEmail
+        : "Chưa có thông tin";
+
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: false,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              16,
+              10,
+              16,
+              18,
+            ),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(28),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 44,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.surface,
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(
+                      color: SafeHomeColors.border,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(
+                          alpha: 0.04,
+                        ),
+                        blurRadius: 15,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        isShared
+                            ? Icons.share_rounded
+                            : Icons.home_rounded,
+                        size: 34,
+                        color: SafeHomeColors.primary,
+                      ),
+                      const SizedBox(height: 9),
+                      Text(
+                        displayName,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: SafeHomeColors.textPrimary,
+                          fontSize: 19,
+                          height: 1.2,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      _homeInfoRow(
+                        icon: Icons.location_on_outlined,
+                        label: "Địa chỉ",
+                        value: address.isNotEmpty
+                            ? address
+                            : "Chưa cập nhật",
+                      ),
+                      const SizedBox(height: 9),
+                      _homeInfoRow(
+                        icon: Icons.person_outline_rounded,
+                        label: "Chủ nhà",
+                        value: ownerDisplay,
+                        subtitle: ownerName.isNotEmpty &&
+                            ownerEmail.isNotEmpty
+                            ? ownerEmail
+                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _homeInfoRow({
+    required IconData icon,
+    required String label,
+    required String value,
+    String? subtitle,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: 19,
+          color: SafeHomeColors.primary,
+        ),
+        const SizedBox(width: 9),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: SafeHomeColors.textSecondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: SafeHomeColors.textPrimary,
+                  fontSize: 13.5,
+                  height: 1.3,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              if (subtitle != null &&
+                  subtitle.trim().isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: SafeHomeColors.textSecondary,
+                    fontSize: 11.5,
+                    height: 1.25,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +315,19 @@ class HomeTabs extends StatelessWidget {
                   label: displayName,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () => onSelect(homeId),
+                    onTap: () {
+                      if (isSelected) {
+                        _showSelectedHomeInfo(
+                          context: context,
+                          home: home,
+                          displayName: displayName,
+                          isShared: isShared,
+                        );
+                        return;
+                      }
+
+                      onSelect(homeId);
+                    },
                     child: AnimatedOpacity(
                       duration:
                       const Duration(milliseconds: 220),

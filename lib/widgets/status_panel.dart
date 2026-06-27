@@ -698,8 +698,17 @@ class _StatusPanelState extends State<StatusPanel> {
     final statusIcon = _statusIcon(level);
     final statusText = _statusText(level);
 
+    final alarmScheduleText =
+    widget.alarmEnabled &&
+        widget.alarmStart.trim().isNotEmpty &&
+        widget.alarmStart != "Tắt"
+        ? widget.alarmStart
+        : "Tắt";
+
+    final alarmScheduleSet = alarmScheduleText != "Tắt";
     final alarmPauseSet =
-        widget.alarmPauseText != "Chưa thiết lập";
+        widget.alarmPauseText.trim().isNotEmpty &&
+            widget.alarmPauseText != "Tắt";
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -818,45 +827,35 @@ class _StatusPanelState extends State<StatusPanel> {
                     ),
                   ],
                 ),
-                if (widget.onAlarmPauseToday != null) ...[
-                  const SizedBox(height: 7),
-                  InkWell(
-                    onTap: widget.onAlarmPauseToday,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 2,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.pause_circle_outline_rounded,
-                            size: 15,
-                            color: alarmPauseSet
-                                ? SafeHomeColors.warning
-                                : SafeHomeColors.textSecondary,
-                          ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: Text(
-                              "Tạm dừng Alarm: ${widget.alarmPauseText}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 11.2,
-                                height: 1.15,
-                                fontWeight: FontWeight.w700,
-                                color: alarmPauseSet
-                                    ? SafeHomeColors.warning
-                                    : SafeHomeColors.textSecondary,
-                              ),
-                            ),
-                          ),
-                        ],
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _alarmStatusItem(
+                        icon: Icons.shield_moon_rounded,
+                        label: "Alarm",
+                        value: alarmScheduleText,
+                        active: alarmScheduleSet,
+                        activeColor: SafeHomeColors.primary,
+                        onTap: widget.onScheduleAlarm,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: _alarmStatusItem(
+                        icon:
+                        Icons.pause_circle_outline_rounded,
+                        label: "Tạm dừng",
+                        value: alarmPauseSet
+                            ? widget.alarmPauseText
+                            : "Tắt",
+                        active: alarmPauseSet,
+                        activeColor: SafeHomeColors.warning,
+                        onTap: widget.onAlarmPauseToday,
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 7),
                 Text(
                   subtitle,
@@ -925,6 +924,67 @@ class _StatusPanelState extends State<StatusPanel> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _alarmStatusItem({
+    required IconData icon,
+    required String label,
+    required String value,
+    required bool active,
+    required Color activeColor,
+    VoidCallback? onTap,
+  }) {
+    final color = active
+        ? activeColor
+        : SafeHomeColors.textSecondary;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 2,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 15,
+              color: color,
+            ),
+            const SizedBox(width: 5),
+            Flexible(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "$label: ",
+                      style: TextStyle(
+                        color: SafeHomeColors.textSecondary,
+                        fontSize: 10.7,
+                        height: 1.15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 10.9,
+                        height: 1.15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
     );
