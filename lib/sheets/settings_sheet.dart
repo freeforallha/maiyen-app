@@ -191,6 +191,7 @@ void showSettingsSheet({
   required VoidCallback onShare,
   required VoidCallback onShareList,
   required VoidCallback onRooms,
+  required VoidCallback onAutoAway,
   required VoidCallback onLogout,
   required VoidCallback onRenameHome,
   required VoidCallback onSecurityTest,
@@ -704,6 +705,26 @@ void showSettingsSheet({
                           closeThen(sheetContext, onShareList);
                         },
                       ),
+
+                      if (role == "owner" || role == "admin")
+                        tile(
+                          icon: Icons.location_on_rounded,
+                          title: strings.choose(
+                            vi: "Tự động Bảo vệ khi rời nhà",
+                            en: "Auto-arm when everyone leaves",
+                          ),
+                          subtitle: strings.choose(
+                            vi: "Đặt vị trí nhà và bật bảo vệ tự động",
+                            en: "Set the home location and automatic protection",
+                          ),
+                          color: const Color(0xFF2F8F6B),
+                          onTap: () {
+                            closeThen(
+                              sheetContext,
+                              onAutoAway,
+                            );
+                          },
+                        ),
 
                       if (role == "owner" || role == "admin")
                         tile(

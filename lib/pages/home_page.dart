@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:geolocator/geolocator.dart';
 import '../helpers/firebase_paths.dart';
 
 import '../helpers/home_helper.dart';
@@ -35,6 +36,7 @@ import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_login_service.dart';
+import '../services/auto_away_service.dart';
 import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
 import '../safehome_theme.dart';
@@ -640,6 +642,488 @@ class _HomePageState extends State<HomePage> {
       debugPrint("SET_SECURITY_MODE_ERROR: $error");
     }
   }
+  Future<void> openAutoAwaySetup() async {
+    final homeId = selectedHome;
+
+    if (homeId.isEmpty) {
+      return;
+    }
+
+    if (!canManageHome()) {
+      showTopToast(
+        context,
+        _strings.t("Bạn không có quyền thay đổi vị trí nhà"),
+        color: Colors.orange,
+        icon: Icons.lock_rounded,
+      );
+      return;
+    }
+
+    final ownerUid = getHomeOwnerUid();
+    final currentHome = safeMap(homes[homeId]);
+    final currentAutoAway = safeMap(currentHome["autoAway"]);
+    final pageContext = context;
+
+    double? readDouble(dynamic raw) {
+      if (raw is num) {
+        return raw.toDouble();
+      }
+
+      return double.tryParse(raw?.toString() ?? "");
+    }
+
+    var localEnabled = currentAutoAway["enabled"] == true;
+    var latitude = readDouble(currentAutoAway["latitude"]);
+    var longitude = readDouble(currentAutoAway["longitude"]);
+    const radiusMeters = 150.0;
+    var locating = false;
+    var saving = false;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (innerContext, setSheetState) {
+            final hasLocation =
+                latitude != null && longitude != null;
+
+            Future<void> captureCurrentLocation() async {
+              if (locating) {
+                return;
+              }
+
+              setSheetState(() {
+                locating = true;
+              });
+
+              try {
+                final serviceEnabled =
+                await Geolocator.isLocationServiceEnabled();
+
+                if (!serviceEnabled) {
+                  if (!sheetContext.mounted) {
+                    return;
+                  }
+
+                  showTopToast(
+                    sheetContext,
+                    _strings.t("Hãy bật GPS để đặt vị trí nhà"),
+                    color: Colors.orange,
+                    icon: Icons.location_off_rounded,
+                  );
+
+                  await Geolocator.openLocationSettings();
+                  return;
+                }
+
+                var permission =
+                await Geolocator.checkPermission();
+
+                if (permission == LocationPermission.denied) {
+                  permission =
+                  await Geolocator.requestPermission();
+                }
+
+                if (permission == LocationPermission.denied) {
+                  if (!sheetContext.mounted) {
+                    return;
+                  }
+
+                  showTopToast(
+                    sheetContext,
+                    _strings.t("Bạn chưa cấp quyền vị trí"),
+                    color: Colors.orange,
+                    icon: Icons.location_disabled_rounded,
+                  );
+                  return;
+                }
+
+                if (permission ==
+                    LocationPermission.deniedForever) {
+                  if (!sheetContext.mounted) {
+                    return;
+                  }
+
+                  showTopToast(
+                    sheetContext,
+                    _strings.t(
+                      "Hãy cấp quyền vị trí trong Cài đặt ứng dụng",
+                    ),
+                    color: Colors.orange,
+                    icon: Icons.settings_rounded,
+                  );
+
+                  await Geolocator.openAppSettings();
+                  return;
+                }
+
+                final position =
+                await Geolocator.getCurrentPosition(
+                  locationSettings: const LocationSettings(
+                    accuracy: LocationAccuracy.high,
+                    timeLimit: Duration(seconds: 20),
+                  ),
+                );
+
+                if (!sheetContext.mounted) {
+                  return;
+                }
+
+                setSheetState(() {
+                  latitude = position.latitude;
+                  longitude = position.longitude;
+                });
+              } catch (error) {
+                if (!sheetContext.mounted) {
+                  return;
+                }
+
+                showTopToast(
+                  sheetContext,
+                  _strings.choose(
+                    vi: "Không lấy được vị trí hiện tại: $error",
+                    en: "Could not get the current location: $error",
+                  ),
+                  color: Colors.red,
+                  icon: Icons.error_outline_rounded,
+                );
+              } finally {
+                if (sheetContext.mounted) {
+                  setSheetState(() {
+                    locating = false;
+                  });
+                }
+              }
+            }
+
+            Future<void> saveAutoAway() async {
+              if (saving) {
+                return;
+              }
+
+              if (localEnabled && !hasLocation) {
+                showTopToast(
+                  sheetContext,
+                  _strings.t(
+                    "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ",
+                  ),
+                  color: Colors.orange,
+                  icon: Icons.location_on_outlined,
+                );
+                return;
+              }
+
+              if (localEnabled) {
+                final hasBackgroundPermission =
+                await AutoAwayService.ensureBackgroundPermission();
+
+                if (!hasBackgroundPermission) {
+                  if (!sheetContext.mounted) {
+                    return;
+                  }
+
+                  showTopToast(
+                    sheetContext,
+                    _strings.t(
+                      "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
+                    ),
+                    color: Colors.orange,
+                    icon: Icons.location_disabled_rounded,
+                  );
+
+                  await Geolocator.openAppSettings();
+                  return;
+                }
+              }
+
+              setSheetState(() {
+                saving = true;
+              });
+
+              final data = <String, Object?>{
+                "enabled": localEnabled,
+                "radiusMeters": radiusMeters.round(),
+                "updatedAt":
+                DateTime.now().millisecondsSinceEpoch,
+                "updatedBy": uid,
+              };
+
+              if (hasLocation) {
+                data["latitude"] = latitude;
+                data["longitude"] = longitude;
+              }
+
+              try {
+                await FirebaseDatabase.instance
+                    .ref(
+                  "accounts/$ownerUid/homes/$homeId/autoAway",
+                )
+                    .set(data);
+
+                if (!mounted || !sheetContext.mounted) {
+                  return;
+                }
+
+                setState(() {
+                  final cachedHome = safeMap(homes[homeId]);
+                  cachedHome["autoAway"] =
+                  Map<String, Object?>.from(data);
+                  homes[homeId] = cachedHome;
+                });
+
+                unawaited(
+                  AutoAwayService.syncForHomes(
+                    uid: uid,
+                    homes: homes,
+                    force: true,
+                  ).catchError((Object error) {
+                    debugPrint(
+                      "AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error",
+                    );
+                  }),
+                );
+
+                Navigator.of(sheetContext).pop();
+
+                showTopToast(
+                  pageContext,
+                  localEnabled
+                      ? _strings.t(
+                    "Đã bật tự động Bảo vệ khi mọi người rời nhà",
+                  )
+                      : _strings.t(
+                    "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
+                  ),
+                  color: Colors.green,
+                  icon: Icons.check_circle_rounded,
+                );
+              } catch (error) {
+                if (!sheetContext.mounted) {
+                  return;
+                }
+
+                showTopToast(
+                  sheetContext,
+                  _strings.choose(
+                    vi: "Không lưu được cài đặt: $error",
+                    en: "Could not save the setting: $error",
+                  ),
+                  color: Colors.red,
+                  icon: Icons.error_outline_rounded,
+                );
+              } finally {
+                if (sheetContext.mounted) {
+                  setSheetState(() {
+                    saving = false;
+                  });
+                }
+              }
+            }
+
+            return SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 18,
+                  right: 18,
+                  top: 12,
+                  bottom:
+                  MediaQuery.of(innerContext).viewInsets.bottom +
+                      18,
+                ),
+                decoration: const BoxDecoration(
+                  color: SafeHomeColors.background,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.primarySoft,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Icon(
+                            Icons.location_on_rounded,
+                            color: SafeHomeColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _strings.t(
+                                  "Tự động Bảo vệ khi rời nhà",
+                                ),
+                                style: const TextStyle(
+                                  color: SafeHomeColors.textPrimary,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                _strings.t(
+                                  "Bán kính bảo vệ mặc định: 150 m",
+                                ),
+                                style: const TextStyle(
+                                  color:
+                                  SafeHomeColors.textSecondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch.adaptive(
+                          value: localEnabled,
+                          onChanged: (value) {
+                            setSheetState(() {
+                              localEnabled = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.surface,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: SafeHomeColors.border,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            hasLocation
+                                ? Icons.check_circle_rounded
+                                : Icons.location_searching_rounded,
+                            color: hasLocation
+                                ? SafeHomeColors.safe
+                                : SafeHomeColors.warning,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              hasLocation
+                                  ? _strings.choose(
+                                vi: "Đã đặt vị trí nhà\n"
+                                    "${latitude!.toStringAsFixed(6)}, "
+                                    "${longitude!.toStringAsFixed(6)}",
+                                en: "Home location set\n"
+                                    "${latitude!.toStringAsFixed(6)}, "
+                                    "${longitude!.toStringAsFixed(6)}",
+                              )
+                                  : _strings.t(
+                                "Chưa đặt vị trí nhà",
+                              ),
+                              style: const TextStyle(
+                                color: SafeHomeColors.textPrimary,
+                                fontSize: 13,
+                                height: 1.35,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed:
+                        locating ? null : captureCurrentLocation,
+                        icon: locating
+                            ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                            : const Icon(
+                          Icons.my_location_rounded,
+                        ),
+                        label: Text(
+                          locating
+                              ? _strings.t("Đang lấy vị trí...")
+                              : _strings.t(
+                            "Đặt vị trí nhà tại đây",
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _strings.t(
+                        "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.",
+                      ),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: SafeHomeColors.textSecondary,
+                        fontSize: 11.5,
+                        height: 1.35,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: saving ? null : saveAutoAway,
+                        icon: saving
+                            ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                            : const Icon(
+                          Icons.save_rounded,
+                        ),
+                        label: Text(
+                          saving
+                              ? _strings.t("Đang lưu...")
+                              : _strings.t("Lưu cài đặt"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<void> setAlarmEnabled(bool enabled) async {
     final homeId = selectedHome;
     final homeName = getHomeDisplayName(homeId);
@@ -1576,6 +2060,16 @@ class _HomePageState extends State<HomePage> {
 
             syncHomeChatListeners();
             syncDeviceNotificationBridge();
+            unawaited(
+              AutoAwayService.syncForHomes(
+                uid: uid,
+                homes: homes,
+              ).catchError((Object error) {
+                debugPrint(
+                  "AUTO_AWAY_SHARED_SYNC_ERROR: $error",
+                );
+              }),
+            );
           },
 
           onDeleted: (homeId) {
@@ -1645,6 +2139,14 @@ class _HomePageState extends State<HomePage> {
       startAlarmPauseListener();
       syncHomeChatListeners();
       syncDeviceNotificationBridge();
+      unawaited(
+        AutoAwayService.syncForHomes(
+          uid: uid,
+          homes: homes,
+        ).catchError((Object error) {
+          debugPrint("AUTO_AWAY_SYNC_ERROR: $error");
+        }),
+      );
       unawaited(_tryOpenPendingChat());
     });
   }
@@ -5023,6 +5525,7 @@ class _HomePageState extends State<HomePage> {
                             }
                           },
                           onShare: shareHome,
+                          onAutoAway: openAutoAwaySetup,
                           onRooms: () {
                             showRoomManagementSheet(
                               context: context,
