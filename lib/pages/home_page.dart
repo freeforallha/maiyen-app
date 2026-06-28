@@ -38,6 +38,7 @@ import '../services/auto_login_service.dart';
 import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,6 +48,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> shareRequests = {};
   final ValueNotifier<int> inviteCountNotifier = ValueNotifier(0);
   int unreadChatCount = 0;
@@ -96,7 +98,7 @@ class _HomePageState extends State<HomePage> {
     final rawName = home["_customName"] ?? home["name"] ?? "";
     final name = rawName.toString().trim();
 
-    return name.isNotEmpty ? name : "Nhà chưa đặt tên";
+    return name.isNotEmpty ? name : _strings.t("Nhà chưa đặt tên");
   }
 
   void selectHomeFromNotification(String homeId) {
@@ -134,7 +136,7 @@ class _HomePageState extends State<HomePage> {
     if (device.isEmpty) {
       showTopToast(
         context,
-        "Không tìm thấy thiết bị trong nhà này",
+        _strings.t("Không tìm thấy thiết bị trong nhà này"),
         color: Colors.orange,
         icon: Icons.sensors_off_rounded,
       );
@@ -219,7 +221,7 @@ class _HomePageState extends State<HomePage> {
     if (homeId.isEmpty || !homes.containsKey(homeId)) {
       showTopToast(
         context,
-        "Không tìm thấy nhà của thông báo này",
+        _strings.t("Không tìm thấy nhà của thông báo này"),
         color: Colors.orange,
         icon: Icons.home_work_outlined,
       );
@@ -389,10 +391,10 @@ class _HomePageState extends State<HomePage> {
                       controller: hourController,
                       keyboardType: TextInputType.number,
                       maxLength: 2,
-                      decoration: const InputDecoration(
-                        labelText: "Giờ",
+                      decoration: InputDecoration(
+                        labelText: _strings.t("Giờ"),
                         counterText: "",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -411,10 +413,10 @@ class _HomePageState extends State<HomePage> {
                       controller: minuteController,
                       keyboardType: TextInputType.number,
                       maxLength: 2,
-                      decoration: const InputDecoration(
-                        labelText: "Phút",
+                      decoration: InputDecoration(
+                        labelText: _strings.t("Phút"),
                         counterText: "",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -469,7 +471,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Huỷ"),
+              child: Text(_strings.t("Huỷ")),
             ),
             ElevatedButton(
               onPressed: () {
@@ -479,8 +481,8 @@ class _HomePageState extends State<HomePage> {
 
                 if (!isValidTime(value)) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Giờ không hợp lệ"),
+                    SnackBar(
+                      content: Text(_strings.t("Giờ không hợp lệ")),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -489,7 +491,7 @@ class _HomePageState extends State<HomePage> {
 
                 Navigator.pop(context, value);
               },
-              child: const Text("OK"),
+              child: Text(_strings.t("OK")),
             ),
           ],
         );
@@ -528,15 +530,19 @@ class _HomePageState extends State<HomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text("Lưu ý khi bật Alarm"),
-          content: const Text(
-            "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
-                "Hãy kiểm tra kỹ cấu hình để tránh cảnh báo làm phiền bạn.",
+          title: Text(_strings.t("Lưu ý khi bật Alarm")),
+          content: Text(
+            _strings.choose(
+              vi: "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
+                  "Hãy kiểm tra kỹ cấu hình để tránh cảnh báo làm phiền bạn.",
+              en: "Alarm is using this home's settings.\n\n"
+                  "Review the configuration to avoid unwanted alerts.",
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Đã hiểu"),
+              child: Text(_strings.t("Đã hiểu")),
             ),
           ],
         );
@@ -552,16 +558,20 @@ class _HomePageState extends State<HomePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text("Lưu ý tạm tắt Alarm"),
-          content: const Text(
-            "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
-                "trong hôm nay, reminder sẽ được báo đến các thành viên khác "
-                "trong nhà. Khoảng tời gian tạm hoãn phải nằm trong khoảng thời gian đã được cài đặt của Alarm",
+          title: Text(_strings.t("Lưu ý tạm tắt Alarm")),
+          content: Text(
+            _strings.choose(
+              vi: "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
+                  "trong hôm nay, reminder sẽ được báo đến các thành viên khác "
+                  "trong nhà. Khoảng thời gian tạm hoãn phải nằm trong khoảng thời gian đã được cài đặt của Alarm.",
+              en: "This changes today's Alarm time for selected devices and notifies "
+                  "other home members. The pause period must stay within the configured Alarm schedule.",
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Đã hiểu"),
+              child: Text(_strings.t("Đã hiểu")),
             ),
           ],
         );
@@ -593,10 +603,18 @@ class _HomePageState extends State<HomePage> {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "alarm_setting_changed",
-      title: enabled ? "Đã bật Alarm" : "Đã tắt Alarm",
+      title: enabled
+          ? _strings.t("Đã bật Alarm")
+          : _strings.t("Đã tắt Alarm"),
       message: enabled
-          ? "Bạn đã bật Alarm cho nhà \"$homeName\"."
-          : "Bạn đã tắt Alarm cho nhà \"$homeName\".",
+          ? _strings.choose(
+        vi: "Bạn đã bật Alarm cho nhà \"$homeName\".",
+        en: "You enabled Alarm for \"$homeName\".",
+      )
+          : _strings.choose(
+        vi: "Bạn đã tắt Alarm cho nhà \"$homeName\".",
+        en: "You disabled Alarm for \"$homeName\".",
+      ),
       homeId: homeId,
       homeName: homeName,
     );
@@ -847,9 +865,11 @@ class _HomePageState extends State<HomePage> {
               device: device,
               event: {
                 "type": "device_added",
-                "title": "Thiết bị mới",
-                "message":
-                "Thiết bị \"${_deviceName(deviceId, device)}\" đã xuất hiện trong \"$homeName\".",
+                "title": _strings.t("Thiết bị mới"),
+                "message": _strings.choose(
+                  vi: "Thiết bị \"${_deviceName(deviceId, device)}\" đã xuất hiện trong \"$homeName\".",
+                  en: "Device \"${_deviceName(deviceId, device)}\" was added to \"$homeName\".",
+                ),
                 "severity": "info",
               },
             );
@@ -917,10 +937,18 @@ class _HomePageState extends State<HomePage> {
       final active = current["smoke"] == true;
       return {
         "type": active ? "device_smoke" : "device_smoke_clear",
-        "title": active ? "Cảnh báo khói" : "Khói đã an toàn",
+        "title": active
+            ? _strings.t("Cảnh báo khói")
+            : _strings.t("Khói đã an toàn"),
         "message": active
-            ? "\"$name\" phát hiện khói trong \"$homeName\"."
-            : "\"$name\" đã trở lại trạng thái bình thường.",
+            ? _strings.choose(
+          vi: "\"$name\" phát hiện khói trong \"$homeName\".",
+          en: "\"$name\" detected smoke in \"$homeName\".",
+        )
+            : _strings.choose(
+          vi: "\"$name\" đã trở lại trạng thái bình thường.",
+          en: "\"$name\" has returned to normal.",
+        ),
         "severity": active ? "critical" : "success",
       };
     }
@@ -929,10 +957,18 @@ class _HomePageState extends State<HomePage> {
       final active = current["sosActive"] == true;
       return {
         "type": active ? "device_sos" : "device_sos_clear",
-        "title": active ? "SOS được kích hoạt" : "SOS đã kết thúc",
+        "title": active
+            ? _strings.t("SOS được kích hoạt")
+            : _strings.t("SOS đã kết thúc"),
         "message": active
-            ? "\"$name\" vừa kích hoạt SOS trong \"$homeName\"."
-            : "\"$name\" đã hết trạng thái SOS.",
+            ? _strings.choose(
+          vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
+          en: "\"$name\" triggered SOS in \"$homeName\".",
+        )
+            : _strings.choose(
+          vi: "\"$name\" đã hết trạng thái SOS.",
+          en: "\"$name\" is no longer in SOS state.",
+        ),
         "severity": active ? "critical" : "success",
       };
     }
@@ -941,10 +977,18 @@ class _HomePageState extends State<HomePage> {
       final active = current["tamper"] == true;
       return {
         "type": active ? "device_tamper" : "device_tamper_clear",
-        "title": active ? "Thiết bị bị tháo" : "Tamper bình thường",
+        "title": active
+            ? _strings.t("Thiết bị bị tháo")
+            : _strings.t("Tamper bình thường"),
         "message": active
-            ? "\"$name\" báo bị tháo/cạy trong \"$homeName\"."
-            : "\"$name\" đã hết cảnh báo tháo/cạy.",
+            ? _strings.choose(
+          vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
+          en: "\"$name\" reported tampering in \"$homeName\".",
+        )
+            : _strings.choose(
+          vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
+          en: "\"$name\" tamper alert has cleared.",
+        ),
         "severity": active ? "critical" : "success",
       };
     }
@@ -953,10 +997,18 @@ class _HomePageState extends State<HomePage> {
       final closed = current["contact"] == true;
       return {
         "type": "device_contact",
-        "title": closed ? "Cửa đã đóng" : "Cửa đang mở",
+        "title": closed
+            ? _strings.t("Cửa đã đóng")
+            : _strings.t("Cửa đang mở"),
         "message": closed
-            ? "\"$name\" đã đóng trong \"$homeName\"."
-            : "\"$name\" đang mở trong \"$homeName\".",
+            ? _strings.choose(
+          vi: "\"$name\" đã đóng trong \"$homeName\".",
+          en: "\"$name\" closed in \"$homeName\".",
+        )
+            : _strings.choose(
+          vi: "\"$name\" đang mở trong \"$homeName\".",
+          en: "\"$name\" is open in \"$homeName\".",
+        ),
         "severity": closed ? "success" : "warning",
       };
     }
@@ -964,8 +1016,11 @@ class _HomePageState extends State<HomePage> {
     if (previous["batteryLow"] != true && current["batteryLow"] == true) {
       return {
         "type": "device_battery_low",
-        "title": "Pin yếu",
-        "message": "\"$name\" trong \"$homeName\" đang yếu pin.",
+        "title": _strings.t("Pin yếu"),
+        "message": _strings.choose(
+          vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
+          en: "\"$name\" in \"$homeName\" has a low battery.",
+        ),
         "severity": "warning",
       };
     }
@@ -975,8 +1030,11 @@ class _HomePageState extends State<HomePage> {
       if (availability == "offline") {
         return {
           "type": "device_connection",
-          "title": "Thiết bị offline",
-          "message": "\"$name\" trong \"$homeName\" đã mất kết nối.",
+          "title": _strings.t("Thiết bị offline"),
+          "message": _strings.choose(
+            vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
+            en: "\"$name\" in \"$homeName\" went offline.",
+          ),
           "severity": "warning",
         };
       }
@@ -984,8 +1042,11 @@ class _HomePageState extends State<HomePage> {
       if (availability == "online") {
         return {
           "type": "device_connection",
-          "title": "Thiết bị online",
-          "message": "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
+          "title": _strings.t("Thiết bị online"),
+          "message": _strings.choose(
+            vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
+            en: "\"$name\" in \"$homeName\" is back online.",
+          ),
           "severity": "success",
         };
       }
@@ -995,8 +1056,11 @@ class _HomePageState extends State<HomePage> {
         current["temperatureHigh"] == true) {
       return {
         "type": "device_environment",
-        "title": "Nhiệt độ cao",
-        "message": "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
+        "title": _strings.t("Nhiệt độ cao"),
+        "message": _strings.choose(
+          vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
+          en: "\"$name\" recorded a high temperature in \"$homeName\".",
+        ),
         "severity": "warning",
       };
     }
@@ -1004,8 +1068,11 @@ class _HomePageState extends State<HomePage> {
     if (previous["humidityHigh"] != true && current["humidityHigh"] == true) {
       return {
         "type": "device_environment",
-        "title": "Độ ẩm cao",
-        "message": "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
+        "title": _strings.t("Độ ẩm cao"),
+        "message": _strings.choose(
+          vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
+          en: "\"$name\" recorded high humidity in \"$homeName\".",
+        ),
         "severity": "warning",
       };
     }
@@ -1026,7 +1093,7 @@ class _HomePageState extends State<HomePage> {
         type: event["type"] ?? "device_event",
         category: "device",
         severity: event["severity"] ?? "info",
-        title: event["title"] ?? "Cập nhật thiết bị",
+        title: event["title"] ?? _strings.t("Cập nhật thiết bị"),
         message: event["message"] ?? "",
         homeId: homeId,
         deviceId: deviceId,
@@ -1532,7 +1599,7 @@ class _HomePageState extends State<HomePage> {
       if (parts.length != 3) {
         showTopToast(
           context,
-          "QR gia nhập nhiều nhà không hợp lệ",
+          _strings.t("QR gia nhập nhiều nhà không hợp lệ"),
           color: Colors.red,
           icon: Icons.qr_code_scanner_rounded,
         );
@@ -1548,7 +1615,7 @@ class _HomePageState extends State<HomePage> {
       if (ownerUid == uid) {
         showTopToast(
           context,
-          "Bạn đang là chủ các nhà này",
+          _strings.t("Bạn đang là chủ các nhà này"),
           color: Colors.orange,
           icon: Icons.home_rounded,
         );
@@ -1564,7 +1631,7 @@ class _HomePageState extends State<HomePage> {
       final requesterName =
       targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
-          : myEmail ?? "Một người dùng";
+          : myEmail ?? _strings.t("Một người dùng");
 
       for (final homeId in homeIds) {
         final homeName = await HomeNotificationService.resolveHomeName(
@@ -1601,8 +1668,11 @@ class _HomePageState extends State<HomePage> {
           homeId: homeId,
           recipientUid: ownerUid,
           type: "join_request",
-          title: "Yêu cầu gia nhập nhà",
-          message: "$requesterName đang xin gia nhập nhà \"$homeName\".",
+          title: _strings.t("Yêu cầu gia nhập nhà"),
+          message: _strings.choose(
+            vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
+            en: "$requesterName requested to join \"$homeName\".",
+          ),
           homeName: homeName,
           category: "member",
           severity: "info",
@@ -1617,7 +1687,10 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
+        _strings.choose(
+          vi: "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
+          en: "Join requests sent for ${homeIds.length} homes",
+        ),
         color: Colors.green,
         icon: Icons.check_circle_rounded,
       );
@@ -1630,7 +1703,7 @@ class _HomePageState extends State<HomePage> {
       if (parts.length != 3) {
         showTopToast(
           context,
-          "QR gia nhập không hợp lệ",
+          _strings.t("QR gia nhập không hợp lệ"),
           color: Colors.red,
           icon: Icons.qr_code_rounded,
         );
@@ -1643,7 +1716,7 @@ class _HomePageState extends State<HomePage> {
       if (ownerUid == uid) {
         showTopToast(
           context,
-          "Bạn đang là chủ nhà này",
+          _strings.t("Bạn đang là chủ nhà này"),
           color: Colors.orange,
           icon: Icons.info_outline_rounded,
         );
@@ -1659,7 +1732,7 @@ class _HomePageState extends State<HomePage> {
       final requesterName =
       targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
-          : myEmail ?? "Một người dùng";
+          : myEmail ?? _strings.t("Một người dùng");
 
       final requestKey = "${homeId}_$uid";
       final homeName = await HomeNotificationService.resolveHomeName(
@@ -1689,8 +1762,11 @@ class _HomePageState extends State<HomePage> {
         homeId: homeId,
         recipientUid: ownerUid,
         type: "join_request",
-        title: "Yêu cầu gia nhập nhà",
-        message: "$requesterName đang xin gia nhập nhà \"$homeName\".",
+        title: _strings.t("Yêu cầu gia nhập nhà"),
+        message: _strings.choose(
+          vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
+          en: "$requesterName requested to join \"$homeName\".",
+        ),
         homeName: homeName,
         category: "member",
         severity: "info",
@@ -1704,7 +1780,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Đã gửi yêu cầu gia nhập nhà",
+        _strings.t("Đã gửi yêu cầu gia nhập nhà"),
         color: Colors.green,
         icon: Icons.check_circle_rounded,
       );
@@ -1715,7 +1791,7 @@ class _HomePageState extends State<HomePage> {
     pairSensor(value);
     showTopToast(
       context,
-      "QR này không phải mã xin gia nhập nhà",
+      _strings.t("QR này không phải mã xin gia nhập nhà"),
       color: Colors.red,
       icon: Icons.qr_code_2_rounded,
     );
@@ -1725,7 +1801,7 @@ class _HomePageState extends State<HomePage> {
     if (!canManageHome()) {
       showTopToast(
         context,
-        "Bạn không có quyền thêm thiết bị",
+        _strings.t("Bạn không có quyền thêm thiết bị"),
         color: Colors.orange,
         icon: Icons.lock_rounded,
       );
@@ -1758,9 +1834,11 @@ class _HomePageState extends State<HomePage> {
       homeId: selectedHome,
       type: "pair_started",
       category: "device",
-      title: "Đã mở chế độ thêm thiết bị",
-      message:
-      "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
+      title: _strings.t("Đã mở chế độ thêm thiết bị"),
+      message: _strings.choose(
+        vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
+        en: "Device pairing was enabled in \"$homeName\" for 60 seconds.",
+      ),
       homeName: homeName,
     );
     setState(() => pairingCountdown = 60);
@@ -1781,7 +1859,7 @@ class _HomePageState extends State<HomePage> {
 
     // ================= HOME SHARE =================
     if (isShared) {
-      final ok = await showConfirmDialog(context, "Rời khỏi Home này?");
+      final ok = await showConfirmDialog(context, _strings.t("Rời khỏi Home này?"));
       if (!ok) return;
       if (!mounted) return;
 
@@ -1839,13 +1917,18 @@ class _HomePageState extends State<HomePage> {
                   size: 48,
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Xác nhận xoá nhà",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("Xác nhận xoá nhà"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
+                  _strings.t(
+                    "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
+                  ),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -1859,7 +1942,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text("Huỷ"),
+                        child: Text(_strings.t("Huỷ")),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -1870,7 +1953,7 @@ class _HomePageState extends State<HomePage> {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(context, true),
-                        child: const Text("Tiếp tục"),
+                        child: Text(_strings.t("Tiếp tục")),
                       ),
                     ),
                   ],
@@ -1911,16 +1994,19 @@ class _HomePageState extends State<HomePage> {
                   size: 44,
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Nhập mật khẩu",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("Nhập mật khẩu"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: controller,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Mật khẩu tài khoản",
+                    labelText: _strings.t("Mật khẩu tài khoản"),
                     filled: true,
                     fillColor: Colors.grey.shade100,
                     border: OutlineInputBorder(
@@ -1934,7 +2020,7 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.delete_forever_rounded),
-                    label: const Text("Xoá nhà"),
+                    label: Text(_strings.t("Xoá nhà")),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
@@ -1958,7 +2044,7 @@ class _HomePageState extends State<HomePage> {
 
                         showTopToast(
                           sheetContext,
-                          "Sai mật khẩu",
+                          _strings.t("Sai mật khẩu"),
                           color: Colors.red,
                           icon: Icons.error_outline_rounded,
                         );
@@ -1984,8 +2070,11 @@ class _HomePageState extends State<HomePage> {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "home_deleted",
-      title: "Đã xoá nhà",
-      message: "Bạn đã xoá nhà \"$deletedHomeName\".",
+      title: _strings.t("Đã xoá nhà"),
+      message: _strings.choose(
+        vi: "Bạn đã xoá nhà \"$deletedHomeName\".",
+        en: "You deleted \"$deletedHomeName\".",
+      ),
       homeId: deletedHomeId,
       homeName: deletedHomeName,
       entityType: "home",
@@ -2017,15 +2106,20 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "QR của nhà này",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("QR của nhà này"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 QrImageView(data: qrData, version: QrVersions.auto, size: 220),
                 const SizedBox(height: 12),
-                const Text(
-                  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
+                Text(
+                  _strings.t(
+                    "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -2070,25 +2164,25 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            "Chia sẻ nhà",
-                            style: TextStyle(
+                            _strings.t("Chia sẻ nhà"),
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
                         ),
                         IconButton(
-                          tooltip: "Quét QR để xin gia nhập nhà",
+                          tooltip: _strings.t("Quét QR để xin gia nhập nhà"),
                           icon: const Icon(Icons.center_focus_strong_rounded),
                           onPressed: () async {
                             Navigator.pop(context, null);
 
                             final code = await openQRScanner(
                               context,
-                              title: "Xin gia nhập nhà",
-                              subtitle: "Quét mã QR chia sẻ nhà",
+                              title: _strings.t("Xin gia nhập nhà"),
+                              subtitle: _strings.t("Quét mã QR chia sẻ nhà"),
                             );
 
                             if (code != null) {
@@ -2106,7 +2200,7 @@ class _HomePageState extends State<HomePage> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (_) => setSheetState(() {}),
                       decoration: InputDecoration(
-                        labelText: "Email người nhận",
+                        labelText: _strings.t("Email người nhận"),
                         filled: true,
                         fillColor: Colors.grey.shade100,
                         border: OutlineInputBorder(
@@ -2126,9 +2220,9 @@ class _HomePageState extends State<HomePage> {
 
                     const SizedBox(height: 18),
 
-                    const Text(
-                      "Mời thành viên bằng mã QR",
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                    Text(
+                      _strings.t("Mời thành viên bằng mã QR"),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
 
                     const SizedBox(height: 12),
@@ -2160,7 +2254,7 @@ class _HomePageState extends State<HomePage> {
     if (targetEmail == myEmail) {
       showTopToast(
         context,
-        "Không thể share cho chính bạn",
+        _strings.t("Không thể share cho chính bạn"),
         color: Colors.orange,
         icon: Icons.warning_amber_rounded,
       );
@@ -2174,7 +2268,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Email chưa đăng ký",
+        _strings.t("Email chưa đăng ký"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -2198,9 +2292,11 @@ class _HomePageState extends State<HomePage> {
       homeId: selectedHome,
       recipientUid: targetUid,
       type: "share_request",
-      title: "Lời mời chia sẻ nhà",
-      message:
-      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} đã mời bạn tham gia nhà \"$homeName\".",
+      title: _strings.t("Lời mời chia sẻ nhà"),
+      message: _strings.choose(
+        vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} đã mời bạn tham gia nhà \"$homeName\".",
+        en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} invited you to join \"$homeName\".",
+      ),
       homeName: homeName,
       category: "member",
       severity: "info",
@@ -2214,7 +2310,7 @@ class _HomePageState extends State<HomePage> {
 
     showTopToast(
       context,
-      "Đã share home",
+      _strings.t("Đã share home"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
     );
@@ -2242,9 +2338,12 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Chuyển quyền chủ nhà",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("Chuyển quyền chủ nhà"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
 
                 const SizedBox(height: 18),
@@ -2263,7 +2362,7 @@ class _HomePageState extends State<HomePage> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (_) => setEmailState(() {}),
                       decoration: InputDecoration(
-                        labelText: "Email người nhận",
+                        labelText: _strings.t("Email người nhận"),
                         filled: true,
                         fillColor: Colors.grey.shade100,
                         border: OutlineInputBorder(
@@ -2303,7 +2402,7 @@ class _HomePageState extends State<HomePage> {
     if (targetEmail == myEmail) {
       showTopToast(
         context,
-        "Không thể chuyển quyền cho chính bạn",
+        _strings.t("Không thể chuyển quyền cho chính bạn"),
         color: Colors.orange,
         icon: Icons.warning_amber_rounded,
       );
@@ -2317,7 +2416,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Không tìm thấy user",
+        _strings.t("Không tìm thấy user"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -2349,15 +2448,21 @@ class _HomePageState extends State<HomePage> {
 
                 const SizedBox(height: 12),
 
-                const Text(
-                  "Xác nhận chuyển quyền",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("Xác nhận chuyển quyền"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
 
                 const SizedBox(height: 12),
 
                 Text(
-                  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail ?",
+                  _strings.choose(
+                    vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
+                    en: "Transfer home ownership to:\n$targetEmail?",
+                  ),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 14,
@@ -2373,7 +2478,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text("Hủy"),
+                        child: Text(_strings.t("Hủy")),
                       ),
                     ),
 
@@ -2386,7 +2491,7 @@ class _HomePageState extends State<HomePage> {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(context, true),
-                        child: const Text("Chuyển"),
+                        child: Text(_strings.t("Chuyển")),
                       ),
                     ),
                   ],
@@ -2406,23 +2511,23 @@ class _HomePageState extends State<HomePage> {
     final passwordOk = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Xác nhận mật khẩu"),
+        title: Text(_strings.t("Xác nhận mật khẩu")),
         content: TextField(
           controller: passwordController,
           obscureText: true,
-          decoration: const InputDecoration(
-            labelText: "Mật khẩu tài khoản",
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: _strings.t("Mật khẩu tài khoản"),
+            border: const OutlineInputBorder(),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Huỷ"),
+            child: Text(_strings.t("Huỷ")),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Xác nhận"),
+            child: Text(_strings.t("Xác nhận")),
           ),
         ],
       ),
@@ -2443,7 +2548,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Sai mật khẩu",
+        _strings.t("Sai mật khẩu"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -2469,9 +2574,11 @@ class _HomePageState extends State<HomePage> {
       homeId: homeId,
       recipientUid: targetUid,
       type: "transfer_owner_request",
-      title: "Yêu cầu chuyển quyền chủ nhà",
-      message:
-      "${userName.isNotEmpty ? userName : (myEmail ?? "Một chủ nhà")} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
+      title: _strings.t("Yêu cầu chuyển quyền chủ nhà"),
+      message: _strings.choose(
+        vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
+        en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} wants to transfer ownership of \"$homeName\" to you.",
+      ),
       homeName: homeName,
       category: "member",
       severity: "info",
@@ -2483,9 +2590,11 @@ class _HomePageState extends State<HomePage> {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "transfer_owner_request",
-      title: "Đã gửi yêu cầu chuyển quyền",
-      message:
-      "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"$homeName\" cho $targetEmail.",
+      title: _strings.t("Đã gửi yêu cầu chuyển quyền"),
+      message: _strings.choose(
+        vi: "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"$homeName\" cho $targetEmail.",
+        en: "You sent an ownership transfer request for \"$homeName\" to $targetEmail.",
+      ),
       homeId: homeId,
       ownerUid: uid,
       homeName: homeName,
@@ -2497,7 +2606,7 @@ class _HomePageState extends State<HomePage> {
 
     showTopToast(
       context,
-      "Đã gửi yêu cầu chuyển quyền chủ nhà",
+      _strings.t("Đã gửi yêu cầu chuyển quyền chủ nhà"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
     );
@@ -2509,14 +2618,14 @@ class _HomePageState extends State<HomePage> {
     if (!canManageHome()) {
       showTopToast(
         context,
-        "Bạn không có quyền xoá thiết bị",
+        _strings.t("Bạn không có quyền xoá thiết bị"),
         color: Colors.orange,
         icon: Icons.lock_rounded,
       );
       return;
     }
 
-    if (!await showConfirmDialog(context, "Xóa Device?")) return;
+    if (!await showConfirmDialog(context, _strings.t("Xóa Device?"))) return;
 
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
@@ -2541,7 +2650,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Đã gửi yêu cầu xoá thiết bị",
+        _strings.t("Đã gửi yêu cầu xoá thiết bị"),
         color: Colors.green,
         icon: Icons.check_circle_rounded,
       );
@@ -2550,7 +2659,10 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Không gửi được yêu cầu xoá: $e",
+        _strings.choose(
+          vi: "Không gửi được yêu cầu xoá: $e",
+          en: "Could not send deletion request: $e",
+        ),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -2563,12 +2675,11 @@ class _HomePageState extends State<HomePage> {
       type: "device_delete_requested",
       category: "device",
       severity: "warning",
-      title: "Đang xoá thiết bị",
-      message:
-      "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
-      deviceId: id,
-      entityType: "device",
-      entityId: id,
+      title: _strings.t("Đang xoá thiết bị"),
+      message: _strings.choose(
+        vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
+        en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
+      ),
       homeName: homeName,
     );
   }
@@ -2576,7 +2687,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> logout() async {
     final confirmed = await showConfirmDialog(
       context,
-      "Đăng xuất?",
+      _strings.t("Đăng xuất?"),
     );
 
     if (!confirmed || !mounted) {
@@ -2609,14 +2720,14 @@ class _HomePageState extends State<HomePage> {
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Thêm nhà mới"),
+        title: Text(_strings.t("Thêm nhà mới")),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: nameController,
               decoration: InputDecoration(
-                labelText: "Tên nhà",
+                labelText: _strings.t("Tên nhà"),
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 border: OutlineInputBorder(
@@ -2633,7 +2744,7 @@ class _HomePageState extends State<HomePage> {
             TextField(
               controller: addressController,
               decoration: InputDecoration(
-                labelText: "Địa chỉ",
+                labelText: _strings.t("Địa chỉ"),
                 filled: true,
                 fillColor: Colors.grey.shade100,
                 border: OutlineInputBorder(
@@ -2651,7 +2762,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Hủy"),
+            child: Text(_strings.t("Hủy")),
           ),
           ElevatedButton(
             onPressed: () {
@@ -2660,7 +2771,7 @@ class _HomePageState extends State<HomePage> {
                 "address": addressController.text.trim(),
               });
             },
-            child: const Text("OK"),
+            child: Text(_strings.t("OK")),
           ),
         ],
       ),
@@ -2705,8 +2816,11 @@ class _HomePageState extends State<HomePage> {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "home_created",
-      title: "Đã tạo nhà mới",
-      message: "Bạn đã tạo nhà \"$name\".",
+      title: _strings.t("Đã tạo nhà mới"),
+      message: _strings.choose(
+        vi: "Bạn đã tạo nhà \"$name\".",
+        en: "You created the home \"$name\".",
+      ),
       homeId: id,
       homeName: name,
       entityType: "home",
@@ -2795,8 +2909,8 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(999),
                       ),
                     ),
-                    const Text(
-                      "⏸️ Tạm tắt Alarm hôm nay",
+                    Text(
+                      _strings.t("⏸️ Tạm tắt Alarm hôm nay"),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
@@ -2812,7 +2926,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () async {
                               final picked = await openTimeTextInput(
                                 context: context,
-                                title: "Chọn giờ bắt đầu tạm tắt",
+                                title: _strings.t("Chọn giờ bắt đầu tạm tắt"),
                                 initial: format(startTime),
                               );
 
@@ -2839,7 +2953,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               child: Column(
                                 children: [
-                                  const Text("Từ giờ"),
+                                  Text(_strings.t("Từ giờ")),
                                   const SizedBox(height: 6),
                                   Text(
                                     format(startTime),
@@ -2859,7 +2973,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () async {
                               final picked = await openTimeTextInput(
                                 context: context,
-                                title: "Chọn giờ kết thúc tạm tắt",
+                                title: _strings.t("Chọn giờ kết thúc tạm tắt"),
                                 initial: format(endTime),
                               );
 
@@ -2884,7 +2998,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               child: Column(
                                 children: [
-                                  const Text("Đến giờ"),
+                                  Text(_strings.t("Đến giờ")),
                                   const SizedBox(height: 6),
                                   Text(
                                     format(endTime),
@@ -2911,7 +3025,7 @@ class _HomePageState extends State<HomePage> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 3),
                             child: ChoiceChip(
-                              label: Text(item),
+                              label: Text(_strings.t(item)),
                               selected: selected,
                               onSelected: (_) {
                                 setSheetState(() {
@@ -2930,7 +3044,7 @@ class _HomePageState extends State<HomePage> {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.save_rounded),
-                        label: const Text("Lưu"),
+                        label: Text(_strings.t("Lưu")),
                         onPressed: () async {
                           final home = safeMap(homes[selectedHome]);
                           final homeName = getSelectedHomeDisplayName();
@@ -2972,7 +3086,10 @@ class _HomePageState extends State<HomePage> {
                             if (!startOk || !endOk) {
                               showTopToast(
                                 context,
-                                "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
+                                _strings.choose(
+                                  vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
+                                  en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
+                                ),
                                 color: Colors.orange,
                                 icon: Icons.schedule_rounded,
                               );
@@ -3014,7 +3131,10 @@ class _HomePageState extends State<HomePage> {
 
                             showTopToast(
                               context,
-                              "Không lưu được tạm tắt Alarm: $e",
+                              _strings.choose(
+                                vi: "Không lưu được tạm tắt Alarm: $e",
+                                en: "Unable to save the Alarm pause: $e",
+                              ),
                               color: Colors.red,
                               icon: Icons.error_outline_rounded,
                             );
@@ -3052,7 +3172,7 @@ class _HomePageState extends State<HomePage> {
                         width: double.infinity,
                         child: OutlinedButton.icon(
                           icon: const Icon(Icons.delete_outline_rounded),
-                          label: const Text("Xóa lịch tạm tắt"),
+                          label: Text(_strings.t("Xóa lịch tạm tắt")),
                           onPressed: () async {
                             try {
                               await FirebaseDatabase.instance
@@ -3074,7 +3194,10 @@ class _HomePageState extends State<HomePage> {
 
                               showTopToast(
                                 context,
-                                "Không xoá được lịch tạm tắt Alarm: $e",
+                                _strings.choose(
+                                  vi: "Không xoá được lịch tạm tắt Alarm: $e",
+                                  en: "Unable to delete the Alarm pause schedule: $e",
+                                ),
                                 color: Colors.red,
                                 icon: Icons.error_outline_rounded,
                               );
@@ -3112,143 +3235,386 @@ class _HomePageState extends State<HomePage> {
         ? (homes[selectedHome]?["_customName"] ??
         homes[selectedHome]?["name"] ??
         selectedHome)
-        : (homes[selectedHome]?["name"] ?? selectedHome);
+        .toString()
+        : (homes[selectedHome]?["name"] ?? selectedHome)
+        .toString();
 
-    final controller = TextEditingController(text: currentName);
+    final currentAddress =
+        homes[selectedHome]?["address"]?.toString() ?? "";
 
-    final name = await showModalBottomSheet<String>(
+    final nameController = TextEditingController(
+      text: currentName,
+    );
+    final addressController = TextEditingController(
+      text: currentAddress,
+    );
+
+    final result =
+    await showModalBottomSheet<Map<String, String>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) {
+      builder: (sheetContext) {
         return SafeArea(
-          child: Container(
+          child: AnimatedPadding(
+            duration: const Duration(milliseconds: 160),
+            curve: Curves.easeOut,
             padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+              bottom:
+              MediaQuery.viewInsetsOf(sheetContext).bottom,
             ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: StatefulBuilder(
-              builder: (context, setSheetState) {
-                final textOk = controller.text.trim().isNotEmpty;
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(
+                20,
+                12,
+                20,
+                20,
+              ),
+              decoration: const BoxDecoration(
+                color: SafeHomeColors.background,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
+              ),
+              child: StatefulBuilder(
+                builder: (context, setSheetState) {
+                  final nameOk =
+                      nameController.text.trim().isNotEmpty;
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.home_rounded,
-                      color: Colors.blue,
-                      size: 44,
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    const Text(
-                      "Đổi tên nhà",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                  InputDecoration fieldDecoration({
+                    required String label,
+                    required IconData icon,
+                    String? hint,
+                  }) {
+                    return InputDecoration(
+                      labelText: label,
+                      hintText: hint,
+                      prefixIcon: Icon(
+                        icon,
+                        color: SafeHomeColors.primary,
                       ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    TextField(
-                      controller: controller,
-                      onChanged: (_) => setSheetState(() {}),
-                      decoration: InputDecoration(
-                        labelText: "Tên nhà",
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
+                      filled: true,
+                      fillColor: SafeHomeColors.surface,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: SafeHomeColors.border,
                         ),
-                        suffixIcon: textOk
-                            ? IconButton(
-                          icon: const Icon(Icons.check_rounded),
-                          onPressed: () {
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: SafeHomeColors.border,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: SafeHomeColors.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.border,
+                            borderRadius:
+                            BorderRadius.circular(999),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Container(
+                          width: 58,
+                          height: 58,
+                          decoration: const BoxDecoration(
+                            color: SafeHomeColors.primarySoft,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.home_rounded,
+                            color: SafeHomeColors.primary,
+                            size: 31,
+                          ),
+                        ),
+                        const SizedBox(height: 11),
+                        Text(
+                          usePersonalName
+                              ? _strings.t("Đổi tên hiển thị")
+                              : _strings.t("Cập nhật thông tin nhà"),
+                          style: const TextStyle(
+                            color: SafeHomeColors.textPrimary,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        TextField(
+                          controller: nameController,
+                          textInputAction: usePersonalName
+                              ? TextInputAction.done
+                              : TextInputAction.next,
+                          onChanged: (_) {
+                            setSheetState(() {});
+                          },
+                          onSubmitted: (_) {
+                            if (!usePersonalName || !nameOk) {
+                              return;
+                            }
+
                             Navigator.pop(
-                              context,
-                              controller.text.trim(),
+                              sheetContext,
+                              {
+                                "name":
+                                nameController.text.trim(),
+                                "address": currentAddress,
+                              },
                             );
                           },
-                        )
-                            : null,
-                      ),
-                    ),
+                          decoration: fieldDecoration(
+                            label: _strings.t("Tên nhà"),
+                            icon: Icons.home_outlined,
+                          ),
+                        ),
+                        if (!usePersonalName) ...[
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: addressController,
+                            textCapitalization:
+                            TextCapitalization.sentences,
+                            textInputAction: TextInputAction.done,
+                            maxLines: 2,
+                            minLines: 1,
+                            onSubmitted: (_) {
+                              if (!nameOk) {
+                                return;
+                              }
 
-                    const SizedBox(height: 12),
-
-                    Text(
-                      "Tên này sẽ hiển thị trên tất cả màn hình của nhà.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
-                      ),
+                              Navigator.pop(
+                                sheetContext,
+                                {
+                                  "name":
+                                  nameController.text.trim(),
+                                  "address":
+                                  addressController.text.trim(),
+                                },
+                              );
+                            },
+                            decoration: fieldDecoration(
+                              label: _strings.t("Địa chỉ"),
+                              icon: Icons.location_on_outlined,
+                              hint: _strings.t("Nhập địa chỉ của nhà"),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: FilledButton.icon(
+                            onPressed: nameOk
+                                ? () {
+                              Navigator.pop(
+                                sheetContext,
+                                {
+                                  "name": nameController.text
+                                      .trim(),
+                                  "address": usePersonalName
+                                      ? currentAddress
+                                      : addressController.text
+                                      .trim(),
+                                },
+                              );
+                            }
+                                : null,
+                            icon: const Icon(
+                              Icons.save_rounded,
+                            ),
+                            label: Text(
+                              _strings.t("Lưu thay đổi"),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            style: FilledButton.styleFrom(
+                              backgroundColor:
+                              SafeHomeColors.primary,
+                              disabledBackgroundColor:
+                              SafeHomeColors.border,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(16),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          usePersonalName
+                              ? _strings.t("Tên này chỉ hiển thị riêng trên tài khoản của bạn.")
+                              : _strings.t("Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà."),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color:
+                            SafeHomeColors.textSecondary,
+                            fontSize: 12,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         );
       },
     );
 
-    if (name == null || name.trim().isEmpty) return;
+    // Bottom sheet vẫn đang chạy animation đóng sau khi
+    // Navigator.pop() trả kết quả. Không dispose controller ngay,
+    // nếu không TextField có thể đọc controller đã dispose và gây
+    // màn hình đỏ.
+    Future<void>.delayed(
+      const Duration(milliseconds: 350),
+          () {
+        nameController.dispose();
+        addressController.dispose();
+      },
+    );
 
-    // HOME SHARE -> lưu riêng cho user hiện tại
-    // Member dùng tên riêng; Owner/Admin sửa tên thật của nhà.
+    if (result == null) {
+      return;
+    }
+
+    final newName = result["name"]?.trim() ?? "";
+    final newAddress = result["address"]?.trim() ?? "";
+
+    if (newName.isEmpty) {
+      return;
+    }
+
     if (usePersonalName) {
+      if (newName == currentName.trim()) {
+        return;
+      }
+
       await FirebaseDatabase.instance
-          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
-          .set(name);
+          .ref(
+        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
+      )
+          .set(newName);
 
-      setState(() {
-        homes[selectedHome]?["_customName"] = name;
-      });
+      if (mounted) {
+        setState(() {
+          homes[selectedHome]?["_customName"] = newName;
+        });
+      }
 
+      return;
+    }
+
+    final oldName =
+        homes[selectedHome]?["name"]?.toString().trim() ??
+            selectedHome;
+    final oldAddress =
+        homes[selectedHome]?["address"]?.toString().trim() ??
+            "";
+
+    final nameChanged = newName != oldName;
+    final addressChanged = newAddress != oldAddress;
+
+    if (!nameChanged && !addressChanged) {
       return;
     }
 
     final ownerUid = getHomeOwnerUid();
 
-    await HomeService.renameHome(
-      ownerUid: ownerUid,
-      homeId: selectedHome,
-      name: name,
-    );
+    if (nameChanged) {
+      await HomeService.renameHome(
+        ownerUid: ownerUid,
+        homeId: selectedHome,
+        name: newName,
+      );
+    }
 
-    // Xóa tên riêng cũ của Admin để không che tên thật vừa đổi.
-    if (isShared) {
+    if (addressChanged) {
       await FirebaseDatabase.instance
-          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
+          .ref(
+        "accounts/$ownerUid/homes/$selectedHome/address",
+      )
+          .set(newAddress);
+    }
+
+    if (isShared && nameChanged) {
+      await FirebaseDatabase.instance
+          .ref(
+        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
+      )
           .remove();
     }
 
     if (mounted) {
       setState(() {
-        homes[selectedHome]?["name"] = name;
-        homes[selectedHome]?.remove("_customName");
+        homes[selectedHome]?["name"] = newName;
+        homes[selectedHome]?["address"] = newAddress;
+
+        if (nameChanged) {
+          homes[selectedHome]?.remove("_customName");
+        }
       });
     }
+
+    final actorName = userName.trim().isNotEmpty
+        ? userName.trim()
+        : _strings.t("Một thành viên");
+
+    String message;
+
+    if (nameChanged && addressChanged) {
+      message = _strings.choose(
+        vi: "$actorName đã cập nhật tên nhà thành \"$newName\" và thay đổi địa chỉ.",
+        en: "$actorName updated the home name to \"$newName\" and changed its address.",
+      );
+    } else if (nameChanged) {
+      message = _strings.choose(
+        vi: "$actorName đã đổi tên nhà thành \"$newName\".",
+        en: "$actorName renamed the home to \"$newName\".",
+      );
+    } else {
+      message = _strings.choose(
+        vi: "$actorName đã cập nhật địa chỉ của nhà \"$newName\".",
+        en: "$actorName updated the address of \"$newName\".",
+      );
+    }
+
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
       homeId: selectedHome,
-      type: "home_renamed",
+      type: "home_updated",
       category: "home",
-      title: "Đã đổi tên nhà",
-      message: "Nhà đã được đổi tên thành \"$name\".",
+      severity: "info",
+      title: _strings.t("Đã cập nhật thông tin nhà"),
+      message: message,
       entityType: "home",
       entityId: selectedHome,
-      homeName: name,
+      homeName: newName,
+      includeActor: true,
+      data: {
+        "actorName": actorName,
+        "oldName": oldName,
+        "newName": newName,
+        "oldAddress": oldAddress,
+        "newAddress": newAddress,
+      },
     );
   }
 
@@ -3259,12 +3625,12 @@ class _HomePageState extends State<HomePage> {
     final name = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Thay tên"),
+        title: Text(_strings.t("Thay tên")),
         content: TextField(controller: controller),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Hủy"),
+            child: Text(_strings.t("Hủy")),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, controller.text),
@@ -3293,7 +3659,7 @@ class _HomePageState extends State<HomePage> {
         ? userName.trim()
         : emailName.isNotEmpty
         ? emailName
-        : "Một thành viên";
+        : _strings.t("Một thành viên");
 
     await HomeService.renameDevice(
       ownerUid: ownerUid,
@@ -3308,9 +3674,11 @@ class _HomePageState extends State<HomePage> {
       type: "device_renamed",
       category: "device",
       severity: "info",
-      title: "Đã đổi tên thiết bị",
-      message:
-      "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
+      title: _strings.t("Đã đổi tên thiết bị"),
+      message: _strings.choose(
+        vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
+        en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
+      ),
       deviceId: id,
       entityType: "device",
       entityId: id,
@@ -3327,7 +3695,7 @@ class _HomePageState extends State<HomePage> {
     if (selectedHome.isEmpty) {
       showTopToast(
         context,
-        "Chưa chọn nhà để kiểm tra",
+        _strings.t("Chưa chọn nhà để kiểm tra"),
         color: Colors.orange,
         icon: Icons.home_work_outlined,
       );
@@ -3337,7 +3705,7 @@ class _HomePageState extends State<HomePage> {
     if (!isOwner()) {
       showTopToast(
         context,
-        "Hãy thực hiện kiểm tra bằng tài khoản Owner",
+        _strings.t("Hãy thực hiện kiểm tra bằng tài khoản Owner"),
         color: Colors.orange,
         icon: Icons.lock_outline_rounded,
       );
@@ -3358,7 +3726,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Không đọc được dữ liệu nhà",
+        _strings.t("Không đọc được dữ liệu nhà"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -3376,7 +3744,7 @@ class _HomePageState extends State<HomePage> {
 
       showTopToast(
         context,
-        "Nhà cần có ít nhất một thiết bị để test",
+        _strings.t("Nhà cần có ít nhất một thiết bị để test"),
         color: Colors.orange,
         icon: Icons.sensors_off_rounded,
       );
@@ -3568,14 +3936,17 @@ class _HomePageState extends State<HomePage> {
         return AlertDialog(
           title: Text(
             passCount == results.length
-                ? "Firebase Rules: ĐẠT"
-                : "Firebase Rules: CÓ LỖI",
+                ? _strings.t("Firebase Rules: ĐẠT")
+                : _strings.t("Firebase Rules: CÓ LỖI"),
           ),
           content: SizedBox(
             width: double.maxFinite,
             child: SingleChildScrollView(
               child: SelectableText(
-                "$passCount/${results.length} bài test đạt\n\n"
+                _strings.choose(
+                  vi: "$passCount/${results.length} bài test đạt\n\n",
+                  en: "$passCount/${results.length} tests passed\n\n",
+                ) +
                     "$lines",
               ),
             ),
@@ -3585,7 +3956,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.pop(dialogContext);
               },
-              child: const Text("Đóng"),
+              child: Text(_strings.t("Đóng")),
             ),
           ],
         );
@@ -3758,7 +4129,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               splashRadius: 18,
                               iconSize: 21,
-                              tooltip: "Thông báo Home",
+                              tooltip: _strings.t("Thông báo Home"),
                               icon: const Icon(
                                 Icons.notifications_rounded,
                                 color: SafeHomeColors.info,
@@ -3966,7 +4337,7 @@ class _HomePageState extends State<HomePage> {
                             rooms: getRooms(),
                             homeName:
                             homes[selectedHome]?["name"]?.toString() ??
-                                "Nhà",
+                                _strings.t("Nhà"),
                             selectedRoomId: selectedRoomId,
                             onSelect: (roomId) {
                               setState(() {
@@ -3977,7 +4348,7 @@ class _HomePageState extends State<HomePage> {
                               if (!canManageHome()) {
                                 showTopToast(
                                   context,
-                                  "Bạn không có quyền sắp xếp phòng",
+                                  _strings.t("Bạn không có quyền sắp xếp phòng"),
                                   color: Colors.orange,
                                   icon: Icons.lock_rounded,
                                 );
@@ -4002,7 +4373,12 @@ class _HomePageState extends State<HomePage> {
                           if (pairingCountdown > 0)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8),
-                              child: Text("Pairing: $pairingCountdown s"),
+                              child: Text(
+                                _strings.choose(
+                                  vi: "Đang ghép nối: $pairingCountdown giây",
+                                  en: "Pairing: $pairingCountdown s",
+                                ),
+                              ),
                             ),
                         ],
                       ),
@@ -4015,7 +4391,7 @@ class _HomePageState extends State<HomePage> {
                         if (!canManageHome()) {
                           showTopToast(
                             context,
-                            "Bạn không có quyền thêm thiết bị",
+                            _strings.t("Bạn không có quyền thêm thiết bị"),
                             color: Colors.orange,
                             icon: Icons.lock_rounded,
                           );
@@ -4032,8 +4408,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text(
-                                      "Quét QR",
+                                    Text(
+                                      _strings.t("Quét QR"),
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
@@ -4044,8 +4420,8 @@ class _HomePageState extends State<HomePage> {
                                       width: double.infinity,
                                       child: ElevatedButton.icon(
                                         icon: const Icon(Icons.qr_code_scanner),
-                                        label: const Text(
-                                          "Quét QR để thêm thiết bị",
+                                        label: Text(
+                                          _strings.t("Quét QR để thêm thiết bị"),
                                         ),
                                         onPressed: () {
                                           Navigator.pop(context, "__SCAN__");
@@ -4055,7 +4431,7 @@ class _HomePageState extends State<HomePage> {
                                     const SizedBox(height: 10),
                                     TextButton.icon(
                                       icon: const Icon(Icons.keyboard),
-                                      label: const Text("Nhập HUB ID thủ công"),
+                                      label: Text(_strings.t("Nhập HUB ID thủ công")),
                                       onPressed: () {
                                         Navigator.pop(context, "__MANUAL__");
                                       },
@@ -4273,7 +4649,7 @@ class _HomePageState extends State<HomePage> {
                                             .withValues(alpha: 0.45),
                                       ),
                                       title: Text(
-                                        "Hẹn giờ Alarm",
+                                        _strings.t("Hẹn giờ Alarm"),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w800,
                                           color: localAlarmEnabled
@@ -4287,9 +4663,9 @@ class _HomePageState extends State<HomePage> {
                                             ? (formatAlarmSchedules()
                                             .trim()
                                             .isEmpty
-                                            ? "Chưa thiết lập thời gian"
+                                            ? _strings.t("Chưa thiết lập thời gian")
                                             : formatAlarmSchedules())
-                                            : "Đang tắt",
+                                            : _strings.t("Đang tắt"),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -4343,7 +4719,7 @@ class _HomePageState extends State<HomePage> {
                                             .withValues(alpha: 0.45),
                                       ),
                                       title: Text(
-                                        "Tạm tắt Alarm hôm nay",
+                                        _strings.t("Tạm tắt Alarm hôm nay"),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           color: alarmPauseToday.isNotEmpty
@@ -4354,9 +4730,9 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       subtitle: Text(
                                         alarmPauseToday.isEmpty
-                                            ? "Chưa thiết lập"
+                                            ? _strings.t("Chưa thiết lập")
                                             : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
-                                            "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${alarmPauseToday["reason"]}" : ""}",
+                                            "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${_strings.t(alarmPauseToday["reason"].toString())}" : ""}",
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
@@ -4387,7 +4763,7 @@ class _HomePageState extends State<HomePage> {
                                             .withValues(alpha: 0.45),
                                       ),
                                       title: Text(
-                                        "Hẹn giờ Reminder",
+                                        _strings.t("Hẹn giờ Reminder"),
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
                                           color: reminderEnabled
@@ -4398,8 +4774,8 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       subtitle: Text(
                                         reminderEnabled
-                                            ? "Đã thiết lập"
-                                            : "Chưa thiết lập",
+                                            ? _strings.t("Đã thiết lập")
+                                            : _strings.t("Chưa thiết lập"),
                                         style: TextStyle(
                                           color: reminderEnabled
                                               ? SafeHomeColors.textSecondary
@@ -4458,7 +4834,7 @@ class _HomePageState extends State<HomePage> {
                             if (devices.isEmpty) {
                               showTopToast(
                                 context,
-                                "Không có thiết bị",
+                                _strings.t("Không có thiết bị"),
                                 color: Colors.orange,
                                 icon: Icons.sensors_off_rounded,
                               );
@@ -4552,7 +4928,7 @@ class _HomePageState extends State<HomePage> {
                               : () {
                             showTopToast(
                               context,
-                              "Chỉ chủ nhà mới được xoá nhà",
+                              _strings.t("Chỉ chủ nhà mới được xoá nhà"),
                               color: Colors.orange,
                               icon: Icons.lock_rounded,
                             );
@@ -4564,7 +4940,7 @@ class _HomePageState extends State<HomePage> {
                               : () {
                             showTopToast(
                               context,
-                              "Chỉ chủ nhà mới được chuyển quyền",
+                              _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
                               color: Colors.orange,
                               icon: Icons.admin_panel_settings_rounded,
                             );

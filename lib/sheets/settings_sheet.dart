@@ -2,6 +2,184 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../safehome_theme.dart';
+import '../localization/app_language_controller.dart';
+import '../localization/app_strings.dart';
+
+
+Future<void> _showLanguageSheet(
+    BuildContext context,
+    ) async {
+  final strings = AppStrings.of(context);
+
+  Widget languageOption({
+    required BuildContext sheetContext,
+    required String code,
+    required String title,
+    required String subtitle,
+  }) {
+    final selected =
+        appLanguageController.languageCode == code;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: Material(
+        color: SafeHomeColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: () async {
+            await appLanguageController.setLanguageCode(code);
+
+            if (sheetContext.mounted) {
+              Navigator.of(sheetContext).pop();
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: selected
+                    ? SafeHomeColors.primary
+                    : SafeHomeColors.border,
+                width: selected ? 1.4 : 0.9,
+              ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 42,
+                  height: 42,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? SafeHomeColors.primarySoft
+                        : SafeHomeColors.background,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Text(
+                    code == "vi" ? "VI" : "EN",
+                    style: TextStyle(
+                      color: selected
+                          ? SafeHomeColors.primary
+                          : SafeHomeColors.textSecondary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          color:
+                          SafeHomeColors.textPrimary,
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          color:
+                          SafeHomeColors.textSecondary,
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (selected)
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: SafeHomeColors.primary,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  await showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    builder: (sheetContext) {
+      return SafeArea(
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(
+            16,
+            10,
+            16,
+            18,
+          ),
+          decoration: const BoxDecoration(
+            color: SafeHomeColors.background,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(28),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 44,
+                height: 5,
+                margin: const EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                  color: SafeHomeColors.border,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.language_rounded,
+                    color: SafeHomeColors.primary,
+                  ),
+                  const SizedBox(width: 9),
+                  Text(
+                    strings.chooseLanguage,
+                    style: const TextStyle(
+                      color: SafeHomeColors.textPrimary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              languageOption(
+                sheetContext: sheetContext,
+                code: "vi",
+                title: "Tiếng Việt",
+                subtitle: "Vietnamese",
+              ),
+              languageOption(
+                sheetContext: sheetContext,
+                code: "en",
+                title: "English",
+                subtitle: "Tiếng Anh",
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
 void showSettingsSheet({
   required String homeId,
@@ -24,6 +202,9 @@ void showSettingsSheet({
 }) {
   int hiddenSecurityTapCount = 0;
   DateTime? lastHiddenSecurityTapAt;
+  final strings = AppStrings.fromLocale(
+    appLanguageController.locale,
+  );
 
   final memberCountFuture = FirebaseDatabase.instance
       .ref("sharedByHome/$homeId")
@@ -110,14 +291,14 @@ void showSettingsSheet({
 
   String roleText() {
     if (role == "owner") {
-      return "Chủ nhà";
+      return strings.owner;
     }
 
     if (role == "admin") {
-      return "Quản trị viên";
+      return strings.admin;
     }
 
-    return "Thành viên";
+    return strings.member;
   }
 
   Widget homeInfoRow({
@@ -128,7 +309,7 @@ void showSettingsSheet({
     int maxLines = 1,
   }) {
     final displayValue =
-    value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
+    value.trim().isEmpty ? strings.notUpdated : value.trim();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -424,7 +605,7 @@ void showSettingsSheet({
                                       child: Text(
                                         homeName.trim().isNotEmpty
                                             ? homeName.trim()
-                                            : "Nhà chưa đặt tên",
+                                            : strings.unnamedHome,
                                         maxLines: 2,
                                         overflow:
                                         TextOverflow.ellipsis,
@@ -455,14 +636,14 @@ void showSettingsSheet({
                                   children: [
                                     homeInfoRow(
                                       icon: roleIcon(),
-                                      label: "Vai trò",
+                                      label: strings.role,
                                       value: roleText(),
                                       valueColor: roleColor(),
                                     ),
                                     homeInfoRow(
                                       icon:
                                       Icons.location_on_outlined,
-                                      label: "Địa chỉ",
+                                      label: strings.address,
                                       value: homeAddress,
                                       maxLines: 2,
                                     ),
@@ -473,13 +654,13 @@ void showSettingsSheet({
                                         snapshot.connectionState ==
                                             ConnectionState
                                                 .waiting
-                                            ? "Đang tải..."
+                                            ? strings.loading
                                             : "${snapshot.data ?? 0}";
 
                                         return homeInfoRow(
                                           icon:
                                           Icons.people_alt_rounded,
-                                          label: "Thành viên",
+                                          label: strings.members,
                                           value: value,
                                         );
                                       },
@@ -499,14 +680,14 @@ void showSettingsSheet({
                       ),
 
                       const SizedBox(height: 16),
-                      sectionTitle("Quản lý nhà"),
+                      sectionTitle(strings.manageHome),
 
                       if (role == "owner" || role == "admin")
                         tile(
                           icon: Icons.share_rounded,
-                          title: "Chia sẻ nhà",
+                          title: strings.shareHome,
                           subtitle:
-                          "Mời người khác tham gia nhà này",
+                          strings.shareHomeSubtitle,
                           color: SafeHomeColors.info,
                           onTap: () {
                             closeThen(sheetContext, onShare);
@@ -515,9 +696,9 @@ void showSettingsSheet({
 
                       tile(
                         icon: Icons.people_alt_rounded,
-                        title: "Thành viên trong nhà",
+                        title: strings.homeMembers,
                         subtitle:
-                        "Xem và quản lý quyền thành viên",
+                        strings.homeMembersSubtitle,
                         color: SafeHomeColors.safe,
                         onTap: () {
                           closeThen(sheetContext, onShareList);
@@ -527,9 +708,9 @@ void showSettingsSheet({
                       if (role == "owner" || role == "admin")
                         tile(
                           icon: Icons.meeting_room_rounded,
-                          title: "Quản lý phòng",
+                          title: strings.manageRooms,
                           subtitle:
-                          "Thêm, đổi tên và sắp xếp phòng",
+                          strings.manageRoomsSubtitle,
                           color: SafeHomeColors.warning,
                           onTap: () {
                             closeThen(sheetContext, onRooms);
@@ -538,9 +719,9 @@ void showSettingsSheet({
 
                       tile(
                         icon: Icons.sensors_rounded,
-                        title: "Toàn bộ thiết bị",
+                        title: strings.allDevices,
                         subtitle:
-                        "Kiểm tra thiết bị trong nhà này",
+                        strings.allDevicesSubtitle,
                         color: const Color(0xFF576FD0),
                         onTap: () {
                           closeThen(sheetContext, onAllDevices);
@@ -550,9 +731,9 @@ void showSettingsSheet({
                       if (role == "owner")
                         tile(
                           icon: Icons.swap_horiz_rounded,
-                          title: "Chuyển quyền chủ nhà",
+                          title: strings.transferOwnership,
                           subtitle:
-                          "Chuyển quyền sở hữu cho thành viên khác",
+                          strings.transferOwnershipSubtitle,
                           color: const Color(0xFF7656C8),
                           onTap: () {
                             closeThen(
@@ -563,13 +744,13 @@ void showSettingsSheet({
                         ),
 
                       const SizedBox(height: 5),
-                      sectionTitle("Tài khoản & hệ thống"),
+                      sectionTitle(strings.accountAndSystem),
 
                       tile(
                         icon: Icons.person_rounded,
-                        title: "Tài khoản cá nhân",
+                        title: strings.personalAccount,
                         subtitle:
-                        "Hồ sơ, yêu cầu và lời mời tham gia",
+                        strings.personalAccountSubtitle,
                         color: SafeHomeColors.primary,
                         trailing:
                         ValueListenableBuilder<int>(
@@ -625,14 +806,33 @@ void showSettingsSheet({
                         },
                       ),
 
+                      tile(
+                        icon: Icons.language_rounded,
+                        title: strings.language,
+                        subtitle:
+                        "${strings.languageSubtitle} • "
+                            "${strings.currentLanguageName}",
+                        color: SafeHomeColors.primary,
+                        onTap: () {
+                          Navigator.of(sheetContext).pop();
+
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((_) {
+                            if (context.mounted) {
+                              _showLanguageSheet(context);
+                            }
+                          });
+                        },
+                      ),
+
                       if (role == "owner") ...[
                         const SizedBox(height: 5),
-                        sectionTitle("Khu vực nguy hiểm"),
+                        sectionTitle(strings.dangerZone),
                         tile(
                           icon: Icons.delete_forever_rounded,
-                          title: "Xoá nhà",
+                          title: strings.deleteHome,
                           subtitle:
-                          "Xoá toàn bộ dữ liệu và thiết bị",
+                          strings.deleteHomeSubtitle,
                           color: SafeHomeColors.danger,
                           destructive: true,
                           onTap: () {

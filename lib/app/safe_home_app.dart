@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -10,20 +11,48 @@ import '../pages/profile_setup_page.dart';
 import '../services/notification_service.dart';
 import '../services/auto_login_service.dart';
 import '../safehome_theme.dart';
+import '../localization/app_language_controller.dart';
+import '../localization/app_strings.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey =
 GlobalKey<NavigatorState>();
 
-class SafeHomeApp extends StatelessWidget {
+class SafeHomeApp extends StatefulWidget {
   const SafeHomeApp({super.key});
 
   @override
+  State<SafeHomeApp> createState() => _SafeHomeAppState();
+}
+
+class _SafeHomeAppState extends State<SafeHomeApp> {
+  @override
+  void initState() {
+    super.initState();
+    appLanguageController.load();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: appNavigatorKey,
-      debugShowCheckedModeBanner: false,
-      theme: SafeHomeTheme.light,
-      home: const AlarmLaunchGate(),
+    return AnimatedBuilder(
+      animation: appLanguageController,
+      builder: (context, _) {
+        return MaterialApp(
+          navigatorKey: appNavigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: SafeHomeTheme.light,
+          locale: appLanguageController.locale,
+          supportedLocales: const [
+            Locale("vi"),
+            Locale("en"),
+          ],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const AlarmLaunchGate(),
+        );
+      },
     );
   }
 }
@@ -70,6 +99,8 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+
     if (!checked) {
       return const SafeHomeSplash();
     }
@@ -79,9 +110,9 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     }
 
     if (payload == "alarm") {
-      return const FullscreenAlarmPage(
-        title: "Báo động SafeHome",
-        body: "Có cảnh báo an ninh cần kiểm tra ngay.",
+      return FullscreenAlarmPage(
+        title: strings.alarmTitle,
+        body: strings.alarmBody,
       );
     }
 
@@ -90,7 +121,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
 
       final body = parts.length > 1
           ? Uri.decodeComponent(parts[1])
-          : "Có cảnh báo cần kiểm tra";
+          : strings.alarmFallback;
 
       final alarmItems = parts.length > 2
           ? Uri.decodeComponent(parts[2])
@@ -353,9 +384,9 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "An tâm hơn trong từng ngôi nhà",
-                  style: TextStyle(
+                Text(
+                  AppStrings.of(context).splashTagline,
+                  style: const TextStyle(
                     color: SafeHomeColors.textSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 
 class RoomTabs extends StatefulWidget {
   final Map<String, dynamic> rooms;
@@ -138,12 +139,13 @@ class _RoomTabsState extends State<RoomTabs> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final tabs = <Map<String, String>>[
       {
         "id": "overview",
         "name": widget.homeName.trim().isNotEmpty
             ? widget.homeName.trim()
-            : "Nhà",
+            : strings.t("Nhà"),
       },
       ..._roomOrder
           .where(widget.rooms.containsKey)

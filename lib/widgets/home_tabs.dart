@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 
 class HomeTabs extends StatelessWidget {
   final Map<String, dynamic> homes;
@@ -35,6 +36,7 @@ class HomeTabs extends StatelessWidget {
     required String displayName,
     required bool isShared,
   }) {
+    final strings = AppStrings.of(context);
     final address = home["address"]?.toString().trim() ?? "";
 
     final ownerName = isShared
@@ -49,7 +51,7 @@ class HomeTabs extends StatelessWidget {
         ? ownerName
         : ownerEmail.isNotEmpty
         ? ownerEmail
-        : "Chưa có thông tin";
+        : strings.t("Chưa có thông tin");
 
     showModalBottomSheet<void>(
       context: context,
@@ -124,15 +126,15 @@ class HomeTabs extends StatelessWidget {
                       const SizedBox(height: 14),
                       _homeInfoRow(
                         icon: Icons.location_on_outlined,
-                        label: "Địa chỉ",
+                        label: strings.t("Địa chỉ"),
                         value: address.isNotEmpty
                             ? address
-                            : "Chưa cập nhật",
+                            : strings.t("Chưa cập nhật"),
                       ),
                       const SizedBox(height: 9),
                       _homeInfoRow(
                         icon: Icons.person_outline_rounded,
-                        label: "Chủ nhà",
+                        label: strings.t("Chủ nhà"),
                         value: ownerDisplay,
                         subtitle: ownerName.isNotEmpty &&
                             ownerEmail.isNotEmpty
@@ -209,6 +211,7 @@ class HomeTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final seen = <String>{};
 
     final visibleHomes = homeOrder
@@ -300,7 +303,7 @@ class HomeTabs extends StatelessWidget {
 
             final displayName =
             rawName.toString().trim().isEmpty
-                ? "Nhà chưa đặt tên"
+                ? strings.t("Nhà chưa đặt tên")
                 : rawName.toString().trim();
 
             final isShared = home["_shared"] == true;
@@ -416,7 +419,7 @@ class HomeTabs extends StatelessWidget {
                                       if (isShared) ...[
                                         const SizedBox(height: 2),
                                         Text(
-                                          "Nhà được chia sẻ",
+                                          strings.t("Nhà được chia sẻ"),
                                           maxLines: 1,
                                           overflow:
                                           TextOverflow.ellipsis,

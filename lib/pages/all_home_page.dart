@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -16,6 +17,7 @@ class AllHomePage extends StatefulWidget {
 }
 
 class _AllHomePageState extends State<AllHomePage> {
+  AppStrings get _strings => AppStrings.of(context);
   bool isAllSafe() {
     if (homes.isEmpty) return true;
 
@@ -75,13 +77,13 @@ class _AllHomePageState extends State<AllHomePage> {
         dangerCount++;
 
         for (final item in (status["dangerIssues"] as List? ?? [])) {
-          dangerReasons.add(item.toString());
+          dangerReasons.add(_strings.statusText(item.toString()));
         }
       } else if (level == "warning") {
         warningCount++;
 
         for (final item in (status["warningIssues"] as List? ?? [])) {
-          warningReasons.add(item.toString());
+          warningReasons.add(_strings.statusText(item.toString()));
         }
       } else {
         safeCount++;
@@ -92,24 +94,45 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (dangerCount > 0) {
       summaries.add(
-        "🚨 $dangerCount nhà không an toàn"
-            "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+        _strings.choose(
+          vi: "🚨 $dangerCount nhà không an toàn"
+              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+          en: "🚨 $dangerCount unsafe homes"
+              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+        ),
       );
     }
 
     if (warningCount > 0) {
       summaries.add(
-        "⚠️ $warningCount nhà cần chú ý"
-            "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+        _strings.choose(
+          vi: "⚠️ $warningCount nhà cần chú ý"
+              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+          en: "⚠️ $warningCount homes need attention"
+              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+        ),
       );
     }
 
     if (safeCount > 0) {
-      summaries.add("✅ $safeCount nhà an toàn");
+      summaries.add(
+        _strings.choose(
+          vi: "✅ $safeCount nhà an toàn",
+          en: "✅ $safeCount safe homes",
+        ),
+      );
     }
 
-    return summaries.isEmpty ? ["🏡 Chưa có nhà nào"] : summaries;
+    return summaries.isEmpty
+        ? [
+      _strings.choose(
+        vi: "🏡 Chưa có nhà nào",
+        en: "🏡 No homes yet",
+      ),
+    ]
+        : summaries;
   }
+
   void showAllHomeSummarySheet() {
     int sheetIndex = summaryIndex;
     Timer? sheetTimer;
@@ -164,8 +187,10 @@ class _AllHomePageState extends State<AllHomePage> {
               final name = item["name"]?.toString() ?? "";
               final issues = List<String>.from(item["issues"] ?? []);
               final message = issues.isEmpty
-                  ? "Cần kiểm tra"
-                  : issues[sheetIndex % issues.length];
+                  ? _strings.t("Cần kiểm tra")
+                  : _strings.statusText(
+                issues[sheetIndex % issues.length],
+              );
 
               return InkWell(
                 onTap: () {
@@ -239,7 +264,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     const SizedBox(height: 8),
                     if (items.isEmpty)
                       Text(
-                        "Không có",
+                        _strings.t("Không có"),
                         style: TextStyle(color: Colors.grey.shade600),
                       )
                     else if (compact)
@@ -292,32 +317,38 @@ class _AllHomePageState extends State<AllHomePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      "Tổng hợp trạng thái",
-                      style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900),
+                    Text(
+                      _strings.t("Tổng hợp trạng thái"),
+                      style: const TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "${homes.length} nhà đang được theo dõi",
+                      _strings.choose(
+                        vi: "${homes.length} nhà đang được theo dõi",
+                        en: "${homes.length} homes monitored",
+                      ),
                       style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
                     ),
                     const SizedBox(height: 20),
                     section(
-                      title: "Không an toàn",
+                      title: _strings.t("Không an toàn"),
                       icon: Icons.warning_amber_rounded,
                       color: Colors.red,
                       items: dangerHomes,
                       compact: true,
                     ),
                     section(
-                      title: "Cần chú ý",
+                      title: _strings.t("Cần chú ý"),
                       icon: Icons.info_outline_rounded,
                       color: Colors.orange,
                       items: warningHomes,
                       compact: true,
                     ),
                     section(
-                      title: "An toàn",
+                      title: _strings.t("An toàn"),
                       icon: Icons.check_circle_rounded,
                       color: Colors.green,
                       items: safeHomes,
@@ -547,7 +578,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final result = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Đổi tên nhóm"),
+        title: Text(_strings.t("Đổi tên nhóm")),
 
         content: TextField(
           controller: controller,
@@ -557,13 +588,13 @@ class _AllHomePageState extends State<AllHomePage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Huỷ"),
+            child: Text(_strings.t("Huỷ")),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context, controller.text.trim());
             },
-            child: const Text("Lưu"),
+            child: Text(_strings.t("Lưu")),
           ),
         ],
       ),
@@ -599,7 +630,7 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     final displayName = customNames[groupKey] ??
-        (isYourHomes ? "Nhà của tôi" : ownerText);
+        (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -654,7 +685,7 @@ class _AllHomePageState extends State<AllHomePage> {
                               Icons.edit_rounded,
                               color: SafeHomeColors.info,
                             ),
-                            title: const Text("Đổi tên nhóm"),
+                            title: Text(_strings.t("Đổi tên nhóm")),
                             onTap: () {
                               Navigator.pop(context);
                               renameGroup(groupKey);
@@ -670,8 +701,8 @@ class _AllHomePageState extends State<AllHomePage> {
                             ),
                             title: Text(
                               allSelected
-                                  ? "Bỏ chọn toàn bộ nhóm"
-                                  : "Chọn toàn bộ nhóm",
+                                  ? _strings.t("Bỏ chọn toàn bộ nhóm")
+                                  : _strings.t("Chọn toàn bộ nhóm"),
                             ),
                             onTap: () {
                               Navigator.pop(context);
@@ -764,7 +795,7 @@ class _AllHomePageState extends State<AllHomePage> {
         homeId;
 
     final displayName = rawName.toString().trim().isEmpty
-        ? "Nhà"
+        ? _strings.t("Nhà")
         : rawName.toString().trim();
 
     return InkWell(
@@ -861,7 +892,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   controller: h,
                   maxLength: 2,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: "Giờ"),
+                  decoration: InputDecoration(labelText: _strings.t("Giờ")),
                 ),
               ),
               const Text(" : "),
@@ -870,7 +901,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   controller: m,
                   maxLength: 2,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: "Phút"),
+                  decoration: InputDecoration(labelText: _strings.t("Phút")),
                 ),
               ),
             ],
@@ -878,7 +909,7 @@ class _AllHomePageState extends State<AllHomePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Huỷ"),
+              child: Text(_strings.t("Huỷ")),
             ),
             ElevatedButton(
               onPressed: () {
@@ -912,8 +943,13 @@ class _AllHomePageState extends State<AllHomePage> {
                     Icons.notifications_active_rounded,
                     color: Colors.orange,
                   ),
-                  title: const Text("Đặt Home Reminder"),
-                  subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                  title: Text(_strings.t("Đặt Home Reminder")),
+                  subtitle: Text(
+                    _strings.choose(
+                      vi: "${selectedHomes.length} nhà đã chọn",
+                      en: "${selectedHomes.length} homes selected",
+                    ),
+                  ),
                   onTap: () => Navigator.pop(context, "reminder"),
                 ),
                 ListTile(
@@ -921,8 +957,13 @@ class _AllHomePageState extends State<AllHomePage> {
                     Icons.shield_moon_rounded,
                     color: Colors.red,
                   ),
-                  title: const Text("Đặt Home Alarm"),
-                  subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                  title: Text(_strings.t("Đặt Home Alarm")),
+                  subtitle: Text(
+                    _strings.choose(
+                      vi: "${selectedHomes.length} nhà đã chọn",
+                      en: "${selectedHomes.length} homes selected",
+                    ),
+                  ),
                   onTap: () => Navigator.pop(context, "alarm"),
                 ),
               ],
@@ -938,20 +979,25 @@ class _AllHomePageState extends State<AllHomePage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Xác nhận thay đổi"),
-        content: const Text(
-          "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
-              "Những thành viên đang sử dụng chế độ 'Theo nhà' sẽ bị ảnh hưởng.\n"
-              "Các cài đặt Reminder/Alarm cá nhân (Riêng tôi) sẽ không bị thay đổi.",
+        title: Text(_strings.t("Xác nhận thay đổi")),
+        content: Text(
+          _strings.choose(
+            vi: "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
+                "Những thành viên đang sử dụng chế độ 'Theo nhà' sẽ bị ảnh hưởng.\n"
+                "Các cài đặt Reminder/Alarm cá nhân (Riêng tôi) sẽ không bị thay đổi.",
+            en: "This will change Home Reminder/Alarm settings for the selected homes.\n\n"
+                "Members using Home settings will be affected.\n"
+                "Personal Reminder/Alarm settings will not be changed.",
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Huỷ"),
+            child: Text(_strings.t("Huỷ")),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Tiếp tục"),
+            child: Text(_strings.t("Tiếp tục")),
           ),
         ],
       ),
@@ -966,7 +1012,7 @@ class _AllHomePageState extends State<AllHomePage> {
     int skippedHomes = 0;
 
     if (action == "reminder") {
-      final time = await inputTime("Giờ Reminder", "22:30");
+      final time = await inputTime(_strings.t("Giờ Reminder"), "22:30");
       if (time == null) return;
 
       for (final homeId in selectedHomes) {
@@ -1006,10 +1052,10 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     if (action == "alarm") {
-      final start = await inputTime("Giờ bắt đầu Alarm", "23:00");
+      final start = await inputTime(_strings.t("Giờ bắt đầu Alarm"), "23:00");
       if (start == null) return;
 
-      final end = await inputTime("Giờ kết thúc Alarm", "06:00");
+      final end = await inputTime(_strings.t("Giờ kết thúc Alarm"), "06:00");
       if (end == null) return;
 
       final alarmData = {
@@ -1062,7 +1108,7 @@ class _AllHomePageState extends State<AllHomePage> {
     if (updates.isEmpty) {
       showTopToast(
         context,
-        "Không có nhà nào đủ điều kiện để cài",
+        _strings.t("Không có nhà nào đủ điều kiện để cài"),
         color: Colors.orange,
         icon: Icons.warning_amber_rounded,
       );
@@ -1076,13 +1122,21 @@ class _AllHomePageState extends State<AllHomePage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Cài đặt hoàn tất"),
+        title: Text(_strings.t("Cài đặt hoàn tất")),
         content: Text(
           action == "reminder"
-              ? "Đã cài Reminder cho $updatedHomes nhà."
-              "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}"
-              : "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
-              "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+              ? _strings.choose(
+            vi: "Đã cài Reminder cho $updatedHomes nhà."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+            en: "Reminder was set for $updatedHomes homes."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+          )
+              : _strings.choose(
+            vi: "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+            en: "Alarm was set for $updatedDevices devices across $updatedHomes homes."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+          ),
         ),
         actions: [
           TextButton(
@@ -1108,13 +1162,22 @@ class _AllHomePageState extends State<AllHomePage> {
     String message = "";
 
     if (sharedCount > 0 && ownCount > 0) {
-      message =
-      "Các home của bạn sẽ bị xoá.\n"
-          "Các home được chia sẻ sẽ được rời khỏi.";
+      message = _strings.choose(
+        vi: "Các home của bạn sẽ bị xoá.\n"
+            "Các home được chia sẻ sẽ được rời khỏi.",
+        en: "Your homes will be deleted.\n"
+            "You will leave the shared homes.",
+      );
     } else if (sharedCount > 0) {
-      message = "Bạn sẽ rời khỏi các home được chia sẻ.";
+      message = _strings.choose(
+        vi: "Bạn sẽ rời khỏi các home được chia sẻ.",
+        en: "You will leave the shared homes.",
+      );
     } else {
-      message = "Các home đã chọn sẽ bị xoá vĩnh viễn.";
+      message = _strings.choose(
+        vi: "Các home đã chọn sẽ bị xoá vĩnh viễn.",
+        en: "The selected homes will be permanently deleted.",
+      );
     }
 
     final confirmOk = await showModalBottomSheet<bool>(
@@ -1143,8 +1206,8 @@ class _AllHomePageState extends State<AllHomePage> {
                 const SizedBox(height: 12),
                 Text(
                   sharedCount > 0 && ownCount == 0
-                      ? "Xác nhận rời nhà"
-                      : "Xác nhận xoá nhà",
+                      ? _strings.t("Xác nhận rời nhà")
+                      : _strings.t("Xác nhận xoá nhà"),
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
@@ -1166,7 +1229,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text("Huỷ"),
+                        child: Text(_strings.t("Huỷ")),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -1179,7 +1242,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(context, true),
-                        child: const Text("Tiếp tục"),
+                        child: Text(_strings.t("Tiếp tục")),
                       ),
                     ),
                   ],
@@ -1220,16 +1283,19 @@ class _AllHomePageState extends State<AllHomePage> {
                   size: 44,
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Nhập mật khẩu",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                Text(
+                  _strings.t("Nhập mật khẩu"),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: controller,
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: "Mật khẩu tài khoản",
+                    labelText: _strings.t("Mật khẩu tài khoản"),
                     filled: true,
                     fillColor: Colors.grey.shade100,
                     border: OutlineInputBorder(
@@ -1249,8 +1315,8 @@ class _AllHomePageState extends State<AllHomePage> {
                     ),
                     label: Text(
                       sharedCount > 0 && ownCount == 0
-                          ? "Rời khỏi nhà"
-                          : "Xoá nhà",
+                          ? _strings.t("Rời khỏi nhà")
+                          : _strings.t("Xoá nhà"),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: sharedCount > 0 && ownCount == 0
@@ -1277,7 +1343,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
                         showTopToast(
                           context,
-                          "Sai mật khẩu",
+                          _strings.t("Sai mật khẩu"),
                           color: Colors.red,
                           icon: Icons.error_outline_rounded,
                         );
@@ -1349,7 +1415,9 @@ class _AllHomePageState extends State<AllHomePage> {
 
     showTopToast(
       context,
-      sharedCount > 0 && ownCount == 0 ? "Đã rời khỏi home" : "Đã cập nhật",
+      sharedCount > 0 && ownCount == 0
+          ? _strings.t("Đã rời khỏi home")
+          : _strings.t("Đã cập nhật"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
     );
@@ -1370,8 +1438,8 @@ class _AllHomePageState extends State<AllHomePage> {
             ? TextField(
           controller: searchController,
           autofocus: true,
-          decoration: const InputDecoration(
-            hintText: "Tìm home...",
+          decoration: InputDecoration(
+            hintText: _strings.t("Tìm home..."),
             border: InputBorder.none,
             filled: false,
             contentPadding: EdgeInsets.zero,
@@ -1504,11 +1572,16 @@ class _AllHomePageState extends State<AllHomePage> {
                             color: Colors.blueAccent,
                           ),
                         ),
-                        title: const Text(
-                          "Đặt Reminder / Alarm nhà đã chọn",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        title: Text(
+                          _strings.t("Đặt Reminder / Alarm nhà đã chọn"),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        subtitle: Text(
+                          _strings.choose(
+                            vi: "${selectedHomes.length} nhà đã chọn",
+                            en: "${selectedHomes.length} homes selected",
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: setSelectedHomesAlarm,
                       ),
@@ -1522,11 +1595,16 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                           child: const Icon(Icons.share_rounded, color: Colors.green),
                         ),
-                        title: const Text(
-                          "Chia sẻ nhà đã chọn",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        title: Text(
+                          _strings.t("Chia sẻ nhà đã chọn"),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        subtitle: Text(
+                          _strings.choose(
+                            vi: "${selectedHomes.length} nhà đã chọn",
+                            en: "${selectedHomes.length} homes selected",
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
                           final controller = TextEditingController();
@@ -1567,16 +1645,20 @@ class _AllHomePageState extends State<AllHomePage> {
                                         ),
                                       ),
                                       const SizedBox(height: 18),
-                                      const Text(
-                                        "Chia sẻ nhà đã chọn",
-                                        style: TextStyle(
+                                      Text(
+                                        _strings.t("Chia sẻ nhà đã chọn"),
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
-                                      const Text(
-                                        "Hoặc quét QR để xin gia nhập các nhà đã chọn",
-                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      Text(
+                                        _strings.t(
+                                          "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                        ),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                       const SizedBox(height: 12),
                                       QrImageView(
@@ -1586,7 +1668,10 @@ class _AllHomePageState extends State<AllHomePage> {
                                       ),
                                       const SizedBox(height: 18),
                                       Text(
-                                        "${selectedHomes.length} nhà đã chọn",
+                                        _strings.choose(
+                                          vi: "${selectedHomes.length} nhà đã chọn",
+                                          en: "${selectedHomes.length} homes selected",
+                                        ),
                                         style: TextStyle(
                                           color: Colors.grey.shade600,
                                           fontWeight: FontWeight.w500,
@@ -1599,7 +1684,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                         decoration: InputDecoration(
                                           prefixIcon:
                                           const Icon(Icons.email_rounded),
-                                          labelText: "Email người nhận",
+                                          labelText: _strings.t("Email người nhận"),
                                           filled: true,
                                           fillColor: Colors.grey.shade100,
                                           border: OutlineInputBorder(
@@ -1613,7 +1698,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                         width: double.infinity,
                                         child: ElevatedButton.icon(
                                           icon: const Icon(Icons.share_rounded),
-                                          label: const Text("Chia sẻ"),
+                                          label: Text(_strings.t("Chia sẻ")),
                                           onPressed: () {
                                             Navigator.pop(
                                               context,
@@ -1656,7 +1741,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           if (targetUid == null) {
                             showTopToast(
                               context,
-                              "Email chưa đăng ký",
+                              _strings.t("Email chưa đăng ký"),
                               color: Colors.red,
                               icon: Icons.error_outline_rounded,
                             );
@@ -1701,11 +1786,17 @@ class _AllHomePageState extends State<AllHomePage> {
                           showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: const Text("Chia sẻ hoàn tất"),
+                              title: Text(_strings.t("Chia sẻ hoàn tất")),
                               content: Text(
                                 skipped > 0
-                                    ? "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ."
-                                    : "Đã chia sẻ nhà thành công.",
+                                    ? _strings.choose(
+                                  vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
+                                  en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
+                                )
+                                    : _strings.choose(
+                                  vi: "Đã chia sẻ nhà thành công.",
+                                  en: "Homes shared successfully.",
+                                ),
                               ),
                               actions: [
                                 TextButton(
@@ -1732,11 +1823,16 @@ class _AllHomePageState extends State<AllHomePage> {
                             color: Colors.orange,
                           ),
                         ),
-                        title: const Text(
-                          "Mở List chia sẻ nhà",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                        title: Text(
+                          _strings.t("Mở List chia sẻ nhà"),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        subtitle: Text(
+                          _strings.choose(
+                            vi: "${selectedHomes.length} nhà đã chọn",
+                            en: "${selectedHomes.length} homes selected",
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
                           final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -1753,7 +1849,9 @@ class _AllHomePageState extends State<AllHomePage> {
                           if (ownHomes.isEmpty) {
                             showTopToast(
                               context,
-                              "Không có nhà nào bạn có quyền quản lý",
+                              _strings.t(
+                                "Không có nhà nào bạn có quyền quản lý",
+                              ),
                               color: Colors.orange,
                               icon: Icons.lock_rounded,
                             );
@@ -1818,9 +1916,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                                   ),
                                                   const SizedBox(height: 10),
                                                   if (users.isEmpty)
-                                                    const Text(
-                                                      "Chưa share cho ai",
-                                                      style: TextStyle(
+                                                    Text(
+                                                      _strings.t("Chưa share cho ai"),
+                                                      style: const TextStyle(
                                                         color: Colors.grey,
                                                       ),
                                                     ),
@@ -1907,14 +2005,19 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                           child: const Icon(Icons.delete_rounded, color: Colors.red),
                         ),
-                        title: const Text(
-                          "Xoá các nhà đã chọn ?",
-                          style: TextStyle(
+                        title: Text(
+                          _strings.t("Xoá các nhà đã chọn ?"),
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.red,
                           ),
                         ),
-                        subtitle: Text("${selectedHomes.length} nhà đã chọn"),
+                        subtitle: Text(
+                          _strings.choose(
+                            vi: "${selectedHomes.length} nhà đã chọn",
+                            en: "${selectedHomes.length} homes selected",
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: confirmDeleteSelected,
                       ),

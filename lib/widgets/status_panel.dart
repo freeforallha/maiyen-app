@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 
 class StatusPanel extends StatefulWidget {
   final Map<String, dynamic> overall;
@@ -48,6 +49,7 @@ class StatusPanel extends StatefulWidget {
 
 class _StatusPanelState extends State<StatusPanel> {
   Timer? _timer;
+  AppStrings get _strings => AppStrings.of(context);
   int _broadcastIndex = 0;
 
   @override
@@ -95,14 +97,14 @@ class _StatusPanelState extends State<StatusPanel> {
 
   String _statusText(String level) {
     if (level == "danger") {
-      return "CHƯA AN TOÀN";
+      return _strings.t("CHƯA AN TOÀN");
     }
 
     if (level == "warning") {
-      return "CẦN CHÚ Ý";
+      return _strings.t("CẦN CHÚ Ý");
     }
 
-    return "ĐÃ AN TOÀN";
+    return _strings.t("ĐÃ AN TOÀN");
   }
 
   List<Map<String, dynamic>> _sortedRecentEvents() {
@@ -166,53 +168,76 @@ class _StatusPanelState extends State<StatusPanel> {
 
     if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
       summary.add(
-        "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
+        _strings.t(
+          "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
+        ),
       );
 
       if (dangerIssues.isNotEmpty) {
         summary.add(
-          "${dangerIssues.length} vấn đề đang cần xử lý ngay.",
+          _strings.choose(
+            vi: "${dangerIssues.length} vấn đề đang cần xử lý ngay.",
+            en: "${dangerIssues.length} issues require immediate action.",
+          ),
         );
       }
 
       if (warningIssues.isNotEmpty) {
         summary.add(
-          "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
+          _strings.choose(
+            vi: "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
+            en: "${warningIssues.length} items need further review.",
+          ),
         );
       }
 
       if (openCount > 0) {
         summary.add(
-          "Gần đây cửa đã được mở $openCount lần.",
+          _strings.choose(
+            vi: "Gần đây cửa đã được mở $openCount lần.",
+            en: "Doors were opened $openCount times recently.",
+          ),
         );
       }
     } else {
       summary.add(
-        "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
+        _strings.t(
+          "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
+        ),
       );
 
       if (recentEvents.isNotEmpty) {
         summary.add(
-          "Có ${recentEvents.length} hoạt động gần đây được ghi nhận.",
+          _strings.choose(
+            vi: "Có ${recentEvents.length} hoạt động gần đây được ghi nhận.",
+            en: "${recentEvents.length} recent activities were recorded.",
+          ),
         );
       }
 
       if (openCount > 0) {
         summary.add(
-          "Cửa được sử dụng $openCount lần gần đây.",
+          _strings.choose(
+            vi: "Cửa được sử dụng $openCount lần gần đây.",
+            en: "Doors were used $openCount times recently.",
+          ),
         );
       }
 
       if (smokeCount == 0 && sosCount == 0) {
         summary.add(
-          "Không có dấu hiệu khói hoặc SOS bất thường.",
+          _strings.t(
+            "Không có dấu hiệu khói hoặc SOS bất thường.",
+          ),
         );
       }
     }
 
     if (summary.length == 1) {
       summary.add(
-        "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
+        _strings.t(
+          "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
+        ),
       );
     }
 
@@ -269,23 +294,25 @@ class _StatusPanelState extends State<StatusPanel> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "An ninh ra/vào",
-                                style: TextStyle(
+                                _strings.t("An ninh ra/vào"),
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w900,
                                   color: SafeHomeColors.textPrimary,
                                 ),
                               ),
-                              SizedBox(height: 2),
+                              const SizedBox(height: 2),
                               Text(
-                                "Cài đặt cảnh báo cho nhà hiện tại",
-                                style: TextStyle(
+                                _strings.t(
+                                  "Cài đặt cảnh báo cho nhà hiện tại",
+                                ),
+                                style: const TextStyle(
                                   fontSize: 12,
                                   color:
                                   SafeHomeColors.textSecondary,
@@ -314,16 +341,16 @@ class _StatusPanelState extends State<StatusPanel> {
                               ? SafeHomeColors.primary
                               : SafeHomeColors.textSecondary,
                         ),
-                        title: const Text(
-                          "Nhận cảnh báo Alarm",
-                          style: TextStyle(
+                        title: Text(
+                          _strings.t("Nhận cảnh báo Alarm"),
+                          style: const TextStyle(
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                         subtitle: Text(
                           localAlarmEnabled
-                              ? "Đang bật cho tài khoản này"
-                              : "Đang tắt cho tài khoản này",
+                              ? _strings.t("Đang bật cho tài khoản này")
+                              : _strings.t("Đang tắt cho tài khoản này"),
                         ),
                         onChanged: (value) {
                           setSheetState(() {
@@ -337,8 +364,8 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 10),
                     _actionTile(
                       icon: Icons.notifications_none_rounded,
-                      title: "Hẹn giờ Reminder",
-                      subtitle: "Nhắc kiểm tra nhà theo thời gian",
+                      title: _strings.t("Hẹn giờ Reminder"),
+                      subtitle: _strings.t("Nhắc kiểm tra nhà theo thời gian"),
                       color: SafeHomeColors.warning,
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -348,9 +375,9 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 8),
                     _actionTile(
                       icon: Icons.shield_moon_rounded,
-                      title: "Hẹn giờ Alarm",
+                      title: _strings.t("Hẹn giờ Alarm"),
                       subtitle: widget.alarmStart.trim().isEmpty
-                          ? "Chưa thiết lập"
+                          ? _strings.t("Chưa thiết lập")
                           : widget.alarmStart,
                       color: SafeHomeColors.danger,
                       onTap: () {
@@ -444,13 +471,13 @@ class _StatusPanelState extends State<StatusPanel> {
   void _showStatusSummary(BuildContext context) {
     final dangerIssues = List<String>.from(
       widget.overall["dangerIssues"] ?? const [],
-    );
+    ).map(_strings.statusText).toList();
     final warningIssues = List<String>.from(
       widget.overall["warningIssues"] ?? const [],
-    );
+    ).map(_strings.statusText).toList();
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
-    );
+    ).map(_strings.statusText).toList();
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -496,19 +523,19 @@ class _StatusPanelState extends State<StatusPanel> {
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
-                const Row(
+                Row(
                   children: [
                     Expanded(
                       child: Text(
-                        "Tổng hợp trạng thái nhà",
-                        style: TextStyle(
+                        _strings.t("Tổng hợp trạng thái nhà"),
+                        style: const TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w900,
                           color: SafeHomeColors.textPrimary,
                         ),
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.insights_rounded,
                       color: SafeHomeColors.primary,
                     ),
@@ -521,7 +548,7 @@ class _StatusPanelState extends State<StatusPanel> {
                     children: [
                       if (dangerIssues.isNotEmpty) ...[
                         _summarySection(
-                          title: "Cần xử lý ngay",
+                          title: _strings.t("Cần xử lý ngay"),
                           icon: Icons.warning_amber_rounded,
                           color: SafeHomeColors.danger,
                           items: dangerIssues,
@@ -530,7 +557,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       ],
                       if (warningIssues.isNotEmpty) ...[
                         _summarySection(
-                          title: "Cần kiểm tra",
+                          title: _strings.t("Cần kiểm tra"),
                           icon: Icons.info_outline_rounded,
                           color: SafeHomeColors.warning,
                           items: warningIssues,
@@ -538,19 +565,19 @@ class _StatusPanelState extends State<StatusPanel> {
                         const SizedBox(height: 12),
                       ],
                       _summarySection(
-                        title: "Đánh giá tự động",
+                        title: _strings.t("Đánh giá tự động"),
                         icon: Icons.auto_awesome_rounded,
                         color: SafeHomeColors.info,
                         items: automaticSummary,
                       ),
                       const SizedBox(height: 12),
                       _summarySection(
-                        title: "Tổng quan hôm nay",
+                        title: _strings.t("Tổng quan hôm nay"),
                         icon: Icons.bar_chart_rounded,
                         color: SafeHomeColors.safe,
                         items: safeSummary.isEmpty
-                            ? const [
-                          "Chưa có dữ liệu tổng quan",
+                            ? [
+                          _strings.t("Chưa có dữ liệu tổng quan"),
                         ]
                             : safeSummary,
                       ),
@@ -672,17 +699,17 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final issues = List<String>.from(
       widget.overall["issues"] ?? const [],
-    );
+    ).map(_strings.statusText).toList();
 
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
-    );
+    ).map(_strings.statusText).toList();
 
     final allLines = issues.isNotEmpty ? issues : safeSummary;
 
     final firstLine = allLines.isNotEmpty
         ? allLines.first
-        : "Chưa có dữ liệu trạng thái";
+        : _strings.t("Chưa có dữ liệu trạng thái");
 
     final rotatingLines = allLines.length > 1
         ? allLines.skip(1).toList()
@@ -692,20 +719,23 @@ class _StatusPanelState extends State<StatusPanel> {
         ? rotatingLines[
     _broadcastIndex % rotatingLines.length
     ]
-        : "Bấm vào để xem chi tiết";
+        : _strings.t("Bấm vào để xem chi tiết");
 
     final statusColor = _statusColor(level);
     final statusIcon = _statusIcon(level);
     final statusText = _statusText(level);
 
-    final alarmScheduleText =
+    final rawAlarmScheduleText =
     widget.alarmEnabled &&
         widget.alarmStart.trim().isNotEmpty &&
         widget.alarmStart != "Tắt"
         ? widget.alarmStart
         : "Tắt";
 
-    final alarmScheduleSet = alarmScheduleText != "Tắt";
+    final alarmScheduleSet = rawAlarmScheduleText != "Tắt";
+    final alarmScheduleText = alarmScheduleSet
+        ? rawAlarmScheduleText
+        : _strings.t("Tắt");
     final alarmPauseSet =
         widget.alarmPauseText.trim().isNotEmpty &&
             widget.alarmPauseText != "Tắt";
@@ -720,20 +750,26 @@ class _StatusPanelState extends State<StatusPanel> {
     String subtitle;
 
     if (issues.isNotEmpty) {
-      subtitle =
-      "Phát hiện ${issues.length} vấn đề cần xử lý";
+      subtitle = _strings.choose(
+        vi: "Phát hiện ${issues.length} vấn đề cần xử lý",
+        en: "${issues.length} issues detected",
+      );
     } else if (smokeCount > 0) {
-      subtitle = "Hôm nay đã ghi nhận cảnh báo khói";
+      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo khói");
     } else if (sosCount > 0) {
-      subtitle = "Hôm nay đã ghi nhận cảnh báo SOS";
+      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo SOS");
     } else if (openCount > 0) {
-      subtitle =
-      "Hôm nay các cửa đã được sử dụng $openCount lần";
+      subtitle = _strings.choose(
+        vi: "Hôm nay các cửa đã được sử dụng $openCount lần",
+        en: "Doors were used $openCount times today",
+      );
     } else if (recentEvents.isNotEmpty) {
-      subtitle =
-      "Đã ghi nhận ${recentEvents.length} hoạt động gần đây";
+      subtitle = _strings.choose(
+        vi: "Đã ghi nhận ${recentEvents.length} hoạt động gần đây",
+        en: "${recentEvents.length} recent activities recorded",
+      );
     } else {
-      subtitle = "Ngôi nhà đang hoạt động ổn định";
+      subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
     }
 
     final environment = widget.environmentText
@@ -845,10 +881,10 @@ class _StatusPanelState extends State<StatusPanel> {
                       child: _alarmStatusItem(
                         icon:
                         Icons.pause_circle_outline_rounded,
-                        label: "Tạm dừng",
+                        label: _strings.t("Tạm dừng"),
                         value: alarmPauseSet
                             ? widget.alarmPauseText
-                            : "Tắt",
+                            : _strings.t("Tắt"),
                         active: alarmPauseSet,
                         activeColor: SafeHomeColors.warning,
                         onTap: widget.onAlarmPauseToday,
@@ -899,20 +935,20 @@ class _StatusPanelState extends State<StatusPanel> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Row(
+                    Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Chi tiết",
-                          style: TextStyle(
+                          _strings.t("Chi tiết"),
+                          style: const TextStyle(
                             fontSize: 11.5,
                             height: 1,
                             fontWeight: FontWeight.w900,
                             color: SafeHomeColors.textPrimary,
                           ),
                         ),
-                        SizedBox(width: 1),
-                        Icon(
+                        const SizedBox(width: 1),
+                        const Icon(
                           Icons.chevron_right_rounded,
                           size: 16,
                           color: SafeHomeColors.textPrimary,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
+import '../localization/app_strings.dart';
 
 class DeviceList extends StatelessWidget {
   final Map<String, dynamic> devices;
@@ -117,13 +118,14 @@ class DeviceList extends StatelessWidget {
   String getConnectionDescription(
       Map<String, dynamic> d,
       String status,
+      AppStrings strings,
       ) {
     if (status == "off") {
-      return "Thiết bị đang Offline";
+      return strings.t("Thiết bị đang Offline");
     }
 
     if (status == "on") {
-      return "Thiết bị đang Online";
+      return strings.t("Thiết bị đang Online");
     }
 
     final warnings = <String>[];
@@ -132,7 +134,7 @@ class DeviceList extends StatelessWidget {
     int.tryParse(d["battery"]?.toString() ?? "");
     if (d["battery_low"] == true ||
         (battery != null && battery <= 20)) {
-      warnings.add("pin yếu");
+      warnings.add(strings.t("pin yếu"));
     }
 
     final linkquality =
@@ -140,7 +142,7 @@ class DeviceList extends StatelessWidget {
     if (linkquality != null &&
         linkquality > 0 &&
         linkquality < 40) {
-      warnings.add("sóng yếu");
+      warnings.add(strings.t("sóng yếu"));
     }
 
     final type = d["type"]?.toString() ?? "door";
@@ -157,15 +159,18 @@ class DeviceList extends StatelessWidget {
           60;
 
       if (ageHours > heartbeatLimitHours(type)) {
-        warnings.add("lâu không phản hồi");
+        warnings.add(strings.t("lâu không phản hồi"));
       }
     }
 
     if (warnings.isEmpty) {
-      return "Kết nối cần kiểm tra";
+      return strings.t("Kết nối cần kiểm tra");
     }
 
-    return "Cần kiểm tra: ${warnings.join(", ")}";
+    return strings.choose(
+      vi: "Cần kiểm tra: ${warnings.join(", ")}",
+      en: "Needs attention: ${warnings.join(", ")}",
+    );
   }
 
   Color getConnectionColor(String status) {
@@ -183,7 +188,10 @@ class DeviceList extends StatelessWidget {
   }
 
 
-  String formatAgo(dynamic ts) {
+  String formatAgo(
+      dynamic ts,
+      AppStrings strings,
+      ) {
     if (ts == null) return "--";
 
     final value = int.tryParse(ts.toString());
@@ -193,25 +201,44 @@ class DeviceList extends StatelessWidget {
     final dt = DateTime.fromMillisecondsSinceEpoch(value);
     final diff = DateTime.now().difference(dt);
 
-    if (diff.inMinutes < 1) return "Vừa xong";
-    if (diff.inHours < 1) return "${diff.inMinutes} phút trước";
+    if (diff.inMinutes < 1) return strings.t("Vừa xong");
+    if (diff.inHours < 1) {
+      return strings.choose(
+        vi: "${diff.inMinutes} phút trước",
+        en: "${diff.inMinutes} minutes ago",
+      );
+    }
 
     if (diff.inHours < 24) {
       final h = diff.inHours;
       final m = diff.inMinutes % 60;
 
-      if (m == 0) return "${h}h trước";
+      if (m == 0) {
+        return strings.choose(
+          vi: "${h}h trước",
+          en: "${h}h ago",
+        );
+      }
 
-      return "${h}h$m' trước";
+      return strings.choose(
+        vi: "${h}h$m' trước",
+        en: "${h}h ${m}m ago",
+      );
     }
 
     if (diff.inDays < 30) {
-      return "${diff.inDays} ngày trước";
+      return strings.choose(
+        vi: "${diff.inDays} ngày trước",
+        en: "${diff.inDays} days ago",
+      );
     }
 
     final months = (diff.inDays / 30).floor();
 
-    return "$months tháng trước";
+    return strings.choose(
+      vi: "$months tháng trước",
+      en: "$months months ago",
+    );
   }
 
   bool isSosActive(Map<String, dynamic> d) {
@@ -294,32 +321,47 @@ class DeviceList extends StatelessWidget {
     }
   }
 
-  String getMainStatus(Map<String, dynamic> d) {
+  String getMainStatus(
+      Map<String, dynamic> d,
+      AppStrings strings,
+      ) {
     final type = d["type"]?.toString() ?? "door";
 
     if (type == "smoke") {
-      if (d["tamper"] == true) return "Bị tháo";
+      if (d["tamper"] == true) return strings.t("Bị tháo");
 
-      return d["smoke"] == true ? "Có khói" : "Bình thường";
+      return d["smoke"] == true
+          ? strings.t("Có khói")
+          : strings.t("Bình thường");
     }
 
     if (type == "sos") {
-      return isSosActive(d) ? "Đã kích hoạt" : "Sẵn sàng";
+      return isSosActive(d)
+          ? strings.t("Đã kích hoạt")
+          : strings.t("Sẵn sàng");
     }
 
-    if (d["tamper"] == true) return "Bị tháo";
+    if (d["tamper"] == true) return strings.t("Bị tháo");
 
-    return d["contact"] == true ? "Đang đóng" : "Đang mở";
+    return d["contact"] == true
+        ? strings.t("Đang đóng")
+        : strings.t("Đang mở");
   }
 
-  String getTimeText(Map<String, dynamic> d) {
-    final value = formatAgo(d["last_event"]);
+  String getTimeText(
+      Map<String, dynamic> d,
+      AppStrings strings,
+      ) {
+    final value = formatAgo(d["last_event"], strings);
 
     if (value == "--") {
-      return "Chưa có cập nhật";
+      return strings.t("Chưa có cập nhật");
     }
 
-    return "Cập nhật $value";
+    return strings.choose(
+      vi: "Cập nhật $value",
+      en: "Updated $value",
+    );
   }
 
   Color getAccentColor(Map<String, dynamic> d) {
@@ -386,13 +428,14 @@ class DeviceList extends StatelessWidget {
     required String id,
     required Map<String, dynamic> d,
     required bool compact,
+    required AppStrings strings,
   }) {
     final type = d["type"]?.toString() ?? "door";
     final connectionStatus = getConnectionStatus(d);
     final connectionColor =
     getConnectionColor(connectionStatus);
     final connectionDescription =
-    getConnectionDescription(d, connectionStatus);
+    getConnectionDescription(d, connectionStatus, strings);
     final accentColor = getAccentColor(d);
 
     final cardStatusColor =
@@ -471,7 +514,7 @@ class DeviceList extends StatelessWidget {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          getMainStatus(d),
+                          getMainStatus(d, strings),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -492,7 +535,7 @@ class DeviceList extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      getTimeText(d),
+                      getTimeText(d, strings),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -594,17 +637,19 @@ class DeviceList extends StatelessWidget {
     );
   }
 
-  Widget _emptySecurityState() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(
+  Widget _emptySecurityState(AppStrings strings) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         vertical: 12,
         horizontal: 12,
       ),
       child: Center(
         child: Text(
-          "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh",
+          strings.t(
+            "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh",
+          ),
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 12.5,
             height: 1.35,
             fontWeight: FontWeight.w600,
@@ -617,6 +662,7 @@ class DeviceList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final securityEntries =
     _groupEntries("An ninh ra/vào");
     final emergencyEntries =
@@ -648,7 +694,7 @@ class DeviceList extends StatelessWidget {
                   children: [
                     if (securityEntries.isNotEmpty)
                       _sectionHeader(
-                        title: "An ninh ra/vào",
+                        title: strings.t("An ninh ra/vào"),
                         count: securityEntries.length,
                         showAddButton: true,
                       )
@@ -663,7 +709,7 @@ class DeviceList extends StatelessWidget {
                         ),
                       ),
                     if (securityEntries.isEmpty)
-                      _emptySecurityState()
+                      _emptySecurityState(strings)
                     else
                       Wrap(
                         spacing: spacing,
@@ -675,6 +721,7 @@ class DeviceList extends StatelessWidget {
                               id: entry.key,
                               d: safeMap(entry.value),
                               compact: compact,
+                              strings: strings,
                             ),
                           );
                         }).toList(),
@@ -682,7 +729,7 @@ class DeviceList extends StatelessWidget {
                     if (emergencyEntries.isNotEmpty) ...[
                       const SizedBox(height: 16),
                       _sectionHeader(
-                        title: "Nguy hiểm khẩn cấp",
+                        title: strings.t("Nguy hiểm khẩn cấp"),
                         count: emergencyEntries.length,
                         showAddButton: false,
                       ),
@@ -696,6 +743,7 @@ class DeviceList extends StatelessWidget {
                               id: entry.key,
                               d: safeMap(entry.value),
                               compact: compact,
+                              strings: strings,
                             ),
                           );
                         }).toList(),

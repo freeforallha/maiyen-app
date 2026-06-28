@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 
@@ -86,6 +87,15 @@ void showDeviceDetail({
 
           final roomId =
               device["roomId"]?.toString() ?? "unassigned";
+
+          final camera = device["camera"] is Map
+              ? Map<String, dynamic>.from(device["camera"] as Map)
+              : <String, dynamic>{};
+
+          final cameraType = camera["type"]?.toString().trim() ?? "";
+          final cameraName = camera["name"]?.toString().trim() ?? "";
+          final cameraUrl = camera["url"]?.toString().trim() ?? "";
+          final cameraSerial = camera["deviceSerial"]?.toString().trim() ?? "";
 
           final health = _getDeviceHealth(
             availability: availability,
@@ -193,7 +203,30 @@ void showDeviceDetail({
                     ),
 
                     const SizedBox(width: 8),
+                    _iconButton(
+                      icon: Icons.videocam_rounded,
+                      color: cameraType.isEmpty ? Colors.grey : Colors.blue,
+                      onTap: () {
+                        if (cameraType.isEmpty) {
+                          _showCameraSetupSheet(
+                            context: sheetContext,
+                            ownerUid: ownerUid,
+                            homeId: homeId,
+                            deviceId: id,
+                          );
+                          return;
+                        }
 
+                        _openCameraProvider(
+                          context: sheetContext,
+                          type: cameraType,
+                          url: cameraUrl,
+                          serial: cameraSerial,
+                        );
+                      },
+                    ),
+
+                    const SizedBox(width: 8),
                     if (onRename != null)
                       _iconButton(
                         icon: Icons.edit_rounded,
@@ -280,12 +313,13 @@ void showDeviceDetail({
                       : "N/A",
                 ),
 
-                _roomPickerRow(
-                  ownerUid: ownerUid,
-                  homeId: homeId,
-                  deviceId: id,
-                  currentRoomId: roomId,
-                  canEdit: onRename != null,
+                _infoRow(
+                  icon: Icons.videocam_rounded,
+                  color: cameraType.isEmpty ? Colors.grey : Colors.blue,
+                  title: "Camera",
+                  value: cameraType.isEmpty
+                      ? "Chưa liên kết"
+                      : (cameraName.isNotEmpty ? cameraName : cameraType.toUpperCase()),
                 ),
 
                 _infoRow(
@@ -609,4 +643,179 @@ String getBatteryText(Map<String, dynamic> d) {
   if (batteryStatus == "low") return "Pin yếu";
 
   return "N/A";
+}
+Future<void> _openCameraProvider({
+  required BuildContext context,
+  required String type,
+  required String url,
+  required String serial,
+}) async {
+  if (type == "rtsp" || type == "web") {
+    final uri = Uri.tryParse(url);
+
+    if (uri == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Link camera không hợp lệ")),
+      );
+      return;
+    }
+
+    final opened = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!context.mounted) return;
+
+    if (!opened) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Không mở được camera")),
+      );
+    }
+
+    return;
+  }
+
+  if (type == "ezviz") {
+    final opened = await launchUrl(
+      Uri.parse("ezviz://"),
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!context.mounted) return;
+
+    if (!opened) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Chưa mở được app EZVIZ")),
+      );
+    }
+
+    return;
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("Loại camera này chưa được hỗ trợ")),
+  );
+}
+
+void _showCameraSetupSheet({
+  required BuildContext context,
+  required String ownerUid,
+  required String homeId,
+  required String deviceId,
+}) {
+  String type = "ezviz";
+
+  final serialController = TextEditingController();
+  final urlController = TextEditingController();
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (sheetContext) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Liên kết camera",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  DropdownButtonFormField<String>(
+                    value: type,
+                    decoration: const InputDecoration(
+                      labelText: "Loại camera",
+                      border: OutlineInputBorder(),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: "ezviz", child: Text("EZVIZ")),
+                      DropdownMenuItem(value: "rtsp", child: Text("RTSP")),
+                      DropdownMenuItem(value: "web", child: Text("Web link")),
+                      DropdownMenuItem(value: "imou", child: Text("Imou")),
+                      DropdownMenuItem(value: "tapo", child: Text("Tapo")),
+                      DropdownMenuItem(value: "other", child: Text("Khác")),
+                    ],
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() => type = value);
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+
+
+
+                  const SizedBox(height: 12),
+
+                  if (type == "rtsp" || type == "web")
+                    TextField(
+                      controller: urlController,
+                      decoration: const InputDecoration(
+                        labelText: "Link camera",
+                        hintText: "rtsp://... hoặc https://...",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+
+                  if (type == "ezviz")
+                    TextField(
+                      controller: serialController,
+                      decoration: const InputDecoration(
+                        labelText: "Số serial EZVIZ",
+                        hintText: "Ví dụ: BD9724993",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+
+                  const SizedBox(height: 14),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.save_rounded),
+                      label: const Text("Lưu camera"),
+                      onPressed: () async {
+                        await FirebaseDatabase.instance
+                            .ref(
+                          "accounts/$ownerUid/homes/$homeId/devices/$deviceId/camera",
+                        )
+                            .set({
+                          "enabled": true,
+                          "type": type,
+                          "name": "",
+                          "url": urlController.text.trim(),
+                          "deviceSerial": serialController.text.trim(),
+                          "updatedAt": ServerValue.timestamp,
+                        });
+
+                        if (sheetContext.mounted) {
+                          Navigator.pop(sheetContext);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
 }
