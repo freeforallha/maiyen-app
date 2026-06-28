@@ -110,6 +110,10 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       selectedHome = homeId;
       alarmEnabled = safeMap(alarmSettings[homeId])["enabled"] != false;
+      securityMode =
+      currentHome["securityMode"]?.toString() == "armed"
+          ? "armed"
+          : "normal";
       start = parsedAlarm["start"];
       end = parsedAlarm["end"];
       alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
@@ -586,8 +590,56 @@ class _HomePageState extends State<HomePage> {
 
     showAlarmPauseSheet();
   }
+  String securityMode = "normal";
 
+  bool get isArmedMode => securityMode == "armed";
   bool alarmEnabled = false;
+  Future<void> setSecurityMode(String mode) async {
+    final homeId = selectedHome;
+
+    if (homeId.isEmpty) return;
+
+    final ownerUid = getHomeOwnerUid();
+    final nextMode = mode == "armed" ? "armed" : "normal";
+    final previousMode = securityMode;
+
+    setState(() {
+      securityMode = nextMode;
+
+      final cachedHome = safeMap(homes[homeId]);
+      cachedHome["securityMode"] = nextMode;
+      cachedHome["securityModeSource"] = "manual";
+      homes[homeId] = cachedHome;
+    });
+
+    try {
+      await FirebaseDatabase.instance.ref().update({
+        "accounts/$ownerUid/homes/$homeId/securityMode":
+        nextMode,
+        "accounts/$ownerUid/homes/$homeId/securityModeSource":
+        "manual",
+      });
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        securityMode = previousMode;
+
+        final cachedHome = safeMap(homes[homeId]);
+        cachedHome["securityMode"] = previousMode;
+        homes[homeId] = cachedHome;
+      });
+
+      showTopToast(
+        context,
+        _strings.t("Không thể thay đổi chế độ nhà"),
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+
+      debugPrint("SET_SECURITY_MODE_ERROR: $error");
+    }
+  }
   Future<void> setAlarmEnabled(bool enabled) async {
     final homeId = selectedHome;
     final homeName = getHomeDisplayName(homeId);
@@ -1515,6 +1567,10 @@ class _HomePageState extends State<HomePage> {
                 selectedHome = homeOrder.first;
               }
               final currentHome = safeMap(homes[selectedHome]);
+              securityMode =
+              currentHome["securityMode"]?.toString() == "armed"
+                  ? "armed"
+                  : "normal";
               alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
             });
 
@@ -1564,7 +1620,10 @@ class _HomePageState extends State<HomePage> {
           );
         }
         final currentHome = safeMap(homes[selectedHome]);
-
+        securityMode =
+        currentHome["securityMode"]?.toString() == "armed"
+            ? "armed"
+            : "normal";
         alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
 
         final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
@@ -4294,6 +4353,11 @@ class _HomePageState extends State<HomePage> {
                               );
                             },
                             overall: getOverallStatus(devices),
+
+                            securityMode: securityMode,
+                            onSecurityModeChanged:
+                            canManageHome() ? setSecurityMode : null,
+
                             alarmEnabled: alarmEnabled,
                             onAlarmEnabledChanged: canManageHome()
                                 ? setAlarmEnabled

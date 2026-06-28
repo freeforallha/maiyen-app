@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,7 +28,14 @@ class _SafeHomeAppState extends State<SafeHomeApp> {
   @override
   void initState() {
     super.initState();
+
     appLanguageController.load();
+
+    // Chỉ xoá Reminder khi app được mở mới hoàn toàn.
+    // Không xoá khi chỉ bật lại màn hình.
+    unawaited(
+      NotificationService.stopReminderNotification(),
+    );
   }
 
   @override
@@ -84,10 +91,13 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     payload = details?.notificationResponse?.payload ?? "";
 
     if (payload.startsWith("alarm_summary|")) {
-      // Giữ nguyên payload.
-    } else if (payload == "open_home") {
-      // Không tự ép open_home thành alarm nữa.
-      // Alarm thật đã có payload riêng: alarm hoặc alarm_summary|.
+      // Giữ nguyên payload Alarm.
+    } else if (payload == "open_home" ||
+        payload == "schedule_notification" ||
+        payload.startsWith("schedule_notification::") ||
+        payload.startsWith("schedule_notification|")) {
+      await NotificationService.stopReminderNotification();
+      payload = "open_home";
     }
 
     if (!mounted) return;
@@ -131,48 +141,6 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
         title: "🚨 SafeHome",
         body: body,
         alarmItemsJson: alarmItems,
-      );
-    }
-
-    if (payload.startsWith("schedule_notification::")) {
-      String title = NotificationService.lastScheduleTitle;
-      String body = NotificationService.lastScheduleBody;
-      String reminderItemsJson =
-          NotificationService.lastReminderItemsJson;
-
-      try {
-        final raw = payload.replaceFirst(
-          "schedule_notification::",
-          "",
-        );
-
-        final data = Map<String, dynamic>.from(jsonDecode(raw));
-
-        title = data["title"]?.toString() ?? title;
-        body = data["body"]?.toString() ?? body;
-        reminderItemsJson =
-            data["reminderItems"]?.toString() ?? reminderItemsJson;
-      } catch (_) {}
-
-      return FullscreenAlarmPage(
-        title: title,
-        body: body,
-        silentMode: true,
-        reminderItemsJson: reminderItemsJson,
-      );
-    }
-
-    if (payload == "schedule_notification" ||
-        payload.startsWith("schedule_notification|")) {
-      final body = payload.startsWith("schedule_notification|")
-          ? payload.replaceFirst("schedule_notification|", "")
-          : NotificationService.lastScheduleBody;
-
-      return FullscreenAlarmPage(
-        title: NotificationService.lastScheduleTitle,
-        body: body,
-        silentMode: true,
-        reminderItemsJson: NotificationService.lastReminderItemsJson,
       );
     }
 

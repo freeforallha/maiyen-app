@@ -15,7 +15,8 @@ class StatusPanel extends StatefulWidget {
   final String environmentText;
   final Map<String, dynamic> homeEvents;
   final VoidCallback? onEnvironmentTap;
-
+  final String securityMode;
+  final ValueChanged<String>? onSecurityModeChanged;
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
 
@@ -35,6 +36,8 @@ class StatusPanel extends StatefulWidget {
     required this.environmentText,
     required this.homeEvents,
     this.onEnvironmentTap,
+    this.securityMode = "normal",
+    this.onSecurityModeChanged,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
     this.onAlarmPauseToday,
@@ -243,7 +246,75 @@ class _StatusPanelState extends State<StatusPanel> {
 
     return summary;
   }
+  void _showSecurityModeOptions(BuildContext context) {
+    final isArmed = widget.securityMode == "armed";
 
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.surface,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(28),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 44,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                const Text(
+                  "Chế độ nhà",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: SafeHomeColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                _actionTile(
+                  icon: Icons.home_rounded,
+                  title: "Bình thường",
+                  subtitle: isArmed
+                      ? "Chuyển về sử dụng thông thường"
+                      : "Đang được sử dụng",
+                  color: SafeHomeColors.safe,
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    widget.onSecurityModeChanged?.call("normal");
+                  },
+                ),
+                const SizedBox(height: 8),
+                _actionTile(
+                  icon: Icons.shield_rounded,
+                  title: "Bảo vệ",
+                  subtitle: isArmed
+                      ? "Đang được sử dụng"
+                      : "Bật giám sát cửa và chuyển động",
+                  color: SafeHomeColors.danger,
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    widget.onSecurityModeChanged?.call("armed");
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
   void _showScheduleOptions(BuildContext context) {
     bool localAlarmEnabled = widget.alarmEnabled;
 
@@ -868,6 +939,21 @@ class _StatusPanelState extends State<StatusPanel> {
                   children: [
                     Expanded(
                       child: _alarmStatusItem(
+                        icon: widget.securityMode == "armed"
+                            ? Icons.shield_rounded
+                            : Icons.home_rounded,
+                        label: "Mode",
+                        value: widget.securityMode == "armed"
+                            ? "Bảo vệ"
+                            : "Bình thường",
+                        active: widget.securityMode == "armed",
+                        activeColor: SafeHomeColors.danger,
+                        onTap: () => _showSecurityModeOptions(context),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _alarmStatusItem(
                         icon: Icons.shield_moon_rounded,
                         label: "Alarm",
                         value: alarmScheduleText,
@@ -876,11 +962,10 @@ class _StatusPanelState extends State<StatusPanel> {
                         onTap: widget.onScheduleAlarm,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: _alarmStatusItem(
-                        icon:
-                        Icons.pause_circle_outline_rounded,
+                        icon: Icons.pause_circle_outline_rounded,
                         label: _strings.t("Tạm dừng"),
                         value: alarmPauseSet
                             ? widget.alarmPauseText

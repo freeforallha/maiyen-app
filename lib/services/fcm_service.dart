@@ -42,11 +42,17 @@ class FCMService {
 
     final initialMessage = await messaging.getInitialMessage();
 
-    if (initialMessage != null &&
-        initialMessage.data["type"]?.toString() == "chat") {
-      NotificationService.requestOpenHomeChat(
-        initialMessage.data,
-      );
+    if (initialMessage != null) {
+      final initialType =
+          initialMessage.data["type"]?.toString() ?? "";
+
+      if (initialType == "chat") {
+        NotificationService.requestOpenHomeChat(
+          initialMessage.data,
+        );
+      } else if (initialType == "schedule_notification") {
+        await NotificationService.stopReminderNotification();
+      }
     }
   }
 
@@ -116,13 +122,18 @@ class FCMService {
       );
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       final type = message.data["type"]?.toString() ?? "";
 
       if (type == "chat") {
         NotificationService.requestOpenHomeChat(
           message.data,
         );
+        return;
+      }
+
+      if (type == "schedule_notification") {
+        await NotificationService.stopReminderNotification();
         return;
       }
 

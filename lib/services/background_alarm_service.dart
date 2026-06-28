@@ -43,14 +43,15 @@ Future<void> firebaseMessagingBackgroundHandler(
     enableVibration: true,
   );
 
-  const scheduleFullscreenChannel =
+  const reminderPriorityChannel =
   AndroidNotificationChannel(
-    'safehome_schedule_fullscreen_channel',
-    'SafeHome Schedule Fullscreen',
+    'safehome_reminder_priority_v2',
+    'SafeHome Reminder Priority',
     description:
-    'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+    'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
     importance: Importance.max,
-    playSound: false,
+    playSound: true,
+    enableVibration: true,
   );
 
   const chatChannel = AndroidNotificationChannel(
@@ -68,7 +69,7 @@ Future<void> firebaseMessagingBackgroundHandler(
   );
 
   await androidPlugin?.createNotificationChannel(
-    scheduleFullscreenChannel,
+    reminderPriorityChannel,
   );
 
   await androidPlugin?.createNotificationChannel(
@@ -99,7 +100,7 @@ Future<void> firebaseMessagingBackgroundHandler(
     final body =
     _buildScheduleBody(message.data);
 
-    final title =
+    final homeTitle =
     message.data['title']
         ?.toString()
         .trim()
@@ -108,39 +109,49 @@ Future<void> firebaseMessagingBackgroundHandler(
         ? message.data['title']
         .toString()
         .trim()
-        : 'Nhà';
+        : 'SafeHome';
 
+    final isSafe =
+        message.data['isSafe']?.toString() == 'true' ||
+            message.data['isSafe']?.toString() == '1' ||
+            message.data['isSafe']?.toString() == 'yes';
+
+    final notificationTitle = isSafe
+        ? '$homeTitle · Đã an toàn'
+        : '$homeTitle · Cần kiểm tra';
+
+    // Reminder chỉ thay thế Reminder cũ.
+    // Tuyệt đối không huỷ notification Alarm.
     await localNotif.cancel(999998);
-    await localNotif.cancel(999999);
 
     await localNotif.show(
       999998,
-      title,
+      notificationTitle,
       body,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
-          'safehome_schedule_fullscreen_channel',
-          'SafeHome Schedule Fullscreen',
+          'safehome_reminder_priority_v2',
+          'SafeHome Reminder Priority',
           channelDescription:
-          'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+          'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
+          visibility: NotificationVisibility.public,
           importance: Importance.max,
-          priority: Priority.high,
+          priority: Priority.max,
           category:
           AndroidNotificationCategory.reminder,
-          fullScreenIntent: true,
-          playSound: false,
-          enableVibration: false,
+          autoCancel: false,
+          ongoing: true,
+          fullScreenIntent: false,
+          playSound: true,
+          enableVibration: true,
+          styleInformation: BigTextStyleInformation(
+            body,
+            contentTitle: notificationTitle,
+            summaryText: 'SafeHome',
+          ),
         ),
       ),
-      payload:
-      'schedule_notification::${jsonEncode({
-        "title": title,
-        "body": body,
-        "reminderItems":
-        message.data['reminderItems']
-            ?.toString() ??
-            '',
-      })}',
+      payload: 'open_home',
     );
 
     return;

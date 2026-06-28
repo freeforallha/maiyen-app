@@ -388,14 +388,14 @@ class NotificationService {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
-      sound: false,
+      sound: true,
     );
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
-      sound: false,
+      sound: true,
     );
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -403,7 +403,7 @@ class NotificationService {
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
-      requestSoundPermission: false,
+      requestSoundPermission: true,
     );
 
     await localNotif.initialize(
@@ -444,58 +444,11 @@ class NotificationService {
           return;
         }
 
-        if (payload == 'open_home') {
-          return;
-        }
-
-        if (payload.startsWith('schedule_notification::')) {
+        if (payload == 'open_home' ||
+            payload == 'schedule_notification' ||
+            payload.startsWith('schedule_notification::') ||
+            payload.startsWith('schedule_notification|')) {
           await NotificationService.stopReminderNotification();
-
-          String title = 'Nhà';
-          String body = lastScheduleBody;
-          String reminderItemsJson = lastReminderItemsJson;
-
-          try {
-            final raw = payload.replaceFirst(
-              'schedule_notification::',
-              '',
-            );
-
-            final data = Map<String, dynamic>.from(
-              jsonDecode(raw),
-            );
-
-            title = data["title"]?.toString() ?? title;
-            body = data["body"]?.toString() ?? body;
-            reminderItemsJson =
-                data["reminderItems"]?.toString() ??
-                    reminderItemsJson;
-          } catch (_) {}
-
-          openOrMergeReminderPage(
-            title: title,
-            body: body,
-            isSafe: body
-                .toUpperCase()
-                .contains("ĐÃ AN TOÀN"),
-            reminderItemsJson: reminderItemsJson,
-          );
-
-          return;
-        }
-
-        if (payload == 'schedule_notification') {
-          await NotificationService.stopReminderNotification();
-
-          openOrMergeReminderPage(
-            title: lastScheduleTitle,
-            body: lastScheduleBody,
-            isSafe: lastScheduleBody
-                .toUpperCase()
-                .contains("ĐÃ AN TOÀN"),
-            reminderItemsJson: lastReminderItemsJson,
-          );
-
           return;
         }
       },
@@ -509,6 +462,13 @@ class NotificationService {
           launchDetails?.notificationResponse?.payload ?? "";
 
       _handleHomeChatPayload(launchPayload);
+
+      if (launchPayload == 'open_home' ||
+          launchPayload == 'schedule_notification' ||
+          launchPayload.startsWith('schedule_notification::') ||
+          launchPayload.startsWith('schedule_notification|')) {
+        await stopReminderNotification();
+      }
     }
 
     if (Platform.isAndroid) {
@@ -531,11 +491,13 @@ class NotificationService {
       );
 
       const reminderChannel = AndroidNotificationChannel(
-        'safehome_reminder_channel',
-        'SafeHome Reminder',
-        description: 'Nhắc nhở an toàn nhẹ nhàng',
-        importance: Importance.high,
-        playSound: false,
+        'safehome_reminder_priority_v2',
+        'SafeHome Reminder Priority',
+        description:
+        'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
       );
 
       const chatChannel = AndroidNotificationChannel(
@@ -672,7 +634,9 @@ class NotificationService {
         ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
         : "⚠️ CHƯA AN TOÀN\n$cleanReason";
 
-    openOrMergeReminderPage(
+    // Chỉ gộp dữ liệu để cập nhật cùng notification.
+    // Không mở trang Reminder toàn màn hình.
+    _mergeReminderSession(
       title: cleanTitle.isNotEmpty ? cleanTitle : "Nhà",
       body: reminderBody,
       isSafe: isSafe,
@@ -680,26 +644,28 @@ class NotificationService {
     );
 
     final notificationTitle = isSafe
-        ? 'SafeHome ✅ ĐÃ AN TOÀN'
-        : 'SafeHome ⚠️ CHƯA AN TOÀN';
+        ? '${lastScheduleTitle.trim().isEmpty ? "SafeHome" : lastScheduleTitle} · Đã an toàn'
+        : '${lastScheduleTitle.trim().isEmpty ? "SafeHome" : lastScheduleTitle} · Cần kiểm tra';
 
-    final body = isSafe
+    final notificationBody = isSafe
         ? 'Hãy an tâm nghỉ ngơi.'
         : cleanReason.isEmpty
         ? 'Có thiết bị chưa an toàn.'
         : cleanReason;
 
     final androidDetails = AndroidNotificationDetails(
-      'safehome_reminder_channel',
-      'SafeHome Reminder',
+      'safehome_reminder_priority_v2',
+      'SafeHome Reminder Priority',
+      channelDescription:
+      'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
       visibility: NotificationVisibility.public,
+      importance: Importance.max,
+      priority: Priority.max,
       autoCancel: false,
-      channelDescription: 'Nhắc nhở an toàn nhẹ nhàng',
-      importance: Importance.high,
-      priority: Priority.high,
-      playSound: false,
-      enableVibration: true,
+      ongoing: true,
       fullScreenIntent: false,
+      playSound: true,
+      enableVibration: true,
       category: AndroidNotificationCategory.reminder,
       styleInformation: BigTextStyleInformation(
         lastScheduleBody,
@@ -711,15 +677,22 @@ class NotificationService {
     const iosDetails = DarwinNotificationDetails(
       presentAlert: true,
       presentBadge: true,
-      presentSound: false,
+      presentSound: true,
     );
+
+    // ID cố định: Reminder mới cập nhật Reminder cũ,
+    // không sinh nhiều notification trùng nhau.
+    await localNotif.cancel(999998);
 
     await localNotif.show(
       999998,
       notificationTitle,
-      body,
-      NotificationDetails(android: androidDetails, iOS: iosDetails),
-      payload: "schedule_notification",
+      notificationBody,
+      NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      ),
+      payload: 'open_home',
     );
   }
 }
