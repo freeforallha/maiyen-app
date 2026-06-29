@@ -1,52 +1,42 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AutoLoginService {
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  static const FlutterSecureStorage _storage =
+  FlutterSecureStorage();
 
   static const String _emailKey = "safehome_email";
-  static const String _passKey = "safehome_password";
+
+  // Chỉ dùng để xoá mật khẩu do các bản app cũ từng lưu.
+  static const String _legacyPasswordKey =
+      "safehome_password";
 
   static Future<void> saveLogin({
     required String email,
-    required String password,
   }) async {
     await _storage.write(
       key: _emailKey,
       value: email.trim().toLowerCase(),
     );
 
-    await _storage.write(
-      key: _passKey,
-      value: password,
-    );
+    await removeLegacyPassword();
   }
 
   static Future<void> clearLogin() async {
     await _storage.delete(key: _emailKey);
-    await _storage.delete(key: _passKey);
+    await removeLegacyPassword();
   }
+
   static Future<Map<String, String?>> loadSavedLogin() async {
-    final savedEmail = await _storage.read(key: _emailKey);
-    final savedPassword = await _storage.read(key: _passKey);
+    await removeLegacyPassword();
 
     return {
-      "email": savedEmail,
-      "password": savedPassword,
+      "email": await _storage.read(key: _emailKey),
     };
   }
-  static Future<User?> tryAutoLogin() async {
-    final email = await _storage.read(key: _emailKey);
-    final password = await _storage.read(key: _passKey);
 
-    if (email == null || email.isEmpty) return null;
-    if (password == null || password.isEmpty) return null;
-
-    final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+  static Future<void> removeLegacyPassword() async {
+    await _storage.delete(
+      key: _legacyPasswordKey,
     );
-
-    return cred.user;
   }
 }

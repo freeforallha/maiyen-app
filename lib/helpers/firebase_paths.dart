@@ -13,6 +13,15 @@ class FirebasePaths {
   static String fcmToken(String uid) =>
       "accounts/$uid/fcmToken";
 
+  static String fcmTokens(String uid) =>
+      "accounts/$uid/fcmTokens";
+
+  static String fcmTokenInstallation(
+      String uid,
+      String installationId,
+      ) =>
+      "accounts/$uid/fcmTokens/$installationId";
+
   // ================= HOMES =================
 
   static String homes(String uid) =>

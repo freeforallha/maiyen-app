@@ -171,7 +171,6 @@ class _LoginPageState extends State<LoginPage> {
         if (rememberLogin) {
           await AutoLoginService.saveLogin(
             email: emailInput,
-            password: passwordInput,
           ).timeout(const Duration(seconds: 10));
         } else {
           await AutoLoginService.clearLogin().timeout(
@@ -201,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
 
       await AutoLoginService.saveLogin(
         email: emailInput,
-        password: passwordInput,
       ).timeout(const Duration(seconds: 10));
 
       if (!mounted) return;
@@ -258,12 +256,10 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       final savedEmail = saved["email"] ?? "";
-      final savedPassword = saved["password"] ?? "";
 
-      if (savedEmail.isNotEmpty && savedPassword.isNotEmpty) {
+      if (savedEmail.isNotEmpty) {
         setState(() {
           email.text = savedEmail;
-          pass.text = savedPassword;
           rememberLogin = true;
         });
       }

@@ -81,16 +81,59 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         _onAlarmSessionChanged,
       );
 
+      NotificationService.alarmResolvedRevision.addListener(
+        _onAlarmResolved,
+      );
+
       _startAlarmMode();
     }
   }
   Future<void> _startAlarmMode() async {
-    // Fullscreen đã mở thì huỷ notification còi dự phòng trước.
-    await NotificationService.stopAlarmNotification();
+    // Fullscreen đã mở thì huỷ cả notification ban đầu
+    // và notification mở toàn màn hình.
+    await NotificationService.stopAllAlarmNotifications();
 
     if (!mounted) return;
 
     await startAlarmSound();
+  }
+
+  void _onAlarmResolved() {
+    if (
+    !mounted ||
+        widget.silentMode ||
+        NotificationService.hasActiveAlarmIncidents
+    ) {
+      return;
+    }
+
+    unawaited(_closeResolvedAlarm());
+  }
+
+  Future<void> _closeResolvedAlarm() async {
+    timer?.cancel();
+    await stopAlarmSound();
+
+    if (!mounted) return;
+
+    final navigator = Navigator.of(context);
+
+    if (navigator.canPop()) {
+      navigator.pop();
+    }
+  }
+
+  void _showAlarmActionError() {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Không thể xác nhận với SafeHome. '
+              'Hãy kiểm tra kết nối và thử lại.',
+        ),
+      ),
+    );
   }
   void _loadLatestReminderSession() {
     final latestTitle =
@@ -187,6 +230,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     } else {
       NotificationService.alarmRevision.removeListener(
         _onAlarmSessionChanged,
+      );
+
+      NotificationService.alarmResolvedRevision.removeListener(
+        _onAlarmResolved,
       );
 
       NotificationService.markAlarmPageClosed();
@@ -489,7 +536,19 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     await stopAlarmSound();
 
     if (!widget.silentMode) {
+      final acknowledged =
+      await NotificationService.resolveActiveAlarmIncidents(
+        action: 'check_home',
+      );
+
+      if (!acknowledged) {
+        await startAlarmSound();
+        _showAlarmActionError();
+        return;
+      }
+
       NotificationService.clearActiveAlarms();
+      await NotificationService.stopAllAlarmNotifications();
     }
 
     if (!context.mounted) return;
@@ -518,7 +577,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       return;
     }
 
-    await localNotif.cancel(999999);
+    await NotificationService.stopAllAlarmNotifications();
     await startAlarmSound();
 
     if (!context.mounted) return;
@@ -528,18 +587,19 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: const Text("Xác nhận tắt cảnh báo"),
+          title: const Text('Xác nhận tắt cảnh báo'),
           content: const Text(
-            "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?",
+            'Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\n'
+                'Bạn chắc chắn muốn tắt cảnh báo?',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text("HỦY"),
+              child: const Text('HỦY'),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text("XÁC NHẬN"),
+              child: const Text('XÁC NHẬN'),
             ),
           ],
         );
@@ -550,7 +610,20 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     timer?.cancel();
     await stopAlarmSound();
+
+    final acknowledged =
+    await NotificationService.resolveActiveAlarmIncidents(
+      action: 'stop',
+    );
+
+    if (!acknowledged) {
+      await startAlarmSound();
+      _showAlarmActionError();
+      return;
+    }
+
     NotificationService.clearActiveAlarms();
+    await NotificationService.stopAllAlarmNotifications();
 
     SystemNavigator.pop();
   }
@@ -618,129 +691,129 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               padding: const EdgeInsets.all(22),
               child: Column(
                 children: [
-              _buildFadedScrollArea(
-              child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(22),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: accent.withValues(alpha: 0.22)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: accent.withValues(alpha: 0.14),
-                          blurRadius: 32,
-                          offset: const Offset(0, 14),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 92,
-                          height: 92,
-                          decoration: BoxDecoration(
-                            color: accent.withValues(alpha: 0.12),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: accent.withValues(alpha: 0.22),
-                              width: 1.5,
+                  _buildFadedScrollArea(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(22),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(color: accent.withValues(alpha: 0.22)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: accent.withValues(alpha: 0.14),
+                            blurRadius: 32,
+                            offset: const Offset(0, 14),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 92,
+                            height: 92,
+                            decoration: BoxDecoration(
+                              color: accent.withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: accent.withValues(alpha: 0.22),
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Icon(
+                              safe
+                                  ? Icons.verified_user_rounded
+                                  : Icons.warning_amber_rounded,
+                              color: accent,
+                              size: 52,
                             ),
                           ),
-                          child: Icon(
-                            safe
-                                ? Icons.verified_user_rounded
-                                : Icons.warning_amber_rounded,
-                            color: accent,
-                            size: 52,
+                          const SizedBox(height: 14),
+                          Text(
+                            safe ? "ĐÃ AN TOÀN" : "CẦN KIỂM TRA",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: accent,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          safe ? "ĐÃ AN TOÀN" : "CẦN KIỂM TRA",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: accent,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
+                          const SizedBox(height: 6),
+                          Text(
+                            reminderSubtitle,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          reminderSubtitle,
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: accent.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Column(
-                            children: issueMap.entries.map((entry) {
-                              return Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 10),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.75),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: accent.withValues(alpha: 0.16),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      entry.key,
-                                      style: TextStyle(
-                                        color: accent,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w900,
-                                      ),
+                          const SizedBox(height: 18),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: accent.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: issueMap.entries.map((entry) {
+                                return Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.75),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: accent.withValues(alpha: 0.16),
                                     ),
-                                    const SizedBox(height: 8),
-                                    ...entry.value.map(
-                                      (item) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 6,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        entry.key,
+                                        style: TextStyle(
+                                          color: accent,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w900,
                                         ),
-                                        child: Text(
-                                          item,
-                                          style: const TextStyle(
-                                            color: Colors.black87,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      ...entry.value.map(
+                                            (item) => Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 6,
+                                          ),
+                                          child: Text(
+                                            item,
+                                            style: const TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Tự đóng sau ${formatRemainingTime()}",
-                          style: TextStyle(
-                            color: Colors.grey.shade700,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                          const SizedBox(height: 16),
+                          Text(
+                            "Tự đóng sau ${formatRemainingTime()}",
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-              ),
-              ),
+                  ),
 
                   const SizedBox(height: 16),
                   SizedBox(
@@ -791,9 +864,20 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final issueMap = buildAlarmIssueMap(type);
     final nextAlarmMap = buildNextAlarmMap();
 
-    final repeatText = nextAlarmMap.isNotEmpty
-        ? "Báo lại lúc ${nextAlarmMap.values.first} nếu vấn đề chưa được xử lý."
-        : "Sẽ báo lại theo lịch alarm đã cài nếu vấn đề chưa được xử lý.";
+    final isEmergency =
+        type == 'sos' ||
+            type == 'smoke' ||
+            type == 'flood' ||
+            type == 'gas';
+
+    final repeatText = isEmergency
+        ? 'Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang '
+        'gọi điện khẩn cấp.'
+        : nextAlarmMap.isNotEmpty
+        ? 'Báo lại lúc ${nextAlarmMap.values.first} '
+        'nếu vấn đề chưa được xử lý.'
+        : 'Sẽ báo lại theo lịch Alarm đã cài '
+        'nếu vấn đề chưa được xử lý.';
 
     final Color bgColor = switch (type) {
       "sos" => const Color(0xFF3A0508),
@@ -822,161 +906,161 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             padding: const EdgeInsets.all(22),
             child: Column(
               children: [
-            _buildFadedScrollArea(
-            child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.28),
-                        blurRadius: 34,
-                        offset: const Offset(0, 18),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 92,
-                        height: 92,
-                        decoration: BoxDecoration(
-                          color: accent.withValues(alpha: 0.12),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: accent.withValues(alpha: 0.22),
-                            width: 1.5,
+                _buildFadedScrollArea(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(32),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.28),
+                          blurRadius: 34,
+                          offset: const Offset(0, 18),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 92,
+                          height: 92,
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.12),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: accent.withValues(alpha: 0.22),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: Icon(alarmIcon(type), color: accent, size: 52),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        Text(
+                          alarmTitle(type),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: accent,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.3,
                           ),
                         ),
-                        child: Icon(alarmIcon(type), color: accent, size: 52),
-                      ),
 
-                      const SizedBox(height: 18),
+                        const SizedBox(height: 6),
 
-                      Text(
-                        alarmTitle(type),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: accent,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      Text(
-                        "SafeHome Security Alert",
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: accent.withValues(alpha: 0.065),
-                          borderRadius: BorderRadius.circular(22),
-                          border: Border.all(
-                            color: accent.withValues(alpha: 0.16),
+                        Text(
+                          "SafeHome Security Alert",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: issueMap.entries.map((entry) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    entry.key,
-                                    style: TextStyle(
-                                      color: Colors.grey.shade800,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ...entry.value.map(
-                                    (reason) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 6),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Icon(
-                                            Icons.warning_amber_rounded,
-                                            color: accent,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Text(
-                                              reason,
-                                              style: const TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 16,
-                                                height: 1.25,
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+
+                        const SizedBox(height: 20),
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.065),
+                            borderRadius: BorderRadius.circular(22),
+                            border: Border.all(
+                              color: accent.withValues(alpha: 0.16),
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: issueMap.entries.map((entry) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      entry.key,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade800,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w900,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: 8),
+                                    ...entry.value.map(
+                                          (reason) => Padding(
+                                        padding: const EdgeInsets.only(bottom: 6),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.warning_amber_rounded,
+                                              color: accent,
+                                              size: 20,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                reason,
+                                                style: const TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 16,
+                                                  height: 1.25,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.repeat_rounded,
+                                color: Colors.grey.shade700,
+                                size: 21,
                               ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.repeat_rounded,
-                              color: Colors.grey.shade700,
-                              size: 21,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                repeatText,
-                                style: TextStyle(
-                                  color: Colors.grey.shade800,
-                                  fontSize: 14,
-                                  height: 1.35,
-                                  fontWeight: FontWeight.w600,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  repeatText,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade800,
+                                    fontSize: 14,
+                                    height: 1.35,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-            ),
-            ),
+                ),
 
                 const SizedBox(height: 16),
 

@@ -18,21 +18,6 @@ class AllHomePage extends StatefulWidget {
 
 class _AllHomePageState extends State<AllHomePage> {
   AppStrings get _strings => AppStrings.of(context);
-  bool isAllSafe() {
-    if (homes.isEmpty) return true;
-
-    for (final home in homes.values) {
-      final devices = safeMap(home["devices"]);
-
-      final unsafe = devices.values.any(
-            (d) => d["status"] != "closed" || d["tamper"] == true,
-      );
-
-      if (unsafe) return false;
-    }
-
-    return true;
-  }
   Map<String, dynamic> homes = {};
 
   Set<String> selectedHomes = {};
@@ -44,22 +29,6 @@ class _AllHomePageState extends State<AllHomePage> {
   int summaryIndex = 0;
   Timer? summaryTimer;
 
-  Map<String, dynamic> safeMap(dynamic data) {
-
-    if (data == null) return {};
-
-    return Map<String, dynamic>.from(data as Map);
-  }
-
-  bool isUnsafe(Map dev) {
-    return dev.values.any((d) {
-      final status = d["status"]?.toString();
-
-      final tamper = d["tamper"] == true;
-
-      return status != "closed" || tamper;
-    });
-  }
   List<String> buildAllHomeSummaries() {
     int safeCount = 0;
     int warningCount = 0;
@@ -69,8 +38,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final warningReasons = <String>{};
 
     for (final home in homes.values) {
-      final devices = safeMap(home["devices"]);
-      final status = getOverallStatus(devices);
+      final status = getHomeOverallStatus(home);
       final level = status["level"]?.toString() ?? "safe";
 
       if (level == "danger") {
@@ -158,7 +126,7 @@ class _AllHomePageState extends State<AllHomePage> {
               final homeId = entry.key;
               final home = safeMap(entry.value);
               final name = home["name"]?.toString() ?? homeId;
-              final status = getOverallStatus(safeMap(home["devices"]));
+              final status = getHomeOverallStatus(home);
               final level = status["level"]?.toString() ?? "safe";
 
               final issues = level == "danger"
@@ -779,8 +747,7 @@ class _AllHomePageState extends State<AllHomePage> {
       String homeId,
       Map<String, dynamic> data,
       ) {
-    final devices = safeMap(data["devices"]);
-    final status = getOverallStatus(devices);
+    final status = getHomeOverallStatus(data);
     final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
 

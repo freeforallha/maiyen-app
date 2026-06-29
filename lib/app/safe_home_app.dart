@@ -10,6 +10,7 @@ import '../pages/fullscreen_alarm_page.dart';
 import '../pages/profile_setup_page.dart';
 import '../services/notification_service.dart';
 import '../services/auto_login_service.dart';
+import '../services/fcm_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -171,22 +172,20 @@ class _AuthGateState extends State<AuthGate> {
   Future<void> checkAuth() async {
     await Future.delayed(const Duration(seconds: 2));
 
+    // Xoá mật khẩu mà phiên bản app cũ từng lưu.
+    // Firebase Auth tự duy trì phiên bằng token bảo mật của SDK.
+    try {
+      await AutoLoginService.removeLegacyPassword();
+    } catch (error) {
+      debugPrint(
+        "REMOVE_LEGACY_PASSWORD_ERROR: $error",
+      );
+    }
+
     user = FirebaseAuth.instance.currentUser;
 
     debugPrint("AUTH CHECK UID = ${user?.uid}");
     debugPrint("AUTH CHECK EMAIL = ${user?.email}");
-
-    if (user == null) {
-      try {
-        debugPrint("TRY AUTO LOGIN...");
-
-        user = await AutoLoginService.tryAutoLogin();
-
-        debugPrint("AUTO LOGIN RESULT = ${user?.uid}");
-      } catch (e) {
-        debugPrint("AUTO LOGIN ERROR = $e");
-      }
-    }
 
     if (!mounted) return;
 
@@ -215,6 +214,21 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _signOutAfterProfileError() async {
+    final currentUid =
+        FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUid != null) {
+      try {
+        await FCMService.removeCurrentInstallationToken(
+          uid: currentUid,
+        );
+      } catch (error) {
+        debugPrint(
+          "REMOVE_FCM_TOKEN_ON_SIGN_OUT_ERROR: $error",
+        );
+      }
+    }
+
     try {
       await AutoLoginService.clearLogin();
     } catch (_) {}

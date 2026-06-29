@@ -7,6 +7,7 @@ import '../localization/app_strings.dart';
 class DeviceList extends StatelessWidget {
   final Map<String, dynamic> devices;
   final String selectedRoomId;
+  final String securityMode;
   final bool isShared;
   final String ownerEmail;
   final Widget? header;
@@ -27,6 +28,7 @@ class DeviceList extends StatelessWidget {
     required this.onTapDevice,
     required this.onPairSensor,
     required this.selectedRoomId,
+    this.securityMode = "normal",
   });
 
   Map<String, dynamic> safeMap(dynamic data) {
@@ -277,10 +279,13 @@ class DeviceList extends StatelessWidget {
       case "window":
       case "gate":
       case "lock":
+      case "door_lock":
+      case "motion":
         return "An ninh ra/vào";
 
       case "smoke":
       case "gas":
+      case "water_leak":
       case "flood":
       case "sos":
         return "Nguy hiểm khẩn cấp";
@@ -302,7 +307,11 @@ class DeviceList extends StatelessWidget {
         return Icons.garage_rounded;
 
       case "lock":
+      case "door_lock":
         return Icons.lock_rounded;
+
+      case "motion":
+        return Icons.directions_walk_rounded;
 
       case "smoke":
         return Icons.local_fire_department_rounded;
@@ -310,6 +319,7 @@ class DeviceList extends StatelessWidget {
       case "gas":
         return Icons.gas_meter_rounded;
 
+      case "water_leak":
       case "flood":
         return Icons.water_damage_rounded;
 
@@ -325,12 +335,15 @@ class DeviceList extends StatelessWidget {
       Map<String, dynamic> d,
       AppStrings strings,
       ) {
-    final type = d["type"]?.toString() ?? "door";
+    final type =
+        d["type"]?.toString().trim().toLowerCase() ?? "door";
+
+    if (d["tamper"] == true) {
+      return strings.t("Bị tháo");
+    }
 
     if (type == "smoke") {
-      if (d["tamper"] == true) return strings.t("Bị tháo");
-
-      return d["smoke"] == true
+      return parseDeviceBool(d["smoke"]) == true
           ? strings.t("Có khói")
           : strings.t("Bình thường");
     }
@@ -341,9 +354,43 @@ class DeviceList extends StatelessWidget {
           : strings.t("Sẵn sàng");
     }
 
-    if (d["tamper"] == true) return strings.t("Bị tháo");
+    if (type == "gas") {
+      final active =
+          parseDeviceBool(d["gas"]) == true ||
+              parseDeviceBool(d["gas_alarm"]) == true;
 
-    return d["contact"] == true
+      return active
+          ? strings.t("Rò rỉ gas")
+          : strings.t("Bình thường");
+    }
+
+    if (type == "water_leak" || type == "flood") {
+      final active =
+          parseDeviceBool(d["water_leak"]) == true ||
+              parseDeviceBool(d["leak"]) == true ||
+              parseDeviceBool(d["water"]) == true;
+
+      return active
+          ? strings.t("Phát hiện ngập nước")
+          : strings.t("Bình thường");
+    }
+
+    if (type == "motion") {
+      final active =
+          parseDeviceBool(d["occupancy"]) == true ||
+              parseDeviceBool(d["motion"]) == true ||
+              parseDeviceBool(d["presence"]) == true;
+
+      return active
+          ? strings.t("Phát hiện chuyển động")
+          : strings.t("Không có chuyển động");
+    }
+
+    final contact = parseDeviceBool(d["contact"]);
+    final status =
+        d["status"]?.toString().trim().toLowerCase() ?? "";
+
+    return contact == true || status == "closed"
         ? strings.t("Đang đóng")
         : strings.t("Đang mở");
   }
@@ -365,34 +412,19 @@ class DeviceList extends StatelessWidget {
   }
 
   Color getAccentColor(Map<String, dynamic> d) {
-    final type = d["type"]?.toString() ?? "door";
+    final evaluation = evaluateDeviceStatus(
+      d,
+      securityMode: securityMode,
+    );
 
-    if (d["tamper"] == true) {
+    final level = evaluation["level"]?.toString() ?? "safe";
+
+    if (level == "danger") {
       return SafeHomeColors.danger;
     }
 
-    if (type == "door" ||
-        type == "window" ||
-        type == "gate" ||
-        type == "lock") {
-      if (d["contact"] == false) {
-        return isNowInAlarmTime(d)
-            ? SafeHomeColors.danger
-            : SafeHomeColors.warning;
-      }
-    }
-
-    if (type == "smoke" &&
-        (d["smoke"] == true || d["tamper"] == true)) {
-      return SafeHomeColors.danger;
-    }
-
-    if (type == "sos" && isSosActive(d)) {
-      return SafeHomeColors.danger;
-    }
-
-    if (type == "sos") {
-      return SafeHomeColors.safe;
+    if (level == "warning") {
+      return SafeHomeColors.warning;
     }
 
     return SafeHomeColors.safe;

@@ -3250,6 +3250,21 @@ class _HomePageState extends State<HomePage> {
       await WidgetsBinding.instance.endOfFrame;
     }
 
+    final currentUid =
+        FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUid != null) {
+      try {
+        await FCMService.removeCurrentInstallationToken(
+          uid: currentUid,
+        );
+      } catch (error) {
+        debugPrint(
+          "REMOVE_FCM_TOKEN_ON_LOGOUT_ERROR: $error",
+        );
+      }
+    }
+
     await AutoLoginService.clearLogin();
     await FirebaseAuth.instance.signOut();
   }
@@ -4690,20 +4705,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
   Color getHomeColor(String h) {
-    final devices = safeMap(homes[h]?["devices"]);
+    final home = safeMap(homes[h]);
+    final overall = getHomeOverallStatus(home);
 
-    final overall = getOverallStatus(devices);
     final level = overall["level"]?.toString() ?? "safe";
+    final selected = h == selectedHome;
 
     if (level == "danger") {
-      return SafeHomeColors.danger;
+      return selected ? Colors.red.shade500 : Colors.red.shade400;
     }
 
     if (level == "warning") {
-      return SafeHomeColors.warning;
+      return selected ? Colors.orange.shade500 : Colors.orange.shade400;
     }
 
-    return SafeHomeColors.safe;
+    return selected ? Colors.green.shade500 : Colors.green.shade400;
   }
 
   @override
@@ -4956,6 +4972,7 @@ class _HomePageState extends State<HomePage> {
                     DeviceList(
                       devices: devices,
                       selectedRoomId: selectedRoomId,
+                      securityMode: securityMode,
                       header: Column(
                         children: [
                           StatusPanel(
@@ -5017,7 +5034,9 @@ class _HomePageState extends State<HomePage> {
                                     openNotificationList(tempDevice["id"]),
                               );
                             },
-                            overall: getOverallStatus(devices),
+                            overall: getHomeOverallStatus(
+                              safeMap(homes[selectedHome]),
+                            ),
 
                             securityMode: securityMode,
                             onSecurityModeChanged:
@@ -5374,7 +5393,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     ListTile(
                                       leading: Icon(
-                                          Icons.crisis_alert_rounded,
+                                        Icons.crisis_alert_rounded,
                                         color: localAlarmEnabled
                                             ? SafeHomeColors.primary
                                             : SafeHomeColors.textSecondary
