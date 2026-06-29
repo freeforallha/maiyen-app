@@ -2723,35 +2723,15 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _strings.t("Chia sẻ nhà"),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _strings.t("Chia sẻ nhà"),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
                         ),
-                        IconButton(
-                          tooltip: _strings.t("Quét QR để xin gia nhập nhà"),
-                          icon: const Icon(Icons.center_focus_strong_rounded),
-                          onPressed: () async {
-                            Navigator.pop(context, null);
-
-                            final code = await openQRScanner(
-                              context,
-                              title: _strings.t("Xin gia nhập nhà"),
-                              subtitle: _strings.t("Quét mã QR chia sẻ nhà"),
-                            );
-
-                            if (code != null) {
-                              await handleScannedQR(code);
-                            }
-                          },
-                        ),
-                      ],
+                      ),
                     ),
 
                     const SizedBox(height: 18),
@@ -3272,6 +3252,191 @@ class _HomePageState extends State<HomePage> {
 
     await AutoLoginService.clearLogin();
     await FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> showAddHomeOptions() async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        Widget optionTile({
+          required IconData icon,
+          required String title,
+          required String subtitle,
+          required Color color,
+          required String value,
+        }) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Material(
+              color: SafeHomeColors.surface,
+              borderRadius: BorderRadius.circular(18),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18),
+                onTap: () {
+                  Navigator.of(sheetContext).pop(value);
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(
+                    13,
+                    11,
+                    11,
+                    11,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: SafeHomeColors.border,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: color.withValues(alpha: 0.11),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Icon(
+                          icon,
+                          color: color,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                color: SafeHomeColors.textPrimary,
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              subtitle,
+                              style: const TextStyle(
+                                color: SafeHomeColors.textSecondary,
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(
+                        Icons.chevron_right_rounded,
+                        color: SafeHomeColors.textSecondary,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+              16,
+              10,
+              16,
+              12,
+            ),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(28),
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 44,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    _strings.t("Thêm Home"),
+                    style: const TextStyle(
+                      color: SafeHomeColors.textPrimary,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
+                optionTile(
+                  icon: Icons.add_home_work_rounded,
+                  title: _strings.t("Tạo Home mới"),
+                  subtitle: _strings.t(
+                    "Tạo một ngôi nhà mới của bạn",
+                  ),
+                  color: SafeHomeColors.primary,
+                  value: "create",
+                ),
+                optionTile(
+                  icon: Icons.qr_code_scanner_rounded,
+                  title: _strings.t("Xin gia nhập Home"),
+                  subtitle: _strings.t(
+                    "Quét mã QR được chủ nhà chia sẻ",
+                  ),
+                  color: SafeHomeColors.info,
+                  value: "join",
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (!mounted || result == null) {
+      return;
+    }
+
+    if (result == "create") {
+      addHome();
+      return;
+    }
+
+    if (result != "join") {
+      return;
+    }
+
+    final code = await openQRScanner(context);
+
+    if (!mounted || code == null || code.trim().isEmpty) {
+      return;
+    }
+
+    final value = code.trim();
+
+    if (!value.startsWith("safehome_join|") &&
+        !value.startsWith("safehome_join_multi|")) {
+      showTopToast(
+        context,
+        _strings.t("QR này không phải mã xin gia nhập Home"),
+        color: Colors.orange,
+        icon: Icons.qr_code_2_rounded,
+      );
+      return;
+    }
+
+    await handleScannedQR(value);
   }
 
   void addHome() async {
@@ -4530,17 +4695,15 @@ class _HomePageState extends State<HomePage> {
     final overall = getOverallStatus(devices);
     final level = overall["level"]?.toString() ?? "safe";
 
-    final selected = h == selectedHome;
-
     if (level == "danger") {
-      return selected ? Colors.red.shade500 : Colors.red.shade400;
+      return SafeHomeColors.danger;
     }
 
     if (level == "warning") {
-      return selected ? Colors.orange.shade500 : Colors.orange.shade400;
+      return SafeHomeColors.warning;
     }
 
-    return selected ? Colors.green.shade500 : Colors.green.shade400;
+    return SafeHomeColors.safe;
   }
 
   @override
@@ -5097,13 +5260,16 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
 
+
                 IconButton(
+                  tooltip: _strings.t("Thêm Home"),
                   icon: const Icon(
                     Icons.add_home_work_rounded,
                     color: SafeHomeColors.primary,
                   ),
-                  onPressed: addHome,
+                  onPressed: showAddHomeOptions,
                 ),
+
                 Stack(
                   children: [
                     IconButton(
@@ -5208,7 +5374,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     ListTile(
                                       leading: Icon(
-                                        Icons.shield_moon_rounded,
+                                          Icons.crisis_alert_rounded,
                                         color: localAlarmEnabled
                                             ? SafeHomeColors.primary
                                             : SafeHomeColors.textSecondary

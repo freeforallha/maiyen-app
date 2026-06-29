@@ -159,6 +159,9 @@ class _AuthGateState extends State<AuthGate> {
   bool ready = false;
   User? user;
 
+  String _profileFutureUid = "";
+  Future<DatabaseEvent>? _profileFuture;
+
   @override
   void initState() {
     super.initState();
@@ -192,6 +195,89 @@ class _AuthGateState extends State<AuthGate> {
     });
   }
 
+  Future<DatabaseEvent> _loadProfile(String uid) {
+    if (_profileFuture == null || _profileFutureUid != uid) {
+      _profileFutureUid = uid;
+      _profileFuture = FirebaseDatabase.instance
+          .ref("accounts/$uid/profile")
+          .once()
+          .timeout(const Duration(seconds: 12));
+    }
+
+    return _profileFuture!;
+  }
+
+  void _retryProfileLoad() {
+    setState(() {
+      _profileFutureUid = "";
+      _profileFuture = null;
+    });
+  }
+
+  Future<void> _signOutAfterProfileError() async {
+    try {
+      await AutoLoginService.clearLogin();
+    } catch (_) {}
+
+    await FirebaseAuth.instance.signOut();
+  }
+
+  Widget _buildProfileLoadError(Object? error) {
+    return Scaffold(
+      backgroundColor: SafeHomeColors.background,
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.cloud_off_rounded,
+                  size: 54,
+                  color: SafeHomeColors.danger,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  "Không thể tải dữ liệu tài khoản",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: SafeHomeColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error?.toString() ?? "Lỗi không xác định",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: SafeHomeColors.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _retryProfileLoad,
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: const Text("Thử lại"),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: _signOutAfterProfileError,
+                  child: const Text("Đăng xuất"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!ready) {
@@ -206,16 +292,28 @@ class _AuthGateState extends State<AuthGate> {
             snap.data ?? FirebaseAuth.instance.currentUser;
 
         if (currentUser == null) {
-          return LoginPage();
+          return const LoginPage();
         }
 
         return FutureBuilder<DatabaseEvent>(
-          future: FirebaseDatabase.instance
-              .ref("accounts/${currentUser.uid}/profile")
-              .once(),
+          future: _loadProfile(currentUser.uid),
           builder: (context, profileSnap) {
-            if (!profileSnap.hasData) {
+            if (profileSnap.connectionState == ConnectionState.waiting) {
               return const SafeHomeSplash();
+            }
+
+            if (profileSnap.hasError) {
+              debugPrint(
+                "PROFILE_LOAD_ERROR ${currentUser.uid}: ${profileSnap.error}",
+              );
+
+              return _buildProfileLoadError(profileSnap.error);
+            }
+
+            if (!profileSnap.hasData) {
+              return _buildProfileLoadError(
+                "Không nhận được dữ liệu từ Firebase",
+              );
             }
 
             final value = profileSnap.data!.snapshot.value;
@@ -238,7 +336,7 @@ class _AuthGateState extends State<AuthGate> {
               );
             }
 
-            return HomePage();
+            return const HomePage();
           },
         );
       },

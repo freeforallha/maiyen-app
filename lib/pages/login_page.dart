@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'set_password_page.dart';
 import '../services/auto_login_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -30,11 +28,14 @@ class _LoginPageState extends State<LoginPage> {
       loading = true;
       error = "";
     });
-    try {
-      setState(() => error = "");
 
-      final googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return;
+    try {
+      final googleSignIn = GoogleSignIn();
+      final googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        return;
+      }
 
       final googleAuth = await googleUser.authentication;
 
@@ -43,82 +44,50 @@ class _LoginPageState extends State<LoginPage> {
         idToken: googleAuth.idToken,
       );
 
-      final cred = await FirebaseAuth.instance.signInWithCredential(credential);
+      final credentialResult = await FirebaseAuth.instance
+          .signInWithCredential(credential)
+          .timeout(const Duration(seconds: 20));
 
-      final user = cred.user;
-      if (user == null) return;
+      final user = credentialResult.user;
 
-      final hasPassword = user.providerData.any(
-        (p) => p.providerId == "password",
-      );
+      if (user == null) {
+        throw Exception("Không thể đăng nhập bằng Google");
+      }
 
-      if (!hasPassword) {
-        if (!mounted) return;
+      // Làm mới token trước khi AuthGate đọc Realtime Database.
+      await user.getIdToken(true);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const SetPasswordPage()),
+      // Google Sign-In không dùng mật khẩu đã lưu của tài khoản email trước đó.
+      try {
+        await AutoLoginService.clearLogin().timeout(
+          const Duration(seconds: 10),
         );
-
-        return;
+      } catch (clearError) {
+        debugPrint("CLEAR_SAVED_LOGIN_AFTER_GOOGLE_ERROR: $clearError");
       }
 
-      final ref = FirebaseDatabase.instance.ref("accounts/${user.uid}");
-      final snap = await ref.get();
+      // Không đọc/ghi Database và không tự điều hướng tại đây.
+      // AuthGate sẽ tự mở ProfileSetupPage hoặc HomePage theo UID mới.
+      debugPrint("GOOGLE_LOGIN_SUCCESS: ${user.uid}");
+    } on FirebaseAuthException catch (e, stack) {
+      debugPrint("GOOGLE_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}");
+      debugPrint("GOOGLE_LOGIN_STACK: $stack");
 
-      if (!snap.exists) {
-        if (!mounted) return;
+      if (!mounted) return;
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                ProfileSetupPage(uid: user.uid, email: user.email ?? ""),
-          ),
-        );
-
-        return;
-      }
-
-      final authenticatedEmail = user.email?.trim();
-
-      if (authenticatedEmail == null || authenticatedEmail.isEmpty) {
-        throw Exception("Không tìm thấy email Firebase Auth");
-      }
-
-      await ref.child("email").set(authenticatedEmail);
-
-      final profileSnap = await ref.child("profile").get();
-      final profile = profileSnap.value is Map
-          ? Map<String, dynamic>.from(profileSnap.value as Map)
-          : <String, dynamic>{};
-
-      final name = profile["name"]?.toString().trim() ?? "";
-      final gender = profile["gender"]?.toString().trim() ?? "";
-      final phone = profile["phone"]?.toString().trim() ?? "";
-
-      if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
-        if (!mounted) return;
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) =>
-                ProfileSetupPage(uid: user.uid, email: user.email ?? ""),
-          ),
-        );
-
-        return;
-      }
-
-      await ref.child("profile").update({"photoUrl": user.photoURL ?? ""});
-    } catch (e, stack) {
       setState(() {
-        error = "Google login error: $e";
+        error = e.message ?? "Không thể đăng nhập bằng Google";
       });
+    } catch (e, stack) {
+      debugPrint("GOOGLE_LOGIN_ERROR: $e");
+      debugPrint("GOOGLE_LOGIN_STACK: $stack");
 
-      debugPrint("Google Sign-In ERROR: $e");
-      debugPrint("Google Sign-In STACK: $stack");
+      if (!mounted) return;
+
+      setState(() {
+        error = "Không thể đăng nhập bằng Google: $e";
+      });
+    } finally {
       if (mounted) {
         setState(() {
           loading = false;
@@ -194,9 +163,9 @@ class _LoginPageState extends State<LoginPage> {
       if (isLogin) {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-              email: emailInput,
-              password: passwordInput,
-            )
+          email: emailInput,
+          password: passwordInput,
+        )
             .timeout(const Duration(seconds: 20));
 
         if (rememberLogin) {
@@ -219,9 +188,9 @@ class _LoginPageState extends State<LoginPage> {
 
       final cred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-            email: emailInput,
-            password: passwordInput,
-          )
+        email: emailInput,
+        password: passwordInput,
+      )
           .timeout(const Duration(seconds: 20));
 
       final user = cred.user;
@@ -440,13 +409,13 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: loading ? null : submit,
                               child: loading
                                   ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.4,
-                                        color: Colors.white,
-                                      ),
-                                    )
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.4,
+                                  color: Colors.white,
+                                ),
+                              )
                                   : Text(isLogin ? "Đăng nhập" : "Đăng ký mới"),
                             ),
                           ),

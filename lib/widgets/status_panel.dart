@@ -445,7 +445,7 @@ class _StatusPanelState extends State<StatusPanel> {
                     ),
                     const SizedBox(height: 8),
                     _actionTile(
-                      icon: Icons.shield_moon_rounded,
+                      icon: Icons.crisis_alert_rounded,
                       title: _strings.t("Hẹn giờ Alarm"),
                       subtitle: widget.alarmStart.trim().isEmpty
                           ? _strings.t("Chưa thiết lập")
@@ -790,7 +790,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ? rotatingLines[
     _broadcastIndex % rotatingLines.length
     ]
-        : _strings.t("Bấm vào để xem chi tiết");
+        : _strings.t("Ngôi nhà đang được theo dõi liên tục");
 
     final statusColor = _statusColor(level);
     final statusIcon = _statusIcon(level);
@@ -935,49 +935,6 @@ class _StatusPanelState extends State<StatusPanel> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: widget.securityMode == "armed"
-                            ? Icons.shield_rounded
-                            : Icons.home_rounded,
-                        label: "Mode",
-                        value: widget.securityMode == "armed"
-                            ? "Bảo vệ"
-                            : "Bình thường",
-                        active: widget.securityMode == "armed",
-                        activeColor: SafeHomeColors.danger,
-                        onTap: () => _showSecurityModeOptions(context),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: Icons.shield_moon_rounded,
-                        label: "Alarm",
-                        value: alarmScheduleText,
-                        active: alarmScheduleSet,
-                        activeColor: SafeHomeColors.primary,
-                        onTap: widget.onScheduleAlarm,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: Icons.pause_circle_outline_rounded,
-                        label: _strings.t("Tạm dừng"),
-                        value: alarmPauseSet
-                            ? widget.alarmPauseText
-                            : _strings.t("Tắt"),
-                        active: alarmPauseSet,
-                        activeColor: SafeHomeColors.warning,
-                        onTap: widget.onAlarmPauseToday,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 7),
                 Text(
                   subtitle,
                   maxLines: 1,
@@ -999,46 +956,91 @@ class _StatusPanelState extends State<StatusPanel> {
                       : SafeHomeColors.textSecondary,
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          );
-                        },
-                        child: _statusLine(
-                          key: ValueKey(secondLine),
-                          text: secondLine,
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  child: Row(
+                    key: ValueKey(secondLine),
+                    children: [
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
                           color: issues.isNotEmpty
                               ? statusColor
                               : SafeHomeColors.textSecondary,
+                          shape: BoxShape.circle,
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _strings.t("Chi tiết"),
-                          style: const TextStyle(
-                            fontSize: 11.5,
-                            height: 1,
-                            fontWeight: FontWeight.w900,
-                            color: SafeHomeColors.textPrimary,
+                      const SizedBox(width: 7),
+                      Expanded(
+                        child: Text(
+                          "$secondLine... →",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12,
+                            height: 1.15,
+                            color: issues.isNotEmpty
+                                ? statusColor
+                                : SafeHomeColors.textSecondary,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 1),
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          size: 16,
-                          color: SafeHomeColors.textPrimary,
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 9),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _alarmStatusItem(
+                        icon: widget.securityMode == "armed"
+                            ? Icons.shield_rounded
+                            : Icons.home_rounded,
+                        value: widget.securityMode == "armed"
+                            ? "Bảo vệ"
+                            : "Bình thường",
+                        active: widget.securityMode == "armed",
+                        activeColor: SafeHomeColors.danger,
+                        onTap: () => _showSecurityModeOptions(context),
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 22,
+                      color: SafeHomeColors.border,
+                    ),
+                    Expanded(
+                      child: _alarmStatusItem(
+                        icon: Icons.crisis_alert_rounded,
+                        value: alarmScheduleText,
+                        active: alarmScheduleSet,
+                        activeColor: SafeHomeColors.primary,
+                        onTap: widget.onScheduleAlarm,
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 22,
+                      color: SafeHomeColors.border,
+                    ),
+                    Expanded(
+                      child: _alarmStatusItem(
+                        icon: Icons.pause_circle_outline_rounded,
+                        value: alarmPauseSet
+                            ? widget.alarmPauseText
+                            : _strings.t("Tắt"),
+                        active: alarmPauseSet,
+                        activeColor: SafeHomeColors.warning,
+                        onTap: widget.onAlarmPauseToday,
+                      ),
                     ),
                   ],
                 ),
@@ -1052,7 +1054,6 @@ class _StatusPanelState extends State<StatusPanel> {
 
   Widget _alarmStatusItem({
     required IconData icon,
-    required String label,
     required String value,
     required bool active,
     required Color activeColor,
@@ -1067,45 +1068,34 @@ class _StatusPanelState extends State<StatusPanel> {
       borderRadius: BorderRadius.circular(8),
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 2,
+          horizontal: 2,
+          vertical: 5,
         ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 15,
-              color: color,
-            ),
-            const SizedBox(width: 5),
-            Flexible(
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "$label: ",
-                      style: TextStyle(
-                        color: SafeHomeColors.textSecondary,
-                        fontSize: 10.7,
-                        height: 1.15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    TextSpan(
-                      text: value,
-                      style: TextStyle(
-                        color: color,
-                        fontSize: 10.9,
-                        height: 1.15,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  size: 17,
+                  color: color,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+                const SizedBox(width: 4),
+                Text(
+                  value,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 10.9,
+                    height: 1.15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
