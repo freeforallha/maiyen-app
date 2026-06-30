@@ -7,6 +7,7 @@ import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
+
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -63,9 +64,11 @@ class _AllHomePageState extends State<AllHomePage> {
     if (dangerCount > 0) {
       summaries.add(
         _strings.choose(
-          vi: "🚨 $dangerCount nhà không an toàn"
+          vi:
+              "🚨 $dangerCount nhà không an toàn"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
-          en: "🚨 $dangerCount unsafe homes"
+          en:
+              "🚨 $dangerCount unsafe homes"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
         ),
       );
@@ -74,9 +77,11 @@ class _AllHomePageState extends State<AllHomePage> {
     if (warningCount > 0) {
       summaries.add(
         _strings.choose(
-          vi: "⚠️ $warningCount nhà cần chú ý"
+          vi:
+              "⚠️ $warningCount nhà cần chú ý"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
-          en: "⚠️ $warningCount homes need attention"
+          en:
+              "⚠️ $warningCount homes need attention"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
         ),
       );
@@ -92,12 +97,7 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     return summaries.isEmpty
-        ? [
-      _strings.choose(
-        vi: "🏡 Chưa có nhà nào",
-        en: "🏡 No homes yet",
-      ),
-    ]
+        ? [_strings.choose(vi: "🏡 Chưa có nhà nào", en: "🏡 No homes yet")]
         : summaries;
   }
 
@@ -156,9 +156,7 @@ class _AllHomePageState extends State<AllHomePage> {
               final issues = List<String>.from(item["issues"] ?? []);
               final message = issues.isEmpty
                   ? _strings.t("Cần kiểm tra")
-                  : _strings.statusText(
-                issues[sheetIndex % issues.length],
-              );
+                  : _strings.statusText(issues[sheetIndex % issues.length]);
 
               return InkWell(
                 onTap: () {
@@ -298,7 +296,10 @@ class _AllHomePageState extends State<AllHomePage> {
                         vi: "${homes.length} nhà đang được theo dõi",
                         en: "${homes.length} homes monitored",
                       ),
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     section(
@@ -333,11 +334,13 @@ class _AllHomePageState extends State<AllHomePage> {
       sheetTimer?.cancel();
     });
   }
+
   StreamSubscription<DatabaseEvent>? ownHomesSubscription;
   StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
   StreamSubscription<DatabaseEvent>? groupNamesSubscription;
 
-  final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions = {};
+  final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions =
+      {};
   @override
   @override
   void initState() {
@@ -349,168 +352,172 @@ class _AllHomePageState extends State<AllHomePage> {
         summaryIndex++;
       });
     });
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return;
+    }
+
+    final uid = currentUser.uid;
 
     ownHomesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/homes")
         .onValue
         .listen((event) {
-      final ownHomes = event.snapshot.value is Map
-          ? Map<String, dynamic>.from(event.snapshot.value as Map)
-          : <String, dynamic>{};
+          final ownHomes = event.snapshot.value is Map
+              ? Map<String, dynamic>.from(event.snapshot.value as Map)
+              : <String, dynamic>{};
 
-      if (!mounted) return;
+          if (!mounted) return;
 
-      setState(() {
-        homes.removeWhere((key, value) {
-          final home = safeMap(value);
-          return home["_shared"] != true;
+          setState(() {
+            homes.removeWhere((key, value) {
+              final home = safeMap(value);
+              return home["_shared"] != true;
+            });
+
+            for (final entry in ownHomes.entries) {
+              homes[entry.key] = entry.value;
+            }
+          });
         });
-
-        for (final entry in ownHomes.entries) {
-          homes[entry.key] = entry.value;
-        }
-      });
-    });
 
     sharedHomesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/sharedHomes")
         .onValue
         .listen((event) {
-      final sharedHomes = event.snapshot.value is Map
-          ? Map<String, dynamic>.from(event.snapshot.value as Map)
-          : <String, dynamic>{};
+          final sharedHomes = event.snapshot.value is Map
+              ? Map<String, dynamic>.from(event.snapshot.value as Map)
+              : <String, dynamic>{};
 
-      final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
+          final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
 
-      for (final oldId in sharedHomeSubscriptions.keys.toList()) {
-        if (!activeIds.contains(oldId)) {
-          sharedHomeSubscriptions.remove(oldId)?.cancel();
+          for (final oldId in sharedHomeSubscriptions.keys.toList()) {
+            if (!activeIds.contains(oldId)) {
+              sharedHomeSubscriptions.remove(oldId)?.cancel();
 
-          if (mounted) {
-            setState(() {
-              homes.remove(oldId);
-            });
+              if (mounted) {
+                setState(() {
+                  homes.remove(oldId);
+                });
+              }
+            }
           }
-        }
-      }
 
-      for (final entry in sharedHomes.entries) {
-        final homeId = entry.key.toString();
-        final sharedInfo = safeMap(entry.value);
+          for (final entry in sharedHomes.entries) {
+            final homeId = entry.key.toString();
+            final sharedInfo = safeMap(entry.value);
 
-        final ownerUid =
-            sharedInfo["ownerUid"]?.toString().trim() ?? "";
+            final ownerUid = sharedInfo["ownerUid"]?.toString().trim() ?? "";
 
-        final role =
-            sharedInfo["role"]?.toString().trim() ?? "member";
+            final role = sharedInfo["role"]?.toString().trim() ?? "member";
 
-        if (ownerUid.isEmpty) {
-          continue;
-        }
-
-        if (sharedHomeSubscriptions.containsKey(homeId)) {
-          continue;
-        }
-
-        final sub = FirebaseDatabase.instance
-            .ref("accounts/$ownerUid/homes/$homeId")
-            .onValue
-            .listen(
-              (homeEvent) {
-            final rawHome = homeEvent.snapshot.value;
-
-            if (rawHome is! Map) {
-              if (!mounted) return;
-
-              setState(() {
-                homes.remove(homeId);
-              });
-
-              return;
+            if (ownerUid.isEmpty) {
+              continue;
             }
 
-            final newHome = {
-              ...Map<String, dynamic>.from(rawHome),
-              "_shared": true,
-              "_ownerUid": ownerUid,
-              "_ownerEmail": "",
-              "_ownerName": "",
-              "_ownerPhotoUrl": "",
-              "_role": role,
-            };
-
-            if (!mounted) return;
-
-            setState(() {
-              homes[homeId] = newHome;
-            });
-          },
-          onError: (Object error) {
-            debugPrint(
-              "ALL_HOME_SHARED_HOME_ERROR "
-                  "$ownerUid/$homeId: $error",
-            );
-          },
-        );
-
-        sharedHomeSubscriptions[homeId] = sub;
-
-        FirebaseDatabase.instance
-            .ref("userDirectory/$ownerUid")
-            .get()
-            .then((directorySnap) {
-          final directory = safeMap(directorySnap.value);
-
-          final ownerEmail =
-              directory["email"]?.toString().trim() ?? "";
-
-          final ownerName =
-              directory["name"]?.toString().trim() ?? "";
-
-          final ownerPhotoUrl =
-              directory["photoUrl"]?.toString().trim() ?? "";
-
-          if (!mounted) return;
-
-          setState(() {
-            final currentHome = safeMap(homes[homeId]);
-
-            if (currentHome.isEmpty) {
-              return;
+            if (sharedHomeSubscriptions.containsKey(homeId)) {
+              continue;
             }
 
-            homes[homeId] = {
-              ...currentHome,
-              "_ownerEmail": ownerEmail,
-              "_ownerName": ownerName,
-              "_ownerPhotoUrl": ownerPhotoUrl,
-              "_role": role,
-            };
-          });
-        }).catchError((Object error) {
-          debugPrint(
-            "ALL_HOME_USER_DIRECTORY_ERROR "
-                "$ownerUid: $error",
-          );
+            final sub = FirebaseDatabase.instance
+                .ref("accounts/$ownerUid/homes/$homeId")
+                .onValue
+                .listen(
+                  (homeEvent) {
+                    final rawHome = homeEvent.snapshot.value;
+
+                    if (rawHome is! Map) {
+                      if (!mounted) return;
+
+                      setState(() {
+                        homes.remove(homeId);
+                      });
+
+                      return;
+                    }
+
+                    final newHome = {
+                      ...Map<String, dynamic>.from(rawHome),
+                      "_shared": true,
+                      "_ownerUid": ownerUid,
+                      "_ownerEmail": "",
+                      "_ownerName": "",
+                      "_ownerPhotoUrl": "",
+                      "_role": role,
+                    };
+
+                    if (!mounted) return;
+
+                    setState(() {
+                      homes[homeId] = newHome;
+                    });
+                  },
+                  onError: (Object error) {
+                    debugPrint(
+                      "ALL_HOME_SHARED_HOME_ERROR "
+                      "$ownerUid/$homeId: $error",
+                    );
+                  },
+                );
+
+            sharedHomeSubscriptions[homeId] = sub;
+
+            FirebaseDatabase.instance
+                .ref("userDirectory/$ownerUid")
+                .get()
+                .then((directorySnap) {
+                  final directory = safeMap(directorySnap.value);
+
+                  final ownerEmail =
+                      directory["email"]?.toString().trim() ?? "";
+
+                  final ownerName = directory["name"]?.toString().trim() ?? "";
+
+                  final ownerPhotoUrl =
+                      directory["photoUrl"]?.toString().trim() ?? "";
+
+                  if (!mounted) return;
+
+                  setState(() {
+                    final currentHome = safeMap(homes[homeId]);
+
+                    if (currentHome.isEmpty) {
+                      return;
+                    }
+
+                    homes[homeId] = {
+                      ...currentHome,
+                      "_ownerEmail": ownerEmail,
+                      "_ownerName": ownerName,
+                      "_ownerPhotoUrl": ownerPhotoUrl,
+                      "_role": role,
+                    };
+                  });
+                })
+                .catchError((Object error) {
+                  debugPrint(
+                    "ALL_HOME_USER_DIRECTORY_ERROR "
+                    "$ownerUid: $error",
+                  );
+                });
+          }
         });
-      }
-    });
 
     groupNamesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/groupNames")
         .onValue
         .listen((event) {
-      final names = event.snapshot.value is Map
-          ? Map<String, String>.from(event.snapshot.value as Map)
-          : <String, String>{};
+          final names = event.snapshot.value is Map
+              ? Map<String, String>.from(event.snapshot.value as Map)
+              : <String, String>{};
 
-      if (!mounted) return;
+          if (!mounted) return;
 
-      setState(() {
-        customNames = names;
-      });
-    });
+          setState(() {
+            customNames = names;
+          });
+        });
   }
 
   Map<String, List<String>> groupedHomes() {
@@ -533,8 +540,7 @@ class _AllHomePageState extends State<AllHomePage> {
           ? (data["_ownerUid"] ?? "unknown_uid")
           : "your_homes";
 
-      grouped.putIfAbsent(groupKey, () => []);
-      grouped[groupKey]!.add(homeId);
+      grouped.putIfAbsent(groupKey, () => []).add(homeId);
     }
 
     return grouped;
@@ -578,13 +584,18 @@ class _AllHomePageState extends State<AllHomePage> {
       selectedHomes.clear();
     });
 
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return;
+    }
+
+    final uid = currentUser.uid;
 
     await FirebaseDatabase.instance
         .ref("accounts/$uid/groupNames/$key")
         .set(result);
   }
-
 
   Widget buildSectionTitle(String groupKey, List<String> ids) {
     final isYourHomes = groupKey == "your_homes";
@@ -593,27 +604,22 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (!isYourHomes && ids.isNotEmpty) {
       final firstHome = safeMap(homes[ids.first]);
-      ownerText =
-          firstHome["_ownerEmail"]?.toString() ?? "Unknown";
+      ownerText = firstHome["_ownerEmail"]?.toString() ?? "Unknown";
     }
 
-    final displayName = customNames[groupKey] ??
+    final displayName =
+        customNames[groupKey] ??
         (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
 
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 8,
-        bottom: 12,
-      ),
+      padding: const EdgeInsets.only(top: 8, bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
             borderRadius: BorderRadius.circular(10),
             onTap: () {
-              final allSelected = ids.every(
-                selectedHomes.contains,
-              );
+              final allSelected = ids.every(selectedHomes.contains);
 
               showModalBottomSheet(
                 context: context,
@@ -622,12 +628,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 builder: (_) {
                   return SafeArea(
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(
-                        16,
-                        10,
-                        16,
-                        18,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
                       decoration: const BoxDecoration(
                         color: SafeHomeColors.surface,
                         borderRadius: BorderRadius.vertical(
@@ -640,12 +641,10 @@ class _AllHomePageState extends State<AllHomePage> {
                           Container(
                             width: 44,
                             height: 5,
-                            margin:
-                            const EdgeInsets.only(bottom: 10),
+                            margin: const EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
                               color: SafeHomeColors.border,
-                              borderRadius:
-                              BorderRadius.circular(999),
+                              borderRadius: BorderRadius.circular(999),
                             ),
                           ),
                           ListTile(
@@ -663,8 +662,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             leading: Icon(
                               allSelected
                                   ? Icons.check_box_rounded
-                                  : Icons
-                                  .check_box_outline_blank_rounded,
+                                  : Icons.check_box_outline_blank_rounded,
                               color: SafeHomeColors.primary,
                             ),
                             title: Text(
@@ -692,10 +690,7 @@ class _AllHomePageState extends State<AllHomePage> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 2,
-                bottom: 8,
-              ),
+              padding: const EdgeInsets.only(left: 2, bottom: 8),
               child: Row(
                 children: [
                   Text(
@@ -729,11 +724,7 @@ class _AllHomePageState extends State<AllHomePage> {
               return SizedBox(
                 width: 55,
                 height: 55,
-                child: buildHomeCard(
-                  context,
-                  homeId,
-                  data,
-                ),
+                child: buildHomeCard(context, homeId, data),
               );
             }).toList(),
           ),
@@ -743,10 +734,10 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Widget buildHomeCard(
-      BuildContext context,
-      String homeId,
-      Map<String, dynamic> data,
-      ) {
+    BuildContext context,
+    String homeId,
+    Map<String, dynamic> data,
+  ) {
     final status = getHomeOverallStatus(data);
     final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
@@ -757,9 +748,7 @@ class _AllHomePageState extends State<AllHomePage> {
         ? SafeHomeColors.warning
         : SafeHomeColors.safe;
 
-    final rawName = data["_customName"] ??
-        data["name"] ??
-        homeId;
+    final rawName = data["_customName"] ?? data["name"] ?? homeId;
 
     final displayName = rawName.toString().trim().isEmpty
         ? _strings.t("Nhà")
@@ -791,9 +780,7 @@ class _AllHomePageState extends State<AllHomePage> {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: selected
-              ? SafeHomeColors.primarySoft
-              : SafeHomeColors.surface,
+          color: selected ? SafeHomeColors.primarySoft : SafeHomeColors.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected
@@ -949,10 +936,12 @@ class _AllHomePageState extends State<AllHomePage> {
         title: Text(_strings.t("Xác nhận thay đổi")),
         content: Text(
           _strings.choose(
-            vi: "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
+            vi:
+                "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
                 "Những thành viên đang sử dụng chế độ 'Theo nhà' sẽ bị ảnh hưởng.\n"
                 "Các cài đặt Reminder/Alarm cá nhân (Riêng tôi) sẽ không bị thay đổi.",
-            en: "This will change Home Reminder/Alarm settings for the selected homes.\n\n"
+            en:
+                "This will change Home Reminder/Alarm settings for the selected homes.\n\n"
                 "Members using Home settings will be affected.\n"
                 "Personal Reminder/Alarm settings will not be changed.",
           ),
@@ -971,7 +960,13 @@ class _AllHomePageState extends State<AllHomePage> {
     );
 
     if (confirmed != true) return;
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return;
+    }
+
+    final uid = currentUser.uid;
     final updates = <String, dynamic>{};
 
     int updatedHomes = 0;
@@ -1000,16 +995,13 @@ class _AllHomePageState extends State<AllHomePage> {
 
         final currentNotifications = currentNotificationsRaw is List
             ? List<Map<String, dynamic>>.from(
-          currentNotificationsRaw.map(
-                (e) => Map<String, dynamic>.from(e),
-          ),
-        )
+                currentNotificationsRaw.map(
+                  (e) => Map<String, dynamic>.from(e),
+                ),
+              )
             : <Map<String, dynamic>>[];
 
-        currentNotifications.add({
-          "enabled": true,
-          "time": time,
-        });
+        currentNotifications.add({"enabled": true, "time": time});
 
         updates["accounts/$ownerUid/homes/$homeId/schedules/notifications"] =
             currentNotifications;
@@ -1093,17 +1085,21 @@ class _AllHomePageState extends State<AllHomePage> {
         content: Text(
           action == "reminder"
               ? _strings.choose(
-            vi: "Đã cài Reminder cho $updatedHomes nhà."
-                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-            en: "Reminder was set for $updatedHomes homes."
-                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-          )
+                  vi:
+                      "Đã cài Reminder cho $updatedHomes nhà."
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+                  en:
+                      "Reminder was set for $updatedHomes homes."
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+                )
               : _strings.choose(
-            vi: "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
-                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-            en: "Alarm was set for $updatedDevices devices across $updatedHomes homes."
-                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-          ),
+                  vi:
+                      "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+                  en:
+                      "Alarm was set for $updatedDevices devices across $updatedHomes homes."
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+                ),
         ),
         actions: [
           TextButton(
@@ -1130,9 +1126,11 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (sharedCount > 0 && ownCount > 0) {
       message = _strings.choose(
-        vi: "Các home của bạn sẽ bị xoá.\n"
+        vi:
+            "Các home của bạn sẽ bị xoá.\n"
             "Các home được chia sẻ sẽ được rời khỏi.",
-        en: "Your homes will be deleted.\n"
+        en:
+            "Your homes will be deleted.\n"
             "You will leave the shared homes.",
       );
     } else if (sharedCount > 0) {
@@ -1293,10 +1291,25 @@ class _AllHomePageState extends State<AllHomePage> {
                     ),
                     onPressed: () async {
                       try {
-                        final user = FirebaseAuth.instance.currentUser!;
+                        final user = FirebaseAuth.instance.currentUser;
+                        final userEmail = user?.email;
+
+                        if (user == null ||
+                            userEmail == null ||
+                            userEmail.isEmpty) {
+                          if (!mounted) return;
+
+                          showTopToast(
+                            context,
+                            _strings.t("Không tìm thấy tài khoản"),
+                            color: Colors.red,
+                            icon: Icons.error_outline_rounded,
+                          );
+                          return;
+                        }
 
                         final credential = EmailAuthProvider.credential(
-                          email: user.email!,
+                          email: userEmail,
                           password: controller.text.trim(),
                         );
 
@@ -1327,7 +1340,13 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (passwordOk != true) return;
 
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return;
+    }
+
+    final uid = currentUser.uid;
 
     for (final homeId in selectedHomes) {
       final home = safeMap(homes[homeId]);
@@ -1403,58 +1422,57 @@ class _AllHomePageState extends State<AllHomePage> {
         centerTitle: true,
         title: isSearching
             ? TextField(
-          controller: searchController,
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: _strings.t("Tìm home..."),
-            border: InputBorder.none,
-            filled: false,
-            contentPadding: EdgeInsets.zero,
-          ),
-          onChanged: (value) {
-            setState(() {
-              search = value.toLowerCase().trim();
-            });
-          },
-        )
+                controller: searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: _strings.t("Tìm home..."),
+                  border: InputBorder.none,
+                  filled: false,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    search = value.toLowerCase().trim();
+                  });
+                },
+              )
             : Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: showAllHomeSummarySheet,
-            borderRadius: BorderRadius.circular(10),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 4,
-              ),
-              child: RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Safe",
-                      style: TextStyle(
-                        color: SafeHomeColors.primary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.4,
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: showAllHomeSummarySheet,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 4,
+                    ),
+                    child: RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Safe",
+                            style: TextStyle(
+                              color: SafeHomeColors.primary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.4,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "AllHome",
+                            style: TextStyle(
+                              color: SafeHomeColors.textPrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.4,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    TextSpan(
-                      text: "AllHome",
-                      style: TextStyle(
-                        color:
-                        SafeHomeColors.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.4,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
 
         actions: [
           IconButton(
@@ -1560,7 +1578,10 @@ class _AllHomePageState extends State<AllHomePage> {
                             color: Colors.green.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.share_rounded, color: Colors.green),
+                          child: const Icon(
+                            Icons.share_rounded,
+                            color: Colors.green,
+                          ),
                         ),
                         title: Text(
                           _strings.t("Chia sẻ nhà đã chọn"),
@@ -1575,7 +1596,13 @@ class _AllHomePageState extends State<AllHomePage> {
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
                           final controller = TextEditingController();
-                          final ownerUid = FirebaseAuth.instance.currentUser!.uid;
+                          final currentUser = FirebaseAuth.instance.currentUser;
+
+                          if (currentUser == null) {
+                            return;
+                          }
+
+                          final ownerUid = currentUser.uid;
 
                           final qrData =
                               "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
@@ -1592,7 +1619,10 @@ class _AllHomePageState extends State<AllHomePage> {
                                     right: 20,
                                     top: 20,
                                     bottom:
-                                    MediaQuery.of(context).viewInsets.bottom + 20,
+                                        MediaQuery.of(
+                                          context,
+                                        ).viewInsets.bottom +
+                                        20,
                                   ),
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
@@ -1608,7 +1638,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                         height: 5,
                                         decoration: BoxDecoration(
                                           color: Colors.grey.shade300,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(height: 18),
@@ -1647,15 +1679,21 @@ class _AllHomePageState extends State<AllHomePage> {
                                       const SizedBox(height: 18),
                                       TextField(
                                         controller: controller,
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         decoration: InputDecoration(
-                                          prefixIcon:
-                                          const Icon(Icons.email_rounded),
-                                          labelText: _strings.t("Email người nhận"),
+                                          prefixIcon: const Icon(
+                                            Icons.email_rounded,
+                                          ),
+                                          labelText: _strings.t(
+                                            "Email người nhận",
+                                          ),
                                           filled: true,
                                           fillColor: Colors.grey.shade100,
                                           border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
                                             borderSide: BorderSide.none,
                                           ),
                                         ),
@@ -1669,7 +1707,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                           onPressed: () {
                                             Navigator.pop(
                                               context,
-                                              controller.text.trim().toLowerCase(),
+                                              controller.text
+                                                  .trim()
+                                                  .toLowerCase(),
                                             );
                                           },
                                         ),
@@ -1681,21 +1721,29 @@ class _AllHomePageState extends State<AllHomePage> {
                             },
                           );
 
-                          if (targetEmail == null || targetEmail.isEmpty) return;
+                          if (targetEmail == null || targetEmail.isEmpty) {
+                            return;
+                          }
 
-                          final accountsSnap =
-                          await FirebaseDatabase.instance.ref("accounts").get();
+                          final accountsSnap = await FirebaseDatabase.instance
+                              .ref("accounts")
+                              .get();
 
                           String? targetUid;
 
                           if (accountsSnap.exists) {
-                            final accounts =
-                            Map<String, dynamic>.from(accountsSnap.value as Map);
+                            final accounts = Map<String, dynamic>.from(
+                              accountsSnap.value as Map,
+                            );
 
                             for (final entry in accounts.entries) {
-                              final data = Map<String, dynamic>.from(entry.value);
-                              final mail =
-                              data["email"]?.toString().trim().toLowerCase();
+                              final data = Map<String, dynamic>.from(
+                                entry.value,
+                              );
+                              final mail = data["email"]
+                                  ?.toString()
+                                  .trim()
+                                  .toLowerCase();
 
                               if (mail == targetEmail) {
                                 targetUid = entry.key;
@@ -1715,14 +1763,15 @@ class _AllHomePageState extends State<AllHomePage> {
                             return;
                           }
 
-                          final myUid = FirebaseAuth.instance.currentUser!.uid;
+                          final myUid = currentUser.uid;
                           int skipped = 0;
 
                           for (final homeId in selectedHomes) {
                             final home = safeMap(homes[homeId]);
                             final role = home["_role"]?.toString() ?? "member";
 
-                            final canShare = home["_shared"] != true ||
+                            final canShare =
+                                home["_shared"] != true ||
                                 role == "owner" ||
                                 role == "admin";
 
@@ -1732,21 +1781,30 @@ class _AllHomePageState extends State<AllHomePage> {
                             }
 
                             await FirebaseDatabase.instance
-                                .ref("accounts/$targetUid/shareRequests/$homeId")
+                                .ref(
+                                  "accounts/$targetUid/shareRequests/$homeId",
+                                )
                                 .set({
-                              "ownerUid": myUid,
-                              "homeId": homeId,
-                              "ownerEmail":
-                              FirebaseAuth.instance.currentUser?.email ?? "",
-                              "time": DateTime.now().millisecondsSinceEpoch,
-                            });
+                                  "ownerUid": myUid,
+                                  "homeId": homeId,
+                                  "ownerEmail":
+                                      FirebaseAuth
+                                          .instance
+                                          .currentUser
+                                          ?.email ??
+                                      "",
+                                  "time": DateTime.now().millisecondsSinceEpoch,
+                                });
 
                             await FirebaseDatabase.instance
-                                .ref("accounts/$myUid/shareList/$homeId/$targetUid")
+                                .ref(
+                                  "accounts/$myUid/shareList/$homeId/$targetUid",
+                                )
                                 .set({
-                              "email": targetEmail,
-                              "sharedAt": DateTime.now().millisecondsSinceEpoch,
-                            });
+                                  "email": targetEmail,
+                                  "sharedAt":
+                                      DateTime.now().millisecondsSinceEpoch,
+                                });
                           }
                           if (!context.mounted) return;
 
@@ -1757,13 +1815,13 @@ class _AllHomePageState extends State<AllHomePage> {
                               content: Text(
                                 skipped > 0
                                     ? _strings.choose(
-                                  vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
-                                  en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
-                                )
+                                        vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
+                                        en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
+                                      )
                                     : _strings.choose(
-                                  vi: "Đã chia sẻ nhà thành công.",
-                                  en: "Homes shared successfully.",
-                                ),
+                                        vi: "Đã chia sẻ nhà thành công.",
+                                        en: "Homes shared successfully.",
+                                      ),
                               ),
                               actions: [
                                 TextButton(
@@ -1802,7 +1860,13 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
-                          final uid = FirebaseAuth.instance.currentUser!.uid;
+                          final currentUser = FirebaseAuth.instance.currentUser;
+
+                          if (currentUser == null) {
+                            return;
+                          }
+
+                          final uid = currentUser.uid;
 
                           final ownHomes = selectedHomes.where((id) {
                             final home = safeMap(homes[id]);
@@ -1835,7 +1899,8 @@ class _AllHomePageState extends State<AllHomePage> {
                                     padding: const EdgeInsets.all(16),
                                     constraints: BoxConstraints(
                                       maxHeight:
-                                      MediaQuery.of(context).size.height * 0.8,
+                                          MediaQuery.of(context).size.height *
+                                          0.8,
                                     ),
                                     child: FutureBuilder(
                                       future: FirebaseDatabase.instance
@@ -1848,43 +1913,47 @@ class _AllHomePageState extends State<AllHomePage> {
                                           );
                                         }
 
-                                        final raw = snap.data!.value == null
-                                            ? {}
-                                            : Map<String, dynamic>.from(
-                                          snap.data!.value as Map,
-                                        );
+                                        final value = snap.data?.value;
+                                        final raw = value is Map
+                                            ? Map<String, dynamic>.from(value)
+                                            : <String, dynamic>{};
 
                                         return ListView(
                                           children: ownHomes.map((homeId) {
                                             final home = safeMap(homes[homeId]);
                                             final homeName =
-                                                home["name"]?.toString() ?? homeId;
+                                                home["name"]?.toString() ??
+                                                homeId;
                                             final users = safeMap(raw[homeId]);
 
                                             return Container(
-                                              margin:
-                                              const EdgeInsets.only(bottom: 16),
+                                              margin: const EdgeInsets.only(
+                                                bottom: 16,
+                                              ),
                                               padding: const EdgeInsets.all(14),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                BorderRadius.circular(18),
+                                                    BorderRadius.circular(18),
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     homeName,
                                                     style: const TextStyle(
                                                       fontSize: 16,
-                                                      fontWeight: FontWeight.w700,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 10),
                                                   if (users.isEmpty)
                                                     Text(
-                                                      _strings.t("Chưa share cho ai"),
+                                                      _strings.t(
+                                                        "Chưa share cho ai",
+                                                      ),
                                                       style: const TextStyle(
                                                         color: Colors.grey,
                                                       ),
@@ -1892,54 +1961,65 @@ class _AllHomePageState extends State<AllHomePage> {
                                                   ...users.entries.map((e) {
                                                     final targetUid = e.key;
                                                     final data =
-                                                    Map<String, dynamic>.from(
-                                                      e.value,
-                                                    );
+                                                        Map<
+                                                          String,
+                                                          dynamic
+                                                        >.from(e.value);
 
                                                     final email =
-                                                        data["email"] ?? "Unknown";
+                                                        data["email"] ??
+                                                        "Unknown";
 
                                                     return Container(
-                                                      margin: const EdgeInsets.only(
-                                                        bottom: 8,
-                                                      ),
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                            bottom: 8,
+                                                          ),
                                                       decoration: BoxDecoration(
-                                                        color: Colors.grey.shade100,
+                                                        color: Colors
+                                                            .grey
+                                                            .shade100,
                                                         borderRadius:
-                                                        BorderRadius.circular(14),
+                                                            BorderRadius.circular(
+                                                              14,
+                                                            ),
                                                       ),
                                                       child: ListTile(
                                                         dense: true,
-                                                        leading: const CircleAvatar(
-                                                          radius: 16,
-                                                          child: Icon(
-                                                            Icons.person,
-                                                            size: 18,
-                                                          ),
-                                                        ),
+                                                        leading:
+                                                            const CircleAvatar(
+                                                              radius: 16,
+                                                              child: Icon(
+                                                                Icons.person,
+                                                                size: 18,
+                                                              ),
+                                                            ),
                                                         title: Text(email),
                                                         trailing: IconButton(
                                                           icon: const Icon(
-                                                            Icons.delete_rounded,
+                                                            Icons
+                                                                .delete_rounded,
                                                             color: Colors.red,
                                                           ),
                                                           onPressed: () async {
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                              "accounts/$targetUid/sharedHomes/$homeId",
-                                                            )
+                                                                  "accounts/$targetUid/sharedHomes/$homeId",
+                                                                )
                                                                 .remove();
 
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                              "accounts/$uid/shareList/$homeId/$targetUid",
-                                                            )
+                                                                  "accounts/$uid/shareList/$homeId/$targetUid",
+                                                                )
                                                                 .remove();
 
                                                             setSheetState(() {
-                                                              users.remove(targetUid);
+                                                              users.remove(
+                                                                targetUid,
+                                                              );
                                                             });
                                                           },
                                                         ),
@@ -1970,7 +2050,10 @@ class _AllHomePageState extends State<AllHomePage> {
                             color: Colors.red.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.delete_rounded, color: Colors.red),
+                          child: const Icon(
+                            Icons.delete_rounded,
+                            color: Colors.red,
+                          ),
                         ),
                         title: Text(
                           _strings.t("Xoá các nhà đã chọn ?"),
@@ -1998,6 +2081,7 @@ class _AllHomePageState extends State<AllHomePage> {
       ),
     );
   }
+
   @override
   void dispose() {
     ownHomesSubscription?.cancel();

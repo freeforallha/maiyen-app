@@ -18,9 +18,15 @@ double heartbeatLimitHours(String type) {
       return 2;
 
     case "repeater":
+    case "hub":
       return 1;
 
     case "smoke":
+    case "heat":
+    case "carbon_monoxide":
+    case "gas":
+    case "water_leak":
+    case "flood":
       return 24;
 
     case "door":
@@ -29,10 +35,19 @@ double heartbeatLimitHours(String type) {
     case "door_lock":
     case "gate":
     case "motion":
-    case "gas":
-    case "water_leak":
-    case "flood":
+    case "presence":
+    case "vibration":
+    case "glass_break":
     case "sos":
+    case "smart_plug":
+    case "power_monitor":
+    case "ups":
+    case "siren":
+    case "smart_valve":
+    case "camera":
+    case "doorbell":
+    case "keypad":
+    case "unknown":
     default:
       return 6;
   }
@@ -71,6 +86,123 @@ bool? parseDeviceBool(dynamic value) {
   return null;
 }
 
+bool isActiveDeviceSignal(dynamic value) {
+  if (value is bool) return value;
+  if (value is num) return value != 0;
+
+  final text = value?.toString().trim().toLowerCase() ?? "";
+
+  return text == "true" ||
+      text == "1" ||
+      text == "on" ||
+      text == "active" ||
+      text == "alarm" ||
+      text == "detected" ||
+      text == "triggered" ||
+      text == "emergency" ||
+      text == "unsafe" ||
+      text == "open" ||
+      text == "unlocked";
+}
+
+String normalizeDeviceLockState(Map<String, dynamic> device) {
+  final raw =
+      device["lock_state"] ??
+          device["lockState"] ??
+          device["lock"] ??
+          device["state"];
+
+  if (raw is bool) {
+    return raw ? "locked" : "unlocked";
+  }
+
+  if (raw is num) {
+    return raw == 0 ? "unlocked" : "locked";
+  }
+
+  final text = raw?.toString().trim().toLowerCase() ?? "";
+
+  if (text == "lock" ||
+      text == "locked" ||
+      text == "closed" ||
+      text == "secure") {
+    return "locked";
+  }
+
+  if (text == "unlock" ||
+      text == "unlocked" ||
+      text == "open" ||
+      text == "unsecure") {
+    return "unlocked";
+  }
+
+  final status =
+      device["status"]?.toString().trim().toLowerCase() ?? "";
+
+  if (status == "locked") return "locked";
+  if (status == "unlocked") return "unlocked";
+
+  final contact = parseDeviceBool(device["contact"]);
+
+  if (contact == true) return "locked";
+  if (contact == false) return "unlocked";
+
+  return "";
+}
+
+String normalizeDeviceSwitchState(Map<String, dynamic> device) {
+  final raw =
+      device["state"] ??
+          device["switch"] ??
+          device["power_state"];
+
+  if (raw is bool) {
+    return raw ? "on" : "off";
+  }
+
+  if (raw is num) {
+    return raw == 0 ? "off" : "on";
+  }
+
+  final text = raw?.toString().trim().toLowerCase() ?? "";
+
+  if (text == "on" ||
+      text == "open" ||
+      text == "active" ||
+      text == "running") {
+    return "on";
+  }
+
+  if (text == "off" ||
+      text == "closed" ||
+      text == "inactive" ||
+      text == "stopped") {
+    return "off";
+  }
+
+  return "";
+}
+
+bool isRecentDeviceEvent(
+    Map<String, dynamic> device, {
+      int withinMs = 60 * 1000,
+    }) {
+  final eventTime = parseLastSeen(
+    device["last_event"] ?? device["last_triggered"],
+  );
+
+  if (eventTime == null) {
+    return false;
+  }
+
+  final ageMs = DateTime.now()
+      .toUtc()
+      .difference(eventTime.toUtc())
+      .inMilliseconds;
+
+  return ageMs >= 0 && ageMs <= withinMs;
+}
+
 String normalizeAvailability(dynamic value) {
   if (value is bool) {
     return value ? "online" : "offline";
@@ -96,9 +228,7 @@ String normalizeAvailability(dynamic value) {
 }
 
 String normalizeSecurityMode(dynamic value) {
-  return value?.toString().trim().toLowerCase() == "armed"
-      ? "armed"
-      : "normal";
+  return value?.toString().trim().toLowerCase() == "armed" ? "armed" : "normal";
 }
 
 bool isSosActive(Map<String, dynamic> d) {
@@ -138,12 +268,9 @@ bool isNowInAlarmTime(Map<String, dynamic> d) {
   return nowMin >= startMin && nowMin <= endMin;
 }
 
-bool _hasTrueFlag(
-    Map<String, dynamic> device,
-    List<String> keys,
-    ) {
+bool _hasTrueFlag(Map<String, dynamic> device, List<String> keys) {
   for (final key in keys) {
-    if (parseDeviceBool(device[key]) == true) {
+    if (isActiveDeviceSignal(device[key])) {
       return true;
     }
   }
@@ -165,13 +292,12 @@ Map<String, dynamic> evaluateDeviceStatus(
   final isArmedMode = normalizedMode == "armed";
 
   final type =
-      device["type"]?.toString().trim().toLowerCase() ?? "door";
+      device["type"]?.toString().trim().toLowerCase() ?? "unknown";
   final status =
       device["status"]?.toString().trim().toLowerCase() ?? "";
 
   final contact = parseDeviceBool(device["contact"]);
   final tamper = parseDeviceBool(device["tamper"]) == true;
-  final smoke = parseDeviceBool(device["smoke"]) == true;
   final availability = normalizeAvailability(device["availability"]);
 
   final battery = int.tryParse(device["battery"]?.toString() ?? "");
@@ -181,22 +307,39 @@ Map<String, dynamic> evaluateDeviceStatus(
   final dangerIssues = <String>[];
   final warningIssues = <String>[];
 
-  final isContactDevice = type == "door" ||
-      type == "window" ||
-      type == "lock" ||
-      type == "door_lock" ||
-      type == "gate";
+  final isLockDevice =
+      type == "lock" || type == "door_lock";
 
-  final isClosed =
-      isContactDevice && (contact == true || status == "closed");
-  final isOpen =
-      isContactDevice && (contact == false || status == "open");
+  final isContactDevice =
+      type == "door" ||
+          type == "window" ||
+          type == "gate" ||
+          isLockDevice;
+
+  final lockState =
+  isLockDevice ? normalizeDeviceLockState(device) : "";
+
+  final isClosed = isContactDevice &&
+      (isLockDevice
+          ? lockState == "locked"
+          : contact == true ||
+          status == "closed" ||
+          status == "locked");
+
+  final isOpen = isContactDevice &&
+      (isLockDevice
+          ? lockState == "unlocked"
+          : contact == false ||
+          status == "open" ||
+          status == "unlocked");
 
   if (type == "temperature") {
-    final temperature =
-    double.tryParse(device["temperature"]?.toString() ?? "");
-    final humidity =
-    double.tryParse(device["humidity"]?.toString() ?? "");
+    final temperature = double.tryParse(
+      device["temperature"]?.toString() ?? "",
+    );
+    final humidity = double.tryParse(
+      device["humidity"]?.toString() ?? "",
+    );
 
     if (temperature != null && temperature >= 34) {
       warningIssues.add("Nhiệt độ cao");
@@ -211,8 +354,32 @@ Map<String, dynamic> evaluateDeviceStatus(
     dangerIssues.add("SOS");
   }
 
-  if (type == "smoke" && (smoke || status == "alarm")) {
+  if (type == "smoke" &&
+      (isActiveDeviceSignal(device["smoke"]) ||
+          status == "alarm")) {
     dangerIssues.add("Có khói");
+  }
+
+  if (type == "heat" &&
+      (_hasTrueFlag(
+        device,
+        const [
+          "heat",
+          "heat_alarm",
+          "high_temperature_alarm",
+        ],
+      ) ||
+          status == "alarm")) {
+    dangerIssues.add("Nhiệt độ nguy hiểm");
+  }
+
+  if (type == "carbon_monoxide" &&
+      (_hasTrueFlag(
+        device,
+        const ["carbon_monoxide", "co_alarm"],
+      ) ||
+          status == "alarm")) {
+    dangerIssues.add("Phát hiện khí CO");
   }
 
   if (type == "gas" &&
@@ -230,27 +397,92 @@ Map<String, dynamic> evaluateDeviceStatus(
     dangerIssues.add("Phát hiện ngập nước");
   }
 
-  final motionActive = type == "motion" &&
-      _hasTrueFlag(
-        device,
-        const ["occupancy", "motion", "presence"],
-      );
+  final motionActive =
+      (type == "motion" || type == "presence") &&
+          _hasTrueFlag(
+            device,
+            const ["occupancy", "motion", "presence"],
+          );
 
   if (motionActive) {
+    final issue = type == "presence"
+        ? "Phát hiện hiện diện"
+        : "Phát hiện chuyển động";
+
     if (isArmedMode || isNowInAlarmTime(device)) {
-      dangerIssues.add("Phát hiện chuyển động");
+      dangerIssues.add(issue);
     } else {
-      warningIssues.add("Phát hiện chuyển động");
+      warningIssues.add(issue);
+    }
+  }
+
+  final action =
+      device["action"]?.toString().trim().toLowerCase() ?? "";
+
+  final vibrationActive =
+      (type == "vibration" || type == "glass_break") &&
+          (_hasTrueFlag(
+            device,
+            const [
+              "vibration",
+              "shock",
+              "glass_break",
+              "broken_glass",
+            ],
+          ) ||
+              (isRecentDeviceEvent(device) &&
+                  (action.contains("vibration") ||
+                      action.contains("shock") ||
+                      action.contains("tilt") ||
+                      action.contains("drop") ||
+                      action.contains("glass"))));
+
+  if (vibrationActive) {
+    final issue = type == "glass_break"
+        ? "Phát hiện kính vỡ"
+        : "Phát hiện rung/chấn động";
+
+    if (isArmedMode || isNowInAlarmTime(device)) {
+      dangerIssues.add(issue);
+    } else {
+      warningIssues.add(issue);
     }
   }
 
   if (isOpen) {
-    if (isArmedMode) {
-      dangerIssues.add("Đang mở khi nhà ở chế độ Bảo vệ");
-    } else if (isNowInAlarmTime(device)) {
-      dangerIssues.add("Đang mở trong giờ Alarm");
+    if (isLockDevice) {
+      if (isArmedMode) {
+        dangerIssues.add(
+          "Khóa đang mở khi nhà ở chế độ Bảo vệ",
+        );
+      } else if (isNowInAlarmTime(device)) {
+        dangerIssues.add("Khóa đang mở trong giờ Alarm");
+      } else {
+        warningIssues.add("Khóa đang mở");
+      }
     } else {
-      warningIssues.add("Đang mở");
+      if (isArmedMode) {
+        dangerIssues.add(
+          "Đang mở khi nhà ở chế độ Bảo vệ",
+        );
+      } else if (isNowInAlarmTime(device)) {
+        dangerIssues.add("Đang mở trong giờ Alarm");
+      } else {
+        warningIssues.add("Đang mở");
+      }
+    }
+  }
+
+  if (type == "power_monitor" || type == "ups") {
+    final mainsPower =
+    parseDeviceBool(
+      device["mains_power"] ??
+          device["ac_connected"] ??
+          device["input_power"],
+    );
+
+    if (mainsPower == false) {
+      warningIssues.add("Mất điện lưới");
     }
   }
 
@@ -262,12 +494,12 @@ Map<String, dynamic> evaluateDeviceStatus(
     warningIssues.add("Pin yếu");
   }
 
-  if (linkquality != null && linkquality > 0 && linkquality < 40) {
+  if (linkquality != null &&
+      linkquality > 0 &&
+      linkquality < 40) {
     warningIssues.add("Sóng yếu");
   }
 
-  // availability là nguồn xác định Online/Offline.
-  // last_seen chỉ dùng để hiển thị thời điểm cập nhật.
   if (availability == "offline") {
     warningIssues.add("Mất kết nối");
   }
@@ -287,6 +519,7 @@ Map<String, dynamic> evaluateDeviceStatus(
     "isContactDevice": isContactDevice,
     "isClosed": isClosed,
     "isOpen": isOpen,
+    "lockState": lockState,
   };
 }
 
@@ -298,17 +531,11 @@ Map<String, dynamic> evaluateHubStatus(dynamic rawHome) {
 
   // Nhà chưa được liên kết Hub sẽ không bị đánh dấu lỗi.
   if (hubId.isEmpty) {
-    return {
-      "tracked": false,
-      "online": true,
-      "issue": "",
-    };
+    return {"tracked": false, "online": true, "issue": ""};
   }
 
   final hubStatus = safeMap(home["hubStatus"]);
-  final heartbeatTime = parseLastSeen(
-    hubStatus["lastHeartbeatAt"],
-  );
+  final heartbeatTime = parseLastSeen(hubStatus["lastHeartbeatAt"]);
 
   if (heartbeatTime == null) {
     return {
@@ -328,26 +555,14 @@ Map<String, dynamic> evaluateHubStatus(dynamic rawHome) {
   }
 
   if (heartbeatAgeMs > hubHeartbeatTimeoutMs) {
-    return {
-      "tracked": true,
-      "online": false,
-      "issue": "Hub mất kết nối",
-    };
+    return {"tracked": true, "online": false, "issue": "Hub mất kết nối"};
   }
 
   if (parseDeviceBool(hubStatus["mqttConnected"]) != true) {
-    return {
-      "tracked": true,
-      "online": false,
-      "issue": "MQTT mất kết nối",
-    };
+    return {"tracked": true, "online": false, "issue": "MQTT mất kết nối"};
   }
 
-  return {
-    "tracked": true,
-    "online": true,
-    "issue": "",
-  };
+  return {"tracked": true, "online": true, "issue": ""};
 }
 
 /// Nguồn rule duy nhất cho trạng thái của một nhà.
@@ -423,27 +638,30 @@ Map<String, dynamic> getOverallStatus(
     final device = safeMap(raw);
     final nameText = device["name"]?.toString().trim() ?? "";
     final name = nameText.isNotEmpty ? nameText : id;
-    final type =
-        device["type"]?.toString().trim().toLowerCase() ?? "door";
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
     final lastSeenTime = parseLastSeen(device["last_seen"]);
 
     deviceCount++;
 
+    final latestSeen = newestLastSeen;
+
     if (lastSeenTime != null &&
-        (newestLastSeen == null ||
-            lastSeenTime.isAfter(newestLastSeen!))) {
+        (latestSeen == null || lastSeenTime.isAfter(latestSeen))) {
       newestLastSeen = lastSeenTime;
     }
 
     if (type == "temperature") {
-      final currentTemperature =
-      double.tryParse(device["temperature"]?.toString() ?? "");
-      final currentHumidity =
-      double.tryParse(device["humidity"]?.toString() ?? "");
+      final currentTemperature = double.tryParse(
+        device["temperature"]?.toString() ?? "",
+      );
+      final currentHumidity = double.tryParse(
+        device["humidity"]?.toString() ?? "",
+      );
 
-      final shouldUseEnvironment = newestEnvironmentSeen == null ||
-          (lastSeenTime != null &&
-              lastSeenTime.isAfter(newestEnvironmentSeen!));
+      final latestEnvironmentSeen = newestEnvironmentSeen;
+      final shouldUseEnvironment =
+          latestEnvironmentSeen == null ||
+              (lastSeenTime != null && lastSeenTime.isAfter(latestEnvironmentSeen));
 
       if (shouldUseEnvironment) {
         temperature = currentTemperature;
@@ -455,10 +673,7 @@ Map<String, dynamic> getOverallStatus(
       }
     }
 
-    final evaluation = evaluateDeviceStatus(
-      device,
-      securityMode: securityMode,
-    );
+    final evaluation = evaluateDeviceStatus(device, securityMode: securityMode);
 
     if (evaluation["isContactDevice"] == true) {
       doorCount++;
@@ -486,15 +701,18 @@ Map<String, dynamic> getOverallStatus(
   });
 
   if (doorCount > 0) {
-    safeSummary.add("$closedDoorCount/$doorCount cửa đã đóng an toàn");
+    safeSummary.add("$closedDoorCount/$doorCount cửa và khóa đã an toàn");
   }
 
   if (temperature != null || humidity != null) {
-    final tempText = temperature != null
-        ? "${temperature!.toStringAsFixed(0)}°C"
+    final currentTemperature = temperature;
+    final currentHumidity = humidity;
+    final tempText = currentTemperature != null
+        ? "${currentTemperature.toStringAsFixed(0)}°C"
         : "--°C";
-    final humText =
-    humidity != null ? "${humidity!.toStringAsFixed(0)}%" : "--%";
+    final humText = currentHumidity != null
+        ? "${currentHumidity.toStringAsFixed(0)}%"
+        : "--%";
 
     safeSummary.add("Môi trường hiện tại: $tempText / $humText");
   }
@@ -503,10 +721,12 @@ Map<String, dynamic> getOverallStatus(
     safeSummary.add("$deviceCount thiết bị đang được theo dõi");
   }
 
-  if (newestLastSeen != null) {
+  final latestSeen = newestLastSeen;
+
+  if (latestSeen != null) {
     var minutes = DateTime.now()
         .toUtc()
-        .difference(newestLastSeen!.toUtc())
+        .difference(latestSeen.toUtc())
         .inMinutes;
 
     if (minutes < 0) {
@@ -542,10 +762,7 @@ Map<String, dynamic> getOverallStatus(
   };
 }
 
-bool isUnsafe(
-    Map<dynamic, dynamic> devices, {
-      String securityMode = "normal",
-    }) {
+bool isUnsafe(Map<dynamic, dynamic> devices, {String securityMode = "normal"}) {
   final normalizedDevices = <String, dynamic>{};
 
   for (final entry in devices.entries) {

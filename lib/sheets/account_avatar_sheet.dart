@@ -7,10 +7,10 @@ import '../services/native_alarm_permission_service.dart';
 
 class AccountAvatarSheet {
   static void showTopMessage(
-      BuildContext context,
-      String message, {
-        Color color = SafeHomeColors.danger,
-      }) {
+    BuildContext context,
+    String message, {
+    Color color = SafeHomeColors.danger,
+  }) {
     final overlay = Overlay.of(context);
     late OverlayEntry entry;
 
@@ -24,10 +24,7 @@ class AccountAvatarSheet {
             color: Colors.transparent,
             child: TweenAnimationBuilder<Offset>(
               duration: const Duration(milliseconds: 250),
-              tween: Tween(
-                begin: const Offset(0, -1),
-                end: Offset.zero,
-              ),
+              tween: Tween(begin: const Offset(0, -1), end: Offset.zero),
               builder: (context, offset, child) {
                 return Transform.translate(
                   offset: Offset(0, offset.dy * 20),
@@ -73,9 +70,7 @@ class AccountAvatarSheet {
     });
   }
 
-  static Future<void> _showDeleteConfirmDialog(
-      BuildContext context,
-      ) async {
+  static Future<void> _showDeleteConfirmDialog(BuildContext context) async {
     final passwordController = TextEditingController();
 
     final ok = await showDialog<bool>(
@@ -159,18 +154,15 @@ class AccountAvatarSheet {
       return;
     }
 
-    await _deleteAccount(
-      context,
-      passwordController.text.trim(),
-    );
+    await _deleteAccount(context, passwordController.text.trim());
 
     passwordController.dispose();
   }
 
   static Future<void> _deleteAccount(
-      BuildContext context,
-      String password,
-      ) async {
+    BuildContext context,
+    String password,
+  ) async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) return;
@@ -179,9 +171,15 @@ class AccountAvatarSheet {
 
     try {
       final db = FirebaseDatabase.instance;
+      final userEmail = user.email;
+
+      if (userEmail == null || userEmail.isEmpty) {
+        showTopMessage(context, "Không tìm thấy email tài khoản");
+        return;
+      }
 
       final credential = EmailAuthProvider.credential(
-        email: user.email!,
+        email: userEmail,
         password: password,
       );
 
@@ -190,37 +188,27 @@ class AccountAvatarSheet {
       final accountSnap = await db.ref("accounts/$uid").get();
 
       final accountData = accountSnap.value is Map
-          ? Map<String, dynamic>.from(
-        accountSnap.value as Map,
-      )
+          ? Map<String, dynamic>.from(accountSnap.value as Map)
           : <String, dynamic>{};
 
       final ownHomes = accountData["homes"] is Map
-          ? Map<String, dynamic>.from(
-        accountData["homes"] as Map,
-      )
+          ? Map<String, dynamic>.from(accountData["homes"] as Map)
           : <String, dynamic>{};
 
       final sharedHomes = accountData["sharedHomes"] is Map
-          ? Map<String, dynamic>.from(
-        accountData["sharedHomes"] as Map,
-      )
+          ? Map<String, dynamic>.from(accountData["sharedHomes"] as Map)
           : <String, dynamic>{};
 
       final updates = <String, dynamic>{};
 
       for (final homeId in ownHomes.keys) {
-        final sharedSnap =
-        await db.ref("sharedByHome/$homeId").get();
+        final sharedSnap = await db.ref("sharedByHome/$homeId").get();
 
         if (sharedSnap.exists && sharedSnap.value is Map) {
-          final sharedMap = Map<String, dynamic>.from(
-            sharedSnap.value as Map,
-          );
+          final sharedMap = Map<String, dynamic>.from(sharedSnap.value as Map);
 
           for (final memberUid in sharedMap.keys) {
-            updates[
-            "accounts/$memberUid/sharedHomes/$homeId"] = null;
+            updates["accounts/$memberUid/sharedHomes/$homeId"] = null;
           }
         }
 
@@ -230,9 +218,7 @@ class AccountAvatarSheet {
 
       for (final homeId in sharedHomes.keys) {
         final sharedInfo = sharedHomes[homeId] is Map
-            ? Map<String, dynamic>.from(
-          sharedHomes[homeId] as Map,
-        )
+            ? Map<String, dynamic>.from(sharedHomes[homeId] as Map)
             : <String, dynamic>{};
 
         final ownerUid = sharedInfo["ownerUid"];
@@ -240,8 +226,7 @@ class AccountAvatarSheet {
         updates["sharedByHome/$homeId/$uid"] = null;
 
         if (ownerUid != null) {
-          updates[
-          "accounts/$ownerUid/shareList/$homeId/$uid"] = null;
+          updates["accounts/$ownerUid/shareList/$homeId/$uid"] = null;
         }
       }
 
@@ -254,25 +239,17 @@ class AccountAvatarSheet {
 
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Đã xoá tài khoản"),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Đã xoá tài khoản")));
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
 
-      showTopMessage(
-        context,
-        "Xoá thất bại: ${e.message ?? 'Unknown error'}",
-      );
+      showTopMessage(context, "Xoá thất bại: ${e.message ?? 'Unknown error'}");
     } catch (e) {
       if (!context.mounted) return;
 
-      showTopMessage(
-        context,
-        "Lỗi xoá tài khoản: $e",
-      );
+      showTopMessage(context, "Lỗi xoá tài khoản: $e");
     }
   }
 
@@ -281,8 +258,7 @@ class AccountAvatarSheet {
     required String label,
     required String value,
   }) {
-    final displayValue =
-    value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
+    final displayValue = value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
 
     return Container(
       padding: const EdgeInsets.all(13),
@@ -299,11 +275,7 @@ class AccountAvatarSheet {
               color: SafeHomeColors.surface,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              size: 19,
-              color: SafeHomeColors.primary,
-            ),
+            child: Icon(icon, size: 19, color: SafeHomeColors.primary),
           ),
           const SizedBox(width: 11),
           Expanded(
@@ -342,18 +314,13 @@ class AccountAvatarSheet {
     required String value,
     required IconData icon,
   }) {
-    final displayValue =
-    value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
+    final displayValue = value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 16,
-            color: SafeHomeColors.primary,
-          ),
+          Icon(icon, size: 16, color: SafeHomeColors.primary),
           const SizedBox(width: 7),
           Expanded(
             child: Text.rich(
@@ -432,17 +399,12 @@ class AccountAvatarSheet {
                     color: color.withValues(alpha: 0.11),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 22,
-                  ),
+                  child: Icon(icon, color: color, size: 22),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
@@ -482,11 +444,8 @@ class AccountAvatarSheet {
     );
   }
 
-  static Future<void> _showSecuritySheet(
-      BuildContext context,
-      ) async {
-    final canUse = await NativeAlarmPermissionService
-        .canUseFullScreenIntent();
+  static Future<void> _showSecuritySheet(BuildContext context) async {
+    final canUse = await NativeAlarmPermissionService.canUseFullScreenIntent();
 
     if (!context.mounted) return;
 
@@ -496,17 +455,10 @@ class AccountAvatarSheet {
       builder: (securityContext) {
         return SafeArea(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(
-              16,
-              10,
-              16,
-              20,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -524,9 +476,7 @@ class AccountAvatarSheet {
                   width: 58,
                   height: 58,
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.info.withValues(
-                      alpha: 0.11,
-                    ),
+                    color: SafeHomeColors.info.withValues(alpha: 0.11),
                     borderRadius: BorderRadius.circular(19),
                   ),
                   child: const Icon(
@@ -550,9 +500,7 @@ class AccountAvatarSheet {
                   decoration: BoxDecoration(
                     color: SafeHomeColors.surface,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: SafeHomeColors.border,
-                    ),
+                    border: Border.all(color: SafeHomeColors.border),
                   ),
                   child: Row(
                     children: [
@@ -560,10 +508,11 @@ class AccountAvatarSheet {
                         width: 42,
                         height: 42,
                         decoration: BoxDecoration(
-                          color: (canUse
-                              ? SafeHomeColors.safe
-                              : SafeHomeColors.warning)
-                              .withValues(alpha: 0.11),
+                          color:
+                              (canUse
+                                      ? SafeHomeColors.safe
+                                      : SafeHomeColors.warning)
+                                  .withValues(alpha: 0.11),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Icon(
@@ -578,14 +527,12 @@ class AccountAvatarSheet {
                       const SizedBox(width: 11),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
                               "Báo động toàn màn hình",
                               style: TextStyle(
-                                color:
-                                SafeHomeColors.textPrimary,
+                                color: SafeHomeColors.textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -618,15 +565,10 @@ class AccountAvatarSheet {
                   width: double.infinity,
                   child: FilledButton.icon(
                     onPressed: () async {
-                      await NativeAlarmPermissionService
-                          .openFullScreenIntentSettings();
+                      await NativeAlarmPermissionService.openFullScreenIntentSettings();
                     },
-                    icon: const Icon(
-                      Icons.settings_rounded,
-                    ),
-                    label: const Text(
-                      "Mở cài đặt hệ thống",
-                    ),
+                    icon: const Icon(Icons.settings_rounded),
+                    label: const Text("Mở cài đặt hệ thống"),
                   ),
                 ),
               ],
@@ -649,14 +591,13 @@ class AccountAvatarSheet {
     required VoidCallback onShareRequests,
   }) {
     final user = FirebaseAuth.instance.currentUser;
+    final photoUrl = user?.photoURL ?? "";
 
     final displayName = userName.trim().isNotEmpty
         ? userName.trim()
         : "Tài khoản SafeHome";
 
-    final dob = userDob.trim().isNotEmpty
-        ? userDob.split("T").first
-        : "";
+    final dob = userDob.trim().isNotEmpty ? userDob.split("T").first : "";
 
     showModalBottomSheet<void>(
       context: context,
@@ -666,14 +607,11 @@ class AccountAvatarSheet {
         return SafeArea(
           child: Container(
             constraints: BoxConstraints(
-              maxHeight:
-              MediaQuery.of(sheetContext).size.height * 0.92,
+              maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
             ),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -689,12 +627,7 @@ class AccountAvatarSheet {
                 ),
                 Flexible(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(
-                      16,
-                      14,
-                      16,
-                      4,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
                     child: Column(
                       children: [
                         Container(
@@ -703,14 +636,10 @@ class AccountAvatarSheet {
                           decoration: BoxDecoration(
                             color: SafeHomeColors.surface,
                             borderRadius: BorderRadius.circular(23),
-                            border: Border.all(
-                              color: SafeHomeColors.border,
-                            ),
+                            border: Border.all(color: SafeHomeColors.border),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(
-                                  alpha: 0.04,
-                                ),
+                                color: Colors.black.withValues(alpha: 0.04),
                                 blurRadius: 15,
                                 offset: const Offset(0, 6),
                               ),
@@ -718,8 +647,7 @@ class AccountAvatarSheet {
                           ),
                           child: IntrinsicHeight(
                             child: Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
                                   width: 104,
@@ -732,63 +660,45 @@ class AccountAvatarSheet {
                                           Container(
                                             width: 72,
                                             height: 72,
-                                            padding:
-                                            const EdgeInsets.all(3),
+                                            padding: const EdgeInsets.all(3),
                                             decoration: BoxDecoration(
-                                              color: SafeHomeColors
-                                                  .primarySoft,
+                                              color: SafeHomeColors.primarySoft,
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                color: SafeHomeColors
-                                                    .primary
-                                                    .withValues(
-                                                  alpha: 0.18,
-                                                ),
+                                                color: SafeHomeColors.primary
+                                                    .withValues(alpha: 0.18),
                                               ),
                                             ),
                                             child: CircleAvatar(
                                               backgroundColor:
-                                              SafeHomeColors
-                                                  .surfaceSoft,
-                                              backgroundImage: user
-                                                  ?.photoURL
-                                                  ?.isNotEmpty ==
-                                                  true
-                                                  ? NetworkImage(
-                                                user!.photoURL!,
-                                              )
+                                                  SafeHomeColors.surfaceSoft,
+                                              backgroundImage:
+                                                  photoUrl.isNotEmpty
+                                                  ? NetworkImage(photoUrl)
                                                   : null,
-                                              child: user?.photoURL
-                                                  ?.isNotEmpty ==
-                                                  true
+                                              child: photoUrl.isNotEmpty
                                                   ? null
                                                   : const Icon(
-                                                Icons
-                                                    .person_rounded,
-                                                size: 37,
-                                                color:
-                                                SafeHomeColors
-                                                    .textSecondary,
-                                              ),
+                                                      Icons.person_rounded,
+                                                      size: 37,
+                                                      color: SafeHomeColors
+                                                          .textSecondary,
+                                                    ),
                                             ),
                                           ),
                                           Positioned(
                                             right: -2,
                                             bottom: -2,
                                             child: Material(
-                                              color: SafeHomeColors
-                                                  .primary,
-                                              shape:
-                                              const CircleBorder(),
+                                              color: SafeHomeColors.primary,
+                                              shape: const CircleBorder(),
                                               child: InkWell(
                                                 onTap: () {
-                                                  Navigator.pop(
-                                                    sheetContext,
-                                                  );
+                                                  Navigator.pop(sheetContext);
                                                   onEditProfile();
                                                 },
                                                 customBorder:
-                                                const CircleBorder(),
+                                                    const CircleBorder(),
                                                 child: const SizedBox(
                                                   width: 29,
                                                   height: 29,
@@ -807,16 +717,13 @@ class AccountAvatarSheet {
                                       Text(
                                         displayName,
                                         maxLines: 2,
-                                        overflow:
-                                        TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
-                                          color: SafeHomeColors
-                                              .textPrimary,
+                                          color: SafeHomeColors.textPrimary,
                                           fontSize: 15,
                                           height: 1.15,
-                                          fontWeight:
-                                          FontWeight.w900,
+                                          fontWeight: FontWeight.w900,
                                           letterSpacing: -0.2,
                                         ),
                                       ),
@@ -831,24 +738,20 @@ class AccountAvatarSheet {
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       _compactProfileInfo(
-                                        icon:
-                                        Icons.email_outlined,
+                                        icon: Icons.email_outlined,
                                         label: "Email",
                                         value: user?.email ?? "",
                                       ),
                                       _compactProfileInfo(
-                                        icon: Icons
-                                            .person_outline_rounded,
+                                        icon: Icons.person_outline_rounded,
                                         label: "Giới tính",
                                         value: userGender,
                                       ),
                                       _compactProfileInfo(
-                                        icon:
-                                        Icons.phone_outlined,
+                                        icon: Icons.phone_outlined,
                                         label: "SĐT",
                                         value: userPhone,
                                       ),
@@ -858,8 +761,7 @@ class AccountAvatarSheet {
                                         value: dob,
                                       ),
                                       _compactProfileInfo(
-                                        icon: Icons
-                                            .fingerprint_rounded,
+                                        icon: Icons.fingerprint_rounded,
                                         label: "UID",
                                         value: user?.uid ?? "",
                                       ),
@@ -876,35 +778,28 @@ class AccountAvatarSheet {
                         _actionTile(
                           icon: Icons.mail_rounded,
                           title: "Yêu cầu & lời mời",
-                          subtitle:
-                          "Xem lời mời chia sẻ và xin gia nhập",
+                          subtitle: "Xem lời mời chia sẻ và xin gia nhập",
                           color: SafeHomeColors.warning,
-                          trailing:
-                          ValueListenableBuilder<int>(
-                            valueListenable:
-                            inviteCountNotifier,
+                          trailing: ValueListenableBuilder<int>(
+                            valueListenable: inviteCountNotifier,
                             builder: (_, inviteCount, _) {
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (inviteCount > 0)
                                     Container(
-                                      constraints:
-                                      const BoxConstraints(
+                                      constraints: const BoxConstraints(
                                         minWidth: 22,
                                         minHeight: 22,
                                       ),
                                       alignment: Alignment.center,
-                                      padding:
-                                      const EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                         horizontal: 6,
                                         vertical: 3,
                                       ),
                                       decoration: BoxDecoration(
-                                        color:
-                                        SafeHomeColors.danger,
-                                        borderRadius:
-                                        BorderRadius.circular(
+                                        color: SafeHomeColors.danger,
+                                        borderRadius: BorderRadius.circular(
                                           999,
                                         ),
                                       ),
@@ -915,17 +810,14 @@ class AccountAvatarSheet {
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 9.5,
-                                          fontWeight:
-                                          FontWeight.w900,
+                                          fontWeight: FontWeight.w900,
                                         ),
                                       ),
                                     ),
-                                  if (inviteCount > 0)
-                                    const SizedBox(width: 4),
+                                  if (inviteCount > 0) const SizedBox(width: 4),
                                   const Icon(
                                     Icons.chevron_right_rounded,
-                                    color: SafeHomeColors
-                                        .textSecondary,
+                                    color: SafeHomeColors.textSecondary,
                                   ),
                                 ],
                               );
@@ -940,8 +832,7 @@ class AccountAvatarSheet {
                         _actionTile(
                           icon: Icons.security_rounded,
                           title: "Cài đặt bảo mật",
-                          subtitle:
-                          "Quyền báo động toàn màn hình",
+                          subtitle: "Quyền báo động toàn màn hình",
                           color: SafeHomeColors.info,
                           onTap: () {
                             _showSecuritySheet(sheetContext);
@@ -953,8 +844,7 @@ class AccountAvatarSheet {
                         _actionTile(
                           icon: Icons.logout_rounded,
                           title: "Đăng xuất",
-                          subtitle:
-                          "Thoát tài khoản khỏi thiết bị này",
+                          subtitle: "Thoát tài khoản khỏi thiết bị này",
                           color: SafeHomeColors.warning,
                           onTap: () {
                             Navigator.pop(sheetContext);
@@ -965,15 +855,12 @@ class AccountAvatarSheet {
                         _actionTile(
                           icon: Icons.delete_forever_rounded,
                           title: "Xoá tài khoản",
-                          subtitle:
-                          "Xoá vĩnh viễn tài khoản và dữ liệu",
+                          subtitle: "Xoá vĩnh viễn tài khoản và dữ liệu",
                           color: SafeHomeColors.danger,
                           destructive: true,
                           bottomSpacing: 0,
                           onTap: () {
-                            _showDeleteConfirmDialog(
-                              sheetContext,
-                            );
+                            _showDeleteConfirmDialog(sheetContext);
                           },
                         ),
                       ],

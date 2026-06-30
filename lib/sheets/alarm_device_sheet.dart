@@ -51,34 +51,37 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         .ref("accounts/$currentUid/customRules/${widget.homeId}")
         .get()
         .then((snap) {
-      if (!mounted) return;
+          if (!mounted) return;
 
-      final data = snap.value;
+          final data = snap.value;
 
-      if (data is Map) {
-        final map = Map<String, dynamic>.from(data);
-        final savedMode = map["mode"]?.toString();
-        final customDevices = map["devices"];
+          if (data is Map) {
+            final map = Map<String, dynamic>.from(data);
+            final savedMode = map["mode"]?.toString();
+            final customDevices = map["devices"];
 
-        if (customDevices is Map) {
-          for (final entry in customDevices.entries) {
-            final deviceId = entry.key.toString();
-            final deviceData = Map<String, dynamic>.from(entry.value as Map);
+            if (customDevices is Map) {
+              for (final entry in customDevices.entries) {
+                final deviceId = entry.key.toString();
+                final deviceData = Map<String, dynamic>.from(
+                  entry.value as Map,
+                );
 
-            if (deviceData["alarm"] is Map) {
-              customAlarms[deviceId] =
-              Map<String, dynamic>.from(deviceData["alarm"]);
+                if (deviceData["alarm"] is Map) {
+                  customAlarms[deviceId] = Map<String, dynamic>.from(
+                    deviceData["alarm"],
+                  );
+                }
+              }
             }
-          }
-        }
 
-        setState(() {
-          if (savedMode == "custom" || savedMode == "home") {
-            mode = savedMode!;
+            setState(() {
+              if (savedMode == "custom" || savedMode == "home") {
+                mode = savedMode == "custom" ? "custom" : "home";
+              }
+            });
           }
         });
-      }
-    });
   }
 
   Map<String, dynamic> _defaultAlarm() {
@@ -110,9 +113,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     );
 
     if (nextMode == "custom") {
-      final updates = <String, Object?>{
-        "mode": "custom",
-      };
+      final updates = <String, Object?>{"mode": "custom"};
 
       final nextCustomAlarms = <String, dynamic>{};
 
@@ -124,16 +125,13 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           continue;
         }
 
-        final device = Map<String, dynamic>.from(
-          rawDevice,
-        );
+        final device = Map<String, dynamic>.from(rawDevice);
 
         if (!isSecurityDevice(device)) {
           continue;
         }
 
-        final rawRealDeviceId =
-            device["_deviceId"]?.toString().trim() ?? "";
+        final rawRealDeviceId = device["_deviceId"]?.toString().trim() ?? "";
 
         final realDeviceId = rawRealDeviceId.isNotEmpty
             ? rawRealDeviceId
@@ -141,19 +139,19 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
         final rawAlarm =
             customAlarms[deviceId] ??
-                customAlarms[realDeviceId] ??
-                homeAlarms[deviceId] ??
-                homeAlarms[realDeviceId];
+            customAlarms[realDeviceId] ??
+            homeAlarms[deviceId] ??
+            homeAlarms[realDeviceId];
 
         final alarm = rawAlarm is Map
             ? Map<String, dynamic>.from(rawAlarm)
             : _defaultAlarm();
 
-        nextCustomAlarms[deviceId] =
-        Map<String, dynamic>.from(alarm);
+        nextCustomAlarms[deviceId] = Map<String, dynamic>.from(alarm);
 
-        updates["devices/$realDeviceId/alarm"] =
-        Map<String, dynamic>.from(alarm);
+        updates["devices/$realDeviceId/alarm"] = Map<String, dynamic>.from(
+          alarm,
+        );
       }
 
       await rulesRef.update(updates);
@@ -183,17 +181,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     });
   }
 
-  Future<void> saveAlarm(
-      String deviceId,
-      Map<String, dynamic> alarm,
-      ) async {
+  Future<void> saveAlarm(String deviceId, Map<String, dynamic> alarm) async {
     if (mode == "home" && !widget.canManageHome) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              "Bạn không có quyền sửa lịch Alarm của nhà",
-            ),
+            content: Text("Bạn không có quyền sửa lịch Alarm của nhà"),
           ),
         );
       }
@@ -201,9 +194,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       return;
     }
 
-    final device = Map<String, dynamic>.from(
-      devices[deviceId] ?? {},
-    );
+    final device = Map<String, dynamic>.from(devices[deviceId] ?? {});
     final homeId = device["_homeId"]?.toString() ?? widget.homeId;
     final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
 
@@ -236,6 +227,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final m = time.minute.toString().padLeft(2, "0");
     return "$h:$m";
   }
+
   bool isValidTime(String value) {
     final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
     return reg.hasMatch(value.trim());
@@ -247,13 +239,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }) async {
     final parts = initial.split(":");
 
-    final hourController = TextEditingController(
-      text: parts[0],
-    );
+    final hourController = TextEditingController(text: parts[0]);
 
-    final minuteController = TextEditingController(
-      text: parts[1],
-    );
+    final minuteController = TextEditingController(text: parts[1]);
 
     const suggestions = [
       ["23", "00"],
@@ -371,6 +359,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       },
     );
   }
+
   Future<void> pickTime({
     required String deviceId,
     required Map<String, dynamic> alarm,
@@ -409,10 +398,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           children: [
             const Text(
               "Alarm thiết bị",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
 
             const SizedBox(height: 14),
@@ -465,9 +451,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                   final alarm = alarmOf(deviceId);
                   final readOnly =
-                      mode == "home" &&
-                          isSharedUser &&
-                          !widget.canManageHome;
+                      mode == "home" && isSharedUser && !widget.canManageHome;
                   final expanded = expandedDeviceId == deviceId;
 
                   return Container(
@@ -495,8 +479,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
-                                    expandedDeviceId =
-                                    expanded ? "" : deviceId;
+                                    expandedDeviceId = expanded ? "" : deviceId;
                                   });
                                 },
                                 child: Column(
@@ -529,11 +512,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               onChanged: readOnly
                                   ? null
                                   : (v) async {
-                                final nextAlarm =
-                                Map<String, dynamic>.from(alarm);
-                                nextAlarm["enabled"] = v;
-                                await saveAlarm(deviceId, nextAlarm);
-                              },
+                                      final nextAlarm =
+                                          Map<String, dynamic>.from(alarm);
+                                      nextAlarm["enabled"] = v;
+                                      await saveAlarm(deviceId, nextAlarm);
+                                    },
                             ),
 
                             IconButton(
@@ -559,8 +542,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               Expanded(
                                 child: _AlarmMiniButton(
                                   label: "Bắt đầu",
-                                  value:
-                                  alarm["start"]?.toString() ?? "23:00",
+                                  value: alarm["start"]?.toString() ?? "23:00",
                                   enabled: !readOnly,
                                   onTap: () => pickTime(
                                     deviceId: deviceId,
@@ -589,8 +571,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                           Row(
                             children: [15, 30, 60].map((minute) {
-                              final selected =
-                                  alarm["repeatMinutes"] == minute;
+                              final selected = alarm["repeatMinutes"] == minute;
 
                               return Expanded(
                                 child: Padding(
@@ -603,17 +584,17 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     onSelected: readOnly
                                         ? null
                                         : (_) async {
-                                      final nextAlarm =
-                                      Map<String, dynamic>.from(
-                                        alarm,
-                                      );
-                                      nextAlarm["repeatMinutes"] = minute;
+                                            final nextAlarm =
+                                                Map<String, dynamic>.from(
+                                                  alarm,
+                                                );
+                                            nextAlarm["repeatMinutes"] = minute;
 
-                                      await saveAlarm(
-                                        deviceId,
-                                        nextAlarm,
-                                      );
-                                    },
+                                            await saveAlarm(
+                                              deviceId,
+                                              nextAlarm,
+                                            );
+                                          },
                                   ),
                                 ),
                               );
@@ -652,10 +633,7 @@ class _AlarmMiniButton extends StatelessWidget {
       onTap: enabled ? onTap : null,
       borderRadius: BorderRadius.circular(14),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 10,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
@@ -665,10 +643,7 @@ class _AlarmMiniButton extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
             ),
             const SizedBox(height: 3),
             Text(

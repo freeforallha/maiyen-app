@@ -36,6 +36,7 @@ class AppStrings {
     "Địa chỉ": "Address",
     "An ninh ra/vào": "Entry security",
     "Nguy hiểm khẩn cấp": "Emergency hazards",
+    "Điều khiển & hạ tầng": "Control & infrastructure",
     "Thiết bị đang Offline": "Device is offline",
     "Thiết bị đang Online": "Device is online",
     "pin yếu": "low battery",
@@ -54,6 +55,28 @@ class AppStrings {
     "Phát hiện ngập nước": "Water leak detected",
     "Phát hiện chuyển động": "Motion detected",
     "Không có chuyển động": "No motion detected",
+    "Phát hiện hiện diện": "Presence detected",
+    "Không phát hiện hiện diện": "No presence detected",
+    "Phát hiện rung/chấn động": "Vibration detected",
+    "Không có rung bất thường": "No unusual vibration",
+    "Phát hiện kính vỡ": "Glass break detected",
+    "Không có cảnh báo kính vỡ": "No glass-break alert",
+    "Nhiệt độ nguy hiểm": "Dangerous heat detected",
+    "Phát hiện khí CO": "Carbon monoxide detected",
+    "Không phát hiện khí CO": "No carbon monoxide detected",
+    "Khóa đang mở": "Unlocked",
+    "Khóa đang đóng": "Locked",
+    "Đang bật": "On",
+    "Đang tắt": "Off",
+    "Đang theo dõi điện năng": "Monitoring power",
+    "Đang dùng nguồn dự phòng": "Running on backup power",
+    "Nguồn điện bình thường": "Mains power normal",
+    "Còi đang bật": "Siren active",
+    "Còi sẵn sàng": "Siren ready",
+    "Van đang mở": "Valve open",
+    "Van đã đóng": "Valve closed",
+    "Đang hoạt động": "Operating",
+    "Chưa nhận diện": "Unrecognized device",
     "Chưa có cập nhật": "No updates yet",
     "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
     "No devices yet. Tap + to add one and start monitoring your home.",
@@ -226,7 +249,6 @@ class AppStrings {
     "Nhà cần có ít nhất một thiết bị để test":
     "The home needs at least one device for testing",
     "Đóng": "Close",
-    "Đang tắt": "Off",
     "Đã thiết lập": "Configured",
     "Quét QR": "Scan QR",
     "Quét QR để thêm thiết bị": "Scan QR to add a device",
@@ -302,6 +324,13 @@ class AppStrings {
       return "${closedMatch.group(1)}/${closedMatch.group(2)} doors safely closed";
     }
 
+    final securedAccessMatch = RegExp(
+      r"^(\d+)/(\d+) cửa và khóa đã an toàn$",
+    ).firstMatch(text);
+    if (securedAccessMatch != null) {
+      return "${securedAccessMatch.group(1)}/${securedAccessMatch.group(2)} doors and locks secured";
+    }
+
     final deviceMatch = RegExp(
       r"^(\d+) thiết bị đang được theo dõi$",
     ).firstMatch(text);
@@ -343,6 +372,17 @@ class AppStrings {
       "Đang mở trong giờ Alarm": "Open during Alarm hours",
       "Đang mở": "Open",
       "Phát hiện chuyển động": "Motion detected",
+      "Phát hiện hiện diện": "Presence detected",
+      "Phát hiện rung/chấn động": "Vibration detected",
+      "Phát hiện kính vỡ": "Glass break detected",
+      "Nhiệt độ nguy hiểm": "Dangerous heat detected",
+      "Phát hiện khí CO": "Carbon monoxide detected",
+      "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Unlocked while Home is in Guard mode",
+      "Khóa đang mở trong giờ Alarm":
+      "Unlocked during Alarm hours",
+      "Khóa đang mở": "Unlocked",
+      "Mất điện lưới": "Mains power lost",
       "Rò rỉ gas": "Gas leak detected",
       "Phát hiện ngập nước": "Water leak detected",
       "Bị tháo": "Tamper detected",

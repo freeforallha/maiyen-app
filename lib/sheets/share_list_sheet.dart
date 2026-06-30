@@ -15,40 +15,34 @@ Future<bool?> showShareListSheet({
   required bool isOwner,
   VoidCallback? onSelfLeave,
 }) async {
-  final myUid = FirebaseAuth.instance.currentUser!.uid;
+  final currentUser = FirebaseAuth.instance.currentUser;
+
+  if (currentUser == null) {
+    return null;
+  }
+
+  final myUid = currentUser.uid;
   final db = FirebaseDatabase.instance;
 
-  final membersSnap = await db
-      .ref(FirebasePaths.sharedByHome(homeId))
-      .get();
+  final membersSnap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
 
   final membersData = membersSnap.value is Map
-      ? Map<String, dynamic>.from(
-    membersSnap.value as Map,
-  )
+      ? Map<String, dynamic>.from(membersSnap.value as Map)
       : <String, dynamic>{};
 
   final ownerRaw = membersData[ownerUid] is Map
-      ? Map<String, dynamic>.from(
-    membersData[ownerUid] as Map,
-  )
+      ? Map<String, dynamic>.from(membersData[ownerUid] as Map)
       : <String, dynamic>{};
 
-  final ownerDirectorySnap = await db
-      .ref("userDirectory/$ownerUid")
-      .get();
+  final ownerDirectorySnap = await db.ref("userDirectory/$ownerUid").get();
 
   final ownerDirectory = ownerDirectorySnap.value is Map
-      ? Map<String, dynamic>.from(
-    ownerDirectorySnap.value as Map,
-  )
+      ? Map<String, dynamic>.from(ownerDirectorySnap.value as Map)
       : <String, dynamic>{};
 
-  final directoryEmail =
-      ownerDirectory["email"]?.toString().trim() ?? "";
+  final directoryEmail = ownerDirectory["email"]?.toString().trim() ?? "";
 
-  final rawEmail =
-      ownerRaw["email"]?.toString().trim() ?? "";
+  final rawEmail = ownerRaw["email"]?.toString().trim() ?? "";
 
   final ownerEmail = directoryEmail.isNotEmpty
       ? directoryEmail
@@ -56,11 +50,9 @@ Future<bool?> showShareListSheet({
       ? rawEmail
       : "Chủ nhà";
 
-  final directoryName =
-      ownerDirectory["name"]?.toString().trim() ?? "";
+  final directoryName = ownerDirectory["name"]?.toString().trim() ?? "";
 
-  final rawName =
-      ownerRaw["name"]?.toString().trim() ?? "";
+  final rawName = ownerRaw["name"]?.toString().trim() ?? "";
 
   final ownerName = directoryName.isNotEmpty
       ? directoryName
@@ -68,11 +60,9 @@ Future<bool?> showShareListSheet({
       ? rawName
       : ownerEmail;
 
-  final directoryPhotoUrl =
-      ownerDirectory["photoUrl"]?.toString().trim() ?? "";
+  final directoryPhotoUrl = ownerDirectory["photoUrl"]?.toString().trim() ?? "";
 
-  final rawPhotoUrl =
-      ownerRaw["photoUrl"]?.toString().trim() ?? "";
+  final rawPhotoUrl = ownerRaw["photoUrl"]?.toString().trim() ?? "";
 
   final ownerPhotoUrl = directoryPhotoUrl.isNotEmpty
       ? directoryPhotoUrl
@@ -85,8 +75,7 @@ Future<bool?> showShareListSheet({
         .ref("homeMemberContacts/$homeId/$ownerUid/phone")
         .get();
 
-    final contactPhone =
-        ownerContactSnap.value?.toString().trim() ?? "";
+    final contactPhone = ownerContactSnap.value?.toString().trim() ?? "";
 
     if (contactPhone.isNotEmpty) {
       ownerPhone = contactPhone;
@@ -96,9 +85,9 @@ Future<bool?> showShareListSheet({
   }
 
   Future<Map<String, dynamic>> loadMember(
-      String memberUid,
-      dynamic rawValue,
-      ) async {
+    String memberUid,
+    dynamic rawValue,
+  ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
@@ -118,8 +107,7 @@ Future<bool?> showShareListSheet({
           .ref("homeMemberContacts/$homeId/$memberUid/phone")
           .get();
 
-      final contactPhone =
-          phoneSnap.value?.toString().trim() ?? "";
+      final contactPhone = phoneSnap.value?.toString().trim() ?? "";
 
       if (contactPhone.isNotEmpty) {
         phone = contactPhone;
@@ -154,10 +142,7 @@ Future<bool?> showShareListSheet({
       return;
     }
 
-    final uri = Uri(
-      scheme: "tel",
-      path: cleanPhone.replaceAll(" ", ""),
-    );
+    final uri = Uri(scheme: "tel", path: cleanPhone.replaceAll(" ", ""));
 
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
@@ -368,14 +353,14 @@ Future<bool?> showShareListSheet({
                           final member = snapshot.data ?? rawMember;
 
                           final email =
-                          member["email"]?.toString().trim().isNotEmpty ==
-                              true
+                              member["email"]?.toString().trim().isNotEmpty ==
+                                  true
                               ? member["email"].toString()
                               : "Không có email";
 
                           final name =
-                          member["name"]?.toString().trim().isNotEmpty ==
-                              true
+                              member["name"]?.toString().trim().isNotEmpty ==
+                                  true
                               ? member["name"].toString()
                               : email;
 
@@ -405,7 +390,7 @@ Future<bool?> showShareListSheet({
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -466,9 +451,9 @@ Future<bool?> showShareListSheet({
                                     onSelected: (value) async {
                                       final canDeleteTarget =
                                           targetUid == myUid ||
-                                              isOwner ||
-                                              (canManageMembers &&
-                                                  role == "member");
+                                          isOwner ||
+                                          (canManageMembers &&
+                                              role == "member");
 
                                       if (value == "delete" &&
                                           !canDeleteTarget) {
@@ -482,7 +467,7 @@ Future<bool?> showShareListSheet({
                                       }
 
                                       if ((value == "member" ||
-                                          value == "admin") &&
+                                              value == "admin") &&
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
@@ -529,30 +514,30 @@ Future<bool?> showShareListSheet({
 
                                         await db
                                             .ref(
-                                          "homeMemberContacts/$homeId/$targetUid",
-                                        )
+                                              "homeMemberContacts/$homeId/$targetUid",
+                                            )
                                             .remove();
 
                                         await db
                                             .ref(
-                                          FirebasePaths.sharedHome(
-                                            targetUid,
-                                            homeId,
-                                          ),
-                                        )
+                                              FirebasePaths.sharedHome(
+                                                targetUid,
+                                                homeId,
+                                              ),
+                                            )
                                             .remove();
                                         await db
                                             .ref(
-                                          FirebasePaths.sharedMember(
-                                            homeId,
-                                            targetUid,
-                                          ),
-                                        )
+                                              FirebasePaths.sharedMember(
+                                                homeId,
+                                                targetUid,
+                                              ),
+                                            )
                                             .remove();
                                         await db
                                             .ref(
-                                          "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                                        )
+                                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
+                                            )
                                             .remove();
 
                                         if (targetUid == myUid) {
@@ -587,7 +572,7 @@ Future<bool?> showShareListSheet({
                                           ? "Admin"
                                           : "Member";
                                       final actorName =
-                                      ownerName.trim().isNotEmpty
+                                          ownerName.trim().isNotEmpty
                                           ? ownerName.trim()
                                           : ownerEmail.trim().isNotEmpty
                                           ? ownerEmail.trim()
@@ -595,9 +580,9 @@ Future<bool?> showShareListSheet({
 
                                       await db.ref().update({
                                         "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
-                                        value,
+                                            value,
                                         "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
-                                        value,
+                                            value,
                                       });
 
                                       await HomeNotificationService.notifyHome(
@@ -606,10 +591,9 @@ Future<bool?> showShareListSheet({
                                         type: "member_role_changed",
                                         category: "member",
                                         severity: "info",
-                                        title:
-                                        "Vai trò thành viên đã thay đổi",
+                                        title: "Vai trò thành viên đã thay đổi",
                                         message:
-                                        "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
+                                            "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
                                         entityType: "member",
                                         entityId: targetUid,
                                         homeName: homeName,
@@ -653,11 +637,11 @@ Future<bool?> showShareListSheet({
                                       decoration: BoxDecoration(
                                         color: role == "admin"
                                             ? Colors.deepPurple.withValues(
-                                          alpha: 0.12,
-                                        )
+                                                alpha: 0.12,
+                                              )
                                             : Colors.blueGrey.withValues(
-                                          alpha: 0.12,
-                                        ),
+                                                alpha: 0.12,
+                                              ),
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       child: Text(
@@ -680,11 +664,11 @@ Future<bool?> showShareListSheet({
                                     decoration: BoxDecoration(
                                       color: role == "admin"
                                           ? Colors.deepPurple.withValues(
-                                        alpha: 0.12,
-                                      )
+                                              alpha: 0.12,
+                                            )
                                           : Colors.blueGrey.withValues(
-                                        alpha: 0.12,
-                                      ),
+                                              alpha: 0.12,
+                                            ),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Text(

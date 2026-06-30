@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 
+import '../helpers/home_helper.dart';
+
 void showDeviceDetail({
   required BuildContext context,
   required String id,
@@ -31,7 +33,9 @@ void showDeviceDetail({
 
           if (raw is Map) {
             device = Map<String, dynamic>.from(raw);
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
+          } else if (
+          snapshot.connectionState ==
+              ConnectionState.waiting) {
             device = Map<String, dynamic>.from(d);
           } else {
             return Container(
@@ -67,35 +71,32 @@ void showDeviceDetail({
           }
 
           final deviceType =
-              device["type"]?.toString() ?? "door";
+              device["type"]?.toString().trim().toLowerCase() ??
+                  "unknown";
 
           final availability =
-              device["availability"]?.toString() ?? "unknown";
+              device["availability"]?.toString().trim().toLowerCase() ??
+                  "unknown";
 
           final linkquality = _toInt(device["linkquality"]);
           final battery = _toInt(device["battery"]);
-
           final lastSeen = device["last_seen"];
           final lastEvent = device["last_event"];
           final lastTriggered = device["last_triggered"];
-
-          final contact = device["contact"];
-          final smoke = device["smoke"] == true;
-          final tamper = device["tamper"] == true;
+          final tamper =
+              parseDeviceBool(device["tamper"]) == true;
           final temperature = device["temperature"];
           final humidity = device["humidity"];
 
-          final roomId =
-              device["roomId"]?.toString() ?? "unassigned";
-
-          final camera = device["camera"] is Map
-              ? Map<String, dynamic>.from(device["camera"] as Map)
-              : <String, dynamic>{};
-
-          final cameraType = camera["type"]?.toString().trim() ?? "";
-          final cameraName = camera["name"]?.toString().trim() ?? "";
-          final cameraUrl = camera["url"]?.toString().trim() ?? "";
-          final cameraSerial = camera["deviceSerial"]?.toString().trim() ?? "";
+          final camera = safeMap(device["camera"]);
+          final cameraType =
+              camera["type"]?.toString().trim() ?? "";
+          final cameraName =
+              camera["name"]?.toString().trim() ?? "";
+          final cameraUrl =
+              camera["url"]?.toString().trim() ?? "";
+          final cameraSerial =
+              camera["deviceSerial"]?.toString().trim() ?? "";
 
           final health = _getDeviceHealth(
             availability: availability,
@@ -104,267 +105,664 @@ void showDeviceDetail({
             lastSeen: lastSeen,
           );
 
-          String typeTitle;
-          String statusValue;
-          IconData statusIcon;
-          Color statusColor;
-
-          if (deviceType == "smoke") {
-            typeTitle = "Báo cháy";
-            statusValue =
-            smoke ? "Phát hiện khói" : "Bình thường";
-            statusIcon =
-                Icons.local_fire_department_rounded;
-            statusColor =
-            smoke ? Colors.red : Colors.green;
-          } else if (deviceType == "sos") {
-            typeTitle = "Trạng thái";
-            statusValue = "Sẵn sàng";
-            statusIcon = Icons.sos_rounded;
-            statusColor = Colors.green;
-          } else if (deviceType == "temperature") {
-            typeTitle = "Môi trường";
-            statusValue = "Đang theo dõi";
-            statusIcon =
-                Icons.device_thermostat_rounded;
-            statusColor = Colors.blue;
-          } else if (deviceType == "repeater") {
-            typeTitle = "Bộ mở rộng sóng";
-            statusValue = availability == "online"
-                ? "Đang hoạt động"
-                : "Mất kết nối";
-            statusIcon =
-                Icons.wifi_tethering_rounded;
-            statusColor = availability == "online"
-                ? Colors.green
-                : Colors.red;
-          } else {
-            typeTitle = "Cửa";
-            statusValue = contact == true
-                ? "Đang đóng"
-                : "Đang mở";
-            statusIcon =
-                Icons.sensor_door_rounded;
-            statusColor = contact == true
-                ? Colors.green
-                : Colors.red;
-          }
+          final displayStatus =
+          _getDeviceDisplayStatus(device);
 
           final deviceName =
               device["name"]?.toString().trim() ?? "";
 
+          final hasBattery =
+              device["battery"] != null ||
+                  device["battery_low"] != null ||
+                  device["battery_status"] != null;
+
+          final showTamper =
+              device.containsKey("tamper") ||
+                  {
+                    "door",
+                    "window",
+                    "gate",
+                    "lock",
+                    "door_lock",
+                    "motion",
+                    "presence",
+                    "vibration",
+                    "glass_break",
+                    "smoke",
+                    "heat",
+                    "carbon_monoxide",
+                    "gas",
+                    "water_leak",
+                    "flood",
+                  }.contains(deviceType);
+
+          final metricRows = <Widget>[];
+
+          void addMetric({
+            required IconData icon,
+            required Color color,
+            required String title,
+            required dynamic value,
+            String suffix = "",
+          }) {
+            if (value == null) {
+              return;
+            }
+
+            final text = value.toString().trim();
+
+            if (text.isEmpty) {
+              return;
+            }
+
+            metricRows.add(
+              _infoRow(
+                icon: icon,
+                color: color,
+                title: title,
+                value: "$text$suffix",
+              ),
+            );
+          }
+
+          if (deviceType == "temperature") {
+            addMetric(
+              icon: Icons.thermostat_rounded,
+              color: Colors.blue,
+              title: "Nhiệt độ",
+              value: temperature,
+              suffix: "°C",
+            );
+
+            addMetric(
+              icon: Icons.water_drop_rounded,
+              color: Colors.cyan,
+              title: "Độ ẩm",
+              value: humidity,
+              suffix: "%",
+            );
+          }
+
+          if ({
+            "smart_plug",
+            "power_monitor",
+            "ups",
+          }.contains(deviceType)) {
+            addMetric(
+              icon: Icons.electric_bolt_rounded,
+              color: Colors.orange,
+              title: "Công suất",
+              value: device["power"],
+              suffix: " W",
+            );
+
+            addMetric(
+              icon: Icons.speed_rounded,
+              color: Colors.deepPurple,
+              title: "Điện áp",
+              value: device["voltage"],
+              suffix: " V",
+            );
+
+            addMetric(
+              icon: Icons.electrical_services_rounded,
+              color: Colors.indigo,
+              title: "Dòng điện",
+              value: device["current"],
+              suffix: " A",
+            );
+
+            addMetric(
+              icon: Icons.data_usage_rounded,
+              color: Colors.teal,
+              title: "Điện năng",
+              value:
+              device["energy"] ??
+                  device["consumption"],
+              suffix: " kWh",
+            );
+          }
+
+          if ({
+            "vibration",
+            "glass_break",
+          }.contains(deviceType)) {
+            addMetric(
+              icon: Icons.vibration_rounded,
+              color: Colors.orange,
+              title: "Cường độ rung",
+              value: device["vibration_strength"],
+            );
+
+            addMetric(
+              icon: Icons.screen_rotation_rounded,
+              color: Colors.blueGrey,
+              title: "Góc nghiêng",
+              value: device["angle"],
+              suffix: "°",
+            );
+          }
+
+          if (deviceType == "smart_valve") {
+            addMetric(
+              icon: Icons.tune_rounded,
+              color: Colors.blue,
+              title: "Độ mở van",
+              value:
+              device["position"] ??
+                  device["valve_position"],
+              suffix: "%",
+            );
+          }
+
           return Container(
-            padding: const EdgeInsets.all(20),
+            constraints: BoxConstraints(
+              maxHeight:
+              MediaQuery.of(context).size.height * 0.9,
+            ),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(26),
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment:
-              CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 42,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius:
-                      BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                Row(
+            child: SafeArea(
+              top: false,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        deviceName.isNotEmpty
-                            ? deviceName
-                            : id,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
+                    Center(
+                      child: Container(
+                        width: 42,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius:
+                          BorderRadius.circular(20),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            deviceName.isNotEmpty
+                                ? deviceName
+                                : id,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                        _iconButton(
+                          icon: Icons
+                              .notifications_active_rounded,
+                          color: Colors.amber,
+                          onTap: onNotification,
+                        ),
+                        const SizedBox(width: 8),
+                        _iconButton(
+                          icon: Icons.videocam_rounded,
+                          color: cameraType.isEmpty
+                              ? Colors.grey
+                              : Colors.blue,
+                          onTap: () {
+                            if (cameraType.isEmpty) {
+                              _showCameraSetupSheet(
+                                context: sheetContext,
+                                ownerUid: ownerUid,
+                                homeId: homeId,
+                                deviceId: id,
+                              );
+                              return;
+                            }
 
-                    _iconButton(
-                      icon: Icons
-                          .notifications_active_rounded,
-                      color: Colors.amber,
-                      onTap: onNotification,
+                            _openCameraProvider(
+                              context: sheetContext,
+                              type: cameraType,
+                              url: cameraUrl,
+                              serial: cameraSerial,
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        if (onRename != null)
+                          _iconButton(
+                            icon: Icons.edit_rounded,
+                            color: Colors.teal,
+                            onTap: onRename,
+                          ),
+                      ],
                     ),
-
-                    const SizedBox(width: 8),
-                    _iconButton(
+                    const SizedBox(height: 18),
+                    _infoRow(
+                      icon: health.icon,
+                      color: health.color,
+                      title: "Tình trạng",
+                      value: health.text,
+                      valueColor: health.color,
+                    ),
+                    _infoRow(
+                      icon: displayStatus.icon,
+                      color: displayStatus.color,
+                      title: displayStatus.title,
+                      value: displayStatus.value,
+                      valueColor: displayStatus.color,
+                    ),
+                    if (showTamper)
+                      _infoRow(
+                        icon: Icons.warning_amber_rounded,
+                        color: tamper
+                            ? Colors.redAccent
+                            : Colors.orange,
+                        title: "Tháo/Lắp",
+                        value: tamper
+                            ? "Bị tháo"
+                            : "Bình thường",
+                        valueColor: tamper
+                            ? Colors.redAccent
+                            : Colors.black87,
+                      ),
+                    ...metricRows,
+                    if (hasBattery)
+                      _infoRow(
+                        icon: Icons.battery_full_rounded,
+                        color:
+                        battery != null && battery < 20
+                            ? Colors.red
+                            : Colors.green,
+                        title: "Pin",
+                        value: getBatteryText(device),
+                      ),
+                    if (linkquality != null)
+                      _infoRow(
+                        icon: Icons.network_cell_rounded,
+                        color: linkquality < 50
+                            ? Colors.red
+                            : Colors.purple,
+                        title: "Tín hiệu",
+                        value: "$linkquality",
+                      ),
+                    _infoRow(
                       icon: Icons.videocam_rounded,
-                      color: cameraType.isEmpty ? Colors.grey : Colors.blue,
-                      onTap: () {
-                        if (cameraType.isEmpty) {
-                          _showCameraSetupSheet(
-                            context: sheetContext,
-                            ownerUid: ownerUid,
-                            homeId: homeId,
-                            deviceId: id,
-                          );
-                          return;
-                        }
-
-                        _openCameraProvider(
-                          context: sheetContext,
-                          type: cameraType,
-                          url: cameraUrl,
-                          serial: cameraSerial,
-                        );
-                      },
+                      color: cameraType.isEmpty
+                          ? Colors.grey
+                          : Colors.blue,
+                      title: "Camera",
+                      value: cameraType.isEmpty
+                          ? "Chưa liên kết"
+                          : (cameraName.isNotEmpty
+                          ? cameraName
+                          : cameraType.toUpperCase()),
                     ),
-
-                    const SizedBox(width: 8),
-                    if (onRename != null)
-                      _iconButton(
-                        icon: Icons.edit_rounded,
-                        color: Colors.teal,
-                        onTap: onRename,
+                    _infoRow(
+                      icon: Icons.access_time_rounded,
+                      color: Colors.indigo,
+                      title: "Liên lạc cuối",
+                      value: formatFullDate(lastSeen),
+                    ),
+                    if (deviceType == "sos")
+                      _infoRow(
+                        icon: Icons.history_rounded,
+                        color: Colors.deepOrange,
+                        title: "Lần kích hoạt cuối",
+                        value: formatFullDate(lastTriggered),
+                      )
+                    else if (
+                    deviceType != "temperature" &&
+                        deviceType != "repeater")
+                      _infoRow(
+                        icon: Icons.history_rounded,
+                        color: Colors.deepOrange,
+                        title: "Event cuối",
+                        value: formatFullDate(lastEvent),
+                      ),
+                    const SizedBox(height: 22),
+                    if (onDelete != null)
+                      Center(
+                        child: _iconButton(
+                          icon: Icons.delete_forever_rounded,
+                          color: Colors.red,
+                          size: 26,
+                          onTap: onDelete,
+                        ),
                       ),
                   ],
                 ),
-
-                const SizedBox(height: 18),
-
-                _infoRow(
-                  icon: health.icon,
-                  color: health.color,
-                  title: "Tình trạng",
-                  value: health.text,
-                  valueColor: health.color,
-                ),
-
-                if (deviceType != "temperature")
-                  _infoRow(
-                    icon: statusIcon,
-                    color: statusColor,
-                    title: typeTitle,
-                    value: statusValue,
-                    valueColor: statusColor,
-                  ),
-
-                if (deviceType == "door" ||
-                    deviceType == "smoke")
-                  _infoRow(
-                    icon:
-                    Icons.warning_amber_rounded,
-                    color: Colors.orange,
-                    title: "Tháo/Lắp",
-                    value: tamper
-                        ? "Bị tháo"
-                        : "Bình thường",
-                    valueColor: tamper
-                        ? Colors.redAccent
-                        : Colors.black87,
-                  ),
-
-                if (deviceType == "temperature" &&
-                    temperature != null)
-                  _infoRow(
-                    icon: Icons.thermostat_rounded,
-                    color: Colors.blue,
-                    title: "Nhiệt độ",
-                    value: "$temperature°C",
-                  ),
-
-                if (deviceType == "temperature" &&
-                    humidity != null)
-                  _infoRow(
-                    icon:
-                    Icons.water_drop_rounded,
-                    color: Colors.cyan,
-                    title: "Độ ẩm",
-                    value: "$humidity%",
-                  ),
-
-                if (deviceType != "repeater")
-                  _infoRow(
-                    icon:
-                    Icons.battery_full_rounded,
-                    color: battery != null &&
-                        battery < 20
-                        ? Colors.red
-                        : Colors.green,
-                    title: "Pin",
-                    value: getBatteryText(device),
-                  ),
-
-                _infoRow(
-                  icon: Icons.network_cell_rounded,
-                  color: linkquality != null &&
-                      linkquality < 50
-                      ? Colors.red
-                      : Colors.purple,
-                  title: "Tín hiệu",
-                  value: linkquality != null
-                      ? "$linkquality"
-                      : "N/A",
-                ),
-
-                _infoRow(
-                  icon: Icons.videocam_rounded,
-                  color: cameraType.isEmpty ? Colors.grey : Colors.blue,
-                  title: "Camera",
-                  value: cameraType.isEmpty
-                      ? "Chưa liên kết"
-                      : (cameraName.isNotEmpty ? cameraName : cameraType.toUpperCase()),
-                ),
-
-                _infoRow(
-                  icon: Icons.access_time_rounded,
-                  color: Colors.indigo,
-                  title: "Liên lạc cuối",
-                  value: formatFullDate(lastSeen),
-                ),
-
-                if (deviceType == "sos")
-                  _infoRow(
-                    icon: Icons.history_rounded,
-                    color: Colors.deepOrange,
-                    title: "Lần kích hoạt cuối",
-                    value:
-                    formatFullDate(lastTriggered),
-                  )
-                else if (deviceType != "temperature" &&
-                    deviceType != "repeater")
-                  _infoRow(
-                    icon: Icons.history_rounded,
-                    color: Colors.deepOrange,
-                    title: "Event cuối",
-                    value: formatFullDate(lastEvent),
-                  ),
-
-                const SizedBox(height: 22),
-
-                if (onDelete != null)
-                  Center(
-                    child: _iconButton(
-                      icon:
-                      Icons.delete_forever_rounded,
-                      color: Colors.red,
-                      size: 26,
-                      onTap: onDelete,
-                    ),
-                  ),
-              ],
+              ),
             ),
           );
         },
       );
     },
   );
+}
+
+
+class _DeviceDisplayStatus {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _DeviceDisplayStatus({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+}
+
+_DeviceDisplayStatus _getDeviceDisplayStatus(
+    Map<String, dynamic> device,
+    ) {
+  final type =
+      device["type"]?.toString().trim().toLowerCase() ??
+          "unknown";
+
+  bool active(List<String> keys) {
+    for (final key in keys) {
+      if (isActiveDeviceSignal(device[key])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  switch (type) {
+    case "door":
+    case "window":
+    case "gate":
+      final closed =
+          parseDeviceBool(device["contact"]) == true ||
+              device["status"]?.toString().toLowerCase() ==
+                  "closed";
+
+      return _DeviceDisplayStatus(
+        title: type == "window"
+            ? "Cửa sổ"
+            : type == "gate"
+            ? "Cổng"
+            : "Cửa",
+        value: closed ? "Đang đóng" : "Đang mở",
+        icon: type == "window"
+            ? Icons.window_rounded
+            : type == "gate"
+            ? Icons.garage_rounded
+            : Icons.sensor_door_rounded,
+        color: closed ? Colors.green : Colors.red,
+      );
+
+    case "lock":
+    case "door_lock":
+      final unlocked =
+          normalizeDeviceLockState(device) == "unlocked";
+
+      return _DeviceDisplayStatus(
+        title: "Khóa thông minh",
+        value: unlocked ? "Khóa đang mở" : "Khóa đang đóng",
+        icon: unlocked
+            ? Icons.lock_open_rounded
+            : Icons.lock_rounded,
+        color: unlocked ? Colors.red : Colors.green,
+      );
+
+    case "motion":
+      final detected =
+      active(const ["occupancy", "motion"]);
+
+      return _DeviceDisplayStatus(
+        title: "Chuyển động",
+        value: detected
+            ? "Phát hiện chuyển động"
+            : "Không có chuyển động",
+        icon: Icons.directions_walk_rounded,
+        color: detected ? Colors.orange : Colors.green,
+      );
+
+    case "presence":
+      final detected =
+      active(const ["presence", "occupancy"]);
+
+      return _DeviceDisplayStatus(
+        title: "Hiện diện",
+        value: detected
+            ? "Phát hiện hiện diện"
+            : "Không phát hiện hiện diện",
+        icon: Icons.sensors_rounded,
+        color: detected ? Colors.orange : Colors.green,
+      );
+
+    case "vibration":
+      final detected =
+          active(const ["vibration", "shock"]) ||
+              isRecentDeviceEvent(device);
+
+      return _DeviceDisplayStatus(
+        title: "Rung/chấn động",
+        value: detected
+            ? "Phát hiện rung/chấn động"
+            : "Không có rung bất thường",
+        icon: Icons.vibration_rounded,
+        color: detected ? Colors.orange : Colors.green,
+      );
+
+    case "glass_break":
+      final detected =
+          active(const ["glass_break", "broken_glass"]) ||
+              isRecentDeviceEvent(device);
+
+      return _DeviceDisplayStatus(
+        title: "Kính vỡ",
+        value: detected
+            ? "Phát hiện kính vỡ"
+            : "Không có cảnh báo kính vỡ",
+        icon: Icons.broken_image_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "smoke":
+      final detected = active(const ["smoke"]);
+
+      return _DeviceDisplayStatus(
+        title: "Báo khói",
+        value: detected ? "Phát hiện khói" : "Bình thường",
+        icon: Icons.local_fire_department_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "heat":
+      final detected = active(
+        const [
+          "heat",
+          "heat_alarm",
+          "high_temperature_alarm",
+        ],
+      );
+
+      return _DeviceDisplayStatus(
+        title: "Báo nhiệt",
+        value: detected
+            ? "Nhiệt độ nguy hiểm"
+            : "Bình thường",
+        icon: Icons.thermostat_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "carbon_monoxide":
+      final detected = active(
+        const ["carbon_monoxide", "co_alarm"],
+      );
+
+      return _DeviceDisplayStatus(
+        title: "Khí CO",
+        value: detected
+            ? "Phát hiện khí CO"
+            : "Không phát hiện khí CO",
+        icon: Icons.cloud_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "gas":
+      final detected =
+      active(const ["gas", "gas_alarm"]);
+
+      return _DeviceDisplayStatus(
+        title: "Báo gas",
+        value: detected ? "Rò rỉ gas" : "Bình thường",
+        icon: Icons.gas_meter_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "water_leak":
+    case "flood":
+      final detected = active(
+        const ["water_leak", "leak", "water"],
+      );
+
+      return _DeviceDisplayStatus(
+        title: "Ngập/rò nước",
+        value: detected
+            ? "Phát hiện ngập nước"
+            : "Bình thường",
+        icon: Icons.water_damage_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "sos":
+      final detected = isSosActive(device);
+
+      return _DeviceDisplayStatus(
+        title: "SOS",
+        value: detected ? "Đã kích hoạt" : "Sẵn sàng",
+        icon: Icons.sos_rounded,
+        color: detected ? Colors.red : Colors.green,
+      );
+
+    case "temperature":
+      return const _DeviceDisplayStatus(
+        title: "Môi trường",
+        value: "Đang theo dõi",
+        icon: Icons.device_thermostat_rounded,
+        color: Colors.blue,
+      );
+
+    case "smart_plug":
+      final on = normalizeDeviceSwitchState(device) == "on";
+
+      return _DeviceDisplayStatus(
+        title: "Ổ điện thông minh",
+        value: on ? "Đang bật" : "Đang tắt",
+        icon: Icons.power_rounded,
+        color: on ? Colors.green : Colors.grey,
+      );
+
+    case "power_monitor":
+      return const _DeviceDisplayStatus(
+        title: "Đo điện năng",
+        value: "Đang theo dõi điện năng",
+        icon: Icons.flash_on_rounded,
+        color: Colors.deepPurple,
+      );
+
+    case "ups":
+      final mainsPower = parseDeviceBool(
+        device["mains_power"] ??
+            device["ac_connected"] ??
+            device["input_power"],
+      );
+
+      return _DeviceDisplayStatus(
+        title: "Nguồn dự phòng",
+        value: mainsPower == false
+            ? "Đang dùng nguồn dự phòng"
+            : "Nguồn điện bình thường",
+        icon: Icons.battery_charging_full_rounded,
+        color: mainsPower == false
+            ? Colors.orange
+            : Colors.green,
+      );
+
+    case "siren":
+      final on = normalizeDeviceSwitchState(device) == "on";
+
+      return _DeviceDisplayStatus(
+        title: "Còi báo động",
+        value: on ? "Còi đang bật" : "Còi sẵn sàng",
+        icon: Icons.notifications_active_rounded,
+        color: on ? Colors.red : Colors.green,
+      );
+
+    case "smart_valve":
+      final open = normalizeDeviceSwitchState(device) == "on";
+
+      return _DeviceDisplayStatus(
+        title: "Van thông minh",
+        value: open ? "Van đang mở" : "Van đã đóng",
+        icon: Icons.water_drop_rounded,
+        color: open ? Colors.blue : Colors.green,
+      );
+
+    case "camera":
+      return const _DeviceDisplayStatus(
+        title: "Camera",
+        value: "Đang hoạt động",
+        icon: Icons.videocam_rounded,
+        color: Colors.blue,
+      );
+
+    case "doorbell":
+      return const _DeviceDisplayStatus(
+        title: "Chuông cửa",
+        value: "Đang hoạt động",
+        icon: Icons.notifications_rounded,
+        color: Colors.blue,
+      );
+
+    case "keypad":
+      return const _DeviceDisplayStatus(
+        title: "Bàn phím an ninh",
+        value: "Sẵn sàng",
+        icon: Icons.grid_3x3_rounded,
+        color: Colors.green,
+      );
+
+    case "repeater":
+      final online =
+          normalizeAvailability(device["availability"]) ==
+              "online";
+
+      return _DeviceDisplayStatus(
+        title: "Bộ mở rộng sóng",
+        value: online ? "Đang hoạt động" : "Mất kết nối",
+        icon: Icons.wifi_tethering_rounded,
+        color: online ? Colors.green : Colors.red,
+      );
+
+    case "hub":
+      return const _DeviceDisplayStatus(
+        title: "Hub trung tâm",
+        value: "Đang hoạt động",
+        icon: Icons.router_rounded,
+        color: Colors.green,
+      );
+
+    default:
+      return const _DeviceDisplayStatus(
+        title: "Loại thiết bị",
+        value: "Chưa nhận diện",
+        icon: Icons.sensors_off_rounded,
+        color: Colors.orange,
+      );
+  }
 }
 
 class _DeviceHealth {
@@ -504,61 +902,61 @@ Widget _roomPickerRow({
         borderRadius: BorderRadius.circular(12),
         onTap: canEdit
             ? () async {
-                final roomsSnap = await FirebaseDatabase.instance
-                    .ref("accounts/$ownerUid/homes/$homeId/rooms")
-                    .get();
+          final roomsSnap = await FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId/rooms")
+              .get();
 
-                final rooms = roomsSnap.value is Map
-                    ? Map<String, dynamic>.from(roomsSnap.value as Map)
-                    : <String, dynamic>{};
+          final rooms = roomsSnap.value is Map
+              ? Map<String, dynamic>.from(roomsSnap.value as Map)
+              : <String, dynamic>{};
 
-                if (!context.mounted) return;
+          if (!context.mounted) return;
 
-                final selectedRoom = await showModalBottomSheet<String>(
-                  context: context,
-                  builder: (_) {
-                    return SafeArea(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: rooms.entries.map((entry) {
-                          final room = entry.value is Map
-                              ? Map<String, dynamic>.from(entry.value as Map)
-                              : <String, dynamic>{};
+          final selectedRoom = await showModalBottomSheet<String>(
+            context: context,
+            builder: (_) {
+              return SafeArea(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: rooms.entries.map((entry) {
+                    final room = entry.value is Map
+                        ? Map<String, dynamic>.from(entry.value as Map)
+                        : <String, dynamic>{};
 
-                          final roomName =
-                              room["name"]?.toString() ?? entry.key;
+                    final roomName =
+                        room["name"]?.toString() ?? entry.key;
 
-                          return ListTile(
-                            leading: Icon(
-                              entry.key == currentRoomId
-                                  ? Icons.radio_button_checked
-                                  : Icons.radio_button_off,
-                            ),
-                            title: Text(roomName),
-                            onTap: () {
-                              Navigator.pop(context, entry.key);
-                            },
-                          );
-                        }).toList(),
+                    return ListTile(
+                      leading: Icon(
+                        entry.key == currentRoomId
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_off,
                       ),
+                      title: Text(roomName),
+                      onTap: () {
+                        Navigator.pop(context, entry.key);
+                      },
                     );
-                  },
-                );
+                  }).toList(),
+                ),
+              );
+            },
+          );
 
-                if (selectedRoom == null || selectedRoom == currentRoomId) {
-                  return;
-                }
+          if (selectedRoom == null || selectedRoom == currentRoomId) {
+            return;
+          }
 
-                await FirebaseDatabase.instance
-                    .ref(
-                      "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
-                    )
-                    .set(selectedRoom);
+          await FirebaseDatabase.instance
+              .ref(
+            "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
+          )
+              .set(selectedRoom);
 
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              }
+          if (context.mounted) {
+            Navigator.pop(context);
+          }
+        }
             : null,
         child: FutureBuilder<DataSnapshot>(
           future: FirebaseDatabase.instance

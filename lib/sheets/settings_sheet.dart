@@ -5,10 +5,7 @@ import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 
-
-Future<void> _showLanguageSheet(
-    BuildContext context,
-    ) async {
+Future<void> _showLanguageSheet(BuildContext context) async {
   final strings = AppStrings.of(context);
 
   Widget languageOption({
@@ -17,8 +14,7 @@ Future<void> _showLanguageSheet(
     required String title,
     required String subtitle,
   }) {
-    final selected =
-        appLanguageController.languageCode == code;
+    final selected = appLanguageController.languageCode == code;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
@@ -35,10 +31,7 @@ Future<void> _showLanguageSheet(
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 12,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
@@ -74,14 +67,12 @@ Future<void> _showLanguageSheet(
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
                         style: const TextStyle(
-                          color:
-                          SafeHomeColors.textPrimary,
+                          color: SafeHomeColors.textPrimary,
                           fontSize: 14.5,
                           fontWeight: FontWeight.w800,
                         ),
@@ -90,8 +81,7 @@ Future<void> _showLanguageSheet(
                       Text(
                         subtitle,
                         style: const TextStyle(
-                          color:
-                          SafeHomeColors.textSecondary,
+                          color: SafeHomeColors.textSecondary,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
                         ),
@@ -119,17 +109,10 @@ Future<void> _showLanguageSheet(
     builder: (sheetContext) {
       return SafeArea(
         child: Container(
-          padding: const EdgeInsets.fromLTRB(
-            16,
-            10,
-            16,
-            18,
-          ),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
           decoration: const BoxDecoration(
             color: SafeHomeColors.background,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(28),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -203,35 +186,33 @@ void showSettingsSheet({
 }) {
   int hiddenSecurityTapCount = 0;
   DateTime? lastHiddenSecurityTapAt;
-  final strings = AppStrings.fromLocale(
-    appLanguageController.locale,
-  );
+  final strings = AppStrings.fromLocale(appLanguageController.locale);
 
   final memberCountFuture = FirebaseDatabase.instance
       .ref("sharedByHome/$homeId")
       .get()
       .then<int>((snapshot) {
-    final raw = snapshot.value;
+        final raw = snapshot.value;
 
-    if (raw is! Map) {
-      return 0;
-    }
+        if (raw is! Map) {
+          return 0;
+        }
 
-    return raw.values.where((value) => value != null).length;
-  }).catchError((_) => 0);
+        return raw.values.where((value) => value != null).length;
+      })
+      .catchError((_) => 0);
 
-  void handleHiddenSecurityTap(
-      BuildContext sheetContext,
-      ) {
+  void handleHiddenSecurityTap(BuildContext sheetContext) {
     if (role != "owner") {
       return;
     }
 
     final now = DateTime.now();
 
-    final isContinuous = lastHiddenSecurityTapAt != null &&
-        now.difference(lastHiddenSecurityTapAt!).inMilliseconds <=
-            1500;
+    final previousTapAt = lastHiddenSecurityTapAt;
+    final isContinuous =
+        previousTapAt != null &&
+        now.difference(previousTapAt).inMilliseconds <= 1500;
 
     if (isContinuous) {
       hiddenSecurityTapCount++;
@@ -255,10 +236,7 @@ void showSettingsSheet({
     });
   }
 
-  void closeThen(
-      BuildContext sheetContext,
-      VoidCallback action,
-      ) {
+  void closeThen(BuildContext sheetContext, VoidCallback action) {
     Navigator.of(sheetContext).pop();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -309,19 +287,16 @@ void showSettingsSheet({
     Color? valueColor,
     int maxLines = 1,
   }) {
-    final displayValue =
-    value.trim().isEmpty ? strings.notUpdated : value.trim();
+    final displayValue = value.trim().isEmpty
+        ? strings.notUpdated
+        : value.trim();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            size: 16,
-            color: valueColor ?? SafeHomeColors.primary,
-          ),
+          Icon(icon, size: 16, color: valueColor ?? SafeHomeColors.primary),
           const SizedBox(width: 7),
           Expanded(
             child: Text.rich(
@@ -339,8 +314,7 @@ void showSettingsSheet({
                   TextSpan(
                     text: displayValue,
                     style: TextStyle(
-                      color:
-                      valueColor ?? SafeHomeColors.textPrimary,
+                      color: valueColor ?? SafeHomeColors.textPrimary,
                       fontSize: 12.5,
                       height: 1.25,
                       fontWeight: FontWeight.w800,
@@ -419,11 +393,7 @@ void showSettingsSheet({
                     color: color.withValues(alpha: 0.11),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 22,
-                  ),
+                  child: Icon(icon, color: color, size: 22),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -478,14 +448,11 @@ void showSettingsSheet({
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight:
-            MediaQuery.of(sheetContext).size.height * 0.92,
+            maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
           ),
           decoration: const BoxDecoration(
             color: SafeHomeColors.background,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(30),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -501,12 +468,7 @@ void showSettingsSheet({
               ),
               Flexible(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    16,
-                    14,
-                    16,
-                    20,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -516,14 +478,10 @@ void showSettingsSheet({
                         decoration: BoxDecoration(
                           color: SafeHomeColors.surface,
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: SafeHomeColors.border,
-                          ),
+                          border: Border.all(color: SafeHomeColors.border),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: 0.04,
-                              ),
+                              color: Colors.black.withValues(alpha: 0.04),
                               blurRadius: 16,
                               offset: const Offset(0, 6),
                             ),
@@ -531,8 +489,7 @@ void showSettingsSheet({
                         ),
                         child: IntrinsicHeight(
                           child: Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 108,
@@ -546,21 +503,16 @@ void showSettingsSheet({
                                           width: 70,
                                           height: 70,
                                           decoration: BoxDecoration(
-                                            color: SafeHomeColors
-                                                .primarySoft,
+                                            color: SafeHomeColors.primarySoft,
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                              color: SafeHomeColors
-                                                  .primary
-                                                  .withValues(
-                                                alpha: 0.18,
-                                              ),
+                                              color: SafeHomeColors.primary
+                                                  .withValues(alpha: 0.18),
                                             ),
                                           ),
                                           child: const Icon(
                                             Icons.home_rounded,
-                                            color:
-                                            SafeHomeColors.primary,
+                                            color: SafeHomeColors.primary,
                                             size: 36,
                                           ),
                                         ),
@@ -568,10 +520,8 @@ void showSettingsSheet({
                                           right: -2,
                                           bottom: -2,
                                           child: Material(
-                                            color:
-                                            SafeHomeColors.primary,
-                                            shape:
-                                            const CircleBorder(),
+                                            color: SafeHomeColors.primary,
+                                            shape: const CircleBorder(),
                                             child: InkWell(
                                               onTap: () {
                                                 closeThen(
@@ -580,7 +530,7 @@ void showSettingsSheet({
                                                 );
                                               },
                                               customBorder:
-                                              const CircleBorder(),
+                                                  const CircleBorder(),
                                               child: const SizedBox(
                                                 width: 28,
                                                 height: 28,
@@ -599,21 +549,17 @@ void showSettingsSheet({
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,
                                       onTap: () {
-                                        handleHiddenSecurityTap(
-                                          sheetContext,
-                                        );
+                                        handleHiddenSecurityTap(sheetContext);
                                       },
                                       child: Text(
                                         homeName.trim().isNotEmpty
                                             ? homeName.trim()
                                             : strings.unnamedHome,
                                         maxLines: 2,
-                                        overflow:
-                                        TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
-                                          color:
-                                          SafeHomeColors.textPrimary,
+                                          color: SafeHomeColors.textPrimary,
                                           fontSize: 15,
                                           height: 1.15,
                                           fontWeight: FontWeight.w900,
@@ -632,8 +578,7 @@ void showSettingsSheet({
                               Expanded(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     homeInfoRow(
                                       icon: roleIcon(),
@@ -642,8 +587,7 @@ void showSettingsSheet({
                                       valueColor: roleColor(),
                                     ),
                                     homeInfoRow(
-                                      icon:
-                                      Icons.location_on_outlined,
+                                      icon: Icons.location_on_outlined,
                                       label: strings.address,
                                       value: homeAddress,
                                       maxLines: 2,
@@ -652,23 +596,20 @@ void showSettingsSheet({
                                       future: memberCountFuture,
                                       builder: (context, snapshot) {
                                         final value =
-                                        snapshot.connectionState ==
-                                            ConnectionState
-                                                .waiting
+                                            snapshot.connectionState ==
+                                                ConnectionState.waiting
                                             ? strings.loading
                                             : "${snapshot.data ?? 0}";
 
                                         return homeInfoRow(
-                                          icon:
-                                          Icons.people_alt_rounded,
+                                          icon: Icons.people_alt_rounded,
                                           label: strings.members,
                                           value: value,
                                         );
                                       },
                                     ),
                                     homeInfoRow(
-                                      icon:
-                                      Icons.fingerprint_rounded,
+                                      icon: Icons.fingerprint_rounded,
                                       label: "HomeID",
                                       value: homeId,
                                     ),
@@ -687,8 +628,7 @@ void showSettingsSheet({
                         tile(
                           icon: Icons.share_rounded,
                           title: strings.shareHome,
-                          subtitle:
-                          strings.shareHomeSubtitle,
+                          subtitle: strings.shareHomeSubtitle,
                           color: SafeHomeColors.info,
                           onTap: () {
                             closeThen(sheetContext, onShare);
@@ -698,8 +638,7 @@ void showSettingsSheet({
                       tile(
                         icon: Icons.people_alt_rounded,
                         title: strings.homeMembers,
-                        subtitle:
-                        strings.homeMembersSubtitle,
+                        subtitle: strings.homeMembersSubtitle,
                         color: SafeHomeColors.safe,
                         onTap: () {
                           closeThen(sheetContext, onShareList);
@@ -719,10 +658,7 @@ void showSettingsSheet({
                           ),
                           color: const Color(0xFF2F8F6B),
                           onTap: () {
-                            closeThen(
-                              sheetContext,
-                              onAutoAway,
-                            );
+                            closeThen(sheetContext, onAutoAway);
                           },
                         ),
 
@@ -730,8 +666,7 @@ void showSettingsSheet({
                         tile(
                           icon: Icons.meeting_room_rounded,
                           title: strings.manageRooms,
-                          subtitle:
-                          strings.manageRoomsSubtitle,
+                          subtitle: strings.manageRoomsSubtitle,
                           color: SafeHomeColors.warning,
                           onTap: () {
                             closeThen(sheetContext, onRooms);
@@ -741,8 +676,7 @@ void showSettingsSheet({
                       tile(
                         icon: Icons.sensors_rounded,
                         title: strings.allDevices,
-                        subtitle:
-                        strings.allDevicesSubtitle,
+                        subtitle: strings.allDevicesSubtitle,
                         color: const Color(0xFF576FD0),
                         onTap: () {
                           closeThen(sheetContext, onAllDevices);
@@ -753,14 +687,10 @@ void showSettingsSheet({
                         tile(
                           icon: Icons.swap_horiz_rounded,
                           title: strings.transferOwnership,
-                          subtitle:
-                          strings.transferOwnershipSubtitle,
+                          subtitle: strings.transferOwnershipSubtitle,
                           color: const Color(0xFF7656C8),
                           onTap: () {
-                            closeThen(
-                              sheetContext,
-                              onTransferOwner,
-                            );
+                            closeThen(sheetContext, onTransferOwner);
                           },
                         ),
 
@@ -770,53 +700,42 @@ void showSettingsSheet({
                       tile(
                         icon: Icons.person_rounded,
                         title: strings.personalAccount,
-                        subtitle:
-                        strings.personalAccountSubtitle,
+                        subtitle: strings.personalAccountSubtitle,
                         color: SafeHomeColors.primary,
-                        trailing:
-                        ValueListenableBuilder<int>(
-                          valueListenable:
-                          inviteCountNotifier,
+                        trailing: ValueListenableBuilder<int>(
+                          valueListenable: inviteCountNotifier,
                           builder: (_, inviteCount, _) {
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (inviteCount > 0)
                                   Container(
-                                    constraints:
-                                    const BoxConstraints(
+                                    constraints: const BoxConstraints(
                                       minWidth: 22,
                                       minHeight: 22,
                                     ),
                                     alignment: Alignment.center,
-                                    padding:
-                                    const EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                       horizontal: 6,
                                       vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
                                       color: SafeHomeColors.danger,
-                                      borderRadius:
-                                      BorderRadius.circular(999),
+                                      borderRadius: BorderRadius.circular(999),
                                     ),
                                     child: Text(
-                                      inviteCount > 99
-                                          ? "99+"
-                                          : "$inviteCount",
+                                      inviteCount > 99 ? "99+" : "$inviteCount",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 9.5,
-                                        fontWeight:
-                                        FontWeight.w900,
+                                        fontWeight: FontWeight.w900,
                                       ),
                                     ),
                                   ),
-                                if (inviteCount > 0)
-                                  const SizedBox(width: 4),
+                                if (inviteCount > 0) const SizedBox(width: 4),
                                 const Icon(
                                   Icons.chevron_right_rounded,
-                                  color: SafeHomeColors
-                                      .textSecondary,
+                                  color: SafeHomeColors.textSecondary,
                                 ),
                               ],
                             );
@@ -831,14 +750,13 @@ void showSettingsSheet({
                         icon: Icons.language_rounded,
                         title: strings.language,
                         subtitle:
-                        "${strings.languageSubtitle} • "
+                            "${strings.languageSubtitle} • "
                             "${strings.currentLanguageName}",
                         color: SafeHomeColors.primary,
                         onTap: () {
                           Navigator.of(sheetContext).pop();
 
-                          WidgetsBinding.instance
-                              .addPostFrameCallback((_) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
                             if (context.mounted) {
                               _showLanguageSheet(context);
                             }
@@ -852,15 +770,11 @@ void showSettingsSheet({
                         tile(
                           icon: Icons.delete_forever_rounded,
                           title: strings.deleteHome,
-                          subtitle:
-                          strings.deleteHomeSubtitle,
+                          subtitle: strings.deleteHomeSubtitle,
                           color: SafeHomeColors.danger,
                           destructive: true,
                           onTap: () {
-                            closeThen(
-                              sheetContext,
-                              onDeleteHome,
-                            );
+                            closeThen(sheetContext, onDeleteHome);
                           },
                         ),
                       ],

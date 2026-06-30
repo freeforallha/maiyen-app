@@ -57,7 +57,13 @@ class NotificationListSheet extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                final data = snap.data!.snapshot.value;
+                final event = snap.data;
+
+                if (event == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final data = event.snapshot.value;
 
                 if (data == null) {
                   return const Center(

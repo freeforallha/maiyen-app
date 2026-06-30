@@ -15,8 +15,7 @@ import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 
-final GlobalKey<NavigatorState> appNavigatorKey =
-GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatefulWidget {
   const SafeHomeApp({super.key});
@@ -34,9 +33,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> {
 
     // Chỉ xoá Reminder khi app được mở mới hoàn toàn.
     // Không xoá khi chỉ bật lại màn hình.
-    unawaited(
-      NotificationService.stopReminderNotification(),
-    );
+    unawaited(NotificationService.stopReminderNotification());
   }
 
   @override
@@ -49,10 +46,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> {
           debugShowCheckedModeBanner: false,
           theme: SafeHomeTheme.light,
           locale: appLanguageController.locale,
-          supportedLocales: const [
-            Locale("vi"),
-            Locale("en"),
-          ],
+          supportedLocales: const [Locale("vi"), Locale("en")],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -134,9 +128,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
           ? Uri.decodeComponent(parts[1])
           : strings.alarmFallback;
 
-      final alarmItems = parts.length > 2
-          ? Uri.decodeComponent(parts[2])
-          : "";
+      final alarmItems = parts.length > 2 ? Uri.decodeComponent(parts[2]) : "";
 
       return FullscreenAlarmPage(
         title: "🚨 SafeHome",
@@ -177,9 +169,7 @@ class _AuthGateState extends State<AuthGate> {
     try {
       await AutoLoginService.removeLegacyPassword();
     } catch (error) {
-      debugPrint(
-        "REMOVE_LEGACY_PASSWORD_ERROR: $error",
-      );
+      debugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
     }
 
     user = FirebaseAuth.instance.currentUser;
@@ -195,15 +185,18 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<DatabaseEvent> _loadProfile(String uid) {
-    if (_profileFuture == null || _profileFutureUid != uid) {
+    var future = _profileFuture;
+
+    if (future == null || _profileFutureUid != uid) {
       _profileFutureUid = uid;
-      _profileFuture = FirebaseDatabase.instance
+      future = FirebaseDatabase.instance
           .ref("accounts/$uid/profile")
           .once()
           .timeout(const Duration(seconds: 12));
+      _profileFuture = future;
     }
 
-    return _profileFuture!;
+    return future;
   }
 
   void _retryProfileLoad() {
@@ -214,18 +207,13 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _signOutAfterProfileError() async {
-    final currentUid =
-        FirebaseAuth.instance.currentUser?.uid;
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid != null) {
       try {
-        await FCMService.removeCurrentInstallationToken(
-          uid: currentUid,
-        );
+        await FCMService.removeCurrentInstallationToken(uid: currentUid);
       } catch (error) {
-        debugPrint(
-          "REMOVE_FCM_TOKEN_ON_SIGN_OUT_ERROR: $error",
-        );
+        debugPrint("REMOVE_FCM_TOKEN_ON_SIGN_OUT_ERROR: $error");
       }
     }
 
@@ -302,8 +290,7 @@ class _AuthGateState extends State<AuthGate> {
       stream: FirebaseAuth.instance.userChanges(),
       initialData: user,
       builder: (context, snap) {
-        final currentUser =
-            snap.data ?? FirebaseAuth.instance.currentUser;
+        final currentUser = snap.data ?? FirebaseAuth.instance.currentUser;
 
         if (currentUser == null) {
           return const LoginPage();
@@ -330,18 +317,23 @@ class _AuthGateState extends State<AuthGate> {
               );
             }
 
-            final value = profileSnap.data!.snapshot.value;
+            final profileEvent = profileSnap.data;
+
+            if (profileEvent == null) {
+              return _buildProfileLoadError(
+                "Không nhận được dữ liệu từ Firebase",
+              );
+            }
+
+            final value = profileEvent.snapshot.value;
 
             final profile = value is Map
                 ? Map<String, dynamic>.from(value)
                 : <String, dynamic>{};
 
-            final name =
-                profile["name"]?.toString().trim() ?? "";
-            final gender =
-                profile["gender"]?.toString().trim() ?? "";
-            final phone =
-                profile["phone"]?.toString().trim() ?? "";
+            final name = profile["name"]?.toString().trim() ?? "";
+            final gender = profile["gender"]?.toString().trim() ?? "";
+            final phone = profile["phone"]?.toString().trim() ?? "";
 
             if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
               return ProfileSetupPage(
@@ -380,20 +372,12 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
       duration: const Duration(milliseconds: 900),
     );
 
-    fade = CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeOutCubic,
-    );
+    fade = CurvedAnimation(parent: controller, curve: Curves.easeOutCubic);
 
     scale = Tween<double>(
       begin: 0.92,
       end: 1,
-    ).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeOutBack,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutBack));
 
     controller.forward();
   }
@@ -422,9 +406,7 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
                   decoration: BoxDecoration(
                     color: SafeHomeColors.surface,
                     borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: SafeHomeColors.border,
-                    ),
+                    border: Border.all(color: SafeHomeColors.border),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.06),
@@ -450,15 +432,11 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
                     children: [
                       TextSpan(
                         text: "Safe",
-                        style: TextStyle(
-                          color: SafeHomeColors.primary,
-                        ),
+                        style: TextStyle(color: SafeHomeColors.primary),
                       ),
                       TextSpan(
                         text: "Home",
-                        style: TextStyle(
-                          color: SafeHomeColors.textPrimary,
-                        ),
+                        style: TextStyle(color: SafeHomeColors.textPrimary),
                       ),
                     ],
                   ),

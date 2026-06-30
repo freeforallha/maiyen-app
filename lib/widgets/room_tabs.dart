@@ -25,8 +25,7 @@ class RoomTabs extends StatefulWidget {
 }
 
 class _RoomTabsState extends State<RoomTabs> {
-  static const Duration _animationDuration =
-  Duration(milliseconds: 220);
+  static const Duration _animationDuration = Duration(milliseconds: 220);
 
   late List<String> _roomOrder;
   bool _savingOrder = false;
@@ -56,34 +55,27 @@ class _RoomTabsState extends State<RoomTabs> {
     }
   }
 
-  List<String> _orderedRoomIds(
-      Map<String, dynamic> rooms,
-      ) {
-    final entries = rooms.entries
-        .where((entry) => entry.key != "unassigned")
-        .toList()
-      ..sort((a, b) {
-        final aData = a.value is Map
-            ? Map<String, dynamic>.from(a.value as Map)
-            : <String, dynamic>{};
+  List<String> _orderedRoomIds(Map<String, dynamic> rooms) {
+    final entries =
+        rooms.entries.where((entry) => entry.key != "unassigned").toList()
+          ..sort((a, b) {
+            final aData = a.value is Map
+                ? Map<String, dynamic>.from(a.value as Map)
+                : <String, dynamic>{};
 
-        final bData = b.value is Map
-            ? Map<String, dynamic>.from(b.value as Map)
-            : <String, dynamic>{};
+            final bData = b.value is Map
+                ? Map<String, dynamic>.from(b.value as Map)
+                : <String, dynamic>{};
 
-        final aOrder =
-            int.tryParse(aData["order"]?.toString() ?? "") ??
-                999;
-        final bOrder =
-            int.tryParse(bData["order"]?.toString() ?? "") ??
-                999;
+            final aOrder =
+                int.tryParse(aData["order"]?.toString() ?? "") ?? 999;
+            final bOrder =
+                int.tryParse(bData["order"]?.toString() ?? "") ?? 999;
 
-        return aOrder.compareTo(bOrder);
-      });
+            return aOrder.compareTo(bOrder);
+          });
 
-    return entries
-        .map((entry) => entry.key.toString())
-        .toList();
+    return entries.map((entry) => entry.key.toString()).toList();
   }
 
   String _roomName(String roomId) {
@@ -98,10 +90,7 @@ class _RoomTabsState extends State<RoomTabs> {
     return name.isNotEmpty ? name : roomId;
   }
 
-  Future<void> _handleReorder(
-      int oldIndex,
-      int newIndex,
-      ) async {
+  Future<void> _handleReorder(int oldIndex, int newIndex) async {
     if (oldIndex == 0) return;
 
     final previousOrder = List<String>.from(_roomOrder);
@@ -124,9 +113,7 @@ class _RoomTabsState extends State<RoomTabs> {
     });
 
     try {
-      await widget.onReorder(
-        List<String>.from(movable),
-      );
+      await widget.onReorder(List<String>.from(movable));
     } catch (_) {
       if (!mounted) return;
 
@@ -149,12 +136,7 @@ class _RoomTabsState extends State<RoomTabs> {
       },
       ..._roomOrder
           .where(widget.rooms.containsKey)
-          .map(
-            (roomId) => {
-          "id": roomId,
-          "name": _roomName(roomId),
-        },
-      ),
+          .map((roomId) => {"id": roomId, "name": _roomName(roomId)}),
     ];
 
     return SizedBox(
@@ -165,10 +147,7 @@ class _RoomTabsState extends State<RoomTabs> {
             left: 12,
             right: 12,
             bottom: 0,
-            child: Container(
-              height: 1,
-              color: SafeHomeColors.border,
-            ),
+            child: Container(height: 1, color: SafeHomeColors.border),
           ),
           Positioned.fill(
             child: ShaderMask(
@@ -189,22 +168,16 @@ class _RoomTabsState extends State<RoomTabs> {
               child: ReorderableListView.builder(
                 scrollDirection: Axis.horizontal,
                 buildDefaultDragHandles: false,
-                padding: const EdgeInsets.fromLTRB(
-                  12,
-                  0,
-                  30,
-                  0,
-                ),
+                padding: const EdgeInsets.fromLTRB(12, 0, 30, 0),
                 itemCount: tabs.length,
                 onReorderItem: _handleReorder,
                 proxyDecorator: _buildDragProxy,
                 autoScrollerVelocityScalar: 70,
                 itemBuilder: (context, index) {
                   final tab = tabs[index];
-                  final roomId = tab["id"]!;
-                  final name = tab["name"]!;
-                  final selected =
-                      widget.selectedRoomId == roomId;
+                  final roomId = tab["id"] ?? "";
+                  final name = tab["name"] ?? roomId;
+                  final selected = widget.selectedRoomId == roomId;
 
                   final tabContent = _RoomTabItem(
                     name: name,
@@ -218,11 +191,8 @@ class _RoomTabsState extends State<RoomTabs> {
 
                   if (index == 0) {
                     return Container(
-                      key: const ValueKey(
-                        "room_tab_overview",
-                      ),
-                      margin:
-                      const EdgeInsets.only(right: 2),
+                      key: const ValueKey("room_tab_overview"),
+                      margin: const EdgeInsets.only(right: 2),
                       child: tabContent,
                     );
                   }
@@ -231,8 +201,7 @@ class _RoomTabsState extends State<RoomTabs> {
                     key: ValueKey("room_tab_$roomId"),
                     index: index,
                     child: Container(
-                      margin:
-                      const EdgeInsets.only(right: 2),
+                      margin: const EdgeInsets.only(right: 2),
                       child: tabContent,
                     ),
                   );
@@ -246,13 +215,11 @@ class _RoomTabsState extends State<RoomTabs> {
   }
 
   static Widget _buildDragProxy(
-      Widget child,
-      int index,
-      Animation<double> animation,
-      ) {
-    final curved = animation.drive(
-      CurveTween(curve: Curves.easeOutCubic),
-    );
+    Widget child,
+    int index,
+    Animation<double> animation,
+  ) {
+    final curved = animation.drive(CurveTween(curve: Curves.easeOutCubic));
 
     return AnimatedBuilder(
       animation: curved,
@@ -269,15 +236,11 @@ class _RoomTabsState extends State<RoomTabs> {
                 color: SafeHomeColors.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: SafeHomeColors.primary.withValues(
-                    alpha: 0.18,
-                  ),
+                  color: SafeHomeColors.primary.withValues(alpha: 0.18),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(
-                      alpha: 0.10 * t,
-                    ),
+                    color: Colors.black.withValues(alpha: 0.10 * t),
                     blurRadius: 14 * t,
                     offset: Offset(0, 5 * t),
                   ),
@@ -319,17 +282,10 @@ class _RoomTabItem extends StatelessWidget {
             curve: Curves.easeOutCubic,
             opacity: selected ? 1 : 0.45,
             child: AnimatedContainer(
-              duration:
-              _RoomTabsState._animationDuration,
+              duration: _RoomTabsState._animationDuration,
               curve: Curves.easeOutCubic,
-              constraints: const BoxConstraints(
-                minWidth: 56,
-                maxWidth: 132,
-              ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 5,
-              ),
+              constraints: const BoxConstraints(minWidth: 56, maxWidth: 132),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               color: Colors.transparent,
               alignment: Alignment.center,
               child: AnimatedDefaultTextStyle(
@@ -337,19 +293,13 @@ class _RoomTabItem extends StatelessWidget {
                 curve: Curves.easeOutCubic,
                 style: TextStyle(
                   fontSize: selected ? 16 : 13.5,
-                  fontWeight: selected
-                      ? FontWeight.w900
-                      : FontWeight.w600,
+                  fontWeight: selected ? FontWeight.w900 : FontWeight.w600,
                   color: selected
                       ? SafeHomeColors.textPrimary
                       : SafeHomeColors.textSecondary,
                   letterSpacing: selected ? -0.2 : -0.05,
                 ),
-                child: Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
               ),
             ),
           ),

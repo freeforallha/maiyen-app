@@ -45,25 +45,8 @@ class DeviceList extends StatelessWidget {
     return {};
   }
 
-  double heartbeatLimitHours(String type) {
-    switch (type) {
-      case "temperature":
-        return 2;
-
-      case "repeater":
-        return 1;
-
-      case "smoke":
-        return 24;
-
-      case "door":
-      case "window":
-      case "lock":
-      case "gate":
-      case "sos":
-      default:
-        return 6;
-    }
+  double deviceHeartbeatLimitHours(String type) {
+    return heartbeatLimitHours(type);
   }
 
   String getConnectionStatus(Map<String, dynamic> d) {
@@ -102,7 +85,7 @@ class DeviceList extends StatelessWidget {
           .inMinutes /
           60;
 
-      staleResponse = ageHours > heartbeatLimitHours(type);
+      staleResponse = ageHours > deviceHeartbeatLimitHours(type);
     }
 
     // Vàng: lâu không phản hồi, sóng yếu, pin yếu,
@@ -160,7 +143,7 @@ class DeviceList extends StatelessWidget {
           .inMinutes /
           60;
 
-      if (ageHours > heartbeatLimitHours(type)) {
+      if (ageHours > deviceHeartbeatLimitHours(type)) {
         warnings.add(strings.t("lâu không phản hồi"));
       }
     }
@@ -253,24 +236,12 @@ class DeviceList extends StatelessWidget {
   }
 
   bool isDeviceUnsafe(Map<String, dynamic> d) {
-    final type = d["type"]?.toString() ?? "door";
+    final evaluation = evaluateDeviceStatus(
+      d,
+      securityMode: securityMode,
+    );
 
-    if (type == "smoke") {
-      return d["smoke"] == true || d["tamper"] == true;
-    }
-
-    if (type == "sos") {
-      return isSosActive(d);
-    }
-
-    if (type == "door" ||
-        type == "window" ||
-        type == "gate" ||
-        type == "lock") {
-      return d["contact"] == false || d["tamper"] == true;
-    }
-
-    return d["tamper"] == true;
+    return evaluation["level"] != "safe";
   }
 
   String getDeviceGroup(String type) {
@@ -281,14 +252,32 @@ class DeviceList extends StatelessWidget {
       case "lock":
       case "door_lock":
       case "motion":
+      case "presence":
+      case "vibration":
+      case "glass_break":
         return "An ninh ra/vào";
 
       case "smoke":
+      case "heat":
+      case "carbon_monoxide":
       case "gas":
       case "water_leak":
       case "flood":
       case "sos":
         return "Nguy hiểm khẩn cấp";
+
+      case "smart_plug":
+      case "power_monitor":
+      case "ups":
+      case "siren":
+      case "smart_valve":
+      case "camera":
+      case "doorbell":
+      case "keypad":
+      case "repeater":
+      case "hub":
+      case "unknown":
+        return "Điều khiển & hạ tầng";
 
       default:
         return "__HIDDEN__";
@@ -299,35 +288,56 @@ class DeviceList extends StatelessWidget {
     switch (type) {
       case "door":
         return Icons.sensor_door_rounded;
-
       case "window":
         return Icons.window_rounded;
-
       case "gate":
         return Icons.garage_rounded;
-
       case "lock":
       case "door_lock":
         return Icons.lock_rounded;
-
       case "motion":
         return Icons.directions_walk_rounded;
-
+      case "presence":
+        return Icons.sensors_rounded;
+      case "vibration":
+        return Icons.vibration_rounded;
+      case "glass_break":
+        return Icons.broken_image_rounded;
       case "smoke":
         return Icons.local_fire_department_rounded;
-
+      case "heat":
+        return Icons.thermostat_rounded;
+      case "carbon_monoxide":
+        return Icons.cloud_rounded;
       case "gas":
         return Icons.gas_meter_rounded;
-
       case "water_leak":
       case "flood":
         return Icons.water_damage_rounded;
-
       case "sos":
         return Icons.sos_rounded;
-
+      case "smart_plug":
+        return Icons.power_rounded;
+      case "power_monitor":
+        return Icons.flash_on_rounded;
+      case "ups":
+        return Icons.battery_charging_full_rounded;
+      case "siren":
+        return Icons.notifications_active_rounded;
+      case "smart_valve":
+        return Icons.water_drop_rounded;
+      case "camera":
+        return Icons.videocam_rounded;
+      case "doorbell":
+        return Icons.notifications_rounded;
+      case "keypad":
+        return Icons.grid_3x3_rounded;
+      case "repeater":
+        return Icons.wifi_tethering_rounded;
+      case "hub":
+        return Icons.router_rounded;
       default:
-        return Icons.sensors_rounded;
+        return Icons.sensors_off_rounded;
     }
   }
 
@@ -336,63 +346,159 @@ class DeviceList extends StatelessWidget {
       AppStrings strings,
       ) {
     final type =
-        d["type"]?.toString().trim().toLowerCase() ?? "door";
+        d["type"]?.toString().trim().toLowerCase() ?? "unknown";
 
-    if (d["tamper"] == true) {
+    if (parseDeviceBool(d["tamper"]) == true) {
       return strings.t("Bị tháo");
     }
 
-    if (type == "smoke") {
-      return parseDeviceBool(d["smoke"]) == true
-          ? strings.t("Có khói")
-          : strings.t("Bình thường");
+    switch (type) {
+      case "smoke":
+        return isActiveDeviceSignal(d["smoke"])
+            ? strings.t("Có khói")
+            : strings.t("Bình thường");
+
+      case "heat":
+        final active =
+            isActiveDeviceSignal(d["heat"]) ||
+                isActiveDeviceSignal(d["heat_alarm"]) ||
+                isActiveDeviceSignal(
+                  d["high_temperature_alarm"],
+                );
+
+        return active
+            ? strings.t("Nhiệt độ nguy hiểm")
+            : strings.t("Bình thường");
+
+      case "carbon_monoxide":
+        final active =
+            isActiveDeviceSignal(d["carbon_monoxide"]) ||
+                isActiveDeviceSignal(d["co_alarm"]);
+
+        return active
+            ? strings.t("Phát hiện khí CO")
+            : strings.t("Không phát hiện khí CO");
+
+      case "sos":
+        return isSosActive(d)
+            ? strings.t("Đã kích hoạt")
+            : strings.t("Sẵn sàng");
+
+      case "gas":
+        final active =
+            isActiveDeviceSignal(d["gas"]) ||
+                isActiveDeviceSignal(d["gas_alarm"]);
+
+        return active
+            ? strings.t("Rò rỉ gas")
+            : strings.t("Bình thường");
+
+      case "water_leak":
+      case "flood":
+        final active =
+            isActiveDeviceSignal(d["water_leak"]) ||
+                isActiveDeviceSignal(d["leak"]) ||
+                isActiveDeviceSignal(d["water"]);
+
+        return active
+            ? strings.t("Phát hiện ngập nước")
+            : strings.t("Bình thường");
+
+      case "motion":
+        final active =
+            isActiveDeviceSignal(d["occupancy"]) ||
+                isActiveDeviceSignal(d["motion"]);
+
+        return active
+            ? strings.t("Phát hiện chuyển động")
+            : strings.t("Không có chuyển động");
+
+      case "presence":
+        final active =
+            isActiveDeviceSignal(d["presence"]) ||
+                isActiveDeviceSignal(d["occupancy"]);
+
+        return active
+            ? strings.t("Phát hiện hiện diện")
+            : strings.t("Không phát hiện hiện diện");
+
+      case "vibration":
+        final active =
+            isActiveDeviceSignal(d["vibration"]) ||
+                isRecentDeviceEvent(d);
+
+        return active
+            ? strings.t("Phát hiện rung/chấn động")
+            : strings.t("Không có rung bất thường");
+
+      case "glass_break":
+        final active =
+            isActiveDeviceSignal(d["glass_break"]) ||
+                isActiveDeviceSignal(d["broken_glass"]) ||
+                isRecentDeviceEvent(d);
+
+        return active
+            ? strings.t("Phát hiện kính vỡ")
+            : strings.t("Không có cảnh báo kính vỡ");
+
+      case "lock":
+      case "door_lock":
+        return normalizeDeviceLockState(d) == "unlocked"
+            ? strings.t("Khóa đang mở")
+            : strings.t("Khóa đang đóng");
+
+      case "door":
+      case "window":
+      case "gate":
+        final contact = parseDeviceBool(d["contact"]);
+        final status =
+            d["status"]?.toString().trim().toLowerCase() ?? "";
+
+        return contact == true ||
+            status == "closed" ||
+            status == "locked"
+            ? strings.t("Đang đóng")
+            : strings.t("Đang mở");
+
+      case "smart_plug":
+        return normalizeDeviceSwitchState(d) == "on"
+            ? strings.t("Đang bật")
+            : strings.t("Đang tắt");
+
+      case "power_monitor":
+        return strings.t("Đang theo dõi điện năng");
+
+      case "ups":
+        final mainsPower = parseDeviceBool(
+          d["mains_power"] ??
+              d["ac_connected"] ??
+              d["input_power"],
+        );
+
+        return mainsPower == false
+            ? strings.t("Đang dùng nguồn dự phòng")
+            : strings.t("Nguồn điện bình thường");
+
+      case "siren":
+        return normalizeDeviceSwitchState(d) == "on"
+            ? strings.t("Còi đang bật")
+            : strings.t("Còi sẵn sàng");
+
+      case "smart_valve":
+        return normalizeDeviceSwitchState(d) == "on"
+            ? strings.t("Van đang mở")
+            : strings.t("Van đã đóng");
+
+      case "camera":
+      case "doorbell":
+      case "keypad":
+      case "repeater":
+      case "hub":
+        return strings.t("Đang hoạt động");
+
+      default:
+        return strings.t("Chưa nhận diện");
     }
-
-    if (type == "sos") {
-      return isSosActive(d)
-          ? strings.t("Đã kích hoạt")
-          : strings.t("Sẵn sàng");
-    }
-
-    if (type == "gas") {
-      final active =
-          parseDeviceBool(d["gas"]) == true ||
-              parseDeviceBool(d["gas_alarm"]) == true;
-
-      return active
-          ? strings.t("Rò rỉ gas")
-          : strings.t("Bình thường");
-    }
-
-    if (type == "water_leak" || type == "flood") {
-      final active =
-          parseDeviceBool(d["water_leak"]) == true ||
-              parseDeviceBool(d["leak"]) == true ||
-              parseDeviceBool(d["water"]) == true;
-
-      return active
-          ? strings.t("Phát hiện ngập nước")
-          : strings.t("Bình thường");
-    }
-
-    if (type == "motion") {
-      final active =
-          parseDeviceBool(d["occupancy"]) == true ||
-              parseDeviceBool(d["motion"]) == true ||
-              parseDeviceBool(d["presence"]) == true;
-
-      return active
-          ? strings.t("Phát hiện chuyển động")
-          : strings.t("Không có chuyển động");
-    }
-
-    final contact = parseDeviceBool(d["contact"]);
-    final status =
-        d["status"]?.toString().trim().toLowerCase() ?? "";
-
-    return contact == true || status == "closed"
-        ? strings.t("Đang đóng")
-        : strings.t("Đang mở");
   }
 
   String getTimeText(
@@ -699,6 +805,8 @@ class DeviceList extends StatelessWidget {
     _groupEntries("An ninh ra/vào");
     final emergencyEntries =
     _groupEntries("Nguy hiểm khẩn cấp");
+    final infrastructureEntries =
+    _groupEntries("Điều khiển & hạ tầng");
 
     return Column(
       children: [
@@ -769,6 +877,29 @@ class DeviceList extends StatelessWidget {
                         spacing: spacing,
                         runSpacing: spacing,
                         children: emergencyEntries.map((entry) {
+                          return SizedBox(
+                            width: itemWidth,
+                            child: _deviceCard(
+                              id: entry.key,
+                              d: safeMap(entry.value),
+                              compact: compact,
+                              strings: strings,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                    if (infrastructureEntries.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      _sectionHeader(
+                        title: strings.t("Điều khiển & hạ tầng"),
+                        count: infrastructureEntries.length,
+                        showAddButton: false,
+                      ),
+                      Wrap(
+                        spacing: spacing,
+                        runSpacing: spacing,
+                        children: infrastructureEntries.map((entry) {
                           return SizedBox(
                             width: itemWidth,
                             child: _deviceCard(

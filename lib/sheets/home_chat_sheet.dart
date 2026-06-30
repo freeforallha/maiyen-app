@@ -28,9 +28,7 @@ void showHomeChatSheet({
   if (user == null) return;
 
   final controller = TextEditingController();
-  final scrollController = ScrollController(
-    initialScrollOffset: 0,
-  );
+  final scrollController = ScrollController(initialScrollOffset: 0);
   final memberRoleCache = <String, String>{};
   final focusNode = FocusNode();
   final searchFocusNode = FocusNode();
@@ -145,11 +143,9 @@ void showHomeChatSheet({
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (isChatSheetClosed) return;
 
-      final targetContext =
-          messageKeys[messageId]?.currentContext;
+      final targetContext = messageKeys[messageId]?.currentContext;
 
-      if (targetContext == null ||
-          !targetContext.mounted) {
+      if (targetContext == null || !targetContext.mounted) {
         return;
       }
 
@@ -162,17 +158,11 @@ void showHomeChatSheet({
     });
   }
 
-  TextSpan highlightedSpan(
-      String source,
-      TextStyle baseStyle,
-      ) {
+  TextSpan highlightedSpan(String source, TextStyle baseStyle) {
     final query = searchQuery.trim();
 
     if (!isSearching || query.isEmpty) {
-      return TextSpan(
-        text: source,
-        style: baseStyle,
-      );
+      return TextSpan(text: source, style: baseStyle);
     }
 
     final lowerSource = source.toLowerCase();
@@ -181,36 +171,22 @@ void showHomeChatSheet({
     var start = 0;
 
     while (true) {
-      final matchIndex = lowerSource.indexOf(
-        lowerQuery,
-        start,
-      );
+      final matchIndex = lowerSource.indexOf(lowerQuery, start);
 
       if (matchIndex < 0) {
-        spans.add(
-          TextSpan(
-            text: source.substring(start),
-            style: baseStyle,
-          ),
-        );
+        spans.add(TextSpan(text: source.substring(start), style: baseStyle));
         break;
       }
 
       if (matchIndex > start) {
         spans.add(
-          TextSpan(
-            text: source.substring(start, matchIndex),
-            style: baseStyle,
-          ),
+          TextSpan(text: source.substring(start, matchIndex), style: baseStyle),
         );
       }
 
       spans.add(
         TextSpan(
-          text: source.substring(
-            matchIndex,
-            matchIndex + query.length,
-          ),
+          text: source.substring(matchIndex, matchIndex + query.length),
           style: baseStyle.copyWith(
             backgroundColor: Colors.yellow.shade300,
             fontWeight: FontWeight.w800,
@@ -243,9 +219,7 @@ void showHomeChatSheet({
 
     try {
       final snap = await FirebaseDatabase.instance
-          .ref(
-        "homeMemberContacts/$homeId/$memberUid/phone",
-      )
+          .ref("homeMemberContacts/$homeId/$memberUid/phone")
           .get();
 
       phone = snap.value?.toString().trim() ?? "";
@@ -388,8 +362,10 @@ void showHomeChatSheet({
   Future<String> getMemberRole(String uid) async {
     if (uid == ownerUid) return "owner";
 
-    if (memberRoleCache.containsKey(uid)) {
-      return memberRoleCache[uid]!;
+    final cachedRole = memberRoleCache[uid];
+
+    if (cachedRole != null) {
+      return cachedRole;
     }
 
     final snap = await FirebaseDatabase.instance
@@ -405,7 +381,6 @@ void showHomeChatSheet({
     memberRoleCache[uid] = role;
     return role;
   }
-
 
   NotificationService.markHomeChatOpened(homeId);
 
@@ -426,9 +401,7 @@ void showHomeChatSheet({
                     .get();
 
                 final raw = snapshot.value is Map
-                    ? Map<String, dynamic>.from(
-                  snapshot.value as Map,
-                )
+                    ? Map<String, dynamic>.from(snapshot.value as Map)
                     : <String, dynamic>{};
 
                 final lastReadRaw = raw["lastRead"];
@@ -436,10 +409,8 @@ void showHomeChatSheet({
                     ? Map<String, dynamic>.from(lastReadRaw)
                     : <String, dynamic>{};
 
-                initialLastRead = int.tryParse(
-                  lastReadMap[user.uid]?.toString() ?? "0",
-                ) ??
-                    0;
+                initialLastRead =
+                    int.tryParse(lastReadMap[user.uid]?.toString() ?? "0") ?? 0;
 
                 initialUnreadCount = ChatService.unreadCount(
                   homeChat: raw,
@@ -451,10 +422,7 @@ void showHomeChatSheet({
               }
 
               try {
-                await ChatService.markAsRead(
-                  homeId: homeId,
-                  uid: user.uid,
-                );
+                await ChatService.markAsRead(homeId: homeId, uid: user.uid);
               } catch (_) {
                 // Không để lỗi cập nhật trạng thái đọc làm hỏng Home Chat.
               }
@@ -482,9 +450,7 @@ void showHomeChatSheet({
               activeSearchResult = nextIndex;
             });
 
-            scrollToMessage(
-              currentSearchResultIds[nextIndex],
-            );
+            scrollToMessage(currentSearchResultIds[nextIndex]);
           }
 
           void openSearch() {
@@ -498,9 +464,7 @@ void showHomeChatSheet({
             });
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (isChatSheetClosed ||
-                  !ctx.mounted ||
-                  !isSearching) {
+              if (isChatSheetClosed || !ctx.mounted || !isSearching) {
                 return;
               }
 
@@ -588,8 +552,7 @@ void showHomeChatSheet({
           }
 
           final screenSize = MediaQuery.sizeOf(ctx);
-          final sheetHeight =
-              screenSize.height * (showEmoji ? 0.86 : 0.72);
+          final sheetHeight = screenSize.height * (showEmoji ? 0.86 : 0.72);
 
           return PopScope<void>(
             canPop: !isSearching,
@@ -637,7 +600,9 @@ void showHomeChatSheet({
 
                             Expanded(
                               child: Text(
-                                homeName.isNotEmpty ? homeName : "Chat trong nhà",
+                                homeName.isNotEmpty
+                                    ? homeName
+                                    : "Chat trong nhà",
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -656,9 +621,7 @@ void showHomeChatSheet({
                                     ? Icons.search_off_rounded
                                     : Icons.search_rounded,
                               ),
-                              onPressed: isSearching
-                                  ? closeSearch
-                                  : openSearch,
+                              onPressed: isSearching ? closeSearch : openSearch,
                             ),
 
                             IconButton(
@@ -698,18 +661,18 @@ void showHomeChatSheet({
                               suffixIcon: searchController.text.isEmpty
                                   ? null
                                   : IconButton(
-                                tooltip: "Xoá từ khoá",
-                                icon: const Icon(Icons.close_rounded),
-                                onPressed: () {
-                                  searchController.clear();
+                                      tooltip: "Xoá từ khoá",
+                                      icon: const Icon(Icons.close_rounded),
+                                      onPressed: () {
+                                        searchController.clear();
 
-                                  setState(() {
-                                    searchQuery = "";
-                                    activeSearchResult = 0;
-                                    currentSearchResultIds = [];
-                                  });
-                                },
-                              ),
+                                        setState(() {
+                                          searchQuery = "";
+                                          activeSearchResult = 0;
+                                          currentSearchResultIds = [];
+                                        });
+                                      },
+                                    ),
                               filled: true,
                               fillColor: Colors.grey.shade100,
                               border: OutlineInputBorder(
@@ -721,10 +684,7 @@ void showHomeChatSheet({
 
                           if (searchQuery.trim().isNotEmpty)
                             Padding(
-                              padding: const EdgeInsets.only(
-                                top: 4,
-                                bottom: 2,
-                              ),
+                              padding: const EdgeInsets.only(top: 4, bottom: 2),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -732,7 +692,7 @@ void showHomeChatSheet({
                                       currentSearchResultIds.isEmpty
                                           ? "Không có kết quả"
                                           : "${activeSearchResult + 1}/"
-                                          "${currentSearchResultIds.length} kết quả",
+                                                "${currentSearchResultIds.length} kết quả",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade700,
@@ -777,17 +737,23 @@ void showHomeChatSheet({
                                 return Center(
                                   child: Text(
                                     "Chưa có tin nhắn",
-                                    style: TextStyle(color: Colors.grey.shade600),
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                    ),
                                   ),
                                 );
                               }
 
-                              final map = Map<String, dynamic>.from(data as Map);
+                              final map = Map<String, dynamic>.from(
+                                data as Map,
+                              );
                               final messages = map.entries.toList()
                                 ..sort((a, b) {
                                   final av = Map<String, dynamic>.from(a.value);
                                   final bv = Map<String, dynamic>.from(b.value);
-                                  return (av["time"] ?? 0).compareTo(bv["time"] ?? 0);
+                                  return (av["time"] ?? 0).compareTo(
+                                    bv["time"] ?? 0,
+                                  );
                                 });
 
                               final activeMessageIds = messages
@@ -795,28 +761,32 @@ void showHomeChatSheet({
                                   .toSet();
 
                               messageKeys.removeWhere(
-                                    (messageId, _) =>
-                                !activeMessageIds.contains(messageId),
+                                (messageId, _) =>
+                                    !activeMessageIds.contains(messageId),
                               );
 
-                              final normalizedQuery =
-                              searchQuery.trim().toLowerCase();
+                              final normalizedQuery = searchQuery
+                                  .trim()
+                                  .toLowerCase();
 
                               final nextSearchResultIds = <String>[];
 
                               if (isSearching && normalizedQuery.isNotEmpty) {
                                 for (final entry in messages) {
-                                  final rawMessage =
-                                  Map<String, dynamic>.from(entry.value);
+                                  final rawMessage = Map<String, dynamic>.from(
+                                    entry.value,
+                                  );
 
-                                  final name = rawMessage["name"]
-                                      ?.toString()
-                                      .toLowerCase() ??
+                                  final name =
+                                      rawMessage["name"]
+                                          ?.toString()
+                                          .toLowerCase() ??
                                       "";
 
-                                  final text = rawMessage["text"]
-                                      ?.toString()
-                                      .toLowerCase() ??
+                                  final text =
+                                      rawMessage["text"]
+                                          ?.toString()
+                                          .toLowerCase() ??
                                       "";
 
                                   if (name.contains(normalizedQuery) ||
@@ -831,11 +801,11 @@ void showHomeChatSheet({
                               final resultsChanged =
                                   nextSearchResultIds.length !=
                                       currentSearchResultIds.length ||
-                                      nextSearchResultIds.asMap().entries.any(
-                                            (entry) =>
+                                  nextSearchResultIds.asMap().entries.any(
+                                    (entry) =>
                                         entry.value !=
-                                            currentSearchResultIds[entry.key],
-                                      );
+                                        currentSearchResultIds[entry.key],
+                                  );
 
                               if (resultsChanged) {
                                 currentSearchResultIds = nextSearchResultIds;
@@ -848,7 +818,9 @@ void showHomeChatSheet({
                                       currentSearchResultIds.length - 1;
                                 }
 
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
                                   if (isChatSheetClosed || !ctx.mounted) {
                                     return;
                                   }
@@ -867,13 +839,15 @@ void showHomeChatSheet({
 
                               if (initialUnreadCount > 0) {
                                 for (final entry in messages) {
-                                  final rawMessage =
-                                  Map<String, dynamic>.from(entry.value);
+                                  final rawMessage = Map<String, dynamic>.from(
+                                    entry.value,
+                                  );
                                   final senderUid =
                                       rawMessage["uid"]?.toString() ?? "";
-                                  final messageTime = int.tryParse(
-                                    rawMessage["time"]?.toString() ?? "0",
-                                  ) ??
+                                  final messageTime =
+                                      int.tryParse(
+                                        rawMessage["time"]?.toString() ?? "0",
+                                      ) ??
                                       0;
 
                                   if (senderUid != user.uid &&
@@ -900,7 +874,7 @@ void showHomeChatSheet({
 
                                 initialScrollUnlockTimer ??= Timer(
                                   const Duration(milliseconds: 900),
-                                      () {
+                                  () {
                                     if (!isChatSheetClosed) {
                                       autoScrollReady = true;
                                     }
@@ -912,7 +886,7 @@ void showHomeChatSheet({
                                   scrollController.hasClients) {
                                 final distanceFromBottom =
                                     scrollController.position.pixels -
-                                        scrollController.position.minScrollExtent;
+                                    scrollController.position.minScrollExtent;
 
                                 if (distanceFromBottom <= 140) {
                                   animateToLatestMessage();
@@ -923,8 +897,7 @@ void showHomeChatSheet({
 
                               return Column(
                                 children: [
-                                  if (showUnreadNotice &&
-                                      unreadNoticeCount > 0)
+                                  if (showUnreadNotice && unreadNoticeCount > 0)
                                     GestureDetector(
                                       onTap: () {
                                         setState(() {
@@ -933,7 +906,9 @@ void showHomeChatSheet({
                                       },
                                       child: Container(
                                         width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 8),
+                                        margin: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 12,
                                           vertical: 9,
@@ -942,7 +917,9 @@ void showHomeChatSheet({
                                           color: Colors.blue.withValues(
                                             alpha: 0.08,
                                           ),
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
                                         ),
                                         child: Row(
                                           children: [
@@ -955,7 +932,7 @@ void showHomeChatSheet({
                                             Expanded(
                                               child: Text(
                                                 "Còn $unreadNoticeCount tin nhắn "
-                                                    "chưa đọc",
+                                                "chưa đọc",
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w700,
@@ -980,127 +957,172 @@ void showHomeChatSheet({
                                       itemCount: messages.length,
                                       itemBuilder: (_, index) {
                                         final messageEntry =
-                                        messages[messages.length - 1 - index];
-                                        final messageId =
-                                        messageEntry.key.toString();
+                                            messages[messages.length -
+                                                1 -
+                                                index];
+                                        final messageId = messageEntry.key
+                                            .toString();
 
                                         final msg = Map<String, dynamic>.from(
                                           messageEntry.value,
                                         );
 
                                         final isMe = msg["uid"] == user.uid;
-                                        final name = msg["name"]?.toString() ?? "User";
-                                        final senderUid = msg["uid"]?.toString() ?? "";
-                                        final text = msg["text"]?.toString() ?? "";
-                                        final photoUrl = msg["photoUrl"]?.toString() ?? "";
+                                        final name =
+                                            msg["name"]?.toString() ?? "User";
+                                        final senderUid =
+                                            msg["uid"]?.toString() ?? "";
+                                        final text =
+                                            msg["text"]?.toString() ?? "";
+                                        final photoUrl =
+                                            msg["photoUrl"]?.toString() ?? "";
                                         final time = msg["time"];
                                         final timeText = formatChatTime(time);
 
                                         return KeyedSubtree(
                                           key: messageKeys.putIfAbsent(
                                             messageId,
-                                                () => GlobalKey(),
+                                            () => GlobalKey(),
                                           ),
                                           child: Align(
                                             alignment: isMe
                                                 ? Alignment.centerRight
                                                 : Alignment.centerLeft,
                                             child: Container(
-                                              margin: const EdgeInsets.only(bottom: 10),
+                                              margin: const EdgeInsets.only(
+                                                bottom: 10,
+                                              ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
                                                 children: [
                                                   if (!isMe)
                                                     GestureDetector(
-                                                      onTap: () => openCallMemberSheet(
-                                                        sheetContext: ctx,
-                                                        memberUid:
-                                                        msg["uid"]?.toString() ?? "",
-                                                        name: name,
-                                                      ),
+                                                      onTap: () =>
+                                                          openCallMemberSheet(
+                                                            sheetContext: ctx,
+                                                            memberUid:
+                                                                msg["uid"]
+                                                                    ?.toString() ??
+                                                                "",
+                                                            name: name,
+                                                          ),
                                                       child: CircleAvatar(
                                                         radius: 14,
-                                                        backgroundImage: photoUrl.isNotEmpty
-                                                            ? NetworkImage(photoUrl)
+                                                        backgroundImage:
+                                                            photoUrl.isNotEmpty
+                                                            ? NetworkImage(
+                                                                photoUrl,
+                                                              )
                                                             : null,
                                                         child: photoUrl.isEmpty
                                                             ? const Icon(
-                                                          Icons.person,
-                                                          size: 15,
-                                                        )
+                                                                Icons.person,
+                                                                size: 15,
+                                                              )
                                                             : null,
                                                       ),
                                                     ),
-                                                  if (!isMe) const SizedBox(width: 6),
+                                                  if (!isMe)
+                                                    const SizedBox(width: 6),
 
                                                   Flexible(
                                                     child: Container(
-                                                      constraints: BoxConstraints(
-                                                        maxWidth:
-                                                        screenSize.width * 0.68,
-                                                      ),
-                                                      padding: const EdgeInsets.symmetric(
-                                                        horizontal: 12,
-                                                        vertical: 9,
-                                                      ),
+                                                      constraints:
+                                                          BoxConstraints(
+                                                            maxWidth:
+                                                                screenSize
+                                                                    .width *
+                                                                0.68,
+                                                          ),
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 12,
+                                                            vertical: 9,
+                                                          ),
                                                       decoration: BoxDecoration(
                                                         color: isMe
-                                                            ? Colors.blue.shade100
-                                                            : Colors.grey.shade100,
-                                                        borderRadius: BorderRadius.circular(
-                                                          16,
-                                                        ),
+                                                            ? Colors
+                                                                  .blue
+                                                                  .shade100
+                                                            : Colors
+                                                                  .grey
+                                                                  .shade100,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              16,
+                                                            ),
                                                       ),
                                                       child: Column(
                                                         crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
                                                           if (!isMe)
-                                                            FutureBuilder<String>(
-                                                              future: getMemberRole(
-                                                                senderUid,
-                                                              ),
+                                                            FutureBuilder<
+                                                              String
+                                                            >(
+                                                              future:
+                                                                  getMemberRole(
+                                                                    senderUid,
+                                                                  ),
                                                               builder: (context, roleSnap) {
                                                                 final role =
-                                                                    roleSnap.data ?? "member";
+                                                                    roleSnap
+                                                                        .data ??
+                                                                    "member";
 
-                                                                final icon = role == "owner"
+                                                                final icon =
+                                                                    role ==
+                                                                        "owner"
                                                                     ? Icons
-                                                                    .workspace_premium_rounded
-                                                                    : role == "admin"
+                                                                          .workspace_premium_rounded
+                                                                    : role ==
+                                                                          "admin"
                                                                     ? Icons
-                                                                    .admin_panel_settings_rounded
-                                                                    : Icons.person_rounded;
+                                                                          .admin_panel_settings_rounded
+                                                                    : Icons
+                                                                          .person_rounded;
 
-                                                                final color = role == "owner"
-                                                                    ? Colors.blue.shade700
-                                                                    : role == "admin"
+                                                                final color =
+                                                                    role ==
+                                                                        "owner"
                                                                     ? Colors
-                                                                    .deepPurple
-                                                                    .shade700
+                                                                          .blue
+                                                                          .shade700
+                                                                    : role ==
+                                                                          "admin"
+                                                                    ? Colors
+                                                                          .deepPurple
+                                                                          .shade700
                                                                     : Colors
-                                                                    .blueGrey
-                                                                    .shade700;
+                                                                          .blueGrey
+                                                                          .shade700;
 
                                                                 return GestureDetector(
-                                                                  onTap: () =>
-                                                                      openCallMemberSheet(
-                                                                        sheetContext: ctx,
-                                                                        memberUid: senderUid,
-                                                                        name: name,
-                                                                      ),
+                                                                  onTap: () => openCallMemberSheet(
+                                                                    sheetContext:
+                                                                        ctx,
+                                                                    memberUid:
+                                                                        senderUid,
+                                                                    name: name,
+                                                                  ),
                                                                   child: Row(
                                                                     mainAxisSize:
-                                                                    MainAxisSize.min,
+                                                                        MainAxisSize
+                                                                            .min,
                                                                     children: [
                                                                       Icon(
                                                                         icon,
-                                                                        size: 13,
-                                                                        color: color,
+                                                                        size:
+                                                                            13,
+                                                                        color:
+                                                                            color,
                                                                       ),
                                                                       const SizedBox(
-                                                                        width: 4,
+                                                                        width:
+                                                                            4,
                                                                       ),
                                                                       Flexible(
                                                                         child: Text.rich(
@@ -1108,15 +1130,12 @@ void showHomeChatSheet({
                                                                             name,
                                                                             TextStyle(
                                                                               fontSize: 11,
-                                                                              fontWeight:
-                                                                              FontWeight
-                                                                                  .w800,
+                                                                              fontWeight: FontWeight.w800,
                                                                               color: color,
                                                                             ),
                                                                           ),
                                                                           overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
+                                                                              TextOverflow.ellipsis,
                                                                         ),
                                                                       ),
                                                                     ],
@@ -1126,24 +1145,30 @@ void showHomeChatSheet({
                                                             ),
                                                           Column(
                                                             crossAxisAlignment:
-                                                            CrossAxisAlignment.end,
+                                                                CrossAxisAlignment
+                                                                    .end,
                                                             children: [
                                                               SelectableText.rich(
                                                                 highlightedSpan(
                                                                   text,
                                                                   const TextStyle(
-                                                                    fontSize: 14,
+                                                                    fontSize:
+                                                                        14,
                                                                   ),
                                                                 ),
                                                               ),
 
-                                                              const SizedBox(height: 4),
+                                                              const SizedBox(
+                                                                height: 4,
+                                                              ),
 
                                                               Text(
                                                                 timeText,
                                                                 style: TextStyle(
                                                                   fontSize: 10,
-                                                                  color: Colors.grey.shade600,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade600,
                                                                 ),
                                                               ),
                                                             ],
@@ -1276,11 +1301,11 @@ void showHomeChatSheet({
                                         iconColorSelected: Colors.blue,
                                       ),
                                       bottomActionBarConfig:
-                                      const BottomActionBarConfig(
-                                        backgroundColor: Colors.white,
-                                        buttonColor: Colors.white,
-                                        buttonIconColor: Colors.grey,
-                                      ),
+                                          const BottomActionBarConfig(
+                                            backgroundColor: Colors.white,
+                                            buttonColor: Colors.white,
+                                            buttonIconColor: Colors.grey,
+                                          ),
                                     ),
                                   ),
                                 );
@@ -1305,9 +1330,7 @@ void showHomeChatSheet({
     focusNode.unfocus();
     messageKeys.clear();
 
-    await Future<void>.delayed(
-      const Duration(milliseconds: 350),
-    );
+    await Future<void>.delayed(const Duration(milliseconds: 350));
 
     controller.dispose();
     searchController.dispose();
@@ -1453,10 +1476,10 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
                       : null,
                   child: previewMembers[index].photoUrl.isEmpty
                       ? Icon(
-                    Icons.person_rounded,
-                    size: 13,
-                    color: Colors.blueGrey.shade500,
-                  )
+                          Icons.person_rounded,
+                          size: 13,
+                          color: Colors.blueGrey.shade500,
+                        )
                       : null,
                 ),
               ),

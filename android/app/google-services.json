@@ -23,6 +23,50 @@
           }
         },
         {
+          "client_id": "83888615408-seein10lqth4vb4e71lb81f49cj72l25.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.safehome_app",
+            "certificate_hash": "165f0129220c4aba8069ea3abcae508f447cd012"
+          }
+        },
+        {
+          "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEYXZZz9AJA1N8ulrGLa-6u-nB1-opWv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "83888615408-jlm9qme2qpansgnheauhs88fb6g02r82.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.safehomeApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83888615408:android:3c968ab416b093abbd7735",
+        "android_client_info": {
+          "package_name": "com.myfamily.safehome"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
           "client_type": 3
         }

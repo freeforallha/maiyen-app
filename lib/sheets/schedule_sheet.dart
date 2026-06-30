@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 class ScheduleSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -23,31 +24,24 @@ class ScheduleSheet extends StatefulWidget {
 
 class _ScheduleSheetState extends State<ScheduleSheet> {
   String get currentUid =>
-      FirebaseAuth.instance.currentUser?.uid ??
-          widget.ownerUid;
+      FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
 
-  bool get isSharedUser =>
-      currentUid != widget.ownerUid;
+  bool get isSharedUser => currentUid != widget.ownerUid;
   String reminderMode = "home";
   List<Map<String, dynamic>> alarms = [];
   List<Map<String, dynamic>> notifications = [];
 
   DatabaseReference get ref {
-    if (
-    widget.type == "notification" &&
+    if (widget.type == "notification" &&
         isSharedUser &&
-        reminderMode == "custom"
-    ) {
+        reminderMode == "custom") {
       return FirebaseDatabase.instance.ref(
         "accounts/$currentUid/customRules/${widget.homeId}/notifications",
       );
     }
 
     return FirebaseDatabase.instance.ref(
-      FirebasePaths.schedules(
-        widget.ownerUid,
-        widget.homeId,
-      ),
+      FirebasePaths.schedules(widget.ownerUid, widget.homeId),
     );
   }
 
@@ -57,21 +51,19 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (widget.type == "notification" && isSharedUser) {
       FirebaseDatabase.instance
-          .ref(
-        "accounts/$currentUid/customRules/${widget.homeId}/mode",
-      )
+          .ref("accounts/$currentUid/customRules/${widget.homeId}/mode")
           .get()
           .then((snap) {
-        final value = snap.value?.toString();
+            final value = snap.value?.toString();
 
-        if (value == "custom" || value == "home") {
-          setState(() {
-            reminderMode = value!;
+            if (value == "custom" || value == "home") {
+              setState(() {
+                reminderMode = value == "custom" ? "custom" : "home";
+              });
+            }
+
+            load();
           });
-        }
-
-        load();
-      });
     } else {
       load();
     }
@@ -82,18 +74,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (!snap.exists) return;
 
-    if (
-    widget.type == "notification" &&
+    if (widget.type == "notification" &&
         isSharedUser &&
-        reminderMode == "custom"
-    ) {
+        reminderMode == "custom") {
       final data = Map<String, dynamic>.from(snap.value as Map);
 
       setState(() {
         notifications = List<Map<String, dynamic>>.from(
-          (data["items"] ?? []).map(
-                (e) => Map<String, dynamic>.from(e),
-          ),
+          (data["items"] ?? []).map((e) => Map<String, dynamic>.from(e)),
         );
       });
 
@@ -104,15 +92,11 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     setState(() {
       alarms = List<Map<String, dynamic>>.from(
-        (data["alarms"] ?? []).map(
-              (e) => Map<String, dynamic>.from(e),
-        ),
+        (data["alarms"] ?? []).map((e) => Map<String, dynamic>.from(e)),
       );
 
       notifications = List<Map<String, dynamic>>.from(
-        (data["notifications"] ?? []).map(
-              (e) => Map<String, dynamic>.from(e),
-        ),
+        (data["notifications"] ?? []).map((e) => Map<String, dynamic>.from(e)),
       );
     });
   }
@@ -120,16 +104,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   Future<void> saveSchedules() async {
     final isCustomReminder =
         widget.type == "notification" &&
-            isSharedUser &&
-            reminderMode == "custom";
+        isSharedUser &&
+        reminderMode == "custom";
 
     if (!isCustomReminder && !widget.canManageHome) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              "Bạn không có quyền sửa lịch chung của nhà",
-            ),
+            content: Text("Bạn không có quyền sửa lịch chung của nhà"),
           ),
         );
       }
@@ -138,18 +120,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     }
 
     if (isCustomReminder) {
-      await ref.set({
-        "items": notifications,
-      });
+      await ref.set({"items": notifications});
 
       return;
     }
 
-    await ref.update({
-      "alarms": alarms,
-      "notifications": notifications,
-    });
+    await ref.update({"alarms": alarms, "notifications": notifications});
   }
+
   String repeatLabel(dynamic value) {
     final minutes = int.tryParse(value?.toString() ?? "0") ?? 0;
 
@@ -160,9 +138,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     return "Không báo lại";
   }
 
-  Future<int?> openRepeatInput({
-    required int initial,
-  }) async {
+  Future<int?> openRepeatInput({required int initial}) async {
     int selected = initial;
 
     return showDialog<int>(
@@ -170,10 +146,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       builder: (_) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
-            Widget option({
-              required int value,
-              required String title,
-            }) {
+            Widget option({required int value, required String title}) {
               final isSelected = selected == value;
 
               return ListTile(
@@ -219,6 +192,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       },
     );
   }
+
   bool isValidTime(String value) {
     final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
 
@@ -231,13 +205,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   }) async {
     final parts = initial.split(":");
 
-    final hourController = TextEditingController(
-      text: parts[0],
-    );
+    final hourController = TextEditingController(text: parts[0]);
 
-    final minuteController = TextEditingController(
-      text: parts[1],
-    );
+    final minuteController = TextEditingController(text: parts[1]);
 
     const suggestions = [
       ["23", "00"],
@@ -310,9 +280,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           child: SizedBox(
                             width: double.infinity,
                             child: ActionChip(
-                              label: Center(
-                                child: Text("${s[0]}:${s[1]}"),
-                              ),
+                              label: Center(child: Text("${s[0]}:${s[1]}")),
                               onPressed: () {
                                 hourController.text = s[0];
                                 minuteController.text = s[1];
@@ -332,9 +300,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           child: SizedBox(
                             width: double.infinity,
                             child: ActionChip(
-                              label: Center(
-                                child: Text("${s[0]}:${s[1]}"),
-                              ),
+                              label: Center(child: Text("${s[0]}:${s[1]}")),
                               onPressed: () {
                                 hourController.text = s[0];
                                 minuteController.text = s[1];
@@ -358,13 +324,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
             ElevatedButton(
               onPressed: () {
-                final h = hourController.text
-                    .trim()
-                    .padLeft(2, '0');
+                final h = hourController.text.trim().padLeft(2, '0');
 
-                final m = minuteController.text
-                    .trim()
-                    .padLeft(2, '0');
+                final m = minuteController.text.trim().padLeft(2, '0');
 
                 final value = "$h:$m";
 
@@ -404,9 +366,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (end == null) return;
 
-    final repeatMinutes = await openRepeatInput(
-      initial: 15,
-    );
+    final repeatMinutes = await openRepeatInput(initial: 15);
 
     if (repeatMinutes == null) return;
 
@@ -421,6 +381,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     saveSchedules();
   }
+
   Future<void> openReminderOptionSheet(int index) async {
     final action = await showModalBottomSheet<String>(
       context: context,
@@ -431,9 +392,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
             padding: const EdgeInsets.all(18),
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(24),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -474,6 +433,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       await saveSchedules();
     }
   }
+
   Future<void> editAlarm(int index) async {
     final current = alarms[index];
 
@@ -507,18 +467,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   }
 
   Future<void> addNotification() async {
-    final time = await openTimeInput(
-      title: "Giờ Reminder",
-      initial: "22:30",
-    );
+    final time = await openTimeInput(title: "Giờ Reminder", initial: "22:30");
 
     if (time == null) return;
 
     setState(() {
-      notifications.add({
-        "enabled": true,
-        "time": time,
-      });
+      notifications.add({"enabled": true, "time": time});
     });
 
     saveSchedules();
@@ -543,18 +497,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
   Widget sectionTitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 10,
-        top: 12,
-      ),
+      padding: const EdgeInsets.only(bottom: 10, top: 12),
       child: Row(
         children: [
           Text(
             text,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
         ],
       ),
@@ -572,9 +520,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         padding: const EdgeInsets.all(18),
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(26),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -591,9 +537,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
               const SizedBox(height: 18),
 
               Text(
-                isAlarm
-                    ? "Hẹn giờ Alarm"
-                    : "Hẹn giờ Reminder",
+                isAlarm ? "Hẹn giờ Alarm" : "Hẹn giờ Reminder",
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -621,8 +565,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                     await FirebaseDatabase.instance
                         .ref(
-                      "accounts/$currentUid/customRules/${widget.homeId}/mode",
-                    )
+                          "accounts/$currentUid/customRules/${widget.homeId}/mode",
+                        )
                         .set(nextMode);
 
                     setState(() {
@@ -643,10 +587,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       ? "Đang sử dụng reminder của chủ nhà"
                       : "Đang sử dụng reminder riêng của bạn",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
               if (isAlarm) ...[
@@ -672,7 +613,6 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         horizontal: 12,
                         vertical: 0,
                       ),
-
 
                       title: Container(
                         padding: const EdgeInsets.symmetric(
@@ -720,21 +660,19 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit_rounded),
-                            onPressed: canEditAlarm
-                                ? () => editAlarm(i)
-                                : null,
+                            onPressed: canEditAlarm ? () => editAlarm(i) : null,
                           ),
 
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
                             onPressed: canEditAlarm
                                 ? () async {
-                              setState(() {
-                                alarms.removeAt(i);
-                              });
+                                    setState(() {
+                                      alarms.removeAt(i);
+                                    });
 
-                              saveSchedules();
-                            }
+                                    saveSchedules();
+                                  }
                                 : null,
                           ),
                         ],
@@ -748,9 +686,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: canEditAlarm ? addAlarm : null,
                     icon: const Icon(Icons.add),
-                    label: const Text(
-                      "Thêm khung giờ Alarm",
-                    ),
+                    label: const Text("Thêm khung giờ Alarm"),
                   ),
                 ),
               ],
@@ -767,10 +703,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   ),
                   child: const Row(
                     children: [
-                      Icon(
-                        Icons.info_outline_rounded,
-                        color: Colors.blue,
-                      ),
+                      Icon(Icons.info_outline_rounded, color: Colors.blue),
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
@@ -804,12 +737,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         value: item["enabled"] == true,
                         onChanged: canEditCurrentReminder
                             ? (v) async {
-                          setState(() {
-                            notifications[i]["enabled"] = v;
-                          });
+                                setState(() {
+                                  notifications[i]["enabled"] = v;
+                                });
 
-                          saveSchedules();
-                        }
+                                saveSchedules();
+                              }
                             : null,
                       ),
                       title: GestureDetector(
@@ -845,7 +778,6 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           ),
                         ),
                       ),
-
                     ),
                   );
                 }),
@@ -855,9 +787,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: canEditCurrentReminder ? addNotification : null,
                     icon: const Icon(Icons.add),
-                    label: const Text(
-                        "Thêm Reminder",
-                    ),
+                    label: const Text("Thêm Reminder"),
                   ),
                 ),
               ],

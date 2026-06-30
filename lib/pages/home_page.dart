@@ -73,8 +73,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  late String uid;
-  late DatabaseReference ref;
+  String uid = "";
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
   String userName = "";
   String userGender = "";
   String userDob = "";
@@ -112,8 +112,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       selectedHome = homeId;
       alarmEnabled = safeMap(alarmSettings[homeId])["enabled"] != false;
-      securityMode =
-      currentHome["securityMode"]?.toString() == "armed"
+      securityMode = currentHome["securityMode"]?.toString() == "armed"
           ? "armed"
           : "normal";
       start = parsedAlarm["start"];
@@ -166,8 +165,7 @@ class _HomePageState extends State<HomePage> {
 
     if (request == null) return;
 
-    _pendingChatOpenRequest =
-    Map<String, String>.from(request);
+    _pendingChatOpenRequest = Map<String, String>.from(request);
 
     unawaited(_tryOpenPendingChat());
   }
@@ -194,13 +192,9 @@ class _HomePageState extends State<HomePage> {
     selectHomeFromNotification(homeId);
 
     await WidgetsBinding.instance.endOfFrame;
-    await Future<void>.delayed(
-      const Duration(milliseconds: 250),
-    );
+    await Future<void>.delayed(const Duration(milliseconds: 250));
 
-    if (!mounted ||
-        selectedHome != homeId ||
-        !homes.containsKey(homeId)) {
+    if (!mounted || selectedHome != homeId || !homes.containsKey(homeId)) {
       _openingChatFromNotification = false;
       return;
     }
@@ -539,9 +533,11 @@ class _HomePageState extends State<HomePage> {
           title: Text(_strings.t("Lưu ý khi bật Alarm")),
           content: Text(
             _strings.choose(
-              vi: "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
+              vi:
+              "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
                   "Hãy kiểm tra kỹ cấu hình để tránh cảnh báo làm phiền bạn.",
-              en: "Alarm is using this home's settings.\n\n"
+              en:
+              "Alarm is using this home's settings.\n\n"
                   "Review the configuration to avoid unwanted alerts.",
             ),
           ),
@@ -567,10 +563,12 @@ class _HomePageState extends State<HomePage> {
           title: Text(_strings.t("Lưu ý tạm tắt Alarm")),
           content: Text(
             _strings.choose(
-              vi: "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
+              vi:
+              "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
                   "trong hôm nay, reminder sẽ được báo đến các thành viên khác "
                   "trong nhà. Khoảng thời gian tạm hoãn phải nằm trong khoảng thời gian đã được cài đặt của Alarm.",
-              en: "This changes today's Alarm time for selected devices and notifies "
+              en:
+              "This changes today's Alarm time for selected devices and notifies "
                   "other home members. The pause period must stay within the configured Alarm schedule.",
             ),
           ),
@@ -592,6 +590,7 @@ class _HomePageState extends State<HomePage> {
 
     showAlarmPauseSheet();
   }
+
   String securityMode = "normal";
 
   bool get isArmedMode => securityMode == "armed";
@@ -616,10 +615,8 @@ class _HomePageState extends State<HomePage> {
 
     try {
       await FirebaseDatabase.instance.ref().update({
-        "accounts/$ownerUid/homes/$homeId/securityMode":
-        nextMode,
-        "accounts/$ownerUid/homes/$homeId/securityModeSource":
-        "manual",
+        "accounts/$ownerUid/homes/$homeId/securityMode": nextMode,
+        "accounts/$ownerUid/homes/$homeId/securityModeSource": "manual",
       });
     } catch (error) {
       if (!mounted) return;
@@ -642,6 +639,7 @@ class _HomePageState extends State<HomePage> {
       debugPrint("SET_SECURITY_MODE_ERROR: $error");
     }
   }
+
   Future<void> openAutoAwaySetup() async {
     final homeId = selectedHome;
 
@@ -686,8 +684,22 @@ class _HomePageState extends State<HomePage> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (innerContext, setSheetState) {
+            final currentLatitude = latitude;
+            final currentLongitude = longitude;
             final hasLocation =
-                latitude != null && longitude != null;
+                currentLatitude != null && currentLongitude != null;
+            final locationText = hasLocation
+                ? _strings.choose(
+              vi:
+              "Đã đặt vị trí nhà\n"
+                  "${currentLatitude.toStringAsFixed(6)}, "
+                  "${currentLongitude.toStringAsFixed(6)}",
+              en:
+              "Home location set\n"
+                  "${currentLatitude.toStringAsFixed(6)}, "
+                  "${currentLongitude.toStringAsFixed(6)}",
+            )
+                : _strings.t("Chưa đặt vị trí nhà");
 
             Future<void> captureCurrentLocation() async {
               if (locating) {
@@ -718,12 +730,10 @@ class _HomePageState extends State<HomePage> {
                   return;
                 }
 
-                var permission =
-                await Geolocator.checkPermission();
+                var permission = await Geolocator.checkPermission();
 
                 if (permission == LocationPermission.denied) {
-                  permission =
-                  await Geolocator.requestPermission();
+                  permission = await Geolocator.requestPermission();
                 }
 
                 if (permission == LocationPermission.denied) {
@@ -740,17 +750,14 @@ class _HomePageState extends State<HomePage> {
                   return;
                 }
 
-                if (permission ==
-                    LocationPermission.deniedForever) {
+                if (permission == LocationPermission.deniedForever) {
                   if (!sheetContext.mounted) {
                     return;
                   }
 
                   showTopToast(
                     sheetContext,
-                    _strings.t(
-                      "Hãy cấp quyền vị trí trong Cài đặt ứng dụng",
-                    ),
+                    _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
                     color: Colors.orange,
                     icon: Icons.settings_rounded,
                   );
@@ -759,8 +766,7 @@ class _HomePageState extends State<HomePage> {
                   return;
                 }
 
-                final position =
-                await Geolocator.getCurrentPosition(
+                final position = await Geolocator.getCurrentPosition(
                   locationSettings: const LocationSettings(
                     accuracy: LocationAccuracy.high,
                     timeLimit: Duration(seconds: 20),
@@ -806,9 +812,7 @@ class _HomePageState extends State<HomePage> {
               if (localEnabled && !hasLocation) {
                 showTopToast(
                   sheetContext,
-                  _strings.t(
-                    "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ",
-                  ),
+                  _strings.t("Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ"),
                   color: Colors.orange,
                   icon: Icons.location_on_outlined,
                 );
@@ -845,8 +849,7 @@ class _HomePageState extends State<HomePage> {
               final data = <String, Object?>{
                 "enabled": localEnabled,
                 "radiusMeters": radiusMeters.round(),
-                "updatedAt":
-                DateTime.now().millisecondsSinceEpoch,
+                "updatedAt": DateTime.now().millisecondsSinceEpoch,
                 "updatedBy": uid,
               };
 
@@ -857,9 +860,7 @@ class _HomePageState extends State<HomePage> {
 
               try {
                 await FirebaseDatabase.instance
-                    .ref(
-                  "accounts/$ownerUid/homes/$homeId/autoAway",
-                )
+                    .ref("accounts/$ownerUid/homes/$homeId/autoAway")
                     .set(data);
 
                 if (!mounted || !sheetContext.mounted) {
@@ -868,8 +869,7 @@ class _HomePageState extends State<HomePage> {
 
                 setState(() {
                   final cachedHome = safeMap(homes[homeId]);
-                  cachedHome["autoAway"] =
-                  Map<String, Object?>.from(data);
+                  cachedHome["autoAway"] = Map<String, Object?>.from(data);
                   homes[homeId] = cachedHome;
                 });
 
@@ -879,9 +879,7 @@ class _HomePageState extends State<HomePage> {
                     homes: homes,
                     force: true,
                   ).catchError((Object error) {
-                    debugPrint(
-                      "AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error",
-                    );
+                    debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
                   }),
                 );
 
@@ -896,7 +894,7 @@ class _HomePageState extends State<HomePage> {
                       : _strings.t(
                     "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
                   ),
-                  color: Colors.green,
+                  color: SafeHomeColors.safe,
                   icon: Icons.check_circle_rounded,
                 );
               } catch (error) {
@@ -928,15 +926,11 @@ class _HomePageState extends State<HomePage> {
                   left: 18,
                   right: 18,
                   top: 12,
-                  bottom:
-                  MediaQuery.of(innerContext).viewInsets.bottom +
-                      18,
+                  bottom: MediaQuery.of(innerContext).viewInsets.bottom + 18,
                 ),
                 decoration: const BoxDecoration(
                   color: SafeHomeColors.background,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(28),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -967,13 +961,10 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _strings.t(
-                                  "Tự động Bảo vệ khi rời nhà",
-                                ),
+                                _strings.t("Tự động Bảo vệ khi rời nhà"),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textPrimary,
                                   fontSize: 17,
@@ -982,12 +973,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                _strings.t(
-                                  "Bán kính bảo vệ mặc định: 150 m",
-                                ),
+                                _strings.t("Bán kính bảo vệ mặc định: 150 m"),
                                 style: const TextStyle(
-                                  color:
-                                  SafeHomeColors.textSecondary,
+                                  color: SafeHomeColors.textSecondary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -1012,9 +1000,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                         color: SafeHomeColors.surface,
                         borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: SafeHomeColors.border,
-                        ),
+                        border: Border.all(color: SafeHomeColors.border),
                       ),
                       child: Row(
                         children: [
@@ -1029,18 +1015,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              hasLocation
-                                  ? _strings.choose(
-                                vi: "Đã đặt vị trí nhà\n"
-                                    "${latitude!.toStringAsFixed(6)}, "
-                                    "${longitude!.toStringAsFixed(6)}",
-                                en: "Home location set\n"
-                                    "${latitude!.toStringAsFixed(6)}, "
-                                    "${longitude!.toStringAsFixed(6)}",
-                              )
-                                  : _strings.t(
-                                "Chưa đặt vị trí nhà",
-                              ),
+                              locationText,
                               style: const TextStyle(
                                 color: SafeHomeColors.textPrimary,
                                 fontSize: 13,
@@ -1056,8 +1031,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton.icon(
-                        onPressed:
-                        locating ? null : captureCurrentLocation,
+                        onPressed: locating ? null : captureCurrentLocation,
                         icon: locating
                             ? const SizedBox(
                           width: 18,
@@ -1066,15 +1040,11 @@ class _HomePageState extends State<HomePage> {
                             strokeWidth: 2,
                           ),
                         )
-                            : const Icon(
-                          Icons.my_location_rounded,
-                        ),
+                            : const Icon(Icons.my_location_rounded),
                         label: Text(
                           locating
                               ? _strings.t("Đang lấy vị trí...")
-                              : _strings.t(
-                            "Đặt vị trí nhà tại đây",
-                          ),
+                              : _strings.t("Đặt vị trí nhà tại đây"),
                         ),
                       ),
                     ),
@@ -1104,9 +1074,7 @@ class _HomePageState extends State<HomePage> {
                             strokeWidth: 2,
                           ),
                         )
-                            : const Icon(
-                          Icons.save_rounded,
-                        ),
+                            : const Icon(Icons.save_rounded),
                         label: Text(
                           saving
                               ? _strings.t("Đang lưu...")
@@ -1139,9 +1107,7 @@ class _HomePageState extends State<HomePage> {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "alarm_setting_changed",
-      title: enabled
-          ? _strings.t("Đã bật Alarm")
-          : _strings.t("Đã tắt Alarm"),
+      title: enabled ? _strings.t("Đã bật Alarm") : _strings.t("Đã tắt Alarm"),
       message: enabled
           ? _strings.choose(
         vi: "Bạn đã bật Alarm cho nhà \"$homeName\".",
@@ -1158,6 +1124,11 @@ class _HomePageState extends State<HomePage> {
 
   int pairingCountdown = 0;
   Timer? timer;
+
+  // Firebase không phát sự kiện chỉ vì thời gian trôi qua.
+  // Timer này buộc UI đánh giá lại tuổi heartbeat khi app đang mở.
+  Timer? hubStatusRefreshTimer;
+
   final ScrollController homeTabController = ScrollController();
   StreamSubscription<DatabaseEvent>? accountSubscription;
   StreamSubscription<DatabaseEvent>? notificationSubscription;
@@ -1249,8 +1220,7 @@ class _HomePageState extends State<HomePage> {
     final ownerUid = getHomeOwnerUid();
     final listenKey = "$ownerUid/$homeId";
 
-    if (_alarmPauseListenKey == listenKey &&
-        alarmPauseSubscription != null) {
+    if (_alarmPauseListenKey == listenKey && alarmPauseSubscription != null) {
       return;
     }
 
@@ -1258,9 +1228,7 @@ class _HomePageState extends State<HomePage> {
     _alarmPauseListenKey = listenKey;
 
     alarmPauseSubscription = FirebaseDatabase.instance
-        .ref(
-      "accounts/$ownerUid/homes/$homeId/alarmPauseToday",
-    )
+        .ref("accounts/$ownerUid/homes/$homeId/alarmPauseToday")
         .onValue
         .listen(
           (event) {
@@ -1287,9 +1255,7 @@ class _HomePageState extends State<HomePage> {
         });
       },
       onError: (Object error) {
-        debugPrint(
-          "ALARM_PAUSE_LISTENER_ERROR: $error",
-        );
+        debugPrint("ALARM_PAUSE_LISTENER_ERROR: $error");
       },
     );
   }
@@ -1533,9 +1499,7 @@ class _HomePageState extends State<HomePage> {
       final closed = current["contact"] == true;
       return {
         "type": "device_contact",
-        "title": closed
-            ? _strings.t("Cửa đã đóng")
-            : _strings.t("Cửa đang mở"),
+        "title": closed ? _strings.t("Cửa đã đóng") : _strings.t("Cửa đang mở"),
         "message": closed
             ? _strings.choose(
           vi: "\"$name\" đã đóng trong \"$homeName\".",
@@ -1677,14 +1641,11 @@ class _HomePageState extends State<HomePage> {
 
   Future<bool> hasEnabledReminderSchedule() async {
     try {
-      final isShared =
-          homes[selectedHome]?["_shared"] == true;
+      final isShared = homes[selectedHome]?["_shared"] == true;
 
       if (isShared) {
         final modeSnap = await FirebaseDatabase.instance
-            .ref(
-          "accounts/$uid/customRules/$selectedHome/mode",
-        )
+            .ref("accounts/$uid/customRules/$selectedHome/mode")
             .get();
 
         if (modeSnap.value?.toString() == "custom") {
@@ -1718,16 +1679,11 @@ class _HomePageState extends State<HomePage> {
     }
 
     final devices = getDevices();
-    final selectedRules = safeMap(
-      customRulesByHome[selectedHome],
-    );
+    final selectedRules = safeMap(customRulesByHome[selectedHome]);
 
-    final useCustomMode =
-        selectedRules["mode"]?.toString() == "custom";
+    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
 
-    final customDevices = safeMap(
-      selectedRules["devices"],
-    );
+    final customDevices = safeMap(selectedRules["devices"]);
 
     final intervals = <Map<String, int>>[];
 
@@ -1755,8 +1711,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     String formatClock(int totalMinutes) {
-      final normalized =
-          ((totalMinutes % 1440) + 1440) % 1440;
+      final normalized = ((totalMinutes % 1440) + 1440) % 1440;
       final hour = normalized ~/ 60;
       final minute = normalized % 60;
 
@@ -1767,16 +1722,11 @@ class _HomePageState extends State<HomePage> {
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
-      final realDeviceId =
-          device["_deviceId"]?.toString() ?? deviceId;
+      final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
 
       final homeAlarm = safeMap(device["alarm"]);
-      final customDevice = safeMap(
-        customDevices[realDeviceId],
-      );
-      final customAlarm = safeMap(
-        customDevice["alarm"],
-      );
+      final customDevice = safeMap(customDevices[realDeviceId]);
+      final customAlarm = safeMap(customDevice["alarm"]);
 
       // Giống AlarmDeviceSheet:
       // mode Riêng tôi dùng custom nếu có,
@@ -1796,10 +1746,7 @@ class _HomePageState extends State<HomePage> {
         continue;
       }
 
-      intervals.add({
-        "start": startMinutes,
-        "end": endMinutes,
-      });
+      intervals.add({"start": startMinutes, "end": endMinutes});
     }
 
     if (intervals.isEmpty) {
@@ -1807,8 +1754,15 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (intervals.length == 1) {
-      return "${formatClock(intervals.first["start"]!)} → "
-          "${formatClock(intervals.first["end"]!)}";
+      final firstInterval = intervals.first;
+      final start = firstInterval["start"];
+      final end = firstInterval["end"];
+
+      if (start == null || end == null) {
+        return "Tắt";
+      }
+
+      return "${formatClock(start)} → ${formatClock(end)}";
     }
 
     // Tìm một khoảng liên tục ngắn nhất nhưng bao phủ toàn bộ
@@ -1819,9 +1773,9 @@ class _HomePageState extends State<HomePage> {
 
     final candidateCuts = <int>{
       for (final interval in intervals)
-        interval["start"]!,
+        if (interval["start"] != null) interval["start"] as int,
       for (final interval in intervals)
-        interval["end"]!,
+        if (interval["end"] != null) interval["end"] as int,
     };
 
     for (final cut in candidateCuts) {
@@ -1829,19 +1783,21 @@ class _HomePageState extends State<HomePage> {
       var maxEnd = -(1 << 30);
 
       for (final interval in intervals) {
-        final startMinutes = interval["start"]!;
-        final endMinutes = interval["end"]!;
+        final startMinutes = interval["start"];
+        final endMinutes = interval["end"];
 
-        var duration =
-            (endMinutes - startMinutes + 1440) % 1440;
+        if (startMinutes == null || endMinutes == null) {
+          continue;
+        }
+
+        var duration = (endMinutes - startMinutes + 1440) % 1440;
 
         // Cùng giờ bắt đầu/kết thúc được hiểu là cả ngày.
         if (duration == 0) {
           duration = 1440;
         }
 
-        final mappedStart =
-            (startMinutes - cut + 1440) % 1440;
+        final mappedStart = (startMinutes - cut + 1440) % 1440;
         final mappedEnd = mappedStart + duration;
 
         if (mappedStart < minStart) {
@@ -1924,6 +1880,7 @@ class _HomePageState extends State<HomePage> {
     final account = accountData ?? safeMap((await ref.get()).value);
     return safeMap(account["shareRequests"]);
   }
+
   Future<void> syncMyPhoneToVisibleHomes({
     required Map<String, dynamic> ownedHomes,
     required Map<String, dynamic> sharedHomes,
@@ -1948,9 +1905,7 @@ class _HomePageState extends State<HomePage> {
         continue;
       }
 
-      updates[
-      "homeMemberContacts/$homeId/$uid/phone"
-      ] = cleanPhone;
+      updates["homeMemberContacts/$homeId/$uid/phone"] = cleanPhone;
     }
 
     if (updates.isEmpty) {
@@ -1958,15 +1913,12 @@ class _HomePageState extends State<HomePage> {
     }
 
     try {
-      await FirebaseDatabase.instance
-          .ref()
-          .update(updates);
+      await FirebaseDatabase.instance.ref().update(updates);
     } catch (error) {
-      debugPrint(
-        "SYNC_HOME_MEMBER_CONTACT_ERROR: $error",
-      );
+      debugPrint("SYNC_HOME_MEMBER_CONTACT_ERROR: $error");
     }
   }
+
   Future<void> refreshShareRequests() async {
     final requests = await loadVisibleShareRequests();
 
@@ -1982,11 +1934,26 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    uid = FirebaseAuth.instance.currentUser!.uid;
+    final currentUser = FirebaseAuth.instance.currentUser;
 
-    NotificationService.chatOpenRequest.addListener(
-      _handleChatOpenRequest,
+    if (currentUser == null) {
+      return;
+    }
+
+    uid = currentUser.uid;
+
+    hubStatusRefreshTimer = Timer.periodic(
+      const Duration(seconds: 5),
+          (_) {
+        if (!mounted || homes.isEmpty) {
+          return;
+        }
+
+        setState(() {});
+      },
     );
+
+    NotificationService.chatOpenRequest.addListener(_handleChatOpenRequest);
     _handleChatOpenRequest();
 
     FCMService.setupFCM(uid: uid);
@@ -2051,8 +2018,7 @@ class _HomePageState extends State<HomePage> {
                 selectedHome = homeOrder.first;
               }
               final currentHome = safeMap(homes[selectedHome]);
-              securityMode =
-              currentHome["securityMode"]?.toString() == "armed"
+              securityMode = currentHome["securityMode"]?.toString() == "armed"
                   ? "armed"
                   : "normal";
               alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
@@ -2061,13 +2027,10 @@ class _HomePageState extends State<HomePage> {
             syncHomeChatListeners();
             syncDeviceNotificationBridge();
             unawaited(
-              AutoAwayService.syncForHomes(
-                uid: uid,
-                homes: homes,
-              ).catchError((Object error) {
-                debugPrint(
-                  "AUTO_AWAY_SHARED_SYNC_ERROR: $error",
-                );
+              AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
+                  Object error,
+                  ) {
+                debugPrint("AUTO_AWAY_SHARED_SYNC_ERROR: $error");
               }),
             );
           },
@@ -2114,8 +2077,7 @@ class _HomePageState extends State<HomePage> {
           );
         }
         final currentHome = safeMap(homes[selectedHome]);
-        securityMode =
-        currentHome["securityMode"]?.toString() == "armed"
+        securityMode = currentHome["securityMode"]?.toString() == "armed"
             ? "armed"
             : "normal";
         alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
@@ -2140,10 +2102,9 @@ class _HomePageState extends State<HomePage> {
       syncHomeChatListeners();
       syncDeviceNotificationBridge();
       unawaited(
-        AutoAwayService.syncForHomes(
-          uid: uid,
-          homes: homes,
-        ).catchError((Object error) {
+        AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
+            Object error,
+            ) {
           debugPrint("AUTO_AWAY_SYNC_ERROR: $error");
         }),
       );
@@ -2252,7 +2213,7 @@ class _HomePageState extends State<HomePage> {
           vi: "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
           en: "Join requests sent for ${homeIds.length} homes",
         ),
-        color: Colors.green,
+        color: SafeHomeColors.safe,
         icon: Icons.check_circle_rounded,
       );
 
@@ -2342,7 +2303,7 @@ class _HomePageState extends State<HomePage> {
       showTopToast(
         context,
         _strings.t("Đã gửi yêu cầu gia nhập nhà"),
-        color: Colors.green,
+        color: SafeHomeColors.safe,
         icon: Icons.check_circle_rounded,
       );
 
@@ -2420,7 +2381,10 @@ class _HomePageState extends State<HomePage> {
 
     // ================= HOME SHARE =================
     if (isShared) {
-      final ok = await showConfirmDialog(context, _strings.t("Rời khỏi Home này?"));
+      final ok = await showConfirmDialog(
+        context,
+        _strings.t("Rời khỏi Home này?"),
+      );
       if (!ok) return;
       if (!mounted) return;
 
@@ -2588,10 +2552,25 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () async {
                       try {
-                        final user = FirebaseAuth.instance.currentUser!;
+                        final user = FirebaseAuth.instance.currentUser;
+                        final userEmail = user?.email;
+
+                        if (user == null ||
+                            userEmail == null ||
+                            userEmail.isEmpty) {
+                          if (!sheetContext.mounted) return;
+
+                          showTopToast(
+                            sheetContext,
+                            _strings.t("Không tìm thấy tài khoản"),
+                            color: Colors.red,
+                            icon: Icons.error_outline_rounded,
+                          );
+                          return;
+                        }
 
                         final credential = EmailAuthProvider.credential(
-                          email: user.email!,
+                          email: userEmail,
                           password: controller.text.trim(),
                         );
 
@@ -2852,7 +2831,7 @@ class _HomePageState extends State<HomePage> {
     showTopToast(
       context,
       _strings.t("Đã share home"),
-      color: Colors.green,
+      color: SafeHomeColors.safe,
       icon: Icons.check_circle_rounded,
     );
   }
@@ -3075,11 +3054,24 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (passwordOk != true) return;
-    final user = FirebaseAuth.instance.currentUser!;
+    final user = FirebaseAuth.instance.currentUser;
+    final userEmail = user?.email;
+
+    if (user == null || userEmail == null || userEmail.isEmpty) {
+      if (!mounted) return;
+
+      showTopToast(
+        context,
+        _strings.t("Không tìm thấy tài khoản"),
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+      return;
+    }
 
     try {
       final credential = EmailAuthProvider.credential(
-        email: user.email!,
+        email: userEmail,
         password: passwordController.text.trim(),
       );
 
@@ -3148,7 +3140,7 @@ class _HomePageState extends State<HomePage> {
     showTopToast(
       context,
       _strings.t("Đã gửi yêu cầu chuyển quyền chủ nhà"),
-      color: Colors.green,
+      color: SafeHomeColors.safe,
       icon: Icons.check_circle_rounded,
     );
 
@@ -3192,7 +3184,7 @@ class _HomePageState extends State<HomePage> {
       showTopToast(
         context,
         _strings.t("Đã gửi yêu cầu xoá thiết bị"),
-        color: Colors.green,
+        color: SafeHomeColors.safe,
         icon: Icons.check_circle_rounded,
       );
     } catch (e) {
@@ -3235,10 +3227,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    final navigator = Navigator.of(
-      context,
-      rootNavigator: true,
-    );
+    final navigator = Navigator.of(context, rootNavigator: true);
 
     while (navigator.canPop()) {
       final didPop = await navigator.maybePop();
@@ -3250,18 +3239,13 @@ class _HomePageState extends State<HomePage> {
       await WidgetsBinding.instance.endOfFrame;
     }
 
-    final currentUid =
-        FirebaseAuth.instance.currentUser?.uid;
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid != null) {
       try {
-        await FCMService.removeCurrentInstallationToken(
-          uid: currentUid,
-        );
+        await FCMService.removeCurrentInstallationToken(uid: currentUid);
       } catch (error) {
-        debugPrint(
-          "REMOVE_FCM_TOKEN_ON_LOGOUT_ERROR: $error",
-        );
+        debugPrint("REMOVE_FCM_TOKEN_ON_LOGOUT_ERROR: $error");
       }
     }
 
@@ -3292,17 +3276,10 @@ class _HomePageState extends State<HomePage> {
                   Navigator.of(sheetContext).pop(value);
                 },
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(
-                    13,
-                    11,
-                    11,
-                    11,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(13, 11, 11, 11),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: SafeHomeColors.border,
-                    ),
+                    border: Border.all(color: SafeHomeColors.border),
                   ),
                   child: Row(
                     children: [
@@ -3313,16 +3290,12 @@ class _HomePageState extends State<HomePage> {
                           color: color.withValues(alpha: 0.11),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: Icon(
-                          icon,
-                          color: color,
-                        ),
+                        child: Icon(icon, color: color),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               title,
@@ -3358,17 +3331,10 @@ class _HomePageState extends State<HomePage> {
 
         return SafeArea(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(
-              16,
-              10,
-              16,
-              12,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(28),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -3397,18 +3363,14 @@ class _HomePageState extends State<HomePage> {
                 optionTile(
                   icon: Icons.add_home_work_rounded,
                   title: _strings.t("Tạo Home mới"),
-                  subtitle: _strings.t(
-                    "Tạo một ngôi nhà mới của bạn",
-                  ),
+                  subtitle: _strings.t("Tạo một ngôi nhà mới của bạn"),
                   color: SafeHomeColors.primary,
                   value: "create",
                 ),
                 optionTile(
                   icon: Icons.qr_code_scanner_rounded,
                   title: _strings.t("Xin gia nhập Home"),
-                  subtitle: _strings.t(
-                    "Quét mã QR được chủ nhà chia sẻ",
-                  ),
+                  subtitle: _strings.t("Quét mã QR được chủ nhà chia sẻ"),
                   color: SafeHomeColors.info,
                   value: "join",
                 ),
@@ -3977,21 +3939,14 @@ class _HomePageState extends State<HomePage> {
         homes[selectedHome]?["name"] ??
         selectedHome)
         .toString()
-        : (homes[selectedHome]?["name"] ?? selectedHome)
-        .toString();
+        : (homes[selectedHome]?["name"] ?? selectedHome).toString();
 
-    final currentAddress =
-        homes[selectedHome]?["address"]?.toString() ?? "";
+    final currentAddress = homes[selectedHome]?["address"]?.toString() ?? "";
 
-    final nameController = TextEditingController(
-      text: currentName,
-    );
-    final addressController = TextEditingController(
-      text: currentAddress,
-    );
+    final nameController = TextEditingController(text: currentName);
+    final addressController = TextEditingController(text: currentAddress);
 
-    final result =
-    await showModalBottomSheet<Map<String, String>>(
+    final result = await showModalBottomSheet<Map<String, String>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -4001,26 +3956,17 @@ class _HomePageState extends State<HomePage> {
             duration: const Duration(milliseconds: 160),
             curve: Curves.easeOut,
             padding: EdgeInsets.only(
-              bottom:
-              MediaQuery.viewInsetsOf(sheetContext).bottom,
+              bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
             ),
             child: Container(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                12,
-                20,
-                20,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               decoration: const BoxDecoration(
                 color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(28),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
               child: StatefulBuilder(
                 builder: (context, setSheetState) {
-                  final nameOk =
-                      nameController.text.trim().isNotEmpty;
+                  final nameOk = nameController.text.trim().isNotEmpty;
 
                   InputDecoration fieldDecoration({
                     required String label,
@@ -4030,10 +3976,7 @@ class _HomePageState extends State<HomePage> {
                     return InputDecoration(
                       labelText: label,
                       hintText: hint,
-                      prefixIcon: Icon(
-                        icon,
-                        color: SafeHomeColors.primary,
-                      ),
+                      prefixIcon: Icon(icon, color: SafeHomeColors.primary),
                       filled: true,
                       fillColor: SafeHomeColors.surface,
                       border: OutlineInputBorder(
@@ -4067,8 +4010,7 @@ class _HomePageState extends State<HomePage> {
                           height: 5,
                           decoration: BoxDecoration(
                             color: SafeHomeColors.border,
-                            borderRadius:
-                            BorderRadius.circular(999),
+                            borderRadius: BorderRadius.circular(999),
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -4110,14 +4052,10 @@ class _HomePageState extends State<HomePage> {
                               return;
                             }
 
-                            Navigator.pop(
-                              sheetContext,
-                              {
-                                "name":
-                                nameController.text.trim(),
-                                "address": currentAddress,
-                              },
-                            );
+                            Navigator.pop(sheetContext, {
+                              "name": nameController.text.trim(),
+                              "address": currentAddress,
+                            });
                           },
                           decoration: fieldDecoration(
                             label: _strings.t("Tên nhà"),
@@ -4128,8 +4066,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 12),
                           TextField(
                             controller: addressController,
-                            textCapitalization:
-                            TextCapitalization.sentences,
+                            textCapitalization: TextCapitalization.sentences,
                             textInputAction: TextInputAction.done,
                             maxLines: 2,
                             minLines: 1,
@@ -4138,15 +4075,10 @@ class _HomePageState extends State<HomePage> {
                                 return;
                               }
 
-                              Navigator.pop(
-                                sheetContext,
-                                {
-                                  "name":
-                                  nameController.text.trim(),
-                                  "address":
-                                  addressController.text.trim(),
-                                },
-                              );
+                              Navigator.pop(sheetContext, {
+                                "name": nameController.text.trim(),
+                                "address": addressController.text.trim(),
+                              });
                             },
                             decoration: fieldDecoration(
                               label: _strings.t("Địa chỉ"),
@@ -4162,36 +4094,24 @@ class _HomePageState extends State<HomePage> {
                           child: FilledButton.icon(
                             onPressed: nameOk
                                 ? () {
-                              Navigator.pop(
-                                sheetContext,
-                                {
-                                  "name": nameController.text
-                                      .trim(),
-                                  "address": usePersonalName
-                                      ? currentAddress
-                                      : addressController.text
-                                      .trim(),
-                                },
-                              );
+                              Navigator.pop(sheetContext, {
+                                "name": nameController.text.trim(),
+                                "address": usePersonalName
+                                    ? currentAddress
+                                    : addressController.text.trim(),
+                              });
                             }
                                 : null,
-                            icon: const Icon(
-                              Icons.save_rounded,
-                            ),
+                            icon: const Icon(Icons.save_rounded),
                             label: Text(
                               _strings.t("Lưu thay đổi"),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.w800),
                             ),
                             style: FilledButton.styleFrom(
-                              backgroundColor:
-                              SafeHomeColors.primary,
-                              disabledBackgroundColor:
-                              SafeHomeColors.border,
+                              backgroundColor: SafeHomeColors.primary,
+                              disabledBackgroundColor: SafeHomeColors.border,
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                             ),
                           ),
@@ -4199,12 +4119,15 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: 10),
                         Text(
                           usePersonalName
-                              ? _strings.t("Tên này chỉ hiển thị riêng trên tài khoản của bạn.")
-                              : _strings.t("Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà."),
+                              ? _strings.t(
+                            "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
+                          )
+                              : _strings.t(
+                            "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
+                          ),
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color:
-                            SafeHomeColors.textSecondary,
+                            color: SafeHomeColors.textSecondary,
                             fontSize: 12,
                             height: 1.35,
                           ),
@@ -4224,13 +4147,10 @@ class _HomePageState extends State<HomePage> {
     // Navigator.pop() trả kết quả. Không dispose controller ngay,
     // nếu không TextField có thể đọc controller đã dispose và gây
     // màn hình đỏ.
-    Future<void>.delayed(
-      const Duration(milliseconds: 350),
-          () {
-        nameController.dispose();
-        addressController.dispose();
-      },
-    );
+    Future<void>.delayed(const Duration(milliseconds: 350), () {
+      nameController.dispose();
+      addressController.dispose();
+    });
 
     if (result == null) {
       return;
@@ -4249,9 +4169,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       await FirebaseDatabase.instance
-          .ref(
-        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
-      )
+          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
           .set(newName);
 
       if (mounted) {
@@ -4264,11 +4182,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     final oldName =
-        homes[selectedHome]?["name"]?.toString().trim() ??
-            selectedHome;
-    final oldAddress =
-        homes[selectedHome]?["address"]?.toString().trim() ??
-            "";
+        homes[selectedHome]?["name"]?.toString().trim() ?? selectedHome;
+    final oldAddress = homes[selectedHome]?["address"]?.toString().trim() ?? "";
 
     final nameChanged = newName != oldName;
     final addressChanged = newAddress != oldAddress;
@@ -4289,17 +4204,13 @@ class _HomePageState extends State<HomePage> {
 
     if (addressChanged) {
       await FirebaseDatabase.instance
-          .ref(
-        "accounts/$ownerUid/homes/$selectedHome/address",
-      )
+          .ref("accounts/$ownerUid/homes/$selectedHome/address")
           .set(newAddress);
     }
 
     if (isShared && nameChanged) {
       await FirebaseDatabase.instance
-          .ref(
-        "${FirebasePaths.sharedHome(uid, selectedHome)}/customName",
-      )
+          .ref("${FirebasePaths.sharedHome(uid, selectedHome)}/customName")
           .remove();
     }
 
@@ -4391,11 +4302,8 @@ class _HomePageState extends State<HomePage> {
 
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
-    final emailName = FirebaseAuth.instance.currentUser?.email
-        ?.split("@")
-        .first
-        .trim() ??
-        "";
+    final emailName =
+        FirebaseAuth.instance.currentUser?.email?.split("@").first.trim() ?? "";
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : emailName.isNotEmpty
@@ -4432,6 +4340,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
   Future<void> runFirebaseSecurityTest() async {
     if (selectedHome.isEmpty) {
       showTopToast(
@@ -4474,9 +4383,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    final homeData = Map<String, dynamic>.from(
-      homeSnap.value as Map,
-    );
+    final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
 
     final rawDevices = homeData["devices"];
 
@@ -4497,14 +4404,10 @@ class _HomePageState extends State<HomePage> {
 
     final deviceId = firstDeviceEntry.key.toString();
     final deviceData = firstDeviceEntry.value is Map
-        ? Map<String, dynamic>.from(
-      firstDeviceEntry.value as Map,
-    )
+        ? Map<String, dynamic>.from(firstDeviceEntry.value as Map)
         : <String, dynamic>{};
 
-    final deviceRef = homeRef.child(
-      "devices/$deviceId",
-    );
+    final deviceRef = homeRef.child("devices/$deviceId");
 
     final results = <String, String>{};
 
@@ -4530,8 +4433,7 @@ class _HomePageState extends State<HomePage> {
           try {
             await cleanup();
           } catch (error) {
-            results[label] =
-            "FAIL — ghi được, cleanup lỗi: $error";
+            results[label] = "FAIL — ghi được, cleanup lỗi: $error";
           }
         }
       } catch (error) {
@@ -4543,23 +4445,18 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    final testId =
-    DateTime.now().millisecondsSinceEpoch.toString();
+    final testId = DateTime.now().millisecondsSinceEpoch.toString();
 
     // 1. Không được ghi trực tiếp _ownerUid.
     await expectDenied(
       label: "_ownerUid",
       action: () async {
-        await homeRef
-            .child("_ownerUid")
-            .set(ownerUid);
+        await homeRef.child("_ownerUid").set(ownerUid);
       },
     );
 
     // 2. Không được tạo event trực tiếp từ client.
-    final eventTestRef = homeRef.child(
-      "events/security_test_$testId",
-    );
+    final eventTestRef = homeRef.child("events/security_test_$testId");
 
     await expectDenied(
       label: "events",
@@ -4591,16 +4488,12 @@ class _HomePageState extends State<HomePage> {
     await expectDenied(
       label: "alarmPauseToday",
       action: () async {
-        await homeRef
-            .child("alarmPauseToday")
-            .set(pauseTestValue);
+        await homeRef.child("alarmPauseToday").set(pauseTestValue);
       },
       cleanup: pauseExists
           ? null
           : () async {
-        await homeRef
-            .child("alarmPauseToday")
-            .remove();
+        await homeRef.child("alarmPauseToday").remove();
       },
     );
 
@@ -4618,12 +4511,9 @@ class _HomePageState extends State<HomePage> {
     for (final entry in fieldFallbackValues.entries) {
       final field = entry.key;
       final fieldExists =
-          deviceData.containsKey(field) &&
-              deviceData[field] != null;
+          deviceData.containsKey(field) && deviceData[field] != null;
 
-      final testValue = fieldExists
-          ? deviceData[field]
-          : entry.value;
+      final testValue = fieldExists ? deviceData[field] : entry.value;
 
       final fieldRef = deviceRef.child(field);
 
@@ -4642,8 +4532,7 @@ class _HomePageState extends State<HomePage> {
 
     // 11. Kiểm tra cổng ghi toàn bộ thiết bị.
     // Đây cũng là cổng mà thao tác remove() trực tiếp phải đi qua.
-    final deviceRootTestData =
-    Map<String, dynamic>.from(deviceData);
+    final deviceRootTestData = Map<String, dynamic>.from(deviceData);
 
     deviceRootTestData["_securityTest"] = testId;
 
@@ -4653,23 +4542,21 @@ class _HomePageState extends State<HomePage> {
         await deviceRef.set(deviceRootTestData);
       },
       cleanup: () async {
-        await deviceRef
-            .child("_securityTest")
-            .remove();
+        await deviceRef.child("_securityTest").remove();
       },
     );
 
     if (!mounted) return;
 
-    final passCount = results.values
-        .where((value) => value == "PASS")
-        .length;
+    final passCount = results.values.where((value) => value == "PASS").length;
 
-    final lines = results.entries.map((entry) {
+    final lines = results.entries
+        .map((entry) {
       final icon = entry.value == "PASS" ? "✅" : "❌";
 
       return "$icon ${entry.key}: ${entry.value}";
-    }).join("\n\n");
+    })
+        .join("\n\n");
 
     await showDialog<void>(
       context: context,
@@ -4704,6 +4591,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
   Color getHomeColor(String h) {
     final home = safeMap(homes[h]);
     final overall = getHomeOverallStatus(home);
@@ -4712,14 +4600,14 @@ class _HomePageState extends State<HomePage> {
     final selected = h == selectedHome;
 
     if (level == "danger") {
-      return selected ? Colors.red.shade500 : Colors.red.shade400;
+      return SafeHomeColors.danger;
     }
 
     if (level == "warning") {
-      return selected ? Colors.orange.shade500 : Colors.orange.shade400;
+      return SafeHomeColors.warning;
     }
 
-    return selected ? Colors.green.shade500 : Colors.green.shade400;
+    return selected ? SafeHomeColors.primary : SafeHomeColors.safe;
   }
 
   @override
@@ -4761,13 +4649,11 @@ class _HomePageState extends State<HomePage> {
                           clipBehavior: Clip.antiAlias,
                           child: InkWell(
                             onTap: () async {
-                              final selected =
-                              await Navigator.push<String>(
+                              final selected = await Navigator.push<String>(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => AllHomePage(
-                                    homeOrder: homeOrder,
-                                  ),
+                                  builder: (_) =>
+                                      AllHomePage(homeOrder: homeOrder),
                                 ),
                               );
 
@@ -4777,16 +4663,12 @@ class _HomePageState extends State<HomePage> {
                                 selectedHome = selected;
                               });
 
-                              final index =
-                              homeOrder.indexOf(selected);
+                              final index = homeOrder.indexOf(selected);
 
-                              if (index != -1 &&
-                                  homeTabController.hasClients) {
+                              if (index != -1 && homeTabController.hasClients) {
                                 homeTabController.animateTo(
                                   index * 110,
-                                  duration: const Duration(
-                                    milliseconds: 300,
-                                  ),
+                                  duration: const Duration(milliseconds: 300),
                                   curve: Curves.easeOutCubic,
                                 );
                               }
@@ -4800,8 +4682,7 @@ class _HomePageState extends State<HomePage> {
                                 border: Border.all(
                                   color: SafeHomeColors.border,
                                 ),
-                                borderRadius:
-                                BorderRadius.circular(11),
+                                borderRadius: BorderRadius.circular(11),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withValues(
@@ -4832,9 +4713,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             TextSpan(
                               text: "Safe",
-                              style: TextStyle(
-                                color: SafeHomeColors.primary,
-                              ),
+                              style: TextStyle(color: SafeHomeColors.primary),
                             ),
                             TextSpan(
                               text: "Home",
@@ -4855,15 +4734,12 @@ class _HomePageState extends State<HomePage> {
                                 showHomeEventSheet(
                                   context: context,
                                   uid: uid,
-                                  homeNameForId:
-                                  getHomeDisplayName,
-                                  onTapNotification:
-                                  openHomeNotificationTarget,
+                                  homeNameForId: getHomeDisplayName,
+                                  onTapNotification: openHomeNotificationTarget,
                                 );
                               },
                               padding: EdgeInsets.zero,
-                              constraints:
-                              const BoxConstraints.tightFor(
+                              constraints: const BoxConstraints.tightFor(
                                 width: 32,
                                 height: 32,
                               ),
@@ -4880,30 +4756,25 @@ class _HomePageState extends State<HomePage> {
                                 right: -3,
                                 top: -3,
                                 child: Container(
-                                  constraints:
-                                  const BoxConstraints(
+                                  constraints: const BoxConstraints(
                                     minWidth: 17,
                                     minHeight: 17,
                                   ),
                                   alignment: Alignment.center,
-                                  padding:
-                                  const EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 4,
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color:
-                                    SafeHomeColors.danger,
+                                    color: SafeHomeColors.danger,
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color:
-                                      SafeHomeColors.surface,
+                                      color: SafeHomeColors.surface,
                                       width: 1.5,
                                     ),
                                   ),
                                   child: Text(
-                                    unreadHomeNotificationCount >
-                                        99
+                                    unreadHomeNotificationCount > 99
                                         ? "99+"
                                         : unreadHomeNotificationCount
                                         .toString(),
@@ -4912,8 +4783,7 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.white,
                                       fontSize: 9,
                                       height: 1,
-                                      fontWeight:
-                                      FontWeight.w900,
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                 ),
@@ -4942,19 +4812,15 @@ class _HomePageState extends State<HomePage> {
                     if (h == selectedHome) return;
 
                     final currentHome = safeMap(homes[h]);
-                    final parsedAlarm =
-                    HomeStateParser.parseAlarm(currentHome);
+                    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
                     setState(() {
                       selectedHome = h;
                       alarmEnabled =
-                          safeMap(alarmSettings[h])["enabled"] !=
-                              false;
+                          safeMap(alarmSettings[h])["enabled"] != false;
                       start = parsedAlarm["start"];
                       end = parsedAlarm["end"];
-                      alarmPauseToday = safeMap(
-                        currentHome["alarmPauseToday"],
-                      );
+                      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
                     });
 
                     startHomeEventsListener();
@@ -4991,18 +4857,13 @@ class _HomePageState extends State<HomePage> {
                               }
 
                               final startText =
-                                  alarmPauseToday["start"]
-                                      ?.toString()
-                                      .trim() ??
+                                  alarmPauseToday["start"]?.toString().trim() ??
                                       "";
                               final endText =
-                                  alarmPauseToday["end"]
-                                      ?.toString()
-                                      .trim() ??
+                                  alarmPauseToday["end"]?.toString().trim() ??
                                       "";
 
-                              if (startText.isEmpty ||
-                                  endText.isEmpty) {
+                              if (startText.isEmpty || endText.isEmpty) {
                                 return "Tắt";
                               }
 
@@ -5039,8 +4900,9 @@ class _HomePageState extends State<HomePage> {
                             ),
 
                             securityMode: securityMode,
-                            onSecurityModeChanged:
-                            canManageHome() ? setSecurityMode : null,
+                            onSecurityModeChanged: canManageHome()
+                                ? setSecurityMode
+                                : null,
 
                             alarmEnabled: alarmEnabled,
                             onAlarmEnabledChanged: canManageHome()
@@ -5096,7 +4958,9 @@ class _HomePageState extends State<HomePage> {
                               if (!canManageHome()) {
                                 showTopToast(
                                   context,
-                                  _strings.t("Bạn không có quyền sắp xếp phòng"),
+                                  _strings.t(
+                                    "Bạn không có quyền sắp xếp phòng",
+                                  ),
                                   color: Colors.orange,
                                   icon: Icons.lock_rounded,
                                 );
@@ -5169,7 +5033,9 @@ class _HomePageState extends State<HomePage> {
                                       child: ElevatedButton.icon(
                                         icon: const Icon(Icons.qr_code_scanner),
                                         label: Text(
-                                          _strings.t("Quét QR để thêm thiết bị"),
+                                          _strings.t(
+                                            "Quét QR để thêm thiết bị",
+                                          ),
                                         ),
                                         onPressed: () {
                                           Navigator.pop(context, "__SCAN__");
@@ -5179,7 +5045,9 @@ class _HomePageState extends State<HomePage> {
                                     const SizedBox(height: 10),
                                     TextButton.icon(
                                       icon: const Icon(Icons.keyboard),
-                                      label: Text(_strings.t("Nhập HUB ID thủ công")),
+                                      label: Text(
+                                        _strings.t("Nhập HUB ID thủ công"),
+                                      ),
                                       onPressed: () {
                                         Navigator.pop(context, "__MANUAL__");
                                       },
@@ -5241,17 +5109,11 @@ class _HomePageState extends State<HomePage> {
         minimum: const EdgeInsets.fromLTRB(12, 0, 12, 10),
         child: Container(
           height: 68,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8,
-            vertical: 7,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
           decoration: BoxDecoration(
             color: SafeHomeColors.surface.withValues(alpha: 0.97),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: SafeHomeColors.border,
-              width: 0.9,
-            ),
+            border: Border.all(color: SafeHomeColors.border, width: 0.9),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.075),
@@ -5278,8 +5140,6 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-
-
                 IconButton(
                   tooltip: _strings.t("Thêm Home"),
                   icon: const Icon(
@@ -5348,8 +5208,7 @@ class _HomePageState extends State<HomePage> {
                         : SafeHomeColors.textSecondary,
                   ),
                   onPressed: () async {
-                    final reminderEnabled =
-                    await hasEnabledReminderSchedule();
+                    final reminderEnabled = await hasEnabledReminderSchedule();
 
                     if (!mounted) return;
 
@@ -5382,13 +5241,12 @@ class _HomePageState extends State<HomePage> {
                                     Container(
                                       width: 44,
                                       height: 5,
-                                      margin: const EdgeInsets.only(
-                                        bottom: 10,
-                                      ),
+                                      margin: const EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
                                         color: SafeHomeColors.border,
-                                        borderRadius:
-                                        BorderRadius.circular(999),
+                                        borderRadius: BorderRadius.circular(
+                                          999,
+                                        ),
                                       ),
                                     ),
                                     ListTile(
@@ -5414,7 +5272,9 @@ class _HomePageState extends State<HomePage> {
                                             ? (formatAlarmSchedules()
                                             .trim()
                                             .isEmpty
-                                            ? _strings.t("Chưa thiết lập thời gian")
+                                            ? _strings.t(
+                                          "Chưa thiết lập thời gian",
+                                        )
                                             : formatAlarmSchedules())
                                             : _strings.t("Đang tắt"),
                                         maxLines: 1,
@@ -5430,8 +5290,7 @@ class _HomePageState extends State<HomePage> {
                                         value: localAlarmEnabled,
                                         activeThumbColor:
                                         SafeHomeColors.primary,
-                                        activeTrackColor:
-                                        SafeHomeColors.primary
+                                        activeTrackColor: SafeHomeColors.primary
                                             .withValues(alpha: 0.28),
                                         onChanged: (value) async {
                                           setModalState(() {
@@ -5691,7 +5550,9 @@ class _HomePageState extends State<HomePage> {
                               : () {
                             showTopToast(
                               context,
-                              _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+                              _strings.t(
+                                "Chỉ chủ nhà mới được chuyển quyền",
+                              ),
                               color: Colors.orange,
                               icon: Icons.admin_panel_settings_rounded,
                             );
@@ -5785,10 +5646,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    NotificationService.chatOpenRequest.removeListener(
-      _handleChatOpenRequest,
-    );
+    NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
+    hubStatusRefreshTimer?.cancel();
     accountSubscription?.cancel();
     notificationSubscription?.cancel();
     homeEventsSubscription?.cancel();

@@ -1,4 +1,4 @@
-package com.example.safehome_app
+package com.myfamily.safehome
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,13 +11,11 @@ import androidx.core.app.NotificationCompat
 class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-
         if (
             intent.action == Intent.ACTION_BOOT_COMPLETED ||
             intent.action == Intent.ACTION_LOCKED_BOOT_COMPLETED ||
             intent.action == "android.intent.action.QUICKBOOT_POWERON"
         ) {
-
             val channelId = "safehome_boot_channel"
 
             val manager =
@@ -25,7 +23,6 @@ class BootReceiver : BroadcastReceiver() {
                         as NotificationManager
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
                 val channel = NotificationChannel(
                     channelId,
                     "SafeHome Boot",
@@ -33,7 +30,6 @@ class BootReceiver : BroadcastReceiver() {
                 )
 
                 channel.description = "SafeHome boot notification"
-
                 manager.createNotificationChannel(channel)
             }
 

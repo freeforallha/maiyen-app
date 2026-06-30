@@ -297,14 +297,19 @@ void showHomeEventSheet({
                       .limitToLast(60)
                       .onValue,
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData ||
-                        snapshot.data!.snapshot.value == null) {
+                    final event = snapshot.data;
+
+                    if (!snapshot.hasData || event?.snapshot.value == null) {
                       return const Center(child: Text("Chưa có thông báo nào"));
                     }
 
-                    final raw = Map<String, dynamic>.from(
-                      snapshot.data!.snapshot.value as Map,
-                    );
+                    final value = event?.snapshot.value;
+
+                    if (value is! Map) {
+                      return const Center(child: Text("Chưa có thông báo nào"));
+                    }
+
+                    final raw = Map<String, dynamic>.from(value);
 
                     final items = raw.values
                         .map((e) => Map<String, dynamic>.from(e))

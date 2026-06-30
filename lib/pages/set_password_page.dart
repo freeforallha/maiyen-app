@@ -40,8 +40,14 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
     });
 
     try {
+      final userEmail = user.email;
+
+      if (userEmail == null || userEmail.isEmpty) {
+        throw Exception("Không tìm thấy email tài khoản");
+      }
+
       final credential = EmailAuthProvider.credential(
-        email: user.email!,
+        email: userEmail,
         password: pass,
       );
 
@@ -51,7 +57,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => HomePage()),
-            (route) => false,
+        (route) => false,
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -92,26 +98,19 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
             TextField(
               controller: passController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Mật khẩu mới",
-              ),
+              decoration: const InputDecoration(labelText: "Mật khẩu mới"),
             ),
 
             TextField(
               controller: confirmController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Nhập lại mật khẩu",
-              ),
+              decoration: const InputDecoration(labelText: "Nhập lại mật khẩu"),
             ),
 
             if (error.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
-                child: Text(
-                  error,
-                  style: const TextStyle(color: Colors.red),
-                ),
+                child: Text(error, style: const TextStyle(color: Colors.red)),
               ),
 
             const Spacer(),

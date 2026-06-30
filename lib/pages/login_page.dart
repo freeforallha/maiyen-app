@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auto_login_service.dart';
+import '../safehome_theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -163,9 +164,9 @@ class _LoginPageState extends State<LoginPage> {
       if (isLogin) {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-          email: emailInput,
-          password: passwordInput,
-        )
+              email: emailInput,
+              password: passwordInput,
+            )
             .timeout(const Duration(seconds: 20));
 
         if (rememberLogin) {
@@ -187,9 +188,9 @@ class _LoginPageState extends State<LoginPage> {
 
       final cred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-        email: emailInput,
-        password: passwordInput,
-      )
+            email: emailInput,
+            password: passwordInput,
+          )
           .timeout(const Duration(seconds: 20));
 
       final user = cred.user;
@@ -277,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildLogo() {
     return Column(
       children: [
-        const Icon(Icons.home_rounded, size: 76, color: Colors.green),
+        const Icon(Icons.home_rounded, size: 76, color: SafeHomeColors.primary),
 
         const SizedBox(height: 10),
 
@@ -291,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               TextSpan(
                 text: "Safe",
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: SafeHomeColors.primary),
               ),
               TextSpan(
                 text: "Home",
@@ -307,7 +308,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: SafeHomeColors.background,
 
       body: SafeArea(
         child: LayoutBuilder(
@@ -324,8 +325,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: 340,
                       padding: const EdgeInsets.all(22),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: SafeHomeColors.surface,
                         borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: SafeHomeColors.border),
                         boxShadow: const [
                           BoxShadow(
                             color: Colors.black12,
@@ -392,7 +394,9 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 error,
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(color: Colors.red),
+                                style: const TextStyle(
+                                  color: SafeHomeColors.danger,
+                                ),
                               ),
                             ),
 
@@ -405,13 +409,13 @@ class _LoginPageState extends State<LoginPage> {
                               onPressed: loading ? null : submit,
                               child: loading
                                   ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.4,
-                                  color: Colors.white,
-                                ),
-                              )
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.4,
+                                        color: Colors.white,
+                                      ),
+                                    )
                                   : Text(isLogin ? "Đăng nhập" : "Đăng ký mới"),
                             ),
                           ),
@@ -454,7 +458,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: _showResetPasswordDialog,
                             child: const Text(
                               "Quên mật khẩu?",
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(color: SafeHomeColors.primary),
                             ),
                           ),
 

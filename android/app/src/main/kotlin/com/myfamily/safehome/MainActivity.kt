@@ -1,4 +1,4 @@
-package com.example.safehome_app
+package com.myfamily.safehome
 
 import android.app.KeyguardManager
 import android.app.NotificationManager

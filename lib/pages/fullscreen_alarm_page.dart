@@ -42,8 +42,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   bool get isReminder => widget.silentMode;
 
   bool get isSafeReminder =>
-      isReminder &&
-          currentReminderBody.toUpperCase().contains("ĐÃ AN TOÀN");
+      isReminder && currentReminderBody.toUpperCase().contains("ĐÃ AN TOÀN");
 
   String get reminderHomeName {
     final raw = currentReminderTitle.trim();
@@ -77,17 +76,14 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     } else {
       _loadLatestAlarmSession();
 
-      NotificationService.alarmRevision.addListener(
-        _onAlarmSessionChanged,
-      );
+      NotificationService.alarmRevision.addListener(_onAlarmSessionChanged);
 
-      NotificationService.alarmResolvedRevision.addListener(
-        _onAlarmResolved,
-      );
+      NotificationService.alarmResolvedRevision.addListener(_onAlarmResolved);
 
       _startAlarmMode();
     }
   }
+
   Future<void> _startAlarmMode() async {
     // Fullscreen đã mở thì huỷ cả notification ban đầu
     // và notification mở toàn màn hình.
@@ -99,11 +95,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   void _onAlarmResolved() {
-    if (
-    !mounted ||
+    if (!mounted ||
         widget.silentMode ||
-        NotificationService.hasActiveAlarmIncidents
-    ) {
+        NotificationService.hasActiveAlarmIncidents) {
       return;
     }
 
@@ -130,20 +124,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       const SnackBar(
         content: Text(
           'Không thể xác nhận với SafeHome. '
-              'Hãy kiểm tra kết nối và thử lại.',
+          'Hãy kiểm tra kết nối và thử lại.',
         ),
       ),
     );
   }
+
   void _loadLatestReminderSession() {
-    final latestTitle =
-    NotificationService.lastScheduleTitle.trim();
+    final latestTitle = NotificationService.lastScheduleTitle.trim();
 
-    final latestBody =
-    NotificationService.lastScheduleBody.trim();
+    final latestBody = NotificationService.lastScheduleBody.trim();
 
-    final latestItems =
-    NotificationService.lastReminderItemsJson.trim();
+    final latestItems = NotificationService.lastReminderItemsJson.trim();
 
     if (latestTitle.isNotEmpty) {
       currentReminderTitle = latestTitle;
@@ -168,12 +160,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       remainingSeconds = 600;
     });
   }
-  void _loadLatestAlarmSession() {
-    final latestBody =
-    NotificationService.lastAlarmBody.trim();
 
-    final latestItems =
-    NotificationService.lastAlarmItemsJson.trim();
+  void _loadLatestAlarmSession() {
+    final latestBody = NotificationService.lastAlarmBody.trim();
+
+    final latestItems = NotificationService.lastAlarmItemsJson.trim();
 
     if (latestBody.isNotEmpty) {
       currentAlarmBody = latestBody;
@@ -191,6 +182,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       _loadLatestAlarmSession();
     });
   }
+
   Future<void> startAlarmSound() async {
     await alarmPlayer.setReleaseMode(ReleaseMode.loop);
     await alarmPlayer.setVolume(1.0);
@@ -228,9 +220,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
       NotificationService.markReminderPageClosed();
     } else {
-      NotificationService.alarmRevision.removeListener(
-        _onAlarmSessionChanged,
-      );
+      NotificationService.alarmRevision.removeListener(_onAlarmSessionChanged);
 
       NotificationService.alarmResolvedRevision.removeListener(
         _onAlarmResolved,
@@ -269,7 +259,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             final data = Map<String, dynamic>.from(item);
 
             final homeName =
-            data["homeName"]?.toString().trim().isNotEmpty == true
+                data["homeName"]?.toString().trim().isNotEmpty == true
                 ? data["homeName"].toString().trim()
                 : "Nhà";
 
@@ -286,16 +276,16 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               }
             }
 
-            result.putIfAbsent(homeName, () => []);
+            final homeReasons = result.putIfAbsent(homeName, () => []);
 
             if (reasons.isEmpty) {
-              if (!result[homeName]!.contains("Đã an toàn")) {
-                result[homeName]!.add("Đã an toàn");
+              if (!homeReasons.contains("Đã an toàn")) {
+                homeReasons.add("Đã an toàn");
               }
             } else {
               for (final reason in reasons) {
-                if (!result[homeName]!.contains(reason)) {
-                  result[homeName]!.add(reason);
+                if (!homeReasons.contains(reason)) {
+                  homeReasons.add(reason);
                 }
               }
             }
@@ -323,9 +313,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         .trim();
 
     return {
-      homeName: [
-        bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra",
-      ],
+      homeName: [bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra"],
     };
   }
 
@@ -487,10 +475,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         text = fallbackReason(type);
       }
 
-      result.putIfAbsent(realHomeName, () => []);
+      final homeReasons = result.putIfAbsent(realHomeName, () => []);
 
-      if (!result[realHomeName]!.contains(text)) {
-        result[realHomeName]!.add(text);
+      if (!homeReasons.contains(text)) {
+        homeReasons.add(text);
       }
     }
 
@@ -537,9 +525,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (!widget.silentMode) {
       final acknowledged =
-      await NotificationService.resolveActiveAlarmIncidents(
-        action: 'check_home',
-      );
+          await NotificationService.resolveActiveAlarmIncidents(
+            action: 'check_home',
+          );
 
       if (!acknowledged) {
         await startAlarmSound();
@@ -560,9 +548,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       return;
     }
 
-    navigator.pushReplacement(
-      MaterialPageRoute(builder: (_) => AuthGate()),
-    );
+    navigator.pushReplacement(MaterialPageRoute(builder: (_) => AuthGate()));
   }
 
   Future<void> closeReminder() async {
@@ -590,7 +576,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
           title: const Text('Xác nhận tắt cảnh báo'),
           content: const Text(
             'Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\n'
-                'Bạn chắc chắn muốn tắt cảnh báo?',
+            'Bạn chắc chắn muốn tắt cảnh báo?',
           ),
           actions: [
             TextButton(
@@ -611,8 +597,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     timer?.cancel();
     await stopAlarmSound();
 
-    final acknowledged =
-    await NotificationService.resolveActiveAlarmIncidents(
+    final acknowledged = await NotificationService.resolveActiveAlarmIncidents(
       action: 'stop',
     );
 
@@ -627,9 +612,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     SystemNavigator.pop();
   }
-  Widget _buildFadedScrollArea({
-    required Widget child,
-  }) {
+
+  Widget _buildFadedScrollArea({required Widget child}) {
     return Expanded(
       child: ShaderMask(
         blendMode: BlendMode.dstIn,
@@ -643,27 +627,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               Colors.black,
               Colors.transparent,
             ],
-            stops: [
-              0.0,
-              0.08,
-              0.88,
-              1.0,
-            ],
+            stops: [0.0, 0.08, 0.88, 1.0],
           ).createShader(bounds);
         },
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(
-            0,
-            40,
-            0,
-            46,
-          ),
+          padding: const EdgeInsets.fromLTRB(0, 40, 0, 46),
           child: child,
         ),
       ),
     );
   }
+
   Widget _buildReminderUI(BuildContext context) {
     final safe = isSafeReminder;
     final issueMap = buildReminderIssueMap();
@@ -698,7 +673,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: accent.withValues(alpha: 0.22)),
+                        border: Border.all(
+                          color: accent.withValues(alpha: 0.22),
+                        ),
                         boxShadow: [
                           BoxShadow(
                             color: accent.withValues(alpha: 0.14),
@@ -769,7 +746,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                     ),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         entry.key,
@@ -781,7 +759,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                       ),
                                       const SizedBox(height: 8),
                                       ...entry.value.map(
-                                            (item) => Padding(
+                                        (item) => Padding(
                                           padding: const EdgeInsets.only(
                                             bottom: 6,
                                           ),
@@ -865,19 +843,16 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final nextAlarmMap = buildNextAlarmMap();
 
     final isEmergency =
-        type == 'sos' ||
-            type == 'smoke' ||
-            type == 'flood' ||
-            type == 'gas';
+        type == 'sos' || type == 'smoke' || type == 'flood' || type == 'gas';
 
     final repeatText = isEmergency
         ? 'Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang '
-        'gọi điện khẩn cấp.'
+              'gọi điện khẩn cấp.'
         : nextAlarmMap.isNotEmpty
         ? 'Báo lại lúc ${nextAlarmMap.values.first} '
-        'nếu vấn đề chưa được xử lý.'
+              'nếu vấn đề chưa được xử lý.'
         : 'Sẽ báo lại theo lịch Alarm đã cài '
-        'nếu vấn đề chưa được xử lý.';
+              'nếu vấn đề chưa được xử lý.';
 
     final Color bgColor = switch (type) {
       "sos" => const Color(0xFF3A0508),
@@ -991,11 +966,13 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                     ),
                                     const SizedBox(height: 8),
                                     ...entry.value.map(
-                                          (reason) => Padding(
-                                        padding: const EdgeInsets.only(bottom: 6),
+                                      (reason) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 6,
+                                        ),
                                         child: Row(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Icon(
                                               Icons.warning_amber_rounded,

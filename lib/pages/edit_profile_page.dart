@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../helpers/top_toast.dart';
+
 class EditProfilePage extends StatefulWidget {
   final String userName;
   final String userGender;
@@ -60,9 +61,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     dayController = TextEditingController(
       text: parts.length == 3 ? parts[2] : "",
     );
-    phoneController = TextEditingController(
-      text: widget.userPhone,
-    );
+    phoneController = TextEditingController(text: widget.userPhone);
   }
 
   @override
@@ -86,9 +85,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return List.generate(end - start + 1, (i) {
       final value = start + i;
 
-      return pad > 0
-          ? value.toString().padLeft(pad, '0')
-          : value.toString();
+      return pad > 0 ? value.toString().padLeft(pad, '0') : value.toString();
     }).where((v) => v.startsWith(input.trim())).toList();
   }
 
@@ -106,12 +103,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         controller.text = value;
       },
 
-      fieldViewBuilder: (
-          context,
-          autoController,
-          focusNode,
-          onSubmit,
-          ) {
+      fieldViewBuilder: (context, autoController, focusNode, onSubmit) {
         autoController.text = controller.text;
 
         autoController.selection = TextSelection.fromPosition(
@@ -123,9 +115,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           focusNode: focusNode,
           keyboardType: TextInputType.number,
 
-          decoration: InputDecoration(
-            labelText: label,
-          ),
+          decoration: InputDecoration(labelText: label),
 
           onChanged: (value) {
             controller.text = value;
@@ -152,23 +142,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> saveProfile() async {
     if (saving) return;
-    if (user == null) return;
+    final currentUser = user;
+    if (currentUser == null) return;
 
     setState(() {
       saving = true;
     });
 
     try {
-      String? photoUrl = user!.photoURL;
+      String? photoUrl = currentUser.photoURL;
 
       // upload avatar
-      if (pickedImage != null) {
+      final imageFile = pickedImage;
+
+      if (imageFile != null) {
         final ref = FirebaseStorage.instance
             .ref()
             .child("avatars")
-            .child("${user!.uid}.jpg");
+            .child("${currentUser.uid}.jpg");
 
-        await ref.putFile(pickedImage!);
+        await ref.putFile(imageFile);
 
         photoUrl = await ref.getDownloadURL();
       }
@@ -180,23 +173,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
       final cleanName = nameController.text.trim();
 
       if (cleanName.isNotEmpty) {
-        await user!.updateDisplayName(cleanName);
+        await currentUser.updateDisplayName(cleanName);
       }
 
       if (photoUrl != null) {
-        await user!.updatePhotoURL(photoUrl);
+        await currentUser.updatePhotoURL(photoUrl);
       }
 
       // update realtime db
       await FirebaseDatabase.instance
-          .ref("accounts/${user!.uid}/profile")
+          .ref("accounts/${currentUser.uid}/profile")
           .update({
-        "name": nameController.text.trim(),
-        "gender": gender,
-        "dob": dob,
-        "phone": phoneController.text.trim(),
-        "photoUrl": photoUrl ?? "",
-      });
+            "name": nameController.text.trim(),
+            "gender": gender,
+            "dob": dob,
+            "phone": phoneController.text.trim(),
+            "photoUrl": photoUrl ?? "",
+          });
 
       if (!mounted) return;
 
@@ -226,14 +219,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = pickedImage != null
-        ? null
-        : user?.photoURL;
+    final imageFile = pickedImage;
+    final avatarUrl = imageFile != null ? null : user?.photoURL;
+    final ImageProvider? avatarImage = imageFile != null
+        ? FileImage(imageFile)
+        : (avatarUrl != null && avatarUrl.isNotEmpty)
+        ? NetworkImage(avatarUrl)
+        : null;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Thông tin cá nhân"),
-      ),
+      appBar: AppBar(title: const Text("Thông tin cá nhân")),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -246,18 +241,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   radius: 48,
                   backgroundColor: Colors.grey.shade200,
 
-                  backgroundImage: pickedImage != null
-                      ? FileImage(pickedImage!)
-                      : (avatarUrl != null && avatarUrl.isNotEmpty)
-                      ? NetworkImage(avatarUrl)
-                      : null,
+                  backgroundImage: avatarImage,
 
-                  child: avatarUrl == null && pickedImage == null
-                      ? const Icon(
-                    Icons.person,
-                    size: 42,
-                    color: Colors.grey,
-                  )
+                  child: avatarImage == null
+                      ? const Icon(Icons.person, size: 42, color: Colors.grey)
                       : null,
                 ),
 
@@ -274,10 +261,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2,
-                        ),
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
 
                       child: const Icon(
@@ -296,9 +280,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(
               controller: nameController,
 
-              decoration: const InputDecoration(
-                labelText: "Tên",
-              ),
+              decoration: const InputDecoration(labelText: "Tên"),
             ),
 
             const SizedBox(height: 20),
@@ -308,10 +290,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Text(
                 "Giới tính",
 
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               ),
             ),
 
@@ -350,9 +329,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: "Số điện thoại",
-              ),
+              decoration: const InputDecoration(labelText: "Số điện thoại"),
             ),
 
             const SizedBox(height: 20),
@@ -362,10 +339,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Text(
                 "Ngày sinh",
 
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
               ),
             ),
 
@@ -431,20 +405,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                 child: saving
                     ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.4,
-                    color: Colors.white,
-                  ),
-                )
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
+                        ),
+                      )
                     : const Text(
-                  "Lưu thay đổi",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                        "Lưu thay đổi",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],
