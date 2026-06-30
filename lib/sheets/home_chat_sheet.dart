@@ -51,6 +51,15 @@ void showHomeChatSheet({
   int initialUnreadCount = 0;
   int initialLastRead = 0;
   int previousMessageCount = 0;
+  String replyingToMessageId = "";
+  Map<String, dynamic>? replyingToMessage;
+  bool mentionMembersLoadStarted = false;
+  List<_HomeChatMentionMember> mentionMembers = const [];
+  bool showMentionSuggestions = false;
+  String mentionQuery = "";
+  int mentionStartIndex = -1;
+  final selectedMentions = <String, String>{};
+  StateSetter? chatSetState;
 
   void writeTypingPresence(bool isTyping) {
     ChatService.setTyping(
@@ -104,8 +113,47 @@ void showHomeChatSheet({
     });
   }
 
+  void syncMentionStateFromDraft() {
+    if (isChatSheetClosed) return;
+
+    final selection = controller.selection;
+    var nextShow = false;
+    var nextQuery = "";
+    var nextStart = -1;
+
+    if (selection.isValid && selection.isCollapsed) {
+      final cursor = selection.baseOffset;
+
+      if (cursor >= 0 && cursor <= controller.text.length) {
+        final beforeCursor = controller.text.substring(0, cursor);
+        final match = RegExp(r'(^|\s)@([^\s@]*)$').firstMatch(
+          beforeCursor,
+        );
+
+        if (match != null) {
+          nextShow = true;
+          nextQuery = match.group(2) ?? "";
+          nextStart = match.start + (match.group(1)?.length ?? 0);
+        }
+      }
+    }
+
+    if (nextShow == showMentionSuggestions &&
+        nextQuery == mentionQuery &&
+        nextStart == mentionStartIndex) {
+      return;
+    }
+
+    showMentionSuggestions = nextShow;
+    mentionQuery = nextQuery;
+    mentionStartIndex = nextStart;
+
+    chatSetState?.call(() {});
+  }
+
   void handleDraftChanged() {
     syncTypingPresence();
+    syncMentionStateFromDraft();
   }
 
   void clearTypingPresence() {
@@ -158,43 +206,110 @@ void showHomeChatSheet({
     });
   }
 
-  TextSpan highlightedSpan(String source, TextStyle baseStyle) {
+  TextSpan highlightedSpan(
+      String source,
+      TextStyle baseStyle, {
+        Map<String, String> mentions = const <String, String>{},
+      }) {
     final query = searchQuery.trim();
 
-    if (!isSearching || query.isEmpty) {
+    if (isSearching && query.isNotEmpty) {
+      final lowerSource = source.toLowerCase();
+      final lowerQuery = query.toLowerCase();
+      final spans = <TextSpan>[];
+      var start = 0;
+
+      while (true) {
+        final matchIndex = lowerSource.indexOf(lowerQuery, start);
+
+        if (matchIndex < 0) {
+          spans.add(
+            TextSpan(
+              text: source.substring(start),
+              style: baseStyle,
+            ),
+          );
+          break;
+        }
+
+        if (matchIndex > start) {
+          spans.add(
+            TextSpan(
+              text: source.substring(start, matchIndex),
+              style: baseStyle,
+            ),
+          );
+        }
+
+        spans.add(
+          TextSpan(
+            text: source.substring(
+              matchIndex,
+              matchIndex + query.length,
+            ),
+            style: baseStyle.copyWith(
+              backgroundColor: Colors.yellow.shade300,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        );
+
+        start = matchIndex + query.length;
+      }
+
+      return TextSpan(children: spans);
+    }
+
+    final mentionNames = mentions.values
+        .map((name) => name.trim())
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList()
+      ..sort((a, b) => b.length.compareTo(a.length));
+
+    if (mentionNames.isEmpty) {
       return TextSpan(text: source, style: baseStyle);
     }
 
-    final lowerSource = source.toLowerCase();
-    final lowerQuery = query.toLowerCase();
+    final mentionPattern = RegExp(
+      '@(?:${mentionNames.map(RegExp.escape).join('|')})'
+      r'(?=$|[\s.,!?;:])',
+      caseSensitive: false,
+    );
+
     final spans = <TextSpan>[];
     var start = 0;
 
-    while (true) {
-      final matchIndex = lowerSource.indexOf(lowerQuery, start);
-
-      if (matchIndex < 0) {
-        spans.add(TextSpan(text: source.substring(start), style: baseStyle));
-        break;
-      }
-
-      if (matchIndex > start) {
+    for (final match in mentionPattern.allMatches(source)) {
+      if (match.start > start) {
         spans.add(
-          TextSpan(text: source.substring(start, matchIndex), style: baseStyle),
+          TextSpan(
+            text: source.substring(start, match.start),
+            style: baseStyle,
+          ),
         );
       }
 
       spans.add(
         TextSpan(
-          text: source.substring(matchIndex, matchIndex + query.length),
+          text: source.substring(match.start, match.end),
           style: baseStyle.copyWith(
-            backgroundColor: Colors.yellow.shade300,
+            color: SafeHomeColors.primary,
             fontWeight: FontWeight.w800,
           ),
         ),
       );
 
-      start = matchIndex + query.length;
+      start = match.end;
+    }
+
+    if (start < source.length) {
+      spans.add(
+        TextSpan(
+          text: source.substring(start),
+          style: baseStyle,
+        ),
+      );
     }
 
     return TextSpan(children: spans);
@@ -358,7 +473,93 @@ void showHomeChatSheet({
       },
     );
   }
+  Future<List<_HomeChatMentionMember>> loadMentionMembers() async {
+    final membersByUid = <String, _HomeChatMentionMember>{};
 
+    try {
+      final snapshot = await FirebaseDatabase.instance
+          .ref("sharedByHome/$homeId")
+          .get();
+
+      final raw = snapshot.value;
+
+      if (raw is Map) {
+        final membersMap = Map<String, dynamic>.from(raw);
+
+        for (final entry in membersMap.entries) {
+          final memberUid = entry.key.toString().trim();
+
+          if (memberUid.isEmpty ||
+              memberUid == user.uid ||
+              entry.value is! Map) {
+            continue;
+          }
+
+          final memberData = Map<String, dynamic>.from(
+            entry.value as Map,
+          );
+
+          final memberName =
+              memberData["name"]?.toString().trim() ??
+                  memberData["displayName"]?.toString().trim() ??
+                  memberData["email"]?.toString().trim() ??
+                  "";
+
+          if (memberName.isEmpty) {
+            continue;
+          }
+
+          membersByUid[memberUid] = _HomeChatMentionMember(
+            uid: memberUid,
+            name: memberName,
+            photoUrl:
+            memberData["photoUrl"]?.toString().trim() ?? "",
+          );
+        }
+      }
+    } catch (_) {
+      // Vẫn tiếp tục thử tải hồ sơ Owner.
+    }
+
+    if (ownerUid.isNotEmpty &&
+        ownerUid != user.uid &&
+        !membersByUid.containsKey(ownerUid)) {
+      try {
+        final ownerSnapshot = await FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/profile")
+            .get();
+
+        final rawOwner = ownerSnapshot.value;
+
+        if (rawOwner is Map) {
+          final ownerData = Map<String, dynamic>.from(rawOwner);
+
+          final ownerName =
+              ownerData["name"]?.toString().trim() ??
+                  ownerData["email"]?.toString().trim() ??
+                  "";
+
+          if (ownerName.isNotEmpty) {
+            membersByUid[ownerUid] = _HomeChatMentionMember(
+              uid: ownerUid,
+              name: ownerName,
+              photoUrl:
+              ownerData["photoUrl"]?.toString().trim() ?? "",
+            );
+          }
+        }
+      } catch (_) {}
+    }
+
+    final members = membersByUid.values.toList()
+      ..sort(
+            (a, b) => a.name.toLowerCase().compareTo(
+          b.name.toLowerCase(),
+        ),
+      );
+
+    return members;
+  }
   Future<String> getMemberRole(String uid) async {
     if (uid == ownerUid) return "owner";
 
@@ -391,6 +592,23 @@ void showHomeChatSheet({
     builder: (ctx) {
       return StatefulBuilder(
         builder: (context, setState) {
+          chatSetState = setState;
+
+          if (!mentionMembersLoadStarted) {
+            mentionMembersLoadStarted = true;
+
+            unawaited(() async {
+              final loadedMembers = await loadMentionMembers();
+
+              if (isChatSheetClosed || !ctx.mounted) {
+                return;
+              }
+
+              setState(() {
+                mentionMembers = loadedMembers;
+              });
+            }());
+          }
           if (!unreadSnapshotStarted) {
             unreadSnapshotStarted = true;
 
@@ -489,11 +707,40 @@ void showHomeChatSheet({
 
             animateToLatestMessage();
           }
+          void beginReply({
+            required String messageId,
+            required Map<String, dynamic> message,
+          }) {
+            final text = message["text"]?.toString().trim() ?? "";
 
+            if (messageId.isEmpty || text.isEmpty) {
+              return;
+            }
+
+            setState(() {
+              replyingToMessageId = messageId;
+              replyingToMessage = Map<String, dynamic>.from(message);
+              showEmoji = false;
+            });
+
+            focusNode.requestFocus();
+          }
+
+          void cancelReply() {
+            if (replyingToMessage == null) {
+              return;
+            }
+
+            setState(() {
+              replyingToMessageId = "";
+              replyingToMessage = null;
+            });
+          }
           Future<void> sendCurrentMessage() async {
             final text = controller.text.trim();
 
             if (text.isEmpty) return;
+
             if (text.length > ChatService.maxMessageLength) {
               ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
                 const SnackBar(content: Text("Tin nhắn quá dài")),
@@ -501,7 +748,31 @@ void showHomeChatSheet({
               return;
             }
 
+            final currentReplyId = replyingToMessageId;
+            final currentReply = replyingToMessage == null
+                ? null
+                : Map<String, dynamic>.from(replyingToMessage!);
+
+            final currentMentions = <String, String>{};
+
+            for (final entry in selectedMentions.entries) {
+              final mentionText = "@${entry.value}".toLowerCase();
+
+              if (text.toLowerCase().contains(mentionText)) {
+                currentMentions[entry.key] = entry.value;
+              }
+            }
+
             controller.clear();
+
+            setState(() {
+              replyingToMessageId = "";
+              replyingToMessage = null;
+              selectedMentions.clear();
+              showMentionSuggestions = false;
+              mentionQuery = "";
+              mentionStartIndex = -1;
+            });
 
             try {
               final messageId = await ChatService.sendMessage(
@@ -510,11 +781,17 @@ void showHomeChatSheet({
                 userName: userName,
                 userPhotoUrl: userPhotoUrl,
                 text: text,
+                mentions: currentMentions,
+                replyToMessageId: currentReplyId,
+                replyToUid: currentReply?["uid"]?.toString() ?? "",
+                replyToName: currentReply?["name"]?.toString() ?? "",
+                replyToText: currentReply?["text"]?.toString() ?? "",
               );
 
               final senderName = userName.trim().isNotEmpty
                   ? userName.trim()
                   : "Một thành viên";
+
               final preview = text.length > 90
                   ? "${text.substring(0, 90)}..."
                   : text;
@@ -537,22 +814,93 @@ void showHomeChatSheet({
                     "messageId": messageId,
                     "senderName": senderName,
                     "text": text,
+                    "replyToMessageId": currentReplyId,
+                    "mentionedUids": currentMentions.keys.join(","),
                   },
                 );
               } catch (_) {}
-            } catch (_) {
-              controller.text = text;
+            } catch (error) {
+              debugPrint("HOME_CHAT_SEND_ERROR: $error");
 
-              if (!ctx.mounted) return;
+              if (!isChatSheetClosed && ctx.mounted) {
+                controller.text = text;
+                controller.selection = TextSelection.collapsed(
+                  offset: controller.text.length,
+                );
 
-              ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
-                const SnackBar(content: Text("Không gửi được tin nhắn")),
-              );
+                setState(() {
+                  replyingToMessageId = currentReplyId;
+                  replyingToMessage = currentReply;
+                  selectedMentions
+                    ..clear()
+                    ..addAll(currentMentions);
+                });
+
+                ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
+                  const SnackBar(content: Text("Không gửi được tin nhắn")),
+                );
+              }
             }
           }
 
-          final screenSize = MediaQuery.sizeOf(ctx);
-          final sheetHeight = screenSize.height * (showEmoji ? 0.86 : 0.72);
+          void selectMention(_HomeChatMentionMember member) {
+            final selection = controller.selection;
+            final cursor = selection.isValid
+                ? selection.baseOffset
+                : controller.text.length;
+
+            if (mentionStartIndex < 0 ||
+                cursor < mentionStartIndex ||
+                cursor > controller.text.length) {
+              return;
+            }
+
+            final replacement = "@${member.name} ";
+            final nextText = controller.text.replaceRange(
+              mentionStartIndex,
+              cursor,
+              replacement,
+            );
+            final nextCursor = mentionStartIndex + replacement.length;
+
+            selectedMentions[member.uid] = member.name;
+
+            controller.value = TextEditingValue(
+              text: nextText,
+              selection: TextSelection.collapsed(offset: nextCursor),
+            );
+
+            setState(() {
+              showMentionSuggestions = false;
+              mentionQuery = "";
+              mentionStartIndex = -1;
+              showEmoji = false;
+            });
+
+            focusNode.requestFocus();
+          }
+
+          final mediaQuery = MediaQuery.of(context);
+          final screenSize = mediaQuery.size;
+          final keyboardVisible = mediaQuery.viewInsets.bottom > 0;
+
+          final sheetHeight = screenSize.height *
+              (keyboardVisible
+                  ? 0.96
+                  : showEmoji
+                  ? 0.86
+                  : 0.72);
+          final normalizedMentionQuery = mentionQuery.trim().toLowerCase();
+
+          final filteredMentionMembers = mentionMembers.where((member) {
+            if (normalizedMentionQuery.isEmpty) {
+              return true;
+            }
+
+            return member.name.toLowerCase().contains(
+              normalizedMentionQuery,
+            );
+          }).take(8).toList();
 
           return PopScope<void>(
             canPop: !isSearching,
@@ -563,7 +911,9 @@ void showHomeChatSheet({
 
               closeSearch();
             },
-            child: SizedBox(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              curve: Curves.easeOutCubic,
               height: sheetHeight,
               child: Scaffold(
                 resizeToAvoidBottomInset: true,
@@ -661,18 +1011,18 @@ void showHomeChatSheet({
                               suffixIcon: searchController.text.isEmpty
                                   ? null
                                   : IconButton(
-                                      tooltip: "Xoá từ khoá",
-                                      icon: const Icon(Icons.close_rounded),
-                                      onPressed: () {
-                                        searchController.clear();
+                                tooltip: "Xoá từ khoá",
+                                icon: const Icon(Icons.close_rounded),
+                                onPressed: () {
+                                  searchController.clear();
 
-                                        setState(() {
-                                          searchQuery = "";
-                                          activeSearchResult = 0;
-                                          currentSearchResultIds = [];
-                                        });
-                                      },
-                                    ),
+                                  setState(() {
+                                    searchQuery = "";
+                                    activeSearchResult = 0;
+                                    currentSearchResultIds = [];
+                                  });
+                                },
+                              ),
                               filled: true,
                               fillColor: Colors.grey.shade100,
                               border: OutlineInputBorder(
@@ -692,7 +1042,7 @@ void showHomeChatSheet({
                                       currentSearchResultIds.isEmpty
                                           ? "Không có kết quả"
                                           : "${activeSearchResult + 1}/"
-                                                "${currentSearchResultIds.length} kết quả",
+                                          "${currentSearchResultIds.length} kết quả",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade700,
@@ -761,8 +1111,8 @@ void showHomeChatSheet({
                                   .toSet();
 
                               messageKeys.removeWhere(
-                                (messageId, _) =>
-                                    !activeMessageIds.contains(messageId),
+                                    (messageId, _) =>
+                                !activeMessageIds.contains(messageId),
                               );
 
                               final normalizedQuery = searchQuery
@@ -781,13 +1131,13 @@ void showHomeChatSheet({
                                       rawMessage["name"]
                                           ?.toString()
                                           .toLowerCase() ??
-                                      "";
+                                          "";
 
                                   final text =
                                       rawMessage["text"]
                                           ?.toString()
                                           .toLowerCase() ??
-                                      "";
+                                          "";
 
                                   if (name.contains(normalizedQuery) ||
                                       text.contains(normalizedQuery)) {
@@ -801,11 +1151,11 @@ void showHomeChatSheet({
                               final resultsChanged =
                                   nextSearchResultIds.length !=
                                       currentSearchResultIds.length ||
-                                  nextSearchResultIds.asMap().entries.any(
-                                    (entry) =>
+                                      nextSearchResultIds.asMap().entries.any(
+                                            (entry) =>
                                         entry.value !=
-                                        currentSearchResultIds[entry.key],
-                                  );
+                                            currentSearchResultIds[entry.key],
+                                      );
 
                               if (resultsChanged) {
                                 currentSearchResultIds = nextSearchResultIds;
@@ -819,8 +1169,8 @@ void showHomeChatSheet({
                                 }
 
                                 WidgetsBinding.instance.addPostFrameCallback((
-                                  _,
-                                ) {
+                                    _,
+                                    ) {
                                   if (isChatSheetClosed || !ctx.mounted) {
                                     return;
                                   }
@@ -848,7 +1198,7 @@ void showHomeChatSheet({
                                       int.tryParse(
                                         rawMessage["time"]?.toString() ?? "0",
                                       ) ??
-                                      0;
+                                          0;
 
                                   if (senderUid != user.uid &&
                                       messageTime > initialLastRead) {
@@ -874,7 +1224,7 @@ void showHomeChatSheet({
 
                                 initialScrollUnlockTimer ??= Timer(
                                   const Duration(milliseconds: 900),
-                                  () {
+                                      () {
                                     if (!isChatSheetClosed) {
                                       autoScrollReady = true;
                                     }
@@ -886,7 +1236,7 @@ void showHomeChatSheet({
                                   scrollController.hasClients) {
                                 final distanceFromBottom =
                                     scrollController.position.pixels -
-                                    scrollController.position.minScrollExtent;
+                                        scrollController.position.minScrollExtent;
 
                                 if (distanceFromBottom <= 140) {
                                   animateToLatestMessage();
@@ -932,7 +1282,7 @@ void showHomeChatSheet({
                                             Expanded(
                                               child: Text(
                                                 "Còn $unreadNoticeCount tin nhắn "
-                                                "chưa đọc",
+                                                    "chưa đọc",
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w700,
@@ -957,9 +1307,9 @@ void showHomeChatSheet({
                                       itemCount: messages.length,
                                       itemBuilder: (_, index) {
                                         final messageEntry =
-                                            messages[messages.length -
-                                                1 -
-                                                index];
+                                        messages[messages.length -
+                                            1 -
+                                            index];
                                         final messageId = messageEntry.key
                                             .toString();
 
@@ -978,11 +1328,37 @@ void showHomeChatSheet({
                                             msg["photoUrl"]?.toString() ?? "";
                                         final time = msg["time"];
                                         final timeText = formatChatTime(time);
+                                        final replyRaw = msg["reply"];
+
+                                        final reply = replyRaw is Map
+                                            ? Map<String, dynamic>.from(replyRaw)
+                                            : <String, dynamic>{};
+
+                                        final replyMessageId =
+                                            reply["messageId"]?.toString().trim() ?? "";
+
+                                        final replyName =
+                                            reply["name"]?.toString().trim() ?? "";
+
+                                        final replyText =
+                                            reply["text"]?.toString().trim() ?? "";
+
+                                        final mentionsRaw = msg["mentions"];
+                                        final mentions = mentionsRaw is Map
+                                            ? Map<String, String>.from(
+                                          mentionsRaw.map(
+                                                (key, value) => MapEntry(
+                                              key.toString(),
+                                              value.toString(),
+                                            ),
+                                          ),
+                                        )
+                                            : <String, String>{};
 
                                         return KeyedSubtree(
                                           key: messageKeys.putIfAbsent(
                                             messageId,
-                                            () => GlobalKey(),
+                                                () => GlobalKey(),
                                           ),
                                           child: Align(
                                             alignment: isMe
@@ -995,7 +1371,7 @@ void showHomeChatSheet({
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
+                                                CrossAxisAlignment.end,
                                                 children: [
                                                   if (!isMe)
                                                     GestureDetector(
@@ -1003,24 +1379,24 @@ void showHomeChatSheet({
                                                           openCallMemberSheet(
                                                             sheetContext: ctx,
                                                             memberUid:
-                                                                msg["uid"]
-                                                                    ?.toString() ??
+                                                            msg["uid"]
+                                                                ?.toString() ??
                                                                 "",
                                                             name: name,
                                                           ),
                                                       child: CircleAvatar(
                                                         radius: 14,
                                                         backgroundImage:
-                                                            photoUrl.isNotEmpty
+                                                        photoUrl.isNotEmpty
                                                             ? NetworkImage(
-                                                                photoUrl,
-                                                              )
+                                                          photoUrl,
+                                                        )
                                                             : null,
                                                         child: photoUrl.isEmpty
                                                             ? const Icon(
-                                                                Icons.person,
-                                                                size: 15,
-                                                              )
+                                                          Icons.person,
+                                                          size: 15,
+                                                        )
                                                             : null,
                                                       ),
                                                     ),
@@ -1028,152 +1404,211 @@ void showHomeChatSheet({
                                                     const SizedBox(width: 6),
 
                                                   Flexible(
-                                                    child: Container(
-                                                      constraints:
-                                                          BoxConstraints(
-                                                            maxWidth:
-                                                                screenSize
-                                                                    .width *
-                                                                0.68,
+                                                    child: GestureDetector(
+                                                      behavior: HitTestBehavior.opaque,
+                                                      onTap: isMe
+                                                          ? null
+                                                          : () {
+                                                        beginReply(
+                                                          messageId: messageId,
+                                                          message: msg,
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        constraints:
+                                                        BoxConstraints(
+                                                          maxWidth:
+                                                          screenSize
+                                                              .width *
+                                                              0.68,
+                                                        ),
+                                                        padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 12,
+                                                          vertical: 9,
+                                                        ),
+                                                        decoration: BoxDecoration(
+                                                          color: isMe
+                                                              ? Colors
+                                                              .blue
+                                                              .shade100
+                                                              : Colors
+                                                              .grey
+                                                              .shade100,
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                            16,
                                                           ),
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 12,
-                                                            vertical: 9,
-                                                          ),
-                                                      decoration: BoxDecoration(
-                                                        color: isMe
-                                                            ? Colors
-                                                                  .blue
-                                                                  .shade100
-                                                            : Colors
-                                                                  .grey
-                                                                  .shade100,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              16,
-                                                            ),
-                                                      ),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          if (!isMe)
-                                                            FutureBuilder<
-                                                              String
-                                                            >(
-                                                              future:
-                                                                  getMemberRole(
-                                                                    senderUid,
-                                                                  ),
-                                                              builder: (context, roleSnap) {
-                                                                final role =
-                                                                    roleSnap
-                                                                        .data ??
-                                                                    "member";
+                                                        ),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                          children: [
+                                                            if (!isMe)
+                                                              FutureBuilder<
+                                                                  String
+                                                              >(
+                                                                future:
+                                                                getMemberRole(
+                                                                  senderUid,
+                                                                ),
+                                                                builder: (context, roleSnap) {
+                                                                  final role =
+                                                                      roleSnap
+                                                                          .data ??
+                                                                          "member";
 
-                                                                final icon =
-                                                                    role ==
-                                                                        "owner"
-                                                                    ? Icons
-                                                                          .workspace_premium_rounded
-                                                                    : role ==
-                                                                          "admin"
-                                                                    ? Icons
-                                                                          .admin_panel_settings_rounded
-                                                                    : Icons
-                                                                          .person_rounded;
+                                                                  final icon =
+                                                                  role ==
+                                                                      "owner"
+                                                                      ? Icons
+                                                                      .workspace_premium_rounded
+                                                                      : role ==
+                                                                      "admin"
+                                                                      ? Icons
+                                                                      .admin_panel_settings_rounded
+                                                                      : Icons
+                                                                      .person_rounded;
 
-                                                                final color =
-                                                                    role ==
-                                                                        "owner"
-                                                                    ? Colors
-                                                                          .blue
-                                                                          .shade700
-                                                                    : role ==
-                                                                          "admin"
-                                                                    ? Colors
-                                                                          .deepPurple
-                                                                          .shade700
-                                                                    : Colors
-                                                                          .blueGrey
-                                                                          .shade700;
+                                                                  final color =
+                                                                  role ==
+                                                                      "owner"
+                                                                      ? Colors
+                                                                      .blue
+                                                                      .shade700
+                                                                      : role ==
+                                                                      "admin"
+                                                                      ? Colors
+                                                                      .deepPurple
+                                                                      .shade700
+                                                                      : Colors
+                                                                      .blueGrey
+                                                                      .shade700;
 
-                                                                return GestureDetector(
-                                                                  onTap: () => openCallMemberSheet(
-                                                                    sheetContext:
-                                                                        ctx,
-                                                                    memberUid:
-                                                                        senderUid,
-                                                                    name: name,
-                                                                  ),
-                                                                  child: Row(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      Icon(
-                                                                        icon,
-                                                                        size:
-                                                                            13,
-                                                                        color:
-                                                                            color,
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            4,
-                                                                      ),
-                                                                      Flexible(
-                                                                        child: Text.rich(
-                                                                          highlightedSpan(
-                                                                            name,
-                                                                            TextStyle(
-                                                                              fontSize: 11,
-                                                                              fontWeight: FontWeight.w800,
-                                                                              color: color,
+                                                                  return GestureDetector(
+                                                                    onTap: () => openCallMemberSheet(
+                                                                      sheetContext:
+                                                                      ctx,
+                                                                      memberUid:
+                                                                      senderUid,
+                                                                      name: name,
+                                                                    ),
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                      children: [
+                                                                        Icon(
+                                                                          icon,
+                                                                          size:
+                                                                          13,
+                                                                          color:
+                                                                          color,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          width:
+                                                                          4,
+                                                                        ),
+                                                                        Flexible(
+                                                                          child: Text.rich(
+                                                                            highlightedSpan(
+                                                                              name,
+                                                                              TextStyle(
+                                                                                fontSize: 11,
+                                                                                fontWeight: FontWeight.w800,
+                                                                                color: color,
+                                                                              ),
                                                                             ),
+                                                                            overflow:
+                                                                            TextOverflow.ellipsis,
                                                                           ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              children: [
+                                                                if (replyMessageId.isNotEmpty) ...[
+                                                                  GestureDetector(
+                                                                    onTap: () => scrollToMessage(replyMessageId),
+                                                                    child: Container(
+                                                                      width: double.infinity,
+                                                                      margin: const EdgeInsets.only(bottom: 7),
+                                                                      padding: const EdgeInsets.fromLTRB(9, 7, 9, 7),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Colors.white.withValues(alpha: 0.65),
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                        border: const Border(
+                                                                          left: BorderSide(
+                                                                            color: SafeHomeColors.primary,
+                                                                            width: 3,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                    ],
+                                                                      child: Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                            replyName.isNotEmpty
+                                                                                ? replyName
+                                                                                : "Một thành viên",
+                                                                            maxLines: 1,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: const TextStyle(
+                                                                              color: SafeHomeColors.primary,
+                                                                              fontSize: 11,
+                                                                              fontWeight: FontWeight.w800,
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(height: 2),
+                                                                          Text(
+                                                                            replyText,
+                                                                            maxLines: 2,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            style: const TextStyle(
+                                                                              color: SafeHomeColors.textSecondary,
+                                                                              fontSize: 11,
+                                                                              height: 1.25,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                                );
-                                                              },
+                                                                ],
+
+                                                                Text.rich(
+                                                                  highlightedSpan(
+                                                                    text,
+                                                                    const TextStyle(
+                                                                      fontSize: 14,
+                                                                    ),
+                                                                    mentions:
+                                                                    mentions,
+                                                                  ),
+                                                                ),
+
+                                                                const SizedBox(
+                                                                  height: 4,
+                                                                ),
+
+                                                                Text(
+                                                                  timeText,
+                                                                  style: TextStyle(
+                                                                    fontSize: 10,
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade600,
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              SelectableText.rich(
-                                                                highlightedSpan(
-                                                                  text,
-                                                                  const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                  ),
-                                                                ),
-                                                              ),
-
-                                                              const SizedBox(
-                                                                height: 4,
-                                                              ),
-
-                                                              Text(
-                                                                timeText,
-                                                                style: TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade600,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -1195,6 +1630,168 @@ void showHomeChatSheet({
                           typingStream: ChatService.typingStream(homeId),
                           currentUid: user.uid,
                         ),
+
+                        if (showMentionSuggestions)
+                          Container(
+                            width: double.infinity,
+                            constraints: const BoxConstraints(
+                              maxHeight: 220,
+                            ),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: SafeHomeColors.border,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.08),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: filteredMentionMembers.isEmpty
+                                ? const Padding(
+                              padding: EdgeInsets.all(14),
+                              child: Text(
+                                "Không tìm thấy thành viên phù hợp",
+                                style: TextStyle(
+                                  color:
+                                  SafeHomeColors.textSecondary,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )
+                                : ListView.separated(
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 6,
+                              ),
+                              itemCount:
+                              filteredMentionMembers.length,
+                              separatorBuilder: (_, __) => Divider(
+                                height: 1,
+                                color: Colors.grey.shade200,
+                              ),
+                              itemBuilder: (_, index) {
+                                final member =
+                                filteredMentionMembers[index];
+
+                                return ListTile(
+                                  dense: true,
+                                  leading: CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor:
+                                    SafeHomeColors.primary
+                                        .withValues(alpha: 0.10),
+                                    backgroundImage:
+                                    member.photoUrl.isNotEmpty
+                                        ? NetworkImage(
+                                      member.photoUrl,
+                                    )
+                                        : null,
+                                    child: member.photoUrl.isEmpty
+                                        ? const Icon(
+                                      Icons.person_rounded,
+                                      size: 19,
+                                      color:
+                                      SafeHomeColors.primary,
+                                    )
+                                        : null,
+                                  ),
+                                  title: Text(
+                                    member.name,
+                                    maxLines: 1,
+                                    overflow:
+                                    TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  subtitle: const Text(
+                                    "Nhắc đến trong tin nhắn",
+                                    style: TextStyle(fontSize: 11),
+                                  ),
+                                  onTap: () =>
+                                      selectMention(member),
+                                );
+                              },
+                            ),
+                          ),
+
+                        if (replyingToMessage != null)
+                          GestureDetector(
+                            onTap: () {
+                              if (replyingToMessageId.isNotEmpty) {
+                                scrollToMessage(replyingToMessageId);
+                              }
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.fromLTRB(10, 8, 4, 8),
+                              decoration: BoxDecoration(
+                                color: SafeHomeColors.primary.withValues(alpha: 0.07),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 3,
+                                    height: 42,
+                                    decoration: BoxDecoration(
+                                      color: SafeHomeColors.primary,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 9),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Đang trả lời ${replyingToMessage?["name"]?.toString().trim().isNotEmpty == true ? replyingToMessage!["name"].toString().trim() : "một thành viên"}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: SafeHomeColors.primary,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          replyingToMessage?["text"]?.toString() ?? "",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: SafeHomeColors.textSecondary,
+                                            fontSize: 12,
+                                            height: 1.3,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    tooltip: "Huỷ trả lời",
+                                    visualDensity: VisualDensity.compact,
+                                    onPressed: cancelReply,
+                                    icon: const Icon(
+                                      Icons.close_rounded,
+                                      size: 19,
+                                      color: SafeHomeColors.textSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
 
                         Row(
                           children: [
@@ -1301,11 +1898,11 @@ void showHomeChatSheet({
                                         iconColorSelected: Colors.blue,
                                       ),
                                       bottomActionBarConfig:
-                                          const BottomActionBarConfig(
-                                            backgroundColor: Colors.white,
-                                            buttonColor: Colors.white,
-                                            buttonIconColor: Colors.grey,
-                                          ),
+                                      const BottomActionBarConfig(
+                                        backgroundColor: Colors.white,
+                                        buttonColor: Colors.white,
+                                        buttonIconColor: Colors.grey,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -1351,6 +1948,18 @@ String formatChatTime(dynamic ts) {
   final mm = dt.minute.toString().padLeft(2, '0');
 
   return "$hh:$mm";
+}
+
+class _HomeChatMentionMember {
+  const _HomeChatMentionMember({
+    required this.uid,
+    required this.name,
+    required this.photoUrl,
+  });
+
+  final String uid;
+  final String name;
+  final String photoUrl;
 }
 
 class _TypingIndicator extends StatefulWidget {
@@ -1476,10 +2085,10 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
                       : null,
                   child: previewMembers[index].photoUrl.isEmpty
                       ? Icon(
-                          Icons.person_rounded,
-                          size: 13,
-                          color: Colors.blueGrey.shade500,
-                        )
+                    Icons.person_rounded,
+                    size: 13,
+                    color: Colors.blueGrey.shade500,
+                  )
                       : null,
                 ),
               ),

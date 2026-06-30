@@ -11,7 +11,8 @@ Map<String, dynamic> safeMap(dynamic data) {
 
   return {};
 }
-
+const double environmentWarningTemperatureC = 40;
+const double environmentWarningHumidityPercent = 90;
 double heartbeatLimitHours(String type) {
   switch (type) {
     case "temperature":
@@ -341,11 +342,13 @@ Map<String, dynamic> evaluateDeviceStatus(
       device["humidity"]?.toString() ?? "",
     );
 
-    if (temperature != null && temperature >= 34) {
+    if (temperature != null &&
+        temperature > environmentWarningTemperatureC) {
       warningIssues.add("Nhiệt độ cao");
     }
 
-    if (humidity != null && humidity >= 80) {
+    if (humidity != null &&
+        humidity >= environmentWarningHumidityPercent) {
       warningIssues.add("Độ ẩm cao");
     }
   }
@@ -525,22 +528,58 @@ Map<String, dynamic> evaluateDeviceStatus(
 
 const int hubHeartbeatTimeoutMs = 90 * 1000;
 
+DateTime _hubStatusGraceUntil =
+DateTime.fromMillisecondsSinceEpoch(0);
+
+void startHubStatusGracePeriod({
+  Duration duration = const Duration(seconds: 35),
+}) {
+  final now = DateTime.now();
+
+  // Không gia hạn lại nếu khoảng kiểm tra hiện tại vẫn đang chạy.
+  if (now.isBefore(_hubStatusGraceUntil)) {
+    return;
+  }
+
+  _hubStatusGraceUntil = now.add(duration);
+}
+
+bool get _hubStatusInGracePeriod {
+  return DateTime.now().isBefore(_hubStatusGraceUntil);
+}
+
 Map<String, dynamic> evaluateHubStatus(dynamic rawHome) {
   final home = safeMap(rawHome);
   final hubId = home["hubId"]?.toString().trim() ?? "";
 
-  // Nhà chưa được liên kết Hub sẽ không bị đánh dấu lỗi.
   if (hubId.isEmpty) {
-    return {"tracked": false, "online": true, "issue": ""};
+    return {
+      "tracked": false,
+      "online": true,
+      "checking": false,
+      "issue": "",
+    };
   }
 
   final hubStatus = safeMap(home["hubStatus"]);
-  final heartbeatTime = parseLastSeen(hubStatus["lastHeartbeatAt"]);
+  final heartbeatTime = parseLastSeen(
+    hubStatus["lastHeartbeatAt"],
+  );
 
   if (heartbeatTime == null) {
+    if (_hubStatusInGracePeriod) {
+      return {
+        "tracked": true,
+        "online": true,
+        "checking": true,
+        "issue": "",
+      };
+    }
+
     return {
       "tracked": true,
       "online": false,
+      "checking": false,
       "issue": "Hub chưa gửi trạng thái",
     };
   }
@@ -555,14 +594,47 @@ Map<String, dynamic> evaluateHubStatus(dynamic rawHome) {
   }
 
   if (heartbeatAgeMs > hubHeartbeatTimeoutMs) {
-    return {"tracked": true, "online": false, "issue": "Hub mất kết nối"};
+    if (_hubStatusInGracePeriod) {
+      return {
+        "tracked": true,
+        "online": true,
+        "checking": true,
+        "issue": "",
+      };
+    }
+
+    return {
+      "tracked": true,
+      "online": false,
+      "checking": false,
+      "issue": "Hub mất kết nối",
+    };
   }
 
   if (parseDeviceBool(hubStatus["mqttConnected"]) != true) {
-    return {"tracked": true, "online": false, "issue": "MQTT mất kết nối"};
+    if (_hubStatusInGracePeriod) {
+      return {
+        "tracked": true,
+        "online": true,
+        "checking": true,
+        "issue": "",
+      };
+    }
+
+    return {
+      "tracked": true,
+      "online": false,
+      "checking": false,
+      "issue": "MQTT mất kết nối",
+    };
   }
 
-  return {"tracked": true, "online": true, "issue": ""};
+  return {
+    "tracked": true,
+    "online": true,
+    "checking": false,
+    "issue": "",
+  };
 }
 
 /// Nguồn rule duy nhất cho trạng thái của một nhà.
@@ -585,16 +657,18 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   final safeSummary = List<String>.from(
     overall["safeSummary"] ?? const <String>[],
   );
-
   final hub = evaluateHubStatus(home);
   final hubTracked = hub["tracked"] == true;
   final hubOnline = hub["online"] == true;
+  final hubChecking = hub["checking"] == true;
   final hubIssue = hub["issue"]?.toString().trim() ?? "";
 
-  if (hubTracked && !hubOnline && hubIssue.isNotEmpty) {
+  if (hubTracked && hubChecking) {
+    safeSummary.insert(0, "Đang kiểm tra kết nối Hub");
+  } else if (hubTracked && !hubOnline && hubIssue.isNotEmpty) {
     dangerIssues.insert(0, hubIssue);
   } else if (hubTracked && hubOnline) {
-    safeSummary.insert(0, "Hub đang kết nối");
+    safeSummary.insert(0, "Hub đã kết nối");
   }
 
   final level = dangerIssues.isNotEmpty
@@ -613,6 +687,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     "safeSummary": safeSummary,
     "hubTracked": hubTracked,
     "hubOnline": hubOnline,
+    "hubChecking": hubChecking,
     "hubIssue": hubIssue,
   };
 }

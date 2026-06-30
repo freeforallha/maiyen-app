@@ -392,7 +392,8 @@ class AppStrings {
       "Hub chưa gửi trạng thái": "Hub status unavailable",
       "Hub mất kết nối": "Hub disconnected",
       "MQTT mất kết nối": "MQTT disconnected",
-      "Hub đang kết nối": "Hub connected",
+      "Đang kiểm tra kết nối Hub": "Checking Hub connection",
+      "Hub đã kết nối": "Hub connected",
       "Chưa có dữ liệu thiết bị để đánh giá":
       "No device data available for assessment",
     };

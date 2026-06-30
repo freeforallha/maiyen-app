@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
@@ -30,28 +30,91 @@ class HomeTabs extends StatelessWidget {
     required this.currentUserEmail,
   });
 
-  void _showSelectedHomeInfo({
+  Future<void> _showSelectedHomeInfo({
     required BuildContext context,
+    required String homeId,
     required Map<String, dynamic> home,
     required String displayName,
     required bool isShared,
-  }) {
-    final strings = AppStrings.of(context);
+  }) async {
     final address = home["address"]?.toString().trim() ?? "";
 
-    final ownerName = isShared
+    var ownerName = isShared
         ? home["_ownerName"]?.toString().trim() ?? ""
         : currentUserName.trim();
 
-    final ownerEmail = isShared
+    var ownerEmail = isShared
         ? home["_ownerEmail"]?.toString().trim() ?? ""
         : currentUserEmail.trim();
+
+    if (isShared && (ownerName.isEmpty || ownerEmail.isEmpty)) {
+      final ownerUid =
+          home["_ownerUid"]?.toString().trim() ?? "";
+
+      if (ownerUid.isNotEmpty) {
+        try {
+          final directorySnapshot = await FirebaseDatabase.instance
+              .ref("userDirectory/$ownerUid")
+              .get();
+
+          final directory = directorySnapshot.value is Map
+              ? Map<String, dynamic>.from(
+            directorySnapshot.value as Map,
+          )
+              : <String, dynamic>{};
+
+          final loadedName =
+              directory["name"]?.toString().trim() ?? "";
+
+          final loadedEmail =
+              directory["email"]?.toString().trim() ?? "";
+
+          if (ownerName.isEmpty) {
+            ownerName = loadedName;
+          }
+
+          if (ownerEmail.isEmpty) {
+            ownerEmail = loadedEmail;
+          }
+        } catch (_) {
+          // Thử dữ liệu thành viên bên dưới.
+        }
+
+        if (ownerName.isEmpty || ownerEmail.isEmpty) {
+          try {
+            final memberSnapshot = await FirebaseDatabase.instance
+                .ref("sharedByHome/$homeId/$ownerUid")
+                .get();
+
+            final member = memberSnapshot.value is Map
+                ? Map<String, dynamic>.from(
+              memberSnapshot.value as Map,
+            )
+                : <String, dynamic>{};
+
+            if (ownerName.isEmpty) {
+              ownerName =
+                  member["name"]?.toString().trim() ?? "";
+            }
+
+            if (ownerEmail.isEmpty) {
+              ownerEmail =
+                  member["email"]?.toString().trim() ?? "";
+            }
+          } catch (_) {}
+        }
+      }
+    }
+
+    if (!context.mounted) {
+      return;
+    }
 
     final ownerDisplay = ownerName.isNotEmpty
         ? ownerName
         : ownerEmail.isNotEmpty
         ? ownerEmail
-        : strings.t("Chưa có thông tin");
+        : "Chưa có thông tin";
 
     showModalBottomSheet<void>(
       context: context,
@@ -126,18 +189,18 @@ class HomeTabs extends StatelessWidget {
                       const SizedBox(height: 14),
                       _homeInfoRow(
                         icon: Icons.location_on_outlined,
-                        label: strings.t("Địa chỉ"),
+                        label: "Địa chỉ",
                         value: address.isNotEmpty
                             ? address
-                            : strings.t("Chưa cập nhật"),
+                            : "Chưa cập nhật",
                       ),
                       const SizedBox(height: 9),
                       _homeInfoRow(
                         icon: Icons.person_outline_rounded,
-                        label: strings.t("Chủ nhà"),
+                        label: "Chủ nhà",
                         value: ownerDisplay,
-                        subtitle: ownerName.isNotEmpty &&
-                            ownerEmail.isNotEmpty
+                        subtitle:
+                        ownerName.isNotEmpty && ownerEmail.isNotEmpty
                             ? ownerEmail
                             : null,
                       ),
@@ -322,6 +385,7 @@ class HomeTabs extends StatelessWidget {
                       if (isSelected) {
                         _showSelectedHomeInfo(
                           context: context,
+                          homeId: homeId,
                           home: home,
                           displayName: displayName,
                           isShared: isShared,

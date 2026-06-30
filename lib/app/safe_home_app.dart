@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-
+import 'package:geolocator/geolocator.dart';
 import '../pages/login_page.dart';
 import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
@@ -342,14 +342,172 @@ class _AuthGateState extends State<AuthGate> {
               );
             }
 
-            return const HomePage();
+            return const LocationPermissionGate(
+              child: HomePage(),
+            );
           },
         );
       },
     );
   }
 }
+class LocationPermissionGate extends StatefulWidget {
+  const LocationPermissionGate({
+    super.key,
+    required this.child,
+  });
 
+  final Widget child;
+
+  @override
+  State<LocationPermissionGate> createState() =>
+      _LocationPermissionGateState();
+}
+
+class _LocationPermissionGateState
+    extends State<LocationPermissionGate> {
+  bool _checkStarted = false;
+  bool _dialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      unawaited(_checkAlwaysLocationPermission());
+    });
+  }
+
+  Future<void> _checkAlwaysLocationPermission() async {
+    if (_checkStarted) return;
+
+    _checkStarted = true;
+
+    try {
+      var permission = await Geolocator.checkPermission();
+
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (!mounted ||
+          permission == LocationPermission.always) {
+        return;
+      }
+
+      await _showPermissionDialog(permission);
+    } catch (error) {
+      debugPrint(
+        "STARTUP_LOCATION_PERMISSION_ERROR: $error",
+      );
+    }
+  }
+
+  Future<void> _showPermissionDialog(
+      LocationPermission permission,
+      ) async {
+    if (!mounted || _dialogOpen) return;
+
+    _dialogOpen = true;
+
+    final strings = AppStrings.of(context);
+
+    final openSettings = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        final currentlyWhileUsing =
+            permission == LocationPermission.whileInUse;
+
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+          ),
+          title: Row(
+            children: [
+              const Icon(
+                Icons.location_on_rounded,
+                color: SafeHomeColors.primary,
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: Text(
+                  strings.choose(
+                    vi: "Cho phép vị trí luôn luôn",
+                    en: "Always allow location",
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            currentlyWhileUsing
+                ? strings.choose(
+              vi: "SafeHome hiện chỉ được truy cập vị trí "
+                  "khi bạn đang sử dụng ứng dụng.\n\n"
+                  "Hãy chọn quyền Vị trí và chuyển sang "
+                  "\"Luôn cho phép\" để tính năng tự động "
+                  "Bảo vệ khi rời nhà hoạt động khi ứng dụng "
+                  "đang chạy nền.",
+              en: "SafeHome can currently access location only "
+                  "while the app is in use.\n\n"
+                  "Open Location permission and select "
+                  "\"Allow all the time\" so automatic protection "
+                  "continues working in the background.",
+            )
+                : strings.choose(
+              vi: "SafeHome cần quyền vị trí "
+                  "\"Luôn cho phép\" để nhận biết khi bạn "
+                  "rời hoặc trở về nhà, kể cả khi ứng dụng "
+                  "đang chạy nền.",
+              en: "SafeHome needs always-on location permission "
+                  "to detect when you leave or return home, "
+                  "including while the app is in the background.",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(
+                strings.choose(
+                  vi: "Để sau",
+                  en: "Later",
+                ),
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              icon: const Icon(Icons.settings_rounded),
+              label: Text(
+                strings.choose(
+                  vi: "Mở cài đặt",
+                  en: "Open settings",
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    _dialogOpen = false;
+
+    if (openSettings == true) {
+      await Geolocator.openAppSettings();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
 class SafeHomeSplash extends StatefulWidget {
   const SafeHomeSplash({super.key});
 
@@ -372,12 +530,20 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
       duration: const Duration(milliseconds: 900),
     );
 
-    fade = CurvedAnimation(parent: controller, curve: Curves.easeOutCubic);
+    fade = CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeOutCubic,
+    );
 
     scale = Tween<double>(
       begin: 0.92,
       end: 1,
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutBack));
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Curves.easeOutBack,
+      ),
+    );
 
     controller.forward();
   }
@@ -391,66 +557,25 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SafeHomeColors.background,
-      body: FadeTransition(
-        opacity: fade,
-        child: ScaleTransition(
-          scale: scale,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 96,
-                  height: 96,
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.surface,
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: SafeHomeColors.border),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.06),
-                        blurRadius: 24,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: FadeTransition(
+          opacity: fade,
+          child: ScaleTransition(
+            scale: scale,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    "assets/login.png",
+                    width: 280,
+                    height: 220,
+                    fit: BoxFit.contain,
                   ),
-                  child: const Icon(
-                    Icons.home_rounded,
-                    size: 52,
-                    color: SafeHomeColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 22),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.8,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "Safe",
-                        style: TextStyle(color: SafeHomeColors.primary),
-                      ),
-                      TextSpan(
-                        text: "Home",
-                        style: TextStyle(color: SafeHomeColors.textPrimary),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AppStrings.of(context).splashTagline,
-                  style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+
+                ],
+              ),
             ),
           ),
         ),

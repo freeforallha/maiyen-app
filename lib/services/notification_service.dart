@@ -752,7 +752,7 @@ class NotificationService {
     );
 
     const android = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      'ic_stat_safehome',
     );
 
     const ios = DarwinInitializationSettings(

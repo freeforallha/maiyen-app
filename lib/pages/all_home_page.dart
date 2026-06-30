@@ -317,9 +317,9 @@ class _AllHomePageState extends State<AllHomePage> {
                       compact: true,
                     ),
                     section(
-                      title: _strings.t("An toàn"),
+                      title: "An toàn",
                       icon: Icons.check_circle_rounded,
-                      color: Colors.green,
+                      color: SafeHomeColors.safe,
                       items: safeHomes,
                       compact: false,
                     ),
@@ -1419,64 +1419,108 @@ class _AllHomePageState extends State<AllHomePage> {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
+        leadingWidth: 54,
+
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: IconButton(
+            tooltip: _strings.t("Quay lại"),
+            onPressed: () {
+              Navigator.maybePop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            ),
+            style: IconButton.styleFrom(
+              foregroundColor: SafeHomeColors.textPrimary,
+              backgroundColor: Colors.transparent,
+              shape: const CircleBorder(),
+            ).copyWith(
+              overlayColor: WidgetStatePropertyAll(
+                SafeHomeColors.primary.withValues(alpha: 0.10),
+              ),
+            ),
+          ),
+        ),
+
         title: isSearching
             ? TextField(
-                controller: searchController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: _strings.t("Tìm home..."),
-                  border: InputBorder.none,
-                  filled: false,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    search = value.toLowerCase().trim();
-                  });
-                },
-              )
+          controller: searchController,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: _strings.t("Tìm home..."),
+            border: InputBorder.none,
+            filled: false,
+            contentPadding: EdgeInsets.zero,
+          ),
+          onChanged: (value) {
+            setState(() {
+              search = value.toLowerCase().trim();
+            });
+          },
+        )
             : Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: showAllHomeSummarySheet,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 4,
-                    ),
-                    child: RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Safe",
-                            style: TextStyle(
-                              color: SafeHomeColors.primary,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.4,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "AllHome",
-                            style: TextStyle(
-                              color: SafeHomeColors.textPrimary,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.4,
-                            ),
-                          ),
-                        ],
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: showAllHomeSummarySheet,
+            borderRadius: BorderRadius.circular(10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 4,
+              ),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Safe",
+                      style: TextStyle(
+                        color: SafeHomeColors.primary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
                       ),
                     ),
-                  ),
+                    TextSpan(
+                      text: "AllHome",
+                      style: TextStyle(
+                        color: SafeHomeColors.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.4,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
+          ),
+        ),
 
         actions: [
           IconButton(
-            icon: Icon(isSearching ? Icons.close : Icons.search),
+            tooltip: isSearching
+                ? _strings.t("Đóng tìm kiếm")
+                : _strings.t("Tìm kiếm"),
+            icon: Icon(
+              isSearching
+                  ? Icons.close_rounded
+                  : Icons.search_rounded,
+              size: 23,
+            ),
+            style: IconButton.styleFrom(
+              foregroundColor: SafeHomeColors.textPrimary,
+              backgroundColor: Colors.transparent,
+              shape: const CircleBorder(),
+            ).copyWith(
+              overlayColor: WidgetStatePropertyAll(
+                SafeHomeColors.primary.withValues(alpha: 0.10),
+              ),
+            ),
             onPressed: () {
               setState(() {
                 isSearching = !isSearching;
@@ -1491,11 +1535,28 @@ class _AllHomePageState extends State<AllHomePage> {
 
           if (selectedHomes.isNotEmpty)
             IconButton(
-              icon: const Icon(Icons.close),
+              tooltip: _strings.t("Bỏ chọn"),
+              icon: const Icon(
+                Icons.deselect_rounded,
+                size: 22,
+              ),
+              style: IconButton.styleFrom(
+                foregroundColor: SafeHomeColors.danger,
+                backgroundColor: Colors.transparent,
+                shape: const CircleBorder(),
+              ).copyWith(
+                overlayColor: WidgetStatePropertyAll(
+                  SafeHomeColors.danger.withValues(alpha: 0.10),
+                ),
+              ),
               onPressed: () {
-                setState(() => selectedHomes.clear());
+                setState(() {
+                  selectedHomes.clear();
+                });
               },
             ),
+
+          const SizedBox(width: 6),
         ],
       ),
 

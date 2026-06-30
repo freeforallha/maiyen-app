@@ -49,7 +49,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with WidgetsBindingObserver {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> shareRequests = {};
   final ValueNotifier<int> inviteCountNotifier = ValueNotifier(0);
@@ -1418,8 +1419,12 @@ class _HomePageState extends State<HomePage> {
       "status": device["status"]?.toString() ?? "",
       "batteryLow": battery != null && battery <= 20,
       "sosActive": isSosActive(device),
-      "temperatureHigh": temperature != null && temperature >= 34,
-      "humidityHigh": humidity != null && humidity >= 80,
+      "temperatureHigh":
+      temperature != null &&
+          temperature > environmentWarningTemperatureC,
+      "humidityHigh":
+      humidity != null &&
+          humidity >= environmentWarningHumidityPercent,
     };
   }
 
@@ -1929,11 +1934,25 @@ class _HomePageState extends State<HomePage> {
       inviteCountNotifier.value = requests.length;
     });
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
 
+    if (state != AppLifecycleState.resumed) {
+      return;
+    }
+
+    startHubStatusGracePeriod();
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
+    startHubStatusGracePeriod();
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser == null) {
@@ -4743,12 +4762,19 @@ class _HomePageState extends State<HomePage> {
                                 width: 32,
                                 height: 32,
                               ),
-                              splashRadius: 18,
-                              iconSize: 21,
                               tooltip: _strings.t("Thông báo Home"),
                               icon: const Icon(
                                 Icons.notifications_rounded,
-                                color: SafeHomeColors.info,
+                                size: 21,
+                              ),
+                              style: IconButton.styleFrom(
+                                foregroundColor: SafeHomeColors.info,
+                                backgroundColor: Colors.transparent,
+                                shape: const CircleBorder(),
+                              ).copyWith(
+                                overlayColor: WidgetStatePropertyAll(
+                                  SafeHomeColors.info.withValues(alpha: 0.10),
+                                ),
                               ),
                             ),
                             if (unreadHomeNotificationCount > 0)
@@ -5646,6 +5672,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();

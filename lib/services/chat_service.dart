@@ -52,6 +52,11 @@ class ChatService {
     required String userName,
     required String userPhotoUrl,
     required String text,
+    Map<String, String> mentions = const <String, String>{},
+    String replyToMessageId = "",
+    String replyToUid = "",
+    String replyToName = "",
+    String replyToText = "",
   }) async {
     final trimmedText = text.trim();
 
@@ -73,14 +78,44 @@ class ChatService {
       throw StateError("Could not create chat message id");
     }
 
+    final normalizedMentions = <String, String>{};
+
+    for (final entry in mentions.entries) {
+      final mentionedUid = entry.key.trim();
+      final mentionedName = _limited(entry.value, 80);
+
+      if (mentionedUid.isEmpty || mentionedName.isEmpty) {
+        continue;
+      }
+
+      normalizedMentions[mentionedUid] = mentionedName;
+    }
+
+    final messageData = <String, dynamic>{
+      "uid": uid,
+      "name": userName.trim(),
+      "photoUrl": userPhotoUrl.trim(),
+      "text": trimmedText,
+      "time": _serverTimestamp,
+    };
+
+    if (normalizedMentions.isNotEmpty) {
+      messageData["mentions"] = normalizedMentions;
+    }
+
+    final normalizedReplyMessageId = replyToMessageId.trim();
+
+    if (normalizedReplyMessageId.isNotEmpty) {
+      messageData["reply"] = {
+        "messageId": normalizedReplyMessageId,
+        "uid": replyToUid.trim(),
+        "name": _limited(replyToName, 80),
+        "text": _limited(replyToText, 180),
+      };
+    }
+
     await FirebaseDatabase.instance.ref().update({
-      "${FirebasePaths.homeMessages(homeId)}/$messageId": {
-        "uid": uid,
-        "name": userName.trim(),
-        "photoUrl": userPhotoUrl.trim(),
-        "text": trimmedText,
-        "time": _serverTimestamp,
-      },
+      "${FirebasePaths.homeMessages(homeId)}/$messageId": messageData,
       FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
     });
 

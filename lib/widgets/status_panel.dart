@@ -284,7 +284,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 ),
                 const SizedBox(height: 14),
                 _actionTile(
-                  icon: Icons.home_rounded,
+                  icon: Icons.shield_rounded,
                   title: "Bình thường",
                   subtitle: isArmed
                       ? "Chuyển về sử dụng thông thường"
@@ -790,7 +790,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ? rotatingLines[
     _broadcastIndex % rotatingLines.length
     ]
-        : _strings.t("Ngôi nhà đang được theo dõi liên tục");
+        : _strings.t("Hệ thống đang giám sát liên tục");
 
     final statusColor = _statusColor(level);
     final statusIcon = _statusIcon(level);
@@ -1001,9 +1001,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   children: [
                     Expanded(
                       child: _alarmStatusItem(
-                        icon: widget.securityMode == "armed"
-                            ? Icons.shield_rounded
-                            : Icons.home_rounded,
+                        icon: Icons.shield_rounded,
                         value: widget.securityMode == "armed"
                             ? "Bảo vệ"
                             : "Bình thường",

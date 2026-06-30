@@ -35,8 +35,8 @@ class BootReceiver : BroadcastReceiver() {
 
             val notification = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("🏡 SafeHome")
-                .setContentText("SafeHome đã sẵn sàng sau khi khởi động máy")
+                .setContentTitle("SafeHome")
+                .setContentText("đã sẵn sàng sau khi khởi động máy")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .build()

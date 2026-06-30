@@ -276,32 +276,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildLogo() {
-    return Column(
-      children: [
-        const Icon(Icons.home_rounded, size: 76, color: SafeHomeColors.primary),
-
-        const SizedBox(height: 10),
-
-        RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.4,
-            ),
-            children: [
-              TextSpan(
-                text: "Safe",
-                style: TextStyle(color: SafeHomeColors.primary),
-              ),
-              TextSpan(
-                text: "Home",
-                style: TextStyle(color: Colors.black87),
-              ),
-            ],
-          ),
-        ),
-      ],
+    return Image.asset(
+      "assets/login.png",
+      width: 180,
+      height: 180,
+      fit: BoxFit.contain,
     );
   }
 

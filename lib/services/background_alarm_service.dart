@@ -16,7 +16,7 @@ Future<void> firebaseMessagingBackgroundHandler(
   );
 
   const androidInit =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+  AndroidInitializationSettings('ic_stat_safehome');
 
   await localNotif.initialize(
     const InitializationSettings(
