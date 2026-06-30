@@ -67,6 +67,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "83888615408-9a8ms2gr3lof9qsh22ot7suo96o26aoa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myfamily.safehome",
+            "certificate_hash": "165f0129220c4aba8069ea3abcae508f447cd012"
+          }
+        },
+        {
+          "client_id": "83888615408-h5gbu367co4399qmtdo6j09u13tge9eb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myfamily.safehome",
+            "certificate_hash": "57635c6e9ad3f9d9c69794826e538d00901a4e1d"
+          }
+        },
+        {
           "client_id": "83888615408-pvqu22dic0n9ivgqoapq8l6jv15mej1h.apps.googleusercontent.com",
           "client_type": 3
         }
