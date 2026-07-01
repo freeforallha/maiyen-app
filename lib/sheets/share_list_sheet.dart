@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
+import '../safehome_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<bool?> showShareListSheet({
@@ -85,9 +86,9 @@ Future<bool?> showShareListSheet({
   }
 
   Future<Map<String, dynamic>> loadMember(
-    String memberUid,
-    dynamic rawValue,
-  ) async {
+      String memberUid,
+      dynamic rawValue,
+      ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
@@ -171,6 +172,73 @@ Future<bool?> showShareListSheet({
     return Icons.person_rounded;
   }
 
+  Widget memberOnlineDot(String memberUid) {
+    return StreamBuilder<DatabaseEvent>(
+      stream: db
+          .ref(
+        "accounts/$ownerUid/homes/$homeId/"
+            "memberPresenceStatus/$memberUid",
+      )
+          .onValue,
+      builder: (context, snapshot) {
+        final raw = snapshot.data?.snapshot.value;
+        final status = raw is Map
+            ? Map<String, dynamic>.from(raw)
+            : <String, dynamic>{};
+
+        // Online ở đây nghĩa là tài khoản vẫn còn phiên đăng nhập
+        // hợp lệ. App chạy nền không bị hiểu nhầm thành đăng xuất.
+        final online = status["online"] == true;
+
+        return Tooltip(
+          message: online ? "Online" : "Offline",
+          child: Container(
+            width: 13,
+            height: 13,
+            decoration: BoxDecoration(
+              color: online
+                  ? SafeHomeColors.safe
+                  : SafeHomeColors.textSecondary,
+              shape: BoxShape.circle,
+            ),
+          ),
+        );
+      },
+    );
+  }
+  Widget callActionButton({
+    required BuildContext callContext,
+    required String phone,
+  }) {
+    final hasPhone = phone.trim().isNotEmpty;
+
+    return Tooltip(
+      message: hasPhone
+          ? "Gọi điện"
+          : "Chưa có số điện thoại",
+      child: InkResponse(
+        radius: 22,
+        onTap: () {
+          callPhone(
+            callContext: callContext,
+            phone: phone,
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            hasPhone
+                ? Icons.phone_rounded
+                : Icons.phone_disabled_rounded,
+            size: 23,
+            color: hasPhone
+                ? SafeHomeColors.safe
+                : SafeHomeColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
   if (!context.mounted) return null;
 
   return showModalBottomSheet<bool>(
@@ -254,7 +322,9 @@ Future<bool?> showShareListSheet({
                                 size: 15,
                                 color: roleColor("owner"),
                               ),
-                              const SizedBox(width: 5),
+                              const SizedBox(width: 6),
+                              memberOnlineDot(ownerUid),
+                              const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
                                   ownerName.isNotEmpty ? ownerName : ownerEmail,
@@ -266,6 +336,7 @@ Future<bool?> showShareListSheet({
                                   ),
                                 ),
                               ),
+
                             ],
                           ),
                           const SizedBox(height: 2),
@@ -281,22 +352,9 @@ Future<bool?> showShareListSheet({
                     ),
 
                     if (ownerUid != myUid)
-                      IconButton(
-                        tooltip: ownerPhone.isNotEmpty
-                            ? "Gọi điện"
-                            : "Chưa có số điện thoại",
-                        icon: Icon(
-                          ownerPhone.isNotEmpty
-                              ? Icons.phone_rounded
-                              : Icons.phone_disabled_rounded,
-                          color: ownerPhone.isNotEmpty
-                              ? Colors.green
-                              : Colors.grey.shade400,
-                        ),
-                        onPressed: () => callPhone(
-                          callContext: sheetContext,
-                          phone: ownerPhone,
-                        ),
+                      callActionButton(
+                        callContext: sheetContext,
+                        phone: ownerPhone,
                       ),
 
                     Container(
@@ -353,14 +411,14 @@ Future<bool?> showShareListSheet({
                           final member = snapshot.data ?? rawMember;
 
                           final email =
-                              member["email"]?.toString().trim().isNotEmpty ==
-                                  true
+                          member["email"]?.toString().trim().isNotEmpty ==
+                              true
                               ? member["email"].toString()
                               : "Không có email";
 
                           final name =
-                              member["name"]?.toString().trim().isNotEmpty ==
-                                  true
+                          member["name"]?.toString().trim().isNotEmpty ==
+                              true
                               ? member["name"].toString()
                               : email;
 
@@ -390,7 +448,7 @@ Future<bool?> showShareListSheet({
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -399,7 +457,9 @@ Future<bool?> showShareListSheet({
                                             size: 15,
                                             color: roleColor(role),
                                           ),
-                                          const SizedBox(width: 5),
+                                          const SizedBox(width: 6),
+                                          memberOnlineDot(targetUid),
+                                          const SizedBox(width: 6),
                                           Expanded(
                                             child: Text(
                                               targetUid == myUid
@@ -413,6 +473,7 @@ Future<bool?> showShareListSheet({
                                               ),
                                             ),
                                           ),
+
                                         ],
                                       ),
                                       const SizedBox(height: 2),
@@ -427,22 +488,9 @@ Future<bool?> showShareListSheet({
                                   ),
                                 ),
                                 if (targetUid != myUid)
-                                  IconButton(
-                                    tooltip: phone.isNotEmpty
-                                        ? "Gọi điện"
-                                        : "Chưa có số điện thoại",
-                                    icon: Icon(
-                                      phone.isNotEmpty
-                                          ? Icons.phone_rounded
-                                          : Icons.phone_disabled_rounded,
-                                      color: phone.isNotEmpty
-                                          ? Colors.green
-                                          : Colors.grey.shade400,
-                                    ),
-                                    onPressed: () => callPhone(
-                                      callContext: sheetContext,
-                                      phone: phone,
-                                    ),
+                                  callActionButton(
+                                    callContext: sheetContext,
+                                    phone: phone,
                                   ),
                                 if (targetUid == myUid ||
                                     isOwner ||
@@ -451,9 +499,9 @@ Future<bool?> showShareListSheet({
                                     onSelected: (value) async {
                                       final canDeleteTarget =
                                           targetUid == myUid ||
-                                          isOwner ||
-                                          (canManageMembers &&
-                                              role == "member");
+                                              isOwner ||
+                                              (canManageMembers &&
+                                                  role == "member");
 
                                       if (value == "delete" &&
                                           !canDeleteTarget) {
@@ -467,7 +515,7 @@ Future<bool?> showShareListSheet({
                                       }
 
                                       if ((value == "member" ||
-                                              value == "admin") &&
+                                          value == "admin") &&
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
@@ -514,30 +562,30 @@ Future<bool?> showShareListSheet({
 
                                         await db
                                             .ref(
-                                              "homeMemberContacts/$homeId/$targetUid",
-                                            )
+                                          "homeMemberContacts/$homeId/$targetUid",
+                                        )
                                             .remove();
 
                                         await db
                                             .ref(
-                                              FirebasePaths.sharedHome(
-                                                targetUid,
-                                                homeId,
-                                              ),
-                                            )
+                                          FirebasePaths.sharedHome(
+                                            targetUid,
+                                            homeId,
+                                          ),
+                                        )
                                             .remove();
                                         await db
                                             .ref(
-                                              FirebasePaths.sharedMember(
-                                                homeId,
-                                                targetUid,
-                                              ),
-                                            )
+                                          FirebasePaths.sharedMember(
+                                            homeId,
+                                            targetUid,
+                                          ),
+                                        )
                                             .remove();
                                         await db
                                             .ref(
-                                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                                            )
+                                          "accounts/$ownerUid/shareList/$homeId/$targetUid",
+                                        )
                                             .remove();
 
                                         if (targetUid == myUid) {
@@ -572,7 +620,7 @@ Future<bool?> showShareListSheet({
                                           ? "Admin"
                                           : "Member";
                                       final actorName =
-                                          ownerName.trim().isNotEmpty
+                                      ownerName.trim().isNotEmpty
                                           ? ownerName.trim()
                                           : ownerEmail.trim().isNotEmpty
                                           ? ownerEmail.trim()
@@ -580,9 +628,9 @@ Future<bool?> showShareListSheet({
 
                                       await db.ref().update({
                                         "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
-                                            value,
+                                        value,
                                         "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
-                                            value,
+                                        value,
                                       });
 
                                       await HomeNotificationService.notifyHome(
@@ -593,7 +641,7 @@ Future<bool?> showShareListSheet({
                                         severity: "info",
                                         title: "Vai trò thành viên đã thay đổi",
                                         message:
-                                            "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
+                                        "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
                                         entityType: "member",
                                         entityId: targetUid,
                                         homeName: homeName,
@@ -637,11 +685,11 @@ Future<bool?> showShareListSheet({
                                       decoration: BoxDecoration(
                                         color: role == "admin"
                                             ? Colors.deepPurple.withValues(
-                                                alpha: 0.12,
-                                              )
+                                          alpha: 0.12,
+                                        )
                                             : Colors.blueGrey.withValues(
-                                                alpha: 0.12,
-                                              ),
+                                          alpha: 0.12,
+                                        ),
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       child: Text(
@@ -664,11 +712,11 @@ Future<bool?> showShareListSheet({
                                     decoration: BoxDecoration(
                                       color: role == "admin"
                                           ? Colors.deepPurple.withValues(
-                                              alpha: 0.12,
-                                            )
+                                        alpha: 0.12,
+                                      )
                                           : Colors.blueGrey.withValues(
-                                              alpha: 0.12,
-                                            ),
+                                        alpha: 0.12,
+                                      ),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Text(

@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
+import '../safehome_theme.dart';
 
 void showDeviceDetail({
   required BuildContext context,
@@ -41,7 +42,7 @@ void showDeviceDetail({
             return Container(
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: SafeHomeColors.background,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(26),
                 ),
@@ -54,7 +55,7 @@ void showDeviceDetail({
                     Icon(
                       Icons.sensors_off_rounded,
                       size: 44,
-                      color: Colors.grey,
+                      color: SafeHomeColors.textSecondary,
                     ),
                     SizedBox(height: 12),
                     Text(
@@ -168,7 +169,7 @@ void showDeviceDetail({
           if (deviceType == "temperature") {
             addMetric(
               icon: Icons.thermostat_rounded,
-              color: Colors.blue,
+              color: SafeHomeColors.info,
               title: "Nhiệt độ",
               value: temperature,
               suffix: "°C",
@@ -176,7 +177,7 @@ void showDeviceDetail({
 
             addMetric(
               icon: Icons.water_drop_rounded,
-              color: Colors.cyan,
+              color: SafeHomeColors.info,
               title: "Độ ẩm",
               value: humidity,
               suffix: "%",
@@ -190,7 +191,7 @@ void showDeviceDetail({
           }.contains(deviceType)) {
             addMetric(
               icon: Icons.electric_bolt_rounded,
-              color: Colors.orange,
+              color: SafeHomeColors.warning,
               title: "Công suất",
               value: device["power"],
               suffix: " W",
@@ -198,7 +199,7 @@ void showDeviceDetail({
 
             addMetric(
               icon: Icons.speed_rounded,
-              color: Colors.deepPurple,
+              color: SafeHomeColors.primary,
               title: "Điện áp",
               value: device["voltage"],
               suffix: " V",
@@ -206,7 +207,7 @@ void showDeviceDetail({
 
             addMetric(
               icon: Icons.electrical_services_rounded,
-              color: Colors.indigo,
+              color: SafeHomeColors.primary,
               title: "Dòng điện",
               value: device["current"],
               suffix: " A",
@@ -214,7 +215,7 @@ void showDeviceDetail({
 
             addMetric(
               icon: Icons.data_usage_rounded,
-              color: Colors.teal,
+              color: SafeHomeColors.primary,
               title: "Điện năng",
               value:
               device["energy"] ??
@@ -229,14 +230,14 @@ void showDeviceDetail({
           }.contains(deviceType)) {
             addMetric(
               icon: Icons.vibration_rounded,
-              color: Colors.orange,
+              color: SafeHomeColors.warning,
               title: "Cường độ rung",
               value: device["vibration_strength"],
             );
 
             addMetric(
               icon: Icons.screen_rotation_rounded,
-              color: Colors.blueGrey,
+              color: SafeHomeColors.textSecondary,
               title: "Góc nghiêng",
               value: device["angle"],
               suffix: "°",
@@ -246,7 +247,7 @@ void showDeviceDetail({
           if (deviceType == "smart_valve") {
             addMetric(
               icon: Icons.tune_rounded,
-              color: Colors.blue,
+              color: SafeHomeColors.info,
               title: "Độ mở van",
               value:
               device["position"] ??
@@ -261,7 +262,7 @@ void showDeviceDetail({
               MediaQuery.of(context).size.height * 0.9,
             ),
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: SafeHomeColors.background,
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(26),
               ),
@@ -280,7 +281,7 @@ void showDeviceDetail({
                         width: 42,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
+                          color: SafeHomeColors.border,
                           borderRadius:
                           BorderRadius.circular(20),
                         ),
@@ -297,22 +298,22 @@ void showDeviceDetail({
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
-                              color: Colors.black87,
+                              color: SafeHomeColors.textPrimary,
                             ),
                           ),
                         ),
                         _iconButton(
                           icon: Icons
                               .notifications_active_rounded,
-                          color: Colors.amber,
+                          color: SafeHomeColors.warning,
                           onTap: onNotification,
                         ),
                         const SizedBox(width: 8),
                         _iconButton(
                           icon: Icons.videocam_rounded,
                           color: cameraType.isEmpty
-                              ? Colors.grey
-                              : Colors.blue,
+                              ? SafeHomeColors.textSecondary
+                              : SafeHomeColors.info,
                           onTap: () {
                             if (cameraType.isEmpty) {
                               _showCameraSetupSheet(
@@ -336,7 +337,7 @@ void showDeviceDetail({
                         if (onRename != null)
                           _iconButton(
                             icon: Icons.edit_rounded,
-                            color: Colors.teal,
+                            color: SafeHomeColors.primary,
                             onTap: onRename,
                           ),
                       ],
@@ -360,15 +361,15 @@ void showDeviceDetail({
                       _infoRow(
                         icon: Icons.warning_amber_rounded,
                         color: tamper
-                            ? Colors.redAccent
-                            : Colors.orange,
+                            ? SafeHomeColors.danger
+                            : SafeHomeColors.warning,
                         title: "Tháo/Lắp",
                         value: tamper
                             ? "Bị tháo"
                             : "Bình thường",
                         valueColor: tamper
-                            ? Colors.redAccent
-                            : Colors.black87,
+                            ? SafeHomeColors.danger
+                            : SafeHomeColors.textPrimary,
                       ),
                     ...metricRows,
                     if (hasBattery)
@@ -376,8 +377,8 @@ void showDeviceDetail({
                         icon: Icons.battery_full_rounded,
                         color:
                         battery != null && battery < 20
-                            ? Colors.red
-                            : Colors.green,
+                            ? SafeHomeColors.danger
+                            : SafeHomeColors.safe,
                         title: "Pin",
                         value: getBatteryText(device),
                       ),
@@ -385,16 +386,16 @@ void showDeviceDetail({
                       _infoRow(
                         icon: Icons.network_cell_rounded,
                         color: linkquality < 50
-                            ? Colors.red
-                            : Colors.purple,
+                            ? SafeHomeColors.danger
+                            : SafeHomeColors.primary,
                         title: "Tín hiệu",
                         value: "$linkquality",
                       ),
                     _infoRow(
                       icon: Icons.videocam_rounded,
                       color: cameraType.isEmpty
-                          ? Colors.grey
-                          : Colors.blue,
+                          ? SafeHomeColors.textSecondary
+                          : SafeHomeColors.info,
                       title: "Camera",
                       value: cameraType.isEmpty
                           ? "Chưa liên kết"
@@ -404,14 +405,14 @@ void showDeviceDetail({
                     ),
                     _infoRow(
                       icon: Icons.access_time_rounded,
-                      color: Colors.indigo,
+                      color: SafeHomeColors.primary,
                       title: "Liên lạc cuối",
                       value: formatFullDate(lastSeen),
                     ),
                     if (deviceType == "sos")
                       _infoRow(
                         icon: Icons.history_rounded,
-                        color: Colors.deepOrange,
+                        color: SafeHomeColors.warning,
                         title: "Lần kích hoạt cuối",
                         value: formatFullDate(lastTriggered),
                       )
@@ -420,7 +421,7 @@ void showDeviceDetail({
                         deviceType != "repeater")
                       _infoRow(
                         icon: Icons.history_rounded,
-                        color: Colors.deepOrange,
+                        color: SafeHomeColors.warning,
                         title: "Event cuối",
                         value: formatFullDate(lastEvent),
                       ),
@@ -429,7 +430,7 @@ void showDeviceDetail({
                       Center(
                         child: _iconButton(
                           icon: Icons.delete_forever_rounded,
-                          color: Colors.red,
+                          color: SafeHomeColors.danger,
                           size: 26,
                           onTap: onDelete,
                         ),
@@ -498,7 +499,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             : type == "gate"
             ? Icons.garage_rounded
             : Icons.sensor_door_rounded,
-        color: closed ? Colors.green : Colors.red,
+        color: closed ? SafeHomeColors.safe : SafeHomeColors.danger,
       );
 
     case "lock":
@@ -512,7 +513,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         icon: unlocked
             ? Icons.lock_open_rounded
             : Icons.lock_rounded,
-        color: unlocked ? Colors.red : Colors.green,
+        color: unlocked ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "motion":
@@ -525,7 +526,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện chuyển động"
             : "Không có chuyển động",
         icon: Icons.directions_walk_rounded,
-        color: detected ? Colors.orange : Colors.green,
+        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
       );
 
     case "presence":
@@ -538,7 +539,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện hiện diện"
             : "Không phát hiện hiện diện",
         icon: Icons.sensors_rounded,
-        color: detected ? Colors.orange : Colors.green,
+        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
       );
 
     case "vibration":
@@ -552,7 +553,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện rung/chấn động"
             : "Không có rung bất thường",
         icon: Icons.vibration_rounded,
-        color: detected ? Colors.orange : Colors.green,
+        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
       );
 
     case "glass_break":
@@ -566,7 +567,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện kính vỡ"
             : "Không có cảnh báo kính vỡ",
         icon: Icons.broken_image_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "smoke":
@@ -576,7 +577,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Báo khói",
         value: detected ? "Phát hiện khói" : "Bình thường",
         icon: Icons.local_fire_department_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "heat":
@@ -594,7 +595,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Nhiệt độ nguy hiểm"
             : "Bình thường",
         icon: Icons.thermostat_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "carbon_monoxide":
@@ -608,7 +609,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện khí CO"
             : "Không phát hiện khí CO",
         icon: Icons.cloud_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "gas":
@@ -619,7 +620,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Báo gas",
         value: detected ? "Rò rỉ gas" : "Bình thường",
         icon: Icons.gas_meter_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "water_leak":
@@ -634,7 +635,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             ? "Phát hiện ngập nước"
             : "Bình thường",
         icon: Icons.water_damage_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "sos":
@@ -644,7 +645,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "SOS",
         value: detected ? "Đã kích hoạt" : "Sẵn sàng",
         icon: Icons.sos_rounded,
-        color: detected ? Colors.red : Colors.green,
+        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "temperature":
@@ -652,7 +653,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Môi trường",
         value: "Đang theo dõi",
         icon: Icons.device_thermostat_rounded,
-        color: Colors.blue,
+        color: SafeHomeColors.info,
       );
 
     case "smart_plug":
@@ -662,7 +663,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Ổ điện thông minh",
         value: on ? "Đang bật" : "Đang tắt",
         icon: Icons.power_rounded,
-        color: on ? Colors.green : Colors.grey,
+        color: on ? SafeHomeColors.safe : SafeHomeColors.textSecondary,
       );
 
     case "power_monitor":
@@ -670,7 +671,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Đo điện năng",
         value: "Đang theo dõi điện năng",
         icon: Icons.flash_on_rounded,
-        color: Colors.deepPurple,
+        color: SafeHomeColors.primary,
       );
 
     case "ups":
@@ -687,8 +688,8 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
             : "Nguồn điện bình thường",
         icon: Icons.battery_charging_full_rounded,
         color: mainsPower == false
-            ? Colors.orange
-            : Colors.green,
+            ? SafeHomeColors.warning
+            : SafeHomeColors.safe,
       );
 
     case "siren":
@@ -698,7 +699,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Còi báo động",
         value: on ? "Còi đang bật" : "Còi sẵn sàng",
         icon: Icons.notifications_active_rounded,
-        color: on ? Colors.red : Colors.green,
+        color: on ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "smart_valve":
@@ -708,7 +709,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Van thông minh",
         value: open ? "Van đang mở" : "Van đã đóng",
         icon: Icons.water_drop_rounded,
-        color: open ? Colors.blue : Colors.green,
+        color: open ? SafeHomeColors.info : SafeHomeColors.safe,
       );
 
     case "camera":
@@ -716,7 +717,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Camera",
         value: "Đang hoạt động",
         icon: Icons.videocam_rounded,
-        color: Colors.blue,
+        color: SafeHomeColors.info,
       );
 
     case "doorbell":
@@ -724,7 +725,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Chuông cửa",
         value: "Đang hoạt động",
         icon: Icons.notifications_rounded,
-        color: Colors.blue,
+        color: SafeHomeColors.info,
       );
 
     case "keypad":
@@ -732,7 +733,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Bàn phím an ninh",
         value: "Sẵn sàng",
         icon: Icons.grid_3x3_rounded,
-        color: Colors.green,
+        color: SafeHomeColors.safe,
       );
 
     case "repeater":
@@ -744,7 +745,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Bộ mở rộng sóng",
         value: online ? "Đang hoạt động" : "Mất kết nối",
         icon: Icons.wifi_tethering_rounded,
-        color: online ? Colors.green : Colors.red,
+        color: online ? SafeHomeColors.safe : SafeHomeColors.danger,
       );
 
     case "hub":
@@ -752,7 +753,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Hub trung tâm",
         value: "Đang hoạt động",
         icon: Icons.router_rounded,
-        color: Colors.green,
+        color: SafeHomeColors.safe,
       );
 
     default:
@@ -760,7 +761,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
         title: "Loại thiết bị",
         value: "Chưa nhận diện",
         icon: Icons.sensors_off_rounded,
-        color: Colors.orange,
+        color: SafeHomeColors.warning,
       );
   }
 }
@@ -790,7 +791,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Offline",
       icon: Icons.cancel_rounded,
-      color: Colors.red,
+      color: SafeHomeColors.danger,
     );
   }
 
@@ -798,7 +799,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Pin yếu",
       icon: Icons.battery_alert_rounded,
-      color: Colors.orange,
+      color: SafeHomeColors.warning,
     );
   }
 
@@ -806,7 +807,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Sóng yếu",
       icon: Icons.signal_cellular_connected_no_internet_4_bar_rounded,
-      color: Colors.orange,
+      color: SafeHomeColors.warning,
     );
   }
 
@@ -814,7 +815,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Cần kiểm tra",
       icon: Icons.info_rounded,
-      color: Colors.amber,
+      color: SafeHomeColors.warning,
     );
   }
 
@@ -822,14 +823,14 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Online",
       icon: Icons.check_circle_rounded,
-      color: Colors.green,
+      color: SafeHomeColors.safe,
     );
   }
 
   return const _DeviceHealth(
     text: "Cần kiểm tra",
     icon: Icons.info_rounded,
-    color: Colors.amber,
+    color: SafeHomeColors.warning,
   );
 }
 
@@ -846,8 +847,11 @@ Widget _iconButton({
       width: 42,
       height: 42,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withValues(alpha: 0.14),
+        ),
       ),
       child: Icon(icon, color: color, size: size),
     ),
@@ -859,7 +863,7 @@ Widget _infoRow({
   required Color color,
   required String title,
   required String value,
-  Color valueColor = Colors.black87,
+  Color valueColor = SafeHomeColors.textPrimary,
 }) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 14),
@@ -875,13 +879,22 @@ Widget _infoRow({
           child: Icon(icon, color: color, size: 18),
         ),
         const SizedBox(width: 12),
-        Text(title, style: const TextStyle(color: Colors.black54)),
+        Text(
+          title,
+          style: const TextStyle(
+            color: SafeHomeColors.textSecondary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: TextStyle(color: valueColor, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: valueColor,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],
@@ -977,7 +990,7 @@ Widget _roomPickerRow({
               icon: canEdit
                   ? Icons.meeting_room_rounded
                   : Icons.lock_outline_rounded,
-              color: canEdit ? Colors.orange : Colors.grey,
+              color: canEdit ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
               title: "Phòng",
               value: roomName,
             );
@@ -1110,15 +1123,22 @@ void _showCameraSetupSheet({
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    backgroundColor: Colors.transparent,
     builder: (sheetContext) {
       return StatefulBuilder(
         builder: (context, setState) {
-          return Padding(
+          return Container(
             padding: EdgeInsets.only(
               left: 20,
               right: 20,
               top: 20,
               bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+            ),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(26),
+              ),
             ),
             child: SafeArea(
               top: false,
@@ -1130,6 +1150,7 @@ void _showCameraSetupSheet({
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
+                      color: SafeHomeColors.textPrimary,
                     ),
                   ),
 

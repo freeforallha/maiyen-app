@@ -9,8 +9,10 @@ import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import '../pages/profile_setup_page.dart';
 import '../services/notification_service.dart';
+import '../services/account_session_service.dart';
+import '../services/auto_away_service.dart';
 import '../services/auto_login_service.dart';
-import '../services/fcm_service.dart';
+import '../services/session_logout_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -24,16 +26,63 @@ class SafeHomeApp extends StatefulWidget {
   State<SafeHomeApp> createState() => _SafeHomeAppState();
 }
 
-class _SafeHomeAppState extends State<SafeHomeApp> {
+class _SafeHomeAppState extends State<SafeHomeApp>
+    with WidgetsBindingObserver {
+  StreamSubscription<User?>? _authSessionSubscription;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     appLanguageController.load();
+
+    _authSessionSubscription = FirebaseAuth.instance
+        .authStateChanges()
+        .listen(
+          (user) {
+        if (user == null) {
+          unawaited(AccountSessionService.deactivateLocal());
+          return;
+        }
+
+        AutoAwayService.activateForSignedInUser(user.uid);
+
+        unawaited(
+          AccountSessionService.activate(
+            uid: user.uid,
+          ).catchError((Object error) {
+            debugPrint(
+              'ACCOUNT_SESSION_ACTIVATE_ERROR: $error',
+            );
+          }),
+        );
+      },
+      onError: (Object error) {
+        debugPrint(
+          'ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error',
+        );
+      },
+    );
 
     // Chỉ xoá Reminder khi app được mở mới hoàn toàn.
     // Không xoá khi chỉ bật lại màn hình.
     unawaited(NotificationService.stopReminderNotification());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    unawaited(
+      AccountSessionService.updateLifecycle(state),
+    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_authSessionSubscription?.cancel());
+    super.dispose();
   }
 
   @override
@@ -207,21 +256,7 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> _signOutAfterProfileError() async {
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
-
-    if (currentUid != null) {
-      try {
-        await FCMService.removeCurrentInstallationToken(uid: currentUid);
-      } catch (error) {
-        debugPrint("REMOVE_FCM_TOKEN_ON_SIGN_OUT_ERROR: $error");
-      }
-    }
-
-    try {
-      await AutoLoginService.clearLogin();
-    } catch (_) {}
-
-    await FirebaseAuth.instance.signOut();
+    await SessionLogoutService.signOutCurrentUser();
   }
 
   Widget _buildProfileLoadError(Object? error) {

@@ -1,54 +1,17 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../helpers/firebase_paths.dart';
+import 'installation_id_service.dart';
 import 'notification_service.dart';
 
 class FCMService {
-  static const FlutterSecureStorage _storage =
-  FlutterSecureStorage();
-
-  static const String _installationIdKey =
-      'safehome_fcm_installation_id';
-
   static bool _foregroundListening = false;
   static StreamSubscription<String>? _tokenRefreshSubscription;
   static String _activeUid = '';
-
-  static Future<String> _getInstallationId() async {
-    final saved = await _storage.read(
-      key: _installationIdKey,
-    );
-
-    if (saved != null && saved.trim().isNotEmpty) {
-      return saved.trim();
-    }
-
-    final random = Random.secure();
-    final bytes = List<int>.generate(
-      16,
-          (_) => random.nextInt(256),
-    );
-
-    final installationId = bytes
-        .map(
-          (value) => value.toRadixString(16).padLeft(2, '0'),
-    )
-        .join();
-
-    await _storage.write(
-      key: _installationIdKey,
-      value: installationId,
-    );
-
-    return installationId;
-  }
 
   static String _platformName() {
     switch (defaultTargetPlatform) {
@@ -78,7 +41,7 @@ class FCMService {
       return;
     }
 
-    final installationId = await _getInstallationId();
+    final installationId = await InstallationIdService.getOrCreate();
     final now = DateTime.now().millisecondsSinceEpoch;
 
     await FirebaseDatabase.instance.ref().update({
@@ -184,7 +147,7 @@ class FCMService {
       return;
     }
 
-    final installationId = await _getInstallationId();
+    final installationId = await InstallationIdService.getOrCreate();
     final currentToken =
     await FirebaseMessaging.instance.getToken();
 

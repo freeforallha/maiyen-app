@@ -393,7 +393,7 @@ class AppStrings {
       "Hub mất kết nối": "Hub disconnected",
       "MQTT mất kết nối": "MQTT disconnected",
       "Đang kiểm tra kết nối Hub": "Checking Hub connection",
-      "Hub đã kết nối": "Hub connected",
+      "Hub tín hiệu bình thường": "Hub connected",
       "Chưa có dữ liệu thiết bị để đánh giá":
       "No device data available for assessment",
     };
@@ -436,7 +436,7 @@ class AppStrings {
     vi: "Mời người khác tham gia nhà này",
     en: "Invite someone to join this home",
   );
-  String get homeMembers => choose(vi: "Thành viên trong nhà", en: "Home members");
+  String get homeMembers => choose(vi: "Thành viên đang ở nhà", en: "Members are at home");
   String get homeMembersSubtitle => choose(
     vi: "Xem và quản lý quyền thành viên",
     en: "View and manage member roles",

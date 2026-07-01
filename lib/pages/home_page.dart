@@ -35,8 +35,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
-import '../services/auto_login_service.dart';
 import '../services/auto_away_service.dart';
+import '../services/session_logout_service.dart';
 import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
 import '../safehome_theme.dart';
@@ -2538,6 +2538,7 @@ class _HomePageState extends State<HomePage>
     }
 
     uid = currentUser.uid;
+    AutoAwayService.activateForSignedInUser(uid);
     _startAutoAwayPresenceRefreshTimer();
     hubStatusRefreshTimer = Timer.periodic(
       const Duration(seconds: 5),
@@ -3836,18 +3837,11 @@ class _HomePageState extends State<HomePage>
       await WidgetsBinding.instance.endOfFrame;
     }
 
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
+    // Chặn timer foreground ghi lại inside/outside trong lúc đăng xuất.
+    autoAwayPresenceRefreshTimer?.cancel();
+    autoAwayPresenceRefreshTimer = null;
 
-    if (currentUid != null) {
-      try {
-        await FCMService.removeCurrentInstallationToken(uid: currentUid);
-      } catch (error) {
-        debugPrint("REMOVE_FCM_TOKEN_ON_LOGOUT_ERROR: $error");
-      }
-    }
-
-    await AutoLoginService.clearLogin();
-    await FirebaseAuth.instance.signOut();
+    await SessionLogoutService.signOutCurrentUser();
   }
 
   Future<void> showAddHomeOptions() async {

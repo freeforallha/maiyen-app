@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
+import '../services/session_logout_service.dart';
 class ProfileSetupPage extends StatefulWidget {
   final String uid;
   final String email;
@@ -198,7 +199,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () async {
-            await FirebaseAuth.instance.signOut();
+            await SessionLogoutService.signOutCurrentUser();
 
             if (!context.mounted) return;
 

@@ -11,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:native_geofence/native_geofence.dart';
 
 import '../firebase_options.dart';
+import 'account_session_service.dart';
 
 const String _legacyAutoAwayGeofencePrefix =
     'safehome_auto_away';
@@ -63,6 +64,16 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
       return;
     }
 
+    try {
+      await AccountSessionService.touchFromBackground(
+        uid: user.uid,
+      );
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_BACKGROUND_SESSION_TOUCH_ERROR: $error',
+      );
+    }
+
     final state = params.event == GeofenceEvent.exit
         ? 'outside'
         : 'inside';
@@ -112,6 +123,10 @@ class AutoAwayService {
   static final Map<String, String>
   _lastMonitoringStatusSignatureByHome = {};
 
+  // Trong lúc đăng xuất, chặn mọi listener/timer cũ đăng ký lại
+  // geofence hoặc ghi lại trạng thái inside/outside.
+  static final Set<String> _loggingOutUids = <String>{};
+
   static Future<void>? _syncInProgress;
   static bool _syncRequested = false;
   static bool _pendingForce = false;
@@ -128,12 +143,197 @@ class AutoAwayService {
     return permission == LocationPermission.always;
   }
 
+  static void activateForSignedInUser(String uid) {
+    final normalizedUid = uid.trim();
+
+    if (normalizedUid.isEmpty) {
+      return;
+    }
+
+    _loggingOutUids.remove(normalizedUid);
+    _lastSyncSignatureByUid.remove(normalizedUid);
+    _lastMonitoringStatusSignatureByHome.removeWhere(
+          (key, _) => key.startsWith('$normalizedUid|'),
+    );
+    _initialPresenceSynced = false;
+  }
+
+  static Future<void> prepareForLogout({
+    required String uid,
+  }) async {
+    final normalizedUid = uid.trim();
+
+    if (normalizedUid.isEmpty) {
+      return;
+    }
+
+    _loggingOutUids.add(normalizedUid);
+
+    // Hủy yêu cầu đồng bộ đang chờ của đúng tài khoản này.
+    if (_pendingUid == normalizedUid) {
+      _pendingHomes = <String, dynamic>{};
+      _pendingForce = false;
+      _syncRequested = false;
+    }
+
+    // Đợi lượt đồng bộ đang chạy kết thúc, sau đó mới dọn geofence.
+    final runningSync = _syncInProgress;
+
+    if (runningSync != null) {
+      try {
+        await runningSync.timeout(const Duration(seconds: 12));
+      } catch (error) {
+        debugPrint('AUTO_AWAY_LOGOUT_WAIT_SYNC_ERROR: $error');
+      }
+    }
+
+    final identitiesByHome =
+    <String, AutoAwayGeofenceIdentity>{};
+    final currentPresenceByHome =
+    <String, Map<String, dynamic>>{};
+    Object? firstError;
+
+    try {
+      final snapshot = await FirebaseDatabase.instance
+          .ref('accounts/$normalizedUid/homePresence')
+          .get()
+          .timeout(const Duration(seconds: 12));
+
+      final presenceMap = _asMap(snapshot.value);
+
+      for (final entry in presenceMap.entries) {
+        final homeId = entry.key.toString().trim();
+        final presence = _asMap(entry.value);
+        final ownerUid =
+            presence['ownerUid']?.toString().trim() ?? '';
+
+        if (homeId.isEmpty || ownerUid.isEmpty) {
+          continue;
+        }
+
+        currentPresenceByHome[homeId] = presence;
+        identitiesByHome[homeId] = AutoAwayGeofenceIdentity(
+          uid: normalizedUid,
+          ownerUid: ownerUid,
+          homeId: homeId,
+        );
+      }
+    } catch (error) {
+      firstError ??= error;
+      debugPrint('AUTO_AWAY_LOGOUT_READ_PRESENCE_ERROR: $error');
+    }
+
+    List<dynamic> registered = <dynamic>[];
+
+    try {
+      if (!_initialized) {
+        await NativeGeofenceManager.instance.initialize();
+        _initialized = true;
+      }
+
+      registered = await NativeGeofenceManager.instance
+          .getRegisteredGeofences();
+
+      for (final registeredItem in registered) {
+        final parsed = parseGeofenceId(
+          registeredItem.id.toString(),
+        );
+
+        if (parsed == null || parsed.uid != normalizedUid) {
+          continue;
+        }
+
+        identitiesByHome[parsed.homeId] = parsed;
+      }
+    } catch (error) {
+      firstError ??= error;
+      debugPrint('AUTO_AWAY_LOGOUT_READ_GEOFENCE_ERROR: $error');
+    }
+
+    if (identitiesByHome.isNotEmpty) {
+      final updates = <String, Object?>{};
+
+      for (final identity in identitiesByHome.values) {
+        final basePath =
+            'accounts/$normalizedUid/homePresence/${identity.homeId}';
+        final current =
+            currentPresenceByHome[identity.homeId] ??
+                const <String, dynamic>{};
+
+        updates['$basePath/ownerUid'] = identity.ownerUid;
+        updates['$basePath/homeId'] = identity.homeId;
+        updates['$basePath/state'] = 'unknown';
+        updates['$basePath/event'] = 'signed_out';
+        updates['$basePath/source'] = 'native_geofence';
+        updates['$basePath/updatedAt'] = ServerValue.timestamp;
+        updates['$basePath/monitoringEligible'] = false;
+        updates['$basePath/locationAlwaysGranted'] =
+            current['locationAlwaysGranted'] == true;
+        updates['$basePath/batteryUnrestricted'] =
+            current['batteryUnrestricted'] == true;
+        updates['$basePath/backgroundRestricted'] =
+            current['backgroundRestricted'] == true;
+        updates['$basePath/autoStartConfirmed'] =
+            current['autoStartConfirmed'] == true;
+        updates['$basePath/monitoringBlockingReason'] =
+        'signed_out';
+        updates['$basePath/monitoringCheckedAt'] =
+            ServerValue.timestamp;
+      }
+
+      try {
+        await FirebaseDatabase.instance
+            .ref()
+            .update(updates)
+            .timeout(const Duration(seconds: 15));
+      } catch (error) {
+        firstError ??= error;
+        debugPrint('AUTO_AWAY_LOGOUT_WRITE_PRESENCE_ERROR: $error');
+      }
+    }
+
+    // Xóa geofence sau khi đã cố gắng ghi signed_out lên Firebase.
+    for (final registeredItem in registered) {
+      final id = registeredItem.id.toString();
+      final parsed = parseGeofenceId(id);
+
+      if (parsed == null || parsed.uid != normalizedUid) {
+        continue;
+      }
+
+      try {
+        await NativeGeofenceManager.instance
+            .removeGeofenceById(id);
+      } catch (error) {
+        firstError ??= error;
+        debugPrint('AUTO_AWAY_LOGOUT_REMOVE_GEOFENCE_ERROR: $error');
+      }
+    }
+
+    _lastSyncSignatureByUid.remove(normalizedUid);
+    _lastMonitoringStatusSignatureByHome.removeWhere(
+          (key, _) => key.startsWith('$normalizedUid|'),
+    );
+    _initialPresenceSynced = false;
+
+    if (firstError != null) {
+      throw firstError;
+    }
+  }
+
   static Future<void> syncForHomes({
     required String uid,
     required Map<String, dynamic> homes,
     bool force = false,
   }) {
-    _pendingUid = uid;
+    final normalizedUid = uid.trim();
+
+    if (normalizedUid.isEmpty ||
+        _loggingOutUids.contains(normalizedUid)) {
+      return Future<void>.value();
+    }
+
+    _pendingUid = normalizedUid;
     _pendingHomes = Map<String, dynamic>.from(homes);
     _pendingForce = _pendingForce || force;
     _syncRequested = true;
@@ -184,7 +384,8 @@ class AutoAwayService {
   }) async {
     final normalizedUid = uid.trim();
 
-    if (normalizedUid.isEmpty) {
+    if (normalizedUid.isEmpty ||
+        _loggingOutUids.contains(normalizedUid)) {
       return;
     }
 

@@ -689,11 +689,11 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   final hubIssue = hub["issue"]?.toString().trim() ?? "";
 
   if (hubTracked && hubChecking) {
-    safeSummary.insert(0, "Đang kiểm tra kết nối Hub");
+    safeSummary.add("Đang kiểm tra kết nối Hub");
   } else if (hubTracked && !hubOnline && hubIssue.isNotEmpty) {
     dangerIssues.insert(0, hubIssue);
   } else if (hubTracked && hubOnline) {
-    safeSummary.insert(0, "Hub đã kết nối");
+    safeSummary.add("Hub kết nối bình thường");
   }
 
   // ================= THÀNH VIÊN =================
@@ -720,36 +720,44 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       home["presenceSummary"],
     );
 
-    final memberCount = int.tryParse(
+    final trackedMemberCount = int.tryParse(
       presenceSummary["memberCount"]?.toString() ?? "",
     ) ??
         0;
+
+    final signedInCount = int.tryParse(
+      presenceSummary["signedInCount"]?.toString() ?? "",
+    ) ??
+        trackedMemberCount;
 
     final insideCount = int.tryParse(
       presenceSummary["insideCount"]?.toString() ?? "",
     ) ??
         0;
 
-    final unknownCount = int.tryParse(
-      presenceSummary["unknownCount"]?.toString() ?? "",
+    final unavailableCount = int.tryParse(
+      presenceSummary["unavailableCount"]?.toString() ?? "",
     ) ??
+        int.tryParse(
+          presenceSummary["unknownCount"]?.toString() ?? "",
+        ) ??
         0;
 
-    if (memberCount > 0) {
+    if (signedInCount > 0) {
       final memberText =
-          "Thành viên trong nhà $insideCount/$memberCount";
+          "Thành viên đang ở trong nhà $insideCount/$signedInCount";
 
       if (insideCount > 0) {
-        safeSummary.add(memberText);
+        safeSummary.insert(0, memberText);
       } else if (dangerIssues.isNotEmpty) {
         dangerIssues.add(memberText);
       } else {
         warningIssues.add(memberText);
       }
 
-      if (unknownCount > 0) {
+      if (unavailableCount > 0) {
         warningIssues.add(
-          "Thành viên chưa xác định vị trí: $unknownCount",
+          "Thành viên chưa xác định vị trí: $unavailableCount",
         );
       }
     }
