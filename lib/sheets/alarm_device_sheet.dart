@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../safehome_theme.dart';
+
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -26,6 +28,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
   String mode = "home";
   String expandedDeviceId = "";
+  bool savingMode = false;
+  bool applyingAll = false;
 
   String get currentUid =>
       FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
@@ -51,37 +55,37 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         .ref("accounts/$currentUid/customRules/${widget.homeId}")
         .get()
         .then((snap) {
-          if (!mounted) return;
+      if (!mounted) return;
 
-          final data = snap.value;
+      final data = snap.value;
 
-          if (data is Map) {
-            final map = Map<String, dynamic>.from(data);
-            final savedMode = map["mode"]?.toString();
-            final customDevices = map["devices"];
+      if (data is Map) {
+        final map = Map<String, dynamic>.from(data);
+        final savedMode = map["mode"]?.toString();
+        final customDevices = map["devices"];
 
-            if (customDevices is Map) {
-              for (final entry in customDevices.entries) {
-                final deviceId = entry.key.toString();
-                final deviceData = Map<String, dynamic>.from(
-                  entry.value as Map,
-                );
+        if (customDevices is Map) {
+          for (final entry in customDevices.entries) {
+            final deviceId = entry.key.toString();
+            final deviceData = Map<String, dynamic>.from(
+              entry.value as Map,
+            );
 
-                if (deviceData["alarm"] is Map) {
-                  customAlarms[deviceId] = Map<String, dynamic>.from(
-                    deviceData["alarm"],
-                  );
-                }
-              }
+            if (deviceData["alarm"] is Map) {
+              customAlarms[deviceId] = Map<String, dynamic>.from(
+                deviceData["alarm"],
+              );
             }
+          }
+        }
 
-            setState(() {
-              if (savedMode == "custom" || savedMode == "home") {
-                mode = savedMode == "custom" ? "custom" : "home";
-              }
-            });
+        setState(() {
+          if (savedMode == "custom" || savedMode == "home") {
+            mode = savedMode == "custom" ? "custom" : "home";
           }
         });
+      }
+    });
   }
 
   Map<String, dynamic> _defaultAlarm() {
@@ -108,77 +112,482 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   Future<void> saveMode(String nextMode) async {
+    if (savingMode || nextMode == mode) {
+      return;
+    }
+
+    setState(() {
+      savingMode = true;
+    });
+
     final rulesRef = FirebaseDatabase.instance.ref(
       "accounts/$currentUid/customRules/${widget.homeId}",
     );
 
-    if (nextMode == "custom") {
-      final updates = <String, Object?>{"mode": "custom"};
+    try {
+      if (nextMode == "custom") {
+        final updates = <String, Object?>{
+          "mode": "custom",
+        };
 
-      final nextCustomAlarms = <String, dynamic>{};
+        final nextCustomAlarms = <String, dynamic>{};
 
-      for (final entry in devices.entries) {
-        final deviceId = entry.key.toString();
-        final rawDevice = entry.value;
+        for (final entry in devices.entries) {
+          final deviceId = entry.key.toString();
+          final rawDevice = entry.value;
 
-        if (rawDevice is! Map) {
-          continue;
+          if (rawDevice is! Map) {
+            continue;
+          }
+
+          final device = Map<String, dynamic>.from(
+            rawDevice,
+          );
+
+          if (!isSecurityDevice(device)) {
+            continue;
+          }
+
+          final rawRealDeviceId =
+              device["_deviceId"]?.toString().trim() ??
+                  "";
+
+          final realDeviceId =
+          rawRealDeviceId.isNotEmpty
+              ? rawRealDeviceId
+              : deviceId;
+
+          final rawAlarm =
+              customAlarms[deviceId] ??
+                  customAlarms[realDeviceId] ??
+                  homeAlarms[deviceId] ??
+                  homeAlarms[realDeviceId];
+
+          final alarm = rawAlarm is Map
+              ? Map<String, dynamic>.from(rawAlarm)
+              : _defaultAlarm();
+
+          nextCustomAlarms[deviceId] =
+          Map<String, dynamic>.from(alarm);
+
+          updates["devices/$realDeviceId/alarm"] =
+          Map<String, dynamic>.from(alarm);
         }
 
-        final device = Map<String, dynamic>.from(rawDevice);
+        await rulesRef.update(updates);
 
-        if (!isSecurityDevice(device)) {
-          continue;
+        if (!mounted) {
+          return;
         }
 
-        final rawRealDeviceId = device["_deviceId"]?.toString().trim() ?? "";
+        setState(() {
+          customAlarms = nextCustomAlarms;
+          mode = "custom";
+          expandedDeviceId = "";
+        });
 
-        final realDeviceId = rawRealDeviceId.isNotEmpty
-            ? rawRealDeviceId
-            : deviceId;
-
-        final rawAlarm =
-            customAlarms[deviceId] ??
-            customAlarms[realDeviceId] ??
-            homeAlarms[deviceId] ??
-            homeAlarms[realDeviceId];
-
-        final alarm = rawAlarm is Map
-            ? Map<String, dynamic>.from(rawAlarm)
-            : _defaultAlarm();
-
-        nextCustomAlarms[deviceId] = Map<String, dynamic>.from(alarm);
-
-        updates["devices/$realDeviceId/alarm"] = Map<String, dynamic>.from(
-          alarm,
-        );
+        return;
       }
 
-      await rulesRef.update(updates);
+      await rulesRef.child("mode").set("home");
 
       if (!mounted) {
         return;
       }
 
       setState(() {
-        customAlarms = nextCustomAlarms;
-        mode = "custom";
+        mode = "home";
         expandedDeviceId = "";
       });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Không thể lưu chế độ Alarm",
+          ),
+        ),
+      );
+
+      debugPrint("SAVE_ALARM_MODE_ERROR: $error");
+    } finally {
+      if (mounted) {
+        setState(() {
+          savingMode = false;
+        });
+      }
+    }
+  }
+
+  Future<void> saveAlarmForAllSecurityDevices(
+      Map<String, dynamic> alarm,
+      ) async {
+    if (applyingAll) {
       return;
     }
 
-    await rulesRef.child("mode").set("home");
+    if (mode == "home" && !widget.canManageHome) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+            ),
+          ),
+        );
+      }
+      return;
+    }
 
-    if (!mounted) {
+    final securityEntries = devices.entries.where((entry) {
+      final rawDevice = entry.value;
+      return rawDevice is Map && isSecurityDevice(rawDevice);
+    }).toList();
+
+    if (securityEntries.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Nhà chưa có thiết bị an ninh để áp dụng"),
+          ),
+        );
+      }
       return;
     }
 
     setState(() {
-      mode = "home";
-      expandedDeviceId = "";
+      applyingAll = true;
     });
+
+    try {
+      final updates = <String, Object?>{};
+
+      for (final entry in securityEntries) {
+        final deviceId = entry.key.toString();
+        final device = Map<String, dynamic>.from(entry.value as Map);
+        final homeId = device["_homeId"]?.toString().trim().isNotEmpty == true
+            ? device["_homeId"].toString().trim()
+            : widget.homeId;
+        final realDeviceId =
+        device["_deviceId"]?.toString().trim().isNotEmpty == true
+            ? device["_deviceId"].toString().trim()
+            : deviceId;
+
+        final path = mode == "custom"
+            ? "accounts/$currentUid/customRules/$homeId/devices/$realDeviceId/alarm"
+            : "accounts/${widget.ownerUid}/homes/$homeId/devices/$realDeviceId/alarm";
+
+        updates[path] = Map<String, dynamic>.from(alarm);
+      }
+
+      await FirebaseDatabase.instance.ref().update(updates);
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        for (final entry in securityEntries) {
+          final deviceId = entry.key.toString();
+          final copiedAlarm = Map<String, dynamic>.from(alarm);
+
+          if (mode == "custom") {
+            customAlarms[deviceId] = copiedAlarm;
+          } else {
+            homeAlarms[deviceId] = copiedAlarm;
+          }
+        }
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          applyingAll = false;
+        });
+      }
+    }
+  }
+
+  Future<void> showQuickAlarmForAllSheet() async {
+    if (mode == "home" && !widget.canManageHome) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+          ),
+        ),
+      );
+      return;
+    }
+
+    final securityEntries = devices.entries.where((entry) {
+      final rawDevice = entry.value;
+      return rawDevice is Map && isSecurityDevice(rawDevice);
+    }).toList();
+
+    if (securityEntries.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Nhà chưa có thiết bị an ninh để áp dụng"),
+        ),
+      );
+      return;
+    }
+
+    final draft = Map<String, dynamic>.from(
+      alarmOf(securityEntries.first.key.toString()),
+    );
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        var saving = false;
+
+        return StatefulBuilder(
+          builder: (innerContext, setSheetState) {
+            Future<void> chooseTime(String field) async {
+              final picked = await openTimeTextInput(
+                title: field == "start"
+                    ? "Chọn giờ bắt đầu Alarm"
+                    : "Chọn giờ kết thúc Alarm",
+                initial: draft[field]?.toString() ??
+                    (field == "start" ? "23:00" : "06:00"),
+              );
+
+              if (picked == null || !sheetContext.mounted) {
+                return;
+              }
+
+              setSheetState(() {
+                draft[field] = picked;
+              });
+            }
+
+            Future<void> applyToAll() async {
+              if (saving) {
+                return;
+              }
+
+              setSheetState(() {
+                saving = true;
+              });
+
+              try {
+                await saveAlarmForAllSecurityDevices(draft);
+
+                if (!sheetContext.mounted) {
+                  return;
+                }
+
+                Navigator.of(sheetContext).pop();
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
+                      ),
+                    ),
+                  );
+                }
+              } catch (error) {
+                if (!sheetContext.mounted) {
+                  return;
+                }
+
+                setSheetState(() {
+                  saving = false;
+                });
+
+                ScaffoldMessenger.of(sheetContext).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Không thể áp dụng Alarm cho toàn bộ thiết bị",
+                    ),
+                  ),
+                );
+
+                debugPrint("SAVE_ALL_SECURITY_ALARMS_ERROR: $error");
+              }
+            }
+
+            return SafeArea(
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 18,
+                  right: 18,
+                  top: 12,
+                  bottom:
+                  MediaQuery.of(innerContext).viewInsets.bottom + 18,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.danger.withValues(
+                              alpha: 0.10,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Icon(
+                            Icons.security_rounded,
+                            color: SafeHomeColors.danger,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Thiết lập nhanh Alarm",
+                                style: TextStyle(
+                                  color: SafeHomeColors.textPrimary,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                "Áp dụng cùng một lịch cho ${securityEntries.length} thiết bị an ninh",
+                                style: const TextStyle(
+                                  color: SafeHomeColors.textSecondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch.adaptive(
+                          value: draft["enabled"] == true,
+                          onChanged: saving
+                              ? null
+                              : (value) {
+                            setSheetState(() {
+                              draft["enabled"] = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _AlarmMiniButton(
+                            label: "Bắt đầu",
+                            value: draft["start"]?.toString() ?? "23:00",
+                            enabled: !saving,
+                            onTap: () {
+                              chooseTime("start");
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _AlarmMiniButton(
+                            label: "Kết thúc",
+                            value: draft["end"]?.toString() ?? "06:00",
+                            enabled: !saving,
+                            onTap: () {
+                              chooseTime("end");
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Lặp lại cảnh báo",
+                        style: TextStyle(
+                          color: SafeHomeColors.textPrimary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [15, 30, 60].map((minute) {
+                        final selected =
+                            draft["repeatMinutes"] == minute;
+
+                        return Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 3,
+                            ),
+                            child: ChoiceChip(
+                              label: Text("$minute phút"),
+                              selected: selected,
+                              onSelected: saving
+                                  ? null
+                                  : (_) {
+                                setSheetState(() {
+                                  draft["repeatMinutes"] = minute;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton.icon(
+                        onPressed: saving ? null : applyToAll,
+                        icon: saving
+                            ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                            : const Icon(Icons.done_all_rounded),
+                        label: Text(
+                          saving
+                              ? "Đang áp dụng..."
+                              : "Áp dụng cho toàn bộ thiết bị",
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Future<void> saveAlarm(String deviceId, Map<String, dynamic> alarm) async {
@@ -403,26 +812,60 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
             const SizedBox(height: 14),
 
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(
-                  value: "home",
-                  label: Text("Theo nhà"),
-                  icon: Icon(Icons.home_rounded),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Chế độ áp dụng",
+                style: TextStyle(
+                  color: SafeHomeColors.textPrimary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
                 ),
-                ButtonSegment(
-                  value: "custom",
-                  label: Text("Riêng tôi"),
-                  icon: Icon(Icons.person_rounded),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _AlarmModeCard(
+                    title: "Theo nhà",
+                    subtitle:
+                    "Dùng lịch chung do Chủ nhà hoặc "
+                        "Quản trị viên thiết lập",
+                    icon: Icons.home_rounded,
+                    selected: mode == "home",
+                    enabled: !savingMode,
+                    onTap: () {
+                      saveMode("home");
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _AlarmModeCard(
+                    title: "Riêng tôi",
+                    subtitle:
+                    "Dùng lịch riêng chỉ áp dụng cho "
+                        "tài khoản của bạn",
+                    icon: Icons.person_rounded,
+                    selected: mode == "custom",
+                    enabled: !savingMode,
+                    onTap: () {
+                      saveMode("custom");
+                    },
+                  ),
                 ),
               ],
-              selected: {mode},
-              onSelectionChanged: (value) async {
-                final nextMode = value.first;
-
-                await saveMode(nextMode);
-              },
             ),
+
+            if (savingMode) ...[
+              const SizedBox(height: 10),
+              const LinearProgressIndicator(
+                minHeight: 2,
+              ),
+            ],
 
             if (mode == "home" && isSharedUser) ...[
               const SizedBox(height: 10),
@@ -436,6 +879,41 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 ),
               ),
             ],
+
+            const SizedBox(height: 14),
+
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: savingMode || applyingAll
+                    ? null
+                    : showQuickAlarmForAllSheet,
+                icon: applyingAll
+                    ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                )
+                    : const Icon(Icons.tune_rounded),
+                label: Text(
+                  applyingAll
+                      ? "Đang áp dụng..."
+                      : "Thiết lập nhanh toàn bộ thiết bị",
+                ),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(48),
+                  foregroundColor: SafeHomeColors.danger,
+                  side: BorderSide(
+                    color: SafeHomeColors.danger.withValues(alpha: 0.35),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
 
             const SizedBox(height: 14),
 
@@ -512,11 +990,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               onChanged: readOnly
                                   ? null
                                   : (v) async {
-                                      final nextAlarm =
-                                          Map<String, dynamic>.from(alarm);
-                                      nextAlarm["enabled"] = v;
-                                      await saveAlarm(deviceId, nextAlarm);
-                                    },
+                                final nextAlarm =
+                                Map<String, dynamic>.from(alarm);
+                                nextAlarm["enabled"] = v;
+                                await saveAlarm(deviceId, nextAlarm);
+                              },
                             ),
 
                             IconButton(
@@ -584,17 +1062,17 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     onSelected: readOnly
                                         ? null
                                         : (_) async {
-                                            final nextAlarm =
-                                                Map<String, dynamic>.from(
-                                                  alarm,
-                                                );
-                                            nextAlarm["repeatMinutes"] = minute;
+                                      final nextAlarm =
+                                      Map<String, dynamic>.from(
+                                        alarm,
+                                      );
+                                      nextAlarm["repeatMinutes"] = minute;
 
-                                            await saveAlarm(
-                                              deviceId,
-                                              nextAlarm,
-                                            );
-                                          },
+                                      await saveAlarm(
+                                        deviceId,
+                                        nextAlarm,
+                                      );
+                                    },
                                   ),
                                 ),
                               );
@@ -608,6 +1086,137 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AlarmModeCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  const _AlarmModeCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.selected,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = SafeHomeColors.danger;
+
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 160),
+      opacity: enabled ? 1 : 0.62,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onTap : null,
+          borderRadius: BorderRadius.circular(18),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            constraints: const BoxConstraints(
+              minHeight: 142,
+            ),
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: selected
+                  ? accent.withValues(alpha: 0.08)
+                  : SafeHomeColors.surface,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: selected
+                    ? accent
+                    : SafeHomeColors.border,
+                width: selected ? 1.6 : 1,
+              ),
+              boxShadow: selected
+                  ? [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.10),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ]
+                  : null,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? accent.withValues(alpha: 0.12)
+                            : SafeHomeColors.background,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        icon,
+                        color: selected
+                            ? accent
+                            : SafeHomeColors.textSecondary,
+                        size: 21,
+                      ),
+                    ),
+                    const Spacer(),
+                    AnimatedSwitcher(
+                      duration:
+                      const Duration(milliseconds: 160),
+                      child: selected
+                          ? Icon(
+                        Icons.check_circle_rounded,
+                        key: const ValueKey("selected"),
+                        color: accent,
+                        size: 22,
+                      )
+                          : Icon(
+                        Icons.circle_outlined,
+                        key: const ValueKey("unselected"),
+                        color: SafeHomeColors.border,
+                        size: 22,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: selected
+                        ? accent
+                        : SafeHomeColors.textPrimary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  subtitle,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: SafeHomeColors.textSecondary,
+                    fontSize: 11.5,
+                    height: 1.35,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

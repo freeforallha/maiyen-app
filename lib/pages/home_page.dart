@@ -501,56 +501,200 @@ class _HomePageState extends State<HomePage>
   }
 
   Map<String, String> getHomeAlarmReminderInfo() {
-    final devices = getDevices();
+    final selectedRules = safeMap(
+      customRulesByHome[selectedHome],
+    );
 
-    for (final item in devices.values) {
-      final device = safeMap(item);
-      final alarm = safeMap(device["alarm"]);
+    final useCustomMode =
+        selectedRules["mode"]?.toString() == "custom";
+
+    final devices = getDevices();
+    final customDevices = safeMap(
+      selectedRules["devices"],
+    );
+
+    for (final entry in devices.entries) {
+      final deviceId = entry.key.toString();
+      final device = safeMap(entry.value);
+      final realDeviceId =
+          device["_deviceId"]?.toString() ?? deviceId;
+
+      final homeAlarm = safeMap(device["alarm"]);
+      final customDevice = safeMap(
+        customDevices[realDeviceId],
+      );
+      final customAlarm = safeMap(
+        customDevice["alarm"],
+      );
+
+      final alarm = useCustomMode &&
+          customAlarm.isNotEmpty
+          ? customAlarm
+          : homeAlarm;
 
       if (alarm["enabled"] == true) {
         return {
-          "mode": "Theo nhà",
-          "start": alarm["start"]?.toString() ?? "23:00",
-          "end": alarm["end"]?.toString() ?? "06:00",
+          "mode": useCustomMode
+              ? "Riêng tôi"
+              : "Theo nhà",
+          "start":
+          alarm["start"]?.toString() ?? "23:00",
+          "end":
+          alarm["end"]?.toString() ?? "06:00",
         };
       }
     }
 
     return {
-      "mode": "Theo nhà",
+      "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
       "start": formatClock(start),
       "end": formatClock(end),
     };
   }
 
   Future<void> showAlarmReceiveReminder() async {
+    var useCustomMode =
+        safeMap(
+          customRulesByHome[selectedHome],
+        )["mode"]?.toString() ==
+            "custom";
+
+    try {
+      final modeSnapshot = await FirebaseDatabase.instance
+          .ref(
+        "accounts/$uid/customRules/"
+            "$selectedHome/mode",
+      )
+          .get();
+
+      useCustomMode =
+          modeSnapshot.value?.toString() == "custom";
+    } catch (error) {
+      debugPrint(
+        "READ_ALARM_MODE_FOR_REMINDER_ERROR: $error",
+      );
+    }
+
+    if (!mounted) {
+      return;
+    }
+
     await showDialog<void>(
       context: context,
-      builder: (_) {
+      builder: (dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Text(_strings.t("Lưu ý khi bật Alarm")),
+          title: Row(
+            children: [
+              Icon(
+                useCustomMode
+                    ? Icons.person_rounded
+                    : Icons.home_rounded,
+                color: SafeHomeColors.primary,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  _strings.t("Alarm đã được bật"),
+                ),
+              ),
+            ],
+          ),
           content: Text(
-            _strings.choose(
+            useCustomMode
+                ? _strings.choose(
               vi:
-              "Alarm đang được thiết lập theo cài đặt của nhà.\n\n"
-                  "Hãy kiểm tra kỹ cấu hình để tránh cảnh báo làm phiền bạn.",
+              "Alarm đang sử dụng chế độ Riêng tôi.\n\n"
+                  "Bạn sẽ nhận cảnh báo theo lịch Alarm riêng "
+                  "đã thiết lập cho tài khoản này.",
               en:
-              "Alarm is using this home's settings.\n\n"
-                  "Review the configuration to avoid unwanted alerts.",
+              "Alarm is using My settings.\n\n"
+                  "You will receive alerts according to the "
+                  "personal Alarm schedules for this account.",
+            )
+                : _strings.choose(
+              vi:
+              "Alarm đang sử dụng chế độ Theo nhà.\n\n"
+                  "Bạn sẽ nhận cảnh báo theo lịch Alarm chung "
+                  "do Chủ nhà hoặc Quản trị viên thiết lập.",
+              en:
+              "Alarm is using Home settings.\n\n"
+                  "You will receive alerts according to the "
+                  "shared schedules configured by the owner "
+                  "or an administrator.",
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
               child: Text(_strings.t("Đã hiểu")),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<bool> confirmDisableAlarm() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: SafeHomeColors.danger,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text("Tắt toàn bộ Alarm?"),
+              ),
+            ],
+          ),
+          content: Text(
+            _strings.choose(
+              vi:
+              "Hành động này sẽ tắt toàn bộ báo động của nhà "
+                  "dưới mọi hình thức. Bạn sẽ không còn nhận được "
+                  "cảnh báo khi có nguy hiểm trên điện thoại nữa.",
+              en:
+              "This action will disable every Alarm for this "
+                  "home. You will no longer receive danger alerts "
+                  "on this phone.",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: Text(_strings.t("Huỷ")),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: SafeHomeColors.danger,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              child: Text(_strings.t("Tắt Alarm")),
+            ),
+          ],
+        );
+      },
+    );
+
+    return confirmed == true;
   }
 
   Future<void> showAlarmPauseReminder() async {
@@ -596,48 +740,367 @@ class _HomePageState extends State<HomePage>
 
   bool get isArmedMode => securityMode == "armed";
   bool alarmEnabled = false;
-  Future<void> setSecurityMode(String mode) async {
-    final homeId = selectedHome;
+  Future<bool> _confirmManualSecurityMode() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Row(
+            children: [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: SafeHomeColors.warning,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Text("Bật Bảo vệ thủ công?"),
+              ),
+            ],
+          ),
+          content: const Text(
+            "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n"
+                "Tự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này "
+                "không tự tắt khi có người về nhà và chỉ được tắt khi "
+                "một thành viên có quyền chủ động chuyển về Bình thường.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext, false);
+              },
+              child: const Text("Huỷ"),
+            ),
+            FilledButton.icon(
+              onPressed: () {
+                Navigator.pop(dialogContext, true);
+              },
+              icon: const Icon(Icons.shield_rounded),
+              label: const Text("Xác nhận"),
+            ),
+          ],
+        );
+      },
+    );
 
-    if (homeId.isEmpty) return;
+    return confirmed == true;
+  }
 
-    final ownerUid = getHomeOwnerUid();
-    final nextMode = mode == "armed" ? "armed" : "normal";
-    final previousMode = securityMode;
+  Future<bool> _reauthenticateForManualSecurityMode() async {
+    var enteredPassword = "";
+    var obscurePassword = true;
 
-    setState(() {
-      securityMode = nextMode;
+    final password = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (dialogContext, setDialogState) {
+            void submitPassword() {
+              final cleanPassword = enteredPassword.trim();
 
-      final cachedHome = safeMap(homes[homeId]);
-      cachedHome["securityMode"] = nextMode;
-      cachedHome["securityModeSource"] = "manual";
-      homes[homeId] = cachedHome;
-    });
+              if (cleanPassword.isEmpty) {
+                return;
+              }
+
+              Navigator.of(dialogContext).pop(cleanPassword);
+            }
+
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: const Text("Xác nhận mật khẩu"),
+              content: TextField(
+                autofocus: true,
+                obscureText: obscurePassword,
+                textInputAction: TextInputAction.done,
+                onChanged: (value) {
+                  enteredPassword = value;
+                },
+                onSubmitted: (_) {
+                  submitPassword();
+                },
+                decoration: InputDecoration(
+                  labelText: "Mật khẩu tài khoản",
+                  prefixIcon: const Icon(
+                    Icons.lock_outline_rounded,
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setDialogState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
+                    icon: Icon(
+                      obscurePassword
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                    ),
+                  ),
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: const Text("Huỷ"),
+                ),
+                FilledButton(
+                  onPressed: submitPassword,
+                  child: const Text("Xác nhận"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (password == null || password.isEmpty) {
+      return false;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+    final email = user?.email?.trim() ?? "";
+
+    if (user == null || email.isEmpty) {
+      if (mounted) {
+        showTopToast(
+          context,
+          "Không thể xác nhận tài khoản hiện tại",
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+      }
+
+      return false;
+    }
 
     try {
-      await FirebaseDatabase.instance.ref().update({
-        "accounts/$ownerUid/homes/$homeId/securityMode": nextMode,
-        "accounts/$ownerUid/homes/$homeId/securityModeSource": "manual",
-      });
-    } catch (error) {
-      if (!mounted) return;
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
 
-      setState(() {
-        securityMode = previousMode;
+      await user.reauthenticateWithCredential(credential);
+      return true;
+    } on FirebaseAuthException catch (error) {
+      if (!mounted) {
+        return false;
+      }
 
-        final cachedHome = safeMap(homes[homeId]);
-        cachedHome["securityMode"] = previousMode;
-        homes[homeId] = cachedHome;
-      });
+      final wrongPassword =
+          error.code == "wrong-password" ||
+              error.code == "invalid-credential" ||
+              error.code == "invalid-login-credentials";
 
       showTopToast(
         context,
-        _strings.t("Không thể thay đổi chế độ nhà"),
+        wrongPassword
+            ? "Mật khẩu không đúng"
+            : "Không thể xác nhận mật khẩu",
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
 
-      debugPrint("SET_SECURITY_MODE_ERROR: $error");
+      return false;
+    } catch (error) {
+      if (mounted) {
+        showTopToast(
+          context,
+          "Không thể xác nhận mật khẩu",
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+      }
+
+      debugPrint(
+        "MANUAL_SECURITY_REAUTH_ERROR: $error",
+      );
+
+      return false;
+    }
+  }
+  Future<void> setSecurityMode(String mode) async {
+    final homeId = selectedHome;
+
+    if (homeId.isEmpty) {
+      return;
+    }
+
+    if (!canManageHome()) {
+      showTopToast(
+        context,
+        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+        color: Colors.orange,
+        icon: Icons.lock_outline_rounded,
+      );
+      return;
+    }
+
+    final nextMode =
+    mode == "armed" ? "armed" : "normal";
+
+    final currentHome = safeMap(homes[homeId]);
+
+    final currentMode =
+    currentHome["securityMode"]?.toString() == "armed"
+        ? "armed"
+        : "normal";
+
+    final currentSource =
+        currentHome["securityModeSource"]
+            ?.toString()
+            .trim() ??
+            "";
+
+    if (currentMode == nextMode) {
+      if (nextMode == "normal" ||
+          currentSource == "manual") {
+        return;
+      }
+    }
+
+    if (nextMode == "armed") {
+      final confirmed =
+      await _confirmManualSecurityMode();
+
+      if (!confirmed || !mounted) {
+        return;
+      }
+
+// Đợi dialog cảnh báo đóng hoàn toàn rồi mới mở dialog mật khẩu.
+      await WidgetsBinding.instance.endOfFrame;
+
+      if (!mounted) {
+        return;
+      }
+
+      final passwordConfirmed =
+      await _reauthenticateForManualSecurityMode();
+
+      if (!passwordConfirmed || !mounted) {
+        return;
+      }
+    }
+
+    final ownerUid = getHomeOwnerUid();
+    final homeName = getHomeDisplayName(homeId);
+
+    final actorName = userName.trim().isNotEmpty
+        ? userName.trim()
+        : FirebaseAuth.instance.currentUser?.email
+        ?.trim() ??
+        "Một thành viên";
+
+    try {
+      await FirebaseDatabase.instance.ref().update({
+        "accounts/$ownerUid/homes/$homeId/securityMode":
+        nextMode,
+
+        // Chuyển về normal phải xoá nguồn manual.
+        "accounts/$ownerUid/homes/$homeId/securityModeSource":
+        nextMode == "armed" ? "manual" : null,
+      });
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        securityMode = nextMode;
+
+        final cachedHome = safeMap(homes[homeId]);
+        cachedHome["securityMode"] = nextMode;
+
+        if (nextMode == "armed") {
+          cachedHome["securityModeSource"] = "manual";
+        } else {
+          cachedHome.remove("securityModeSource");
+        }
+
+        homes[homeId] = cachedHome;
+      });
+
+      if (nextMode == "armed") {
+        try {
+          await HomeNotificationService.notifyHome(
+            ownerUid: ownerUid,
+            homeId: homeId,
+            homeName: homeName,
+            type: "manual_security_mode_enabled",
+            category: "home",
+            severity: "warning",
+            title: "Mode Bảo vệ thủ công đã bật",
+            message:
+            "$actorName đã bật Mode Bảo vệ thủ công cho "
+                "\"$homeName\". Chế độ này chỉ tắt khi một thành "
+                "viên có quyền chủ động chuyển về Bình thường.",
+            actorUid: uid,
+            entityType: "home",
+            entityId: homeId,
+            includeActor: true,
+            writeHomeTimeline: true,
+            data: const {
+              "securityMode": "armed",
+              "securityModeSource": "manual",
+            },
+          );
+        } catch (error) {
+          debugPrint(
+            "MANUAL_SECURITY_NOTIFICATION_ERROR: $error",
+          );
+
+          if (mounted) {
+            showTopToast(
+              context,
+              "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
+              color: Colors.orange,
+              icon: Icons.notifications_off_outlined,
+            );
+          }
+
+          return;
+        }
+
+        if (mounted) {
+          showTopToast(
+            context,
+            "Đã bật Mode Bảo vệ thủ công",
+            color: SafeHomeColors.danger,
+            icon: Icons.shield_rounded,
+          );
+        }
+
+        return;
+      }
+
+      showTopToast(
+        context,
+        "Đã chuyển nhà về Bình thường",
+        color: SafeHomeColors.safe,
+        icon: Icons.home_rounded,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      showTopToast(
+        context,
+        "Không thể thay đổi chế độ nhà",
+        color: Colors.red,
+        icon: Icons.error_outline_rounded,
+      );
+
+      debugPrint(
+        "SET_SECURITY_MODE_ERROR: $error",
+      );
     }
   }
 
@@ -1093,34 +1556,108 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Future<void> setAlarmEnabled(bool enabled) async {
+  Future<bool> setAlarmEnabled(bool enabled) async {
     final homeId = selectedHome;
+
+    if (homeId.isEmpty) {
+      return false;
+    }
+
+    if (alarmEnabled == enabled) {
+      return true;
+    }
+
+    if (!enabled) {
+      final confirmed = await confirmDisableAlarm();
+
+      if (!confirmed || !mounted) {
+        return false;
+      }
+    }
+
     final homeName = getHomeDisplayName(homeId);
+
+    try {
+      await FirebaseDatabase.instance
+          .ref(
+        "accounts/$uid/alarmSettings/"
+            "$homeId/enabled",
+      )
+          .set(enabled);
+    } catch (error) {
+      if (mounted) {
+        showTopToast(
+          context,
+          _strings.t(
+            "Không thể thay đổi trạng thái Alarm",
+          ),
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+      }
+
+      debugPrint(
+        "SET_ALARM_ENABLED_ERROR: $error",
+      );
+      return false;
+    }
+
+    if (!mounted) {
+      return true;
+    }
 
     setState(() {
       alarmEnabled = enabled;
-      alarmSettings[homeId] = {"enabled": enabled};
+      alarmSettings[homeId] = {
+        "enabled": enabled,
+      };
     });
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/alarmSettings/$homeId/enabled")
-        .set(enabled);
-    await HomeNotificationService.addNotification(
-      uid: uid,
-      type: "alarm_setting_changed",
-      title: enabled ? _strings.t("Đã bật Alarm") : _strings.t("Đã tắt Alarm"),
-      message: enabled
-          ? _strings.choose(
-        vi: "Bạn đã bật Alarm cho nhà \"$homeName\".",
-        en: "You enabled Alarm for \"$homeName\".",
-      )
-          : _strings.choose(
-        vi: "Bạn đã tắt Alarm cho nhà \"$homeName\".",
-        en: "You disabled Alarm for \"$homeName\".",
-      ),
-      homeId: homeId,
-      homeName: homeName,
+    unawaited(
+      HomeNotificationService.addNotification(
+        uid: uid,
+        type: "alarm_setting_changed",
+        title: enabled
+            ? _strings.t("Đã bật Alarm")
+            : _strings.t("Đã tắt Alarm"),
+        message: enabled
+            ? _strings.choose(
+          vi:
+          "Bạn đã bật Alarm cho nhà "
+              "\"$homeName\".",
+          en:
+          "You enabled Alarm for "
+              "\"$homeName\".",
+        )
+            : _strings.choose(
+          vi:
+          "Bạn đã tắt toàn bộ Alarm của nhà "
+              "\"$homeName\".",
+          en:
+          "You disabled every Alarm for "
+              "\"$homeName\".",
+        ),
+        homeId: homeId,
+        homeName: homeName,
+      ).catchError((Object error) {
+        debugPrint(
+          "ALARM_SETTING_NOTIFICATION_ERROR: $error",
+        );
+      }),
     );
+
+    if (enabled) {
+      await showAlarmReceiveReminder();
+    } else if (mounted) {
+      showTopToast(
+        context,
+        _strings.t("Đã tắt toàn bộ Alarm của nhà"),
+        color: SafeHomeColors.warning,
+        icon: Icons.notifications_off_rounded,
+      );
+    }
+
+    return true;
   }
 
   int pairingCountdown = 0;
@@ -1129,7 +1666,40 @@ class _HomePageState extends State<HomePage>
   // Firebase không phát sự kiện chỉ vì thời gian trôi qua.
   // Timer này buộc UI đánh giá lại tuổi heartbeat khi app đang mở.
   Timer? hubStatusRefreshTimer;
+// Khi app đang mở, đo lại vị trí định kỳ để sửa trạng thái
+// inside/outside nếu geofence chưa phát callback.
+  Timer? autoAwayPresenceRefreshTimer;
+  void _refreshAutoAwayPresenceNow() {
+    if (!mounted || uid.isEmpty || homes.isEmpty) {
+      return;
+    }
 
+    unawaited(
+      AutoAwayService.syncForHomes(
+        uid: uid,
+        homes: homes,
+        force: true,
+      ).catchError((Object error) {
+        debugPrint(
+          'AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error',
+        );
+      }),
+    );
+  }
+
+  void _startAutoAwayPresenceRefreshTimer() {
+    autoAwayPresenceRefreshTimer?.cancel();
+
+    // Kiểm tra ngay khi bắt đầu.
+    _refreshAutoAwayPresenceNow();
+
+    autoAwayPresenceRefreshTimer = Timer.periodic(
+      const Duration(seconds: 30),
+          (_) {
+        _refreshAutoAwayPresenceNow();
+      },
+    );
+  }
   final ScrollController homeTabController = ScrollController();
   StreamSubscription<DatabaseEvent>? accountSubscription;
   StreamSubscription<DatabaseEvent>? notificationSubscription;
@@ -1938,14 +2508,22 @@ class _HomePageState extends State<HomePage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    if (state != AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.resumed) {
+      startHubStatusGracePeriod();
+      _startAutoAwayPresenceRefreshTimer();
+
+      if (mounted) {
+        setState(() {});
+      }
+
       return;
     }
 
-    startHubStatusGracePeriod();
-
-    if (mounted) {
-      setState(() {});
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) {
+      autoAwayPresenceRefreshTimer?.cancel();
+      autoAwayPresenceRefreshTimer = null;
     }
   }
   @override
@@ -1960,7 +2538,7 @@ class _HomePageState extends State<HomePage>
     }
 
     uid = currentUser.uid;
-
+    _startAutoAwayPresenceRefreshTimer();
     hubStatusRefreshTimer = Timer.periodic(
       const Duration(seconds: 5),
           (_) {
@@ -4926,9 +5504,14 @@ class _HomePageState extends State<HomePage>
                             ),
 
                             securityMode: securityMode,
-                            onSecurityModeChanged: canManageHome()
-                                ? setSecurityMode
-                                : null,
+                            securityModeSource:
+                            safeMap(homes[selectedHome])["securityModeSource"]
+                                ?.toString()
+                                .trim() ??
+                                "",
+                            // Luôn nhận thao tác bấm.
+// setSecurityMode sẽ tự kiểm tra quyền và báo rõ cho member.
+                            onSecurityModeChanged: setSecurityMode,
 
                             alarmEnabled: alarmEnabled,
                             onAlarmEnabledChanged: canManageHome()
@@ -5319,15 +5902,18 @@ class _HomePageState extends State<HomePage>
                                         activeTrackColor: SafeHomeColors.primary
                                             .withValues(alpha: 0.28),
                                         onChanged: (value) async {
-                                          setModalState(() {
-                                            localAlarmEnabled = value;
-                                          });
-
+                                          final changed =
                                           await setAlarmEnabled(value);
 
-                                          if (value && context.mounted) {
-                                            await showAlarmReceiveReminder();
+                                          if (!context.mounted) {
+                                            return;
                                           }
+
+                                          setModalState(() {
+                                            localAlarmEnabled = changed
+                                                ? value
+                                                : alarmEnabled;
+                                          });
                                         },
                                       ),
                                       onTap: () {
@@ -5676,6 +6262,7 @@ class _HomePageState extends State<HomePage>
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
+    autoAwayPresenceRefreshTimer?.cancel();
     accountSubscription?.cancel();
     notificationSubscription?.cancel();
     homeEventsSubscription?.cancel();

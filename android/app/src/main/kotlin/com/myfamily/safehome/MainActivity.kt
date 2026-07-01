@@ -1,5 +1,6 @@
 package com.myfamily.safehome
 
+import android.app.ActivityManager
 import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
@@ -26,17 +27,60 @@ class MainActivity : FlutterActivity() {
             channelName
         ).setMethodCallHandler { call, result ->
             when (call.method) {
-                "canUseFullScreenIntent" -> result.success(canUseFullScreenIntent())
+                "canUseFullScreenIntent" -> {
+                    result.success(canUseFullScreenIntent())
+                }
 
                 "openFullScreenIntentSettings" -> {
                     openFullScreenIntentSettings()
                     result.success(true)
                 }
 
-                "isAlarmScreenLaunch" -> result.success(isAlarmScreenLaunch())
+                "isAlarmScreenLaunch" -> {
+                    result.success(isAlarmScreenLaunch())
+                }
 
                 "getSafeHomeAction" -> {
-                    result.success(intent?.getStringExtra("safehome_action") ?: "")
+                    result.success(
+                        intent?.getStringExtra("safehome_action") ?: ""
+                    )
+                }
+
+                // Kiểm tra SafeHome đã được đặt thành
+                // Không hạn chế pin hay chưa.
+                "isIgnoringBatteryOptimizations" -> {
+                    result.success(isIgnoringBatteryOptimizations())
+                }
+
+                // Kiểm tra Android có đang hạn chế app chạy nền không.
+                "isBackgroundRestricted" -> {
+                    result.success(isBackgroundRestricted())
+                }
+
+                // Mở danh sách ứng dụng được miễn tối ưu pin.
+                "openBatteryOptimizationSettings" -> {
+                    openBatteryOptimizationSettings()
+                    result.success(true)
+                }
+
+                // Mở trang chi tiết SafeHome.
+                // Người dùng có thể bật Tự khởi chạy trên máy hỗ trợ.
+                "openAppDetailsSettings" -> {
+                    openAppDetailsSettings()
+                    result.success(true)
+                }
+                "isBootReceiverConfirmed" -> {
+                    result.success(
+                        isBootReceiverConfirmedForCurrentBoot()
+                    )
+                }
+                "getDeviceManufacturer" -> {
+                    result.success(
+                        Build.MANUFACTURER
+                            ?.trim()
+                            ?.lowercase()
+                            ?: ""
+                    )
                 }
 
                 else -> result.notImplemented()
@@ -80,13 +124,17 @@ class MainActivity : FlutterActivity() {
         val powerManager =
             getSystemService(Context.POWER_SERVICE) as PowerManager
 
-        return keyguardManager.isKeyguardLocked || !powerManager.isInteractive
+        return keyguardManager.isKeyguardLocked ||
+                !powerManager.isInteractive
     }
 
     private fun canUseFullScreenIntent(): Boolean {
         return if (Build.VERSION.SDK_INT >= 34) {
             val manager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                getSystemService(
+                    Context.NOTIFICATION_SERVICE
+                ) as NotificationManager
+
             manager.canUseFullScreenIntent()
         } else {
             true
@@ -95,17 +143,108 @@ class MainActivity : FlutterActivity() {
 
     private fun openFullScreenIntentSettings() {
         if (Build.VERSION.SDK_INT >= 34) {
-            val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
+            val settingsIntent = Intent(
+                Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
+            ).apply {
                 data = Uri.parse("package:$packageName")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            startActivity(intent)
+
+            startActivity(settingsIntent)
         } else {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:$packageName")
+            openAppDetailsSettings()
+        }
+    }
+
+    private fun isIgnoringBatteryOptimizations(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true
+        }
+
+        val powerManager =
+            getSystemService(Context.POWER_SERVICE) as PowerManager
+
+        return powerManager.isIgnoringBatteryOptimizations(
+            packageName
+        )
+    }
+
+    private fun isBackgroundRestricted(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            return false
+        }
+
+        val activityManager =
+            getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        return activityManager.isBackgroundRestricted
+    }
+
+    private fun openBatteryOptimizationSettings() {
+        try {
+            val settingsIntent = Intent(
+                Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+            ).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            startActivity(intent)
+
+            startActivity(settingsIntent)
+        } catch (_: Exception) {
+            openAppDetailsSettings()
         }
+    }
+    private fun isBootReceiverConfirmedForCurrentBoot(): Boolean {
+        val storageContext =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                createDeviceProtectedStorageContext()
+            } else {
+                this
+            }
+
+        val preferences =
+            storageContext.getSharedPreferences(
+                BootReceiver.PREFS_NAME,
+                Context.MODE_PRIVATE
+            )
+
+        val receiverConfirmed =
+            preferences.getBoolean(
+                BootReceiver.KEY_BOOT_RECEIVER_CONFIRMED,
+                false
+            )
+
+        if (!receiverConfirmed) {
+            return false
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return true
+        }
+
+        val confirmedBootCount =
+            preferences.getInt(
+                BootReceiver.KEY_CONFIRMED_BOOT_COUNT,
+                -1
+            )
+
+        val currentBootCount =
+            Settings.Global.getInt(
+                contentResolver,
+                Settings.Global.BOOT_COUNT,
+                -2
+            )
+
+        return confirmedBootCount >= 0 &&
+                confirmedBootCount == currentBootCount
+    }
+    private fun openAppDetailsSettings() {
+        val settingsIntent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        ).apply {
+            data = Uri.parse("package:$packageName")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        startActivity(settingsIntent)
     }
 }

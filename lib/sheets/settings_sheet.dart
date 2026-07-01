@@ -439,7 +439,105 @@ void showSettingsSheet({
       ),
     );
   }
+  void showHomeManagementSheet(
+      BuildContext settingsSheetContext,
+      ) {
+    Navigator.of(settingsSheetContext).pop();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) {
+        return;
+      }
+
+      showModalBottomSheet<void>(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (managementContext) {
+          return SafeArea(
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(
+                16,
+                10,
+                16,
+                18,
+              ),
+              decoration: const BoxDecoration(
+                color: SafeHomeColors.background,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 44,
+                    height: 5,
+                    margin: const EdgeInsets.only(bottom: 15),
+                    decoration: BoxDecoration(
+                      color: SafeHomeColors.border,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.home_work_rounded,
+                        color: SafeHomeColors.primary,
+                      ),
+                      const SizedBox(width: 9),
+                      Expanded(
+                        child: Text(
+                          strings.choose(
+                            vi: "Quản lý nhà",
+                            en: "Home management",
+                          ),
+                          style: const TextStyle(
+                            color: SafeHomeColors.textPrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+
+                  tile(
+                    icon: Icons.swap_horiz_rounded,
+                    title: strings.transferOwnership,
+                    subtitle: strings.transferOwnershipSubtitle,
+                    color: const Color(0xFF7656C8),
+                    onTap: () {
+                      closeThen(
+                        managementContext,
+                        onTransferOwner,
+                      );
+                    },
+                  ),
+
+                  tile(
+                    icon: Icons.delete_forever_rounded,
+                    title: strings.deleteHome,
+                    subtitle: strings.deleteHomeSubtitle,
+                    color: SafeHomeColors.danger,
+                    destructive: true,
+                    onTap: () {
+                      closeThen(
+                        managementContext,
+                        onDeleteHome,
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    });
+  }
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
@@ -685,12 +783,18 @@ void showSettingsSheet({
 
                       if (role == "owner")
                         tile(
-                          icon: Icons.swap_horiz_rounded,
-                          title: strings.transferOwnership,
-                          subtitle: strings.transferOwnershipSubtitle,
+                          icon: Icons.home_work_rounded,
+                          title: strings.choose(
+                            vi: "Quản lý nhà",
+                            en: "Home management",
+                          ),
+                          subtitle: strings.choose(
+                            vi: "Chuyển quyền chủ nhà hoặc xoá nhà",
+                            en: "Transfer ownership or delete this home",
+                          ),
                           color: const Color(0xFF7656C8),
                           onTap: () {
-                            closeThen(sheetContext, onTransferOwner);
+                            showHomeManagementSheet(sheetContext);
                           },
                         ),
 
@@ -763,21 +867,6 @@ void showSettingsSheet({
                           });
                         },
                       ),
-
-                      if (role == "owner") ...[
-                        const SizedBox(height: 5),
-                        sectionTitle(strings.dangerZone),
-                        tile(
-                          icon: Icons.delete_forever_rounded,
-                          title: strings.deleteHome,
-                          subtitle: strings.deleteHomeSubtitle,
-                          color: SafeHomeColors.danger,
-                          destructive: true,
-                          onTap: () {
-                            closeThen(sheetContext, onDeleteHome);
-                          },
-                        ),
-                      ],
                     ],
                   ),
                 ),

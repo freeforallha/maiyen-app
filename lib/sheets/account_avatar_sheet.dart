@@ -598,6 +598,35 @@ class AccountAvatarSheet {
         : "Tài khoản SafeHome";
 
     final dob = userDob.trim().isNotEmpty ? userDob.split("T").first : "";
+    int hiddenDeleteTapCount = 0;
+    DateTime? lastHiddenDeleteTapAt;
+
+    Future<void> handleHiddenDeleteTap(
+        BuildContext sheetContext,
+        ) async {
+      final now = DateTime.now();
+
+      // Không ấn liên tục thì bắt đầu đếm lại.
+      if (lastHiddenDeleteTapAt == null ||
+          now.difference(lastHiddenDeleteTapAt!) >
+              const Duration(seconds: 2)) {
+        hiddenDeleteTapCount = 0;
+      }
+
+      lastHiddenDeleteTapAt = now;
+      hiddenDeleteTapCount++;
+
+      if (hiddenDeleteTapCount < 5) {
+        return;
+      }
+
+      hiddenDeleteTapCount = 0;
+      lastHiddenDeleteTapAt = null;
+
+      await _showDeleteConfirmDialog(
+        sheetContext,
+      );
+    }
 
     showModalBottomSheet<void>(
       context: context,
@@ -714,17 +743,31 @@ class AccountAvatarSheet {
                                         ],
                                       ),
                                       const SizedBox(height: 9),
-                                      Text(
-                                        displayName,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: SafeHomeColors.textPrimary,
-                                          fontSize: 15,
-                                          height: 1.15,
-                                          fontWeight: FontWeight.w900,
-                                          letterSpacing: -0.2,
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () async {
+                                          await handleHiddenDeleteTap(
+                                            sheetContext,
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 4,
+                                          ),
+                                          child: Text(
+                                            displayName,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              color: SafeHomeColors.textPrimary,
+                                              fontSize: 15,
+                                              height: 1.15,
+                                              fontWeight: FontWeight.w900,
+                                              letterSpacing: -0.2,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -852,17 +895,6 @@ class AccountAvatarSheet {
                           },
                         ),
 
-                        _actionTile(
-                          icon: Icons.delete_forever_rounded,
-                          title: "Xoá tài khoản",
-                          subtitle: "Xoá vĩnh viễn tài khoản và dữ liệu",
-                          color: SafeHomeColors.danger,
-                          destructive: true,
-                          bottomSpacing: 0,
-                          onTap: () {
-                            _showDeleteConfirmDialog(sheetContext);
-                          },
-                        ),
                       ],
                     ),
                   ),

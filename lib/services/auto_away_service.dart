@@ -1,21 +1,27 @@
 import 'dart:async';
 import 'dart:ui';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:native_geofence/native_geofence.dart';
 
 import '../firebase_options.dart';
 
-const String _autoAwayGeofencePrefix = 'safehome_auto_away';
+const String _legacyAutoAwayGeofencePrefix =
+    'safehome_auto_away';
+
+const String _autoAwayGeofencePrefix =
+    'safehome_auto_away_v2';
 
 @pragma('vm:entry-point')
 Future<void> safeHomeAutoAwayGeofenceCallback(
-  GeofenceCallbackParams params,
-) async {
+    GeofenceCallbackParams params,
+    ) async {
   DartPluginRegistrant.ensureInitialized();
 
   try {
@@ -25,11 +31,19 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
       );
     }
 
-    await FirebaseAppCheck.instance.activate(
-      androidProvider: kReleaseMode
-          ? AndroidProvider.playIntegrity
-          : AndroidProvider.debug,
-    );
+    // App Check không được phép làm hỏng callback vị trí nền.
+    // Nếu việc kích hoạt thất bại, vẫn tiếp tục ghi trạng thái vị trí.
+    try {
+      await FirebaseAppCheck.instance.activate(
+        androidProvider: kReleaseMode
+            ? AndroidProvider.playIntegrity
+            : AndroidProvider.debug,
+      );
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_BACKGROUND_APP_CHECK_ERROR: $error',
+      );
+    }
 
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -43,6 +57,9 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
     }
 
     if (user == null) {
+      debugPrint(
+        'AUTO_AWAY_GEOFENCE_CALLBACK: no signed-in user',
+      );
       return;
     }
 
@@ -63,7 +80,7 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
           .ref(
         'accounts/${user.uid}/homePresence/${parsed.homeId}',
       )
-          .set({
+          .update({
         'ownerUid': parsed.ownerUid,
         'homeId': parsed.homeId,
         'state': state,
@@ -72,15 +89,29 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
         'updatedAt': ServerValue.timestamp,
       });
     }
-  } catch (error) {
-    print('AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error');
+  } catch (error, stackTrace) {
+    debugPrint(
+      'AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error',
+    );
+    debugPrintStack(stackTrace: stackTrace);
   }
 }
 
 class AutoAwayService {
+  static const MethodChannel _nativeChannel =
+  MethodChannel('safehome/native_alarm_permission');
+
   static bool _initialized = false;
   static bool _initialPresenceSynced = false;
-  static String _lastSignature = '';
+
+  // Mỗi tài khoản có chữ ký đồng bộ riêng.
+  static final Map<String, String> _lastSyncSignatureByUid = {};
+
+  // Chống ghi monitoringCheckedAt lặp lại theo từng tài khoản/nhà.
+  // Timestamp chỉ được cập nhật khi trạng thái quyền thực sự đổi.
+  static final Map<String, String>
+  _lastMonitoringStatusSignatureByHome = {};
+
   static Future<void>? _syncInProgress;
   static bool _syncRequested = false;
   static bool _pendingForce = false;
@@ -133,11 +164,16 @@ class AutoAwayService {
 
       _pendingForce = false;
 
-      await _syncForHomesInternal(
-        uid: uid,
-        homes: homes,
-        force: force,
-      );
+      try {
+        await _syncForHomesInternal(
+          uid: uid,
+          homes: homes,
+          force: force,
+        );
+      } catch (error, stackTrace) {
+        debugPrint('AUTO_AWAY_SYNC_ERROR: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
     }
   }
 
@@ -146,7 +182,9 @@ class AutoAwayService {
     required Map<String, dynamic> homes,
     required bool force,
   }) async {
-    if (uid.trim().isEmpty) {
+    final normalizedUid = uid.trim();
+
+    if (normalizedUid.isEmpty) {
       return;
     }
 
@@ -163,7 +201,8 @@ class AutoAwayService {
 
       final latitude = _asDouble(autoAway['latitude']);
       final longitude = _asDouble(autoAway['longitude']);
-      final radius = _asDouble(autoAway['radiusMeters']) ?? 150.0;
+      final radius =
+          _asDouble(autoAway['radiusMeters']) ?? 150.0;
 
       if (latitude == null || longitude == null) {
         continue;
@@ -171,14 +210,14 @@ class AutoAwayService {
 
       final ownerUid = home['_shared'] == true
           ? home['_ownerUid']?.toString().trim() ?? ''
-          : uid;
+          : normalizedUid;
 
       if (ownerUid.isEmpty) {
         continue;
       }
 
       final geofenceId = buildGeofenceId(
-        uid: uid,
+        uid: normalizedUid,
         ownerUid: ownerUid,
         homeId: homeId,
       );
@@ -189,21 +228,51 @@ class AutoAwayService {
         homeId: homeId,
         latitude: latitude,
         longitude: longitude,
-        radiusMeters: radius.clamp(100.0, 1000.0).toDouble(),
+        radiusMeters:
+        radius.clamp(100.0, 1000.0).toDouble(),
       );
     }
 
     final permission = await Geolocator.checkPermission();
+
+    final monitoringStatus = await _readMonitoringStatus(
+      permission: permission,
+    );
+
     final signature = _buildSignature(
       desired,
       permission,
+      monitoringStatus,
     );
 
-    if (!force && signature == _lastSignature) {
+    final previousSignature =
+    _lastSyncSignatureByUid[normalizedUid];
+
+    final signatureChanged =
+        signature != previousSignature;
+
+    // Chặn vòng lặp:
+    // ghi monitoringCheckedAt -> listener Firebase chạy lại
+    // -> syncForHomes chạy lại -> tiếp tục ghi Firebase.
+    //
+    // Chỉ đồng bộ khi quyền/cấu hình/trạng thái giám sát
+    // thực sự thay đổi hoặc khi caller chủ động force.
+    if (!force && !signatureChanged) {
       return;
     }
 
-    _lastSignature = signature;
+    // Chỉ ghi trạng thái khi có thay đổi thực sự.
+    for (final item in desired.values) {
+      await _writeMonitoringStatus(
+        uid: normalizedUid,
+        item: item,
+        status: monitoringStatus,
+      );
+    }
+
+    // monitoringEligible chỉ quyết định người này có được dùng
+    // để bật Auto Away hay không. Không được vô hiệu hóa geofence,
+    // vì sự kiện đi vào nhà vẫn cần dùng để tắt Mode Bảo vệ.
 
     if (!_initialized) {
       await NativeGeofenceManager.instance.initialize();
@@ -213,52 +282,73 @@ class AutoAwayService {
     final registered = await NativeGeofenceManager.instance
         .getRegisteredGeofences();
 
-    final registeredById = {
-      for (final item in registered) item.id: item,
-    };
+    final desiredHomeIds = desired.values
+        .map((item) => item.homeId)
+        .toSet();
 
-    for (final item in registered) {
-      if (!item.id.startsWith('$_autoAwayGeofencePrefix|')) {
+    // Chỉ xóa geofence cũ hoặc geofence của nhà không còn dùng.
+    // Thành viên thiếu điều kiện vẫn giữ geofence để một sự kiện
+    // enter thực tế có thể đưa Mode về Bình thường.
+    for (final registeredItem in registered) {
+      if (!_isSafeHomeAutoAwayGeofenceId(
+        registeredItem.id,
+      )) {
         continue;
       }
 
-      if (!desired.containsKey(item.id)) {
-        await NativeGeofenceManager.instance
-            .removeGeofenceById(item.id);
+      final parsed = parseGeofenceId(
+        registeredItem.id,
+      );
 
-        final parsed = parseGeofenceId(item.id);
+      final belongsToCurrentUser =
+          parsed == null || parsed.uid == normalizedUid;
 
-        if (parsed != null && parsed.uid == uid) {
-          await FirebaseDatabase.instance
-              .ref(
-            'accounts/$uid/homePresence/${parsed.homeId}',
-          )
-              .remove();
-        }
+      if (!belongsToCurrentUser) {
+        continue;
+      }
+
+      final isCurrentDesired =
+      desired.containsKey(registeredItem.id);
+
+      final shouldRemove = !isCurrentDesired;
+
+      if (!shouldRemove) {
+        continue;
+      }
+
+      await NativeGeofenceManager.instance
+          .removeGeofenceById(registeredItem.id);
+
+      // Chỉ xóa node presence khi nhà không còn bật Auto Away.
+      // Khi chỉ đổi phiên bản geofence hoặc thiếu điều kiện nền,
+      // vẫn giữ node để ghi trạng thái unknown và lý do bị chặn.
+      if (parsed != null &&
+          parsed.uid == normalizedUid &&
+          !desiredHomeIds.contains(parsed.homeId)) {
+        await FirebaseDatabase.instance
+            .ref(
+          'accounts/$normalizedUid/homePresence/${parsed.homeId}',
+        )
+            .remove();
       }
     }
 
-    if (permission != LocationPermission.always) {
-      for (final item in desired.values) {
-        await _writePresence(
-          uid: uid,
-          item: item,
-          state: 'unknown',
-          event: 'permission_required',
-        );
-      }
-
-      return;
-    }
+    final registeredById = {
+      for (final item in registered) item.id: item,
+    };
 
     var changed = false;
 
     for (final item in desired.values) {
       final current = registeredById[item.id];
+
       final matches = current != null &&
-          (current.location.latitude - item.latitude).abs() < 0.000001 &&
-          (current.location.longitude - item.longitude).abs() < 0.000001 &&
-          (current.radiusMeters - item.radiusMeters).abs() < 0.5;
+          (current.location.latitude - item.latitude).abs() <
+              0.000001 &&
+          (current.location.longitude - item.longitude).abs() <
+              0.000001 &&
+          (current.radiusMeters - item.radiusMeters).abs() <
+              0.5;
 
       if (matches) {
         continue;
@@ -287,7 +377,8 @@ class AutoAwayService {
           initialTriggers: {
             GeofenceEvent.enter,
           },
-          notificationResponsiveness: Duration(seconds: 15),
+          notificationResponsiveness:
+          Duration(seconds: 15),
         ),
       );
 
@@ -299,14 +390,21 @@ class AutoAwayService {
       changed = true;
     }
 
-    if (!_initialPresenceSynced || changed || force) {
+    if (!_initialPresenceSynced ||
+        changed ||
+        force ||
+        signatureChanged) {
       await _syncInitialPresence(
-        uid: uid,
+        uid: normalizedUid,
         desired: desired.values.toList(),
       );
 
       _initialPresenceSynced = true;
     }
+
+    // Chỉ lưu signature sau khi toàn bộ quá trình thành công.
+    // Nếu native plugin lỗi, lần sau hệ thống vẫn thử lại.
+    _lastSyncSignatureByUid[normalizedUid] = signature;
   }
 
   static Future<void> _syncInitialPresence({
@@ -322,29 +420,40 @@ class AutoAwayService {
     try {
       position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium,
+          accuracy: LocationAccuracy.high,
           timeLimit: Duration(seconds: 20),
         ),
       );
-    } catch (_) {
-      position = await Geolocator.getLastKnownPosition();
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_CURRENT_POSITION_ERROR: $error',
+      );
 
-      final timestamp = position?.timestamp;
+      try {
+        position = await Geolocator.getLastKnownPosition();
 
-      if (timestamp == null ||
-          DateTime.now().difference(timestamp).abs() >
-              const Duration(minutes: 5)) {
+        final timestamp = position?.timestamp;
+
+        if (timestamp == null ||
+            DateTime.now().difference(timestamp).abs() >
+                const Duration(minutes: 5)) {
+          position = null;
+        }
+      } catch (lastKnownError) {
+        debugPrint(
+          'AUTO_AWAY_LAST_POSITION_ERROR: $lastKnownError',
+        );
         position = null;
       }
     }
 
     if (position == null) {
+      // Không được ghi đè inside/outside hợp lệ thành unknown
+      // chỉ vì một lần lấy GPS tạm thời thất bại.
       for (final item in desired) {
-        await _writePresence(
+        await _markUnknownOnlyIfNoKnownState(
           uid: uid,
           item: item,
-          state: 'unknown',
-          event: 'location_unavailable',
         );
       }
 
@@ -359,7 +468,7 @@ class AutoAwayService {
         item.longitude,
       );
 
-      await _writePresence(
+      await _writePresenceIfChanged(
         uid: uid,
         item: item,
         state: distance <= item.radiusMeters
@@ -368,6 +477,68 @@ class AutoAwayService {
         event: 'initial_sync',
       );
     }
+  }
+
+  static Future<void> _writePresenceIfChanged({
+    required String uid,
+    required _DesiredGeofence item,
+    required String state,
+    required String event,
+  }) async {
+    final reference = FirebaseDatabase.instance.ref(
+      'accounts/$uid/homePresence/${item.homeId}',
+    );
+
+    final snapshot = await reference.once();
+    final current = _asMap(snapshot.snapshot.value);
+
+    final sameIdentity =
+        current['ownerUid']?.toString() == item.ownerUid &&
+            current['homeId']?.toString() == item.homeId;
+
+    final sameState =
+        current['state']?.toString() == state;
+
+    if (sameIdentity && sameState) {
+      return;
+    }
+
+    await reference.update({
+      'ownerUid': item.ownerUid,
+      'homeId': item.homeId,
+      'state': state,
+      'event': event,
+      'source': 'native_geofence',
+      'updatedAt': ServerValue.timestamp,
+    });
+  }
+
+  static Future<void> _markUnknownOnlyIfNoKnownState({
+    required String uid,
+    required _DesiredGeofence item,
+  }) async {
+    final reference = FirebaseDatabase.instance.ref(
+      'accounts/$uid/homePresence/${item.homeId}',
+    );
+
+    final snapshot = await reference.once();
+    final current = _asMap(snapshot.snapshot.value);
+    final currentState =
+        current['state']?.toString().trim() ?? '';
+
+    if (currentState == 'inside' ||
+        currentState == 'outside') {
+      return;
+    }
+
+    await reference.update({
+      'ownerUid': item.ownerUid,
+      'homeId': item.homeId,
+      'state': 'unknown',
+      'event': 'location_unavailable',
+      'source': 'native_geofence',
+      'updatedAt': ServerValue.timestamp,
+    });
   }
 
   static Future<void> _writePresence({
@@ -380,7 +551,7 @@ class AutoAwayService {
         .ref(
       'accounts/$uid/homePresence/${item.homeId}',
     )
-        .set({
+        .update({
       'ownerUid': item.ownerUid,
       'homeId': item.homeId,
       'state': state,
@@ -388,6 +559,69 @@ class AutoAwayService {
       'source': 'native_geofence',
       'updatedAt': ServerValue.timestamp,
     });
+  }
+
+  static Future<void> _writeMonitoringStatus({
+    required String uid,
+    required _DesiredGeofence item,
+    required _MonitoringStatus status,
+  }) async {
+    final cacheKey = '$uid|${item.homeId}';
+
+    final valueSignature = [
+      item.ownerUid,
+      item.homeId,
+      status.signature,
+      status.monitoringEligible,
+      status.blockingEvent,
+    ].join('|');
+
+    // Dù syncForHomes được listener gọi lại nhiều lần,
+    // không ghi Firebase nếu các giá trị quyền không thay đổi.
+    if (_lastMonitoringStatusSignatureByHome[cacheKey] ==
+        valueSignature) {
+      return;
+    }
+
+    // Đặt cache trước khi await để callback Firebase chạy lại
+    // trong lúc ghi cũng không tạo vòng lặp mới.
+    _lastMonitoringStatusSignatureByHome[cacheKey] =
+        valueSignature;
+
+    try {
+      await FirebaseDatabase.instance
+          .ref(
+        'accounts/$uid/homePresence/${item.homeId}',
+      )
+          .update({
+        'ownerUid': item.ownerUid,
+        'homeId': item.homeId,
+        'monitoringEligible':
+        status.monitoringEligible,
+        'locationAlwaysGranted':
+        status.locationAlwaysGranted,
+        'batteryUnrestricted':
+        status.batteryUnrestricted,
+        'backgroundRestricted':
+        status.backgroundRestricted,
+        'autoStartConfirmed':
+        status.autoStartConfirmed,
+        'monitoringBlockingReason':
+        status.blockingEvent,
+        'monitoringCheckedAt':
+        ServerValue.timestamp,
+      });
+    } catch (_) {
+      // Cho phép lần đồng bộ sau thử ghi lại nếu lần này lỗi.
+      if (_lastMonitoringStatusSignatureByHome[cacheKey] ==
+          valueSignature) {
+        _lastMonitoringStatusSignatureByHome.remove(
+          cacheKey,
+        );
+      }
+
+      rethrow;
+    }
   }
 
   static String buildGeofenceId({
@@ -404,12 +638,18 @@ class AutoAwayService {
   }
 
   static AutoAwayGeofenceIdentity? parseGeofenceId(
-    String rawId,
-  ) {
+      String rawId,
+      ) {
     final parts = rawId.split('|');
 
-    if (parts.length != 4 ||
-        parts.first != _autoAwayGeofencePrefix) {
+    if (parts.length != 4) {
+      return null;
+    }
+
+    final prefix = parts.first;
+
+    if (prefix != _autoAwayGeofencePrefix &&
+        prefix != _legacyAutoAwayGeofencePrefix) {
       return null;
     }
 
@@ -417,7 +657,9 @@ class AutoAwayService {
     final ownerUid = parts[2].trim();
     final homeId = parts[3].trim();
 
-    if (uid.isEmpty || ownerUid.isEmpty || homeId.isEmpty) {
+    if (uid.isEmpty ||
+        ownerUid.isEmpty ||
+        homeId.isEmpty) {
       return null;
     }
 
@@ -428,15 +670,91 @@ class AutoAwayService {
     );
   }
 
+  static bool _isSafeHomeAutoAwayGeofenceId(
+      String id,
+      ) {
+    return id.startsWith(
+      '$_autoAwayGeofencePrefix|',
+    ) ||
+        id.startsWith(
+          '$_legacyAutoAwayGeofencePrefix|',
+        );
+  }
+
+  static Future<_MonitoringStatus> _readMonitoringStatus({
+    required LocationPermission permission,
+  }) async {
+    final locationAlwaysGranted =
+        permission == LocationPermission.always;
+
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      return _MonitoringStatus(
+        locationAlwaysGranted: locationAlwaysGranted,
+        batteryUnrestricted: true,
+        backgroundRestricted: false,
+        autoStartConfirmed: true,
+      );
+    }
+
+    var batteryUnrestricted = false;
+    var backgroundRestricted = true;
+    var autoStartConfirmed = false;
+
+    try {
+      batteryUnrestricted =
+          await _nativeChannel.invokeMethod<bool>(
+            'isIgnoringBatteryOptimizations',
+          ) ??
+              false;
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_BATTERY_CHECK_ERROR: $error',
+      );
+    }
+
+    try {
+      backgroundRestricted =
+          await _nativeChannel.invokeMethod<bool>(
+            'isBackgroundRestricted',
+          ) ??
+              true;
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_BACKGROUND_CHECK_ERROR: $error',
+      );
+    }
+
+    try {
+      autoStartConfirmed =
+          await _nativeChannel.invokeMethod<bool>(
+            'isBootReceiverConfirmed',
+          ) ??
+              false;
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_AUTOSTART_CHECK_ERROR: $error',
+      );
+    }
+
+    return _MonitoringStatus(
+      locationAlwaysGranted: locationAlwaysGranted,
+      batteryUnrestricted: batteryUnrestricted,
+      backgroundRestricted: backgroundRestricted,
+      autoStartConfirmed: autoStartConfirmed,
+    );
+  }
+
   static String _buildSignature(
-    Map<String, _DesiredGeofence> desired,
-    LocationPermission permission,
-  ) {
+      Map<String, _DesiredGeofence> desired,
+      LocationPermission permission,
+      _MonitoringStatus monitoringStatus,
+      ) {
     final items = desired.values.toList()
       ..sort((a, b) => a.id.compareTo(b.id));
 
     return [
       permission.name,
+      monitoringStatus.signature,
       for (final item in items)
         '${item.id}:${item.latitude}:${item.longitude}:${item.radiusMeters}',
     ].join(';');
@@ -457,6 +775,53 @@ class AutoAwayService {
 
     return double.tryParse(raw?.toString() ?? '');
   }
+}
+
+class _MonitoringStatus {
+  const _MonitoringStatus({
+    required this.locationAlwaysGranted,
+    required this.batteryUnrestricted,
+    required this.backgroundRestricted,
+    required this.autoStartConfirmed,
+  });
+
+  final bool locationAlwaysGranted;
+  final bool batteryUnrestricted;
+  final bool backgroundRestricted;
+  final bool autoStartConfirmed;
+
+  bool get monitoringEligible =>
+      locationAlwaysGranted &&
+          batteryUnrestricted &&
+          !backgroundRestricted &&
+          autoStartConfirmed;
+
+  String get blockingEvent {
+    if (!locationAlwaysGranted) {
+      return 'permission_required';
+    }
+
+    if (!batteryUnrestricted) {
+      return 'battery_optimization_required';
+    }
+
+    if (backgroundRestricted) {
+      return 'background_restricted';
+    }
+
+    if (!autoStartConfirmed) {
+      return 'auto_start_required';
+    }
+
+    return '';
+  }
+
+  String get signature => [
+    locationAlwaysGranted,
+    batteryUnrestricted,
+    backgroundRestricted,
+    autoStartConfirmed,
+  ].join(':');
 }
 
 class AutoAwayGeofenceIdentity {

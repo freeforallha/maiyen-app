@@ -648,7 +648,25 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     safeMap(home["devices"]),
     securityMode: normalizeSecurityMode(home["securityMode"]),
   );
-
+// Nhà chưa có thiết bị thì Hub không được làm trạng thái
+// chuyển thành an toàn, nguy hiểm hoặc đang giám sát.
+  if (overall["hasDevices"] != true) {
+    return {
+      ...overall,
+      "safe": false,
+      "level": "no_data",
+      "dangerIssues": <String>[],
+      "warningIssues": <String>[],
+      "issues": <String>[],
+      "safeSummary": <String>[
+        "Chưa có dữ liệu để đánh giá",
+      ],
+      "hubTracked": false,
+      "hubOnline": false,
+      "hubChecking": false,
+      "hubIssue": "",
+    };
+  }
   final dangerIssues = List<String>.from(
     overall["dangerIssues"] ?? const <String>[],
   );
@@ -769,7 +787,7 @@ Map<String, dynamic> getOverallStatus(
   int doorCount = 0;
   int closedDoorCount = 0;
   int deviceCount = 0;
-
+  final deviceTypes = <String>{};
   double? temperature;
   double? humidity;
   DateTime? newestLastSeen;
@@ -777,13 +795,18 @@ Map<String, dynamic> getOverallStatus(
 
   devices.forEach((id, raw) {
     final device = safeMap(raw);
+
+    if (device.isEmpty) {
+      return;
+    }
+
     final nameText = device["name"]?.toString().trim() ?? "";
     final name = nameText.isNotEmpty ? nameText : id;
     final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
     final lastSeenTime = parseLastSeen(device["last_seen"]);
 
     deviceCount++;
-
+    deviceTypes.add(type);
     final latestSeen = newestLastSeen;
 
     if (lastSeenTime != null &&
@@ -840,7 +863,60 @@ Map<String, dynamic> getOverallStatus(
       warningIssues.add("$name: ${deviceWarningIssues.join(" & ")}");
     }
   });
+  if (deviceCount == 0) {
+    return {
+      "safe": false,
+      "level": "no_data",
+      "dangerIssues": <String>[],
+      "warningIssues": <String>[],
+      "issues": <String>[],
+      "safeSummary": <String>[
+        "Chưa có dữ liệu để đánh giá",
+      ],
+      "deviceCount": 0,
+      "hasDevices": false,
+      "deviceTypes": <String>[],
+      "hasContactDevice": false,
+      "hasSmokeDevice": false,
+      "hasSosDevice": false,
+      "hasEnvironmentDevice": false,
+      "hasEmergencyDevice": false,
+      "hasInfrastructureDevice": false,
+    };
+  }
 
+  final hasContactDevice = deviceTypes.any(
+    const {
+      "door",
+      "window",
+      "gate",
+      "lock",
+      "door_lock",
+    }.contains,
+  );
+
+  final hasSmokeDevice = deviceTypes.contains("smoke");
+  final hasSosDevice = deviceTypes.contains("sos");
+  final hasEnvironmentDevice = deviceTypes.contains("temperature");
+
+  final hasEmergencyDevice = deviceTypes.any(
+    const {
+      "smoke",
+      "heat",
+      "carbon_monoxide",
+      "gas",
+      "water_leak",
+      "flood",
+      "sos",
+    }.contains,
+  );
+
+  final hasInfrastructureDevice = deviceTypes.any(
+    const {
+      "repeater",
+      "hub",
+    }.contains,
+  );
   if (doorCount > 0) {
     safeSummary.add("$closedDoorCount/$doorCount cửa và khóa đã an toàn");
   }
@@ -900,6 +976,18 @@ Map<String, dynamic> getOverallStatus(
     "warningIssues": warningIssues,
     "issues": [...dangerIssues, ...warningIssues],
     "safeSummary": safeSummary,
+
+    // Thông tin này giúp Status Panel chỉ mô tả
+    // đúng những loại cảm biến thực sự đang có.
+    "deviceCount": deviceCount,
+    "hasDevices": true,
+    "deviceTypes": deviceTypes.toList(),
+    "hasContactDevice": hasContactDevice,
+    "hasSmokeDevice": hasSmokeDevice,
+    "hasSosDevice": hasSosDevice,
+    "hasEnvironmentDevice": hasEnvironmentDevice,
+    "hasEmergencyDevice": hasEmergencyDevice,
+    "hasInfrastructureDevice": hasInfrastructureDevice,
   };
 }
 

@@ -1475,23 +1475,28 @@ class _AllHomePageState extends State<AllHomePage> {
               ),
               child: RichText(
                 text: const TextSpan(
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.3,
+                  ),
                   children: [
                     TextSpan(
                       text: "Safe",
                       style: TextStyle(
                         color: SafeHomeColors.primary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.4,
                       ),
                     ),
                     TextSpan(
-                      text: "AllHome",
+                      text: "All",
                       style: TextStyle(
                         color: SafeHomeColors.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.4,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Home",
+                      style: TextStyle(
+                        color: SafeHomeColors.textPrimary,
                       ),
                     ),
                   ],

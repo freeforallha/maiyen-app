@@ -17,6 +17,7 @@ class StatusPanel extends StatefulWidget {
   final VoidCallback? onEnvironmentTap;
   final String securityMode;
   final ValueChanged<String>? onSecurityModeChanged;
+  final String securityModeSource;
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
 
@@ -37,6 +38,7 @@ class StatusPanel extends StatefulWidget {
     required this.homeEvents,
     this.onEnvironmentTap,
     this.securityMode = "normal",
+    this.securityModeSource = "",
     this.onSecurityModeChanged,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
@@ -75,6 +77,10 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   Color _statusColor(String level) {
+    if (level == "no_data") {
+      return SafeHomeColors.textSecondary;
+    }
+
     if (level == "danger") {
       return SafeHomeColors.danger;
     }
@@ -87,6 +93,10 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   IconData _statusIcon(String level) {
+    if (level == "no_data") {
+      return Icons.remove_circle_outline_rounded;
+    }
+
     if (level == "danger") {
       return Icons.warning_amber_rounded;
     }
@@ -99,6 +109,10 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   String _statusText(String level) {
+    if (level == "no_data") {
+      return "-------";
+    }
+
     if (level == "danger") {
       return _strings.t("CHƯA AN TOÀN");
     }
@@ -164,6 +178,17 @@ class _StatusPanelState extends State<StatusPanel> {
     required List<Map<String, dynamic>> recentEvents,
     required Map<String, int> eventCounts,
   }) {
+    final hasDevices =
+        widget.overall["hasDevices"] == true;
+
+    if (!hasDevices) {
+      return [
+        _strings.choose(
+          vi: "Chưa có dữ liệu để đánh giá",
+          en: "Not enough data to evaluate",
+        ),
+      ];
+    }
     final summary = <String>[];
     final openCount = eventCounts["open"] ?? 0;
     final smokeCount = eventCounts["smoke"] ?? 0;
@@ -227,10 +252,26 @@ class _StatusPanelState extends State<StatusPanel> {
         );
       }
 
-      if (smokeCount == 0 && sosCount == 0) {
+      final hasSmokeDevice =
+          widget.overall["hasSmokeDevice"] == true;
+
+      final hasSosDevice =
+          widget.overall["hasSosDevice"] == true;
+
+      if (hasSmokeDevice && smokeCount == 0) {
         summary.add(
-          _strings.t(
-            "Không có dấu hiệu khói hoặc SOS bất thường.",
+          _strings.choose(
+            vi: "Cảm biến khói chưa ghi nhận bất thường.",
+            en: "The smoke sensor has not detected an issue.",
+          ),
+        );
+      }
+
+      if (hasSosDevice && sosCount == 0) {
+        summary.add(
+          _strings.choose(
+            vi: "Thiết bị SOS chưa ghi nhận cảnh báo.",
+            en: "The SOS device has not recorded an alert.",
           ),
         );
       }
@@ -766,23 +807,57 @@ class _StatusPanelState extends State<StatusPanel> {
   @override
   Widget build(BuildContext context) {
     final level =
-        widget.overall["level"]?.toString() ?? "safe";
+        widget.overall["level"]?.toString() ?? "no_data";
+
+    final hasDevices =
+        widget.overall["hasDevices"] == true;
+
+    final noData =
+        level == "no_data" || !hasDevices;
 
     final issues = List<String>.from(
       widget.overall["issues"] ?? const [],
-    ).map(_strings.statusText).toList();
+    );
 
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
-    ).map(_strings.statusText).toList();
+    );
 
-    final allLines = issues.isNotEmpty ? issues : safeSummary;
+    final allLines =
+    issues.isNotEmpty ? issues : safeSummary;
 
-    final firstLine = allLines.isNotEmpty
+    final manualSecurityMode =
+        widget.securityMode == "armed" &&
+            widget.securityModeSource == "manual";
+
+    final manualSecurityModeText = _strings.choose(
+      vi:
+      "Bảo vệ thủ công đang bật — chỉ tắt khi chuyển về Bình thường",
+      en:
+      "Manual protection is on — switch to Normal to turn it off",
+    );
+
+    final normalFirstLine = allLines.isNotEmpty
         ? allLines.first
-        : _strings.t("Chưa có dữ liệu trạng thái");
+        : _strings.choose(
+      vi: "Chưa có dữ liệu trạng thái",
+      en: "No status data available",
+    );
 
-    final rotatingLines = allLines.length > 1
+    final firstLine = noData
+        ? _strings.choose(
+      vi: "Chưa có dữ liệu để đánh giá",
+      en: "Not enough data to evaluate",
+    )
+        : manualSecurityMode
+        ? manualSecurityModeText
+        : normalFirstLine;
+
+    final rotatingLines = noData
+        ? <String>[]
+        : manualSecurityMode
+        ? allLines
+        : allLines.length > 1
         ? allLines.skip(1).toList()
         : <String>[];
 
@@ -790,7 +865,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ? rotatingLines[
     _broadcastIndex % rotatingLines.length
     ]
-        : _strings.t("Hệ thống đang giám sát liên tục");
+        : _strings.t("Bấm vào để xem chi tiết");
 
     final statusColor = _statusColor(level);
     final statusIcon = _statusIcon(level);
@@ -800,16 +875,20 @@ class _StatusPanelState extends State<StatusPanel> {
     widget.alarmEnabled &&
         widget.alarmStart.trim().isNotEmpty &&
         widget.alarmStart != "Tắt"
-        ? widget.alarmStart
-        : "Tắt";
+        ? widget.alarmStart.trim()
+        : "";
 
-    final alarmScheduleSet = rawAlarmScheduleText != "Tắt";
+    final alarmScheduleSet =
+        rawAlarmScheduleText.isNotEmpty;
+
     final alarmScheduleText = alarmScheduleSet
         ? rawAlarmScheduleText
         : _strings.t("Tắt");
+
     final alarmPauseSet =
         widget.alarmPauseText.trim().isNotEmpty &&
-            widget.alarmPauseText != "Tắt";
+            widget.alarmPauseText != "Tắt" &&
+            widget.alarmPauseText != "Chưa thiết lập";
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -820,15 +899,23 @@ class _StatusPanelState extends State<StatusPanel> {
 
     String subtitle;
 
-    if (issues.isNotEmpty) {
+    if (noData) {
+      subtitle = "";
+    } else if (issues.isNotEmpty) {
       subtitle = _strings.choose(
         vi: "Phát hiện ${issues.length} vấn đề cần xử lý",
-        en: "${issues.length} issues detected",
+        en: "${issues.length} issues need attention",
       );
     } else if (smokeCount > 0) {
-      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo khói");
+      subtitle = _strings.choose(
+        vi: "Hôm nay đã ghi nhận cảnh báo khói",
+        en: "A smoke alert was recorded today",
+      );
     } else if (sosCount > 0) {
-      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo SOS");
+      subtitle = _strings.choose(
+        vi: "Hôm nay đã ghi nhận cảnh báo SOS",
+        en: "An SOS alert was recorded today",
+      );
     } else if (openCount > 0) {
       subtitle = _strings.choose(
         vi: "Hôm nay các cửa đã được sử dụng $openCount lần",
@@ -840,13 +927,18 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "${recentEvents.length} recent activities recorded",
       );
     } else {
-      subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
+      subtitle = _strings.t(
+        "Ngôi nhà đang hoạt động ổn định",
+      );
     }
 
-    final environment = widget.environmentText
+    final environment =
+    widget.overall["hasEnvironmentDevice"] == true
+        ? widget.environmentText
         .replaceAll("/", " | ")
         .replaceAll("  ", " ")
-        .trim();
+        .trim()
+        : "";
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -902,6 +994,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         ),
                       ),
                     ),
+                    if (environment.isNotEmpty)
                     InkWell(
                       onTap: widget.onEnvironmentTap,
                       borderRadius: BorderRadius.circular(8),
@@ -951,7 +1044,9 @@ class _StatusPanelState extends State<StatusPanel> {
                 const SizedBox(height: 5),
                 _statusLine(
                   text: firstLine,
-                  color: issues.isNotEmpty
+                  color: manualSecurityMode
+                      ? SafeHomeColors.danger
+                      : issues.isNotEmpty
                       ? statusColor
                       : SafeHomeColors.textSecondary,
                 ),
