@@ -287,7 +287,7 @@ class AutoAwayService {
           initialTriggers: {
             GeofenceEvent.enter,
           },
-          notificationResponsiveness: Duration(minutes: 1),
+          notificationResponsiveness: Duration(seconds: 15),
         ),
       );
 

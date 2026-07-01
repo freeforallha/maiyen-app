@@ -643,6 +643,7 @@ Map<String, dynamic> evaluateHubStatus(dynamic rawHome) {
 /// các màn hình cho ra màu hoặc trạng thái khác nhau.
 Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   final home = safeMap(rawHome);
+
   final overall = getOverallStatus(
     safeMap(home["devices"]),
     securityMode: normalizeSecurityMode(home["securityMode"]),
@@ -651,13 +652,19 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   final dangerIssues = List<String>.from(
     overall["dangerIssues"] ?? const <String>[],
   );
+
   final warningIssues = List<String>.from(
     overall["warningIssues"] ?? const <String>[],
   );
+
   final safeSummary = List<String>.from(
     overall["safeSummary"] ?? const <String>[],
   );
+
+  // ================= HUB =================
+
   final hub = evaluateHubStatus(home);
+
   final hubTracked = hub["tracked"] == true;
   final hubOnline = hub["online"] == true;
   final hubChecking = hub["checking"] == true;
@@ -669,6 +676,65 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     dangerIssues.insert(0, hubIssue);
   } else if (hubTracked && hubOnline) {
     safeSummary.insert(0, "Hub đã kết nối");
+  }
+
+  // ================= THÀNH VIÊN =================
+
+  final autoAway = safeMap(home["autoAway"]);
+
+  final homeLatitude = double.tryParse(
+    autoAway["latitude"]?.toString() ?? "",
+  );
+
+  final homeLongitude = double.tryParse(
+    autoAway["longitude"]?.toString() ?? "",
+  );
+
+  final presenceTrackingEnabled =
+      autoAway["enabled"] == true &&
+          homeLatitude != null &&
+          homeLongitude != null;
+
+  // Chỉ đánh giá vị trí thành viên khi nhà đã đặt vị trí
+  // và đang bật tính năng tự động nhận biết ra/vào nhà.
+  if (presenceTrackingEnabled) {
+    final presenceSummary = safeMap(
+      home["presenceSummary"],
+    );
+
+    final memberCount = int.tryParse(
+      presenceSummary["memberCount"]?.toString() ?? "",
+    ) ??
+        0;
+
+    final insideCount = int.tryParse(
+      presenceSummary["insideCount"]?.toString() ?? "",
+    ) ??
+        0;
+
+    final unknownCount = int.tryParse(
+      presenceSummary["unknownCount"]?.toString() ?? "",
+    ) ??
+        0;
+
+    if (memberCount > 0) {
+      final memberText =
+          "Thành viên trong nhà $insideCount/$memberCount";
+
+      if (insideCount > 0) {
+        safeSummary.add(memberText);
+      } else if (dangerIssues.isNotEmpty) {
+        dangerIssues.add(memberText);
+      } else {
+        warningIssues.add(memberText);
+      }
+
+      if (unknownCount > 0) {
+        warningIssues.add(
+          "Thành viên chưa xác định vị trí: $unknownCount",
+        );
+      }
+    }
   }
 
   final level = dangerIssues.isNotEmpty
