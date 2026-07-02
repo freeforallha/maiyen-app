@@ -75,7 +75,6 @@ class _HomePageState extends State<HomePage>
   }
 
   String uid = "";
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
   String userName = "";
   String userGender = "";
   String userDob = "";
@@ -284,6 +283,12 @@ class _HomePageState extends State<HomePage>
   }
 
   Map<String, dynamic> homes = {};
+  final HomeListenerService _homeListenerService = HomeListenerService();
+  final Set<String> _ownedHomeIds = <String>{};
+  Map<String, dynamic> _sharedHomesSnapshot = {};
+  Object? _savedHomeOrder;
+  String _ensuredRoomModelKey = "";
+
   String selectedHome = "";
   String selectedRoomId = "overview";
   Map<String, dynamic> alarmSettings = {};
@@ -926,6 +931,90 @@ class _HomePageState extends State<HomePage>
       return false;
     }
   }
+  int _normalizeSecurityModeRepeatMinutes(
+      dynamic value,
+      ) {
+    final minutes = int.tryParse(
+      value?.toString() ?? "",
+    ) ??
+        0;
+
+    return const <int>[0, 15, 30, 60]
+        .contains(minutes)
+        ? minutes
+        : 0;
+  }
+
+  Future<bool> setSecurityModeRepeatMinutes(
+      int minutes,
+      ) async {
+    final homeId = selectedHome;
+
+    if (homeId.isEmpty) {
+      return false;
+    }
+
+    if (!canManageHome()) {
+      showTopToast(
+        context,
+        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+        color: Colors.orange,
+        icon: Icons.lock_outline_rounded,
+      );
+      return false;
+    }
+
+    final normalized =
+    _normalizeSecurityModeRepeatMinutes(minutes);
+
+    try {
+      final ownerUid = getHomeOwnerUid();
+
+      await FirebaseDatabase.instance
+          .ref(
+        "accounts/$ownerUid/homes/$homeId/securityModeRepeatMinutes",
+      )
+          .set(normalized);
+
+      if (!mounted) {
+        return true;
+      }
+
+      setState(() {
+        final cachedHome = safeMap(homes[homeId]);
+        cachedHome["securityModeRepeatMinutes"] =
+            normalized;
+        homes[homeId] = cachedHome;
+      });
+
+      showTopToast(
+        context,
+        normalized == 0
+            ? "Mode Bảo vệ sẽ chỉ báo động một lần"
+            : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
+        color: SafeHomeColors.primary,
+        icon: Icons.repeat_rounded,
+      );
+
+      return true;
+    } catch (error) {
+      if (mounted) {
+        showTopToast(
+          context,
+          "Không lưu được thời gian lặp báo động",
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+      }
+
+      debugPrint(
+        "SET_SECURITY_MODE_REPEAT_ERROR: $error",
+      );
+
+      return false;
+    }
+  }
+
   Future<void> setSecurityMode(String mode) async {
     final homeId = selectedHome;
 
@@ -958,6 +1047,11 @@ class _HomePageState extends State<HomePage>
             ?.toString()
             .trim() ??
             "";
+
+    final securityModeRepeatMinutes =
+    _normalizeSecurityModeRepeatMinutes(
+      currentHome["securityModeRepeatMinutes"],
+    );
 
     if (currentMode == nextMode) {
       if (nextMode == "normal" ||
@@ -1040,15 +1134,18 @@ class _HomePageState extends State<HomePage>
             message:
             "$actorName đã bật Mode Bảo vệ thủ công cho "
                 "\"$homeName\". Chế độ này chỉ tắt khi một thành "
-                "viên có quyền chủ động chuyển về Bình thường.",
+                "viên có quyền chủ động chuyển về Bình thường. "
+                "${securityModeRepeatMinutes == 0 ? "Báo động không lặp lại." : "Báo động lặp sau $securityModeRepeatMinutes phút nếu sự cố vẫn còn."}",
             actorUid: uid,
             entityType: "home",
             entityId: homeId,
             includeActor: true,
             writeHomeTimeline: true,
-            data: const {
+            data: {
               "securityMode": "armed",
               "securityModeSource": "manual",
+              "securityModeRepeatMinutes":
+              securityModeRepeatMinutes,
             },
           );
         } catch (error) {
@@ -1701,14 +1798,23 @@ class _HomePageState extends State<HomePage>
     );
   }
   final ScrollController homeTabController = ScrollController();
-  StreamSubscription<DatabaseEvent>? accountSubscription;
+  StreamSubscription<DatabaseEvent>? profileSubscription;
+  StreamSubscription<DatabaseEvent>? ownedHomeAddedSubscription;
+  StreamSubscription<DatabaseEvent>? ownedHomeChangedSubscription;
+  StreamSubscription<DatabaseEvent>? ownedHomeRemovedSubscription;
+  StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
+  StreamSubscription<DatabaseEvent>? homeOrderSubscription;
+  StreamSubscription<DatabaseEvent>? alarmSettingsSubscription;
+  StreamSubscription<DatabaseEvent>? customRulesSubscription;
+  StreamSubscription<DatabaseEvent>? shareRequestsSubscription;
   StreamSubscription<DatabaseEvent>? notificationSubscription;
   StreamSubscription<DatabaseEvent>? homeEventsSubscription;
   StreamSubscription<DatabaseEvent>? alarmPauseSubscription;
   String _homeEventsListenKey = "";
   String _alarmPauseListenKey = "";
-  final Map<String, StreamSubscription<DatabaseEvent>> homeChatSubscriptions =
-  {};
+  StreamSubscription<DatabaseEvent>? chatUnreadSubscription;
+  String _chatUnreadListenUid = "";
+  Map<String, int> _chatUnreadSnapshot = {};
 
   void startNotificationListener() {
     notificationSubscription?.cancel();
@@ -1831,67 +1937,91 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  void syncHomeChatListeners() {
+  void _applyChatUnreadSnapshot() {
     if (!mounted) return;
 
-    final activeHomeIds = homes.keys.where((id) => id.isNotEmpty).toSet();
-    final removedHomeIds = homeChatSubscriptions.keys
-        .where((homeId) => !activeHomeIds.contains(homeId))
-        .toList();
-    var changedUnread = false;
+    final activeHomeIds = homes.keys
+        .where((homeId) => homeId.isNotEmpty)
+        .toSet();
 
-    for (final homeId in removedHomeIds) {
-      homeChatSubscriptions.remove(homeId)?.cancel();
-      changedUnread = unreadChatByHome.remove(homeId) != null || changedUnread;
+    final nextUnreadByHome = <String, int>{};
+
+    for (final entry in _chatUnreadSnapshot.entries) {
+      if (
+      activeHomeIds.contains(entry.key) &&
+          entry.value > 0
+      ) {
+        nextUnreadByHome[entry.key] = entry.value;
+      }
     }
 
-    for (final homeId in activeHomeIds) {
-      if (homeChatSubscriptions.containsKey(homeId)) continue;
+    final nextTotal = nextUnreadByHome.values.fold<int>(
+      0,
+          (total, count) => total + count,
+    );
 
-      homeChatSubscriptions[homeId] = ChatService.homeChatStream(homeId).listen(
-            (event) {
-          final unread = ChatService.unreadCount(
-            homeChat: event.snapshot.value,
-            uid: uid,
-          );
+    final unchanged =
+        nextTotal == unreadChatCount &&
+            nextUnreadByHome.length == unreadChatByHome.length &&
+            nextUnreadByHome.entries.every(
+                  (entry) => unreadChatByHome[entry.key] == entry.value,
+            );
 
-          if (!mounted) return;
+    if (unchanged) {
+      return;
+    }
 
-          setState(() {
-            if (unread > 0) {
-              unreadChatByHome[homeId] = unread;
-            } else {
-              unreadChatByHome.remove(homeId);
+    setState(() {
+      unreadChatByHome = nextUnreadByHome;
+      unreadChatCount = nextTotal;
+    });
+  }
+
+  void syncHomeChatListeners() {
+    if (!mounted || uid.isEmpty) return;
+
+    if (
+    chatUnreadSubscription != null &&
+        _chatUnreadListenUid == uid
+    ) {
+      _applyChatUnreadSnapshot();
+      return;
+    }
+
+    chatUnreadSubscription?.cancel();
+    _chatUnreadListenUid = uid;
+    _chatUnreadSnapshot = {};
+
+    chatUnreadSubscription = ChatService
+        .unreadCountersStream(uid)
+        .listen(
+          (event) {
+        final data = event.snapshot.value;
+        final nextSnapshot = <String, int>{};
+
+        if (data is Map) {
+          final map = Map<String, dynamic>.from(data);
+
+          for (final entry in map.entries) {
+            final count = ChatService.unreadCounterCount(
+              entry.value,
+            );
+
+            if (count > 0) {
+              nextSnapshot[entry.key.toString()] = count;
             }
+          }
+        }
 
-            unreadChatCount = unreadChatByHome.values.fold<int>(
-              0,
-                  (total, count) => total + count,
-            );
-          });
-        },
-        onError: (_) {
-          if (!mounted) return;
-
-          setState(() {
-            unreadChatByHome.remove(homeId);
-            unreadChatCount = unreadChatByHome.values.fold<int>(
-              0,
-                  (total, count) => total + count,
-            );
-          });
-        },
-      );
-    }
-
-    if (changedUnread) {
-      setState(() {
-        unreadChatCount = unreadChatByHome.values.fold<int>(
-          0,
-              (total, count) => total + count,
-        );
-      });
-    }
+        _chatUnreadSnapshot = nextSnapshot;
+        _applyChatUnreadSnapshot();
+      },
+      onError: (Object error) {
+        debugPrint("CHAT_UNREAD_LISTENER_ERROR: $error");
+        _chatUnreadSnapshot = {};
+        _applyChatUnreadSnapshot();
+      },
+    );
   }
 
   void syncDeviceNotificationBridge() {
@@ -2449,11 +2579,12 @@ class _HomePageState extends State<HomePage>
     return "--°C / --%";
   }
 
-  Future<Map<String, dynamic>> loadVisibleShareRequests({
-    Map<String, dynamic>? accountData,
-  }) async {
-    final account = accountData ?? safeMap((await ref.get()).value);
-    return safeMap(account["shareRequests"]);
+  Future<Map<String, dynamic>> loadVisibleShareRequests() async {
+    final snapshot = await FirebaseDatabase.instance
+        .ref(FirebasePaths.shareRequests(uid))
+        .get();
+
+    return safeMap(snapshot.value);
   }
 
   Future<void> syncMyPhoneToVisibleHomes({
@@ -2504,6 +2635,427 @@ class _HomePageState extends State<HomePage>
       inviteCountNotifier.value = requests.length;
     });
   }
+
+  Object? _normalizeSavedHomeOrder(Object? rawOrder) {
+    if (rawOrder is List) {
+      return rawOrder
+          .where((item) => item != null)
+          .map((item) => item.toString())
+          .toList();
+    }
+
+    if (rawOrder is Map) {
+      final entries = rawOrder.entries.toList()
+        ..sort((a, b) {
+          final aIndex = int.tryParse(a.key.toString()) ?? 1 << 30;
+          final bIndex = int.tryParse(b.key.toString()) ?? 1 << 30;
+          return aIndex.compareTo(bIndex);
+        });
+
+      return entries
+          .where((entry) => entry.value != null)
+          .map((entry) => entry.value.toString())
+          .toList();
+    }
+
+    return null;
+  }
+
+  Map<String, dynamic> _ownedHomesForState() {
+    final result = <String, dynamic>{};
+
+    for (final homeId in _ownedHomeIds) {
+      if (homes.containsKey(homeId)) {
+        result[homeId] = homes[homeId];
+      }
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> _loadedSharedHomesForState() {
+    final result = <String, dynamic>{};
+
+    for (final entry in _sharedHomesSnapshot.entries) {
+      final homeId = entry.key.toString();
+      final home = safeMap(homes[homeId]);
+
+      if (home['_shared'] == true) {
+        result[homeId] = entry.value;
+      }
+    }
+
+    return result;
+  }
+
+  void _rebuildHomeOrderAndSelectionLocked() {
+    final ownedHomes = _ownedHomesForState();
+    final sharedHomes = _loadedSharedHomesForState();
+
+    homeOrder = HomeStateParser.parseHomeOrder(
+      account: <String, dynamic>{
+        if (_savedHomeOrder != null) 'homeOrder': _savedHomeOrder,
+      },
+      homesData: ownedHomes,
+      sharedHomes: sharedHomes,
+      selectedHome: selectedHome,
+    );
+
+    if (homeOrder.isEmpty) {
+      selectedHome = '';
+      selectedRoomId = 'overview';
+      securityMode = 'normal';
+      alarmPauseToday = {};
+      alarmEnabled = true;
+      start = const TimeOfDay(hour: 23, minute: 0);
+      end = const TimeOfDay(hour: 6, minute: 0);
+      return;
+    }
+
+    if (!homeOrder.contains(selectedHome)) {
+      selectedHome = homeOrder.first;
+      selectedRoomId = 'overview';
+    }
+
+    final currentHome = safeMap(homes[selectedHome]);
+    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+
+    securityMode = currentHome['securityMode']?.toString() == 'armed'
+        ? 'armed'
+        : 'normal';
+    alarmPauseToday = safeMap(currentHome['alarmPauseToday']);
+    alarmEnabled = safeMap(alarmSettings[selectedHome])['enabled'] != false;
+    start = parsedAlarm['start'];
+    end = parsedAlarm['end'];
+  }
+
+  void _ensureSelectedHomeRoomModel() {
+    if (!mounted || selectedHome.isEmpty || !canManageHome()) {
+      return;
+    }
+
+    final key = '${getHomeOwnerUid()}/$selectedHome';
+
+    if (_ensuredRoomModelKey == key) {
+      return;
+    }
+
+    _ensuredRoomModelKey = key;
+
+    unawaited(
+      HomeService.ensureHomeRoomModel(
+        ownerUid: getHomeOwnerUid(),
+        homeId: selectedHome,
+      ).catchError((Object error) {
+        debugPrint('ENSURE_HOME_ROOM_MODEL_ERROR: $error');
+      }),
+    );
+  }
+
+  void _syncPhoneToCurrentHomes() {
+    unawaited(
+      syncMyPhoneToVisibleHomes(
+        ownedHomes: _ownedHomesForState(),
+        sharedHomes: _sharedHomesSnapshot,
+        phone: userPhone,
+      ),
+    );
+  }
+
+  void _afterHomeStateChanged({
+    bool syncAutoAway = false,
+    bool syncPhone = false,
+  }) {
+    if (!mounted) return;
+
+    _ensureSelectedHomeRoomModel();
+    startHomeEventsListener();
+    startAlarmPauseListener();
+    syncHomeChatListeners();
+    syncDeviceNotificationBridge();
+
+    if (syncPhone) {
+      _syncPhoneToCurrentHomes();
+    }
+
+    if (syncAutoAway) {
+      unawaited(
+        AutoAwayService.syncForHomes(
+          uid: uid,
+          homes: homes,
+        ).catchError((Object error) {
+          debugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
+        }),
+      );
+    }
+
+    unawaited(_tryOpenPendingChat());
+  }
+
+  String _autoAwayConfigSignature(Map<String, dynamic> home) {
+    final autoAway = safeMap(home['autoAway']);
+
+    return [
+      autoAway['enabled'] == true,
+      autoAway['latitude'],
+      autoAway['longitude'],
+      autoAway['radiusMeters'],
+    ].join('|');
+  }
+
+  void _handleOwnedHomeUpsert(DatabaseEvent event) {
+    final homeId = event.snapshot.key?.trim() ?? '';
+
+    if (!mounted || homeId.isEmpty) {
+      return;
+    }
+
+    final homeData = safeMap(event.snapshot.value);
+    final previousHome = safeMap(homes[homeId]);
+    final wasOwned = _ownedHomeIds.contains(homeId);
+    final autoAwayChanged =
+        !wasOwned ||
+            _autoAwayConfigSignature(previousHome) !=
+                _autoAwayConfigSignature(homeData);
+
+    setState(() {
+      _ownedHomeIds.add(homeId);
+      homes[homeId] = homeData;
+      _rebuildHomeOrderAndSelectionLocked();
+    });
+
+    _afterHomeStateChanged(
+      syncAutoAway: autoAwayChanged,
+      syncPhone: !wasOwned,
+    );
+  }
+
+  void _handleOwnedHomeRemoved(DatabaseEvent event) {
+    final homeId = event.snapshot.key?.trim() ?? '';
+
+    if (!mounted || homeId.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _ownedHomeIds.remove(homeId);
+
+      if (safeMap(homes[homeId])['_shared'] != true) {
+        homes.remove(homeId);
+      }
+
+      _deviceNotificationSnapshots.remove(homeId);
+      _deviceNotificationPrimedHomes.remove(homeId);
+      _rebuildHomeOrderAndSelectionLocked();
+    });
+
+    _afterHomeStateChanged(
+      syncAutoAway: true,
+      syncPhone: true,
+    );
+  }
+
+  void _handleSharedHomesSnapshot(Object? rawValue) {
+    if (!mounted) return;
+
+    final nextSharedHomes = safeMap(rawValue);
+    _sharedHomesSnapshot = nextSharedHomes;
+
+    setState(() {
+      homes.removeWhere((homeId, rawHome) {
+        final home = safeMap(rawHome);
+        return home['_shared'] == true &&
+            !nextSharedHomes.containsKey(homeId);
+      });
+
+      _rebuildHomeOrderAndSelectionLocked();
+    });
+
+    _homeListenerService.syncSharedHomes(
+      sharedHomes: nextSharedHomes,
+      onChanged: (homeId, home) {
+        if (!mounted || !_sharedHomesSnapshot.containsKey(homeId)) {
+          return;
+        }
+
+        final previousHome = safeMap(homes[homeId]);
+        final wasLoaded = previousHome['_shared'] == true;
+        final autoAwayChanged =
+            !wasLoaded ||
+                _autoAwayConfigSignature(previousHome) !=
+                    _autoAwayConfigSignature(home);
+
+        setState(() {
+          homes[homeId] = home;
+          _rebuildHomeOrderAndSelectionLocked();
+        });
+
+        _afterHomeStateChanged(
+          syncAutoAway: autoAwayChanged,
+          syncPhone: !wasLoaded,
+        );
+      },
+      onDeleted: (homeId) {
+        if (!mounted || _ownedHomeIds.contains(homeId)) {
+          return;
+        }
+
+        setState(() {
+          homes.remove(homeId);
+          _deviceNotificationSnapshots.remove(homeId);
+          _deviceNotificationPrimedHomes.remove(homeId);
+          _rebuildHomeOrderAndSelectionLocked();
+        });
+
+        _afterHomeStateChanged(
+          syncAutoAway: true,
+          syncPhone: true,
+        );
+      },
+    );
+
+    _afterHomeStateChanged(
+      syncPhone: true,
+    );
+  }
+
+  void _startAccountPathListeners() {
+    profileSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.profile(uid))
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted) return;
+
+        final profile = safeMap(event.snapshot.value);
+        final nextPhone = profile['phone']?.toString() ?? '';
+        final phoneChanged = nextPhone != userPhone;
+
+        setState(() {
+          userName = profile['name']?.toString() ?? '';
+          userGender = profile['gender']?.toString() ?? '';
+          userDob = profile['dob']?.toString() ?? '';
+          userPhone = nextPhone;
+          userPhotoUrl = profile['photoUrl']?.toString() ?? '';
+        });
+
+        if (phoneChanged) {
+          _syncPhoneToCurrentHomes();
+        }
+      },
+      onError: (Object error) {
+        debugPrint('PROFILE_LISTENER_ERROR: $error');
+      },
+    );
+
+    final ownedHomesRef = FirebaseDatabase.instance.ref(
+      FirebasePaths.homes(uid),
+    );
+
+    ownedHomeAddedSubscription = ownedHomesRef.onChildAdded.listen(
+      _handleOwnedHomeUpsert,
+      onError: (Object error) {
+        debugPrint('OWNED_HOME_ADDED_LISTENER_ERROR: $error');
+      },
+    );
+
+    ownedHomeChangedSubscription = ownedHomesRef.onChildChanged.listen(
+      _handleOwnedHomeUpsert,
+      onError: (Object error) {
+        debugPrint('OWNED_HOME_CHANGED_LISTENER_ERROR: $error');
+      },
+    );
+
+    ownedHomeRemovedSubscription = ownedHomesRef.onChildRemoved.listen(
+      _handleOwnedHomeRemoved,
+      onError: (Object error) {
+        debugPrint('OWNED_HOME_REMOVED_LISTENER_ERROR: $error');
+      },
+    );
+
+    sharedHomesSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.sharedHomes(uid))
+        .onValue
+        .listen(
+          (event) => _handleSharedHomesSnapshot(event.snapshot.value),
+      onError: (Object error) {
+        debugPrint('SHARED_HOMES_LISTENER_ERROR: $error');
+      },
+    );
+
+    homeOrderSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.homeOrder(uid))
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted) return;
+
+        _savedHomeOrder = _normalizeSavedHomeOrder(
+          event.snapshot.value,
+        );
+
+        setState(_rebuildHomeOrderAndSelectionLocked);
+        _afterHomeStateChanged();
+      },
+      onError: (Object error) {
+        debugPrint('HOME_ORDER_LISTENER_ERROR: $error');
+      },
+    );
+
+    alarmSettingsSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.alarmSettings(uid))
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted) return;
+
+        setState(() {
+          alarmSettings = safeMap(event.snapshot.value);
+          alarmEnabled = selectedHome.isEmpty ||
+              safeMap(alarmSettings[selectedHome])['enabled'] != false;
+        });
+      },
+      onError: (Object error) {
+        debugPrint('ALARM_SETTINGS_LISTENER_ERROR: $error');
+      },
+    );
+
+    customRulesSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.customRules(uid))
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted) return;
+
+        setState(() {
+          customRulesByHome = safeMap(event.snapshot.value);
+        });
+      },
+      onError: (Object error) {
+        debugPrint('CUSTOM_RULES_LISTENER_ERROR: $error');
+      },
+    );
+
+    shareRequestsSubscription = FirebaseDatabase.instance
+        .ref(FirebasePaths.shareRequests(uid))
+        .onValue
+        .listen(
+          (event) {
+        if (!mounted) return;
+
+        final requests = safeMap(event.snapshot.value);
+
+        setState(() {
+          shareRequests = requests;
+          inviteCountNotifier.value = requests.length;
+        });
+      },
+      onError: (Object error) {
+        debugPrint('SHARE_REQUESTS_LISTENER_ERROR: $error');
+      },
+    );
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -2526,11 +3078,13 @@ class _HomePageState extends State<HomePage>
       autoAwayPresenceRefreshTimer = null;
     }
   }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     startHubStatusGracePeriod();
+
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser == null) {
@@ -2540,8 +3094,11 @@ class _HomePageState extends State<HomePage>
     uid = currentUser.uid;
     AutoAwayService.activateForSignedInUser(uid);
     _startAutoAwayPresenceRefreshTimer();
+
+    // Chỉ cần đánh giá lại tuổi heartbeat định kỳ khi backend im lặng.
+    // Realtime hubStatus vẫn cập nhật ngay qua listener từng nhà.
     hubStatusRefreshTimer = Timer.periodic(
-      const Duration(seconds: 5),
+      const Duration(seconds: 15),
           (_) {
         if (!mounted || homes.isEmpty) {
           return;
@@ -2555,159 +3112,11 @@ class _HomePageState extends State<HomePage>
     _handleChatOpenRequest();
 
     FCMService.setupFCM(uid: uid);
-
     FCMService.listenForeground(localNotif: localNotif);
-    ref = FirebaseDatabase.instance.ref(FirebasePaths.account(uid));
+
     startNotificationListener();
-
-    accountSubscription = ref.onValue.listen((event) async {
-      final data = event.snapshot.value;
-      if (data == null) return;
-
-      final map = safeMap(data);
-      final homesData = safeMap(map["homes"]);
-      final sharedHomes = safeMap(map["sharedHomes"]);
-      final requests = await loadVisibleShareRequests(accountData: map);
-      if (!mounted) return;
-
-      final userAlarmSettings = safeMap(map["alarmSettings"]);
-      final userCustomRules = safeMap(map["customRules"]);
-
-      setState(() {
-        shareRequests = requests;
-        inviteCountNotifier.value = requests.length;
-        alarmSettings = userAlarmSettings;
-        customRulesByHome = userCustomRules;
-        final profile = HomeStateParser.parseProfile(map);
-
-        userName = profile["name"] ?? "";
-        userGender = profile["gender"] ?? "";
-        userDob = profile["dob"] ?? "";
-        userPhone = profile["phone"] ?? "";
-        userPhotoUrl = profile["photoUrl"] ?? "";
-        homes.removeWhere((key, value) {
-          final home = safeMap(value);
-          final isShared = home["_shared"] == true;
-
-          return !isShared && !homesData.containsKey(key);
-        });
-
-        // Cập nhật home chính chủ.
-        for (final entry in homesData.entries) {
-          homes[entry.key] = entry.value;
-        }
-        HomeListenerService.loadSharedHomes(
-          uid: uid,
-          homes: homes,
-          sharedHomes: sharedHomes,
-
-          refresh: () {
-            if (!mounted) return;
-
-            setState(() {
-              homeOrder = HomeStateParser.parseHomeOrder(
-                account: map,
-                homesData: homesData,
-                sharedHomes: sharedHomes,
-                selectedHome: selectedHome,
-              );
-
-              if (homeOrder.isNotEmpty && !homeOrder.contains(selectedHome)) {
-                selectedHome = homeOrder.first;
-              }
-              final currentHome = safeMap(homes[selectedHome]);
-              securityMode = currentHome["securityMode"]?.toString() == "armed"
-                  ? "armed"
-                  : "normal";
-              alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
-            });
-
-            syncHomeChatListeners();
-            syncDeviceNotificationBridge();
-            unawaited(
-              AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
-                  Object error,
-                  ) {
-                debugPrint("AUTO_AWAY_SHARED_SYNC_ERROR: $error");
-              }),
-            );
-          },
-
-          onDeleted: (homeId) {
-            setState(() {
-              homes.remove(homeId);
-
-              homeOrder.remove(homeId);
-
-              if (selectedHome == homeId) {
-                selectedHome = homeOrder.isNotEmpty ? homeOrder.first : "";
-              }
-            });
-
-            syncHomeChatListeners();
-            _deviceNotificationSnapshots.remove(homeId);
-            _deviceNotificationPrimedHomes.remove(homeId);
-          },
-        );
-        homeOrder = HomeStateParser.parseHomeOrder(
-          account: map,
-          homesData: homesData,
-          sharedHomes: sharedHomes,
-          selectedHome: selectedHome,
-        );
-
-        // 🔥 FIX QUAN TRỌNG: chọn home đầu tiên theo ORDER
-        if (homeOrder.isNotEmpty) {
-          if (!homeOrder.contains(selectedHome)) {
-            selectedHome = homeOrder.first; // 👈 HOME NGOÀI CÙNG BÊN PHẢI
-          }
-        } else {
-          selectedHome = "";
-        }
-        if (selectedHome.isNotEmpty && canManageHome()) {
-          unawaited(
-            HomeService.ensureHomeRoomModel(
-              ownerUid: getHomeOwnerUid(),
-              homeId: selectedHome,
-            ).catchError((Object error) {
-              debugPrint("ENSURE_HOME_ROOM_MODEL_ERROR: $error");
-            }),
-          );
-        }
-        final currentHome = safeMap(homes[selectedHome]);
-        securityMode = currentHome["securityMode"]?.toString() == "armed"
-            ? "armed"
-            : "normal";
-        alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
-
-        final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-        final userAlarmSetting = safeMap(map["alarmSettings"]?[selectedHome]);
-
-        alarmEnabled = userAlarmSetting["enabled"] != false;
-        start = parsedAlarm["start"];
-        end = parsedAlarm["end"];
-      });
-      unawaited(
-        syncMyPhoneToVisibleHomes(
-          ownedHomes: homesData,
-          sharedHomes: sharedHomes,
-          phone: userPhone,
-        ),
-      );
-      startHomeEventsListener();
-      startAlarmPauseListener();
-      syncHomeChatListeners();
-      syncDeviceNotificationBridge();
-      unawaited(
-        AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
-            Object error,
-            ) {
-          debugPrint("AUTO_AWAY_SYNC_ERROR: $error");
-        }),
-      );
-      unawaited(_tryOpenPendingChat());
-    });
+    syncHomeChatListeners();
+    _startAccountPathListeners();
   }
 
   Future<void> handleScannedQR(String code) async {
@@ -5440,6 +5849,11 @@ class _HomePageState extends State<HomePage>
                       header: Column(
                         children: [
                           StatusPanel(
+                            key: ValueKey(
+                              "status_${getHomeOwnerUid()}_$selectedHome",
+                            ),
+                            ownerUid: getHomeOwnerUid(),
+                            homeId: selectedHome,
                             alarmPauseText: (() {
                               if (alarmPauseToday.isEmpty) {
                                 return "Tắt";
@@ -5503,8 +5917,19 @@ class _HomePageState extends State<HomePage>
                                 ?.toString()
                                 .trim() ??
                                 "",
+                            securityModeRepeatMinutes:
+                            _normalizeSecurityModeRepeatMinutes(
+                              safeMap(
+                                homes[selectedHome],
+                              )["securityModeRepeatMinutes"],
+                            ),
+                            onSecurityModeRepeatChanged:
+                            canManageHome()
+                                ? setSecurityModeRepeatMinutes
+                                : null,
                             // Luôn nhận thao tác bấm.
-// setSecurityMode sẽ tự kiểm tra quyền và báo rõ cho member.
+                            // setSecurityMode sẽ tự kiểm tra quyền
+                            // và báo rõ cho member.
                             onSecurityModeChanged: setSecurityMode,
 
                             alarmEnabled: alarmEnabled,
@@ -6257,14 +6682,20 @@ class _HomePageState extends State<HomePage>
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
     autoAwayPresenceRefreshTimer?.cancel();
-    accountSubscription?.cancel();
+    profileSubscription?.cancel();
+    ownedHomeAddedSubscription?.cancel();
+    ownedHomeChangedSubscription?.cancel();
+    ownedHomeRemovedSubscription?.cancel();
+    sharedHomesSubscription?.cancel();
+    homeOrderSubscription?.cancel();
+    alarmSettingsSubscription?.cancel();
+    customRulesSubscription?.cancel();
+    shareRequestsSubscription?.cancel();
     notificationSubscription?.cancel();
     homeEventsSubscription?.cancel();
     alarmPauseSubscription?.cancel();
-    for (final subscription in homeChatSubscriptions.values) {
-      subscription.cancel();
-    }
-    homeChatSubscriptions.clear();
+    chatUnreadSubscription?.cancel();
+    unawaited(_homeListenerService.dispose());
     homeTabController.dispose();
     super.dispose();
   }

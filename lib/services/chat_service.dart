@@ -23,9 +23,9 @@ class ChatService {
     ".sv": "timestamp",
   };
 
-  static Stream<DatabaseEvent> homeChatStream(String homeId) {
+  static Stream<DatabaseEvent> unreadCountersStream(String uid) {
     return FirebaseDatabase.instance
-        .ref(FirebasePaths.homeChat(homeId))
+        .ref(FirebasePaths.chatUnread(uid))
         .onValue;
   }
 
@@ -117,6 +117,11 @@ class ChatService {
     await FirebaseDatabase.instance.ref().update({
       "${FirebasePaths.homeMessages(homeId)}/$messageId": messageData,
       FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/count": 0,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt":
+      _serverTimestamp,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/updatedAt":
+      _serverTimestamp,
     });
 
     return messageId;
@@ -126,9 +131,14 @@ class ChatService {
     required String homeId,
     required String uid,
   }) async {
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.homeLastRead(homeId, uid))
-        .set(_serverTimestamp);
+    await FirebaseDatabase.instance.ref().update({
+      FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/count": 0,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt":
+      _serverTimestamp,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/updatedAt":
+      _serverTimestamp,
+    });
   }
 
   static Future<void> setTyping({
@@ -202,56 +212,33 @@ class ChatService {
     return members;
   }
 
-  static int unreadCount({
-    required dynamic homeChat,
-    required String uid,
-  }) {
-    if (homeChat == null || homeChat is! Map) {
+  static int unreadCounterCount(dynamic value) {
+    if (value is int) {
+      return value < 0 ? 0 : value;
+    }
+
+    if (value is double) {
+      final count = value.toInt();
+      return count < 0 ? 0 : count;
+    }
+
+    if (value is! Map) {
       return 0;
     }
 
-    final chat = Map<String, dynamic>.from(homeChat);
-    final messagesRaw = chat["messages"];
+    final data = Map<String, dynamic>.from(value);
+    final count = int.tryParse(data["count"]?.toString() ?? "") ?? 0;
 
-    if (messagesRaw == null || messagesRaw is! Map) {
-      return 0;
-    }
-
-    final messages = Map<String, dynamic>.from(messagesRaw);
-    final lastRead = _lastReadTime(chat["lastRead"], uid);
-    var count = 0;
-
-    for (final messageRaw in messages.values) {
-      if (messageRaw is! Map) continue;
-
-      final message = Map<String, dynamic>.from(
-        messageRaw,
-      );
-
-      final sender = message["uid"]?.toString() ?? "";
-      final time = _asMillis(message["time"]);
-
-      if (sender != uid && time > lastRead) {
-        count++;
-      }
-    }
-
-    return count;
+    return count < 0 ? 0 : count;
   }
 
-  static int _lastReadTime(
-      dynamic lastReadRaw,
-      String uid,
-      ) {
-    if (lastReadRaw == null || lastReadRaw is! Map) {
+  static int unreadCounterLastReadAt(dynamic value) {
+    if (value is! Map) {
       return 0;
     }
 
-    final lastRead = Map<String, dynamic>.from(
-      lastReadRaw,
-    );
-
-    return _asMillis(lastRead[uid]);
+    final data = Map<String, dynamic>.from(value);
+    return _asMillis(data["lastReadAt"]);
   }
 
   static int _asMillis(dynamic value) {

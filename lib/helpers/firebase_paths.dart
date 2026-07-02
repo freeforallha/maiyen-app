@@ -10,6 +10,12 @@ class FirebasePaths {
   static String profile(String uid) =>
       "accounts/$uid/profile";
 
+  static String alarmSettings(String uid) =>
+      "accounts/$uid/alarmSettings";
+
+  static String customRules(String uid) =>
+      "accounts/$uid/customRules";
+
   static String fcmToken(String uid) =>
       "accounts/$uid/fcmToken";
 
@@ -96,6 +102,15 @@ class FirebasePaths {
 
   static String homeChat(String homeId) =>
       "homeChats/$homeId";
+
+  static String chatUnread(String uid) =>
+      "accounts/$uid/chatUnread";
+
+  static String chatUnreadHome(
+      String uid,
+      String homeId,
+      ) =>
+      "accounts/$uid/chatUnread/$homeId";
 
   static String homeMessages(String homeId) =>
       "homeChats/$homeId/messages";

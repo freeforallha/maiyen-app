@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
@@ -7,6 +8,8 @@ import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
 class StatusPanel extends StatefulWidget {
+  final String ownerUid;
+  final String homeId;
   final Map<String, dynamic> overall;
   final VoidCallback? onPair;
   final VoidCallback? onQR;
@@ -18,6 +21,9 @@ class StatusPanel extends StatefulWidget {
   final String securityMode;
   final ValueChanged<String>? onSecurityModeChanged;
   final String securityModeSource;
+  final int securityModeRepeatMinutes;
+  final Future<bool> Function(int minutes)?
+  onSecurityModeRepeatChanged;
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
 
@@ -29,6 +35,8 @@ class StatusPanel extends StatefulWidget {
 
   const StatusPanel({
     super.key,
+    required this.ownerUid,
+    required this.homeId,
     required this.overall,
     required this.onPair,
     required this.onQR,
@@ -39,7 +47,9 @@ class StatusPanel extends StatefulWidget {
     this.onEnvironmentTap,
     this.securityMode = "normal",
     this.securityModeSource = "",
+    this.securityModeRepeatMinutes = 0,
     this.onSecurityModeChanged,
+    this.onSecurityModeRepeatChanged,
     this.alarmEnabled = true,
     this.onAlarmEnabledChanged,
     this.onAlarmPauseToday,
@@ -69,6 +79,7 @@ class _StatusPanelState extends State<StatusPanel> {
       });
     });
   }
+
 
   @override
   void dispose() {
@@ -124,8 +135,10 @@ class _StatusPanelState extends State<StatusPanel> {
     return _strings.t("ĐÃ AN TOÀN");
   }
 
-  List<Map<String, dynamic>> _sortedRecentEvents() {
-    final events = widget.homeEvents.values
+  List<Map<String, dynamic>> _sortedRecentEvents([
+    Map<String, dynamic>? source,
+  ]) {
+    final events = (source ?? widget.homeEvents).values
         .map((item) => safeMap(item))
         .toList();
 
@@ -173,13 +186,14 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   List<String> _buildAutomaticSummary({
+    required Map<String, dynamic> overall,
     required List<String> dangerIssues,
     required List<String> warningIssues,
     required List<Map<String, dynamic>> recentEvents,
     required Map<String, int> eventCounts,
   }) {
     final hasDevices =
-        widget.overall["hasDevices"] == true;
+        overall["hasDevices"] == true;
 
     if (!hasDevices) {
       return [
@@ -253,10 +267,10 @@ class _StatusPanelState extends State<StatusPanel> {
       }
 
       final hasSmokeDevice =
-          widget.overall["hasSmokeDevice"] == true;
+          overall["hasSmokeDevice"] == true;
 
       final hasSosDevice =
-          widget.overall["hasSosDevice"] == true;
+          overall["hasSosDevice"] == true;
 
       if (hasSmokeDevice && smokeCount == 0) {
         summary.add(
@@ -289,69 +303,275 @@ class _StatusPanelState extends State<StatusPanel> {
   }
   void _showSecurityModeOptions(BuildContext context) {
     final isArmed = widget.securityMode == "armed";
+    final allowedRepeatMinutes = <int>[0, 15, 30, 60];
+    var localRepeatMinutes =
+    allowedRepeatMinutes.contains(
+      widget.securityModeRepeatMinutes,
+    )
+        ? widget.securityModeRepeatMinutes
+        : 0;
+    var repeatSaving = false;
+
+    String repeatText(int minutes) {
+      return minutes == 0
+          ? "Không lặp lại"
+          : "Lặp sau $minutes phút";
+    }
 
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
-            decoration: const BoxDecoration(
-              color: SafeHomeColors.surface,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(28),
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(
+                  18,
+                  8,
+                  18,
+                  18,
+                ),
+                decoration: const BoxDecoration(
+                  color: SafeHomeColors.surface,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 5,
+                      margin: const EdgeInsets.only(
+                        bottom: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius:
+                        BorderRadius.circular(999),
+                      ),
+                    ),
+                    const Text(
+                      "Chế độ nhà",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w900,
+                        color: SafeHomeColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    _actionTile(
+                      icon: Icons.shield_rounded,
+                      title: "Bình thường",
+                      subtitle: isArmed
+                          ? "Chuyển về sử dụng thông thường"
+                          : "Đang được sử dụng",
+                      color: SafeHomeColors.safe,
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onSecurityModeChanged
+                            ?.call("normal");
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _actionTile(
+                      icon: Icons.shield_rounded,
+                      title: "Bảo vệ",
+                      subtitle: isArmed
+                          ? "Đang dùng • ${repeatText(localRepeatMinutes)}"
+                          : "Giám sát an ninh • ${repeatText(localRepeatMinutes)}",
+                      color: SafeHomeColors.danger,
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onSecurityModeChanged
+                            ?.call("armed");
+                      },
+                    ),
+                    const SizedBox(height: 14),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.surfaceSoft,
+                        borderRadius:
+                        BorderRadius.circular(18),
+                        border: Border.all(
+                          color: SafeHomeColors.border,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(
+                                Icons.repeat_rounded,
+                                size: 19,
+                                color:
+                                SafeHomeColors.primary,
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "Lặp báo động khi sự cố vẫn còn",
+                                  style: TextStyle(
+                                    fontSize: 13.5,
+                                    fontWeight:
+                                    FontWeight.w900,
+                                    color: SafeHomeColors
+                                        .textPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
+                            style: TextStyle(
+                              fontSize: 11.5,
+                              height: 1.35,
+                              color: SafeHomeColors
+                                  .textSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          DropdownButtonFormField<int>(
+                            key: ValueKey<int>(
+                              localRepeatMinutes,
+                            ),
+                            initialValue: localRepeatMinutes,
+                            isExpanded: true,
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: SafeHomeColors.primary,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: "Thời gian lặp",
+                              labelStyle: const TextStyle(
+                                color: SafeHomeColors
+                                    .textSecondary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.schedule_rounded,
+                                color: SafeHomeColors.primary,
+                              ),
+                              suffixIcon: repeatSaving
+                                  ? const Padding(
+                                padding:
+                                EdgeInsets.all(14),
+                                child:
+                                SizedBox.square(
+                                  dimension: 18,
+                                  child:
+                                  CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              )
+                                  : null,
+                              filled: true,
+                              fillColor:
+                              SafeHomeColors.surface,
+                              contentPadding:
+                              const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 14,
+                              ),
+                              enabledBorder:
+                              OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.circular(14),
+                                borderSide: const BorderSide(
+                                  color: SafeHomeColors.border,
+                                ),
+                              ),
+                              focusedBorder:
+                              OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.circular(14),
+                                borderSide: const BorderSide(
+                                  color:
+                                  SafeHomeColors.primary,
+                                  width: 1.5,
+                                ),
+                              ),
+                              disabledBorder:
+                              OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.circular(14),
+                                borderSide: const BorderSide(
+                                  color: SafeHomeColors.border,
+                                ),
+                              ),
+                            ),
+                            items: allowedRepeatMinutes
+                                .map(
+                                  (minutes) =>
+                                  DropdownMenuItem<int>(
+                                    value: minutes,
+                                    child: Text(
+                                      minutes == 0
+                                          ? "Không lặp lại"
+                                          : "$minutes phút",
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight:
+                                        FontWeight.w700,
+                                        color: SafeHomeColors
+                                            .textPrimary,
+                                      ),
+                                    ),
+                                  ),
+                            )
+                                .toList(),
+                            onChanged: widget
+                                .onSecurityModeRepeatChanged ==
+                                null ||
+                                repeatSaving
+                                ? null
+                                : (minutes) async {
+                              if (minutes == null ||
+                                  minutes ==
+                                      localRepeatMinutes) {
+                                return;
+                              }
+
+                              setSheetState(() {
+                                repeatSaving = true;
+                              });
+
+                              final saved = await widget
+                                  .onSecurityModeRepeatChanged!(
+                                minutes,
+                              );
+
+                              if (!sheetContext.mounted) {
+                                return;
+                              }
+
+                              setSheetState(() {
+                                if (saved) {
+                                  localRepeatMinutes =
+                                      minutes;
+                                }
+
+                                repeatSaving = false;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 44,
-                  height: 5,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                const Text(
-                  "Chế độ nhà",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: SafeHomeColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                _actionTile(
-                  icon: Icons.shield_rounded,
-                  title: "Bình thường",
-                  subtitle: isArmed
-                      ? "Chuyển về sử dụng thông thường"
-                      : "Đang được sử dụng",
-                  color: SafeHomeColors.safe,
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    widget.onSecurityModeChanged?.call("normal");
-                  },
-                ),
-                const SizedBox(height: 8),
-                _actionTile(
-                  icon: Icons.shield_rounded,
-                  title: "Bảo vệ",
-                  subtitle: isArmed
-                      ? "Đang được sử dụng"
-                      : "Bật giám sát cửa và chuyển động",
-                  color: SafeHomeColors.danger,
-                  onTap: () {
-                    Navigator.pop(sheetContext);
-                    widget.onSecurityModeChanged?.call("armed");
-                  },
-                ),
-              ],
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -581,124 +801,161 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   void _showStatusSummary(BuildContext context) {
-    final dangerIssues = List<String>.from(
-      widget.overall["dangerIssues"] ?? const [],
-    ).map(_strings.statusText).toList();
-    final warningIssues = List<String>.from(
-      widget.overall["warningIssues"] ?? const [],
-    ).map(_strings.statusText).toList();
-    final safeSummary = List<String>.from(
-      widget.overall["safeSummary"] ?? const [],
-    ).map(_strings.statusText).toList();
-
-    final recentEvents = _sortedRecentEvents();
-    final eventCounts = _eventCounts(recentEvents);
-
-    final automaticSummary = _buildAutomaticSummary(
-      dangerIssues: dangerIssues,
-      warningIssues: warningIssues,
-      recentEvents: recentEvents,
-      eventCounts: eventCounts,
+    final homeRef = FirebaseDatabase.instance.ref(
+      "accounts/${widget.ownerUid}/homes/${widget.homeId}",
     );
 
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.86,
-            ),
-            padding: const EdgeInsets.fromLTRB(
-              18,
-              8,
-              18,
-              20,
-            ),
-            decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 46,
-                  height: 5,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
+      builder: (sheetContext) {
+        return StreamBuilder<DatabaseEvent>(
+          stream: homeRef.onValue,
+          builder: (context, snapshot) {
+            final liveHome = snapshot.hasData
+                ? safeMap(snapshot.data?.snapshot.value)
+                : <String, dynamic>{};
+
+            final liveOverall = liveHome.isNotEmpty
+                ? getHomeOverallStatus(liveHome)
+                : widget.overall;
+
+            final liveEvents = liveHome.isNotEmpty
+                ? safeMap(liveHome["events"])
+                : widget.homeEvents;
+
+            final dangerIssues = List<String>.from(
+              liveOverall["dangerIssues"] ?? const [],
+            ).map(_strings.statusText).toList();
+
+            final warningIssues = List<String>.from(
+              liveOverall["warningIssues"] ?? const [],
+            ).map(_strings.statusText).toList();
+
+            final safeSummary = List<String>.from(
+              liveOverall["safeSummary"] ?? const [],
+            ).map(_strings.statusText).toList();
+
+            final recentEvents = _sortedRecentEvents(liveEvents);
+            final eventCounts = _eventCounts(recentEvents);
+
+            final automaticSummary = _buildAutomaticSummary(
+              overall: liveOverall,
+              dangerIssues: dangerIssues,
+              warningIssues: warningIssues,
+              recentEvents: recentEvents,
+              eventCounts: eventCounts,
+            );
+
+            return SafeArea(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight:
+                  MediaQuery.of(sheetContext).size.height * 0.86,
+                ),
+                padding: const EdgeInsets.fromLTRB(
+                  18,
+                  8,
+                  18,
+                  20,
+                ),
+                decoration: const BoxDecoration(
+                  color: SafeHomeColors.background,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
                   ),
                 ),
-                Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: Text(
-                        _strings.t("Tổng hợp trạng thái nhà"),
-                        style: const TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.w900,
-                          color: SafeHomeColors.textPrimary,
-                        ),
+                    Container(
+                      width: 46,
+                      height: 5,
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.border,
+                        borderRadius: BorderRadius.circular(999),
                       ),
                     ),
-                    const Icon(
-                      Icons.insights_rounded,
-                      color: SafeHomeColors.primary,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _strings.t("Tổng hợp trạng thái nhà"),
+                            style: const TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w900,
+                              color: SafeHomeColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting)
+                          const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        else
+                          const Icon(
+                            Icons.insights_rounded,
+                            color: SafeHomeColors.primary,
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Flexible(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          if (dangerIssues.isNotEmpty) ...[
+                            _summarySection(
+                              title: _strings.t("Cần xử lý ngay"),
+                              icon: Icons.warning_amber_rounded,
+                              color: SafeHomeColors.danger,
+                              items: dangerIssues,
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                          if (warningIssues.isNotEmpty) ...[
+                            _summarySection(
+                              title: _strings.t("Cần kiểm tra"),
+                              icon: Icons.info_outline_rounded,
+                              color: SafeHomeColors.warning,
+                              items: warningIssues,
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                          _summarySection(
+                            title: _strings.t("Đánh giá tự động"),
+                            icon: Icons.auto_awesome_rounded,
+                            color: SafeHomeColors.info,
+                            items: automaticSummary,
+                          ),
+                          const SizedBox(height: 12),
+                          _summarySection(
+                            title: _strings.t("Tổng quan hôm nay"),
+                            icon: Icons.bar_chart_rounded,
+                            color: SafeHomeColors.safe,
+                            items: safeSummary.isEmpty
+                                ? [
+                              _strings.t(
+                                "Chưa có dữ liệu tổng quan",
+                              ),
+                            ]
+                                : safeSummary,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Flexible(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      if (dangerIssues.isNotEmpty) ...[
-                        _summarySection(
-                          title: _strings.t("Cần xử lý ngay"),
-                          icon: Icons.warning_amber_rounded,
-                          color: SafeHomeColors.danger,
-                          items: dangerIssues,
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                      if (warningIssues.isNotEmpty) ...[
-                        _summarySection(
-                          title: _strings.t("Cần kiểm tra"),
-                          icon: Icons.info_outline_rounded,
-                          color: SafeHomeColors.warning,
-                          items: warningIssues,
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                      _summarySection(
-                        title: _strings.t("Đánh giá tự động"),
-                        icon: Icons.auto_awesome_rounded,
-                        color: SafeHomeColors.info,
-                        items: automaticSummary,
-                      ),
-                      const SizedBox(height: 12),
-                      _summarySection(
-                        title: _strings.t("Tổng quan hôm nay"),
-                        icon: Icons.bar_chart_rounded,
-                        color: SafeHomeColors.safe,
-                        items: safeSummary.isEmpty
-                            ? [
-                          _strings.t("Chưa có dữ liệu tổng quan"),
-                        ]
-                            : safeSummary,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -995,36 +1252,36 @@ class _StatusPanelState extends State<StatusPanel> {
                       ),
                     ),
                     if (environment.isNotEmpty)
-                    InkWell(
-                      onTap: widget.onEnvironmentTap,
-                      borderRadius: BorderRadius.circular(8),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
-                          vertical: 3,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.thermostat_rounded,
-                              size: 15,
-                              color: SafeHomeColors.textSecondary,
-                            ),
-                            const SizedBox(width: 3),
-                            Text(
-                              environment,
-                              style: const TextStyle(
-                                fontSize: 11.2,
-                                height: 1,
-                                fontWeight: FontWeight.w800,
-                                color: SafeHomeColors.textPrimary,
+                      InkWell(
+                        onTap: widget.onEnvironmentTap,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                            vertical: 3,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.thermostat_rounded,
+                                size: 15,
+                                color: SafeHomeColors.textSecondary,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 3),
+                              Text(
+                                environment,
+                                style: const TextStyle(
+                                  fontSize: 11.2,
+                                  height: 1,
+                                  fontWeight: FontWeight.w800,
+                                  color: SafeHomeColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),

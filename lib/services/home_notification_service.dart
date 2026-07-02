@@ -365,40 +365,37 @@ class HomeNotificationService {
 
   static Future<void> _cleanupOldNotifications(String uid) async {
     try {
-      final snap = await FirebaseDatabase.instance
-          .ref("accounts/$uid/notifications")
+      final listRef = FirebaseDatabase.instance.ref(
+        "accounts/$uid/notifications",
+      );
+
+      // Chỉ tải tối đa max + 1 bản ghi cũ nhất thay vì đọc toàn bộ
+      // lịch sử thông báo sau mỗi lần ghi.
+      final snap = await listRef
           .orderByChild("time")
+          .limitToFirst(maxNotifications + 1)
           .get();
 
-      if (!snap.exists || snap.value is! Map) return;
+      final orderedItems = snap.children.toList();
 
-      final raw = Map<String, dynamic>.from(snap.value as Map);
+      if (orderedItems.length <= maxNotifications) {
+        return;
+      }
 
-      if (raw.length <= maxNotifications) return;
-
-      final items = raw.entries.toList();
-
-      items.sort((a, b) {
-        if (a.value is! Map || b.value is! Map) return 0;
-
-        final aData = Map<String, dynamic>.from(a.value as Map);
-        final bData = Map<String, dynamic>.from(b.value as Map);
-
-        final aTime = int.tryParse(aData["time"]?.toString() ?? "0") ?? 0;
-        final bTime = int.tryParse(bData["time"]?.toString() ?? "0") ?? 0;
-
-        return aTime.compareTo(bTime);
-      });
-
-      final removeCount = raw.length - maxNotifications;
+      final removeCount =
+          orderedItems.length - maxNotifications;
       final updates = <String, Object?>{};
 
-      for (int i = 0; i < removeCount; i++) {
-        updates["accounts/$uid/notifications/${items[i].key}"] = null;
+      for (final item in orderedItems.take(removeCount)) {
+        final key = item.key;
+
+        if (key != null && key.isNotEmpty) {
+          updates[key] = null;
+        }
       }
 
       if (updates.isNotEmpty) {
-        await FirebaseDatabase.instance.ref().update(updates);
+        await listRef.update(updates);
       }
     } catch (_) {}
   }
@@ -425,9 +422,9 @@ class HomeNotificationService {
   }
 
   static Map<String, dynamic> _withHomeName(
-    Map<String, dynamic>? data,
-    String homeName,
-  ) {
+      Map<String, dynamic>? data,
+      String homeName,
+      ) {
     final result = _compact(data ?? <String, dynamic>{});
     final existingHomeName = _cleanHomeName(result["homeName"]?.toString());
 

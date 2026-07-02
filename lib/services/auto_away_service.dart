@@ -700,7 +700,13 @@ class AutoAwayService {
     final sameState =
         current['state']?.toString() == state;
 
-    if (sameIdentity && sameState) {
+    final sameEvent =
+        current['event']?.toString() == event;
+
+    // Không chỉ so sánh state: sau khi login lại, state có thể
+    // trùng với phiên trước nhưng event vẫn là signed_out. Khi đó
+    // phải ghi initial_sync để xoá marker đăng xuất cũ.
+    if (sameIdentity && sameState && sameEvent) {
       return;
     }
 

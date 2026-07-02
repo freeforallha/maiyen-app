@@ -20,6 +20,7 @@ class AllHomePage extends StatefulWidget {
 class _AllHomePageState extends State<AllHomePage> {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> homes = {};
+  final ValueNotifier<int> homesRevision = ValueNotifier<int>(0);
 
   Set<String> selectedHomes = {};
 
@@ -65,10 +66,10 @@ class _AllHomePageState extends State<AllHomePage> {
       summaries.add(
         _strings.choose(
           vi:
-              "🚨 $dangerCount nhà không an toàn"
+          "🚨 $dangerCount nhà không an toàn"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
           en:
-              "🚨 $dangerCount unsafe homes"
+          "🚨 $dangerCount unsafe homes"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
         ),
       );
@@ -78,10 +79,10 @@ class _AllHomePageState extends State<AllHomePage> {
       summaries.add(
         _strings.choose(
           vi:
-              "⚠️ $warningCount nhà cần chú ý"
+          "⚠️ $warningCount nhà cần chú ý"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
           en:
-              "⚠️ $warningCount homes need attention"
+          "⚠️ $warningCount homes need attention"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
         ),
       );
@@ -110,222 +111,227 @@ class _AllHomePageState extends State<AllHomePage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            sheetTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
-              setSheetState(() {
-                sheetIndex++;
-              });
-            });
+        return ValueListenableBuilder<int>(
+          valueListenable: homesRevision,
+          builder: (context, _, __) {
+            return StatefulBuilder(
+              builder: (context, setSheetState) {
+                sheetTimer ??= Timer.periodic(const Duration(seconds: 4), (_) {
+                  setSheetState(() {
+                    sheetIndex++;
+                  });
+                });
 
-            final safeHomes = <Map<String, dynamic>>[];
-            final warningHomes = <Map<String, dynamic>>[];
-            final dangerHomes = <Map<String, dynamic>>[];
+                final safeHomes = <Map<String, dynamic>>[];
+                final warningHomes = <Map<String, dynamic>>[];
+                final dangerHomes = <Map<String, dynamic>>[];
 
-            for (final entry in homes.entries) {
-              final homeId = entry.key;
-              final home = safeMap(entry.value);
-              final name = home["name"]?.toString() ?? homeId;
-              final status = getHomeOverallStatus(home);
-              final level = status["level"]?.toString() ?? "safe";
+                for (final entry in homes.entries) {
+                  final homeId = entry.key;
+                  final home = safeMap(entry.value);
+                  final name = home["name"]?.toString() ?? homeId;
+                  final status = getHomeOverallStatus(home);
+                  final level = status["level"]?.toString() ?? "safe";
 
-              final issues = level == "danger"
-                  ? (status["dangerIssues"] as List? ?? [])
-                  : level == "warning"
-                  ? (status["warningIssues"] as List? ?? [])
-                  : <dynamic>[];
+                  final issues = level == "danger"
+                      ? (status["dangerIssues"] as List? ?? [])
+                      : level == "warning"
+                      ? (status["warningIssues"] as List? ?? [])
+                      : <dynamic>[];
 
-              final item = {
-                "id": homeId,
-                "name": name,
-                "issues": issues.map((e) => e.toString()).toList(),
-              };
+                  final item = {
+                    "id": homeId,
+                    "name": name,
+                    "issues": issues.map((e) => e.toString()).toList(),
+                  };
 
-              if (level == "danger") {
-                dangerHomes.add(item);
-              } else if (level == "warning") {
-                warningHomes.add(item);
-              } else {
-                safeHomes.add(item);
-              }
-            }
+                  if (level == "danger") {
+                    dangerHomes.add(item);
+                  } else if (level == "warning") {
+                    warningHomes.add(item);
+                  } else {
+                    safeHomes.add(item);
+                  }
+                }
 
-            Widget homeRow(Map<String, dynamic> item, Color color) {
-              final homeId = item["id"]?.toString() ?? "";
-              final name = item["name"]?.toString() ?? "";
-              final issues = List<String>.from(item["issues"] ?? []);
-              final message = issues.isEmpty
-                  ? _strings.t("Cần kiểm tra")
-                  : _strings.statusText(issues[sheetIndex % issues.length]);
+                Widget homeRow(Map<String, dynamic> item, Color color) {
+                  final homeId = item["id"]?.toString() ?? "";
+                  final name = item["name"]?.toString() ?? "";
+                  final issues = List<String>.from(item["issues"] ?? []);
+                  final message = issues.isEmpty
+                      ? _strings.t("Cần kiểm tra")
+                      : _strings.statusText(issues[sheetIndex % issues.length]);
 
-              return InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context, homeId);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Text(
-                          name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 6,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 700),
-                          child: Text(
-                            message,
-                            key: ValueKey("$homeId-$message"),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: color,
-                              fontWeight: FontWeight.w700,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context, homeId);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 9),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontWeight: FontWeight.w800),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-
-            Widget section({
-              required String title,
-              required IconData icon,
-              required Color color,
-              required List<Map<String, dynamic>> items,
-              required bool compact,
-            }) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(icon, color: color, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          "$title (${items.length})",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: color,
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 6,
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 700),
+                              child: Text(
+                                message,
+                                key: ValueKey("$homeId-$message"),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: color,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    if (items.isEmpty)
-                      Text(
-                        _strings.t("Không có"),
-                        style: TextStyle(color: Colors.grey.shade600),
-                      )
-                    else if (compact)
-                      ...items.map((e) => homeRow(e, color))
-                    else
-                      Wrap(
-                        children: items.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final item = entry.value;
-                          final homeId = item["id"]?.toString() ?? "";
-                          final name = item["name"]?.toString() ?? "";
+                  );
+                }
 
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context, homeId);
-                            },
-                            child: Text(
-                              index == items.length - 1 ? name : "$name, ",
+                Widget section({
+                  required String title,
+                  required IconData icon,
+                  required Color color,
+                  required List<Map<String, dynamic>> items,
+                  required bool compact,
+                }) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(icon, color: color, size: 20),
+                            const SizedBox(width: 8),
+                            Text(
+                              "$title (${items.length})",
                               style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w900,
                                 color: color,
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                  ],
-                ),
-              );
-            }
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        if (items.isEmpty)
+                          Text(
+                            _strings.t("Không có"),
+                            style: TextStyle(color: Colors.grey.shade600),
+                          )
+                        else if (compact)
+                          ...items.map((e) => homeRow(e, color))
+                        else
+                          Wrap(
+                            children: items.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final item = entry.value;
+                              final homeId = item["id"]?.toString() ?? "";
+                              final name = item["name"]?.toString() ?? "";
 
-            return SafeArea(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF7FAF8),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 46,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context, homeId);
+                                },
+                                child: Text(
+                                  index == items.length - 1 ? name : "$name, ",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: color,
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      _strings.t("Tổng hợp trạng thái"),
-                      style: const TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w900,
-                      ),
+                  );
+                }
+
+                return SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF7FAF8),
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _strings.choose(
-                        vi: "${homes.length} nhà đang được theo dõi",
-                        en: "${homes.length} homes monitored",
-                      ),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey.shade600,
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _strings.t("Tổng hợp trạng thái"),
+                          style: const TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _strings.choose(
+                            vi: "${homes.length} nhà đang được theo dõi",
+                            en: "${homes.length} homes monitored",
+                          ),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        section(
+                          title: _strings.t("Không an toàn"),
+                          icon: Icons.warning_amber_rounded,
+                          color: Colors.red,
+                          items: dangerHomes,
+                          compact: true,
+                        ),
+                        section(
+                          title: _strings.t("Cần chú ý"),
+                          icon: Icons.info_outline_rounded,
+                          color: Colors.orange,
+                          items: warningHomes,
+                          compact: true,
+                        ),
+                        section(
+                          title: "An toàn",
+                          icon: Icons.check_circle_rounded,
+                          color: SafeHomeColors.safe,
+                          items: safeHomes,
+                          compact: false,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    section(
-                      title: _strings.t("Không an toàn"),
-                      icon: Icons.warning_amber_rounded,
-                      color: Colors.red,
-                      items: dangerHomes,
-                      compact: true,
-                    ),
-                    section(
-                      title: _strings.t("Cần chú ý"),
-                      icon: Icons.info_outline_rounded,
-                      color: Colors.orange,
-                      items: warningHomes,
-                      compact: true,
-                    ),
-                    section(
-                      title: "An toàn",
-                      icon: Icons.check_circle_rounded,
-                      color: SafeHomeColors.safe,
-                      items: safeHomes,
-                      compact: false,
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             );
           },
         );
@@ -340,8 +346,13 @@ class _AllHomePageState extends State<AllHomePage> {
   StreamSubscription<DatabaseEvent>? groupNamesSubscription;
 
   final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions =
-      {};
-  @override
+  {};
+
+  void notifyHomesChanged() {
+    if (!mounted) return;
+    homesRevision.value = homesRevision.value + 1;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -364,160 +375,165 @@ class _AllHomePageState extends State<AllHomePage> {
         .ref("accounts/$uid/homes")
         .onValue
         .listen((event) {
-          final ownHomes = event.snapshot.value is Map
-              ? Map<String, dynamic>.from(event.snapshot.value as Map)
-              : <String, dynamic>{};
+      final ownHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
 
-          if (!mounted) return;
+      if (!mounted) return;
 
-          setState(() {
-            homes.removeWhere((key, value) {
-              final home = safeMap(value);
-              return home["_shared"] != true;
-            });
-
-            for (final entry in ownHomes.entries) {
-              homes[entry.key] = entry.value;
-            }
-          });
+      setState(() {
+        homes.removeWhere((key, value) {
+          final home = safeMap(value);
+          return home["_shared"] != true;
         });
+
+        for (final entry in ownHomes.entries) {
+          homes[entry.key] = entry.value;
+        }
+      });
+      notifyHomesChanged();
+    });
 
     sharedHomesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/sharedHomes")
         .onValue
         .listen((event) {
-          final sharedHomes = event.snapshot.value is Map
-              ? Map<String, dynamic>.from(event.snapshot.value as Map)
-              : <String, dynamic>{};
+      final sharedHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
 
-          final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
+      final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
 
-          for (final oldId in sharedHomeSubscriptions.keys.toList()) {
-            if (!activeIds.contains(oldId)) {
-              sharedHomeSubscriptions.remove(oldId)?.cancel();
+      for (final oldId in sharedHomeSubscriptions.keys.toList()) {
+        if (!activeIds.contains(oldId)) {
+          sharedHomeSubscriptions.remove(oldId)?.cancel();
 
-              if (mounted) {
-                setState(() {
-                  homes.remove(oldId);
-                });
-              }
-            }
+          if (mounted) {
+            setState(() {
+              homes.remove(oldId);
+            });
+            notifyHomesChanged();
           }
+        }
+      }
 
-          for (final entry in sharedHomes.entries) {
-            final homeId = entry.key.toString();
-            final sharedInfo = safeMap(entry.value);
+      for (final entry in sharedHomes.entries) {
+        final homeId = entry.key.toString();
+        final sharedInfo = safeMap(entry.value);
 
-            final ownerUid = sharedInfo["ownerUid"]?.toString().trim() ?? "";
+        final ownerUid = sharedInfo["ownerUid"]?.toString().trim() ?? "";
 
-            final role = sharedInfo["role"]?.toString().trim() ?? "member";
+        final role = sharedInfo["role"]?.toString().trim() ?? "member";
 
-            if (ownerUid.isEmpty) {
-              continue;
+        if (ownerUid.isEmpty) {
+          continue;
+        }
+
+        if (sharedHomeSubscriptions.containsKey(homeId)) {
+          continue;
+        }
+
+        final sub = FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/homes/$homeId")
+            .onValue
+            .listen(
+              (homeEvent) {
+            final rawHome = homeEvent.snapshot.value;
+
+            if (rawHome is! Map) {
+              if (!mounted) return;
+
+              setState(() {
+                homes.remove(homeId);
+              });
+              notifyHomesChanged();
+
+              return;
             }
 
-            if (sharedHomeSubscriptions.containsKey(homeId)) {
-              continue;
+            final newHome = {
+              ...Map<String, dynamic>.from(rawHome),
+              "_shared": true,
+              "_ownerUid": ownerUid,
+              "_ownerEmail": "",
+              "_ownerName": "",
+              "_ownerPhotoUrl": "",
+              "_role": role,
+            };
+
+            if (!mounted) return;
+
+            setState(() {
+              homes[homeId] = newHome;
+            });
+            notifyHomesChanged();
+          },
+          onError: (Object error) {
+            debugPrint(
+              "ALL_HOME_SHARED_HOME_ERROR "
+                  "$ownerUid/$homeId: $error",
+            );
+          },
+        );
+
+        sharedHomeSubscriptions[homeId] = sub;
+
+        FirebaseDatabase.instance
+            .ref("userDirectory/$ownerUid")
+            .get()
+            .then((directorySnap) {
+          final directory = safeMap(directorySnap.value);
+
+          final ownerEmail =
+              directory["email"]?.toString().trim() ?? "";
+
+          final ownerName = directory["name"]?.toString().trim() ?? "";
+
+          final ownerPhotoUrl =
+              directory["photoUrl"]?.toString().trim() ?? "";
+
+          if (!mounted) return;
+
+          setState(() {
+            final currentHome = safeMap(homes[homeId]);
+
+            if (currentHome.isEmpty) {
+              return;
             }
 
-            final sub = FirebaseDatabase.instance
-                .ref("accounts/$ownerUid/homes/$homeId")
-                .onValue
-                .listen(
-                  (homeEvent) {
-                    final rawHome = homeEvent.snapshot.value;
-
-                    if (rawHome is! Map) {
-                      if (!mounted) return;
-
-                      setState(() {
-                        homes.remove(homeId);
-                      });
-
-                      return;
-                    }
-
-                    final newHome = {
-                      ...Map<String, dynamic>.from(rawHome),
-                      "_shared": true,
-                      "_ownerUid": ownerUid,
-                      "_ownerEmail": "",
-                      "_ownerName": "",
-                      "_ownerPhotoUrl": "",
-                      "_role": role,
-                    };
-
-                    if (!mounted) return;
-
-                    setState(() {
-                      homes[homeId] = newHome;
-                    });
-                  },
-                  onError: (Object error) {
-                    debugPrint(
-                      "ALL_HOME_SHARED_HOME_ERROR "
-                      "$ownerUid/$homeId: $error",
-                    );
-                  },
-                );
-
-            sharedHomeSubscriptions[homeId] = sub;
-
-            FirebaseDatabase.instance
-                .ref("userDirectory/$ownerUid")
-                .get()
-                .then((directorySnap) {
-                  final directory = safeMap(directorySnap.value);
-
-                  final ownerEmail =
-                      directory["email"]?.toString().trim() ?? "";
-
-                  final ownerName = directory["name"]?.toString().trim() ?? "";
-
-                  final ownerPhotoUrl =
-                      directory["photoUrl"]?.toString().trim() ?? "";
-
-                  if (!mounted) return;
-
-                  setState(() {
-                    final currentHome = safeMap(homes[homeId]);
-
-                    if (currentHome.isEmpty) {
-                      return;
-                    }
-
-                    homes[homeId] = {
-                      ...currentHome,
-                      "_ownerEmail": ownerEmail,
-                      "_ownerName": ownerName,
-                      "_ownerPhotoUrl": ownerPhotoUrl,
-                      "_role": role,
-                    };
-                  });
-                })
-                .catchError((Object error) {
-                  debugPrint(
-                    "ALL_HOME_USER_DIRECTORY_ERROR "
-                    "$ownerUid: $error",
-                  );
-                });
-          }
+            homes[homeId] = {
+              ...currentHome,
+              "_ownerEmail": ownerEmail,
+              "_ownerName": ownerName,
+              "_ownerPhotoUrl": ownerPhotoUrl,
+              "_role": role,
+            };
+          });
+          notifyHomesChanged();
+        })
+            .catchError((Object error) {
+          debugPrint(
+            "ALL_HOME_USER_DIRECTORY_ERROR "
+                "$ownerUid: $error",
+          );
         });
+      }
+    });
 
     groupNamesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/groupNames")
         .onValue
         .listen((event) {
-          final names = event.snapshot.value is Map
-              ? Map<String, String>.from(event.snapshot.value as Map)
-              : <String, String>{};
+      final names = event.snapshot.value is Map
+          ? Map<String, String>.from(event.snapshot.value as Map)
+          : <String, String>{};
 
-          if (!mounted) return;
+      if (!mounted) return;
 
-          setState(() {
-            customNames = names;
-          });
-        });
+      setState(() {
+        customNames = names;
+      });
+    });
   }
 
   Map<String, List<String>> groupedHomes() {
@@ -609,7 +625,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final displayName =
         customNames[groupKey] ??
-        (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
+            (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 12),
@@ -734,10 +750,10 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Widget buildHomeCard(
-    BuildContext context,
-    String homeId,
-    Map<String, dynamic> data,
-  ) {
+      BuildContext context,
+      String homeId,
+      Map<String, dynamic> data,
+      ) {
     final status = getHomeOverallStatus(data);
     final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
@@ -878,6 +894,89 @@ class _AllHomePageState extends State<AllHomePage> {
       );
     }
 
+    String repeatLabel(int minutes) {
+      if (minutes <= 0) {
+        return _strings.choose(
+          vi: "Không lặp lại",
+          en: "No repeat",
+        );
+      }
+
+      return _strings.choose(
+        vi: "$minutes phút",
+        en: "$minutes minutes",
+      );
+    }
+
+    Future<int?> inputRepeatMinutes(int initial) async {
+      const options = [0, 15, 30, 60];
+      var selected = options.contains(initial) ? initial : 30;
+
+      return showDialog<int>(
+        context: context,
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              return AlertDialog(
+                title: Text(
+                  _strings.choose(
+                    vi: "Thời gian lặp lại Alarm",
+                    en: "Alarm repeat time",
+                  ),
+                ),
+                content: InputDecorator(
+                  decoration: InputDecoration(
+                    labelText: _strings.choose(
+                      vi: "Lặp lại khi sự cố vẫn còn",
+                      en: "Repeat while the issue remains",
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.replay_rounded,
+                      color: SafeHomeColors.danger,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int>(
+                      value: selected,
+                      isExpanded: true,
+                      items: options.map((minutes) {
+                        return DropdownMenuItem<int>(
+                          value: minutes,
+                          child: Text(repeatLabel(minutes)),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value == null) return;
+
+                        setDialogState(() {
+                          selected = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: Text(_strings.t("Huỷ")),
+                  ),
+                  FilledButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext, selected);
+                    },
+                    child: Text(_strings.t("Xác nhận")),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    }
+
     final action = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -930,20 +1029,43 @@ class _AllHomePageState extends State<AllHomePage> {
     if (action == null) return;
     if (!mounted) return;
 
+    final isReminderAction = action == "reminder";
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(_strings.t("Xác nhận thay đổi")),
+        title: Text(
+          isReminderAction
+              ? _strings.choose(
+            vi: "Xác nhận thay đổi Reminder",
+            en: "Confirm Reminder changes",
+          )
+              : _strings.choose(
+            vi: "Xác nhận thay đổi Alarm",
+            en: "Confirm Alarm changes",
+          ),
+        ),
         content: Text(
-          _strings.choose(
+          isReminderAction
+              ? _strings.choose(
             vi:
-                "Thao tác này sẽ thay đổi Home Reminder/Alarm của các nhà đã chọn.\n\n"
-                "Những thành viên đang sử dụng chế độ 'Theo nhà' sẽ bị ảnh hưởng.\n"
-                "Các cài đặt Reminder/Alarm cá nhân (Riêng tôi) sẽ không bị thay đổi.",
+            "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n"
+                "Những thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\n"
+                "Reminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
             en:
-                "This will change Home Reminder/Alarm settings for the selected homes.\n\n"
-                "Members using Home settings will be affected.\n"
-                "Personal Reminder/Alarm settings will not be changed.",
+            "This will add a Home Reminder to the selected homes.\n\n"
+                "Members using Home Reminder settings will be affected.\n"
+                "Personal Reminder settings will not be changed.",
+          )
+              : _strings.choose(
+            vi:
+            "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n"
+                "Những thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\n"
+                "Alarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+            en:
+            "This will change Home Alarm schedules for all security devices in the selected homes.\n\n"
+                "Members using Home Alarm settings will be affected.\n"
+                "Personal Alarm settings will not be changed.",
           ),
         ),
         actions: [
@@ -972,6 +1094,7 @@ class _AllHomePageState extends State<AllHomePage> {
     int updatedHomes = 0;
     int updatedDevices = 0;
     int skippedHomes = 0;
+    int selectedAlarmRepeatMinutes = 30;
 
     if (action == "reminder") {
       final time = await inputTime(_strings.t("Giờ Reminder"), "22:30");
@@ -995,10 +1118,10 @@ class _AllHomePageState extends State<AllHomePage> {
 
         final currentNotifications = currentNotificationsRaw is List
             ? List<Map<String, dynamic>>.from(
-                currentNotificationsRaw.map(
-                  (e) => Map<String, dynamic>.from(e),
-                ),
-              )
+          currentNotificationsRaw.map(
+                (e) => Map<String, dynamic>.from(e),
+          ),
+        )
             : <Map<String, dynamic>>[];
 
         currentNotifications.add({"enabled": true, "time": time});
@@ -1017,11 +1140,16 @@ class _AllHomePageState extends State<AllHomePage> {
       final end = await inputTime(_strings.t("Giờ kết thúc Alarm"), "06:00");
       if (end == null) return;
 
+      final repeatMinutes = await inputRepeatMinutes(30);
+      if (repeatMinutes == null) return;
+
+      selectedAlarmRepeatMinutes = repeatMinutes;
+
       final alarmData = {
         "enabled": true,
         "start": start,
         "end": end,
-        "repeatMinutes": 30,
+        "repeatMinutes": repeatMinutes,
       };
 
       for (final homeId in selectedHomes) {
@@ -1085,21 +1213,23 @@ class _AllHomePageState extends State<AllHomePage> {
         content: Text(
           action == "reminder"
               ? _strings.choose(
-                  vi:
-                      "Đã cài Reminder cho $updatedHomes nhà."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-                  en:
-                      "Reminder was set for $updatedHomes homes."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-                )
+            vi:
+            "Đã cài Reminder cho $updatedHomes nhà."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+            en:
+            "Reminder was set for $updatedHomes homes."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+          )
               : _strings.choose(
-                  vi:
-                      "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-                  en:
-                      "Alarm was set for $updatedDevices devices across $updatedHomes homes."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-                ),
+            vi:
+            "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà.\n"
+                "Thời gian lặp lại: ${repeatLabel(selectedAlarmRepeatMinutes)}."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
+            en:
+            "Alarm was set for $updatedDevices devices across $updatedHomes homes.\n"
+                "Repeat time: ${repeatLabel(selectedAlarmRepeatMinutes)}."
+                "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+          ),
         ),
         actions: [
           TextButton(
@@ -1127,10 +1257,10 @@ class _AllHomePageState extends State<AllHomePage> {
     if (sharedCount > 0 && ownCount > 0) {
       message = _strings.choose(
         vi:
-            "Các home của bạn sẽ bị xoá.\n"
+        "Các home của bạn sẽ bị xoá.\n"
             "Các home được chia sẻ sẽ được rời khỏi.",
         en:
-            "Your homes will be deleted.\n"
+        "Your homes will be deleted.\n"
             "You will leave the shared homes.",
       );
     } else if (sharedCount > 0) {
@@ -1371,25 +1501,34 @@ class _AllHomePageState extends State<AllHomePage> {
       }
       // ===== HOME CỦA MÌNH =====
       else {
-        final accountsSnap = await FirebaseDatabase.instance
-            .ref("accounts")
+        final sharedSnap = await FirebaseDatabase.instance
+            .ref("sharedByHome/$homeId")
             .get();
 
-        if (accountsSnap.exists) {
-          final accounts = Map<String, dynamic>.from(accountsSnap.value as Map);
+        final sharedUsers = sharedSnap.value is Map
+            ? Map<String, dynamic>.from(
+          sharedSnap.value as Map,
+        )
+            : <String, dynamic>{};
 
-          for (final entry in accounts.entries) {
-            final otherUid = entry.key;
+        final updates = <String, Object?>{
+          "accounts/$uid/homes/$homeId": null,
+          "accounts/$uid/shareList/$homeId": null,
+        };
 
-            await FirebaseDatabase.instance
-                .ref("accounts/$otherUid/sharedHomes/$homeId")
-                .remove();
-          }
+        for (final memberUid in sharedUsers.keys) {
+          updates[
+          "accounts/$memberUid/sharedHomes/$homeId"
+          ] = null;
+
+          updates[
+          "sharedByHome/$homeId/$memberUid"
+          ] = null;
         }
 
         await FirebaseDatabase.instance
-            .ref("accounts/$uid/homes/$homeId")
-            .remove();
+            .ref()
+            .update(updates);
       }
     }
 
@@ -1685,9 +1824,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                     right: 20,
                                     top: 20,
                                     bottom:
-                                        MediaQuery.of(
-                                          context,
-                                        ).viewInsets.bottom +
+                                    MediaQuery.of(
+                                      context,
+                                    ).viewInsets.bottom +
                                         20,
                                   ),
                                   decoration: const BoxDecoration(
@@ -1746,7 +1885,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                       TextField(
                                         controller: controller,
                                         keyboardType:
-                                            TextInputType.emailAddress,
+                                        TextInputType.emailAddress,
                                         decoration: InputDecoration(
                                           prefixIcon: const Icon(
                                             Icons.email_rounded,
@@ -1791,30 +1930,25 @@ class _AllHomePageState extends State<AllHomePage> {
                             return;
                           }
 
-                          final accountsSnap = await FirebaseDatabase.instance
-                              .ref("accounts")
+                          final directorySnap =
+                          await FirebaseDatabase.instance
+                              .ref("userDirectory")
+                              .orderByChild("email")
+                              .equalTo(targetEmail)
+                              .limitToFirst(1)
                               .get();
 
                           String? targetUid;
 
-                          if (accountsSnap.exists) {
-                            final accounts = Map<String, dynamic>.from(
-                              accountsSnap.value as Map,
+                          if (directorySnap.value is Map) {
+                            final directory =
+                            Map<String, dynamic>.from(
+                              directorySnap.value as Map,
                             );
 
-                            for (final entry in accounts.entries) {
-                              final data = Map<String, dynamic>.from(
-                                entry.value,
-                              );
-                              final mail = data["email"]
-                                  ?.toString()
-                                  .trim()
-                                  .toLowerCase();
-
-                              if (mail == targetEmail) {
-                                targetUid = entry.key;
-                                break;
-                              }
+                            if (directory.isNotEmpty) {
+                              targetUid =
+                                  directory.keys.first.toString();
                             }
                           }
                           if (!context.mounted) return;
@@ -1838,8 +1972,8 @@ class _AllHomePageState extends State<AllHomePage> {
 
                             final canShare =
                                 home["_shared"] != true ||
-                                role == "owner" ||
-                                role == "admin";
+                                    role == "owner" ||
+                                    role == "admin";
 
                             if (!canShare) {
                               skipped++;
@@ -1848,29 +1982,29 @@ class _AllHomePageState extends State<AllHomePage> {
 
                             await FirebaseDatabase.instance
                                 .ref(
-                                  "accounts/$targetUid/shareRequests/$homeId",
-                                )
+                              "accounts/$targetUid/shareRequests/$homeId",
+                            )
                                 .set({
-                                  "ownerUid": myUid,
-                                  "homeId": homeId,
-                                  "ownerEmail":
-                                      FirebaseAuth
-                                          .instance
-                                          .currentUser
-                                          ?.email ??
-                                      "",
-                                  "time": DateTime.now().millisecondsSinceEpoch,
-                                });
+                              "ownerUid": myUid,
+                              "homeId": homeId,
+                              "ownerEmail":
+                              FirebaseAuth
+                                  .instance
+                                  .currentUser
+                                  ?.email ??
+                                  "",
+                              "time": DateTime.now().millisecondsSinceEpoch,
+                            });
 
                             await FirebaseDatabase.instance
                                 .ref(
-                                  "accounts/$myUid/shareList/$homeId/$targetUid",
-                                )
+                              "accounts/$myUid/shareList/$homeId/$targetUid",
+                            )
                                 .set({
-                                  "email": targetEmail,
-                                  "sharedAt":
-                                      DateTime.now().millisecondsSinceEpoch,
-                                });
+                              "email": targetEmail,
+                              "sharedAt":
+                              DateTime.now().millisecondsSinceEpoch,
+                            });
                           }
                           if (!context.mounted) return;
 
@@ -1881,13 +2015,13 @@ class _AllHomePageState extends State<AllHomePage> {
                               content: Text(
                                 skipped > 0
                                     ? _strings.choose(
-                                        vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
-                                        en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
-                                      )
+                                  vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
+                                  en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
+                                )
                                     : _strings.choose(
-                                        vi: "Đã chia sẻ nhà thành công.",
-                                        en: "Homes shared successfully.",
-                                      ),
+                                  vi: "Đã chia sẻ nhà thành công.",
+                                  en: "Homes shared successfully.",
+                                ),
                               ),
                               actions: [
                                 TextButton(
@@ -1965,7 +2099,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                     padding: const EdgeInsets.all(16),
                                     constraints: BoxConstraints(
                                       maxHeight:
-                                          MediaQuery.of(context).size.height *
+                                      MediaQuery.of(context).size.height *
                                           0.8,
                                     ),
                                     child: FutureBuilder(
@@ -1989,7 +2123,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                             final home = safeMap(homes[homeId]);
                                             final homeName =
                                                 home["name"]?.toString() ??
-                                                homeId;
+                                                    homeId;
                                             final users = safeMap(raw[homeId]);
 
                                             return Container(
@@ -2000,18 +2134,18 @@ class _AllHomePageState extends State<AllHomePage> {
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(18),
+                                                BorderRadius.circular(18),
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     homeName,
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.w700,
+                                                      FontWeight.w700,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 10),
@@ -2027,39 +2161,39 @@ class _AllHomePageState extends State<AllHomePage> {
                                                   ...users.entries.map((e) {
                                                     final targetUid = e.key;
                                                     final data =
-                                                        Map<
-                                                          String,
-                                                          dynamic
-                                                        >.from(e.value);
+                                                    Map<
+                                                        String,
+                                                        dynamic
+                                                    >.from(e.value);
 
                                                     final email =
                                                         data["email"] ??
-                                                        "Unknown";
+                                                            "Unknown";
 
                                                     return Container(
                                                       margin:
-                                                          const EdgeInsets.only(
-                                                            bottom: 8,
-                                                          ),
+                                                      const EdgeInsets.only(
+                                                        bottom: 8,
+                                                      ),
                                                       decoration: BoxDecoration(
                                                         color: Colors
                                                             .grey
                                                             .shade100,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                              14,
-                                                            ),
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
                                                       ),
                                                       child: ListTile(
                                                         dense: true,
                                                         leading:
-                                                            const CircleAvatar(
-                                                              radius: 16,
-                                                              child: Icon(
-                                                                Icons.person,
-                                                                size: 18,
-                                                              ),
-                                                            ),
+                                                        const CircleAvatar(
+                                                          radius: 16,
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            size: 18,
+                                                          ),
+                                                        ),
                                                         title: Text(email),
                                                         trailing: IconButton(
                                                           icon: const Icon(
@@ -2071,15 +2205,15 @@ class _AllHomePageState extends State<AllHomePage> {
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                                  "accounts/$targetUid/sharedHomes/$homeId",
-                                                                )
+                                                              "accounts/$targetUid/sharedHomes/$homeId",
+                                                            )
                                                                 .remove();
 
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                                  "accounts/$uid/shareList/$homeId/$targetUid",
-                                                                )
+                                                              "accounts/$uid/shareList/$homeId/$targetUid",
+                                                            )
                                                                 .remove();
 
                                                             setSheetState(() {
@@ -2162,6 +2296,7 @@ class _AllHomePageState extends State<AllHomePage> {
     summaryTimer?.cancel();
     searchController.dispose();
 
+    homesRevision.dispose();
     super.dispose();
   }
 }

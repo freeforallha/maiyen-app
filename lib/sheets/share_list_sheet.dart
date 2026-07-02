@@ -193,8 +193,8 @@ Future<bool?> showShareListSheet({
         return Tooltip(
           message: online ? "Online" : "Offline",
           child: Container(
-            width: 13,
-            height: 13,
+            width: 10,
+            height: 10,
             decoration: BoxDecoration(
               color: online
                   ? SafeHomeColors.safe
@@ -206,6 +206,7 @@ Future<bool?> showShareListSheet({
       },
     );
   }
+
   Widget callActionButton({
     required BuildContext callContext,
     required String phone,
@@ -239,6 +240,7 @@ Future<bool?> showShareListSheet({
       ),
     );
   }
+
   if (!context.mounted) return null;
 
   return showModalBottomSheet<bool>(
@@ -317,15 +319,7 @@ Future<bool?> showShareListSheet({
                         children: [
                           Row(
                             children: [
-                              Icon(
-                                roleIcon("owner"),
-                                size: 15,
-                                color: roleColor("owner"),
-                              ),
-                              const SizedBox(width: 6),
-                              memberOnlineDot(ownerUid),
-                              const SizedBox(width: 6),
-                              Expanded(
+                              Flexible(
                                 child: Text(
                                   ownerName.isNotEmpty ? ownerName : ownerEmail,
                                   maxLines: 1,
@@ -336,7 +330,8 @@ Future<bool?> showShareListSheet({
                                   ),
                                 ),
                               ),
-
+                              const SizedBox(width: 6),
+                              memberOnlineDot(ownerUid),
                             ],
                           ),
                           const SizedBox(height: 2),
@@ -452,15 +447,7 @@ Future<bool?> showShareListSheet({
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(
-                                            roleIcon(role),
-                                            size: 15,
-                                            color: roleColor(role),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          memberOnlineDot(targetUid),
-                                          const SizedBox(width: 6),
-                                          Expanded(
+                                          Flexible(
                                             child: Text(
                                               targetUid == myUid
                                                   ? "$name (Bạn)"
@@ -473,7 +460,8 @@ Future<bool?> showShareListSheet({
                                               ),
                                             ),
                                           ),
-
+                                          const SizedBox(width: 6),
+                                          memberOnlineDot(targetUid),
                                         ],
                                       ),
                                       const SizedBox(height: 2),

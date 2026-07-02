@@ -4,6 +4,20 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../safehome_theme.dart';
 
+
+int _normalizeAlarmRepeatMinutes(Object? rawValue) {
+  final value = rawValue is num
+      ? rawValue.toInt()
+      : int.tryParse(rawValue?.toString() ?? "");
+
+  return const [0, 15, 30, 60].contains(value) ? value! : 30;
+}
+
+String _alarmRepeatLabel(Object? rawValue) {
+  final value = _normalizeAlarmRepeatMinutes(rawValue);
+  return value == 0 ? "Không lặp lại" : "$value phút";
+}
+
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -522,42 +536,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Lặp lại cảnh báo",
-                        style: TextStyle(
-                          color: SafeHomeColors.textPrimary,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
-                        ),
+                    _AlarmRepeatDropdown(
+                      value: _normalizeAlarmRepeatMinutes(
+                        draft["repeatMinutes"],
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [15, 30, 60].map((minute) {
-                        final selected =
-                            draft["repeatMinutes"] == minute;
-
-                        return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 3,
-                            ),
-                            child: ChoiceChip(
-                              label: Text("$minute phút"),
-                              selected: selected,
-                              onSelected: saving
-                                  ? null
-                                  : (_) {
-                                setSheetState(() {
-                                  draft["repeatMinutes"] = minute;
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                      enabled: !saving,
+                      onChanged: (minute) {
+                        setSheetState(() {
+                          draft["repeatMinutes"] = minute;
+                        });
+                      },
                     ),
                     const SizedBox(height: 18),
                     SizedBox(
@@ -973,7 +961,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
-                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${alarm["repeatMinutes"] ?? 30} phút",
+                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmRepeatLabel(alarm["repeatMinutes"])}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 12,
@@ -1047,36 +1035,22 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                           const SizedBox(height: 10),
 
-                          Row(
-                            children: [15, 30, 60].map((minute) {
-                              final selected = alarm["repeatMinutes"] == minute;
-
-                              return Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 3,
-                                  ),
-                                  child: ChoiceChip(
-                                    label: Text("$minute phút"),
-                                    selected: selected,
-                                    onSelected: readOnly
-                                        ? null
-                                        : (_) async {
-                                      final nextAlarm =
-                                      Map<String, dynamic>.from(
-                                        alarm,
-                                      );
-                                      nextAlarm["repeatMinutes"] = minute;
-
-                                      await saveAlarm(
-                                        deviceId,
-                                        nextAlarm,
-                                      );
-                                    },
-                                  ),
-                                ),
+                          _AlarmRepeatDropdown(
+                            value: _normalizeAlarmRepeatMinutes(
+                              alarm["repeatMinutes"],
+                            ),
+                            enabled: !readOnly,
+                            onChanged: (minute) async {
+                              final nextAlarm = Map<String, dynamic>.from(
+                                alarm,
                               );
-                            }).toList(),
+                              nextAlarm["repeatMinutes"] = minute;
+
+                              await saveAlarm(
+                                deviceId,
+                                nextAlarm,
+                              );
+                            },
                           ),
                         ],
                       ],
@@ -1087,6 +1061,90 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AlarmRepeatDropdown extends StatelessWidget {
+  final int value;
+  final bool enabled;
+  final ValueChanged<int> onChanged;
+
+  const _AlarmRepeatDropdown({
+    required this.value,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedValue = _normalizeAlarmRepeatMinutes(value);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 7,
+      ),
+      decoration: BoxDecoration(
+        color: SafeHomeColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: SafeHomeColors.border,
+        ),
+      ),
+      child: Row(
+        children: [
+          const Expanded(
+            child: Text(
+              "Thời gian lặp lại",
+              style: TextStyle(
+                color: SafeHomeColors.textPrimary,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: normalizedValue,
+                isExpanded: true,
+                alignment: Alignment.centerRight,
+                icon: const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: SafeHomeColors.textSecondary,
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 0,
+                    child: Text("Không lặp lại"),
+                  ),
+                  DropdownMenuItem(
+                    value: 15,
+                    child: Text("15 phút"),
+                  ),
+                  DropdownMenuItem(
+                    value: 30,
+                    child: Text("30 phút"),
+                  ),
+                  DropdownMenuItem(
+                    value: 60,
+                    child: Text("60 phút"),
+                  ),
+                ],
+                onChanged: enabled
+                    ? (nextValue) {
+                  if (nextValue != null) {
+                    onChanged(nextValue);
+                  }
+                }
+                    : null,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

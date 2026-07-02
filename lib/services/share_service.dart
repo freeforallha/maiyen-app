@@ -356,6 +356,7 @@ class ShareService {
       FirebasePaths.sharedHome(currentUid, homeId): null,
       FirebasePaths.sharedMember(homeId, currentUid): null,
       "${FirebasePaths.shareList(realOwnerUid, homeId)}/$currentUid": null,
+      FirebasePaths.chatUnreadHome(currentUid, homeId): null,
     });
   }
 

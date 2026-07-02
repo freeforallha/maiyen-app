@@ -47,10 +47,20 @@ void showHomeChatSheet({
   bool autoScrollReady = false;
   Timer? initialScrollUnlockTimer;
   bool unreadSnapshotStarted = false;
+  bool initialUnreadSnapshotReady = false;
   bool showUnreadNotice = false;
   int initialUnreadCount = 0;
   int initialLastRead = 0;
+  int lastMarkedReadMessageTime = 0;
   int previousMessageCount = 0;
+
+  // Chỉ tải 15 tin gần nhất khi mở Chat.
+  // Khi người dùng cuộn lên gần đầu danh sách, tải thêm từng 15 tin.
+  int messageLimit = 15;
+  bool hasMoreMessages = true;
+  bool loadingOlderMessages = false;
+  bool messagePaginationListenerAdded = false;
+
   String replyingToMessageId = "";
   Map<String, dynamic>? replyingToMessage;
   bool mentionMembersLoadStarted = false;
@@ -594,6 +604,32 @@ void showHomeChatSheet({
         builder: (context, setState) {
           chatSetState = setState;
 
+          if (!messagePaginationListenerAdded) {
+            messagePaginationListenerAdded = true;
+
+            scrollController.addListener(() {
+              if (isChatSheetClosed ||
+                  !scrollController.hasClients ||
+                  loadingOlderMessages ||
+                  !hasMoreMessages) {
+                return;
+              }
+
+              final position = scrollController.position;
+
+              // List đang reverse: true. Cuộn lên phía tin cũ sẽ tiến
+              // gần maxScrollExtent.
+              if (position.pixels < position.maxScrollExtent - 120) {
+                return;
+              }
+
+              loadingOlderMessages = true;
+              messageLimit += 15;
+
+              chatSetState?.call(() {});
+            });
+          }
+
           if (!mentionMembersLoadStarted) {
             mentionMembersLoadStarted = true;
 
@@ -614,26 +650,25 @@ void showHomeChatSheet({
 
             unawaited(() async {
               try {
-                final snapshot = await FirebaseDatabase.instance
-                    .ref("homeChats/$homeId")
-                    .get();
+                final results = await Future.wait([
+                  FirebaseDatabase.instance
+                      .ref(FirebasePaths.chatUnreadHome(user.uid, homeId))
+                      .get(),
+                  FirebaseDatabase.instance
+                      .ref(FirebasePaths.homeLastRead(homeId, user.uid))
+                      .get(),
+                ]);
 
-                final raw = snapshot.value is Map
-                    ? Map<String, dynamic>.from(snapshot.value as Map)
-                    : <String, dynamic>{};
+                final unreadRaw = results[0].value;
+                final legacyLastRead =
+                    int.tryParse(results[1].value?.toString() ?? "0") ?? 0;
 
-                final lastReadRaw = raw["lastRead"];
-                final lastReadMap = lastReadRaw is Map
-                    ? Map<String, dynamic>.from(lastReadRaw)
-                    : <String, dynamic>{};
-
-                initialLastRead =
-                    int.tryParse(lastReadMap[user.uid]?.toString() ?? "0") ?? 0;
-
-                initialUnreadCount = ChatService.unreadCount(
-                  homeChat: raw,
-                  uid: user.uid,
-                );
+                initialUnreadCount =
+                    ChatService.unreadCounterCount(unreadRaw);
+                initialLastRead = math.max(
+                  ChatService.unreadCounterLastReadAt(unreadRaw),
+                  legacyLastRead,
+                ).toInt();
               } catch (_) {
                 initialUnreadCount = 0;
                 initialLastRead = 0;
@@ -650,6 +685,7 @@ void showHomeChatSheet({
               }
 
               setState(() {
+                initialUnreadSnapshotReady = true;
                 showUnreadNotice = initialUnreadCount > 0;
               });
             }());
@@ -1079,7 +1115,10 @@ void showHomeChatSheet({
 
                         Expanded(
                           child: StreamBuilder<DatabaseEvent>(
-                            stream: ChatService.messagesStream(homeId),
+                            stream: ChatService.messagesStream(
+                              homeId,
+                              limit: messageLimit + 1,
+                            ),
                             builder: (context, snapshot) {
                               final data = snapshot.data?.snapshot.value;
 
@@ -1097,7 +1136,8 @@ void showHomeChatSheet({
                               final map = Map<String, dynamic>.from(
                                 data as Map,
                               );
-                              final messages = map.entries.toList()
+
+                              final allMessages = map.entries.toList()
                                 ..sort((a, b) {
                                   final av = Map<String, dynamic>.from(a.value);
                                   final bv = Map<String, dynamic>.from(b.value);
@@ -1105,6 +1145,51 @@ void showHomeChatSheet({
                                     bv["time"] ?? 0,
                                   );
                                 });
+
+                              if (
+                              initialUnreadSnapshotReady &&
+                                  allMessages.isNotEmpty
+                              ) {
+                                final latestMessage =
+                                Map<String, dynamic>.from(
+                                  allMessages.last.value,
+                                );
+                                final latestMessageTime = int.tryParse(
+                                  latestMessage["time"]?.toString() ?? "0",
+                                ) ?? 0;
+
+                                if (
+                                latestMessageTime > 0 &&
+                                    latestMessageTime > lastMarkedReadMessageTime
+                                ) {
+                                  lastMarkedReadMessageTime = latestMessageTime;
+
+                                  unawaited(
+                                    ChatService.markAsRead(
+                                      homeId: homeId,
+                                      uid: user.uid,
+                                    ).catchError((_) {}),
+                                  );
+                                }
+                              }
+
+                              final nextHasMoreMessages =
+                                  allMessages.length > messageLimit;
+
+                              final messages = nextHasMoreMessages
+                                  ? allMessages.sublist(
+                                allMessages.length - messageLimit,
+                              )
+                                  : allMessages;
+
+                              // Chỉ kết thúc trạng thái tải khi query mới đã
+                              // thực sự active, tránh tăng limit liên tục khi
+                              // StreamBuilder vẫn đang giữ snapshot cũ.
+                              if (snapshot.connectionState ==
+                                  ConnectionState.active) {
+                                hasMoreMessages = nextHasMoreMessages;
+                                loadingOlderMessages = false;
+                              }
 
                               final activeMessageIds = messages
                                   .map((entry) => entry.key.toString())
@@ -1304,8 +1389,48 @@ void showHomeChatSheet({
                                       controller: scrollController,
                                       reverse: true,
                                       padding: const EdgeInsets.only(bottom: 8),
-                                      itemCount: messages.length,
+                                      itemCount: messages.length +
+                                          (hasMoreMessages ? 1 : 0),
                                       itemBuilder: (_, index) {
+                                        if (index >= messages.length) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 12,
+                                            ),
+                                            child: Center(
+                                              child: TextButton.icon(
+                                                onPressed: loadingOlderMessages
+                                                    ? null
+                                                    : () {
+                                                  loadingOlderMessages =
+                                                  true;
+                                                  messageLimit += 15;
+                                                  setState(() {});
+                                                },
+                                                icon: loadingOlderMessages
+                                                    ? const SizedBox(
+                                                  width: 16,
+                                                  height: 16,
+                                                  child:
+                                                  CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                  ),
+                                                )
+                                                    : const Icon(
+                                                  Icons.history_rounded,
+                                                  size: 18,
+                                                ),
+                                                label: Text(
+                                                  loadingOlderMessages
+                                                      ? "Đang tải..."
+                                                      : "Tải tin cũ hơn",
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+
                                         final messageEntry =
                                         messages[messages.length -
                                             1 -

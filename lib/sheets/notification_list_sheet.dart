@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class NotificationListSheet extends StatelessWidget {
+class NotificationListSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
   final String deviceId;
@@ -12,6 +12,63 @@ class NotificationListSheet extends StatelessWidget {
     required this.homeId,
     required this.deviceId,
   });
+
+  @override
+  State<NotificationListSheet> createState() =>
+      _NotificationListSheetState();
+}
+
+class _NotificationListSheetState extends State<NotificationListSheet> {
+  static const int _pageSize = 10;
+
+  late final DatabaseReference _ref;
+  final ScrollController _scrollController = ScrollController();
+
+  int _limit = _pageSize;
+  bool _loadingOlder = false;
+  bool _hasMore = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _ref = FirebaseDatabase.instance.ref(
+      "accounts/${widget.ownerUid}/homes/${widget.homeId}/"
+          "devices/${widget.deviceId}/notifications",
+    );
+
+    _scrollController.addListener(_handleScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_handleScroll)
+      ..dispose();
+
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    if (!_scrollController.hasClients ||
+        _loadingOlder ||
+        !_hasMore) {
+      return;
+    }
+
+    final position = _scrollController.position;
+
+    // Danh sách mới nhất nằm trên cùng. Khi người dùng vuốt lên
+    // và tiến gần cuối danh sách, tải thêm 10 thông báo cũ.
+    if (position.pixels < position.maxScrollExtent - 100) {
+      return;
+    }
+
+    setState(() {
+      _loadingOlder = true;
+      _limit += _pageSize;
+    });
+  }
 
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
@@ -27,11 +84,26 @@ class NotificationListSheet extends StatelessWidget {
         "${dt.second.toString().padLeft(2, '0')}";
   }
 
+  void _completePagination(bool nextHasMore) {
+    if (_hasMore == nextHasMore && !_loadingOlder) {
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      setState(() {
+        _hasMore = nextHasMore;
+        _loadingOlder = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ref = FirebaseDatabase.instance.ref(
-      "accounts/$ownerUid/homes/$homeId/devices/$deviceId/notifications",
-    );
+    final query = _ref
+        .orderByChild("time")
+        .limitToLast(_limit + 1);
 
     return Container(
       height: 500,
@@ -40,32 +112,46 @@ class NotificationListSheet extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.receipt_long_rounded, color: Colors.blueAccent),
+              Icon(
+                Icons.receipt_long_rounded,
+                color: Colors.blueAccent,
+              ),
               SizedBox(width: 8),
               Text(
                 "Thông báo",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Expanded(
-            child: StreamBuilder(
-              stream: ref.onValue,
+            child: StreamBuilder<DatabaseEvent>(
+              stream: query.onValue,
               builder: (context, snap) {
                 if (!snap.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
 
                 final event = snap.data;
 
                 if (event == null) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
 
                 final data = event.snapshot.value;
 
                 if (data == null) {
+                  if (snap.connectionState == ConnectionState.active) {
+                    _completePagination(false);
+                  }
+
                   return const Center(
                     child: Text(
                       "Chưa có thông báo",
@@ -75,19 +161,56 @@ class NotificationListSheet extends StatelessWidget {
                 }
 
                 final map = safeMap(data);
-                final list = map.entries.toList();
+                final allItems = map.entries.toList();
 
-                list.sort((a, b) {
+                allItems.sort((a, b) {
                   final ta = safeMap(a.value)["time"] ?? 0;
                   final tb = safeMap(b.value)["time"] ?? 0;
                   return tb.compareTo(ta);
                 });
 
+                final nextHasMore = allItems.length > _limit;
+                final visibleItems = nextHasMore
+                    ? allItems.take(_limit).toList()
+                    : allItems;
+
+                if (snap.connectionState == ConnectionState.active) {
+                  _completePagination(nextHasMore);
+                }
+
+                final showFooter = _loadingOlder || nextHasMore;
+
                 return ListView.separated(
-                  itemCount: list.length,
-                  separatorBuilder: (_, _) => const Divider(height: 1),
+                  controller: _scrollController,
+                  itemCount:
+                  visibleItems.length + (showFooter ? 1 : 0),
+                  separatorBuilder: (_, _) =>
+                  const Divider(height: 1),
                   itemBuilder: (_, i) {
-                    final item = safeMap(list[i].value);
+                    if (i >= visibleItems.length) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Center(
+                          child: _loadingOlder
+                              ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                              : const Text(
+                            "Vuốt lên để tải thêm",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final item = safeMap(visibleItems[i].value);
 
                     String text = item["text"]?.toString() ?? "";
                     final type = item["type"]?.toString() ?? "";
@@ -95,25 +218,49 @@ class NotificationListSheet extends StatelessWidget {
                     text = text
                         .replaceAll("Door opened", "Cửa mở")
                         .replaceAll("Door closed", "Cửa đóng")
-                        .replaceAll("Tamper detected", "Phát hiện cạy phá")
-                        .replaceAll("Tamper cleared", "Tamper bình thường")
-                        .replaceAll("Motion detected", "Phát hiện chuyển động")
+                        .replaceAll(
+                      "Tamper detected",
+                      "Phát hiện cạy phá",
+                    )
+                        .replaceAll(
+                      "Tamper cleared",
+                      "Tamper bình thường",
+                    )
+                        .replaceAll(
+                      "Motion detected",
+                      "Phát hiện chuyển động",
+                    )
                         .replaceAll("Battery low", "Pin yếu")
-                        .replaceAll("Device offline", "Thiết bị mất kết nối")
-                        .replaceAll("Device online", "Thiết bị đã kết nối lại")
-                        .replaceAll("Alarm triggered", "Báo động kích hoạt")
-                        .replaceAll("Alarm cleared", "Báo động đã tắt");
+                        .replaceAll(
+                      "Device offline",
+                      "Thiết bị mất kết nối",
+                    )
+                        .replaceAll(
+                      "Device online",
+                      "Thiết bị đã kết nối lại",
+                    )
+                        .replaceAll(
+                      "Alarm triggered",
+                      "Báo động kích hoạt",
+                    )
+                        .replaceAll(
+                      "Alarm cleared",
+                      "Báo động đã tắt",
+                    );
 
                     final lower = text.toLowerCase();
 
                     final isSafe =
                         lower.contains("đóng") ||
-                        lower.contains("bình thường") ||
-                        lower.contains("đã tắt") ||
-                        lower.contains("kết nối lại") ||
-                        lower.contains("cập nhật");
+                            lower.contains("bình thường") ||
+                            lower.contains("đã tắt") ||
+                            lower.contains("kết nối lại") ||
+                            lower.contains("cập nhật");
 
-                    final time = item["time"] ?? 0;
+                    final time = int.tryParse(
+                      item["time"]?.toString() ?? "0",
+                    ) ??
+                        0;
                     final dt = DateTime.fromMillisecondsSinceEpoch(time);
 
                     IconData icon = Icons.notifications;
@@ -139,20 +286,25 @@ class NotificationListSheet extends StatelessWidget {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: CircleAvatar(
-                        backgroundColor: color.withValues(alpha: 0.12),
+                        backgroundColor:
+                        color.withValues(alpha: 0.12),
                         child: Icon(icon, color: color),
                       ),
                       title: Text(
                         text,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: isSafe ? Colors.black : Colors.red.shade300,
+                          color: isSafe
+                              ? Colors.black
+                              : Colors.red.shade300,
                         ),
                       ),
                       subtitle: Text(
                         formatTime(dt),
                         style: TextStyle(
-                          color: isSafe ? Colors.grey : Colors.red.shade200,
+                          color: isSafe
+                              ? Colors.grey
+                              : Colors.red.shade200,
                         ),
                       ),
                     );

@@ -720,32 +720,76 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       home["presenceSummary"],
     );
 
-    final trackedMemberCount = int.tryParse(
-      presenceSummary["memberCount"]?.toString() ?? "",
-    ) ??
-        0;
+    final memberPresenceStatus = safeMap(
+      home["memberPresenceStatus"],
+    );
 
-    final signedInCount = int.tryParse(
-      presenceSummary["signedInCount"]?.toString() ?? "",
-    ) ??
-        trackedMemberCount;
+    final allMemberStatuses = memberPresenceStatus.values
+        .map(safeMap)
+        .toList();
 
-    final insideCount = int.tryParse(
+    bool hasKnownLocation(Map<String, dynamic> status) {
+      if (status["online"] != true) {
+        return false;
+      }
+
+      final state = status["state"]?.toString() ?? "unknown";
+      return state == "inside" || state == "outside";
+    }
+
+    final knownMemberStatuses = allMemberStatuses
+        .where(hasKnownLocation)
+        .toList();
+
+    final fallbackInsideCount = int.tryParse(
       presenceSummary["insideCount"]?.toString() ?? "",
     ) ??
         0;
 
-    final unavailableCount = int.tryParse(
-      presenceSummary["unavailableCount"]?.toString() ?? "",
+    final fallbackOutsideCount = int.tryParse(
+      presenceSummary["outsideCount"]?.toString() ?? "",
     ) ??
-        int.tryParse(
-          presenceSummary["unknownCount"]?.toString() ?? "",
-        ) ??
         0;
 
-    if (signedInCount > 0) {
+    final fallbackKnownLocationCount =
+        fallbackInsideCount + fallbackOutsideCount;
+
+    final summaryTotalMemberCount = int.tryParse(
+      presenceSummary["totalMemberCount"]?.toString() ?? "",
+    ) ??
+        0;
+
+    final totalMemberCount = memberPresenceStatus.isNotEmpty
+        ? summaryTotalMemberCount > allMemberStatuses.length
+        ? summaryTotalMemberCount
+        : allMemberStatuses.length
+        : summaryTotalMemberCount;
+
+    final insideCount = memberPresenceStatus.isNotEmpty
+        ? knownMemberStatuses.where((status) {
+      return status["state"]?.toString() == "inside";
+    }).length
+        : fallbackInsideCount;
+
+    final knownLocationCount = memberPresenceStatus.isNotEmpty
+        ? knownMemberStatuses.length
+        : fallbackKnownLocationCount;
+
+    final fallbackUnknownCount = int.tryParse(
+      presenceSummary["unknownCount"]?.toString() ?? "",
+    ) ??
+        0;
+
+    final unknownCount = totalMemberCount > knownLocationCount
+        ? totalMemberCount - knownLocationCount
+        : fallbackUnknownCount;
+
+    // Mẫu số chỉ gồm những tài khoản đang đăng nhập và đã xác định
+    // được inside/outside. Tài khoản logout hoặc vị trí unknown được
+    // tách riêng ở dòng "chưa xác định vị trí".
+    if (knownLocationCount > 0) {
       final memberText =
-          "Thành viên đang ở trong nhà $insideCount/$signedInCount";
+          "Thành viên đang ở trong nhà $insideCount/$knownLocationCount";
 
       if (insideCount > 0) {
         safeSummary.insert(0, memberText);
@@ -754,12 +798,12 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       } else {
         warningIssues.add(memberText);
       }
+    }
 
-      if (unavailableCount > 0) {
-        warningIssues.add(
-          "Thành viên chưa xác định vị trí: $unavailableCount",
-        );
-      }
+    if (unknownCount > 0) {
+      warningIssues.add(
+        "Thành viên chưa xác định vị trí: $unknownCount",
+      );
     }
   }
 

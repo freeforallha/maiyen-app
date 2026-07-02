@@ -73,7 +73,7 @@ void showHomeEventSheet({
     result = result.replaceAll(
       RegExp(
         '\\s+(?:trong|cho\\s+nhà|tại\\s+nhà|ở\\s+nhà)'
-        '\\s+["“”]?$escapedName["“”]?',
+            '\\s+["“”]?$escapedName["“”]?',
         caseSensitive: false,
       ),
       '',
@@ -294,7 +294,7 @@ void showHomeEventSheet({
                   stream: FirebaseDatabase.instance
                       .ref("accounts/$uid/notifications")
                       .orderByChild("time")
-                      .limitToLast(60)
+                      .limitToLast(20)
                       .onValue,
                   builder: (context, snapshot) {
                     final event = snapshot.data;
