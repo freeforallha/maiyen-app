@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -36,6 +37,7 @@ import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_away_service.dart';
+import '../services/auto_away_foreground_task_service.dart';
 import '../services/session_logout_service.dart';
 import '../sheets/room_management_sheet.dart';
 import '../widgets/room_tabs.dart';
@@ -1443,6 +1445,7 @@ class _HomePageState extends State<HomePage>
                     debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
                   }),
                 );
+                unawaited(_syncAutoAwayLocationMonitoring());
 
                 Navigator.of(sheetContext).pop();
 
@@ -1763,19 +1766,40 @@ class _HomePageState extends State<HomePage>
   // Firebase không phát sự kiện chỉ vì thời gian trôi qua.
   // Timer này buộc UI đánh giá lại tuổi heartbeat khi app đang mở.
   Timer? hubStatusRefreshTimer;
-// Khi app đang mở, đo lại vị trí định kỳ để sửa trạng thái
-// inside/outside nếu geofence chưa phát callback.
+  // Android dùng foreground task độc lập để heartbeat vẫn chạy
+  // khi app ở nền, tắt màn hình hoặc bị vuốt khỏi Recent Apps.
+  // Các nền tảng khác giữ timer cũ.
   Timer? autoAwayPresenceRefreshTimer;
-  void _refreshAutoAwayPresenceNow() {
+
+  bool _hasEnabledAutoAwayHome() {
+    for (final rawHome in homes.values) {
+      final home = safeMap(rawHome);
+      final autoAway = safeMap(home['autoAway']);
+
+      if (autoAway['enabled'] == true &&
+          autoAway['latitude'] is num &&
+          autoAway['longitude'] is num) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void _refreshAutoAwayPresenceNow({
+    Position? position,
+    String event = 'foreground_check',
+  }) {
     if (!mounted || uid.isEmpty || homes.isEmpty) {
       return;
     }
 
     unawaited(
-      AutoAwayService.syncForHomes(
+      AutoAwayService.refreshPresenceForHomes(
         uid: uid,
         homes: homes,
-        force: true,
+        position: position,
+        event: event,
       ).catchError((Object error) {
         debugPrint(
           'AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error',
@@ -1796,6 +1820,38 @@ class _HomePageState extends State<HomePage>
         _refreshAutoAwayPresenceNow();
       },
     );
+  }
+
+  Future<void> _syncAutoAwayLocationMonitoring() async {
+    if (!mounted || uid.isEmpty) {
+      return;
+    }
+
+    if (kIsWeb ||
+        defaultTargetPlatform != TargetPlatform.android) {
+      if (!_hasEnabledAutoAwayHome()) {
+        autoAwayPresenceRefreshTimer?.cancel();
+        autoAwayPresenceRefreshTimer = null;
+        return;
+      }
+
+      _startAutoAwayPresenceRefreshTimer();
+      return;
+    }
+
+    autoAwayPresenceRefreshTimer?.cancel();
+    autoAwayPresenceRefreshTimer = null;
+
+    try {
+      await AutoAwayForegroundTaskService.syncForHomes(
+        uid: uid,
+        homes: homes,
+      );
+    } catch (error) {
+      debugPrint(
+        'AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error',
+      );
+    }
   }
   final ScrollController homeTabController = ScrollController();
   StreamSubscription<DatabaseEvent>? profileSubscription;
@@ -2789,6 +2845,7 @@ class _HomePageState extends State<HomePage>
       );
     }
 
+    unawaited(_syncAutoAwayLocationMonitoring());
     unawaited(_tryOpenPendingChat());
   }
 
@@ -3062,7 +3119,7 @@ class _HomePageState extends State<HomePage>
 
     if (state == AppLifecycleState.resumed) {
       startHubStatusGracePeriod();
-      _startAutoAwayPresenceRefreshTimer();
+      unawaited(_syncAutoAwayLocationMonitoring());
 
       if (mounted) {
         setState(() {});
@@ -3074,8 +3131,12 @@ class _HomePageState extends State<HomePage>
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive ||
         state == AppLifecycleState.detached) {
-      autoAwayPresenceRefreshTimer?.cancel();
-      autoAwayPresenceRefreshTimer = null;
+      // Android giữ foreground task độc lập nên không dừng heartbeat ở đây.
+      if (kIsWeb ||
+          defaultTargetPlatform != TargetPlatform.android) {
+        autoAwayPresenceRefreshTimer?.cancel();
+        autoAwayPresenceRefreshTimer = null;
+      }
     }
   }
 
@@ -3093,7 +3154,7 @@ class _HomePageState extends State<HomePage>
 
     uid = currentUser.uid;
     AutoAwayService.activateForSignedInUser(uid);
-    _startAutoAwayPresenceRefreshTimer();
+    // Foreground task được đồng bộ sau khi listener tải danh sách nhà.
 
     // Chỉ cần đánh giá lại tuổi heartbeat định kỳ khi backend im lặng.
     // Realtime hubStatus vẫn cập nhật ngay qua listener từng nhà.
@@ -4246,7 +4307,7 @@ class _HomePageState extends State<HomePage>
       await WidgetsBinding.instance.endOfFrame;
     }
 
-    // Chặn timer foreground ghi lại inside/outside trong lúc đăng xuất.
+    // Chặn timer cục bộ trước khi dọn foreground task và đăng xuất.
     autoAwayPresenceRefreshTimer?.cancel();
     autoAwayPresenceRefreshTimer = null;
 

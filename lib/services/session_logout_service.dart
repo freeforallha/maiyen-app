@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import 'account_session_service.dart';
 import 'auto_away_service.dart';
+import 'auto_away_foreground_task_service.dart';
 import 'auto_login_service.dart';
 import 'fcm_service.dart';
 
@@ -14,6 +15,13 @@ class SessionLogoutService {
     final uid = user?.uid.trim() ?? '';
 
     if (uid.isNotEmpty) {
+      try {
+        await AutoAwayForegroundTaskService.stop();
+      } catch (error, stackTrace) {
+        debugPrint('AUTO_AWAY_FOREGROUND_TASK_STOP_ERROR: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
+
       try {
         await AutoAwayService.prepareForLogout(
           uid: uid,
