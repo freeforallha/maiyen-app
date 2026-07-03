@@ -526,7 +526,7 @@ Map<String, dynamic> evaluateDeviceStatus(
   };
 }
 
-const int hubHeartbeatTimeoutMs = 90 * 1000;
+const int hubHeartbeatTimeoutMs = 180 * 1000;
 
 DateTime _hubStatusGraceUntil =
 DateTime.fromMillisecondsSinceEpoch(0);

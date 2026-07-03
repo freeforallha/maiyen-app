@@ -57,7 +57,7 @@ class AutoAwayForegroundTaskService {
         playSound: false,
       ),
       foregroundTaskOptions: ForegroundTaskOptions(
-        eventAction: ForegroundTaskEventAction.repeat(30000),
+        eventAction: ForegroundTaskEventAction.repeat(300000),
         autoRunOnBoot: true,
         autoRunOnMyPackageReplaced: true,
         allowWakeLock: true,
@@ -97,18 +97,31 @@ class AutoAwayForegroundTaskService {
       return;
     }
 
-    await FlutterForegroundTask.saveData(
+    final taskConfig = jsonEncode({
+      'uid': normalizedUid,
+      'homes': taskHomes,
+    });
+
+    final previousTaskConfig =
+    await FlutterForegroundTask.getData<String>(
       key: _autoAwayTaskDataKey,
-      value: jsonEncode({
-        'uid': normalizedUid,
-        'homes': taskHomes,
-        'savedAt': DateTime.now().millisecondsSinceEpoch,
-      }),
     );
+
+    final configChanged =
+        previousTaskConfig != taskConfig;
+
+    if (configChanged) {
+      await FlutterForegroundTask.saveData(
+        key: _autoAwayTaskDataKey,
+        value: taskConfig,
+      );
+    }
 
     final locationServiceEnabled =
     await Geolocator.isLocationServiceEnabled();
-    final permission = await Geolocator.checkPermission();
+
+    final permission =
+    await Geolocator.checkPermission();
 
     if (!locationServiceEnabled ||
         permission != LocationPermission.always) {
@@ -116,11 +129,17 @@ class AutoAwayForegroundTaskService {
     }
 
     if (await FlutterForegroundTask.isRunningService) {
-      FlutterForegroundTask.sendDataToTask(
-        const <String, dynamic>{
-          'action': 'refresh_now',
-        },
-      );
+      // Chỉ kiểm tra ngay khi bật/tắt Auto Away,
+      // đổi tọa độ hoặc thay đổi danh sách nhà.
+      // Các cập nhật hubStatus không còn kích hoạt GPS.
+      if (configChanged) {
+        FlutterForegroundTask.sendDataToTask(
+          const <String, dynamic>{
+            'action': 'refresh_now',
+          },
+        );
+      }
+
       return;
     }
 

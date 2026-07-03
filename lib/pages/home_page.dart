@@ -109,17 +109,24 @@ class _HomePageState extends State<HomePage>
     if (homeId.isEmpty || !homes.containsKey(homeId)) return;
 
     final currentHome = safeMap(homes[homeId]);
-    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+    final parsedAlarm =
+    HomeStateParser.parseAlarm(currentHome);
 
     setState(() {
       selectedHome = homeId;
-      alarmEnabled = safeMap(alarmSettings[homeId])["enabled"] != false;
-      securityMode = currentHome["securityMode"]?.toString() == "armed"
+
+      securityMode =
+      currentHome["securityMode"]?.toString() == "armed"
           ? "armed"
           : "normal";
+
+      alarmEnabled =
+          safeMap(alarmSettings[homeId])["enabled"] != false;
+
       start = parsedAlarm["start"];
       end = parsedAlarm["end"];
-      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
+      alarmPauseToday =
+          safeMap(currentHome["alarmPauseToday"]);
     });
 
     final index = homeOrder.indexOf(homeId);
@@ -5718,10 +5725,30 @@ class _HomePageState extends State<HomePage>
                                 ),
                               );
 
-                              if (selected == null) return;
+                              if (selected == null ||
+                                  !homes.containsKey(selected)) {
+                                return;
+                              }
+
+                              final currentHome = safeMap(homes[selected]);
+                              final parsedAlarm =
+                              HomeStateParser.parseAlarm(currentHome);
 
                               setState(() {
                                 selectedHome = selected;
+
+                                securityMode =
+                                currentHome["securityMode"]?.toString() == "armed"
+                                    ? "armed"
+                                    : "normal";
+
+                                alarmEnabled =
+                                    safeMap(alarmSettings[selected])["enabled"] != false;
+
+                                start = parsedAlarm["start"];
+                                end = parsedAlarm["end"];
+                                alarmPauseToday =
+                                    safeMap(currentHome["alarmPauseToday"]);
                               });
 
                               final index = homeOrder.indexOf(selected);
@@ -5733,6 +5760,9 @@ class _HomePageState extends State<HomePage>
                                   curve: Curves.easeOutCubic,
                                 );
                               }
+
+                              startHomeEventsListener();
+                              startAlarmPauseListener();
                             },
                             borderRadius: BorderRadius.circular(11),
                             child: Container(
@@ -5880,15 +5910,24 @@ class _HomePageState extends State<HomePage>
                     if (h == selectedHome) return;
 
                     final currentHome = safeMap(homes[h]);
-                    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+                    final parsedAlarm =
+                    HomeStateParser.parseAlarm(currentHome);
 
                     setState(() {
                       selectedHome = h;
+
+                      securityMode =
+                      currentHome["securityMode"]?.toString() == "armed"
+                          ? "armed"
+                          : "normal";
+
                       alarmEnabled =
                           safeMap(alarmSettings[h])["enabled"] != false;
+
                       start = parsedAlarm["start"];
                       end = parsedAlarm["end"];
-                      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
+                      alarmPauseToday =
+                          safeMap(currentHome["alarmPauseToday"]);
                     });
 
                     startHomeEventsListener();
