@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,46 +7,43 @@ import '../helpers/firebase_paths.dart';
 
 import '../helpers/home_helper.dart';
 import '../services/fcm_service.dart';
+import '../services/firebase_security_test_service.dart';
+import '../services/home_account_realtime_coordinator.dart';
+import '../services/home_alarm_security_service.dart';
+import '../services/home_auto_away_coordinator.dart';
 import '../services/home_listener_service.dart';
+import '../services/home_pairing_service.dart';
+import '../services/home_realtime_coordinator.dart';
+import '../services/home_selection_state_service.dart';
 import '../services/home_service.dart';
 import '../services/home_state_parser.dart';
-import '../services/chat_service.dart';
 import '../services/share_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
-import '../sheets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
 import 'home/home_add_sheets.dart';
 import 'home/home_alarm_menu_sheet.dart';
 import 'home/home_alarm_pause_sheet.dart';
 import 'home/home_auto_away_sheet.dart';
+import 'home/home_alarm_formatters.dart';
 import 'home/home_bottom_bar.dart';
+import 'home/home_data_helpers.dart';
+import 'home/home_delete_sheets.dart';
 import 'home/home_dialogs.dart';
 import 'home/home_header_bar.dart';
 import 'home/home_management_sheets.dart';
 import 'home/home_overview_header.dart';
+import 'home/home_pair_sensor_sheet.dart';
 import 'home/home_transfer_owner_sheets.dart';
+import 'home/home_ui_coordinator.dart';
 import '../dialogs/confirm_dialog.dart';
-import '../sheets/device_detail_sheet.dart';
-import '../sheets/notification_list_sheet.dart' as notif_sheet;
 import '../dialogs/pair_dialog.dart';
 import 'qr_scan_page.dart';
-import '../sheets/settings_sheet.dart';
-import '../sheets/share_list_sheet.dart';
-import '../sheets/share_request_sheet.dart';
-import 'edit_profile_page.dart';
-import '../sheets/home_chat_sheet.dart';
-import '../sheets/schedule_sheet.dart';
-import '../sheets/all_devices_sheet.dart';
-import '../sheets/home_event_sheet.dart';
-import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_away_service.dart';
-import '../services/auto_away_foreground_task_service.dart';
 import '../services/session_logout_service.dart';
-import '../sheets/room_management_sheet.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
@@ -68,17 +64,50 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Map<String, String>? _pendingChatOpenRequest;
   bool _openingChatFromNotification = false;
   void openNotificationList(String deviceId) {
-    final ownerUid = getHomeOwnerUid();
-    showModalBottomSheet(
+    HomeUiCoordinator.openDeviceNotificationList(
       context: context,
-      isScrollControlled: true,
-      builder: (_) {
-        return notif_sheet.NotificationListSheet(
-          ownerUid: ownerUid,
-          homeId: selectedHome,
-          deviceId: deviceId,
-        );
-      },
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      deviceId: deviceId,
+    );
+  }
+
+  void openDeviceDetailSheet({
+    required String deviceId,
+    required Map<String, dynamic> device,
+  }) {
+    HomeUiCoordinator.openDeviceDetail(
+      context: context,
+      deviceId: deviceId,
+      device: device,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      onRename: canManageHome() ? () => renameDevice(deviceId) : null,
+      onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
+      onNotification: () => openNotificationList(deviceId),
+    );
+  }
+
+  void openSelectedDeviceDetail(String deviceId) {
+    openDeviceDetailSheet(
+      deviceId: deviceId,
+      device: safeMap(getDevices()[deviceId]),
+    );
+  }
+
+  void openHomeChatSheetFor({
+    required String homeId,
+    required String homeName,
+  }) {
+    HomeUiCoordinator.openChat(
+      context: context,
+      homeId: homeId,
+      homeName: homeName,
+      userName: userName,
+      userPhotoUrl: userPhotoUrl,
+      ownerUid: getHomeOwnerUid(),
+      canManageMembers: canManageHome(),
+      isOwner: isOwner(),
     );
   }
 
@@ -159,16 +188,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    showDeviceDetail(
-      context: context,
-      id: deviceId,
-      d: device,
-      ownerUid: getHomeOwnerUid(),
-      homeId: selectedHome,
-      onRename: canManageHome() ? () => renameDevice(deviceId) : null,
-      onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
-      onNotification: () => openNotificationList(deviceId),
-    );
+    openDeviceDetailSheet(deviceId: deviceId, device: device);
   }
 
   void _handleChatOpenRequest() {
@@ -210,16 +230,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    showHomeChatSheet(
-      context: context,
-      homeId: homeId,
-      homeName: getHomeDisplayName(homeId),
-      userName: userName,
-      userPhotoUrl: userPhotoUrl,
-      ownerUid: getHomeOwnerUid(),
-      canManageMembers: canManageHome(),
-      isOwner: isOwner(),
-    );
+    openHomeChatSheetFor(homeId: homeId, homeName: getHomeDisplayName(homeId));
 
     _openingChatFromNotification = false;
   }
@@ -254,15 +265,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         : "";
 
     if (type == "chat" || entityType == "chat") {
-      showHomeChatSheet(
-        context: context,
+      openHomeChatSheetFor(
         homeId: selectedHome,
         homeName: getSelectedHomeDisplayName(),
-        userName: userName,
-        userPhotoUrl: userPhotoUrl,
-        ownerUid: getHomeOwnerUid(),
-        canManageMembers: canManageHome(),
-        isOwner: isOwner(),
       );
       return;
     }
@@ -295,10 +300,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   Map<String, dynamic> homes = {};
   final HomeListenerService _homeListenerService = HomeListenerService();
+  final HomeAccountRealtimeCoordinator _homeAccountRealtimeCoordinator =
+      HomeAccountRealtimeCoordinator();
+  final HomeAlarmSecurityService _homeAlarmSecurityService =
+      HomeAlarmSecurityService();
+  final HomeAutoAwayCoordinator _homeAutoAwayCoordinator =
+      HomeAutoAwayCoordinator();
+  final HomePairingService _homePairingService = HomePairingService();
+  final HomeRealtimeCoordinator _homeRealtimeCoordinator =
+      HomeRealtimeCoordinator();
+  final HomeSelectionStateService _homeSelectionStateService =
+      HomeSelectionStateService();
   final Set<String> _ownedHomeIds = <String>{};
   Map<String, dynamic> _sharedHomesSnapshot = {};
   Object? _savedHomeOrder;
-  String _ensuredRoomModelKey = "";
 
   String selectedHome = "";
   String selectedRoomId = "overview";
@@ -307,44 +322,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Map<String, dynamic> homeEvents = {};
 
   Map<String, dynamic> alarmPauseToday = {};
-  final Map<String, Map<String, Map<String, dynamic>>>
-  _deviceNotificationSnapshots = {};
-  final Set<String> _deviceNotificationPrimedHomes = {};
   List<String> homeOrder = [];
 
   List<String> mergeVisibleHomeOrder(List<String> visibleOrder) {
-    final visibleIds = visibleOrder.toSet();
-    final nextOrder = <String>[];
-    final seen = <String>{};
-    var visibleIndex = 0;
-
-    void addHomeId(String homeId) {
-      if (seen.add(homeId)) {
-        nextOrder.add(homeId);
-      }
-    }
-
-    for (final homeId in homeOrder) {
-      if (visibleIds.contains(homeId)) {
-        if (visibleIndex < visibleOrder.length) {
-          addHomeId(visibleOrder[visibleIndex]);
-          visibleIndex++;
-        }
-      } else {
-        addHomeId(homeId);
-      }
-    }
-
-    while (visibleIndex < visibleOrder.length) {
-      addHomeId(visibleOrder[visibleIndex]);
-      visibleIndex++;
-    }
-
-    for (final homeId in homes.keys) {
-      addHomeId(homeId);
-    }
-
-    return nextOrder;
+    return HomeDataHelpers.mergeVisibleHomeOrder(
+      visibleOrder: visibleOrder,
+      homeOrder: homeOrder,
+      homes: homes,
+    );
   }
 
   Future<void> reorderHomeTabs(List<String> visibleOrder) async {
@@ -362,12 +347,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   TimeOfDay start = TimeOfDay(hour: 23, minute: 0);
   TimeOfDay end = TimeOfDay(hour: 6, minute: 0);
 
-  String formatClock(TimeOfDay time) {
-    final hour = time.hour.toString().padLeft(2, "0");
-    final minute = time.minute.toString().padLeft(2, "0");
-    return "$hour:$minute";
-  }
-
   Future<String?> openTimeTextInput({
     required BuildContext context,
     required String title,
@@ -382,40 +361,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Map<String, String> getHomeAlarmReminderInfo() {
-    final selectedRules = safeMap(customRulesByHome[selectedHome]);
-
-    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
-
-    final devices = getDevices();
-    final customDevices = safeMap(selectedRules["devices"]);
-
-    for (final entry in devices.entries) {
-      final deviceId = entry.key.toString();
-      final device = safeMap(entry.value);
-      final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
-      final homeAlarm = safeMap(device["alarm"]);
-      final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = safeMap(customDevice["alarm"]);
-
-      final alarm = useCustomMode && customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] == true) {
-        return {
-          "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
-          "start": alarm["start"]?.toString() ?? "23:00",
-          "end": alarm["end"]?.toString() ?? "06:00",
-        };
-      }
-    }
-
-    return {
-      "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
-      "start": formatClock(start),
-      "end": formatClock(end),
-    };
+    return HomeAlarmFormatters.getHomeAlarmReminderInfo(
+      customRulesByHome: customRulesByHome,
+      selectedHome: selectedHome,
+      devices: getDevices(),
+      start: start,
+      end: end,
+    );
   }
 
   Future<void> showAlarmReceiveReminder() async {
@@ -549,298 +501,241 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return false;
     }
 
-    final user = FirebaseAuth.instance.currentUser;
-    final email = user?.email?.trim() ?? "";
+    final result = await _homeAlarmSecurityService
+        .reauthenticateForManualSecurityMode(password: password);
 
-    if (user == null || email.isEmpty) {
-      if (mounted) {
+    if (!mounted) {
+      return false;
+    }
+
+    switch (result.status) {
+      case HomeSecurityReauthStatus.success:
+        return true;
+      case HomeSecurityReauthStatus.cancelled:
+        return false;
+      case HomeSecurityReauthStatus.currentUserUnavailable:
         showTopToast(
           context,
           "Không thể xác nhận tài khoản hiện tại",
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
-      }
-
-      return false;
-    }
-
-    try {
-      final credential = EmailAuthProvider.credential(
-        email: email,
-        password: password,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-      return true;
-    } on FirebaseAuthException catch (error) {
-      if (!mounted) {
         return false;
-      }
-
-      final wrongPassword =
-          error.code == "wrong-password" ||
-          error.code == "invalid-credential" ||
-          error.code == "invalid-login-credentials";
-
-      showTopToast(
-        context,
-        wrongPassword ? "Mật khẩu không đúng" : "Không thể xác nhận mật khẩu",
-        color: Colors.red,
-        icon: Icons.error_outline_rounded,
-      );
-
-      return false;
-    } catch (error) {
-      if (mounted) {
+      case HomeSecurityReauthStatus.wrongPassword:
+        showTopToast(
+          context,
+          "Mật khẩu không đúng",
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+        return false;
+      case HomeSecurityReauthStatus.failed:
         showTopToast(
           context,
           "Không thể xác nhận mật khẩu",
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
-      }
 
-      debugPrint("MANUAL_SECURITY_REAUTH_ERROR: $error");
-
-      return false;
+        return false;
     }
   }
 
   int _normalizeSecurityModeRepeatMinutes(dynamic value) {
-    final minutes = int.tryParse(value?.toString() ?? "") ?? 0;
-
-    return const <int>[0, 15, 30, 60].contains(minutes) ? minutes : 0;
+    return _homeAlarmSecurityService.normalizeSecurityModeRepeatMinutes(value);
   }
 
   Future<bool> setSecurityModeRepeatMinutes(int minutes) async {
     final homeId = selectedHome;
+    final result = await _homeAlarmSecurityService.setSecurityModeRepeatMinutes(
+      ownerUid: homeId.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: homeId,
+      canManageHome: canManageHome(),
+      minutes: minutes,
+    );
 
-    if (homeId.isEmpty) {
-      return false;
+    if (!mounted) {
+      return result.status == HomeSecurityRepeatStatus.saved;
     }
 
-    if (!canManageHome()) {
-      showTopToast(
-        context,
-        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
-        color: Colors.orange,
-        icon: Icons.lock_outline_rounded,
-      );
-      return false;
-    }
-
-    final normalized = _normalizeSecurityModeRepeatMinutes(minutes);
-
-    try {
-      final ownerUid = getHomeOwnerUid();
-
-      await FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId/securityModeRepeatMinutes")
-          .set(normalized);
-
-      if (!mounted) {
-        return true;
-      }
-
-      setState(() {
-        final cachedHome = safeMap(homes[homeId]);
-        cachedHome["securityModeRepeatMinutes"] = normalized;
-        homes[homeId] = cachedHome;
-      });
-
-      showTopToast(
-        context,
-        normalized == 0
-            ? "Mode Bảo vệ sẽ chỉ báo động một lần"
-            : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
-        color: SafeHomeColors.primary,
-        icon: Icons.repeat_rounded,
-      );
-
-      return true;
-    } catch (error) {
-      if (mounted) {
+    switch (result.status) {
+      case HomeSecurityRepeatStatus.homeUnavailable:
+        return false;
+      case HomeSecurityRepeatStatus.noPermission:
         showTopToast(
           context,
-          "Không lưu được thời gian lặp báo động",
-          color: Colors.red,
-          icon: Icons.error_outline_rounded,
+          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+          color: Colors.orange,
+          icon: Icons.lock_outline_rounded,
         );
-      }
+        return false;
+      case HomeSecurityRepeatStatus.failed:
+        if (mounted) {
+          showTopToast(
+            context,
+            "Không lưu được thời gian lặp báo động",
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+        }
+        return false;
+      case HomeSecurityRepeatStatus.saved:
+        if (!mounted) {
+          return true;
+        }
 
-      debugPrint("SET_SECURITY_MODE_REPEAT_ERROR: $error");
+        final normalized = result.normalizedMinutes;
 
-      return false;
+        setState(() {
+          final cachedHome = safeMap(homes[homeId]);
+          cachedHome["securityModeRepeatMinutes"] = normalized;
+          homes[homeId] = cachedHome;
+        });
+
+        showTopToast(
+          context,
+          normalized == 0
+              ? "Mode Bảo vệ sẽ chỉ báo động một lần"
+              : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
+          color: SafeHomeColors.primary,
+          icon: Icons.repeat_rounded,
+        );
+
+        return true;
     }
   }
 
   Future<void> setSecurityMode(String mode) async {
     final homeId = selectedHome;
-
-    if (homeId.isEmpty) {
-      return;
-    }
-
-    if (!canManageHome()) {
-      showTopToast(
-        context,
-        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
-        color: Colors.orange,
-        icon: Icons.lock_outline_rounded,
-      );
-      return;
-    }
-
-    final nextMode = mode == "armed" ? "armed" : "normal";
-
     final currentHome = safeMap(homes[homeId]);
-
-    final currentMode = currentHome["securityMode"]?.toString() == "armed"
-        ? "armed"
-        : "normal";
-
-    final currentSource =
-        currentHome["securityModeSource"]?.toString().trim() ?? "";
-
-    final securityModeRepeatMinutes = _normalizeSecurityModeRepeatMinutes(
-      currentHome["securityModeRepeatMinutes"],
+    final plan = _homeAlarmSecurityService.planSecurityModeChange(
+      homeId: homeId,
+      canManageHome: canManageHome(),
+      mode: mode,
+      currentHome: currentHome,
     );
 
-    if (currentMode == nextMode) {
-      if (nextMode == "normal" || currentSource == "manual") {
+    switch (plan.status) {
+      case HomeSecurityModePlanStatus.homeUnavailable:
+      case HomeSecurityModePlanStatus.unchanged:
         return;
-      }
-    }
-
-    if (nextMode == "armed") {
-      final confirmed = await _confirmManualSecurityMode();
-
-      if (!confirmed || !mounted) {
+      case HomeSecurityModePlanStatus.noPermission:
+        showTopToast(
+          context,
+          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+          color: Colors.orange,
+          icon: Icons.lock_outline_rounded,
+        );
         return;
-      }
+      case HomeSecurityModePlanStatus.requiresManualConfirmation:
+        final confirmed = await _confirmManualSecurityMode();
 
-      // Đợi dialog cảnh báo đóng hoàn toàn rồi mới mở dialog mật khẩu.
-      await WidgetsBinding.instance.endOfFrame;
+        if (!confirmed || !mounted) {
+          return;
+        }
 
-      if (!mounted) {
-        return;
-      }
+        // Đợi dialog cảnh báo đóng hoàn toàn rồi mới mở dialog mật khẩu.
+        await WidgetsBinding.instance.endOfFrame;
 
-      final passwordConfirmed = await _reauthenticateForManualSecurityMode();
+        if (!mounted) {
+          return;
+        }
 
-      if (!passwordConfirmed || !mounted) {
-        return;
-      }
+        final passwordConfirmed = await _reauthenticateForManualSecurityMode();
+
+        if (!passwordConfirmed || !mounted) {
+          return;
+        }
+        break;
+      case HomeSecurityModePlanStatus.ready:
+        break;
     }
 
     final ownerUid = getHomeOwnerUid();
     final homeName = getHomeDisplayName(homeId);
-
+    final nextMode = plan.nextMode;
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : FirebaseAuth.instance.currentUser?.email?.trim() ?? "Một thành viên";
 
-    try {
-      await FirebaseDatabase.instance.ref().update({
-        "accounts/$ownerUid/homes/$homeId/securityMode": nextMode,
+    final saveResult = await _homeAlarmSecurityService.setSecurityMode(
+      ownerUid: ownerUid,
+      homeId: homeId,
+      nextMode: nextMode,
+    );
 
-        // Chuyển về normal phải xoá nguồn manual.
-        "accounts/$ownerUid/homes/$homeId/securityModeSource":
-            nextMode == "armed" ? "manual" : null,
-      });
+    if (!mounted) {
+      return;
+    }
 
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        securityMode = nextMode;
-
-        final cachedHome = safeMap(homes[homeId]);
-        cachedHome["securityMode"] = nextMode;
-
-        if (nextMode == "armed") {
-          cachedHome["securityModeSource"] = "manual";
-        } else {
-          cachedHome.remove("securityModeSource");
-        }
-
-        homes[homeId] = cachedHome;
-      });
-
-      if (nextMode == "armed") {
-        try {
-          await HomeNotificationService.notifyHome(
-            ownerUid: ownerUid,
-            homeId: homeId,
-            homeName: homeName,
-            type: "manual_security_mode_enabled",
-            category: "home",
-            severity: "warning",
-            title: "Mode Bảo vệ thủ công đã bật",
-            message:
-                "$actorName đã bật Mode Bảo vệ thủ công cho "
-                "\"$homeName\". Chế độ này chỉ tắt khi một thành "
-                "viên có quyền chủ động chuyển về Bình thường. "
-                "${securityModeRepeatMinutes == 0 ? "Báo động không lặp lại." : "Báo động lặp sau $securityModeRepeatMinutes phút nếu sự cố vẫn còn."}",
-            actorUid: uid,
-            entityType: "home",
-            entityId: homeId,
-            includeActor: true,
-            writeHomeTimeline: true,
-            data: {
-              "securityMode": "armed",
-              "securityModeSource": "manual",
-              "securityModeRepeatMinutes": securityModeRepeatMinutes,
-            },
-          );
-        } catch (error) {
-          debugPrint("MANUAL_SECURITY_NOTIFICATION_ERROR: $error");
-
-          if (mounted) {
-            showTopToast(
-              context,
-              "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
-              color: Colors.orange,
-              icon: Icons.notifications_off_outlined,
-            );
-          }
-
-          return;
-        }
-
-        if (mounted) {
-          showTopToast(
-            context,
-            "Đã bật Mode Bảo vệ thủ công",
-            color: SafeHomeColors.danger,
-            icon: Icons.shield_rounded,
-          );
-        }
-
-        return;
-      }
-
-      showTopToast(
-        context,
-        "Đã chuyển nhà về Bình thường",
-        color: SafeHomeColors.safe,
-        icon: Icons.home_rounded,
-      );
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-
+    if (saveResult.status == HomeSecurityModeSaveStatus.failed) {
       showTopToast(
         context,
         "Không thể thay đổi chế độ nhà",
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
+      return;
+    }
 
-      debugPrint("SET_SECURITY_MODE_ERROR: $error");
+    setState(() {
+      securityMode = nextMode;
+
+      final cachedHome = safeMap(homes[homeId]);
+      cachedHome["securityMode"] = nextMode;
+
+      if (nextMode == "armed") {
+        cachedHome["securityModeSource"] = "manual";
+      } else {
+        cachedHome.remove("securityModeSource");
+      }
+
+      homes[homeId] = cachedHome;
+    });
+
+    if (nextMode == "armed") {
+      final notificationStatus = await _homeAlarmSecurityService
+          .notifyManualSecurityModeEnabled(
+            ownerUid: ownerUid,
+            homeId: homeId,
+            homeName: homeName,
+            actorUid: uid,
+            actorName: actorName,
+            securityModeRepeatMinutes: plan.repeatMinutes,
+          );
+
+      if (notificationStatus == HomeSecurityNotificationStatus.failed) {
+        if (mounted) {
+          showTopToast(
+            context,
+            "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
+            color: Colors.orange,
+            icon: Icons.notifications_off_outlined,
+          );
+        }
+
+        return;
+      }
+
+      if (mounted) {
+        showTopToast(
+          context,
+          "Đã bật Mode Bảo vệ thủ công",
+          color: SafeHomeColors.danger,
+          icon: Icons.shield_rounded,
+        );
+      }
+
+      return;
+    }
+
+    if (mounted) {
+      showTopToast(
+        context,
+        "Đã chuyển nhà về Bình thường",
+        color: SafeHomeColors.safe,
+        icon: Icons.home_rounded,
+      );
     }
   }
 
@@ -1073,33 +968,40 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   Future<bool> setAlarmEnabled(bool enabled) async {
     final homeId = selectedHome;
+    final plan = _homeAlarmSecurityService.planAlarmEnabled(
+      homeId: homeId,
+      currentEnabled: alarmEnabled,
+      nextEnabled: enabled,
+    );
 
-    if (homeId.isEmpty) {
-      return false;
-    }
-
-    if (alarmEnabled == enabled) {
-      return true;
-    }
-
-    if (!enabled) {
-      final confirmed = await confirmDisableAlarm();
-
-      if (!confirmed || !mounted) {
+    switch (plan.status) {
+      case HomeAlarmTogglePlanStatus.homeUnavailable:
         return false;
-      }
+      case HomeAlarmTogglePlanStatus.unchanged:
+        return true;
+      case HomeAlarmTogglePlanStatus.requiresDisableConfirmation:
+        final confirmed = await confirmDisableAlarm();
+
+        if (!confirmed || !mounted) {
+          return false;
+        }
+        break;
+      case HomeAlarmTogglePlanStatus.ready:
+        break;
     }
 
     final homeName = getHomeDisplayName(homeId);
+    final result = await _homeAlarmSecurityService.setAlarmEnabled(
+      uid: uid,
+      homeId: homeId,
+      enabled: enabled,
+    );
 
-    try {
-      await FirebaseDatabase.instance
-          .ref(
-            "accounts/$uid/alarmSettings/"
-            "$homeId/enabled",
-          )
-          .set(enabled);
-    } catch (error) {
+    if (!mounted) {
+      return result.status == HomeAlarmToggleSaveStatus.saved;
+    }
+
+    if (result.status == HomeAlarmToggleSaveStatus.failed) {
       if (mounted) {
         showTopToast(
           context,
@@ -1109,7 +1011,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         );
       }
 
-      debugPrint("SET_ALARM_ENABLED_ERROR: $error");
       return false;
     }
 
@@ -1123,34 +1024,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
 
     unawaited(
-      HomeNotificationService.addNotification(
-        uid: uid,
-        type: "alarm_setting_changed",
-        title: enabled
-            ? _strings.t("Đã bật Alarm")
-            : _strings.t("Đã tắt Alarm"),
-        message: enabled
-            ? _strings.choose(
-                vi:
-                    "Bạn đã bật Alarm cho nhà "
-                    "\"$homeName\".",
-                en:
-                    "You enabled Alarm for "
-                    "\"$homeName\".",
-              )
-            : _strings.choose(
-                vi:
-                    "Bạn đã tắt toàn bộ Alarm của nhà "
-                    "\"$homeName\".",
-                en:
-                    "You disabled every Alarm for "
-                    "\"$homeName\".",
-              ),
-        homeId: homeId,
-        homeName: homeName,
-      ).catchError((Object error) {
-        debugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
-      }),
+      _homeAlarmSecurityService
+          .recordAlarmEnabledNotification(
+            uid: uid,
+            homeId: homeId,
+            homeName: homeName,
+            enabled: enabled,
+            strings: _strings,
+          )
+          .catchError((Object error) {
+            debugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
+          }),
     );
 
     if (enabled) {
@@ -1176,54 +1060,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   // Android dùng foreground task độc lập để heartbeat vẫn chạy
   // khi app ở nền, tắt màn hình hoặc bị vuốt khỏi Recent Apps.
   // Các nền tảng khác giữ timer cũ.
-  Timer? autoAwayPresenceRefreshTimer;
 
+  // ignore: unused_element
   bool _hasEnabledAutoAwayHome() {
-    for (final rawHome in homes.values) {
-      final home = safeMap(rawHome);
-      final autoAway = safeMap(home['autoAway']);
-
-      if (autoAway['enabled'] == true &&
-          autoAway['latitude'] is num &&
-          autoAway['longitude'] is num) {
-        return true;
-      }
-    }
-
-    return false;
+    return _homeAutoAwayCoordinator.hasEnabledAutoAwayHome(homes);
   }
 
+  // ignore: unused_element
   void _refreshAutoAwayPresenceNow({
     Position? position,
     String event = 'foreground_check',
   }) {
-    if (!mounted || uid.isEmpty || homes.isEmpty) {
-      return;
-    }
+    if (!mounted) return;
 
-    unawaited(
-      AutoAwayService.refreshPresenceForHomes(
-        uid: uid,
-        homes: homes,
-        position: position,
-        event: event,
-      ).catchError((Object error) {
-        debugPrint('AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error');
-      }),
+    _homeAutoAwayCoordinator.refreshPresenceNow(
+      uid: uid,
+      homes: homes,
+      position: position,
+      event: event,
     );
   }
 
+  // ignore: unused_element
   void _startAutoAwayPresenceRefreshTimer() {
-    autoAwayPresenceRefreshTimer?.cancel();
-
-    // Kiểm tra ngay khi bắt đầu.
-    _refreshAutoAwayPresenceNow();
-
-    autoAwayPresenceRefreshTimer = Timer.periodic(const Duration(seconds: 30), (
-      _,
-    ) {
-      _refreshAutoAwayPresenceNow();
-    });
+    _homeAutoAwayCoordinator.startPresenceRefreshTimer(
+      uid: uid,
+      homesProvider: () => homes,
+    );
   }
 
   Future<void> _syncAutoAwayLocationMonitoring() async {
@@ -1231,240 +1094,104 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
-      if (!_hasEnabledAutoAwayHome()) {
-        autoAwayPresenceRefreshTimer?.cancel();
-        autoAwayPresenceRefreshTimer = null;
-        return;
-      }
-
-      _startAutoAwayPresenceRefreshTimer();
-      return;
-    }
-
-    autoAwayPresenceRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer = null;
-
-    try {
-      await AutoAwayForegroundTaskService.syncForHomes(uid: uid, homes: homes);
-    } catch (error) {
-      debugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
-    }
+    await _homeAutoAwayCoordinator.syncLocationMonitoring(
+      uid: uid,
+      homesProvider: () => homes,
+    );
   }
 
   final ScrollController homeTabController = ScrollController();
-  StreamSubscription<DatabaseEvent>? profileSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeAddedSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeChangedSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeRemovedSubscription;
-  StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
-  StreamSubscription<DatabaseEvent>? homeOrderSubscription;
-  StreamSubscription<DatabaseEvent>? alarmSettingsSubscription;
-  StreamSubscription<DatabaseEvent>? customRulesSubscription;
-  StreamSubscription<DatabaseEvent>? shareRequestsSubscription;
-  StreamSubscription<DatabaseEvent>? notificationSubscription;
-  StreamSubscription<DatabaseEvent>? homeEventsSubscription;
-  StreamSubscription<DatabaseEvent>? alarmPauseSubscription;
-  String _homeEventsListenKey = "";
-  String _alarmPauseListenKey = "";
-  StreamSubscription<DatabaseEvent>? chatUnreadSubscription;
-  String _chatUnreadListenUid = "";
-  Map<String, int> _chatUnreadSnapshot = {};
 
   void startNotificationListener() {
-    notificationSubscription?.cancel();
-    notificationSubscription = FirebaseDatabase.instance
-        .ref("accounts/$uid/notifications")
-        .onValue
-        .listen((event) {
-          final data = event.snapshot.value;
-          var count = 0;
+    _homeRealtimeCoordinator.startNotificationUnreadListener(
+      uid: uid,
+      onUnreadChanged: (count) {
+        if (!mounted) return;
 
-          if (data is Map) {
-            final map = Map<String, dynamic>.from(data);
-
-            for (final item in map.values) {
-              if (item is! Map) continue;
-
-              final notification = Map<String, dynamic>.from(item);
-
-              if (notification["read"] != true) {
-                count++;
-              }
-            }
-          }
-
-          if (!mounted) return;
-
-          setState(() {
-            unreadHomeNotificationCount = count;
-          });
+        setState(() {
+          unreadHomeNotificationCount = count;
         });
+      },
+    );
   }
 
   void startHomeEventsListener() {
-    if (selectedHome.isEmpty) {
-      homeEventsSubscription?.cancel();
-      homeEventsSubscription = null;
-      _homeEventsListenKey = "";
-      return;
-    }
+    _homeRealtimeCoordinator.startHomeEventsListener(
+      ownerUid: selectedHome.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: selectedHome,
+      onHomeEventsChanged: (events) {
+        if (!mounted) return;
 
-    final ownerUid = getHomeOwnerUid();
-    final listenKey = "$ownerUid/$selectedHome";
-
-    if (_homeEventsListenKey == listenKey && homeEventsSubscription != null) {
-      return;
-    }
-
-    homeEventsSubscription?.cancel();
-    _homeEventsListenKey = listenKey;
-
-    homeEventsSubscription = FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/events")
-        .limitToLast(50)
-        .onValue
-        .listen((event) {
-          if (!mounted) return;
-
-          setState(() {
-            homeEvents = safeMap(event.snapshot.value);
-          });
+        setState(() {
+          homeEvents = events;
         });
+      },
+    );
   }
 
   void startAlarmPauseListener() {
-    if (selectedHome.isEmpty) {
-      alarmPauseSubscription?.cancel();
-      alarmPauseSubscription = null;
-      _alarmPauseListenKey = "";
-
-      if (mounted && alarmPauseToday.isNotEmpty) {
-        setState(() {
-          alarmPauseToday = {};
-        });
-      }
-
-      return;
-    }
-
     final homeId = selectedHome;
-    final ownerUid = getHomeOwnerUid();
-    final listenKey = "$ownerUid/$homeId";
 
-    if (_alarmPauseListenKey == listenKey && alarmPauseSubscription != null) {
-      return;
-    }
+    _homeRealtimeCoordinator.startAlarmPauseListener(
+      ownerUid: homeId.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: homeId,
+      onSelectedHomeCleared: () {
+        if (mounted && alarmPauseToday.isNotEmpty) {
+          setState(() {
+            alarmPauseToday = {};
+          });
+        }
+      },
+      onAlarmPauseChanged: (update) {
+        if (!mounted || selectedHome != update.homeId) {
+          return;
+        }
 
-    alarmPauseSubscription?.cancel();
-    _alarmPauseListenKey = listenKey;
+        final pause = update.alarmPauseToday;
 
-    alarmPauseSubscription = FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$homeId/alarmPauseToday")
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted ||
-                selectedHome != homeId ||
-                _alarmPauseListenKey != listenKey) {
-              return;
-            }
+        setState(() {
+          alarmPauseToday = pause;
 
-            final pause = safeMap(event.snapshot.value);
+          final cachedHome = safeMap(homes[update.homeId]);
 
-            setState(() {
-              alarmPauseToday = pause;
+          if (pause.isEmpty) {
+            cachedHome.remove("alarmPauseToday");
+          } else {
+            cachedHome["alarmPauseToday"] = pause;
+          }
 
-              final cachedHome = safeMap(homes[homeId]);
-
-              if (pause.isEmpty) {
-                cachedHome.remove("alarmPauseToday");
-              } else {
-                cachedHome["alarmPauseToday"] = pause;
-              }
-
-              homes[homeId] = cachedHome;
-            });
-          },
-          onError: (Object error) {
-            debugPrint("ALARM_PAUSE_LISTENER_ERROR: $error");
-          },
-        );
-  }
-
-  void _applyChatUnreadSnapshot() {
-    if (!mounted) return;
-
-    final activeHomeIds = homes.keys
-        .where((homeId) => homeId.isNotEmpty)
-        .toSet();
-
-    final nextUnreadByHome = <String, int>{};
-
-    for (final entry in _chatUnreadSnapshot.entries) {
-      if (activeHomeIds.contains(entry.key) && entry.value > 0) {
-        nextUnreadByHome[entry.key] = entry.value;
-      }
-    }
-
-    final nextTotal = nextUnreadByHome.values.fold<int>(
-      0,
-      (total, count) => total + count,
+          homes[update.homeId] = cachedHome;
+        });
+      },
     );
-
-    final unchanged =
-        nextTotal == unreadChatCount &&
-        nextUnreadByHome.length == unreadChatByHome.length &&
-        nextUnreadByHome.entries.every(
-          (entry) => unreadChatByHome[entry.key] == entry.value,
-        );
-
-    if (unchanged) {
-      return;
-    }
-
-    setState(() {
-      unreadChatByHome = nextUnreadByHome;
-      unreadChatCount = nextTotal;
-    });
   }
 
   void syncHomeChatListeners() {
     if (!mounted || uid.isEmpty) return;
 
-    if (chatUnreadSubscription != null && _chatUnreadListenUid == uid) {
-      _applyChatUnreadSnapshot();
-      return;
-    }
+    _homeRealtimeCoordinator.syncHomeChatListeners(
+      uid: uid,
+      homes: homes,
+      onUnreadChanged: (snapshot) {
+        if (!mounted) return;
 
-    chatUnreadSubscription?.cancel();
-    _chatUnreadListenUid = uid;
-    _chatUnreadSnapshot = {};
+        final nextUnreadByHome = snapshot.unreadByHome;
+        final nextTotal = snapshot.total;
+        final unchanged =
+            nextTotal == unreadChatCount &&
+            nextUnreadByHome.length == unreadChatByHome.length &&
+            nextUnreadByHome.entries.every(
+              (entry) => unreadChatByHome[entry.key] == entry.value,
+            );
 
-    chatUnreadSubscription = ChatService.unreadCountersStream(uid).listen(
-      (event) {
-        final data = event.snapshot.value;
-        final nextSnapshot = <String, int>{};
-
-        if (data is Map) {
-          final map = Map<String, dynamic>.from(data);
-
-          for (final entry in map.entries) {
-            final count = ChatService.unreadCounterCount(entry.value);
-
-            if (count > 0) {
-              nextSnapshot[entry.key.toString()] = count;
-            }
-          }
+        if (unchanged) {
+          return;
         }
 
-        _chatUnreadSnapshot = nextSnapshot;
-        _applyChatUnreadSnapshot();
-      },
-      onError: (Object error) {
-        debugPrint("CHAT_UNREAD_LISTENER_ERROR: $error");
-        _chatUnreadSnapshot = {};
-        _applyChatUnreadSnapshot();
+        setState(() {
+          unreadChatByHome = nextUnreadByHome;
+          unreadChatCount = nextTotal;
+        });
       },
     );
   }
@@ -1472,260 +1199,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void syncDeviceNotificationBridge() {
     if (!mounted) return;
 
-    final activeHomeIds = homes.keys.where((id) => id.isNotEmpty).toSet();
-
-    _deviceNotificationSnapshots.removeWhere(
-      (homeId, _) => !activeHomeIds.contains(homeId),
-    );
-    _deviceNotificationPrimedHomes.removeWhere(
-      (homeId) => !activeHomeIds.contains(homeId),
-    );
-
-    for (final homeEntry in homes.entries) {
-      final homeId = homeEntry.key.toString();
-      final home = safeMap(homeEntry.value);
-      final devices = safeMap(home["devices"]);
-      final previousByDevice = _deviceNotificationSnapshots.putIfAbsent(
-        homeId,
-        () => <String, Map<String, dynamic>>{},
-      );
-      final homeWasPrimed = _deviceNotificationPrimedHomes.contains(homeId);
-      final homeName = getHomeDisplayName(homeId);
-
-      previousByDevice.removeWhere(
-        (deviceId, _) => !devices.containsKey(deviceId),
-      );
-
-      for (final deviceEntry in devices.entries) {
-        final deviceId = deviceEntry.key.toString();
-        final device = safeMap(deviceEntry.value);
-        final currentState = _deviceNotificationState(device);
-        final previousState = previousByDevice[deviceId];
-
-        previousByDevice[deviceId] = currentState;
-
-        if (previousState == null) {
-          if (homeWasPrimed) {
-            _recordDeviceNotification(
-              homeId: homeId,
-              homeName: homeName,
-              deviceId: deviceId,
-              device: device,
-              event: {
-                "type": "device_added",
-                "title": _strings.t("Thiết bị mới"),
-                "message": _strings.choose(
-                  vi: "Thiết bị \"${_deviceName(deviceId, device)}\" đã xuất hiện trong \"$homeName\".",
-                  en: "Device \"${_deviceName(deviceId, device)}\" was added to \"$homeName\".",
-                ),
-                "severity": "info",
-              },
-            );
-          }
-
-          continue;
-        }
-
-        final event = _deviceNotificationEvent(
-          homeName: homeName,
-          deviceId: deviceId,
-          device: device,
-          previous: previousState,
-          current: currentState,
-        );
-
-        if (event == null) continue;
-
+    _homeRealtimeCoordinator.syncDeviceNotificationBridge(
+      homes: homes,
+      strings: _strings,
+      homeNameForId: getHomeDisplayName,
+      onDeviceNotification: (notification) {
         _recordDeviceNotification(
-          homeId: homeId,
-          homeName: homeName,
-          deviceId: deviceId,
-          device: device,
-          event: event,
+          homeId: notification.homeId,
+          homeName: notification.homeName,
+          deviceId: notification.deviceId,
+          device: notification.device,
+          deviceName: notification.deviceName,
+          event: notification.event,
         );
-      }
-
-      _deviceNotificationPrimedHomes.add(homeId);
-    }
-  }
-
-  Map<String, dynamic> _deviceNotificationState(Map<String, dynamic> device) {
-    final battery = int.tryParse(device["battery"]?.toString() ?? "");
-    final temperature = double.tryParse(
-      device["temperature"]?.toString() ?? "",
+      },
     );
-    final humidity = double.tryParse(device["humidity"]?.toString() ?? "");
-
-    return {
-      "availability": device["availability"]?.toString().toLowerCase() ?? "",
-      "contact": device["contact"],
-      "smoke": device["smoke"] == true,
-      "tamper": device["tamper"] == true,
-      "status": device["status"]?.toString() ?? "",
-      "batteryLow": battery != null && battery <= 20,
-      "sosActive": isSosActive(device),
-      "temperatureHigh":
-          temperature != null && temperature > environmentWarningTemperatureC,
-      "humidityHigh":
-          humidity != null && humidity >= environmentWarningHumidityPercent,
-    };
-  }
-
-  Map<String, String>? _deviceNotificationEvent({
-    required String homeName,
-    required String deviceId,
-    required Map<String, dynamic> device,
-    required Map<String, dynamic> previous,
-    required Map<String, dynamic> current,
-  }) {
-    final type = device["type"]?.toString() ?? "door";
-    final name = _deviceName(deviceId, device);
-
-    bool changed(String key) => previous[key] != current[key];
-
-    if (changed("smoke")) {
-      final active = current["smoke"] == true;
-      return {
-        "type": active ? "device_smoke" : "device_smoke_clear",
-        "title": active
-            ? _strings.t("Cảnh báo khói")
-            : _strings.t("Khói đã an toàn"),
-        "message": active
-            ? _strings.choose(
-                vi: "\"$name\" phát hiện khói trong \"$homeName\".",
-                en: "\"$name\" detected smoke in \"$homeName\".",
-              )
-            : _strings.choose(
-                vi: "\"$name\" đã trở lại trạng thái bình thường.",
-                en: "\"$name\" has returned to normal.",
-              ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (changed("sosActive")) {
-      final active = current["sosActive"] == true;
-      return {
-        "type": active ? "device_sos" : "device_sos_clear",
-        "title": active
-            ? _strings.t("SOS được kích hoạt")
-            : _strings.t("SOS đã kết thúc"),
-        "message": active
-            ? _strings.choose(
-                vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
-                en: "\"$name\" triggered SOS in \"$homeName\".",
-              )
-            : _strings.choose(
-                vi: "\"$name\" đã hết trạng thái SOS.",
-                en: "\"$name\" is no longer in SOS state.",
-              ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (changed("tamper")) {
-      final active = current["tamper"] == true;
-      return {
-        "type": active ? "device_tamper" : "device_tamper_clear",
-        "title": active
-            ? _strings.t("Thiết bị bị tháo")
-            : _strings.t("Tamper bình thường"),
-        "message": active
-            ? _strings.choose(
-                vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
-                en: "\"$name\" reported tampering in \"$homeName\".",
-              )
-            : _strings.choose(
-                vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
-                en: "\"$name\" tamper alert has cleared.",
-              ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (_isContactDevice(type) && changed("contact")) {
-      final closed = current["contact"] == true;
-      return {
-        "type": "device_contact",
-        "title": closed ? _strings.t("Cửa đã đóng") : _strings.t("Cửa đang mở"),
-        "message": closed
-            ? _strings.choose(
-                vi: "\"$name\" đã đóng trong \"$homeName\".",
-                en: "\"$name\" closed in \"$homeName\".",
-              )
-            : _strings.choose(
-                vi: "\"$name\" đang mở trong \"$homeName\".",
-                en: "\"$name\" is open in \"$homeName\".",
-              ),
-        "severity": closed ? "success" : "warning",
-      };
-    }
-
-    if (previous["batteryLow"] != true && current["batteryLow"] == true) {
-      return {
-        "type": "device_battery_low",
-        "title": _strings.t("Pin yếu"),
-        "message": _strings.choose(
-          vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
-          en: "\"$name\" in \"$homeName\" has a low battery.",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    if (changed("availability")) {
-      final availability = current["availability"]?.toString() ?? "";
-      if (availability == "offline") {
-        return {
-          "type": "device_connection",
-          "title": _strings.t("Thiết bị offline"),
-          "message": _strings.choose(
-            vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
-            en: "\"$name\" in \"$homeName\" went offline.",
-          ),
-          "severity": "warning",
-        };
-      }
-
-      if (availability == "online") {
-        return {
-          "type": "device_connection",
-          "title": _strings.t("Thiết bị online"),
-          "message": _strings.choose(
-            vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
-            en: "\"$name\" in \"$homeName\" is back online.",
-          ),
-          "severity": "success",
-        };
-      }
-    }
-
-    if (previous["temperatureHigh"] != true &&
-        current["temperatureHigh"] == true) {
-      return {
-        "type": "device_environment",
-        "title": _strings.t("Nhiệt độ cao"),
-        "message": _strings.choose(
-          vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
-          en: "\"$name\" recorded a high temperature in \"$homeName\".",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    if (previous["humidityHigh"] != true && current["humidityHigh"] == true) {
-      return {
-        "type": "device_environment",
-        "title": _strings.t("Độ ẩm cao"),
-        "message": _strings.choose(
-          vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
-          en: "\"$name\" recorded high humidity in \"$homeName\".",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    return null;
   }
 
   void _recordDeviceNotification({
@@ -1733,6 +1221,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     required String homeName,
     required String deviceId,
     required Map<String, dynamic> device,
+    required String deviceName,
     required Map<String, String> event,
   }) {
     unawaited(
@@ -1750,41 +1239,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homeName: homeName,
         data: {
           "homeName": homeName,
-          "deviceName": _deviceName(deviceId, device),
+          "deviceName": deviceName,
           "deviceType": device["type"]?.toString() ?? "",
         },
       ).catchError((_) {}),
     );
-  }
-
-  bool _isContactDevice(String type) {
-    return type == "door" ||
-        type == "window" ||
-        type == "gate" ||
-        type == "lock";
-  }
-
-  String _deviceName(String deviceId, Map<String, dynamic> device) {
-    final name = device["name"]?.toString().trim() ?? "";
-    return name.isNotEmpty ? name : deviceId;
-  }
-
-  bool _hasEnabledScheduleValue(dynamic raw) {
-    if (raw is List) {
-      return raw.any((item) {
-        final schedule = safeMap(item);
-        return schedule["enabled"] == true;
-      });
-    }
-
-    if (raw is Map) {
-      return raw.values.any((item) {
-        final schedule = safeMap(item);
-        return schedule["enabled"] == true;
-      });
-    }
-
-    return false;
   }
 
   Future<bool> hasEnabledReminderSchedule() async {
@@ -1804,7 +1263,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               )
               .get();
 
-          return _hasEnabledScheduleValue(customSnap.value);
+          return HomeAlarmFormatters.hasEnabledScheduleValue(customSnap.value);
         }
       }
 
@@ -1815,211 +1274,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           )
           .get();
 
-      return _hasEnabledScheduleValue(homeSnap.value);
+      return HomeAlarmFormatters.hasEnabledScheduleValue(homeSnap.value);
     } catch (_) {
       return false;
     }
   }
 
   String formatAlarmSchedules() {
-    if (!alarmEnabled || selectedHome.isEmpty) {
-      return "Tắt";
-    }
-
-    final devices = getDevices();
-    final selectedRules = safeMap(customRulesByHome[selectedHome]);
-
-    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
-
-    final customDevices = safeMap(selectedRules["devices"]);
-
-    final intervals = <Map<String, int>>[];
-
-    int? parseClock(dynamic raw) {
-      final value = raw?.toString().trim() ?? "";
-      final parts = value.split(":");
-
-      if (parts.length != 2) {
-        return null;
-      }
-
-      final hour = int.tryParse(parts[0]);
-      final minute = int.tryParse(parts[1]);
-
-      if (hour == null ||
-          minute == null ||
-          hour < 0 ||
-          hour > 23 ||
-          minute < 0 ||
-          minute > 59) {
-        return null;
-      }
-
-      return hour * 60 + minute;
-    }
-
-    String formatClock(int totalMinutes) {
-      final normalized = ((totalMinutes % 1440) + 1440) % 1440;
-      final hour = normalized ~/ 60;
-      final minute = normalized % 60;
-
-      return "${hour.toString().padLeft(2, "0")}:"
-          "${minute.toString().padLeft(2, "0")}";
-    }
-
-    for (final entry in devices.entries) {
-      final deviceId = entry.key.toString();
-      final device = safeMap(entry.value);
-      final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
-      final homeAlarm = safeMap(device["alarm"]);
-      final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = safeMap(customDevice["alarm"]);
-
-      // Giống AlarmDeviceSheet:
-      // mode Riêng tôi dùng custom nếu có,
-      // nếu chưa có thì kế thừa lịch Theo nhà.
-      final alarm = useCustomMode && customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] != true) {
-        continue;
-      }
-
-      final startMinutes = parseClock(alarm["start"]);
-      final endMinutes = parseClock(alarm["end"]);
-
-      if (startMinutes == null || endMinutes == null) {
-        continue;
-      }
-
-      intervals.add({"start": startMinutes, "end": endMinutes});
-    }
-
-    if (intervals.isEmpty) {
-      return "Tắt";
-    }
-
-    if (intervals.length == 1) {
-      final firstInterval = intervals.first;
-      final start = firstInterval["start"];
-      final end = firstInterval["end"];
-
-      if (start == null || end == null) {
-        return "Tắt";
-      }
-
-      return "${formatClock(start)} → ${formatClock(end)}";
-    }
-
-    // Tìm một khoảng liên tục ngắn nhất nhưng bao phủ toàn bộ
-    // các lịch Alarm, kể cả lịch đi qua 00:00.
-    int? bestStart;
-    int? bestEnd;
-    var bestSpan = 1 << 30;
-
-    final candidateCuts = <int>{
-      for (final interval in intervals)
-        if (interval["start"] != null) interval["start"] as int,
-      for (final interval in intervals)
-        if (interval["end"] != null) interval["end"] as int,
-    };
-
-    for (final cut in candidateCuts) {
-      var minStart = 1 << 30;
-      var maxEnd = -(1 << 30);
-
-      for (final interval in intervals) {
-        final startMinutes = interval["start"];
-        final endMinutes = interval["end"];
-
-        if (startMinutes == null || endMinutes == null) {
-          continue;
-        }
-
-        var duration = (endMinutes - startMinutes + 1440) % 1440;
-
-        // Cùng giờ bắt đầu/kết thúc được hiểu là cả ngày.
-        if (duration == 0) {
-          duration = 1440;
-        }
-
-        final mappedStart = (startMinutes - cut + 1440) % 1440;
-        final mappedEnd = mappedStart + duration;
-
-        if (mappedStart < minStart) {
-          minStart = mappedStart;
-        }
-
-        if (mappedEnd > maxEnd) {
-          maxEnd = mappedEnd;
-        }
-      }
-
-      final span = maxEnd - minStart;
-
-      if (span < bestSpan) {
-        bestSpan = span;
-        bestStart = cut + minStart;
-        bestEnd = cut + maxEnd;
-      }
-    }
-
-    if (bestStart == null || bestEnd == null) {
-      return "Tắt";
-    }
-
-    if (bestSpan >= 1440) {
-      return "Cả ngày";
-    }
-
-    return "${formatClock(bestStart)} → "
-        "${formatClock(bestEnd)}";
+    return HomeAlarmFormatters.formatAlarmSchedules(
+      alarmEnabled: alarmEnabled,
+      selectedHome: selectedHome,
+      devices: getDevices(),
+      customRulesByHome: customRulesByHome,
+    );
   }
 
   Map<String, dynamic> getDevices() {
-    final homeData = safeMap(homes[selectedHome]);
-    return safeMap(homeData["devices"]);
+    return HomeDataHelpers.getDevices(homes: homes, selectedHome: selectedHome);
   }
 
   Map<String, dynamic> getRooms() {
-    final homeData = safeMap(homes[selectedHome]);
-    return safeMap(homeData["rooms"]);
+    return HomeDataHelpers.getRooms(homes: homes, selectedHome: selectedHome);
   }
 
   Map<String, dynamic>? getTemperatureDevice() {
-    final devices = getDevices();
-
-    for (final entry in devices.entries) {
-      final d = safeMap(entry.value);
-
-      if (d["type"] == "temperature") {
-        return {"id": entry.key, "data": d};
-      }
-    }
-
-    return null;
+    return HomeDataHelpers.getTemperatureDevice(devices: getDevices());
   }
 
   String getHomeEnvironmentText() {
-    final devices = getDevices();
-
-    for (final item in devices.values) {
-      final d = safeMap(item);
-
-      if (d["type"] == "temperature") {
-        final temp = d["temperature"];
-        final humidity = d["humidity"];
-
-        final tempText = temp != null ? "$temp°C" : "--";
-        final humidityText = humidity != null ? "$humidity%" : "--";
-
-        return "$tempText / $humidityText";
-      }
-    }
-
-    return "--°C / --%";
+    return HomeDataHelpers.getHomeEnvironmentText(devices: getDevices());
   }
 
   Future<Map<String, dynamic>> loadVisibleShareRequests() async {
@@ -2105,71 +1388,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Map<String, dynamic> _ownedHomesForState() {
-    final result = <String, dynamic>{};
-
-    for (final homeId in _ownedHomeIds) {
-      if (homes.containsKey(homeId)) {
-        result[homeId] = homes[homeId];
-      }
-    }
-
-    return result;
+    return _homeSelectionStateService.ownedHomesForState(
+      ownedHomeIds: _ownedHomeIds,
+      homes: homes,
+    );
   }
 
+  // ignore: unused_element
   Map<String, dynamic> _loadedSharedHomesForState() {
-    final result = <String, dynamic>{};
-
-    for (final entry in _sharedHomesSnapshot.entries) {
-      final homeId = entry.key.toString();
-      final home = safeMap(homes[homeId]);
-
-      if (home['_shared'] == true) {
-        result[homeId] = entry.value;
-      }
-    }
-
-    return result;
+    return _homeSelectionStateService.loadedSharedHomesForState(
+      sharedHomesSnapshot: _sharedHomesSnapshot,
+      homes: homes,
+    );
   }
 
   void _rebuildHomeOrderAndSelectionLocked() {
-    final ownedHomes = _ownedHomesForState();
-    final sharedHomes = _loadedSharedHomesForState();
-
-    homeOrder = HomeStateParser.parseHomeOrder(
-      account: <String, dynamic>{
-        if (_savedHomeOrder != null) 'homeOrder': _savedHomeOrder,
-      },
-      homesData: ownedHomes,
-      sharedHomes: sharedHomes,
+    final result = _homeSelectionStateService.rebuildHomeOrderAndSelection(
+      savedHomeOrder: _savedHomeOrder,
+      ownedHomeIds: _ownedHomeIds,
+      sharedHomesSnapshot: _sharedHomesSnapshot,
+      homes: homes,
       selectedHome: selectedHome,
+      selectedRoomId: selectedRoomId,
+      alarmSettings: alarmSettings,
     );
 
-    if (homeOrder.isEmpty) {
-      selectedHome = '';
-      selectedRoomId = 'overview';
-      securityMode = 'normal';
-      alarmPauseToday = {};
-      alarmEnabled = true;
-      start = const TimeOfDay(hour: 23, minute: 0);
-      end = const TimeOfDay(hour: 6, minute: 0);
-      return;
-    }
-
-    if (!homeOrder.contains(selectedHome)) {
-      selectedHome = homeOrder.first;
-      selectedRoomId = 'overview';
-    }
-
-    final currentHome = safeMap(homes[selectedHome]);
-    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-    securityMode = currentHome['securityMode']?.toString() == 'armed'
-        ? 'armed'
-        : 'normal';
-    alarmPauseToday = safeMap(currentHome['alarmPauseToday']);
-    alarmEnabled = safeMap(alarmSettings[selectedHome])['enabled'] != false;
-    start = parsedAlarm['start'];
-    end = parsedAlarm['end'];
+    homeOrder = result.homeOrder;
+    selectedHome = result.selectedHome;
+    selectedRoomId = result.selectedRoomId;
+    securityMode = result.securityMode;
+    alarmPauseToday = result.alarmPauseToday;
+    alarmEnabled = result.alarmEnabled;
+    start = result.start;
+    end = result.end;
   }
 
   void _ensureSelectedHomeRoomModel() {
@@ -2177,21 +1428,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    final key = '${getHomeOwnerUid()}/$selectedHome';
-
-    if (_ensuredRoomModelKey == key) {
-      return;
-    }
-
-    _ensuredRoomModelKey = key;
-
-    unawaited(
-      HomeService.ensureHomeRoomModel(
-        ownerUid: getHomeOwnerUid(),
-        homeId: selectedHome,
-      ).catchError((Object error) {
-        debugPrint('ENSURE_HOME_ROOM_MODEL_ERROR: $error');
-      }),
+    _homeSelectionStateService.ensureSelectedHomeRoomModel(
+      selectedHome: selectedHome,
+      canManageHome: canManageHome(),
+      ownerUid: getHomeOwnerUid(),
     );
   }
 
@@ -2236,24 +1476,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   String _autoAwayConfigSignature(Map<String, dynamic> home) {
-    final autoAway = safeMap(home['autoAway']);
-
-    return [
-      autoAway['enabled'] == true,
-      autoAway['latitude'],
-      autoAway['longitude'],
-      autoAway['radiusMeters'],
-    ].join('|');
+    return _homeSelectionStateService.autoAwayConfigSignature(home);
   }
 
-  void _handleOwnedHomeUpsert(DatabaseEvent event) {
-    final homeId = event.snapshot.key?.trim() ?? '';
-
+  void _handleOwnedHomeUpsert(String homeId, Map<String, dynamic> homeData) {
     if (!mounted || homeId.isEmpty) {
       return;
     }
 
-    final homeData = safeMap(event.snapshot.value);
     final previousHome = safeMap(homes[homeId]);
     final wasOwned = _ownedHomeIds.contains(homeId);
     final autoAwayChanged =
@@ -2270,9 +1500,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     _afterHomeStateChanged(syncAutoAway: autoAwayChanged, syncPhone: !wasOwned);
   }
 
-  void _handleOwnedHomeRemoved(DatabaseEvent event) {
-    final homeId = event.snapshot.key?.trim() ?? '';
-
+  void _handleOwnedHomeRemoved(String homeId, Map<String, dynamic> homeData) {
     if (!mounted || homeId.isEmpty) {
       return;
     }
@@ -2284,18 +1512,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homes.remove(homeId);
       }
 
-      _deviceNotificationSnapshots.remove(homeId);
-      _deviceNotificationPrimedHomes.remove(homeId);
       _rebuildHomeOrderAndSelectionLocked();
     });
 
     _afterHomeStateChanged(syncAutoAway: true, syncPhone: true);
   }
 
-  void _handleSharedHomesSnapshot(Object? rawValue) {
+  void _handleSharedHomesSnapshot(Map<String, dynamic> nextSharedHomes) {
     if (!mounted) return;
 
-    final nextSharedHomes = safeMap(rawValue);
     _sharedHomesSnapshot = nextSharedHomes;
 
     setState(() {
@@ -2338,8 +1563,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
         setState(() {
           homes.remove(homeId);
-          _deviceNotificationSnapshots.remove(homeId);
-          _deviceNotificationPrimedHomes.remove(homeId);
           _rebuildHomeOrderAndSelectionLocked();
         });
 
@@ -2351,139 +1574,64 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void _startAccountPathListeners() {
-    profileSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.profile(uid))
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted) return;
+    _homeAccountRealtimeCoordinator.start(
+      uid: uid,
+      onProfileChanged: (profile) {
+        if (!mounted) return;
 
-            final profile = safeMap(event.snapshot.value);
-            final nextPhone = profile['phone']?.toString() ?? '';
-            final phoneChanged = nextPhone != userPhone;
+        final nextPhone = profile['phone']?.toString() ?? '';
+        final phoneChanged = nextPhone != userPhone;
 
-            setState(() {
-              userName = profile['name']?.toString() ?? '';
-              userGender = profile['gender']?.toString() ?? '';
-              userDob = profile['dob']?.toString() ?? '';
-              userPhone = nextPhone;
-              userPhotoUrl = profile['photoUrl']?.toString() ?? '';
-            });
+        setState(() {
+          userName = profile['name']?.toString() ?? '';
+          userGender = profile['gender']?.toString() ?? '';
+          userDob = profile['dob']?.toString() ?? '';
+          userPhone = nextPhone;
+          userPhotoUrl = profile['photoUrl']?.toString() ?? '';
+        });
 
-            if (phoneChanged) {
-              _syncPhoneToCurrentHomes();
-            }
-          },
-          onError: (Object error) {
-            debugPrint('PROFILE_LISTENER_ERROR: $error');
-          },
-        );
+        if (phoneChanged) {
+          _syncPhoneToCurrentHomes();
+        }
+      },
+      onOwnedHomeAdded: _handleOwnedHomeUpsert,
+      onOwnedHomeChanged: _handleOwnedHomeUpsert,
+      onOwnedHomeRemoved: _handleOwnedHomeRemoved,
+      onSharedHomesChanged: _handleSharedHomesSnapshot,
+      onHomeOrderChanged: (rawOrder) {
+        if (!mounted) return;
 
-    final ownedHomesRef = FirebaseDatabase.instance.ref(
-      FirebasePaths.homes(uid),
-    );
+        _savedHomeOrder = _normalizeSavedHomeOrder(rawOrder);
 
-    ownedHomeAddedSubscription = ownedHomesRef.onChildAdded.listen(
-      _handleOwnedHomeUpsert,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_ADDED_LISTENER_ERROR: $error');
+        setState(_rebuildHomeOrderAndSelectionLocked);
+        _afterHomeStateChanged();
+      },
+      onAlarmSettingsChanged: (settings) {
+        if (!mounted) return;
+
+        setState(() {
+          alarmSettings = settings;
+          alarmEnabled =
+              selectedHome.isEmpty ||
+              safeMap(alarmSettings[selectedHome])['enabled'] != false;
+        });
+      },
+      onCustomRulesChanged: (rules) {
+        if (!mounted) return;
+
+        setState(() {
+          customRulesByHome = rules;
+        });
+      },
+      onShareRequestsChanged: (requests) {
+        if (!mounted) return;
+
+        setState(() {
+          shareRequests = requests;
+          inviteCountNotifier.value = requests.length;
+        });
       },
     );
-
-    ownedHomeChangedSubscription = ownedHomesRef.onChildChanged.listen(
-      _handleOwnedHomeUpsert,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_CHANGED_LISTENER_ERROR: $error');
-      },
-    );
-
-    ownedHomeRemovedSubscription = ownedHomesRef.onChildRemoved.listen(
-      _handleOwnedHomeRemoved,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_REMOVED_LISTENER_ERROR: $error');
-      },
-    );
-
-    sharedHomesSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedHomes(uid))
-        .onValue
-        .listen(
-          (event) => _handleSharedHomesSnapshot(event.snapshot.value),
-          onError: (Object error) {
-            debugPrint('SHARED_HOMES_LISTENER_ERROR: $error');
-          },
-        );
-
-    homeOrderSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.homeOrder(uid))
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted) return;
-
-            _savedHomeOrder = _normalizeSavedHomeOrder(event.snapshot.value);
-
-            setState(_rebuildHomeOrderAndSelectionLocked);
-            _afterHomeStateChanged();
-          },
-          onError: (Object error) {
-            debugPrint('HOME_ORDER_LISTENER_ERROR: $error');
-          },
-        );
-
-    alarmSettingsSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.alarmSettings(uid))
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted) return;
-
-            setState(() {
-              alarmSettings = safeMap(event.snapshot.value);
-              alarmEnabled =
-                  selectedHome.isEmpty ||
-                  safeMap(alarmSettings[selectedHome])['enabled'] != false;
-            });
-          },
-          onError: (Object error) {
-            debugPrint('ALARM_SETTINGS_LISTENER_ERROR: $error');
-          },
-        );
-
-    customRulesSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.customRules(uid))
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted) return;
-
-            setState(() {
-              customRulesByHome = safeMap(event.snapshot.value);
-            });
-          },
-          onError: (Object error) {
-            debugPrint('CUSTOM_RULES_LISTENER_ERROR: $error');
-          },
-        );
-
-    shareRequestsSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.shareRequests(uid))
-        .onValue
-        .listen(
-          (event) {
-            if (!mounted) return;
-
-            final requests = safeMap(event.snapshot.value);
-
-            setState(() {
-              shareRequests = requests;
-              inviteCountNotifier.value = requests.length;
-            });
-          },
-          onError: (Object error) {
-            debugPrint('SHARE_REQUESTS_LISTENER_ERROR: $error');
-          },
-        );
   }
 
   @override
@@ -2505,10 +1653,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         state == AppLifecycleState.inactive ||
         state == AppLifecycleState.detached) {
       // Android giữ foreground task độc lập nên không dừng heartbeat ở đây.
-      if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
-        autoAwayPresenceRefreshTimer?.cancel();
-        autoAwayPresenceRefreshTimer = null;
-      }
+      _homeAutoAwayCoordinator.stopPresenceRefreshTimerForBackgroundIfNeeded();
     }
   }
 
@@ -2550,12 +1695,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> handleScannedQR(String code) async {
-    final value = code.trim();
-    debugPrint("QR_DEBUG value=$value");
-    if (value.startsWith("safehome_join_multi|")) {
-      final parts = value.split("|");
+    final result = await _homePairingService.handleScannedQr(
+      code: code,
+      uid: uid,
+      strings: _strings,
+    );
 
-      if (parts.length != 3) {
+    if (!mounted) return;
+
+    switch (result.status) {
+      case HomeScannedQrStatus.invalidJoinMulti:
         showTopToast(
           context,
           _strings.t("QR gia nhập nhiều nhà không hợp lệ"),
@@ -2563,15 +1712,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           icon: Icons.qr_code_scanner_rounded,
         );
         return;
-      }
-
-      final ownerUid = parts[1];
-      final homeIds = parts[2]
-          .split(",")
-          .where((e) => e.trim().isNotEmpty)
-          .toList();
-
-      if (ownerUid == uid) {
+      case HomeScannedQrStatus.ownerOfMultiHomes:
         showTopToast(
           context,
           _strings.t("Bạn đang là chủ các nhà này"),
@@ -2579,87 +1720,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           icon: Icons.home_rounded,
         );
         return;
-      }
-
-      final myEmail = FirebaseAuth.instance.currentUser?.email
-          ?.trim()
-          .toLowerCase();
-
-      final targetData = await ShareService.loadAccount(uid);
-      final targetProfile = safeMap(targetData["profile"]);
-      final requesterName =
-          targetProfile["name"]?.toString().trim().isNotEmpty == true
-          ? targetProfile["name"].toString().trim()
-          : myEmail ?? _strings.t("Một người dùng");
-
-      for (final homeId in homeIds) {
-        final homeName = await HomeNotificationService.resolveHomeName(
-          homeId: homeId,
-          ownerUid: ownerUid,
-        );
-        final requestKey = "${homeId}_$uid";
-        final requestData = {
-          "homeId": homeId,
-          "homeName": homeName,
-          "ownerUid": ownerUid,
-          "targetUid": uid,
-          "targetEmail": myEmail ?? "",
-          "targetName": requesterName,
-          "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
-          "type": "join_request",
-          "time": DateTime.now().millisecondsSinceEpoch,
-        };
-
-        final updates = <String, Object?>{
-          "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-        };
-
-        try {
-          debugPrint("QR_JOIN_UPDATES=$updates");
-          await FirebaseDatabase.instance.ref().update(updates);
-          debugPrint("QR_JOIN_UPDATE_OK");
-        } catch (e, st) {
-          debugPrint("QR_JOIN_UPDATE_ERROR: $e");
-          debugPrint("QR_JOIN_UPDATE_STACK: $st");
-        }
-        await HomeNotificationService.notifyHome(
-          ownerUid: ownerUid,
-          homeId: homeId,
-          recipientUid: ownerUid,
-          type: "join_request",
-          title: _strings.t("Yêu cầu gia nhập nhà"),
-          message: _strings.choose(
-            vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-            en: "$requesterName requested to join \"$homeName\".",
+      case HomeScannedQrStatus.joinMultiSent:
+        showTopToast(
+          context,
+          _strings.choose(
+            vi: "Đã gửi yêu cầu gia nhập ${result.joinRequestCount} nhà",
+            en: "Join requests sent for ${result.joinRequestCount} homes",
           ),
-          homeName: homeName,
-          category: "member",
-          severity: "info",
-          entityType: "member",
-          entityId: uid,
-          includeActor: false,
-          writeHomeTimeline: false,
+          color: SafeHomeColors.safe,
+          icon: Icons.check_circle_rounded,
         );
-      }
-
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.choose(
-          vi: "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
-          en: "Join requests sent for ${homeIds.length} homes",
-        ),
-        color: SafeHomeColors.safe,
-        icon: Icons.check_circle_rounded,
-      );
-
-      return;
-    }
-    if (value.startsWith("safehome_join|")) {
-      final parts = value.split("|");
-
-      if (parts.length != 3) {
+        return;
+      case HomeScannedQrStatus.invalidJoinSingle:
         showTopToast(
           context,
           _strings.t("QR gia nhập không hợp lệ"),
@@ -2667,12 +1739,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           icon: Icons.qr_code_rounded,
         );
         return;
-      }
-
-      final ownerUid = parts[1];
-      final homeId = parts[2];
-
-      if (ownerUid == uid) {
+      case HomeScannedQrStatus.ownerOfSingleHome:
         showTopToast(
           context,
           _strings.t("Bạn đang là chủ nhà này"),
@@ -2680,80 +1747,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           icon: Icons.info_outline_rounded,
         );
         return;
-      }
-
-      final myEmail = FirebaseAuth.instance.currentUser?.email
-          ?.trim()
-          .toLowerCase();
-
-      final targetData = await ShareService.loadAccount(uid);
-      final targetProfile = safeMap(targetData["profile"]);
-      final requesterName =
-          targetProfile["name"]?.toString().trim().isNotEmpty == true
-          ? targetProfile["name"].toString().trim()
-          : myEmail ?? _strings.t("Một người dùng");
-
-      final requestKey = "${homeId}_$uid";
-      final homeName = await HomeNotificationService.resolveHomeName(
-        homeId: homeId,
-        ownerUid: ownerUid,
-      );
-
-      final requestData = {
-        "homeId": homeId,
-        "homeName": homeName,
-        "ownerUid": ownerUid,
-        "targetUid": uid,
-        "targetEmail": myEmail ?? "",
-        "targetName": requesterName,
-        "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
-        "type": "join_request",
-        "time": DateTime.now().millisecondsSinceEpoch,
-      };
-
-      final updates = <String, Object?>{
-        "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-      };
-
-      await FirebaseDatabase.instance.ref().update(updates);
-      await HomeNotificationService.notifyHome(
-        ownerUid: ownerUid,
-        homeId: homeId,
-        recipientUid: ownerUid,
-        type: "join_request",
-        title: _strings.t("Yêu cầu gia nhập nhà"),
-        message: _strings.choose(
-          vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-          en: "$requesterName requested to join \"$homeName\".",
-        ),
-        homeName: homeName,
-        category: "member",
-        severity: "info",
-        entityType: "member",
-        entityId: uid,
-        includeActor: false,
-        writeHomeTimeline: false,
-      );
-
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Đã gửi yêu cầu gia nhập nhà"),
-        color: SafeHomeColors.safe,
-        icon: Icons.check_circle_rounded,
-      );
-
-      return;
+      case HomeScannedQrStatus.joinSingleSent:
+        showTopToast(
+          context,
+          _strings.t("Đã gửi yêu cầu gia nhập nhà"),
+          color: SafeHomeColors.safe,
+          icon: Icons.check_circle_rounded,
+        );
+        return;
+      case HomeScannedQrStatus.pairHubId:
+        pairSensor(result.hubId);
+        showTopToast(
+          context,
+          _strings.t("QR này không phải mã xin gia nhập nhà"),
+          color: Colors.red,
+          icon: Icons.qr_code_2_rounded,
+        );
+        return;
     }
-
-    pairSensor(value);
-    showTopToast(
-      context,
-      _strings.t("QR này không phải mã xin gia nhập nhà"),
-      color: Colors.red,
-      icon: Icons.qr_code_2_rounded,
-    );
   }
 
   void pairSensor(String hubId) async {
@@ -2767,40 +1778,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
-
-    final requestId =
-        "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.pairRequest(requestId))
-        .set({
-          "active": true,
-          "hubId": hubId.trim(),
-          "homeId": selectedHome,
-          "ownerUid": ownerUid,
-          "requestedBy": uid,
-          "roomId": selectedRoomId == "overview"
-              ? "unassigned"
-              : selectedRoomId,
-          "duration": 60,
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
-    await HomeNotificationService.notifyHome(
+    final result = await _homePairingService.startPairing(
+      hubId: hubId,
+      uid: uid,
       ownerUid: ownerUid,
       homeId: selectedHome,
-      type: "pair_started",
-      category: "device",
-      title: _strings.t("Đã mở chế độ thêm thiết bị"),
-      message: _strings.choose(
-        vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
-        en: "Device pairing was enabled in \"$homeName\" for 60 seconds.",
-      ),
+      selectedRoomId: selectedRoomId,
       homeName: homeName,
+      strings: _strings,
     );
-    setState(() => pairingCountdown = 60);
+
+    if (!mounted) return;
+
+    setState(() => pairingCountdown = result.durationSeconds);
 
     timer?.cancel();
 
@@ -2857,186 +1849,57 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     // ================= HOME OWN =================
-    final controller = TextEditingController();
-
-    final confirmOk = await showModalBottomSheet<bool>(
+    final confirmOk = await showDeleteHomeConfirmSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.red,
-                  size: 48,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t("Xác nhận xoá nhà"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t(
-                    "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
-                  ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: Colors.grey.shade700,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(_strings.t("Huỷ")),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(_strings.t("Tiếp tục")),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
-    if (confirmOk != true) return;
+    if (!confirmOk) return;
     if (!mounted) return;
 
-    final passwordOk = await showModalBottomSheet<bool>(
+    final passwordOk = await showDeleteHomePasswordSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.lock_outline_rounded,
-                  color: Colors.red,
-                  size: 44,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t("Nhập mật khẩu"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: controller,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: _strings.t("Mật khẩu tài khoản"),
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.delete_forever_rounded),
-                    label: Text(_strings.t("Xoá nhà")),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () async {
-                      try {
-                        final user = FirebaseAuth.instance.currentUser;
-                        final userEmail = user?.email;
+      strings: _strings,
+      onConfirmPassword: (sheetContext, password) async {
+        try {
+          final user = FirebaseAuth.instance.currentUser;
+          final userEmail = user?.email;
 
-                        if (user == null ||
-                            userEmail == null ||
-                            userEmail.isEmpty) {
-                          if (!sheetContext.mounted) return;
+          if (user == null || userEmail == null || userEmail.isEmpty) {
+            if (!sheetContext.mounted) return false;
 
-                          showTopToast(
-                            sheetContext,
-                            _strings.t("Không tìm thấy tài khoản"),
-                            color: Colors.red,
-                            icon: Icons.error_outline_rounded,
-                          );
-                          return;
-                        }
+            showTopToast(
+              sheetContext,
+              _strings.t("Không tìm thấy tài khoản"),
+              color: Colors.red,
+              icon: Icons.error_outline_rounded,
+            );
+            return false;
+          }
 
-                        final credential = EmailAuthProvider.credential(
-                          email: userEmail,
-                          password: controller.text.trim(),
-                        );
+          final credential = EmailAuthProvider.credential(
+            email: userEmail,
+            password: password,
+          );
 
-                        await user.reauthenticateWithCredential(credential);
+          await user.reauthenticateWithCredential(credential);
 
-                        if (!sheetContext.mounted) return;
+          return true;
+        } catch (_) {
+          if (!sheetContext.mounted) return false;
 
-                        Navigator.pop(sheetContext, true);
-                      } catch (e) {
-                        if (!sheetContext.mounted) return;
-
-                        showTopToast(
-                          sheetContext,
-                          _strings.t("Sai mật khẩu"),
-                          color: Colors.red,
-                          icon: Icons.error_outline_rounded,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+          showTopToast(
+            sheetContext,
+            _strings.t("Sai mật khẩu"),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
       },
     );
 
-    if (passwordOk != true) return;
+    if (!passwordOk) return;
 
     final deletedHomeId = selectedHome;
     final deletedHomeName =
@@ -3395,8 +2258,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     // Chặn timer cục bộ trước khi dọn foreground task và đăng xuất.
-    autoAwayPresenceRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer = null;
+    _homeAutoAwayCoordinator.dispose();
 
     await SessionLogoutService.signOutCurrentUser();
   }
@@ -3941,190 +2803,36 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final ownerUid = getHomeOwnerUid();
     final homeId = selectedHome;
 
-    final homeRef = FirebaseDatabase.instance.ref(
-      "accounts/$ownerUid/homes/$homeId",
-    );
-
-    final homeSnap = await homeRef.get();
-
-    if (!homeSnap.exists || homeSnap.value is! Map) {
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Không đọc được dữ liệu nhà"),
-        color: Colors.red,
-        icon: Icons.error_outline_rounded,
-      );
-      return;
-    }
-
-    final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
-
-    final rawDevices = homeData["devices"];
-
-    if (rawDevices is! Map || rawDevices.isEmpty) {
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Nhà cần có ít nhất một thiết bị để test"),
-        color: Colors.orange,
-        icon: Icons.sensors_off_rounded,
-      );
-      return;
-    }
-
-    final devices = Map<String, dynamic>.from(rawDevices);
-    final firstDeviceEntry = devices.entries.first;
-
-    final deviceId = firstDeviceEntry.key.toString();
-    final deviceData = firstDeviceEntry.value is Map
-        ? Map<String, dynamic>.from(firstDeviceEntry.value as Map)
-        : <String, dynamic>{};
-
-    final deviceRef = homeRef.child("devices/$deviceId");
-
-    final results = <String, String>{};
-
-    bool isPermissionDenied(Object error) {
-      final text = error.toString().toLowerCase();
-
-      return text.contains("permission-denied") ||
-          text.contains("permission_denied") ||
-          text.contains("permission denied");
-    }
-
-    Future<void> expectDenied({
-      required String label,
-      required Future<void> Function() action,
-      Future<void> Function()? cleanup,
-    }) async {
-      try {
-        await action();
-
-        results[label] = "FAIL — Firebase cho phép ghi";
-
-        if (cleanup != null) {
-          try {
-            await cleanup();
-          } catch (error) {
-            results[label] = "FAIL — ghi được, cleanup lỗi: $error";
-          }
-        }
-      } catch (error) {
-        if (isPermissionDenied(error)) {
-          results[label] = "PASS";
-        } else {
-          results[label] = "ERROR — $error";
-        }
-      }
-    }
-
-    final testId = DateTime.now().millisecondsSinceEpoch.toString();
-
-    // 1. Không được ghi trực tiếp _ownerUid.
-    await expectDenied(
-      label: "_ownerUid",
-      action: () async {
-        await homeRef.child("_ownerUid").set(ownerUid);
-      },
-    );
-
-    // 2. Không được tạo event trực tiếp từ client.
-    final eventTestRef = homeRef.child("events/security_test_$testId");
-
-    await expectDenied(
-      label: "events",
-      action: () async {
-        await eventTestRef.set({
-          "type": "security_test",
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
-      },
-      cleanup: () async {
-        await eventTestRef.remove();
-      },
-    );
-
-    // 3. Không được ghi trực tiếp alarmPauseToday.
-    final pauseExists =
-        homeData.containsKey("alarmPauseToday") &&
-        homeData["alarmPauseToday"] != null;
-
-    final pauseTestValue = pauseExists
-        ? homeData["alarmPauseToday"]
-        : <String, dynamic>{
-            "date": "security_test",
-            "start": "00:00",
-            "end": "00:01",
-            "reason": "security_test",
-          };
-
-    await expectDenied(
-      label: "alarmPauseToday",
-      action: () async {
-        await homeRef.child("alarmPauseToday").set(pauseTestValue);
-      },
-      cleanup: pauseExists
-          ? null
-          : () async {
-              await homeRef.child("alarmPauseToday").remove();
-            },
-    );
-
-    final fieldFallbackValues = <String, Object?>{
-      "contact": false,
-      "smoke": false,
-      "tamper": false,
-      "availability": "online",
-      "battery": 100,
-      "type": "door",
-      "last_seen": DateTime.now().toIso8601String(),
-    };
-
-    // 4–10. Các trạng thái thiết bị chỉ backend được ghi.
-    for (final entry in fieldFallbackValues.entries) {
-      final field = entry.key;
-      final fieldExists =
-          deviceData.containsKey(field) && deviceData[field] != null;
-
-      final testValue = fieldExists ? deviceData[field] : entry.value;
-
-      final fieldRef = deviceRef.child(field);
-
-      await expectDenied(
-        label: "device/$field",
-        action: () async {
-          await fieldRef.set(testValue);
-        },
-        cleanup: fieldExists
-            ? null
-            : () async {
-                await fieldRef.remove();
-              },
-      );
-    }
-
-    // 11. Kiểm tra cổng ghi toàn bộ thiết bị.
-    // Đây cũng là cổng mà thao tác remove() trực tiếp phải đi qua.
-    final deviceRootTestData = Map<String, dynamic>.from(deviceData);
-
-    deviceRootTestData["_securityTest"] = testId;
-
-    await expectDenied(
-      label: "device root / delete gate",
-      action: () async {
-        await deviceRef.set(deviceRootTestData);
-      },
-      cleanup: () async {
-        await deviceRef.child("_securityTest").remove();
-      },
+    final result = await FirebaseSecurityTestService.run(
+      ownerUid: ownerUid,
+      homeId: homeId,
     );
 
     if (!mounted) return;
 
-    final passCount = results.values.where((value) => value == "PASS").length;
+    switch (result.state) {
+      case FirebaseSecurityTestState.homeUnavailable:
+        showTopToast(
+          context,
+          _strings.t("Không đọc được dữ liệu nhà"),
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+        return;
+      case FirebaseSecurityTestState.noDevices:
+        showTopToast(
+          context,
+          _strings.t("Nhà cần có ít nhất một thiết bị để test"),
+          color: Colors.orange,
+          icon: Icons.sensors_off_rounded,
+        );
+        return;
+      case FirebaseSecurityTestState.completed:
+        break;
+    }
+
+    final results = result.results;
+    final passCount = result.passCount;
 
     final lines = results.entries
         .map((entry) {
@@ -4165,21 +2873,164 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Color getHomeColor(String h) {
-    final home = safeMap(homes[h]);
-    final overall = getHomeOverallStatus(home);
+    return HomeDataHelpers.getHomeColor(
+      homes: homes,
+      homeId: h,
+      selectedHome: selectedHome,
+    );
+  }
 
-    final level = overall["level"]?.toString() ?? "safe";
-    final selected = h == selectedHome;
+  void openHomeNotifications() {
+    HomeUiCoordinator.openHomeNotificationList(
+      context: context,
+      uid: uid,
+      homeNameForId: getHomeDisplayName,
+      onTapNotification: openHomeNotificationTarget,
+    );
+  }
 
-    if (level == "danger") {
-      return SafeHomeColors.danger;
+  void openScheduleNotificationSheet() {
+    HomeUiCoordinator.openScheduleSheet(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      isShared: homes[selectedHome]?["_shared"] == true,
+      type: "notification",
+      canManageHome: canManageHome(),
+    );
+  }
+
+  void openAlarmDeviceSheet() {
+    HomeUiCoordinator.openAlarmDeviceSheet(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      devices: getDevices(),
+      canManageHome: canManageHome(),
+    );
+  }
+
+  void openSelectedHomeChat() {
+    openHomeChatSheetFor(
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+    );
+  }
+
+  Future<void> openShareRequestsSheet() async {
+    final changed = await HomeUiCoordinator.openShareRequests(
+      context: context,
+      requests: shareRequests,
+      uid: uid,
+    );
+
+    if (changed == true) {
+      await refreshShareRequests();
     }
+  }
 
-    if (level == "warning") {
-      return SafeHomeColors.warning;
+  Future<void> openShareListSheet() async {
+    final selfLeft = await HomeUiCoordinator.openShareList(
+      canManageMembers: canManageHome(),
+      isOwner: isOwner(),
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+    );
+
+    if (selfLeft == true && mounted) {
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).popUntil((route) => route.isFirst);
     }
+  }
 
-    return selected ? SafeHomeColors.primary : SafeHomeColors.safe;
+  void openAccountSheet() {
+    HomeUiCoordinator.openAccount(
+      context: context,
+      logout: logout,
+      userName: userName,
+      userGender: userGender,
+      userDob: userDob,
+      userPhone: userPhone,
+      inviteCountNotifier: inviteCountNotifier,
+      onShareRequests: () {
+        unawaited(openShareRequestsSheet());
+      },
+    );
+  }
+
+  void openRoomManagement() {
+    HomeUiCoordinator.openRoomManagement(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+    );
+  }
+
+  void openAllDevicesFromSettings() {
+    HomeUiCoordinator.openAllDevices(
+      context: context,
+      devices: getDevices(),
+      onEmpty: () {
+        showTopToast(
+          context,
+          _strings.t("Không có thiết bị"),
+          color: Colors.orange,
+          icon: Icons.sensors_off_rounded,
+        );
+      },
+      onOpenDevice: (deviceId, device) {
+        openDeviceDetailSheet(deviceId: deviceId, device: device);
+      },
+    );
+  }
+
+  void openSettingsCoordinator() {
+    HomeUiCoordinator.openSettings(
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+      homeAddress: homes[selectedHome]?["address"]?.toString() ?? "",
+      role: getMyRole(),
+      onAllDevices: openAllDevicesFromSettings,
+      onAccount: openAccountSheet,
+      onDeleteHome: isOwner()
+          ? deleteHome
+          : () {
+              showTopToast(
+                context,
+                _strings.t("Chỉ chủ nhà mới được xoá nhà"),
+                color: Colors.orange,
+                icon: Icons.lock_rounded,
+              );
+            },
+      onRenameHome: renameHome,
+      onSecurityTest: runFirebaseSecurityTest,
+      onTransferOwner: isOwner()
+          ? transferOwner
+          : () {
+              showTopToast(
+                context,
+                _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+                color: Colors.orange,
+                icon: Icons.admin_panel_settings_rounded,
+              );
+            },
+      context: context,
+      inviteCountNotifier: inviteCountNotifier,
+      onShareRequests: () {
+        unawaited(openShareRequestsSheet());
+      },
+      onShare: shareHome,
+      onAutoAway: openAutoAwaySetup,
+      onRooms: openRoomManagement,
+      onShareList: () {
+        unawaited(openShareListSheet());
+      },
+      onLogout: logout,
+    );
   }
 
   @override
@@ -4295,14 +3146,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   startHomeEventsListener();
                   startAlarmPauseListener();
                 },
-                onOpenNotifications: () {
-                  showHomeEventSheet(
-                    context: context,
-                    uid: uid,
-                    homeNameForId: getHomeDisplayName,
-                    onTapNotification: openHomeNotificationTarget,
-                  );
-                },
+                onOpenNotifications: openHomeNotifications,
               ),
               const SizedBox(height: sectionGap),
 
@@ -4370,20 +3214,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                           if (tempDevice == null) return;
 
-                          showDeviceDetail(
-                            context: context,
-                            id: tempDevice["id"],
-                            d: tempDevice["data"],
-                            ownerUid: getHomeOwnerUid(),
-                            homeId: selectedHome,
-                            onRename: canManageHome()
-                                ? () => renameDevice(tempDevice["id"])
-                                : null,
-                            onDelete: canManageHome()
-                                ? () => deleteDevice(tempDevice["id"])
-                                : null,
-                            onNotification: () =>
-                                openNotificationList(tempDevice["id"]),
+                          openDeviceDetailSheet(
+                            deviceId: tempDevice["id"],
+                            device: tempDevice["data"],
                           );
                         },
                         overall: overviewOverall,
@@ -4399,33 +3232,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         onAlarmEnabledChanged: canManageSelectedHome
                             ? setAlarmEnabled
                             : null,
-                        onScheduleNotification: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => ScheduleSheet(
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              isShared: homes[selectedHome]?["_shared"] == true,
-                              type: "notification",
-                              canManageHome: canManageHome(),
-                            ),
-                          );
-                        },
-                        onScheduleAlarm: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => AlarmDeviceSheet(
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              devices: getDevices(),
-                              canManageHome: canManageHome(),
-                            ),
-                          );
-                        },
+                        onScheduleNotification: openScheduleNotificationSheet,
+                        onScheduleAlarm: openAlarmDeviceSheet,
                         alarmStart: overviewAlarmScheduleText,
                         alarmEnd: "",
                         rooms: overviewRooms,
@@ -4480,56 +3288,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           return;
                         }
 
-                        final result = await showModalBottomSheet<String>(
+                        final result = await showHomePairSensorSheet(
                           context: context,
-                          isScrollControlled: true,
-                          builder: (_) {
-                            return SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      _strings.t("Quét QR"),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton.icon(
-                                        icon: const Icon(Icons.qr_code_scanner),
-                                        label: Text(
-                                          _strings.t(
-                                            "Quét QR để thêm thiết bị",
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context, "__SCAN__");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    TextButton.icon(
-                                      icon: const Icon(Icons.keyboard),
-                                      label: Text(
-                                        _strings.t("Nhập HUB ID thủ công"),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context, "__MANUAL__");
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                          strings: _strings,
                         );
 
-                        if (result == "__SCAN__") {
+                        if (result == HomePairSensorMethod.scanQr) {
                           if (!context.mounted) return;
 
                           final code = await openQRScanner(context);
@@ -4539,7 +3303,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           }
                         }
 
-                        if (result == "__MANUAL__") {
+                        if (result == HomePairSensorMethod.manualHubId) {
                           if (!context.mounted) return;
 
                           final hubId = await showPairDialog(context);
@@ -4549,22 +3313,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           pairSensor(hubId.trim());
                         }
                       },
-                      onTapDevice: (id) {
-                        showDeviceDetail(
-                          context: context,
-                          id: id,
-                          d: safeMap(getDevices()[id]),
-                          ownerUid: getHomeOwnerUid(),
-                          homeId: selectedHome,
-                          onRename: canManageHome()
-                              ? () => renameDevice(id)
-                              : null,
-                          onDelete: canManageHome()
-                              ? () => deleteDevice(id)
-                              : null,
-                          onNotification: () => openNotificationList(id),
-                        );
-                      },
+                      onTapDevice: openSelectedDeviceDetail,
                     ),
                   ],
                 ),
@@ -4580,18 +3329,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         inviteCount: shareRequests.length,
         alarmEnabled: alarmEnabled,
         onAddHome: showAddHomeOptions,
-        onOpenChat: () {
-          showHomeChatSheet(
-            context: context,
-            homeId: selectedHome,
-            homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
-            userName: userName,
-            userPhotoUrl: userPhotoUrl,
-            ownerUid: getHomeOwnerUid(),
-            canManageMembers: canManageHome(),
-            isOwner: isOwner(),
-          );
-        },
+        onOpenChat: openSelectedHomeChat,
         onOpenAlarm: () async {
           final reminderEnabled = await hasEnabledReminderSchedule();
 
@@ -4609,19 +3347,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             alarmScheduleText: alarmScheduleText,
             alarmPauseToday: alarmPauseToday,
             onAlarmEnabledChanged: setAlarmEnabled,
-            onOpenAlarmSchedule: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (_) => AlarmDeviceSheet(
-                  ownerUid: getHomeOwnerUid(),
-                  homeId: selectedHome,
-                  devices: getDevices(),
-                  canManageHome: canManageHome(),
-                ),
-              );
-            },
+            onOpenAlarmSchedule: openAlarmDeviceSheet,
             onOpenAlarmPause: () async {
               await Future<void>.delayed(const Duration(milliseconds: 120));
 
@@ -4629,182 +3355,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
               await openAlarmPauseSheetWithReminder();
             },
-            onOpenReminderSchedule: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (_) => ScheduleSheet(
-                  ownerUid: getHomeOwnerUid(),
-                  homeId: selectedHome,
-                  isShared: homes[selectedHome]?["_shared"] == true,
-                  type: "notification",
-                  canManageHome: canManageHome(),
-                ),
-              );
-            },
+            onOpenReminderSchedule: openScheduleNotificationSheet,
           );
         },
-        onOpenSettings: () {
-          showSettingsSheet(
-            homeId: selectedHome,
-            homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
-            homeAddress: homes[selectedHome]?["address"]?.toString() ?? "",
-            role: getMyRole(),
-            onAllDevices: () {
-              final devices = getDevices();
-
-              if (devices.isEmpty) {
-                showTopToast(
-                  context,
-                  _strings.t("Không có thiết bị"),
-                  color: Colors.orange,
-                  icon: Icons.sensors_off_rounded,
-                );
-                return;
-              }
-
-              if (devices.length == 1) {
-                final entry = devices.entries.first;
-
-                Navigator.pop(context);
-
-                showDeviceDetail(
-                  context: context,
-                  id: entry.key,
-                  d: safeMap(entry.value),
-                  ownerUid: getHomeOwnerUid(),
-                  homeId: selectedHome,
-                  onRename: canManageHome()
-                      ? () => renameDevice(entry.key)
-                      : null,
-                  onDelete: canManageHome()
-                      ? () => deleteDevice(entry.key)
-                      : null,
-                  onNotification: () => openNotificationList(entry.key),
-                );
-
-                return;
-              }
-
-              showAllDevicesSheet(
-                context: context,
-                devices: devices,
-                onTapDevice: (id) {
-                  showDeviceDetail(
-                    context: context,
-                    id: id,
-                    d: safeMap(getDevices()[id]),
-                    ownerUid: getHomeOwnerUid(),
-                    homeId: selectedHome,
-                    onRename: canManageHome() ? () => renameDevice(id) : null,
-                    onDelete: canManageHome() ? () => deleteDevice(id) : null,
-                    onNotification: () => openNotificationList(id),
-                  );
-                },
-              );
-            },
-            onAccount: () {
-              AccountAvatarSheet.show(
-                context: context,
-                logout: logout,
-                onEditProfile: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => EditProfilePage(
-                        userName: userName,
-                        userGender: userGender,
-                        userDob: userDob,
-                        userPhone: userPhone,
-                      ),
-                    ),
-                  );
-                },
-                userName: userName,
-                userGender: userGender,
-                userDob: userDob,
-                userPhone: userPhone,
-                inviteCountNotifier: inviteCountNotifier,
-
-                onShareRequests: () async {
-                  final changed = await showShareRequestSheet(
-                    context: context,
-                    requests: shareRequests,
-                    uid: uid,
-                  );
-
-                  if (changed == true) {
-                    await refreshShareRequests();
-                  }
-                },
-              );
-            },
-            onDeleteHome: isOwner()
-                ? deleteHome
-                : () {
-                    showTopToast(
-                      context,
-                      _strings.t("Chỉ chủ nhà mới được xoá nhà"),
-                      color: Colors.orange,
-                      icon: Icons.lock_rounded,
-                    );
-                  },
-            onRenameHome: renameHome,
-            onSecurityTest: runFirebaseSecurityTest,
-            onTransferOwner: isOwner()
-                ? transferOwner
-                : () {
-                    showTopToast(
-                      context,
-                      _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
-                      color: Colors.orange,
-                      icon: Icons.admin_panel_settings_rounded,
-                    );
-                  },
-            context: context,
-            inviteCountNotifier: inviteCountNotifier,
-            onShareRequests: () async {
-              final changed = await showShareRequestSheet(
-                context: context,
-                requests: shareRequests,
-                uid: uid,
-              );
-
-              if (changed == true) {
-                await refreshShareRequests();
-              }
-            },
-            onShare: shareHome,
-            onAutoAway: openAutoAwaySetup,
-            onRooms: () {
-              showRoomManagementSheet(
-                context: context,
-                ownerUid: getHomeOwnerUid(),
-                homeId: selectedHome,
-              );
-            },
-            onShareList: () async {
-              final selfLeft = await showShareListSheet(
-                canManageMembers: canManageHome(),
-                isOwner: isOwner(),
-                context: context,
-                ownerUid: getHomeOwnerUid(),
-                homeId: selectedHome,
-                homeName:
-                    homes[selectedHome]?["name"]?.toString() ?? selectedHome,
-              );
-
-              if (selfLeft == true && context.mounted) {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).popUntil((route) => route.isFirst);
-              }
-            },
-            onLogout: logout,
-          );
-        },
+        onOpenSettings: openSettingsCoordinator,
       ),
     );
   }
@@ -4815,20 +3369,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer?.cancel();
-    profileSubscription?.cancel();
-    ownedHomeAddedSubscription?.cancel();
-    ownedHomeChangedSubscription?.cancel();
-    ownedHomeRemovedSubscription?.cancel();
-    sharedHomesSubscription?.cancel();
-    homeOrderSubscription?.cancel();
-    alarmSettingsSubscription?.cancel();
-    customRulesSubscription?.cancel();
-    shareRequestsSubscription?.cancel();
-    notificationSubscription?.cancel();
-    homeEventsSubscription?.cancel();
-    alarmPauseSubscription?.cancel();
-    chatUnreadSubscription?.cancel();
+    _homeAutoAwayCoordinator.dispose();
+    _homeAccountRealtimeCoordinator.dispose();
+    _homeRealtimeCoordinator.dispose();
     unawaited(_homeListenerService.dispose());
     homeTabController.dispose();
     super.dispose();
