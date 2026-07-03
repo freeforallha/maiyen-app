@@ -26,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>SafeHome sử dụng vị trí để xác định khi bạn ở trong hoặc ngoài nhà.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>SafeHome sử dụng vị trí nền để tự động cập nhật trạng thái ở nhà hoặc rời nhà.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>SafeHome sử dụng camera để quét mã QR thiết bị và nhà.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -56,12 +56,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB0-C9tL3V0Kp8HD7v7nOPIELeTvNz_QK8',
-    appId: '1:83888615408:ios:ce97c5ecf96b13bdbd7735',
+    appId: '1:83888615408:ios:32969a3566813eb6bd7735',
     messagingSenderId: '83888615408',
     projectId: 'safehome-10cc9',
     databaseURL: 'https://safehome-10cc9-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'safehome-10cc9.firebasestorage.app',
-    iosBundleId: 'com.example.safehomeApp',
+    iosBundleId: 'com.myfamily.safehome',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
