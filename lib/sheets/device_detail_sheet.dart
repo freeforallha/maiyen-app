@@ -34,18 +34,14 @@ void showDeviceDetail({
 
           if (raw is Map) {
             device = Map<String, dynamic>.from(raw);
-          } else if (
-          snapshot.connectionState ==
-              ConnectionState.waiting) {
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
             device = Map<String, dynamic>.from(d);
           } else {
             return Container(
               padding: const EdgeInsets.all(24),
               decoration: const BoxDecoration(
                 color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(26),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
               ),
               child: const SafeArea(
                 top: false,
@@ -72,32 +68,26 @@ void showDeviceDetail({
           }
 
           final deviceType =
-              device["type"]?.toString().trim().toLowerCase() ??
-                  "unknown";
+              device["type"]?.toString().trim().toLowerCase() ?? "unknown";
 
           final availability =
               device["availability"]?.toString().trim().toLowerCase() ??
-                  "unknown";
+              "unknown";
 
           final linkquality = _toInt(device["linkquality"]);
           final battery = _toInt(device["battery"]);
           final lastSeen = device["last_seen"];
           final lastEvent = device["last_event"];
           final lastTriggered = device["last_triggered"];
-          final tamper =
-              parseDeviceBool(device["tamper"]) == true;
+          final tamper = parseDeviceBool(device["tamper"]) == true;
           final temperature = device["temperature"];
           final humidity = device["humidity"];
 
           final camera = safeMap(device["camera"]);
-          final cameraType =
-              camera["type"]?.toString().trim() ?? "";
-          final cameraName =
-              camera["name"]?.toString().trim() ?? "";
-          final cameraUrl =
-              camera["url"]?.toString().trim() ?? "";
-          final cameraSerial =
-              camera["deviceSerial"]?.toString().trim() ?? "";
+          final cameraType = camera["type"]?.toString().trim() ?? "";
+          final cameraName = camera["name"]?.toString().trim() ?? "";
+          final cameraUrl = camera["url"]?.toString().trim() ?? "";
+          final cameraSerial = camera["deviceSerial"]?.toString().trim() ?? "";
 
           final health = _getDeviceHealth(
             availability: availability,
@@ -106,36 +96,34 @@ void showDeviceDetail({
             lastSeen: lastSeen,
           );
 
-          final displayStatus =
-          _getDeviceDisplayStatus(device);
+          final displayStatus = _getDeviceDisplayStatus(device);
 
-          final deviceName =
-              device["name"]?.toString().trim() ?? "";
+          final deviceName = device["name"]?.toString().trim() ?? "";
 
           final hasBattery =
               device["battery"] != null ||
-                  device["battery_low"] != null ||
-                  device["battery_status"] != null;
+              device["battery_low"] != null ||
+              device["battery_status"] != null;
 
           final showTamper =
               device.containsKey("tamper") ||
-                  {
-                    "door",
-                    "window",
-                    "gate",
-                    "lock",
-                    "door_lock",
-                    "motion",
-                    "presence",
-                    "vibration",
-                    "glass_break",
-                    "smoke",
-                    "heat",
-                    "carbon_monoxide",
-                    "gas",
-                    "water_leak",
-                    "flood",
-                  }.contains(deviceType);
+              {
+                "door",
+                "window",
+                "gate",
+                "lock",
+                "door_lock",
+                "motion",
+                "presence",
+                "vibration",
+                "glass_break",
+                "smoke",
+                "heat",
+                "carbon_monoxide",
+                "gas",
+                "water_leak",
+                "flood",
+              }.contains(deviceType);
 
           final metricRows = <Widget>[];
 
@@ -184,11 +172,7 @@ void showDeviceDetail({
             );
           }
 
-          if ({
-            "smart_plug",
-            "power_monitor",
-            "ups",
-          }.contains(deviceType)) {
+          if ({"smart_plug", "power_monitor", "ups"}.contains(deviceType)) {
             addMetric(
               icon: Icons.electric_bolt_rounded,
               color: SafeHomeColors.warning,
@@ -217,17 +201,12 @@ void showDeviceDetail({
               icon: Icons.data_usage_rounded,
               color: SafeHomeColors.primary,
               title: "Điện năng",
-              value:
-              device["energy"] ??
-                  device["consumption"],
+              value: device["energy"] ?? device["consumption"],
               suffix: " kWh",
             );
           }
 
-          if ({
-            "vibration",
-            "glass_break",
-          }.contains(deviceType)) {
+          if ({"vibration", "glass_break"}.contains(deviceType)) {
             addMetric(
               icon: Icons.vibration_rounded,
               color: SafeHomeColors.warning,
@@ -249,23 +228,18 @@ void showDeviceDetail({
               icon: Icons.tune_rounded,
               color: SafeHomeColors.info,
               title: "Độ mở van",
-              value:
-              device["position"] ??
-                  device["valve_position"],
+              value: device["position"] ?? device["valve_position"],
               suffix: "%",
             );
           }
 
           return Container(
             constraints: BoxConstraints(
-              maxHeight:
-              MediaQuery.of(context).size.height * 0.9,
+              maxHeight: MediaQuery.of(context).size.height * 0.9,
             ),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(26),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
             child: SafeArea(
               top: false,
@@ -273,8 +247,7 @@ void showDeviceDetail({
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                       child: Container(
@@ -282,8 +255,7 @@ void showDeviceDetail({
                         height: 5,
                         decoration: BoxDecoration(
                           color: SafeHomeColors.border,
-                          borderRadius:
-                          BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
@@ -292,9 +264,7 @@ void showDeviceDetail({
                       children: [
                         Expanded(
                           child: Text(
-                            deviceName.isNotEmpty
-                                ? deviceName
-                                : id,
+                            deviceName.isNotEmpty ? deviceName : id,
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
@@ -303,8 +273,7 @@ void showDeviceDetail({
                           ),
                         ),
                         _iconButton(
-                          icon: Icons
-                              .notifications_active_rounded,
+                          icon: Icons.notifications_active_rounded,
                           color: SafeHomeColors.warning,
                           onTap: onNotification,
                         ),
@@ -364,9 +333,7 @@ void showDeviceDetail({
                             ? SafeHomeColors.danger
                             : SafeHomeColors.warning,
                         title: "Tháo/Lắp",
-                        value: tamper
-                            ? "Bị tháo"
-                            : "Bình thường",
+                        value: tamper ? "Bị tháo" : "Bình thường",
                         valueColor: tamper
                             ? SafeHomeColors.danger
                             : SafeHomeColors.textPrimary,
@@ -375,8 +342,7 @@ void showDeviceDetail({
                     if (hasBattery)
                       _infoRow(
                         icon: Icons.battery_full_rounded,
-                        color:
-                        battery != null && battery < 20
+                        color: battery != null && battery < 20
                             ? SafeHomeColors.danger
                             : SafeHomeColors.safe,
                         title: "Pin",
@@ -400,8 +366,8 @@ void showDeviceDetail({
                       value: cameraType.isEmpty
                           ? "Chưa liên kết"
                           : (cameraName.isNotEmpty
-                          ? cameraName
-                          : cameraType.toUpperCase()),
+                                ? cameraName
+                                : cameraType.toUpperCase()),
                     ),
                     _infoRow(
                       icon: Icons.access_time_rounded,
@@ -416,8 +382,7 @@ void showDeviceDetail({
                         title: "Lần kích hoạt cuối",
                         value: formatFullDate(lastTriggered),
                       )
-                    else if (
-                    deviceType != "temperature" &&
+                    else if (deviceType != "temperature" &&
                         deviceType != "repeater")
                       _infoRow(
                         icon: Icons.history_rounded,
@@ -446,7 +411,6 @@ void showDeviceDetail({
   );
 }
 
-
 class _DeviceDisplayStatus {
   final String title;
   final String value;
@@ -461,12 +425,8 @@ class _DeviceDisplayStatus {
   });
 }
 
-_DeviceDisplayStatus _getDeviceDisplayStatus(
-    Map<String, dynamic> device,
-    ) {
-  final type =
-      device["type"]?.toString().trim().toLowerCase() ??
-          "unknown";
+_DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
+  final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
 
   bool active(List<String> keys) {
     for (final key in keys) {
@@ -484,8 +444,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
     case "gate":
       final closed =
           parseDeviceBool(device["contact"]) == true ||
-              device["status"]?.toString().toLowerCase() ==
-                  "closed";
+          device["status"]?.toString().toLowerCase() == "closed";
 
       return _DeviceDisplayStatus(
         title: type == "window"
@@ -504,48 +463,38 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
 
     case "lock":
     case "door_lock":
-      final unlocked =
-          normalizeDeviceLockState(device) == "unlocked";
+      final unlocked = normalizeDeviceLockState(device) == "unlocked";
 
       return _DeviceDisplayStatus(
         title: "Khóa thông minh",
         value: unlocked ? "Khóa đang mở" : "Khóa đang đóng",
-        icon: unlocked
-            ? Icons.lock_open_rounded
-            : Icons.lock_rounded,
+        icon: unlocked ? Icons.lock_open_rounded : Icons.lock_rounded,
         color: unlocked ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "motion":
-      final detected =
-      active(const ["occupancy", "motion"]);
+      final detected = active(const ["occupancy", "motion"]);
 
       return _DeviceDisplayStatus(
         title: "Chuyển động",
-        value: detected
-            ? "Phát hiện chuyển động"
-            : "Không có chuyển động",
+        value: detected ? "Phát hiện chuyển động" : "Không có chuyển động",
         icon: Icons.directions_walk_rounded,
         color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
       );
 
     case "presence":
-      final detected =
-      active(const ["presence", "occupancy"]);
+      final detected = active(const ["presence", "occupancy"]);
 
       return _DeviceDisplayStatus(
         title: "Hiện diện",
-        value: detected
-            ? "Phát hiện hiện diện"
-            : "Không phát hiện hiện diện",
+        value: detected ? "Phát hiện hiện diện" : "Không phát hiện hiện diện",
         icon: Icons.sensors_rounded,
         color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
       );
 
     case "vibration":
       final detected =
-          active(const ["vibration", "shock"]) ||
-              isRecentDeviceEvent(device);
+          active(const ["vibration", "shock"]) || isRecentDeviceEvent(device);
 
       return _DeviceDisplayStatus(
         title: "Rung/chấn động",
@@ -559,13 +508,11 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
     case "glass_break":
       final detected =
           active(const ["glass_break", "broken_glass"]) ||
-              isRecentDeviceEvent(device);
+          isRecentDeviceEvent(device);
 
       return _DeviceDisplayStatus(
         title: "Kính vỡ",
-        value: detected
-            ? "Phát hiện kính vỡ"
-            : "Không có cảnh báo kính vỡ",
+        value: detected ? "Phát hiện kính vỡ" : "Không có cảnh báo kính vỡ",
         icon: Icons.broken_image_rounded,
         color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
@@ -581,40 +528,31 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
       );
 
     case "heat":
-      final detected = active(
-        const [
-          "heat",
-          "heat_alarm",
-          "high_temperature_alarm",
-        ],
-      );
+      final detected = active(const [
+        "heat",
+        "heat_alarm",
+        "high_temperature_alarm",
+      ]);
 
       return _DeviceDisplayStatus(
         title: "Báo nhiệt",
-        value: detected
-            ? "Nhiệt độ nguy hiểm"
-            : "Bình thường",
+        value: detected ? "Nhiệt độ nguy hiểm" : "Bình thường",
         icon: Icons.thermostat_rounded,
         color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "carbon_monoxide":
-      final detected = active(
-        const ["carbon_monoxide", "co_alarm"],
-      );
+      final detected = active(const ["carbon_monoxide", "co_alarm"]);
 
       return _DeviceDisplayStatus(
         title: "Khí CO",
-        value: detected
-            ? "Phát hiện khí CO"
-            : "Không phát hiện khí CO",
+        value: detected ? "Phát hiện khí CO" : "Không phát hiện khí CO",
         icon: Icons.cloud_rounded,
         color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
     case "gas":
-      final detected =
-      active(const ["gas", "gas_alarm"]);
+      final detected = active(const ["gas", "gas_alarm"]);
 
       return _DeviceDisplayStatus(
         title: "Báo gas",
@@ -625,15 +563,11 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
 
     case "water_leak":
     case "flood":
-      final detected = active(
-        const ["water_leak", "leak", "water"],
-      );
+      final detected = active(const ["water_leak", "leak", "water"]);
 
       return _DeviceDisplayStatus(
         title: "Ngập/rò nước",
-        value: detected
-            ? "Phát hiện ngập nước"
-            : "Bình thường",
+        value: detected ? "Phát hiện ngập nước" : "Bình thường",
         icon: Icons.water_damage_rounded,
         color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
@@ -737,9 +671,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(
       );
 
     case "repeater":
-      final online =
-          normalizeAvailability(device["availability"]) ==
-              "online";
+      final online = normalizeAvailability(device["availability"]) == "online";
 
       return _DeviceDisplayStatus(
         title: "Bộ mở rộng sóng",
@@ -849,9 +781,7 @@ Widget _iconButton({
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: color.withValues(alpha: 0.14),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.14)),
       ),
       child: Icon(icon, color: color, size: size),
     ),
@@ -891,113 +821,11 @@ Widget _infoRow({
           child: Text(
             value,
             textAlign: TextAlign.right,
-            style: TextStyle(
-              color: valueColor,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(color: valueColor, fontWeight: FontWeight.w700),
           ),
         ),
       ],
     ),
-  );
-}
-
-Widget _roomPickerRow({
-  required String ownerUid,
-  required String homeId,
-  required String deviceId,
-  required String currentRoomId,
-  required bool canEdit,
-}) {
-  return Builder(
-    builder: (context) {
-      return InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: canEdit
-            ? () async {
-          final roomsSnap = await FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId/rooms")
-              .get();
-
-          final rooms = roomsSnap.value is Map
-              ? Map<String, dynamic>.from(roomsSnap.value as Map)
-              : <String, dynamic>{};
-
-          if (!context.mounted) return;
-
-          final selectedRoom = await showModalBottomSheet<String>(
-            context: context,
-            builder: (_) {
-              return SafeArea(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: rooms.entries.map((entry) {
-                    final room = entry.value is Map
-                        ? Map<String, dynamic>.from(entry.value as Map)
-                        : <String, dynamic>{};
-
-                    final roomName =
-                        room["name"]?.toString() ?? entry.key;
-
-                    return ListTile(
-                      leading: Icon(
-                        entry.key == currentRoomId
-                            ? Icons.radio_button_checked
-                            : Icons.radio_button_off,
-                      ),
-                      title: Text(roomName),
-                      onTap: () {
-                        Navigator.pop(context, entry.key);
-                      },
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          );
-
-          if (selectedRoom == null || selectedRoom == currentRoomId) {
-            return;
-          }
-
-          await FirebaseDatabase.instance
-              .ref(
-            "accounts/$ownerUid/homes/$homeId/devices/$deviceId/roomId",
-          )
-              .set(selectedRoom);
-
-          if (context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-            : null,
-        child: FutureBuilder<DataSnapshot>(
-          future: FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId/rooms/$currentRoomId")
-              .get(),
-          builder: (context, snapshot) {
-            String roomName = currentRoomId;
-
-            final value = snapshot.data?.value;
-
-            if (value is Map) {
-              final room = Map<String, dynamic>.from(value);
-
-              roomName = room["name"]?.toString() ?? currentRoomId;
-            }
-
-            return _infoRow(
-              icon: canEdit
-                  ? Icons.meeting_room_rounded
-                  : Icons.lock_outline_rounded,
-              color: canEdit ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
-              title: "Phòng",
-              value: roomName,
-            );
-          },
-        ),
-      );
-    },
   );
 }
 
@@ -1055,6 +883,7 @@ String getBatteryText(Map<String, dynamic> d) {
 
   return "N/A";
 }
+
 Future<void> _openCameraProvider({
   required BuildContext context,
   required String type,
@@ -1065,23 +894,20 @@ Future<void> _openCameraProvider({
     final uri = Uri.tryParse(url);
 
     if (uri == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Link camera không hợp lệ")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Link camera không hợp lệ")));
       return;
     }
 
-    final opened = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
 
     if (!context.mounted) return;
 
     if (!opened) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Không mở được camera")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Không mở được camera")));
     }
 
     return;
@@ -1096,9 +922,9 @@ Future<void> _openCameraProvider({
     if (!context.mounted) return;
 
     if (!opened) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Chưa mở được app EZVIZ")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Chưa mở được app EZVIZ")));
     }
 
     return;
@@ -1136,9 +962,7 @@ void _showCameraSetupSheet({
             ),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(26),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
             child: SafeArea(
               top: false,
@@ -1157,7 +981,7 @@ void _showCameraSetupSheet({
                   const SizedBox(height: 14),
 
                   DropdownButtonFormField<String>(
-                    value: type,
+                    initialValue: type,
                     decoration: const InputDecoration(
                       labelText: "Loại camera",
                       border: OutlineInputBorder(),
@@ -1177,8 +1001,6 @@ void _showCameraSetupSheet({
                   ),
 
                   const SizedBox(height: 12),
-
-
 
                   const SizedBox(height: 12),
 
@@ -1212,16 +1034,16 @@ void _showCameraSetupSheet({
                       onPressed: () async {
                         await FirebaseDatabase.instance
                             .ref(
-                          "accounts/$ownerUid/homes/$homeId/devices/$deviceId/camera",
-                        )
+                              "accounts/$ownerUid/homes/$homeId/devices/$deviceId/camera",
+                            )
                             .set({
-                          "enabled": true,
-                          "type": type,
-                          "name": "",
-                          "url": urlController.text.trim(),
-                          "deviceSerial": serialController.text.trim(),
-                          "updatedAt": ServerValue.timestamp,
-                        });
+                              "enabled": true,
+                              "type": type,
+                              "name": "",
+                              "url": urlController.text.trim(),
+                              "deviceSerial": serialController.text.trim(),
+                              "updatedAt": ServerValue.timestamp,
+                            });
 
                         if (sheetContext.mounted) {
                           Navigator.pop(sheetContext);

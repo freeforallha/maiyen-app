@@ -4,13 +4,16 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../safehome_theme.dart';
 
-
 int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   final value = rawValue is num
       ? rawValue.toInt()
       : int.tryParse(rawValue?.toString() ?? "");
 
-  return const [0, 15, 30, 60].contains(value) ? value! : 30;
+  if (value == null) {
+    return 30;
+  }
+
+  return const [0, 15, 30, 60].contains(value) ? value : 30;
 }
 
 String _alarmRepeatLabel(Object? rawValue) {
@@ -69,37 +72,37 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         .ref("accounts/$currentUid/customRules/${widget.homeId}")
         .get()
         .then((snap) {
-      if (!mounted) return;
+          if (!mounted) return;
 
-      final data = snap.value;
+          final data = snap.value;
 
-      if (data is Map) {
-        final map = Map<String, dynamic>.from(data);
-        final savedMode = map["mode"]?.toString();
-        final customDevices = map["devices"];
+          if (data is Map) {
+            final map = Map<String, dynamic>.from(data);
+            final savedMode = map["mode"]?.toString();
+            final customDevices = map["devices"];
 
-        if (customDevices is Map) {
-          for (final entry in customDevices.entries) {
-            final deviceId = entry.key.toString();
-            final deviceData = Map<String, dynamic>.from(
-              entry.value as Map,
-            );
+            if (customDevices is Map) {
+              for (final entry in customDevices.entries) {
+                final deviceId = entry.key.toString();
+                final deviceData = Map<String, dynamic>.from(
+                  entry.value as Map,
+                );
 
-            if (deviceData["alarm"] is Map) {
-              customAlarms[deviceId] = Map<String, dynamic>.from(
-                deviceData["alarm"],
-              );
+                if (deviceData["alarm"] is Map) {
+                  customAlarms[deviceId] = Map<String, dynamic>.from(
+                    deviceData["alarm"],
+                  );
+                }
+              }
             }
-          }
-        }
 
-        setState(() {
-          if (savedMode == "custom" || savedMode == "home") {
-            mode = savedMode == "custom" ? "custom" : "home";
+            setState(() {
+              if (savedMode == "custom" || savedMode == "home") {
+                mode = savedMode == "custom" ? "custom" : "home";
+              }
+            });
           }
         });
-      }
-    });
   }
 
   Map<String, dynamic> _defaultAlarm() {
@@ -140,9 +143,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
     try {
       if (nextMode == "custom") {
-        final updates = <String, Object?>{
-          "mode": "custom",
-        };
+        final updates = <String, Object?>{"mode": "custom"};
 
         final nextCustomAlarms = <String, dynamic>{};
 
@@ -154,38 +155,33 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             continue;
           }
 
-          final device = Map<String, dynamic>.from(
-            rawDevice,
-          );
+          final device = Map<String, dynamic>.from(rawDevice);
 
           if (!isSecurityDevice(device)) {
             continue;
           }
 
-          final rawRealDeviceId =
-              device["_deviceId"]?.toString().trim() ??
-                  "";
+          final rawRealDeviceId = device["_deviceId"]?.toString().trim() ?? "";
 
-          final realDeviceId =
-          rawRealDeviceId.isNotEmpty
+          final realDeviceId = rawRealDeviceId.isNotEmpty
               ? rawRealDeviceId
               : deviceId;
 
           final rawAlarm =
               customAlarms[deviceId] ??
-                  customAlarms[realDeviceId] ??
-                  homeAlarms[deviceId] ??
-                  homeAlarms[realDeviceId];
+              customAlarms[realDeviceId] ??
+              homeAlarms[deviceId] ??
+              homeAlarms[realDeviceId];
 
           final alarm = rawAlarm is Map
               ? Map<String, dynamic>.from(rawAlarm)
               : _defaultAlarm();
 
-          nextCustomAlarms[deviceId] =
-          Map<String, dynamic>.from(alarm);
+          nextCustomAlarms[deviceId] = Map<String, dynamic>.from(alarm);
 
-          updates["devices/$realDeviceId/alarm"] =
-          Map<String, dynamic>.from(alarm);
+          updates["devices/$realDeviceId/alarm"] = Map<String, dynamic>.from(
+            alarm,
+          );
         }
 
         await rulesRef.update(updates);
@@ -219,11 +215,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Không thể lưu chế độ Alarm",
-          ),
-        ),
+        const SnackBar(content: Text("Không thể lưu chế độ Alarm")),
       );
 
       debugPrint("SAVE_ALARM_MODE_ERROR: $error");
@@ -237,8 +229,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   Future<void> saveAlarmForAllSecurityDevices(
-      Map<String, dynamic> alarm,
-      ) async {
+    Map<String, dynamic> alarm,
+  ) async {
     if (applyingAll) {
       return;
     }
@@ -286,7 +278,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             ? device["_homeId"].toString().trim()
             : widget.homeId;
         final realDeviceId =
-        device["_deviceId"]?.toString().trim().isNotEmpty == true
+            device["_deviceId"]?.toString().trim().isNotEmpty == true
             ? device["_deviceId"].toString().trim()
             : deviceId;
 
@@ -368,7 +360,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 title: field == "start"
                     ? "Chọn giờ bắt đầu Alarm"
                     : "Chọn giờ kết thúc Alarm",
-                initial: draft[field]?.toString() ??
+                initial:
+                    draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
               );
 
@@ -435,14 +428,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   left: 18,
                   right: 18,
                   top: 12,
-                  bottom:
-                  MediaQuery.of(innerContext).viewInsets.bottom + 18,
+                  bottom: MediaQuery.of(innerContext).viewInsets.bottom + 18,
                 ),
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(28),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -502,10 +492,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           onChanged: saving
                               ? null
                               : (value) {
-                            setSheetState(() {
-                              draft["enabled"] = value;
-                            });
-                          },
+                                  setSheetState(() {
+                                    draft["enabled"] = value;
+                                  });
+                                },
                         ),
                       ],
                     ),
@@ -554,12 +544,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         onPressed: saving ? null : applyToAll,
                         icon: saving
                             ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : const Icon(Icons.done_all_rounded),
                         label: Text(
                           saving
@@ -820,7 +810,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   child: _AlarmModeCard(
                     title: "Theo nhà",
                     subtitle:
-                    "Dùng lịch chung do Chủ nhà hoặc "
+                        "Dùng lịch chung do Chủ nhà hoặc "
                         "Quản trị viên thiết lập",
                     icon: Icons.home_rounded,
                     selected: mode == "home",
@@ -835,7 +825,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   child: _AlarmModeCard(
                     title: "Riêng tôi",
                     subtitle:
-                    "Dùng lịch riêng chỉ áp dụng cho "
+                        "Dùng lịch riêng chỉ áp dụng cho "
                         "tài khoản của bạn",
                     icon: Icons.person_rounded,
                     selected: mode == "custom",
@@ -850,9 +840,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
             if (savingMode) ...[
               const SizedBox(height: 10),
-              const LinearProgressIndicator(
-                minHeight: 2,
-              ),
+              const LinearProgressIndicator(minHeight: 2),
             ],
 
             if (mode == "home" && isSharedUser) ...[
@@ -878,12 +866,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     : showQuickAlarmForAllSheet,
                 icon: applyingAll
                     ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ),
-                )
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Icon(Icons.tune_rounded),
                 label: Text(
                   applyingAll
@@ -978,11 +964,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               onChanged: readOnly
                                   ? null
                                   : (v) async {
-                                final nextAlarm =
-                                Map<String, dynamic>.from(alarm);
-                                nextAlarm["enabled"] = v;
-                                await saveAlarm(deviceId, nextAlarm);
-                              },
+                                      final nextAlarm =
+                                          Map<String, dynamic>.from(alarm);
+                                      nextAlarm["enabled"] = v;
+                                      await saveAlarm(deviceId, nextAlarm);
+                                    },
                             ),
 
                             IconButton(
@@ -1046,10 +1032,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               );
                               nextAlarm["repeatMinutes"] = minute;
 
-                              await saveAlarm(
-                                deviceId,
-                                nextAlarm,
-                              );
+                              await saveAlarm(deviceId, nextAlarm);
                             },
                           ),
                         ],
@@ -1082,16 +1065,11 @@ class _AlarmRepeatDropdown extends StatelessWidget {
     final normalizedValue = _normalizeAlarmRepeatMinutes(value);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 7,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
         color: SafeHomeColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: SafeHomeColors.border,
-        ),
+        border: Border.all(color: SafeHomeColors.border),
       ),
       child: Row(
         children: [
@@ -1117,29 +1095,17 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                   color: SafeHomeColors.textSecondary,
                 ),
                 items: const [
-                  DropdownMenuItem(
-                    value: 0,
-                    child: Text("Không lặp lại"),
-                  ),
-                  DropdownMenuItem(
-                    value: 15,
-                    child: Text("15 phút"),
-                  ),
-                  DropdownMenuItem(
-                    value: 30,
-                    child: Text("30 phút"),
-                  ),
-                  DropdownMenuItem(
-                    value: 60,
-                    child: Text("60 phút"),
-                  ),
+                  DropdownMenuItem(value: 0, child: Text("Không lặp lại")),
+                  DropdownMenuItem(value: 15, child: Text("15 phút")),
+                  DropdownMenuItem(value: 30, child: Text("30 phút")),
+                  DropdownMenuItem(value: 60, child: Text("60 phút")),
                 ],
                 onChanged: enabled
                     ? (nextValue) {
-                  if (nextValue != null) {
-                    onChanged(nextValue);
-                  }
-                }
+                        if (nextValue != null) {
+                          onChanged(nextValue);
+                        }
+                      }
                     : null,
               ),
             ),
@@ -1182,9 +1148,7 @@ class _AlarmModeCard extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeOut,
-            constraints: const BoxConstraints(
-              minHeight: 142,
-            ),
+            constraints: const BoxConstraints(minHeight: 142),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: selected
@@ -1192,19 +1156,17 @@ class _AlarmModeCard extends StatelessWidget {
                   : SafeHomeColors.surface,
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: selected
-                    ? accent
-                    : SafeHomeColors.border,
+                color: selected ? accent : SafeHomeColors.border,
                 width: selected ? 1.6 : 1,
               ),
               boxShadow: selected
                   ? [
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.10),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
-                ),
-              ]
+                      BoxShadow(
+                        color: accent.withValues(alpha: 0.10),
+                        blurRadius: 14,
+                        offset: const Offset(0, 5),
+                      ),
+                    ]
                   : null,
             ),
             child: Column(
@@ -1223,29 +1185,26 @@ class _AlarmModeCard extends StatelessWidget {
                       ),
                       child: Icon(
                         icon,
-                        color: selected
-                            ? accent
-                            : SafeHomeColors.textSecondary,
+                        color: selected ? accent : SafeHomeColors.textSecondary,
                         size: 21,
                       ),
                     ),
                     const Spacer(),
                     AnimatedSwitcher(
-                      duration:
-                      const Duration(milliseconds: 160),
+                      duration: const Duration(milliseconds: 160),
                       child: selected
                           ? Icon(
-                        Icons.check_circle_rounded,
-                        key: const ValueKey("selected"),
-                        color: accent,
-                        size: 22,
-                      )
+                              Icons.check_circle_rounded,
+                              key: const ValueKey("selected"),
+                              color: accent,
+                              size: 22,
+                            )
                           : Icon(
-                        Icons.circle_outlined,
-                        key: const ValueKey("unselected"),
-                        color: SafeHomeColors.border,
-                        size: 22,
-                      ),
+                              Icons.circle_outlined,
+                              key: const ValueKey("unselected"),
+                              color: SafeHomeColors.border,
+                              size: 22,
+                            ),
                     ),
                   ],
                 ),
@@ -1253,9 +1212,7 @@ class _AlarmModeCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: selected
-                        ? accent
-                        : SafeHomeColors.textPrimary,
+                    color: selected ? accent : SafeHomeColors.textPrimary,
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
                   ),

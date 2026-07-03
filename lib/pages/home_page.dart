@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,39 +7,43 @@ import '../helpers/firebase_paths.dart';
 
 import '../helpers/home_helper.dart';
 import '../services/fcm_service.dart';
+import '../services/firebase_security_test_service.dart';
+import '../services/home_account_realtime_coordinator.dart';
+import '../services/home_alarm_security_service.dart';
+import '../services/home_auto_away_coordinator.dart';
 import '../services/home_listener_service.dart';
+import '../services/home_pairing_service.dart';
+import '../services/home_realtime_coordinator.dart';
+import '../services/home_selection_state_service.dart';
 import '../services/home_service.dart';
 import '../services/home_state_parser.dart';
-import '../services/chat_service.dart';
 import '../services/share_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
-import '../widgets/status_panel.dart';
-import '../sheets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
+import 'home/home_add_sheets.dart';
+import 'home/home_alarm_menu_sheet.dart';
+import 'home/home_alarm_pause_sheet.dart';
+import 'home/home_auto_away_sheet.dart';
+import 'home/home_alarm_formatters.dart';
+import 'home/home_bottom_bar.dart';
+import 'home/home_data_helpers.dart';
+import 'home/home_delete_sheets.dart';
+import 'home/home_dialogs.dart';
+import 'home/home_header_bar.dart';
+import 'home/home_management_sheets.dart';
+import 'home/home_overview_header.dart';
+import 'home/home_pair_sensor_sheet.dart';
+import 'home/home_transfer_owner_sheets.dart';
+import 'home/home_ui_coordinator.dart';
 import '../dialogs/confirm_dialog.dart';
-import '../sheets/device_detail_sheet.dart';
-import '../sheets/notification_list_sheet.dart' as notif_sheet;
 import '../dialogs/pair_dialog.dart';
 import 'qr_scan_page.dart';
-import '../sheets/settings_sheet.dart';
-import '../sheets/share_list_sheet.dart';
-import '../sheets/share_request_sheet.dart';
-import 'edit_profile_page.dart';
-import '../sheets/home_chat_sheet.dart';
-import '../sheets/schedule_sheet.dart';
-import '../sheets/all_devices_sheet.dart';
-import '../sheets/home_event_sheet.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_away_service.dart';
-import '../services/auto_away_foreground_task_service.dart';
 import '../services/session_logout_service.dart';
-import '../sheets/room_management_sheet.dart';
-import '../widgets/room_tabs.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
@@ -51,8 +54,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> shareRequests = {};
   final ValueNotifier<int> inviteCountNotifier = ValueNotifier(0);
@@ -62,17 +64,50 @@ class _HomePageState extends State<HomePage>
   Map<String, String>? _pendingChatOpenRequest;
   bool _openingChatFromNotification = false;
   void openNotificationList(String deviceId) {
-    final ownerUid = getHomeOwnerUid();
-    showModalBottomSheet(
+    HomeUiCoordinator.openDeviceNotificationList(
       context: context,
-      isScrollControlled: true,
-      builder: (_) {
-        return notif_sheet.NotificationListSheet(
-          ownerUid: ownerUid,
-          homeId: selectedHome,
-          deviceId: deviceId,
-        );
-      },
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      deviceId: deviceId,
+    );
+  }
+
+  void openDeviceDetailSheet({
+    required String deviceId,
+    required Map<String, dynamic> device,
+  }) {
+    HomeUiCoordinator.openDeviceDetail(
+      context: context,
+      deviceId: deviceId,
+      device: device,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      onRename: canManageHome() ? () => renameDevice(deviceId) : null,
+      onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
+      onNotification: () => openNotificationList(deviceId),
+    );
+  }
+
+  void openSelectedDeviceDetail(String deviceId) {
+    openDeviceDetailSheet(
+      deviceId: deviceId,
+      device: safeMap(getDevices()[deviceId]),
+    );
+  }
+
+  void openHomeChatSheetFor({
+    required String homeId,
+    required String homeName,
+  }) {
+    HomeUiCoordinator.openChat(
+      context: context,
+      homeId: homeId,
+      homeName: homeName,
+      userName: userName,
+      userPhotoUrl: userPhotoUrl,
+      ownerUid: getHomeOwnerUid(),
+      canManageMembers: canManageHome(),
+      isOwner: isOwner(),
     );
   }
 
@@ -109,24 +144,20 @@ class _HomePageState extends State<HomePage>
     if (homeId.isEmpty || !homes.containsKey(homeId)) return;
 
     final currentHome = safeMap(homes[homeId]);
-    final parsedAlarm =
-    HomeStateParser.parseAlarm(currentHome);
+    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
     setState(() {
       selectedHome = homeId;
 
-      securityMode =
-      currentHome["securityMode"]?.toString() == "armed"
+      securityMode = currentHome["securityMode"]?.toString() == "armed"
           ? "armed"
           : "normal";
 
-      alarmEnabled =
-          safeMap(alarmSettings[homeId])["enabled"] != false;
+      alarmEnabled = safeMap(alarmSettings[homeId])["enabled"] != false;
 
       start = parsedAlarm["start"];
       end = parsedAlarm["end"];
-      alarmPauseToday =
-          safeMap(currentHome["alarmPauseToday"]);
+      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
     });
 
     final index = homeOrder.indexOf(homeId);
@@ -157,16 +188,7 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    showDeviceDetail(
-      context: context,
-      id: deviceId,
-      d: device,
-      ownerUid: getHomeOwnerUid(),
-      homeId: selectedHome,
-      onRename: canManageHome() ? () => renameDevice(deviceId) : null,
-      onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
-      onNotification: () => openNotificationList(deviceId),
-    );
+    openDeviceDetailSheet(deviceId: deviceId, device: device);
   }
 
   void _handleChatOpenRequest() {
@@ -208,23 +230,14 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    showHomeChatSheet(
-      context: context,
-      homeId: homeId,
-      homeName: getHomeDisplayName(homeId),
-      userName: userName,
-      userPhotoUrl: userPhotoUrl,
-      ownerUid: getHomeOwnerUid(),
-      canManageMembers: canManageHome(),
-      isOwner: isOwner(),
-    );
+    openHomeChatSheetFor(homeId: homeId, homeName: getHomeDisplayName(homeId));
 
     _openingChatFromNotification = false;
   }
 
   Future<void> openHomeNotificationTarget(
-      Map<String, dynamic> notification,
-      ) async {
+    Map<String, dynamic> notification,
+  ) async {
     final homeId = notification["homeId"]?.toString() ?? "";
 
     if (homeId.isEmpty || !homes.containsKey(homeId)) {
@@ -252,15 +265,9 @@ class _HomePageState extends State<HomePage>
         : "";
 
     if (type == "chat" || entityType == "chat") {
-      showHomeChatSheet(
-        context: context,
+      openHomeChatSheetFor(
         homeId: selectedHome,
         homeName: getSelectedHomeDisplayName(),
-        userName: userName,
-        userPhotoUrl: userPhotoUrl,
-        ownerUid: getHomeOwnerUid(),
-        canManageMembers: canManageHome(),
-        isOwner: isOwner(),
       );
       return;
     }
@@ -293,10 +300,20 @@ class _HomePageState extends State<HomePage>
 
   Map<String, dynamic> homes = {};
   final HomeListenerService _homeListenerService = HomeListenerService();
+  final HomeAccountRealtimeCoordinator _homeAccountRealtimeCoordinator =
+      HomeAccountRealtimeCoordinator();
+  final HomeAlarmSecurityService _homeAlarmSecurityService =
+      HomeAlarmSecurityService();
+  final HomeAutoAwayCoordinator _homeAutoAwayCoordinator =
+      HomeAutoAwayCoordinator();
+  final HomePairingService _homePairingService = HomePairingService();
+  final HomeRealtimeCoordinator _homeRealtimeCoordinator =
+      HomeRealtimeCoordinator();
+  final HomeSelectionStateService _homeSelectionStateService =
+      HomeSelectionStateService();
   final Set<String> _ownedHomeIds = <String>{};
   Map<String, dynamic> _sharedHomesSnapshot = {};
   Object? _savedHomeOrder;
-  String _ensuredRoomModelKey = "";
 
   String selectedHome = "";
   String selectedRoomId = "overview";
@@ -305,44 +322,14 @@ class _HomePageState extends State<HomePage>
   Map<String, dynamic> homeEvents = {};
 
   Map<String, dynamic> alarmPauseToday = {};
-  final Map<String, Map<String, Map<String, dynamic>>>
-  _deviceNotificationSnapshots = {};
-  final Set<String> _deviceNotificationPrimedHomes = {};
   List<String> homeOrder = [];
 
   List<String> mergeVisibleHomeOrder(List<String> visibleOrder) {
-    final visibleIds = visibleOrder.toSet();
-    final nextOrder = <String>[];
-    final seen = <String>{};
-    var visibleIndex = 0;
-
-    void addHomeId(String homeId) {
-      if (seen.add(homeId)) {
-        nextOrder.add(homeId);
-      }
-    }
-
-    for (final homeId in homeOrder) {
-      if (visibleIds.contains(homeId)) {
-        if (visibleIndex < visibleOrder.length) {
-          addHomeId(visibleOrder[visibleIndex]);
-          visibleIndex++;
-        }
-      } else {
-        addHomeId(homeId);
-      }
-    }
-
-    while (visibleIndex < visibleOrder.length) {
-      addHomeId(visibleOrder[visibleIndex]);
-      visibleIndex++;
-    }
-
-    for (final homeId in homes.keys) {
-      addHomeId(homeId);
-    }
-
-    return nextOrder;
+    return HomeDataHelpers.mergeVisibleHomeOrder(
+      visibleOrder: visibleOrder,
+      homeOrder: homeOrder,
+      homes: homes,
+    );
   }
 
   Future<void> reorderHomeTabs(List<String> visibleOrder) async {
@@ -360,386 +347,64 @@ class _HomePageState extends State<HomePage>
   TimeOfDay start = TimeOfDay(hour: 23, minute: 0);
   TimeOfDay end = TimeOfDay(hour: 6, minute: 0);
 
-  String formatClock(TimeOfDay time) {
-    final hour = time.hour.toString().padLeft(2, "0");
-    final minute = time.minute.toString().padLeft(2, "0");
-    return "$hour:$minute";
-  }
-
   Future<String?> openTimeTextInput({
     required BuildContext context,
     required String title,
     required String initial,
   }) async {
-    final parts = initial.split(":");
-
-    final hourController = TextEditingController(text: parts[0]);
-
-    final minuteController = TextEditingController(text: parts[1]);
-
-    const suggestions = [
-      ["23", "00"],
-      ["00", "00"],
-      ["01", "00"],
-      ["04", "00"],
-      ["05", "00"],
-      ["06", "00"],
-    ];
-
-    bool isValidTime(String value) {
-      final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
-      return reg.hasMatch(value.trim());
-    }
-
-    return showDialog<String>(
+    return showHomeTimeTextInputDialog(
       context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(title),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: hourController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Giờ"),
-                        counterText: "",
-                        border: const OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      ":",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: minuteController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Phút"),
-                        counterText: "",
-                        border: const OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Column(
-                children: [
-                  Row(
-                    children: suggestions.take(3).map((s) {
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ActionChip(
-                              label: Center(child: Text("${s[0]}:${s[1]}")),
-                              onPressed: () {
-                                hourController.text = s[0];
-                                minuteController.text = s[1];
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: suggestions.skip(3).map((s) {
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: ActionChip(
-                              label: Center(child: Text("${s[0]}:${s[1]}")),
-                              onPressed: () {
-                                hourController.text = s[0];
-                                minuteController.text = s[1];
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(_strings.t("Huỷ")),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final h = hourController.text.trim().padLeft(2, '0');
-                final m = minuteController.text.trim().padLeft(2, '0');
-                final value = "$h:$m";
-
-                if (!isValidTime(value)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(_strings.t("Giờ không hợp lệ")),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                  return;
-                }
-
-                Navigator.pop(context, value);
-              },
-              child: Text(_strings.t("OK")),
-            ),
-          ],
-        );
-      },
+      strings: _strings,
+      title: title,
+      initial: initial,
     );
   }
 
   Map<String, String> getHomeAlarmReminderInfo() {
-    final selectedRules = safeMap(
-      customRulesByHome[selectedHome],
+    return HomeAlarmFormatters.getHomeAlarmReminderInfo(
+      customRulesByHome: customRulesByHome,
+      selectedHome: selectedHome,
+      devices: getDevices(),
+      start: start,
+      end: end,
     );
-
-    final useCustomMode =
-        selectedRules["mode"]?.toString() == "custom";
-
-    final devices = getDevices();
-    final customDevices = safeMap(
-      selectedRules["devices"],
-    );
-
-    for (final entry in devices.entries) {
-      final deviceId = entry.key.toString();
-      final device = safeMap(entry.value);
-      final realDeviceId =
-          device["_deviceId"]?.toString() ?? deviceId;
-
-      final homeAlarm = safeMap(device["alarm"]);
-      final customDevice = safeMap(
-        customDevices[realDeviceId],
-      );
-      final customAlarm = safeMap(
-        customDevice["alarm"],
-      );
-
-      final alarm = useCustomMode &&
-          customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] == true) {
-        return {
-          "mode": useCustomMode
-              ? "Riêng tôi"
-              : "Theo nhà",
-          "start":
-          alarm["start"]?.toString() ?? "23:00",
-          "end":
-          alarm["end"]?.toString() ?? "06:00",
-        };
-      }
-    }
-
-    return {
-      "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
-      "start": formatClock(start),
-      "end": formatClock(end),
-    };
   }
 
   Future<void> showAlarmReceiveReminder() async {
     var useCustomMode =
-        safeMap(
-          customRulesByHome[selectedHome],
-        )["mode"]?.toString() ==
-            "custom";
+        safeMap(customRulesByHome[selectedHome])["mode"]?.toString() ==
+        "custom";
 
     try {
       final modeSnapshot = await FirebaseDatabase.instance
           .ref(
-        "accounts/$uid/customRules/"
+            "accounts/$uid/customRules/"
             "$selectedHome/mode",
-      )
+          )
           .get();
 
-      useCustomMode =
-          modeSnapshot.value?.toString() == "custom";
+      useCustomMode = modeSnapshot.value?.toString() == "custom";
     } catch (error) {
-      debugPrint(
-        "READ_ALARM_MODE_FOR_REMINDER_ERROR: $error",
-      );
+      debugPrint("READ_ALARM_MODE_FOR_REMINDER_ERROR: $error");
     }
 
     if (!mounted) {
       return;
     }
 
-    await showDialog<void>(
+    await showAlarmReceiveReminderDialog(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Row(
-            children: [
-              Icon(
-                useCustomMode
-                    ? Icons.person_rounded
-                    : Icons.home_rounded,
-                color: SafeHomeColors.primary,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  _strings.t("Alarm đã được bật"),
-                ),
-              ),
-            ],
-          ),
-          content: Text(
-            useCustomMode
-                ? _strings.choose(
-              vi:
-              "Alarm đang sử dụng chế độ Riêng tôi.\n\n"
-                  "Bạn sẽ nhận cảnh báo theo lịch Alarm riêng "
-                  "đã thiết lập cho tài khoản này.",
-              en:
-              "Alarm is using My settings.\n\n"
-                  "You will receive alerts according to the "
-                  "personal Alarm schedules for this account.",
-            )
-                : _strings.choose(
-              vi:
-              "Alarm đang sử dụng chế độ Theo nhà.\n\n"
-                  "Bạn sẽ nhận cảnh báo theo lịch Alarm chung "
-                  "do Chủ nhà hoặc Quản trị viên thiết lập.",
-              en:
-              "Alarm is using Home settings.\n\n"
-                  "You will receive alerts according to the "
-                  "shared schedules configured by the owner "
-                  "or an administrator.",
-            ),
-          ),
-          actions: [
-            FilledButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-              child: Text(_strings.t("Đã hiểu")),
-            ),
-          ],
-        );
-      },
+      strings: _strings,
+      useCustomMode: useCustomMode,
     );
   }
 
   Future<bool> confirmDisableAlarm() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Row(
-            children: [
-              Icon(
-                Icons.warning_amber_rounded,
-                color: SafeHomeColors.danger,
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text("Tắt toàn bộ Alarm?"),
-              ),
-            ],
-          ),
-          content: Text(
-            _strings.choose(
-              vi:
-              "Hành động này sẽ tắt toàn bộ báo động của nhà "
-                  "dưới mọi hình thức. Bạn sẽ không còn nhận được "
-                  "cảnh báo khi có nguy hiểm trên điện thoại nữa.",
-              en:
-              "This action will disable every Alarm for this "
-                  "home. You will no longer receive danger alerts "
-                  "on this phone.",
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop(false);
-              },
-              child: Text(_strings.t("Huỷ")),
-            ),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: SafeHomeColors.danger,
-                foregroundColor: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(true);
-              },
-              child: Text(_strings.t("Tắt Alarm")),
-            ),
-          ],
-        );
-      },
-    );
-
-    return confirmed == true;
+    return showConfirmDisableAlarmDialog(context: context, strings: _strings);
   }
 
   Future<void> showAlarmPauseReminder() async {
-    await showDialog<void>(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Text(_strings.t("Lưu ý tạm tắt Alarm")),
-          content: Text(
-            _strings.choose(
-              vi:
-              "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
-                  "trong hôm nay, reminder sẽ được báo đến các thành viên khác "
-                  "trong nhà. Khoảng thời gian tạm hoãn phải nằm trong khoảng thời gian đã được cài đặt của Alarm.",
-              en:
-              "This changes today's Alarm time for selected devices and notifies "
-                  "other home members. The pause period must stay within the configured Alarm schedule.",
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(_strings.t("Đã hiểu")),
-            ),
-          ],
-        );
-      },
-    );
+    await showAlarmPauseReminderDialog(context: context, strings: _strings);
   }
 
   Future<void> openAlarmPauseSheetWithReminder() async {
@@ -755,51 +420,10 @@ class _HomePageState extends State<HomePage>
   bool get isArmedMode => securityMode == "armed";
   bool alarmEnabled = false;
   Future<bool> _confirmManualSecurityMode() async {
-    final confirmed = await showDialog<bool>(
+    return showConfirmManualSecurityModeDialog(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Row(
-            children: [
-              Icon(
-                Icons.warning_amber_rounded,
-                color: SafeHomeColors.warning,
-              ),
-              SizedBox(width: 10),
-              Expanded(
-                child: Text("Bật Bảo vệ thủ công?"),
-              ),
-            ],
-          ),
-          content: const Text(
-            "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n"
-                "Tự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này "
-                "không tự tắt khi có người về nhà và chỉ được tắt khi "
-                "một thành viên có quyền chủ động chuyển về Bình thường.",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext, false);
-              },
-              child: const Text("Huỷ"),
-            ),
-            FilledButton.icon(
-              onPressed: () {
-                Navigator.pop(dialogContext, true);
-              },
-              icon: const Icon(Icons.shield_rounded),
-              label: const Text("Xác nhận"),
-            ),
-          ],
-        );
-      },
+      strings: _strings,
     );
-
-    return confirmed == true;
   }
 
   Future<bool> _reauthenticateForManualSecurityMode() async {
@@ -839,9 +463,7 @@ class _HomePageState extends State<HomePage>
                 },
                 decoration: InputDecoration(
                   labelText: "Mật khẩu tài khoản",
-                  prefixIcon: const Icon(
-                    Icons.lock_outline_rounded,
-                  ),
+                  prefixIcon: const Icon(Icons.lock_outline_rounded),
                   suffixIcon: IconButton(
                     onPressed: () {
                       setDialogState(() {
@@ -879,333 +501,240 @@ class _HomePageState extends State<HomePage>
       return false;
     }
 
-    final user = FirebaseAuth.instance.currentUser;
-    final email = user?.email?.trim() ?? "";
+    final result = await _homeAlarmSecurityService
+        .reauthenticateForManualSecurityMode(password: password);
 
-    if (user == null || email.isEmpty) {
-      if (mounted) {
+    if (!mounted) {
+      return false;
+    }
+
+    switch (result.status) {
+      case HomeSecurityReauthStatus.success:
+        return true;
+      case HomeSecurityReauthStatus.cancelled:
+        return false;
+      case HomeSecurityReauthStatus.currentUserUnavailable:
         showTopToast(
           context,
           "Không thể xác nhận tài khoản hiện tại",
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
-      }
-
-      return false;
-    }
-
-    try {
-      final credential = EmailAuthProvider.credential(
-        email: email,
-        password: password,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-      return true;
-    } on FirebaseAuthException catch (error) {
-      if (!mounted) {
         return false;
-      }
-
-      final wrongPassword =
-          error.code == "wrong-password" ||
-              error.code == "invalid-credential" ||
-              error.code == "invalid-login-credentials";
-
-      showTopToast(
-        context,
-        wrongPassword
-            ? "Mật khẩu không đúng"
-            : "Không thể xác nhận mật khẩu",
-        color: Colors.red,
-        icon: Icons.error_outline_rounded,
-      );
-
-      return false;
-    } catch (error) {
-      if (mounted) {
+      case HomeSecurityReauthStatus.wrongPassword:
+        showTopToast(
+          context,
+          "Mật khẩu không đúng",
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+        return false;
+      case HomeSecurityReauthStatus.failed:
         showTopToast(
           context,
           "Không thể xác nhận mật khẩu",
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
-      }
 
-      debugPrint(
-        "MANUAL_SECURITY_REAUTH_ERROR: $error",
-      );
-
-      return false;
+        return false;
     }
   }
-  int _normalizeSecurityModeRepeatMinutes(
-      dynamic value,
-      ) {
-    final minutes = int.tryParse(
-      value?.toString() ?? "",
-    ) ??
-        0;
 
-    return const <int>[0, 15, 30, 60]
-        .contains(minutes)
-        ? minutes
-        : 0;
+  int _normalizeSecurityModeRepeatMinutes(dynamic value) {
+    return _homeAlarmSecurityService.normalizeSecurityModeRepeatMinutes(value);
   }
 
-  Future<bool> setSecurityModeRepeatMinutes(
-      int minutes,
-      ) async {
+  Future<bool> setSecurityModeRepeatMinutes(int minutes) async {
     final homeId = selectedHome;
+    final result = await _homeAlarmSecurityService.setSecurityModeRepeatMinutes(
+      ownerUid: homeId.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: homeId,
+      canManageHome: canManageHome(),
+      minutes: minutes,
+    );
 
-    if (homeId.isEmpty) {
-      return false;
+    if (!mounted) {
+      return result.status == HomeSecurityRepeatStatus.saved;
     }
 
-    if (!canManageHome()) {
-      showTopToast(
-        context,
-        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
-        color: Colors.orange,
-        icon: Icons.lock_outline_rounded,
-      );
-      return false;
-    }
-
-    final normalized =
-    _normalizeSecurityModeRepeatMinutes(minutes);
-
-    try {
-      final ownerUid = getHomeOwnerUid();
-
-      await FirebaseDatabase.instance
-          .ref(
-        "accounts/$ownerUid/homes/$homeId/securityModeRepeatMinutes",
-      )
-          .set(normalized);
-
-      if (!mounted) {
-        return true;
-      }
-
-      setState(() {
-        final cachedHome = safeMap(homes[homeId]);
-        cachedHome["securityModeRepeatMinutes"] =
-            normalized;
-        homes[homeId] = cachedHome;
-      });
-
-      showTopToast(
-        context,
-        normalized == 0
-            ? "Mode Bảo vệ sẽ chỉ báo động một lần"
-            : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
-        color: SafeHomeColors.primary,
-        icon: Icons.repeat_rounded,
-      );
-
-      return true;
-    } catch (error) {
-      if (mounted) {
+    switch (result.status) {
+      case HomeSecurityRepeatStatus.homeUnavailable:
+        return false;
+      case HomeSecurityRepeatStatus.noPermission:
         showTopToast(
           context,
-          "Không lưu được thời gian lặp báo động",
-          color: Colors.red,
-          icon: Icons.error_outline_rounded,
+          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+          color: Colors.orange,
+          icon: Icons.lock_outline_rounded,
         );
-      }
+        return false;
+      case HomeSecurityRepeatStatus.failed:
+        if (mounted) {
+          showTopToast(
+            context,
+            "Không lưu được thời gian lặp báo động",
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+        }
+        return false;
+      case HomeSecurityRepeatStatus.saved:
+        if (!mounted) {
+          return true;
+        }
 
-      debugPrint(
-        "SET_SECURITY_MODE_REPEAT_ERROR: $error",
-      );
+        final normalized = result.normalizedMinutes;
 
-      return false;
+        setState(() {
+          final cachedHome = safeMap(homes[homeId]);
+          cachedHome["securityModeRepeatMinutes"] = normalized;
+          homes[homeId] = cachedHome;
+        });
+
+        showTopToast(
+          context,
+          normalized == 0
+              ? "Mode Bảo vệ sẽ chỉ báo động một lần"
+              : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
+          color: SafeHomeColors.primary,
+          icon: Icons.repeat_rounded,
+        );
+
+        return true;
     }
   }
 
   Future<void> setSecurityMode(String mode) async {
     final homeId = selectedHome;
-
-    if (homeId.isEmpty) {
-      return;
-    }
-
-    if (!canManageHome()) {
-      showTopToast(
-        context,
-        "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
-        color: Colors.orange,
-        icon: Icons.lock_outline_rounded,
-      );
-      return;
-    }
-
-    final nextMode =
-    mode == "armed" ? "armed" : "normal";
-
     final currentHome = safeMap(homes[homeId]);
-
-    final currentMode =
-    currentHome["securityMode"]?.toString() == "armed"
-        ? "armed"
-        : "normal";
-
-    final currentSource =
-        currentHome["securityModeSource"]
-            ?.toString()
-            .trim() ??
-            "";
-
-    final securityModeRepeatMinutes =
-    _normalizeSecurityModeRepeatMinutes(
-      currentHome["securityModeRepeatMinutes"],
+    final plan = _homeAlarmSecurityService.planSecurityModeChange(
+      homeId: homeId,
+      canManageHome: canManageHome(),
+      mode: mode,
+      currentHome: currentHome,
     );
 
-    if (currentMode == nextMode) {
-      if (nextMode == "normal" ||
-          currentSource == "manual") {
+    switch (plan.status) {
+      case HomeSecurityModePlanStatus.homeUnavailable:
+      case HomeSecurityModePlanStatus.unchanged:
         return;
-      }
-    }
-
-    if (nextMode == "armed") {
-      final confirmed =
-      await _confirmManualSecurityMode();
-
-      if (!confirmed || !mounted) {
+      case HomeSecurityModePlanStatus.noPermission:
+        showTopToast(
+          context,
+          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+          color: Colors.orange,
+          icon: Icons.lock_outline_rounded,
+        );
         return;
-      }
+      case HomeSecurityModePlanStatus.requiresManualConfirmation:
+        final confirmed = await _confirmManualSecurityMode();
 
-// Đợi dialog cảnh báo đóng hoàn toàn rồi mới mở dialog mật khẩu.
-      await WidgetsBinding.instance.endOfFrame;
+        if (!confirmed || !mounted) {
+          return;
+        }
 
-      if (!mounted) {
-        return;
-      }
+        // Đợi dialog cảnh báo đóng hoàn toàn rồi mới mở dialog mật khẩu.
+        await WidgetsBinding.instance.endOfFrame;
 
-      final passwordConfirmed =
-      await _reauthenticateForManualSecurityMode();
+        if (!mounted) {
+          return;
+        }
 
-      if (!passwordConfirmed || !mounted) {
-        return;
-      }
+        final passwordConfirmed = await _reauthenticateForManualSecurityMode();
+
+        if (!passwordConfirmed || !mounted) {
+          return;
+        }
+        break;
+      case HomeSecurityModePlanStatus.ready:
+        break;
     }
 
     final ownerUid = getHomeOwnerUid();
     final homeName = getHomeDisplayName(homeId);
-
+    final nextMode = plan.nextMode;
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
-        : FirebaseAuth.instance.currentUser?.email
-        ?.trim() ??
-        "Một thành viên";
+        : FirebaseAuth.instance.currentUser?.email?.trim() ?? "Một thành viên";
 
-    try {
-      await FirebaseDatabase.instance.ref().update({
-        "accounts/$ownerUid/homes/$homeId/securityMode":
-        nextMode,
+    final saveResult = await _homeAlarmSecurityService.setSecurityMode(
+      ownerUid: ownerUid,
+      homeId: homeId,
+      nextMode: nextMode,
+    );
 
-        // Chuyển về normal phải xoá nguồn manual.
-        "accounts/$ownerUid/homes/$homeId/securityModeSource":
-        nextMode == "armed" ? "manual" : null,
-      });
+    if (!mounted) {
+      return;
+    }
 
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        securityMode = nextMode;
-
-        final cachedHome = safeMap(homes[homeId]);
-        cachedHome["securityMode"] = nextMode;
-
-        if (nextMode == "armed") {
-          cachedHome["securityModeSource"] = "manual";
-        } else {
-          cachedHome.remove("securityModeSource");
-        }
-
-        homes[homeId] = cachedHome;
-      });
-
-      if (nextMode == "armed") {
-        try {
-          await HomeNotificationService.notifyHome(
-            ownerUid: ownerUid,
-            homeId: homeId,
-            homeName: homeName,
-            type: "manual_security_mode_enabled",
-            category: "home",
-            severity: "warning",
-            title: "Mode Bảo vệ thủ công đã bật",
-            message:
-            "$actorName đã bật Mode Bảo vệ thủ công cho "
-                "\"$homeName\". Chế độ này chỉ tắt khi một thành "
-                "viên có quyền chủ động chuyển về Bình thường. "
-                "${securityModeRepeatMinutes == 0 ? "Báo động không lặp lại." : "Báo động lặp sau $securityModeRepeatMinutes phút nếu sự cố vẫn còn."}",
-            actorUid: uid,
-            entityType: "home",
-            entityId: homeId,
-            includeActor: true,
-            writeHomeTimeline: true,
-            data: {
-              "securityMode": "armed",
-              "securityModeSource": "manual",
-              "securityModeRepeatMinutes":
-              securityModeRepeatMinutes,
-            },
-          );
-        } catch (error) {
-          debugPrint(
-            "MANUAL_SECURITY_NOTIFICATION_ERROR: $error",
-          );
-
-          if (mounted) {
-            showTopToast(
-              context,
-              "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
-              color: Colors.orange,
-              icon: Icons.notifications_off_outlined,
-            );
-          }
-
-          return;
-        }
-
-        if (mounted) {
-          showTopToast(
-            context,
-            "Đã bật Mode Bảo vệ thủ công",
-            color: SafeHomeColors.danger,
-            icon: Icons.shield_rounded,
-          );
-        }
-
-        return;
-      }
-
-      showTopToast(
-        context,
-        "Đã chuyển nhà về Bình thường",
-        color: SafeHomeColors.safe,
-        icon: Icons.home_rounded,
-      );
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-
+    if (saveResult.status == HomeSecurityModeSaveStatus.failed) {
       showTopToast(
         context,
         "Không thể thay đổi chế độ nhà",
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
+      return;
+    }
 
-      debugPrint(
-        "SET_SECURITY_MODE_ERROR: $error",
+    setState(() {
+      securityMode = nextMode;
+
+      final cachedHome = safeMap(homes[homeId]);
+      cachedHome["securityMode"] = nextMode;
+
+      if (nextMode == "armed") {
+        cachedHome["securityModeSource"] = "manual";
+      } else {
+        cachedHome.remove("securityModeSource");
+      }
+
+      homes[homeId] = cachedHome;
+    });
+
+    if (nextMode == "armed") {
+      final notificationStatus = await _homeAlarmSecurityService
+          .notifyManualSecurityModeEnabled(
+            ownerUid: ownerUid,
+            homeId: homeId,
+            homeName: homeName,
+            actorUid: uid,
+            actorName: actorName,
+            securityModeRepeatMinutes: plan.repeatMinutes,
+          );
+
+      if (notificationStatus == HomeSecurityNotificationStatus.failed) {
+        if (mounted) {
+          showTopToast(
+            context,
+            "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
+            color: Colors.orange,
+            icon: Icons.notifications_off_outlined,
+          );
+        }
+
+        return;
+      }
+
+      if (mounted) {
+        showTopToast(
+          context,
+          "Đã bật Mode Bảo vệ thủ công",
+          color: SafeHomeColors.danger,
+          icon: Icons.shield_rounded,
+        );
+      }
+
+      return;
+    }
+
+    if (mounted) {
+      showTopToast(
+        context,
+        "Đã chuyển nhà về Bình thường",
+        color: SafeHomeColors.safe,
+        icon: Icons.home_rounded,
       );
     }
   }
@@ -1240,472 +769,248 @@ class _HomePageState extends State<HomePage>
       return double.tryParse(raw?.toString() ?? "");
     }
 
-    var localEnabled = currentAutoAway["enabled"] == true;
-    var latitude = readDouble(currentAutoAway["latitude"]);
-    var longitude = readDouble(currentAutoAway["longitude"]);
-    const radiusMeters = 150.0;
-    var locating = false;
-    var saving = false;
+    const radiusMeters = 150;
 
-    await showModalBottomSheet<void>(
+    await showHomeAutoAwaySheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (innerContext, setSheetState) {
-            final currentLatitude = latitude;
-            final currentLongitude = longitude;
-            final hasLocation =
-                currentLatitude != null && currentLongitude != null;
-            final locationText = hasLocation
-                ? _strings.choose(
-              vi:
-              "Đã đặt vị trí nhà\n"
-                  "${currentLatitude.toStringAsFixed(6)}, "
-                  "${currentLongitude.toStringAsFixed(6)}",
-              en:
-              "Home location set\n"
-                  "${currentLatitude.toStringAsFixed(6)}, "
-                  "${currentLongitude.toStringAsFixed(6)}",
-            )
-                : _strings.t("Chưa đặt vị trí nhà");
+      strings: _strings,
+      initialEnabled: currentAutoAway["enabled"] == true,
+      initialLatitude: readDouble(currentAutoAway["latitude"]),
+      initialLongitude: readDouble(currentAutoAway["longitude"]),
+      radiusMeters: radiusMeters,
+      onCaptureLocation: () async {
+        try {
+          final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-            Future<void> captureCurrentLocation() async {
-              if (locating) {
-                return;
-              }
-
-              setSheetState(() {
-                locating = true;
-              });
-
-              try {
-                final serviceEnabled =
-                await Geolocator.isLocationServiceEnabled();
-
-                if (!serviceEnabled) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Hãy bật GPS để đặt vị trí nhà"),
-                    color: Colors.orange,
-                    icon: Icons.location_off_rounded,
-                  );
-
-                  await Geolocator.openLocationSettings();
-                  return;
-                }
-
-                var permission = await Geolocator.checkPermission();
-
-                if (permission == LocationPermission.denied) {
-                  permission = await Geolocator.requestPermission();
-                }
-
-                if (permission == LocationPermission.denied) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Bạn chưa cấp quyền vị trí"),
-                    color: Colors.orange,
-                    icon: Icons.location_disabled_rounded,
-                  );
-                  return;
-                }
-
-                if (permission == LocationPermission.deniedForever) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
-                    color: Colors.orange,
-                    icon: Icons.settings_rounded,
-                  );
-
-                  await Geolocator.openAppSettings();
-                  return;
-                }
-
-                final position = await Geolocator.getCurrentPosition(
-                  locationSettings: const LocationSettings(
-                    accuracy: LocationAccuracy.high,
-                    timeLimit: Duration(seconds: 20),
-                  ),
-                );
-
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                setSheetState(() {
-                  latitude = position.latitude;
-                  longitude = position.longitude;
-                });
-              } catch (error) {
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                showTopToast(
-                  sheetContext,
-                  _strings.choose(
-                    vi: "Không lấy được vị trí hiện tại: $error",
-                    en: "Could not get the current location: $error",
-                  ),
-                  color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              } finally {
-                if (sheetContext.mounted) {
-                  setSheetState(() {
-                    locating = false;
-                  });
-                }
-              }
+          if (!serviceEnabled) {
+            if (!mounted) {
+              return null;
             }
 
-            Future<void> saveAutoAway() async {
-              if (saving) {
-                return;
-              }
-
-              if (localEnabled && !hasLocation) {
-                showTopToast(
-                  sheetContext,
-                  _strings.t("Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ"),
-                  color: Colors.orange,
-                  icon: Icons.location_on_outlined,
-                );
-                return;
-              }
-
-              if (localEnabled) {
-                final hasBackgroundPermission =
-                await AutoAwayService.ensureBackgroundPermission();
-
-                if (!hasBackgroundPermission) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t(
-                      "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
-                    ),
-                    color: Colors.orange,
-                    icon: Icons.location_disabled_rounded,
-                  );
-
-                  await Geolocator.openAppSettings();
-                  return;
-                }
-              }
-
-              setSheetState(() {
-                saving = true;
-              });
-
-              final data = <String, Object?>{
-                "enabled": localEnabled,
-                "radiusMeters": radiusMeters.round(),
-                "updatedAt": DateTime.now().millisecondsSinceEpoch,
-                "updatedBy": uid,
-              };
-
-              if (hasLocation) {
-                data["latitude"] = latitude;
-                data["longitude"] = longitude;
-              }
-
-              try {
-                await FirebaseDatabase.instance
-                    .ref("accounts/$ownerUid/homes/$homeId/autoAway")
-                    .set(data);
-
-                if (!mounted || !sheetContext.mounted) {
-                  return;
-                }
-
-                setState(() {
-                  final cachedHome = safeMap(homes[homeId]);
-                  cachedHome["autoAway"] = Map<String, Object?>.from(data);
-                  homes[homeId] = cachedHome;
-                });
-
-                unawaited(
-                  AutoAwayService.syncForHomes(
-                    uid: uid,
-                    homes: homes,
-                    force: true,
-                  ).catchError((Object error) {
-                    debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
-                  }),
-                );
-                unawaited(_syncAutoAwayLocationMonitoring());
-
-                Navigator.of(sheetContext).pop();
-
-                showTopToast(
-                  pageContext,
-                  localEnabled
-                      ? _strings.t(
-                    "Đã bật tự động Bảo vệ khi mọi người rời nhà",
-                  )
-                      : _strings.t(
-                    "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
-                  ),
-                  color: SafeHomeColors.safe,
-                  icon: Icons.check_circle_rounded,
-                );
-              } catch (error) {
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                showTopToast(
-                  sheetContext,
-                  _strings.choose(
-                    vi: "Không lưu được cài đặt: $error",
-                    en: "Could not save the setting: $error",
-                  ),
-                  color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              } finally {
-                if (sheetContext.mounted) {
-                  setSheetState(() {
-                    saving = false;
-                  });
-                }
-              }
-            }
-
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 18,
-                  right: 18,
-                  top: 12,
-                  bottom: MediaQuery.of(innerContext).viewInsets.bottom + 18,
-                ),
-                decoration: const BoxDecoration(
-                  color: SafeHomeColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Icon(
-                            Icons.location_on_rounded,
-                            color: SafeHomeColors.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _strings.t("Tự động Bảo vệ khi rời nhà"),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textPrimary,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                _strings.t("Bán kính bảo vệ mặc định: 150 m"),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Switch.adaptive(
-                          value: localEnabled,
-                          onChanged: (value) {
-                            setSheetState(() {
-                              localEnabled = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.surface,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: SafeHomeColors.border),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            hasLocation
-                                ? Icons.check_circle_rounded
-                                : Icons.location_searching_rounded,
-                            color: hasLocation
-                                ? SafeHomeColors.safe
-                                : SafeHomeColors.warning,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              locationText,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
-                                fontSize: 13,
-                                height: 1.35,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: locating ? null : captureCurrentLocation,
-                        icon: locating
-                            ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
-                            : const Icon(Icons.my_location_rounded),
-                        label: Text(
-                          locating
-                              ? _strings.t("Đang lấy vị trí...")
-                              : _strings.t("Đặt vị trí nhà tại đây"),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      _strings.t(
-                        "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.",
-                      ),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: SafeHomeColors.textSecondary,
-                        fontSize: 11.5,
-                        height: 1.35,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: saving ? null : saveAutoAway,
-                        icon: saving
-                            ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
-                            : const Icon(Icons.save_rounded),
-                        label: Text(
-                          saving
-                              ? _strings.t("Đang lưu...")
-                              : _strings.t("Lưu cài đặt"),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            showTopToast(
+              context,
+              _strings.t("Hãy bật GPS để đặt vị trí nhà"),
+              color: Colors.orange,
+              icon: Icons.location_off_rounded,
             );
-          },
-        );
+
+            await Geolocator.openLocationSettings();
+            return null;
+          }
+
+          var permission = await Geolocator.checkPermission();
+
+          if (permission == LocationPermission.denied) {
+            permission = await Geolocator.requestPermission();
+          }
+
+          if (permission == LocationPermission.denied) {
+            if (!mounted) {
+              return null;
+            }
+
+            showTopToast(
+              context,
+              _strings.t("Bạn chưa cấp quyền vị trí"),
+              color: Colors.orange,
+              icon: Icons.location_disabled_rounded,
+            );
+            return null;
+          }
+
+          if (permission == LocationPermission.deniedForever) {
+            if (!mounted) {
+              return null;
+            }
+
+            showTopToast(
+              context,
+              _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
+              color: Colors.orange,
+              icon: Icons.settings_rounded,
+            );
+
+            await Geolocator.openAppSettings();
+            return null;
+          }
+
+          final position = await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.high,
+              timeLimit: Duration(seconds: 20),
+            ),
+          );
+
+          if (!mounted) {
+            return null;
+          }
+
+          return HomeAutoAwayLocation(
+            latitude: position.latitude,
+            longitude: position.longitude,
+          );
+        } catch (error) {
+          if (!mounted) {
+            return null;
+          }
+
+          showTopToast(
+            context,
+            _strings.choose(
+              vi: "Không lấy được vị trí hiện tại: $error",
+              en: "Could not get the current location: $error",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return null;
+        }
+      },
+      onSave: (data) async {
+        if (data.enabled) {
+          final hasBackgroundPermission =
+              await AutoAwayService.ensureBackgroundPermission();
+
+          if (!hasBackgroundPermission) {
+            if (!mounted) {
+              return false;
+            }
+
+            showTopToast(
+              context,
+              _strings.t(
+                "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
+              ),
+              color: Colors.orange,
+              icon: Icons.location_disabled_rounded,
+            );
+
+            await Geolocator.openAppSettings();
+            return false;
+          }
+        }
+
+        final hasLocation = data.latitude != null && data.longitude != null;
+        final autoAwayData = <String, Object?>{
+          "enabled": data.enabled,
+          "radiusMeters": data.radiusMeters,
+          "updatedAt": DateTime.now().millisecondsSinceEpoch,
+          "updatedBy": uid,
+        };
+
+        if (hasLocation) {
+          autoAwayData["latitude"] = data.latitude;
+          autoAwayData["longitude"] = data.longitude;
+        }
+
+        try {
+          await FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId/autoAway")
+              .set(autoAwayData);
+
+          if (!mounted) {
+            return false;
+          }
+
+          setState(() {
+            final cachedHome = safeMap(homes[homeId]);
+            cachedHome["autoAway"] = Map<String, Object?>.from(autoAwayData);
+            homes[homeId] = cachedHome;
+          });
+
+          unawaited(
+            AutoAwayService.syncForHomes(
+              uid: uid,
+              homes: homes,
+              force: true,
+            ).catchError((Object error) {
+              debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
+            }),
+          );
+          unawaited(_syncAutoAwayLocationMonitoring());
+
+          unawaited(
+            Future<void>.delayed(Duration.zero, () {
+              if (!mounted || !pageContext.mounted) {
+                return;
+              }
+
+              showTopToast(
+                pageContext,
+                data.enabled
+                    ? _strings.t("Đã bật tự động Bảo vệ khi mọi người rời nhà")
+                    : _strings.t("Đã tắt tự động Bảo vệ khi mọi người rời nhà"),
+                color: SafeHomeColors.safe,
+                icon: Icons.check_circle_rounded,
+              );
+            }),
+          );
+          return true;
+        } catch (error) {
+          if (!mounted) {
+            return false;
+          }
+
+          showTopToast(
+            context,
+            _strings.choose(
+              vi: "Không lưu được cài đặt: $error",
+              en: "Could not save the setting: $error",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
       },
     );
   }
 
   Future<bool> setAlarmEnabled(bool enabled) async {
     final homeId = selectedHome;
+    final plan = _homeAlarmSecurityService.planAlarmEnabled(
+      homeId: homeId,
+      currentEnabled: alarmEnabled,
+      nextEnabled: enabled,
+    );
 
-    if (homeId.isEmpty) {
-      return false;
-    }
-
-    if (alarmEnabled == enabled) {
-      return true;
-    }
-
-    if (!enabled) {
-      final confirmed = await confirmDisableAlarm();
-
-      if (!confirmed || !mounted) {
+    switch (plan.status) {
+      case HomeAlarmTogglePlanStatus.homeUnavailable:
         return false;
-      }
+      case HomeAlarmTogglePlanStatus.unchanged:
+        return true;
+      case HomeAlarmTogglePlanStatus.requiresDisableConfirmation:
+        final confirmed = await confirmDisableAlarm();
+
+        if (!confirmed || !mounted) {
+          return false;
+        }
+        break;
+      case HomeAlarmTogglePlanStatus.ready:
+        break;
     }
 
     final homeName = getHomeDisplayName(homeId);
+    final result = await _homeAlarmSecurityService.setAlarmEnabled(
+      uid: uid,
+      homeId: homeId,
+      enabled: enabled,
+    );
 
-    try {
-      await FirebaseDatabase.instance
-          .ref(
-        "accounts/$uid/alarmSettings/"
-            "$homeId/enabled",
-      )
-          .set(enabled);
-    } catch (error) {
+    if (!mounted) {
+      return result.status == HomeAlarmToggleSaveStatus.saved;
+    }
+
+    if (result.status == HomeAlarmToggleSaveStatus.failed) {
       if (mounted) {
         showTopToast(
           context,
-          _strings.t(
-            "Không thể thay đổi trạng thái Alarm",
-          ),
+          _strings.t("Không thể thay đổi trạng thái Alarm"),
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
       }
 
-      debugPrint(
-        "SET_ALARM_ENABLED_ERROR: $error",
-      );
       return false;
     }
 
@@ -1715,42 +1020,21 @@ class _HomePageState extends State<HomePage>
 
     setState(() {
       alarmEnabled = enabled;
-      alarmSettings[homeId] = {
-        "enabled": enabled,
-      };
+      alarmSettings[homeId] = {"enabled": enabled};
     });
 
     unawaited(
-      HomeNotificationService.addNotification(
-        uid: uid,
-        type: "alarm_setting_changed",
-        title: enabled
-            ? _strings.t("Đã bật Alarm")
-            : _strings.t("Đã tắt Alarm"),
-        message: enabled
-            ? _strings.choose(
-          vi:
-          "Bạn đã bật Alarm cho nhà "
-              "\"$homeName\".",
-          en:
-          "You enabled Alarm for "
-              "\"$homeName\".",
-        )
-            : _strings.choose(
-          vi:
-          "Bạn đã tắt toàn bộ Alarm của nhà "
-              "\"$homeName\".",
-          en:
-          "You disabled every Alarm for "
-              "\"$homeName\".",
-        ),
-        homeId: homeId,
-        homeName: homeName,
-      ).catchError((Object error) {
-        debugPrint(
-          "ALARM_SETTING_NOTIFICATION_ERROR: $error",
-        );
-      }),
+      _homeAlarmSecurityService
+          .recordAlarmEnabledNotification(
+            uid: uid,
+            homeId: homeId,
+            homeName: homeName,
+            enabled: enabled,
+            strings: _strings,
+          )
+          .catchError((Object error) {
+            debugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
+          }),
     );
 
     if (enabled) {
@@ -1776,56 +1060,32 @@ class _HomePageState extends State<HomePage>
   // Android dùng foreground task độc lập để heartbeat vẫn chạy
   // khi app ở nền, tắt màn hình hoặc bị vuốt khỏi Recent Apps.
   // Các nền tảng khác giữ timer cũ.
-  Timer? autoAwayPresenceRefreshTimer;
 
+  // ignore: unused_element
   bool _hasEnabledAutoAwayHome() {
-    for (final rawHome in homes.values) {
-      final home = safeMap(rawHome);
-      final autoAway = safeMap(home['autoAway']);
-
-      if (autoAway['enabled'] == true &&
-          autoAway['latitude'] is num &&
-          autoAway['longitude'] is num) {
-        return true;
-      }
-    }
-
-    return false;
+    return _homeAutoAwayCoordinator.hasEnabledAutoAwayHome(homes);
   }
 
+  // ignore: unused_element
   void _refreshAutoAwayPresenceNow({
     Position? position,
     String event = 'foreground_check',
   }) {
-    if (!mounted || uid.isEmpty || homes.isEmpty) {
-      return;
-    }
+    if (!mounted) return;
 
-    unawaited(
-      AutoAwayService.refreshPresenceForHomes(
-        uid: uid,
-        homes: homes,
-        position: position,
-        event: event,
-      ).catchError((Object error) {
-        debugPrint(
-          'AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error',
-        );
-      }),
+    _homeAutoAwayCoordinator.refreshPresenceNow(
+      uid: uid,
+      homes: homes,
+      position: position,
+      event: event,
     );
   }
 
+  // ignore: unused_element
   void _startAutoAwayPresenceRefreshTimer() {
-    autoAwayPresenceRefreshTimer?.cancel();
-
-    // Kiểm tra ngay khi bắt đầu.
-    _refreshAutoAwayPresenceNow();
-
-    autoAwayPresenceRefreshTimer = Timer.periodic(
-      const Duration(seconds: 30),
-          (_) {
-        _refreshAutoAwayPresenceNow();
-      },
+    _homeAutoAwayCoordinator.startPresenceRefreshTimer(
+      uid: uid,
+      homesProvider: () => homes,
     );
   }
 
@@ -1834,156 +1094,65 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    if (kIsWeb ||
-        defaultTargetPlatform != TargetPlatform.android) {
-      if (!_hasEnabledAutoAwayHome()) {
-        autoAwayPresenceRefreshTimer?.cancel();
-        autoAwayPresenceRefreshTimer = null;
-        return;
-      }
-
-      _startAutoAwayPresenceRefreshTimer();
-      return;
-    }
-
-    autoAwayPresenceRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer = null;
-
-    try {
-      await AutoAwayForegroundTaskService.syncForHomes(
-        uid: uid,
-        homes: homes,
-      );
-    } catch (error) {
-      debugPrint(
-        'AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error',
-      );
-    }
+    await _homeAutoAwayCoordinator.syncLocationMonitoring(
+      uid: uid,
+      homesProvider: () => homes,
+    );
   }
+
   final ScrollController homeTabController = ScrollController();
-  StreamSubscription<DatabaseEvent>? profileSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeAddedSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeChangedSubscription;
-  StreamSubscription<DatabaseEvent>? ownedHomeRemovedSubscription;
-  StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
-  StreamSubscription<DatabaseEvent>? homeOrderSubscription;
-  StreamSubscription<DatabaseEvent>? alarmSettingsSubscription;
-  StreamSubscription<DatabaseEvent>? customRulesSubscription;
-  StreamSubscription<DatabaseEvent>? shareRequestsSubscription;
-  StreamSubscription<DatabaseEvent>? notificationSubscription;
-  StreamSubscription<DatabaseEvent>? homeEventsSubscription;
-  StreamSubscription<DatabaseEvent>? alarmPauseSubscription;
-  String _homeEventsListenKey = "";
-  String _alarmPauseListenKey = "";
-  StreamSubscription<DatabaseEvent>? chatUnreadSubscription;
-  String _chatUnreadListenUid = "";
-  Map<String, int> _chatUnreadSnapshot = {};
 
   void startNotificationListener() {
-    notificationSubscription?.cancel();
-    notificationSubscription = FirebaseDatabase.instance
-        .ref("accounts/$uid/notifications")
-        .onValue
-        .listen((event) {
-      final data = event.snapshot.value;
-      var count = 0;
+    _homeRealtimeCoordinator.startNotificationUnreadListener(
+      uid: uid,
+      onUnreadChanged: (count) {
+        if (!mounted) return;
 
-      if (data is Map) {
-        final map = Map<String, dynamic>.from(data);
-
-        for (final item in map.values) {
-          if (item is! Map) continue;
-
-          final notification = Map<String, dynamic>.from(item);
-
-          if (notification["read"] != true) {
-            count++;
-          }
-        }
-      }
-
-      if (!mounted) return;
-
-      setState(() {
-        unreadHomeNotificationCount = count;
-      });
-    });
+        setState(() {
+          unreadHomeNotificationCount = count;
+        });
+      },
+    );
   }
 
   void startHomeEventsListener() {
-    if (selectedHome.isEmpty) {
-      homeEventsSubscription?.cancel();
-      homeEventsSubscription = null;
-      _homeEventsListenKey = "";
-      return;
-    }
+    _homeRealtimeCoordinator.startHomeEventsListener(
+      ownerUid: selectedHome.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: selectedHome,
+      onHomeEventsChanged: (events) {
+        if (!mounted) return;
 
-    final ownerUid = getHomeOwnerUid();
-    final listenKey = "$ownerUid/$selectedHome";
-
-    if (_homeEventsListenKey == listenKey && homeEventsSubscription != null) {
-      return;
-    }
-
-    homeEventsSubscription?.cancel();
-    _homeEventsListenKey = listenKey;
-
-    homeEventsSubscription = FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$selectedHome/events")
-        .limitToLast(50)
-        .onValue
-        .listen((event) {
-      if (!mounted) return;
-
-      setState(() {
-        homeEvents = safeMap(event.snapshot.value);
-      });
-    });
+        setState(() {
+          homeEvents = events;
+        });
+      },
+    );
   }
 
   void startAlarmPauseListener() {
-    if (selectedHome.isEmpty) {
-      alarmPauseSubscription?.cancel();
-      alarmPauseSubscription = null;
-      _alarmPauseListenKey = "";
-
-      if (mounted && alarmPauseToday.isNotEmpty) {
-        setState(() {
-          alarmPauseToday = {};
-        });
-      }
-
-      return;
-    }
-
     final homeId = selectedHome;
-    final ownerUid = getHomeOwnerUid();
-    final listenKey = "$ownerUid/$homeId";
 
-    if (_alarmPauseListenKey == listenKey && alarmPauseSubscription != null) {
-      return;
-    }
-
-    alarmPauseSubscription?.cancel();
-    _alarmPauseListenKey = listenKey;
-
-    alarmPauseSubscription = FirebaseDatabase.instance
-        .ref("accounts/$ownerUid/homes/$homeId/alarmPauseToday")
-        .onValue
-        .listen(
-          (event) {
-        if (!mounted ||
-            selectedHome != homeId ||
-            _alarmPauseListenKey != listenKey) {
+    _homeRealtimeCoordinator.startAlarmPauseListener(
+      ownerUid: homeId.isEmpty ? "" : getHomeOwnerUid(),
+      homeId: homeId,
+      onSelectedHomeCleared: () {
+        if (mounted && alarmPauseToday.isNotEmpty) {
+          setState(() {
+            alarmPauseToday = {};
+          });
+        }
+      },
+      onAlarmPauseChanged: (update) {
+        if (!mounted || selectedHome != update.homeId) {
           return;
         }
 
-        final pause = safeMap(event.snapshot.value);
+        final pause = update.alarmPauseToday;
 
         setState(() {
           alarmPauseToday = pause;
 
-          final cachedHome = safeMap(homes[homeId]);
+          final cachedHome = safeMap(homes[update.homeId]);
 
           if (pause.isEmpty) {
             cachedHome.remove("alarmPauseToday");
@@ -1991,98 +1160,38 @@ class _HomePageState extends State<HomePage>
             cachedHome["alarmPauseToday"] = pause;
           }
 
-          homes[homeId] = cachedHome;
+          homes[update.homeId] = cachedHome;
         });
       },
-      onError: (Object error) {
-        debugPrint("ALARM_PAUSE_LISTENER_ERROR: $error");
-      },
     );
-  }
-
-  void _applyChatUnreadSnapshot() {
-    if (!mounted) return;
-
-    final activeHomeIds = homes.keys
-        .where((homeId) => homeId.isNotEmpty)
-        .toSet();
-
-    final nextUnreadByHome = <String, int>{};
-
-    for (final entry in _chatUnreadSnapshot.entries) {
-      if (
-      activeHomeIds.contains(entry.key) &&
-          entry.value > 0
-      ) {
-        nextUnreadByHome[entry.key] = entry.value;
-      }
-    }
-
-    final nextTotal = nextUnreadByHome.values.fold<int>(
-      0,
-          (total, count) => total + count,
-    );
-
-    final unchanged =
-        nextTotal == unreadChatCount &&
-            nextUnreadByHome.length == unreadChatByHome.length &&
-            nextUnreadByHome.entries.every(
-                  (entry) => unreadChatByHome[entry.key] == entry.value,
-            );
-
-    if (unchanged) {
-      return;
-    }
-
-    setState(() {
-      unreadChatByHome = nextUnreadByHome;
-      unreadChatCount = nextTotal;
-    });
   }
 
   void syncHomeChatListeners() {
     if (!mounted || uid.isEmpty) return;
 
-    if (
-    chatUnreadSubscription != null &&
-        _chatUnreadListenUid == uid
-    ) {
-      _applyChatUnreadSnapshot();
-      return;
-    }
+    _homeRealtimeCoordinator.syncHomeChatListeners(
+      uid: uid,
+      homes: homes,
+      onUnreadChanged: (snapshot) {
+        if (!mounted) return;
 
-    chatUnreadSubscription?.cancel();
-    _chatUnreadListenUid = uid;
-    _chatUnreadSnapshot = {};
-
-    chatUnreadSubscription = ChatService
-        .unreadCountersStream(uid)
-        .listen(
-          (event) {
-        final data = event.snapshot.value;
-        final nextSnapshot = <String, int>{};
-
-        if (data is Map) {
-          final map = Map<String, dynamic>.from(data);
-
-          for (final entry in map.entries) {
-            final count = ChatService.unreadCounterCount(
-              entry.value,
+        final nextUnreadByHome = snapshot.unreadByHome;
+        final nextTotal = snapshot.total;
+        final unchanged =
+            nextTotal == unreadChatCount &&
+            nextUnreadByHome.length == unreadChatByHome.length &&
+            nextUnreadByHome.entries.every(
+              (entry) => unreadChatByHome[entry.key] == entry.value,
             );
 
-            if (count > 0) {
-              nextSnapshot[entry.key.toString()] = count;
-            }
-          }
+        if (unchanged) {
+          return;
         }
 
-        _chatUnreadSnapshot = nextSnapshot;
-        _applyChatUnreadSnapshot();
-      },
-      onError: (Object error) {
-        debugPrint("CHAT_UNREAD_LISTENER_ERROR: $error");
-        _chatUnreadSnapshot = {};
-        _applyChatUnreadSnapshot();
+        setState(() {
+          unreadChatByHome = nextUnreadByHome;
+          unreadChatCount = nextTotal;
+        });
       },
     );
   }
@@ -2090,262 +1199,21 @@ class _HomePageState extends State<HomePage>
   void syncDeviceNotificationBridge() {
     if (!mounted) return;
 
-    final activeHomeIds = homes.keys.where((id) => id.isNotEmpty).toSet();
-
-    _deviceNotificationSnapshots.removeWhere(
-          (homeId, _) => !activeHomeIds.contains(homeId),
-    );
-    _deviceNotificationPrimedHomes.removeWhere(
-          (homeId) => !activeHomeIds.contains(homeId),
-    );
-
-    for (final homeEntry in homes.entries) {
-      final homeId = homeEntry.key.toString();
-      final home = safeMap(homeEntry.value);
-      final devices = safeMap(home["devices"]);
-      final previousByDevice = _deviceNotificationSnapshots.putIfAbsent(
-        homeId,
-            () => <String, Map<String, dynamic>>{},
-      );
-      final homeWasPrimed = _deviceNotificationPrimedHomes.contains(homeId);
-      final homeName = getHomeDisplayName(homeId);
-
-      previousByDevice.removeWhere(
-            (deviceId, _) => !devices.containsKey(deviceId),
-      );
-
-      for (final deviceEntry in devices.entries) {
-        final deviceId = deviceEntry.key.toString();
-        final device = safeMap(deviceEntry.value);
-        final currentState = _deviceNotificationState(device);
-        final previousState = previousByDevice[deviceId];
-
-        previousByDevice[deviceId] = currentState;
-
-        if (previousState == null) {
-          if (homeWasPrimed) {
-            _recordDeviceNotification(
-              homeId: homeId,
-              homeName: homeName,
-              deviceId: deviceId,
-              device: device,
-              event: {
-                "type": "device_added",
-                "title": _strings.t("Thiết bị mới"),
-                "message": _strings.choose(
-                  vi: "Thiết bị \"${_deviceName(deviceId, device)}\" đã xuất hiện trong \"$homeName\".",
-                  en: "Device \"${_deviceName(deviceId, device)}\" was added to \"$homeName\".",
-                ),
-                "severity": "info",
-              },
-            );
-          }
-
-          continue;
-        }
-
-        final event = _deviceNotificationEvent(
-          homeName: homeName,
-          deviceId: deviceId,
-          device: device,
-          previous: previousState,
-          current: currentState,
-        );
-
-        if (event == null) continue;
-
+    _homeRealtimeCoordinator.syncDeviceNotificationBridge(
+      homes: homes,
+      strings: _strings,
+      homeNameForId: getHomeDisplayName,
+      onDeviceNotification: (notification) {
         _recordDeviceNotification(
-          homeId: homeId,
-          homeName: homeName,
-          deviceId: deviceId,
-          device: device,
-          event: event,
+          homeId: notification.homeId,
+          homeName: notification.homeName,
+          deviceId: notification.deviceId,
+          device: notification.device,
+          deviceName: notification.deviceName,
+          event: notification.event,
         );
-      }
-
-      _deviceNotificationPrimedHomes.add(homeId);
-    }
-  }
-
-  Map<String, dynamic> _deviceNotificationState(Map<String, dynamic> device) {
-    final battery = int.tryParse(device["battery"]?.toString() ?? "");
-    final temperature = double.tryParse(
-      device["temperature"]?.toString() ?? "",
+      },
     );
-    final humidity = double.tryParse(device["humidity"]?.toString() ?? "");
-
-    return {
-      "availability": device["availability"]?.toString().toLowerCase() ?? "",
-      "contact": device["contact"],
-      "smoke": device["smoke"] == true,
-      "tamper": device["tamper"] == true,
-      "status": device["status"]?.toString() ?? "",
-      "batteryLow": battery != null && battery <= 20,
-      "sosActive": isSosActive(device),
-      "temperatureHigh":
-      temperature != null &&
-          temperature > environmentWarningTemperatureC,
-      "humidityHigh":
-      humidity != null &&
-          humidity >= environmentWarningHumidityPercent,
-    };
-  }
-
-  Map<String, String>? _deviceNotificationEvent({
-    required String homeName,
-    required String deviceId,
-    required Map<String, dynamic> device,
-    required Map<String, dynamic> previous,
-    required Map<String, dynamic> current,
-  }) {
-    final type = device["type"]?.toString() ?? "door";
-    final name = _deviceName(deviceId, device);
-
-    bool changed(String key) => previous[key] != current[key];
-
-    if (changed("smoke")) {
-      final active = current["smoke"] == true;
-      return {
-        "type": active ? "device_smoke" : "device_smoke_clear",
-        "title": active
-            ? _strings.t("Cảnh báo khói")
-            : _strings.t("Khói đã an toàn"),
-        "message": active
-            ? _strings.choose(
-          vi: "\"$name\" phát hiện khói trong \"$homeName\".",
-          en: "\"$name\" detected smoke in \"$homeName\".",
-        )
-            : _strings.choose(
-          vi: "\"$name\" đã trở lại trạng thái bình thường.",
-          en: "\"$name\" has returned to normal.",
-        ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (changed("sosActive")) {
-      final active = current["sosActive"] == true;
-      return {
-        "type": active ? "device_sos" : "device_sos_clear",
-        "title": active
-            ? _strings.t("SOS được kích hoạt")
-            : _strings.t("SOS đã kết thúc"),
-        "message": active
-            ? _strings.choose(
-          vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
-          en: "\"$name\" triggered SOS in \"$homeName\".",
-        )
-            : _strings.choose(
-          vi: "\"$name\" đã hết trạng thái SOS.",
-          en: "\"$name\" is no longer in SOS state.",
-        ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (changed("tamper")) {
-      final active = current["tamper"] == true;
-      return {
-        "type": active ? "device_tamper" : "device_tamper_clear",
-        "title": active
-            ? _strings.t("Thiết bị bị tháo")
-            : _strings.t("Tamper bình thường"),
-        "message": active
-            ? _strings.choose(
-          vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
-          en: "\"$name\" reported tampering in \"$homeName\".",
-        )
-            : _strings.choose(
-          vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
-          en: "\"$name\" tamper alert has cleared.",
-        ),
-        "severity": active ? "critical" : "success",
-      };
-    }
-
-    if (_isContactDevice(type) && changed("contact")) {
-      final closed = current["contact"] == true;
-      return {
-        "type": "device_contact",
-        "title": closed ? _strings.t("Cửa đã đóng") : _strings.t("Cửa đang mở"),
-        "message": closed
-            ? _strings.choose(
-          vi: "\"$name\" đã đóng trong \"$homeName\".",
-          en: "\"$name\" closed in \"$homeName\".",
-        )
-            : _strings.choose(
-          vi: "\"$name\" đang mở trong \"$homeName\".",
-          en: "\"$name\" is open in \"$homeName\".",
-        ),
-        "severity": closed ? "success" : "warning",
-      };
-    }
-
-    if (previous["batteryLow"] != true && current["batteryLow"] == true) {
-      return {
-        "type": "device_battery_low",
-        "title": _strings.t("Pin yếu"),
-        "message": _strings.choose(
-          vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
-          en: "\"$name\" in \"$homeName\" has a low battery.",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    if (changed("availability")) {
-      final availability = current["availability"]?.toString() ?? "";
-      if (availability == "offline") {
-        return {
-          "type": "device_connection",
-          "title": _strings.t("Thiết bị offline"),
-          "message": _strings.choose(
-            vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
-            en: "\"$name\" in \"$homeName\" went offline.",
-          ),
-          "severity": "warning",
-        };
-      }
-
-      if (availability == "online") {
-        return {
-          "type": "device_connection",
-          "title": _strings.t("Thiết bị online"),
-          "message": _strings.choose(
-            vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
-            en: "\"$name\" in \"$homeName\" is back online.",
-          ),
-          "severity": "success",
-        };
-      }
-    }
-
-    if (previous["temperatureHigh"] != true &&
-        current["temperatureHigh"] == true) {
-      return {
-        "type": "device_environment",
-        "title": _strings.t("Nhiệt độ cao"),
-        "message": _strings.choose(
-          vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
-          en: "\"$name\" recorded a high temperature in \"$homeName\".",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    if (previous["humidityHigh"] != true && current["humidityHigh"] == true) {
-      return {
-        "type": "device_environment",
-        "title": _strings.t("Độ ẩm cao"),
-        "message": _strings.choose(
-          vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
-          en: "\"$name\" recorded high humidity in \"$homeName\".",
-        ),
-        "severity": "warning",
-      };
-    }
-
-    return null;
   }
 
   void _recordDeviceNotification({
@@ -2353,6 +1221,7 @@ class _HomePageState extends State<HomePage>
     required String homeName,
     required String deviceId,
     required Map<String, dynamic> device,
+    required String deviceName,
     required Map<String, String> event,
   }) {
     unawaited(
@@ -2370,41 +1239,11 @@ class _HomePageState extends State<HomePage>
         homeName: homeName,
         data: {
           "homeName": homeName,
-          "deviceName": _deviceName(deviceId, device),
+          "deviceName": deviceName,
           "deviceType": device["type"]?.toString() ?? "",
         },
       ).catchError((_) {}),
     );
-  }
-
-  bool _isContactDevice(String type) {
-    return type == "door" ||
-        type == "window" ||
-        type == "gate" ||
-        type == "lock";
-  }
-
-  String _deviceName(String deviceId, Map<String, dynamic> device) {
-    final name = device["name"]?.toString().trim() ?? "";
-    return name.isNotEmpty ? name : deviceId;
-  }
-
-  bool _hasEnabledScheduleValue(dynamic raw) {
-    if (raw is List) {
-      return raw.any((item) {
-        final schedule = safeMap(item);
-        return schedule["enabled"] == true;
-      });
-    }
-
-    if (raw is Map) {
-      return raw.values.any((item) {
-        final schedule = safeMap(item);
-        return schedule["enabled"] == true;
-      });
-    }
-
-    return false;
   }
 
   Future<bool> hasEnabledReminderSchedule() async {
@@ -2419,227 +1258,51 @@ class _HomePageState extends State<HomePage>
         if (modeSnap.value?.toString() == "custom") {
           final customSnap = await FirebaseDatabase.instance
               .ref(
-            "accounts/$uid/customRules/"
+                "accounts/$uid/customRules/"
                 "$selectedHome/notifications/items",
-          )
+              )
               .get();
 
-          return _hasEnabledScheduleValue(customSnap.value);
+          return HomeAlarmFormatters.hasEnabledScheduleValue(customSnap.value);
         }
       }
 
       final homeSnap = await FirebaseDatabase.instance
           .ref(
-        "accounts/${getHomeOwnerUid()}/homes/"
+            "accounts/${getHomeOwnerUid()}/homes/"
             "$selectedHome/schedules/notifications",
-      )
+          )
           .get();
 
-      return _hasEnabledScheduleValue(homeSnap.value);
+      return HomeAlarmFormatters.hasEnabledScheduleValue(homeSnap.value);
     } catch (_) {
       return false;
     }
   }
 
   String formatAlarmSchedules() {
-    if (!alarmEnabled || selectedHome.isEmpty) {
-      return "Tắt";
-    }
-
-    final devices = getDevices();
-    final selectedRules = safeMap(customRulesByHome[selectedHome]);
-
-    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
-
-    final customDevices = safeMap(selectedRules["devices"]);
-
-    final intervals = <Map<String, int>>[];
-
-    int? parseClock(dynamic raw) {
-      final value = raw?.toString().trim() ?? "";
-      final parts = value.split(":");
-
-      if (parts.length != 2) {
-        return null;
-      }
-
-      final hour = int.tryParse(parts[0]);
-      final minute = int.tryParse(parts[1]);
-
-      if (hour == null ||
-          minute == null ||
-          hour < 0 ||
-          hour > 23 ||
-          minute < 0 ||
-          minute > 59) {
-        return null;
-      }
-
-      return hour * 60 + minute;
-    }
-
-    String formatClock(int totalMinutes) {
-      final normalized = ((totalMinutes % 1440) + 1440) % 1440;
-      final hour = normalized ~/ 60;
-      final minute = normalized % 60;
-
-      return "${hour.toString().padLeft(2, "0")}:"
-          "${minute.toString().padLeft(2, "0")}";
-    }
-
-    for (final entry in devices.entries) {
-      final deviceId = entry.key.toString();
-      final device = safeMap(entry.value);
-      final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
-      final homeAlarm = safeMap(device["alarm"]);
-      final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = safeMap(customDevice["alarm"]);
-
-      // Giống AlarmDeviceSheet:
-      // mode Riêng tôi dùng custom nếu có,
-      // nếu chưa có thì kế thừa lịch Theo nhà.
-      final alarm = useCustomMode && customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] != true) {
-        continue;
-      }
-
-      final startMinutes = parseClock(alarm["start"]);
-      final endMinutes = parseClock(alarm["end"]);
-
-      if (startMinutes == null || endMinutes == null) {
-        continue;
-      }
-
-      intervals.add({"start": startMinutes, "end": endMinutes});
-    }
-
-    if (intervals.isEmpty) {
-      return "Tắt";
-    }
-
-    if (intervals.length == 1) {
-      final firstInterval = intervals.first;
-      final start = firstInterval["start"];
-      final end = firstInterval["end"];
-
-      if (start == null || end == null) {
-        return "Tắt";
-      }
-
-      return "${formatClock(start)} → ${formatClock(end)}";
-    }
-
-    // Tìm một khoảng liên tục ngắn nhất nhưng bao phủ toàn bộ
-    // các lịch Alarm, kể cả lịch đi qua 00:00.
-    int? bestStart;
-    int? bestEnd;
-    var bestSpan = 1 << 30;
-
-    final candidateCuts = <int>{
-      for (final interval in intervals)
-        if (interval["start"] != null) interval["start"] as int,
-      for (final interval in intervals)
-        if (interval["end"] != null) interval["end"] as int,
-    };
-
-    for (final cut in candidateCuts) {
-      var minStart = 1 << 30;
-      var maxEnd = -(1 << 30);
-
-      for (final interval in intervals) {
-        final startMinutes = interval["start"];
-        final endMinutes = interval["end"];
-
-        if (startMinutes == null || endMinutes == null) {
-          continue;
-        }
-
-        var duration = (endMinutes - startMinutes + 1440) % 1440;
-
-        // Cùng giờ bắt đầu/kết thúc được hiểu là cả ngày.
-        if (duration == 0) {
-          duration = 1440;
-        }
-
-        final mappedStart = (startMinutes - cut + 1440) % 1440;
-        final mappedEnd = mappedStart + duration;
-
-        if (mappedStart < minStart) {
-          minStart = mappedStart;
-        }
-
-        if (mappedEnd > maxEnd) {
-          maxEnd = mappedEnd;
-        }
-      }
-
-      final span = maxEnd - minStart;
-
-      if (span < bestSpan) {
-        bestSpan = span;
-        bestStart = cut + minStart;
-        bestEnd = cut + maxEnd;
-      }
-    }
-
-    if (bestStart == null || bestEnd == null) {
-      return "Tắt";
-    }
-
-    if (bestSpan >= 1440) {
-      return "Cả ngày";
-    }
-
-    return "${formatClock(bestStart)} → "
-        "${formatClock(bestEnd)}";
+    return HomeAlarmFormatters.formatAlarmSchedules(
+      alarmEnabled: alarmEnabled,
+      selectedHome: selectedHome,
+      devices: getDevices(),
+      customRulesByHome: customRulesByHome,
+    );
   }
 
   Map<String, dynamic> getDevices() {
-    final homeData = safeMap(homes[selectedHome]);
-    return safeMap(homeData["devices"]);
+    return HomeDataHelpers.getDevices(homes: homes, selectedHome: selectedHome);
   }
 
   Map<String, dynamic> getRooms() {
-    final homeData = safeMap(homes[selectedHome]);
-    return safeMap(homeData["rooms"]);
+    return HomeDataHelpers.getRooms(homes: homes, selectedHome: selectedHome);
   }
 
   Map<String, dynamic>? getTemperatureDevice() {
-    final devices = getDevices();
-
-    for (final entry in devices.entries) {
-      final d = safeMap(entry.value);
-
-      if (d["type"] == "temperature") {
-        return {"id": entry.key, "data": d};
-      }
-    }
-
-    return null;
+    return HomeDataHelpers.getTemperatureDevice(devices: getDevices());
   }
 
   String getHomeEnvironmentText() {
-    final devices = getDevices();
-
-    for (final item in devices.values) {
-      final d = safeMap(item);
-
-      if (d["type"] == "temperature") {
-        final temp = d["temperature"];
-        final humidity = d["humidity"];
-
-        final tempText = temp != null ? "$temp°C" : "--";
-        final humidityText = humidity != null ? "$humidity%" : "--";
-
-        return "$tempText / $humidityText";
-      }
-    }
-
-    return "--°C / --%";
+    return HomeDataHelpers.getHomeEnvironmentText(devices: getDevices());
   }
 
   Future<Map<String, dynamic>> loadVisibleShareRequests() async {
@@ -2725,71 +1388,39 @@ class _HomePageState extends State<HomePage>
   }
 
   Map<String, dynamic> _ownedHomesForState() {
-    final result = <String, dynamic>{};
-
-    for (final homeId in _ownedHomeIds) {
-      if (homes.containsKey(homeId)) {
-        result[homeId] = homes[homeId];
-      }
-    }
-
-    return result;
+    return _homeSelectionStateService.ownedHomesForState(
+      ownedHomeIds: _ownedHomeIds,
+      homes: homes,
+    );
   }
 
+  // ignore: unused_element
   Map<String, dynamic> _loadedSharedHomesForState() {
-    final result = <String, dynamic>{};
-
-    for (final entry in _sharedHomesSnapshot.entries) {
-      final homeId = entry.key.toString();
-      final home = safeMap(homes[homeId]);
-
-      if (home['_shared'] == true) {
-        result[homeId] = entry.value;
-      }
-    }
-
-    return result;
+    return _homeSelectionStateService.loadedSharedHomesForState(
+      sharedHomesSnapshot: _sharedHomesSnapshot,
+      homes: homes,
+    );
   }
 
   void _rebuildHomeOrderAndSelectionLocked() {
-    final ownedHomes = _ownedHomesForState();
-    final sharedHomes = _loadedSharedHomesForState();
-
-    homeOrder = HomeStateParser.parseHomeOrder(
-      account: <String, dynamic>{
-        if (_savedHomeOrder != null) 'homeOrder': _savedHomeOrder,
-      },
-      homesData: ownedHomes,
-      sharedHomes: sharedHomes,
+    final result = _homeSelectionStateService.rebuildHomeOrderAndSelection(
+      savedHomeOrder: _savedHomeOrder,
+      ownedHomeIds: _ownedHomeIds,
+      sharedHomesSnapshot: _sharedHomesSnapshot,
+      homes: homes,
       selectedHome: selectedHome,
+      selectedRoomId: selectedRoomId,
+      alarmSettings: alarmSettings,
     );
 
-    if (homeOrder.isEmpty) {
-      selectedHome = '';
-      selectedRoomId = 'overview';
-      securityMode = 'normal';
-      alarmPauseToday = {};
-      alarmEnabled = true;
-      start = const TimeOfDay(hour: 23, minute: 0);
-      end = const TimeOfDay(hour: 6, minute: 0);
-      return;
-    }
-
-    if (!homeOrder.contains(selectedHome)) {
-      selectedHome = homeOrder.first;
-      selectedRoomId = 'overview';
-    }
-
-    final currentHome = safeMap(homes[selectedHome]);
-    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-    securityMode = currentHome['securityMode']?.toString() == 'armed'
-        ? 'armed'
-        : 'normal';
-    alarmPauseToday = safeMap(currentHome['alarmPauseToday']);
-    alarmEnabled = safeMap(alarmSettings[selectedHome])['enabled'] != false;
-    start = parsedAlarm['start'];
-    end = parsedAlarm['end'];
+    homeOrder = result.homeOrder;
+    selectedHome = result.selectedHome;
+    selectedRoomId = result.selectedRoomId;
+    securityMode = result.securityMode;
+    alarmPauseToday = result.alarmPauseToday;
+    alarmEnabled = result.alarmEnabled;
+    start = result.start;
+    end = result.end;
   }
 
   void _ensureSelectedHomeRoomModel() {
@@ -2797,21 +1428,10 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    final key = '${getHomeOwnerUid()}/$selectedHome';
-
-    if (_ensuredRoomModelKey == key) {
-      return;
-    }
-
-    _ensuredRoomModelKey = key;
-
-    unawaited(
-      HomeService.ensureHomeRoomModel(
-        ownerUid: getHomeOwnerUid(),
-        homeId: selectedHome,
-      ).catchError((Object error) {
-        debugPrint('ENSURE_HOME_ROOM_MODEL_ERROR: $error');
-      }),
+    _homeSelectionStateService.ensureSelectedHomeRoomModel(
+      selectedHome: selectedHome,
+      canManageHome: canManageHome(),
+      ownerUid: getHomeOwnerUid(),
     );
   }
 
@@ -2843,10 +1463,9 @@ class _HomePageState extends State<HomePage>
 
     if (syncAutoAway) {
       unawaited(
-        AutoAwayService.syncForHomes(
-          uid: uid,
-          homes: homes,
-        ).catchError((Object error) {
+        AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
+          Object error,
+        ) {
           debugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
         }),
       );
@@ -2857,30 +1476,20 @@ class _HomePageState extends State<HomePage>
   }
 
   String _autoAwayConfigSignature(Map<String, dynamic> home) {
-    final autoAway = safeMap(home['autoAway']);
-
-    return [
-      autoAway['enabled'] == true,
-      autoAway['latitude'],
-      autoAway['longitude'],
-      autoAway['radiusMeters'],
-    ].join('|');
+    return _homeSelectionStateService.autoAwayConfigSignature(home);
   }
 
-  void _handleOwnedHomeUpsert(DatabaseEvent event) {
-    final homeId = event.snapshot.key?.trim() ?? '';
-
+  void _handleOwnedHomeUpsert(String homeId, Map<String, dynamic> homeData) {
     if (!mounted || homeId.isEmpty) {
       return;
     }
 
-    final homeData = safeMap(event.snapshot.value);
     final previousHome = safeMap(homes[homeId]);
     final wasOwned = _ownedHomeIds.contains(homeId);
     final autoAwayChanged =
         !wasOwned ||
-            _autoAwayConfigSignature(previousHome) !=
-                _autoAwayConfigSignature(homeData);
+        _autoAwayConfigSignature(previousHome) !=
+            _autoAwayConfigSignature(homeData);
 
     setState(() {
       _ownedHomeIds.add(homeId);
@@ -2888,15 +1497,10 @@ class _HomePageState extends State<HomePage>
       _rebuildHomeOrderAndSelectionLocked();
     });
 
-    _afterHomeStateChanged(
-      syncAutoAway: autoAwayChanged,
-      syncPhone: !wasOwned,
-    );
+    _afterHomeStateChanged(syncAutoAway: autoAwayChanged, syncPhone: !wasOwned);
   }
 
-  void _handleOwnedHomeRemoved(DatabaseEvent event) {
-    final homeId = event.snapshot.key?.trim() ?? '';
-
+  void _handleOwnedHomeRemoved(String homeId, Map<String, dynamic> homeData) {
     if (!mounted || homeId.isEmpty) {
       return;
     }
@@ -2908,28 +1512,21 @@ class _HomePageState extends State<HomePage>
         homes.remove(homeId);
       }
 
-      _deviceNotificationSnapshots.remove(homeId);
-      _deviceNotificationPrimedHomes.remove(homeId);
       _rebuildHomeOrderAndSelectionLocked();
     });
 
-    _afterHomeStateChanged(
-      syncAutoAway: true,
-      syncPhone: true,
-    );
+    _afterHomeStateChanged(syncAutoAway: true, syncPhone: true);
   }
 
-  void _handleSharedHomesSnapshot(Object? rawValue) {
+  void _handleSharedHomesSnapshot(Map<String, dynamic> nextSharedHomes) {
     if (!mounted) return;
 
-    final nextSharedHomes = safeMap(rawValue);
     _sharedHomesSnapshot = nextSharedHomes;
 
     setState(() {
       homes.removeWhere((homeId, rawHome) {
         final home = safeMap(rawHome);
-        return home['_shared'] == true &&
-            !nextSharedHomes.containsKey(homeId);
+        return home['_shared'] == true && !nextSharedHomes.containsKey(homeId);
       });
 
       _rebuildHomeOrderAndSelectionLocked();
@@ -2946,8 +1543,8 @@ class _HomePageState extends State<HomePage>
         final wasLoaded = previousHome['_shared'] == true;
         final autoAwayChanged =
             !wasLoaded ||
-                _autoAwayConfigSignature(previousHome) !=
-                    _autoAwayConfigSignature(home);
+            _autoAwayConfigSignature(previousHome) !=
+                _autoAwayConfigSignature(home);
 
         setState(() {
           homes[homeId] = home;
@@ -2966,32 +1563,22 @@ class _HomePageState extends State<HomePage>
 
         setState(() {
           homes.remove(homeId);
-          _deviceNotificationSnapshots.remove(homeId);
-          _deviceNotificationPrimedHomes.remove(homeId);
           _rebuildHomeOrderAndSelectionLocked();
         });
 
-        _afterHomeStateChanged(
-          syncAutoAway: true,
-          syncPhone: true,
-        );
+        _afterHomeStateChanged(syncAutoAway: true, syncPhone: true);
       },
     );
 
-    _afterHomeStateChanged(
-      syncPhone: true,
-    );
+    _afterHomeStateChanged(syncPhone: true);
   }
 
   void _startAccountPathListeners() {
-    profileSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.profile(uid))
-        .onValue
-        .listen(
-          (event) {
+    _homeAccountRealtimeCoordinator.start(
+      uid: uid,
+      onProfileChanged: (profile) {
         if (!mounted) return;
 
-        final profile = safeMap(event.snapshot.value);
         final nextPhone = profile['phone']?.toString() ?? '';
         final phoneChanged = nextPhone != userPhone;
 
@@ -3007,115 +1594,42 @@ class _HomePageState extends State<HomePage>
           _syncPhoneToCurrentHomes();
         }
       },
-      onError: (Object error) {
-        debugPrint('PROFILE_LISTENER_ERROR: $error');
-      },
-    );
-
-    final ownedHomesRef = FirebaseDatabase.instance.ref(
-      FirebasePaths.homes(uid),
-    );
-
-    ownedHomeAddedSubscription = ownedHomesRef.onChildAdded.listen(
-      _handleOwnedHomeUpsert,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_ADDED_LISTENER_ERROR: $error');
-      },
-    );
-
-    ownedHomeChangedSubscription = ownedHomesRef.onChildChanged.listen(
-      _handleOwnedHomeUpsert,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_CHANGED_LISTENER_ERROR: $error');
-      },
-    );
-
-    ownedHomeRemovedSubscription = ownedHomesRef.onChildRemoved.listen(
-      _handleOwnedHomeRemoved,
-      onError: (Object error) {
-        debugPrint('OWNED_HOME_REMOVED_LISTENER_ERROR: $error');
-      },
-    );
-
-    sharedHomesSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.sharedHomes(uid))
-        .onValue
-        .listen(
-          (event) => _handleSharedHomesSnapshot(event.snapshot.value),
-      onError: (Object error) {
-        debugPrint('SHARED_HOMES_LISTENER_ERROR: $error');
-      },
-    );
-
-    homeOrderSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.homeOrder(uid))
-        .onValue
-        .listen(
-          (event) {
+      onOwnedHomeAdded: _handleOwnedHomeUpsert,
+      onOwnedHomeChanged: _handleOwnedHomeUpsert,
+      onOwnedHomeRemoved: _handleOwnedHomeRemoved,
+      onSharedHomesChanged: _handleSharedHomesSnapshot,
+      onHomeOrderChanged: (rawOrder) {
         if (!mounted) return;
 
-        _savedHomeOrder = _normalizeSavedHomeOrder(
-          event.snapshot.value,
-        );
+        _savedHomeOrder = _normalizeSavedHomeOrder(rawOrder);
 
         setState(_rebuildHomeOrderAndSelectionLocked);
         _afterHomeStateChanged();
       },
-      onError: (Object error) {
-        debugPrint('HOME_ORDER_LISTENER_ERROR: $error');
-      },
-    );
-
-    alarmSettingsSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.alarmSettings(uid))
-        .onValue
-        .listen(
-          (event) {
+      onAlarmSettingsChanged: (settings) {
         if (!mounted) return;
 
         setState(() {
-          alarmSettings = safeMap(event.snapshot.value);
-          alarmEnabled = selectedHome.isEmpty ||
+          alarmSettings = settings;
+          alarmEnabled =
+              selectedHome.isEmpty ||
               safeMap(alarmSettings[selectedHome])['enabled'] != false;
         });
       },
-      onError: (Object error) {
-        debugPrint('ALARM_SETTINGS_LISTENER_ERROR: $error');
-      },
-    );
-
-    customRulesSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.customRules(uid))
-        .onValue
-        .listen(
-          (event) {
+      onCustomRulesChanged: (rules) {
         if (!mounted) return;
 
         setState(() {
-          customRulesByHome = safeMap(event.snapshot.value);
+          customRulesByHome = rules;
         });
       },
-      onError: (Object error) {
-        debugPrint('CUSTOM_RULES_LISTENER_ERROR: $error');
-      },
-    );
-
-    shareRequestsSubscription = FirebaseDatabase.instance
-        .ref(FirebasePaths.shareRequests(uid))
-        .onValue
-        .listen(
-          (event) {
+      onShareRequestsChanged: (requests) {
         if (!mounted) return;
-
-        final requests = safeMap(event.snapshot.value);
 
         setState(() {
           shareRequests = requests;
           inviteCountNotifier.value = requests.length;
         });
-      },
-      onError: (Object error) {
-        debugPrint('SHARE_REQUESTS_LISTENER_ERROR: $error');
       },
     );
   }
@@ -3139,11 +1653,7 @@ class _HomePageState extends State<HomePage>
         state == AppLifecycleState.inactive ||
         state == AppLifecycleState.detached) {
       // Android giữ foreground task độc lập nên không dừng heartbeat ở đây.
-      if (kIsWeb ||
-          defaultTargetPlatform != TargetPlatform.android) {
-        autoAwayPresenceRefreshTimer?.cancel();
-        autoAwayPresenceRefreshTimer = null;
-      }
+      _homeAutoAwayCoordinator.stopPresenceRefreshTimerForBackgroundIfNeeded();
     }
   }
 
@@ -3165,16 +1675,13 @@ class _HomePageState extends State<HomePage>
 
     // Chỉ cần đánh giá lại tuổi heartbeat định kỳ khi backend im lặng.
     // Realtime hubStatus vẫn cập nhật ngay qua listener từng nhà.
-    hubStatusRefreshTimer = Timer.periodic(
-      const Duration(seconds: 15),
-          (_) {
-        if (!mounted || homes.isEmpty) {
-          return;
-        }
+    hubStatusRefreshTimer = Timer.periodic(const Duration(seconds: 15), (_) {
+      if (!mounted || homes.isEmpty) {
+        return;
+      }
 
-        setState(() {});
-      },
-    );
+      setState(() {});
+    });
 
     NotificationService.chatOpenRequest.addListener(_handleChatOpenRequest);
     _handleChatOpenRequest();
@@ -3188,12 +1695,16 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> handleScannedQR(String code) async {
-    final value = code.trim();
-    debugPrint("QR_DEBUG value=$value");
-    if (value.startsWith("safehome_join_multi|")) {
-      final parts = value.split("|");
+    final result = await _homePairingService.handleScannedQr(
+      code: code,
+      uid: uid,
+      strings: _strings,
+    );
 
-      if (parts.length != 3) {
+    if (!mounted) return;
+
+    switch (result.status) {
+      case HomeScannedQrStatus.invalidJoinMulti:
         showTopToast(
           context,
           _strings.t("QR gia nhập nhiều nhà không hợp lệ"),
@@ -3201,15 +1712,7 @@ class _HomePageState extends State<HomePage>
           icon: Icons.qr_code_scanner_rounded,
         );
         return;
-      }
-
-      final ownerUid = parts[1];
-      final homeIds = parts[2]
-          .split(",")
-          .where((e) => e.trim().isNotEmpty)
-          .toList();
-
-      if (ownerUid == uid) {
+      case HomeScannedQrStatus.ownerOfMultiHomes:
         showTopToast(
           context,
           _strings.t("Bạn đang là chủ các nhà này"),
@@ -3217,87 +1720,18 @@ class _HomePageState extends State<HomePage>
           icon: Icons.home_rounded,
         );
         return;
-      }
-
-      final myEmail = FirebaseAuth.instance.currentUser?.email
-          ?.trim()
-          .toLowerCase();
-
-      final targetData = await ShareService.loadAccount(uid);
-      final targetProfile = safeMap(targetData["profile"]);
-      final requesterName =
-      targetProfile["name"]?.toString().trim().isNotEmpty == true
-          ? targetProfile["name"].toString().trim()
-          : myEmail ?? _strings.t("Một người dùng");
-
-      for (final homeId in homeIds) {
-        final homeName = await HomeNotificationService.resolveHomeName(
-          homeId: homeId,
-          ownerUid: ownerUid,
-        );
-        final requestKey = "${homeId}_$uid";
-        final requestData = {
-          "homeId": homeId,
-          "homeName": homeName,
-          "ownerUid": ownerUid,
-          "targetUid": uid,
-          "targetEmail": myEmail ?? "",
-          "targetName": requesterName,
-          "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
-          "type": "join_request",
-          "time": DateTime.now().millisecondsSinceEpoch,
-        };
-
-        final updates = <String, Object?>{
-          "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-        };
-
-        try {
-          debugPrint("QR_JOIN_UPDATES=$updates");
-          await FirebaseDatabase.instance.ref().update(updates);
-          debugPrint("QR_JOIN_UPDATE_OK");
-        } catch (e, st) {
-          debugPrint("QR_JOIN_UPDATE_ERROR: $e");
-          debugPrint("QR_JOIN_UPDATE_STACK: $st");
-        }
-        await HomeNotificationService.notifyHome(
-          ownerUid: ownerUid,
-          homeId: homeId,
-          recipientUid: ownerUid,
-          type: "join_request",
-          title: _strings.t("Yêu cầu gia nhập nhà"),
-          message: _strings.choose(
-            vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-            en: "$requesterName requested to join \"$homeName\".",
+      case HomeScannedQrStatus.joinMultiSent:
+        showTopToast(
+          context,
+          _strings.choose(
+            vi: "Đã gửi yêu cầu gia nhập ${result.joinRequestCount} nhà",
+            en: "Join requests sent for ${result.joinRequestCount} homes",
           ),
-          homeName: homeName,
-          category: "member",
-          severity: "info",
-          entityType: "member",
-          entityId: uid,
-          includeActor: false,
-          writeHomeTimeline: false,
+          color: SafeHomeColors.safe,
+          icon: Icons.check_circle_rounded,
         );
-      }
-
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.choose(
-          vi: "Đã gửi yêu cầu gia nhập ${homeIds.length} nhà",
-          en: "Join requests sent for ${homeIds.length} homes",
-        ),
-        color: SafeHomeColors.safe,
-        icon: Icons.check_circle_rounded,
-      );
-
-      return;
-    }
-    if (value.startsWith("safehome_join|")) {
-      final parts = value.split("|");
-
-      if (parts.length != 3) {
+        return;
+      case HomeScannedQrStatus.invalidJoinSingle:
         showTopToast(
           context,
           _strings.t("QR gia nhập không hợp lệ"),
@@ -3305,12 +1739,7 @@ class _HomePageState extends State<HomePage>
           icon: Icons.qr_code_rounded,
         );
         return;
-      }
-
-      final ownerUid = parts[1];
-      final homeId = parts[2];
-
-      if (ownerUid == uid) {
+      case HomeScannedQrStatus.ownerOfSingleHome:
         showTopToast(
           context,
           _strings.t("Bạn đang là chủ nhà này"),
@@ -3318,80 +1747,24 @@ class _HomePageState extends State<HomePage>
           icon: Icons.info_outline_rounded,
         );
         return;
-      }
-
-      final myEmail = FirebaseAuth.instance.currentUser?.email
-          ?.trim()
-          .toLowerCase();
-
-      final targetData = await ShareService.loadAccount(uid);
-      final targetProfile = safeMap(targetData["profile"]);
-      final requesterName =
-      targetProfile["name"]?.toString().trim().isNotEmpty == true
-          ? targetProfile["name"].toString().trim()
-          : myEmail ?? _strings.t("Một người dùng");
-
-      final requestKey = "${homeId}_$uid";
-      final homeName = await HomeNotificationService.resolveHomeName(
-        homeId: homeId,
-        ownerUid: ownerUid,
-      );
-
-      final requestData = {
-        "homeId": homeId,
-        "homeName": homeName,
-        "ownerUid": ownerUid,
-        "targetUid": uid,
-        "targetEmail": myEmail ?? "",
-        "targetName": requesterName,
-        "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
-        "type": "join_request",
-        "time": DateTime.now().millisecondsSinceEpoch,
-      };
-
-      final updates = <String, Object?>{
-        "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-      };
-
-      await FirebaseDatabase.instance.ref().update(updates);
-      await HomeNotificationService.notifyHome(
-        ownerUid: ownerUid,
-        homeId: homeId,
-        recipientUid: ownerUid,
-        type: "join_request",
-        title: _strings.t("Yêu cầu gia nhập nhà"),
-        message: _strings.choose(
-          vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-          en: "$requesterName requested to join \"$homeName\".",
-        ),
-        homeName: homeName,
-        category: "member",
-        severity: "info",
-        entityType: "member",
-        entityId: uid,
-        includeActor: false,
-        writeHomeTimeline: false,
-      );
-
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Đã gửi yêu cầu gia nhập nhà"),
-        color: SafeHomeColors.safe,
-        icon: Icons.check_circle_rounded,
-      );
-
-      return;
+      case HomeScannedQrStatus.joinSingleSent:
+        showTopToast(
+          context,
+          _strings.t("Đã gửi yêu cầu gia nhập nhà"),
+          color: SafeHomeColors.safe,
+          icon: Icons.check_circle_rounded,
+        );
+        return;
+      case HomeScannedQrStatus.pairHubId:
+        pairSensor(result.hubId);
+        showTopToast(
+          context,
+          _strings.t("QR này không phải mã xin gia nhập nhà"),
+          color: Colors.red,
+          icon: Icons.qr_code_2_rounded,
+        );
+        return;
     }
-
-    pairSensor(value);
-    showTopToast(
-      context,
-      _strings.t("QR này không phải mã xin gia nhập nhà"),
-      color: Colors.red,
-      icon: Icons.qr_code_2_rounded,
-    );
   }
 
   void pairSensor(String hubId) async {
@@ -3405,40 +1778,21 @@ class _HomePageState extends State<HomePage>
       return;
     }
 
-    // 🔥 FIX: khai báo ownerUid đúng cách
     final ownerUid = getHomeOwnerUid();
     final homeName = getSelectedHomeDisplayName();
-
-    final requestId =
-        "${DateTime.now().millisecondsSinceEpoch}_${uid.substring(0, 4)}";
-
-    await FirebaseDatabase.instance
-        .ref(FirebasePaths.pairRequest(requestId))
-        .set({
-      "active": true,
-      "hubId": hubId.trim(),
-      "homeId": selectedHome,
-      "ownerUid": ownerUid,
-      "requestedBy": uid,
-      "roomId": selectedRoomId == "overview"
-          ? "unassigned"
-          : selectedRoomId,
-      "duration": 60,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
-    await HomeNotificationService.notifyHome(
+    final result = await _homePairingService.startPairing(
+      hubId: hubId,
+      uid: uid,
       ownerUid: ownerUid,
       homeId: selectedHome,
-      type: "pair_started",
-      category: "device",
-      title: _strings.t("Đã mở chế độ thêm thiết bị"),
-      message: _strings.choose(
-        vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
-        en: "Device pairing was enabled in \"$homeName\" for 60 seconds.",
-      ),
+      selectedRoomId: selectedRoomId,
       homeName: homeName,
+      strings: _strings,
     );
-    setState(() => pairingCountdown = 60);
+
+    if (!mounted) return;
+
+    setState(() => pairingCountdown = result.durationSeconds);
 
     timer?.cancel();
 
@@ -3495,186 +1849,57 @@ class _HomePageState extends State<HomePage>
     }
 
     // ================= HOME OWN =================
-    final controller = TextEditingController();
-
-    final confirmOk = await showModalBottomSheet<bool>(
+    final confirmOk = await showDeleteHomeConfirmSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.red,
-                  size: 48,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t("Xác nhận xoá nhà"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t(
-                    "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
-                  ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: Colors.grey.shade700,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(_strings.t("Huỷ")),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(_strings.t("Tiếp tục")),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
-    if (confirmOk != true) return;
+    if (!confirmOk) return;
     if (!mounted) return;
 
-    final passwordOk = await showModalBottomSheet<bool>(
+    final passwordOk = await showDeleteHomePasswordSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.lock_outline_rounded,
-                  color: Colors.red,
-                  size: 44,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t("Nhập mật khẩu"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: controller,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: _strings.t("Mật khẩu tài khoản"),
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.delete_forever_rounded),
-                    label: Text(_strings.t("Xoá nhà")),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () async {
-                      try {
-                        final user = FirebaseAuth.instance.currentUser;
-                        final userEmail = user?.email;
+      strings: _strings,
+      onConfirmPassword: (sheetContext, password) async {
+        try {
+          final user = FirebaseAuth.instance.currentUser;
+          final userEmail = user?.email;
 
-                        if (user == null ||
-                            userEmail == null ||
-                            userEmail.isEmpty) {
-                          if (!sheetContext.mounted) return;
+          if (user == null || userEmail == null || userEmail.isEmpty) {
+            if (!sheetContext.mounted) return false;
 
-                          showTopToast(
-                            sheetContext,
-                            _strings.t("Không tìm thấy tài khoản"),
-                            color: Colors.red,
-                            icon: Icons.error_outline_rounded,
-                          );
-                          return;
-                        }
+            showTopToast(
+              sheetContext,
+              _strings.t("Không tìm thấy tài khoản"),
+              color: Colors.red,
+              icon: Icons.error_outline_rounded,
+            );
+            return false;
+          }
 
-                        final credential = EmailAuthProvider.credential(
-                          email: userEmail,
-                          password: controller.text.trim(),
-                        );
+          final credential = EmailAuthProvider.credential(
+            email: userEmail,
+            password: password,
+          );
 
-                        await user.reauthenticateWithCredential(credential);
+          await user.reauthenticateWithCredential(credential);
 
-                        if (!sheetContext.mounted) return;
+          return true;
+        } catch (_) {
+          if (!sheetContext.mounted) return false;
 
-                        Navigator.pop(sheetContext, true);
-                      } catch (e) {
-                        if (!sheetContext.mounted) return;
-
-                        showTopToast(
-                          sheetContext,
-                          _strings.t("Sai mật khẩu"),
-                          color: Colors.red,
-                          icon: Icons.error_outline_rounded,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+          showTopToast(
+            sheetContext,
+            _strings.t("Sai mật khẩu"),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
       },
     );
 
-    if (passwordOk != true) return;
+    if (!passwordOk) return;
 
     final deletedHomeId = selectedHome;
     final deletedHomeName =
@@ -3707,135 +1932,17 @@ class _HomePageState extends State<HomePage>
     final shareOwnerUid = getHomeOwnerUid();
     final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
 
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _strings.t("QR của nhà này"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                QrImageView(data: qrData, version: QrVersions.auto, size: 220),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t(
-                    "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    showJoinHomeQrSheet(context: context, strings: _strings, qrData: qrData);
   }
 
   void shareHome() async {
-    final controller = TextEditingController();
     final shareOwnerUid = getHomeOwnerUid();
     final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
 
-    final targetEmail = await showModalBottomSheet<String>(
+    final targetEmail = await showShareHomeSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            final email = controller.text.trim().toLowerCase();
-            final emailOk = RegExp(
-              r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-            ).hasMatch(email);
-
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 20,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _strings.t("Chia sẻ nhà"),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) => setSheetState(() {}),
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Email người nhận"),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: emailOk
-                            ? IconButton(
-                          icon: const Icon(Icons.send_rounded),
-                          onPressed: () {
-                            Navigator.pop(context, email);
-                          },
-                        )
-                            : null,
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    Text(
-                      _strings.t("Mời thành viên bằng mã QR"),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    QrImageView(
-                      data: qrData,
-                      version: QrVersions.auto,
-                      size: 180,
-                    ),
-
-                    const SizedBox(height: 12),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+      strings: _strings,
+      qrData: qrData,
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
@@ -3912,80 +2019,9 @@ class _HomePageState extends State<HomePage>
   }
 
   void transferOwner() async {
-    final controller = TextEditingController();
-    final targetEmail = await showModalBottomSheet<String>(
+    final targetEmail = await showTransferOwnerEmailSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _strings.t("Chuyển quyền chủ nhà"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-                const SizedBox(height: 12),
-
-                StatefulBuilder(
-                  builder: (context, setEmailState) {
-                    final email = controller.text.trim().toLowerCase();
-
-                    final emailOk = RegExp(
-                      r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                    ).hasMatch(email);
-
-                    return TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) => setEmailState(() {}),
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Email người nhận"),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: emailOk
-                            ? IconButton(
-                          icon: const Icon(Icons.send_rounded),
-                          onPressed: () {
-                            Navigator.pop(
-                              context,
-                              controller.text.trim().toLowerCase(),
-                            );
-                          },
-                        )
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 18),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
@@ -4021,114 +2057,21 @@ class _HomePageState extends State<HomePage>
     // ===== 2. CONFIRM =====
     if (!mounted) return;
 
-    final ok = await showModalBottomSheet<bool>(
+    final ok = await showTransferOwnerConfirmSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.orange,
-                  size: 46,
-                ),
-
-                const SizedBox(height: 12),
-
-                Text(
-                  _strings.t("Xác nhận chuyển quyền"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                Text(
-                  _strings.choose(
-                    vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
-                    en: "Transfer home ownership to:\n$targetEmail?",
-                  ),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(_strings.t("Hủy")),
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(_strings.t("Chuyển")),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
+      targetEmail: targetEmail,
     );
 
-    if (ok != true) return;
+    if (!ok) return;
     if (!mounted) return;
 
-    final passwordController = TextEditingController();
-
-    final passwordOk = await showDialog<bool>(
+    final password = await showTransferOwnerPasswordDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(_strings.t("Xác nhận mật khẩu")),
-        content: TextField(
-          controller: passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: _strings.t("Mật khẩu tài khoản"),
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(_strings.t("Huỷ")),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(_strings.t("Xác nhận")),
-          ),
-        ],
-      ),
+      strings: _strings,
     );
 
-    if (passwordOk != true) return;
+    if (password == null) return;
     final user = FirebaseAuth.instance.currentUser;
     final userEmail = user?.email;
 
@@ -4147,7 +2090,7 @@ class _HomePageState extends State<HomePage>
     try {
       final credential = EmailAuthProvider.credential(
         email: userEmail,
-        password: passwordController.text.trim(),
+        password: password,
       );
 
       await user.reauthenticateWithCredential(credential);
@@ -4168,15 +2111,15 @@ class _HomePageState extends State<HomePage>
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/shareRequests/transfer_${homeId}_$uid")
         .set({
-      "type": "transfer_owner_request",
-      "homeId": homeId,
-      "oldOwnerUid": uid,
-      "newOwnerUid": targetUid,
-      "ownerEmail": myEmail ?? "",
-      "targetEmail": targetEmail,
-      "homeName": homeName,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
+          "type": "transfer_owner_request",
+          "homeId": homeId,
+          "oldOwnerUid": uid,
+          "newOwnerUid": targetUid,
+          "ownerEmail": myEmail ?? "",
+          "targetEmail": targetEmail,
+          "homeName": homeName,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
     await HomeNotificationService.notifyHome(
       ownerUid: uid,
       homeId: homeId,
@@ -4242,17 +2185,17 @@ class _HomePageState extends State<HomePage>
     try {
       await FirebaseDatabase.instance
           .ref(
-        "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
-      )
+            "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
+          )
           .set({
-        "ownerUid": ownerUid,
-        "homeId": selectedHome,
-        "deviceId": id,
-        "deviceName": deviceName,
-        "requestedBy": uid,
-        "time": DateTime.now().millisecondsSinceEpoch,
-        "status": "pending",
-      });
+            "ownerUid": ownerUid,
+            "homeId": selectedHome,
+            "deviceId": id,
+            "deviceName": deviceName,
+            "requestedBy": uid,
+            "time": DateTime.now().millisecondsSinceEpoch,
+            "status": "pending",
+          });
 
       if (!mounted) return;
 
@@ -4315,138 +2258,15 @@ class _HomePageState extends State<HomePage>
     }
 
     // Chặn timer cục bộ trước khi dọn foreground task và đăng xuất.
-    autoAwayPresenceRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer = null;
+    _homeAutoAwayCoordinator.dispose();
 
     await SessionLogoutService.signOutCurrentUser();
   }
 
   Future<void> showAddHomeOptions() async {
-    final result = await showModalBottomSheet<String>(
+    final result = await showAddHomeOptionsSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        Widget optionTile({
-          required IconData icon,
-          required String title,
-          required String subtitle,
-          required Color color,
-          required String value,
-        }) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Material(
-              color: SafeHomeColors.surface,
-              borderRadius: BorderRadius.circular(18),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(18),
-                onTap: () {
-                  Navigator.of(sheetContext).pop(value);
-                },
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(13, 11, 11, 11),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: SafeHomeColors.border),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.11),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Icon(icon, color: color),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
-                                fontSize: 14.5,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              subtitle,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textSecondary,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: SafeHomeColors.textSecondary,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-            decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 44,
-                  height: 5,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    _strings.t("Thêm Home"),
-                    style: const TextStyle(
-                      color: SafeHomeColors.textPrimary,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                optionTile(
-                  icon: Icons.add_home_work_rounded,
-                  title: _strings.t("Tạo Home mới"),
-                  subtitle: _strings.t("Tạo một ngôi nhà mới của bạn"),
-                  color: SafeHomeColors.primary,
-                  value: "create",
-                ),
-                optionTile(
-                  icon: Icons.qr_code_scanner_rounded,
-                  title: _strings.t("Xin gia nhập Home"),
-                  subtitle: _strings.t("Quét mã QR được chủ nhà chia sẻ"),
-                  color: SafeHomeColors.info,
-                  value: "join",
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
     if (!mounted || result == null) {
@@ -4485,67 +2305,9 @@ class _HomePageState extends State<HomePage>
   }
 
   void addHome() async {
-    final nameController = TextEditingController();
-    final addressController = TextEditingController();
-
-    final result = await showDialog<Map<String, String>>(
+    final result = await showCreateHomeDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(_strings.t("Thêm nhà mới")),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: _strings.t("Tên nhà"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: addressController,
-              decoration: InputDecoration(
-                labelText: _strings.t("Địa chỉ"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(_strings.t("Hủy")),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, {
-                "name": nameController.text.trim(),
-                "address": addressController.text.trim(),
-              });
-            },
-            child: Text(_strings.t("OK")),
-          ),
-        ],
-      ),
+      strings: _strings,
     );
 
     if (result == null) return;
@@ -4635,365 +2397,174 @@ class _HomePageState extends State<HomePage>
       );
     }
 
-    TimeOfDay startTime = parseTime(
+    final startTime = parseTime(
       alarmPauseToday["start"]?.toString(),
       const TimeOfDay(hour: 23, minute: 30),
     );
 
-    TimeOfDay endTime = parseTime(
+    final endTime = parseTime(
       alarmPauseToday["end"]?.toString(),
       const TimeOfDay(hour: 23, minute: 45),
     );
 
-    String reason = "Về muộn";
-
     final ownerUid = getHomeOwnerUid();
 
-    await showModalBottomSheet(
+    final now = DateTime.now();
+    final today =
+        "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+    final showRemoveButton =
+        alarmPauseToday.isNotEmpty && alarmPauseToday["date"] == today;
+
+    String format(TimeOfDay time) {
+      return "${time.hour.toString().padLeft(2, "0")}:${time.minute.toString().padLeft(2, "0")}";
+    }
+
+    await showHomeAlarmPauseSheet(
       context: context,
-      isScrollControlled: true,
-      showDragHandle: false,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            String format(TimeOfDay t) {
-              return "${t.hour.toString().padLeft(2, "0")}:${t.minute.toString().padLeft(2, "0")}";
-            }
+      strings: _strings,
+      initialStartTime: startTime,
+      initialEndTime: endTime,
+      showRemoveButton: showRemoveButton,
+      onPickTime: openTimeTextInput,
+      onSave: (sheetContext, data) async {
+        final home = safeMap(homes[selectedHome]);
+        final homeName = getSelectedHomeDisplayName();
+        final devices = safeMap(home["devices"]);
 
-            return SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 14),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Text(
-                      _strings.t("⏸️ Tạm tắt Alarm hôm nay"),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+        Map<String, dynamic>? firstAlarm;
 
-                    const SizedBox(height: 18),
+        for (final d in devices.values) {
+          final device = safeMap(d);
+          final alarm = safeMap(device["alarm"]);
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              final picked = await openTimeTextInput(
-                                context: context,
-                                title: _strings.t("Chọn giờ bắt đầu tạm tắt"),
-                                initial: format(startTime),
-                              );
+          if (alarm["enabled"] == true) {
+            firstAlarm = alarm;
+            break;
+          }
+        }
 
-                              if (picked == null) return;
+        if (firstAlarm != null) {
+          final alarmStart = firstAlarm["start"]?.toString() ?? "23:00";
+          final alarmEnd = firstAlarm["end"]?.toString() ?? "06:00";
 
-                              final parts = picked.split(":");
+          final selectedStart = format(data.startTime);
+          final selectedEnd = format(data.endTime);
 
-                              setSheetState(() {
-                                startTime = TimeOfDay(
-                                  hour:
-                                  int.tryParse(parts[0]) ?? startTime.hour,
-                                  minute:
-                                  int.tryParse(parts[1]) ??
-                                      startTime.minute,
-                                );
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(14),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(_strings.t("Từ giờ")),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    format(startTime),
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              final picked = await openTimeTextInput(
-                                context: context,
-                                title: _strings.t("Chọn giờ kết thúc tạm tắt"),
-                                initial: format(endTime),
-                              );
+          final startOk = isNowInRange(alarmStart, alarmEnd, selectedStart);
 
-                              if (picked == null) return;
+          final endOk = isNowInRange(alarmStart, alarmEnd, selectedEnd);
 
-                              final parts = picked.split(":");
-
-                              setSheetState(() {
-                                endTime = TimeOfDay(
-                                  hour: int.tryParse(parts[0]) ?? endTime.hour,
-                                  minute:
-                                  int.tryParse(parts[1]) ?? endTime.minute,
-                                );
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(14),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(_strings.t("Đến giờ")),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    format(endTime),
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    Row(
-                      children: ["Về muộn", "Ra ngoài", "Khác"].map((item) {
-                        final selected = reason == item;
-
-                        return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 3),
-                            child: ChoiceChip(
-                              label: Text(_strings.t(item)),
-                              selected: selected,
-                              onSelected: (_) {
-                                setSheetState(() {
-                                  reason = item;
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.save_rounded),
-                        label: Text(_strings.t("Lưu")),
-                        onPressed: () async {
-                          final home = safeMap(homes[selectedHome]);
-                          final homeName = getSelectedHomeDisplayName();
-                          final devices = safeMap(home["devices"]);
-
-                          Map<String, dynamic>? firstAlarm;
-
-                          for (final d in devices.values) {
-                            final device = safeMap(d);
-                            final alarm = safeMap(device["alarm"]);
-
-                            if (alarm["enabled"] == true) {
-                              firstAlarm = alarm;
-                              break;
-                            }
-                          }
-
-                          if (firstAlarm != null) {
-                            final alarmStart =
-                                firstAlarm["start"]?.toString() ?? "23:00";
-                            final alarmEnd =
-                                firstAlarm["end"]?.toString() ?? "06:00";
-
-                            final selectedStart = format(startTime);
-                            final selectedEnd = format(endTime);
-
-                            final startOk = isNowInRange(
-                              alarmStart,
-                              alarmEnd,
-                              selectedStart,
-                            );
-
-                            final endOk = isNowInRange(
-                              alarmStart,
-                              alarmEnd,
-                              selectedEnd,
-                            );
-
-                            if (!startOk || !endOk) {
-                              showTopToast(
-                                context,
-                                _strings.choose(
-                                  vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
-                                  en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
-                                ),
-                                color: Colors.orange,
-                                icon: Icons.schedule_rounded,
-                              );
-
-                              return;
-                            }
-                          }
-
-                          final now = DateTime.now();
-
-                          final date =
-                              "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
-
-                          final pauseStartText = format(startTime);
-                          final pauseEndText = format(endTime);
-                          final createdAt =
-                              DateTime.now().millisecondsSinceEpoch;
-
-                          try {
-                            await FirebaseDatabase.instance
-                                .ref(
-                              "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-                            )
-                                .set({
-                              "status": "pending",
-                              "ownerUid": ownerUid,
-                              "homeId": selectedHome,
-                              "homeName": homeName,
-                              "date": date,
-                              "start": pauseStartText,
-                              "end": pauseEndText,
-                              "reason": reason,
-                              "createdByUid": uid,
-                              "createdByName": userName,
-                              "createdAt": createdAt,
-                            });
-                          } catch (e) {
-                            if (!context.mounted) return;
-
-                            showTopToast(
-                              context,
-                              _strings.choose(
-                                vi: "Không lưu được tạm tắt Alarm: $e",
-                                en: "Unable to save the Alarm pause: $e",
-                              ),
-                              color: Colors.red,
-                              icon: Icons.error_outline_rounded,
-                            );
-                            return;
-                          }
-
-                          if (mounted) {
-                            setState(() {
-                              alarmPauseToday = {
-                                "date": date,
-                                "start": pauseStartText,
-                                "end": pauseEndText,
-                                "homeName": homeName,
-                                "reason": reason,
-                                "createdByUid": uid,
-                                "createdByName": userName,
-                                "createdAt": createdAt,
-                              };
-                            });
-                          }
-
-                          if (!context.mounted) return;
-
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-
-                    if (alarmPauseToday.isNotEmpty &&
-                        alarmPauseToday["date"] ==
-                            "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, "0")}-${DateTime.now().day.toString().padLeft(2, "0")}") ...[
-                      const SizedBox(height: 10),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          icon: const Icon(Icons.delete_outline_rounded),
-                          label: Text(_strings.t("Xóa lịch tạm tắt")),
-                          onPressed: () async {
-                            try {
-                              await FirebaseDatabase.instance
-                                  .ref(
-                                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-                              )
-                                  .set({
-                                "status": "pending",
-                                "action": "remove",
-                                "ownerUid": ownerUid,
-                                "homeId": selectedHome,
-                                "createdByUid": uid,
-                                "createdByName": userName,
-                                "createdAt":
-                                DateTime.now().millisecondsSinceEpoch,
-                              });
-                            } catch (e) {
-                              if (!context.mounted) return;
-
-                              showTopToast(
-                                context,
-                                _strings.choose(
-                                  vi: "Không xoá được lịch tạm tắt Alarm: $e",
-                                  en: "Unable to delete the Alarm pause schedule: $e",
-                                ),
-                                color: Colors.red,
-                                icon: Icons.error_outline_rounded,
-                              );
-                              return;
-                            }
-
-                            if (mounted) {
-                              setState(() {
-                                alarmPauseToday = {};
-                              });
-                            }
-
-                            if (!context.mounted) return;
-
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+          if (!startOk || !endOk) {
+            showTopToast(
+              sheetContext,
+              _strings.choose(
+                vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
+                en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
               ),
+              color: Colors.orange,
+              icon: Icons.schedule_rounded,
             );
-          },
-        );
+
+            return false;
+          }
+        }
+
+        final now = DateTime.now();
+
+        final date =
+            "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+
+        final pauseStartText = format(data.startTime);
+        final pauseEndText = format(data.endTime);
+        final createdAt = DateTime.now().millisecondsSinceEpoch;
+
+        try {
+          await FirebaseDatabase.instance
+              .ref(
+                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+              )
+              .set({
+                "status": "pending",
+                "ownerUid": ownerUid,
+                "homeId": selectedHome,
+                "homeName": homeName,
+                "date": date,
+                "start": pauseStartText,
+                "end": pauseEndText,
+                "reason": data.reason,
+                "createdByUid": uid,
+                "createdByName": userName,
+                "createdAt": createdAt,
+              });
+        } catch (e) {
+          if (!sheetContext.mounted) return false;
+
+          showTopToast(
+            sheetContext,
+            _strings.choose(
+              vi: "Không lưu được tạm tắt Alarm: $e",
+              en: "Unable to save the Alarm pause: $e",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
+
+        if (mounted) {
+          setState(() {
+            alarmPauseToday = {
+              "date": date,
+              "start": pauseStartText,
+              "end": pauseEndText,
+              "homeName": homeName,
+              "reason": data.reason,
+              "createdByUid": uid,
+              "createdByName": userName,
+              "createdAt": createdAt,
+            };
+          });
+        }
+
+        return true;
+      },
+      onRemove: (sheetContext) async {
+        try {
+          await FirebaseDatabase.instance
+              .ref(
+                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+              )
+              .set({
+                "status": "pending",
+                "action": "remove",
+                "ownerUid": ownerUid,
+                "homeId": selectedHome,
+                "createdByUid": uid,
+                "createdByName": userName,
+                "createdAt": DateTime.now().millisecondsSinceEpoch,
+              });
+        } catch (e) {
+          if (!sheetContext.mounted) return false;
+
+          showTopToast(
+            sheetContext,
+            _strings.choose(
+              vi: "Không xoá được lịch tạm tắt Alarm: $e",
+              en: "Unable to delete the Alarm pause schedule: $e",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
+
+        if (mounted) {
+          setState(() {
+            alarmPauseToday = {};
+          });
+        }
+
+        return true;
       },
     );
   }
@@ -5004,221 +2575,20 @@ class _HomePageState extends State<HomePage>
 
     final currentName = usePersonalName
         ? (homes[selectedHome]?["_customName"] ??
-        homes[selectedHome]?["name"] ??
-        selectedHome)
-        .toString()
+                  homes[selectedHome]?["name"] ??
+                  selectedHome)
+              .toString()
         : (homes[selectedHome]?["name"] ?? selectedHome).toString();
 
     final currentAddress = homes[selectedHome]?["address"]?.toString() ?? "";
 
-    final nameController = TextEditingController(text: currentName);
-    final addressController = TextEditingController(text: currentAddress);
-
-    final result = await showModalBottomSheet<Map<String, String>>(
+    final result = await showRenameHomeSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: AnimatedPadding(
-            duration: const Duration(milliseconds: 160),
-            curve: Curves.easeOut,
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
-            ),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-              decoration: const BoxDecoration(
-                color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-              child: StatefulBuilder(
-                builder: (context, setSheetState) {
-                  final nameOk = nameController.text.trim().isNotEmpty;
-
-                  InputDecoration fieldDecoration({
-                    required String label,
-                    required IconData icon,
-                    String? hint,
-                  }) {
-                    return InputDecoration(
-                      labelText: label,
-                      hintText: hint,
-                      prefixIcon: Icon(icon, color: SafeHomeColors.primary),
-                      filled: true,
-                      fillColor: SafeHomeColors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.border,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.border,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                    );
-                  }
-
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.border,
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Container(
-                          width: 58,
-                          height: 58,
-                          decoration: const BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.home_rounded,
-                            color: SafeHomeColors.primary,
-                            size: 31,
-                          ),
-                        ),
-                        const SizedBox(height: 11),
-                        Text(
-                          usePersonalName
-                              ? _strings.t("Đổi tên hiển thị")
-                              : _strings.t("Cập nhật thông tin nhà"),
-                          style: const TextStyle(
-                            color: SafeHomeColors.textPrimary,
-                            fontSize: 19,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        TextField(
-                          controller: nameController,
-                          textInputAction: usePersonalName
-                              ? TextInputAction.done
-                              : TextInputAction.next,
-                          onChanged: (_) {
-                            setSheetState(() {});
-                          },
-                          onSubmitted: (_) {
-                            if (!usePersonalName || !nameOk) {
-                              return;
-                            }
-
-                            Navigator.pop(sheetContext, {
-                              "name": nameController.text.trim(),
-                              "address": currentAddress,
-                            });
-                          },
-                          decoration: fieldDecoration(
-                            label: _strings.t("Tên nhà"),
-                            icon: Icons.home_outlined,
-                          ),
-                        ),
-                        if (!usePersonalName) ...[
-                          const SizedBox(height: 12),
-                          TextField(
-                            controller: addressController,
-                            textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.done,
-                            maxLines: 2,
-                            minLines: 1,
-                            onSubmitted: (_) {
-                              if (!nameOk) {
-                                return;
-                              }
-
-                              Navigator.pop(sheetContext, {
-                                "name": nameController.text.trim(),
-                                "address": addressController.text.trim(),
-                              });
-                            },
-                            decoration: fieldDecoration(
-                              label: _strings.t("Địa chỉ"),
-                              icon: Icons.location_on_outlined,
-                              hint: _strings.t("Nhập địa chỉ của nhà"),
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: FilledButton.icon(
-                            onPressed: nameOk
-                                ? () {
-                              Navigator.pop(sheetContext, {
-                                "name": nameController.text.trim(),
-                                "address": usePersonalName
-                                    ? currentAddress
-                                    : addressController.text.trim(),
-                              });
-                            }
-                                : null,
-                            icon: const Icon(Icons.save_rounded),
-                            label: Text(
-                              _strings.t("Lưu thay đổi"),
-                              style: TextStyle(fontWeight: FontWeight.w800),
-                            ),
-                            style: FilledButton.styleFrom(
-                              backgroundColor: SafeHomeColors.primary,
-                              disabledBackgroundColor: SafeHomeColors.border,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          usePersonalName
-                              ? _strings.t(
-                            "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
-                          )
-                              : _strings.t(
-                            "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
-                          ),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: SafeHomeColors.textSecondary,
-                            fontSize: 12,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
+      strings: _strings,
+      usePersonalName: usePersonalName,
+      currentName: currentName,
+      currentAddress: currentAddress,
     );
-
-    // Bottom sheet vẫn đang chạy animation đóng sau khi
-    // Navigator.pop() trả kết quả. Không dispose controller ngay,
-    // nếu không TextField có thể đọc controller đã dispose và gây
-    // màn hình đỏ.
-    Future<void>.delayed(const Duration(milliseconds: 350), () {
-      nameController.dispose();
-      addressController.dispose();
-    });
 
     if (result == null) {
       return;
@@ -5433,197 +2803,43 @@ class _HomePageState extends State<HomePage>
     final ownerUid = getHomeOwnerUid();
     final homeId = selectedHome;
 
-    final homeRef = FirebaseDatabase.instance.ref(
-      "accounts/$ownerUid/homes/$homeId",
-    );
-
-    final homeSnap = await homeRef.get();
-
-    if (!homeSnap.exists || homeSnap.value is! Map) {
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Không đọc được dữ liệu nhà"),
-        color: Colors.red,
-        icon: Icons.error_outline_rounded,
-      );
-      return;
-    }
-
-    final homeData = Map<String, dynamic>.from(homeSnap.value as Map);
-
-    final rawDevices = homeData["devices"];
-
-    if (rawDevices is! Map || rawDevices.isEmpty) {
-      if (!mounted) return;
-
-      showTopToast(
-        context,
-        _strings.t("Nhà cần có ít nhất một thiết bị để test"),
-        color: Colors.orange,
-        icon: Icons.sensors_off_rounded,
-      );
-      return;
-    }
-
-    final devices = Map<String, dynamic>.from(rawDevices);
-    final firstDeviceEntry = devices.entries.first;
-
-    final deviceId = firstDeviceEntry.key.toString();
-    final deviceData = firstDeviceEntry.value is Map
-        ? Map<String, dynamic>.from(firstDeviceEntry.value as Map)
-        : <String, dynamic>{};
-
-    final deviceRef = homeRef.child("devices/$deviceId");
-
-    final results = <String, String>{};
-
-    bool isPermissionDenied(Object error) {
-      final text = error.toString().toLowerCase();
-
-      return text.contains("permission-denied") ||
-          text.contains("permission_denied") ||
-          text.contains("permission denied");
-    }
-
-    Future<void> expectDenied({
-      required String label,
-      required Future<void> Function() action,
-      Future<void> Function()? cleanup,
-    }) async {
-      try {
-        await action();
-
-        results[label] = "FAIL — Firebase cho phép ghi";
-
-        if (cleanup != null) {
-          try {
-            await cleanup();
-          } catch (error) {
-            results[label] = "FAIL — ghi được, cleanup lỗi: $error";
-          }
-        }
-      } catch (error) {
-        if (isPermissionDenied(error)) {
-          results[label] = "PASS";
-        } else {
-          results[label] = "ERROR — $error";
-        }
-      }
-    }
-
-    final testId = DateTime.now().millisecondsSinceEpoch.toString();
-
-    // 1. Không được ghi trực tiếp _ownerUid.
-    await expectDenied(
-      label: "_ownerUid",
-      action: () async {
-        await homeRef.child("_ownerUid").set(ownerUid);
-      },
-    );
-
-    // 2. Không được tạo event trực tiếp từ client.
-    final eventTestRef = homeRef.child("events/security_test_$testId");
-
-    await expectDenied(
-      label: "events",
-      action: () async {
-        await eventTestRef.set({
-          "type": "security_test",
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
-      },
-      cleanup: () async {
-        await eventTestRef.remove();
-      },
-    );
-
-    // 3. Không được ghi trực tiếp alarmPauseToday.
-    final pauseExists =
-        homeData.containsKey("alarmPauseToday") &&
-            homeData["alarmPauseToday"] != null;
-
-    final pauseTestValue = pauseExists
-        ? homeData["alarmPauseToday"]
-        : <String, dynamic>{
-      "date": "security_test",
-      "start": "00:00",
-      "end": "00:01",
-      "reason": "security_test",
-    };
-
-    await expectDenied(
-      label: "alarmPauseToday",
-      action: () async {
-        await homeRef.child("alarmPauseToday").set(pauseTestValue);
-      },
-      cleanup: pauseExists
-          ? null
-          : () async {
-        await homeRef.child("alarmPauseToday").remove();
-      },
-    );
-
-    final fieldFallbackValues = <String, Object?>{
-      "contact": false,
-      "smoke": false,
-      "tamper": false,
-      "availability": "online",
-      "battery": 100,
-      "type": "door",
-      "last_seen": DateTime.now().toIso8601String(),
-    };
-
-    // 4–10. Các trạng thái thiết bị chỉ backend được ghi.
-    for (final entry in fieldFallbackValues.entries) {
-      final field = entry.key;
-      final fieldExists =
-          deviceData.containsKey(field) && deviceData[field] != null;
-
-      final testValue = fieldExists ? deviceData[field] : entry.value;
-
-      final fieldRef = deviceRef.child(field);
-
-      await expectDenied(
-        label: "device/$field",
-        action: () async {
-          await fieldRef.set(testValue);
-        },
-        cleanup: fieldExists
-            ? null
-            : () async {
-          await fieldRef.remove();
-        },
-      );
-    }
-
-    // 11. Kiểm tra cổng ghi toàn bộ thiết bị.
-    // Đây cũng là cổng mà thao tác remove() trực tiếp phải đi qua.
-    final deviceRootTestData = Map<String, dynamic>.from(deviceData);
-
-    deviceRootTestData["_securityTest"] = testId;
-
-    await expectDenied(
-      label: "device root / delete gate",
-      action: () async {
-        await deviceRef.set(deviceRootTestData);
-      },
-      cleanup: () async {
-        await deviceRef.child("_securityTest").remove();
-      },
+    final result = await FirebaseSecurityTestService.run(
+      ownerUid: ownerUid,
+      homeId: homeId,
     );
 
     if (!mounted) return;
 
-    final passCount = results.values.where((value) => value == "PASS").length;
+    switch (result.state) {
+      case FirebaseSecurityTestState.homeUnavailable:
+        showTopToast(
+          context,
+          _strings.t("Không đọc được dữ liệu nhà"),
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+        return;
+      case FirebaseSecurityTestState.noDevices:
+        showTopToast(
+          context,
+          _strings.t("Nhà cần có ít nhất một thiết bị để test"),
+          color: Colors.orange,
+          icon: Icons.sensors_off_rounded,
+        );
+        return;
+      case FirebaseSecurityTestState.completed:
+        break;
+    }
+
+    final results = result.results;
+    final passCount = result.passCount;
 
     final lines = results.entries
         .map((entry) {
-      final icon = entry.value == "PASS" ? "✅" : "❌";
+          final icon = entry.value == "PASS" ? "✅" : "❌";
 
-      return "$icon ${entry.key}: ${entry.value}";
-    })
+          return "$icon ${entry.key}: ${entry.value}";
+        })
         .join("\n\n");
 
     await showDialog<void>(
@@ -5639,11 +2855,7 @@ class _HomePageState extends State<HomePage>
             width: double.maxFinite,
             child: SingleChildScrollView(
               child: SelectableText(
-                _strings.choose(
-                  vi: "$passCount/${results.length} bài test đạt\n\n",
-                  en: "$passCount/${results.length} tests passed\n\n",
-                ) +
-                    "$lines",
+                "${_strings.choose(vi: "$passCount/${results.length} bài test đạt\n\n", en: "$passCount/${results.length} tests passed\n\n")}$lines",
               ),
             ),
           ),
@@ -5661,27 +2873,212 @@ class _HomePageState extends State<HomePage>
   }
 
   Color getHomeColor(String h) {
-    final home = safeMap(homes[h]);
-    final overall = getHomeOverallStatus(home);
+    return HomeDataHelpers.getHomeColor(
+      homes: homes,
+      homeId: h,
+      selectedHome: selectedHome,
+    );
+  }
 
-    final level = overall["level"]?.toString() ?? "safe";
-    final selected = h == selectedHome;
+  void openHomeNotifications() {
+    HomeUiCoordinator.openHomeNotificationList(
+      context: context,
+      uid: uid,
+      homeNameForId: getHomeDisplayName,
+      onTapNotification: openHomeNotificationTarget,
+    );
+  }
 
-    if (level == "danger") {
-      return SafeHomeColors.danger;
+  void openScheduleNotificationSheet() {
+    HomeUiCoordinator.openScheduleSheet(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      isShared: homes[selectedHome]?["_shared"] == true,
+      type: "notification",
+      canManageHome: canManageHome(),
+    );
+  }
+
+  void openAlarmDeviceSheet() {
+    HomeUiCoordinator.openAlarmDeviceSheet(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      devices: getDevices(),
+      canManageHome: canManageHome(),
+    );
+  }
+
+  void openSelectedHomeChat() {
+    openHomeChatSheetFor(
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+    );
+  }
+
+  Future<void> openShareRequestsSheet() async {
+    final changed = await HomeUiCoordinator.openShareRequests(
+      context: context,
+      requests: shareRequests,
+      uid: uid,
+    );
+
+    if (changed == true) {
+      await refreshShareRequests();
     }
+  }
 
-    if (level == "warning") {
-      return SafeHomeColors.warning;
+  Future<void> openShareListSheet() async {
+    final selfLeft = await HomeUiCoordinator.openShareList(
+      canManageMembers: canManageHome(),
+      isOwner: isOwner(),
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+    );
+
+    if (selfLeft == true && mounted) {
+      Navigator.of(
+        context,
+        rootNavigator: true,
+      ).popUntil((route) => route.isFirst);
     }
+  }
 
-    return selected ? SafeHomeColors.primary : SafeHomeColors.safe;
+  void openAccountSheet() {
+    HomeUiCoordinator.openAccount(
+      context: context,
+      logout: logout,
+      userName: userName,
+      userGender: userGender,
+      userDob: userDob,
+      userPhone: userPhone,
+      inviteCountNotifier: inviteCountNotifier,
+      onShareRequests: () {
+        unawaited(openShareRequestsSheet());
+      },
+    );
+  }
+
+  void openRoomManagement() {
+    HomeUiCoordinator.openRoomManagement(
+      context: context,
+      ownerUid: getHomeOwnerUid(),
+      homeId: selectedHome,
+    );
+  }
+
+  void openAllDevicesFromSettings() {
+    HomeUiCoordinator.openAllDevices(
+      context: context,
+      devices: getDevices(),
+      onEmpty: () {
+        showTopToast(
+          context,
+          _strings.t("Không có thiết bị"),
+          color: Colors.orange,
+          icon: Icons.sensors_off_rounded,
+        );
+      },
+      onOpenDevice: (deviceId, device) {
+        openDeviceDetailSheet(deviceId: deviceId, device: device);
+      },
+    );
+  }
+
+  void openSettingsCoordinator() {
+    HomeUiCoordinator.openSettings(
+      homeId: selectedHome,
+      homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+      homeAddress: homes[selectedHome]?["address"]?.toString() ?? "",
+      role: getMyRole(),
+      onAllDevices: openAllDevicesFromSettings,
+      onAccount: openAccountSheet,
+      onDeleteHome: isOwner()
+          ? deleteHome
+          : () {
+              showTopToast(
+                context,
+                _strings.t("Chỉ chủ nhà mới được xoá nhà"),
+                color: Colors.orange,
+                icon: Icons.lock_rounded,
+              );
+            },
+      onRenameHome: renameHome,
+      onSecurityTest: runFirebaseSecurityTest,
+      onTransferOwner: isOwner()
+          ? transferOwner
+          : () {
+              showTopToast(
+                context,
+                _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+                color: Colors.orange,
+                icon: Icons.admin_panel_settings_rounded,
+              );
+            },
+      context: context,
+      inviteCountNotifier: inviteCountNotifier,
+      onShareRequests: () {
+        unawaited(openShareRequestsSheet());
+      },
+      onShare: shareHome,
+      onAutoAway: openAutoAwaySetup,
+      onRooms: openRoomManagement,
+      onShareList: () {
+        unawaited(openShareListSheet());
+      },
+      onLogout: logout,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final devices = getDevices();
     const sectionGap = 6.0;
+    final overviewOwnerUid = getHomeOwnerUid();
+    final overviewHome = safeMap(homes[selectedHome]);
+    final overviewRooms = getRooms();
+    final overviewHomeName =
+        homes[selectedHome]?["name"]?.toString() ?? _strings.t("Nhà");
+    final overviewAlarmPauseText = (() {
+      if (alarmPauseToday.isEmpty) {
+        return "Tắt";
+      }
+
+      final now = DateTime.now();
+
+      final today =
+          "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+
+      if (alarmPauseToday["date"] != today) {
+        return "Tắt";
+      }
+
+      final startText = alarmPauseToday["start"]?.toString().trim() ?? "";
+      final endText = alarmPauseToday["end"]?.toString().trim() ?? "";
+
+      if (startText.isEmpty || endText.isEmpty) {
+        return "Tắt";
+      }
+
+      return "$startText → $endText";
+    })();
+    final overviewSecurityModeSource =
+        overviewHome["securityModeSource"]?.toString().trim() ?? "";
+    final overviewSecurityModeRepeatMinutes =
+        _normalizeSecurityModeRepeatMinutes(
+          overviewHome["securityModeRepeatMinutes"],
+        );
+    final overviewAlarmScheduleText = formatAlarmSchedules();
+    final overviewEnvironmentText = getHomeEnvironmentText();
+    final overviewOverall = getHomeOverallStatus(overviewHome);
+    final overviewPairingCountdownText = _strings.choose(
+      vi: "Đang ghép nối: $pairingCountdown giây",
+      en: "Pairing: $pairingCountdown s",
+    );
+    final canManageSelectedHome = canManageHome();
 
     return Scaffold(
       extendBody: true,
@@ -5702,196 +3099,54 @@ class _HomePageState extends State<HomePage>
         child: SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-                child: SizedBox(
-                  height: 36,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Material(
-                          color: SafeHomeColors.surface,
-                          borderRadius: BorderRadius.circular(11),
-                          clipBehavior: Clip.antiAlias,
-                          child: InkWell(
-                            onTap: () async {
-                              final selected = await Navigator.push<String>(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      AllHomePage(homeOrder: homeOrder),
-                                ),
-                              );
+              HomeHeaderBar(
+                notificationTooltip: _strings.t("Thông báo Home"),
+                unreadHomeNotificationCount: unreadHomeNotificationCount,
+                onOpenHomeList: () async {
+                  final selected = await Navigator.push<String>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AllHomePage(homeOrder: homeOrder),
+                    ),
+                  );
 
-                              if (selected == null ||
-                                  !homes.containsKey(selected)) {
-                                return;
-                              }
+                  if (selected == null || !homes.containsKey(selected)) {
+                    return;
+                  }
 
-                              final currentHome = safeMap(homes[selected]);
-                              final parsedAlarm =
-                              HomeStateParser.parseAlarm(currentHome);
+                  final currentHome = safeMap(homes[selected]);
+                  final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
-                              setState(() {
-                                selectedHome = selected;
+                  setState(() {
+                    selectedHome = selected;
 
-                                securityMode =
-                                currentHome["securityMode"]?.toString() == "armed"
-                                    ? "armed"
-                                    : "normal";
+                    securityMode =
+                        currentHome["securityMode"]?.toString() == "armed"
+                        ? "armed"
+                        : "normal";
 
-                                alarmEnabled =
-                                    safeMap(alarmSettings[selected])["enabled"] != false;
+                    alarmEnabled =
+                        safeMap(alarmSettings[selected])["enabled"] != false;
 
-                                start = parsedAlarm["start"];
-                                end = parsedAlarm["end"];
-                                alarmPauseToday =
-                                    safeMap(currentHome["alarmPauseToday"]);
-                              });
+                    start = parsedAlarm["start"];
+                    end = parsedAlarm["end"];
+                    alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
+                  });
 
-                              final index = homeOrder.indexOf(selected);
+                  final index = homeOrder.indexOf(selected);
 
-                              if (index != -1 && homeTabController.hasClients) {
-                                homeTabController.animateTo(
-                                  index * 110,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeOutCubic,
-                                );
-                              }
+                  if (index != -1 && homeTabController.hasClients) {
+                    homeTabController.animateTo(
+                      index * 110,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOutCubic,
+                    );
+                  }
 
-                              startHomeEventsListener();
-                              startAlarmPauseListener();
-                            },
-                            borderRadius: BorderRadius.circular(11),
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: SafeHomeColors.border,
-                                ),
-                                borderRadius: BorderRadius.circular(11),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(
-                                      alpha: 0.035,
-                                    ),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                Icons.grid_view_rounded,
-                                size: 18,
-                                color: SafeHomeColors.textPrimary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          style: TextStyle(
-                            fontSize: 29,
-                            height: 1,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -1.1,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "Safe",
-                              style: TextStyle(color: SafeHomeColors.primary),
-                            ),
-                            TextSpan(
-                              text: "Home",
-                              style: TextStyle(
-                                color: SafeHomeColors.textPrimary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                showHomeEventSheet(
-                                  context: context,
-                                  uid: uid,
-                                  homeNameForId: getHomeDisplayName,
-                                  onTapNotification: openHomeNotificationTarget,
-                                );
-                              },
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints.tightFor(
-                                width: 32,
-                                height: 32,
-                              ),
-                              tooltip: _strings.t("Thông báo Home"),
-                              icon: const Icon(
-                                Icons.notifications_rounded,
-                                size: 21,
-                              ),
-                              style: IconButton.styleFrom(
-                                foregroundColor: SafeHomeColors.info,
-                                backgroundColor: Colors.transparent,
-                                shape: const CircleBorder(),
-                              ).copyWith(
-                                overlayColor: WidgetStatePropertyAll(
-                                  SafeHomeColors.info.withValues(alpha: 0.10),
-                                ),
-                              ),
-                            ),
-                            if (unreadHomeNotificationCount > 0)
-                              Positioned(
-                                right: -3,
-                                top: -3,
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                    minWidth: 17,
-                                    minHeight: 17,
-                                  ),
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: SafeHomeColors.danger,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: SafeHomeColors.surface,
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: Text(
-                                    unreadHomeNotificationCount > 99
-                                        ? "99+"
-                                        : unreadHomeNotificationCount
-                                        .toString(),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                      height: 1,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                  startHomeEventsListener();
+                  startAlarmPauseListener();
+                },
+                onOpenNotifications: openHomeNotifications,
               ),
               const SizedBox(height: sectionGap),
 
@@ -5905,19 +3160,18 @@ class _HomePageState extends State<HomePage>
                   selectedHome: selectedHome,
                   currentUserName: userName,
                   currentUserEmail:
-                  FirebaseAuth.instance.currentUser?.email ?? "",
+                      FirebaseAuth.instance.currentUser?.email ?? "",
                   onSelect: (h) {
                     if (h == selectedHome) return;
 
                     final currentHome = safeMap(homes[h]);
-                    final parsedAlarm =
-                    HomeStateParser.parseAlarm(currentHome);
+                    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
 
                     setState(() {
                       selectedHome = h;
 
                       securityMode =
-                      currentHome["securityMode"]?.toString() == "armed"
+                          currentHome["securityMode"]?.toString() == "armed"
                           ? "armed"
                           : "normal";
 
@@ -5926,8 +3180,7 @@ class _HomePageState extends State<HomePage>
 
                       start = parsedAlarm["start"];
                       end = parsedAlarm["end"];
-                      alarmPauseToday =
-                          safeMap(currentHome["alarmPauseToday"]);
+                      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
                     });
 
                     startHomeEventsListener();
@@ -5946,185 +3199,82 @@ class _HomePageState extends State<HomePage>
                       devices: devices,
                       selectedRoomId: selectedRoomId,
                       securityMode: securityMode,
-                      header: Column(
-                        children: [
-                          StatusPanel(
-                            key: ValueKey(
-                              "status_${getHomeOwnerUid()}_$selectedHome",
-                            ),
-                            ownerUid: getHomeOwnerUid(),
-                            homeId: selectedHome,
-                            alarmPauseText: (() {
-                              if (alarmPauseToday.isEmpty) {
-                                return "Tắt";
-                              }
+                      header: HomeOverviewHeader(
+                        ownerUid: overviewOwnerUid,
+                        homeId: selectedHome,
+                        homeName: overviewHomeName,
+                        alarmPauseText: overviewAlarmPauseText,
+                        onAlarmPauseToday: () {
+                          openAlarmPauseSheetWithReminder();
+                        },
+                        environmentText: overviewEnvironmentText,
+                        homeEvents: homeEvents,
+                        onEnvironmentTap: () {
+                          final tempDevice = getTemperatureDevice();
 
-                              final now = DateTime.now();
+                          if (tempDevice == null) return;
 
-                              final today =
-                                  "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+                          openDeviceDetailSheet(
+                            deviceId: tempDevice["id"],
+                            device: tempDevice["data"],
+                          );
+                        },
+                        overall: overviewOverall,
+                        securityMode: securityMode,
+                        securityModeSource: overviewSecurityModeSource,
+                        securityModeRepeatMinutes:
+                            overviewSecurityModeRepeatMinutes,
+                        onSecurityModeRepeatChanged: canManageSelectedHome
+                            ? setSecurityModeRepeatMinutes
+                            : null,
+                        onSecurityModeChanged: setSecurityMode,
+                        alarmEnabled: alarmEnabled,
+                        onAlarmEnabledChanged: canManageSelectedHome
+                            ? setAlarmEnabled
+                            : null,
+                        onScheduleNotification: openScheduleNotificationSheet,
+                        onScheduleAlarm: openAlarmDeviceSheet,
+                        alarmStart: overviewAlarmScheduleText,
+                        alarmEnd: "",
+                        rooms: overviewRooms,
+                        selectedRoomId: selectedRoomId,
+                        onSelectRoom: (roomId) {
+                          setState(() {
+                            selectedRoomId = roomId;
+                          });
+                        },
+                        onReorderRooms: (roomIds) async {
+                          if (!canManageHome()) {
+                            showTopToast(
+                              context,
+                              _strings.t("Bạn không có quyền sắp xếp phòng"),
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
+                            );
+                            return;
+                          }
 
-                              if (alarmPauseToday["date"] != today) {
-                                return "Tắt";
-                              }
+                          final ownerUid = getHomeOwnerUid();
+                          final updates = <String, Object?>{};
 
-                              final startText =
-                                  alarmPauseToday["start"]?.toString().trim() ??
-                                      "";
-                              final endText =
-                                  alarmPauseToday["end"]?.toString().trim() ??
-                                      "";
+                          for (var i = 0; i < roomIds.length; i++) {
+                            updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
+                                i + 1;
+                          }
 
-                              if (startText.isEmpty || endText.isEmpty) {
-                                return "Tắt";
-                              }
-
-                              return "$startText → $endText";
-                            })(),
-                            onAlarmPauseToday: () {
-                              openAlarmPauseSheetWithReminder();
-                            },
-                            environmentText: getHomeEnvironmentText(),
-                            homeEvents: homeEvents,
-                            onEnvironmentTap: () {
-                              final tempDevice = getTemperatureDevice();
-
-                              if (tempDevice == null) return;
-
-                              showDeviceDetail(
-                                context: context,
-                                id: tempDevice["id"],
-                                d: tempDevice["data"],
-                                ownerUid: getHomeOwnerUid(),
-                                homeId: selectedHome,
-                                onRename: canManageHome()
-                                    ? () => renameDevice(tempDevice["id"])
-                                    : null,
-                                onDelete: canManageHome()
-                                    ? () => deleteDevice(tempDevice["id"])
-                                    : null,
-                                onNotification: () =>
-                                    openNotificationList(tempDevice["id"]),
-                              );
-                            },
-                            overall: getHomeOverallStatus(
-                              safeMap(homes[selectedHome]),
-                            ),
-
-                            securityMode: securityMode,
-                            securityModeSource:
-                            safeMap(homes[selectedHome])["securityModeSource"]
-                                ?.toString()
-                                .trim() ??
-                                "",
-                            securityModeRepeatMinutes:
-                            _normalizeSecurityModeRepeatMinutes(
-                              safeMap(
-                                homes[selectedHome],
-                              )["securityModeRepeatMinutes"],
-                            ),
-                            onSecurityModeRepeatChanged:
-                            canManageHome()
-                                ? setSecurityModeRepeatMinutes
-                                : null,
-                            // Luôn nhận thao tác bấm.
-                            // setSecurityMode sẽ tự kiểm tra quyền
-                            // và báo rõ cho member.
-                            onSecurityModeChanged: setSecurityMode,
-
-                            alarmEnabled: alarmEnabled,
-                            onAlarmEnabledChanged: canManageHome()
-                                ? setAlarmEnabled
-                                : null,
-                            onPair: null,
-                            onQR: null,
-                            onScheduleNotification: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => ScheduleSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  isShared:
-                                  homes[selectedHome]?["_shared"] == true,
-                                  type: "notification",
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                            onScheduleAlarm: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => AlarmDeviceSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  devices: getDevices(),
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                            alarmStart: formatAlarmSchedules(),
-                            alarmEnd: "",
-                          ),
-                          const SizedBox(height: sectionGap),
-
-                          RoomTabs(
-                            rooms: getRooms(),
-                            homeName:
-                            homes[selectedHome]?["name"]?.toString() ??
-                                _strings.t("Nhà"),
-                            selectedRoomId: selectedRoomId,
-                            onSelect: (roomId) {
-                              setState(() {
-                                selectedRoomId = roomId;
-                              });
-                            },
-                            onReorder: (roomIds) async {
-                              if (!canManageHome()) {
-                                showTopToast(
-                                  context,
-                                  _strings.t(
-                                    "Bạn không có quyền sắp xếp phòng",
-                                  ),
-                                  color: Colors.orange,
-                                  icon: Icons.lock_rounded,
-                                );
-                                return;
-                              }
-
-                              final ownerUid = getHomeOwnerUid();
-                              final updates = <String, Object?>{};
-
-                              for (var i = 0; i < roomIds.length; i++) {
-                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
-                                    i + 1;
-                              }
-
-                              if (updates.isNotEmpty) {
-                                await FirebaseDatabase.instance.ref().update(
-                                  updates,
-                                );
-                              }
-                            },
-                          ),
-                          if (pairingCountdown > 0)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: Text(
-                                _strings.choose(
-                                  vi: "Đang ghép nối: $pairingCountdown giây",
-                                  en: "Pairing: $pairingCountdown s",
-                                ),
-                              ),
-                            ),
-                        ],
+                          if (updates.isNotEmpty) {
+                            await FirebaseDatabase.instance.ref().update(
+                              updates,
+                            );
+                          }
+                        },
+                        pairingCountdown: pairingCountdown,
+                        pairingCountdownText: overviewPairingCountdownText,
+                        sectionGap: sectionGap,
                       ),
                       isShared: homes[selectedHome]?["_shared"] == true,
                       ownerEmail:
-                      homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
+                          homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
                       onRename: canManageHome() ? renameDevice : (_) {},
                       onDelete: canManageHome() ? deleteDevice : (_) {},
                       onPairSensor: () async {
@@ -6138,56 +3288,12 @@ class _HomePageState extends State<HomePage>
                           return;
                         }
 
-                        final result = await showModalBottomSheet<String>(
+                        final result = await showHomePairSensorSheet(
                           context: context,
-                          isScrollControlled: true,
-                          builder: (_) {
-                            return SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      _strings.t("Quét QR"),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton.icon(
-                                        icon: const Icon(Icons.qr_code_scanner),
-                                        label: Text(
-                                          _strings.t(
-                                            "Quét QR để thêm thiết bị",
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context, "__SCAN__");
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    TextButton.icon(
-                                      icon: const Icon(Icons.keyboard),
-                                      label: Text(
-                                        _strings.t("Nhập HUB ID thủ công"),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context, "__MANUAL__");
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                          strings: _strings,
                         );
 
-                        if (result == "__SCAN__") {
+                        if (result == HomePairSensorMethod.scanQr) {
                           if (!context.mounted) return;
 
                           final code = await openQRScanner(context);
@@ -6197,7 +3303,7 @@ class _HomePageState extends State<HomePage>
                           }
                         }
 
-                        if (result == "__MANUAL__") {
+                        if (result == HomePairSensorMethod.manualHubId) {
                           if (!context.mounted) return;
 
                           final hubId = await showPairDialog(context);
@@ -6207,22 +3313,7 @@ class _HomePageState extends State<HomePage>
                           pairSensor(hubId.trim());
                         }
                       },
-                      onTapDevice: (id) {
-                        showDeviceDetail(
-                          context: context,
-                          id: id,
-                          d: safeMap(getDevices()[id]),
-                          ownerUid: getHomeOwnerUid(),
-                          homeId: selectedHome,
-                          onRename: canManageHome()
-                              ? () => renameDevice(id)
-                              : null,
-                          onDelete: canManageHome()
-                              ? () => deleteDevice(id)
-                              : null,
-                          onNotification: () => openNotificationList(id),
-                        );
-                      },
+                      onTapDevice: openSelectedDeviceDetail,
                     ),
                   ],
                 ),
@@ -6232,545 +3323,42 @@ class _HomePageState extends State<HomePage>
         ),
       ),
 
-      bottomNavigationBar: SafeArea(
-        top: false,
-        minimum: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-        child: Container(
-          height: 68,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-          decoration: BoxDecoration(
-            color: SafeHomeColors.surface.withValues(alpha: 0.97),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: SafeHomeColors.border, width: 0.9),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.075),
-                blurRadius: 24,
-                offset: const Offset(0, 9),
-              ),
-            ],
-          ),
-          child: IconButtonTheme(
-            data: IconButtonThemeData(
-              style: IconButton.styleFrom(
-                minimumSize: const Size(46, 46),
-                maximumSize: const Size(46, 46),
-                padding: EdgeInsets.zero,
-                foregroundColor: SafeHomeColors.textSecondary,
-                backgroundColor: Colors.transparent,
-                hoverColor: SafeHomeColors.primarySoft,
-                highlightColor: SafeHomeColors.primarySoft,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  tooltip: _strings.t("Thêm Home"),
-                  icon: const Icon(
-                    Icons.add_home_work_rounded,
-                    color: SafeHomeColors.primary,
-                  ),
-                  onPressed: showAddHomeOptions,
-                ),
+      bottomNavigationBar: HomeBottomBar(
+        addHomeTooltip: _strings.t("Thêm Home"),
+        unreadChatCount: unreadChatByHome[selectedHome] ?? 0,
+        inviteCount: shareRequests.length,
+        alarmEnabled: alarmEnabled,
+        onAddHome: showAddHomeOptions,
+        onOpenChat: openSelectedHomeChat,
+        onOpenAlarm: () async {
+          final reminderEnabled = await hasEnabledReminderSchedule();
 
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chat_bubble_rounded,
-                        color: SafeHomeColors.primary,
-                      ),
-                      onPressed: () {
-                        showHomeChatSheet(
-                          context: context,
-                          homeId: selectedHome,
-                          homeName:
-                          homes[selectedHome]?["name"]?.toString() ??
-                              selectedHome,
-                          userName: userName,
-                          userPhotoUrl: userPhotoUrl,
-                          ownerUid: getHomeOwnerUid(),
-                          canManageMembers: canManageHome(),
-                          isOwner: isOwner(),
-                        );
-                      },
-                    ),
-                    if ((unreadChatByHome[selectedHome] ?? 0) > 0)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.danger,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: SafeHomeColors.surface,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Text(
-                            (unreadChatByHome[selectedHome] ?? 0) > 99
-                                ? "99+"
-                                : (unreadChatByHome[selectedHome] ?? 0)
-                                .toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.crisis_alert_rounded,
-                    color: alarmEnabled
-                        ? SafeHomeColors.danger
-                        : SafeHomeColors.textSecondary,
-                  ),
-                  onPressed: () async {
-                    final reminderEnabled = await hasEnabledReminderSchedule();
+          if (!context.mounted) return;
 
-                    if (!mounted) return;
+          final alarmScheduleText = formatAlarmSchedules().trim().isEmpty
+              ? _strings.t("Chưa thiết lập thời gian")
+              : formatAlarmSchedules();
 
-                    showModalBottomSheet(
-                      context: context,
-                      showDragHandle: false,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) {
-                        bool localAlarmEnabled = alarmEnabled;
+          await showHomeAlarmMenuSheet(
+            context: context,
+            strings: _strings,
+            alarmEnabled: alarmEnabled,
+            reminderEnabled: reminderEnabled,
+            alarmScheduleText: alarmScheduleText,
+            alarmPauseToday: alarmPauseToday,
+            onAlarmEnabledChanged: setAlarmEnabled,
+            onOpenAlarmSchedule: openAlarmDeviceSheet,
+            onOpenAlarmPause: () async {
+              await Future<void>.delayed(const Duration(milliseconds: 120));
 
-                        return StatefulBuilder(
-                          builder: (context, setModalState) {
-                            return SafeArea(
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(
-                                  18,
-                                  10,
-                                  18,
-                                  18,
-                                ),
-                                decoration: const BoxDecoration(
-                                  color: SafeHomeColors.surface,
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(26),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 44,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(bottom: 10),
-                                      decoration: BoxDecoration(
-                                        color: SafeHomeColors.border,
-                                        borderRadius: BorderRadius.circular(
-                                          999,
-                                        ),
-                                      ),
-                                    ),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.crisis_alert_rounded,
-                                        color: localAlarmEnabled
-                                            ? SafeHomeColors.primary
-                                            : SafeHomeColors.textSecondary
-                                            .withValues(alpha: 0.45),
-                                      ),
-                                      title: Text(
-                                        _strings.t("Hẹn giờ Alarm"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: localAlarmEnabled
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        localAlarmEnabled
-                                            ? (formatAlarmSchedules()
-                                            .trim()
-                                            .isEmpty
-                                            ? _strings.t(
-                                          "Chưa thiết lập thời gian",
-                                        )
-                                            : formatAlarmSchedules())
-                                            : _strings.t("Đang tắt"),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: localAlarmEnabled
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      trailing: Switch(
-                                        value: localAlarmEnabled,
-                                        activeThumbColor:
-                                        SafeHomeColors.primary,
-                                        activeTrackColor: SafeHomeColors.primary
-                                            .withValues(alpha: 0.28),
-                                        onChanged: (value) async {
-                                          final changed =
-                                          await setAlarmEnabled(value);
+              if (!mounted) return;
 
-                                          if (!context.mounted) {
-                                            return;
-                                          }
-
-                                          setModalState(() {
-                                            localAlarmEnabled = changed
-                                                ? value
-                                                : alarmEnabled;
-                                          });
-                                        },
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => AlarmDeviceSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            devices: getDevices(),
-                                            canManageHome: canManageHome(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.pause_circle_filled_rounded,
-                                        color: alarmPauseToday.isNotEmpty
-                                            ? SafeHomeColors.warning
-                                            : SafeHomeColors.textSecondary
-                                            .withValues(alpha: 0.45),
-                                      ),
-                                      title: Text(
-                                        _strings.t("Tạm tắt Alarm hôm nay"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: alarmPauseToday.isNotEmpty
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        alarmPauseToday.isEmpty
-                                            ? _strings.t("Chưa thiết lập")
-                                            : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
-                                            "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${_strings.t(alarmPauseToday["reason"].toString())}" : ""}",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: alarmPauseToday.isNotEmpty
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        await Future<void>.delayed(
-                                          const Duration(milliseconds: 120),
-                                        );
-
-                                        if (!mounted) return;
-
-                                        await openAlarmPauseSheetWithReminder();
-                                      },
-                                    ),
-                                    const Divider(),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.notifications_active_rounded,
-                                        color: reminderEnabled
-                                            ? SafeHomeColors.primary
-                                            : SafeHomeColors.textSecondary
-                                            .withValues(alpha: 0.45),
-                                      ),
-                                      title: Text(
-                                        _strings.t("Hẹn giờ Reminder"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: reminderEnabled
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        reminderEnabled
-                                            ? _strings.t("Đã thiết lập")
-                                            : _strings.t("Chưa thiết lập"),
-                                        style: TextStyle(
-                                          color: reminderEnabled
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                              .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => ScheduleSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            isShared:
-                                            homes[selectedHome]?["_shared"] ==
-                                                true,
-                                            type: "notification",
-                                            canManageHome: canManageHome(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.settings_rounded,
-                        color: SafeHomeColors.textSecondary,
-                      ),
-                      onPressed: () {
-                        showSettingsSheet(
-                          homeId: selectedHome,
-                          homeName:
-                          homes[selectedHome]?["name"]?.toString() ??
-                              selectedHome,
-                          homeAddress:
-                          homes[selectedHome]?["address"]?.toString() ?? "",
-                          role: getMyRole(),
-                          onAllDevices: () {
-                            final devices = getDevices();
-
-                            if (devices.isEmpty) {
-                              showTopToast(
-                                context,
-                                _strings.t("Không có thiết bị"),
-                                color: Colors.orange,
-                                icon: Icons.sensors_off_rounded,
-                              );
-                              return;
-                            }
-
-                            if (devices.length == 1) {
-                              final entry = devices.entries.first;
-
-                              Navigator.pop(context);
-
-                              showDeviceDetail(
-                                context: context,
-                                id: entry.key,
-                                d: safeMap(entry.value),
-                                ownerUid: getHomeOwnerUid(),
-                                homeId: selectedHome,
-                                onRename: canManageHome()
-                                    ? () => renameDevice(entry.key)
-                                    : null,
-                                onDelete: canManageHome()
-                                    ? () => deleteDevice(entry.key)
-                                    : null,
-                                onNotification: () =>
-                                    openNotificationList(entry.key),
-                              );
-
-                              return;
-                            }
-
-                            showAllDevicesSheet(
-                              context: context,
-                              devices: devices,
-                              onTapDevice: (id) {
-                                showDeviceDetail(
-                                  context: context,
-                                  id: id,
-                                  d: safeMap(getDevices()[id]),
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  onRename: canManageHome()
-                                      ? () => renameDevice(id)
-                                      : null,
-                                  onDelete: canManageHome()
-                                      ? () => deleteDevice(id)
-                                      : null,
-                                  onNotification: () =>
-                                      openNotificationList(id),
-                                );
-                              },
-                            );
-                          },
-                          onAccount: () {
-                            AccountAvatarSheet.show(
-                              context: context,
-                              logout: logout,
-                              onEditProfile: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => EditProfilePage(
-                                      userName: userName,
-                                      userGender: userGender,
-                                      userDob: userDob,
-                                      userPhone: userPhone,
-                                    ),
-                                  ),
-                                );
-                              },
-                              userName: userName,
-                              userGender: userGender,
-                              userDob: userDob,
-                              userPhone: userPhone,
-                              inviteCountNotifier: inviteCountNotifier,
-
-                              onShareRequests: () async {
-                                final changed = await showShareRequestSheet(
-                                  context: context,
-                                  requests: shareRequests,
-                                  uid: uid,
-                                );
-
-                                if (changed == true) {
-                                  await refreshShareRequests();
-                                }
-                              },
-                            );
-                          },
-                          onDeleteHome: isOwner()
-                              ? deleteHome
-                              : () {
-                            showTopToast(
-                              context,
-                              _strings.t("Chỉ chủ nhà mới được xoá nhà"),
-                              color: Colors.orange,
-                              icon: Icons.lock_rounded,
-                            );
-                          },
-                          onRenameHome: renameHome,
-                          onSecurityTest: runFirebaseSecurityTest,
-                          onTransferOwner: isOwner()
-                              ? transferOwner
-                              : () {
-                            showTopToast(
-                              context,
-                              _strings.t(
-                                "Chỉ chủ nhà mới được chuyển quyền",
-                              ),
-                              color: Colors.orange,
-                              icon: Icons.admin_panel_settings_rounded,
-                            );
-                          },
-                          context: context,
-                          inviteCountNotifier: inviteCountNotifier,
-                          onShareRequests: () async {
-                            final changed = await showShareRequestSheet(
-                              context: context,
-                              requests: shareRequests,
-                              uid: uid,
-                            );
-
-                            if (changed == true) {
-                              await refreshShareRequests();
-                            }
-                          },
-                          onShare: shareHome,
-                          onAutoAway: openAutoAwaySetup,
-                          onRooms: () {
-                            showRoomManagementSheet(
-                              context: context,
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                            );
-                          },
-                          onShareList: () async {
-                            final selfLeft = await showShareListSheet(
-                              canManageMembers: canManageHome(),
-                              isOwner: isOwner(),
-                              context: context,
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              homeName:
-                              homes[selectedHome]?["name"]?.toString() ??
-                                  selectedHome,
-                            );
-
-                            if (selfLeft == true && context.mounted) {
-                              Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).popUntil((route) => route.isFirst);
-                            }
-                          },
-                          onLogout: logout,
-                        );
-                      },
-                    ),
-                    if (shareRequests.isNotEmpty)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: 18,
-                            minHeight: 18,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.danger,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: SafeHomeColors.surface,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Text(
-                            "${shareRequests.length}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+              await openAlarmPauseSheetWithReminder();
+            },
+            onOpenReminderSchedule: openScheduleNotificationSheet,
+          );
+        },
+        onOpenSettings: openSettingsCoordinator,
       ),
     );
   }
@@ -6781,20 +3369,9 @@ class _HomePageState extends State<HomePage>
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
-    autoAwayPresenceRefreshTimer?.cancel();
-    profileSubscription?.cancel();
-    ownedHomeAddedSubscription?.cancel();
-    ownedHomeChangedSubscription?.cancel();
-    ownedHomeRemovedSubscription?.cancel();
-    sharedHomesSubscription?.cancel();
-    homeOrderSubscription?.cancel();
-    alarmSettingsSubscription?.cancel();
-    customRulesSubscription?.cancel();
-    shareRequestsSubscription?.cancel();
-    notificationSubscription?.cancel();
-    homeEventsSubscription?.cancel();
-    alarmPauseSubscription?.cancel();
-    chatUnreadSubscription?.cancel();
+    _homeAutoAwayCoordinator.dispose();
+    _homeAccountRealtimeCoordinator.dispose();
+    _homeRealtimeCoordinator.dispose();
     unawaited(_homeListenerService.dispose());
     homeTabController.dispose();
     super.dispose();

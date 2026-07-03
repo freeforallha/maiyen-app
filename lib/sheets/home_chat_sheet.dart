@@ -136,9 +136,7 @@ void showHomeChatSheet({
 
       if (cursor >= 0 && cursor <= controller.text.length) {
         final beforeCursor = controller.text.substring(0, cursor);
-        final match = RegExp(r'(^|\s)@([^\s@]*)$').firstMatch(
-          beforeCursor,
-        );
+        final match = RegExp(r'(^|\s)@([^\s@]*)$').firstMatch(beforeCursor);
 
         if (match != null) {
           nextShow = true;
@@ -217,10 +215,10 @@ void showHomeChatSheet({
   }
 
   TextSpan highlightedSpan(
-      String source,
-      TextStyle baseStyle, {
-        Map<String, String> mentions = const <String, String>{},
-      }) {
+    String source,
+    TextStyle baseStyle, {
+    Map<String, String> mentions = const <String, String>{},
+  }) {
     final query = searchQuery.trim();
 
     if (isSearching && query.isNotEmpty) {
@@ -233,12 +231,7 @@ void showHomeChatSheet({
         final matchIndex = lowerSource.indexOf(lowerQuery, start);
 
         if (matchIndex < 0) {
-          spans.add(
-            TextSpan(
-              text: source.substring(start),
-              style: baseStyle,
-            ),
-          );
+          spans.add(TextSpan(text: source.substring(start), style: baseStyle));
           break;
         }
 
@@ -253,10 +246,7 @@ void showHomeChatSheet({
 
         spans.add(
           TextSpan(
-            text: source.substring(
-              matchIndex,
-              matchIndex + query.length,
-            ),
+            text: source.substring(matchIndex, matchIndex + query.length),
             style: baseStyle.copyWith(
               backgroundColor: Colors.yellow.shade300,
               fontWeight: FontWeight.w800,
@@ -270,12 +260,13 @@ void showHomeChatSheet({
       return TextSpan(children: spans);
     }
 
-    final mentionNames = mentions.values
-        .map((name) => name.trim())
-        .where((name) => name.isNotEmpty)
-        .toSet()
-        .toList()
-      ..sort((a, b) => b.length.compareTo(a.length));
+    final mentionNames =
+        mentions.values
+            .map((name) => name.trim())
+            .where((name) => name.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort((a, b) => b.length.compareTo(a.length));
 
     if (mentionNames.isEmpty) {
       return TextSpan(text: source, style: baseStyle);
@@ -314,12 +305,7 @@ void showHomeChatSheet({
     }
 
     if (start < source.length) {
-      spans.add(
-        TextSpan(
-          text: source.substring(start),
-          style: baseStyle,
-        ),
-      );
+      spans.add(TextSpan(text: source.substring(start), style: baseStyle));
     }
 
     return TextSpan(children: spans);
@@ -483,6 +469,7 @@ void showHomeChatSheet({
       },
     );
   }
+
   Future<List<_HomeChatMentionMember>> loadMentionMembers() async {
     final membersByUid = <String, _HomeChatMentionMember>{};
 
@@ -505,15 +492,13 @@ void showHomeChatSheet({
             continue;
           }
 
-          final memberData = Map<String, dynamic>.from(
-            entry.value as Map,
-          );
+          final memberData = Map<String, dynamic>.from(entry.value as Map);
 
           final memberName =
               memberData["name"]?.toString().trim() ??
-                  memberData["displayName"]?.toString().trim() ??
-                  memberData["email"]?.toString().trim() ??
-                  "";
+              memberData["displayName"]?.toString().trim() ??
+              memberData["email"]?.toString().trim() ??
+              "";
 
           if (memberName.isEmpty) {
             continue;
@@ -522,8 +507,7 @@ void showHomeChatSheet({
           membersByUid[memberUid] = _HomeChatMentionMember(
             uid: memberUid,
             name: memberName,
-            photoUrl:
-            memberData["photoUrl"]?.toString().trim() ?? "",
+            photoUrl: memberData["photoUrl"]?.toString().trim() ?? "",
           );
         }
       }
@@ -546,15 +530,14 @@ void showHomeChatSheet({
 
           final ownerName =
               ownerData["name"]?.toString().trim() ??
-                  ownerData["email"]?.toString().trim() ??
-                  "";
+              ownerData["email"]?.toString().trim() ??
+              "";
 
           if (ownerName.isNotEmpty) {
             membersByUid[ownerUid] = _HomeChatMentionMember(
               uid: ownerUid,
               name: ownerName,
-              photoUrl:
-              ownerData["photoUrl"]?.toString().trim() ?? "",
+              photoUrl: ownerData["photoUrl"]?.toString().trim() ?? "",
             );
           }
         }
@@ -562,14 +545,11 @@ void showHomeChatSheet({
     }
 
     final members = membersByUid.values.toList()
-      ..sort(
-            (a, b) => a.name.toLowerCase().compareTo(
-          b.name.toLowerCase(),
-        ),
-      );
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
     return members;
   }
+
   Future<String> getMemberRole(String uid) async {
     if (uid == ownerUid) return "owner";
 
@@ -663,12 +643,13 @@ void showHomeChatSheet({
                 final legacyLastRead =
                     int.tryParse(results[1].value?.toString() ?? "0") ?? 0;
 
-                initialUnreadCount =
-                    ChatService.unreadCounterCount(unreadRaw);
-                initialLastRead = math.max(
-                  ChatService.unreadCounterLastReadAt(unreadRaw),
-                  legacyLastRead,
-                ).toInt();
+                initialUnreadCount = ChatService.unreadCounterCount(unreadRaw);
+                initialLastRead = math
+                    .max(
+                      ChatService.unreadCounterLastReadAt(unreadRaw),
+                      legacyLastRead,
+                    )
+                    .toInt();
               } catch (_) {
                 initialUnreadCount = 0;
                 initialLastRead = 0;
@@ -743,6 +724,7 @@ void showHomeChatSheet({
 
             animateToLatestMessage();
           }
+
           void beginReply({
             required String messageId,
             required Map<String, dynamic> message,
@@ -772,6 +754,13 @@ void showHomeChatSheet({
               replyingToMessage = null;
             });
           }
+
+          String replyDisplayName(Map<String, dynamic>? message) {
+            final name = message?["name"]?.toString().trim() ?? "";
+
+            return name.isNotEmpty ? name : "một thành viên";
+          }
+
           Future<void> sendCurrentMessage() async {
             final text = controller.text.trim();
 
@@ -785,9 +774,10 @@ void showHomeChatSheet({
             }
 
             final currentReplyId = replyingToMessageId;
-            final currentReply = replyingToMessage == null
+            final replySnapshot = replyingToMessage;
+            final currentReply = replySnapshot == null
                 ? null
-                : Map<String, dynamic>.from(replyingToMessage!);
+                : Map<String, dynamic>.from(replySnapshot);
 
             final currentMentions = <String, String>{};
 
@@ -920,7 +910,8 @@ void showHomeChatSheet({
           final screenSize = mediaQuery.size;
           final keyboardVisible = mediaQuery.viewInsets.bottom > 0;
 
-          final sheetHeight = screenSize.height *
+          final sheetHeight =
+              screenSize.height *
               (keyboardVisible
                   ? 0.96
                   : showEmoji
@@ -928,15 +919,18 @@ void showHomeChatSheet({
                   : 0.72);
           final normalizedMentionQuery = mentionQuery.trim().toLowerCase();
 
-          final filteredMentionMembers = mentionMembers.where((member) {
-            if (normalizedMentionQuery.isEmpty) {
-              return true;
-            }
+          final filteredMentionMembers = mentionMembers
+              .where((member) {
+                if (normalizedMentionQuery.isEmpty) {
+                  return true;
+                }
 
-            return member.name.toLowerCase().contains(
-              normalizedMentionQuery,
-            );
-          }).take(8).toList();
+                return member.name.toLowerCase().contains(
+                  normalizedMentionQuery,
+                );
+              })
+              .take(8)
+              .toList();
 
           return PopScope<void>(
             canPop: !isSearching,
@@ -1047,18 +1041,18 @@ void showHomeChatSheet({
                               suffixIcon: searchController.text.isEmpty
                                   ? null
                                   : IconButton(
-                                tooltip: "Xoá từ khoá",
-                                icon: const Icon(Icons.close_rounded),
-                                onPressed: () {
-                                  searchController.clear();
+                                      tooltip: "Xoá từ khoá",
+                                      icon: const Icon(Icons.close_rounded),
+                                      onPressed: () {
+                                        searchController.clear();
 
-                                  setState(() {
-                                    searchQuery = "";
-                                    activeSearchResult = 0;
-                                    currentSearchResultIds = [];
-                                  });
-                                },
-                              ),
+                                        setState(() {
+                                          searchQuery = "";
+                                          activeSearchResult = 0;
+                                          currentSearchResultIds = [];
+                                        });
+                                      },
+                                    ),
                               filled: true,
                               fillColor: Colors.grey.shade100,
                               border: OutlineInputBorder(
@@ -1078,7 +1072,7 @@ void showHomeChatSheet({
                                       currentSearchResultIds.isEmpty
                                           ? "Không có kết quả"
                                           : "${activeSearchResult + 1}/"
-                                          "${currentSearchResultIds.length} kết quả",
+                                                "${currentSearchResultIds.length} kết quả",
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade700,
@@ -1146,22 +1140,20 @@ void showHomeChatSheet({
                                   );
                                 });
 
-                              if (
-                              initialUnreadSnapshotReady &&
-                                  allMessages.isNotEmpty
-                              ) {
-                                final latestMessage =
-                                Map<String, dynamic>.from(
+                              if (initialUnreadSnapshotReady &&
+                                  allMessages.isNotEmpty) {
+                                final latestMessage = Map<String, dynamic>.from(
                                   allMessages.last.value,
                                 );
-                                final latestMessageTime = int.tryParse(
-                                  latestMessage["time"]?.toString() ?? "0",
-                                ) ?? 0;
+                                final latestMessageTime =
+                                    int.tryParse(
+                                      latestMessage["time"]?.toString() ?? "0",
+                                    ) ??
+                                    0;
 
-                                if (
-                                latestMessageTime > 0 &&
-                                    latestMessageTime > lastMarkedReadMessageTime
-                                ) {
+                                if (latestMessageTime > 0 &&
+                                    latestMessageTime >
+                                        lastMarkedReadMessageTime) {
                                   lastMarkedReadMessageTime = latestMessageTime;
 
                                   unawaited(
@@ -1178,8 +1170,8 @@ void showHomeChatSheet({
 
                               final messages = nextHasMoreMessages
                                   ? allMessages.sublist(
-                                allMessages.length - messageLimit,
-                              )
+                                      allMessages.length - messageLimit,
+                                    )
                                   : allMessages;
 
                               // Chỉ kết thúc trạng thái tải khi query mới đã
@@ -1196,8 +1188,8 @@ void showHomeChatSheet({
                                   .toSet();
 
                               messageKeys.removeWhere(
-                                    (messageId, _) =>
-                                !activeMessageIds.contains(messageId),
+                                (messageId, _) =>
+                                    !activeMessageIds.contains(messageId),
                               );
 
                               final normalizedQuery = searchQuery
@@ -1216,13 +1208,13 @@ void showHomeChatSheet({
                                       rawMessage["name"]
                                           ?.toString()
                                           .toLowerCase() ??
-                                          "";
+                                      "";
 
                                   final text =
                                       rawMessage["text"]
                                           ?.toString()
                                           .toLowerCase() ??
-                                          "";
+                                      "";
 
                                   if (name.contains(normalizedQuery) ||
                                       text.contains(normalizedQuery)) {
@@ -1236,11 +1228,11 @@ void showHomeChatSheet({
                               final resultsChanged =
                                   nextSearchResultIds.length !=
                                       currentSearchResultIds.length ||
-                                      nextSearchResultIds.asMap().entries.any(
-                                            (entry) =>
+                                  nextSearchResultIds.asMap().entries.any(
+                                    (entry) =>
                                         entry.value !=
-                                            currentSearchResultIds[entry.key],
-                                      );
+                                        currentSearchResultIds[entry.key],
+                                  );
 
                               if (resultsChanged) {
                                 currentSearchResultIds = nextSearchResultIds;
@@ -1254,8 +1246,8 @@ void showHomeChatSheet({
                                 }
 
                                 WidgetsBinding.instance.addPostFrameCallback((
-                                    _,
-                                    ) {
+                                  _,
+                                ) {
                                   if (isChatSheetClosed || !ctx.mounted) {
                                     return;
                                   }
@@ -1283,7 +1275,7 @@ void showHomeChatSheet({
                                       int.tryParse(
                                         rawMessage["time"]?.toString() ?? "0",
                                       ) ??
-                                          0;
+                                      0;
 
                                   if (senderUid != user.uid &&
                                       messageTime > initialLastRead) {
@@ -1309,7 +1301,7 @@ void showHomeChatSheet({
 
                                 initialScrollUnlockTimer ??= Timer(
                                   const Duration(milliseconds: 900),
-                                      () {
+                                  () {
                                     if (!isChatSheetClosed) {
                                       autoScrollReady = true;
                                     }
@@ -1321,7 +1313,7 @@ void showHomeChatSheet({
                                   scrollController.hasClients) {
                                 final distanceFromBottom =
                                     scrollController.position.pixels -
-                                        scrollController.position.minScrollExtent;
+                                    scrollController.position.minScrollExtent;
 
                                 if (distanceFromBottom <= 140) {
                                   animateToLatestMessage();
@@ -1367,7 +1359,7 @@ void showHomeChatSheet({
                                             Expanded(
                                               child: Text(
                                                 "Còn $unreadNoticeCount tin nhắn "
-                                                    "chưa đọc",
+                                                "chưa đọc",
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w700,
@@ -1389,7 +1381,8 @@ void showHomeChatSheet({
                                       controller: scrollController,
                                       reverse: true,
                                       padding: const EdgeInsets.only(bottom: 8),
-                                      itemCount: messages.length +
+                                      itemCount:
+                                          messages.length +
                                           (hasMoreMessages ? 1 : 0),
                                       itemBuilder: (_, index) {
                                         if (index >= messages.length) {
@@ -1403,24 +1396,24 @@ void showHomeChatSheet({
                                                 onPressed: loadingOlderMessages
                                                     ? null
                                                     : () {
-                                                  loadingOlderMessages =
-                                                  true;
-                                                  messageLimit += 15;
-                                                  setState(() {});
-                                                },
+                                                        loadingOlderMessages =
+                                                            true;
+                                                        messageLimit += 15;
+                                                        setState(() {});
+                                                      },
                                                 icon: loadingOlderMessages
                                                     ? const SizedBox(
-                                                  width: 16,
-                                                  height: 16,
-                                                  child:
-                                                  CircularProgressIndicator(
-                                                    strokeWidth: 2,
-                                                  ),
-                                                )
+                                                        width: 16,
+                                                        height: 16,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                            ),
+                                                      )
                                                     : const Icon(
-                                                  Icons.history_rounded,
-                                                  size: 18,
-                                                ),
+                                                        Icons.history_rounded,
+                                                        size: 18,
+                                                      ),
                                                 label: Text(
                                                   loadingOlderMessages
                                                       ? "Đang tải..."
@@ -1432,9 +1425,9 @@ void showHomeChatSheet({
                                         }
 
                                         final messageEntry =
-                                        messages[messages.length -
-                                            1 -
-                                            index];
+                                            messages[messages.length -
+                                                1 -
+                                                index];
                                         final messageId = messageEntry.key
                                             .toString();
 
@@ -1456,34 +1449,41 @@ void showHomeChatSheet({
                                         final replyRaw = msg["reply"];
 
                                         final reply = replyRaw is Map
-                                            ? Map<String, dynamic>.from(replyRaw)
+                                            ? Map<String, dynamic>.from(
+                                                replyRaw,
+                                              )
                                             : <String, dynamic>{};
 
                                         final replyMessageId =
-                                            reply["messageId"]?.toString().trim() ?? "";
+                                            reply["messageId"]
+                                                ?.toString()
+                                                .trim() ??
+                                            "";
 
                                         final replyName =
-                                            reply["name"]?.toString().trim() ?? "";
+                                            reply["name"]?.toString().trim() ??
+                                            "";
 
                                         final replyText =
-                                            reply["text"]?.toString().trim() ?? "";
+                                            reply["text"]?.toString().trim() ??
+                                            "";
 
                                         final mentionsRaw = msg["mentions"];
                                         final mentions = mentionsRaw is Map
                                             ? Map<String, String>.from(
-                                          mentionsRaw.map(
-                                                (key, value) => MapEntry(
-                                              key.toString(),
-                                              value.toString(),
-                                            ),
-                                          ),
-                                        )
+                                                mentionsRaw.map(
+                                                  (key, value) => MapEntry(
+                                                    key.toString(),
+                                                    value.toString(),
+                                                  ),
+                                                ),
+                                              )
                                             : <String, String>{};
 
                                         return KeyedSubtree(
                                           key: messageKeys.putIfAbsent(
                                             messageId,
-                                                () => GlobalKey(),
+                                            () => GlobalKey(),
                                           ),
                                           child: Align(
                                             alignment: isMe
@@ -1496,7 +1496,7 @@ void showHomeChatSheet({
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
-                                                CrossAxisAlignment.end,
+                                                    CrossAxisAlignment.end,
                                                 children: [
                                                   if (!isMe)
                                                     GestureDetector(
@@ -1504,24 +1504,24 @@ void showHomeChatSheet({
                                                           openCallMemberSheet(
                                                             sheetContext: ctx,
                                                             memberUid:
-                                                            msg["uid"]
-                                                                ?.toString() ??
+                                                                msg["uid"]
+                                                                    ?.toString() ??
                                                                 "",
                                                             name: name,
                                                           ),
                                                       child: CircleAvatar(
                                                         radius: 14,
                                                         backgroundImage:
-                                                        photoUrl.isNotEmpty
+                                                            photoUrl.isNotEmpty
                                                             ? NetworkImage(
-                                                          photoUrl,
-                                                        )
+                                                                photoUrl,
+                                                              )
                                                             : null,
                                                         child: photoUrl.isEmpty
                                                             ? const Icon(
-                                                          Icons.person,
-                                                          size: 15,
-                                                        )
+                                                                Icons.person,
+                                                                size: 15,
+                                                              )
                                                             : null,
                                                       ),
                                                     ),
@@ -1530,170 +1530,196 @@ void showHomeChatSheet({
 
                                                   Flexible(
                                                     child: GestureDetector(
-                                                      behavior: HitTestBehavior.opaque,
+                                                      behavior: HitTestBehavior
+                                                          .opaque,
                                                       onTap: isMe
                                                           ? null
                                                           : () {
-                                                        beginReply(
-                                                          messageId: messageId,
-                                                          message: msg,
-                                                        );
-                                                      },
+                                                              beginReply(
+                                                                messageId:
+                                                                    messageId,
+                                                                message: msg,
+                                                              );
+                                                            },
                                                       child: Container(
                                                         constraints:
-                                                        BoxConstraints(
-                                                          maxWidth:
-                                                          screenSize
-                                                              .width *
-                                                              0.68,
-                                                        ),
+                                                            BoxConstraints(
+                                                              maxWidth:
+                                                                  screenSize
+                                                                      .width *
+                                                                  0.68,
+                                                            ),
                                                         padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 12,
-                                                          vertical: 9,
-                                                        ),
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 9,
+                                                            ),
                                                         decoration: BoxDecoration(
                                                           color: isMe
                                                               ? Colors
-                                                              .blue
-                                                              .shade100
+                                                                    .blue
+                                                                    .shade100
                                                               : Colors
-                                                              .grey
-                                                              .shade100,
+                                                                    .grey
+                                                                    .shade100,
                                                           borderRadius:
-                                                          BorderRadius.circular(
-                                                            16,
-                                                          ),
+                                                              BorderRadius.circular(
+                                                                16,
+                                                              ),
                                                         ),
                                                         child: Column(
                                                           crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             if (!isMe)
                                                               FutureBuilder<
-                                                                  String
+                                                                String
                                                               >(
                                                                 future:
-                                                                getMemberRole(
-                                                                  senderUid,
-                                                                ),
-                                                                builder: (context, roleSnap) {
-                                                                  final role =
-                                                                      roleSnap
-                                                                          .data ??
+                                                                    getMemberRole(
+                                                                      senderUid,
+                                                                    ),
+                                                                builder:
+                                                                    (
+                                                                      context,
+                                                                      roleSnap,
+                                                                    ) {
+                                                                      final role =
+                                                                          roleSnap
+                                                                              .data ??
                                                                           "member";
 
-                                                                  final icon =
-                                                                  role ==
-                                                                      "owner"
-                                                                      ? Icons
-                                                                      .workspace_premium_rounded
-                                                                      : role ==
-                                                                      "admin"
-                                                                      ? Icons
-                                                                      .admin_panel_settings_rounded
-                                                                      : Icons
-                                                                      .person_rounded;
+                                                                      final icon =
+                                                                          role ==
+                                                                              "owner"
+                                                                          ? Icons.workspace_premium_rounded
+                                                                          : role ==
+                                                                                "admin"
+                                                                          ? Icons.admin_panel_settings_rounded
+                                                                          : Icons.person_rounded;
 
-                                                                  final color =
-                                                                  role ==
-                                                                      "owner"
-                                                                      ? Colors
-                                                                      .blue
-                                                                      .shade700
-                                                                      : role ==
-                                                                      "admin"
-                                                                      ? Colors
-                                                                      .deepPurple
-                                                                      .shade700
-                                                                      : Colors
-                                                                      .blueGrey
-                                                                      .shade700;
+                                                                      final color =
+                                                                          role ==
+                                                                              "owner"
+                                                                          ? Colors.blue.shade700
+                                                                          : role ==
+                                                                                "admin"
+                                                                          ? Colors.deepPurple.shade700
+                                                                          : Colors.blueGrey.shade700;
 
-                                                                  return GestureDetector(
-                                                                    onTap: () => openCallMemberSheet(
-                                                                      sheetContext:
-                                                                      ctx,
-                                                                      memberUid:
-                                                                      senderUid,
-                                                                      name: name,
-                                                                    ),
-                                                                    child: Row(
-                                                                      mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                      children: [
-                                                                        Icon(
-                                                                          icon,
-                                                                          size:
-                                                                          13,
-                                                                          color:
-                                                                          color,
-                                                                        ),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                          4,
-                                                                        ),
-                                                                        Flexible(
-                                                                          child: Text.rich(
-                                                                            highlightedSpan(
+                                                                      return GestureDetector(
+                                                                        onTap: () => openCallMemberSheet(
+                                                                          sheetContext:
+                                                                              ctx,
+                                                                          memberUid:
+                                                                              senderUid,
+                                                                          name:
                                                                               name,
-                                                                              TextStyle(
-                                                                                fontSize: 11,
-                                                                                fontWeight: FontWeight.w800,
-                                                                                color: color,
+                                                                        ),
+                                                                        child: Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Icon(
+                                                                              icon,
+                                                                              size: 13,
+                                                                              color: color,
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 4,
+                                                                            ),
+                                                                            Flexible(
+                                                                              child: Text.rich(
+                                                                                highlightedSpan(
+                                                                                  name,
+                                                                                  TextStyle(
+                                                                                    fontSize: 11,
+                                                                                    fontWeight: FontWeight.w800,
+                                                                                    color: color,
+                                                                                  ),
+                                                                                ),
+                                                                                overflow: TextOverflow.ellipsis,
                                                                               ),
                                                                             ),
-                                                                            overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                          ),
+                                                                          ],
                                                                         ),
-                                                                      ],
-                                                                    ),
-                                                                  );
-                                                                },
+                                                                      );
+                                                                    },
                                                               ),
                                                             Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .end,
                                                               children: [
-                                                                if (replyMessageId.isNotEmpty) ...[
+                                                                if (replyMessageId
+                                                                    .isNotEmpty) ...[
                                                                   GestureDetector(
-                                                                    onTap: () => scrollToMessage(replyMessageId),
+                                                                    onTap: () =>
+                                                                        scrollToMessage(
+                                                                          replyMessageId,
+                                                                        ),
                                                                     child: Container(
-                                                                      width: double.infinity,
-                                                                      margin: const EdgeInsets.only(bottom: 7),
-                                                                      padding: const EdgeInsets.fromLTRB(9, 7, 9, 7),
+                                                                      width: double
+                                                                          .infinity,
+                                                                      margin: const EdgeInsets.only(
+                                                                        bottom:
+                                                                            7,
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.fromLTRB(
+                                                                            9,
+                                                                            7,
+                                                                            9,
+                                                                            7,
+                                                                          ),
                                                                       decoration: BoxDecoration(
-                                                                        color: Colors.white.withValues(alpha: 0.65),
-                                                                        borderRadius: BorderRadius.circular(10),
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withValues(
+                                                                              alpha: 0.65,
+                                                                            ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                              10,
+                                                                            ),
                                                                         border: const Border(
                                                                           left: BorderSide(
-                                                                            color: SafeHomeColors.primary,
-                                                                            width: 3,
+                                                                            color:
+                                                                                SafeHomeColors.primary,
+                                                                            width:
+                                                                                3,
                                                                           ),
                                                                         ),
                                                                       ),
                                                                       child: Column(
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
                                                                         children: [
                                                                           Text(
                                                                             replyName.isNotEmpty
                                                                                 ? replyName
                                                                                 : "Một thành viên",
-                                                                            maxLines: 1,
-                                                                            overflow: TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
                                                                             style: const TextStyle(
                                                                               color: SafeHomeColors.primary,
                                                                               fontSize: 11,
                                                                               fontWeight: FontWeight.w800,
                                                                             ),
                                                                           ),
-                                                                          const SizedBox(height: 2),
+                                                                          const SizedBox(
+                                                                            height:
+                                                                                2,
+                                                                          ),
                                                                           Text(
                                                                             replyText,
-                                                                            maxLines: 2,
-                                                                            overflow: TextOverflow.ellipsis,
+                                                                            maxLines:
+                                                                                2,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
                                                                             style: const TextStyle(
                                                                               color: SafeHomeColors.textSecondary,
                                                                               fontSize: 11,
@@ -1710,10 +1736,11 @@ void showHomeChatSheet({
                                                                   highlightedSpan(
                                                                     text,
                                                                     const TextStyle(
-                                                                      fontSize: 14,
+                                                                      fontSize:
+                                                                          14,
                                                                     ),
                                                                     mentions:
-                                                                    mentions,
+                                                                        mentions,
                                                                   ),
                                                                 ),
 
@@ -1724,7 +1751,8 @@ void showHomeChatSheet({
                                                                 Text(
                                                                   timeText,
                                                                   style: TextStyle(
-                                                                    fontSize: 10,
+                                                                    fontSize:
+                                                                        10,
                                                                     color: Colors
                                                                         .grey
                                                                         .shade600,
@@ -1759,16 +1787,12 @@ void showHomeChatSheet({
                         if (showMentionSuggestions)
                           Container(
                             width: double.infinity,
-                            constraints: const BoxConstraints(
-                              maxHeight: 220,
-                            ),
+                            constraints: const BoxConstraints(maxHeight: 220),
                             margin: const EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: SafeHomeColors.border,
-                              ),
+                              border: Border.all(color: SafeHomeColors.border),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withValues(alpha: 0.08),
@@ -1780,73 +1804,66 @@ void showHomeChatSheet({
                             clipBehavior: Clip.antiAlias,
                             child: filteredMentionMembers.isEmpty
                                 ? const Padding(
-                              padding: EdgeInsets.all(14),
-                              child: Text(
-                                "Không tìm thấy thành viên phù hợp",
-                                style: TextStyle(
-                                  color:
-                                  SafeHomeColors.textSecondary,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )
-                                : ListView.separated(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 6,
-                              ),
-                              itemCount:
-                              filteredMentionMembers.length,
-                              separatorBuilder: (_, __) => Divider(
-                                height: 1,
-                                color: Colors.grey.shade200,
-                              ),
-                              itemBuilder: (_, index) {
-                                final member =
-                                filteredMentionMembers[index];
-
-                                return ListTile(
-                                  dense: true,
-                                  leading: CircleAvatar(
-                                    radius: 18,
-                                    backgroundColor:
-                                    SafeHomeColors.primary
-                                        .withValues(alpha: 0.10),
-                                    backgroundImage:
-                                    member.photoUrl.isNotEmpty
-                                        ? NetworkImage(
-                                      member.photoUrl,
-                                    )
-                                        : null,
-                                    child: member.photoUrl.isEmpty
-                                        ? const Icon(
-                                      Icons.person_rounded,
-                                      size: 19,
-                                      color:
-                                      SafeHomeColors.primary,
-                                    )
-                                        : null,
-                                  ),
-                                  title: Text(
-                                    member.name,
-                                    maxLines: 1,
-                                    overflow:
-                                    TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
+                                    padding: EdgeInsets.all(14),
+                                    child: Text(
+                                      "Không tìm thấy thành viên phù hợp",
+                                      style: TextStyle(
+                                        color: SafeHomeColors.textSecondary,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
+                                  )
+                                : ListView.separated(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 6,
+                                    ),
+                                    itemCount: filteredMentionMembers.length,
+                                    separatorBuilder: (_, _) => Divider(
+                                      height: 1,
+                                      color: Colors.grey.shade200,
+                                    ),
+                                    itemBuilder: (_, index) {
+                                      final member =
+                                          filteredMentionMembers[index];
+
+                                      return ListTile(
+                                        dense: true,
+                                        leading: CircleAvatar(
+                                          radius: 18,
+                                          backgroundColor: SafeHomeColors
+                                              .primary
+                                              .withValues(alpha: 0.10),
+                                          backgroundImage:
+                                              member.photoUrl.isNotEmpty
+                                              ? NetworkImage(member.photoUrl)
+                                              : null,
+                                          child: member.photoUrl.isEmpty
+                                              ? const Icon(
+                                                  Icons.person_rounded,
+                                                  size: 19,
+                                                  color: SafeHomeColors.primary,
+                                                )
+                                              : null,
+                                        ),
+                                        title: Text(
+                                          member.name,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        subtitle: const Text(
+                                          "Nhắc đến trong tin nhắn",
+                                          style: TextStyle(fontSize: 11),
+                                        ),
+                                        onTap: () => selectMention(member),
+                                      );
+                                    },
                                   ),
-                                  subtitle: const Text(
-                                    "Nhắc đến trong tin nhắn",
-                                    style: TextStyle(fontSize: 11),
-                                  ),
-                                  onTap: () =>
-                                      selectMention(member),
-                                );
-                              },
-                            ),
                           ),
 
                         if (replyingToMessage != null)
@@ -1861,7 +1878,9 @@ void showHomeChatSheet({
                               margin: const EdgeInsets.only(bottom: 8),
                               padding: const EdgeInsets.fromLTRB(10, 8, 4, 8),
                               decoration: BoxDecoration(
-                                color: SafeHomeColors.primary.withValues(alpha: 0.07),
+                                color: SafeHomeColors.primary.withValues(
+                                  alpha: 0.07,
+                                ),
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: Row(
@@ -1877,10 +1896,11 @@ void showHomeChatSheet({
                                   const SizedBox(width: 9),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Đang trả lời ${replyingToMessage?["name"]?.toString().trim().isNotEmpty == true ? replyingToMessage!["name"].toString().trim() : "một thành viên"}",
+                                          "Đang trả lời ${replyDisplayName(replyingToMessage)}",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -1891,7 +1911,9 @@ void showHomeChatSheet({
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          replyingToMessage?["text"]?.toString() ?? "",
+                                          replyingToMessage?["text"]
+                                                  ?.toString() ??
+                                              "",
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -2023,11 +2045,11 @@ void showHomeChatSheet({
                                         iconColorSelected: Colors.blue,
                                       ),
                                       bottomActionBarConfig:
-                                      const BottomActionBarConfig(
-                                        backgroundColor: Colors.white,
-                                        buttonColor: Colors.white,
-                                        buttonIconColor: Colors.grey,
-                                      ),
+                                          const BottomActionBarConfig(
+                                            backgroundColor: Colors.white,
+                                            buttonColor: Colors.white,
+                                            buttonIconColor: Colors.grey,
+                                          ),
                                     ),
                                   ),
                                 );
@@ -2210,10 +2232,10 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
                       : null,
                   child: previewMembers[index].photoUrl.isEmpty
                       ? Icon(
-                    Icons.person_rounded,
-                    size: 13,
-                    color: Colors.blueGrey.shade500,
-                  )
+                          Icons.person_rounded,
+                          size: 13,
+                          color: Colors.blueGrey.shade500,
+                        )
                       : null,
                 ),
               ),

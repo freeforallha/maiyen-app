@@ -253,62 +253,6 @@ class AccountAvatarSheet {
     }
   }
 
-  static Widget _infoTile({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    final displayValue = value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
-
-    return Container(
-      padding: const EdgeInsets.all(13),
-      decoration: BoxDecoration(
-        color: SafeHomeColors.surfaceSoft,
-        borderRadius: BorderRadius.circular(17),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: SafeHomeColors.surface,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, size: 19, color: SafeHomeColors.primary),
-          ),
-          const SizedBox(width: 11),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  displayValue,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: SafeHomeColors.textPrimary,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   static Widget _compactProfileInfo({
     required String label,
     required String value,
@@ -601,15 +545,14 @@ class AccountAvatarSheet {
     int hiddenDeleteTapCount = 0;
     DateTime? lastHiddenDeleteTapAt;
 
-    Future<void> handleHiddenDeleteTap(
-        BuildContext sheetContext,
-        ) async {
+    Future<void> handleHiddenDeleteTap(BuildContext sheetContext) async {
       final now = DateTime.now();
 
       // Không ấn liên tục thì bắt đầu đếm lại.
-      if (lastHiddenDeleteTapAt == null ||
-          now.difference(lastHiddenDeleteTapAt!) >
-              const Duration(seconds: 2)) {
+      final previousTapAt = lastHiddenDeleteTapAt;
+
+      if (previousTapAt == null ||
+          now.difference(previousTapAt) > const Duration(seconds: 2)) {
         hiddenDeleteTapCount = 0;
       }
 
@@ -623,9 +566,7 @@ class AccountAvatarSheet {
       hiddenDeleteTapCount = 0;
       lastHiddenDeleteTapAt = null;
 
-      await _showDeleteConfirmDialog(
-        sheetContext,
-      );
+      await _showDeleteConfirmDialog(sheetContext);
     }
 
     showModalBottomSheet<void>(
@@ -894,7 +835,6 @@ class AccountAvatarSheet {
                             logout();
                           },
                         ),
-
                       ],
                     ),
                   ),
