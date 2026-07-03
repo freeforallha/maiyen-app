@@ -19,6 +19,7 @@ import '../widgets/device_list.dart';
 import '../widgets/status_panel.dart';
 import '../sheets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
+import 'home/home_bottom_bar.dart';
 import 'home/home_dialogs.dart';
 import 'home/home_header_bar.dart';
 import '../dialogs/confirm_dialog.dart';
@@ -5673,546 +5674,396 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
       ),
 
-      bottomNavigationBar: SafeArea(
-        top: false,
-        minimum: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-        child: Container(
-          height: 68,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
-          decoration: BoxDecoration(
-            color: SafeHomeColors.surface.withValues(alpha: 0.97),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: SafeHomeColors.border, width: 0.9),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.075),
-                blurRadius: 24,
-                offset: const Offset(0, 9),
-              ),
-            ],
-          ),
-          child: IconButtonTheme(
-            data: IconButtonThemeData(
-              style: IconButton.styleFrom(
-                minimumSize: const Size(46, 46),
-                maximumSize: const Size(46, 46),
-                padding: EdgeInsets.zero,
-                foregroundColor: SafeHomeColors.textSecondary,
-                backgroundColor: Colors.transparent,
-                hoverColor: SafeHomeColors.primarySoft,
-                highlightColor: SafeHomeColors.primarySoft,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  tooltip: _strings.t("Thêm Home"),
-                  icon: const Icon(
-                    Icons.add_home_work_rounded,
-                    color: SafeHomeColors.primary,
-                  ),
-                  onPressed: showAddHomeOptions,
-                ),
+      bottomNavigationBar: HomeBottomBar(
+        addHomeTooltip: _strings.t("Thêm Home"),
+        unreadChatCount: unreadChatByHome[selectedHome] ?? 0,
+        inviteCount: shareRequests.length,
+        alarmEnabled: alarmEnabled,
+        onAddHome: showAddHomeOptions,
+        onOpenChat: () {
+          showHomeChatSheet(
+            context: context,
+            homeId: selectedHome,
+            homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+            userName: userName,
+            userPhotoUrl: userPhotoUrl,
+            ownerUid: getHomeOwnerUid(),
+            canManageMembers: canManageHome(),
+            isOwner: isOwner(),
+          );
+        },
+        onOpenAlarm: () async {
+          final reminderEnabled = await hasEnabledReminderSchedule();
 
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chat_bubble_rounded,
-                        color: SafeHomeColors.primary,
-                      ),
-                      onPressed: () {
-                        showHomeChatSheet(
-                          context: context,
-                          homeId: selectedHome,
-                          homeName:
-                              homes[selectedHome]?["name"]?.toString() ??
-                              selectedHome,
-                          userName: userName,
-                          userPhotoUrl: userPhotoUrl,
-                          ownerUid: getHomeOwnerUid(),
-                          canManageMembers: canManageHome(),
-                          isOwner: isOwner(),
-                        );
-                      },
-                    ),
-                    if ((unreadChatByHome[selectedHome] ?? 0) > 0)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.danger,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: SafeHomeColors.surface,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: Text(
-                            (unreadChatByHome[selectedHome] ?? 0) > 99
-                                ? "99+"
-                                : (unreadChatByHome[selectedHome] ?? 0)
-                                      .toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+          if (!context.mounted) return;
+
+          showModalBottomSheet(
+            context: context,
+            showDragHandle: false,
+            backgroundColor: Colors.transparent,
+            builder: (_) {
+              bool localAlarmEnabled = alarmEnabled;
+
+              return StatefulBuilder(
+                builder: (context, setModalState) {
+                  return SafeArea(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
+                      decoration: const BoxDecoration(
+                        color: SafeHomeColors.surface,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(26),
                         ),
                       ),
-                  ],
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.crisis_alert_rounded,
-                    color: alarmEnabled
-                        ? SafeHomeColors.danger
-                        : SafeHomeColors.textSecondary,
-                  ),
-                  onPressed: () async {
-                    final reminderEnabled = await hasEnabledReminderSchedule();
-
-                    if (!context.mounted) return;
-
-                    showModalBottomSheet(
-                      context: context,
-                      showDragHandle: false,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) {
-                        bool localAlarmEnabled = alarmEnabled;
-
-                        return StatefulBuilder(
-                          builder: (context, setModalState) {
-                            return SafeArea(
-                              child: Container(
-                                padding: const EdgeInsets.fromLTRB(
-                                  18,
-                                  10,
-                                  18,
-                                  18,
-                                ),
-                                decoration: const BoxDecoration(
-                                  color: SafeHomeColors.surface,
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(26),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: 44,
-                                      height: 5,
-                                      margin: const EdgeInsets.only(bottom: 10),
-                                      decoration: BoxDecoration(
-                                        color: SafeHomeColors.border,
-                                        borderRadius: BorderRadius.circular(
-                                          999,
-                                        ),
-                                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 5,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.border,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.crisis_alert_rounded,
+                              color: localAlarmEnabled
+                                  ? SafeHomeColors.primary
+                                  : SafeHomeColors.textSecondary.withValues(
+                                      alpha: 0.45,
                                     ),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.crisis_alert_rounded,
-                                        color: localAlarmEnabled
-                                            ? SafeHomeColors.primary
-                                            : SafeHomeColors.textSecondary
-                                                  .withValues(alpha: 0.45),
+                            ),
+                            title: Text(
+                              _strings.t("Hẹn giờ Alarm"),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                color: localAlarmEnabled
+                                    ? SafeHomeColors.textPrimary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.55,
                                       ),
-                                      title: Text(
-                                        _strings.t("Hẹn giờ Alarm"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                          color: localAlarmEnabled
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        localAlarmEnabled
-                                            ? (formatAlarmSchedules()
-                                                      .trim()
-                                                      .isEmpty
-                                                  ? _strings.t(
-                                                      "Chưa thiết lập thời gian",
-                                                    )
-                                                  : formatAlarmSchedules())
-                                            : _strings.t("Đang tắt"),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: localAlarmEnabled
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      trailing: Switch(
-                                        value: localAlarmEnabled,
-                                        activeThumbColor:
-                                            SafeHomeColors.primary,
-                                        activeTrackColor: SafeHomeColors.primary
-                                            .withValues(alpha: 0.28),
-                                        onChanged: (value) async {
-                                          final changed = await setAlarmEnabled(
-                                            value,
-                                          );
-
-                                          if (!context.mounted) {
-                                            return;
-                                          }
-
-                                          setModalState(() {
-                                            localAlarmEnabled = changed
-                                                ? value
-                                                : alarmEnabled;
-                                          });
-                                        },
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => AlarmDeviceSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            devices: getDevices(),
-                                            canManageHome: canManageHome(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.pause_circle_filled_rounded,
-                                        color: alarmPauseToday.isNotEmpty
-                                            ? SafeHomeColors.warning
-                                            : SafeHomeColors.textSecondary
-                                                  .withValues(alpha: 0.45),
-                                      ),
-                                      title: Text(
-                                        _strings.t("Tạm tắt Alarm hôm nay"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: alarmPauseToday.isNotEmpty
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        alarmPauseToday.isEmpty
-                                            ? _strings.t("Chưa thiết lập")
-                                            : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
-                                                  "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${_strings.t(alarmPauseToday["reason"].toString())}" : ""}",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: alarmPauseToday.isNotEmpty
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      onTap: () async {
-                                        Navigator.pop(context);
-                                        await Future<void>.delayed(
-                                          const Duration(milliseconds: 120),
-                                        );
-
-                                        if (!mounted) return;
-
-                                        await openAlarmPauseSheetWithReminder();
-                                      },
-                                    ),
-                                    const Divider(),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.notifications_active_rounded,
-                                        color: reminderEnabled
-                                            ? SafeHomeColors.primary
-                                            : SafeHomeColors.textSecondary
-                                                  .withValues(alpha: 0.45),
-                                      ),
-                                      title: Text(
-                                        _strings.t("Hẹn giờ Reminder"),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: reminderEnabled
-                                              ? SafeHomeColors.textPrimary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.55),
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        reminderEnabled
-                                            ? _strings.t("Đã thiết lập")
-                                            : _strings.t("Chưa thiết lập"),
-                                        style: TextStyle(
-                                          color: reminderEnabled
-                                              ? SafeHomeColors.textSecondary
-                                              : SafeHomeColors.textSecondary
-                                                    .withValues(alpha: 0.45),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(context);
-
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (_) => ScheduleSheet(
-                                            ownerUid: getHomeOwnerUid(),
-                                            homeId: selectedHome,
-                                            isShared:
-                                                homes[selectedHome]?["_shared"] ==
-                                                true,
-                                            type: "notification",
-                                            canManageHome: canManageHome(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.settings_rounded,
-                        color: SafeHomeColors.textSecondary,
-                      ),
-                      onPressed: () {
-                        showSettingsSheet(
-                          homeId: selectedHome,
-                          homeName:
-                              homes[selectedHome]?["name"]?.toString() ??
-                              selectedHome,
-                          homeAddress:
-                              homes[selectedHome]?["address"]?.toString() ?? "",
-                          role: getMyRole(),
-                          onAllDevices: () {
-                            final devices = getDevices();
+                            ),
+                            subtitle: Text(
+                              localAlarmEnabled
+                                  ? (formatAlarmSchedules().trim().isEmpty
+                                        ? _strings.t("Chưa thiết lập thời gian")
+                                        : formatAlarmSchedules())
+                                  : _strings.t("Đang tắt"),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: localAlarmEnabled
+                                    ? SafeHomeColors.textSecondary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.45,
+                                      ),
+                              ),
+                            ),
+                            trailing: Switch(
+                              value: localAlarmEnabled,
+                              activeThumbColor: SafeHomeColors.primary,
+                              activeTrackColor: SafeHomeColors.primary
+                                  .withValues(alpha: 0.28),
+                              onChanged: (value) async {
+                                final changed = await setAlarmEnabled(value);
 
-                            if (devices.isEmpty) {
-                              showTopToast(
-                                context,
-                                _strings.t("Không có thiết bị"),
-                                color: Colors.orange,
-                                icon: Icons.sensors_off_rounded,
-                              );
-                              return;
-                            }
+                                if (!context.mounted) {
+                                  return;
+                                }
 
-                            if (devices.length == 1) {
-                              final entry = devices.entries.first;
-
+                                setModalState(() {
+                                  localAlarmEnabled = changed
+                                      ? value
+                                      : alarmEnabled;
+                                });
+                              },
+                            ),
+                            onTap: () {
                               Navigator.pop(context);
 
-                              showDeviceDetail(
+                              showModalBottomSheet(
                                 context: context,
-                                id: entry.key,
-                                d: safeMap(entry.value),
-                                ownerUid: getHomeOwnerUid(),
-                                homeId: selectedHome,
-                                onRename: canManageHome()
-                                    ? () => renameDevice(entry.key)
-                                    : null,
-                                onDelete: canManageHome()
-                                    ? () => deleteDevice(entry.key)
-                                    : null,
-                                onNotification: () =>
-                                    openNotificationList(entry.key),
-                              );
-
-                              return;
-                            }
-
-                            showAllDevicesSheet(
-                              context: context,
-                              devices: devices,
-                              onTapDevice: (id) {
-                                showDeviceDetail(
-                                  context: context,
-                                  id: id,
-                                  d: safeMap(getDevices()[id]),
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => AlarmDeviceSheet(
                                   ownerUid: getHomeOwnerUid(),
                                   homeId: selectedHome,
-                                  onRename: canManageHome()
-                                      ? () => renameDevice(id)
-                                      : null,
-                                  onDelete: canManageHome()
-                                      ? () => deleteDevice(id)
-                                      : null,
-                                  onNotification: () =>
-                                      openNotificationList(id),
-                                );
-                              },
-                            );
-                          },
-                          onAccount: () {
-                            AccountAvatarSheet.show(
-                              context: context,
-                              logout: logout,
-                              onEditProfile: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => EditProfilePage(
-                                      userName: userName,
-                                      userGender: userGender,
-                                      userDob: userDob,
-                                      userPhone: userPhone,
+                                  devices: getDevices(),
+                                  canManageHome: canManageHome(),
+                                ),
+                              );
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.pause_circle_filled_rounded,
+                              color: alarmPauseToday.isNotEmpty
+                                  ? SafeHomeColors.warning
+                                  : SafeHomeColors.textSecondary.withValues(
+                                      alpha: 0.45,
                                     ),
-                                  ),
-                                );
-                              },
-                              userName: userName,
-                              userGender: userGender,
-                              userDob: userDob,
-                              userPhone: userPhone,
-                              inviteCountNotifier: inviteCountNotifier,
+                            ),
+                            title: Text(
+                              _strings.t("Tạm tắt Alarm hôm nay"),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: alarmPauseToday.isNotEmpty
+                                    ? SafeHomeColors.textPrimary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.55,
+                                      ),
+                              ),
+                            ),
+                            subtitle: Text(
+                              alarmPauseToday.isEmpty
+                                  ? _strings.t("Chưa thiết lập")
+                                  : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
+                                        "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${_strings.t(alarmPauseToday["reason"].toString())}" : ""}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: alarmPauseToday.isNotEmpty
+                                    ? SafeHomeColors.textSecondary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.45,
+                                      ),
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              await Future<void>.delayed(
+                                const Duration(milliseconds: 120),
+                              );
 
-                              onShareRequests: () async {
-                                final changed = await showShareRequestSheet(
-                                  context: context,
-                                  requests: shareRequests,
-                                  uid: uid,
-                                );
+                              if (!mounted) return;
 
-                                if (changed == true) {
-                                  await refreshShareRequests();
-                                }
-                              },
-                            );
-                          },
-                          onDeleteHome: isOwner()
-                              ? deleteHome
-                              : () {
-                                  showTopToast(
-                                    context,
-                                    _strings.t("Chỉ chủ nhà mới được xoá nhà"),
-                                    color: Colors.orange,
-                                    icon: Icons.lock_rounded,
-                                  );
-                                },
-                          onRenameHome: renameHome,
-                          onSecurityTest: runFirebaseSecurityTest,
-                          onTransferOwner: isOwner()
-                              ? transferOwner
-                              : () {
-                                  showTopToast(
-                                    context,
-                                    _strings.t(
-                                      "Chỉ chủ nhà mới được chuyển quyền",
+                              await openAlarmPauseSheetWithReminder();
+                            },
+                          ),
+                          const Divider(),
+                          ListTile(
+                            leading: Icon(
+                              Icons.notifications_active_rounded,
+                              color: reminderEnabled
+                                  ? SafeHomeColors.primary
+                                  : SafeHomeColors.textSecondary.withValues(
+                                      alpha: 0.45,
                                     ),
-                                    color: Colors.orange,
-                                    icon: Icons.admin_panel_settings_rounded,
-                                  );
-                                },
-                          context: context,
-                          inviteCountNotifier: inviteCountNotifier,
-                          onShareRequests: () async {
-                            final changed = await showShareRequestSheet(
-                              context: context,
-                              requests: shareRequests,
-                              uid: uid,
-                            );
-
-                            if (changed == true) {
-                              await refreshShareRequests();
-                            }
-                          },
-                          onShare: shareHome,
-                          onAutoAway: openAutoAwaySetup,
-                          onRooms: () {
-                            showRoomManagementSheet(
-                              context: context,
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                            );
-                          },
-                          onShareList: () async {
-                            final selfLeft = await showShareListSheet(
-                              canManageMembers: canManageHome(),
-                              isOwner: isOwner(),
-                              context: context,
-                              ownerUid: getHomeOwnerUid(),
-                              homeId: selectedHome,
-                              homeName:
-                                  homes[selectedHome]?["name"]?.toString() ??
-                                  selectedHome,
-                            );
-
-                            if (selfLeft == true && context.mounted) {
-                              Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).popUntil((route) => route.isFirst);
-                            }
-                          },
-                          onLogout: logout,
-                        );
-                      },
-                    ),
-                    if (shareRequests.isNotEmpty)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            minWidth: 18,
-                            minHeight: 18,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.danger,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: SafeHomeColors.surface,
-                              width: 1.5,
                             ),
-                          ),
-                          child: Text(
-                            "${shareRequests.length}",
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                            title: Text(
+                              _strings.t("Hẹn giờ Reminder"),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: reminderEnabled
+                                    ? SafeHomeColors.textPrimary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.55,
+                                      ),
+                              ),
                             ),
+                            subtitle: Text(
+                              reminderEnabled
+                                  ? _strings.t("Đã thiết lập")
+                                  : _strings.t("Chưa thiết lập"),
+                              style: TextStyle(
+                                color: reminderEnabled
+                                    ? SafeHomeColors.textSecondary
+                                    : SafeHomeColors.textSecondary.withValues(
+                                        alpha: 0.45,
+                                      ),
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => ScheduleSheet(
+                                  ownerUid: getHomeOwnerUid(),
+                                  homeId: selectedHome,
+                                  isShared:
+                                      homes[selectedHome]?["_shared"] == true,
+                                  type: "notification",
+                                  canManageHome: canManageHome(),
+                                ),
+                              );
+                            },
                           ),
-                        ),
+                        ],
                       ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+        onOpenSettings: () {
+          showSettingsSheet(
+            homeId: selectedHome,
+            homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+            homeAddress: homes[selectedHome]?["address"]?.toString() ?? "",
+            role: getMyRole(),
+            onAllDevices: () {
+              final devices = getDevices();
+
+              if (devices.isEmpty) {
+                showTopToast(
+                  context,
+                  _strings.t("Không có thiết bị"),
+                  color: Colors.orange,
+                  icon: Icons.sensors_off_rounded,
+                );
+                return;
+              }
+
+              if (devices.length == 1) {
+                final entry = devices.entries.first;
+
+                Navigator.pop(context);
+
+                showDeviceDetail(
+                  context: context,
+                  id: entry.key,
+                  d: safeMap(entry.value),
+                  ownerUid: getHomeOwnerUid(),
+                  homeId: selectedHome,
+                  onRename: canManageHome()
+                      ? () => renameDevice(entry.key)
+                      : null,
+                  onDelete: canManageHome()
+                      ? () => deleteDevice(entry.key)
+                      : null,
+                  onNotification: () => openNotificationList(entry.key),
+                );
+
+                return;
+              }
+
+              showAllDevicesSheet(
+                context: context,
+                devices: devices,
+                onTapDevice: (id) {
+                  showDeviceDetail(
+                    context: context,
+                    id: id,
+                    d: safeMap(getDevices()[id]),
+                    ownerUid: getHomeOwnerUid(),
+                    homeId: selectedHome,
+                    onRename: canManageHome() ? () => renameDevice(id) : null,
+                    onDelete: canManageHome() ? () => deleteDevice(id) : null,
+                    onNotification: () => openNotificationList(id),
+                  );
+                },
+              );
+            },
+            onAccount: () {
+              AccountAvatarSheet.show(
+                context: context,
+                logout: logout,
+                onEditProfile: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditProfilePage(
+                        userName: userName,
+                        userGender: userGender,
+                        userDob: userDob,
+                        userPhone: userPhone,
+                      ),
+                    ),
+                  );
+                },
+                userName: userName,
+                userGender: userGender,
+                userDob: userDob,
+                userPhone: userPhone,
+                inviteCountNotifier: inviteCountNotifier,
+
+                onShareRequests: () async {
+                  final changed = await showShareRequestSheet(
+                    context: context,
+                    requests: shareRequests,
+                    uid: uid,
+                  );
+
+                  if (changed == true) {
+                    await refreshShareRequests();
+                  }
+                },
+              );
+            },
+            onDeleteHome: isOwner()
+                ? deleteHome
+                : () {
+                    showTopToast(
+                      context,
+                      _strings.t("Chỉ chủ nhà mới được xoá nhà"),
+                      color: Colors.orange,
+                      icon: Icons.lock_rounded,
+                    );
+                  },
+            onRenameHome: renameHome,
+            onSecurityTest: runFirebaseSecurityTest,
+            onTransferOwner: isOwner()
+                ? transferOwner
+                : () {
+                    showTopToast(
+                      context,
+                      _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+                      color: Colors.orange,
+                      icon: Icons.admin_panel_settings_rounded,
+                    );
+                  },
+            context: context,
+            inviteCountNotifier: inviteCountNotifier,
+            onShareRequests: () async {
+              final changed = await showShareRequestSheet(
+                context: context,
+                requests: shareRequests,
+                uid: uid,
+              );
+
+              if (changed == true) {
+                await refreshShareRequests();
+              }
+            },
+            onShare: shareHome,
+            onAutoAway: openAutoAwaySetup,
+            onRooms: () {
+              showRoomManagementSheet(
+                context: context,
+                ownerUid: getHomeOwnerUid(),
+                homeId: selectedHome,
+              );
+            },
+            onShareList: () async {
+              final selfLeft = await showShareListSheet(
+                canManageMembers: canManageHome(),
+                isOwner: isOwner(),
+                context: context,
+                ownerUid: getHomeOwnerUid(),
+                homeId: selectedHome,
+                homeName:
+                    homes[selectedHome]?["name"]?.toString() ?? selectedHome,
+              );
+
+              if (selfLeft == true && context.mounted) {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).popUntil((route) => route.isFirst);
+              }
+            },
+            onLogout: logout,
+          );
+        },
       ),
     );
   }
