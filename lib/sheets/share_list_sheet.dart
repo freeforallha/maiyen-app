@@ -86,9 +86,9 @@ Future<bool?> showShareListSheet({
   }
 
   Future<Map<String, dynamic>> loadMember(
-      String memberUid,
-      dynamic rawValue,
-      ) async {
+    String memberUid,
+    dynamic rawValue,
+  ) async {
     final raw = rawValue is Map
         ? Map<String, dynamic>.from(rawValue)
         : <String, dynamic>{};
@@ -166,19 +166,13 @@ Future<bool?> showShareListSheet({
     return Colors.blueGrey.shade700;
   }
 
-  IconData roleIcon(String role) {
-    if (role == "owner") return Icons.workspace_premium_rounded;
-    if (role == "admin") return Icons.admin_panel_settings_rounded;
-    return Icons.person_rounded;
-  }
-
   Widget memberOnlineDot(String memberUid) {
     return StreamBuilder<DatabaseEvent>(
       stream: db
           .ref(
-        "accounts/$ownerUid/homes/$homeId/"
+            "accounts/$ownerUid/homes/$homeId/"
             "memberPresenceStatus/$memberUid",
-      )
+          )
           .onValue,
       builder: (context, snapshot) {
         final raw = snapshot.data?.snapshot.value;
@@ -214,23 +208,16 @@ Future<bool?> showShareListSheet({
     final hasPhone = phone.trim().isNotEmpty;
 
     return Tooltip(
-      message: hasPhone
-          ? "Gọi điện"
-          : "Chưa có số điện thoại",
+      message: hasPhone ? "Gọi điện" : "Chưa có số điện thoại",
       child: InkResponse(
         radius: 22,
         onTap: () {
-          callPhone(
-            callContext: callContext,
-            phone: phone,
-          );
+          callPhone(callContext: callContext, phone: phone);
         },
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Icon(
-            hasPhone
-                ? Icons.phone_rounded
-                : Icons.phone_disabled_rounded,
+            hasPhone ? Icons.phone_rounded : Icons.phone_disabled_rounded,
             size: 23,
             color: hasPhone
                 ? SafeHomeColors.safe
@@ -406,14 +393,14 @@ Future<bool?> showShareListSheet({
                           final member = snapshot.data ?? rawMember;
 
                           final email =
-                          member["email"]?.toString().trim().isNotEmpty ==
-                              true
+                              member["email"]?.toString().trim().isNotEmpty ==
+                                  true
                               ? member["email"].toString()
                               : "Không có email";
 
                           final name =
-                          member["name"]?.toString().trim().isNotEmpty ==
-                              true
+                              member["name"]?.toString().trim().isNotEmpty ==
+                                  true
                               ? member["name"].toString()
                               : email;
 
@@ -443,7 +430,7 @@ Future<bool?> showShareListSheet({
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -487,9 +474,9 @@ Future<bool?> showShareListSheet({
                                     onSelected: (value) async {
                                       final canDeleteTarget =
                                           targetUid == myUid ||
-                                              isOwner ||
-                                              (canManageMembers &&
-                                                  role == "member");
+                                          isOwner ||
+                                          (canManageMembers &&
+                                              role == "member");
 
                                       if (value == "delete" &&
                                           !canDeleteTarget) {
@@ -503,7 +490,7 @@ Future<bool?> showShareListSheet({
                                       }
 
                                       if ((value == "member" ||
-                                          value == "admin") &&
+                                              value == "admin") &&
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
@@ -550,30 +537,30 @@ Future<bool?> showShareListSheet({
 
                                         await db
                                             .ref(
-                                          "homeMemberContacts/$homeId/$targetUid",
-                                        )
+                                              "homeMemberContacts/$homeId/$targetUid",
+                                            )
                                             .remove();
 
                                         await db
                                             .ref(
-                                          FirebasePaths.sharedHome(
-                                            targetUid,
-                                            homeId,
-                                          ),
-                                        )
+                                              FirebasePaths.sharedHome(
+                                                targetUid,
+                                                homeId,
+                                              ),
+                                            )
                                             .remove();
                                         await db
                                             .ref(
-                                          FirebasePaths.sharedMember(
-                                            homeId,
-                                            targetUid,
-                                          ),
-                                        )
+                                              FirebasePaths.sharedMember(
+                                                homeId,
+                                                targetUid,
+                                              ),
+                                            )
                                             .remove();
                                         await db
                                             .ref(
-                                          "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                                        )
+                                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
+                                            )
                                             .remove();
 
                                         if (targetUid == myUid) {
@@ -608,7 +595,7 @@ Future<bool?> showShareListSheet({
                                           ? "Admin"
                                           : "Member";
                                       final actorName =
-                                      ownerName.trim().isNotEmpty
+                                          ownerName.trim().isNotEmpty
                                           ? ownerName.trim()
                                           : ownerEmail.trim().isNotEmpty
                                           ? ownerEmail.trim()
@@ -616,9 +603,9 @@ Future<bool?> showShareListSheet({
 
                                       await db.ref().update({
                                         "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
-                                        value,
+                                            value,
                                         "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
-                                        value,
+                                            value,
                                       });
 
                                       await HomeNotificationService.notifyHome(
@@ -629,7 +616,7 @@ Future<bool?> showShareListSheet({
                                         severity: "info",
                                         title: "Vai trò thành viên đã thay đổi",
                                         message:
-                                        "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
+                                            "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
                                         entityType: "member",
                                         entityId: targetUid,
                                         homeName: homeName,
@@ -673,11 +660,11 @@ Future<bool?> showShareListSheet({
                                       decoration: BoxDecoration(
                                         color: role == "admin"
                                             ? Colors.deepPurple.withValues(
-                                          alpha: 0.12,
-                                        )
+                                                alpha: 0.12,
+                                              )
                                             : Colors.blueGrey.withValues(
-                                          alpha: 0.12,
-                                        ),
+                                                alpha: 0.12,
+                                              ),
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       child: Text(
@@ -700,11 +687,11 @@ Future<bool?> showShareListSheet({
                                     decoration: BoxDecoration(
                                       color: role == "admin"
                                           ? Colors.deepPurple.withValues(
-                                        alpha: 0.12,
-                                      )
+                                              alpha: 0.12,
+                                            )
                                           : Colors.blueGrey.withValues(
-                                        alpha: 0.12,
-                                      ),
+                                              alpha: 0.12,
+                                            ),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Text(

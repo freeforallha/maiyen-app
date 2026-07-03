@@ -22,8 +22,7 @@ class StatusPanel extends StatefulWidget {
   final ValueChanged<String>? onSecurityModeChanged;
   final String securityModeSource;
   final int securityModeRepeatMinutes;
-  final Future<bool> Function(int minutes)?
-  onSecurityModeRepeatChanged;
+  final Future<bool> Function(int minutes)? onSecurityModeRepeatChanged;
   final bool alarmEnabled;
   final ValueChanged<bool>? onAlarmEnabledChanged;
 
@@ -79,7 +78,6 @@ class _StatusPanelState extends State<StatusPanel> {
       });
     });
   }
-
 
   @override
   void dispose() {
@@ -143,10 +141,8 @@ class _StatusPanelState extends State<StatusPanel> {
         .toList();
 
     events.sort((a, b) {
-      final first =
-          int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
-      final second =
-          int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
+      final first = int.tryParse(a["time"]?.toString() ?? "0") ?? 0;
+      final second = int.tryParse(b["time"]?.toString() ?? "0") ?? 0;
 
       return second.compareTo(first);
     });
@@ -154,16 +150,13 @@ class _StatusPanelState extends State<StatusPanel> {
     return events.take(20).toList();
   }
 
-  Map<String, int> _eventCounts(
-      List<Map<String, dynamic>> recentEvents,
-      ) {
+  Map<String, int> _eventCounts(List<Map<String, dynamic>> recentEvents) {
     int openCount = 0;
     int smokeCount = 0;
     int sosCount = 0;
 
     for (final event in recentEvents) {
-      final text =
-      (event["text"] ?? "").toString().toLowerCase();
+      final text = (event["text"] ?? "").toString().toLowerCase();
 
       if (text.contains("mở")) {
         openCount++;
@@ -178,11 +171,7 @@ class _StatusPanelState extends State<StatusPanel> {
       }
     }
 
-    return {
-      "open": openCount,
-      "smoke": smokeCount,
-      "sos": sosCount,
-    };
+    return {"open": openCount, "smoke": smokeCount, "sos": sosCount};
   }
 
   List<String> _buildAutomaticSummary({
@@ -192,8 +181,7 @@ class _StatusPanelState extends State<StatusPanel> {
     required List<Map<String, dynamic>> recentEvents,
     required Map<String, int> eventCounts,
   }) {
-    final hasDevices =
-        overall["hasDevices"] == true;
+    final hasDevices = overall["hasDevices"] == true;
 
     if (!hasDevices) {
       return [
@@ -243,9 +231,7 @@ class _StatusPanelState extends State<StatusPanel> {
       }
     } else {
       summary.add(
-        _strings.t(
-          "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
-        ),
+        _strings.t("Nhà đang hoạt động ổn định, bạn có thể yên tâm."),
       );
 
       if (recentEvents.isNotEmpty) {
@@ -266,11 +252,9 @@ class _StatusPanelState extends State<StatusPanel> {
         );
       }
 
-      final hasSmokeDevice =
-          overall["hasSmokeDevice"] == true;
+      final hasSmokeDevice = overall["hasSmokeDevice"] == true;
 
-      final hasSosDevice =
-          overall["hasSosDevice"] == true;
+      final hasSosDevice = overall["hasSosDevice"] == true;
 
       if (hasSmokeDevice && smokeCount == 0) {
         summary.add(
@@ -293,29 +277,24 @@ class _StatusPanelState extends State<StatusPanel> {
 
     if (summary.length == 1) {
       summary.add(
-        _strings.t(
-          "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
-        ),
+        _strings.t("Chưa có nhiều hoạt động mới để phân tích sâu hơn."),
       );
     }
 
     return summary;
   }
+
   void _showSecurityModeOptions(BuildContext context) {
     final isArmed = widget.securityMode == "armed";
     final allowedRepeatMinutes = <int>[0, 15, 30, 60];
     var localRepeatMinutes =
-    allowedRepeatMinutes.contains(
-      widget.securityModeRepeatMinutes,
-    )
+        allowedRepeatMinutes.contains(widget.securityModeRepeatMinutes)
         ? widget.securityModeRepeatMinutes
         : 0;
     var repeatSaving = false;
 
     String repeatText(int minutes) {
-      return minutes == 0
-          ? "Không lặp lại"
-          : "Lặp sau $minutes phút";
+      return minutes == 0 ? "Không lặp lại" : "Lặp sau $minutes phút";
     }
 
     showModalBottomSheet<void>(
@@ -326,17 +305,10 @@ class _StatusPanelState extends State<StatusPanel> {
           builder: (context, setSheetState) {
             return SafeArea(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(
-                  18,
-                  8,
-                  18,
-                  18,
-                ),
+                padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
                 decoration: const BoxDecoration(
                   color: SafeHomeColors.surface,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(28),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -344,13 +316,10 @@ class _StatusPanelState extends State<StatusPanel> {
                     Container(
                       width: 44,
                       height: 5,
-                      margin: const EdgeInsets.only(
-                        bottom: 16,
-                      ),
+                      margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
                         color: SafeHomeColors.border,
-                        borderRadius:
-                        BorderRadius.circular(999),
+                        borderRadius: BorderRadius.circular(999),
                       ),
                     ),
                     const Text(
@@ -371,8 +340,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       color: SafeHomeColors.safe,
                       onTap: () {
                         Navigator.pop(sheetContext);
-                        widget.onSecurityModeChanged
-                            ?.call("normal");
+                        widget.onSecurityModeChanged?.call("normal");
                       },
                     ),
                     const SizedBox(height: 8),
@@ -385,8 +353,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       color: SafeHomeColors.danger,
                       onTap: () {
                         Navigator.pop(sheetContext);
-                        widget.onSecurityModeChanged
-                            ?.call("armed");
+                        widget.onSecurityModeChanged?.call("armed");
                       },
                     ),
                     const SizedBox(height: 14),
@@ -395,23 +362,18 @@ class _StatusPanelState extends State<StatusPanel> {
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: SafeHomeColors.surfaceSoft,
-                        borderRadius:
-                        BorderRadius.circular(18),
-                        border: Border.all(
-                          color: SafeHomeColors.border,
-                        ),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: SafeHomeColors.border),
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Row(
                             children: [
                               Icon(
                                 Icons.repeat_rounded,
                                 size: 19,
-                                color:
-                                SafeHomeColors.primary,
+                                color: SafeHomeColors.primary,
                               ),
                               SizedBox(width: 8),
                               Expanded(
@@ -419,10 +381,8 @@ class _StatusPanelState extends State<StatusPanel> {
                                   "Lặp báo động khi sự cố vẫn còn",
                                   style: TextStyle(
                                     fontSize: 13.5,
-                                    fontWeight:
-                                    FontWeight.w900,
-                                    color: SafeHomeColors
-                                        .textPrimary,
+                                    fontWeight: FontWeight.w900,
+                                    color: SafeHomeColors.textPrimary,
                                   ),
                                 ),
                               ),
@@ -434,15 +394,12 @@ class _StatusPanelState extends State<StatusPanel> {
                             style: TextStyle(
                               fontSize: 11.5,
                               height: 1.35,
-                              color: SafeHomeColors
-                                  .textSecondary,
+                              color: SafeHomeColors.textSecondary,
                             ),
                           ),
                           const SizedBox(height: 12),
                           DropdownButtonFormField<int>(
-                            key: ValueKey<int>(
-                              localRepeatMinutes,
-                            ),
+                            key: ValueKey<int>(localRepeatMinutes),
                             initialValue: localRepeatMinutes,
                             isExpanded: true,
                             icon: const Icon(
@@ -452,8 +409,7 @@ class _StatusPanelState extends State<StatusPanel> {
                             decoration: InputDecoration(
                               labelText: "Thời gian lặp",
                               labelStyle: const TextStyle(
-                                color: SafeHomeColors
-                                    .textSecondary,
+                                color: SafeHomeColors.textSecondary,
                                 fontWeight: FontWeight.w700,
                               ),
                               prefixIcon: const Icon(
@@ -462,48 +418,36 @@ class _StatusPanelState extends State<StatusPanel> {
                               ),
                               suffixIcon: repeatSaving
                                   ? const Padding(
-                                padding:
-                                EdgeInsets.all(14),
-                                child:
-                                SizedBox.square(
-                                  dimension: 18,
-                                  child:
-                                  CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                ),
-                              )
+                                      padding: EdgeInsets.all(14),
+                                      child: SizedBox.square(
+                                        dimension: 18,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    )
                                   : null,
                               filled: true,
-                              fillColor:
-                              SafeHomeColors.surface,
-                              contentPadding:
-                              const EdgeInsets.symmetric(
+                              fillColor: SafeHomeColors.surface,
+                              contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 14,
                                 vertical: 14,
                               ),
-                              enabledBorder:
-                              OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.circular(14),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
                                   color: SafeHomeColors.border,
                                 ),
                               ),
-                              focusedBorder:
-                              OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.circular(14),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
-                                  color:
-                                  SafeHomeColors.primary,
+                                  color: SafeHomeColors.primary,
                                   width: 1.5,
                                 ),
                               ),
-                              disabledBorder:
-                              OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.circular(14),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
                                   color: SafeHomeColors.border,
                                 ),
@@ -511,8 +455,7 @@ class _StatusPanelState extends State<StatusPanel> {
                             ),
                             items: allowedRepeatMinutes
                                 .map(
-                                  (minutes) =>
-                                  DropdownMenuItem<int>(
+                                  (minutes) => DropdownMenuItem<int>(
                                     value: minutes,
                                     child: Text(
                                       minutes == 0
@@ -520,202 +463,45 @@ class _StatusPanelState extends State<StatusPanel> {
                                           : "$minutes phút",
                                       style: const TextStyle(
                                         fontSize: 14,
-                                        fontWeight:
-                                        FontWeight.w700,
-                                        color: SafeHomeColors
-                                            .textPrimary,
+                                        fontWeight: FontWeight.w700,
+                                        color: SafeHomeColors.textPrimary,
                                       ),
                                     ),
                                   ),
-                            )
+                                )
                                 .toList(),
-                            onChanged: widget
-                                .onSecurityModeRepeatChanged ==
-                                null ||
-                                repeatSaving
+                            onChanged:
+                                widget.onSecurityModeRepeatChanged == null ||
+                                    repeatSaving
                                 ? null
                                 : (minutes) async {
-                              if (minutes == null ||
-                                  minutes ==
-                                      localRepeatMinutes) {
-                                return;
-                              }
+                                    if (minutes == null ||
+                                        minutes == localRepeatMinutes) {
+                                      return;
+                                    }
 
-                              setSheetState(() {
-                                repeatSaving = true;
-                              });
+                                    setSheetState(() {
+                                      repeatSaving = true;
+                                    });
 
-                              final saved = await widget
-                                  .onSecurityModeRepeatChanged!(
-                                minutes,
-                              );
+                                    final saved = await widget
+                                        .onSecurityModeRepeatChanged!(minutes);
 
-                              if (!sheetContext.mounted) {
-                                return;
-                              }
+                                    if (!sheetContext.mounted) {
+                                      return;
+                                    }
 
-                              setSheetState(() {
-                                if (saved) {
-                                  localRepeatMinutes =
-                                      minutes;
-                                }
+                                    setSheetState(() {
+                                      if (saved) {
+                                        localRepeatMinutes = minutes;
+                                      }
 
-                                repeatSaving = false;
-                              });
-                            },
+                                      repeatSaving = false;
+                                    });
+                                  },
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-  void _showScheduleOptions(BuildContext context) {
-    bool localAlarmEnabled = widget.alarmEnabled;
-
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            return SafeArea(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(
-                  18,
-                  8,
-                  18,
-                  18,
-                ),
-                decoration: const BoxDecoration(
-                  color: SafeHomeColors.surface,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(28),
-                  ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Icon(
-                            Icons.shield_rounded,
-                            color: SafeHomeColors.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _strings.t("An ninh ra/vào"),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: SafeHomeColors.textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                _strings.t(
-                                  "Cài đặt cảnh báo cho nhà hiện tại",
-                                ),
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color:
-                                  SafeHomeColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.surfaceSoft,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: SwitchListTile(
-                        value: localAlarmEnabled,
-                        activeThumbColor: SafeHomeColors.primary,
-                        activeTrackColor: SafeHomeColors.primarySoft,
-                        secondary: Icon(
-                          localAlarmEnabled
-                              ? Icons.notifications_active_rounded
-                              : Icons.notifications_off_rounded,
-                          color: localAlarmEnabled
-                              ? SafeHomeColors.primary
-                              : SafeHomeColors.textSecondary,
-                        ),
-                        title: Text(
-                          _strings.t("Nhận cảnh báo Alarm"),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        subtitle: Text(
-                          localAlarmEnabled
-                              ? _strings.t("Đang bật cho tài khoản này")
-                              : _strings.t("Đang tắt cho tài khoản này"),
-                        ),
-                        onChanged: (value) {
-                          setSheetState(() {
-                            localAlarmEnabled = value;
-                          });
-
-                          widget.onAlarmEnabledChanged?.call(value);
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    _actionTile(
-                      icon: Icons.notifications_none_rounded,
-                      title: _strings.t("Hẹn giờ Reminder"),
-                      subtitle: _strings.t("Nhắc kiểm tra nhà theo thời gian"),
-                      color: SafeHomeColors.warning,
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        widget.onScheduleNotification?.call();
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    _actionTile(
-                      icon: Icons.crisis_alert_rounded,
-                      title: _strings.t("Hẹn giờ Alarm"),
-                      subtitle: widget.alarmStart.trim().isEmpty
-                          ? _strings.t("Chưa thiết lập")
-                          : widget.alarmStart,
-                      color: SafeHomeColors.danger,
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        widget.onScheduleAlarm?.call();
-                      },
                     ),
                   ],
                 ),
@@ -744,9 +530,7 @@ class _StatusPanelState extends State<StatusPanel> {
           padding: const EdgeInsets.all(13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: SafeHomeColors.border,
-            ),
+            border: Border.all(color: SafeHomeColors.border),
           ),
           child: Row(
             children: [
@@ -757,11 +541,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   color: color.withValues(alpha: 0.11),
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 21,
-                ),
+                child: Icon(icon, color: color, size: 21),
               ),
               const SizedBox(width: 11),
               Expanded(
@@ -851,20 +631,12 @@ class _StatusPanelState extends State<StatusPanel> {
             return SafeArea(
               child: Container(
                 constraints: BoxConstraints(
-                  maxHeight:
-                  MediaQuery.of(sheetContext).size.height * 0.86,
+                  maxHeight: MediaQuery.of(sheetContext).size.height * 0.86,
                 ),
-                padding: const EdgeInsets.fromLTRB(
-                  18,
-                  8,
-                  18,
-                  20,
-                ),
+                padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
                 decoration: const BoxDecoration(
                   color: SafeHomeColors.background,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -890,14 +662,11 @@ class _StatusPanelState extends State<StatusPanel> {
                             ),
                           ),
                         ),
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting)
+                        if (snapshot.connectionState == ConnectionState.waiting)
                           const SizedBox(
                             width: 18,
                             height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
+                            child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         else
                           const Icon(
@@ -941,11 +710,7 @@ class _StatusPanelState extends State<StatusPanel> {
                             icon: Icons.bar_chart_rounded,
                             color: SafeHomeColors.safe,
                             items: safeSummary.isEmpty
-                                ? [
-                              _strings.t(
-                                "Chưa có dữ liệu tổng quan",
-                              ),
-                            ]
+                                ? [_strings.t("Chưa có dữ liệu tổng quan")]
                                 : safeSummary,
                           ),
                         ],
@@ -972,9 +737,7 @@ class _StatusPanelState extends State<StatusPanel> {
       decoration: BoxDecoration(
         color: SafeHomeColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: color.withValues(alpha: 0.13),
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.13)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -995,11 +758,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   color: color.withValues(alpha: 0.11),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 20,
-                ),
+                child: Icon(icon, color: color, size: 20),
               ),
               const SizedBox(width: 10),
               Text(
@@ -1013,21 +772,13 @@ class _StatusPanelState extends State<StatusPanel> {
             ],
           ),
           const SizedBox(height: 12),
-          ...items.map(
-                (item) => _summaryItem(
-              text: item,
-              color: color,
-            ),
-          ),
+          ...items.map((item) => _summaryItem(text: item, color: color)),
         ],
       ),
     );
   }
 
-  static Widget _summaryItem({
-    required String text,
-    required Color color,
-  }) {
+  static Widget _summaryItem({required String text, required Color color}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -1036,14 +787,8 @@ class _StatusPanelState extends State<StatusPanel> {
           Container(
             width: 6,
             height: 6,
-            margin: const EdgeInsets.only(
-              top: 6,
-              right: 9,
-            ),
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
+            margin: const EdgeInsets.only(top: 6, right: 9),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           Expanded(
             child: Text(
@@ -1063,49 +808,40 @@ class _StatusPanelState extends State<StatusPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final level =
-        widget.overall["level"]?.toString() ?? "no_data";
+    final level = widget.overall["level"]?.toString() ?? "no_data";
 
-    final hasDevices =
-        widget.overall["hasDevices"] == true;
+    final hasDevices = widget.overall["hasDevices"] == true;
 
-    final noData =
-        level == "no_data" || !hasDevices;
+    final noData = level == "no_data" || !hasDevices;
 
-    final issues = List<String>.from(
-      widget.overall["issues"] ?? const [],
-    );
+    final issues = List<String>.from(widget.overall["issues"] ?? const []);
 
     final safeSummary = List<String>.from(
       widget.overall["safeSummary"] ?? const [],
     );
 
-    final allLines =
-    issues.isNotEmpty ? issues : safeSummary;
+    final allLines = issues.isNotEmpty ? issues : safeSummary;
 
     final manualSecurityMode =
-        widget.securityMode == "armed" &&
-            widget.securityModeSource == "manual";
+        widget.securityMode == "armed" && widget.securityModeSource == "manual";
 
     final manualSecurityModeText = _strings.choose(
-      vi:
-      "Bảo vệ thủ công đang bật — chỉ tắt khi chuyển về Bình thường",
-      en:
-      "Manual protection is on — switch to Normal to turn it off",
+      vi: "Bảo vệ thủ công đang bật — chỉ tắt khi chuyển về Bình thường",
+      en: "Manual protection is on — switch to Normal to turn it off",
     );
 
     final normalFirstLine = allLines.isNotEmpty
         ? allLines.first
         : _strings.choose(
-      vi: "Chưa có dữ liệu trạng thái",
-      en: "No status data available",
-    );
+            vi: "Chưa có dữ liệu trạng thái",
+            en: "No status data available",
+          );
 
     final firstLine = noData
         ? _strings.choose(
-      vi: "Chưa có dữ liệu để đánh giá",
-      en: "Not enough data to evaluate",
-    )
+            vi: "Chưa có dữ liệu để đánh giá",
+            en: "Not enough data to evaluate",
+          )
         : manualSecurityMode
         ? manualSecurityModeText
         : normalFirstLine;
@@ -1119,9 +855,7 @@ class _StatusPanelState extends State<StatusPanel> {
         : <String>[];
 
     final secondLine = rotatingLines.isNotEmpty
-        ? rotatingLines[
-    _broadcastIndex % rotatingLines.length
-    ]
+        ? rotatingLines[_broadcastIndex % rotatingLines.length]
         : _strings.t("Bấm vào để xem chi tiết");
 
     final statusColor = _statusColor(level);
@@ -1129,14 +863,13 @@ class _StatusPanelState extends State<StatusPanel> {
     final statusText = _statusText(level);
 
     final rawAlarmScheduleText =
-    widget.alarmEnabled &&
-        widget.alarmStart.trim().isNotEmpty &&
-        widget.alarmStart != "Tắt"
+        widget.alarmEnabled &&
+            widget.alarmStart.trim().isNotEmpty &&
+            widget.alarmStart != "Tắt"
         ? widget.alarmStart.trim()
         : "";
 
-    final alarmScheduleSet =
-        rawAlarmScheduleText.isNotEmpty;
+    final alarmScheduleSet = rawAlarmScheduleText.isNotEmpty;
 
     final alarmScheduleText = alarmScheduleSet
         ? rawAlarmScheduleText
@@ -1144,8 +877,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final alarmPauseSet =
         widget.alarmPauseText.trim().isNotEmpty &&
-            widget.alarmPauseText != "Tắt" &&
-            widget.alarmPauseText != "Chưa thiết lập";
+        widget.alarmPauseText != "Tắt" &&
+        widget.alarmPauseText != "Chưa thiết lập";
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -1184,17 +917,14 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "${recentEvents.length} recent activities recorded",
       );
     } else {
-      subtitle = _strings.t(
-        "Ngôi nhà đang hoạt động ổn định",
-      );
+      subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
     }
 
-    final environment =
-    widget.overall["hasEnvironmentDevice"] == true
+    final environment = widget.overall["hasEnvironmentDevice"] == true
         ? widget.environmentText
-        .replaceAll("/", " | ")
-        .replaceAll("  ", " ")
-        .trim()
+              .replaceAll("/", " | ")
+              .replaceAll("  ", " ")
+              .trim()
         : "";
 
     return Padding(
@@ -1205,18 +935,11 @@ class _StatusPanelState extends State<StatusPanel> {
           onTap: () => _showStatusSummary(context),
           borderRadius: BorderRadius.circular(22),
           child: Container(
-            padding: const EdgeInsets.fromLTRB(
-              14,
-              11,
-              14,
-              10,
-            ),
+            padding: const EdgeInsets.fromLTRB(14, 11, 14, 10),
             decoration: BoxDecoration(
               color: SafeHomeColors.surface,
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(
-                color: statusColor.withValues(alpha: 0.11),
-              ),
+              border: Border.all(color: statusColor.withValues(alpha: 0.11)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.035),
@@ -1231,11 +954,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      statusIcon,
-                      color: statusColor,
-                      size: 19,
-                    ),
+                    Icon(statusIcon, color: statusColor, size: 19),
                     const SizedBox(width: 7),
                     Expanded(
                       child: Text(
@@ -1311,10 +1030,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    );
+                    return FadeTransition(opacity: animation, child: child);
                   },
                   child: Row(
                     key: ValueKey(secondLine),
@@ -1409,29 +1125,20 @@ class _StatusPanelState extends State<StatusPanel> {
     required Color activeColor,
     VoidCallback? onTap,
   }) {
-    final color = active
-        ? activeColor
-        : SafeHomeColors.textSecondary;
+    final color = active ? activeColor : SafeHomeColors.textSecondary;
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 2,
-          vertical: 5,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
         child: Center(
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  icon,
-                  size: 17,
-                  color: color,
-                ),
+                Icon(icon, size: 17, color: color),
                 const SizedBox(width: 4),
                 Text(
                   value,
@@ -1451,21 +1158,14 @@ class _StatusPanelState extends State<StatusPanel> {
     );
   }
 
-  Widget _statusLine({
-    Key? key,
-    required String text,
-    required Color color,
-  }) {
+  Widget _statusLine({Key? key, required String text, required Color color}) {
     return Row(
       key: key,
       children: [
         Container(
           width: 5,
           height: 5,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 7),
         Expanded(
