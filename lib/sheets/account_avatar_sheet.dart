@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../safehome_theme.dart';
-import '../services/native_alarm_permission_service.dart';
+import '../services/platform/platform_alarm_permission_service.dart';
 
 class AccountAvatarSheet {
   static void showTopMessage(
@@ -389,7 +389,12 @@ class AccountAvatarSheet {
   }
 
   static Future<void> _showSecuritySheet(BuildContext context) async {
-    final canUse = await NativeAlarmPermissionService.canUseFullScreenIntent();
+    if (!PlatformAlarmPermissionService.isSupported) {
+      return;
+    }
+
+    final canUse =
+        await PlatformAlarmPermissionService.canUseFullScreenIntent();
 
     if (!context.mounted) return;
 
@@ -509,7 +514,7 @@ class AccountAvatarSheet {
                   width: double.infinity,
                   child: FilledButton.icon(
                     onPressed: () async {
-                      await NativeAlarmPermissionService.openFullScreenIntentSettings();
+                      await PlatformAlarmPermissionService.openFullScreenIntentSettings();
                     },
                     icon: const Icon(Icons.settings_rounded),
                     label: const Text("Mở cài đặt hệ thống"),
@@ -813,15 +818,16 @@ class AccountAvatarSheet {
                           },
                         ),
 
-                        _actionTile(
-                          icon: Icons.security_rounded,
-                          title: "Cài đặt bảo mật",
-                          subtitle: "Quyền báo động toàn màn hình",
-                          color: SafeHomeColors.info,
-                          onTap: () {
-                            _showSecuritySheet(sheetContext);
-                          },
-                        ),
+                        if (PlatformAlarmPermissionService.isSupported)
+                          _actionTile(
+                            icon: Icons.security_rounded,
+                            title: "Cài đặt bảo mật",
+                            subtitle: "Quyền báo động toàn màn hình",
+                            color: SafeHomeColors.info,
+                            onTap: () {
+                              _showSecuritySheet(sheetContext);
+                            },
+                          ),
 
                         const SizedBox(height: 5),
 

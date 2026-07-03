@@ -5,16 +5,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'dart:io';
 import '../app/safe_home_app.dart';
 import '../pages/fullscreen_alarm_page.dart';
+import 'platform/android/android_notification_config.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 class NotificationService {
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
-  ValueNotifier<Map<String, String>?>(null);
+      ValueNotifier<Map<String, String>?>(null);
 
   static String? _activeHomeChatId;
 
@@ -25,11 +25,7 @@ class NotificationService {
 
     _activeHomeChatId = cleanHomeId;
 
-    unawaited(
-      localNotif.cancel(
-        _chatNotificationId(cleanHomeId),
-      ),
-    );
+    unawaited(localNotif.cancel(_chatNotificationId(cleanHomeId)));
   }
 
   static void markHomeChatClosed(String homeId) {
@@ -38,24 +34,17 @@ class NotificationService {
     }
   }
 
-  static void requestOpenHomeChat(
-      Map<String, dynamic> rawData,
-      ) {
-    final homeId =
-        rawData["homeId"]?.toString().trim() ?? "";
+  static void requestOpenHomeChat(Map<String, dynamic> rawData) {
+    final homeId = rawData["homeId"]?.toString().trim() ?? "";
 
     if (homeId.isEmpty) return;
 
     chatOpenRequest.value = {
       "homeId": homeId,
-      "homeName":
-      rawData["homeName"]?.toString().trim() ?? "",
-      "ownerUid":
-      rawData["ownerUid"]?.toString().trim() ?? "",
-      "messageId":
-      rawData["messageId"]?.toString().trim() ?? "",
-      "nonce":
-      DateTime.now().microsecondsSinceEpoch.toString(),
+      "homeName": rawData["homeName"]?.toString().trim() ?? "",
+      "ownerUid": rawData["ownerUid"]?.toString().trim() ?? "",
+      "messageId": rawData["messageId"]?.toString().trim() ?? "",
+      "nonce": DateTime.now().microsecondsSinceEpoch.toString(),
     };
   }
 
@@ -65,32 +54,25 @@ class NotificationService {
     }
 
     try {
-      final raw = payload.replaceFirst(
-        "home_chat::",
-        "",
-      );
+      final raw = payload.replaceFirst("home_chat::", "");
 
       final decoded = jsonDecode(raw);
 
       if (decoded is Map) {
-        requestOpenHomeChat(
-          Map<String, dynamic>.from(decoded),
-        );
+        requestOpenHomeChat(Map<String, dynamic>.from(decoded));
       }
     } catch (_) {}
 
     return true;
   }
 
-
   static const int emergencyNotificationId = 999997;
   static const int alarmNotificationId = 999999;
 
-  static final Map<String, Map<String, String>>
-  _activeAlarmIncidentContexts = {};
+  static final Map<String, Map<String, String>> _activeAlarmIncidentContexts =
+      {};
 
-  static final ValueNotifier<int> alarmResolvedRevision =
-  ValueNotifier<int>(0);
+  static final ValueNotifier<int> alarmResolvedRevision = ValueNotifier<int>(0);
 
   static Timer? _pendingAlarmOpenTimer;
   static Map<String, dynamic>? _pendingAlarmOpenData;
@@ -99,9 +81,9 @@ class NotificationService {
       _activeAlarmIncidentContexts.isNotEmpty;
 
   static Map<String, dynamic>? _decodeAlarmPayload(
-      String payload,
-      String prefix,
-      ) {
+    String payload,
+    String prefix,
+  ) {
     if (!payload.startsWith('$prefix::')) {
       return null;
     }
@@ -118,46 +100,37 @@ class NotificationService {
     return null;
   }
 
-  static void rememberAlarmIncident(
-      Map<String, dynamic> data,
-      ) {
-    final incidentId =
-        data['incidentId']?.toString().trim() ?? '';
+  static void rememberAlarmIncident(Map<String, dynamic> data) {
+    final incidentId = data['incidentId']?.toString().trim() ?? '';
 
     if (incidentId.isEmpty) return;
 
-    final currentUid =
-        FirebaseAuth.instance.currentUser?.uid ?? '';
+    final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     final receiverUid =
-    data['receiverUid']?.toString().trim().isNotEmpty == true
+        data['receiverUid']?.toString().trim().isNotEmpty == true
         ? data['receiverUid'].toString().trim()
         : currentUid;
 
-    final ownerUid =
-        data['ownerUid']?.toString().trim() ?? '';
+    final ownerUid = data['ownerUid']?.toString().trim() ?? '';
 
-    final homeId =
-        data['homeId']?.toString().trim() ?? '';
+    final homeId = data['homeId']?.toString().trim() ?? '';
 
-    final flowType =
-        data['alarmFlowType']?.toString().trim() ?? '';
+    final flowType = data['alarmFlowType']?.toString().trim() ?? '';
 
     // Mỗi người chỉ giữ incident mới nhất của cùng một nhà
     // và cùng luồng cảnh báo. Incident cũ đã superseded
     // không được gửi xác nhận lại.
     if (homeId.isNotEmpty && flowType.isNotEmpty) {
-      _activeAlarmIncidentContexts.removeWhere(
-            (oldIncidentId, context) {
-          if (oldIncidentId == incidentId) {
-            return false;
-          }
+      _activeAlarmIncidentContexts.removeWhere((oldIncidentId, context) {
+        if (oldIncidentId == incidentId) {
+          return false;
+        }
 
-          return context['receiverUid'] == receiverUid &&
-              context['homeId'] == homeId &&
-              context['flowType'] == flowType;
-        },
-      );
+        return context['receiverUid'] == receiverUid &&
+            context['homeId'] == homeId &&
+            context['flowType'] == flowType;
+      });
     }
 
     _activeAlarmIncidentContexts[incidentId] = {
@@ -174,23 +147,18 @@ class NotificationService {
     required String receiverUid,
     required String action,
   }) async {
-    final requestedBy =
-        FirebaseAuth.instance.currentUser?.uid ?? '';
+    final requestedBy = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     if (incidentId.isEmpty) {
       return true;
     }
 
     if (requestedBy.isEmpty) {
-      debugPrint(
-        'ALARM ACTION ERROR: chưa có người dùng đăng nhập',
-      );
+      debugPrint('ALARM ACTION ERROR: chưa có người dùng đăng nhập');
       return false;
     }
 
-    final realReceiverUid = receiverUid.isNotEmpty
-        ? receiverUid
-        : requestedBy;
+    final realReceiverUid = receiverUid.isNotEmpty ? receiverUid : requestedBy;
 
     try {
       final ref = FirebaseDatabase.instance
@@ -220,21 +188,19 @@ class NotificationService {
     final targets = <Map<String, String>>[];
 
     if (incidentId.trim().isNotEmpty) {
-      final context =
-      _activeAlarmIncidentContexts[incidentId.trim()];
+      final context = _activeAlarmIncidentContexts[incidentId.trim()];
 
       targets.add(
         context ??
             {
               'incidentId': incidentId.trim(),
-              'receiverUid':
-              FirebaseAuth.instance.currentUser?.uid ?? '',
+              'receiverUid': FirebaseAuth.instance.currentUser?.uid ?? '',
             },
       );
     } else {
       targets.addAll(
         _activeAlarmIncidentContexts.values.map(
-              (item) => Map<String, String>.from(item),
+          (item) => Map<String, String>.from(item),
         ),
       );
     }
@@ -272,38 +238,19 @@ class NotificationService {
   }) async {
     rememberAlarmIncident(data);
 
-    final title =
-    data['title']?.toString().trim().isNotEmpty == true
+    final title = data['title']?.toString().trim().isNotEmpty == true
         ? data['title'].toString().trim()
         : '🚨 SafeHome phát hiện cảnh báo';
 
-    final body =
-    data['body']?.toString().trim().isNotEmpty == true
+    final body = data['body']?.toString().trim().isNotEmpty == true
         ? data['body'].toString().trim()
         : 'Mở SafeHome để kiểm tra ngay.';
 
-    final payload =
-        'priority_alarm::${jsonEncode(data)}';
+    final payload = 'priority_alarm::${jsonEncode(data)}';
 
-    final androidDetails = AndroidNotificationDetails(
-      'safehome_emergency_priority_v1',
-      'SafeHome Emergency Priority',
-      channelDescription:
-      'Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình',
-      visibility: NotificationVisibility.public,
-      importance: Importance.max,
-      priority: Priority.max,
-      category: AndroidNotificationCategory.alarm,
-      autoCancel: false,
-      ongoing: true,
-      fullScreenIntent: false,
-      playSound: true,
-      enableVibration: true,
-      styleInformation: BigTextStyleInformation(
-        body,
-        contentTitle: title,
-        summaryText: 'SafeHome',
-      ),
+    final androidDetails = AndroidNotificationConfig.priorityAlarmDetails(
+      title: title,
+      body: body,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -318,22 +265,18 @@ class NotificationService {
       emergencyNotificationId,
       title,
       body,
-      NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      ),
+      NotificationDetails(android: androidDetails, iOS: iosDetails),
       payload: payload,
     );
   }
 
   static Future<void> handlePriorityAlarmOpened(
-      Map<String, dynamic> data,
-      ) async {
+    Map<String, dynamic> data,
+  ) async {
     rememberAlarmIncident(data);
     await stopEmergencyNotification();
 
-    final incidentId =
-        data['incidentId']?.toString().trim() ?? '';
+    final incidentId = data['incidentId']?.toString().trim() ?? '';
 
     final ok = await resolveActiveAlarmIncidents(
       action: 'check_home',
@@ -345,11 +288,8 @@ class NotificationService {
     }
   }
 
-  static Future<void> handleAlarmResolved(
-      Map<String, dynamic> data,
-      ) async {
-    final incidentId =
-        data['incidentId']?.toString().trim() ?? '';
+  static Future<void> handleAlarmResolved(Map<String, dynamic> data) async {
+    final incidentId = data['incidentId']?.toString().trim() ?? '';
 
     if (incidentId.isNotEmpty) {
       _activeAlarmIncidentContexts.remove(incidentId);
@@ -360,30 +300,20 @@ class NotificationService {
     await stopAllAlarmNotifications();
 
     if (_activeAlarmIncidentContexts.isEmpty) {
-      clearActiveAlarms(
-        clearIncidentContexts: false,
-      );
+      clearActiveAlarms(clearIncidentContexts: false);
       alarmResolvedRevision.value++;
     }
   }
 
-  static Future<bool> handleAlarmNotificationPayload(
-      String payload,
-      ) async {
-    final priorityData = _decodeAlarmPayload(
-      payload,
-      'priority_alarm',
-    );
+  static Future<bool> handleAlarmNotificationPayload(String payload) async {
+    final priorityData = _decodeAlarmPayload(payload, 'priority_alarm');
 
     if (priorityData != null) {
       await handlePriorityAlarmOpened(priorityData);
       return true;
     }
 
-    final sirenData = _decodeAlarmPayload(
-      payload,
-      'alarm_siren',
-    );
+    final sirenData = _decodeAlarmPayload(payload, 'alarm_siren');
 
     if (sirenData != null) {
       openAlarmFromData(sirenData);
@@ -393,65 +323,47 @@ class NotificationService {
     return false;
   }
 
-  static void openAlarmFromData(
-      Map<String, dynamic> data,
-      ) {
+  static void openAlarmFromData(Map<String, dynamic> data) {
     rememberAlarmIncident(data);
 
     openAlarmPage(
-      title:
-      data['title']?.toString().trim().isNotEmpty == true
+      title: data['title']?.toString().trim().isNotEmpty == true
           ? data['title'].toString().trim()
           : '🚨 SafeHome',
-      body:
-      data['body']?.toString().trim().isNotEmpty == true
+      body: data['body']?.toString().trim().isNotEmpty == true
           ? data['body'].toString().trim()
           : 'Có cảnh báo cần kiểm tra ngay.',
-      alarmItemsJson:
-      data['alarmItems']?.toString() ?? '',
-      incidentId:
-      data['incidentId']?.toString() ?? '',
-      receiverUid:
-      data['receiverUid']?.toString() ?? '',
-      ownerUid:
-      data['ownerUid']?.toString() ?? '',
-      homeId:
-      data['homeId']?.toString() ?? '',
-      flowType:
-      data['alarmFlowType']?.toString() ?? '',
+      alarmItemsJson: data['alarmItems']?.toString() ?? '',
+      incidentId: data['incidentId']?.toString() ?? '',
+      receiverUid: data['receiverUid']?.toString() ?? '',
+      ownerUid: data['ownerUid']?.toString() ?? '',
+      homeId: data['homeId']?.toString() ?? '',
+      flowType: data['alarmFlowType']?.toString() ?? '',
     );
   }
 
   static Future<void> showChatNotification({
     required Map<String, dynamic> data,
   }) async {
-    final homeId =
-        data["homeId"]?.toString().trim() ?? "";
+    final homeId = data["homeId"]?.toString().trim() ?? "";
 
-    if (homeId.isEmpty ||
-        _activeHomeChatId == homeId) {
+    if (homeId.isEmpty || _activeHomeChatId == homeId) {
       return;
     }
 
-    final homeName =
-        data["homeName"]?.toString().trim() ?? "";
-    final senderName =
-        data["senderName"]?.toString().trim() ?? "";
-    final rawTitle =
-        data["title"]?.toString().trim() ?? "";
-    final rawBody =
-        data["body"]?.toString().trim() ?? "";
+    final homeName = data["homeName"]?.toString().trim() ?? "";
+    final senderName = data["senderName"]?.toString().trim() ?? "";
+    final rawTitle = data["title"]?.toString().trim() ?? "";
+    final rawBody = data["body"]?.toString().trim() ?? "";
 
-    final unreadCount = int.tryParse(
-      data["unreadCount"]?.toString() ?? "1",
-    ) ??
-        1;
+    final unreadCount =
+        int.tryParse(data["unreadCount"]?.toString() ?? "1") ?? 1;
 
     final title = rawTitle.isNotEmpty
         ? rawTitle
         : unreadCount > 1
         ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
-        "$unreadCount tin nhắn mới"
+              "$unreadCount tin nhắn mới"
         : homeName.isNotEmpty
         ? homeName
         : "Tin nhắn HomeChat";
@@ -462,22 +374,9 @@ class NotificationService {
         ? "$senderName đã gửi một tin nhắn"
         : "Bạn có tin nhắn mới";
 
-    final androidDetails =
-    AndroidNotificationDetails(
-      "safehome_chat_channel_v1",
-      "Tin nhắn HomeChat",
-      channelDescription:
-      "Tin nhắn mới trong các nhà SafeHome",
-      importance: Importance.high,
-      priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
-      category:
-      AndroidNotificationCategory.message,
-      styleInformation: BigTextStyleInformation(
-        body,
-        contentTitle: title,
-      ),
+    final androidDetails = AndroidNotificationConfig.chatDetails(
+      title: title,
+      body: body,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -486,23 +385,14 @@ class NotificationService {
       presentSound: true,
     );
 
-    final payload = "home_chat::${jsonEncode({
-      "homeId": homeId,
-      "homeName": homeName,
-      "ownerUid":
-      data["ownerUid"]?.toString() ?? "",
-      "messageId":
-      data["messageId"]?.toString() ?? "",
-    })}";
+    final payload =
+        "home_chat::${jsonEncode({"homeId": homeId, "homeName": homeName, "ownerUid": data["ownerUid"]?.toString() ?? "", "messageId": data["messageId"]?.toString() ?? ""})}";
 
     await localNotif.show(
       _chatNotificationId(homeId),
       title,
       body,
-      NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      ),
+      NotificationDetails(android: androidDetails, iOS: iosDetails),
       payload: payload,
     );
   }
@@ -511,12 +401,12 @@ class NotificationService {
     var hash = 0;
 
     for (final codeUnit in homeId.codeUnits) {
-      hash =
-      ((hash * 31) + codeUnit) & 0x7fffffff;
+      hash = ((hash * 31) + codeUnit) & 0x7fffffff;
     }
 
     return 200000 + (hash % 700000);
   }
+
   static Future<void> stopAlarmNotification() async {
     await localNotif.cancel(alarmNotificationId);
   }
@@ -526,10 +416,7 @@ class NotificationService {
   }
 
   static Future<void> stopAllAlarmNotifications() async {
-    await Future.wait([
-      stopAlarmNotification(),
-      stopEmergencyNotification(),
-    ]);
+    await Future.wait([stopAlarmNotification(), stopEmergencyNotification()]);
   }
 
   static Future<void> stopReminderNotification() async {
@@ -545,8 +432,7 @@ class NotificationService {
 
   static bool _reminderPageOpen = false;
 
-  static final ValueNotifier<int> reminderRevision =
-  ValueNotifier<int>(0);
+  static final ValueNotifier<int> reminderRevision = ValueNotifier<int>(0);
 
   static void markReminderPageClosed() {
     _reminderPageOpen = false;
@@ -577,11 +463,9 @@ class NotificationService {
     required bool isSafe,
     required String reminderItemsJson,
   }) {
-    final existingItems =
-    _decodeReminderItems(lastReminderItemsJson);
+    final existingItems = _decodeReminderItems(lastReminderItemsJson);
 
-    final incomingItems =
-    _decodeReminderItems(reminderItemsJson);
+    final incomingItems = _decodeReminderItems(reminderItemsJson);
 
     if (incomingItems.isEmpty) {
       final cleanBody = body
@@ -596,31 +480,20 @@ class NotificationService {
         "homeName": title.trim().isEmpty ? "Nhà" : title.trim(),
         "reasons": isSafe
             ? <String>[]
-            : <String>[
-          cleanBody.isEmpty
-              ? "Có mục cần kiểm tra"
-              : cleanBody,
-        ],
+            : <String>[cleanBody.isEmpty ? "Có mục cần kiểm tra" : cleanBody],
       });
     }
 
     final merged = <String, Map<String, dynamic>>{};
 
-    for (final item in [
-      ...existingItems,
-      ...incomingItems,
-    ]) {
-      final homeId =
-          item["homeId"]?.toString().trim() ?? "";
+    for (final item in [...existingItems, ...incomingItems]) {
+      final homeId = item["homeId"]?.toString().trim() ?? "";
 
-      final homeName =
-      item["homeName"]?.toString().trim().isNotEmpty == true
+      final homeName = item["homeName"]?.toString().trim().isNotEmpty == true
           ? item["homeName"].toString().trim()
           : "Nhà";
 
-      final key = homeId.isNotEmpty
-          ? homeId
-          : homeName.toLowerCase();
+      final key = homeId.isNotEmpty ? homeId : homeName.toLowerCase();
 
       final reasons = <String>[];
       final rawReasons = item["reasons"];
@@ -637,16 +510,10 @@ class NotificationService {
 
       final current = merged.putIfAbsent(
         key,
-            () => {
-          "homeId": homeId,
-          "homeName": homeName,
-          "reasons": <String>[],
-        },
+        () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
       );
 
-      final currentReasons = List<String>.from(
-        current["reasons"] as List,
-      );
+      final currentReasons = List<String>.from(current["reasons"] as List);
 
       for (final reason in reasons) {
         if (!currentReasons.contains(reason)) {
@@ -672,8 +539,7 @@ class NotificationService {
         : "SafeHome Reminder";
 
     if (!hasUnsafe) {
-      lastScheduleBody =
-      "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+      lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
       return;
     }
 
@@ -684,16 +550,12 @@ class NotificationService {
 
       if (reasons is! List || reasons.isEmpty) continue;
 
-      final homeName =
-          item["homeName"]?.toString() ?? "Nhà";
+      final homeName = item["homeName"]?.toString() ?? "Nhà";
 
-      issueLines.add(
-        "$homeName: ${reasons.join(", ")}",
-      );
+      issueLines.add("$homeName: ${reasons.join(", ")}");
     }
 
-    lastScheduleBody =
-    "⚠️ CHƯA AN TOÀN\n${issueLines.join("\n")}";
+    lastScheduleBody = "⚠️ CHƯA AN TOÀN\n${issueLines.join("\n")}";
   }
 
   static void openOrMergeReminderPage({
@@ -723,20 +585,19 @@ class NotificationService {
 
     navigator
         .push(
-      MaterialPageRoute(
-        settings: const RouteSettings(
-          name: reminderRouteName,
-        ),
-        builder: (_) => FullscreenAlarmPage(
-          title: lastScheduleTitle,
-          body: lastScheduleBody,
-          silentMode: true,
-          reminderItemsJson: lastReminderItemsJson,
-        ),
-      ),
-    )
+          MaterialPageRoute(
+            settings: const RouteSettings(name: reminderRouteName),
+            builder: (_) => FullscreenAlarmPage(
+              title: lastScheduleTitle,
+              body: lastScheduleBody,
+              silentMode: true,
+              reminderItemsJson: lastReminderItemsJson,
+            ),
+          ),
+        )
         .whenComplete(markReminderPageClosed);
   }
+
   static Future<void> init() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -746,14 +607,10 @@ class NotificationService {
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    const android = AndroidInitializationSettings(
-      'ic_stat_safehome',
-    );
+          alert: true,
+          badge: true,
+          sound: true,
+        );
 
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -763,7 +620,7 @@ class NotificationService {
 
     await localNotif.initialize(
       const InitializationSettings(
-        android: android,
+        android: AndroidNotificationConfig.initializationSettings,
         iOS: ios,
       ),
       onDidReceiveNotificationResponse: (response) async {
@@ -816,21 +673,16 @@ class NotificationService {
       },
     );
 
-    final launchDetails =
-    await localNotif.getNotificationAppLaunchDetails();
+    final launchDetails = await localNotif.getNotificationAppLaunchDetails();
 
     if (launchDetails?.didNotificationLaunchApp == true) {
-      final launchPayload =
-          launchDetails?.notificationResponse?.payload ?? '';
+      final launchPayload = launchDetails?.notificationResponse?.payload ?? '';
 
-      final handledChat =
-      _handleHomeChatPayload(launchPayload);
+      final handledChat = _handleHomeChatPayload(launchPayload);
 
       final handledAlarm = handledChat
           ? false
-          : await handleAlarmNotificationPayload(
-        launchPayload,
-      );
+          : await handleAlarmNotificationPayload(launchPayload);
 
       if (!handledChat &&
           !handledAlarm &&
@@ -842,113 +694,16 @@ class NotificationService {
       }
     }
 
-    if (Platform.isAndroid) {
-      const legacyAlarmChannel = AndroidNotificationChannel(
-        'alarm_channel_silent_v3',
-        'Alarm Channel Silent V3',
-        description:
-        'Kênh Alarm cũ để giữ tương thích',
-        importance: Importance.max,
-        playSound: false,
-        enableVibration: true,
-      );
-
-      const alarmFullscreenChannel =
-      AndroidNotificationChannel(
-        'safehome_alarm_fullscreen_v4',
-        'SafeHome Alarm Fullscreen',
-        description:
-        'Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm',
-        importance: Importance.max,
-        playSound: false,
-        enableVibration: true,
-      );
-
-      const emergencyPriorityChannel =
-      AndroidNotificationChannel(
-        'safehome_emergency_priority_v1',
-        'SafeHome Emergency Priority',
-        description:
-        'Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình',
-        importance: Importance.max,
-        playSound: true,
-        enableVibration: true,
-      );
-
-      const scheduleFullscreenChannel =
-      AndroidNotificationChannel(
-        'safehome_schedule_fullscreen_channel',
-        'SafeHome Schedule Fullscreen',
-        description:
-        'Nhắc nhở SafeHome toàn màn hình không âm thanh',
-        importance: Importance.max,
-        playSound: false,
-      );
-
-      const reminderChannel = AndroidNotificationChannel(
-        'safehome_reminder_priority_v2',
-        'SafeHome Reminder Priority',
-        description:
-        'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
-        importance: Importance.max,
-        playSound: true,
-        enableVibration: true,
-      );
-
-      const chatChannel = AndroidNotificationChannel(
-        'safehome_chat_channel_v1',
-        'Tin nhắn HomeChat',
-        description: 'Tin nhắn mới trong các nhà SafeHome',
-        importance: Importance.high,
-        playSound: true,
-        enableVibration: true,
-      );
-
-      final androidPlugin = localNotif
-          .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-      >();
-
-      final fullScreenPermission =
-      await androidPlugin
-          ?.requestFullScreenIntentPermission();
-
-      debugPrint(
-        'FULL_SCREEN_INTENT_PERMISSION: '
-            '$fullScreenPermission',
-      );
-
-      await androidPlugin?.createNotificationChannel(
-        legacyAlarmChannel,
-      );
-      await androidPlugin?.createNotificationChannel(
-        alarmFullscreenChannel,
-      );
-      await androidPlugin?.createNotificationChannel(
-        emergencyPriorityChannel,
-      );
-      await androidPlugin?.createNotificationChannel(
-        scheduleFullscreenChannel,
-      );
-      await androidPlugin?.createNotificationChannel(
-        reminderChannel,
-      );
-      await androidPlugin?.createNotificationChannel(
-        chatChannel,
-      );
-    }
+    await AndroidNotificationConfig.configure(localNotif);
   }
 
-  static const String alarmRouteName =
-      'fullscreen_alarm';
+  static const String alarmRouteName = 'fullscreen_alarm';
 
   static bool _alarmPageOpen = false;
 
-  static final ValueNotifier<int> alarmRevision =
-  ValueNotifier<int>(0);
+  static final ValueNotifier<int> alarmRevision = ValueNotifier<int>(0);
 
-  static final List<Map<String, dynamic>>
-  activeAlarmItems = [];
+  static final List<Map<String, dynamic>> activeAlarmItems = [];
 
   static void markAlarmPageClosed() {
     _alarmPageOpen = false;
@@ -970,8 +725,7 @@ class NotificationService {
 
       if (decoded is! List) return;
 
-      final existingKeys =
-      activeAlarmItems.map(_alarmKey).toSet();
+      final existingKeys = activeAlarmItems.map(_alarmKey).toSet();
 
       for (final item in decoded) {
         if (item is! Map) continue;
@@ -1010,18 +764,12 @@ class NotificationService {
     openAlarmPage(
       title: data['title']?.toString() ?? '🚨 SafeHome',
       body: data['body']?.toString() ?? lastAlarmBody,
-      alarmItemsJson:
-      data['alarmItemsJson']?.toString() ?? '',
-      incidentId:
-      data['incidentId']?.toString() ?? '',
-      receiverUid:
-      data['receiverUid']?.toString() ?? '',
-      ownerUid:
-      data['ownerUid']?.toString() ?? '',
-      homeId:
-      data['homeId']?.toString() ?? '',
-      flowType:
-      data['flowType']?.toString() ?? '',
+      alarmItemsJson: data['alarmItemsJson']?.toString() ?? '',
+      incidentId: data['incidentId']?.toString() ?? '',
+      receiverUid: data['receiverUid']?.toString() ?? '',
+      ownerUid: data['ownerUid']?.toString() ?? '',
+      homeId: data['homeId']?.toString() ?? '',
+      flowType: data['flowType']?.toString() ?? '',
     );
   }
 
@@ -1084,27 +832,22 @@ class NotificationService {
 
     navigator
         .push(
-      MaterialPageRoute(
-        settings: const RouteSettings(
-          name: alarmRouteName,
-        ),
-        builder: (_) => FullscreenAlarmPage(
-          title: title,
-          body: lastAlarmBody,
-          alarmItemsJson: lastAlarmItemsJson,
-        ),
-      ),
-    )
+          MaterialPageRoute(
+            settings: const RouteSettings(name: alarmRouteName),
+            builder: (_) => FullscreenAlarmPage(
+              title: title,
+              body: lastAlarmBody,
+              alarmItemsJson: lastAlarmItemsJson,
+            ),
+          ),
+        )
         .whenComplete(markAlarmPageClosed);
   }
 
-  static void clearActiveAlarms({
-    bool clearIncidentContexts = true,
-  }) {
+  static void clearActiveAlarms({bool clearIncidentContexts = true}) {
     activeAlarmItems.clear();
     lastAlarmItemsJson = '';
-    lastAlarmBody =
-    'Có cảnh báo an ninh cần kiểm tra ngay.';
+    lastAlarmBody = 'Có cảnh báo an ninh cần kiểm tra ngay.';
 
     if (clearIncidentContexts) {
       _activeAlarmIncidentContexts.clear();
@@ -1146,25 +889,10 @@ class NotificationService {
         ? 'Có thiết bị chưa an toàn.'
         : cleanReason;
 
-    final androidDetails = AndroidNotificationDetails(
-      'safehome_reminder_priority_v2',
-      'SafeHome Reminder Priority',
-      channelDescription:
-      'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
-      visibility: NotificationVisibility.public,
-      importance: Importance.max,
-      priority: Priority.max,
-      autoCancel: false,
-      ongoing: true,
-      fullScreenIntent: false,
-      playSound: true,
-      enableVibration: true,
-      category: AndroidNotificationCategory.reminder,
-      styleInformation: BigTextStyleInformation(
-        lastScheduleBody,
-        contentTitle: notificationTitle,
-        summaryText: 'SafeHome',
-      ),
+    final androidDetails = AndroidNotificationConfig.reminderDetails(
+      title: notificationTitle,
+      body: notificationBody,
+      bigText: lastScheduleBody,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -1181,10 +909,7 @@ class NotificationService {
       999998,
       notificationTitle,
       notificationBody,
-      NotificationDetails(
-        android: androidDetails,
-        iOS: iosDetails,
-      ),
+      NotificationDetails(android: androidDetails, iOS: iosDetails),
       payload: 'open_home',
     );
   }

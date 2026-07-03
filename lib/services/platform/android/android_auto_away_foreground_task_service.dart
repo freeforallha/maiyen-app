@@ -9,8 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../firebase_options.dart';
-import 'auto_away_service.dart';
+import '../../../firebase_options.dart';
+import '../../auto_away_service.dart';
 
 const String _autoAwayTaskDataKey =
     'safehome_auto_away_foreground_task_config_v1';
@@ -18,19 +18,36 @@ const int _autoAwayForegroundServiceId = 884201;
 
 @pragma('vm:entry-point')
 void safeHomeAutoAwayForegroundTaskCallback() {
-  FlutterForegroundTask.setTaskHandler(
-    _SafeHomeAutoAwayTaskHandler(),
-  );
+  FlutterForegroundTask.setTaskHandler(_SafeHomeAutoAwayTaskHandler());
 }
 
-class AutoAwayForegroundTaskService {
-  const AutoAwayForegroundTaskService._();
+class AndroidAutoAwayForegroundTaskService {
+  const AndroidAutoAwayForegroundTaskService._();
 
   static bool _initialized = false;
 
   static bool get _isAndroid {
-    return !kIsWeb &&
-        defaultTargetPlatform == TargetPlatform.android;
+    return !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+  }
+
+  static void initCommunicationPort() {
+    if (!_isAndroid) {
+      return;
+    }
+
+    FlutterForegroundTask.initCommunicationPort();
+  }
+
+  static Future<void> activateAppCheck() async {
+    if (!_isAndroid) {
+      return;
+    }
+
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: kReleaseMode
+          ? AndroidProvider.playIntegrity
+          : AndroidProvider.debug,
+    );
   }
 
   static void initialize() {
@@ -39,12 +56,11 @@ class AutoAwayForegroundTaskService {
     }
 
     FlutterForegroundTask.init(
-      androidNotificationOptions:
-      AndroidNotificationOptions(
+      androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'safehome_auto_away_location_v1',
         channelName: 'SafeHome cập nhật vị trí',
         channelDescription:
-        'Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.',
+            'Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         onlyAlertOnce: true,
@@ -87,28 +103,20 @@ class AutoAwayForegroundTaskService {
 
     initialize();
 
-    final taskHomes = _buildTaskHomes(
-      uid: normalizedUid,
-      homes: homes,
-    );
+    final taskHomes = _buildTaskHomes(uid: normalizedUid, homes: homes);
 
     if (taskHomes.isEmpty) {
       await stop();
       return;
     }
 
-    final taskConfig = jsonEncode({
-      'uid': normalizedUid,
-      'homes': taskHomes,
-    });
+    final taskConfig = jsonEncode({'uid': normalizedUid, 'homes': taskHomes});
 
-    final previousTaskConfig =
-    await FlutterForegroundTask.getData<String>(
+    final previousTaskConfig = await FlutterForegroundTask.getData<String>(
       key: _autoAwayTaskDataKey,
     );
 
-    final configChanged =
-        previousTaskConfig != taskConfig;
+    final configChanged = previousTaskConfig != taskConfig;
 
     if (configChanged) {
       await FlutterForegroundTask.saveData(
@@ -117,14 +125,11 @@ class AutoAwayForegroundTaskService {
       );
     }
 
-    final locationServiceEnabled =
-    await Geolocator.isLocationServiceEnabled();
+    final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
-    final permission =
-    await Geolocator.checkPermission();
+    final permission = await Geolocator.checkPermission();
 
-    if (!locationServiceEnabled ||
-        permission != LocationPermission.always) {
+    if (!locationServiceEnabled || permission != LocationPermission.always) {
       return;
     }
 
@@ -133,11 +138,9 @@ class AutoAwayForegroundTaskService {
       // đổi tọa độ hoặc thay đổi danh sách nhà.
       // Các cập nhật hubStatus không còn kích hoạt GPS.
       if (configChanged) {
-        FlutterForegroundTask.sendDataToTask(
-          const <String, dynamic>{
-            'action': 'refresh_now',
-          },
-        );
+        FlutterForegroundTask.sendDataToTask(const <String, dynamic>{
+          'action': 'refresh_now',
+        });
       }
 
       return;
@@ -149,8 +152,7 @@ class AutoAwayForegroundTaskService {
         ForegroundServiceTypes.location,
       ],
       notificationTitle: 'SafeHome đang cập nhật vị trí',
-      notificationText:
-      'Đang theo dõi để tự động bật Chế độ Bảo vệ.',
+      notificationText: 'Đang theo dõi để tự động bật Chế độ Bảo vệ.',
       callback: safeHomeAutoAwayForegroundTaskCallback,
     );
   }
@@ -160,9 +162,7 @@ class AutoAwayForegroundTaskService {
       return;
     }
 
-    await FlutterForegroundTask.removeData(
-      key: _autoAwayTaskDataKey,
-    );
+    await FlutterForegroundTask.removeData(key: _autoAwayTaskDataKey);
 
     if (await FlutterForegroundTask.isRunningService) {
       await FlutterForegroundTask.stopService();
@@ -186,8 +186,7 @@ class AutoAwayForegroundTaskService {
 
       final latitude = _asDouble(autoAway['latitude']);
       final longitude = _asDouble(autoAway['longitude']);
-      final radiusMeters =
-          _asDouble(autoAway['radiusMeters']) ?? 150.0;
+      final radiusMeters = _asDouble(autoAway['radiusMeters']) ?? 150.0;
 
       if (latitude == null || longitude == null) {
         continue;
@@ -209,8 +208,7 @@ class AutoAwayForegroundTaskService {
           'enabled': true,
           'latitude': latitude,
           'longitude': longitude,
-          'radiusMeters':
-          radiusMeters.clamp(100.0, 1000.0).toDouble(),
+          'radiusMeters': radiusMeters.clamp(100.0, 1000.0).toDouble(),
         },
       };
     }
@@ -224,9 +222,7 @@ class AutoAwayForegroundTaskService {
     }
 
     if (value is Map) {
-      return value.map(
-            (key, item) => MapEntry(key.toString(), item),
-      );
+      return value.map((key, item) => MapEntry(key.toString(), item));
     }
 
     return <String, dynamic>{};
@@ -246,35 +242,25 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
   bool _firebaseReady = false;
 
   @override
-  Future<void> onStart(
-      DateTime timestamp,
-      TaskStarter starter,
-      ) async {
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     DartPluginRegistrant.ensureInitialized();
     await _runHeartbeat('foreground_task_started');
   }
 
   @override
   void onRepeatEvent(DateTime timestamp) {
-    unawaited(
-      _runHeartbeat('foreground_task_heartbeat'),
-    );
+    unawaited(_runHeartbeat('foreground_task_heartbeat'));
   }
 
   @override
   void onReceiveData(Object data) {
     if (data is Map && data['action'] == 'refresh_now') {
-      unawaited(
-        _runHeartbeat('foreground_task_config_changed'),
-      );
+      unawaited(_runHeartbeat('foreground_task_config_changed'));
     }
   }
 
   @override
-  Future<void> onDestroy(
-      DateTime timestamp,
-      bool isTimeout,
-      ) async {}
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {}
 
   @override
   void onNotificationPressed() {
@@ -289,8 +275,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
     _heartbeatRunning = true;
 
     try {
-      final rawConfig =
-      await FlutterForegroundTask.getData<String>(
+      final rawConfig = await FlutterForegroundTask.getData<String>(
         key: _autoAwayTaskDataKey,
       );
 
@@ -305,7 +290,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
       }
 
       final config = decoded.map(
-            (key, value) => MapEntry(key.toString(), value),
+        (key, value) => MapEntry(key.toString(), value),
       );
       final uid = config['uid']?.toString().trim() ?? '';
       final homes = _asMap(config['homes']);
@@ -320,10 +305,9 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
 
       if (user == null) {
         try {
-          user = await FirebaseAuth.instance
-              .authStateChanges()
-              .first
-              .timeout(const Duration(seconds: 5));
+          user = await FirebaseAuth.instance.authStateChanges().first.timeout(
+            const Duration(seconds: 5),
+          );
         } catch (_) {}
       }
 
@@ -332,11 +316,10 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
       }
 
       final locationServiceEnabled =
-      await Geolocator.isLocationServiceEnabled();
+          await Geolocator.isLocationServiceEnabled();
       final permission = await Geolocator.checkPermission();
 
-      if (!locationServiceEnabled ||
-          permission != LocationPermission.always) {
+      if (!locationServiceEnabled || permission != LocationPermission.always) {
         return;
       }
 
@@ -348,9 +331,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
         event: event,
       );
     } catch (error, stackTrace) {
-      debugPrint(
-        'AUTO_AWAY_FOREGROUND_TASK_HEARTBEAT_ERROR: $error',
-      );
+      debugPrint('AUTO_AWAY_FOREGROUND_TASK_HEARTBEAT_ERROR: $error');
       debugPrintStack(stackTrace: stackTrace);
     } finally {
       _heartbeatRunning = false;
@@ -375,9 +356,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
             : AndroidProvider.debug,
       );
     } catch (error) {
-      debugPrint(
-        'AUTO_AWAY_FOREGROUND_TASK_APP_CHECK_ERROR: $error',
-      );
+      debugPrint('AUTO_AWAY_FOREGROUND_TASK_APP_CHECK_ERROR: $error');
     }
 
     _firebaseReady = true;
@@ -389,9 +368,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
     }
 
     if (value is Map) {
-      return value.map(
-            (key, item) => MapEntry(key.toString(), item),
-      );
+      return value.map((key, item) => MapEntry(key.toString(), item));
     }
 
     return <String, dynamic>{};

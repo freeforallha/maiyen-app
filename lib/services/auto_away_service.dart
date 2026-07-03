@@ -2,18 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:native_geofence/native_geofence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../firebase_options.dart';
 import 'account_session_service.dart';
+import 'platform/platform_bootstrap_service.dart';
+import 'platform/platform_auto_away_system_service.dart';
 
 const String _legacyAutoAwayGeofencePrefix = 'safehome_auto_away';
 
@@ -74,11 +74,7 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
 
     // App Check không được phép làm hỏng callback vị trí nền.
     try {
-      await FirebaseAppCheck.instance.activate(
-        androidProvider: kReleaseMode
-            ? AndroidProvider.playIntegrity
-            : AndroidProvider.debug,
-      );
+      await PlatformBootstrapService.activateAppCheck();
     } catch (error) {
       debugPrint('AUTO_AWAY_BACKGROUND_APP_CHECK_ERROR: $error');
     }
@@ -119,10 +115,6 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
 }
 
 class AutoAwayService {
-  static const MethodChannel _nativeChannel = MethodChannel(
-    'safehome/native_alarm_permission',
-  );
-
   static bool _initialized = false;
   static bool _initialPresenceSynced = false;
 
@@ -1246,51 +1238,13 @@ class AutoAwayService {
     required LocationPermission permission,
   }) async {
     final locationAlwaysGranted = permission == LocationPermission.always;
-
-    if (defaultTargetPlatform != TargetPlatform.android) {
-      return _MonitoringStatus(
-        locationAlwaysGranted: locationAlwaysGranted,
-        batteryUnrestricted: true,
-        backgroundRestricted: false,
-        autoStartConfirmed: true,
-      );
-    }
-
-    var batteryUnrestricted = false;
-    var backgroundRestricted = true;
-    var autoStartConfirmed = false;
-
-    try {
-      batteryUnrestricted =
-          await _nativeChannel.invokeMethod<bool>(
-            'isIgnoringBatteryOptimizations',
-          ) ??
-          false;
-    } catch (error) {
-      debugPrint('AUTO_AWAY_BATTERY_CHECK_ERROR: $error');
-    }
-
-    try {
-      backgroundRestricted =
-          await _nativeChannel.invokeMethod<bool>('isBackgroundRestricted') ??
-          true;
-    } catch (error) {
-      debugPrint('AUTO_AWAY_BACKGROUND_CHECK_ERROR: $error');
-    }
-
-    try {
-      autoStartConfirmed =
-          await _nativeChannel.invokeMethod<bool>('isBootReceiverConfirmed') ??
-          false;
-    } catch (error) {
-      debugPrint('AUTO_AWAY_AUTOSTART_CHECK_ERROR: $error');
-    }
+    final systemStatus = await PlatformAutoAwaySystemService.readSystemStatus();
 
     return _MonitoringStatus(
       locationAlwaysGranted: locationAlwaysGranted,
-      batteryUnrestricted: batteryUnrestricted,
-      backgroundRestricted: backgroundRestricted,
-      autoStartConfirmed: autoStartConfirmed,
+      batteryUnrestricted: systemStatus.batteryUnrestricted,
+      backgroundRestricted: systemStatus.backgroundRestricted,
+      autoStartConfirmed: systemStatus.autoStartConfirmed,
     );
   }
 

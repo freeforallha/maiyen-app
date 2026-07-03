@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../helpers/home_helper.dart';
-import 'auto_away_foreground_task_service.dart';
 import 'auto_away_service.dart';
+import 'platform/platform_auto_away_task_service.dart';
 
 typedef HomeAutoAwayHomesProvider = Map<String, dynamic> Function();
 
@@ -88,7 +88,7 @@ class HomeAutoAwayCoordinator {
     _presenceRefreshTimer = null;
 
     try {
-      await AutoAwayForegroundTaskService.syncForHomes(uid: uid, homes: homes);
+      await PlatformAutoAwayTaskService.syncForHomes(uid: uid, homes: homes);
     } catch (error) {
       debugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
     }
