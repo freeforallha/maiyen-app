@@ -16,12 +16,18 @@ import '../services/share_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
-import '../widgets/status_panel.dart';
 import '../sheets/account_avatar_sheet.dart';
 import 'all_home_page.dart';
+import 'home/home_add_sheets.dart';
+import 'home/home_alarm_menu_sheet.dart';
+import 'home/home_alarm_pause_sheet.dart';
+import 'home/home_auto_away_sheet.dart';
 import 'home/home_bottom_bar.dart';
 import 'home/home_dialogs.dart';
 import 'home/home_header_bar.dart';
+import 'home/home_management_sheets.dart';
+import 'home/home_overview_header.dart';
+import 'home/home_transfer_owner_sheets.dart';
 import '../dialogs/confirm_dialog.dart';
 import '../sheets/device_detail_sheet.dart';
 import '../sheets/notification_list_sheet.dart' as notif_sheet;
@@ -35,7 +41,6 @@ import '../sheets/home_chat_sheet.dart';
 import '../sheets/schedule_sheet.dart';
 import '../sheets/all_devices_sheet.dart';
 import '../sheets/home_event_sheet.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import '../sheets/alarm_device_sheet.dart';
 import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
@@ -43,7 +48,6 @@ import '../services/auto_away_service.dart';
 import '../services/auto_away_foreground_task_service.dart';
 import '../services/session_logout_service.dart';
 import '../sheets/room_management_sheet.dart';
-import '../widgets/room_tabs.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
@@ -870,425 +874,199 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return double.tryParse(raw?.toString() ?? "");
     }
 
-    var localEnabled = currentAutoAway["enabled"] == true;
-    var latitude = readDouble(currentAutoAway["latitude"]);
-    var longitude = readDouble(currentAutoAway["longitude"]);
-    const radiusMeters = 150.0;
-    var locating = false;
-    var saving = false;
+    const radiusMeters = 150;
 
-    await showModalBottomSheet<void>(
+    await showHomeAutoAwaySheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (innerContext, setSheetState) {
-            final currentLatitude = latitude;
-            final currentLongitude = longitude;
-            final hasLocation =
-                currentLatitude != null && currentLongitude != null;
-            final locationText = hasLocation
-                ? _strings.choose(
-                    vi:
-                        "Đã đặt vị trí nhà\n"
-                        "${currentLatitude.toStringAsFixed(6)}, "
-                        "${currentLongitude.toStringAsFixed(6)}",
-                    en:
-                        "Home location set\n"
-                        "${currentLatitude.toStringAsFixed(6)}, "
-                        "${currentLongitude.toStringAsFixed(6)}",
-                  )
-                : _strings.t("Chưa đặt vị trí nhà");
+      strings: _strings,
+      initialEnabled: currentAutoAway["enabled"] == true,
+      initialLatitude: readDouble(currentAutoAway["latitude"]),
+      initialLongitude: readDouble(currentAutoAway["longitude"]),
+      radiusMeters: radiusMeters,
+      onCaptureLocation: () async {
+        try {
+          final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-            Future<void> captureCurrentLocation() async {
-              if (locating) {
-                return;
-              }
-
-              setSheetState(() {
-                locating = true;
-              });
-
-              try {
-                final serviceEnabled =
-                    await Geolocator.isLocationServiceEnabled();
-
-                if (!serviceEnabled) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Hãy bật GPS để đặt vị trí nhà"),
-                    color: Colors.orange,
-                    icon: Icons.location_off_rounded,
-                  );
-
-                  await Geolocator.openLocationSettings();
-                  return;
-                }
-
-                var permission = await Geolocator.checkPermission();
-
-                if (permission == LocationPermission.denied) {
-                  permission = await Geolocator.requestPermission();
-                }
-
-                if (permission == LocationPermission.denied) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Bạn chưa cấp quyền vị trí"),
-                    color: Colors.orange,
-                    icon: Icons.location_disabled_rounded,
-                  );
-                  return;
-                }
-
-                if (permission == LocationPermission.deniedForever) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
-                    color: Colors.orange,
-                    icon: Icons.settings_rounded,
-                  );
-
-                  await Geolocator.openAppSettings();
-                  return;
-                }
-
-                final position = await Geolocator.getCurrentPosition(
-                  locationSettings: const LocationSettings(
-                    accuracy: LocationAccuracy.high,
-                    timeLimit: Duration(seconds: 20),
-                  ),
-                );
-
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                setSheetState(() {
-                  latitude = position.latitude;
-                  longitude = position.longitude;
-                });
-              } catch (error) {
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                showTopToast(
-                  sheetContext,
-                  _strings.choose(
-                    vi: "Không lấy được vị trí hiện tại: $error",
-                    en: "Could not get the current location: $error",
-                  ),
-                  color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              } finally {
-                if (sheetContext.mounted) {
-                  setSheetState(() {
-                    locating = false;
-                  });
-                }
-              }
+          if (!serviceEnabled) {
+            if (!mounted) {
+              return null;
             }
 
-            Future<void> saveAutoAway() async {
-              if (saving) {
-                return;
-              }
-
-              if (localEnabled && !hasLocation) {
-                showTopToast(
-                  sheetContext,
-                  _strings.t("Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ"),
-                  color: Colors.orange,
-                  icon: Icons.location_on_outlined,
-                );
-                return;
-              }
-
-              if (localEnabled) {
-                final hasBackgroundPermission =
-                    await AutoAwayService.ensureBackgroundPermission();
-
-                if (!hasBackgroundPermission) {
-                  if (!sheetContext.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    sheetContext,
-                    _strings.t(
-                      "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
-                    ),
-                    color: Colors.orange,
-                    icon: Icons.location_disabled_rounded,
-                  );
-
-                  await Geolocator.openAppSettings();
-                  return;
-                }
-              }
-
-              setSheetState(() {
-                saving = true;
-              });
-
-              final data = <String, Object?>{
-                "enabled": localEnabled,
-                "radiusMeters": radiusMeters.round(),
-                "updatedAt": DateTime.now().millisecondsSinceEpoch,
-                "updatedBy": uid,
-              };
-
-              if (hasLocation) {
-                data["latitude"] = latitude;
-                data["longitude"] = longitude;
-              }
-
-              try {
-                await FirebaseDatabase.instance
-                    .ref("accounts/$ownerUid/homes/$homeId/autoAway")
-                    .set(data);
-
-                if (!mounted || !sheetContext.mounted) {
-                  return;
-                }
-
-                setState(() {
-                  final cachedHome = safeMap(homes[homeId]);
-                  cachedHome["autoAway"] = Map<String, Object?>.from(data);
-                  homes[homeId] = cachedHome;
-                });
-
-                unawaited(
-                  AutoAwayService.syncForHomes(
-                    uid: uid,
-                    homes: homes,
-                    force: true,
-                  ).catchError((Object error) {
-                    debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
-                  }),
-                );
-                unawaited(_syncAutoAwayLocationMonitoring());
-
-                Navigator.of(sheetContext).pop();
-
-                showTopToast(
-                  pageContext,
-                  localEnabled
-                      ? _strings.t(
-                          "Đã bật tự động Bảo vệ khi mọi người rời nhà",
-                        )
-                      : _strings.t(
-                          "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
-                        ),
-                  color: SafeHomeColors.safe,
-                  icon: Icons.check_circle_rounded,
-                );
-              } catch (error) {
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                showTopToast(
-                  sheetContext,
-                  _strings.choose(
-                    vi: "Không lưu được cài đặt: $error",
-                    en: "Could not save the setting: $error",
-                  ),
-                  color: Colors.red,
-                  icon: Icons.error_outline_rounded,
-                );
-              } finally {
-                if (sheetContext.mounted) {
-                  setSheetState(() {
-                    saving = false;
-                  });
-                }
-              }
-            }
-
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 18,
-                  right: 18,
-                  top: 12,
-                  bottom: MediaQuery.of(innerContext).viewInsets.bottom + 18,
-                ),
-                decoration: const BoxDecoration(
-                  color: SafeHomeColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Icon(
-                            Icons.location_on_rounded,
-                            color: SafeHomeColors.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _strings.t("Tự động Bảo vệ khi rời nhà"),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textPrimary,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                _strings.t("Bán kính bảo vệ mặc định: 150 m"),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Switch.adaptive(
-                          value: localEnabled,
-                          onChanged: (value) {
-                            setSheetState(() {
-                              localEnabled = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.surface,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: SafeHomeColors.border),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            hasLocation
-                                ? Icons.check_circle_rounded
-                                : Icons.location_searching_rounded,
-                            color: hasLocation
-                                ? SafeHomeColors.safe
-                                : SafeHomeColors.warning,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              locationText,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
-                                fontSize: 13,
-                                height: 1.35,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: locating ? null : captureCurrentLocation,
-                        icon: locating
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.my_location_rounded),
-                        label: Text(
-                          locating
-                              ? _strings.t("Đang lấy vị trí...")
-                              : _strings.t("Đặt vị trí nhà tại đây"),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      _strings.t(
-                        "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.",
-                      ),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: SafeHomeColors.textSecondary,
-                        fontSize: 11.5,
-                        height: 1.35,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: saving ? null : saveAutoAway,
-                        icon: saving
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.save_rounded),
-                        label: Text(
-                          saving
-                              ? _strings.t("Đang lưu...")
-                              : _strings.t("Lưu cài đặt"),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            showTopToast(
+              context,
+              _strings.t("Hãy bật GPS để đặt vị trí nhà"),
+              color: Colors.orange,
+              icon: Icons.location_off_rounded,
             );
-          },
-        );
+
+            await Geolocator.openLocationSettings();
+            return null;
+          }
+
+          var permission = await Geolocator.checkPermission();
+
+          if (permission == LocationPermission.denied) {
+            permission = await Geolocator.requestPermission();
+          }
+
+          if (permission == LocationPermission.denied) {
+            if (!mounted) {
+              return null;
+            }
+
+            showTopToast(
+              context,
+              _strings.t("Bạn chưa cấp quyền vị trí"),
+              color: Colors.orange,
+              icon: Icons.location_disabled_rounded,
+            );
+            return null;
+          }
+
+          if (permission == LocationPermission.deniedForever) {
+            if (!mounted) {
+              return null;
+            }
+
+            showTopToast(
+              context,
+              _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
+              color: Colors.orange,
+              icon: Icons.settings_rounded,
+            );
+
+            await Geolocator.openAppSettings();
+            return null;
+          }
+
+          final position = await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.high,
+              timeLimit: Duration(seconds: 20),
+            ),
+          );
+
+          if (!mounted) {
+            return null;
+          }
+
+          return HomeAutoAwayLocation(
+            latitude: position.latitude,
+            longitude: position.longitude,
+          );
+        } catch (error) {
+          if (!mounted) {
+            return null;
+          }
+
+          showTopToast(
+            context,
+            _strings.choose(
+              vi: "Không lấy được vị trí hiện tại: $error",
+              en: "Could not get the current location: $error",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return null;
+        }
+      },
+      onSave: (data) async {
+        if (data.enabled) {
+          final hasBackgroundPermission =
+              await AutoAwayService.ensureBackgroundPermission();
+
+          if (!hasBackgroundPermission) {
+            if (!mounted) {
+              return false;
+            }
+
+            showTopToast(
+              context,
+              _strings.t(
+                "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
+              ),
+              color: Colors.orange,
+              icon: Icons.location_disabled_rounded,
+            );
+
+            await Geolocator.openAppSettings();
+            return false;
+          }
+        }
+
+        final hasLocation = data.latitude != null && data.longitude != null;
+        final autoAwayData = <String, Object?>{
+          "enabled": data.enabled,
+          "radiusMeters": data.radiusMeters,
+          "updatedAt": DateTime.now().millisecondsSinceEpoch,
+          "updatedBy": uid,
+        };
+
+        if (hasLocation) {
+          autoAwayData["latitude"] = data.latitude;
+          autoAwayData["longitude"] = data.longitude;
+        }
+
+        try {
+          await FirebaseDatabase.instance
+              .ref("accounts/$ownerUid/homes/$homeId/autoAway")
+              .set(autoAwayData);
+
+          if (!mounted) {
+            return false;
+          }
+
+          setState(() {
+            final cachedHome = safeMap(homes[homeId]);
+            cachedHome["autoAway"] = Map<String, Object?>.from(autoAwayData);
+            homes[homeId] = cachedHome;
+          });
+
+          unawaited(
+            AutoAwayService.syncForHomes(
+              uid: uid,
+              homes: homes,
+              force: true,
+            ).catchError((Object error) {
+              debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
+            }),
+          );
+          unawaited(_syncAutoAwayLocationMonitoring());
+
+          unawaited(
+            Future<void>.delayed(Duration.zero, () {
+              if (!mounted || !pageContext.mounted) {
+                return;
+              }
+
+              showTopToast(
+                pageContext,
+                data.enabled
+                    ? _strings.t("Đã bật tự động Bảo vệ khi mọi người rời nhà")
+                    : _strings.t("Đã tắt tự động Bảo vệ khi mọi người rời nhà"),
+                color: SafeHomeColors.safe,
+                icon: Icons.check_circle_rounded,
+              );
+            }),
+          );
+          return true;
+        } catch (error) {
+          if (!mounted) {
+            return false;
+          }
+
+          showTopToast(
+            context,
+            _strings.choose(
+              vi: "Không lưu được cài đặt: $error",
+              en: "Could not save the setting: $error",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
       },
     );
   }
@@ -3291,135 +3069,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final shareOwnerUid = getHomeOwnerUid();
     final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
 
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _strings.t("QR của nhà này"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                QrImageView(data: qrData, version: QrVersions.auto, size: 220),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t(
-                    "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    showJoinHomeQrSheet(context: context, strings: _strings, qrData: qrData);
   }
 
   void shareHome() async {
-    final controller = TextEditingController();
     final shareOwnerUid = getHomeOwnerUid();
     final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
 
-    final targetEmail = await showModalBottomSheet<String>(
+    final targetEmail = await showShareHomeSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            final email = controller.text.trim().toLowerCase();
-            final emailOk = RegExp(
-              r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-            ).hasMatch(email);
-
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  top: 20,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _strings.t("Chia sẻ nhà"),
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) => setSheetState(() {}),
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Email người nhận"),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: emailOk
-                            ? IconButton(
-                                icon: const Icon(Icons.send_rounded),
-                                onPressed: () {
-                                  Navigator.pop(context, email);
-                                },
-                              )
-                            : null,
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    Text(
-                      _strings.t("Mời thành viên bằng mã QR"),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    QrImageView(
-                      data: qrData,
-                      version: QrVersions.auto,
-                      size: 180,
-                    ),
-
-                    const SizedBox(height: 12),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+      strings: _strings,
+      qrData: qrData,
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
@@ -3496,80 +3156,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void transferOwner() async {
-    final controller = TextEditingController();
-    final targetEmail = await showModalBottomSheet<String>(
+    final targetEmail = await showTransferOwnerEmailSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  _strings.t("Chuyển quyền chủ nhà"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-                const SizedBox(height: 12),
-
-                StatefulBuilder(
-                  builder: (context, setEmailState) {
-                    final email = controller.text.trim().toLowerCase();
-
-                    final emailOk = RegExp(
-                      r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                    ).hasMatch(email);
-
-                    return TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) => setEmailState(() {}),
-                      decoration: InputDecoration(
-                        labelText: _strings.t("Email người nhận"),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: emailOk
-                            ? IconButton(
-                                icon: const Icon(Icons.send_rounded),
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                    controller.text.trim().toLowerCase(),
-                                  );
-                                },
-                              )
-                            : null,
-                      ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 18),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
     if (targetEmail == null || targetEmail.isEmpty) return;
@@ -3605,114 +3194,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     // ===== 2. CONFIRM =====
     if (!mounted) return;
 
-    final ok = await showModalBottomSheet<bool>(
+    final ok = await showTransferOwnerConfirmSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.warning_amber_rounded,
-                  color: Colors.orange,
-                  size: 46,
-                ),
-
-                const SizedBox(height: 12),
-
-                Text(
-                  _strings.t("Xác nhận chuyển quyền"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                Text(
-                  _strings.choose(
-                    vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
-                    en: "Transfer home ownership to:\n$targetEmail?",
-                  ),
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: Text(_strings.t("Hủy")),
-                      ),
-                    ),
-
-                    const SizedBox(width: 12),
-
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: () => Navigator.pop(context, true),
-                        child: Text(_strings.t("Chuyển")),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
+      targetEmail: targetEmail,
     );
 
-    if (ok != true) return;
+    if (!ok) return;
     if (!mounted) return;
 
-    final passwordController = TextEditingController();
-
-    final passwordOk = await showDialog<bool>(
+    final password = await showTransferOwnerPasswordDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(_strings.t("Xác nhận mật khẩu")),
-        content: TextField(
-          controller: passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: _strings.t("Mật khẩu tài khoản"),
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(_strings.t("Huỷ")),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(_strings.t("Xác nhận")),
-          ),
-        ],
-      ),
+      strings: _strings,
     );
 
-    if (passwordOk != true) return;
+    if (password == null) return;
     final user = FirebaseAuth.instance.currentUser;
     final userEmail = user?.email;
 
@@ -3731,7 +3227,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     try {
       final credential = EmailAuthProvider.credential(
         email: userEmail,
-        password: passwordController.text.trim(),
+        password: password,
       );
 
       await user.reauthenticateWithCredential(credential);
@@ -3906,131 +3402,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> showAddHomeOptions() async {
-    final result = await showModalBottomSheet<String>(
+    final result = await showAddHomeOptionsSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        Widget optionTile({
-          required IconData icon,
-          required String title,
-          required String subtitle,
-          required Color color,
-          required String value,
-        }) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Material(
-              color: SafeHomeColors.surface,
-              borderRadius: BorderRadius.circular(18),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(18),
-                onTap: () {
-                  Navigator.of(sheetContext).pop(value);
-                },
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(13, 11, 11, 11),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: SafeHomeColors.border),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.11),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Icon(icon, color: color),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
-                                fontSize: 14.5,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              subtitle,
-                              style: const TextStyle(
-                                color: SafeHomeColors.textSecondary,
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Icon(
-                        Icons.chevron_right_rounded,
-                        color: SafeHomeColors.textSecondary,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-            decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 44,
-                  height: 5,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    _strings.t("Thêm Home"),
-                    style: const TextStyle(
-                      color: SafeHomeColors.textPrimary,
-                      fontSize: 19,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                optionTile(
-                  icon: Icons.add_home_work_rounded,
-                  title: _strings.t("Tạo Home mới"),
-                  subtitle: _strings.t("Tạo một ngôi nhà mới của bạn"),
-                  color: SafeHomeColors.primary,
-                  value: "create",
-                ),
-                optionTile(
-                  icon: Icons.qr_code_scanner_rounded,
-                  title: _strings.t("Xin gia nhập Home"),
-                  subtitle: _strings.t("Quét mã QR được chủ nhà chia sẻ"),
-                  color: SafeHomeColors.info,
-                  value: "join",
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      strings: _strings,
     );
 
     if (!mounted || result == null) {
@@ -4069,67 +3443,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void addHome() async {
-    final nameController = TextEditingController();
-    final addressController = TextEditingController();
-
-    final result = await showDialog<Map<String, String>>(
+    final result = await showCreateHomeDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(_strings.t("Thêm nhà mới")),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: _strings.t("Tên nhà"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: addressController,
-              decoration: InputDecoration(
-                labelText: _strings.t("Địa chỉ"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(_strings.t("Hủy")),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, {
-                "name": nameController.text.trim(),
-                "address": addressController.text.trim(),
-              });
-            },
-            child: Text(_strings.t("OK")),
-          ),
-        ],
-      ),
+      strings: _strings,
     );
 
     if (result == null) return;
@@ -4219,365 +3535,174 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       );
     }
 
-    TimeOfDay startTime = parseTime(
+    final startTime = parseTime(
       alarmPauseToday["start"]?.toString(),
       const TimeOfDay(hour: 23, minute: 30),
     );
 
-    TimeOfDay endTime = parseTime(
+    final endTime = parseTime(
       alarmPauseToday["end"]?.toString(),
       const TimeOfDay(hour: 23, minute: 45),
     );
 
-    String reason = "Về muộn";
-
     final ownerUid = getHomeOwnerUid();
 
-    await showModalBottomSheet(
+    final now = DateTime.now();
+    final today =
+        "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+    final showRemoveButton =
+        alarmPauseToday.isNotEmpty && alarmPauseToday["date"] == today;
+
+    String format(TimeOfDay time) {
+      return "${time.hour.toString().padLeft(2, "0")}:${time.minute.toString().padLeft(2, "0")}";
+    }
+
+    await showHomeAlarmPauseSheet(
       context: context,
-      isScrollControlled: true,
-      showDragHandle: false,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            String format(TimeOfDay t) {
-              return "${t.hour.toString().padLeft(2, "0")}:${t.minute.toString().padLeft(2, "0")}";
-            }
+      strings: _strings,
+      initialStartTime: startTime,
+      initialEndTime: endTime,
+      showRemoveButton: showRemoveButton,
+      onPickTime: openTimeTextInput,
+      onSave: (sheetContext, data) async {
+        final home = safeMap(homes[selectedHome]);
+        final homeName = getSelectedHomeDisplayName();
+        final devices = safeMap(home["devices"]);
 
-            return SafeArea(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 14),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Text(
-                      _strings.t("⏸️ Tạm tắt Alarm hôm nay"),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+        Map<String, dynamic>? firstAlarm;
 
-                    const SizedBox(height: 18),
+        for (final d in devices.values) {
+          final device = safeMap(d);
+          final alarm = safeMap(device["alarm"]);
 
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              final picked = await openTimeTextInput(
-                                context: context,
-                                title: _strings.t("Chọn giờ bắt đầu tạm tắt"),
-                                initial: format(startTime),
-                              );
+          if (alarm["enabled"] == true) {
+            firstAlarm = alarm;
+            break;
+          }
+        }
 
-                              if (picked == null) return;
+        if (firstAlarm != null) {
+          final alarmStart = firstAlarm["start"]?.toString() ?? "23:00";
+          final alarmEnd = firstAlarm["end"]?.toString() ?? "06:00";
 
-                              final parts = picked.split(":");
+          final selectedStart = format(data.startTime);
+          final selectedEnd = format(data.endTime);
 
-                              setSheetState(() {
-                                startTime = TimeOfDay(
-                                  hour:
-                                      int.tryParse(parts[0]) ?? startTime.hour,
-                                  minute:
-                                      int.tryParse(parts[1]) ??
-                                      startTime.minute,
-                                );
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(14),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(_strings.t("Từ giờ")),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    format(startTime),
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () async {
-                              final picked = await openTimeTextInput(
-                                context: context,
-                                title: _strings.t("Chọn giờ kết thúc tạm tắt"),
-                                initial: format(endTime),
-                              );
+          final startOk = isNowInRange(alarmStart, alarmEnd, selectedStart);
 
-                              if (picked == null) return;
+          final endOk = isNowInRange(alarmStart, alarmEnd, selectedEnd);
 
-                              final parts = picked.split(":");
-
-                              setSheetState(() {
-                                endTime = TimeOfDay(
-                                  hour: int.tryParse(parts[0]) ?? endTime.hour,
-                                  minute:
-                                      int.tryParse(parts[1]) ?? endTime.minute,
-                                );
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(14),
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(_strings.t("Đến giờ")),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    format(endTime),
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    Row(
-                      children: ["Về muộn", "Ra ngoài", "Khác"].map((item) {
-                        final selected = reason == item;
-
-                        return Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 3),
-                            child: ChoiceChip(
-                              label: Text(_strings.t(item)),
-                              selected: selected,
-                              onSelected: (_) {
-                                setSheetState(() {
-                                  reason = item;
-                                });
-                              },
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.save_rounded),
-                        label: Text(_strings.t("Lưu")),
-                        onPressed: () async {
-                          final home = safeMap(homes[selectedHome]);
-                          final homeName = getSelectedHomeDisplayName();
-                          final devices = safeMap(home["devices"]);
-
-                          Map<String, dynamic>? firstAlarm;
-
-                          for (final d in devices.values) {
-                            final device = safeMap(d);
-                            final alarm = safeMap(device["alarm"]);
-
-                            if (alarm["enabled"] == true) {
-                              firstAlarm = alarm;
-                              break;
-                            }
-                          }
-
-                          if (firstAlarm != null) {
-                            final alarmStart =
-                                firstAlarm["start"]?.toString() ?? "23:00";
-                            final alarmEnd =
-                                firstAlarm["end"]?.toString() ?? "06:00";
-
-                            final selectedStart = format(startTime);
-                            final selectedEnd = format(endTime);
-
-                            final startOk = isNowInRange(
-                              alarmStart,
-                              alarmEnd,
-                              selectedStart,
-                            );
-
-                            final endOk = isNowInRange(
-                              alarmStart,
-                              alarmEnd,
-                              selectedEnd,
-                            );
-
-                            if (!startOk || !endOk) {
-                              showTopToast(
-                                context,
-                                _strings.choose(
-                                  vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
-                                  en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
-                                ),
-                                color: Colors.orange,
-                                icon: Icons.schedule_rounded,
-                              );
-
-                              return;
-                            }
-                          }
-
-                          final now = DateTime.now();
-
-                          final date =
-                              "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
-
-                          final pauseStartText = format(startTime);
-                          final pauseEndText = format(endTime);
-                          final createdAt =
-                              DateTime.now().millisecondsSinceEpoch;
-
-                          try {
-                            await FirebaseDatabase.instance
-                                .ref(
-                                  "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-                                )
-                                .set({
-                                  "status": "pending",
-                                  "ownerUid": ownerUid,
-                                  "homeId": selectedHome,
-                                  "homeName": homeName,
-                                  "date": date,
-                                  "start": pauseStartText,
-                                  "end": pauseEndText,
-                                  "reason": reason,
-                                  "createdByUid": uid,
-                                  "createdByName": userName,
-                                  "createdAt": createdAt,
-                                });
-                          } catch (e) {
-                            if (!context.mounted) return;
-
-                            showTopToast(
-                              context,
-                              _strings.choose(
-                                vi: "Không lưu được tạm tắt Alarm: $e",
-                                en: "Unable to save the Alarm pause: $e",
-                              ),
-                              color: Colors.red,
-                              icon: Icons.error_outline_rounded,
-                            );
-                            return;
-                          }
-
-                          if (mounted) {
-                            setState(() {
-                              alarmPauseToday = {
-                                "date": date,
-                                "start": pauseStartText,
-                                "end": pauseEndText,
-                                "homeName": homeName,
-                                "reason": reason,
-                                "createdByUid": uid,
-                                "createdByName": userName,
-                                "createdAt": createdAt,
-                              };
-                            });
-                          }
-
-                          if (!context.mounted) return;
-
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ),
-
-                    if (alarmPauseToday.isNotEmpty &&
-                        alarmPauseToday["date"] ==
-                            "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, "0")}-${DateTime.now().day.toString().padLeft(2, "0")}") ...[
-                      const SizedBox(height: 10),
-
-                      SizedBox(
-                        width: double.infinity,
-                        child: OutlinedButton.icon(
-                          icon: const Icon(Icons.delete_outline_rounded),
-                          label: Text(_strings.t("Xóa lịch tạm tắt")),
-                          onPressed: () async {
-                            try {
-                              await FirebaseDatabase.instance
-                                  .ref(
-                                    "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-                                  )
-                                  .set({
-                                    "status": "pending",
-                                    "action": "remove",
-                                    "ownerUid": ownerUid,
-                                    "homeId": selectedHome,
-                                    "createdByUid": uid,
-                                    "createdByName": userName,
-                                    "createdAt":
-                                        DateTime.now().millisecondsSinceEpoch,
-                                  });
-                            } catch (e) {
-                              if (!context.mounted) return;
-
-                              showTopToast(
-                                context,
-                                _strings.choose(
-                                  vi: "Không xoá được lịch tạm tắt Alarm: $e",
-                                  en: "Unable to delete the Alarm pause schedule: $e",
-                                ),
-                                color: Colors.red,
-                                icon: Icons.error_outline_rounded,
-                              );
-                              return;
-                            }
-
-                            if (mounted) {
-                              setState(() {
-                                alarmPauseToday = {};
-                              });
-                            }
-
-                            if (!context.mounted) return;
-
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
+          if (!startOk || !endOk) {
+            showTopToast(
+              sheetContext,
+              _strings.choose(
+                vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
+                en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
               ),
+              color: Colors.orange,
+              icon: Icons.schedule_rounded,
             );
-          },
-        );
+
+            return false;
+          }
+        }
+
+        final now = DateTime.now();
+
+        final date =
+            "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+
+        final pauseStartText = format(data.startTime);
+        final pauseEndText = format(data.endTime);
+        final createdAt = DateTime.now().millisecondsSinceEpoch;
+
+        try {
+          await FirebaseDatabase.instance
+              .ref(
+                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+              )
+              .set({
+                "status": "pending",
+                "ownerUid": ownerUid,
+                "homeId": selectedHome,
+                "homeName": homeName,
+                "date": date,
+                "start": pauseStartText,
+                "end": pauseEndText,
+                "reason": data.reason,
+                "createdByUid": uid,
+                "createdByName": userName,
+                "createdAt": createdAt,
+              });
+        } catch (e) {
+          if (!sheetContext.mounted) return false;
+
+          showTopToast(
+            sheetContext,
+            _strings.choose(
+              vi: "Không lưu được tạm tắt Alarm: $e",
+              en: "Unable to save the Alarm pause: $e",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
+
+        if (mounted) {
+          setState(() {
+            alarmPauseToday = {
+              "date": date,
+              "start": pauseStartText,
+              "end": pauseEndText,
+              "homeName": homeName,
+              "reason": data.reason,
+              "createdByUid": uid,
+              "createdByName": userName,
+              "createdAt": createdAt,
+            };
+          });
+        }
+
+        return true;
+      },
+      onRemove: (sheetContext) async {
+        try {
+          await FirebaseDatabase.instance
+              .ref(
+                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+              )
+              .set({
+                "status": "pending",
+                "action": "remove",
+                "ownerUid": ownerUid,
+                "homeId": selectedHome,
+                "createdByUid": uid,
+                "createdByName": userName,
+                "createdAt": DateTime.now().millisecondsSinceEpoch,
+              });
+        } catch (e) {
+          if (!sheetContext.mounted) return false;
+
+          showTopToast(
+            sheetContext,
+            _strings.choose(
+              vi: "Không xoá được lịch tạm tắt Alarm: $e",
+              en: "Unable to delete the Alarm pause schedule: $e",
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
+        }
+
+        if (mounted) {
+          setState(() {
+            alarmPauseToday = {};
+          });
+        }
+
+        return true;
       },
     );
   }
@@ -4595,214 +3720,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final currentAddress = homes[selectedHome]?["address"]?.toString() ?? "";
 
-    final nameController = TextEditingController(text: currentName);
-    final addressController = TextEditingController(text: currentAddress);
-
-    final result = await showModalBottomSheet<Map<String, String>>(
+    final result = await showRenameHomeSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return SafeArea(
-          child: AnimatedPadding(
-            duration: const Duration(milliseconds: 160),
-            curve: Curves.easeOut,
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.viewInsetsOf(sheetContext).bottom,
-            ),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-              decoration: const BoxDecoration(
-                color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-              child: StatefulBuilder(
-                builder: (context, setSheetState) {
-                  final nameOk = nameController.text.trim().isNotEmpty;
-
-                  InputDecoration fieldDecoration({
-                    required String label,
-                    required IconData icon,
-                    String? hint,
-                  }) {
-                    return InputDecoration(
-                      labelText: label,
-                      hintText: hint,
-                      prefixIcon: Icon(icon, color: SafeHomeColors.primary),
-                      filled: true,
-                      fillColor: SafeHomeColors.surface,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.border,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.border,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          color: SafeHomeColors.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                    );
-                  }
-
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.border,
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Container(
-                          width: 58,
-                          height: 58,
-                          decoration: const BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.home_rounded,
-                            color: SafeHomeColors.primary,
-                            size: 31,
-                          ),
-                        ),
-                        const SizedBox(height: 11),
-                        Text(
-                          usePersonalName
-                              ? _strings.t("Đổi tên hiển thị")
-                              : _strings.t("Cập nhật thông tin nhà"),
-                          style: const TextStyle(
-                            color: SafeHomeColors.textPrimary,
-                            fontSize: 19,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        TextField(
-                          controller: nameController,
-                          textInputAction: usePersonalName
-                              ? TextInputAction.done
-                              : TextInputAction.next,
-                          onChanged: (_) {
-                            setSheetState(() {});
-                          },
-                          onSubmitted: (_) {
-                            if (!usePersonalName || !nameOk) {
-                              return;
-                            }
-
-                            Navigator.pop(sheetContext, {
-                              "name": nameController.text.trim(),
-                              "address": currentAddress,
-                            });
-                          },
-                          decoration: fieldDecoration(
-                            label: _strings.t("Tên nhà"),
-                            icon: Icons.home_outlined,
-                          ),
-                        ),
-                        if (!usePersonalName) ...[
-                          const SizedBox(height: 12),
-                          TextField(
-                            controller: addressController,
-                            textCapitalization: TextCapitalization.sentences,
-                            textInputAction: TextInputAction.done,
-                            maxLines: 2,
-                            minLines: 1,
-                            onSubmitted: (_) {
-                              if (!nameOk) {
-                                return;
-                              }
-
-                              Navigator.pop(sheetContext, {
-                                "name": nameController.text.trim(),
-                                "address": addressController.text.trim(),
-                              });
-                            },
-                            decoration: fieldDecoration(
-                              label: _strings.t("Địa chỉ"),
-                              icon: Icons.location_on_outlined,
-                              hint: _strings.t("Nhập địa chỉ của nhà"),
-                            ),
-                          ),
-                        ],
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: FilledButton.icon(
-                            onPressed: nameOk
-                                ? () {
-                                    Navigator.pop(sheetContext, {
-                                      "name": nameController.text.trim(),
-                                      "address": usePersonalName
-                                          ? currentAddress
-                                          : addressController.text.trim(),
-                                    });
-                                  }
-                                : null,
-                            icon: const Icon(Icons.save_rounded),
-                            label: Text(
-                              _strings.t("Lưu thay đổi"),
-                              style: TextStyle(fontWeight: FontWeight.w800),
-                            ),
-                            style: FilledButton.styleFrom(
-                              backgroundColor: SafeHomeColors.primary,
-                              disabledBackgroundColor: SafeHomeColors.border,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          usePersonalName
-                              ? _strings.t(
-                                  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
-                                )
-                              : _strings.t(
-                                  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
-                                ),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: SafeHomeColors.textSecondary,
-                            fontSize: 12,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
+      strings: _strings,
+      usePersonalName: usePersonalName,
+      currentName: currentName,
+      currentAddress: currentAddress,
     );
-
-    // Bottom sheet vẫn đang chạy animation đóng sau khi
-    // Navigator.pop() trả kết quả. Không dispose controller ngay,
-    // nếu không TextField có thể đọc controller đã dispose và gây
-    // màn hình đỏ.
-    Future<void>.delayed(const Duration(milliseconds: 350), () {
-      nameController.dispose();
-      addressController.dispose();
-    });
 
     if (result == null) {
       return;
@@ -5262,6 +4186,48 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final devices = getDevices();
     const sectionGap = 6.0;
+    final overviewOwnerUid = getHomeOwnerUid();
+    final overviewHome = safeMap(homes[selectedHome]);
+    final overviewRooms = getRooms();
+    final overviewHomeName =
+        homes[selectedHome]?["name"]?.toString() ?? _strings.t("Nhà");
+    final overviewAlarmPauseText = (() {
+      if (alarmPauseToday.isEmpty) {
+        return "Tắt";
+      }
+
+      final now = DateTime.now();
+
+      final today =
+          "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
+
+      if (alarmPauseToday["date"] != today) {
+        return "Tắt";
+      }
+
+      final startText = alarmPauseToday["start"]?.toString().trim() ?? "";
+      final endText = alarmPauseToday["end"]?.toString().trim() ?? "";
+
+      if (startText.isEmpty || endText.isEmpty) {
+        return "Tắt";
+      }
+
+      return "$startText → $endText";
+    })();
+    final overviewSecurityModeSource =
+        overviewHome["securityModeSource"]?.toString().trim() ?? "";
+    final overviewSecurityModeRepeatMinutes =
+        _normalizeSecurityModeRepeatMinutes(
+          overviewHome["securityModeRepeatMinutes"],
+        );
+    final overviewAlarmScheduleText = formatAlarmSchedules();
+    final overviewEnvironmentText = getHomeEnvironmentText();
+    final overviewOverall = getHomeOverallStatus(overviewHome);
+    final overviewPairingCountdownText = _strings.choose(
+      vi: "Đang ghép nối: $pairingCountdown giây",
+      en: "Pairing: $pairingCountdown s",
+    );
+    final canManageSelectedHome = canManageHome();
 
     return Scaffold(
       extendBody: true,
@@ -5389,180 +4355,114 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       devices: devices,
                       selectedRoomId: selectedRoomId,
                       securityMode: securityMode,
-                      header: Column(
-                        children: [
-                          StatusPanel(
-                            key: ValueKey(
-                              "status_${getHomeOwnerUid()}_$selectedHome",
-                            ),
+                      header: HomeOverviewHeader(
+                        ownerUid: overviewOwnerUid,
+                        homeId: selectedHome,
+                        homeName: overviewHomeName,
+                        alarmPauseText: overviewAlarmPauseText,
+                        onAlarmPauseToday: () {
+                          openAlarmPauseSheetWithReminder();
+                        },
+                        environmentText: overviewEnvironmentText,
+                        homeEvents: homeEvents,
+                        onEnvironmentTap: () {
+                          final tempDevice = getTemperatureDevice();
+
+                          if (tempDevice == null) return;
+
+                          showDeviceDetail(
+                            context: context,
+                            id: tempDevice["id"],
+                            d: tempDevice["data"],
                             ownerUid: getHomeOwnerUid(),
                             homeId: selectedHome,
-                            alarmPauseText: (() {
-                              if (alarmPauseToday.isEmpty) {
-                                return "Tắt";
-                              }
-
-                              final now = DateTime.now();
-
-                              final today =
-                                  "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
-
-                              if (alarmPauseToday["date"] != today) {
-                                return "Tắt";
-                              }
-
-                              final startText =
-                                  alarmPauseToday["start"]?.toString().trim() ??
-                                  "";
-                              final endText =
-                                  alarmPauseToday["end"]?.toString().trim() ??
-                                  "";
-
-                              if (startText.isEmpty || endText.isEmpty) {
-                                return "Tắt";
-                              }
-
-                              return "$startText → $endText";
-                            })(),
-                            onAlarmPauseToday: () {
-                              openAlarmPauseSheetWithReminder();
-                            },
-                            environmentText: getHomeEnvironmentText(),
-                            homeEvents: homeEvents,
-                            onEnvironmentTap: () {
-                              final tempDevice = getTemperatureDevice();
-
-                              if (tempDevice == null) return;
-
-                              showDeviceDetail(
-                                context: context,
-                                id: tempDevice["id"],
-                                d: tempDevice["data"],
-                                ownerUid: getHomeOwnerUid(),
-                                homeId: selectedHome,
-                                onRename: canManageHome()
-                                    ? () => renameDevice(tempDevice["id"])
-                                    : null,
-                                onDelete: canManageHome()
-                                    ? () => deleteDevice(tempDevice["id"])
-                                    : null,
-                                onNotification: () =>
-                                    openNotificationList(tempDevice["id"]),
-                              );
-                            },
-                            overall: getHomeOverallStatus(
-                              safeMap(homes[selectedHome]),
-                            ),
-
-                            securityMode: securityMode,
-                            securityModeSource:
-                                safeMap(
-                                  homes[selectedHome],
-                                )["securityModeSource"]?.toString().trim() ??
-                                "",
-                            securityModeRepeatMinutes:
-                                _normalizeSecurityModeRepeatMinutes(
-                                  safeMap(
-                                    homes[selectedHome],
-                                  )["securityModeRepeatMinutes"],
-                                ),
-                            onSecurityModeRepeatChanged: canManageHome()
-                                ? setSecurityModeRepeatMinutes
+                            onRename: canManageHome()
+                                ? () => renameDevice(tempDevice["id"])
                                 : null,
-                            // Luôn nhận thao tác bấm.
-                            // setSecurityMode sẽ tự kiểm tra quyền
-                            // và báo rõ cho member.
-                            onSecurityModeChanged: setSecurityMode,
-
-                            alarmEnabled: alarmEnabled,
-                            onAlarmEnabledChanged: canManageHome()
-                                ? setAlarmEnabled
+                            onDelete: canManageHome()
+                                ? () => deleteDevice(tempDevice["id"])
                                 : null,
-                            onPair: null,
-                            onQR: null,
-                            onScheduleNotification: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => ScheduleSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  isShared:
-                                      homes[selectedHome]?["_shared"] == true,
-                                  type: "notification",
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                            onScheduleAlarm: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => AlarmDeviceSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  devices: getDevices(),
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                            alarmStart: formatAlarmSchedules(),
-                            alarmEnd: "",
-                          ),
-                          const SizedBox(height: sectionGap),
-
-                          RoomTabs(
-                            rooms: getRooms(),
-                            homeName:
-                                homes[selectedHome]?["name"]?.toString() ??
-                                _strings.t("Nhà"),
-                            selectedRoomId: selectedRoomId,
-                            onSelect: (roomId) {
-                              setState(() {
-                                selectedRoomId = roomId;
-                              });
-                            },
-                            onReorder: (roomIds) async {
-                              if (!canManageHome()) {
-                                showTopToast(
-                                  context,
-                                  _strings.t(
-                                    "Bạn không có quyền sắp xếp phòng",
-                                  ),
-                                  color: Colors.orange,
-                                  icon: Icons.lock_rounded,
-                                );
-                                return;
-                              }
-
-                              final ownerUid = getHomeOwnerUid();
-                              final updates = <String, Object?>{};
-
-                              for (var i = 0; i < roomIds.length; i++) {
-                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
-                                    i + 1;
-                              }
-
-                              if (updates.isNotEmpty) {
-                                await FirebaseDatabase.instance.ref().update(
-                                  updates,
-                                );
-                              }
-                            },
-                          ),
-                          if (pairingCountdown > 0)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: Text(
-                                _strings.choose(
-                                  vi: "Đang ghép nối: $pairingCountdown giây",
-                                  en: "Pairing: $pairingCountdown s",
-                                ),
-                              ),
+                            onNotification: () =>
+                                openNotificationList(tempDevice["id"]),
+                          );
+                        },
+                        overall: overviewOverall,
+                        securityMode: securityMode,
+                        securityModeSource: overviewSecurityModeSource,
+                        securityModeRepeatMinutes:
+                            overviewSecurityModeRepeatMinutes,
+                        onSecurityModeRepeatChanged: canManageSelectedHome
+                            ? setSecurityModeRepeatMinutes
+                            : null,
+                        onSecurityModeChanged: setSecurityMode,
+                        alarmEnabled: alarmEnabled,
+                        onAlarmEnabledChanged: canManageSelectedHome
+                            ? setAlarmEnabled
+                            : null,
+                        onScheduleNotification: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => ScheduleSheet(
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                              isShared: homes[selectedHome]?["_shared"] == true,
+                              type: "notification",
+                              canManageHome: canManageHome(),
                             ),
-                        ],
+                          );
+                        },
+                        onScheduleAlarm: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => AlarmDeviceSheet(
+                              ownerUid: getHomeOwnerUid(),
+                              homeId: selectedHome,
+                              devices: getDevices(),
+                              canManageHome: canManageHome(),
+                            ),
+                          );
+                        },
+                        alarmStart: overviewAlarmScheduleText,
+                        alarmEnd: "",
+                        rooms: overviewRooms,
+                        selectedRoomId: selectedRoomId,
+                        onSelectRoom: (roomId) {
+                          setState(() {
+                            selectedRoomId = roomId;
+                          });
+                        },
+                        onReorderRooms: (roomIds) async {
+                          if (!canManageHome()) {
+                            showTopToast(
+                              context,
+                              _strings.t("Bạn không có quyền sắp xếp phòng"),
+                              color: Colors.orange,
+                              icon: Icons.lock_rounded,
+                            );
+                            return;
+                          }
+
+                          final ownerUid = getHomeOwnerUid();
+                          final updates = <String, Object?>{};
+
+                          for (var i = 0; i < roomIds.length; i++) {
+                            updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
+                                i + 1;
+                          }
+
+                          if (updates.isNotEmpty) {
+                            await FirebaseDatabase.instance.ref().update(
+                              updates,
+                            );
+                          }
+                        },
+                        pairingCountdown: pairingCountdown,
+                        pairingCountdownText: overviewPairingCountdownText,
+                        sectionGap: sectionGap,
                       ),
                       isShared: homes[selectedHome]?["_shared"] == true,
                       ownerEmail:
@@ -5697,209 +4597,50 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           if (!context.mounted) return;
 
-          showModalBottomSheet(
+          final alarmScheduleText = formatAlarmSchedules().trim().isEmpty
+              ? _strings.t("Chưa thiết lập thời gian")
+              : formatAlarmSchedules();
+
+          await showHomeAlarmMenuSheet(
             context: context,
-            showDragHandle: false,
-            backgroundColor: Colors.transparent,
-            builder: (_) {
-              bool localAlarmEnabled = alarmEnabled;
+            strings: _strings,
+            alarmEnabled: alarmEnabled,
+            reminderEnabled: reminderEnabled,
+            alarmScheduleText: alarmScheduleText,
+            alarmPauseToday: alarmPauseToday,
+            onAlarmEnabledChanged: setAlarmEnabled,
+            onOpenAlarmSchedule: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => AlarmDeviceSheet(
+                  ownerUid: getHomeOwnerUid(),
+                  homeId: selectedHome,
+                  devices: getDevices(),
+                  canManageHome: canManageHome(),
+                ),
+              );
+            },
+            onOpenAlarmPause: () async {
+              await Future<void>.delayed(const Duration(milliseconds: 120));
 
-              return StatefulBuilder(
-                builder: (context, setModalState) {
-                  return SafeArea(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
-                      decoration: const BoxDecoration(
-                        color: SafeHomeColors.surface,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(26),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 5,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: SafeHomeColors.border,
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                          ),
-                          ListTile(
-                            leading: Icon(
-                              Icons.crisis_alert_rounded,
-                              color: localAlarmEnabled
-                                  ? SafeHomeColors.primary
-                                  : SafeHomeColors.textSecondary.withValues(
-                                      alpha: 0.45,
-                                    ),
-                            ),
-                            title: Text(
-                              _strings.t("Hẹn giờ Alarm"),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                color: localAlarmEnabled
-                                    ? SafeHomeColors.textPrimary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.55,
-                                      ),
-                              ),
-                            ),
-                            subtitle: Text(
-                              localAlarmEnabled
-                                  ? (formatAlarmSchedules().trim().isEmpty
-                                        ? _strings.t("Chưa thiết lập thời gian")
-                                        : formatAlarmSchedules())
-                                  : _strings.t("Đang tắt"),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: localAlarmEnabled
-                                    ? SafeHomeColors.textSecondary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.45,
-                                      ),
-                              ),
-                            ),
-                            trailing: Switch(
-                              value: localAlarmEnabled,
-                              activeThumbColor: SafeHomeColors.primary,
-                              activeTrackColor: SafeHomeColors.primary
-                                  .withValues(alpha: 0.28),
-                              onChanged: (value) async {
-                                final changed = await setAlarmEnabled(value);
+              if (!mounted) return;
 
-                                if (!context.mounted) {
-                                  return;
-                                }
-
-                                setModalState(() {
-                                  localAlarmEnabled = changed
-                                      ? value
-                                      : alarmEnabled;
-                                });
-                              },
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => AlarmDeviceSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  devices: getDevices(),
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                          ),
-                          ListTile(
-                            leading: Icon(
-                              Icons.pause_circle_filled_rounded,
-                              color: alarmPauseToday.isNotEmpty
-                                  ? SafeHomeColors.warning
-                                  : SafeHomeColors.textSecondary.withValues(
-                                      alpha: 0.45,
-                                    ),
-                            ),
-                            title: Text(
-                              _strings.t("Tạm tắt Alarm hôm nay"),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: alarmPauseToday.isNotEmpty
-                                    ? SafeHomeColors.textPrimary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.55,
-                                      ),
-                              ),
-                            ),
-                            subtitle: Text(
-                              alarmPauseToday.isEmpty
-                                  ? _strings.t("Chưa thiết lập")
-                                  : "${alarmPauseToday["start"] ?? "--:--"} → ${alarmPauseToday["end"] ?? "--:--"}"
-                                        "${(alarmPauseToday["reason"] ?? "").toString().isNotEmpty ? " • ${_strings.t(alarmPauseToday["reason"].toString())}" : ""}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: alarmPauseToday.isNotEmpty
-                                    ? SafeHomeColors.textSecondary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.45,
-                                      ),
-                              ),
-                            ),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              await Future<void>.delayed(
-                                const Duration(milliseconds: 120),
-                              );
-
-                              if (!mounted) return;
-
-                              await openAlarmPauseSheetWithReminder();
-                            },
-                          ),
-                          const Divider(),
-                          ListTile(
-                            leading: Icon(
-                              Icons.notifications_active_rounded,
-                              color: reminderEnabled
-                                  ? SafeHomeColors.primary
-                                  : SafeHomeColors.textSecondary.withValues(
-                                      alpha: 0.45,
-                                    ),
-                            ),
-                            title: Text(
-                              _strings.t("Hẹn giờ Reminder"),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: reminderEnabled
-                                    ? SafeHomeColors.textPrimary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.55,
-                                      ),
-                              ),
-                            ),
-                            subtitle: Text(
-                              reminderEnabled
-                                  ? _strings.t("Đã thiết lập")
-                                  : _strings.t("Chưa thiết lập"),
-                              style: TextStyle(
-                                color: reminderEnabled
-                                    ? SafeHomeColors.textSecondary
-                                    : SafeHomeColors.textSecondary.withValues(
-                                        alpha: 0.45,
-                                      ),
-                              ),
-                            ),
-                            onTap: () {
-                              Navigator.pop(context);
-
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                backgroundColor: Colors.transparent,
-                                builder: (_) => ScheduleSheet(
-                                  ownerUid: getHomeOwnerUid(),
-                                  homeId: selectedHome,
-                                  isShared:
-                                      homes[selectedHome]?["_shared"] == true,
-                                  type: "notification",
-                                  canManageHome: canManageHome(),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+              await openAlarmPauseSheetWithReminder();
+            },
+            onOpenReminderSchedule: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => ScheduleSheet(
+                  ownerUid: getHomeOwnerUid(),
+                  homeId: selectedHome,
+                  isShared: homes[selectedHome]?["_shared"] == true,
+                  type: "notification",
+                  canManageHome: canManageHome(),
+                ),
               );
             },
           );
