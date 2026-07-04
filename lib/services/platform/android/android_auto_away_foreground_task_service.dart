@@ -10,6 +10,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../firebase_options.dart';
+import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 
 const String _autoAwayTaskDataKey =
@@ -60,7 +61,7 @@ class AndroidAutoAwayForegroundTaskService {
         channelId: 'safehome_auto_away_location_v1',
         channelName: 'SafeHome cập nhật vị trí',
         channelDescription:
-            'Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.',
+        'Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.',
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         onlyAlertOnce: true,
@@ -290,7 +291,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
       }
 
       final config = decoded.map(
-        (key, value) => MapEntry(key.toString(), value),
+            (key, value) => MapEntry(key.toString(), value),
       );
       final uid = config['uid']?.toString().trim() ?? '';
       final homes = _asMap(config['homes']);
@@ -315,8 +316,13 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
         return;
       }
 
+      // Giữ session còn sống khi foreground service Auto Away vẫn chạy.
+      // Nếu điện thoại shutdown / hết pin, heartbeat này sẽ dừng,
+      // backend có thể chuyển vị trí thành unknown sau ngưỡng stale.
+      await AccountSessionService.touchFromBackground(uid: uid);
+
       final locationServiceEnabled =
-          await Geolocator.isLocationServiceEnabled();
+      await Geolocator.isLocationServiceEnabled();
       final permission = await Geolocator.checkPermission();
 
       if (!locationServiceEnabled || permission != LocationPermission.always) {
