@@ -63,12 +63,28 @@ class HomeOverviewHeader extends StatelessWidget {
   final String pairingCountdownText;
   final double sectionGap;
 
+  String _statusPanelKey() {
+    final issues = List<String>.from(overall["issues"] ?? const []);
+    final safeSummary = List<String>.from(
+      overall["safeSummary"] ?? const [],
+    );
+
+    return [
+      "status",
+      ownerUid,
+      homeId,
+      overall["level"]?.toString() ?? "",
+      issues.join("|"),
+      safeSummary.join("|"),
+    ].join("|");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         StatusPanel(
-          key: ValueKey("status_${ownerUid}_$homeId"),
+          key: ValueKey(_statusPanelKey()),
           ownerUid: ownerUid,
           homeId: homeId,
           alarmPauseText: alarmPauseText,

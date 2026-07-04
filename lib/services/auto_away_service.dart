@@ -139,13 +139,84 @@ class AutoAwayService {
   static Map<String, dynamic> _pendingHomes = {};
 
   static Future<bool> ensureBackgroundPermission() async {
-    var permission = await Geolocator.checkPermission();
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final permission = await _ensureBackgroundLocationPermissionForIOS();
+      return permission == LocationPermission.always;
+    }
+
+    var permission = await _readLocationPermission();
 
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      permission = await _requestLocationPermission(
+        fallbackPermission: permission,
+      );
     }
 
     return permission == LocationPermission.always;
+  }
+
+  static bool _hasLocationPermission(LocationPermission permission) {
+    return permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always;
+  }
+
+  static bool _hasBackgroundLocationPermission(LocationPermission permission) {
+    return permission == LocationPermission.always;
+  }
+
+  static Future<LocationPermission> _readLocationPermission() async {
+    try {
+      return await Geolocator.checkPermission();
+    } catch (error) {
+      debugPrint('AUTO_AWAY_LOCATION_PERMISSION_CHECK_ERROR: $error');
+      return LocationPermission.denied;
+    }
+  }
+
+  static Future<LocationPermission> _requestLocationPermission({
+    required LocationPermission fallbackPermission,
+  }) async {
+    try {
+      return await Geolocator.requestPermission();
+    } catch (error) {
+      debugPrint('AUTO_AWAY_LOCATION_PERMISSION_REQUEST_ERROR: $error');
+      return fallbackPermission;
+    }
+  }
+
+  static Future<LocationPermission> _ensureForegroundLocationPermissionForIOS() async {
+    var permission = await _readLocationPermission();
+
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return permission;
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await _requestLocationPermission(
+        fallbackPermission: permission,
+      );
+    }
+
+    return permission;
+  }
+
+  static Future<LocationPermission> _ensureBackgroundLocationPermissionForIOS() async {
+    var permission = await _readLocationPermission();
+
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return permission;
+    }
+
+    // geolocator exposes one request API on iOS. With the Always usage strings
+    // present in Info.plist, the native side requests the background-capable
+    // permission needed by geofencing when iOS still allows a prompt.
+    if (permission != LocationPermission.always) {
+      permission = await _requestLocationPermission(
+        fallbackPermission: permission,
+      );
+    }
+
+    return permission;
   }
 
   static Future<List<Map<String, dynamic>>> _readPendingPresenceEvents() async {
@@ -824,7 +895,9 @@ class AutoAwayService {
       );
     }
 
-    final permission = await Geolocator.checkPermission();
+    final permission = desired.isEmpty
+        ? await _readLocationPermission()
+        : await _ensureBackgroundLocationPermissionForIOS();
 
     final monitoringStatus = await _readMonitoringStatus(
       permission: permission,
@@ -853,6 +926,29 @@ class AutoAwayService {
         item: item,
         status: monitoringStatus,
       );
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.iOS &&
+        !_hasBackgroundLocationPermission(permission)) {
+      if (_hasLocationPermission(permission)) {
+        await _syncInitialPresence(
+          uid: normalizedUid,
+          desired: desired.values.toList(),
+        );
+        _initialPresenceSynced = true;
+      } else {
+        for (final item in desired.values) {
+          await _writeLocationCheckFailure(
+            uid: normalizedUid,
+            item: item,
+            result: 'location_permission_denied',
+            markStateUnknown: true,
+          );
+        }
+      }
+
+      _lastSyncSignatureByUid[normalizedUid] = signature;
+      return;
     }
 
     // monitoringEligible chỉ quyết định người này có được dùng
@@ -975,6 +1071,22 @@ class AutoAwayService {
       return;
     }
 
+    final permission = await _ensureForegroundLocationPermissionForIOS();
+
+    if (!_hasLocationPermission(permission)) {
+      for (final item in desired) {
+        await _writeLocationCheckFailure(
+          uid: uid,
+          item: item,
+          result: 'location_permission_denied',
+          locationPermission: permission,
+          markStateUnknown: true,
+        );
+      }
+
+      return;
+    }
+
     final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!locationServiceEnabled) {
@@ -983,21 +1095,8 @@ class AutoAwayService {
           uid: uid,
           item: item,
           result: 'location_service_disabled',
-        );
-      }
-
-      return;
-    }
-
-    final permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      for (final item in desired) {
-        await _writeLocationCheckFailure(
-          uid: uid,
-          item: item,
-          result: 'location_permission_denied',
+          locationPermission: permission,
+          locationServiceEnabled: locationServiceEnabled,
         );
       }
 
@@ -1006,6 +1105,7 @@ class AutoAwayService {
 
     Position? position = providedPosition;
     var usedLastKnownPosition = false;
+    Object? currentPositionError;
 
     if (position == null) {
       try {
@@ -1016,6 +1116,7 @@ class AutoAwayService {
           ),
         );
       } catch (error) {
+        currentPositionError = error;
         debugPrint('AUTO_AWAY_CURRENT_POSITION_ERROR: $error');
 
         try {
@@ -1044,6 +1145,9 @@ class AutoAwayService {
           uid: uid,
           item: item,
           result: 'position_unavailable',
+          locationPermission: permission,
+          locationError: currentPositionError,
+          locationServiceEnabled: locationServiceEnabled,
         );
       }
 
@@ -1067,6 +1171,9 @@ class AutoAwayService {
         accuracyMeters: position.accuracy,
         positionAt: position.timestamp,
         usedLastKnownPosition: usedLastKnownPosition,
+        locationPermission: permission,
+        locationError: currentPositionError,
+        locationServiceEnabled: locationServiceEnabled,
       );
     }
   }
@@ -1080,6 +1187,9 @@ class AutoAwayService {
     required double accuracyMeters,
     required DateTime positionAt,
     required bool usedLastKnownPosition,
+    LocationPermission? locationPermission,
+    Object? locationError,
+    bool? locationServiceEnabled,
   }) async {
     final occurredAt = DateTime.now().millisecondsSinceEpoch;
     final eventId = [
@@ -1109,6 +1219,13 @@ class AutoAwayService {
         'lastDistanceMeters': double.parse(distanceMeters.toStringAsFixed(1)),
         'lastAccuracyMeters': double.parse(accuracyMeters.toStringAsFixed(1)),
         'lastPositionAt': positionAt.millisecondsSinceEpoch,
+        if (locationPermission != null)
+          'lastLocationPermission': locationPermission.name,
+        if (locationError != null) 'lastLocationError': _locationErrorText(
+          locationError,
+        ),
+        if (locationServiceEnabled != null)
+          'lastLocationServiceEnabled': locationServiceEnabled,
       },
     );
   }
@@ -1117,15 +1234,47 @@ class AutoAwayService {
     required String uid,
     required _DesiredGeofence item,
     required String result,
+    LocationPermission? locationPermission,
+    Object? locationError,
+    bool? locationServiceEnabled,
+    bool markStateUnknown = false,
   }) {
+    final updates = <String, Object?>{
+      'ownerUid': item.ownerUid,
+      'homeId': item.homeId,
+      'lastLocationCheckAt': ServerValue.timestamp,
+      'lastLocationCheckResult': result,
+      if (locationPermission != null)
+        'lastLocationPermission': locationPermission.name,
+      if (locationError != null) 'lastLocationError': _locationErrorText(
+        locationError,
+      ),
+      if (locationServiceEnabled != null)
+        'lastLocationServiceEnabled': locationServiceEnabled,
+    };
+
+    if (markStateUnknown) {
+      updates.addAll({
+        'state': 'unknown',
+        'event': result,
+        'source': 'foreground_location_check',
+        'updatedAt': ServerValue.timestamp,
+      });
+    }
+
     return FirebaseDatabase.instance
         .ref('accounts/$uid/homePresence/${item.homeId}')
-        .update({
-          'ownerUid': item.ownerUid,
-          'homeId': item.homeId,
-          'lastLocationCheckAt': ServerValue.timestamp,
-          'lastLocationCheckResult': result,
-        });
+        .update(updates);
+  }
+
+  static String _locationErrorText(Object error) {
+    final text = error.toString();
+
+    if (text.length <= 500) {
+      return text;
+    }
+
+    return text.substring(0, 500);
   }
 
   static Future<void> _writeMonitoringStatus({

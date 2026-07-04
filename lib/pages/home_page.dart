@@ -1196,6 +1196,46 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  void syncHomePresenceListeners() {
+    if (!mounted || uid.isEmpty) return;
+
+    _homeRealtimeCoordinator.syncHomePresenceListeners(
+      uid: uid,
+      homes: homes,
+      onPresenceChanged: ({
+        required String homeId,
+        required Map<String, dynamic> presenceSummary,
+        required Map<String, dynamic> memberPresenceStatus,
+      }) {
+        if (!mounted || !homes.containsKey(homeId)) {
+          return;
+        }
+
+        setState(() {
+          final cachedHome = safeMap(homes[homeId]);
+          final currentMemberPresenceStatus = safeMap(
+            cachedHome["memberPresenceStatus"],
+          );
+          final nextMemberPresenceStatus = <String, dynamic>{
+            ...currentMemberPresenceStatus,
+          };
+
+          for (final entry in memberPresenceStatus.entries) {
+            nextMemberPresenceStatus[entry.key.toString()] = safeMap(
+              entry.value,
+            );
+          }
+
+          cachedHome["presenceSummary"] = Map<String, dynamic>.from(
+            presenceSummary,
+          );
+          cachedHome["memberPresenceStatus"] = nextMemberPresenceStatus;
+          homes[homeId] = cachedHome;
+        });
+      },
+    );
+  }
+
   void syncDeviceNotificationBridge() {
     if (!mounted) return;
 
@@ -1455,6 +1495,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     startHomeEventsListener();
     startAlarmPauseListener();
     syncHomeChatListeners();
+    syncHomePresenceListeners();
     syncDeviceNotificationBridge();
 
     if (syncPhone) {

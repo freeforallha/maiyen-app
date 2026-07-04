@@ -73,25 +73,56 @@ class HomeAutoAwayCoordinator {
 
     final homes = homesProvider();
 
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
-      if (!hasEnabledAutoAwayHome(homes)) {
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      _presenceRefreshTimer?.cancel();
+      _presenceRefreshTimer = null;
+
+      try {
+        await PlatformAutoAwayTaskService.syncForHomes(uid: uid, homes: homes);
+      } catch (error) {
+        debugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
+      }
+
+      return;
+    }
+
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+      final hasEnabledHome = hasEnabledAutoAwayHome(homes);
+
+      if (!hasEnabledHome) {
         _presenceRefreshTimer?.cancel();
         _presenceRefreshTimer = null;
+
+        try {
+          await AutoAwayService.syncForHomes(
+            uid: uid,
+            homes: homes,
+            force: true,
+          );
+        } catch (error) {
+          debugPrint('AUTO_AWAY_IOS_CLEANUP_SYNC_ERROR: $error');
+        }
+
         return;
+      }
+
+      try {
+        await AutoAwayService.syncForHomes(uid: uid, homes: homes, force: true);
+      } catch (error) {
+        debugPrint('AUTO_AWAY_IOS_SYNC_ERROR: $error');
       }
 
       startPresenceRefreshTimer(uid: uid, homesProvider: homesProvider);
       return;
     }
 
-    _presenceRefreshTimer?.cancel();
-    _presenceRefreshTimer = null;
-
-    try {
-      await PlatformAutoAwayTaskService.syncForHomes(uid: uid, homes: homes);
-    } catch (error) {
-      debugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
+    if (!hasEnabledAutoAwayHome(homes)) {
+      _presenceRefreshTimer?.cancel();
+      _presenceRefreshTimer = null;
+      return;
     }
+
+    startPresenceRefreshTimer(uid: uid, homesProvider: homesProvider);
   }
 
   void stopPresenceRefreshTimerForBackgroundIfNeeded() {

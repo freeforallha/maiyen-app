@@ -17,6 +17,12 @@ typedef HomeChatUnreadChanged =
     void Function(HomeRealtimeChatUnreadSnapshot snapshot);
 typedef HomeDeviceNotificationChanged =
     void Function(HomeRealtimeDeviceNotification notification);
+typedef HomePresenceChanged =
+    void Function({
+      required String homeId,
+      required Map<String, dynamic> presenceSummary,
+      required Map<String, dynamic> memberPresenceStatus,
+    });
 
 class HomeRealtimeAlarmPauseUpdate {
   const HomeRealtimeAlarmPauseUpdate({
@@ -56,7 +62,63 @@ class HomeRealtimeDeviceNotification {
   final Map<String, String> event;
 }
 
+class _HomePresenceListenState {
+  _HomePresenceListenState({
+    required this.ownerUid,
+  });
+
+  String ownerUid;
+  StreamSubscription<DatabaseEvent>? sharedMembersSubscription;
+  StreamSubscription<DatabaseEvent>? fallbackMemberStatusSubscription;
+  bool sharedMembersPrimed = false;
+  bool fallbackMemberStatusPrimed = false;
+  String fallbackMemberStatusOwnerUid = "";
+  final Set<String> sharedMemberUids = <String>{};
+  final Set<String> memberUids = <String>{};
+  final Set<String> primedMemberUids = <String>{};
+  final Map<String, StreamSubscription<DatabaseEvent>> memberSubscriptions = {};
+  final Map<String, Map<String, dynamic>> rawPresenceByMember = {};
+  final Map<String, Map<String, dynamic>> fallbackPresenceByMember = {};
+  String lastEmittedSignature = "";
+
+  void cancel() {
+    sharedMembersSubscription?.cancel();
+    fallbackMemberStatusSubscription?.cancel();
+
+    for (final subscription in memberSubscriptions.values) {
+      subscription.cancel();
+    }
+
+    sharedMembersSubscription = null;
+    fallbackMemberStatusSubscription = null;
+    sharedMembersPrimed = false;
+    fallbackMemberStatusPrimed = false;
+    fallbackMemberStatusOwnerUid = "";
+    memberSubscriptions.clear();
+    rawPresenceByMember.clear();
+    fallbackPresenceByMember.clear();
+    memberUids.clear();
+    primedMemberUids.clear();
+    sharedMemberUids.clear();
+    lastEmittedSignature = "";
+  }
+}
+
+class _HomePresenceSnapshot {
+  const _HomePresenceSnapshot({
+    required this.presenceSummary,
+    required this.memberPresenceStatus,
+    required this.signature,
+  });
+
+  final Map<String, dynamic> presenceSummary;
+  final Map<String, dynamic> memberPresenceStatus;
+  final String signature;
+}
+
 class HomeRealtimeCoordinator {
+  static const Duration _presenceFreshnessLimit = Duration(minutes: 30);
+
   StreamSubscription<DatabaseEvent>? _notificationSubscription;
   StreamSubscription<DatabaseEvent>? _homeEventsSubscription;
   StreamSubscription<DatabaseEvent>? _alarmPauseSubscription;
@@ -68,6 +130,9 @@ class HomeRealtimeCoordinator {
   final Map<String, Map<String, Map<String, dynamic>>>
   _deviceNotificationSnapshots = {};
   final Set<String> _deviceNotificationPrimedHomes = {};
+  final Map<String, _HomePresenceListenState> _homePresenceStates = {};
+  Timer? _homePresenceRefreshTimer;
+  HomePresenceChanged? _homePresenceChanged;
 
   void startNotificationUnreadListener({
     required String uid,
@@ -220,6 +285,503 @@ class HomeRealtimeCoordinator {
     );
   }
 
+  void syncHomePresenceListeners({
+    required String uid,
+    required Map<String, dynamic> homes,
+    required HomePresenceChanged onPresenceChanged,
+  }) {
+    if (uid.isEmpty) {
+      _clearHomePresenceListeners();
+      return;
+    }
+
+    _homePresenceChanged = onPresenceChanged;
+
+    final activeHomeIds = homes.keys
+        .map((homeId) => homeId.toString().trim())
+        .where((homeId) => homeId.isNotEmpty)
+        .toSet();
+
+    final removedHomeIds = _homePresenceStates.keys
+        .where((homeId) => !activeHomeIds.contains(homeId))
+        .toList();
+
+    for (final homeId in removedHomeIds) {
+      _disposeHomePresenceState(homeId);
+    }
+
+    for (final entry in homes.entries) {
+      final homeId = entry.key.toString().trim();
+
+      if (homeId.isEmpty) {
+        continue;
+      }
+
+      final home = safeMap(entry.value);
+      final ownerUid = _presenceOwnerUidFor(uid: uid, home: home);
+      final state = _homePresenceStates.putIfAbsent(
+        homeId,
+        () => _HomePresenceListenState(ownerUid: ownerUid),
+      );
+
+      state.ownerUid = ownerUid;
+
+      _startSharedMembersPresenceListener(homeId: homeId, state: state);
+      _startFallbackMemberStatusListener(homeId: homeId, state: state);
+      _seedFallbackMemberStatusFromHome(home: home, state: state);
+      _syncHomePresenceMembers(homeId: homeId, state: state, forceEmit: true);
+    }
+
+    _updateHomePresenceRefreshTimer();
+  }
+
+  String _presenceOwnerUidFor({
+    required String uid,
+    required Map<String, dynamic> home,
+  }) {
+    final ownerUid = home["_ownerUid"]?.toString().trim() ?? "";
+
+    if (ownerUid.isNotEmpty) {
+      return ownerUid;
+    }
+
+    if (home["_shared"] == true) {
+      return "";
+    }
+
+    return uid;
+  }
+
+  void _startSharedMembersPresenceListener({
+    required String homeId,
+    required _HomePresenceListenState state,
+  }) {
+    if (state.sharedMembersSubscription != null) {
+      return;
+    }
+
+    state.sharedMembersSubscription = FirebaseDatabase.instance
+        .ref("sharedByHome/$homeId")
+        .onValue
+        .listen(
+          (event) {
+            final currentState = _homePresenceStates[homeId];
+
+            if (!identical(currentState, state)) {
+              return;
+            }
+
+            final sharedMembers = safeMap(event.snapshot.value).keys
+                .map((memberUid) => memberUid.toString().trim())
+                .where((memberUid) => memberUid.isNotEmpty)
+                .toSet();
+
+            state.sharedMemberUids
+              ..clear()
+              ..addAll(sharedMembers);
+            state.sharedMembersPrimed = true;
+
+            _syncHomePresenceMembers(homeId: homeId, state: state);
+          },
+          onError: (Object error) {
+            debugPrint("HOME_PRESENCE_MEMBERS_LISTENER_ERROR: $homeId - $error");
+            state.sharedMembersPrimed = true;
+            _syncHomePresenceMembers(homeId: homeId, state: state);
+          },
+        );
+  }
+
+  void _seedFallbackMemberStatusFromHome({
+    required Map<String, dynamic> home,
+    required _HomePresenceListenState state,
+  }) {
+    final fallbackStatus = safeMap(home["memberPresenceStatus"]);
+
+    for (final entry in fallbackStatus.entries) {
+      final memberUid = entry.key.toString().trim();
+
+      if (memberUid.isEmpty) {
+        continue;
+      }
+
+      state.fallbackPresenceByMember[memberUid] = {
+        ...safeMap(state.fallbackPresenceByMember[memberUid]),
+        ...safeMap(entry.value),
+      };
+    }
+  }
+
+  void _startFallbackMemberStatusListener({
+    required String homeId,
+    required _HomePresenceListenState state,
+  }) {
+    final ownerUid = state.ownerUid.trim();
+
+    if (ownerUid.isEmpty) {
+      state.fallbackMemberStatusSubscription?.cancel();
+      state.fallbackMemberStatusSubscription = null;
+      state.fallbackMemberStatusOwnerUid = "";
+      state.fallbackPresenceByMember.clear();
+      state.fallbackMemberStatusPrimed = true;
+      _syncHomePresenceMembers(homeId: homeId, state: state);
+      return;
+    }
+
+    if (state.fallbackMemberStatusSubscription != null &&
+        state.fallbackMemberStatusOwnerUid == ownerUid) {
+      return;
+    }
+
+    state.fallbackMemberStatusSubscription?.cancel();
+    state.fallbackMemberStatusSubscription = null;
+    state.fallbackMemberStatusOwnerUid = ownerUid;
+    state.fallbackMemberStatusPrimed = false;
+    state.fallbackPresenceByMember.clear();
+
+    state.fallbackMemberStatusSubscription = FirebaseDatabase.instance
+        .ref("accounts/$ownerUid/homes/$homeId/memberPresenceStatus")
+        .onValue
+        .listen(
+          (event) {
+            final currentState = _homePresenceStates[homeId];
+
+            if (!identical(currentState, state)) {
+              return;
+            }
+
+            final fallbackPresence = <String, Map<String, dynamic>>{};
+            final rawFallback = safeMap(event.snapshot.value);
+
+            for (final entry in rawFallback.entries) {
+              final memberUid = entry.key.toString().trim();
+
+              if (memberUid.isEmpty) {
+                continue;
+              }
+
+              fallbackPresence[memberUid] = safeMap(entry.value);
+            }
+
+            state.fallbackPresenceByMember
+              ..clear()
+              ..addAll(fallbackPresence);
+            state.fallbackMemberStatusPrimed = true;
+
+            _syncHomePresenceMembers(homeId: homeId, state: state);
+          },
+          onError: (Object error) {
+            debugPrint(
+              "HOME_MEMBER_PRESENCE_STATUS_LISTENER_ERROR: "
+              "$ownerUid/$homeId - $error",
+            );
+            state.fallbackMemberStatusPrimed = true;
+            _syncHomePresenceMembers(homeId: homeId, state: state);
+          },
+        );
+  }
+
+  void _syncHomePresenceMembers({
+    required String homeId,
+    required _HomePresenceListenState state,
+    bool forceEmit = false,
+  }) {
+    final desiredMemberUids = <String>{
+      if (state.ownerUid.trim().isNotEmpty) state.ownerUid.trim(),
+      ...state.sharedMemberUids,
+      ...state.fallbackPresenceByMember.keys,
+      ...state.rawPresenceByMember.keys,
+    };
+
+    final removedMemberUids = state.memberSubscriptions.keys
+        .where((memberUid) => !desiredMemberUids.contains(memberUid))
+        .toList();
+
+    for (final memberUid in removedMemberUids) {
+      state.memberSubscriptions.remove(memberUid)?.cancel();
+      state.rawPresenceByMember.remove(memberUid);
+      state.primedMemberUids.remove(memberUid);
+    }
+
+    state.memberUids
+      ..clear()
+      ..addAll(desiredMemberUids);
+
+    for (final memberUid in desiredMemberUids) {
+      if (state.memberSubscriptions.containsKey(memberUid)) {
+        continue;
+      }
+
+      state.memberSubscriptions[memberUid] = FirebaseDatabase.instance
+          .ref("accounts/$memberUid/homePresence/$homeId")
+          .onValue
+          .listen(
+            (event) {
+              final currentState = _homePresenceStates[homeId];
+
+              if (!identical(currentState, state)) {
+                return;
+              }
+
+              state.rawPresenceByMember[memberUid] =
+                  safeMap(event.snapshot.value);
+              state.primedMemberUids.add(memberUid);
+              _emitHomePresence(homeId);
+            },
+            onError: (Object error) {
+              debugPrint(
+                "HOME_PRESENCE_LISTENER_ERROR: "
+                "$memberUid/$homeId - $error",
+              );
+
+              state.rawPresenceByMember[memberUid] = <String, dynamic>{};
+              state.primedMemberUids.add(memberUid);
+              _emitHomePresence(homeId);
+            },
+          );
+    }
+
+    _emitHomePresence(homeId, force: forceEmit);
+  }
+
+  DateTime? _presenceTimestamp(Map<String, dynamic> rawPresence) {
+    return parseLastSeen(
+      rawPresence["lastConfirmedAt"] ??
+          rawPresence["lastEventOccurredAt"] ??
+          rawPresence["lastSeenAt"] ??
+          rawPresence["lastLocationCheckAt"] ??
+          rawPresence["updatedAt"],
+    );
+  }
+
+  bool _hasFreshKnownPresence(
+    Map<String, dynamic> rawPresence,
+    DateTime now,
+  ) {
+    final rawState = rawPresence["state"]?.toString().trim().toLowerCase() ?? "";
+    final lastSeenAt = _presenceTimestamp(rawPresence);
+    final isKnownState = rawState == "inside" || rawState == "outside";
+
+    if (!isKnownState || lastSeenAt == null) {
+      return false;
+    }
+
+    return !lastSeenAt.toUtc().isBefore(
+      now.toUtc().subtract(_presenceFreshnessLimit),
+    );
+  }
+
+  Map<String, dynamic> _normalizeKnownPresence({
+    required Map<String, dynamic> primaryPresence,
+    required Map<String, dynamic> fallbackPresence,
+    required bool usePrimary,
+    required DateTime now,
+  }) {
+    final selectedPresence = usePrimary ? primaryPresence : fallbackPresence;
+    final rawState =
+        selectedPresence["state"]?.toString().trim().toLowerCase() ??
+            "unknown";
+    final lastSeenAt = _presenceTimestamp(selectedPresence);
+
+    return <String, dynamic>{
+      ...fallbackPresence,
+      ...primaryPresence,
+      "state": rawState,
+      "online": true,
+      "stale": false,
+      "lastSeenAt": lastSeenAt?.millisecondsSinceEpoch,
+      "presenceSource": usePrimary ? "homePresence" : "memberPresenceStatus",
+    };
+  }
+
+  Map<String, dynamic> _normalizeMemberPresence({
+    required Map<String, dynamic> primaryPresence,
+    required Map<String, dynamic> fallbackPresence,
+    required DateTime now,
+  }) {
+    if (_hasFreshKnownPresence(primaryPresence, now)) {
+      return _normalizeKnownPresence(
+        primaryPresence: primaryPresence,
+        fallbackPresence: fallbackPresence,
+        usePrimary: true,
+        now: now,
+      );
+    }
+
+    if (_hasFreshKnownPresence(fallbackPresence, now)) {
+      return _normalizeKnownPresence(
+        primaryPresence: primaryPresence,
+        fallbackPresence: fallbackPresence,
+        usePrimary: false,
+        now: now,
+      );
+    }
+
+    final lastSeenAt =
+        _presenceTimestamp(primaryPresence) ?? _presenceTimestamp(fallbackPresence);
+
+    return <String, dynamic>{
+      ...fallbackPresence,
+      ...primaryPresence,
+      "state": "unknown",
+      "online": false,
+      "stale": true,
+      "lastSeenAt": lastSeenAt?.millisecondsSinceEpoch,
+      "presenceSource": primaryPresence.isNotEmpty
+          ? "homePresence"
+          : fallbackPresence.isNotEmpty
+          ? "memberPresenceStatus"
+          : "none",
+    };
+  }
+
+  _HomePresenceSnapshot _buildHomePresenceSnapshot(
+    _HomePresenceListenState state,
+  ) {
+    final now = DateTime.now();
+    final memberUids = state.memberUids.toList()..sort();
+    final memberPresenceStatus = <String, dynamic>{};
+    var insideCount = 0;
+    var outsideCount = 0;
+
+    for (final memberUid in memberUids) {
+      final status = _normalizeMemberPresence(
+        primaryPresence:
+            state.rawPresenceByMember[memberUid] ?? <String, dynamic>{},
+        fallbackPresence:
+            state.fallbackPresenceByMember[memberUid] ?? <String, dynamic>{},
+        now: now,
+      );
+
+      memberPresenceStatus[memberUid] = status;
+
+      if (status["state"] == "inside") {
+        insideCount++;
+      } else if (status["state"] == "outside") {
+        outsideCount++;
+      }
+    }
+
+    final totalMemberCount = memberUids.length;
+    final knownLocationCount = insideCount + outsideCount;
+    final unknownCount = totalMemberCount > knownLocationCount
+        ? totalMemberCount - knownLocationCount
+        : 0;
+    final presenceSummary = <String, dynamic>{
+      "insideCount": insideCount,
+      "outsideCount": outsideCount,
+      "unknownCount": unknownCount,
+      "knownLocationCount": knownLocationCount,
+      "totalMemberCount": totalMemberCount,
+    };
+
+    return _HomePresenceSnapshot(
+      presenceSummary: presenceSummary,
+      memberPresenceStatus: memberPresenceStatus,
+      signature: _homePresenceSignature(
+        presenceSummary: presenceSummary,
+        memberPresenceStatus: memberPresenceStatus,
+      ),
+    );
+  }
+
+  String _homePresenceSignature({
+    required Map<String, dynamic> presenceSummary,
+    required Map<String, dynamic> memberPresenceStatus,
+  }) {
+    final parts = <String>[
+      presenceSummary["insideCount"]?.toString() ?? "0",
+      presenceSummary["outsideCount"]?.toString() ?? "0",
+      presenceSummary["unknownCount"]?.toString() ?? "0",
+      presenceSummary["knownLocationCount"]?.toString() ?? "0",
+      presenceSummary["totalMemberCount"]?.toString() ?? "0",
+    ];
+
+    final memberUids = memberPresenceStatus.keys.toList()..sort();
+
+    for (final memberUid in memberUids) {
+      final status = safeMap(memberPresenceStatus[memberUid]);
+
+      parts.add(
+        [
+          memberUid,
+          status["state"]?.toString() ?? "unknown",
+          status["online"]?.toString() ?? "false",
+          status["stale"]?.toString() ?? "true",
+          status["lastSeenAt"]?.toString() ?? "",
+        ].join(":"),
+      );
+    }
+
+    return parts.join("|");
+  }
+
+  void _emitHomePresence(String homeId, {bool force = false}) {
+    final callback = _homePresenceChanged;
+    final state = _homePresenceStates[homeId];
+
+    if (callback == null || state == null) {
+      return;
+    }
+
+    final allPresenceStreamsPrimed =
+        state.sharedMembersPrimed &&
+        state.fallbackMemberStatusPrimed &&
+        state.memberUids.every(
+          (memberUid) => state.primedMemberUids.contains(memberUid),
+        );
+
+    if (!allPresenceStreamsPrimed) {
+      return;
+    }
+
+    final snapshot = _buildHomePresenceSnapshot(state);
+
+    if (!force && state.lastEmittedSignature == snapshot.signature) {
+      return;
+    }
+
+    state.lastEmittedSignature = snapshot.signature;
+
+    callback(
+      homeId: homeId,
+      presenceSummary: snapshot.presenceSummary,
+      memberPresenceStatus: snapshot.memberPresenceStatus,
+    );
+  }
+
+  void _updateHomePresenceRefreshTimer() {
+    if (_homePresenceStates.isEmpty) {
+      _homePresenceRefreshTimer?.cancel();
+      _homePresenceRefreshTimer = null;
+      return;
+    }
+
+    _homePresenceRefreshTimer ??= Timer.periodic(
+      const Duration(minutes: 1),
+      (_) {
+        for (final homeId in _homePresenceStates.keys.toList()) {
+          _emitHomePresence(homeId);
+        }
+      },
+    );
+  }
+
+  void _disposeHomePresenceState(String homeId) {
+    final state = _homePresenceStates.remove(homeId);
+    state?.cancel();
+  }
+
+  void _clearHomePresenceListeners() {
+    for (final state in _homePresenceStates.values) {
+      state.cancel();
+    }
+
+    _homePresenceStates.clear();
+    _homePresenceChanged = null;
+    _homePresenceRefreshTimer?.cancel();
+    _homePresenceRefreshTimer = null;
+  }
+
   void syncDeviceNotificationBridge({
     required Map<String, dynamic> homes,
     required AppStrings strings,
@@ -362,5 +924,6 @@ class HomeRealtimeCoordinator {
     _chatUnreadSnapshot = {};
     _deviceNotificationSnapshots.clear();
     _deviceNotificationPrimedHomes.clear();
+    _clearHomePresenceListeners();
   }
 }

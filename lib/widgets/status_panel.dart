@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
@@ -581,8 +580,30 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   void _showStatusSummary(BuildContext context) {
-    final homeRef = FirebaseDatabase.instance.ref(
-      "accounts/${widget.ownerUid}/homes/${widget.homeId}",
+    final liveOverall = widget.overall;
+    final liveEvents = widget.homeEvents;
+
+    final dangerIssues = List<String>.from(
+      liveOverall["dangerIssues"] ?? const [],
+    ).map(_strings.statusText).toList();
+
+    final warningIssues = List<String>.from(
+      liveOverall["warningIssues"] ?? const [],
+    ).map(_strings.statusText).toList();
+
+    final safeSummary = List<String>.from(
+      liveOverall["safeSummary"] ?? const [],
+    ).map(_strings.statusText).toList();
+
+    final recentEvents = _sortedRecentEvents(liveEvents);
+    final eventCounts = _eventCounts(recentEvents);
+
+    final automaticSummary = _buildAutomaticSummary(
+      overall: liveOverall,
+      dangerIssues: dangerIssues,
+      warningIssues: warningIssues,
+      recentEvents: recentEvents,
+      eventCounts: eventCounts,
     );
 
     showModalBottomSheet<void>(
@@ -590,137 +611,90 @@ class _StatusPanelState extends State<StatusPanel> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
-        return StreamBuilder<DatabaseEvent>(
-          stream: homeRef.onValue,
-          builder: (context, snapshot) {
-            final liveHome = snapshot.hasData
-                ? safeMap(snapshot.data?.snapshot.value)
-                : <String, dynamic>{};
-
-            final liveOverall = liveHome.isNotEmpty
-                ? getHomeOverallStatus(liveHome)
-                : widget.overall;
-
-            final liveEvents = liveHome.isNotEmpty
-                ? safeMap(liveHome["events"])
-                : widget.homeEvents;
-
-            final dangerIssues = List<String>.from(
-              liveOverall["dangerIssues"] ?? const [],
-            ).map(_strings.statusText).toList();
-
-            final warningIssues = List<String>.from(
-              liveOverall["warningIssues"] ?? const [],
-            ).map(_strings.statusText).toList();
-
-            final safeSummary = List<String>.from(
-              liveOverall["safeSummary"] ?? const [],
-            ).map(_strings.statusText).toList();
-
-            final recentEvents = _sortedRecentEvents(liveEvents);
-            final eventCounts = _eventCounts(recentEvents);
-
-            final automaticSummary = _buildAutomaticSummary(
-              overall: liveOverall,
-              dangerIssues: dangerIssues,
-              warningIssues: warningIssues,
-              recentEvents: recentEvents,
-              eventCounts: eventCounts,
-            );
-
-            return SafeArea(
-              child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(sheetContext).size.height * 0.86,
+        return SafeArea(
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(sheetContext).size.height * 0.86,
+            ),
+            padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 46,
+                  height: 5,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
                 ),
-                padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
-                decoration: const BoxDecoration(
-                  color: SafeHomeColors.background,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                Row(
                   children: [
-                    Container(
-                      width: 46,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _strings.t("Tổng hợp trạng thái nhà"),
-                            style: const TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.w900,
-                              color: SafeHomeColors.textPrimary,
-                            ),
-                          ),
+                    Expanded(
+                      child: Text(
+                        _strings.t("Tổng hợp trạng thái nhà"),
+                        style: const TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w900,
+                          color: SafeHomeColors.textPrimary,
                         ),
-                        if (snapshot.connectionState == ConnectionState.waiting)
-                          const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        else
-                          const Icon(
-                            Icons.insights_rounded,
-                            color: SafeHomeColors.primary,
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Flexible(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          if (dangerIssues.isNotEmpty) ...[
-                            _summarySection(
-                              title: _strings.t("Cần xử lý ngay"),
-                              icon: Icons.warning_amber_rounded,
-                              color: SafeHomeColors.danger,
-                              items: dangerIssues,
-                            ),
-                            const SizedBox(height: 12),
-                          ],
-                          if (warningIssues.isNotEmpty) ...[
-                            _summarySection(
-                              title: _strings.t("Cần kiểm tra"),
-                              icon: Icons.info_outline_rounded,
-                              color: SafeHomeColors.warning,
-                              items: warningIssues,
-                            ),
-                            const SizedBox(height: 12),
-                          ],
-                          _summarySection(
-                            title: _strings.t("Đánh giá tự động"),
-                            icon: Icons.auto_awesome_rounded,
-                            color: SafeHomeColors.info,
-                            items: automaticSummary,
-                          ),
-                          const SizedBox(height: 12),
-                          _summarySection(
-                            title: _strings.t("Tổng quan hôm nay"),
-                            icon: Icons.bar_chart_rounded,
-                            color: SafeHomeColors.safe,
-                            items: safeSummary.isEmpty
-                                ? [_strings.t("Chưa có dữ liệu tổng quan")]
-                                : safeSummary,
-                          ),
-                        ],
                       ),
+                    ),
+                    const Icon(
+                      Icons.insights_rounded,
+                      color: SafeHomeColors.primary,
                     ),
                   ],
                 ),
-              ),
-            );
-          },
+                const SizedBox(height: 16),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      if (dangerIssues.isNotEmpty) ...[
+                        _summarySection(
+                          title: _strings.t("Cần xử lý ngay"),
+                          icon: Icons.warning_amber_rounded,
+                          color: SafeHomeColors.danger,
+                          items: dangerIssues,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      if (warningIssues.isNotEmpty) ...[
+                        _summarySection(
+                          title: _strings.t("Cần kiểm tra"),
+                          icon: Icons.info_outline_rounded,
+                          color: SafeHomeColors.warning,
+                          items: warningIssues,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                      _summarySection(
+                        title: _strings.t("Đánh giá tự động"),
+                        icon: Icons.auto_awesome_rounded,
+                        color: SafeHomeColors.info,
+                        items: automaticSummary,
+                      ),
+                      const SizedBox(height: 12),
+                      _summarySection(
+                        title: _strings.t("Tổng quan hôm nay"),
+                        icon: Icons.bar_chart_rounded,
+                        color: SafeHomeColors.safe,
+                        items: safeSummary.isEmpty
+                            ? [_strings.t("Chưa có dữ liệu tổng quan")]
+                            : safeSummary,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
