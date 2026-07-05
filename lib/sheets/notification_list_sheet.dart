@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 class NotificationListSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -14,8 +16,7 @@ class NotificationListSheet extends StatefulWidget {
   });
 
   @override
-  State<NotificationListSheet> createState() =>
-      _NotificationListSheetState();
+  State<NotificationListSheet> createState() => _NotificationListSheetState();
 }
 
 class _NotificationListSheetState extends State<NotificationListSheet> {
@@ -34,7 +35,7 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
     _ref = FirebaseDatabase.instance.ref(
       "accounts/${widget.ownerUid}/homes/${widget.homeId}/"
-          "devices/${widget.deviceId}/notifications",
+      "devices/${widget.deviceId}/notifications",
     );
 
     _scrollController.addListener(_handleScroll);
@@ -50,9 +51,7 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
   }
 
   void _handleScroll() {
-    if (!_scrollController.hasClients ||
-        _loadingOlder ||
-        !_hasMore) {
+    if (!_scrollController.hasClients || _loadingOlder || !_hasMore) {
       return;
     }
 
@@ -101,25 +100,21 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final query = _ref
-        .orderByChild("time")
-        .limitToLast(_limit + 1);
+    final strings = AppStrings.of(context);
+    final query = _ref.orderByChild("time").limitToLast(_limit + 1);
 
     return Container(
       height: 500,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(
-                Icons.receipt_long_rounded,
-                color: Colors.blueAccent,
-              ),
-              SizedBox(width: 8),
+              const Icon(Icons.receipt_long_rounded, color: Colors.blueAccent),
+              const SizedBox(width: 8),
               Text(
-                "Thông báo",
-                style: TextStyle(
+                strings.t("Thông báo"),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -132,17 +127,13 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
               stream: query.onValue,
               builder: (context, snap) {
                 if (!snap.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 final event = snap.data;
 
                 if (event == null) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 final data = event.snapshot.value;
@@ -152,10 +143,10 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
                     _completePagination(false);
                   }
 
-                  return const Center(
+                  return Center(
                     child: Text(
-                      "Chưa có thông báo",
-                      style: TextStyle(color: Colors.grey),
+                      strings.t("Chưa có thông báo"),
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   );
                 }
@@ -182,10 +173,8 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
                 return ListView.separated(
                   controller: _scrollController,
-                  itemCount:
-                  visibleItems.length + (showFooter ? 1 : 0),
-                  separatorBuilder: (_, _) =>
-                  const Divider(height: 1),
+                  itemCount: visibleItems.length + (showFooter ? 1 : 0),
+                  separatorBuilder: (_, _) => const Divider(height: 1),
                   itemBuilder: (_, i) {
                     if (i >= visibleItems.length) {
                       return Padding(
@@ -193,19 +182,19 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
                         child: Center(
                           child: _loadingOlder
                               ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          )
-                              : const Text(
-                            "Vuốt lên để tải thêm",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  strings.t("Vuốt lên để tải thêm"),
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
                         ),
                       );
                     }
@@ -218,49 +207,26 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
                     text = text
                         .replaceAll("Door opened", "Cửa mở")
                         .replaceAll("Door closed", "Cửa đóng")
-                        .replaceAll(
-                      "Tamper detected",
-                      "Phát hiện cạy phá",
-                    )
-                        .replaceAll(
-                      "Tamper cleared",
-                      "Tamper bình thường",
-                    )
-                        .replaceAll(
-                      "Motion detected",
-                      "Phát hiện chuyển động",
-                    )
+                        .replaceAll("Tamper detected", "Phát hiện cạy phá")
+                        .replaceAll("Tamper cleared", "Tamper bình thường")
+                        .replaceAll("Motion detected", "Phát hiện chuyển động")
                         .replaceAll("Battery low", "Pin yếu")
-                        .replaceAll(
-                      "Device offline",
-                      "Thiết bị mất kết nối",
-                    )
-                        .replaceAll(
-                      "Device online",
-                      "Thiết bị đã kết nối lại",
-                    )
-                        .replaceAll(
-                      "Alarm triggered",
-                      "Báo động kích hoạt",
-                    )
-                        .replaceAll(
-                      "Alarm cleared",
-                      "Báo động đã tắt",
-                    );
+                        .replaceAll("Device offline", "Thiết bị mất kết nối")
+                        .replaceAll("Device online", "Thiết bị đã kết nối lại")
+                        .replaceAll("Alarm triggered", "Báo động kích hoạt")
+                        .replaceAll("Alarm cleared", "Báo động đã tắt");
 
                     final lower = text.toLowerCase();
 
                     final isSafe =
                         lower.contains("đóng") ||
-                            lower.contains("bình thường") ||
-                            lower.contains("đã tắt") ||
-                            lower.contains("kết nối lại") ||
-                            lower.contains("cập nhật");
+                        lower.contains("bình thường") ||
+                        lower.contains("đã tắt") ||
+                        lower.contains("kết nối lại") ||
+                        lower.contains("cập nhật");
 
-                    final time = int.tryParse(
-                      item["time"]?.toString() ?? "0",
-                    ) ??
-                        0;
+                    final time =
+                        int.tryParse(item["time"]?.toString() ?? "0") ?? 0;
                     final dt = DateTime.fromMillisecondsSinceEpoch(time);
 
                     IconData icon = Icons.notifications;
@@ -286,25 +252,20 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: CircleAvatar(
-                        backgroundColor:
-                        color.withValues(alpha: 0.12),
+                        backgroundColor: color.withValues(alpha: 0.12),
                         child: Icon(icon, color: color),
                       ),
                       title: Text(
                         text,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: isSafe
-                              ? Colors.black
-                              : Colors.red.shade300,
+                          color: isSafe ? Colors.black : Colors.red.shade300,
                         ),
                       ),
                       subtitle: Text(
                         formatTime(dt),
                         style: TextStyle(
-                          color: isSafe
-                              ? Colors.grey
-                              : Colors.red.shade200,
+                          color: isSafe ? Colors.grey : Colors.red.shade200,
                         ),
                       ),
                     );

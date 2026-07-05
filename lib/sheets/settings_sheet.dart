@@ -54,7 +54,11 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
-                    code == "vi" ? "VI" : "EN",
+                    code == "vi"
+                        ? "VI"
+                        : code == "zh"
+                        ? "中"
+                        : "EN",
                     style: TextStyle(
                       color: selected
                           ? SafeHomeColors.primary
@@ -156,6 +160,12 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 title: "English",
                 subtitle: "Tiếng Anh",
               ),
+              languageOption(
+                sheetContext: sheetContext,
+                code: "zh",
+                title: "中文",
+                subtitle: "Chinese Simplified",
+              ),
             ],
           ),
         ),
@@ -166,6 +176,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
 
 void showSettingsSheet({
   required String homeId,
+  required String ownerUid,
   required String homeName,
   required String homeAddress,
   required String role,
@@ -188,6 +199,8 @@ void showSettingsSheet({
   DateTime? lastHiddenSecurityTapAt;
   final strings = AppStrings.fromLocale(appLanguageController.locale);
 
+  final normalizedOwnerUid = ownerUid.trim();
+
   final memberCountFuture = FirebaseDatabase.instance
       .ref("sharedByHome/$homeId")
       .get()
@@ -195,12 +208,21 @@ void showSettingsSheet({
         final raw = snapshot.value;
 
         if (raw is! Map) {
-          return 0;
+          return normalizedOwnerUid.isEmpty ? 0 : 1;
         }
 
-        return raw.values.where((value) => value != null).length;
+        final memberUids = raw.entries
+            .where((entry) => entry.value != null)
+            .map((entry) => entry.key.toString())
+            .toSet();
+
+        if (normalizedOwnerUid.isNotEmpty) {
+          memberUids.add(normalizedOwnerUid);
+        }
+
+        return memberUids.length;
       })
-      .catchError((_) => 0);
+      .catchError((_) => normalizedOwnerUid.isEmpty ? 0 : 1);
 
   void handleHiddenSecurityTap(BuildContext sheetContext) {
     if (role != "owner") {
@@ -439,9 +461,8 @@ void showSettingsSheet({
       ),
     );
   }
-  void showHomeManagementSheet(
-      BuildContext settingsSheetContext,
-      ) {
+
+  void showHomeManagementSheet(BuildContext settingsSheetContext) {
     Navigator.of(settingsSheetContext).pop();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -456,17 +477,10 @@ void showSettingsSheet({
         builder: (managementContext) {
           return SafeArea(
             child: Container(
-              padding: const EdgeInsets.fromLTRB(
-                16,
-                10,
-                16,
-                18,
-              ),
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
               decoration: const BoxDecoration(
                 color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(28),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -510,10 +524,7 @@ void showSettingsSheet({
                     subtitle: strings.transferOwnershipSubtitle,
                     color: const Color(0xFF7656C8),
                     onTap: () {
-                      closeThen(
-                        managementContext,
-                        onTransferOwner,
-                      );
+                      closeThen(managementContext, onTransferOwner);
                     },
                   ),
 
@@ -524,10 +535,7 @@ void showSettingsSheet({
                     color: SafeHomeColors.danger,
                     destructive: true,
                     onTap: () {
-                      closeThen(
-                        managementContext,
-                        onDeleteHome,
-                      );
+                      closeThen(managementContext, onDeleteHome);
                     },
                   ),
                 ],
@@ -538,6 +546,7 @@ void showSettingsSheet({
       );
     });
   }
+
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
@@ -748,11 +757,13 @@ void showSettingsSheet({
                           icon: Icons.location_on_rounded,
                           title: strings.choose(
                             vi: "Tự động Bảo vệ khi rời nhà",
-                            en: "Auto-arm when everyone leaves",
+                            en: "Auto Guard when away",
+                            zh: "离家自动布防",
                           ),
                           subtitle: strings.choose(
                             vi: "Đặt vị trí nhà và bật bảo vệ tự động",
                             en: "Set the home location and automatic protection",
+                            zh: "设置家庭位置并开启自动布防",
                           ),
                           color: const Color(0xFF2F8F6B),
                           onTap: () {
@@ -787,10 +798,12 @@ void showSettingsSheet({
                           title: strings.choose(
                             vi: "Quản lý nhà",
                             en: "Home management",
+                            zh: "家庭管理",
                           ),
                           subtitle: strings.choose(
                             vi: "Chuyển quyền chủ nhà hoặc xoá nhà",
                             en: "Transfer ownership or delete this home",
+                            zh: "转移所有权或删除此家庭",
                           ),
                           color: const Color(0xFF7656C8),
                           onTap: () {

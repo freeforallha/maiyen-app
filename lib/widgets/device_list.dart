@@ -61,18 +61,13 @@ class DeviceList extends StatelessWidget {
       return "off";
     }
 
-    final battery =
-    int.tryParse(d["battery"]?.toString() ?? "");
+    final battery = int.tryParse(d["battery"]?.toString() ?? "");
     final batteryLow =
-        d["battery_low"] == true ||
-            (battery != null && battery <= 20);
+        d["battery_low"] == true || (battery != null && battery <= 20);
 
-    final linkquality =
-    int.tryParse(d["linkquality"]?.toString() ?? "");
+    final linkquality = int.tryParse(d["linkquality"]?.toString() ?? "");
     final weakSignal =
-        linkquality != null &&
-            linkquality > 0 &&
-            linkquality < 40;
+        linkquality != null && linkquality > 0 && linkquality < 40;
 
     bool staleResponse = false;
     final lastSeenText = d["last_seen"]?.toString();
@@ -81,21 +76,15 @@ class DeviceList extends StatelessWidget {
         : DateTime.tryParse(lastSeenText);
 
     if (lastSeen != null) {
-      final ageHours = DateTime.now()
-          .toUtc()
-          .difference(lastSeen.toUtc())
-          .inMinutes /
-          60;
+      final ageHours =
+          DateTime.now().toUtc().difference(lastSeen.toUtc()).inMinutes / 60;
 
       staleResponse = ageHours > deviceHeartbeatLimitHours(type);
     }
 
     // Vàng: lâu không phản hồi, sóng yếu, pin yếu,
     // hoặc trạng thái kết nối chưa xác định rõ.
-    if (batteryLow ||
-        weakSignal ||
-        staleResponse ||
-        availability != "online") {
+    if (batteryLow || weakSignal || staleResponse || availability != "online") {
       return "warn";
     }
 
@@ -103,10 +92,10 @@ class DeviceList extends StatelessWidget {
   }
 
   String getConnectionDescription(
-      Map<String, dynamic> d,
-      String status,
-      AppStrings strings,
-      ) {
+    Map<String, dynamic> d,
+    String status,
+    AppStrings strings,
+  ) {
     if (status == "off") {
       return strings.t("Thiết bị đang Offline");
     }
@@ -117,18 +106,13 @@ class DeviceList extends StatelessWidget {
 
     final warnings = <String>[];
 
-    final battery =
-    int.tryParse(d["battery"]?.toString() ?? "");
-    if (d["battery_low"] == true ||
-        (battery != null && battery <= 20)) {
+    final battery = int.tryParse(d["battery"]?.toString() ?? "");
+    if (d["battery_low"] == true || (battery != null && battery <= 20)) {
       warnings.add(strings.t("pin yếu"));
     }
 
-    final linkquality =
-    int.tryParse(d["linkquality"]?.toString() ?? "");
-    if (linkquality != null &&
-        linkquality > 0 &&
-        linkquality < 40) {
+    final linkquality = int.tryParse(d["linkquality"]?.toString() ?? "");
+    if (linkquality != null && linkquality > 0 && linkquality < 40) {
       warnings.add(strings.t("sóng yếu"));
     }
 
@@ -139,11 +123,8 @@ class DeviceList extends StatelessWidget {
         : DateTime.tryParse(lastSeenText);
 
     if (lastSeen != null) {
-      final ageHours = DateTime.now()
-          .toUtc()
-          .difference(lastSeen.toUtc())
-          .inMinutes /
-          60;
+      final ageHours =
+          DateTime.now().toUtc().difference(lastSeen.toUtc()).inMinutes / 60;
 
       if (ageHours > deviceHeartbeatLimitHours(type)) {
         warnings.add(strings.t("lâu không phản hồi"));
@@ -174,11 +155,7 @@ class DeviceList extends StatelessWidget {
     }
   }
 
-
-  String formatAgo(
-      dynamic ts,
-      AppStrings strings,
-      ) {
+  String formatAgo(dynamic ts, AppStrings strings) {
     if (ts == null) return "--";
 
     final value = int.tryParse(ts.toString());
@@ -193,6 +170,7 @@ class DeviceList extends StatelessWidget {
       return strings.choose(
         vi: "${diff.inMinutes} phút trước",
         en: "${diff.inMinutes} minutes ago",
+        zh: "${diff.inMinutes} 分钟前",
       );
     }
 
@@ -201,15 +179,13 @@ class DeviceList extends StatelessWidget {
       final m = diff.inMinutes % 60;
 
       if (m == 0) {
-        return strings.choose(
-          vi: "${h}h trước",
-          en: "${h}h ago",
-        );
+        return strings.choose(vi: "${h}h trước", en: "${h}h ago", zh: "$h 小时前");
       }
 
       return strings.choose(
         vi: "${h}h$m' trước",
         en: "${h}h ${m}m ago",
+        zh: "$h 小时 $m 分钟前",
       );
     }
 
@@ -217,6 +193,7 @@ class DeviceList extends StatelessWidget {
       return strings.choose(
         vi: "${diff.inDays} ngày trước",
         en: "${diff.inDays} days ago",
+        zh: "${diff.inDays} 天前",
       );
     }
 
@@ -225,6 +202,7 @@ class DeviceList extends StatelessWidget {
     return strings.choose(
       vi: "$months tháng trước",
       en: "$months months ago",
+      zh: "$months 个月前",
     );
   }
 
@@ -238,10 +216,7 @@ class DeviceList extends StatelessWidget {
   }
 
   bool isDeviceUnsafe(Map<String, dynamic> d) {
-    final evaluation = evaluateDeviceStatus(
-      d,
-      securityMode: securityMode,
-    );
+    final evaluation = evaluateDeviceStatus(d, securityMode: securityMode);
 
     return evaluation["level"] != "safe";
   }
@@ -343,12 +318,8 @@ class DeviceList extends StatelessWidget {
     }
   }
 
-  String getMainStatus(
-      Map<String, dynamic> d,
-      AppStrings strings,
-      ) {
-    final type =
-        d["type"]?.toString().trim().toLowerCase() ?? "unknown";
+  String getMainStatus(Map<String, dynamic> d, AppStrings strings) {
+    final type = d["type"]?.toString().trim().toLowerCase() ?? "unknown";
 
     if (parseDeviceBool(d["tamper"]) == true) {
       return strings.t("Bị tháo");
@@ -363,10 +334,8 @@ class DeviceList extends StatelessWidget {
       case "heat":
         final active =
             isActiveDeviceSignal(d["heat"]) ||
-                isActiveDeviceSignal(d["heat_alarm"]) ||
-                isActiveDeviceSignal(
-                  d["high_temperature_alarm"],
-                );
+            isActiveDeviceSignal(d["heat_alarm"]) ||
+            isActiveDeviceSignal(d["high_temperature_alarm"]);
 
         return active
             ? strings.t("Nhiệt độ nguy hiểm")
@@ -375,7 +344,7 @@ class DeviceList extends StatelessWidget {
       case "carbon_monoxide":
         final active =
             isActiveDeviceSignal(d["carbon_monoxide"]) ||
-                isActiveDeviceSignal(d["co_alarm"]);
+            isActiveDeviceSignal(d["co_alarm"]);
 
         return active
             ? strings.t("Phát hiện khí CO")
@@ -389,18 +358,16 @@ class DeviceList extends StatelessWidget {
       case "gas":
         final active =
             isActiveDeviceSignal(d["gas"]) ||
-                isActiveDeviceSignal(d["gas_alarm"]);
+            isActiveDeviceSignal(d["gas_alarm"]);
 
-        return active
-            ? strings.t("Rò rỉ gas")
-            : strings.t("Bình thường");
+        return active ? strings.t("Rò rỉ gas") : strings.t("Bình thường");
 
       case "water_leak":
       case "flood":
         final active =
             isActiveDeviceSignal(d["water_leak"]) ||
-                isActiveDeviceSignal(d["leak"]) ||
-                isActiveDeviceSignal(d["water"]);
+            isActiveDeviceSignal(d["leak"]) ||
+            isActiveDeviceSignal(d["water"]);
 
         return active
             ? strings.t("Phát hiện ngập nước")
@@ -409,7 +376,7 @@ class DeviceList extends StatelessWidget {
       case "motion":
         final active =
             isActiveDeviceSignal(d["occupancy"]) ||
-                isActiveDeviceSignal(d["motion"]);
+            isActiveDeviceSignal(d["motion"]);
 
         return active
             ? strings.t("Phát hiện chuyển động")
@@ -418,7 +385,7 @@ class DeviceList extends StatelessWidget {
       case "presence":
         final active =
             isActiveDeviceSignal(d["presence"]) ||
-                isActiveDeviceSignal(d["occupancy"]);
+            isActiveDeviceSignal(d["occupancy"]);
 
         return active
             ? strings.t("Phát hiện hiện diện")
@@ -426,8 +393,7 @@ class DeviceList extends StatelessWidget {
 
       case "vibration":
         final active =
-            isActiveDeviceSignal(d["vibration"]) ||
-                isRecentDeviceEvent(d);
+            isActiveDeviceSignal(d["vibration"]) || isRecentDeviceEvent(d);
 
         return active
             ? strings.t("Phát hiện rung/chấn động")
@@ -436,8 +402,8 @@ class DeviceList extends StatelessWidget {
       case "glass_break":
         final active =
             isActiveDeviceSignal(d["glass_break"]) ||
-                isActiveDeviceSignal(d["broken_glass"]) ||
-                isRecentDeviceEvent(d);
+            isActiveDeviceSignal(d["broken_glass"]) ||
+            isRecentDeviceEvent(d);
 
         return active
             ? strings.t("Phát hiện kính vỡ")
@@ -453,12 +419,9 @@ class DeviceList extends StatelessWidget {
       case "window":
       case "gate":
         final contact = parseDeviceBool(d["contact"]);
-        final status =
-            d["status"]?.toString().trim().toLowerCase() ?? "";
+        final status = d["status"]?.toString().trim().toLowerCase() ?? "";
 
-        return contact == true ||
-            status == "closed" ||
-            status == "locked"
+        return contact == true || status == "closed" || status == "locked"
             ? strings.t("Đang đóng")
             : strings.t("Đang mở");
 
@@ -472,9 +435,7 @@ class DeviceList extends StatelessWidget {
 
       case "ups":
         final mainsPower = parseDeviceBool(
-          d["mains_power"] ??
-              d["ac_connected"] ??
-              d["input_power"],
+          d["mains_power"] ?? d["ac_connected"] ?? d["input_power"],
         );
 
         return mainsPower == false
@@ -503,10 +464,7 @@ class DeviceList extends StatelessWidget {
     }
   }
 
-  String getTimeText(
-      Map<String, dynamic> d,
-      AppStrings strings,
-      ) {
+  String getTimeText(Map<String, dynamic> d, AppStrings strings) {
     final value = formatAgo(d["last_event"], strings);
 
     if (value == "--") {
@@ -516,14 +474,12 @@ class DeviceList extends StatelessWidget {
     return strings.choose(
       vi: "Cập nhật $value",
       en: "Updated $value",
+      zh: "$value 更新",
     );
   }
 
   Color getAccentColor(Map<String, dynamic> d) {
-    final evaluation = evaluateDeviceStatus(
-      d,
-      securityMode: securityMode,
-    );
+    final evaluation = evaluateDeviceStatus(d, securityMode: securityMode);
 
     final level = evaluation["level"]?.toString() ?? "safe";
 
@@ -542,9 +498,7 @@ class DeviceList extends StatelessWidget {
     return getAccentColor(d).withValues(alpha: 0.11);
   }
 
-  List<MapEntry<String, dynamic>> _groupEntries(
-      String groupName,
-      ) {
+  List<MapEntry<String, dynamic>> _groupEntries(String groupName) {
     return devices.entries.where((entry) {
       final d = safeMap(entry.value);
       final type = d["type"]?.toString() ?? "door";
@@ -557,8 +511,7 @@ class DeviceList extends StatelessWidget {
         return true;
       }
 
-      final roomId =
-          d["roomId"]?.toString() ?? "unassigned";
+      final roomId = d["roomId"]?.toString() ?? "unassigned";
 
       return roomId == selectedRoomId;
     }).toList();
@@ -572,15 +525,16 @@ class DeviceList extends StatelessWidget {
   }) {
     final type = d["type"]?.toString() ?? "door";
     final connectionStatus = getConnectionStatus(d);
-    final connectionColor =
-    getConnectionColor(connectionStatus);
-    final connectionDescription =
-    getConnectionDescription(d, connectionStatus, strings);
+    final connectionColor = getConnectionColor(connectionStatus);
+    final connectionDescription = getConnectionDescription(
+      d,
+      connectionStatus,
+      strings,
+    );
     final accentColor = getAccentColor(d);
 
     final cardStatusColor =
-    accentColor == SafeHomeColors.danger ||
-        connectionStatus == "off"
+        accentColor == SafeHomeColors.danger || connectionStatus == "off"
         ? SafeHomeColors.danger
         : connectionStatus == "warn"
         ? SafeHomeColors.warning
@@ -637,8 +591,7 @@ class DeviceList extends StatelessWidget {
                   Expanded(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           d["name"]?.toString() ?? id,
@@ -736,10 +689,7 @@ class DeviceList extends StatelessWidget {
     required bool showAddButton,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 0,
-        bottom: 7,
-      ),
+      padding: const EdgeInsets.only(top: 0, bottom: 7),
       child: Row(
         children: [
           Expanded(
@@ -779,10 +729,7 @@ class DeviceList extends StatelessWidget {
 
   Widget _emptySecurityState(AppStrings strings) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 12,
-        horizontal: 12,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       child: Center(
         child: Text(
           strings.t(
@@ -803,36 +750,25 @@ class DeviceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final securityEntries =
-    _groupEntries("An ninh ra/vào");
-    final emergencyEntries =
-    _groupEntries("Nguy hiểm khẩn cấp");
-    final infrastructureEntries =
-    _groupEntries("Điều khiển & hạ tầng");
+    final securityEntries = _groupEntries("An ninh ra/vào");
+    final emergencyEntries = _groupEntries("Nguy hiểm khẩn cấp");
+    final infrastructureEntries = _groupEntries("Điều khiển & hạ tầng");
 
     return Column(
       children: [
-        if (header != null) header!,
+        ?header,
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
               final compact = constraints.maxWidth < 390;
               final spacing = compact ? 10.0 : 14.0;
-              final contentWidth =
-                  constraints.maxWidth - 24;
-              final itemWidth =
-                  (contentWidth - spacing) / 2;
+              final contentWidth = constraints.maxWidth - 24;
+              final itemWidth = (contentWidth - spacing) / 2;
 
               return SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  12,
-                  6,
-                  12,
-                  bottomPadding,
-                ),
+                padding: EdgeInsets.fromLTRB(12, 6, 12, bottomPadding),
                 child: Column(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (securityEntries.isNotEmpty)
                       _sectionHeader(
@@ -844,9 +780,7 @@ class DeviceList extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 7,
-                          ),
+                          padding: const EdgeInsets.only(bottom: 7),
                           child: _addDeviceButton(),
                         ),
                       ),

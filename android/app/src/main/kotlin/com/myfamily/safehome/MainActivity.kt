@@ -89,18 +89,29 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableAlarmScreenMode()
+        syncAlarmScreenMode(intent)
         super.onCreate(savedInstanceState)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        syncAlarmScreenMode(intent)
     }
 
     override fun onResume() {
         super.onResume()
-        enableAlarmScreenMode()
+        if (!isAlarmLaunchIntent(intent) || !isAlarmScreenLaunch()) {
+            disableAlarmScreenMode()
+        }
+    }
+
+    private fun syncAlarmScreenMode(launchIntent: Intent?) {
+        if (isAlarmLaunchIntent(launchIntent)) {
+            enableAlarmScreenMode()
+        } else {
+            disableAlarmScreenMode()
+        }
     }
 
     private fun enableAlarmScreenMode() {
@@ -115,6 +126,76 @@ class MainActivity : FlutterActivity() {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
                     WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
         )
+    }
+
+    private fun disableAlarmScreenMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(false)
+            setTurnScreenOn(false)
+        }
+
+        window.clearFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+        )
+    }
+
+    private fun isAlarmLaunchIntent(launchIntent: Intent?): Boolean {
+        if (launchIntent == null) {
+            return false
+        }
+
+        if (isAlarmLaunchValue(launchIntent.action)) {
+            return true
+        }
+
+        if (isAlarmLaunchValue(launchIntent.dataString)) {
+            return true
+        }
+
+        if (isAlarmLaunchValue(launchIntent.getStringExtra("safehome_action"))) {
+            return true
+        }
+
+        val extras = launchIntent.extras ?: return false
+
+        for (key in extras.keySet()) {
+            val value = extras.get(key)?.toString()
+
+            if (isAlarmLaunchValue(value)) {
+                return true
+            }
+
+            val cleanKey = key.trim().lowercase()
+
+            if ((cleanKey.contains("alarm") ||
+                        cleanKey.contains("siren") ||
+                        cleanKey.contains("fullscreen")) &&
+                value != "false"
+            ) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun isAlarmLaunchValue(rawValue: String?): Boolean {
+        val value = rawValue
+            ?.trim()
+            ?.lowercase()
+            ?: return false
+
+        return value == "alarm" ||
+                value == "siren" ||
+                value == "alarm_siren" ||
+                value == "fullscreen_alarm" ||
+                value == "alarm_fullscreen" ||
+                value.startsWith("alarm_siren::") ||
+                value.startsWith("priority_alarm::") ||
+                value.startsWith("alarm_summary|")
     }
 
     private fun isAlarmScreenLaunch(): Boolean {

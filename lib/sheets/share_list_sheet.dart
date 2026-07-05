@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 import '../services/home_notification_service.dart';
 import '../safehome_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,6 +25,7 @@ Future<bool?> showShareListSheet({
 
   final myUid = currentUser.uid;
   final db = FirebaseDatabase.instance;
+  final strings = AppStrings.of(context);
 
   final membersSnap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
 
@@ -95,7 +97,7 @@ Future<bool?> showShareListSheet({
 
     final email = raw["email"]?.toString().trim().isNotEmpty == true
         ? raw["email"].toString().trim()
-        : "Không có email";
+        : strings.choose(vi: "Không có email", en: "No email", zh: "无邮箱");
 
     final name = raw["name"]?.toString().trim().isNotEmpty == true
         ? raw["name"].toString().trim()
@@ -136,7 +138,11 @@ Future<bool?> showShareListSheet({
     if (cleanPhone.isEmpty) {
       showTopToast(
         callContext,
-        "Thành viên chưa cập nhật số điện thoại",
+        strings.choose(
+          vi: "Thành viên chưa cập nhật số điện thoại",
+          en: "This member has not added a phone number",
+          zh: "该成员尚未添加电话号码",
+        ),
         color: Colors.orange,
         icon: Icons.phone_disabled_rounded,
       );
@@ -154,7 +160,11 @@ Future<bool?> showShareListSheet({
 
     showTopToast(
       callContext,
-      "Không mở được ứng dụng gọi điện",
+      strings.choose(
+        vi: "Không mở được ứng dụng gọi điện",
+        en: "Could not open the phone app",
+        zh: "无法打开拨号应用",
+      ),
       color: Colors.red,
       icon: Icons.phone_disabled_rounded,
     );
@@ -164,6 +174,12 @@ Future<bool?> showShareListSheet({
     if (role == "owner") return Colors.blue.shade700;
     if (role == "admin") return Colors.deepPurple.shade700;
     return Colors.blueGrey.shade700;
+  }
+
+  String roleLabel(String role) {
+    if (role == "owner") return strings.owner;
+    if (role == "admin") return strings.admin;
+    return strings.member;
   }
 
   Widget memberOnlineDot(String memberUid) {
@@ -208,7 +224,13 @@ Future<bool?> showShareListSheet({
     final hasPhone = phone.trim().isNotEmpty;
 
     return Tooltip(
-      message: hasPhone ? "Gọi điện" : "Chưa có số điện thoại",
+      message: hasPhone
+          ? strings.choose(vi: "Gọi điện", en: "Call", zh: "拨打电话")
+          : strings.choose(
+              vi: "Chưa có số điện thoại",
+              en: "No phone number",
+              zh: "暂无电话号码",
+            ),
       child: InkResponse(
         radius: 22,
         onTap: () {
@@ -265,7 +287,7 @@ Future<bool?> showShareListSheet({
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      homeName.isNotEmpty ? homeName : "Thành viên trong nhà",
+                      homeName.isNotEmpty ? homeName : strings.homeMembers,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -347,9 +369,9 @@ Future<bool?> showShareListSheet({
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text(
-                        "OWNER",
-                        style: TextStyle(
+                      child: Text(
+                        roleLabel("owner"),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -372,7 +394,7 @@ Future<bool?> showShareListSheet({
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 30),
                       child: Text(
-                        "Chưa share cho ai",
+                        strings.t("Chưa share cho ai"),
                         style: TextStyle(color: Colors.grey.shade600),
                       ),
                     );
@@ -396,7 +418,11 @@ Future<bool?> showShareListSheet({
                               member["email"]?.toString().trim().isNotEmpty ==
                                   true
                               ? member["email"].toString()
-                              : "Không có email";
+                              : strings.choose(
+                                  vi: "Không có email",
+                                  en: "No email",
+                                  zh: "无邮箱",
+                                );
 
                           final name =
                               member["name"]?.toString().trim().isNotEmpty ==
@@ -437,7 +463,7 @@ Future<bool?> showShareListSheet({
                                           Flexible(
                                             child: Text(
                                               targetUid == myUid
-                                                  ? "$name (Bạn)"
+                                                  ? "$name (${strings.choose(vi: "Bạn", en: "You", zh: "你")})"
                                                   : name,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -482,7 +508,11 @@ Future<bool?> showShareListSheet({
                                           !canDeleteTarget) {
                                         showTopToast(
                                           sheetContext,
-                                          "Bạn không có quyền xoá thành viên này",
+                                          strings.choose(
+                                            vi: "Bạn không có quyền xoá thành viên này",
+                                            en: "You do not have permission to remove this member",
+                                            zh: "你没有权限移除此成员",
+                                          ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -494,7 +524,11 @@ Future<bool?> showShareListSheet({
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
-                                          "Chỉ chủ nhà mới được thay đổi vai trò",
+                                          strings.choose(
+                                            vi: "Chỉ chủ nhà mới được thay đổi vai trò",
+                                            en: "Only the owner can change roles",
+                                            zh: "只有屋主可以更改角色",
+                                          ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -506,13 +540,29 @@ Future<bool?> showShareListSheet({
                                           builder: (_) => AlertDialog(
                                             title: Text(
                                               targetUid == myUid
-                                                  ? "Rời khỏi nhà?"
-                                                  : "Xoá thành viên?",
+                                                  ? strings.choose(
+                                                      vi: "Rời khỏi nhà?",
+                                                      en: "Leave this home?",
+                                                      zh: "离开此家庭？",
+                                                    )
+                                                  : strings.choose(
+                                                      vi: "Xoá thành viên?",
+                                                      en: "Remove member?",
+                                                      zh: "移除成员？",
+                                                    ),
                                             ),
                                             content: Text(
                                               targetUid == myUid
-                                                  ? "Bạn chắc chắn muốn rời khỏi nhà này?"
-                                                  : "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
+                                                  ? strings.choose(
+                                                      vi: "Bạn chắc chắn muốn rời khỏi nhà này?",
+                                                      en: "Are you sure you want to leave this home?",
+                                                      zh: "确定要离开此家庭吗？",
+                                                    )
+                                                  : strings.choose(
+                                                      vi: "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
+                                                      en: "Are you sure you want to remove $name from this home?",
+                                                      zh: "确定要将 $name 从此家庭中移除吗？",
+                                                    ),
                                             ),
                                             actions: [
                                               TextButton(
@@ -520,14 +570,20 @@ Future<bool?> showShareListSheet({
                                                   context,
                                                   false,
                                                 ),
-                                                child: const Text("Huỷ"),
+                                                child: Text(strings.t("Huỷ")),
                                               ),
                                               ElevatedButton(
                                                 onPressed: () => Navigator.pop(
                                                   context,
                                                   true,
                                                 ),
-                                                child: const Text("Đồng ý"),
+                                                child: Text(
+                                                  strings.choose(
+                                                    vi: "Đồng ý",
+                                                    en: "OK",
+                                                    zh: "确定",
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -574,7 +630,11 @@ Future<bool?> showShareListSheet({
 
                                         showTopToast(
                                           sheetContext,
-                                          "Đã xoá thành viên",
+                                          strings.choose(
+                                            vi: "Đã xoá thành viên",
+                                            en: "Member removed",
+                                            zh: "成员已移除",
+                                          ),
                                           color: Colors.green,
                                           icon: Icons.check_circle_rounded,
                                         );
@@ -632,21 +692,25 @@ Future<bool?> showShareListSheet({
                                     },
                                     itemBuilder: (_) => [
                                       if (isOwner) ...[
-                                        const PopupMenuItem(
+                                        PopupMenuItem(
                                           value: "member",
-                                          child: Text("Member"),
+                                          child: Text(strings.member),
                                         ),
-                                        const PopupMenuItem(
+                                        PopupMenuItem(
                                           value: "admin",
-                                          child: Text("Admin"),
+                                          child: Text(strings.admin),
                                         ),
                                       ],
                                       PopupMenuItem(
                                         value: "delete",
                                         child: Text(
                                           targetUid == myUid
-                                              ? "Rời khỏi nhà"
-                                              : "Xoá thành viên",
+                                              ? strings.t("Rời khỏi nhà")
+                                              : strings.choose(
+                                                  vi: "Xoá thành viên",
+                                                  en: "Remove member",
+                                                  zh: "移除成员",
+                                                ),
                                           style: const TextStyle(
                                             color: Colors.red,
                                           ),
@@ -668,7 +732,7 @@ Future<bool?> showShareListSheet({
                                         borderRadius: BorderRadius.circular(14),
                                       ),
                                       child: Text(
-                                        role.toUpperCase(),
+                                        roleLabel(role),
                                         style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w700,
@@ -695,7 +759,7 @@ Future<bool?> showShareListSheet({
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Text(
-                                      role.toUpperCase(),
+                                      roleLabel(role),
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w700,

@@ -204,6 +204,7 @@ class HomeUiCoordinator {
   static void openSettings({
     required BuildContext context,
     required String homeId,
+    required String ownerUid,
     required String homeName,
     required String homeAddress,
     required String role,
@@ -223,6 +224,7 @@ class HomeUiCoordinator {
   }) {
     showSettingsSheet(
       homeId: homeId,
+      ownerUid: ownerUid,
       homeName: homeName,
       homeAddress: homeAddress,
       role: role,

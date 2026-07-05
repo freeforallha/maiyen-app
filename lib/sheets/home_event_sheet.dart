@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../services/home_notification_service.dart';
 
 void showHomeEventSheet({
@@ -9,6 +10,8 @@ void showHomeEventSheet({
   String Function(String homeId)? homeNameForId,
   Future<void> Function(Map<String, dynamic> notification)? onTapNotification,
 }) {
+  final strings = AppStrings.of(context);
+
   HomeNotificationService.markAllAsRead(uid: uid);
 
   String formatTime(dynamic value) {
@@ -18,10 +21,26 @@ void showHomeEventSheet({
     final dt = DateTime.fromMillisecondsSinceEpoch(ts);
     final diff = DateTime.now().difference(dt);
 
-    if (diff.inMinutes < 1) return "Vừa xong";
-    if (diff.inHours < 1) return "${diff.inMinutes} phút trước";
-    if (diff.inDays < 1) return "${diff.inHours} giờ trước";
-    return "${diff.inDays} ngày trước";
+    if (diff.inMinutes < 1) return strings.t("Vừa xong");
+    if (diff.inHours < 1) {
+      return strings.choose(
+        vi: "${diff.inMinutes} phút trước",
+        en: "${diff.inMinutes} minutes ago",
+        zh: "${diff.inMinutes} 分钟前",
+      );
+    }
+    if (diff.inDays < 1) {
+      return strings.choose(
+        vi: "${diff.inHours} giờ trước",
+        en: "${diff.inHours} hours ago",
+        zh: "${diff.inHours} 小时前",
+      );
+    }
+    return strings.choose(
+      vi: "${diff.inDays} ngày trước",
+      en: "${diff.inDays} days ago",
+      zh: "${diff.inDays} 天前",
+    );
   }
 
   String cleanHomeName(String? value) {
@@ -73,7 +92,7 @@ void showHomeEventSheet({
     result = result.replaceAll(
       RegExp(
         '\\s+(?:trong|cho\\s+nhà|tại\\s+nhà|ở\\s+nhà)'
-            '\\s+["“”]?$escapedName["“”]?',
+        '\\s+["“”]?$escapedName["“”]?',
         caseSensitive: false,
       ),
       '',
@@ -91,7 +110,7 @@ void showHomeEventSheet({
     final rawTitle = item["title"]?.toString().trim() ?? "";
     final title = removeRepeatedHomeName(rawTitle, homeName);
 
-    return title.isNotEmpty ? title : "Thông báo";
+    return title.isNotEmpty ? title : strings.t("Thông báo");
   }
 
   String displayMessage(Map<String, dynamic> item, String homeName) {
@@ -237,9 +256,9 @@ void showHomeEventSheet({
                 child: Row(
                   children: [
                     const Spacer(),
-                    const Text(
-                      "Thông báo Home",
-                      style: TextStyle(
+                    Text(
+                      strings.t("Thông báo nhà"),
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
                       ),
@@ -254,21 +273,27 @@ void showHomeEventSheet({
                         final ok = await showDialog<bool>(
                           context: context,
                           builder: (_) => AlertDialog(
-                            title: const Text("Xoá tất cả thông báo?"),
-                            content: const Text(
-                              "Toàn bộ thông báo Home sẽ bị xoá.",
+                            title: Text(strings.t("Xoá tất cả thông báo?")),
+                            content: Text(
+                              strings.t("Toàn bộ thông báo nhà sẽ bị xoá."),
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context, false),
-                                child: const Text("Huỷ"),
+                                child: Text(strings.t("Huỷ")),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
                                 ),
                                 onPressed: () => Navigator.pop(context, true),
-                                child: const Text("Xoá"),
+                                child: Text(
+                                  strings.choose(
+                                    vi: "Xoá",
+                                    en: "Delete",
+                                    zh: "删除",
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -300,13 +325,17 @@ void showHomeEventSheet({
                     final event = snapshot.data;
 
                     if (!snapshot.hasData || event?.snapshot.value == null) {
-                      return const Center(child: Text("Chưa có thông báo nào"));
+                      return Center(
+                        child: Text(strings.t("Chưa có thông báo nào")),
+                      );
                     }
 
                     final value = event?.snapshot.value;
 
                     if (value is! Map) {
-                      return const Center(child: Text("Chưa có thông báo nào"));
+                      return Center(
+                        child: Text(strings.t("Chưa có thông báo nào")),
+                      );
                     }
 
                     final raw = Map<String, dynamic>.from(value);

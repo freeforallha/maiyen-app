@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   final value = rawValue is num
       ? rawValue.toInt()
@@ -17,9 +19,15 @@ int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   return const [0, 15, 30, 60].contains(value) ? value : 30;
 }
 
-String _alarmRepeatLabel(Object? rawValue) {
+String _alarmRepeatLabel(Object? rawValue, AppStrings strings) {
   final value = _normalizeAlarmRepeatMinutes(rawValue);
-  return value == 0 ? "Không lặp lại" : "$value phút";
+  return value == 0
+      ? strings.t("Không lặp lại")
+      : strings.choose(
+          vi: "$value phút",
+          en: "$value minutes",
+          zh: "$value 分钟",
+        );
 }
 
 class AlarmDeviceSheet extends StatefulWidget {
@@ -217,7 +225,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
       showTopToast(
         context,
-        "Không thể lưu chế độ Alarm",
+        AppStrings.of(context).choose(
+          vi: "Không thể lưu chế độ Alarm",
+          en: "Could not save Alarm mode",
+          zh: "无法保存 Alarm 模式",
+        ),
         color: SafeHomeColors.danger,
         icon: Icons.error_rounded,
       );
@@ -243,7 +255,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+          AppStrings.of(context).choose(
+            vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+            en: "You do not have permission to edit Home settings. Choose Only me.",
+            zh: "你没有权限编辑按家庭设置。请选择仅自己。",
+          ),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -260,7 +276,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          "Nhà chưa có thiết bị an ninh để áp dụng",
+          AppStrings.of(context).choose(
+            vi: "Nhà chưa có thiết bị an ninh để áp dụng",
+            en: "This home has no security devices to apply",
+            zh: "此家庭暂无可应用的安全设备",
+          ),
           color: Colors.orange,
           icon: Icons.sensors_off_rounded,
         );
@@ -321,10 +341,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   Future<void> showQuickAlarmForAllSheet() async {
+    final strings = AppStrings.of(context);
+
     if (mode == "home" && !widget.canManageHome) {
       showTopToast(
         context,
-        "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+        AppStrings.of(context).choose(
+          vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+          en: "You do not have permission to edit Home settings. Choose Only me.",
+          zh: "你没有权限编辑按家庭设置。请选择仅自己。",
+        ),
         color: SafeHomeColors.danger,
         icon: Icons.lock_rounded,
       );
@@ -339,7 +365,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     if (securityEntries.isEmpty) {
       showTopToast(
         context,
-        "Nhà chưa có thiết bị an ninh để áp dụng",
+        AppStrings.of(context).choose(
+          vi: "Nhà chưa có thiết bị an ninh để áp dụng",
+          en: "This home has no security devices to apply",
+          zh: "此家庭暂无可应用的安全设备",
+        ),
         color: Colors.orange,
         icon: Icons.sensors_off_rounded,
       );
@@ -362,8 +392,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             Future<void> chooseTime(String field) async {
               final picked = await openTimeTextInput(
                 title: field == "start"
-                    ? "Chọn giờ bắt đầu Alarm"
-                    : "Chọn giờ kết thúc Alarm",
+                    ? strings.choose(
+                        vi: "Chọn giờ bắt đầu Alarm",
+                        en: "Choose Alarm start time",
+                        zh: "选择 Alarm 开始时间",
+                      )
+                    : strings.choose(
+                        vi: "Chọn giờ kết thúc Alarm",
+                        en: "Choose Alarm end time",
+                        zh: "选择 Alarm 结束时间",
+                      ),
                 initial:
                     draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
@@ -399,7 +437,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 if (mounted) {
                   showTopToast(
                     context,
-                    "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
+                    strings.choose(
+                      vi: "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
+                      en: "Alarm applied to ${securityEntries.length} security devices",
+                      zh: "Alarm 已应用到 ${securityEntries.length} 个安全设备",
+                    ),
                     color: SafeHomeColors.success,
                     icon: Icons.check_circle_rounded,
                   );
@@ -415,7 +457,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                 showTopToast(
                   sheetContext,
-                  "Không thể áp dụng Alarm cho toàn bộ thiết bị",
+                  strings.choose(
+                    vi: "Không thể áp dụng Alarm cho toàn bộ thiết bị",
+                    en: "Could not apply Alarm to all devices",
+                    zh: "无法将 Alarm 应用到所有设备",
+                  ),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
                 );
@@ -469,9 +515,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Thiết lập nhanh Alarm",
-                                style: TextStyle(
+                              Text(
+                                strings.t("Thiết lập nhanh Alarm"),
+                                style: const TextStyle(
                                   color: SafeHomeColors.textPrimary,
                                   fontSize: 17,
                                   fontWeight: FontWeight.w900,
@@ -479,7 +525,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                "Áp dụng cùng một lịch cho ${securityEntries.length} thiết bị an ninh",
+                                strings.choose(
+                                  vi: "Áp dụng cùng một lịch cho ${securityEntries.length} thiết bị an ninh",
+                                  en: "Apply the same schedule to ${securityEntries.length} security devices",
+                                  zh: "将同一计划应用到 ${securityEntries.length} 个安全设备",
+                                ),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textSecondary,
                                   fontSize: 12,
@@ -506,7 +556,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       children: [
                         Expanded(
                           child: _AlarmMiniButton(
-                            label: "Bắt đầu",
+                            label: strings.t("Bắt đầu"),
                             value: draft["start"]?.toString() ?? "23:00",
                             enabled: !saving,
                             onTap: () {
@@ -517,7 +567,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: _AlarmMiniButton(
-                            label: "Kết thúc",
+                            label: strings.t("Kết thúc"),
                             value: draft["end"]?.toString() ?? "06:00",
                             enabled: !saving,
                             onTap: () {
@@ -555,8 +605,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             : const Icon(Icons.done_all_rounded),
                         label: Text(
                           saving
-                              ? "Đang áp dụng..."
-                              : "Áp dụng cho toàn bộ thiết bị",
+                              ? strings.t("Đang áp dụng...")
+                              : strings.t("Áp dụng cho toàn bộ thiết bị"),
                         ),
                       ),
                     ),
@@ -575,7 +625,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          "Bạn không có quyền sửa lịch Alarm của nhà",
+          AppStrings.of(context).choose(
+            vi: "Bạn không có quyền sửa lịch Alarm của nhà",
+            en: "You do not have permission to edit this home's Alarm schedule",
+            zh: "你没有权限编辑此家庭的 Alarm 计划",
+          ),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -627,6 +681,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     required String title,
     required String initial,
   }) async {
+    final strings = AppStrings.of(context);
     final parts = initial.split(":");
 
     final hourController = TextEditingController(text: parts[0]);
@@ -657,10 +712,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       controller: hourController,
                       keyboardType: TextInputType.number,
                       maxLength: 2,
-                      decoration: const InputDecoration(
-                        labelText: "Giờ",
+                      decoration: InputDecoration(
+                        labelText: strings.t("Giờ"),
                         counterText: "",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -679,10 +734,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       controller: minuteController,
                       keyboardType: TextInputType.number,
                       maxLength: 2,
-                      decoration: const InputDecoration(
-                        labelText: "Phút",
+                      decoration: InputDecoration(
+                        labelText: strings.t("Phút"),
                         counterText: "",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),
@@ -731,7 +786,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Huỷ"),
+              child: Text(strings.t("Huỷ")),
             ),
             ElevatedButton(
               onPressed: () {
@@ -742,7 +797,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                 Navigator.pop(context, value);
               },
-              child: const Text("OK"),
+              child: Text(strings.t("OK")),
             ),
           ],
         );
@@ -757,8 +812,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }) async {
     final picked = await openTimeTextInput(
       title: field == "start"
-          ? "Chọn giờ bắt đầu Alarm"
-          : "Chọn giờ kết thúc Alarm",
+          ? AppStrings.of(context).choose(
+              vi: "Chọn giờ bắt đầu Alarm",
+              en: "Choose Alarm start time",
+              zh: "选择 Alarm 开始时间",
+            )
+          : AppStrings.of(context).choose(
+              vi: "Chọn giờ kết thúc Alarm",
+              en: "Choose Alarm end time",
+              zh: "选择 Alarm 结束时间",
+            ),
       initial: alarm[field]?.toString() ?? "23:00",
     );
 
@@ -772,6 +835,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final securityDevices = devices.entries.where((e) {
       return isSecurityDevice(Map<String, dynamic>.from(e.value));
     }).toList();
@@ -786,18 +850,18 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              "Alarm thiết bị",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            Text(
+              strings.t("Alarm thiết bị"),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
 
             const SizedBox(height: 14),
 
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Chế độ áp dụng",
-                style: TextStyle(
+                strings.t("Chế độ áp dụng"),
+                style: const TextStyle(
                   color: SafeHomeColors.textPrimary,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
@@ -811,10 +875,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               children: [
                 Expanded(
                   child: _AlarmModeCard(
-                    title: "Theo nhà",
-                    subtitle:
-                        "Dùng lịch chung do Chủ nhà hoặc "
-                        "Quản trị viên thiết lập",
+                    title: strings.t("Theo nhà"),
+                    subtitle: strings.choose(
+                      vi: "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
+                      en: "Use the shared schedule set by the Owner or Admin",
+                      zh: "使用屋主或管理员设置的共享计划",
+                    ),
                     icon: Icons.home_rounded,
                     selected: mode == "home",
                     enabled: !savingMode,
@@ -826,10 +892,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _AlarmModeCard(
-                    title: "Riêng tôi",
-                    subtitle:
-                        "Dùng lịch riêng chỉ áp dụng cho "
-                        "tài khoản của bạn",
+                    title: strings.t("Riêng tôi"),
+                    subtitle: strings.choose(
+                      vi: "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
+                      en: "Use a private schedule for your account only",
+                      zh: "仅为你的账户使用个人计划",
+                    ),
                     icon: Icons.person_rounded,
                     selected: mode == "custom",
                     enabled: !savingMode,
@@ -849,7 +917,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             if (mode == "home" && isSharedUser) ...[
               const SizedBox(height: 10),
               Text(
-                "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch alarm.",
+                strings.choose(
+                  vi: "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
+                  en: "You are viewing the owner's schedule. Choose Only me to set your own Alarm schedule.",
+                  zh: "你正在查看屋主的计划。选择仅自己即可设置个人 Alarm 计划。",
+                ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -876,8 +948,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     : const Icon(Icons.tune_rounded),
                 label: Text(
                   applyingAll
-                      ? "Đang áp dụng..."
-                      : "Thiết lập nhanh toàn bộ thiết bị",
+                      ? strings.t("Đang áp dụng...")
+                      : strings.t("Thiết lập nhanh toàn bộ thiết bị"),
                 ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
@@ -950,7 +1022,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
-                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmRepeatLabel(alarm["repeatMinutes"])}",
+                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 12,
@@ -996,7 +1068,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             children: [
                               Expanded(
                                 child: _AlarmMiniButton(
-                                  label: "Bắt đầu",
+                                  label: strings.t("Bắt đầu"),
                                   value: alarm["start"]?.toString() ?? "23:00",
                                   enabled: !readOnly,
                                   onTap: () => pickTime(
@@ -1009,7 +1081,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: _AlarmMiniButton(
-                                  label: "Kết thúc",
+                                  label: strings.t("Kết thúc"),
                                   value: alarm["end"]?.toString() ?? "06:00",
                                   enabled: !readOnly,
                                   onTap: () => pickTime(
@@ -1065,6 +1137,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final normalizedValue = _normalizeAlarmRepeatMinutes(value);
 
     return Container(
@@ -1076,10 +1149,10 @@ class _AlarmRepeatDropdown extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Text(
-              "Thời gian lặp lại",
-              style: TextStyle(
+              strings.t("Thời gian lặp lại"),
+              style: const TextStyle(
                 color: SafeHomeColors.textPrimary,
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
@@ -1097,11 +1170,41 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                   Icons.keyboard_arrow_down_rounded,
                   color: SafeHomeColors.textSecondary,
                 ),
-                items: const [
-                  DropdownMenuItem(value: 0, child: Text("Không lặp lại")),
-                  DropdownMenuItem(value: 15, child: Text("15 phút")),
-                  DropdownMenuItem(value: 30, child: Text("30 phút")),
-                  DropdownMenuItem(value: 60, child: Text("60 phút")),
+                items: [
+                  DropdownMenuItem(
+                    value: 0,
+                    child: Text(strings.t("Không lặp lại")),
+                  ),
+                  DropdownMenuItem(
+                    value: 15,
+                    child: Text(
+                      strings.choose(
+                        vi: "15 phút",
+                        en: "15 minutes",
+                        zh: "15 分钟",
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 30,
+                    child: Text(
+                      strings.choose(
+                        vi: "30 phút",
+                        en: "30 minutes",
+                        zh: "30 分钟",
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 60,
+                    child: Text(
+                      strings.choose(
+                        vi: "60 phút",
+                        en: "60 minutes",
+                        zh: "60 分钟",
+                      ),
+                    ),
+                  ),
                 ],
                 onChanged: enabled
                     ? (nextValue) {

@@ -726,32 +726,38 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
 
     final insideCount = summaryCount("insideCount");
     final outsideCount = summaryCount("outsideCount");
-    final summaryKnownLocationCount = summaryCount("knownLocationCount");
-    final knownLocationCount = summaryKnownLocationCount > 0
-        ? summaryKnownLocationCount
-        : insideCount + outsideCount;
     final unknownCount = summaryCount("unknownCount");
 
-    // Mẫu số chỉ gồm những tài khoản đang đăng nhập và đã xác định
-    // được inside/outside. Tài khoản logout hoặc vị trí unknown được
-    // tách riêng ở dòng "chưa xác định vị trí".
-    if (knownLocationCount > 0) {
-      final memberText =
-          "Thành viên đang ở trong nhà $insideCount/$knownLocationCount";
+    final summaryTotalMemberCount = summaryCount("totalMemberCount");
+    final totalMemberCount = summaryTotalMemberCount > 0
+        ? summaryTotalMemberCount
+        : insideCount + outsideCount + unknownCount;
+
+// UI luôn dùng tổng thành viên thật làm mẫu số.
+// Auto Away backend vẫn dùng known/eligible riêng để quyết định bật Bảo vệ.
+    if (totalMemberCount > 0) {
+      final insideText =
+          "Thành viên trong nhà: $insideCount/$totalMemberCount";
 
       if (insideCount > 0) {
-        safeSummary.insert(0, memberText);
+        safeSummary.insert(0, insideText);
       } else if (dangerIssues.isNotEmpty) {
-        dangerIssues.add(memberText);
+        dangerIssues.add(insideText);
       } else {
-        warningIssues.add(memberText);
+        warningIssues.add(insideText);
       }
-    }
 
-    if (unknownCount > 0) {
-      warningIssues.add(
-        "Thành viên chưa xác định vị trí: $unknownCount",
-      );
+      if (outsideCount > 0) {
+        safeSummary.add(
+          "Thành viên bên ngoài: $outsideCount/$totalMemberCount",
+        );
+      }
+
+      if (unknownCount > 0) {
+        warningIssues.add(
+          "Thành viên chưa xác định vị trí: $unknownCount/$totalMemberCount",
+        );
+      }
     }
   }
 

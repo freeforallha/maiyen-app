@@ -17,6 +17,7 @@ import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatefulWidget {
@@ -26,8 +27,7 @@ class SafeHomeApp extends StatefulWidget {
   State<SafeHomeApp> createState() => _SafeHomeAppState();
 }
 
-class _SafeHomeAppState extends State<SafeHomeApp>
-    with WidgetsBindingObserver {
+class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
   StreamSubscription<User?>? _authSessionSubscription;
   @override
   void initState() {
@@ -36,10 +36,8 @@ class _SafeHomeAppState extends State<SafeHomeApp>
 
     appLanguageController.load();
 
-    _authSessionSubscription = FirebaseAuth.instance
-        .authStateChanges()
-        .listen(
-          (user) {
+    _authSessionSubscription = FirebaseAuth.instance.authStateChanges().listen(
+      (user) {
         if (user == null) {
           unawaited(AccountSessionService.deactivateLocal());
           return;
@@ -48,19 +46,15 @@ class _SafeHomeAppState extends State<SafeHomeApp>
         AutoAwayService.activateForSignedInUser(user.uid);
 
         unawaited(
-          AccountSessionService.activate(
-            uid: user.uid,
-          ).catchError((Object error) {
-            safeDebugPrint(
-              'ACCOUNT_SESSION_ACTIVATE_ERROR: $error',
-            );
+          AccountSessionService.activate(uid: user.uid).catchError((
+            Object error,
+          ) {
+            safeDebugPrint('ACCOUNT_SESSION_ACTIVATE_ERROR: $error');
           }),
         );
       },
       onError: (Object error) {
-        safeDebugPrint(
-          'ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error',
-        );
+        safeDebugPrint('ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error');
       },
     );
 
@@ -115,7 +109,11 @@ class _SafeHomeAppState extends State<SafeHomeApp>
           debugShowCheckedModeBanner: false,
           theme: SafeHomeTheme.light,
           locale: appLanguageController.locale,
-          supportedLocales: const [Locale("vi"), Locale("en")],
+          supportedLocales: const [
+            Locale("vi"),
+            Locale("en"),
+            Locale("zh", "CN"),
+          ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -392,30 +390,24 @@ class _AuthGateState extends State<AuthGate> {
               );
             }
 
-            return const LocationPermissionGate(
-              child: HomePage(),
-            );
+            return const LocationPermissionGate(child: HomePage());
           },
         );
       },
     );
   }
 }
+
 class LocationPermissionGate extends StatefulWidget {
-  const LocationPermissionGate({
-    super.key,
-    required this.child,
-  });
+  const LocationPermissionGate({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<LocationPermissionGate> createState() =>
-      _LocationPermissionGateState();
+  State<LocationPermissionGate> createState() => _LocationPermissionGateState();
 }
 
-class _LocationPermissionGateState
-    extends State<LocationPermissionGate> {
+class _LocationPermissionGateState extends State<LocationPermissionGate> {
   bool _checkStarted = false;
   bool _dialogOpen = false;
 
@@ -442,22 +434,17 @@ class _LocationPermissionGateState
         permission = await Geolocator.requestPermission();
       }
 
-      if (!mounted ||
-          permission == LocationPermission.always) {
+      if (!mounted || permission == LocationPermission.always) {
         return;
       }
 
       await _showPermissionDialog(permission);
     } catch (error) {
-      safeDebugPrint(
-        "STARTUP_LOCATION_PERMISSION_ERROR: $error",
-      );
+      safeDebugPrint("STARTUP_LOCATION_PERMISSION_ERROR: $error");
     }
   }
 
-  Future<void> _showPermissionDialog(
-      LocationPermission permission,
-      ) async {
+  Future<void> _showPermissionDialog(LocationPermission permission) async {
     if (!mounted || _dialogOpen) return;
 
     _dialogOpen = true;
@@ -468,8 +455,7 @@ class _LocationPermissionGateState
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
-        final currentlyWhileUsing =
-            permission == LocationPermission.whileInUse;
+        final currentlyWhileUsing = permission == LocationPermission.whileInUse;
 
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -495,39 +481,38 @@ class _LocationPermissionGateState
           content: Text(
             currentlyWhileUsing
                 ? strings.choose(
-              vi: "SafeHome hiện chỉ được truy cập vị trí "
-                  "khi bạn đang sử dụng ứng dụng.\n\n"
-                  "Hãy chọn quyền Vị trí và chuyển sang "
-                  "\"Luôn cho phép\" để tính năng tự động "
-                  "Bảo vệ khi rời nhà hoạt động khi ứng dụng "
-                  "đang chạy nền.",
-              en: "SafeHome can currently access location only "
-                  "while the app is in use.\n\n"
-                  "Open Location permission and select "
-                  "\"Allow all the time\" so automatic protection "
-                  "continues working in the background.",
-            )
+                    vi:
+                        "SafeHome hiện chỉ được truy cập vị trí "
+                        "khi bạn đang sử dụng ứng dụng.\n\n"
+                        "Hãy chọn quyền Vị trí và chuyển sang "
+                        "\"Luôn cho phép\" để tính năng tự động "
+                        "Bảo vệ khi rời nhà hoạt động khi ứng dụng "
+                        "đang chạy nền.",
+                    en:
+                        "SafeHome can currently access location only "
+                        "while the app is in use.\n\n"
+                        "Open Location permission and select "
+                        "\"Allow all the time\" so automatic protection "
+                        "continues working in the background.",
+                  )
                 : strings.choose(
-              vi: "SafeHome cần quyền vị trí "
-                  "\"Luôn cho phép\" để nhận biết khi bạn "
-                  "rời hoặc trở về nhà, kể cả khi ứng dụng "
-                  "đang chạy nền.",
-              en: "SafeHome needs always-on location permission "
-                  "to detect when you leave or return home, "
-                  "including while the app is in the background.",
-            ),
+                    vi:
+                        "SafeHome cần quyền vị trí "
+                        "\"Luôn cho phép\" để nhận biết khi bạn "
+                        "rời hoặc trở về nhà, kể cả khi ứng dụng "
+                        "đang chạy nền.",
+                    en:
+                        "SafeHome needs always-on location permission "
+                        "to detect when you leave or return home, "
+                        "including while the app is in the background.",
+                  ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop(false);
               },
-              child: Text(
-                strings.choose(
-                  vi: "Để sau",
-                  en: "Later",
-                ),
-              ),
+              child: Text(strings.choose(vi: "Để sau", en: "Later")),
             ),
             ElevatedButton.icon(
               onPressed: () {
@@ -535,10 +520,7 @@ class _LocationPermissionGateState
               },
               icon: const Icon(Icons.settings_rounded),
               label: Text(
-                strings.choose(
-                  vi: "Mở cài đặt",
-                  en: "Open settings",
-                ),
+                strings.choose(vi: "Mở cài đặt", en: "Open settings"),
               ),
             ),
           ],
@@ -558,6 +540,7 @@ class _LocationPermissionGateState
     return widget.child;
   }
 }
+
 class SafeHomeSplash extends StatefulWidget {
   const SafeHomeSplash({super.key});
 
@@ -580,20 +563,12 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
       duration: const Duration(milliseconds: 900),
     );
 
-    fade = CurvedAnimation(
-      parent: controller,
-      curve: Curves.easeOutCubic,
-    );
+    fade = CurvedAnimation(parent: controller, curve: Curves.easeOutCubic);
 
     scale = Tween<double>(
       begin: 0.92,
       end: 1,
-    ).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeOutBack,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutBack));
 
     controller.forward();
   }
@@ -623,7 +598,6 @@ class _SafeHomeSplashState extends State<SafeHomeSplash>
                     height: 220,
                     fit: BoxFit.contain,
                   ),
-
                 ],
               ),
             ),

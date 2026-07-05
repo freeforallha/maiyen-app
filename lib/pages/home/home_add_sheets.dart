@@ -104,7 +104,7 @@ Future<String?> showAddHomeOptionsSheet({
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  strings.t("Thêm Home"),
+                  strings.t("Thêm nhà"),
                   style: const TextStyle(
                     color: SafeHomeColors.textPrimary,
                     fontSize: 19,
@@ -115,14 +115,14 @@ Future<String?> showAddHomeOptionsSheet({
               const SizedBox(height: 14),
               optionTile(
                 icon: Icons.add_home_work_rounded,
-                title: strings.t("Tạo Home mới"),
+                title: strings.t("Tạo nhà mới"),
                 subtitle: strings.t("Tạo một ngôi nhà mới của bạn"),
                 color: SafeHomeColors.primary,
                 value: "create",
               ),
               optionTile(
                 icon: Icons.qr_code_scanner_rounded,
-                title: strings.t("Xin gia nhập Home"),
+                title: strings.t("Xin gia nhập nhà"),
                 subtitle: strings.t("Quét mã QR được chủ nhà chia sẻ"),
                 color: SafeHomeColors.info,
                 value: "join",

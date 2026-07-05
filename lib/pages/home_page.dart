@@ -47,6 +47,7 @@ import '../services/session_logout_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -3016,6 +3017,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void openSettingsCoordinator() {
     HomeUiCoordinator.openSettings(
       homeId: selectedHome,
+      ownerUid: getHomeOwnerUid(),
       homeName: homes[selectedHome]?["name"]?.toString() ?? selectedHome,
       homeAddress: homes[selectedHome]?["address"]?.toString() ?? "",
       role: getMyRole(),
@@ -3137,226 +3139,239 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               bottom: false,
               child: Column(
                 children: [
-              HomeHeaderBar(
-                notificationTooltip: _strings.t("Thông báo Home"),
-                unreadHomeNotificationCount: unreadHomeNotificationCount,
-                onOpenHomeList: () async {
-                  final selected = await Navigator.push<String>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AllHomePage(homeOrder: homeOrder),
-                    ),
-                  );
+                  HomeHeaderBar(
+                    notificationTooltip: _strings.t("Thông báo Home"),
+                    unreadHomeNotificationCount: unreadHomeNotificationCount,
+                    onOpenHomeList: () async {
+                      final selected = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AllHomePage(homeOrder: homeOrder),
+                        ),
+                      );
 
-                  if (selected == null || !homes.containsKey(selected)) {
-                    return;
-                  }
+                      if (selected == null || !homes.containsKey(selected)) {
+                        return;
+                      }
 
-                  final currentHome = safeMap(homes[selected]);
-                  final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
+                      final currentHome = safeMap(homes[selected]);
+                      final parsedAlarm = HomeStateParser.parseAlarm(
+                        currentHome,
+                      );
 
-                  setState(() {
-                    selectedHome = selected;
+                      setState(() {
+                        selectedHome = selected;
 
-                    securityMode =
-                        currentHome["securityMode"]?.toString() == "armed"
-                        ? "armed"
-                        : "normal";
+                        securityMode =
+                            currentHome["securityMode"]?.toString() == "armed"
+                            ? "armed"
+                            : "normal";
 
-                    alarmEnabled =
-                        safeMap(alarmSettings[selected])["enabled"] != false;
+                        alarmEnabled =
+                            safeMap(alarmSettings[selected])["enabled"] !=
+                            false;
 
-                    start = parsedAlarm["start"];
-                    end = parsedAlarm["end"];
-                    alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
-                  });
+                        start = parsedAlarm["start"];
+                        end = parsedAlarm["end"];
+                        alarmPauseToday = safeMap(
+                          currentHome["alarmPauseToday"],
+                        );
+                      });
 
-                  final index = homeOrder.indexOf(selected);
+                      final index = homeOrder.indexOf(selected);
 
-                  if (index != -1 && homeTabController.hasClients) {
-                    homeTabController.animateTo(
-                      index * 110,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOutCubic,
-                    );
-                  }
+                      if (index != -1 && homeTabController.hasClients) {
+                        homeTabController.animateTo(
+                          index * 110,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOutCubic,
+                        );
+                      }
 
-                  startHomeEventsListener();
-                  startAlarmPauseListener();
-                },
-                onOpenNotifications: openHomeNotifications,
-              ),
-              const SizedBox(height: sectionGap),
+                      startHomeEventsListener();
+                      startAlarmPauseListener();
+                    },
+                    onOpenNotifications: openHomeNotifications,
+                  ),
+                  const SizedBox(height: sectionGap),
 
-              Padding(
-                padding: EdgeInsets.zero,
-                child: HomeTabs(
-                  unreadChatByHome: unreadChatByHome,
-                  controller: homeTabController,
-                  homes: homes,
-                  homeOrder: homeOrder,
-                  selectedHome: selectedHome,
-                  currentUserName: userName,
-                  currentUserEmail:
-                      FirebaseAuth.instance.currentUser?.email ?? "",
-                  onSelect: (h) {
-                    if (h == selectedHome) return;
+                  Padding(
+                    padding: EdgeInsets.zero,
+                    child: HomeTabs(
+                      unreadChatByHome: unreadChatByHome,
+                      controller: homeTabController,
+                      homes: homes,
+                      homeOrder: homeOrder,
+                      selectedHome: selectedHome,
+                      currentUserName: userName,
+                      currentUserEmail:
+                          FirebaseAuth.instance.currentUser?.email ?? "",
+                      onSelect: (h) {
+                        if (h == selectedHome) return;
 
-                    final currentHome = safeMap(homes[h]);
-                    final parsedAlarm = HomeStateParser.parseAlarm(currentHome);
-
-                    setState(() {
-                      selectedHome = h;
-
-                      securityMode =
-                          currentHome["securityMode"]?.toString() == "armed"
-                          ? "armed"
-                          : "normal";
-
-                      alarmEnabled =
-                          safeMap(alarmSettings[h])["enabled"] != false;
-
-                      start = parsedAlarm["start"];
-                      end = parsedAlarm["end"];
-                      alarmPauseToday = safeMap(currentHome["alarmPauseToday"]);
-                    });
-
-                    startHomeEventsListener();
-                    startAlarmPauseListener();
-                  },
-                  onReorder: reorderHomeTabs,
-                  getHomeColor: getHomeColor,
-                ),
-              ),
-              const SizedBox(height: sectionGap),
-
-              Expanded(
-                child: Stack(
-                  children: [
-                    DeviceList(
-                      devices: devices,
-                      selectedRoomId: selectedRoomId,
-                      securityMode: securityMode,
-                      bottomPadding: deviceListBottomPadding,
-                      header: HomeOverviewHeader(
-                        ownerUid: overviewOwnerUid,
-                        homeId: selectedHome,
-                        homeName: overviewHomeName,
-                        alarmPauseText: overviewAlarmPauseText,
-                        onAlarmPauseToday: () {
-                          openAlarmPauseSheetWithReminder();
-                        },
-                        environmentText: overviewEnvironmentText,
-                        homeEvents: homeEvents,
-                        onEnvironmentTap: () {
-                          final tempDevice = getTemperatureDevice();
-
-                          if (tempDevice == null) return;
-
-                          openDeviceDetailSheet(
-                            deviceId: tempDevice["id"],
-                            device: tempDevice["data"],
-                          );
-                        },
-                        overall: overviewOverall,
-                        securityMode: securityMode,
-                        securityModeSource: overviewSecurityModeSource,
-                        securityModeRepeatMinutes:
-                            overviewSecurityModeRepeatMinutes,
-                        onSecurityModeRepeatChanged: canManageSelectedHome
-                            ? setSecurityModeRepeatMinutes
-                            : null,
-                        onSecurityModeChanged: setSecurityMode,
-                        alarmEnabled: alarmEnabled,
-                        onAlarmEnabledChanged: canManageSelectedHome
-                            ? setAlarmEnabled
-                            : null,
-                        onScheduleNotification: openScheduleNotificationSheet,
-                        onScheduleAlarm: openAlarmDeviceSheet,
-                        alarmStart: overviewAlarmScheduleText,
-                        alarmEnd: "",
-                        rooms: overviewRooms,
-                        selectedRoomId: selectedRoomId,
-                        onSelectRoom: (roomId) {
-                          setState(() {
-                            selectedRoomId = roomId;
-                          });
-                        },
-                        onReorderRooms: (roomIds) async {
-                          if (!canManageHome()) {
-                            showTopToast(
-                              context,
-                              _strings.t("Bạn không có quyền sắp xếp phòng"),
-                              color: Colors.orange,
-                              icon: Icons.lock_rounded,
-                            );
-                            return;
-                          }
-
-                          final ownerUid = getHomeOwnerUid();
-                          final updates = <String, Object?>{};
-
-                          for (var i = 0; i < roomIds.length; i++) {
-                            updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
-                                i + 1;
-                          }
-
-                          if (updates.isNotEmpty) {
-                            await FirebaseDatabase.instance.ref().update(
-                              updates,
-                            );
-                          }
-                        },
-                        pairingCountdown: pairingCountdown,
-                        pairingCountdownText: overviewPairingCountdownText,
-                        sectionGap: sectionGap,
-                      ),
-                      isShared: homes[selectedHome]?["_shared"] == true,
-                      ownerEmail:
-                          homes[selectedHome]?["_ownerEmail"]?.toString() ?? "",
-                      onRename: canManageHome() ? renameDevice : (_) {},
-                      onDelete: canManageHome() ? deleteDevice : (_) {},
-                      onPairSensor: () async {
-                        if (!canManageHome()) {
-                          showTopToast(
-                            context,
-                            _strings.t("Bạn không có quyền thêm thiết bị"),
-                            color: Colors.orange,
-                            icon: Icons.lock_rounded,
-                          );
-                          return;
-                        }
-
-                        final result = await showHomePairSensorSheet(
-                          context: context,
-                          strings: _strings,
+                        final currentHome = safeMap(homes[h]);
+                        final parsedAlarm = HomeStateParser.parseAlarm(
+                          currentHome,
                         );
 
-                        if (result == HomePairSensorMethod.scanQr) {
-                          if (!context.mounted) return;
+                        setState(() {
+                          selectedHome = h;
 
-                          final code = await openQRScanner(context);
+                          securityMode =
+                              currentHome["securityMode"]?.toString() == "armed"
+                              ? "armed"
+                              : "normal";
 
-                          if (code != null) {
-                            pairSensor(code);
-                          }
-                        }
+                          alarmEnabled =
+                              safeMap(alarmSettings[h])["enabled"] != false;
 
-                        if (result == HomePairSensorMethod.manualHubId) {
-                          if (!context.mounted) return;
+                          start = parsedAlarm["start"];
+                          end = parsedAlarm["end"];
+                          alarmPauseToday = safeMap(
+                            currentHome["alarmPauseToday"],
+                          );
+                        });
 
-                          final hubId = await showPairDialog(context);
-
-                          if (hubId == null || hubId.trim().isEmpty) return;
-
-                          pairSensor(hubId.trim());
-                        }
+                        startHomeEventsListener();
+                        startAlarmPauseListener();
                       },
-                      onTapDevice: openSelectedDeviceDetail,
+                      onReorder: reorderHomeTabs,
+                      getHomeColor: getHomeColor,
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                  const SizedBox(height: sectionGap),
+
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        DeviceList(
+                          devices: devices,
+                          selectedRoomId: selectedRoomId,
+                          securityMode: securityMode,
+                          bottomPadding: deviceListBottomPadding,
+                          header: HomeOverviewHeader(
+                            ownerUid: overviewOwnerUid,
+                            homeId: selectedHome,
+                            homeName: overviewHomeName,
+                            alarmPauseText: overviewAlarmPauseText,
+                            onAlarmPauseToday: () {
+                              openAlarmPauseSheetWithReminder();
+                            },
+                            environmentText: overviewEnvironmentText,
+                            homeEvents: homeEvents,
+                            onEnvironmentTap: () {
+                              final tempDevice = getTemperatureDevice();
+
+                              if (tempDevice == null) return;
+
+                              openDeviceDetailSheet(
+                                deviceId: tempDevice["id"],
+                                device: tempDevice["data"],
+                              );
+                            },
+                            overall: overviewOverall,
+                            securityMode: securityMode,
+                            securityModeSource: overviewSecurityModeSource,
+                            securityModeRepeatMinutes:
+                                overviewSecurityModeRepeatMinutes,
+                            onSecurityModeRepeatChanged: canManageSelectedHome
+                                ? setSecurityModeRepeatMinutes
+                                : null,
+                            onSecurityModeChanged: setSecurityMode,
+                            alarmEnabled: alarmEnabled,
+                            onAlarmEnabledChanged: canManageSelectedHome
+                                ? setAlarmEnabled
+                                : null,
+                            onScheduleNotification:
+                                openScheduleNotificationSheet,
+                            onScheduleAlarm: openAlarmDeviceSheet,
+                            alarmStart: overviewAlarmScheduleText,
+                            alarmEnd: "",
+                            rooms: overviewRooms,
+                            selectedRoomId: selectedRoomId,
+                            onSelectRoom: (roomId) {
+                              setState(() {
+                                selectedRoomId = roomId;
+                              });
+                            },
+                            onReorderRooms: (roomIds) async {
+                              if (!canManageHome()) {
+                                showTopToast(
+                                  context,
+                                  _strings.t(
+                                    "Bạn không có quyền sắp xếp phòng",
+                                  ),
+                                  color: Colors.orange,
+                                  icon: Icons.lock_rounded,
+                                );
+                                return;
+                              }
+
+                              final ownerUid = getHomeOwnerUid();
+                              final updates = <String, Object?>{};
+
+                              for (var i = 0; i < roomIds.length; i++) {
+                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
+                                    i + 1;
+                              }
+
+                              if (updates.isNotEmpty) {
+                                await FirebaseDatabase.instance.ref().update(
+                                  updates,
+                                );
+                              }
+                            },
+                            pairingCountdown: pairingCountdown,
+                            pairingCountdownText: overviewPairingCountdownText,
+                            sectionGap: sectionGap,
+                          ),
+                          isShared: homes[selectedHome]?["_shared"] == true,
+                          ownerEmail:
+                              homes[selectedHome]?["_ownerEmail"]?.toString() ??
+                              "",
+                          onRename: canManageHome() ? renameDevice : (_) {},
+                          onDelete: canManageHome() ? deleteDevice : (_) {},
+                          onPairSensor: () async {
+                            if (!canManageHome()) {
+                              showTopToast(
+                                context,
+                                _strings.t("Bạn không có quyền thêm thiết bị"),
+                                color: Colors.orange,
+                                icon: Icons.lock_rounded,
+                              );
+                              return;
+                            }
+
+                            final result = await showHomePairSensorSheet(
+                              context: context,
+                              strings: _strings,
+                            );
+
+                            if (result == HomePairSensorMethod.scanQr) {
+                              if (!context.mounted) return;
+
+                              final code = await openQRScanner(context);
+
+                              if (code != null) {
+                                pairSensor(code);
+                              }
+                            }
+
+                            if (result == HomePairSensorMethod.manualHubId) {
+                              if (!context.mounted) return;
+
+                              final hubId = await showPairDialog(context);
+
+                              if (hubId == null || hubId.trim().isEmpty) return;
+
+                              pairSensor(hubId.trim());
+                            }
+                          },
+                          onTapDevice: openSelectedDeviceDetail,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -3376,7 +3391,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                   if (!context.mounted) return;
 
-                  final alarmScheduleText = formatAlarmSchedules().trim().isEmpty
+                  final alarmScheduleText =
+                      formatAlarmSchedules().trim().isEmpty
                       ? _strings.t("Chưa thiết lập thời gian")
                       : formatAlarmSchedules();
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 void showAllDevicesSheet({
   required BuildContext context,
   required Map<String, dynamic> devices,
@@ -10,13 +12,13 @@ void showAllDevicesSheet({
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     builder: (_) {
+      final strings = AppStrings.of(context);
+
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(28),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -32,9 +34,9 @@ void showAllDevicesSheet({
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  "Toàn bộ thiết bị SafeHome",
-                  style: TextStyle(
+                Text(
+                  strings.t("Toàn bộ thiết bị SafeHome"),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                   ),
@@ -43,7 +45,7 @@ void showAllDevicesSheet({
                 _deviceGroup(
                   context: context,
                   devices: devices,
-                  title: "An ninh ra/vào",
+                  title: strings.t("An ninh ra/vào"),
                   icon: Icons.door_front_door_rounded,
                   color: Colors.brown,
                   onTapDevice: onTapDevice,
@@ -85,7 +87,7 @@ void showAllDevicesSheet({
                 _deviceGroup(
                   context: context,
                   devices: devices,
-                  title: "Nguy hiểm khẩn cấp",
+                  title: strings.t("Nguy hiểm khẩn cấp"),
                   icon: Icons.warning_rounded,
                   color: Colors.red,
                   onTapDevice: onTapDevice,
@@ -119,13 +121,13 @@ void showAllDevicesSheet({
                 _deviceGroup(
                   context: context,
                   devices: devices,
-                  title: "Môi trường",
+                  title: strings.t("Môi trường"),
                   icon: Icons.thermostat_rounded,
                   color: Colors.blue,
                   onTapDevice: onTapDevice,
                   items: const [
                     {
-                      "name": "Nhiệt độ / Độ ẩm",
+                      "name": "Nhiệt độ/Độ ẩm",
                       "types": ["temperature"],
                     },
                     {
@@ -145,7 +147,7 @@ void showAllDevicesSheet({
                 _deviceGroup(
                   context: context,
                   devices: devices,
-                  title: "Điều khiển & tự động hóa",
+                  title: strings.t("Điều khiển & hạ tầng"),
                   icon: Icons.tune_rounded,
                   color: Colors.teal,
                   onTapDevice: onTapDevice,
@@ -174,16 +176,6 @@ void showAllDevicesSheet({
                       "name": "Bàn phím an ninh",
                       "types": ["keypad"],
                     },
-                  ],
-                ),
-                _deviceGroup(
-                  context: context,
-                  devices: devices,
-                  title: "Hạ tầng hệ thống",
-                  icon: Icons.settings_input_antenna_rounded,
-                  color: Colors.deepPurple,
-                  onTapDevice: onTapDevice,
-                  items: const [
                     {
                       "name": "Bộ mở rộng sóng",
                       "types": ["repeater"],
@@ -325,10 +317,8 @@ Widget _deviceGroup({
           _deviceTypeRow(
             context: context,
             devices: devices,
-            name: item["name"]?.toString() ?? "",
-            types: List<String>.from(
-              item["types"] ?? const <String>[],
-            ),
+            name: AppStrings.of(context).t(item["name"]?.toString() ?? ""),
+            types: List<String>.from(item["types"] ?? const <String>[]),
             onTapDevice: onTapDevice,
           ),
       ],
@@ -345,8 +335,7 @@ Widget _deviceTypeRow({
 }) {
   final matched = devices.entries.where((entry) {
     final device = _safeDeviceMap(entry.value);
-    final type =
-        device["type"]?.toString().trim().toLowerCase() ?? "unknown";
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
 
     return types.contains(type);
   }).toList();
@@ -358,18 +347,18 @@ Widget _deviceTypeRow({
     onTap: count == 0
         ? null
         : () {
-      if (count == 1) {
-        onTapDevice(matched.first.key);
-        return;
-      }
+            if (count == 1) {
+              onTapDevice(matched.first.key);
+              return;
+            }
 
-      _showDevicePicker(
-        context: context,
-        title: name,
-        devices: matched,
-        onTapDevice: onTapDevice,
-      );
-    },
+            _showDevicePicker(
+              context: context,
+              title: name,
+              devices: matched,
+              onTapDevice: onTapDevice,
+            );
+          },
     child: Padding(
       padding: const EdgeInsets.only(bottom: 7),
       child: Row(
@@ -393,10 +382,7 @@ Widget _deviceTypeRow({
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8,
-              vertical: 3,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               color: count > 0
                   ? Colors.green.withValues(alpha: 0.12)
@@ -432,9 +418,7 @@ void _showDevicePicker({
           padding: const EdgeInsets.all(18),
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(26),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -451,27 +435,22 @@ void _showDevicePicker({
                 ListTile(
                   leading: Icon(
                     _deviceIcon(
-                      _safeDeviceMap(
-                        entry.value,
-                      )["type"]?.toString() ??
+                      _safeDeviceMap(entry.value)["type"]?.toString() ??
                           "unknown",
                     ),
                   ),
                   title: Text(
-                    _safeDeviceMap(entry.value)["name"]
-                        ?.toString() ??
+                    _safeDeviceMap(entry.value)["name"]?.toString() ??
                         entry.key,
                   ),
-                  trailing: const Icon(
-                    Icons.chevron_right_rounded,
-                  ),
+                  trailing: const Icon(Icons.chevron_right_rounded),
                   onTap: () {
                     final deviceId = entry.key;
                     Navigator.pop(context);
 
                     Future.delayed(
                       const Duration(milliseconds: 180),
-                          () => onTapDevice(deviceId),
+                      () => onTapDevice(deviceId),
                     );
                   },
                 ),

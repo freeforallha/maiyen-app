@@ -8,6 +8,7 @@ import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -30,6 +31,16 @@ class _AllHomePageState extends State<AllHomePage> {
   bool isSearching = false;
   int summaryIndex = 0;
   Timer? summaryTimer;
+
+  String selectedHomeCountText([int? count]) {
+    final value = count ?? selectedHomes.length;
+
+    return _strings.choose(
+      vi: "$value nhà đã chọn",
+      en: "$value homes selected",
+      zh: "已选择 $value 个家庭",
+    );
+  }
 
   List<String> buildAllHomeSummaries() {
     int safeCount = 0;
@@ -71,6 +82,9 @@ class _AllHomePageState extends State<AllHomePage> {
           en:
               "🚨 $dangerCount unsafe homes"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+          zh:
+              "🚨 $dangerCount 个家庭不安全"
+              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
         ),
       );
     }
@@ -84,6 +98,9 @@ class _AllHomePageState extends State<AllHomePage> {
           en:
               "⚠️ $warningCount homes need attention"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+          zh:
+              "⚠️ $warningCount 个家庭需要注意"
+              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
         ),
       );
     }
@@ -93,12 +110,19 @@ class _AllHomePageState extends State<AllHomePage> {
         _strings.choose(
           vi: "✅ $safeCount nhà an toàn",
           en: "✅ $safeCount safe homes",
+          zh: "✅ $safeCount 个家庭安全",
         ),
       );
     }
 
     return summaries.isEmpty
-        ? [_strings.choose(vi: "🏡 Chưa có nhà nào", en: "🏡 No homes yet")]
+        ? [
+            _strings.choose(
+              vi: "🏡 Chưa có nhà nào",
+              en: "🏡 No homes yet",
+              zh: "🏡 暂无家庭",
+            ),
+          ]
         : summaries;
   }
 
@@ -303,6 +327,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           _strings.choose(
                             vi: "${homes.length} nhà đang được theo dõi",
                             en: "${homes.length} homes monitored",
+                            zh: "正在监测 ${homes.length} 个家庭",
                           ),
                           style: TextStyle(
                             fontSize: 13,
@@ -325,7 +350,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           compact: true,
                         ),
                         section(
-                          title: "An toàn",
+                          title: _strings.t("An toàn"),
                           icon: Icons.check_circle_rounded,
                           color: SafeHomeColors.safe,
                           items: safeHomes,
@@ -885,7 +910,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     "${h.text.trim().padLeft(2, '0')}:${m.text.trim().padLeft(2, '0')}";
                 Navigator.pop(context, value);
               },
-              child: const Text("OK"),
+              child: Text(_strings.t("OK")),
             ),
           ],
         ),
@@ -894,10 +919,14 @@ class _AllHomePageState extends State<AllHomePage> {
 
     String repeatLabel(int minutes) {
       if (minutes <= 0) {
-        return _strings.choose(vi: "Không lặp lại", en: "No repeat");
+        return _strings.choose(vi: "Không lặp lại", en: "No repeat", zh: "不重复");
       }
 
-      return _strings.choose(vi: "$minutes phút", en: "$minutes minutes");
+      return _strings.choose(
+        vi: "$minutes phút",
+        en: "$minutes minutes",
+        zh: "$minutes 分钟",
+      );
     }
 
     Future<int?> inputRepeatMinutes(int initial) async {
@@ -914,6 +943,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   _strings.choose(
                     vi: "Thời gian lặp lại Alarm",
                     en: "Alarm repeat time",
+                    zh: "Alarm 重复时间",
                   ),
                 ),
                 content: InputDecorator(
@@ -921,6 +951,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     labelText: _strings.choose(
                       vi: "Lặp lại khi sự cố vẫn còn",
                       en: "Repeat while the issue remains",
+                      zh: "问题仍存在时重复",
                     ),
                     prefixIcon: const Icon(
                       Icons.replay_rounded,
@@ -989,12 +1020,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     color: Colors.orange,
                   ),
                   title: Text(_strings.t("Đặt Home Reminder")),
-                  subtitle: Text(
-                    _strings.choose(
-                      vi: "${selectedHomes.length} nhà đã chọn",
-                      en: "${selectedHomes.length} homes selected",
-                    ),
-                  ),
+                  subtitle: Text(selectedHomeCountText()),
                   onTap: () => Navigator.pop(context, "reminder"),
                 ),
                 ListTile(
@@ -1003,12 +1029,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     color: Colors.red,
                   ),
                   title: Text(_strings.t("Đặt Home Alarm")),
-                  subtitle: Text(
-                    _strings.choose(
-                      vi: "${selectedHomes.length} nhà đã chọn",
-                      en: "${selectedHomes.length} homes selected",
-                    ),
-                  ),
+                  subtitle: Text(selectedHomeCountText()),
                   onTap: () => Navigator.pop(context, "alarm"),
                 ),
               ],
@@ -1031,10 +1052,12 @@ class _AllHomePageState extends State<AllHomePage> {
               ? _strings.choose(
                   vi: "Xác nhận thay đổi Reminder",
                   en: "Confirm Reminder changes",
+                  zh: "确认更改 Reminder",
                 )
               : _strings.choose(
                   vi: "Xác nhận thay đổi Alarm",
                   en: "Confirm Alarm changes",
+                  zh: "确认更改 Alarm",
                 ),
         ),
         content: Text(
@@ -1048,6 +1071,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "This will add a Home Reminder to the selected homes.\n\n"
                       "Members using Home Reminder settings will be affected.\n"
                       "Personal Reminder settings will not be changed.",
+                  zh:
+                      "此操作会为所选家庭添加 Home Reminder。\n\n"
+                      "正在使用按家庭 Reminder 设置的成员会受到影响。\n"
+                      "处于仅自己模式的个人 Reminder 不会改变。",
                 )
               : _strings.choose(
                   vi:
@@ -1058,6 +1085,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "This will change Home Alarm schedules for all security devices in the selected homes.\n\n"
                       "Members using Home Alarm settings will be affected.\n"
                       "Personal Alarm settings will not be changed.",
+                  zh:
+                      "此操作会更改所选家庭中所有安全设备的 Home Alarm 计划。\n\n"
+                      "正在使用按家庭 Alarm 设置的成员会受到影响。\n"
+                      "处于仅自己模式的个人 Alarm 不会改变。",
                 ),
         ),
         actions: [
@@ -1211,6 +1242,9 @@ class _AllHomePageState extends State<AllHomePage> {
                   en:
                       "Reminder was set for $updatedHomes homes."
                       "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+                  zh:
+                      "已为 $updatedHomes 个家庭设置 Reminder。"
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
                 )
               : _strings.choose(
                   vi:
@@ -1221,6 +1255,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "Alarm was set for $updatedDevices devices across $updatedHomes homes.\n"
                       "Repeat time: ${repeatLabel(selectedAlarmRepeatMinutes)}."
                       "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
+                  zh:
+                      "已为 $updatedHomes 个家庭中的 $updatedDevices 台设备设置 Alarm。\n"
+                      "重复时间：${repeatLabel(selectedAlarmRepeatMinutes)}。"
+                      "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
                 ),
         ),
         actions: [
@@ -1249,21 +1287,24 @@ class _AllHomePageState extends State<AllHomePage> {
     if (sharedCount > 0 && ownCount > 0) {
       message = _strings.choose(
         vi:
-            "Các home của bạn sẽ bị xoá.\n"
-            "Các home được chia sẻ sẽ được rời khỏi.",
+            "Các nhà của bạn sẽ bị xoá.\n"
+            "Các nhà được chia sẻ sẽ được rời khỏi.",
         en:
             "Your homes will be deleted.\n"
             "You will leave the shared homes.",
+        zh: "你的家庭将被删除。\n你将离开共享家庭。",
       );
     } else if (sharedCount > 0) {
       message = _strings.choose(
-        vi: "Bạn sẽ rời khỏi các home được chia sẻ.",
+        vi: "Bạn sẽ rời khỏi các nhà được chia sẻ.",
         en: "You will leave the shared homes.",
+        zh: "你将离开共享家庭。",
       );
     } else {
       message = _strings.choose(
-        vi: "Các home đã chọn sẽ bị xoá vĩnh viễn.",
-        en: "The selected homes will be permanently deleted.",
+        vi: "Các nhà đã chọn sẽ bị xoá vĩnh viễn.",
+        en: "Selected homes will be permanently deleted.",
+        zh: "所选家庭将被永久删除。",
       );
     }
 
@@ -1525,7 +1566,7 @@ class _AllHomePageState extends State<AllHomePage> {
     showTopToast(
       context,
       sharedCount > 0 && ownCount == 0
-          ? _strings.t("Đã rời khỏi home")
+          ? _strings.choose(vi: "Đã rời khỏi nhà", en: "Left home", zh: "已离开家庭")
           : _strings.t("Đã cập nhật"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
@@ -1573,7 +1614,11 @@ class _AllHomePageState extends State<AllHomePage> {
                 controller: searchController,
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: _strings.t("Tìm home..."),
+                  hintText: _strings.choose(
+                    vi: "Tìm nhà...",
+                    en: "Search homes...",
+                    zh: "搜索家庭...",
+                  ),
                   border: InputBorder.none,
                   filled: false,
                   contentPadding: EdgeInsets.zero,
@@ -1739,12 +1784,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           _strings.t("Đặt Reminder / Alarm nhà đã chọn"),
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text(
-                          _strings.choose(
-                            vi: "${selectedHomes.length} nhà đã chọn",
-                            en: "${selectedHomes.length} homes selected",
-                          ),
-                        ),
+                        subtitle: Text(selectedHomeCountText()),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: setSelectedHomesAlarm,
                       ),
@@ -1765,12 +1805,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           _strings.t("Chia sẻ nhà đã chọn"),
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text(
-                          _strings.choose(
-                            vi: "${selectedHomes.length} nhà đã chọn",
-                            en: "${selectedHomes.length} homes selected",
-                          ),
-                        ),
+                        subtitle: Text(selectedHomeCountText()),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
                           final controller = TextEditingController();
@@ -1830,8 +1865,10 @@ class _AllHomePageState extends State<AllHomePage> {
                                         ),
                                       ),
                                       Text(
-                                        _strings.t(
-                                          "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                        _strings.choose(
+                                          vi: "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                          en: "Or scan the QR code to request access to the selected homes",
+                                          zh: "或扫描二维码申请加入所选家庭",
                                         ),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -1845,10 +1882,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                       ),
                                       const SizedBox(height: 18),
                                       Text(
-                                        _strings.choose(
-                                          vi: "${selectedHomes.length} nhà đã chọn",
-                                          en: "${selectedHomes.length} homes selected",
-                                        ),
+                                        selectedHomeCountText(),
                                         style: TextStyle(
                                           color: Colors.grey.shade600,
                                           fontWeight: FontWeight.w500,
@@ -1987,10 +2021,12 @@ class _AllHomePageState extends State<AllHomePage> {
                                     ? _strings.choose(
                                         vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
                                         en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
+                                        zh: "已共享你有权限管理的家庭。\n\n$skipped 个家庭因没有共享权限而被跳过。",
                                       )
                                     : _strings.choose(
                                         vi: "Đã chia sẻ nhà thành công.",
                                         en: "Homes shared successfully.",
+                                        zh: "家庭共享成功。",
                                       ),
                               ),
                               actions: [
@@ -2019,15 +2055,10 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                         ),
                         title: Text(
-                          _strings.t("Mở List chia sẻ nhà"),
+                          _strings.t("Mở danh sách chia sẻ nhà"),
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text(
-                          _strings.choose(
-                            vi: "${selectedHomes.length} nhà đã chọn",
-                            en: "${selectedHomes.length} homes selected",
-                          ),
-                        ),
+                        subtitle: Text(selectedHomeCountText()),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
                           final currentUser = FirebaseAuth.instance.currentUser;
@@ -2226,18 +2257,13 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                         ),
                         title: Text(
-                          _strings.t("Xoá các nhà đã chọn ?"),
+                          _strings.t("Xoá các nhà đã chọn?"),
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.red,
                           ),
                         ),
-                        subtitle: Text(
-                          _strings.choose(
-                            vi: "${selectedHomes.length} nhà đã chọn",
-                            en: "${selectedHomes.length} homes selected",
-                          ),
-                        ),
+                        subtitle: Text(selectedHomeCountText()),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: confirmDeleteSelected,
                       ),

@@ -9,11 +9,13 @@ import '../services/chat_service.dart';
 import '../services/home_notification_service.dart';
 import '../services/notification_service.dart';
 import '../helpers/firebase_paths.dart';
+import '../localization/app_strings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -26,6 +28,7 @@ void showHomeChatSheet({
 }) {
   final user = FirebaseAuth.instance.currentUser;
   if (user == null) return;
+  final strings = AppStrings.of(context);
 
   final controller = TextEditingController();
   final scrollController = ScrollController(initialScrollOffset: 0);
@@ -397,9 +400,13 @@ void showHomeChatSheet({
 
                         const SizedBox(height: 12),
 
-                        const Text(
-                          "Chưa có số điện thoại",
-                          style: TextStyle(
+                        Text(
+                          strings.choose(
+                            vi: "Chưa có số điện thoại",
+                            en: "No phone number",
+                            zh: "暂无电话号码",
+                          ),
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                           ),
@@ -408,7 +415,11 @@ void showHomeChatSheet({
                         const SizedBox(height: 6),
 
                         Text(
-                          "$name chưa cập nhật số điện thoại trong hồ sơ.",
+                          strings.choose(
+                            vi: "$name chưa cập nhật số điện thoại trong hồ sơ.",
+                            en: "$name has not added a phone number to their profile.",
+                            zh: "$name 尚未在个人资料中添加电话号码。",
+                          ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
@@ -428,7 +439,7 @@ void showHomeChatSheet({
                                 rootNavigator: true,
                               ).pop();
                             },
-                            child: const Text("Đã hiểu"),
+                            child: Text(strings.t("Đã hiểu")),
                           ),
                         ),
                       ],
@@ -441,7 +452,7 @@ void showHomeChatSheet({
                       color: Colors.green,
                     ),
                     title: Text(phone),
-                    subtitle: const Text("Gọi điện"),
+                    subtitle: Text(strings.t("Gọi điện")),
                     onTap: () async {
                       final uri = Uri(
                         scheme: "tel",
@@ -455,7 +466,11 @@ void showHomeChatSheet({
 
                         showTopToast(
                           sheetContext,
-                          "Không mở được ứng dụng gọi điện",
+                          strings.choose(
+                            vi: "Không mở được ứng dụng gọi điện",
+                            en: "Could not open the phone app",
+                            zh: "无法打开拨号应用",
+                          ),
                           color: Colors.red,
                           icon: Icons.phone_disabled_rounded,
                         );
@@ -819,7 +834,7 @@ void showHomeChatSheet({
 
               final senderName = userName.trim().isNotEmpty
                   ? userName.trim()
-                  : "Một thành viên";
+                  : strings.t("Một thành viên");
 
               final preview = text.length > 90
                   ? "${text.substring(0, 90)}..."
@@ -832,7 +847,11 @@ void showHomeChatSheet({
                   type: "chat",
                   category: "chat",
                   severity: "info",
-                  title: "Tin nhắn mới trong $homeName",
+                  title: strings.choose(
+                    vi: "Tin nhắn mới trong $homeName",
+                    en: "New message in $homeName",
+                    zh: "$homeName 有新消息",
+                  ),
                   message: "$senderName: $preview",
                   entityType: "chat",
                   entityId: messageId,
@@ -988,7 +1007,7 @@ void showHomeChatSheet({
                               child: Text(
                                 homeName.isNotEmpty
                                     ? homeName
-                                    : "Chat trong nhà",
+                                    : strings.t("Chat trong nhà"),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -1001,7 +1020,7 @@ void showHomeChatSheet({
                             const Spacer(),
 
                             IconButton(
-                              tooltip: "Tìm kiếm tin nhắn",
+                              tooltip: strings.t("Tìm kiếm tin nhắn"),
                               icon: Icon(
                                 isSearching
                                     ? Icons.search_off_rounded
@@ -1011,7 +1030,7 @@ void showHomeChatSheet({
                             ),
 
                             IconButton(
-                              tooltip: "Xem thành viên",
+                              tooltip: strings.t("Xem thành viên"),
                               icon: const Icon(Icons.people_alt_rounded),
                               onPressed: () {
                                 showShareListSheet(
@@ -1042,12 +1061,14 @@ void showHomeChatSheet({
                               });
                             },
                             decoration: InputDecoration(
-                              hintText: "Tìm nội dung hoặc tên người gửi",
+                              hintText: strings.t(
+                                "Tìm nội dung hoặc tên người gửi",
+                              ),
                               prefixIcon: const Icon(Icons.search_rounded),
                               suffixIcon: searchController.text.isEmpty
                                   ? null
                                   : IconButton(
-                                      tooltip: "Xoá từ khoá",
+                                      tooltip: strings.t("Xoá từ khoá"),
                                       icon: const Icon(Icons.close_rounded),
                                       onPressed: () {
                                         searchController.clear();
@@ -1076,9 +1097,12 @@ void showHomeChatSheet({
                                   Expanded(
                                     child: Text(
                                       currentSearchResultIds.isEmpty
-                                          ? "Không có kết quả"
-                                          : "${activeSearchResult + 1}/"
-                                                "${currentSearchResultIds.length} kết quả",
+                                          ? strings.t("Không có kết quả")
+                                          : strings.choose(
+                                              vi: "${activeSearchResult + 1}/${currentSearchResultIds.length} kết quả",
+                                              en: "${activeSearchResult + 1}/${currentSearchResultIds.length} results",
+                                              zh: "${activeSearchResult + 1}/${currentSearchResultIds.length} 个结果",
+                                            ),
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade700,
@@ -1087,7 +1111,7 @@ void showHomeChatSheet({
                                     ),
                                   ),
                                   IconButton(
-                                    tooltip: "Kết quả trước",
+                                    tooltip: strings.t("Kết quả trước"),
                                     visualDensity: VisualDensity.compact,
                                     onPressed: currentSearchResultIds.isEmpty
                                         ? null
@@ -1097,7 +1121,7 @@ void showHomeChatSheet({
                                     ),
                                   ),
                                   IconButton(
-                                    tooltip: "Kết quả tiếp theo",
+                                    tooltip: strings.t("Kết quả tiếp theo"),
                                     visualDensity: VisualDensity.compact,
                                     onPressed: currentSearchResultIds.isEmpty
                                         ? null
@@ -1125,7 +1149,7 @@ void showHomeChatSheet({
                               if (data == null) {
                                 return Center(
                                   child: Text(
-                                    "Chưa có tin nhắn",
+                                    strings.t("Chưa có tin nhắn"),
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                     ),
@@ -1809,11 +1833,13 @@ void showHomeChatSheet({
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: filteredMentionMembers.isEmpty
-                                ? const Padding(
-                                    padding: EdgeInsets.all(14),
+                                ? Padding(
+                                    padding: const EdgeInsets.all(14),
                                     child: Text(
-                                      "Không tìm thấy thành viên phù hợp",
-                                      style: TextStyle(
+                                      strings.t(
+                                        "Không tìm thấy thành viên phù hợp",
+                                      ),
+                                      style: const TextStyle(
                                         color: SafeHomeColors.textSecondary,
                                         fontSize: 13,
                                         fontWeight: FontWeight.w600,
@@ -1862,9 +1888,9 @@ void showHomeChatSheet({
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
-                                        subtitle: const Text(
-                                          "Nhắc đến trong tin nhắn",
-                                          style: TextStyle(fontSize: 11),
+                                        subtitle: Text(
+                                          strings.t("Nhắc đến trong tin nhắn"),
+                                          style: const TextStyle(fontSize: 11),
                                         ),
                                         onTap: () => selectMention(member),
                                       );
@@ -1906,7 +1932,11 @@ void showHomeChatSheet({
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Đang trả lời ${replyDisplayName(replyingToMessage)}",
+                                          strings.choose(
+                                            vi: "Đang trả lời ${replyDisplayName(replyingToMessage)}",
+                                            en: "Replying to ${replyDisplayName(replyingToMessage)}",
+                                            zh: "正在回复 ${replyDisplayName(replyingToMessage)}",
+                                          ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -1932,7 +1962,7 @@ void showHomeChatSheet({
                                     ),
                                   ),
                                   IconButton(
-                                    tooltip: "Huỷ trả lời",
+                                    tooltip: strings.t("Huỷ trả lời"),
                                     visualDensity: VisualDensity.compact,
                                     onPressed: cancelReply,
                                     icon: const Icon(
@@ -1975,7 +2005,7 @@ void showHomeChatSheet({
                                 minLines: 1,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  hintText: "Nhắn gì đó...",
+                                  hintText: strings.t("Nhắn gì đó..."),
                                   filled: true,
                                   fillColor: Colors.grey.shade100,
                                   border: OutlineInputBorder(
