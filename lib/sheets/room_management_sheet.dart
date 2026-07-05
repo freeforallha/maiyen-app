@@ -2,6 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../helpers/top_toast.dart';
+
 Future<void> showRoomManagementSheet({
   required BuildContext context,
   required String ownerUid,
@@ -28,8 +30,11 @@ Future<void> showRoomManagementSheet({
 
     if (sharedOwnerUid != ownerUid || role != "admin") {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Bạn không có quyền quản lý phòng")),
+        showTopToast(
+          context,
+          "Bạn không có quyền quản lý phòng",
+          color: Colors.red,
+          icon: Icons.lock_rounded,
         );
       }
 
@@ -213,8 +218,11 @@ Future<void> showRoomManagementSheet({
                   if (existing == normalized) {
                     if (!context.mounted) return;
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Tên phòng đã tồn tại")),
+                    showTopToast(
+                      context,
+                      "Tên phòng đã tồn tại",
+                      color: Colors.orange,
+                      icon: Icons.info_rounded,
                     );
                     return;
                   }

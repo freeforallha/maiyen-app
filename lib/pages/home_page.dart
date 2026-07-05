@@ -46,7 +46,7 @@ import '../services/auto_away_service.dart';
 import '../services/session_logout_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -385,7 +385,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       useCustomMode = modeSnapshot.value?.toString() == "custom";
     } catch (error) {
-      debugPrint("READ_ALARM_MODE_FOR_REMINDER_ERROR: $error");
+      safeDebugPrint("READ_ALARM_MODE_FOR_REMINDER_ERROR: $error");
     }
 
     if (!mounted) {
@@ -651,9 +651,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         break;
     }
 
+    final nextMode = plan.nextMode;
+
+    if (nextMode == "normal" &&
+        safeMap(currentHome["autoAway"])["enabled"] == true) {
+      final confirmed = await showConfirmNormalModeWithAutoAwayDialog(
+        context: context,
+        strings: _strings,
+      );
+
+      if (!confirmed || !mounted) {
+        return;
+      }
+    }
+
     final ownerUid = getHomeOwnerUid();
     final homeName = getHomeDisplayName(homeId);
-    final nextMode = plan.nextMode;
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : FirebaseAuth.instance.currentUser?.email?.trim() ?? "Một thành viên";
@@ -924,7 +937,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               homes: homes,
               force: true,
             ).catchError((Object error) {
-              debugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
+              safeDebugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
             }),
           );
           unawaited(_syncAutoAwayLocationMonitoring());
@@ -1033,7 +1046,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             strings: _strings,
           )
           .catchError((Object error) {
-            debugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
+            safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
           }),
     );
 
@@ -1197,43 +1210,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void syncHomePresenceListeners() {
-    if (!mounted || uid.isEmpty) return;
-
-    _homeRealtimeCoordinator.syncHomePresenceListeners(
-      uid: uid,
-      homes: homes,
-      onPresenceChanged: ({
-        required String homeId,
-        required Map<String, dynamic> presenceSummary,
-        required Map<String, dynamic> memberPresenceStatus,
-      }) {
-        if (!mounted || !homes.containsKey(homeId)) {
-          return;
-        }
-
-        setState(() {
-          final cachedHome = safeMap(homes[homeId]);
-          final currentMemberPresenceStatus = safeMap(
-            cachedHome["memberPresenceStatus"],
-          );
-          final nextMemberPresenceStatus = <String, dynamic>{
-            ...currentMemberPresenceStatus,
-          };
-
-          for (final entry in memberPresenceStatus.entries) {
-            nextMemberPresenceStatus[entry.key.toString()] = safeMap(
-              entry.value,
-            );
-          }
-
-          cachedHome["presenceSummary"] = Map<String, dynamic>.from(
-            presenceSummary,
-          );
-          cachedHome["memberPresenceStatus"] = nextMemberPresenceStatus;
-          homes[homeId] = cachedHome;
-        });
-      },
-    );
+    // presenceSummary/memberPresenceStatus là dữ liệu chuẩn do backend ghi
+    // tại accounts/{ownerUid}/homes/{homeId}. Home listener đã nhận realtime
+    // dữ liệu này cho cả chủ nhà và nhà được chia sẻ.
+    //
+    // Không tự tổng hợp lại từ từng accounts/{memberUid}/homePresence ở app,
+    // vì mỗi thiết bị có quyền đọc/cache/listener khác nhau và có thể hiển thị
+    // số inside/outside/unknown không đồng nhất với Firebase.
+    _homeRealtimeCoordinator.stopHomePresenceListeners();
   }
 
   void syncDeviceNotificationBridge() {
@@ -1387,7 +1371,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     try {
       await FirebaseDatabase.instance.ref().update(updates);
     } catch (error) {
-      debugPrint("SYNC_HOME_MEMBER_CONTACT_ERROR: $error");
+      safeDebugPrint("SYNC_HOME_MEMBER_CONTACT_ERROR: $error");
     }
   }
 
@@ -1507,7 +1491,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
           Object error,
         ) {
-          debugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
+          safeDebugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
         }),
       );
     }
@@ -3120,6 +3104,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       en: "Pairing: $pairingCountdown s",
     );
     final canManageSelectedHome = canManageHome();
+    const bottomBarHeight = 68.0;
+    const bottomBarHorizontalInset = 12.0;
+    const bottomBarBottomGap = 10.0;
+    const deviceListBottomBreathingRoom = 24.0;
+    final bottomSafeInset = MediaQuery.paddingOf(context).bottom;
+    final bottomBarBottomInset = bottomSafeInset > bottomBarBottomGap
+        ? bottomSafeInset
+        : bottomBarBottomGap;
+    final deviceListBottomPadding =
+        bottomBarHeight + bottomBarBottomInset + deviceListBottomBreathingRoom;
 
     return Scaffold(
       extendBody: true,
@@ -3137,9 +3131,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ],
           ),
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
+        child: Stack(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
               HomeHeaderBar(
                 notificationTooltip: _strings.t("Thông báo Home"),
                 unreadHomeNotificationCount: unreadHomeNotificationCount,
@@ -3240,6 +3237,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       devices: devices,
                       selectedRoomId: selectedRoomId,
                       securityMode: securityMode,
+                      bottomPadding: deviceListBottomPadding,
                       header: HomeOverviewHeader(
                         ownerUid: overviewOwnerUid,
                         homeId: selectedHome,
@@ -3359,47 +3357,55 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   ],
                 ),
               ),
-            ],
-          ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: bottomBarHorizontalInset,
+              right: bottomBarHorizontalInset,
+              bottom: bottomBarBottomInset,
+              child: HomeBottomBar(
+                addHomeTooltip: _strings.t("Thêm Home"),
+                unreadChatCount: unreadChatByHome[selectedHome] ?? 0,
+                inviteCount: shareRequests.length,
+                alarmEnabled: alarmEnabled,
+                onAddHome: showAddHomeOptions,
+                onOpenChat: openSelectedHomeChat,
+                onOpenAlarm: () async {
+                  final reminderEnabled = await hasEnabledReminderSchedule();
+
+                  if (!context.mounted) return;
+
+                  final alarmScheduleText = formatAlarmSchedules().trim().isEmpty
+                      ? _strings.t("Chưa thiết lập thời gian")
+                      : formatAlarmSchedules();
+
+                  await showHomeAlarmMenuSheet(
+                    context: context,
+                    strings: _strings,
+                    alarmEnabled: alarmEnabled,
+                    reminderEnabled: reminderEnabled,
+                    alarmScheduleText: alarmScheduleText,
+                    alarmPauseToday: alarmPauseToday,
+                    onAlarmEnabledChanged: setAlarmEnabled,
+                    onOpenAlarmSchedule: openAlarmDeviceSheet,
+                    onOpenAlarmPause: () async {
+                      await Future<void>.delayed(
+                        const Duration(milliseconds: 120),
+                      );
+
+                      if (!mounted) return;
+
+                      await openAlarmPauseSheetWithReminder();
+                    },
+                    onOpenReminderSchedule: openScheduleNotificationSheet,
+                  );
+                },
+                onOpenSettings: openSettingsCoordinator,
+              ),
+            ),
+          ],
         ),
-      ),
-
-      bottomNavigationBar: HomeBottomBar(
-        addHomeTooltip: _strings.t("Thêm Home"),
-        unreadChatCount: unreadChatByHome[selectedHome] ?? 0,
-        inviteCount: shareRequests.length,
-        alarmEnabled: alarmEnabled,
-        onAddHome: showAddHomeOptions,
-        onOpenChat: openSelectedHomeChat,
-        onOpenAlarm: () async {
-          final reminderEnabled = await hasEnabledReminderSchedule();
-
-          if (!context.mounted) return;
-
-          final alarmScheduleText = formatAlarmSchedules().trim().isEmpty
-              ? _strings.t("Chưa thiết lập thời gian")
-              : formatAlarmSchedules();
-
-          await showHomeAlarmMenuSheet(
-            context: context,
-            strings: _strings,
-            alarmEnabled: alarmEnabled,
-            reminderEnabled: reminderEnabled,
-            alarmScheduleText: alarmScheduleText,
-            alarmPauseToday: alarmPauseToday,
-            onAlarmEnabledChanged: setAlarmEnabled,
-            onOpenAlarmSchedule: openAlarmDeviceSheet,
-            onOpenAlarmPause: () async {
-              await Future<void>.delayed(const Duration(milliseconds: 120));
-
-              if (!mounted) return;
-
-              await openAlarmPauseSheetWithReminder();
-            },
-            onOpenReminderSchedule: openScheduleNotificationSheet,
-          );
-        },
-        onOpenSettings: openSettingsCoordinator,
       ),
     );
   }

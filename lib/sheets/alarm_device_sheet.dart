@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   final value = rawValue is num
       ? rawValue.toInt()
@@ -214,11 +215,14 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Không thể lưu chế độ Alarm")),
+      showTopToast(
+        context,
+        "Không thể lưu chế độ Alarm",
+        color: SafeHomeColors.danger,
+        icon: Icons.error_rounded,
       );
 
-      debugPrint("SAVE_ALARM_MODE_ERROR: $error");
+      safeDebugPrint("SAVE_ALARM_MODE_ERROR: $error");
     } finally {
       if (mounted) {
         setState(() {
@@ -237,12 +241,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
     if (mode == "home" && !widget.canManageHome) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
-            ),
-          ),
+        showTopToast(
+          context,
+          "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+          color: SafeHomeColors.danger,
+          icon: Icons.lock_rounded,
         );
       }
       return;
@@ -255,10 +258,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
     if (securityEntries.isEmpty) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Nhà chưa có thiết bị an ninh để áp dụng"),
-          ),
+        showTopToast(
+          context,
+          "Nhà chưa có thiết bị an ninh để áp dụng",
+          color: Colors.orange,
+          icon: Icons.sensors_off_rounded,
         );
       }
       return;
@@ -318,12 +322,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
   Future<void> showQuickAlarmForAllSheet() async {
     if (mode == "home" && !widget.canManageHome) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
-          ),
-        ),
+      showTopToast(
+        context,
+        "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+        color: SafeHomeColors.danger,
+        icon: Icons.lock_rounded,
       );
       return;
     }
@@ -334,10 +337,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     }).toList();
 
     if (securityEntries.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Nhà chưa có thiết bị an ninh để áp dụng"),
-        ),
+      showTopToast(
+        context,
+        "Nhà chưa có thiết bị an ninh để áp dụng",
+        color: Colors.orange,
+        icon: Icons.sensors_off_rounded,
       );
       return;
     }
@@ -393,12 +397,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 Navigator.of(sheetContext).pop();
 
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
-                      ),
-                    ),
+                  showTopToast(
+                    context,
+                    "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
+                    color: SafeHomeColors.success,
+                    icon: Icons.check_circle_rounded,
                   );
                 }
               } catch (error) {
@@ -410,15 +413,14 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   saving = false;
                 });
 
-                ScaffoldMessenger.of(sheetContext).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Không thể áp dụng Alarm cho toàn bộ thiết bị",
-                    ),
-                  ),
+                showTopToast(
+                  sheetContext,
+                  "Không thể áp dụng Alarm cho toàn bộ thiết bị",
+                  color: SafeHomeColors.danger,
+                  icon: Icons.error_rounded,
                 );
 
-                debugPrint("SAVE_ALL_SECURITY_ALARMS_ERROR: $error");
+                safeDebugPrint("SAVE_ALL_SECURITY_ALARMS_ERROR: $error");
               }
             }
 
@@ -571,10 +573,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   Future<void> saveAlarm(String deviceId, Map<String, dynamic> alarm) async {
     if (mode == "home" && !widget.canManageHome) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Bạn không có quyền sửa lịch Alarm của nhà"),
-          ),
+        showTopToast(
+          context,
+          "Bạn không có quyền sửa lịch Alarm của nhà",
+          color: SafeHomeColors.danger,
+          icon: Icons.lock_rounded,
         );
       }
 

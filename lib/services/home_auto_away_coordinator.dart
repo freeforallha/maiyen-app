@@ -6,11 +6,15 @@ import 'package:geolocator/geolocator.dart';
 import '../helpers/home_helper.dart';
 import 'auto_away_service.dart';
 import 'platform/platform_auto_away_task_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 typedef HomeAutoAwayHomesProvider = Map<String, dynamic> Function();
 
 class HomeAutoAwayCoordinator {
+  static const Duration _androidForegroundConfirmInterval =
+      Duration(minutes: 2);
+
   Timer? _presenceRefreshTimer;
+  DateTime? _lastAndroidForegroundConfirmAt;
 
   bool hasEnabledAutoAwayHome(Map<String, dynamic> homes) {
     for (final rawHome in homes.values) {
@@ -44,7 +48,7 @@ class HomeAutoAwayCoordinator {
         position: position,
         event: event,
       ).catchError((Object error) {
-        debugPrint('AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_PERIODIC_LOCATION_ERROR: $error');
       }),
     );
   }
@@ -52,11 +56,16 @@ class HomeAutoAwayCoordinator {
   void startPresenceRefreshTimer({
     required String uid,
     required HomeAutoAwayHomesProvider homesProvider,
+    String immediateEvent = 'foreground_check',
   }) {
     _presenceRefreshTimer?.cancel();
 
     // Kiểm tra ngay khi bắt đầu.
-    refreshPresenceNow(uid: uid, homes: homesProvider());
+    refreshPresenceNow(
+      uid: uid,
+      homes: homesProvider(),
+      event: immediateEvent,
+    );
 
     _presenceRefreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       refreshPresenceNow(uid: uid, homes: homesProvider());
@@ -74,13 +83,35 @@ class HomeAutoAwayCoordinator {
     final homes = homesProvider();
 
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      final hasEnabledHome = hasEnabledAutoAwayHome(homes);
+
       _presenceRefreshTimer?.cancel();
       _presenceRefreshTimer = null;
 
       try {
         await PlatformAutoAwayTaskService.syncForHomes(uid: uid, homes: homes);
       } catch (error) {
-        debugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_FOREGROUND_TASK_SYNC_ERROR: $error');
+      }
+
+      final lastConfirmAt = _lastAndroidForegroundConfirmAt;
+      final now = DateTime.now();
+      final canConfirm =
+          lastConfirmAt == null ||
+          now.difference(lastConfirmAt) >= _androidForegroundConfirmInterval;
+
+      if (hasEnabledHome && canConfirm) {
+        _lastAndroidForegroundConfirmAt = now;
+
+        try {
+          await AutoAwayService.refreshPresenceForHomes(
+            uid: uid,
+            homes: homes,
+            event: 'android_foreground_confirm',
+          );
+        } catch (error) {
+          safeDebugPrint('AUTO_AWAY_ANDROID_FOREGROUND_CONFIRM_ERROR: $error');
+        }
       }
 
       return;
@@ -100,7 +131,7 @@ class HomeAutoAwayCoordinator {
             force: true,
           );
         } catch (error) {
-          debugPrint('AUTO_AWAY_IOS_CLEANUP_SYNC_ERROR: $error');
+          safeDebugPrint('AUTO_AWAY_IOS_CLEANUP_SYNC_ERROR: $error');
         }
 
         return;
@@ -109,10 +140,14 @@ class HomeAutoAwayCoordinator {
       try {
         await AutoAwayService.syncForHomes(uid: uid, homes: homes, force: true);
       } catch (error) {
-        debugPrint('AUTO_AWAY_IOS_SYNC_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_IOS_SYNC_ERROR: $error');
       }
 
-      startPresenceRefreshTimer(uid: uid, homesProvider: homesProvider);
+      startPresenceRefreshTimer(
+        uid: uid,
+        homesProvider: homesProvider,
+        immediateEvent: 'ios_foreground_confirm',
+      );
       return;
     }
 

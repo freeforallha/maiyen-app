@@ -16,7 +16,7 @@ import '../services/session_logout_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 class SafeHomeApp extends StatefulWidget {
@@ -51,14 +51,14 @@ class _SafeHomeAppState extends State<SafeHomeApp>
           AccountSessionService.activate(
             uid: user.uid,
           ).catchError((Object error) {
-            debugPrint(
+            safeDebugPrint(
               'ACCOUNT_SESSION_ACTIVATE_ERROR: $error',
             );
           }),
         );
       },
       onError: (Object error) {
-        debugPrint(
+        safeDebugPrint(
           'ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error',
         );
       },
@@ -73,8 +73,28 @@ class _SafeHomeAppState extends State<SafeHomeApp>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
+    unawaited(AccountSessionService.updateLifecycle(state));
+
+    if (state != AppLifecycleState.resumed) {
+      return;
+    }
+
+    _activateResumeServices();
+  }
+
+  void _activateResumeServices() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    AutoAwayService.activateForSignedInUser(user.uid);
+
     unawaited(
-      AccountSessionService.updateLifecycle(state),
+      AccountSessionService.activate(uid: user.uid).catchError((Object error) {
+        safeDebugPrint('ACCOUNT_SESSION_RESUME_ACTIVATE_ERROR: $error');
+      }),
     );
   }
 
@@ -218,13 +238,10 @@ class _AuthGateState extends State<AuthGate> {
     try {
       await AutoLoginService.removeLegacyPassword();
     } catch (error) {
-      debugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
+      safeDebugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
     }
 
     user = FirebaseAuth.instance.currentUser;
-
-    debugPrint("AUTH CHECK UID = ${user?.uid}");
-    debugPrint("AUTH CHECK EMAIL = ${user?.email}");
 
     if (!mounted) return;
 
@@ -339,9 +356,7 @@ class _AuthGateState extends State<AuthGate> {
             }
 
             if (profileSnap.hasError) {
-              debugPrint(
-                "PROFILE_LOAD_ERROR ${currentUser.uid}: ${profileSnap.error}",
-              );
+              safeDebugPrint("PROFILE_LOAD_ERROR: ${profileSnap.error}");
 
               return _buildProfileLoadError(profileSnap.error);
             }
@@ -434,7 +449,7 @@ class _LocationPermissionGateState
 
       await _showPermissionDialog(permission);
     } catch (error) {
-      debugPrint(
+      safeDebugPrint(
         "STARTUP_LOCATION_PERMISSION_ERROR: $error",
       );
     }

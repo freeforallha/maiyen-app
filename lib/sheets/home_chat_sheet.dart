@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 void showHomeChatSheet({
   required BuildContext context,
   required String homeId,
@@ -767,8 +767,11 @@ void showHomeChatSheet({
             if (text.isEmpty) return;
 
             if (text.length > ChatService.maxMessageLength) {
-              ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
-                const SnackBar(content: Text("Tin nhắn quá dài")),
+              showTopToast(
+                ctx,
+                "Tin nhắn quá dài",
+                color: Colors.orange,
+                icon: Icons.text_fields_rounded,
               );
               return;
             }
@@ -846,7 +849,7 @@ void showHomeChatSheet({
                 );
               } catch (_) {}
             } catch (error) {
-              debugPrint("HOME_CHAT_SEND_ERROR: $error");
+              safeDebugPrint("HOME_CHAT_SEND_ERROR: $error");
 
               if (!isChatSheetClosed && ctx.mounted) {
                 controller.text = text;
@@ -862,8 +865,11 @@ void showHomeChatSheet({
                     ..addAll(currentMentions);
                 });
 
-                ScaffoldMessenger.maybeOf(ctx)?.showSnackBar(
-                  const SnackBar(content: Text("Không gửi được tin nhắn")),
+                showTopToast(
+                  ctx,
+                  "Không gửi được tin nhắn",
+                  color: SafeHomeColors.danger,
+                  icon: Icons.error_rounded,
                 );
               }
             }

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import '../localization/app_strings.dart';
 import 'home_notification_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 enum HomeSecurityRepeatStatus { saved, homeUnavailable, noPermission, failed }
 
 class HomeSecurityRepeatResult {
@@ -126,7 +126,7 @@ class HomeAlarmSecurityService {
         normalizedMinutes: normalized,
       );
     } catch (error) {
-      debugPrint("SET_SECURITY_MODE_REPEAT_ERROR: $error");
+      safeDebugPrint("SET_SECURITY_MODE_REPEAT_ERROR: $error");
 
       return HomeSecurityRepeatResult(
         status: HomeSecurityRepeatStatus.failed,
@@ -206,7 +206,7 @@ class HomeAlarmSecurityService {
         nextMode: nextMode,
       );
     } catch (error) {
-      debugPrint("SET_SECURITY_MODE_ERROR: $error");
+      safeDebugPrint("SET_SECURITY_MODE_ERROR: $error");
 
       return HomeSecurityModeSaveResult(
         status: HomeSecurityModeSaveStatus.failed,
@@ -251,7 +251,7 @@ class HomeAlarmSecurityService {
 
       return HomeSecurityNotificationStatus.sent;
     } catch (error) {
-      debugPrint("MANUAL_SECURITY_NOTIFICATION_ERROR: $error");
+      safeDebugPrint("MANUAL_SECURITY_NOTIFICATION_ERROR: $error");
 
       return HomeSecurityNotificationStatus.failed;
     }
@@ -293,7 +293,7 @@ class HomeAlarmSecurityService {
             : HomeSecurityReauthStatus.failed,
       );
     } catch (error) {
-      debugPrint("MANUAL_SECURITY_REAUTH_ERROR: $error");
+      safeDebugPrint("MANUAL_SECURITY_REAUTH_ERROR: $error");
 
       return const HomeSecurityReauthResult(HomeSecurityReauthStatus.failed);
     }
@@ -341,7 +341,7 @@ class HomeAlarmSecurityService {
 
       return const HomeAlarmToggleSaveResult(HomeAlarmToggleSaveStatus.saved);
     } catch (error) {
-      debugPrint("SET_ALARM_ENABLED_ERROR: $error");
+      safeDebugPrint("SET_ALARM_ENABLED_ERROR: $error");
 
       return const HomeAlarmToggleSaveResult(HomeAlarmToggleSaveStatus.failed);
     }

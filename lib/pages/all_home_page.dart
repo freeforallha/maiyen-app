@@ -7,7 +7,7 @@ import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
 
@@ -473,10 +473,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     notifyHomesChanged();
                   },
                   onError: (Object error) {
-                    debugPrint(
-                      "ALL_HOME_SHARED_HOME_ERROR "
-                      "$ownerUid/$homeId: $error",
-                    );
+                    safeDebugPrint("ALL_HOME_SHARED_HOME_ERROR: $error");
                   },
                 );
 
@@ -516,10 +513,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   notifyHomesChanged();
                 })
                 .catchError((Object error) {
-                  debugPrint(
-                    "ALL_HOME_USER_DIRECTORY_ERROR "
-                    "$ownerUid: $error",
-                  );
+                  safeDebugPrint("ALL_HOME_USER_DIRECTORY_ERROR: $error");
                 });
           }
         });

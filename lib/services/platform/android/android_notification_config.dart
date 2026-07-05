@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
 
@@ -27,7 +27,7 @@ class AndroidNotificationConfig {
     final fullScreenPermission = await androidPlugin
         ?.requestFullScreenIntentPermission();
 
-    debugPrint('FULL_SCREEN_INTENT_PERMISSION: $fullScreenPermission');
+    safeDebugPrint('FULL_SCREEN_INTENT_PERMISSION: $fullScreenPermission');
 
     await createChannels(localNotif);
   }

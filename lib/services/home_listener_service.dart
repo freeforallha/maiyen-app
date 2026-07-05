@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class HomeListenerService {
   final Map<String, StreamSubscription<DatabaseEvent>> _subscriptions = {};
   final Map<String, String> _ownerUidByHome = {};
@@ -118,10 +118,7 @@ class HomeListenerService {
           );
         },
         onError: (Object error) {
-          debugPrint(
-            'SHARED_HOME_LISTENER_ERROR: '
-                '$ownerUid/$homeId - $error',
-          );
+          safeDebugPrint('SHARED_HOME_LISTENER_ERROR: $error');
         },
       );
     }

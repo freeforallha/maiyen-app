@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
+import '../helpers/top_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ScheduleSheet extends StatefulWidget {
@@ -109,10 +110,11 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (!isCustomReminder && !widget.canManageHome) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Bạn không có quyền sửa lịch chung của nhà"),
-          ),
+        showTopToast(
+          context,
+          "Bạn không có quyền sửa lịch chung của nhà",
+          color: Colors.red,
+          icon: Icons.lock_rounded,
         );
       }
 
@@ -331,11 +333,11 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                 final value = "$h:$m";
 
                 if (!isValidTime(value)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Giờ không hợp lệ"),
-                      backgroundColor: Colors.red,
-                    ),
+                  showTopToast(
+                    context,
+                    "Giờ không hợp lệ",
+                    color: Colors.red,
+                    icon: Icons.schedule_rounded,
                   );
 
                   return;

@@ -4,7 +4,7 @@ import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auto_login_service.dart';
 import '../safehome_theme.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -64,24 +64,21 @@ class _LoginPageState extends State<LoginPage> {
           const Duration(seconds: 10),
         );
       } catch (clearError) {
-        debugPrint("CLEAR_SAVED_LOGIN_AFTER_GOOGLE_ERROR: $clearError");
+        safeDebugPrint("CLEAR_SAVED_LOGIN_AFTER_GOOGLE_ERROR: $clearError");
       }
 
       // Không đọc/ghi Database và không tự điều hướng tại đây.
       // AuthGate sẽ tự mở ProfileSetupPage hoặc HomePage theo UID mới.
-      debugPrint("GOOGLE_LOGIN_SUCCESS: ${user.uid}");
-    } on FirebaseAuthException catch (e, stack) {
-      debugPrint("GOOGLE_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}");
-      debugPrint("GOOGLE_LOGIN_STACK: $stack");
+    } on FirebaseAuthException catch (e) {
+      safeDebugPrint("GOOGLE_LOGIN_FIREBASE_ERROR: ${e.code}");
 
       if (!mounted) return;
 
       setState(() {
         error = e.message ?? "Không thể đăng nhập bằng Google";
       });
-    } catch (e, stack) {
-      debugPrint("GOOGLE_LOGIN_ERROR: $e");
-      debugPrint("GOOGLE_LOGIN_STACK: $stack");
+    } catch (e) {
+      safeDebugPrint("GOOGLE_LOGIN_ERROR");
 
       if (!mounted) return;
 
@@ -230,16 +227,15 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
 
-      debugPrint("EMAIL_LOGIN_FIREBASE_ERROR: ${e.code} ${e.message}");
-    } catch (e, stack) {
+      safeDebugPrint("EMAIL_LOGIN_FIREBASE_ERROR: ${e.code}");
+    } catch (e) {
       if (!mounted) return;
 
       setState(() {
         error = e.toString().replaceFirst("Exception: ", "");
       });
 
-      debugPrint("EMAIL_LOGIN_ERROR: $e");
-      debugPrint("EMAIL_LOGIN_STACK: $stack");
+      safeDebugPrint("EMAIL_LOGIN_ERROR");
     } finally {
       if (mounted) {
         setState(() {

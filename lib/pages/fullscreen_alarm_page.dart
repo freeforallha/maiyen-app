@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app/safe_home_app.dart';
+import '../helpers/top_toast.dart';
 import '../services/notification_service.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
@@ -120,13 +121,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   void _showAlarmActionError() {
     if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Không thể xác nhận với SafeHome. '
-          'Hãy kiểm tra kết nối và thử lại.',
-        ),
-      ),
+    showTopToast(
+      context,
+      'Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.',
+      color: Colors.red,
+      icon: Icons.wifi_off_rounded,
     );
   }
 
@@ -838,7 +837,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   Widget _buildAlarmUI(BuildContext context) {
     final type = alarmType();
-    debugPrint("ALARM JSON = ${widget.alarmItemsJson}");
     final issueMap = buildAlarmIssueMap(type);
     final nextAlarmMap = buildNextAlarmMap();
 

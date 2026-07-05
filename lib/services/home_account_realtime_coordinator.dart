@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 typedef HomeAccountProfileChanged = void Function(Map<String, dynamic> profile);
 typedef HomeAccountHomeChanged =
     void Function(String homeId, Map<String, dynamic> homeData);
@@ -45,7 +45,7 @@ class HomeAccountRealtimeCoordinator {
             onProfileChanged(safeMap(event.snapshot.value));
           },
           onError: (Object error) {
-            debugPrint('PROFILE_LISTENER_ERROR: $error');
+            safeDebugPrint('PROFILE_LISTENER_ERROR: $error');
           },
         );
 
@@ -61,7 +61,7 @@ class HomeAccountRealtimeCoordinator {
         );
       },
       onError: (Object error) {
-        debugPrint('OWNED_HOME_ADDED_LISTENER_ERROR: $error');
+        safeDebugPrint('OWNED_HOME_ADDED_LISTENER_ERROR: $error');
       },
     );
 
@@ -73,7 +73,7 @@ class HomeAccountRealtimeCoordinator {
         );
       },
       onError: (Object error) {
-        debugPrint('OWNED_HOME_CHANGED_LISTENER_ERROR: $error');
+        safeDebugPrint('OWNED_HOME_CHANGED_LISTENER_ERROR: $error');
       },
     );
 
@@ -85,7 +85,7 @@ class HomeAccountRealtimeCoordinator {
         );
       },
       onError: (Object error) {
-        debugPrint('OWNED_HOME_REMOVED_LISTENER_ERROR: $error');
+        safeDebugPrint('OWNED_HOME_REMOVED_LISTENER_ERROR: $error');
       },
     );
 
@@ -97,7 +97,7 @@ class HomeAccountRealtimeCoordinator {
             onSharedHomesChanged(safeMap(event.snapshot.value));
           },
           onError: (Object error) {
-            debugPrint('SHARED_HOMES_LISTENER_ERROR: $error');
+            safeDebugPrint('SHARED_HOMES_LISTENER_ERROR: $error');
           },
         );
 
@@ -109,7 +109,7 @@ class HomeAccountRealtimeCoordinator {
             onHomeOrderChanged(event.snapshot.value);
           },
           onError: (Object error) {
-            debugPrint('HOME_ORDER_LISTENER_ERROR: $error');
+            safeDebugPrint('HOME_ORDER_LISTENER_ERROR: $error');
           },
         );
 
@@ -121,7 +121,7 @@ class HomeAccountRealtimeCoordinator {
             onAlarmSettingsChanged(safeMap(event.snapshot.value));
           },
           onError: (Object error) {
-            debugPrint('ALARM_SETTINGS_LISTENER_ERROR: $error');
+            safeDebugPrint('ALARM_SETTINGS_LISTENER_ERROR: $error');
           },
         );
 
@@ -133,7 +133,7 @@ class HomeAccountRealtimeCoordinator {
             onCustomRulesChanged(safeMap(event.snapshot.value));
           },
           onError: (Object error) {
-            debugPrint('CUSTOM_RULES_LISTENER_ERROR: $error');
+            safeDebugPrint('CUSTOM_RULES_LISTENER_ERROR: $error');
           },
         );
 
@@ -145,7 +145,7 @@ class HomeAccountRealtimeCoordinator {
             onShareRequestsChanged(safeMap(event.snapshot.value));
           },
           onError: (Object error) {
-            debugPrint('SHARE_REQUESTS_LISTENER_ERROR: $error');
+            safeDebugPrint('SHARE_REQUESTS_LISTENER_ERROR: $error');
           },
         );
   }

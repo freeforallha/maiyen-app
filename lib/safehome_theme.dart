@@ -16,6 +16,7 @@ class SafeHomeColors {
   static const Color textSecondary = Color(0xFF69746F);
 
   static const Color safe = primary;
+  static const Color success = safe;
   static const Color warning = Color(0xFFE99822);
   static const Color danger = Color(0xFFD94A4A);
   static const Color info = Color(0xFF3B82D0);

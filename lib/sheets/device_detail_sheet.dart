@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
+import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
 
 void showDeviceDetail({
@@ -894,9 +895,12 @@ Future<void> _openCameraProvider({
     final uri = Uri.tryParse(url);
 
     if (uri == null) {
-      ScaffoldMessenger.of(
+      showTopToast(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Link camera không hợp lệ")));
+        "Link camera không hợp lệ",
+        color: Colors.orange,
+        icon: Icons.link_off_rounded,
+      );
       return;
     }
 
@@ -905,9 +909,12 @@ Future<void> _openCameraProvider({
     if (!context.mounted) return;
 
     if (!opened) {
-      ScaffoldMessenger.of(
+      showTopToast(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Không mở được camera")));
+        "Không mở được camera",
+        color: Colors.orange,
+        icon: Icons.videocam_off_rounded,
+      );
     }
 
     return;
@@ -922,16 +929,22 @@ Future<void> _openCameraProvider({
     if (!context.mounted) return;
 
     if (!opened) {
-      ScaffoldMessenger.of(
+      showTopToast(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Chưa mở được app EZVIZ")));
+        "Chưa mở được app EZVIZ",
+        color: Colors.orange,
+        icon: Icons.open_in_new_off_rounded,
+      );
     }
 
     return;
   }
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text("Loại camera này chưa được hỗ trợ")),
+  showTopToast(
+    context,
+    "Loại camera này chưa được hỗ trợ",
+    color: Colors.orange,
+    icon: Icons.videocam_off_rounded,
   );
 }
 

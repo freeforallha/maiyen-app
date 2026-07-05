@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
 
@@ -130,11 +131,11 @@ Future<String?> showHomeTimeTextInputDialog({
               final value = "$h:$m";
 
               if (!isValidTime(value)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(strings.t("Giờ không hợp lệ")),
-                    backgroundColor: Colors.red,
-                  ),
+                showTopToast(
+                  context,
+                  strings.t("Giờ không hợp lệ"),
+                  color: Colors.red,
+                  icon: Icons.schedule_rounded,
                 );
                 return;
               }
@@ -327,6 +328,51 @@ Future<bool> showConfirmManualSecurityModeDialog({
             },
             icon: const Icon(Icons.shield_rounded),
             label: const Text("Xác nhận"),
+          ),
+        ],
+      );
+    },
+  );
+
+  return confirmed == true;
+}
+
+Future<bool> showConfirmNormalModeWithAutoAwayDialog({
+  required BuildContext context,
+  required AppStrings strings,
+}) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: SafeHomeColors.warning,
+            ),
+            const SizedBox(width: 10),
+            Expanded(child: Text(strings.t("Chuyển về Bình thường?"))),
+          ],
+        ),
+        content: Text(
+          strings.t(
+            "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext, false);
+            },
+            child: Text(strings.t("Huỷ")),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(dialogContext, true);
+            },
+            child: Text(strings.t("Vẫn chuyển về Bình thường")),
           ),
         ],
       );

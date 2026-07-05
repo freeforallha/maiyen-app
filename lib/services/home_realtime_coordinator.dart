@@ -7,7 +7,7 @@ import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import 'chat_service.dart';
 import 'device_notification_event_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 typedef HomeNotificationUnreadChanged = void Function(int count);
 typedef HomeEventsChanged = void Function(Map<String, dynamic> events);
 typedef HomeAlarmPauseCleared = void Function();
@@ -234,7 +234,7 @@ class HomeRealtimeCoordinator {
             );
           },
           onError: (Object error) {
-            debugPrint("ALARM_PAUSE_LISTENER_ERROR: $error");
+            safeDebugPrint("ALARM_PAUSE_LISTENER_ERROR: $error");
           },
         );
   }
@@ -278,7 +278,7 @@ class HomeRealtimeCoordinator {
         _emitChatUnreadSnapshot(homes: homes, onUnreadChanged: onUnreadChanged);
       },
       onError: (Object error) {
-        debugPrint("CHAT_UNREAD_LISTENER_ERROR: $error");
+        safeDebugPrint("CHAT_UNREAD_LISTENER_ERROR: $error");
         _chatUnreadSnapshot = {};
         _emitChatUnreadSnapshot(homes: homes, onUnreadChanged: onUnreadChanged);
       },
@@ -384,7 +384,7 @@ class HomeRealtimeCoordinator {
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
           onError: (Object error) {
-            debugPrint("HOME_PRESENCE_MEMBERS_LISTENER_ERROR: $homeId - $error");
+            safeDebugPrint("HOME_PRESENCE_MEMBERS_LISTENER_ERROR: $error");
             state.sharedMembersPrimed = true;
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
@@ -470,10 +470,7 @@ class HomeRealtimeCoordinator {
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
           onError: (Object error) {
-            debugPrint(
-              "HOME_MEMBER_PRESENCE_STATUS_LISTENER_ERROR: "
-              "$ownerUid/$homeId - $error",
-            );
+            safeDebugPrint("HOME_MEMBER_PRESENCE_STATUS_LISTENER_ERROR: $error");
             state.fallbackMemberStatusPrimed = true;
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
@@ -528,10 +525,7 @@ class HomeRealtimeCoordinator {
               _emitHomePresence(homeId);
             },
             onError: (Object error) {
-              debugPrint(
-                "HOME_PRESENCE_LISTENER_ERROR: "
-                "$memberUid/$homeId - $error",
-              );
+              safeDebugPrint("HOME_PRESENCE_LISTENER_ERROR: $error");
 
               state.rawPresenceByMember[memberUid] = <String, dynamic>{};
               state.primedMemberUids.add(memberUid);
@@ -769,6 +763,10 @@ class HomeRealtimeCoordinator {
   void _disposeHomePresenceState(String homeId) {
     final state = _homePresenceStates.remove(homeId);
     state?.cancel();
+  }
+
+  void stopHomePresenceListeners() {
+    _clearHomePresenceListeners();
   }
 
   void _clearHomePresenceListeners() {

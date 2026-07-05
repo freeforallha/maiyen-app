@@ -7,7 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../helpers/firebase_paths.dart';
 import 'installation_id_service.dart';
 import 'notification_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class FCMService {
   static bool _foregroundListening = false;
   static StreamSubscription<String>? _tokenRefreshSubscription;
@@ -82,15 +82,19 @@ class FCMService {
       sound: true,
     );
 
-    debugPrint(
-      '🔔 Permission: ${settings.authorizationStatus}',
-    );
+    if (kDebugMode) {
+      safeDebugPrint('PUSH_PERMISSION_STATUS: ${settings.authorizationStatus}');
+    }
 
     final apnsToken = await messaging.getAPNSToken();
-    debugPrint('🍎 APNS TOKEN: $apnsToken');
+    if (kDebugMode && apnsToken != null) {
+      safeDebugPrint('PUSH_IOS_REGISTRATION_AVAILABLE');
+    }
 
     final token = await messaging.getToken();
-    debugPrint('🔥 FCM TOKEN: $token');
+    if (kDebugMode && token != null) {
+      safeDebugPrint('PUSH_REGISTRATION_AVAILABLE');
+    }
 
     if (token != null) {
       await _saveToken(
@@ -108,9 +112,9 @@ class FCMService {
               return;
             }
 
-            debugPrint(
-              '🔥 FCM TOKEN REFRESH: $newToken',
-            );
+            if (kDebugMode) {
+              safeDebugPrint('PUSH_REGISTRATION_REFRESHED');
+            }
 
             try {
               await _saveToken(
@@ -118,14 +122,14 @@ class FCMService {
                 token: newToken,
               );
             } catch (error) {
-              debugPrint(
-                'FCM_TOKEN_REFRESH_SAVE_ERROR: $error',
+              safeDebugPrint(
+                'PUSH_REGISTRATION_REFRESH_SAVE_ERROR: $error',
               );
             }
           },
           onError: (Object error) {
-            debugPrint(
-              'FCM_TOKEN_REFRESH_STREAM_ERROR: $error',
+            safeDebugPrint(
+              'PUSH_REGISTRATION_REFRESH_STREAM_ERROR: $error',
             );
           },
         );

@@ -26,11 +26,9 @@ class HomeBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      minimum: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+    return SizedBox(
+      height: 68,
       child: Container(
-        height: 68,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
         decoration: BoxDecoration(
           color: SafeHomeColors.surface.withValues(alpha: 0.97),

@@ -11,6 +11,7 @@ class DeviceList extends StatelessWidget {
   final bool isShared;
   final String ownerEmail;
   final Widget? header;
+  final double bottomPadding;
 
   final Function(String) onRename;
   final Function(String) onDelete;
@@ -29,6 +30,7 @@ class DeviceList extends StatelessWidget {
     required this.onPairSensor,
     required this.selectedRoomId,
     this.securityMode = "normal",
+    this.bottomPadding = 28,
   });
 
   Map<String, dynamic> safeMap(dynamic data) {
@@ -810,7 +812,7 @@ class DeviceList extends StatelessWidget {
 
     return Column(
       children: [
-        ?header,
+        if (header != null) header!,
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -822,11 +824,11 @@ class DeviceList extends StatelessWidget {
                   (contentWidth - spacing) / 2;
 
               return SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(
+                padding: EdgeInsets.fromLTRB(
                   12,
                   6,
                   12,
-                  28,
+                  bottomPadding,
                 ),
                 child: Column(
                   crossAxisAlignment:

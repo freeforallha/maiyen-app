@@ -8,7 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../app/safe_home_app.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
 
@@ -154,7 +154,7 @@ class NotificationService {
     }
 
     if (requestedBy.isEmpty) {
-      debugPrint('ALARM ACTION ERROR: chưa có người dùng đăng nhập');
+      safeDebugPrint('ALARM ACTION ERROR: chưa có người dùng đăng nhập');
       return false;
     }
 
@@ -176,7 +176,7 @@ class NotificationService {
 
       return true;
     } catch (error) {
-      debugPrint('ALARM ACTION WRITE ERROR: $error');
+      safeDebugPrint('ALARM ACTION WRITE ERROR: $error');
       return false;
     }
   }

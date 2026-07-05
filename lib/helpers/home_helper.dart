@@ -720,69 +720,17 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       home["presenceSummary"],
     );
 
-    final memberPresenceStatus = safeMap(
-      home["memberPresenceStatus"],
-    );
-
-    final allMemberStatuses = memberPresenceStatus.values
-        .map(safeMap)
-        .toList();
-
-    bool hasKnownLocation(Map<String, dynamic> status) {
-      if (status["online"] != true) {
-        return false;
-      }
-
-      final state = status["state"]?.toString() ?? "unknown";
-      return state == "inside" || state == "outside";
+    int summaryCount(String key) {
+      return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
     }
 
-    final knownMemberStatuses = allMemberStatuses
-        .where(hasKnownLocation)
-        .toList();
-
-    final fallbackInsideCount = int.tryParse(
-      presenceSummary["insideCount"]?.toString() ?? "",
-    ) ??
-        0;
-
-    final fallbackOutsideCount = int.tryParse(
-      presenceSummary["outsideCount"]?.toString() ?? "",
-    ) ??
-        0;
-
-    final fallbackKnownLocationCount =
-        fallbackInsideCount + fallbackOutsideCount;
-
-    final summaryTotalMemberCount = int.tryParse(
-      presenceSummary["totalMemberCount"]?.toString() ?? "",
-    ) ??
-        0;
-
-    final totalMemberCount = memberPresenceStatus.isNotEmpty
-        ? summaryTotalMemberCount > allMemberStatuses.length
-        ? summaryTotalMemberCount
-        : allMemberStatuses.length
-        : summaryTotalMemberCount;
-
-    final insideCount = memberPresenceStatus.isNotEmpty
-        ? knownMemberStatuses.where((status) {
-      return status["state"]?.toString() == "inside";
-    }).length
-        : fallbackInsideCount;
-
-    final knownLocationCount = memberPresenceStatus.isNotEmpty
-        ? knownMemberStatuses.length
-        : fallbackKnownLocationCount;
-
-    final fallbackUnknownCount = int.tryParse(
-      presenceSummary["unknownCount"]?.toString() ?? "",
-    ) ??
-        0;
-
-    final unknownCount = totalMemberCount > knownLocationCount
-        ? totalMemberCount - knownLocationCount
-        : fallbackUnknownCount;
+    final insideCount = summaryCount("insideCount");
+    final outsideCount = summaryCount("outsideCount");
+    final summaryKnownLocationCount = summaryCount("knownLocationCount");
+    final knownLocationCount = summaryKnownLocationCount > 0
+        ? summaryKnownLocationCount
+        : insideCount + outsideCount;
+    final unknownCount = summaryCount("unknownCount");
 
     // Mẫu số chỉ gồm những tài khoản đang đăng nhập và đã xác định
     // được inside/outside. Tài khoản logout hoặc vị trí unknown được

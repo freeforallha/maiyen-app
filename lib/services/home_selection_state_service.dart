@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../helpers/home_helper.dart';
 import 'home_service.dart';
 import 'home_state_parser.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class HomeSelectionStateResult {
   const HomeSelectionStateResult({
     required this.homeOrder,
@@ -156,7 +156,7 @@ class HomeSelectionStateService {
         ownerUid: ownerUid,
         homeId: selectedHome,
       ).catchError((Object error) {
-        debugPrint('ENSURE_HOME_ROOM_MODEL_ERROR: $error');
+        safeDebugPrint('ENSURE_HOME_ROOM_MODEL_ERROR: $error');
       }),
     );
   }

@@ -7,7 +7,7 @@ import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import 'home_notification_service.dart';
 import 'share_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 enum HomeScannedQrStatus {
   joinMultiSent,
   joinSingleSent,
@@ -43,7 +43,6 @@ class HomePairingService {
     required AppStrings strings,
   }) async {
     final value = code.trim();
-    debugPrint("QR_DEBUG value=$value");
 
     if (value.startsWith("safehome_join_multi|")) {
       final parts = value.split("|");
@@ -100,12 +99,9 @@ class HomePairingService {
         };
 
         try {
-          debugPrint("QR_JOIN_UPDATES=$updates");
           await FirebaseDatabase.instance.ref().update(updates);
-          debugPrint("QR_JOIN_UPDATE_OK");
-        } catch (e, st) {
-          debugPrint("QR_JOIN_UPDATE_ERROR: $e");
-          debugPrint("QR_JOIN_UPDATE_STACK: $st");
+        } catch (e) {
+          safeDebugPrint("QR_JOIN_UPDATE_ERROR: $e");
         }
 
         await HomeNotificationService.notifyHome(

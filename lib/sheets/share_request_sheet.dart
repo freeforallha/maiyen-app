@@ -2,9 +2,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/firebase_paths.dart';
+import '../helpers/top_toast.dart';
 import '../services/share_service.dart';
 import '../services/home_notification_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 Future<bool?> showShareRequestSheet({
   required BuildContext context,
   required Map<String, dynamic> requests,
@@ -88,12 +89,11 @@ Future<bool?> showShareRequestSheet({
               ) async {
             if (!await canHandleRequest(data)) {
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Bạn không có quyền chấp nhận yêu cầu này",
-                    ),
-                  ),
+                showTopToast(
+                  context,
+                  "Bạn không có quyền chấp nhận yêu cầu này",
+                  color: Colors.red,
+                  icon: Icons.lock_rounded,
                 );
               }
 
@@ -173,7 +173,7 @@ Future<bool?> showShareRequestSheet({
                       ? targetPhone
                       : profile["phone"]?.toString().trim() ?? "";
                 } catch (e) {
-                  debugPrint("LOAD_SELF_ACCOUNT_FOR_SHARE_ERROR: $e");
+                  safeDebugPrint("LOAD_SELF_ACCOUNT_FOR_SHARE_ERROR: $e");
                 }
               }
 
@@ -267,12 +267,11 @@ Future<bool?> showShareRequestSheet({
 
             if (!await canHandleRequest(data)) {
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      "Bạn không có quyền từ chối yêu cầu này",
-                    ),
-                  ),
+                showTopToast(
+                  context,
+                  "Bạn không có quyền từ chối yêu cầu này",
+                  color: Colors.red,
+                  icon: Icons.lock_rounded,
                 );
               }
 
@@ -587,25 +586,20 @@ Future<bool?> showShareRequestSheet({
                                                 requestKey,
                                                 data,
                                               );
-                                            } catch (e, st) {
-                                              debugPrint(
+                                            } catch (e) {
+                                              safeDebugPrint(
                                                 "ACCEPT_REQUEST_ERROR: $e",
-                                              );
-                                              debugPrint(
-                                                "ACCEPT_REQUEST_STACK: $st",
                                               );
 
                                               if (!context.mounted) return;
 
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    isJoinRequest
-                                                        ? "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại."
-                                                        : "Không thể chấp nhận lời mời. Vui lòng thử lại.",
-                                                  ),
-                                                ),
+                                              showTopToast(
+                                                context,
+                                                isJoinRequest
+                                                    ? "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại."
+                                                    : "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                color: Colors.red,
+                                                icon: Icons.error_rounded,
                                               );
                                             }
                                           },

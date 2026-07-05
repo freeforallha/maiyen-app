@@ -239,9 +239,11 @@ class AccountAvatarSheet {
 
       Navigator.pop(context);
 
-      ScaffoldMessenger.of(
+      showTopMessage(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Đã xoá tài khoản")));
+        "Đã xoá tài khoản",
+        color: SafeHomeColors.success,
+      );
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
 

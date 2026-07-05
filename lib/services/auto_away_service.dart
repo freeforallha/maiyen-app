@@ -14,7 +14,7 @@ import '../firebase_options.dart';
 import 'account_session_service.dart';
 import 'platform/platform_bootstrap_service.dart';
 import 'platform/platform_auto_away_system_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 const String _legacyAutoAwayGeofencePrefix = 'safehome_auto_away';
 
 const String _autoAwayGeofencePrefix = 'safehome_auto_away_v2';
@@ -26,8 +26,8 @@ const int _pendingPresenceEventsLimit = 100;
 
 @pragma('vm:entry-point')
 Future<void> safeHomeAutoAwayGeofenceCallback(
-  GeofenceCallbackParams params,
-) async {
+    GeofenceCallbackParams params,
+    ) async {
   DartPluginRegistrant.ensureInitialized();
 
   final occurredAt = DateTime.now().millisecondsSinceEpoch;
@@ -56,9 +56,8 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
 
       queuedUids.add(parsed.uid);
     }
-  } catch (error, stackTrace) {
-    debugPrint('AUTO_AWAY_LOCAL_EVENT_QUEUE_ERROR: $error');
-    debugPrintStack(stackTrace: stackTrace);
+  } catch (error) {
+    safeDebugPrint('AUTO_AWAY_LOCAL_EVENT_QUEUE_ERROR: $error');
   }
 
   if (queuedUids.isEmpty) {
@@ -76,7 +75,7 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
     try {
       await PlatformBootstrapService.activateAppCheck();
     } catch (error) {
-      debugPrint('AUTO_AWAY_BACKGROUND_APP_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_BACKGROUND_APP_CHECK_ERROR: $error');
     }
 
     User? user = FirebaseAuth.instance.currentUser;
@@ -91,26 +90,25 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
 
     if (user == null || !queuedUids.contains(user.uid)) {
       // Event vẫn nằm trong queue để gửi khi đúng tài khoản hoạt động.
-      debugPrint('AUTO_AWAY_GEOFENCE_CALLBACK: no matching signed-in user');
+      safeDebugPrint('AUTO_AWAY_GEOFENCE_CALLBACK: no matching signed-in user');
       return;
     }
 
     try {
       await AccountSessionService.touchFromBackground(uid: user.uid);
     } catch (error) {
-      debugPrint('AUTO_AWAY_BACKGROUND_SESSION_TOUCH_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_BACKGROUND_SESSION_TOUCH_ERROR: $error');
     }
 
     try {
       await AutoAwayService.flushPendingPresenceEvents(uid: user.uid);
     } catch (error) {
       // Không xóa queue nếu upload lỗi.
-      debugPrint('AUTO_AWAY_BACKGROUND_EVENT_FLUSH_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_BACKGROUND_EVENT_FLUSH_ERROR: $error');
     }
-  } catch (error, stackTrace) {
+  } catch (error) {
     // Firebase/Auth lỗi không làm mất event đã lưu ở bước đầu.
-    debugPrint('AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error');
-    debugPrintStack(stackTrace: stackTrace);
+    safeDebugPrint('AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error');
   }
 }
 
@@ -132,7 +130,7 @@ class AutoAwayService {
   static Future<void>? _syncInProgress;
   static Future<void>? _presenceRefreshInProgress;
   static final Map<String, Future<void>> _pendingPresenceFlushByUid =
-      <String, Future<void>>{};
+  <String, Future<void>>{};
   static bool _syncRequested = false;
   static bool _pendingForce = false;
   static String _pendingUid = '';
@@ -168,7 +166,7 @@ class AutoAwayService {
     try {
       return await Geolocator.checkPermission();
     } catch (error) {
-      debugPrint('AUTO_AWAY_LOCATION_PERMISSION_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_LOCATION_PERMISSION_CHECK_ERROR: $error');
       return LocationPermission.denied;
     }
   }
@@ -179,7 +177,7 @@ class AutoAwayService {
     try {
       return await Geolocator.requestPermission();
     } catch (error) {
-      debugPrint('AUTO_AWAY_LOCATION_PERMISSION_REQUEST_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_LOCATION_PERMISSION_REQUEST_ERROR: $error');
       return fallbackPermission;
     }
   }
@@ -227,7 +225,7 @@ class AutoAwayService {
 
     final rawItems =
         preferences.getStringList(_pendingPresenceEventsStorageKey) ??
-        const <String>[];
+            const <String>[];
 
     final result = <Map<String, dynamic>>[];
 
@@ -249,19 +247,19 @@ class AutoAwayService {
   }
 
   static Future<void> _writePendingPresenceEvents(
-    List<Map<String, dynamic>> events,
-  ) async {
+      List<Map<String, dynamic>> events,
+      ) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.reload();
 
     final normalized =
-        events.where((item) {
-          return (item['id']?.toString().trim() ?? '').isNotEmpty;
-        }).toList()..sort((a, b) {
-          final aTime = _asInt(a['occurredAt']) ?? 0;
-          final bTime = _asInt(b['occurredAt']) ?? 0;
-          return aTime.compareTo(bTime);
-        });
+    events.where((item) {
+      return (item['id']?.toString().trim() ?? '').isNotEmpty;
+    }).toList()..sort((a, b) {
+      final aTime = _asInt(a['occurredAt']) ?? 0;
+      final bTime = _asInt(b['occurredAt']) ?? 0;
+      return aTime.compareTo(bTime);
+    });
 
     final limited = normalized.length > _pendingPresenceEventsLimit
         ? normalized.sublist(normalized.length - _pendingPresenceEventsLimit)
@@ -369,12 +367,12 @@ class AutoAwayService {
 
     final pending = await _readPendingPresenceEvents();
     final items =
-        pending.where((item) => item['uid']?.toString() == uid).toList()
-          ..sort((a, b) {
-            final aTime = _asInt(a['occurredAt']) ?? 0;
-            final bTime = _asInt(b['occurredAt']) ?? 0;
-            return aTime.compareTo(bTime);
-          });
+    pending.where((item) => item['uid']?.toString() == uid).toList()
+      ..sort((a, b) {
+        final aTime = _asInt(a['occurredAt']) ?? 0;
+        final bTime = _asInt(b['occurredAt']) ?? 0;
+        return aTime.compareTo(bTime);
+      });
 
     if (items.isEmpty) {
       return;
@@ -423,7 +421,7 @@ class AutoAwayService {
 
         uploadedIds.add(eventId);
       } catch (error) {
-        debugPrint('AUTO_AWAY_PENDING_EVENT_UPLOAD_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_PENDING_EVENT_UPLOAD_ERROR: $error');
 
         // Thường là mất mạng. Dừng để giữ nguyên thứ tự event.
         break;
@@ -439,7 +437,7 @@ class AutoAwayService {
     final latestPending = await _readPendingPresenceEvents();
 
     latestPending.removeWhere(
-      (item) => uploadedIds.contains(item['id']?.toString() ?? ''),
+          (item) => uploadedIds.contains(item['id']?.toString() ?? ''),
     );
 
     await _writePendingPresenceEvents(latestPending);
@@ -464,48 +462,48 @@ class AutoAwayService {
 
     final result = await reference
         .runTransaction((currentValue) {
-          final current = _asMap(currentValue);
-          final currentOccurredAt =
-              _asInt(current['lastEventOccurredAt']) ??
+      final current = _asMap(currentValue);
+      final currentOccurredAt =
+          _asInt(current['lastEventOccurredAt']) ??
               _asInt(current['lastConfirmedAt']) ??
               0;
-          final currentEventId = current['lastEventId']?.toString() ?? '';
+      final currentEventId = current['lastEventId']?.toString() ?? '';
 
-          final olderThanCurrent =
-              currentOccurredAt > occurredAt ||
+      final olderThanCurrent =
+          currentOccurredAt > occurredAt ||
               (currentOccurredAt == occurredAt &&
                   currentEventId.compareTo(eventId) >= 0);
 
-          if (olderThanCurrent) {
-            supersededByNewerEvent = true;
-            return Transaction.abort();
-          }
+      if (olderThanCurrent) {
+        supersededByNewerEvent = true;
+        return Transaction.abort();
+      }
 
-          final previousState = current['state']?.toString().trim() ?? '';
+      final previousState = current['state']?.toString().trim() ?? '';
 
-          final next = <String, Object?>{
-            ...current,
-            'ownerUid': ownerUid,
-            'homeId': homeId,
-            'state': state,
-            'event': event,
-            'source': source,
-            'updatedAt': ServerValue.timestamp,
-            'lastConfirmedAt': occurredAt,
-            'lastEventOccurredAt': occurredAt,
-            'lastEventId': eventId,
-            'monitoringHealth': 'active',
-            'monitoringHealthReason': null,
-            ...extraData,
-          };
+      final next = <String, Object?>{
+        ...current,
+        'ownerUid': ownerUid,
+        'homeId': homeId,
+        'state': state,
+        'event': event,
+        'source': source,
+        'updatedAt': ServerValue.timestamp,
+        'lastConfirmedAt': occurredAt,
+        'lastEventOccurredAt': occurredAt,
+        'lastEventId': eventId,
+        'monitoringHealth': 'active',
+        'monitoringHealthReason': null,
+        ...extraData,
+      };
 
-          if (previousState != state ||
-              _asInt(current['lastTransitionAt']) == null) {
-            next['lastTransitionAt'] = occurredAt;
-          }
+      if (previousState != state ||
+          _asInt(current['lastTransitionAt']) == null) {
+        next['lastTransitionAt'] = occurredAt;
+      }
 
-          return Transaction.success(next);
-        }, applyLocally: false)
+      return Transaction.success(next);
+    }, applyLocally: false)
         .timeout(const Duration(seconds: 20));
 
     if (!result.committed && !supersededByNewerEvent) {
@@ -523,13 +521,13 @@ class AutoAwayService {
     _loggingOutUids.remove(normalizedUid);
     _lastSyncSignatureByUid.remove(normalizedUid);
     _lastMonitoringStatusSignatureByHome.removeWhere(
-      (key, _) => key.startsWith('$normalizedUid|'),
+          (key, _) => key.startsWith('$normalizedUid|'),
     );
     _initialPresenceSynced = false;
 
     unawaited(
       flushPendingPresenceEvents(uid: normalizedUid).catchError((Object error) {
-        debugPrint('AUTO_AWAY_LOGIN_PENDING_EVENT_FLUSH_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_LOGIN_PENDING_EVENT_FLUSH_ERROR: $error');
       }),
     );
   }
@@ -548,7 +546,7 @@ class AutoAwayService {
     try {
       await _removePendingPresenceEventsForUid(normalizedUid);
     } catch (error) {
-      debugPrint('AUTO_AWAY_LOGOUT_CLEAR_PENDING_EVENTS_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_LOGOUT_CLEAR_PENDING_EVENTS_ERROR: $error');
     }
 
     // Hủy yêu cầu đồng bộ đang chờ của đúng tài khoản này.
@@ -565,7 +563,7 @@ class AutoAwayService {
       try {
         await runningSync.timeout(const Duration(seconds: 12));
       } catch (error) {
-        debugPrint('AUTO_AWAY_LOGOUT_WAIT_SYNC_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_LOGOUT_WAIT_SYNC_ERROR: $error');
       }
     }
 
@@ -599,7 +597,7 @@ class AutoAwayService {
       }
     } catch (error) {
       firstError ??= error;
-      debugPrint('AUTO_AWAY_LOGOUT_READ_PRESENCE_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_LOGOUT_READ_PRESENCE_ERROR: $error');
     }
 
     List<dynamic> registered = <dynamic>[];
@@ -624,7 +622,7 @@ class AutoAwayService {
       }
     } catch (error) {
       firstError ??= error;
-      debugPrint('AUTO_AWAY_LOGOUT_READ_GEOFENCE_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_LOGOUT_READ_GEOFENCE_ERROR: $error');
     }
 
     if (identitiesByHome.isNotEmpty) {
@@ -645,7 +643,7 @@ class AutoAwayService {
         updates['$basePath/lastConfirmedAt'] = logoutOccurredAt;
         updates['$basePath/lastEventOccurredAt'] = logoutOccurredAt;
         updates['$basePath/lastEventId'] =
-            'signed_out|$normalizedUid|${identity.homeId}|$logoutOccurredAt';
+        'signed_out|$normalizedUid|${identity.homeId}|$logoutOccurredAt';
         updates['$basePath/monitoringHealth'] = 'unavailable';
         updates['$basePath/monitoringHealthReason'] = 'signed_out';
         updates['$basePath/monitoringEligible'] = false;
@@ -671,7 +669,7 @@ class AutoAwayService {
             .timeout(const Duration(seconds: 15));
       } catch (error) {
         firstError ??= error;
-        debugPrint('AUTO_AWAY_LOGOUT_WRITE_PRESENCE_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_LOGOUT_WRITE_PRESENCE_ERROR: $error');
       }
     }
 
@@ -688,13 +686,13 @@ class AutoAwayService {
         await NativeGeofenceManager.instance.removeGeofenceById(id);
       } catch (error) {
         firstError ??= error;
-        debugPrint('AUTO_AWAY_LOGOUT_REMOVE_GEOFENCE_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_LOGOUT_REMOVE_GEOFENCE_ERROR: $error');
       }
     }
 
     _lastSyncSignatureByUid.remove(normalizedUid);
     _lastMonitoringStatusSignatureByHome.removeWhere(
-      (key, _) => key.startsWith('$normalizedUid|'),
+          (key, _) => key.startsWith('$normalizedUid|'),
     );
     _initialPresenceSynced = false;
 
@@ -832,9 +830,8 @@ class AutoAwayService {
 
       try {
         await _syncForHomesInternal(uid: uid, homes: homes, force: force);
-      } catch (error, stackTrace) {
-        debugPrint('AUTO_AWAY_SYNC_ERROR: $error');
-        debugPrintStack(stackTrace: stackTrace);
+      } catch (error) {
+        safeDebugPrint('AUTO_AWAY_SYNC_ERROR: $error');
       }
     }
   }
@@ -1015,9 +1012,9 @@ class AutoAwayService {
 
       final matches =
           current != null &&
-          (current.location.latitude - item.latitude).abs() < 0.000001 &&
-          (current.location.longitude - item.longitude).abs() < 0.000001 &&
-          (current.radiusMeters - item.radiusMeters).abs() < 0.5;
+              (current.location.latitude - item.latitude).abs() < 0.000001 &&
+              (current.location.longitude - item.longitude).abs() < 0.000001 &&
+              (current.radiusMeters - item.radiusMeters).abs() < 0.5;
 
       if (matches) {
         continue;
@@ -1117,7 +1114,7 @@ class AutoAwayService {
         );
       } catch (error) {
         currentPositionError = error;
-        debugPrint('AUTO_AWAY_CURRENT_POSITION_ERROR: $error');
+        safeDebugPrint('AUTO_AWAY_CURRENT_POSITION_ERROR: $error');
 
         try {
           position = await Geolocator.getLastKnownPosition();
@@ -1132,7 +1129,7 @@ class AutoAwayService {
             usedLastKnownPosition = true;
           }
         } catch (lastKnownError) {
-          debugPrint('AUTO_AWAY_LAST_POSITION_ERROR: $lastKnownError');
+          safeDebugPrint('AUTO_AWAY_LAST_POSITION_ERROR: $lastKnownError');
           position = null;
         }
       }
@@ -1219,13 +1216,6 @@ class AutoAwayService {
         'lastDistanceMeters': double.parse(distanceMeters.toStringAsFixed(1)),
         'lastAccuracyMeters': double.parse(accuracyMeters.toStringAsFixed(1)),
         'lastPositionAt': positionAt.millisecondsSinceEpoch,
-        if (locationPermission != null)
-          'lastLocationPermission': locationPermission.name,
-        if (locationError != null) 'lastLocationError': _locationErrorText(
-          locationError,
-        ),
-        if (locationServiceEnabled != null)
-          'lastLocationServiceEnabled': locationServiceEnabled,
       },
     );
   }
@@ -1244,13 +1234,6 @@ class AutoAwayService {
       'homeId': item.homeId,
       'lastLocationCheckAt': ServerValue.timestamp,
       'lastLocationCheckResult': result,
-      if (locationPermission != null)
-        'lastLocationPermission': locationPermission.name,
-      if (locationError != null) 'lastLocationError': _locationErrorText(
-        locationError,
-      ),
-      if (locationServiceEnabled != null)
-        'lastLocationServiceEnabled': locationServiceEnabled,
     };
 
     if (markStateUnknown) {
@@ -1306,31 +1289,31 @@ class AutoAwayService {
       await FirebaseDatabase.instance
           .ref('accounts/$uid/homePresence/${item.homeId}')
           .update({
-            'ownerUid': item.ownerUid,
-            'homeId': item.homeId,
-            // Chỉ quyền vị trí nền là điều kiện bắt buộc.
-            // Các giới hạn pin/chạy nền/tự khởi động chỉ tạo cảnh báo.
-            'monitoringEligible': status.monitoringEligible,
-            'monitoringAvailable': status.monitoringEligible,
-            'monitoringWarnings': status.warningFlags.isEmpty
-                ? null
-                : status.warningFlags,
-            'monitoringWarningReason': status.primaryWarning.isEmpty
-                ? null
-                : status.primaryWarning,
-            'locationAlwaysGranted': status.locationAlwaysGranted,
-            'batteryUnrestricted': status.batteryUnrestricted,
-            'backgroundRestricted': status.backgroundRestricted,
-            'autoStartConfirmed': status.autoStartConfirmed,
-            'monitoringBlockingReason': status.blockingEvent,
-            'monitoringHealth': status.monitoringEligible
-                ? 'active'
-                : 'unavailable',
-            'monitoringHealthReason': status.monitoringEligible
-                ? null
-                : status.blockingEvent,
-            'monitoringCheckedAt': ServerValue.timestamp,
-          });
+        'ownerUid': item.ownerUid,
+        'homeId': item.homeId,
+        // Chỉ quyền vị trí nền là điều kiện bắt buộc.
+        // Các giới hạn pin/chạy nền/tự khởi động chỉ tạo cảnh báo.
+        'monitoringEligible': status.monitoringEligible,
+        'monitoringAvailable': status.monitoringEligible,
+        'monitoringWarnings': status.warningFlags.isEmpty
+            ? null
+            : status.warningFlags,
+        'monitoringWarningReason': status.primaryWarning.isEmpty
+            ? null
+            : status.primaryWarning,
+        'locationAlwaysGranted': status.locationAlwaysGranted,
+        'batteryUnrestricted': status.batteryUnrestricted,
+        'backgroundRestricted': status.backgroundRestricted,
+        'autoStartConfirmed': status.autoStartConfirmed,
+        'monitoringBlockingReason': status.blockingEvent,
+        'monitoringHealth': status.monitoringEligible
+            ? 'active'
+            : 'unavailable',
+        'monitoringHealthReason': status.monitoringEligible
+            ? null
+            : status.blockingEvent,
+        'monitoringCheckedAt': ServerValue.timestamp,
+      });
     } catch (_) {
       // Cho phép lần đồng bộ sau thử ghi lại nếu lần này lỗi.
       if (_lastMonitoringStatusSignatureByHome[cacheKey] == valueSignature) {
@@ -1398,10 +1381,10 @@ class AutoAwayService {
   }
 
   static String _buildSignature(
-    Map<String, _DesiredGeofence> desired,
-    LocationPermission permission,
-    _MonitoringStatus monitoringStatus,
-  ) {
+      Map<String, _DesiredGeofence> desired,
+      LocationPermission permission,
+      _MonitoringStatus monitoringStatus,
+      ) {
     final items = desired.values.toList()..sort((a, b) => a.id.compareTo(b.id));
 
     return [

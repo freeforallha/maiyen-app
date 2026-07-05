@@ -31,7 +31,19 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+build/
 /coverage/
+.gradle/
+
+# Local secrets/config
+serviceAccount.json
+.env
+*.pem
+*.key
+android/key.properties
+android/local.properties
+**/google-services.json
+**/GoogleService-Info.plist
 
 # Symbolication related
 app.*.symbols

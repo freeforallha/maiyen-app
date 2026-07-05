@@ -12,7 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../../firebase_options.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 const String _autoAwayTaskDataKey =
     'safehome_auto_away_foreground_task_config_v1';
 const int _autoAwayForegroundServiceId = 884201;
@@ -336,9 +336,8 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
         homes: homes,
         event: event,
       );
-    } catch (error, stackTrace) {
-      debugPrint('AUTO_AWAY_FOREGROUND_TASK_HEARTBEAT_ERROR: $error');
-      debugPrintStack(stackTrace: stackTrace);
+    } catch (error) {
+      safeDebugPrint('AUTO_AWAY_FOREGROUND_TASK_HEARTBEAT_ERROR: $error');
     } finally {
       _heartbeatRunning = false;
     }
@@ -362,7 +361,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
             : AndroidProvider.debug,
       );
     } catch (error) {
-      debugPrint('AUTO_AWAY_FOREGROUND_TASK_APP_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_FOREGROUND_TASK_APP_CHECK_ERROR: $error');
     }
 
     _firebaseReady = true;

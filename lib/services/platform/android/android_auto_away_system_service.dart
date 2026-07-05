@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class AndroidAutoAwaySystemService {
   const AndroidAutoAwaySystemService._();
 
@@ -15,7 +15,7 @@ class AndroidAutoAwaySystemService {
           ) ??
           false;
     } catch (error) {
-      debugPrint('AUTO_AWAY_BATTERY_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_BATTERY_CHECK_ERROR: $error');
       return false;
     }
   }
@@ -25,7 +25,7 @@ class AndroidAutoAwaySystemService {
       return await _channel.invokeMethod<bool>('isBackgroundRestricted') ??
           true;
     } catch (error) {
-      debugPrint('AUTO_AWAY_BACKGROUND_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_BACKGROUND_CHECK_ERROR: $error');
       return true;
     }
   }
@@ -35,7 +35,7 @@ class AndroidAutoAwaySystemService {
       return await _channel.invokeMethod<bool>('isBootReceiverConfirmed') ??
           false;
     } catch (error) {
-      debugPrint('AUTO_AWAY_AUTOSTART_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_AUTOSTART_CHECK_ERROR: $error');
       return false;
     }
   }

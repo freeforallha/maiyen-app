@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'installation_id_service.dart';
-
+import 'package:safehome_app/helpers/debug_log.dart';
 class AccountSessionService {
   const AccountSessionService._();
 
@@ -123,14 +123,14 @@ class AccountSessionService {
             uid: cleanUid,
             ref: ref,
           ).catchError((Object error) {
-            debugPrint(
+            safeDebugPrint(
               'ACCOUNT_SESSION_CONNECTED_ERROR: $error',
             );
           }),
         );
       },
       onError: (Object error) {
-        debugPrint(
+        safeDebugPrint(
           'ACCOUNT_SESSION_CONNECTION_LISTENER_ERROR: $error',
         );
       },
@@ -155,7 +155,7 @@ class AccountSessionService {
             uid: cleanUid,
             ref: ref,
           ).catchError((Object error) {
-            debugPrint(
+            safeDebugPrint(
               'ACCOUNT_SESSION_HEARTBEAT_ERROR: $error',
             );
           }),
@@ -240,7 +240,7 @@ class AccountSessionService {
         ref: ref,
       );
     } catch (error) {
-      debugPrint(
+      safeDebugPrint(
         'ACCOUNT_SESSION_LIFECYCLE_ERROR: $error',
       );
     }
@@ -274,7 +274,7 @@ class AccountSessionService {
     try {
       await ref.onDisconnect().cancel();
     } catch (error) {
-      debugPrint(
+      safeDebugPrint(
         'ACCOUNT_SESSION_CANCEL_DISCONNECT_ERROR: $error',
       );
     }
