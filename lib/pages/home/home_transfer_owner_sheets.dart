@@ -6,86 +6,89 @@ Future<String?> showTransferOwnerEmailSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  final controller = TextEditingController();
+  String inputEmail = "";
 
-  try {
-    return await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
+  return showModalBottomSheet<String>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (sheetContext) {
+      return SafeArea(
+        child: AnimatedPadding(
+          duration: const Duration(milliseconds: 160),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
+          ),
           child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  strings.t("Chuyển quyền chủ nhà"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+            child: StatefulBuilder(
+              builder: (context, setSheetState) {
+                final email = inputEmail.trim().toLowerCase();
 
-                const SizedBox(height: 18),
-                const SizedBox(height: 12),
+                final emailOk = RegExp(
+                  r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                ).hasMatch(email);
 
-                StatefulBuilder(
-                  builder: (context, setEmailState) {
-                    final email = controller.text.trim().toLowerCase();
+                void submit() {
+                  if (!emailOk) return;
+                  Navigator.pop(sheetContext, email);
+                }
 
-                    final emailOk = RegExp(
-                      r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                    ).hasMatch(email);
-
-                    return TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (_) => setEmailState(() {}),
-                      decoration: InputDecoration(
-                        labelText: strings.t("Email người nhận"),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        strings.t("Chuyển quyền chủ nhà"),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
                         ),
-                        suffixIcon: emailOk
-                            ? IconButton(
-                                icon: const Icon(Icons.send_rounded),
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                    controller.text.trim().toLowerCase(),
-                                  );
-                                },
-                              )
-                            : null,
                       ),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 18),
-              ],
+                      const SizedBox(height: 18),
+                      TextFormField(
+                        autofocus: true,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                          labelText: strings.t("Email người nhận"),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: emailOk
+                              ? IconButton(
+                            icon: const Icon(Icons.send_rounded),
+                            onPressed: submit,
+                          )
+                              : null,
+                        ),
+                        onChanged: (value) {
+                          inputEmail = value;
+                          setSheetState(() {});
+                        },
+                        onFieldSubmitted: (_) => submit(),
+                      ),
+                      const SizedBox(height: 18),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
-        );
-      },
-    );
-  } finally {
-    controller.dispose();
-  }
+        ),
+      );
+    },
+  );
 }
 
 Future<bool> showTransferOwnerConfirmSheet({
@@ -178,37 +181,49 @@ Future<String?> showTransferOwnerPasswordDialog({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  final passwordController = TextEditingController();
+  String inputPassword = "";
 
-  try {
-    return await showDialog<String>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: Text(strings.t("Xác nhận mật khẩu")),
-          content: TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: strings.t("Mật khẩu tài khoản"),
-              border: const OutlineInputBorder(),
+  return showDialog<String>(
+    context: context,
+    builder: (dialogContext) {
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final passwordOk = inputPassword.trim().isNotEmpty;
+
+          void submit() {
+            if (!passwordOk) return;
+            Navigator.pop(dialogContext, inputPassword.trim());
+          }
+
+          return AlertDialog(
+            title: Text(strings.t("Xác nhận mật khẩu")),
+            content: TextFormField(
+              autofocus: true,
+              obscureText: true,
+              textInputAction: TextInputAction.done,
+              decoration: InputDecoration(
+                labelText: strings.t("Mật khẩu tài khoản"),
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                inputPassword = value.trim();
+                setDialogState(() {});
+              },
+              onFieldSubmitted: (_) => submit(),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: Text(strings.t("Huỷ")),
-            ),
-            ElevatedButton(
-              onPressed: () =>
-                  Navigator.pop(dialogContext, passwordController.text.trim()),
-              child: Text(strings.t("Xác nhận")),
-            ),
-          ],
-        );
-      },
-    );
-  } finally {
-    passwordController.dispose();
-  }
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(strings.t("Huỷ")),
+              ),
+              ElevatedButton(
+                onPressed: passwordOk ? submit : null,
+                child: Text(strings.t("Xác nhận")),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
 }

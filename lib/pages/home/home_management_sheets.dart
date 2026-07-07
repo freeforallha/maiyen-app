@@ -11,10 +11,10 @@ Future<Map<String, String>?> showRenameHomeSheet({
   required String currentName,
   required String currentAddress,
 }) async {
-  final nameController = TextEditingController(text: currentName);
-  final addressController = TextEditingController(text: currentAddress);
+  String inputName = currentName.trim();
+  String inputAddress = currentAddress.trim();
 
-  final result = await showModalBottomSheet<Map<String, String>>(
+  return showModalBottomSheet<Map<String, String>>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -34,7 +34,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
             ),
             child: StatefulBuilder(
               builder: (context, setSheetState) {
-                final nameOk = nameController.text.trim().isNotEmpty;
+                final nameOk = inputName.trim().isNotEmpty;
 
                 InputDecoration fieldDecoration({
                   required String label,
@@ -69,7 +69,20 @@ Future<Map<String, String>?> showRenameHomeSheet({
                   );
                 }
 
+                void submit() {
+                  if (!nameOk) return;
+
+                  Navigator.pop(sheetContext, {
+                    "name": inputName.trim(),
+                    "address": usePersonalName
+                        ? currentAddress.trim()
+                        : inputAddress.trim(),
+                  });
+                }
+
                 return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -107,23 +120,20 @@ Future<Map<String, String>?> showRenameHomeSheet({
                         ),
                       ),
                       const SizedBox(height: 18),
-                      TextField(
-                        controller: nameController,
+                      TextFormField(
+                        initialValue: currentName,
+                        autofocus: true,
                         textInputAction: usePersonalName
                             ? TextInputAction.done
                             : TextInputAction.next,
-                        onChanged: (_) {
+                        onChanged: (value) {
+                          inputName = value.trim();
                           setSheetState(() {});
                         },
-                        onSubmitted: (_) {
-                          if (!usePersonalName || !nameOk) {
-                            return;
+                        onFieldSubmitted: (_) {
+                          if (usePersonalName) {
+                            submit();
                           }
-
-                          Navigator.pop(sheetContext, {
-                            "name": nameController.text.trim(),
-                            "address": currentAddress,
-                          });
                         },
                         decoration: fieldDecoration(
                           label: strings.t("Tên nhà"),
@@ -132,22 +142,16 @@ Future<Map<String, String>?> showRenameHomeSheet({
                       ),
                       if (!usePersonalName) ...[
                         const SizedBox(height: 12),
-                        TextField(
-                          controller: addressController,
+                        TextFormField(
+                          initialValue: currentAddress,
                           textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.done,
                           maxLines: 2,
                           minLines: 1,
-                          onSubmitted: (_) {
-                            if (!nameOk) {
-                              return;
-                            }
-
-                            Navigator.pop(sheetContext, {
-                              "name": nameController.text.trim(),
-                              "address": addressController.text.trim(),
-                            });
+                          onChanged: (value) {
+                            inputAddress = value.trim();
                           },
+                          onFieldSubmitted: (_) => submit(),
                           decoration: fieldDecoration(
                             label: strings.t("Địa chỉ"),
                             icon: Icons.location_on_outlined,
@@ -160,20 +164,13 @@ Future<Map<String, String>?> showRenameHomeSheet({
                         width: double.infinity,
                         height: 48,
                         child: FilledButton.icon(
-                          onPressed: nameOk
-                              ? () {
-                                  Navigator.pop(sheetContext, {
-                                    "name": nameController.text.trim(),
-                                    "address": usePersonalName
-                                        ? currentAddress
-                                        : addressController.text.trim(),
-                                  });
-                                }
-                              : null,
+                          onPressed: nameOk ? submit : null,
                           icon: const Icon(Icons.save_rounded),
                           label: Text(
                             strings.t("Lưu thay đổi"),
-                            style: TextStyle(fontWeight: FontWeight.w800),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                           style: FilledButton.styleFrom(
                             backgroundColor: SafeHomeColors.primary,
@@ -188,11 +185,11 @@ Future<Map<String, String>?> showRenameHomeSheet({
                       Text(
                         usePersonalName
                             ? strings.t(
-                                "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
-                              )
+                          "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
+                        )
                             : strings.t(
-                                "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
-                              ),
+                          "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
+                        ),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: SafeHomeColors.textSecondary,
@@ -210,17 +207,6 @@ Future<Map<String, String>?> showRenameHomeSheet({
       );
     },
   );
-
-  // Bottom sheet vẫn đang chạy animation đóng sau khi
-  // Navigator.pop() trả kết quả. Không dispose controller ngay,
-  // nếu không TextField có thể đọc controller đã dispose và gây
-  // màn hình đỏ.
-  Future<void>.delayed(const Duration(milliseconds: 350), () {
-    nameController.dispose();
-    addressController.dispose();
-  });
-
-  return result;
 }
 
 Future<String?> showShareHomeSheet({
@@ -228,79 +214,105 @@ Future<String?> showShareHomeSheet({
   required AppStrings strings,
   required String qrData,
 }) async {
-  final controller = TextEditingController();
+  String inputEmail = "";
 
-  final targetEmail = await showModalBottomSheet<String>(
+  return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       return StatefulBuilder(
         builder: (context, setSheetState) {
-          final email = controller.text.trim().toLowerCase();
-          final emailOk = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
+          final email = inputEmail.trim().toLowerCase();
+
+          final emailOk = RegExp(
+            r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+          ).hasMatch(email);
+
+          void submit() {
+            if (!emailOk) return;
+            Navigator.pop(sheetContext, email);
+          }
+
+          final bottomInset = MediaQuery.of(sheetContext).viewInsets.bottom;
+          final keyboardOpen = bottomInset > 0;
+          final qrSize = keyboardOpen ? 130.0 : 180.0;
 
           return SafeArea(
-            child: Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      strings.t("Chia sẻ nhà"),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
+            child: AnimatedPadding(
+              duration: const Duration(milliseconds: 160),
+              curve: Curves.easeOut,
+              padding: EdgeInsets.only(bottom: bottomInset),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
+                ),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(26),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          strings.t("Chia sẻ nhà"),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (_) => setSheetState(() {}),
-                    decoration: InputDecoration(
-                      labelText: strings.t("Email người nhận"),
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide.none,
+                      const SizedBox(height: 18),
+                      TextFormField(
+                        autofocus: true,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) {
+                          inputEmail = value;
+                          setSheetState(() {});
+                        },
+                        onFieldSubmitted: (_) => submit(),
+                        decoration: InputDecoration(
+                          labelText: strings.t("Email người nhận"),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                          suffixIcon: emailOk
+                              ? IconButton(
+                            icon: const Icon(Icons.send_rounded),
+                            onPressed: submit,
+                          )
+                              : null,
+                        ),
                       ),
-                      suffixIcon: emailOk
-                          ? IconButton(
-                              icon: const Icon(Icons.send_rounded),
-                              onPressed: () {
-                                Navigator.pop(context, email);
-                              },
-                            )
-                          : null,
-                    ),
+                      const SizedBox(height: 18),
+                      Text(
+                        strings.t("Mời thành viên bằng mã QR"),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      QrImageView(
+                        data: qrData,
+                        version: QrVersions.auto,
+                        size: qrSize,
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                   ),
-                  const SizedBox(height: 18),
-                  Text(
-                    strings.t("Mời thành viên bằng mã QR"),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12),
-                  QrImageView(
-                    data: qrData,
-                    version: QrVersions.auto,
-                    size: 180,
-                  ),
-                  const SizedBox(height: 12),
-                ],
+                ),
               ),
             ),
           );
@@ -308,12 +320,6 @@ Future<String?> showShareHomeSheet({
       );
     },
   );
-
-  Future<void>.delayed(const Duration(milliseconds: 350), () {
-    controller.dispose();
-  });
-
-  return targetEmail;
 }
 
 void showJoinHomeQrSheet({

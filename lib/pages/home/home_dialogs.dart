@@ -12,9 +12,8 @@ Future<String?> showHomeTimeTextInputDialog({
 }) async {
   final parts = initial.split(":");
 
-  final hourController = TextEditingController(text: parts[0]);
-
-  final minuteController = TextEditingController(text: parts[1]);
+  String hourText = parts.isNotEmpty ? parts[0].padLeft(2, "0") : "00";
+  String minuteText = parts.length > 1 ? parts[1].padLeft(2, "0") : "00";
 
   const suggestions = [
     ["23", "00"],
@@ -30,129 +29,132 @@ Future<String?> showHomeTimeTextInputDialog({
     return reg.hasMatch(value.trim());
   }
 
-  final result = await showDialog<String>(
+  return showDialog<String>(
     context: context,
     builder: (dialogContext) {
-      return AlertDialog(
-        title: Text(title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          void submit() {
+            final h = hourText.trim().padLeft(2, "0");
+            final m = minuteText.trim().padLeft(2, "0");
+            final value = "$h:$m";
+
+            if (!isValidTime(value)) {
+              showTopToast(
+                dialogContext,
+                strings.t("Giờ không hợp lệ"),
+                color: Colors.red,
+                icon: Icons.schedule_rounded,
+              );
+              return;
+            }
+
+            Navigator.pop(dialogContext, value);
+          }
+
+          Widget suggestionChip(List<String> s) {
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ActionChip(
+                    label: Center(child: Text("${s[0]}:${s[1]}")),
+                    onPressed: () {
+                      setDialogState(() {
+                        hourText = s[0];
+                        minuteText = s[1];
+                      });
+                    },
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return AlertDialog(
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: hourController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 2,
-                    decoration: InputDecoration(
-                      labelText: strings.t("Giờ"),
-                      counterText: "",
-                      border: const OutlineInputBorder(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        key: ValueKey("hour_$hourText"),
+                        initialValue: hourText,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.next,
+                        maxLength: 2,
+                        decoration: InputDecoration(
+                          labelText: strings.t("Giờ"),
+                          counterText: "",
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          hourText = value.trim();
+                        },
+                      ),
                     ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    ":",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: minuteController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 2,
-                    decoration: InputDecoration(
-                      labelText: strings.t("Phút"),
-                      counterText: "",
-                      border: const OutlineInputBorder(),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        ":",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: TextFormField(
+                        key: ValueKey("minute_$minuteText"),
+                        initialValue: minuteText,
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        maxLength: 2,
+                        decoration: InputDecoration(
+                          labelText: strings.t("Phút"),
+                          counterText: "",
+                          border: const OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          minuteText = value.trim();
+                        },
+                        onFieldSubmitted: (_) => submit(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Column(
+                  children: [
+                    Row(
+                      children: suggestions.take(3).map(suggestionChip).toList(),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: suggestions.skip(3).map(suggestionChip).toList(),
+                    ),
+                  ],
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-            Column(
-              children: [
-                Row(
-                  children: suggestions.take(3).map((s) {
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ActionChip(
-                            label: Center(child: Text("${s[0]}:${s[1]}")),
-                            onPressed: () {
-                              hourController.text = s[0];
-                              minuteController.text = s[1];
-                            },
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: suggestions.skip(3).map((s) {
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ActionChip(
-                            label: Center(child: Text("${s[0]}:${s[1]}")),
-                            onPressed: () {
-                              hourController.text = s[0];
-                              minuteController.text = s[1];
-                            },
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(strings.t("Huỷ")),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final h = hourController.text.trim().padLeft(2, '0');
-              final m = minuteController.text.trim().padLeft(2, '0');
-              final value = "$h:$m";
-
-              if (!isValidTime(value)) {
-                showTopToast(
-                  dialogContext,
-                  strings.t("Giờ không hợp lệ"),
-                  color: Colors.red,
-                  icon: Icons.schedule_rounded,
-                );
-                return;
-              }
-
-              Navigator.pop(dialogContext, value);
-            },
-            child: Text(strings.t("OK")),
-          ),
-        ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(strings.t("Huỷ")),
+              ),
+              ElevatedButton(
+                onPressed: submit,
+                child: Text(strings.t("OK")),
+              ),
+            ],
+          );
+        },
       );
     },
   );
-
-  hourController.dispose();
-  minuteController.dispose();
-
-  return result;
 }
 
 Future<void> showAlarmReceiveReminderDialog({

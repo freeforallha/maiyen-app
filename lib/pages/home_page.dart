@@ -2780,21 +2780,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   void renameDevice(String id) async {
     final oldDeviceName = getDevices()[id]?["name"]?.toString() ?? id;
-    final controller = TextEditingController(text: oldDeviceName);
+    String inputName = oldDeviceName.trim();
 
     final name = await showDialog<String>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           title: Text(_strings.t("Thay tên")),
-          content: TextField(controller: controller),
+          content: TextFormField(
+            initialValue: oldDeviceName,
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            onChanged: (value) {
+              inputName = value.trim();
+            },
+            onFieldSubmitted: (_) {
+              if (inputName.isEmpty) return;
+              Navigator.of(dialogContext).pop(inputName);
+            },
+          ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(_strings.t("Hủy")),
             ),
             ElevatedButton(
-              onPressed: () => Navigator.pop(dialogContext, controller.text),
+              onPressed: () {
+                if (inputName.isEmpty) return;
+                Navigator.of(dialogContext).pop(inputName);
+              },
               child: Text(_strings.t("OK")),
             ),
           ],
@@ -2802,8 +2816,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       },
     );
 
-    controller.dispose();
-
+    if (!mounted) return;
     if (name == null || name.trim().isEmpty) return;
 
     final newName = name.trim();
@@ -2822,36 +2835,50 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ? emailName
         : _strings.t("Một thành viên");
 
-    await HomeService.renameDevice(
-      ownerUid: ownerUid,
-      homeId: selectedHome,
-      deviceId: id,
-      name: newName,
-    );
+    try {
+      await HomeService.renameDevice(
+        ownerUid: ownerUid,
+        homeId: selectedHome,
+        deviceId: id,
+        name: newName,
+      );
 
-    await HomeNotificationService.notifyHome(
-      ownerUid: ownerUid,
-      homeId: selectedHome,
-      type: "device_renamed",
-      category: "device",
-      severity: "info",
-      title: _strings.t("Đã đổi tên thiết bị"),
-      message: _strings.choose(
-        vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
-        en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
-        ja: "$actorName が「$homeName」でデバイス「$oldDeviceName」の名前を「$newName」に変更しました。",
-      ),
-      deviceId: id,
-      entityType: "device",
-      entityId: id,
-      homeName: homeName,
-      includeActor: true,
-      data: {
-        "actorName": actorName,
-        "oldName": oldDeviceName,
-        "newName": newName,
-      },
-    );
+      await HomeNotificationService.notifyHome(
+        ownerUid: ownerUid,
+        homeId: selectedHome,
+        type: "device_renamed",
+        category: "device",
+        severity: "info",
+        title: _strings.t("Đã đổi tên thiết bị"),
+        message: _strings.choose(
+          vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
+          en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
+          ja: "$actorName が「$homeName」でデバイス「$oldDeviceName」の名前を「$newName」に変更しました。",
+        ),
+        deviceId: id,
+        entityType: "device",
+        entityId: id,
+        homeName: homeName,
+        includeActor: true,
+        data: {
+          "actorName": actorName,
+          "oldName": oldDeviceName,
+          "newName": newName,
+        },
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      showTopToast(
+        context,
+        _strings.sanitizeUserMessage(
+          e.toString(),
+          fallback: _strings.genericOperationError,
+        ),
+        color: Colors.red,
+        icon: Icons.error_rounded,
+      );
+    }
   }
 
   Future<void> runFirebaseSecurityTest() async {

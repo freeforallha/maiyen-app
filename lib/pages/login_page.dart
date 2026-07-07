@@ -120,50 +120,67 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showResetPasswordDialog() {
-    final controller = TextEditingController();
+    final strings = AppStrings.of(context);
+    String inputEmail = "";
 
-    showDialog(
+    showDialog<void>(
       context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(AppStrings.of(context).t("Khôi phục mật khẩu")),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: AppStrings.of(context).t("Nhập email của bạn"),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(AppStrings.of(context).t("Huỷ")),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final emailInput = controller.text.trim();
-                if (emailInput.isEmpty) return;
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            final emailInput = inputEmail.trim();
 
-                try {
-                  await FirebaseAuth.instance.sendPasswordResetEmail(
-                    email: emailInput,
-                  );
+            Future<void> submit() async {
+              if (emailInput.isEmpty) return;
 
-                  if (!mounted) return;
+              try {
+                await FirebaseAuth.instance.sendPasswordResetEmail(
+                  email: emailInput,
+                );
 
-                  Navigator.pop(context);
+                if (!mounted || !dialogContext.mounted) return;
 
-                  setState(() {
-                    error = AppStrings.of(context).t("Đã gửi email khôi phục");
-                  });
-                } catch (e) {
-                  setState(() {
-                    error = AppStrings.of(context).t("Không gửi được email");
-                  });
-                }
-              },
-              child: Text(AppStrings.of(context).t("Gửi")),
-            ),
-          ],
+                Navigator.of(dialogContext).pop();
+
+                setState(() {
+                  error = strings.t("Đã gửi email khôi phục");
+                });
+              } catch (_) {
+                if (!mounted) return;
+
+                setState(() {
+                  error = strings.t("Không gửi được email");
+                });
+              }
+            }
+
+            return AlertDialog(
+              title: Text(strings.t("Khôi phục mật khẩu")),
+              content: TextFormField(
+                autofocus: true,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  hintText: strings.t("Nhập email của bạn"),
+                ),
+                onChanged: (value) {
+                  inputEmail = value.trim();
+                  setDialogState(() {});
+                },
+                onFieldSubmitted: (_) => submit(),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: Text(strings.t("Huỷ")),
+                ),
+                ElevatedButton(
+                  onPressed: emailInput.isEmpty ? null : submit,
+                  child: Text(strings.t("Gửi")),
+                ),
+              ],
+            );
+          },
         );
       },
     );

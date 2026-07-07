@@ -139,73 +139,80 @@ Future<Map<String, String>?> showCreateHomeDialog({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  final nameController = TextEditingController();
-  final addressController = TextEditingController();
+  String inputName = "";
+  String inputAddress = "";
 
-  final result = await showDialog<Map<String, String>>(
+  return showDialog<Map<String, String>>(
     context: context,
     builder: (dialogContext) {
-      return AlertDialog(
-        title: Text(strings.t("Thêm nhà mới")),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: strings.t("Tên nhà"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final nameOk = inputName.trim().isNotEmpty;
+
+          InputDecoration fieldDecoration(String label) {
+            return InputDecoration(
+              labelText: label,
+              filled: true,
+              fillColor: Colors.grey.shade100,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
               ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: addressController,
-              decoration: InputDecoration(
-                labelText: strings.t("Địa chỉ"),
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide.none,
-                ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
               ),
+            );
+          }
+
+          void submit() {
+            if (!nameOk) return;
+
+            Navigator.of(dialogContext).pop({
+              "name": inputName.trim(),
+              "address": inputAddress.trim(),
+            });
+          }
+
+          return AlertDialog(
+            title: Text(strings.t("Thêm nhà mới")),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  autofocus: true,
+                  textInputAction: TextInputAction.next,
+                  decoration: fieldDecoration(strings.t("Tên nhà")),
+                  onChanged: (value) {
+                    inputName = value.trim();
+                    setDialogState(() {});
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
+                  textInputAction: TextInputAction.done,
+                  decoration: fieldDecoration(strings.t("Địa chỉ")),
+                  onChanged: (value) {
+                    inputAddress = value.trim();
+                  },
+                  onFieldSubmitted: (_) => submit(),
+                ),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: Text(strings.t("Hủy")),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext, {
-                "name": nameController.text.trim(),
-                "address": addressController.text.trim(),
-              });
-            },
-            child: Text(strings.t("OK")),
-          ),
-        ],
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(strings.t("Hủy")),
+              ),
+              ElevatedButton(
+                onPressed: nameOk ? submit : null,
+                child: Text(strings.t("OK")),
+              ),
+            ],
+          );
+        },
       );
     },
   );
-
-  nameController.dispose();
-  addressController.dispose();
-
-  return result;
 }

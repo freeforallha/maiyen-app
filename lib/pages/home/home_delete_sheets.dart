@@ -83,7 +83,7 @@ Future<bool> showDeleteHomePasswordSheet({
   required Future<bool> Function(BuildContext sheetContext, String password)
   onConfirmPassword,
 }) async {
-  final controller = TextEditingController();
+  String inputPassword = "";
 
   final result = await showModalBottomSheet<bool>(
     context: context,
@@ -91,79 +91,101 @@ Future<bool> showDeleteHomePasswordSheet({
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {
       return SafeArea(
-        child: Container(
+        child: AnimatedPadding(
+          duration: const Duration(milliseconds: 160),
+          curve: Curves.easeOut,
           padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
           ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.lock_outline_rounded,
-                color: Colors.red,
-                size: 44,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                strings.t("Nhập mật khẩu"),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: controller,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: strings.t("Mật khẩu tài khoản"),
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.delete_forever_rounded),
-                  label: Text(strings.t("Xoá nhà")),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () async {
-                    final confirmed = await onConfirmPassword(
-                      sheetContext,
-                      controller.text.trim(),
-                    );
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+            ),
+            child: StatefulBuilder(
+              builder: (context, setSheetState) {
+                final passwordOk = inputPassword.trim().isNotEmpty;
 
-                    if (!sheetContext.mounted || !confirmed) {
-                      return;
-                    }
+                Future<void> submit() async {
+                  if (!passwordOk) return;
 
-                    Navigator.pop(sheetContext, true);
-                  },
-                ),
-              ),
-            ],
+                  final confirmed = await onConfirmPassword(
+                    sheetContext,
+                    inputPassword.trim(),
+                  );
+
+                  if (!sheetContext.mounted || !confirmed) {
+                    return;
+                  }
+
+                  Navigator.pop(sheetContext, true);
+                }
+
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.lock_outline_rounded,
+                        color: Colors.red,
+                        size: 44,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        strings.t("Nhập mật khẩu"),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        autofocus: true,
+                        obscureText: true,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                          labelText: strings.t("Mật khẩu tài khoản"),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          inputPassword = value.trim();
+                          setSheetState(() {});
+                        },
+                        onFieldSubmitted: (_) => submit(),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.delete_forever_rounded),
+                          label: Text(strings.t("Xoá nhà")),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor: Colors.grey.shade300,
+                            disabledForegroundColor: Colors.grey.shade600,
+                          ),
+                          onPressed: passwordOk ? submit : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       );
     },
   );
-
-  Future<void>.delayed(const Duration(milliseconds: 350), controller.dispose);
 
   return result ?? false;
 }

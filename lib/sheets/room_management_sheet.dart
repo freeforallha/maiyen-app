@@ -93,22 +93,30 @@ Future<void> showRoomManagementSheet({
                     });
 
               Future<void> renameRoom(
-                String roomId,
-                Map<String, dynamic> room,
-              ) async {
-                final controller = TextEditingController(
-                  text: room["name"]?.toString() ?? "",
-                );
+                  String roomId,
+                  Map<String, dynamic> room,
+                  ) async {
+                final oldName = room["name"]?.toString() ?? "";
+                String inputName = oldName.trim();
 
                 final newName = await showDialog<String>(
                   context: sheetContext,
                   builder: (dialogContext) => AlertDialog(
                     title: Text(strings.t("Đổi tên phòng")),
-                    content: TextField(
-                      controller: controller,
+                    content: TextFormField(
+                      initialValue: oldName,
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         hintText: strings.t("Tên phòng"),
                       ),
+                      onChanged: (value) {
+                        inputName = value.trim();
+                      },
+                      onFieldSubmitted: (_) {
+                        if (inputName.isEmpty) return;
+                        Navigator.pop(dialogContext, inputName);
+                      },
                     ),
                     actions: [
                       TextButton(
@@ -117,7 +125,8 @@ Future<void> showRoomManagementSheet({
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(dialogContext, controller.text.trim());
+                          if (inputName.isEmpty) return;
+                          Navigator.pop(dialogContext, inputName);
                         },
                         child: Text(strings.t("Lưu")),
                       ),
@@ -125,11 +134,11 @@ Future<void> showRoomManagementSheet({
                   ),
                 );
 
-                controller.dispose();
+                if (newName == null || newName.trim().isEmpty) return;
 
-                if (newName == null || newName.isEmpty) return;
-
-                await roomsRef.child(roomId).update({"name": newName});
+                await roomsRef.child(roomId).update({
+                  "name": newName.trim(),
+                });
               }
 
               Future<void> deleteRoom(String roomId) async {
@@ -181,19 +190,27 @@ Future<void> showRoomManagementSheet({
               }
 
               Future<void> addRoom(
-                List<MapEntry<dynamic, dynamic>> allEntries,
-              ) async {
-                final controller = TextEditingController();
+                  List<MapEntry<dynamic, dynamic>> allEntries,
+                  ) async {
+                String inputName = "";
 
                 final roomName = await showDialog<String>(
                   context: sheetContext,
                   builder: (dialogContext) => AlertDialog(
                     title: Text(strings.t("Thêm phòng")),
-                    content: TextField(
-                      controller: controller,
+                    content: TextFormField(
+                      autofocus: true,
+                      textInputAction: TextInputAction.done,
                       decoration: InputDecoration(
                         hintText: strings.t("Ví dụ: Phòng khách"),
                       ),
+                      onChanged: (value) {
+                        inputName = value.trim();
+                      },
+                      onFieldSubmitted: (_) {
+                        if (inputName.isEmpty) return;
+                        Navigator.pop(dialogContext, inputName);
+                      },
                     ),
                     actions: [
                       TextButton(
@@ -202,7 +219,8 @@ Future<void> showRoomManagementSheet({
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(dialogContext, controller.text.trim());
+                          if (inputName.isEmpty) return;
+                          Navigator.pop(dialogContext, inputName);
                         },
                         child: Text(strings.t("Thêm")),
                       ),
@@ -210,9 +228,7 @@ Future<void> showRoomManagementSheet({
                   ),
                 );
 
-                controller.dispose();
-
-                if (roomName == null || roomName.isEmpty) return;
+                if (roomName == null || roomName.trim().isEmpty) return;
 
                 final normalized = roomName.trim().toLowerCase();
 
@@ -241,7 +257,7 @@ Future<void> showRoomManagementSheet({
                 final roomId = "room_${DateTime.now().millisecondsSinceEpoch}";
 
                 await roomsRef.child(roomId).set({
-                  "name": roomName,
+                  "name": roomName.trim(),
                   "icon": "room",
                   "order": normalEntries.length + 1,
                 });

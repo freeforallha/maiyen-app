@@ -606,15 +606,17 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Future<void> renameGroup(String key) async {
-    final controller = TextEditingController(text: customNames[key] ?? "");
+    final oldName = customNames[key] ?? "";
+    String inputName = oldName.trim();
 
     final result = await showDialog<String>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(_strings.t("Đổi tên nhóm")),
-
-        content: TextField(
-          controller: controller,
+        content: TextFormField(
+          initialValue: oldName,
+          autofocus: true,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             hintText: _strings.choose(
               vi: "VD: Mr Chung",
@@ -624,16 +626,21 @@ class _AllHomePageState extends State<AllHomePage> {
               ja: "例: Mr Chung",
             ),
           ),
+          onChanged: (value) {
+            inputName = value.trim();
+          },
+          onFieldSubmitted: (_) {
+            Navigator.pop(dialogContext, inputName);
+          },
         ),
-
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(_strings.t("Huỷ")),
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context, controller.text.trim());
+              Navigator.pop(dialogContext, inputName);
             },
             child: Text(_strings.t("Lưu")),
           ),
@@ -658,10 +665,15 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     final uid = currentUser.uid;
+    final newName = result.trim();
 
-    await FirebaseDatabase.instance
-        .ref("accounts/$uid/groupNames/$key")
-        .set(result);
+    final ref = FirebaseDatabase.instance.ref("accounts/$uid/groupNames/$key");
+
+    if (newName.isEmpty) {
+      await ref.remove();
+    } else {
+      await ref.set(newName);
+    }
   }
 
   Widget buildSectionTitle(String groupKey, List<String> ids) {
@@ -899,49 +911,148 @@ class _AllHomePageState extends State<AllHomePage> {
   Future<void> setSelectedHomesAlarm() async {
     Future<String?> inputTime(String title, String initial) async {
       final parts = initial.split(":");
-      final h = TextEditingController(text: parts[0]);
-      final m = TextEditingController(text: parts[1]);
+
+      String hourText = parts.isNotEmpty ? parts[0].padLeft(2, "0") : "23";
+      String minuteText = parts.length > 1 ? parts[1].padLeft(2, "0") : "00";
+
+      const suggestions = [
+        ["23", "00"],
+        ["00", "00"],
+        ["01", "00"],
+        ["04", "00"],
+        ["05", "00"],
+        ["06", "00"],
+      ];
+
+      bool isValidTime(String value) {
+        return RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$').hasMatch(value.trim());
+      }
 
       return showDialog<String>(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text(title),
-          content: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: h,
-                  maxLength: 2,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: _strings.t("Giờ")),
+        builder: (dialogContext) {
+          return StatefulBuilder(
+            builder: (context, setDialogState) {
+              void submit() {
+                final h = hourText.trim().padLeft(2, "0");
+                final m = minuteText.trim().padLeft(2, "0");
+                final value = "$h:$m";
+
+                if (!isValidTime(value)) {
+                  showTopToast(
+                    dialogContext,
+                    _strings.t("Giờ không hợp lệ"),
+                    color: Colors.red,
+                    icon: Icons.schedule_rounded,
+                  );
+                  return;
+                }
+
+                Navigator.of(dialogContext).pop(value);
+              }
+
+              Widget suggestionChip(List<String> s) {
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ActionChip(
+                        label: Center(child: Text("${s[0]}:${s[1]}")),
+                        onPressed: () {
+                          setDialogState(() {
+                            hourText = s[0];
+                            minuteText = s[1];
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return AlertDialog(
+                title: Text(title),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            key: ValueKey("all_home_alarm_hour_$hourText"),
+                            initialValue: hourText,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            maxLength: 2,
+                            decoration: InputDecoration(
+                              labelText: _strings.t("Giờ"),
+                              counterText: "",
+                              border: const OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              hourText = value.trim();
+                            },
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            ":",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            key: ValueKey("all_home_alarm_minute_$minuteText"),
+                            initialValue: minuteText,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            maxLength: 2,
+                            decoration: InputDecoration(
+                              labelText: _strings.t("Phút"),
+                              counterText: "",
+                              border: const OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              minuteText = value.trim();
+                            },
+                            onFieldSubmitted: (_) => submit(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    Column(
+                      children: [
+                        Row(
+                          children: suggestions.take(3).map(suggestionChip).toList(),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: suggestions.skip(3).map(suggestionChip).toList(),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              const Text(" : "),
-              Expanded(
-                child: TextField(
-                  controller: m,
-                  maxLength: 2,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: _strings.t("Phút")),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(_strings.t("Huỷ")),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final value =
-                    "${h.text.trim().padLeft(2, '0')}:${m.text.trim().padLeft(2, '0')}";
-                Navigator.pop(context, value);
-              },
-              child: Text(_strings.t("OK")),
-            ),
-          ],
-        ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    child: Text(_strings.t("Huỷ")),
+                  ),
+                  ElevatedButton(
+                    onPressed: submit,
+                    child: Text(_strings.t("OK")),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       );
     }
 
@@ -1346,8 +1457,6 @@ class _AllHomePageState extends State<AllHomePage> {
   }
 
   Future<void> confirmDeleteSelected() async {
-    final controller = TextEditingController();
-
     final sharedCount = selectedHomes.where((id) {
       final home = safeMap(homes[id]);
 
@@ -1361,17 +1470,17 @@ class _AllHomePageState extends State<AllHomePage> {
     if (sharedCount > 0 && ownCount > 0) {
       message = _strings.choose(
         vi:
-            "Các nhà của bạn sẽ bị xoá.\n"
+        "Các nhà của bạn sẽ bị xoá.\n"
             "Các nhà được chia sẻ sẽ được rời khỏi.",
         en:
-            "Your homes will be deleted.\n"
+        "Your homes will be deleted.\n"
             "You will leave the shared homes.",
         zh: "你的家庭将被删除。\n你将离开共享家庭。",
         ko:
-            "내 집은 삭제됩니다.\n"
+        "내 집은 삭제됩니다.\n"
             "공유된 집에서는 나가게 됩니다.",
         ja:
-            "自分の家は削除されます。\n"
+        "自分の家は削除されます。\n"
             "共有された家からは退出します。",
       );
     } else if (sharedCount > 0) {
@@ -1395,7 +1504,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final confirmOk = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (_) {
+      builder: (sheetContext) {
         return SafeArea(
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -1440,7 +1549,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () => Navigator.pop(context, false),
+                        onPressed: () => Navigator.pop(sheetContext, false),
                         child: Text(_strings.t("Huỷ")),
                       ),
                     ),
@@ -1453,7 +1562,7 @@ class _AllHomePageState extends State<AllHomePage> {
                               : Colors.red,
                           foregroundColor: Colors.white,
                         ),
-                        onPressed: () => Navigator.pop(context, true),
+                        onPressed: () => Navigator.pop(sheetContext, true),
                         child: Text(_strings.t("Tiếp tục")),
                       ),
                     ),
@@ -1469,118 +1578,142 @@ class _AllHomePageState extends State<AllHomePage> {
     if (confirmOk != true) return;
     if (!mounted) return;
 
+    String inputPassword = "";
+
     final passwordOk = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) {
-        return SafeArea(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.lock_outline_rounded,
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            final passwordOk = inputPassword.trim().isNotEmpty;
+
+            Future<void> submit() async {
+              if (!passwordOk) return;
+
+              try {
+                final user = FirebaseAuth.instance.currentUser;
+                final userEmail = user?.email;
+
+                if (user == null || userEmail == null || userEmail.isEmpty) {
+                  if (!sheetContext.mounted) return;
+
+                  showTopToast(
+                    sheetContext,
+                    _strings.t("Không tìm thấy tài khoản"),
+                    color: Colors.red,
+                    icon: Icons.error_outline_rounded,
+                  );
+                  return;
+                }
+
+                final credential = EmailAuthProvider.credential(
+                  email: userEmail,
+                  password: inputPassword.trim(),
+                );
+
+                await user.reauthenticateWithCredential(credential);
+
+                if (!sheetContext.mounted) return;
+
+                Navigator.pop(sheetContext, true);
+              } catch (e) {
+                if (!sheetContext.mounted) return;
+
+                showTopToast(
+                  sheetContext,
+                  _strings.t("Sai mật khẩu"),
                   color: Colors.red,
-                  size: 44,
+                  icon: Icons.error_outline_rounded,
+                );
+              }
+            }
+
+            return SafeArea(
+              child: AnimatedPadding(
+                duration: const Duration(milliseconds: 160),
+                curve: Curves.easeOut,
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(sheetContext).viewInsets.bottom,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  _strings.t("Nhập mật khẩu"),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
                   ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: controller,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: _strings.t("Mật khẩu tài khoản"),
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: Icon(
-                      sharedCount > 0 && ownCount == 0
-                          ? Icons.logout_rounded
-                          : Icons.delete_forever_rounded,
-                    ),
-                    label: Text(
-                      sharedCount > 0 && ownCount == 0
-                          ? _strings.t("Rời khỏi nhà")
-                          : _strings.t("Xoá nhà"),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: sharedCount > 0 && ownCount == 0
-                          ? Colors.orange
-                          : Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () async {
-                      try {
-                        final user = FirebaseAuth.instance.currentUser;
-                        final userEmail = user?.email;
-
-                        if (user == null ||
-                            userEmail == null ||
-                            userEmail.isEmpty) {
-                          if (!mounted) return;
-
-                          showTopToast(
-                            context,
-                            _strings.t("Không tìm thấy tài khoản"),
-                            color: Colors.red,
-                            icon: Icons.error_outline_rounded,
-                          );
-                          return;
-                        }
-
-                        final credential = EmailAuthProvider.credential(
-                          email: userEmail,
-                          password: controller.text.trim(),
-                        );
-
-                        await user.reauthenticateWithCredential(credential);
-
-                        if (!mounted) return;
-
-                        Navigator.pop(context, true);
-                      } catch (e) {
-                        if (!mounted) return;
-
-                        showTopToast(
-                          context,
-                          _strings.t("Sai mật khẩu"),
+                  child: SingleChildScrollView(
+                    keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.lock_outline_rounded,
                           color: Colors.red,
-                          icon: Icons.error_outline_rounded,
-                        );
-                      }
-                    },
+                          size: 44,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          _strings.t("Nhập mật khẩu"),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          autofocus: true,
+                          obscureText: true,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            labelText: _strings.t("Mật khẩu tài khoản"),
+                            filled: true,
+                            fillColor: Colors.grey.shade100,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            inputPassword = value.trim();
+                            setSheetState(() {});
+                          },
+                          onFieldSubmitted: (_) => submit(),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              sharedCount > 0 && ownCount == 0
+                                  ? Icons.logout_rounded
+                                  : Icons.delete_forever_rounded,
+                            ),
+                            label: Text(
+                              sharedCount > 0 && ownCount == 0
+                                  ? _strings.t("Rời khỏi nhà")
+                                  : _strings.t("Xoá nhà"),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: sharedCount > 0 && ownCount == 0
+                                  ? Colors.orange
+                                  : Colors.red,
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor: Colors.grey.shade300,
+                              disabledForegroundColor: Colors.grey.shade600,
+                            ),
+                            onPressed: passwordOk ? submit : null,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -1599,7 +1732,7 @@ class _AllHomePageState extends State<AllHomePage> {
       final home = safeMap(homes[homeId]);
 
       final isShared = home["_shared"] == true;
-      // ===== HOME ĐƯỢC SHARE =====
+
       if (isShared) {
         final ownerUid = home["_ownerUid"];
 
@@ -1611,13 +1744,10 @@ class _AllHomePageState extends State<AllHomePage> {
             .ref("sharedByHome/$homeId/$uid")
             .remove();
 
-        // 🔥 remove khỏi share list của owner
         await FirebaseDatabase.instance
             .ref("accounts/$ownerUid/shareList/$homeId/$uid")
             .remove();
-      }
-      // ===== HOME CỦA MÌNH =====
-      else {
+      } else {
         final sharedSnap = await FirebaseDatabase.instance
             .ref("sharedByHome/$homeId")
             .get();
@@ -1633,7 +1763,6 @@ class _AllHomePageState extends State<AllHomePage> {
 
         for (final memberUid in sharedUsers.keys) {
           updates["accounts/$memberUid/sharedHomes/$homeId"] = null;
-
           updates["sharedByHome/$homeId/$memberUid"] = null;
         }
 
@@ -1651,17 +1780,17 @@ class _AllHomePageState extends State<AllHomePage> {
       context,
       sharedCount > 0 && ownCount == 0
           ? _strings.choose(
-              vi: "Đã rời khỏi nhà",
-              en: "Left home",
-              zh: "已离开家庭",
-              ko: "집에서 나갔습니다",
-              ja: "家から退出しました",
-            )
+        vi: "Đã rời khỏi nhà",
+        en: "Left home",
+        zh: "已离开家庭",
+        ko: "집에서 나갔습니다",
+        ja: "家から退出しました",
+      )
           : _strings.t("Đã cập nhật"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
     );
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -1900,7 +2029,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         subtitle: Text(selectedHomeCountText()),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () async {
-                          final controller = TextEditingController();
+                          String targetEmailText = "";
                           final currentUser = FirebaseAuth.instance.currentUser;
 
                           if (currentUser == null) {
@@ -1982,9 +2111,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                             ),
                                           ),
                                           const SizedBox(height: 18),
-                                          TextField(
-                                            controller: controller,
+                                          TextFormField(
                                             keyboardType: TextInputType.emailAddress,
+                                            textInputAction: TextInputAction.done,
                                             decoration: InputDecoration(
                                               prefixIcon: const Icon(Icons.email_rounded),
                                               labelText: _strings.t("Email người nhận"),
@@ -1995,10 +2124,13 @@ class _AllHomePageState extends State<AllHomePage> {
                                                 borderSide: BorderSide.none,
                                               ),
                                             ),
-                                            onSubmitted: (_) {
+                                            onChanged: (value) {
+                                              targetEmailText = value.trim().toLowerCase();
+                                            },
+                                            onFieldSubmitted: (_) {
                                               Navigator.pop(
                                                 sheetContext,
-                                                controller.text.trim().toLowerCase(),
+                                                targetEmailText,
                                               );
                                             },
                                           ),
@@ -2011,7 +2143,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                               onPressed: () {
                                                 Navigator.pop(
                                                   sheetContext,
-                                                  controller.text.trim().toLowerCase(),
+                                                  targetEmailText,
                                                 );
                                               },
                                             ),
