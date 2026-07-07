@@ -2,40 +2,40 @@ import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
 
-Future<String?> showPairDialog(BuildContext context) async {
-  final controller = TextEditingController();
+Future<String?> showPairDialog(BuildContext context) {
+  String hubId = "";
 
-  final result = await showDialog<String>(
+  return showDialog<String>(
     context: context,
     builder: (dialogContext) {
       final strings = AppStrings.of(dialogContext);
 
       return AlertDialog(
         title: const Text("Nhập HUB ID"),
-
         content: TextField(
-          controller: controller,
           autofocus: true,
           textCapitalization: TextCapitalization.characters,
           decoration: const InputDecoration(
             hintText: "VD: HUB_001",
             border: OutlineInputBorder(),
           ),
+          onChanged: (value) {
+            hubId = value.trim();
+          },
+          onSubmitted: (_) {
+            if (hubId.isEmpty) return;
+            Navigator.pop(dialogContext, hubId);
+          },
         ),
-
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(strings.t("Huỷ")),
           ),
-
           ElevatedButton(
             onPressed: () {
-              final value = controller.text.trim();
-
-              if (value.isEmpty) return;
-
-              Navigator.pop(dialogContext, value);
+              if (hubId.isEmpty) return;
+              Navigator.pop(dialogContext, hubId);
             },
             child: const Text("Pair"),
           ),
@@ -43,8 +43,4 @@ Future<String?> showPairDialog(BuildContext context) async {
       );
     },
   );
-
-  controller.dispose();
-
-  return result;
 }

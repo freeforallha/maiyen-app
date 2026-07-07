@@ -141,6 +141,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Repeat every 15 minutes",
         zh: "每 15 分钟重复",
         ko: "15분마다 다시 알림",
+        ja: "15 分ごとに再通知",
       );
     }
     if (minutes == 30) {
@@ -149,6 +150,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Repeat every 30 minutes",
         zh: "每 30 分钟重复",
         ko: "30분마다 다시 알림",
+        ja: "30 分ごとに再通知",
       );
     }
     if (minutes == 60) {
@@ -157,6 +159,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Repeat every hour",
         zh: "每 1 小时重复",
         ko: "1시간마다 다시 알림",
+        ja: "1 時間ごとに再通知",
       );
     }
 
@@ -165,6 +168,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       en: "Do not repeat",
       zh: "不重复",
       ko: "다시 알리지 않음",
+      ja: "再通知しない",
     );
   }
 
@@ -203,6 +207,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   en: "Repeat while still unsafe",
                   zh: "仍不安全时重复提醒",
                   ko: "아직 안전하지 않으면 반복 알림",
+                  ja: "まだ安全でない場合は再通知",
                 ),
               ),
               content: Column(
@@ -215,6 +220,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Do not repeat",
                       zh: "不重复",
                       ko: "다시 알리지 않음",
+                      ja: "再通知しない",
                     ),
                   ),
                   option(
@@ -224,6 +230,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Every 15 minutes",
                       zh: "每 15 分钟",
                       ko: "15분마다",
+                      ja: "15 分ごと",
                     ),
                   ),
                   option(
@@ -233,6 +240,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Every 30 minutes",
                       zh: "每 30 分钟",
                       ko: "30분마다",
+                      ja: "30 分ごと",
                     ),
                   ),
                   option(
@@ -242,6 +250,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Every hour",
                       zh: "每 1 小时",
                       ko: "1시간마다",
+                      ja: "1 時間ごと",
                     ),
                   ),
                 ],
@@ -477,6 +486,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Edit Reminder time",
                       zh: "编辑 Reminder 时间",
                       ko: "Reminder 시간 수정",
+                      ja: "Reminder 時刻を編集",
                     ),
                   ),
                   onTap: () => Navigator.pop(context, "edit"),
@@ -492,6 +502,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       en: "Delete Reminder",
                       zh: "删除 Reminder",
                       ko: "Reminder 삭제",
+                      ja: "Reminder を削除",
                     ),
                     style: const TextStyle(color: Colors.red),
                   ),
@@ -528,6 +539,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Edit Alarm start time",
         zh: "编辑 Alarm 开始时间",
         ko: "Alarm 시작 시간 수정",
+        ja: "Alarm の開始時刻を編集",
       ),
       initial: current["start"]?.toString() ?? "23:00",
     );
@@ -540,6 +552,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Edit Alarm end time",
         zh: "编辑 Alarm 结束时间",
         ko: "Alarm 종료 시간 수정",
+        ja: "Alarm の終了時刻を編集",
       ),
       initial: current["end"]?.toString() ?? "06:00",
     );
@@ -585,6 +598,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         en: "Edit Reminder time",
         zh: "编辑 Reminder 时间",
         ko: "Reminder 시간 수정",
+        ja: "Reminder 時刻を編集",
       ),
       initial: current["time"]?.toString() ?? "22:30",
     );
@@ -695,12 +709,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           en: "Using the owner's Reminder settings",
                           zh: "正在使用屋主的 Reminder 设置",
                           ko: "집 주인의 Reminder 설정을 사용 중입니다",
+                          ja: "所有者の Reminder 設定を使用中",
                         )
                       : strings.choose(
                           vi: "Đang sử dụng Reminder riêng của bạn",
                           en: "Using your own Reminder settings",
                           zh: "正在使用你的个人 Reminder 设置",
                           ko: "내 Reminder 설정을 사용 중입니다",
+                          ja: "自分の Reminder 設定を使用中",
                         ),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -808,6 +824,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         en: "Add Alarm time window",
                         zh: "添加 Alarm 时间段",
                         ko: "Alarm 시간대 추가",
+                        ja: "Alarm 時間帯を追加",
                       ),
                     ),
                   ),
@@ -838,6 +855,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                             en: "Reminder will remind you to check your home's safety status at the selected time.",
                             zh: "Reminder 会在所选时间提醒你检查家庭安全状态。",
                             ko: "Reminder는 선택한 시간에 집의 안전 상태를 확인하도록 알려줍니다.",
+                            ja: "Reminder は、選択した時刻に家の安全状態を確認するよう通知します。",
                           ),
                         ),
                       ),
@@ -924,6 +942,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         en: "Add Reminder",
                         zh: "添加 Reminder",
                         ko: "Reminder 추가",
+                        ja: "Reminder を追加",
                       ),
                     ),
                   ),

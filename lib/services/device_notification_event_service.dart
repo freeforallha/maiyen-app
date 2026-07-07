@@ -74,14 +74,16 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("Cảnh báo khói")
           : strings.t("Khói đã an toàn"),
       "message": active
-          ? strings.choose(
-              vi: "\"$name\" phát hiện khói trong \"$homeName\".",
-              en: "\"$name\" detected smoke in \"$homeName\".",
-            )
-          : strings.choose(
-              vi: "\"$name\" đã trở lại trạng thái bình thường.",
-              en: "\"$name\" has returned to normal.",
-            ),
+            ? strings.choose(
+                vi: "\"$name\" phát hiện khói trong \"$homeName\".",
+                en: "\"$name\" detected smoke in \"$homeName\".",
+                ja: "「$name」が「$homeName」で煙を検知しました。",
+              )
+            : strings.choose(
+                vi: "\"$name\" đã trở lại trạng thái bình thường.",
+                en: "\"$name\" has returned to normal.",
+                ja: "「$name」は通常状態に戻りました。",
+              ),
       "severity": active ? "critical" : "success",
     };
   }
@@ -94,14 +96,16 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("SOS được kích hoạt")
           : strings.t("SOS đã kết thúc"),
       "message": active
-          ? strings.choose(
-              vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
-              en: "\"$name\" triggered SOS in \"$homeName\".",
-            )
-          : strings.choose(
-              vi: "\"$name\" đã hết trạng thái SOS.",
-              en: "\"$name\" is no longer in SOS state.",
-            ),
+            ? strings.choose(
+                vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
+                en: "\"$name\" triggered SOS in \"$homeName\".",
+                ja: "「$name」が「$homeName」で SOS を起動しました。",
+              )
+            : strings.choose(
+                vi: "\"$name\" đã hết trạng thái SOS.",
+                en: "\"$name\" is no longer in SOS state.",
+                ja: "「$name」の SOS 状態は解除されました。",
+              ),
       "severity": active ? "critical" : "success",
     };
   }
@@ -114,14 +118,16 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("Thiết bị bị tháo")
           : strings.t("Tamper bình thường"),
       "message": active
-          ? strings.choose(
-              vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
-              en: "\"$name\" reported tampering in \"$homeName\".",
-            )
-          : strings.choose(
-              vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
-              en: "\"$name\" tamper alert has cleared.",
-            ),
+            ? strings.choose(
+                vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
+                en: "\"$name\" reported tampering in \"$homeName\".",
+                ja: "「$name」が「$homeName」で取り外し/こじ開けを検知しました。",
+              )
+            : strings.choose(
+                vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
+                en: "\"$name\" tamper alert has cleared.",
+                ja: "「$name」の取り外し警告は解除されました。",
+              ),
       "severity": active ? "critical" : "success",
     };
   }
@@ -135,10 +141,12 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.choose(
               vi: "\"$name\" đã đóng trong \"$homeName\".",
               en: "\"$name\" closed in \"$homeName\".",
+              ja: "「$name」は「$homeName」で閉じました。",
             )
           : strings.choose(
               vi: "\"$name\" đang mở trong \"$homeName\".",
               en: "\"$name\" is open in \"$homeName\".",
+              ja: "「$name」は「$homeName」で開いています。",
             ),
       "severity": closed ? "success" : "warning",
     };
@@ -151,6 +159,7 @@ Map<String, String>? _deviceNotificationEvent({
       "message": strings.choose(
         vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
         en: "\"$name\" in \"$homeName\" has a low battery.",
+        ja: "「$homeName」の「$name」はバッテリー残量が低下しています。",
       ),
       "severity": "warning",
     };
@@ -165,6 +174,7 @@ Map<String, String>? _deviceNotificationEvent({
         "message": strings.choose(
           vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
           en: "\"$name\" in \"$homeName\" went offline.",
+          ja: "「$homeName」の「$name」はオフラインになりました。",
         ),
         "severity": "warning",
       };
@@ -177,6 +187,7 @@ Map<String, String>? _deviceNotificationEvent({
         "message": strings.choose(
           vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
           en: "\"$name\" in \"$homeName\" is back online.",
+          ja: "「$homeName」の「$name」はオンラインに戻りました。",
         ),
         "severity": "success",
       };
@@ -191,6 +202,7 @@ Map<String, String>? _deviceNotificationEvent({
       "message": strings.choose(
         vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
         en: "\"$name\" recorded a high temperature in \"$homeName\".",
+        ja: "「$name」が「$homeName」で高温を記録しました。",
       ),
       "severity": "warning",
     };
@@ -203,6 +215,7 @@ Map<String, String>? _deviceNotificationEvent({
       "message": strings.choose(
         vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
         en: "\"$name\" recorded high humidity in \"$homeName\".",
+        ja: "「$name」が「$homeName」で高い湿度を記録しました。",
       ),
       "severity": "warning",
     };

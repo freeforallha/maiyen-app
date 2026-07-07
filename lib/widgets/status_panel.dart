@@ -208,6 +208,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "${dangerIssues.length} issues require immediate action.",
             zh: "${dangerIssues.length} 个问题需要立即处理。",
             ko: "${dangerIssues.length}개의 문제가 즉시 처리되어야 합니다.",
+            ja: "${dangerIssues.length} 件の問題にすぐ対応が必要です。",
           ),
         );
       }
@@ -219,6 +220,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "${warningIssues.length} items need further review.",
             zh: "${warningIssues.length} 个迹象需要进一步检查。",
             ko: "${warningIssues.length}개 항목을 추가로 확인해야 합니다.",
+            ja: "${warningIssues.length} 件を追加確認してください。",
           ),
         );
       }
@@ -230,6 +232,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "Doors were opened $openCount times recently.",
             zh: "最近门被打开了 $openCount 次。",
             ko: "최근 문이 $openCount번 열렸습니다.",
+            ja: "最近ドアが $openCount 回開かれました。",
           ),
         );
       }
@@ -243,6 +246,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "${recentEvents.length} recent activities were recorded.",
             zh: "已记录 ${recentEvents.length} 条近期活动。",
             ko: "최근 활동 ${recentEvents.length}개가 기록되었습니다.",
+            ja: "最近のアクティビティが ${recentEvents.length} 件記録されました。",
           ),
         );
       }
@@ -254,6 +258,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "Doors were used $openCount times recently.",
             zh: "最近门被使用了 $openCount 次。",
             ko: "최근 문이 $openCount번 사용되었습니다.",
+            ja: "最近ドアが $openCount 回使用されました。",
           ),
         );
       }
@@ -269,6 +274,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "The smoke sensor has not detected an issue.",
             zh: "烟雾传感器未记录异常。",
             ko: "연기 감지기가 이상을 감지하지 않았습니다.",
+            ja: "煙センサーは異常を検知していません。",
           ),
         );
       }
@@ -280,6 +286,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "The SOS device has not recorded an alert.",
             zh: "SOS 设备未记录警报。",
             ko: "SOS 기기에 기록된 알림이 없습니다.",
+            ja: "SOS デバイスにアラートは記録されていません。",
           ),
         );
       }
@@ -310,12 +317,14 @@ class _StatusPanelState extends State<StatusPanel> {
               en: "No repeat",
               zh: "不重复",
               ko: "반복 없음",
+              ja: "繰り返しなし",
             )
           : _strings.choose(
               vi: "Lặp sau $minutes phút",
               en: "Repeat after $minutes minutes",
               zh: "$minutes 分钟后重复",
               ko: "$minutes분 후 반복",
+              ja: "$minutes 分後に繰り返し",
             );
     }
 
@@ -350,6 +359,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         en: "Home mode",
                         zh: "家庭模式",
                         ko: "집 모드",
+                        ja: "家のモード",
                       ),
                       style: const TextStyle(
                         fontSize: 18,
@@ -365,6 +375,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         en: "Normal",
                         zh: "普通模式",
                         ko: "일반",
+                        ja: "通常モード",
                       ),
                       subtitle: isArmed
                           ? _strings.choose(
@@ -372,12 +383,14 @@ class _StatusPanelState extends State<StatusPanel> {
                               en: "Switch back to normal use",
                               zh: "切换回普通模式",
                               ko: "일반 사용으로 전환",
+                              ja: "通常の使用に戻す",
                             )
                           : _strings.choose(
                               vi: "Đang được sử dụng",
                               en: "Currently active",
                               zh: "当前使用中",
                               ko: "사용 중",
+                              ja: "現在有効です",
                             ),
                       color: SafeHomeColors.safe,
                       onTap: () {
@@ -393,6 +406,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         en: "Guard",
                         zh: "布防",
                         ko: "보호",
+                        ja: "警戒",
                       ),
                       subtitle: isArmed
                           ? _strings.choose(
@@ -400,12 +414,14 @@ class _StatusPanelState extends State<StatusPanel> {
                               en: "Active • ${repeatText(localRepeatMinutes)}",
                               zh: "使用中 • ${repeatText(localRepeatMinutes)}",
                               ko: "사용 중 • ${repeatText(localRepeatMinutes)}",
+                              ja: "有効 • ${repeatText(localRepeatMinutes)}",
                             )
                           : _strings.choose(
                               vi: "Giám sát an ninh • ${repeatText(localRepeatMinutes)}",
                               en: "Security monitoring • ${repeatText(localRepeatMinutes)}",
                               zh: "安全监测 • ${repeatText(localRepeatMinutes)}",
                               ko: "보안 모니터링 • ${repeatText(localRepeatMinutes)}",
+                              ja: "セキュリティ監視 • ${repeatText(localRepeatMinutes)}",
                             ),
                       color: SafeHomeColors.danger,
                       onTap: () {
@@ -440,6 +456,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                     en: "Repeat Alarm while the issue remains",
                                     zh: "问题仍存在时重复 Alarm",
                                     ko: "문제가 계속되면 Alarm 반복",
+                                    ja: "問題が続く間 Alarm を繰り返す",
                                   ),
                                   style: const TextStyle(
                                     fontSize: 13.5,
@@ -457,6 +474,7 @@ class _StatusPanelState extends State<StatusPanel> {
                               en: "Choose 0 to alert once. This setting applies to manual Guard mode and Auto Guard when away.",
                               zh: "选择 0 表示只提醒一次。此设置同时用于手动布防和离家自动布防。",
                               ko: "0을 선택하면 한 번만 알립니다. 이 설정은 수동 보호와 외출 시 자동 보호 모두에 적용됩니다.",
+                              ja: "0 を選ぶと 1 回だけ通知します。この設定は手動 Guard モードと外出時の自動 Guard の両方に適用されます。",
                             ),
                             style: const TextStyle(
                               fontSize: 11.5,
@@ -479,6 +497,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                 en: "Repeat interval",
                                 zh: "重复间隔",
                                 ko: "반복 시간",
+                                ja: "繰り返し間隔",
                               ),
                               labelStyle: const TextStyle(
                                 color: SafeHomeColors.textSecondary,
@@ -536,12 +555,14 @@ class _StatusPanelState extends State<StatusPanel> {
                                               en: "No repeat",
                                               zh: "不重复",
                                               ko: "반복 없음",
+                                              ja: "繰り返さない",
                                             )
                                           : _strings.choose(
                                               vi: "$minutes phút",
                                               en: "$minutes minutes",
                                               zh: "$minutes 分钟",
                                               ko: "$minutes분",
+                                              ja: "$minutes 分",
                                             ),
                                       style: const TextStyle(
                                         fontSize: 14,
@@ -886,12 +907,19 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final liveSecurityMode =
         normalizeSecurityMode(liveHome["securityMode"]) == "armed"
-        ? strings.choose(vi: "Bảo vệ", en: "Guard", zh: "布防", ko: "보호")
+        ? strings.choose(
+            vi: "Bảo vệ",
+            en: "Guard",
+            zh: "布防",
+            ko: "보호",
+            ja: "Guard",
+          )
         : strings.choose(
             vi: "Bình thường",
             en: "Normal",
             zh: "普通模式",
             ko: "일반 모드",
+            ja: "通常モード",
           );
 
     final devices = safeMap(liveHome["devices"]);
@@ -906,6 +934,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "Home mode: $liveSecurityMode",
         zh: "家庭模式：$liveSecurityMode",
         ko: "집 모드: $liveSecurityMode",
+        ja: "家のモード: $liveSecurityMode",
       ),
       if (environmentLine.isNotEmpty) environmentLine,
       ...safeSummary,
@@ -938,6 +967,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "Automatic assessment",
             zh: "自动评估",
             ko: "자동 평가",
+            ja: "自動評価",
           ),
           icon: Icons.auto_awesome_rounded,
           color: SafeHomeColors.info,
@@ -1084,6 +1114,7 @@ class _StatusPanelState extends State<StatusPanel> {
       en: "Manual Guard mode is on - switch to Normal to turn it off",
       zh: "手动布防已开启 - 切换到普通模式后关闭",
       ko: "수동 Guard 모드가 켜져 있습니다 - 끄려면 Normal로 전환하세요",
+      ja: "手動警戒モードがオンです - オフにするには通常モードに切り替えてください",
     );
 
     final normalFirstLine = allLines.isNotEmpty
@@ -1093,6 +1124,7 @@ class _StatusPanelState extends State<StatusPanel> {
             en: "No status data available",
             zh: "暂无状态数据",
             ko: "상태 데이터가 없습니다",
+            ja: "状態データがありません",
           );
 
     final firstLine = noData
@@ -1158,6 +1190,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "${issues.length} issues need attention",
         zh: "发现 ${issues.length} 个问题需要处理",
         ko: "${issues.length}개 문제를 처리해야 합니다",
+        ja: "${issues.length} 件の問題に対応が必要です",
       );
     } else if (smokeCount > 0) {
       subtitle = _strings.choose(
@@ -1165,6 +1198,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "A smoke alert was recorded today",
         zh: "今天已记录烟雾警报",
         ko: "오늘 연기 경보가 기록되었습니다",
+        ja: "今日は煙アラートが記録されました",
       );
     } else if (sosCount > 0) {
       subtitle = _strings.choose(
@@ -1172,6 +1206,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "An SOS alert was recorded today",
         zh: "今天已记录 SOS 警报",
         ko: "오늘 SOS 경보가 기록되었습니다",
+        ja: "今日は SOS アラートが記録されました",
       );
     } else if (openCount > 0) {
       subtitle = _strings.choose(
@@ -1179,6 +1214,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "Doors were used $openCount times today",
         zh: "今天门被使用了 $openCount 次",
         ko: "오늘 문이 $openCount번 사용되었습니다",
+        ja: "今日はドアが $openCount 回使用されました",
       );
     } else if (recentEvents.isNotEmpty) {
       subtitle = _strings.choose(
@@ -1186,6 +1222,7 @@ class _StatusPanelState extends State<StatusPanel> {
         en: "${recentEvents.length} recent activities recorded",
         zh: "已记录 ${recentEvents.length} 条近期活动",
         ko: "최근 활동 ${recentEvents.length}개가 기록되었습니다",
+        ja: "最近のアクティビティが ${recentEvents.length} 件記録されました",
       );
     } else {
       subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
@@ -1347,12 +1384,14 @@ class _StatusPanelState extends State<StatusPanel> {
                                 en: "Guard",
                                 zh: "布防",
                                 ko: "보호",
+                                ja: "Guard",
                               )
                             : _strings.choose(
                                 vi: "Bình thường",
                                 en: "Normal",
                                 zh: "普通模式",
                                 ko: "일반",
+                                ja: "通常",
                               ),
                         active: widget.securityMode == "armed",
                         activeColor: SafeHomeColors.danger,

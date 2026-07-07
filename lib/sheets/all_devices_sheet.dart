@@ -52,15 +52,7 @@ void showAllDevicesSheet({
                   items: const [
                     {
                       "name": "Cửa ra/vào",
-                      "types": ["door"],
-                    },
-                    {
-                      "name": "Cửa sổ",
-                      "types": ["window"],
-                    },
-                    {
-                      "name": "Cổng",
-                      "types": ["gate"],
+                      "types": ["door", "window", "gate"],
                     },
                     {
                       "name": "Khóa thông minh",
@@ -77,10 +69,6 @@ void showAllDevicesSheet({
                     {
                       "name": "Rung/chấn động",
                       "types": ["vibration"],
-                    },
-                    {
-                      "name": "Kính vỡ",
-                      "types": ["glass_break"],
                     },
                   ],
                 ),
@@ -164,10 +152,7 @@ void showAllDevicesSheet({
                       "name": "Van thông minh",
                       "types": ["smart_valve"],
                     },
-                    {
-                      "name": "Camera",
-                      "types": ["camera"],
-                    },
+                    
                     {
                       "name": "Chuông cửa",
                       "types": ["doorbell"],
@@ -180,18 +165,12 @@ void showAllDevicesSheet({
                       "name": "Bộ mở rộng sóng",
                       "types": ["repeater"],
                     },
-                    {
-                      "name": "Hub trung tâm",
-                      "types": ["hub"],
-                    },
+
                     {
                       "name": "Đo điện năng",
                       "types": ["power_monitor"],
                     },
-                    {
-                      "name": "Nguồn dự phòng UPS",
-                      "types": ["ups"],
-                    },
+
                     {
                       "name": "Chưa nhận diện",
                       "types": ["unknown"],

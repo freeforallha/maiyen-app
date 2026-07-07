@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 
@@ -89,8 +88,6 @@ void showDeviceDetail({
           final camera = safeMap(device["camera"]);
           final cameraType = camera["type"]?.toString().trim() ?? "";
           final cameraName = camera["name"]?.toString().trim() ?? "";
-          final cameraUrl = camera["url"]?.toString().trim() ?? "";
-          final cameraSerial = camera["deviceSerial"]?.toString().trim() ?? "";
 
           final health = _getDeviceHealth(
             availability: availability,
@@ -287,22 +284,7 @@ void showDeviceDetail({
                               ? SafeHomeColors.textSecondary
                               : SafeHomeColors.info,
                           onTap: () {
-                            if (cameraType.isEmpty) {
-                              _showCameraSetupSheet(
-                                context: sheetContext,
-                                ownerUid: ownerUid,
-                                homeId: homeId,
-                                deviceId: id,
-                              );
-                              return;
-                            }
-
-                            _openCameraProvider(
-                              context: sheetContext,
-                              type: cameraType,
-                              url: cameraUrl,
-                              serial: cameraSerial,
-                            );
+                            _showCameraUnderDevelopment(sheetContext);
                           },
                         ),
                         const SizedBox(width: 8),
@@ -362,17 +344,21 @@ void showDeviceDetail({
                         title: strings.t("Tín hiệu"),
                         value: "$linkquality",
                       ),
-                    _infoRow(
-                      icon: Icons.videocam_rounded,
-                      color: cameraType.isEmpty
-                          ? SafeHomeColors.textSecondary
-                          : SafeHomeColors.info,
-                      title: strings.t("Camera"),
-                      value: cameraType.isEmpty
-                          ? strings.t("Chưa liên kết")
-                          : (cameraName.isNotEmpty
-                                ? cameraName
-                                : cameraType.toUpperCase()),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => _showCameraUnderDevelopment(sheetContext),
+                      child: _infoRow(
+                        icon: Icons.videocam_rounded,
+                        color: cameraType.isEmpty
+                            ? SafeHomeColors.textSecondary
+                            : SafeHomeColors.info,
+                        title: strings.t("Camera"),
+                        value: cameraType.isEmpty
+                            ? strings.t("Chưa liên kết")
+                            : (cameraName.isNotEmpty
+                                  ? cameraName
+                                  : cameraType.toUpperCase()),
+                      ),
                     ),
                     _infoRow(
                       icon: Icons.access_time_rounded,
@@ -889,191 +875,13 @@ String getBatteryText(Map<String, dynamic> d) {
   return "N/A";
 }
 
-Future<void> _openCameraProvider({
-  required BuildContext context,
-  required String type,
-  required String url,
-  required String serial,
-}) async {
-  if (type == "rtsp" || type == "web") {
-    final uri = Uri.tryParse(url);
-
-    if (uri == null) {
-      showTopToast(
-        context,
-        "Link camera không hợp lệ",
-        color: Colors.orange,
-        icon: Icons.link_off_rounded,
-      );
-      return;
-    }
-
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-
-    if (!context.mounted) return;
-
-    if (!opened) {
-      showTopToast(
-        context,
-        "Không mở được camera",
-        color: Colors.orange,
-        icon: Icons.videocam_off_rounded,
-      );
-    }
-
-    return;
-  }
-
-  if (type == "ezviz") {
-    final opened = await launchUrl(
-      Uri.parse("ezviz://"),
-      mode: LaunchMode.externalApplication,
-    );
-
-    if (!context.mounted) return;
-
-    if (!opened) {
-      showTopToast(
-        context,
-        "Chưa mở được app EZVIZ",
-        color: Colors.orange,
-        icon: Icons.open_in_new_off_rounded,
-      );
-    }
-
-    return;
-  }
+void _showCameraUnderDevelopment(BuildContext context) {
+  final strings = AppStrings.of(context);
 
   showTopToast(
     context,
-    "Loại camera này chưa được hỗ trợ",
+    strings.t("Tính năng đang được phát triển"),
     color: Colors.orange,
-    icon: Icons.videocam_off_rounded,
-  );
-}
-
-void _showCameraSetupSheet({
-  required BuildContext context,
-  required String ownerUid,
-  required String homeId,
-  required String deviceId,
-}) {
-  String type = "ezviz";
-
-  final serialController = TextEditingController();
-  final urlController = TextEditingController();
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (sheetContext) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Container(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 20,
-              bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
-            ),
-            decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-            ),
-            child: SafeArea(
-              top: false,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Liên kết camera",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: SafeHomeColors.textPrimary,
-                    ),
-                  ),
-
-                  const SizedBox(height: 14),
-
-                  DropdownButtonFormField<String>(
-                    initialValue: type,
-                    decoration: const InputDecoration(
-                      labelText: "Loại camera",
-                      border: OutlineInputBorder(),
-                    ),
-                    items: const [
-                      DropdownMenuItem(value: "ezviz", child: Text("EZVIZ")),
-                      DropdownMenuItem(value: "rtsp", child: Text("RTSP")),
-                      DropdownMenuItem(value: "web", child: Text("Web link")),
-                      DropdownMenuItem(value: "imou", child: Text("Imou")),
-                      DropdownMenuItem(value: "tapo", child: Text("Tapo")),
-                      DropdownMenuItem(value: "other", child: Text("Khác")),
-                    ],
-                    onChanged: (value) {
-                      if (value == null) return;
-                      setState(() => type = value);
-                    },
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  const SizedBox(height: 12),
-
-                  if (type == "rtsp" || type == "web")
-                    TextField(
-                      controller: urlController,
-                      decoration: const InputDecoration(
-                        labelText: "Link camera",
-                        hintText: "rtsp://... hoặc https://...",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-
-                  if (type == "ezviz")
-                    TextField(
-                      controller: serialController,
-                      decoration: const InputDecoration(
-                        labelText: "Số serial EZVIZ",
-                        hintText: "Ví dụ: BD9724993",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-
-                  const SizedBox(height: 14),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.save_rounded),
-                      label: const Text("Lưu camera"),
-                      onPressed: () async {
-                        await FirebaseDatabase.instance
-                            .ref(
-                              "accounts/$ownerUid/homes/$homeId/devices/$deviceId/camera",
-                            )
-                            .set({
-                              "enabled": true,
-                              "type": type,
-                              "name": "",
-                              "url": urlController.text.trim(),
-                              "deviceSerial": serialController.text.trim(),
-                              "updatedAt": ServerValue.timestamp,
-                            });
-
-                        if (sheetContext.mounted) {
-                          Navigator.pop(sheetContext);
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    },
+    icon: Icons.construction_rounded,
   );
 }

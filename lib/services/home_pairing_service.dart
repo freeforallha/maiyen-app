@@ -113,6 +113,7 @@ class HomePairingService {
           message: strings.choose(
             vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
             en: "$requesterName requested to join \"$homeName\".",
+            ja: "$requesterName が「$homeName」への参加をリクエストしています。",
           ),
           homeName: homeName,
           category: "member",
@@ -191,6 +192,7 @@ class HomePairingService {
         message: strings.choose(
           vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
           en: "$requesterName requested to join \"$homeName\".",
+          ja: "$requesterName が「$homeName」への参加をリクエストしています。",
         ),
         homeName: homeName,
         category: "member",
@@ -247,6 +249,7 @@ class HomePairingService {
       message: strings.choose(
         vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
         en: "Device pairing was enabled in \"$homeName\" for 60 seconds.",
+        ja: "「$homeName」でデバイス追加モードが 60 秒間有効になりました。",
       ),
       homeName: homeName,
     );

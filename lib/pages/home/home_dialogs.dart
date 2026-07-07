@@ -189,6 +189,9 @@ Future<void> showAlarmReceiveReminderDialog({
                   ko:
                       "Alarm이 나만 설정을 사용 중입니다.\n\n"
                       "이 계정에 설정된 개인 Alarm 일정에 따라 알림을 받습니다.",
+                  ja:
+                      "Alarm は「自分のみ」モードを使用しています。\n\n"
+                      "このアカウントに設定された個人用 Alarm スケジュールに従って通知を受け取ります。",
                 )
               : strings.choose(
                   vi:
@@ -203,6 +206,9 @@ Future<void> showAlarmReceiveReminderDialog({
                   ko:
                       "Alarm이 집 기준 설정을 사용 중입니다.\n\n"
                       "집 주인 또는 관리자가 설정한 공용 일정에 따라 알림을 받습니다.",
+                  ja:
+                      "Alarm は「家の設定」モードを使用しています。\n\n"
+                      "所有者または管理者が設定した共有スケジュールに従って通知を受け取ります。",
                 ),
         ),
         actions: [
@@ -242,6 +248,7 @@ Future<bool> showConfirmDisableAlarmDialog({
                   en: "Turn off all Alarm?",
                   zh: "关闭全部 Alarm？",
                   ko: "모든 Alarm을 끄시겠습니까?",
+                  ja: "すべての Alarm をオフにしますか？",
                 ),
               ),
             ),
@@ -261,6 +268,9 @@ Future<bool> showConfirmDisableAlarmDialog({
             ko:
                 "이 작업은 이 집의 모든 Alarm을 끕니다. "
                 "이 휴대전화에서 위험 알림을 더 이상 받지 않습니다.",
+            ja:
+                "この操作により、この家のすべての Alarm がオフになります。"
+                "この端末で危険通知を受け取れなくなります。",
           ),
         ),
         actions: [
@@ -306,6 +316,7 @@ Future<void> showAlarmPauseReminderDialog({
             en: "This action will change the alarm timing for some devices today...",
             zh: "此操作将更改今天部分设备的报警时间……",
             ko: "이 작업은 오늘 일부 기기의 Alarm 시간을 변경합니다...",
+            ja: "この操作により、本日の一部デバイスの Alarm 時刻が変更されます...",
           ),
         ),
         actions: [
@@ -342,6 +353,7 @@ Future<bool> showConfirmManualSecurityModeDialog({
                   en: "Turn on manual Guard mode?",
                   zh: "开启手动布防？",
                   ko: "수동 Guard 모드를 켜시겠습니까?",
+                  ja: "手動 Guard モードをオンにしますか？",
                 ),
               ),
             ),
@@ -368,6 +380,10 @@ Future<bool> showConfirmManualSecurityModeDialog({
                 "외출 시 자동 Guard는 일시 중지됩니다. 이 모드는 "
                 "누군가 집에 돌아와도 자동으로 꺼지지 않으며, 권한이 있는 "
                 "구성원이 직접 Normal로 전환해야 합니다.",
+            ja:
+                "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n"
+                "外出時の自動 Guard は一時停止します。このモードは誰かが帰宅しても"
+                "自動ではオフにならず、権限のあるメンバーが手動で Normal に戻す必要があります。",
           ),
         ),
         actions: [
@@ -408,12 +424,32 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
               color: SafeHomeColors.warning,
             ),
             const SizedBox(width: 10),
-            Expanded(child: Text(strings.t("Chuyển về Bình thường?"))),
+            Expanded(
+              child: Text(
+                strings.choose(
+                  vi: "Chuyển về Bình thường?",
+                  en: "Switch to Normal?",
+                  zh: "切换到普通模式？",
+                  ko: "일반 모드로 전환할까요?",
+                  ja: "通常モードに切り替えますか？",
+                ),
+              ),
+            ),
           ],
         ),
         content: Text(
-          strings.t(
-            "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
+          strings.choose(
+            vi:
+                "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
+            en:
+                "Auto Guard when away is still enabled. If all members are still away, the system may turn Guard mode back on after a few minutes.",
+            zh:
+                "离家自动布防仍处于开启状态。如果所有成员仍在外出，系统可能会在几分钟后重新开启布防。",
+            ko:
+                "외출 시 자동 보호가 아직 켜져 있습니다. 모든 구성원이 아직 외출 중이면 몇 분 후 시스템이 보호 모드를 다시 켤 수 있습니다.",
+            ja:
+                "外出時の自動 Guard がまだ有効です。すべてのメンバーが外出中の場合、"
+                "数分後にシステムが Guard モードを再びオンにすることがあります。",
           ),
         ),
         actions: [
@@ -421,13 +457,29 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
             onPressed: () {
               Navigator.pop(dialogContext, false);
             },
-            child: Text(strings.t("Huỷ")),
+            child: Text(
+              strings.choose(
+                vi: "Huỷ",
+                en: "Cancel",
+                zh: "取消",
+                ko: "취소",
+                ja: "キャンセル",
+              ),
+            ),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(dialogContext, true);
             },
-            child: Text(strings.t("Vẫn chuyển về Bình thường")),
+            child: Text(
+              strings.choose(
+                vi: "Vẫn chuyển về Bình thường",
+                en: "Still switch to Normal",
+                zh: "仍然切换到普通模式",
+                ko: "그래도 일반 모드로 전환",
+                ja: "それでも通常モードに切り替える",
+              ),
+            ),
           ),
         ],
       );

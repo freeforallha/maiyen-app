@@ -138,6 +138,7 @@ class DeviceList extends StatelessWidget {
     return strings.choose(
       vi: "Cần kiểm tra: ${warnings.join(", ")}",
       en: "Needs attention: ${warnings.join(", ")}",
+      ja: "確認が必要: ${warnings.join(", ")}",
     );
   }
 
@@ -172,6 +173,7 @@ class DeviceList extends StatelessWidget {
         en: "${diff.inMinutes} minutes ago",
         zh: "${diff.inMinutes} 分钟前",
         ko: "${diff.inMinutes}분 전",
+        ja: "${diff.inMinutes} 分前",
       );
     }
 
@@ -185,6 +187,7 @@ class DeviceList extends StatelessWidget {
           en: "${h}h ago",
           zh: "$h 小时前",
           ko: "$h시간 전",
+          ja: "$h 時間前",
         );
       }
 
@@ -193,6 +196,7 @@ class DeviceList extends StatelessWidget {
         en: "${h}h ${m}m ago",
         zh: "$h 小时 $m 分钟前",
         ko: "$h시간 $m분 전",
+        ja: "$h 時間 $m 分前",
       );
     }
 
@@ -202,6 +206,7 @@ class DeviceList extends StatelessWidget {
         en: "${diff.inDays} days ago",
         zh: "${diff.inDays} 天前",
         ko: "${diff.inDays}일 전",
+        ja: "${diff.inDays} 日前",
       );
     }
 
@@ -212,6 +217,7 @@ class DeviceList extends StatelessWidget {
       en: "$months months ago",
       zh: "$months 个月前",
       ko: "$months개월 전",
+      ja: "$months か月前",
     );
   }
 
@@ -485,6 +491,7 @@ class DeviceList extends StatelessWidget {
       en: "Updated $value",
       zh: "$value更新",
       ko: "$value에 업데이트됨",
+      ja: "$valueに更新",
     );
   }
 

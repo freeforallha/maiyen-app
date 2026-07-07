@@ -27,6 +27,7 @@ void showHomeEventSheet({
         vi: "${diff.inMinutes} phút trước",
         en: "${diff.inMinutes} minutes ago",
         zh: "${diff.inMinutes} 分钟前",
+        ja: "${diff.inMinutes} 分前",
       );
     }
     if (diff.inDays < 1) {
@@ -34,12 +35,14 @@ void showHomeEventSheet({
         vi: "${diff.inHours} giờ trước",
         en: "${diff.inHours} hours ago",
         zh: "${diff.inHours} 小时前",
+        ja: "${diff.inHours} 時間前",
       );
     }
     return strings.choose(
       vi: "${diff.inDays} ngày trước",
       en: "${diff.inDays} days ago",
       zh: "${diff.inDays} 天前",
+      ja: "${diff.inDays} 日前",
     );
   }
 
@@ -108,23 +111,24 @@ void showHomeEventSheet({
 
   String displayTitle(Map<String, dynamic> item, String homeName) {
     final rawTitle = item["title"]?.toString().trim() ?? "";
-    final type = item["type"]?.toString() ?? "";
-    final title = strings.systemNotificationText(
-      removeRepeatedHomeName(rawTitle, homeName),
-      type: type,
-    );
+    final localizedItem = Map<String, dynamic>.from(item);
 
-    return title.isNotEmpty ? title : strings.t("Thông báo");
+    if (rawTitle.isNotEmpty) {
+      localizedItem["title"] = removeRepeatedHomeName(rawTitle, homeName);
+    }
+
+    return strings.notificationTitle(localizedItem, homeName: homeName);
   }
 
   String displayMessage(Map<String, dynamic> item, String homeName) {
     final rawMessage = item["message"]?.toString().trim() ?? "";
-    final type = item["type"]?.toString() ?? "";
+    final localizedItem = Map<String, dynamic>.from(item);
 
-    return strings.systemNotificationText(
-      removeRepeatedHomeName(rawMessage, homeName),
-      type: type,
-    );
+    if (rawMessage.isNotEmpty) {
+      localizedItem["message"] = removeRepeatedHomeName(rawMessage, homeName);
+    }
+
+    return strings.notificationMessage(localizedItem, homeName: homeName);
   }
 
   IconData iconForType(String type) {
@@ -179,6 +183,7 @@ void showHomeEventSheet({
         return Icons.admin_panel_settings_rounded;
       case "transfer_owner_accepted":
         return Icons.workspace_premium_rounded;
+      case "member_role_changed":
       case "role_changed":
         return Icons.manage_accounts_rounded;
       default:
@@ -228,6 +233,7 @@ void showHomeEventSheet({
         return Colors.purple;
       case "transfer_owner_accepted":
         return Colors.deepPurple;
+      case "member_role_changed":
       case "role_changed":
         return Colors.deepPurple;
       default:
@@ -300,6 +306,7 @@ void showHomeEventSheet({
                                     vi: "Xoá",
                                     en: "Delete",
                                     zh: "删除",
+                                    ja: "削除",
                                   ),
                                 ),
                               ),
@@ -371,6 +378,14 @@ void showHomeEventSheet({
                         final read = item["read"] == true;
                         final homeName = displayHomeName(item);
                         final timeText = formatTime(item["time"]);
+                        final messageText = displayMessage(item, homeName);
+                        final metaText = homeName.isNotEmpty &&
+                                !messageText.contains(homeName)
+                            ? "$homeName • $timeText"
+                            : timeText;
+                        final subtitleText = messageText.isNotEmpty
+                            ? "$messageText\n$metaText"
+                            : metaText;
 
                         return Material(
                           color: read
@@ -393,9 +408,7 @@ void showHomeEventSheet({
                               ),
                             ),
                             subtitle: Text(
-                              homeName.isNotEmpty
-                                  ? "${displayMessage(item, homeName)}\n$homeName • $timeText"
-                                  : "${displayMessage(item, homeName)}\n$timeText",
+                              subtitleText,
                             ),
                             isThreeLine: true,
                             onTap: () async {

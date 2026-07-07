@@ -405,6 +405,7 @@ void showHomeChatSheet({
                             vi: "Chưa có số điện thoại",
                             en: "No phone number",
                             zh: "暂无电话号码",
+                            ja: "電話番号がありません",
                           ),
                           style: const TextStyle(
                             fontSize: 16,
@@ -419,6 +420,7 @@ void showHomeChatSheet({
                             vi: "$name chưa cập nhật số điện thoại trong hồ sơ.",
                             en: "$name has not added a phone number to their profile.",
                             zh: "$name 尚未在个人资料中添加电话号码。",
+                            ja: "$name はプロフィールに電話番号を追加していません。",
                           ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -470,6 +472,7 @@ void showHomeChatSheet({
                             vi: "Không mở được ứng dụng gọi điện",
                             en: "Could not open the phone app",
                             zh: "无法打开拨号应用",
+                            ja: "電話アプリを開けません",
                           ),
                           color: Colors.red,
                           icon: Icons.phone_disabled_rounded,
@@ -851,6 +854,7 @@ void showHomeChatSheet({
                     vi: "Tin nhắn mới trong $homeName",
                     en: "New message in $homeName",
                     zh: "$homeName 有新消息",
+                    ja: "$homeName に新しいメッセージがあります",
                   ),
                   message: "$senderName: $preview",
                   entityType: "chat",
@@ -1102,6 +1106,7 @@ void showHomeChatSheet({
                                               vi: "${activeSearchResult + 1}/${currentSearchResultIds.length} kết quả",
                                               en: "${activeSearchResult + 1}/${currentSearchResultIds.length} results",
                                               zh: "${activeSearchResult + 1}/${currentSearchResultIds.length} 个结果",
+                                              ja: "${activeSearchResult + 1}/${currentSearchResultIds.length} 件の結果",
                                             ),
                                       style: TextStyle(
                                         fontSize: 12,
@@ -1936,6 +1941,7 @@ void showHomeChatSheet({
                                             vi: "Đang trả lời ${replyDisplayName(replyingToMessage)}",
                                             en: "Replying to ${replyDisplayName(replyingToMessage)}",
                                             zh: "正在回复 ${replyDisplayName(replyingToMessage)}",
+                                            ja: "${replyDisplayName(replyingToMessage)} に返信中",
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

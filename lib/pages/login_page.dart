@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
             vi: "Không thể đăng nhập bằng Google",
             en: "Could not sign in with Google",
             zh: "无法使用 Google 登录",
+            ja: "Google でログインできません",
           ),
         );
       }
@@ -92,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
             vi: "Không thể đăng nhập bằng Google",
             en: "Could not sign in with Google",
             zh: "无法使用 Google 登录",
+            ja: "Google でログインできません",
           ),
         );
       });
@@ -105,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
           vi: "Không thể đăng nhập bằng Google",
           en: "Could not sign in with Google",
           zh: "无法使用 Google 登录",
+          ja: "Google でログインできません",
         );
       });
     } finally {
@@ -383,6 +386,7 @@ class _LoginPageState extends State<LoginPage> {
                 option(code: "en", title: "English", subtitle: "Tiếng Anh"),
                 option(code: "zh", title: "中文", subtitle: "Chinese Simplified"),
                 option(code: "ko", title: "한국어", subtitle: "Korean"),
+                option(code: "ja", title: "日本語", subtitle: "Japanese"),
               ],
             ),
           ),
@@ -438,9 +442,9 @@ class _LoginPageState extends State<LoginPage> {
 
                               TextField(
                                 controller: email,
-                                decoration: const InputDecoration(
-                                  labelText: "Email",
-                                  prefixIcon: Icon(Icons.email_rounded),
+                                decoration: InputDecoration(
+                                  labelText: strings.t("Email"),
+                                  prefixIcon: const Icon(Icons.email_rounded),
                                 ),
                               ),
 
@@ -450,11 +454,7 @@ class _LoginPageState extends State<LoginPage> {
                                 controller: pass,
                                 obscureText: true,
                                 decoration: InputDecoration(
-                                  labelText: strings.choose(
-                                    vi: "Mật khẩu",
-                                    en: "Password",
-                                    zh: "密码",
-                                  ),
+                                  labelText: strings.t("Mật khẩu"),
                                   prefixIcon: const Icon(Icons.lock_rounded),
                                 ),
                               ),

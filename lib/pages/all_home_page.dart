@@ -40,6 +40,7 @@ class _AllHomePageState extends State<AllHomePage> {
       en: "$value homes selected",
       zh: "已选择 $value 个家庭",
       ko: "선택한 집 $value개",
+      ja: "$value 件の家を選択済み",
     );
   }
 
@@ -89,6 +90,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ko:
               "🚨 안전하지 않은 집 $dangerCount개"
               "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+          ja:
+              "🚨 安全ではない家 $dangerCount 件"
+              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
         ),
       );
     }
@@ -108,6 +112,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ko:
               "⚠️ 주의가 필요한 집 $warningCount개"
               "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+          ja:
+              "⚠️ 確認が必要な家 $warningCount 件"
+              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
         ),
       );
     }
@@ -119,6 +126,7 @@ class _AllHomePageState extends State<AllHomePage> {
           en: "✅ $safeCount safe homes",
           zh: "✅ $safeCount 个家庭安全",
           ko: "✅ 안전한 집 $safeCount개",
+          ja: "✅ 安全な家 $safeCount 件",
         ),
       );
     }
@@ -130,6 +138,7 @@ class _AllHomePageState extends State<AllHomePage> {
               en: "🏡 No homes yet",
               zh: "🏡 暂无家庭",
               ko: "🏡 아직 집이 없습니다",
+              ja: "🏡 まだ家がありません",
             ),
           ]
         : summaries;
@@ -338,6 +347,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             en: "${homes.length} homes monitored",
                             zh: "正在监测 ${homes.length} 个家庭",
                             ko: "집 ${homes.length}개를 모니터링 중입니다",
+                            ja: "${homes.length} 件の家を監視中",
                           ),
                           style: TextStyle(
                             fontSize: 13,
@@ -611,6 +621,7 @@ class _AllHomePageState extends State<AllHomePage> {
               en: "E.g. Mr Chung",
               zh: "例如：Mr Chung",
               ko: "예: Mr Chung",
+              ja: "例: Mr Chung",
             ),
           ),
         ),
@@ -941,15 +952,17 @@ class _AllHomePageState extends State<AllHomePage> {
           en: "No repeat",
           zh: "不重复",
           ko: "반복 없음",
+          ja: "繰り返しなし",
         );
       }
 
       return _strings.choose(
-        vi: "$minutes phút",
-        en: "$minutes minutes",
-        zh: "$minutes 分钟",
-        ko: "$minutes분",
-      );
+      vi: "$minutes phút",
+      en: "$minutes minutes",
+      zh: "$minutes 分钟",
+      ko: "$minutes분",
+      ja: "$minutes 分",
+    );
     }
 
     Future<int?> inputRepeatMinutes(int initial) async {
@@ -968,6 +981,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     en: "Alarm repeat time",
                     zh: "Alarm 重复时间",
                     ko: "Alarm 반복 시간",
+                    ja: "Alarm の繰り返し時間",
                   ),
                 ),
                 content: InputDecorator(
@@ -977,6 +991,7 @@ class _AllHomePageState extends State<AllHomePage> {
                       en: "Repeat while the issue remains",
                       zh: "问题仍存在时重复",
                       ko: "문제가 계속되면 반복",
+                      ja: "問題が続く間は繰り返す",
                     ),
                     prefixIcon: const Icon(
                       Icons.replay_rounded,
@@ -1079,12 +1094,14 @@ class _AllHomePageState extends State<AllHomePage> {
                   en: "Confirm Reminder changes",
                   zh: "确认更改 Reminder",
                   ko: "Reminder 변경 확인",
+                  ja: "Reminder の変更を確認",
                 )
               : _strings.choose(
                   vi: "Xác nhận thay đổi Alarm",
                   en: "Confirm Alarm changes",
                   zh: "确认更改 Alarm",
                   ko: "Alarm 변경 확인",
+                  ja: "Alarm の変更を確認",
                 ),
         ),
         content: Text(
@@ -1106,6 +1123,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "선택한 집에 Home Reminder를 추가합니다.\n\n"
                       "Reminder를 집 기준으로 사용하는 구성원이 영향을 받습니다.\n"
                       "나만 모드의 개인 Reminder는 변경되지 않습니다.",
+                  ja:
+                      "選択した家に Home Reminder を追加します。\n\n"
+                      "家の Reminder 設定を使用しているメンバーに影響します。\n"
+                      "「自分のみ」モードの個人 Reminder は変更されません。",
                 )
               : _strings.choose(
                   vi:
@@ -1124,6 +1145,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "선택한 집의 모든 보안 기기 Home Alarm 일정을 변경합니다.\n\n"
                       "Alarm을 집 기준으로 사용하는 구성원이 영향을 받습니다.\n"
                       "나만 모드의 개인 Alarm은 변경되지 않습니다.",
+                  ja:
+                      "選択した家のすべてのセキュリティデバイスの Home Alarm スケジュールを変更します。\n\n"
+                      "家の Alarm 設定を使用しているメンバーに影響します。\n"
+                      "「自分のみ」モードの個人 Alarm は変更されません。",
                 ),
         ),
         actions: [
@@ -1283,6 +1308,9 @@ class _AllHomePageState extends State<AllHomePage> {
                   ko:
                       "$updatedHomes개 집에 Reminder를 설정했습니다."
                       "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
+                  ja:
+                      "$updatedHomes 件の家に Reminder を設定しました。"
+                      "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
                 )
               : _strings.choose(
                   vi:
@@ -1301,6 +1329,10 @@ class _AllHomePageState extends State<AllHomePage> {
                       "$updatedHomes개 집의 기기 $updatedDevices대에 Alarm을 설정했습니다.\n"
                       "반복 시간: ${repeatLabel(selectedAlarmRepeatMinutes)}."
                       "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
+                  ja:
+                      "$updatedHomes 件の家にある $updatedDevices 台のデバイスに Alarm を設定しました。\n"
+                      "繰り返し時間: ${repeatLabel(selectedAlarmRepeatMinutes)}。"
+                      "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
                 ),
         ),
         actions: [
@@ -1338,6 +1370,9 @@ class _AllHomePageState extends State<AllHomePage> {
         ko:
             "내 집은 삭제됩니다.\n"
             "공유된 집에서는 나가게 됩니다.",
+        ja:
+            "自分の家は削除されます。\n"
+            "共有された家からは退出します。",
       );
     } else if (sharedCount > 0) {
       message = _strings.choose(
@@ -1345,6 +1380,7 @@ class _AllHomePageState extends State<AllHomePage> {
         en: "You will leave the shared homes.",
         zh: "你将离开共享家庭。",
         ko: "공유된 집에서 나가게 됩니다.",
+        ja: "共有された家から退出します。",
       );
     } else {
       message = _strings.choose(
@@ -1352,6 +1388,7 @@ class _AllHomePageState extends State<AllHomePage> {
         en: "Selected homes will be permanently deleted.",
         zh: "所选家庭将被永久删除。",
         ko: "선택한 집이 영구적으로 삭제됩니다.",
+        ja: "選択した家は完全に削除されます。",
       );
     }
 
@@ -1618,6 +1655,7 @@ class _AllHomePageState extends State<AllHomePage> {
               en: "Left home",
               zh: "已离开家庭",
               ko: "집에서 나갔습니다",
+              ja: "家から退出しました",
             )
           : _strings.t("Đã cập nhật"),
       color: Colors.green,
@@ -1671,6 +1709,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     en: "Search homes...",
                     zh: "搜索家庭...",
                     ko: "집 검색...",
+                    ja: "家を検索...",
                   ),
                   border: InputBorder.none,
                   filled: false,
@@ -1877,107 +1916,109 @@ class _AllHomePageState extends State<AllHomePage> {
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
-                            builder: (_) {
+                            builder: (sheetContext) {
+                              final bottomInset = MediaQuery.of(sheetContext).viewInsets.bottom;
+                              final keyboardOpen = bottomInset > 0;
+                              final qrSize = keyboardOpen ? 140.0 : 190.0;
+
                               return SafeArea(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: 20,
-                                    right: 20,
-                                    top: 20,
-                                    bottom:
-                                        MediaQuery.of(
-                                          context,
-                                        ).viewInsets.bottom +
-                                        20,
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(26),
+                                child: AnimatedPadding(
+                                  duration: const Duration(milliseconds: 180),
+                                  curve: Curves.easeOut,
+                                  padding: EdgeInsets.only(bottom: bottomInset),
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
                                     ),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: 42,
-                                        height: 5,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade300,
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                        ),
+                                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(26),
                                       ),
-                                      const SizedBox(height: 18),
-                                      Text(
-                                        _strings.t("Chia sẻ nhà đã chọn"),
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                      Text(
-                                        _strings.t(
-                                          "Hoặc quét QR để xin gia nhập các nhà đã chọn",
-                                        ),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      QrImageView(
-                                        data: qrData,
-                                        version: QrVersions.auto,
-                                        size: 190,
-                                      ),
-                                      const SizedBox(height: 18),
-                                      Text(
-                                        selectedHomeCountText(),
-                                        style: TextStyle(
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 18),
-                                      TextField(
-                                        controller: controller,
-                                        keyboardType:
-                                            TextInputType.emailAddress,
-                                        decoration: InputDecoration(
-                                          prefixIcon: const Icon(
-                                            Icons.email_rounded,
-                                          ),
-                                          labelText: _strings.t(
-                                            "Email người nhận",
-                                          ),
-                                          filled: true,
-                                          fillColor: Colors.grey.shade100,
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              16,
+                                    ),
+                                    child: SingleChildScrollView(
+                                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width: 42,
+                                            height: 5,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade300,
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
-                                            borderSide: BorderSide.none,
                                           ),
-                                        ),
+                                          const SizedBox(height: 18),
+                                          Text(
+                                            _strings.t("Chia sẻ nhà đã chọn"),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                          Text(
+                                            _strings.t(
+                                              "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                            ),
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+                                          QrImageView(
+                                            data: qrData,
+                                            version: QrVersions.auto,
+                                            size: qrSize,
+                                          ),
+                                          const SizedBox(height: 18),
+                                          Text(
+                                            selectedHomeCountText(),
+                                            style: TextStyle(
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 18),
+                                          TextField(
+                                            controller: controller,
+                                            keyboardType: TextInputType.emailAddress,
+                                            decoration: InputDecoration(
+                                              prefixIcon: const Icon(Icons.email_rounded),
+                                              labelText: _strings.t("Email người nhận"),
+                                              filled: true,
+                                              fillColor: Colors.grey.shade100,
+                                              border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.circular(16),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                            ),
+                                            onSubmitted: (_) {
+                                              Navigator.pop(
+                                                sheetContext,
+                                                controller.text.trim().toLowerCase(),
+                                              );
+                                            },
+                                          ),
+                                          const SizedBox(height: 18),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton.icon(
+                                              icon: const Icon(Icons.share_rounded),
+                                              label: Text(_strings.t("Chia sẻ")),
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                  sheetContext,
+                                                  controller.text.trim().toLowerCase(),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(height: 18),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: ElevatedButton.icon(
-                                          icon: const Icon(Icons.share_rounded),
-                                          label: Text(_strings.t("Chia sẻ")),
-                                          onPressed: () {
-                                            Navigator.pop(
-                                              context,
-                                              controller.text
-                                                  .trim()
-                                                  .toLowerCase(),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -2074,12 +2115,14 @@ class _AllHomePageState extends State<AllHomePage> {
                                         en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
                                         zh: "已共享你有权限管理的家庭。\n\n$skipped 个家庭因没有共享权限而被跳过。",
                                         ko: "관리 권한이 있는 집을 공유했습니다.\n\n공유 권한이 없어 $skipped개의 집은 건너뛰었습니다.",
+                                        ja: "管理権限のある家を共有しました。\n\n共有権限がないため $skipped 件の家をスキップしました。",
                                       )
                                     : _strings.choose(
                                         vi: "Đã chia sẻ nhà thành công.",
                                         en: "Homes shared successfully.",
                                         zh: "家庭共享成功。",
                                         ko: "집 공유가 완료되었습니다.",
+                                        ja: "家の共有が完了しました。",
                                       ),
                               ),
                               actions: [

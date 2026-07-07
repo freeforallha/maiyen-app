@@ -71,6 +71,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
             vi: "Không đặt được mật khẩu",
             en: "Could not set password",
             zh: "无法设置密码",
+            ja: "パスワードを設定できません",
           ),
         );
       });

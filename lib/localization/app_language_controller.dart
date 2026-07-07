@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLanguageController extends ChangeNotifier {
   static const String _storageKey = "safehome_language_code";
-  static const Set<String> supportedCodes = {"vi", "en", "zh", "ko"};
+  static const Set<String> supportedCodes = {"vi", "en", "zh", "ko", "ja"};
 
   Locale _locale = const Locale("vi");
   bool _loaded = false;
@@ -13,6 +13,7 @@ class AppLanguageController extends ChangeNotifier {
   bool get isEnglish => languageCode == "en";
   bool get isChinese => languageCode == "zh";
   bool get isKorean => languageCode == "ko";
+  bool get isJapanese => languageCode == "ja";
 
   Locale _localeForCode(String code) {
     if (code == "zh") {
@@ -21,6 +22,10 @@ class AppLanguageController extends ChangeNotifier {
 
     if (code == "ko") {
       return const Locale("ko", "KR");
+    }
+
+    if (code == "ja") {
+      return const Locale("ja", "JP");
     }
 
     return Locale(code);

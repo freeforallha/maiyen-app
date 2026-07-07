@@ -4,11 +4,13 @@ class AppStrings {
   final bool isEnglish;
   final bool isChinese;
   final bool isKorean;
+  final bool isJapanese;
 
   const AppStrings._({
     required this.isEnglish,
     required this.isChinese,
     required this.isKorean,
+    required this.isJapanese,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -16,6 +18,7 @@ class AppStrings {
       isEnglish: locale.languageCode == "en",
       isChinese: locale.languageCode == "zh",
       isKorean: locale.languageCode == "ko",
+      isJapanese: locale.languageCode == "ja",
     );
   }
 
@@ -28,7 +31,12 @@ class AppStrings {
     required String en,
     String? zh,
     String? ko,
+    String? ja,
   }) {
+    if (isJapanese) {
+      return ja ?? _japanese[vi] ?? vi;
+    }
+
     if (isKorean) {
       return ko ?? _korean[vi] ?? vi;
     }
@@ -45,6 +53,7 @@ class AppStrings {
     en: "You don't have permission to perform this action.",
     zh: "你没有权限执行此操作。",
     ko: "이 작업을 수행할 권한이 없습니다.",
+    ja: "この操作を実行する権限がありません。",
   );
 
   String get genericOperationError => choose(
@@ -52,6 +61,7 @@ class AppStrings {
     en: "Couldn't complete the action. Please try again.",
     zh: "无法完成此操作。请重试。",
     ko: "작업을 완료할 수 없습니다. 다시 시도해 주세요.",
+    ja: "操作を完了できませんでした。もう一度お試しください。",
   );
 
   bool isPermissionDeniedError(Object? error) {
@@ -150,6 +160,384 @@ class AppStrings {
     }
 
     return result;
+  }
+
+  String roleName(String role) {
+    switch (role.trim().toLowerCase()) {
+      case "owner":
+        return choose(
+          vi: "Chủ nhà",
+          en: "Owner",
+          zh: "房主",
+          ko: "집 주인",
+          ja: "所有者",
+        );
+      case "admin":
+        return choose(
+          vi: "Quản trị viên",
+          en: "Admin",
+          zh: "管理员",
+          ko: "관리자",
+          ja: "管理者",
+        );
+      case "member":
+        return choose(
+          vi: "Thành viên",
+          en: "Member",
+          zh: "成员",
+          ko: "구성원",
+          ja: "メンバー",
+        );
+    }
+
+    return role;
+  }
+
+  String notificationTitle(
+    Map<String, dynamic> item, {
+    String homeName = "",
+  }) {
+    final type = _notificationString(item, "type").toLowerCase();
+    final rawTitle = _notificationString(item, "title");
+
+    if (_isMemberRoleNotification(type)) {
+      return choose(
+        vi: "Vai trò thành viên đã thay đổi",
+        en: "Member role changed",
+        zh: "成员角色已更改",
+        ko: "구성원 역할이 변경됨",
+        ja: "メンバーの役割が変更されました",
+      );
+    }
+
+    if (_isAbnormalNotification(type, rawTitle)) {
+      return choose(
+        vi: "Phát hiện bất thường",
+        en: "Abnormal activity detected",
+        zh: "检测到异常",
+        ko: "이상 감지",
+        ja: "異常を検知",
+      );
+    }
+
+    final doorClosed = _notificationDoorClosed(item);
+    if (doorClosed != null &&
+        (rawTitle.isEmpty ||
+            _isDoorNotificationType(type) ||
+            _doorClosedFromText(rawTitle) != null)) {
+      return _doorStatusTitle(doorClosed);
+    }
+
+    final title = systemNotificationText(rawTitle, type: type);
+
+    return title.isNotEmpty ? title : t("Thông báo");
+  }
+
+  String notificationMessage(
+    Map<String, dynamic> item, {
+    String homeName = "",
+  }) {
+    final type = _notificationString(item, "type").toLowerCase();
+    final resolvedHomeName = homeName.trim().isNotEmpty
+        ? homeName.trim()
+        : _firstNotificationString(item, const ["homeName"]);
+
+    if (_isMemberRoleNotification(type)) {
+      final actorName = _firstNotificationString(item, const ["actorName"]);
+      final targetName = _firstNotificationString(
+        item,
+        const ["targetName", "memberName"],
+      );
+      final oldRole = _firstNotificationString(item, const ["oldRole"]);
+      final newRole = _firstNotificationString(item, const ["newRole"]);
+
+      if (actorName.isNotEmpty &&
+          targetName.isNotEmpty &&
+          oldRole.isNotEmpty &&
+          newRole.isNotEmpty &&
+          resolvedHomeName.isNotEmpty) {
+        final oldRoleName = roleName(oldRole);
+        final newRoleName = roleName(newRole);
+
+        return choose(
+          vi:
+              "$actorName đã đổi vai trò của $targetName từ $oldRoleName thành $newRoleName trong nhà \"$resolvedHomeName\".",
+          en:
+              "$actorName changed $targetName's role from $oldRoleName to $newRoleName in \"$resolvedHomeName\".",
+          zh:
+              "$actorName 已将 $targetName 在“$resolvedHomeName”中的角色从 $oldRoleName 更改为 $newRoleName。",
+          ko:
+              "$actorName님이 \"$resolvedHomeName\"에서 $targetName님의 역할을 $oldRoleName에서 $newRoleName로 변경했습니다.",
+          ja:
+              "$actorName が「$resolvedHomeName」で $targetName の役割を $oldRoleName から $newRoleName に変更しました。",
+        );
+      }
+    }
+
+    final doorClosed = _notificationDoorClosed(item);
+    if (doorClosed != null) {
+      final deviceName = _notificationDeviceName(item);
+
+      if (deviceName.isNotEmpty && resolvedHomeName.isNotEmpty) {
+        return doorClosed
+            ? choose(
+                vi: "\"$deviceName\" đã đóng trong \"$resolvedHomeName\".",
+                en: "\"$deviceName\" closed in \"$resolvedHomeName\".",
+                zh: "“$deviceName”已在“$resolvedHomeName”中关闭。",
+                ko: "\"$resolvedHomeName\"의 \"$deviceName\"이 닫혔습니다.",
+                ja: "「$resolvedHomeName」の「$deviceName」が閉じました。",
+              )
+            : choose(
+                vi: "\"$deviceName\" đang mở trong \"$resolvedHomeName\".",
+                en: "\"$deviceName\" is open in \"$resolvedHomeName\".",
+                zh: "“$deviceName”在“$resolvedHomeName”中处于打开状态。",
+                ko: "\"$resolvedHomeName\"의 \"$deviceName\"이 열려 있습니다.",
+                ja: "「$resolvedHomeName」の「$deviceName」が開いています。",
+              );
+      }
+
+      if (deviceName.isNotEmpty) {
+        return "$deviceName: ${_doorStatusTitle(doorClosed)}";
+      }
+    }
+
+    final rawMessage = _firstNotificationString(
+      item,
+      const ["message", "body", "text"],
+    );
+    final message = systemNotificationText(rawMessage, type: type);
+
+    return statusText(message);
+  }
+
+  String _doorStatusTitle(bool closed) {
+    return closed
+        ? choose(
+            vi: "Cửa đã đóng",
+            en: "Door closed",
+            zh: "门已关闭",
+            ko: "문이 닫힘",
+            ja: "ドアが閉じました",
+          )
+        : choose(
+            vi: "Cửa đang mở",
+            en: "Door is open",
+            zh: "门已打开",
+            ko: "문이 열려 있음",
+            ja: "ドアが開いています",
+          );
+  }
+
+  Map<String, dynamic> _notificationData(Map<String, dynamic> item) {
+    final data = item["data"];
+
+    return data is Map ? Map<String, dynamic>.from(data) : <String, dynamic>{};
+  }
+
+  dynamic _firstNotificationValue(
+    Map<String, dynamic> item,
+    List<String> keys,
+  ) {
+    final data = _notificationData(item);
+
+    for (final key in keys) {
+      final value = item[key] ?? data[key];
+
+      if (value != null && value.toString().trim().isNotEmpty) {
+        return value;
+      }
+    }
+
+    return null;
+  }
+
+  String _notificationString(Map<String, dynamic> item, String key) {
+    return _firstNotificationString(item, [key]);
+  }
+
+  String _firstNotificationString(
+    Map<String, dynamic> item,
+    List<String> keys,
+  ) {
+    final value = _firstNotificationValue(item, keys);
+
+    return value?.toString().trim() ?? "";
+  }
+
+  bool _isMemberRoleNotification(String type) {
+    return type == "member_role_changed" || type == "role_changed";
+  }
+
+  bool _isAbnormalNotification(String type, String title) {
+    final normalizedTitle = _normalizeNotificationText(title);
+
+    return type == "device_tamper" ||
+        type == "tamper" ||
+        type == "device_tamper_detected" ||
+        normalizedTitle == _normalizeNotificationText("Phát hiện bất thường") ||
+        normalizedTitle == "abnormal activity detected";
+  }
+
+  bool _isDoorNotificationType(String type) {
+    return const {
+      "device_contact",
+      "door",
+      "door_open",
+      "door_closed",
+      "device_door",
+      "status",
+    }.contains(type);
+  }
+
+  bool _isDoorDevice(Map<String, dynamic> item) {
+    final deviceType =
+        _firstNotificationString(item, const ["deviceType", "entityType"])
+            .toLowerCase();
+
+    return const {
+      "door",
+      "window",
+      "gate",
+      "lock",
+      "door_lock",
+      "contact",
+    }.contains(deviceType);
+  }
+
+  bool? _notificationBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+
+    final text = value?.toString().trim().toLowerCase() ?? "";
+
+    if (text == "true" || text == "1" || text == "closed") {
+      return true;
+    }
+
+    if (text == "false" || text == "0" || text == "open") {
+      return false;
+    }
+
+    return null;
+  }
+
+  bool? _notificationDoorClosed(Map<String, dynamic> item) {
+    final type = _notificationString(item, "type").toLowerCase();
+    final isDoorEvent = _isDoorNotificationType(type) || _isDoorDevice(item);
+
+    final contactValue = _firstNotificationValue(
+      item,
+      const ["contact", "isClosed", "closed"],
+    );
+    final contactClosed = _notificationBool(contactValue);
+    if (contactClosed != null && isDoorEvent) {
+      return contactClosed;
+    }
+
+    final openValue = _firstNotificationValue(item, const ["isOpen", "open"]);
+    final isOpen = _notificationBool(openValue);
+    if (isOpen != null && isDoorEvent) {
+      return !isOpen;
+    }
+
+    for (final key in const [
+      "status",
+      "event",
+      "action",
+      "state",
+      "message",
+      "text",
+      "title",
+    ]) {
+      final statusText = _notificationString(item, key);
+      final textClosed = _doorClosedFromText(statusText);
+      if (textClosed != null &&
+          (isDoorEvent || _looksLikeDoorStatusText(statusText))) {
+        return textClosed;
+      }
+    }
+
+    final severity = _notificationString(item, "severity").toLowerCase();
+    if (isDoorEvent) {
+      if (severity == "success" || severity == "cleared") {
+        return true;
+      }
+
+      if (severity == "warning" || severity == "critical") {
+        return false;
+      }
+    }
+
+    return null;
+  }
+
+  bool? _doorClosedFromText(String text) {
+    final normalized = _normalizeNotificationText(text);
+
+    if (normalized.isEmpty) {
+      return null;
+    }
+
+    if (normalized.contains("cửa đã đóng") ||
+        normalized.contains("cửa đóng") ||
+        normalized.contains("door closed")) {
+      return true;
+    }
+
+    if (normalized.contains("cửa đang mở") ||
+        normalized.contains("cửa mở") ||
+        normalized.contains("door is open") ||
+        normalized.contains("door opened")) {
+      return false;
+    }
+
+    if (normalized == "closed") {
+      return true;
+    }
+
+    if (normalized == "open") {
+      return false;
+    }
+
+    return null;
+  }
+
+  bool _looksLikeDoorStatusText(String text) {
+    final normalized = _normalizeNotificationText(text);
+
+    return normalized.contains("cửa") || normalized.contains("door");
+  }
+
+  String _notificationDeviceName(Map<String, dynamic> item) {
+    final direct = _firstNotificationString(
+      item,
+      const ["deviceName", "device_name"],
+    );
+
+    if (direct.isNotEmpty) {
+      return direct;
+    }
+
+    final rawLine = _firstNotificationString(
+      item,
+      const ["message", "body", "text", "title"],
+    );
+    final separator = rawLine.indexOf(":");
+
+    if (separator <= 0) {
+      return "";
+    }
+
+    final details = rawLine.substring(separator + 1);
+
+    return _doorClosedFromText(details) == null
+        ? ""
+        : rawLine.substring(0, separator).trim();
+  }
+
+  String _normalizeNotificationText(String text) {
+    return text.trim().toLowerCase().replaceAll(RegExp(r"\s+"), " ");
   }
 
   static const Map<String, String> _english = {
@@ -578,12 +966,15 @@ class AppStrings {
     "Mật khẩu quá yếu": "Password is too weak",
     "Sai email hoặc mật khẩu": "Incorrect email or password",
     "Lỗi đăng nhập": "Sign-in error",
+    "Email": "Email",
+    "Mật khẩu": "Password",
     "Ghi nhớ tài khoản": "Remember account",
-    "Đăng nhập": "Sign in",
+    "Đăng nhập": "Log in",
     "Đăng ký mới": "Create account",
     "Quên mật khẩu?": "Forgot password?",
-    "Chưa có tài khoản? Đăng ký": "No account yet? Sign up",
-    "Đã có tài khoản? Đăng nhập": "Already have an account? Sign in",
+    "Chưa có tài khoản? Đăng ký": "Don't have an account? Sign up",
+    "Đã có tài khoản? Đăng nhập": "Already have an account? Log in",
+    "Tính năng đang được phát triển": "This feature is under development",
     "Thông báo": "Notifications",
     "Chat trong nhà": "Home chat",
     "Tìm kiếm tin nhắn": "Search messages",
@@ -1019,12 +1410,15 @@ class AppStrings {
     "Mật khẩu quá yếu": "密码太弱",
     "Sai email hoặc mật khẩu": "邮箱或密码不正确",
     "Lỗi đăng nhập": "登录错误",
-    "Ghi nhớ tài khoản": "记住账户",
+    "Email": "邮箱",
+    "Mật khẩu": "密码",
+    "Ghi nhớ tài khoản": "记住账号",
     "Đăng nhập": "登录",
-    "Đăng ký mới": "创建账户",
+    "Đăng ký mới": "创建账号",
     "Quên mật khẩu?": "忘记密码？",
-    "Chưa có tài khoản? Đăng ký": "还没有账户？注册",
-    "Đã có tài khoản? Đăng nhập": "已有账户？登录",
+    "Chưa có tài khoản? Đăng ký": "没有账号？注册",
+    "Đã có tài khoản? Đăng nhập": "已有账号？登录",
+    "Tính năng đang được phát triển": "此功能正在开发中",
     "Thông báo": "通知",
     "Chat trong nhà": "家庭聊天",
     "Tìm kiếm tin nhắn": "搜索消息",
@@ -1277,11 +1671,17 @@ class AppStrings {
     "Thêm": "추가",
     "Đóng": "닫기",
     "Xác nhận": "확인",
+    "Email": "이메일",
     "Mật khẩu": "비밀번호",
-    "Email": "Email",
+    "Xác nhận mật khẩu": "비밀번호 확인",
     "Đăng nhập": "로그인",
+    "Đăng ký mới": "새 계정 만들기",
+    "Ghi nhớ tài khoản": "계정 기억하기",
+    "Chưa có tài khoản? Đăng ký": "계정이 없나요? 가입하기",
+    "Đã có tài khoản? Đăng nhập": "이미 계정이 있나요? 로그인",
     "Tạo tài khoản": "계정 만들기",
     "Quên mật khẩu?": "비밀번호를 잊으셨나요?",
+    "Tính năng đang được phát triển": "이 기능은 개발 중입니다",
     "Nhập email": "Email 입력",
     "Nhập mật khẩu": "비밀번호 입력",
     "Tên": "이름",
@@ -1359,7 +1759,7 @@ class AppStrings {
     "Phát hiện kính vỡ": "유리 파손 감지",
     "Nhiệt độ nguy hiểm": "위험 온도 감지",
     "Phát hiện khí CO": "일산화탄소 감지",
-    "Đang mở khi nhà ở chế độ Bảo vệ": "보호 모드에서 열림",
+    "Đang mở khi nhà ở chế độ Bảo vệ": "집이 보호 모드일 때 열려 있음",
     "Đang mở trong giờ Alarm": "Alarm 시간 중 열림",
     "Khóa đang mở khi nhà ở chế độ Bảo vệ": "보호 모드에서 잠금 해제됨",
     "Khóa đang mở trong giờ Alarm": "Alarm 시간 중 잠금 해제됨",
@@ -1373,7 +1773,223 @@ class AppStrings {
     "Báo động đã tắt": "알람 꺼짐",
   };
 
+  static const Map<String, String> _japanese = {
+    "Email": "メールアドレス",
+    "Mật khẩu": "パスワード",
+    "Xác nhận mật khẩu": "パスワード確認",
+    "Đăng nhập": "ログイン",
+    "Đăng ký mới": "新規登録",
+    "Ghi nhớ tài khoản": "アカウントを記憶",
+    "Quên mật khẩu?": "パスワードをお忘れですか？",
+    "Chưa có tài khoản? Đăng ký": "アカウントをお持ちでないですか？登録",
+    "Đã có tài khoản? Đăng nhập": "すでにアカウントをお持ちですか？ログイン",
+    "Khôi phục mật khẩu": "パスワードをリセット",
+    "Nhập email của bạn": "メールアドレスを入力",
+    "Gửi": "送信",
+    "Đã gửi email khôi phục": "パスワード再設定メールを送信しました",
+    "Không gửi được email": "メールを送信できませんでした",
+    "Vui lòng nhập email và mật khẩu": "メールアドレスとパスワードを入力してください",
+    "Mật khẩu xác nhận không khớp": "パスワード確認が一致しません",
+    "Không thể tạo tài khoản": "アカウントを作成できません",
+    "Sai tài khoản": "アカウントが正しくありません",
+    "Email đã tồn tại": "このメールアドレスはすでに存在します",
+    "Mật khẩu quá yếu": "パスワードが弱すぎます",
+    "Sai email hoặc mật khẩu": "メールアドレスまたはパスワードが正しくありません",
+    "Lỗi đăng nhập": "ログインエラー",
+    "Không thể đăng nhập bằng Google": "Google でログインできません",
+    "Nhà": "家",
+    "Nhà chưa đặt tên": "名前未設定の家",
+    "Nhà được chia sẻ": "共有された家",
+    "Địa chỉ": "住所",
+    "An toàn": "安全",
+    "Cần chú ý": "確認が必要",
+    "Không an toàn": "安全ではありません",
+    "Chưa đủ dữ liệu để đánh giá": "評価するためのデータが不足しています",
+    "Nhấn để xem chi tiết...": "詳細を見るにはタップ...",
+    "Tổng hợp trạng thái nhà": "家の状態サマリー",
+    "Tự động đánh giá": "自動評価",
+    "Tổng quan hôm nay": "今日の概要",
+    "Môi trường hiện tại": "現在の環境",
+    "Hub kết nối bình thường": "Hub は正常に接続されています",
+    "Bảo vệ": "警戒",
+    "Chế độ Bảo vệ": "警戒モード",
+    "Bình thường": "正常",
+    "Tắt": "オフ",
+    "Tự động Bảo vệ khi rời nhà": "外出時の自動警戒",
+    "Chuyển về Bình thường?": "通常モードに切り替えますか？",
+    "Vẫn chuyển về Bình thường": "それでも通常モードに切り替える",
+    "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+        "外出時の自動警戒がまだ有効です。全員が外出中の場合、数分後に警戒モードが自動で再び有効になることがあります。",
+    "An ninh ra/vào": "出入り口セキュリティ",
+    "Nguy hiểm khẩn cấp": "緊急リスク",
+    "Môi trường": "環境",
+    "Điều khiển & hạ tầng": "制御とインフラ",
+    "Tình trạng": "状態",
+    "Cửa": "ドア",
+    "Cửa ra/vào": "出入口ドア",
+    "Cửa sổ": "窓",
+    "Cổng": "ゲート",
+    "Đang mở": "開いています",
+    "Đang đóng": "閉じています",
+    "Sẵn sàng": "準備完了",
+    "Đang hoạt động": "稼働中",
+    "Tháo/Lắp": "取り外し検知",
+    "Pin": "バッテリー",
+    "Tín hiệu": "信号",
+    "Camera": "カメラ",
+    "Chưa liên kết": "未連携",
+    "Liên lạc cuối": "最終通信",
+    "Sự kiện cuối": "最終イベント",
+    "Event cuối": "最終イベント",
+    "Lần kích hoạt cuối": "最終作動",
+    "Chưa cập nhật": "まだ更新がありません",
+    "Tính năng đang được phát triển": "この機能は開発中です",
+    "Alarm": "Alarm",
+    "Reminder": "Reminder",
+    "Hẹn giờ Alarm": "Alarm 予約",
+    "Hẹn giờ Reminder": "Reminder 予約",
+    "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+        "Reminder は、選択した時刻に家の安全状態を確認するよう通知します。",
+    "Thêm Reminder": "Reminder を追加",
+    "Alarm thiết bị": "デバイス Alarm",
+    "Chế độ áp dụng": "適用モード",
+    "Theo nhà": "家の設定",
+    "Riêng tôi": "自分のみ",
+    "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+        "家の所有者または管理者が設定した共通スケジュールを使用します",
+    "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+        "自分のアカウントにのみ適用される個人スケジュールを使用します",
+    "Thiết lập nhanh toàn bộ thiết bị": "すべてのデバイスを一括設定",
+    "Bắt đầu": "開始",
+    "Kết thúc": "終了",
+    "Thời gian lặp": "繰り返し間隔",
+    "Thời gian lặp lại": "繰り返し間隔",
+    "Không lặp lại": "繰り返しなし",
+    "Chưa thiết lập": "未設定",
+    "Đã thiết lập": "設定済み",
+    "Tạm tắt Alarm hôm nay": "今日の Alarm を一時停止",
+    "Lưu ý tạm tắt Alarm": "Alarm 一時停止の注意",
+    "Từ": "開始",
+    "Từ giờ": "開始",
+    "Đến": "終了",
+    "Đến giờ": "終了",
+    "Về muộn": "帰宅が遅い",
+    "Ra ngoài": "外出",
+    "Khác": "その他",
+    "Lưu": "保存",
+    "Xoá lịch tạm tắt": "一時停止スケジュールを削除",
+    "Xóa lịch tạm tắt": "一時停止スケジュールを削除",
+    "Đã hiểu": "了解",
+    "Cài đặt bảo mật": "セキュリティ設定",
+    "Quyền báo động toàn màn hình": "全画面アラーム権限",
+    "Báo động toàn màn hình": "全画面アラーム",
+    "Đã được cấp quyền": "権限が許可されています",
+    "Chưa được cấp quyền": "権限が許可されていません",
+    "Mở cài đặt hệ thống": "システム設定を開く",
+    "Yêu cầu & lời mời": "リクエストと招待",
+    "Không có yêu cầu hoặc lời mời nào": "リクエストまたは招待はありません",
+    "Đăng xuất": "ログアウト",
+    "Đăng xuất?": "ログアウトしますか？",
+    "Không": "いいえ",
+    "Có": "はい",
+    "OK": "OK",
+    "Huỷ": "キャンセル",
+    "Hủy": "キャンセル",
+    "Tiếp tục": "続行",
+    "Giới tính": "性別",
+    "SĐT": "電話番号",
+    "Số điện thoại": "電話番号",
+    "Ngày sinh": "生年月日",
+    "Thoát tài khoản khỏi thiết bị này": "このデバイスからログアウト",
+    "Chia sẻ nhà": "家を共有",
+    "Thành viên trong nhà": "家のメンバー",
+    "Quản lý phòng": "部屋の管理",
+    "Toàn bộ thiết bị": "すべてのデバイス",
+    "Toàn bộ thiết bị SafeHome": "すべての SafeHome デバイス",
+    "Quản lý nhà": "家の管理",
+    "Chuyển quyền chủ nhà hoặc xoá nhà": "家の所有権を移転または家を削除",
+    "Đặt vị trí nhà và bật bảo vệ tự động": "家の位置を設定し、自動警戒を有効にします",
+    "Email người nhận": "受信者のメール",
+    "Mời thành viên bằng mã QR": "QR コードでメンバーを招待",
+    "Xin gia nhập nhà": "家への参加をリクエスト",
+    "Quét QR HUB": "HUB の QR をスキャン",
+    "Đưa mã QR vào giữa khung": "QR コードを枠の中央に合わせてください",
+    "Quét mã QR được chủ nhà chia sẻ": "家の所有者が共有した QR コードをスキャン",
+    "Chưa share cho ai": "まだ誰にも共有されていません",
+    "Chưa phân phòng": "未割り当て",
+    "Phòng mặc định": "デフォルトの部屋",
+    "Phòng khách": "リビング",
+    "Thêm phòng": "部屋を追加",
+    "Phòng": "部屋",
+    "Nhắn gì đó...": "メッセージを入力...",
+    "Thông báo nhà": "家の通知",
+    "Thông báo Home": "家の通知",
+    "Phát hiện bất thường": "異常を検知",
+    "Cửa đang mở": "ドアが開いています",
+    "Cửa đã đóng": "ドアが閉じました",
+    "SOS được kích hoạt": "SOS が作動しました",
+    "SOS đã kết thúc": "SOS が終了しました",
+    "Tamper bình thường": "取り外し検知は正常です",
+    "Vai trò thành viên đã thay đổi": "メンバーの役割が変更されました",
+    "Chủ nhà": "所有者",
+    "Quản trị viên": "管理者",
+    "Thành viên": "メンバー",
+    "Vai trò": "役割",
+    "Tìm nhà": "家を検索",
+    "Tìm home...": "家を検索...",
+    "Tìm nhà...": "家を検索...",
+    "Đặt Reminder / Alarm nhà đã chọn": "選択した家の Reminder / Alarm を設定",
+    "Chia sẻ nhà đã chọn": "選択した家を共有",
+    "Mở danh sách chia sẻ nhà": "家の共有リストを開く",
+    "Xoá các nhà đã chọn?": "選択した家を削除しますか？",
+    "Xác nhận xoá nhà": "家の削除を確認",
+    "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "選択した家は完全に削除されます。",
+    "Thêm nhà": "家を追加",
+    "Thêm nhà mới": "新しい家を追加",
+    "Tạo nhà mới": "新しい家を作成",
+    "Tạo một ngôi nhà mới của bạn": "新しい家を作成します",
+    "Tên nhà": "家の名前",
+    "Chưa đặt vị trí nhà": "家の位置が未設定です",
+    "Đã đặt vị trí nhà": "家の位置が設定されています",
+    "Đặt vị trí nhà tại đây": "現在地を家の位置に設定",
+    "Bán kính bảo vệ mặc định: 150 m": "デフォルトの保護半径: 150 m",
+    "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+        "外出/帰宅状態をバックグラウンドで動作させるには、各メンバーが位置情報を「常に許可」にする必要があります。",
+    "Lưu cài đặt": "設定を保存",
+    "Bạn không có quyền thực hiện thao tác này。": "この操作を実行する権限がありません。",
+    "Bạn không có quyền thực hiện thao tác này.": "この操作を実行する権限がありません。",
+    "Không thể hoàn tất thao tác. Vui lòng thử lại.": "エラーが発生しました。もう一度お試しください。",
+    "Đã xảy ra lỗi. Vui lòng thử lại.": "エラーが発生しました。もう一度お試しください。",
+    "Đang mở khi nhà ở chế độ Bảo vệ": "家が警戒モードのときに開いています",
+    "Đang mở trong giờ Alarm": "Alarm 時間中に開いています",
+    "Khóa đang mở khi nhà ở chế độ Bảo vệ": "警戒モード中にロックが解除されています",
+    "Khóa đang mở trong giờ Alarm": "Alarm 時間中にロックが解除されています",
+    "Khóa đang mở": "ロック解除中",
+    "Bị tháo": "取り外し検知",
+    "Pin yếu": "バッテリー低下",
+    "Sóng yếu": "信号が弱い",
+    "Mất kết nối": "接続が切断されました",
+    "Offline": "オフライン",
+    "Online": "オンライン",
+    "Thiết bị offline": "デバイスはオフラインです",
+    "Thiết bị online": "デバイスはオンラインです",
+    "Thiết bị mới": "新しいデバイス",
+    "Đang tải...": "読み込み中...",
+    "Ngôn ngữ": "言語",
+    "Thay đổi ngôn ngữ hiển thị": "表示言語を変更",
+    "Chọn ngôn ngữ": "言語を選択",
+    "Tiếng Việt": "ベトナム語",
+    "Tiếng Anh": "英語",
+    "Tiếng Trung": "中国語",
+    "Tiếng Hàn": "韓国語",
+    "Tiếng Nhật": "日本語",
+  };
+
   String t(String vi) {
+    if (isJapanese) {
+      return _japanese[vi] ?? vi;
+    }
+
     if (isKorean) {
       return _korean[vi] ?? vi;
     }
@@ -1396,6 +2012,8 @@ class AppStrings {
 
     final translations = isKorean
         ? _korean
+        : isJapanese
+        ? _japanese
         : isChinese
         ? _chinese
         : isEnglish
@@ -1417,6 +2035,7 @@ class AppStrings {
         en: "$count doors safely closed",
         zh: "$count 扇门已安全关闭",
         ko: "$count개의 문이 안전하게 닫힘",
+        ja: "$count 個のドアが安全に閉じています",
       );
     }
 
@@ -1431,6 +2050,7 @@ class AppStrings {
         en: "$count doors and locks secured",
         zh: "$count 扇门和门锁已安全",
         ko: "$count개의 문과 잠금장치가 안전함",
+        ja: "$count 個のドアとロックが安全です",
       );
     }
 
@@ -1444,6 +2064,7 @@ class AppStrings {
         en: "$count devices monitored",
         zh: "正在监测 $count 台设备",
         ko: "기기 $count대 모니터링 중",
+        ja: "$count 台のデバイスを監視中",
       );
     }
 
@@ -1457,6 +2078,7 @@ class AppStrings {
         en: "Doors were used $count times today",
         zh: "今天门被使用了 $count 次",
         ko: "오늘 문이 $count번 사용되었습니다",
+        ja: "今日はドアが $count 回使用されました",
       );
     }
 
@@ -1468,6 +2090,7 @@ class AppStrings {
         en: "Updated $timeText",
         zh: "$timeText更新",
         ko: "$timeText에 업데이트됨",
+        ja: "$timeTextに更新",
       );
     }
 
@@ -1481,6 +2104,7 @@ class AppStrings {
         en: "Latest data updated $count minutes ago",
         zh: "最近数据更新于 $count 分钟前",
         ko: "최신 데이터가 $count분 전에 업데이트됨",
+        ja: "最新データは $count 分前に更新されました",
       );
     }
 
@@ -1494,6 +2118,7 @@ class AppStrings {
         en: "Latest data updated $count hours ago",
         zh: "最近数据更新于 $count 小时前",
         ko: "최신 데이터가 $count시간 전에 업데이트됨",
+        ja: "最新データは $count 時間前に更新されました",
       );
     }
 
@@ -1508,6 +2133,7 @@ class AppStrings {
         en: "Members at home: $count",
         zh: "在家成员：$count",
         ko: "집 구성원: $count",
+        ja: "在宅メンバー: $count",
       );
     }
 
@@ -1521,6 +2147,7 @@ class AppStrings {
         en: "Members away: $count",
         zh: "外出成员：$count",
         ko: "외출 구성원: $count",
+        ja: "外出中のメンバー: $count",
       );
     }
 
@@ -1535,6 +2162,7 @@ class AppStrings {
         en: "Location unknown: $count",
         zh: "位置未知：$count",
         ko: "위치 알 수 없음: $count",
+        ja: "位置不明: $count",
       );
     }
 
@@ -1549,10 +2177,11 @@ class AppStrings {
         en: "Current environment: $environment",
         zh: "当前环境：$environment",
         ko: "현재 환경: $environment",
+        ja: "現在の環境: $environment",
       );
     }
 
-    if (!isEnglish && !isChinese && !isKorean) {
+    if (!isEnglish && !isChinese && !isKorean && !isJapanese) {
       return text;
     }
 
@@ -1560,6 +2189,24 @@ class AppStrings {
     if (issueParts.length >= 2) {
       final name = issueParts.first;
       final details = issueParts.sublist(1).join(": ");
+      const openWhileGuardDetails = {
+        "Đang mở khi nhà ở chế độ Bảo vệ",
+        "Open while Home is in Guard mode",
+        "家庭处于布防模式时仍打开",
+        "집이 보호 모드일 때 열려 있음",
+        "家が警戒モードのときに開いています",
+      };
+
+      if (openWhileGuardDetails.contains(details)) {
+        return choose(
+          vi: "$name: Đang mở khi nhà ở chế độ Bảo vệ",
+          en: "$name: Open while Home is in Guard mode",
+          zh: "$name：家庭处于布防模式时仍打开",
+          ko: "$name: 집이 보호 모드일 때 열려 있음",
+          ja: "$name: 家が警戒モードのときに開いています",
+        );
+      }
+
       final translatedDetails = details
           .split(" & ")
           .map(_translateStatusFragment)
@@ -1585,6 +2232,7 @@ class AppStrings {
         en: "$count minutes ago",
         zh: "$count 分钟前",
         ko: "$count분 전",
+        ja: "$count 分前",
       );
     }
 
@@ -1597,6 +2245,7 @@ class AppStrings {
         en: "${hours}h ${minutes}m ago",
         zh: "$hours 小时 $minutes 分钟前",
         ko: "$hours시간 $minutes분 전",
+        ja: "$hours 時間 $minutes 分前",
       );
     }
 
@@ -1608,6 +2257,7 @@ class AppStrings {
         en: "${count}h ago",
         zh: "$count 小时前",
         ko: "$count시간 전",
+        ja: "$count 時間前",
       );
     }
 
@@ -1619,6 +2269,7 @@ class AppStrings {
         en: "$count days ago",
         zh: "$count 天前",
         ko: "$count일 전",
+        ja: "$count 日前",
       );
     }
 
@@ -1630,6 +2281,7 @@ class AppStrings {
         en: "$count months ago",
         zh: "$count 个月前",
         ko: "$count개월 전",
+        ja: "$count か月前",
       );
     }
 
@@ -1637,6 +2289,48 @@ class AppStrings {
   }
 
   String _translateStatusFragment(String text) {
+    if (isJapanese) {
+      final exact = _japanese[text];
+
+      if (exact != null) {
+        return exact;
+      }
+
+      const fragments = {
+        "Nhiệt độ cao": "高温",
+        "Độ ẩm cao": "高湿度",
+        "Có khói": "煙を検知",
+        "SOS": "SOS",
+        "Đang mở khi nhà ở chế độ Bảo vệ": "家が警戒モードのときに開いています",
+        "Đang mở trong giờ Alarm": "Alarm 時間中に開いています",
+        "Đang mở": "開いています",
+        "Phát hiện chuyển động": "動きを検知",
+        "Phát hiện hiện diện": "在室を検知",
+        "Phát hiện rung/chấn động": "振動/衝撃を検知",
+        "Phát hiện kính vỡ": "ガラス破損を検知",
+        "Nhiệt độ nguy hiểm": "危険な高温を検知",
+        "Phát hiện khí CO": "一酸化炭素を検知",
+        "Khóa đang mở khi nhà ở chế độ Bảo vệ": "警戒モード中にロックが解除されています",
+        "Khóa đang mở trong giờ Alarm": "Alarm 時間中にロックが解除されています",
+        "Khóa đang mở": "ロック解除中",
+        "Mất điện lưới": "主電源が切断されました",
+        "Rò rỉ gas": "ガス漏れを検知",
+        "Phát hiện ngập nước": "水漏れを検知",
+        "Bị tháo": "取り外し検知",
+        "Pin yếu": "バッテリー低下",
+        "Sóng yếu": "信号が弱い",
+        "Mất kết nối": "接続が切断されました",
+        "Hub chưa gửi trạng thái": "Hub の状態がありません",
+        "Hub mất kết nối": "Hub が切断されました",
+        "MQTT mất kết nối": "MQTT が切断されました",
+        "Đang kiểm tra kết nối Hub": "Hub 接続を確認中",
+        "Hub tín hiệu bình thường": "Hub 接続は正常です",
+        "Chưa có dữ liệu thiết bị để đánh giá": "評価するためのデバイスデータがありません",
+      };
+
+      return fragments[text] ?? text;
+    }
+
     if (isKorean) {
       final exact = _korean[text];
 
@@ -1649,7 +2343,7 @@ class AppStrings {
         "Độ ẩm cao": "습도 높음",
         "Có khói": "연기 감지",
         "SOS": "SOS",
-        "Đang mở khi nhà ở chế độ Bảo vệ": "보호 모드에서 열림",
+        "Đang mở khi nhà ở chế độ Bảo vệ": "집이 보호 모드일 때 열려 있음",
         "Đang mở trong giờ Alarm": "Alarm 시간 중 열림",
         "Đang mở": "열림",
         "Phát hiện chuyển động": "움직임 감지",
@@ -1691,7 +2385,7 @@ class AppStrings {
         "Độ ẩm cao": "湿度过高",
         "Có khói": "检测到烟雾",
         "SOS": "SOS",
-        "Đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时被打开",
+        "Đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时仍打开",
         "Đang mở trong giờ Alarm": "Alarm 时段内被打开",
         "Đang mở": "已打开",
         "Phát hiện chuyển động": "检测到移动",
@@ -1767,6 +2461,7 @@ class AppStrings {
     en: "Peace of mind in every home",
     zh: "让每个家庭更安心",
     ko: "모든 집에 더 큰 안심을",
+    ja: "すべての家に、もっと安心を",
   );
 
   String get alarmTitle => choose(
@@ -1774,6 +2469,7 @@ class AppStrings {
     en: "SafeHome Alarm",
     zh: "SafeHome Alarm",
     ko: "SafeHome Alarm",
+    ja: "SafeHome Alarm",
   );
 
   String get alarmBody => choose(
@@ -1781,6 +2477,7 @@ class AppStrings {
     en: "A security alert requires your attention.",
     zh: "有安全警报需要立即检查。",
     ko: "확인이 필요한 보안 경고가 있습니다.",
+    ja: "確認が必要なセキュリティ警告があります。",
   );
 
   String get alarmFallback => choose(
@@ -1788,61 +2485,99 @@ class AppStrings {
     en: "An alert requires your attention",
     zh: "有警报需要检查",
     ko: "확인이 필요한 경고가 있습니다",
+    ja: "確認が必要な警告があります",
   );
 
   String get owner => t("Chủ nhà");
-  String get admin =>
-      choose(vi: "Quản trị viên", en: "Admin", zh: "管理员", ko: "관리자");
-  String get member =>
-      choose(vi: "Thành viên", en: "Member", zh: "成员", ko: "구성원");
+  String get admin => choose(
+    vi: "Quản trị viên",
+    en: "Admin",
+    zh: "管理员",
+    ko: "관리자",
+    ja: "管理者",
+  );
+  String get member => choose(
+    vi: "Thành viên",
+    en: "Member",
+    zh: "成员",
+    ko: "구성원",
+    ja: "メンバー",
+  );
   String get notUpdated => t("Chưa cập nhật");
   String get unnamedHome => t("Nhà chưa đặt tên");
-  String get role => choose(vi: "Vai trò", en: "Role", zh: "角色", ko: "역할");
+  String get role =>
+      choose(vi: "Vai trò", en: "Role", zh: "角色", ko: "역할", ja: "役割");
   String get address => t("Địa chỉ");
-  String get members =>
-      choose(vi: "Thành viên", en: "Members", zh: "成员", ko: "구성원");
-  String get loading =>
-      choose(vi: "Đang tải...", en: "Loading...", zh: "正在加载...", ko: "로딩 중...");
-  String get manageHome =>
-      choose(vi: "Quản lý nhà", en: "Home management", zh: "家庭管理", ko: "집 관리");
+  String get members => choose(
+    vi: "Thành viên",
+    en: "Members",
+    zh: "成员",
+    ko: "구성원",
+    ja: "メンバー",
+  );
+  String get loading => choose(
+    vi: "Đang tải...",
+    en: "Loading...",
+    zh: "正在加载...",
+    ko: "로딩 중...",
+    ja: "読み込み中...",
+  );
+  String get manageHome => choose(
+    vi: "Quản lý nhà",
+    en: "Home management",
+    zh: "家庭管理",
+    ko: "집 관리",
+    ja: "家の管理",
+  );
   String get shareHome => t("Chia sẻ nhà");
   String get shareHomeSubtitle => choose(
     vi: "Mời người khác tham gia nhà này",
     en: "Invite someone to join this home",
     zh: "邀请他人加入此家庭",
     ko: "다른 사람을 이 집에 초대합니다",
+    ja: "他の人をこの家に招待します",
   );
   String get homeMembers => choose(
     vi: "Thành viên trong nhà",
     en: "Home members",
     zh: "家庭成员",
     ko: "집 구성원",
+    ja: "家のメンバー",
   );
   String get homeMembersSubtitle => choose(
     vi: "Xem và quản lý quyền thành viên",
     en: "View and manage member roles",
     zh: "查看和管理成员权限",
     ko: "구성원 권한을 보고 관리합니다",
+    ja: "メンバーの権限を表示・管理します",
   );
-  String get manageRooms =>
-      choose(vi: "Quản lý phòng", en: "Manage rooms", zh: "管理房间", ko: "방 관리");
+  String get manageRooms => choose(
+    vi: "Quản lý phòng",
+    en: "Manage rooms",
+    zh: "管理房间",
+    ko: "방 관리",
+    ja: "部屋の管理",
+  );
   String get manageRoomsSubtitle => choose(
     vi: "Thêm, đổi tên và sắp xếp phòng",
     en: "Add, rename and reorder rooms",
     zh: "添加、重命名和排序房间",
     ko: "방을 추가, 이름 변경 및 정렬합니다",
+    ja: "部屋の追加、名前変更、並べ替えを行います",
   );
   String get allDevices => choose(
     vi: "Toàn bộ thiết bị",
     en: "All devices",
     zh: "全部设备",
     ko: "전체 기기",
+    ja: "すべてのデバイス",
   );
   String get allDevicesSubtitle => choose(
     vi: "Kiểm tra thiết bị trong nhà này",
     en: "Review devices in this home",
     zh: "查看此家庭中的设备",
     ko: "이 집의 기기를 확인합니다",
+    ja: "この家のデバイスを確認します",
   );
   String get transferOwnership => t("Chuyển quyền chủ nhà");
   String get transferOwnershipSubtitle => choose(
@@ -1850,48 +2585,60 @@ class AppStrings {
     en: "Transfer ownership to another member",
     zh: "将所有权转移给其他成员",
     ko: "소유권을 다른 구성원에게 이전합니다",
+    ja: "所有権を他のメンバーに移転します",
   );
   String get accountAndSystem => choose(
     vi: "Tài khoản & hệ thống",
     en: "Account & system",
     zh: "账户与系统",
     ko: "계정 및 시스템",
+    ja: "アカウントとシステム",
   );
   String get personalAccount => choose(
     vi: "Tài khoản cá nhân",
     en: "Personal account",
     zh: "个人账户",
     ko: "개인 계정",
+    ja: "個人アカウント",
   );
   String get personalAccountSubtitle => choose(
     vi: "Hồ sơ, yêu cầu và lời mời tham gia",
     en: "Profile, requests and invitations",
     zh: "个人资料、申请和邀请",
     ko: "프로필, 요청 및 초대",
+    ja: "プロフィール、リクエスト、招待",
   );
   String get language =>
-      choose(vi: "Ngôn ngữ", en: "Language", zh: "语言", ko: "언어");
+      choose(vi: "Ngôn ngữ", en: "Language", zh: "语言", ko: "언어", ja: "言語");
   String get languageSubtitle => choose(
     vi: "Thay đổi ngôn ngữ hiển thị",
     en: "Change the display language",
     zh: "更改显示语言",
     ko: "표시 언어 변경",
+    ja: "表示言語を変更",
   );
   String get chooseLanguage => choose(
     vi: "Chọn ngôn ngữ",
     en: "Choose language",
     zh: "选择语言",
     ko: "언어 선택",
+    ja: "言語を選択",
   );
   String get vietnamese =>
-      choose(vi: "Tiếng Việt", en: "Vietnamese", zh: "越南语", ko: "베트남어");
+      choose(vi: "Tiếng Việt", en: "Vietnamese", zh: "越南语", ko: "베트남어", ja: "ベトナム語");
   String get english =>
-      choose(vi: "Tiếng Anh", en: "English", zh: "英语", ko: "영어");
+      choose(vi: "Tiếng Anh", en: "English", zh: "英语", ko: "영어", ja: "英語");
   String get chinese =>
-      choose(vi: "Tiếng Trung", en: "Chinese", zh: "中文", ko: "중국어");
+      choose(vi: "Tiếng Trung", en: "Chinese", zh: "中文", ko: "중국어", ja: "中国語");
   String get korean =>
-      choose(vi: "Tiếng Hàn", en: "Korean", zh: "韩语", ko: "한국어");
+      choose(vi: "Tiếng Hàn", en: "Korean", zh: "韩语", ko: "한국어", ja: "韓国語");
+  String get japanese =>
+      choose(vi: "Tiếng Nhật", en: "Japanese", zh: "日语", ko: "일본어", ja: "日本語");
   String get currentLanguageName {
+    if (isJapanese) {
+      return "日本語";
+    }
+
     if (isKorean) {
       return "한국어";
     }
@@ -1908,6 +2655,7 @@ class AppStrings {
     en: "Danger zone",
     zh: "危险区域",
     ko: "위험 구역",
+    ja: "危険ゾーン",
   );
   String get deleteHome => t("Xoá nhà");
   String get deleteHomeSubtitle => choose(
@@ -1915,6 +2663,7 @@ class AppStrings {
     en: "Delete all home data and devices",
     zh: "删除所有家庭数据和设备",
     ko: "모든 집 데이터와 기기를 삭제합니다",
+    ja: "家のデータとデバイスをすべて削除します",
   );
 }
 

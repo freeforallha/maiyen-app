@@ -203,12 +203,17 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
                     final rawText = item["text"]?.toString() ?? "";
                     final type = item["type"]?.toString() ?? "";
-                    final text = strings.systemNotificationText(
-                      rawText,
-                      type: type,
+                    final text = strings.notificationMessage(
+                      {
+                        ...item,
+                        "type": type,
+                        "message": item["message"] ?? rawText,
+                        "title": item["title"] ?? rawText,
+                      },
+                      homeName: item["homeName"]?.toString() ?? "",
                     );
 
-                    final lower = rawText.toLowerCase();
+                    final lower = "$rawText $text".toLowerCase();
 
                     final isSafe =
                         lower.contains("đóng") ||

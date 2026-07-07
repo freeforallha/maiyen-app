@@ -877,6 +877,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 en: "Could not get the current location",
                 zh: "无法获取当前位置",
                 ko: "현재 위치를 가져올 수 없습니다",
+                ja: "現在地を取得できません",
               ),
             ),
             color: Colors.red,
@@ -979,6 +980,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 en: "Could not save the setting",
                 zh: "无法保存设置",
                 ko: "설정을 저장할 수 없습니다",
+                ja: "設定を保存できません",
               ),
             ),
             color: Colors.red,
@@ -1764,6 +1766,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           _strings.choose(
             vi: "Đã gửi yêu cầu gia nhập ${result.joinRequestCount} nhà",
             en: "Join requests sent for ${result.joinRequestCount} homes",
+            ja: "${result.joinRequestCount} 件の家への参加リクエストを送信しました",
           ),
           color: SafeHomeColors.safe,
           icon: Icons.check_circle_rounded,
@@ -1952,6 +1955,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "Bạn đã xoá nhà \"$deletedHomeName\".",
         en: "You deleted \"$deletedHomeName\".",
+        ja: "「$deletedHomeName」を削除しました。",
       ),
       homeId: deletedHomeId,
       homeName: deletedHomeName,
@@ -2036,6 +2040,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} đã mời bạn tham gia nhà \"$homeName\".",
         en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} invited you to join \"$homeName\".",
+        ja: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} が「$homeName」への参加に招待しました。",
       ),
       homeName: homeName,
       category: "member",
@@ -2167,6 +2172,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
         en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} wants to transfer ownership of \"$homeName\" to you.",
+        ja: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} が「$homeName」の所有権をあなたに譲渡したいと考えています。",
       ),
       homeName: homeName,
       category: "member",
@@ -2183,6 +2189,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"$homeName\" cho $targetEmail.",
         en: "You sent an ownership transfer request for \"$homeName\" to $targetEmail.",
+        ja: "「$homeName」の所有権譲渡リクエストを $targetEmail に送信しました。",
       ),
       homeId: homeId,
       ownerUid: uid,
@@ -2255,6 +2262,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             en: "Could not send deletion request",
             zh: "无法发送删除请求",
             ko: "삭제 요청을 보낼 수 없습니다",
+            ja: "削除リクエストを送信できません",
           ),
         ),
         color: Colors.red,
@@ -2275,6 +2283,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
         zh: "SafeHome 正在从 \"$homeName\" 中移除 \"$deviceName\"。",
         ko: "SafeHome이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
+        ja: "SafeHome は「$homeName」から「$deviceName」を削除しています。",
       ),
       homeName: homeName,
     );
@@ -2398,6 +2407,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "Bạn đã tạo nhà \"$name\".",
         en: "You created the home \"$name\".",
+        ja: "家「$name」を作成しました。",
       ),
       homeId: id,
       homeName: name,
@@ -2504,6 +2514,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               _strings.choose(
                 vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
                 en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
+                ja: "一時停止期間は Alarm スケジュール（$alarmStart → $alarmEnd）内である必要があります",
               ),
               color: Colors.orange,
               icon: Icons.schedule_rounded,
@@ -2552,6 +2563,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 en: "Unable to save the Alarm pause",
                 zh: "无法保存 Alarm 暂停",
                 ko: "Alarm 임시 중지를 저장할 수 없습니다",
+                ja: "Alarm の一時停止を保存できません",
               ),
             ),
             color: Colors.red,
@@ -2604,6 +2616,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 en: "Unable to delete the Alarm pause schedule",
                 zh: "无法删除 Alarm 暂停计划",
                 ko: "Alarm 임시 중지 일정을 삭제할 수 없습니다",
+                ja: "Alarm の一時停止スケジュールを削除できません",
               ),
             ),
             color: Colors.red,
@@ -2727,16 +2740,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message = _strings.choose(
         vi: "$actorName đã cập nhật tên nhà thành \"$newName\" và thay đổi địa chỉ.",
         en: "$actorName updated the home name to \"$newName\" and changed its address.",
+        ja: "$actorName が家の名前を「$newName」に更新し、住所を変更しました。",
       );
     } else if (nameChanged) {
       message = _strings.choose(
         vi: "$actorName đã đổi tên nhà thành \"$newName\".",
         en: "$actorName renamed the home to \"$newName\".",
+        ja: "$actorName が家の名前を「$newName」に変更しました。",
       );
     } else {
       message = _strings.choose(
         vi: "$actorName đã cập nhật địa chỉ của nhà \"$newName\".",
         en: "$actorName updated the address of \"$newName\".",
+        ja: "$actorName が「$newName」の住所を更新しました。",
       );
     }
 
@@ -2823,6 +2839,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
         en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
+        ja: "$actorName が「$homeName」でデバイス「$oldDeviceName」の名前を「$newName」に変更しました。",
       ),
       deviceId: id,
       entityType: "device",
@@ -2913,7 +2930,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             width: double.maxFinite,
             child: SingleChildScrollView(
               child: SelectableText(
-                "${_strings.choose(vi: "$passCount/${results.length} bài test đạt\n\n", en: "$passCount/${results.length} tests passed\n\n")}$lines",
+                "${_strings.choose(vi: "$passCount/${results.length} bài test đạt\n\n", en: "$passCount/${results.length} tests passed\n\n", ja: "$passCount/${results.length} 件のテストに合格\n\n")}$lines",
               ),
             ),
           ),
@@ -3136,6 +3153,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewPairingCountdownText = _strings.choose(
       vi: "Đang ghép nối: $pairingCountdown giây",
       en: "Pairing: $pairingCountdown s",
+      ja: "ペアリング中: $pairingCountdown 秒",
     );
     final canManageSelectedHome = canManageHome();
     const bottomBarHeight = 68.0;

@@ -448,6 +448,7 @@ Future<bool?> showShareRequestSheet({
                                     vi: "Lời xin vào nhà",
                                     en: "Home join request",
                                     zh: "加入家庭请求",
+                                    ja: "家への参加リクエスト",
                                   )
                                 : isTransferOwner
                                 ? strings.t("Chuyển quyền chủ nhà")
@@ -455,6 +456,7 @@ Future<bool?> showShareRequestSheet({
                                     vi: "Lời mời gia nhập",
                                     en: "Join invitation",
                                     zh: "加入邀请",
+                                    ja: "参加招待",
                                   );
 
                             late final String title;
@@ -469,6 +471,7 @@ Future<bool?> showShareRequestSheet({
                                       vi: "Một người dùng SafeHome",
                                       en: "A SafeHome user",
                                       zh: "一位 SafeHome 用户",
+                                      ja: "SafeHome ユーザー",
                                     );
 
                               subtitle =
@@ -478,22 +481,26 @@ Future<bool?> showShareRequestSheet({
                                       vi: "$targetEmail\nXin gia nhập \"$homeName\"",
                                       en: "$targetEmail\nRequests to join \"$homeName\"",
                                       zh: "$targetEmail\n申请加入“$homeName”",
+                                      ja: "$targetEmail\n「$homeName」への参加をリクエストしています",
                                     )
                                   : strings.choose(
                                       vi: "Xin gia nhập \"$homeName\"",
                                       en: "Requests to join \"$homeName\"",
                                       zh: "申请加入“$homeName”",
+                                      ja: "「$homeName」への参加をリクエストしています",
                                     );
                             } else if (isTransferOwner) {
                               title = strings.choose(
                                 vi: "Nhận quyền chủ nhà",
                                 en: "Receive home ownership",
                                 zh: "接收屋主权限",
+                                ja: "家の所有権を受け取る",
                               );
                               subtitle = strings.choose(
                                 vi: "Bạn được mời nhận quyền nhà \"$homeName\"",
                                 en: "You were invited to receive ownership of \"$homeName\"",
                                 zh: "你被邀请接收“$homeName”的屋主权限",
+                                ja: "「$homeName」の所有権を受け取るよう招待されています",
                               );
                             } else {
                               title = ownerName.isNotEmpty
@@ -504,6 +511,7 @@ Future<bool?> showShareRequestSheet({
                                       vi: "Lời mời từ chủ nhà",
                                       en: "Invitation from the owner",
                                       zh: "来自屋主的邀请",
+                                      ja: "所有者からの招待",
                                     );
 
                               subtitle =
@@ -512,11 +520,13 @@ Future<bool?> showShareRequestSheet({
                                       vi: "$ownerEmail\nMời bạn gia nhập \"$homeName\"",
                                       en: "$ownerEmail\nInvites you to join \"$homeName\"",
                                       zh: "$ownerEmail\n邀请你加入“$homeName”",
+                                      ja: "$ownerEmail\n「$homeName」への参加に招待しています",
                                     )
                                   : strings.choose(
                                       vi: "Mời bạn gia nhập \"$homeName\"",
                                       en: "Invites you to join \"$homeName\"",
                                       zh: "邀请你加入“$homeName”",
+                                      ja: "「$homeName」への参加に招待しています",
                                     );
                             }
 
@@ -613,6 +623,7 @@ Future<bool?> showShareRequestSheet({
                                               vi: "Từ chối",
                                               en: "Decline",
                                               zh: "拒绝",
+                                              ja: "拒否",
                                             ),
                                           ),
                                         ),
@@ -641,11 +652,13 @@ Future<bool?> showShareRequestSheet({
                                                         vi: "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
                                                         en: "Could not accept the join request. Please try again.",
                                                         zh: "无法接受加入请求。请重试。",
+                                                        ja: "参加リクエストを承認できませんでした。もう一度お試しください。",
                                                       )
                                                     : strings.choose(
                                                         vi: "Không thể chấp nhận lời mời. Vui lòng thử lại.",
                                                         en: "Could not accept the invitation. Please try again.",
                                                         zh: "无法接受邀请。请重试。",
+                                                        ja: "招待を承認できませんでした。もう一度お試しください。",
                                                       ),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
@@ -658,11 +671,13 @@ Future<bool?> showShareRequestSheet({
                                                     vi: "Cho phép",
                                                     en: "Allow",
                                                     zh: "允许",
+                                                    ja: "許可",
                                                   )
                                                 : strings.choose(
                                                     vi: "Chấp nhận",
                                                     en: "Accept",
                                                     zh: "接受",
+                                                    ja: "承認",
                                                   ),
                                           ),
                                         ),

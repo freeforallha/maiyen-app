@@ -53,14 +53,16 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                         : SafeHomeColors.background,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Text(
-                    code == "vi"
-                        ? "VI"
-                        : code == "zh"
-                        ? "中"
-                        : code == "ko"
-                        ? "KO"
-                        : "EN",
+                    child: Text(
+                      code == "vi"
+                          ? "VI"
+                          : code == "zh"
+                          ? "中"
+                          : code == "ko"
+                          ? "KO"
+                          : code == "ja"
+                          ? "日"
+                          : "EN",
                     style: TextStyle(
                       color: selected
                           ? SafeHomeColors.primary
@@ -173,6 +175,12 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 code: "ko",
                 title: "한국어",
                 subtitle: "Korean",
+              ),
+              languageOption(
+                sheetContext: sheetContext,
+                code: "ja",
+                title: "日本語",
+                subtitle: "Japanese",
               ),
             ],
           ),
@@ -514,6 +522,7 @@ void showSettingsSheet({
                           strings.choose(
                             vi: "Quản lý nhà",
                             en: "Home management",
+                            ja: "家の管理",
                           ),
                           style: const TextStyle(
                             color: SafeHomeColors.textPrimary,
@@ -768,6 +777,7 @@ void showSettingsSheet({
                             en: "Auto Guard when away",
                             zh: "离家自动布防",
                             ko: "외출 시 자동 보호",
+                            ja: "外出時の自動 Guard",
                           ),
                           subtitle: strings.t(
                             "Đặt vị trí nhà và bật bảo vệ tự động",
@@ -807,6 +817,7 @@ void showSettingsSheet({
                             en: "Home management",
                             zh: "家庭管理",
                             ko: "집 관리",
+                            ja: "家の管理",
                           ),
                           subtitle: strings.t(
                             "Chuyển quyền chủ nhà hoặc xoá nhà",

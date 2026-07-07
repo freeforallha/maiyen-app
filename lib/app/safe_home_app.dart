@@ -114,6 +114,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
             Locale("en"),
             Locale("zh", "CN"),
             Locale("ko", "KR"),
+            Locale("ja", "JP"),
           ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
@@ -284,6 +285,7 @@ class _AuthGateState extends State<AuthGate> {
         en: "Could not load account data",
         zh: "无法加载账户数据",
         ko: "계정 데이터를 불러올 수 없습니다",
+        ja: "アカウントデータを読み込めません",
       ),
     );
 
@@ -308,6 +310,7 @@ class _AuthGateState extends State<AuthGate> {
                     en: "Could not load account data",
                     zh: "无法加载账户数据",
                     ko: "계정 데이터를 불러올 수 없습니다",
+                    ja: "アカウントデータを読み込めません",
                   ),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -337,6 +340,7 @@ class _AuthGateState extends State<AuthGate> {
                         en: "Try again",
                         zh: "重试",
                         ko: "다시 시도",
+                        ja: "再試行",
                       ),
                     ),
                   ),
@@ -497,6 +501,7 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
                   strings.choose(
                     vi: "Cho phép vị trí luôn luôn",
                     en: "Always allow location",
+                    ja: "位置情報を常に許可",
                   ),
                 ),
               ),
@@ -518,6 +523,10 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
                         "Open Location permission and select "
                         "\"Allow all the time\" so automatic protection "
                         "continues working in the background.",
+                    ja:
+                        "SafeHome は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n"
+                        "位置情報の権限を開き、\"常に許可\" を選択すると、"
+                        "外出時の自動保護がバックグラウンドでも動作し続けます。",
                   )
                 : strings.choose(
                     vi:
@@ -529,6 +538,10 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
                         "SafeHome needs always-on location permission "
                         "to detect when you leave or return home, "
                         "including while the app is in the background.",
+                    ja:
+                        "SafeHome には、外出または帰宅を検知するために "
+                        "\"常に許可\" の位置情報権限が必要です。"
+                        "アプリがバックグラウンドで動作している場合も含まれます。",
                   ),
           ),
           actions: [
@@ -536,7 +549,9 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
               onPressed: () {
                 Navigator.of(dialogContext).pop(false);
               },
-              child: Text(strings.choose(vi: "Để sau", en: "Later")),
+              child: Text(
+                strings.choose(vi: "Để sau", en: "Later", ja: "後で"),
+              ),
             ),
             ElevatedButton.icon(
               onPressed: () {
@@ -544,7 +559,11 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
               },
               icon: const Icon(Icons.settings_rounded),
               label: Text(
-                strings.choose(vi: "Mở cài đặt", en: "Open settings"),
+                strings.choose(
+                  vi: "Mở cài đặt",
+                  en: "Open settings",
+                  ja: "設定を開く",
+                ),
               ),
             ),
           ],

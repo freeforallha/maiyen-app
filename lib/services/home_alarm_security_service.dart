@@ -366,6 +366,8 @@ class HomeAlarmSecurityService {
               en:
                   "You enabled Alarm for "
                   "\"$homeName\".",
+              ja:
+                  "「$homeName」の Alarm をオンにしました。",
             )
           : strings.choose(
               vi:
@@ -374,6 +376,8 @@ class HomeAlarmSecurityService {
               en:
                   "You disabled every Alarm for "
                   "\"$homeName\".",
+              ja:
+                  "「$homeName」のすべての Alarm をオフにしました。",
             ),
       homeId: homeId,
       homeName: homeName,
