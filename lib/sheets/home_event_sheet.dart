@@ -108,15 +108,23 @@ void showHomeEventSheet({
 
   String displayTitle(Map<String, dynamic> item, String homeName) {
     final rawTitle = item["title"]?.toString().trim() ?? "";
-    final title = removeRepeatedHomeName(rawTitle, homeName);
+    final type = item["type"]?.toString() ?? "";
+    final title = strings.systemNotificationText(
+      removeRepeatedHomeName(rawTitle, homeName),
+      type: type,
+    );
 
     return title.isNotEmpty ? title : strings.t("Thông báo");
   }
 
   String displayMessage(Map<String, dynamic> item, String homeName) {
     final rawMessage = item["message"]?.toString().trim() ?? "";
+    final type = item["type"]?.toString() ?? "";
 
-    return removeRepeatedHomeName(rawMessage, homeName);
+    return strings.systemNotificationText(
+      removeRepeatedHomeName(rawMessage, homeName),
+      type: type,
+    );
   }
 
   IconData iconForType(String type) {

@@ -144,62 +144,64 @@ Future<Map<String, String>?> showCreateHomeDialog({
 
   final result = await showDialog<Map<String, String>>(
     context: context,
-    builder: (_) => AlertDialog(
-      title: Text(strings.t("Thêm nhà mới")),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              labelText: strings.t("Tên nhà"),
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
+    builder: (dialogContext) {
+      return AlertDialog(
+        title: Text(strings.t("Thêm nhà mới")),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: strings.t("Tên nhà"),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: addressController,
+              decoration: InputDecoration(
+                labelText: strings.t("Địa chỉ"),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(strings.t("Hủy")),
           ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: addressController,
-            decoration: InputDecoration(
-              labelText: strings.t("Địa chỉ"),
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
-              ),
-            ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(dialogContext, {
+                "name": nameController.text.trim(),
+                "address": addressController.text.trim(),
+              });
+            },
+            child: Text(strings.t("OK")),
           ),
         ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(strings.t("Hủy")),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context, {
-              "name": nameController.text.trim(),
-              "address": addressController.text.trim(),
-            });
-          },
-          child: Text(strings.t("OK")),
-        ),
-      ],
-    ),
+      );
+    },
   );
 
   nameController.dispose();

@@ -53,16 +53,9 @@ Future<void> showHomeAutoAwaySheet({
           final hasLocation =
               currentLatitude != null && currentLongitude != null;
           final locationText = hasLocation
-              ? strings.choose(
-                  vi:
-                      "Đã đặt vị trí nhà\n"
-                      "${currentLatitude.toStringAsFixed(6)}, "
-                      "${currentLongitude.toStringAsFixed(6)}",
-                  en:
-                      "Home location set\n"
-                      "${currentLatitude.toStringAsFixed(6)}, "
-                      "${currentLongitude.toStringAsFixed(6)}",
-                )
+              ? "${strings.t("Đã đặt vị trí nhà")}\n"
+                    "${currentLatitude.toStringAsFixed(6)}, "
+                    "${currentLongitude.toStringAsFixed(6)}"
               : strings.t("Chưa đặt vị trí nhà");
 
           Future<void> captureCurrentLocation() async {

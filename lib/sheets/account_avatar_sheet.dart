@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import '../services/platform/platform_alarm_permission_service.dart';
 
@@ -12,6 +13,7 @@ class AccountAvatarSheet {
     Color color = SafeHomeColors.danger,
   }) {
     final overlay = Overlay.of(context);
+    final safeMessage = AppStrings.of(context).sanitizeUserMessage(message);
     late OverlayEntry entry;
 
     entry = OverlayEntry(
@@ -48,7 +50,7 @@ class AccountAvatarSheet {
                   ],
                 ),
                 child: Text(
-                  message,
+                  safeMessage,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -71,92 +73,23 @@ class AccountAvatarSheet {
   }
 
   static Future<void> _showDeleteConfirmDialog(BuildContext context) async {
-    final passwordController = TextEditingController();
-
-    final ok = await showDialog<bool>(
+    final password = await showModalBottomSheet<String>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          icon: Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: SafeHomeColors.danger.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(17),
-            ),
-            child: const Icon(
-              Icons.delete_forever_rounded,
-              color: SafeHomeColors.danger,
-              size: 27,
-            ),
-          ),
-          title: const Text(
-            "Xoá tài khoản",
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              color: SafeHomeColors.textPrimary,
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Hành động này sẽ xoá toàn bộ dữ liệu:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: SafeHomeColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text("• Nhà và thiết bị"),
-              const Text("• Chia sẻ và quyền truy cập"),
-              const Text("• Toàn bộ dữ liệu liên quan"),
-              const SizedBox(height: 15),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: "Mật khẩu xác nhận",
-                  prefixIcon: Icon(Icons.lock_outline_rounded),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext, false);
-              },
-              child: const Text("Huỷ"),
-            ),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: SafeHomeColors.danger,
-              ),
-              onPressed: () {
-                Navigator.pop(dialogContext, true);
-              },
-              child: const Text("Xoá tài khoản"),
-            ),
-          ],
-        );
-      },
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => const _DeleteAccountConfirmSheet(),
     );
 
-    if (ok != true) {
-      passwordController.dispose();
+    if (password == null || password.trim().isEmpty) {
       return;
     }
 
     if (!context.mounted) {
-      passwordController.dispose();
       return;
     }
 
-    await _deleteAccount(context, passwordController.text.trim());
-
-    passwordController.dispose();
+    await _deleteAccount(context, password.trim());
   }
 
   static Future<void> _deleteAccount(
@@ -164,6 +97,7 @@ class AccountAvatarSheet {
     String password,
   ) async {
     final user = FirebaseAuth.instance.currentUser;
+    final strings = AppStrings.of(context);
 
     if (user == null) return;
 
@@ -174,7 +108,7 @@ class AccountAvatarSheet {
       final userEmail = user.email;
 
       if (userEmail == null || userEmail.isEmpty) {
-        showTopMessage(context, "Không tìm thấy email tài khoản");
+        showTopMessage(context, strings.t("Không tìm thấy tài khoản"));
         return;
       }
 
@@ -237,30 +171,49 @@ class AccountAvatarSheet {
 
       if (!context.mounted) return;
 
-      Navigator.pop(context);
+      final rootContext = Navigator.of(context, rootNavigator: true).context;
+      Navigator.of(context).pop();
 
-      showTopMessage(
-        context,
-        "Đã xoá tài khoản",
-        color: SafeHomeColors.success,
-      );
+      if (rootContext.mounted) {
+        showTopMessage(
+          rootContext,
+          strings.t("Đã xoá tài khoản"),
+          color: SafeHomeColors.success,
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
 
-      showTopMessage(context, "Xoá thất bại: ${e.message ?? 'Unknown error'}");
+      final message =
+          e.code == "wrong-password" ||
+              e.code == "invalid-credential" ||
+              e.code == "invalid-login-credentials"
+          ? strings.t("Sai mật khẩu")
+          : strings.genericOperationError;
+
+      showTopMessage(context, "${strings.t("Xoá thất bại")}: $message");
     } catch (e) {
       if (!context.mounted) return;
 
-      showTopMessage(context, "Lỗi xoá tài khoản: $e");
+      showTopMessage(
+        context,
+        strings.sanitizeUserMessage(
+          e.toString(),
+          fallback: strings.t("Lỗi xoá tài khoản"),
+        ),
+      );
     }
   }
 
   static Widget _compactProfileInfo({
+    required AppStrings strings,
     required String label,
     required String value,
     required IconData icon,
   }) {
-    final displayValue = value.trim().isEmpty ? "Chưa cập nhật" : value.trim();
+    final displayValue = value.trim().isEmpty
+        ? strings.t("Chưa cập nhật")
+        : value.trim();
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -404,6 +357,8 @@ class AccountAvatarSheet {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (securityContext) {
+        final strings = AppStrings.of(securityContext);
+
         return SafeArea(
           child: Container(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 20),
@@ -437,9 +392,9 @@ class AccountAvatarSheet {
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Cài đặt bảo mật",
-                  style: TextStyle(
+                Text(
+                  strings.t("Cài đặt bảo mật"),
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                     color: SafeHomeColors.textPrimary,
@@ -480,9 +435,9 @@ class AccountAvatarSheet {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Báo động toàn màn hình",
-                              style: TextStyle(
+                            Text(
+                              strings.t("Báo động toàn màn hình"),
+                              style: const TextStyle(
                                 color: SafeHomeColors.textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
@@ -491,8 +446,8 @@ class AccountAvatarSheet {
                             const SizedBox(height: 3),
                             Text(
                               canUse
-                                  ? "Đã được cấp quyền"
-                                  : "Chưa được cấp quyền",
+                                  ? strings.t("Đã được cấp quyền")
+                                  : strings.t("Chưa được cấp quyền"),
                               style: TextStyle(
                                 color: canUse
                                     ? SafeHomeColors.safe
@@ -519,7 +474,7 @@ class AccountAvatarSheet {
                       await PlatformAlarmPermissionService.openFullScreenIntentSettings();
                     },
                     icon: const Icon(Icons.settings_rounded),
-                    label: const Text("Mở cài đặt hệ thống"),
+                    label: Text(strings.t("Mở cài đặt hệ thống")),
                   ),
                 ),
               ],
@@ -581,6 +536,8 @@ class AccountAvatarSheet {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
+        final strings = AppStrings.of(sheetContext);
+
         return SafeArea(
           child: Container(
             constraints: BoxConstraints(
@@ -732,26 +689,31 @@ class AccountAvatarSheet {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       _compactProfileInfo(
+                                        strings: strings,
                                         icon: Icons.email_outlined,
                                         label: "Email",
                                         value: user?.email ?? "",
                                       ),
                                       _compactProfileInfo(
+                                        strings: strings,
                                         icon: Icons.person_outline_rounded,
-                                        label: "Giới tính",
+                                        label: strings.t("Giới tính"),
                                         value: userGender,
                                       ),
                                       _compactProfileInfo(
+                                        strings: strings,
                                         icon: Icons.phone_outlined,
-                                        label: "SĐT",
+                                        label: strings.t("SĐT"),
                                         value: userPhone,
                                       ),
                                       _compactProfileInfo(
+                                        strings: strings,
                                         icon: Icons.cake_outlined,
-                                        label: "Ngày sinh",
+                                        label: strings.t("Ngày sinh"),
                                         value: dob,
                                       ),
                                       _compactProfileInfo(
+                                        strings: strings,
                                         icon: Icons.fingerprint_rounded,
                                         label: "UID",
                                         value: user?.uid ?? "",
@@ -768,8 +730,10 @@ class AccountAvatarSheet {
 
                         _actionTile(
                           icon: Icons.mail_rounded,
-                          title: "Yêu cầu & lời mời",
-                          subtitle: "Xem lời mời chia sẻ và xin gia nhập",
+                          title: strings.t("Yêu cầu & lời mời"),
+                          subtitle: strings.t(
+                            "Xem lời mời chia sẻ và xin gia nhập",
+                          ),
                           color: SafeHomeColors.warning,
                           trailing: ValueListenableBuilder<int>(
                             valueListenable: inviteCountNotifier,
@@ -823,11 +787,19 @@ class AccountAvatarSheet {
                         if (PlatformAlarmPermissionService.isSupported)
                           _actionTile(
                             icon: Icons.security_rounded,
-                            title: "Cài đặt bảo mật",
-                            subtitle: "Quyền báo động toàn màn hình",
+                            title: strings.t("Cài đặt bảo mật"),
+                            subtitle: strings.t("Quyền báo động toàn màn hình"),
                             color: SafeHomeColors.info,
-                            onTap: () {
-                              _showSecuritySheet(sheetContext);
+                            onTap: () async {
+                              Navigator.of(sheetContext).pop();
+
+                              await Future<void>.delayed(Duration.zero);
+
+                              if (!context.mounted) {
+                                return;
+                              }
+
+                              await _showSecuritySheet(context);
                             },
                           ),
 
@@ -835,8 +807,10 @@ class AccountAvatarSheet {
 
                         _actionTile(
                           icon: Icons.logout_rounded,
-                          title: "Đăng xuất",
-                          subtitle: "Thoát tài khoản khỏi thiết bị này",
+                          title: strings.t("Đăng xuất"),
+                          subtitle: strings.t(
+                            "Thoát tài khoản khỏi thiết bị này",
+                          ),
                           color: SafeHomeColors.warning,
                           onTap: () {
                             Navigator.pop(sheetContext);
@@ -852,6 +826,192 @@ class AccountAvatarSheet {
           ),
         );
       },
+    );
+  }
+}
+
+class _DeleteAccountConfirmSheet extends StatefulWidget {
+  const _DeleteAccountConfirmSheet();
+
+  @override
+  State<_DeleteAccountConfirmSheet> createState() =>
+      _DeleteAccountConfirmSheetState();
+}
+
+class _DeleteAccountConfirmSheetState
+    extends State<_DeleteAccountConfirmSheet> {
+  final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _passwordFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _passwordFocusNode.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final password = _passwordController.text.trim();
+
+    if (password.isEmpty) {
+      return;
+    }
+
+    _passwordFocusNode.unfocus();
+    Navigator.of(context).pop(password);
+  }
+
+  void _cancel() {
+    _passwordFocusNode.unfocus();
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final viewInsets = MediaQuery.viewInsetsOf(context);
+    final keyboardOpen = viewInsets.bottom > 0;
+    final maxHeight = MediaQuery.sizeOf(context).height * 0.9;
+
+    return PopScope(
+      canPop: !keyboardOpen,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+
+        if (_passwordFocusNode.hasFocus) {
+          _passwordFocusNode.unfocus();
+        }
+      },
+      child: AnimatedPadding(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        padding: EdgeInsets.only(bottom: viewInsets.bottom),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxHeight),
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
+                decoration: const BoxDecoration(
+                  color: SafeHomeColors.background,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28),
+                    bottom: Radius.circular(22),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 46,
+                          height: 5,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.border,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          width: 54,
+                          height: 54,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.danger.withValues(
+                              alpha: 0.10,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: const Icon(
+                            Icons.delete_forever_rounded,
+                            color: SafeHomeColors.danger,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Center(
+                        child: Text(
+                          strings.t("Xoá tài khoản"),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: SafeHomeColors.textPrimary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        strings.t("Hành động này sẽ xoá toàn bộ dữ liệu:"),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: SafeHomeColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text("• ${strings.t("Nhà và thiết bị")}"),
+                      Text("• ${strings.t("Chia sẻ và quyền truy cập")}"),
+                      Text("• ${strings.t("Toàn bộ dữ liệu liên quan")}"),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _passwordController,
+                        focusNode: _passwordFocusNode,
+                        obscureText: true,
+                        autofocus: true,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (_) => _submit(),
+                        decoration: InputDecoration(
+                          labelText: strings.t("Mật khẩu xác nhận"),
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          filled: true,
+                          fillColor: SafeHomeColors.surface,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _cancel,
+                              child: Text(strings.t("Huỷ")),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: FilledButton(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: SafeHomeColors.danger,
+                              ),
+                              onPressed: _submit,
+                              child: Text(strings.t("Xoá tài khoản")),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

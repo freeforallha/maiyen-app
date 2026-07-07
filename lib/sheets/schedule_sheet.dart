@@ -140,6 +140,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Báo lại mỗi 15 phút",
         en: "Repeat every 15 minutes",
         zh: "每 15 分钟重复",
+        ko: "15분마다 다시 알림",
       );
     }
     if (minutes == 30) {
@@ -147,6 +148,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Báo lại mỗi 30 phút",
         en: "Repeat every 30 minutes",
         zh: "每 30 分钟重复",
+        ko: "30분마다 다시 알림",
       );
     }
     if (minutes == 60) {
@@ -154,10 +156,16 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Báo lại mỗi 1 giờ",
         en: "Repeat every hour",
         zh: "每 1 小时重复",
+        ko: "1시간마다 다시 알림",
       );
     }
 
-    return strings.choose(vi: "Không báo lại", en: "Do not repeat", zh: "不重复");
+    return strings.choose(
+      vi: "Không báo lại",
+      en: "Do not repeat",
+      zh: "不重复",
+      ko: "다시 알리지 않음",
+    );
   }
 
   Future<int?> openRepeatInput({required int initial}) async {
@@ -194,6 +202,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   vi: "Báo lại khi vẫn chưa an toàn",
                   en: "Repeat while still unsafe",
                   zh: "仍不安全时重复提醒",
+                  ko: "아직 안전하지 않으면 반복 알림",
                 ),
               ),
               content: Column(
@@ -205,6 +214,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Không báo lại",
                       en: "Do not repeat",
                       zh: "不重复",
+                      ko: "다시 알리지 않음",
                     ),
                   ),
                   option(
@@ -213,6 +223,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Mỗi 15 phút",
                       en: "Every 15 minutes",
                       zh: "每 15 分钟",
+                      ko: "15분마다",
                     ),
                   ),
                   option(
@@ -221,6 +232,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Mỗi 30 phút",
                       en: "Every 30 minutes",
                       zh: "每 30 分钟",
+                      ko: "30분마다",
                     ),
                   ),
                   option(
@@ -229,6 +241,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Mỗi 1 giờ",
                       en: "Every hour",
                       zh: "每 1 小时",
+                      ko: "1시간마다",
                     ),
                   ),
                 ],
@@ -463,6 +476,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Sửa giờ Reminder",
                       en: "Edit Reminder time",
                       zh: "编辑 Reminder 时间",
+                      ko: "Reminder 시간 수정",
                     ),
                   ),
                   onTap: () => Navigator.pop(context, "edit"),
@@ -477,6 +491,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       vi: "Xoá Reminder",
                       en: "Delete Reminder",
                       zh: "删除 Reminder",
+                      ko: "Reminder 삭제",
                     ),
                     style: const TextStyle(color: Colors.red),
                   ),
@@ -512,6 +527,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Sửa giờ bắt đầu Alarm",
         en: "Edit Alarm start time",
         zh: "编辑 Alarm 开始时间",
+        ko: "Alarm 시작 시간 수정",
       ),
       initial: current["start"]?.toString() ?? "23:00",
     );
@@ -523,6 +539,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Sửa giờ kết thúc Alarm",
         en: "Edit Alarm end time",
         zh: "编辑 Alarm 结束时间",
+        ko: "Alarm 종료 시간 수정",
       ),
       initial: current["end"]?.toString() ?? "06:00",
     );
@@ -567,6 +584,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
         vi: "Sửa giờ Reminder",
         en: "Edit Reminder time",
         zh: "编辑 Reminder 时间",
+        ko: "Reminder 시간 수정",
       ),
       initial: current["time"]?.toString() ?? "22:30",
     );
@@ -676,11 +694,13 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                           vi: "Đang sử dụng Reminder của chủ nhà",
                           en: "Using the owner's Reminder settings",
                           zh: "正在使用屋主的 Reminder 设置",
+                          ko: "집 주인의 Reminder 설정을 사용 중입니다",
                         )
                       : strings.choose(
                           vi: "Đang sử dụng Reminder riêng của bạn",
                           en: "Using your own Reminder settings",
                           zh: "正在使用你的个人 Reminder 设置",
+                          ko: "내 Reminder 설정을 사용 중입니다",
                         ),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
@@ -787,6 +807,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         vi: "Thêm khung giờ Alarm",
                         en: "Add Alarm time window",
                         zh: "添加 Alarm 时间段",
+                        ko: "Alarm 시간대 추가",
                       ),
                     ),
                   ),
@@ -816,6 +837,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                             vi: "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
                             en: "Reminder will remind you to check your home's safety status at the selected time.",
                             zh: "Reminder 会在所选时间提醒你检查家庭安全状态。",
+                            ko: "Reminder는 선택한 시간에 집의 안전 상태를 확인하도록 알려줍니다.",
                           ),
                         ),
                       ),
@@ -901,6 +923,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         vi: "Thêm Reminder",
                         en: "Add Reminder",
                         zh: "添加 Reminder",
+                        ko: "Reminder 추가",
                       ),
                     ),
                   ),

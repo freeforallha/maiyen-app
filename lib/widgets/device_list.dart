@@ -171,6 +171,7 @@ class DeviceList extends StatelessWidget {
         vi: "${diff.inMinutes} phút trước",
         en: "${diff.inMinutes} minutes ago",
         zh: "${diff.inMinutes} 分钟前",
+        ko: "${diff.inMinutes}분 전",
       );
     }
 
@@ -179,13 +180,19 @@ class DeviceList extends StatelessWidget {
       final m = diff.inMinutes % 60;
 
       if (m == 0) {
-        return strings.choose(vi: "${h}h trước", en: "${h}h ago", zh: "$h 小时前");
+        return strings.choose(
+          vi: "${h}h trước",
+          en: "${h}h ago",
+          zh: "$h 小时前",
+          ko: "$h시간 전",
+        );
       }
 
       return strings.choose(
         vi: "${h}h$m' trước",
         en: "${h}h ${m}m ago",
         zh: "$h 小时 $m 分钟前",
+        ko: "$h시간 $m분 전",
       );
     }
 
@@ -194,6 +201,7 @@ class DeviceList extends StatelessWidget {
         vi: "${diff.inDays} ngày trước",
         en: "${diff.inDays} days ago",
         zh: "${diff.inDays} 天前",
+        ko: "${diff.inDays}일 전",
       );
     }
 
@@ -203,6 +211,7 @@ class DeviceList extends StatelessWidget {
       vi: "$months tháng trước",
       en: "$months months ago",
       zh: "$months 个月前",
+      ko: "$months개월 전",
     );
   }
 
@@ -474,7 +483,8 @@ class DeviceList extends StatelessWidget {
     return strings.choose(
       vi: "Cập nhật $value",
       en: "Updated $value",
-      zh: "$value 更新",
+      zh: "$value更新",
+      ko: "$value에 업데이트됨",
     );
   }
 

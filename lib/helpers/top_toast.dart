@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 void showTopToast(
-    BuildContext context,
-    String message, {
-      Color color = Colors.black87,
-      IconData icon = Icons.info_rounded,
-    }) {
+  BuildContext context,
+  String message, {
+  Color color = Colors.black87,
+  IconData icon = Icons.info_rounded,
+}) {
   final overlay = Overlay.of(context);
+  final safeMessage = AppStrings.of(context).sanitizeUserMessage(message);
 
   late OverlayEntry entry;
 
   entry = OverlayEntry(
     builder: (_) => _TopToastWidget(
-      message: message,
+      message: safeMessage,
       color: color,
       icon: icon,
       onClose: () {
@@ -58,12 +61,7 @@ class _TopToastWidgetState extends State<_TopToastWidget>
     slide = Tween(
       begin: const Offset(0, -1),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeOut,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
 
     controller.forward();
 
@@ -93,10 +91,7 @@ class _TopToastWidgetState extends State<_TopToastWidget>
         child: Material(
           color: Colors.transparent,
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 14,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             decoration: BoxDecoration(
               color: widget.color,
               borderRadius: BorderRadius.circular(18),
@@ -110,10 +105,7 @@ class _TopToastWidgetState extends State<_TopToastWidget>
             ),
             child: Row(
               children: [
-                Icon(
-                  widget.icon,
-                  color: Colors.white,
-                ),
+                Icon(widget.icon, color: Colors.white),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(

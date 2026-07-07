@@ -96,7 +96,7 @@ Future<bool> showTransferOwnerConfirmSheet({
   final result = await showModalBottomSheet<bool>(
     context: context,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       return SafeArea(
         child: Container(
           padding: const EdgeInsets.all(20),
@@ -144,7 +144,7 @@ Future<bool> showTransferOwnerConfirmSheet({
                 children: [
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context, false),
+                      onPressed: () => Navigator.pop(sheetContext, false),
                       child: Text(strings.t("Hủy")),
                     ),
                   ),
@@ -157,7 +157,7 @@ Future<bool> showTransferOwnerConfirmSheet({
                         backgroundColor: Colors.purple,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: () => Navigator.pop(context, true),
+                      onPressed: () => Navigator.pop(sheetContext, true),
                       child: Text(strings.t("Chuyển")),
                     ),
                   ),
@@ -182,28 +182,30 @@ Future<String?> showTransferOwnerPasswordDialog({
   try {
     return await showDialog<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(strings.t("Xác nhận mật khẩu")),
-        content: TextField(
-          controller: passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            labelText: strings.t("Mật khẩu tài khoản"),
-            border: const OutlineInputBorder(),
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(strings.t("Xác nhận mật khẩu")),
+          content: TextField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: InputDecoration(
+              labelText: strings.t("Mật khẩu tài khoản"),
+              border: const OutlineInputBorder(),
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(strings.t("Huỷ")),
-          ),
-          ElevatedButton(
-            onPressed: () =>
-                Navigator.pop(context, passwordController.text.trim()),
-            child: Text(strings.t("Xác nhận")),
-          ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(strings.t("Huỷ")),
+            ),
+            ElevatedButton(
+              onPressed: () =>
+                  Navigator.pop(dialogContext, passwordController.text.trim()),
+              child: Text(strings.t("Xác nhận")),
+            ),
+          ],
+        );
+      },
     );
   } finally {
     passwordController.dispose();

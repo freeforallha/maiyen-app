@@ -97,7 +97,12 @@ Future<bool?> showShareListSheet({
 
     final email = raw["email"]?.toString().trim().isNotEmpty == true
         ? raw["email"].toString().trim()
-        : strings.choose(vi: "Không có email", en: "No email", zh: "无邮箱");
+        : strings.choose(
+            vi: "Không có email",
+            en: "No email",
+            zh: "无邮箱",
+            ko: "이메일 없음",
+          );
 
     final name = raw["name"]?.toString().trim().isNotEmpty == true
         ? raw["name"].toString().trim()
@@ -142,6 +147,7 @@ Future<bool?> showShareListSheet({
           vi: "Thành viên chưa cập nhật số điện thoại",
           en: "This member has not added a phone number",
           zh: "该成员尚未添加电话号码",
+          ko: "이 구성원이 전화번호를 추가하지 않았습니다",
         ),
         color: Colors.orange,
         icon: Icons.phone_disabled_rounded,
@@ -164,6 +170,7 @@ Future<bool?> showShareListSheet({
         vi: "Không mở được ứng dụng gọi điện",
         en: "Could not open the phone app",
         zh: "无法打开拨号应用",
+        ko: "전화 앱을 열 수 없습니다",
       ),
       color: Colors.red,
       icon: Icons.phone_disabled_rounded,
@@ -225,11 +232,12 @@ Future<bool?> showShareListSheet({
 
     return Tooltip(
       message: hasPhone
-          ? strings.choose(vi: "Gọi điện", en: "Call", zh: "拨打电话")
+          ? strings.choose(vi: "Gọi điện", en: "Call", zh: "拨打电话", ko: "전화")
           : strings.choose(
               vi: "Chưa có số điện thoại",
               en: "No phone number",
               zh: "暂无电话号码",
+              ko: "전화번호 없음",
             ),
       child: InkResponse(
         radius: 22,
@@ -422,6 +430,7 @@ Future<bool?> showShareListSheet({
                                   vi: "Không có email",
                                   en: "No email",
                                   zh: "无邮箱",
+                                  ko: "이메일 없음",
                                 );
 
                           final name =
@@ -463,7 +472,7 @@ Future<bool?> showShareListSheet({
                                           Flexible(
                                             child: Text(
                                               targetUid == myUid
-                                                  ? "$name (${strings.choose(vi: "Bạn", en: "You", zh: "你")})"
+                                                  ? "$name (${strings.choose(vi: "Bạn", en: "You", zh: "你", ko: "나")})"
                                                   : name,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -512,6 +521,7 @@ Future<bool?> showShareListSheet({
                                             vi: "Bạn không có quyền xoá thành viên này",
                                             en: "You do not have permission to remove this member",
                                             zh: "你没有权限移除此成员",
+                                            ko: "이 구성원을 삭제할 권한이 없습니다",
                                           ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
@@ -528,6 +538,7 @@ Future<bool?> showShareListSheet({
                                             vi: "Chỉ chủ nhà mới được thay đổi vai trò",
                                             en: "Only the owner can change roles",
                                             zh: "只有屋主可以更改角色",
+                                            ko: "집 주인만 역할을 변경할 수 있습니다",
                                           ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
@@ -544,11 +555,13 @@ Future<bool?> showShareListSheet({
                                                       vi: "Rời khỏi nhà?",
                                                       en: "Leave this home?",
                                                       zh: "离开此家庭？",
+                                                      ko: "이 집에서 나가시겠습니까?",
                                                     )
                                                   : strings.choose(
                                                       vi: "Xoá thành viên?",
                                                       en: "Remove member?",
                                                       zh: "移除成员？",
+                                                      ko: "구성원을 삭제하시겠습니까?",
                                                     ),
                                             ),
                                             content: Text(
@@ -557,11 +570,13 @@ Future<bool?> showShareListSheet({
                                                       vi: "Bạn chắc chắn muốn rời khỏi nhà này?",
                                                       en: "Are you sure you want to leave this home?",
                                                       zh: "确定要离开此家庭吗？",
+                                                      ko: "정말 이 집에서 나가시겠습니까?",
                                                     )
                                                   : strings.choose(
                                                       vi: "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
                                                       en: "Are you sure you want to remove $name from this home?",
                                                       zh: "确定要将 $name 从此家庭中移除吗？",
+                                                      ko: "정말 이 집에서 $name 님을 삭제하시겠습니까?",
                                                     ),
                                             ),
                                             actions: [
@@ -582,6 +597,7 @@ Future<bool?> showShareListSheet({
                                                     vi: "Đồng ý",
                                                     en: "OK",
                                                     zh: "确定",
+                                                    ko: "확인",
                                                   ),
                                                 ),
                                               ),
@@ -634,6 +650,7 @@ Future<bool?> showShareListSheet({
                                             vi: "Đã xoá thành viên",
                                             en: "Member removed",
                                             zh: "成员已移除",
+                                            ko: "구성원이 삭제되었습니다",
                                           ),
                                           color: Colors.green,
                                           icon: Icons.check_circle_rounded,
@@ -710,6 +727,7 @@ Future<bool?> showShareListSheet({
                                                   vi: "Xoá thành viên",
                                                   en: "Remove member",
                                                   zh: "移除成员",
+                                                  ko: "구성원 삭제",
                                                 ),
                                           style: const TextStyle(
                                             color: Colors.red,

@@ -19,9 +19,9 @@ class HomeHeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 2),
       child: SizedBox(
-        height: 36,
+        height: 42,
         child: Stack(
           alignment: Alignment.center,
           children: [

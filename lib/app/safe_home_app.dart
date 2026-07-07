@@ -113,6 +113,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
             Locale("vi"),
             Locale("en"),
             Locale("zh", "CN"),
+            Locale("ko", "KR"),
           ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
@@ -275,6 +276,17 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Widget _buildProfileLoadError(Object? error) {
+    final strings = AppStrings.of(context);
+    final message = strings.sanitizeUserMessage(
+      error?.toString() ?? "",
+      fallback: strings.choose(
+        vi: "Không thể tải dữ liệu tài khoản",
+        en: "Could not load account data",
+        zh: "无法加载账户数据",
+        ko: "계정 데이터를 불러올 수 없습니다",
+      ),
+    );
+
     return Scaffold(
       backgroundColor: SafeHomeColors.background,
       body: SafeArea(
@@ -290,10 +302,15 @@ class _AuthGateState extends State<AuthGate> {
                   color: SafeHomeColors.danger,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  "Không thể tải dữ liệu tài khoản",
+                Text(
+                  strings.choose(
+                    vi: "Không thể tải dữ liệu tài khoản",
+                    en: "Could not load account data",
+                    zh: "无法加载账户数据",
+                    ko: "계정 데이터를 불러올 수 없습니다",
+                  ),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: SafeHomeColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
@@ -301,7 +318,7 @@ class _AuthGateState extends State<AuthGate> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  error?.toString() ?? "Lỗi không xác định",
+                  message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: SafeHomeColors.textSecondary,
@@ -314,13 +331,20 @@ class _AuthGateState extends State<AuthGate> {
                   child: ElevatedButton.icon(
                     onPressed: _retryProfileLoad,
                     icon: const Icon(Icons.refresh_rounded),
-                    label: const Text("Thử lại"),
+                    label: Text(
+                      strings.choose(
+                        vi: "Thử lại",
+                        en: "Try again",
+                        zh: "重试",
+                        ko: "다시 시도",
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: _signOutAfterProfileError,
-                  child: const Text("Đăng xuất"),
+                  child: Text(strings.t("Đăng xuất")),
                 ),
               ],
             ),

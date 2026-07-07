@@ -48,8 +48,7 @@ class HomeTabs extends StatelessWidget {
         : currentUserEmail.trim();
 
     if (isShared && (ownerName.isEmpty || ownerEmail.isEmpty)) {
-      final ownerUid =
-          home["_ownerUid"]?.toString().trim() ?? "";
+      final ownerUid = home["_ownerUid"]?.toString().trim() ?? "";
 
       if (ownerUid.isNotEmpty) {
         try {
@@ -58,16 +57,12 @@ class HomeTabs extends StatelessWidget {
               .get();
 
           final directory = directorySnapshot.value is Map
-              ? Map<String, dynamic>.from(
-            directorySnapshot.value as Map,
-          )
+              ? Map<String, dynamic>.from(directorySnapshot.value as Map)
               : <String, dynamic>{};
 
-          final loadedName =
-              directory["name"]?.toString().trim() ?? "";
+          final loadedName = directory["name"]?.toString().trim() ?? "";
 
-          final loadedEmail =
-              directory["email"]?.toString().trim() ?? "";
+          final loadedEmail = directory["email"]?.toString().trim() ?? "";
 
           if (ownerName.isEmpty) {
             ownerName = loadedName;
@@ -87,19 +82,15 @@ class HomeTabs extends StatelessWidget {
                 .get();
 
             final member = memberSnapshot.value is Map
-                ? Map<String, dynamic>.from(
-              memberSnapshot.value as Map,
-            )
+                ? Map<String, dynamic>.from(memberSnapshot.value as Map)
                 : <String, dynamic>{};
 
             if (ownerName.isEmpty) {
-              ownerName =
-                  member["name"]?.toString().trim() ?? "";
+              ownerName = member["name"]?.toString().trim() ?? "";
             }
 
             if (ownerEmail.isEmpty) {
-              ownerEmail =
-                  member["email"]?.toString().trim() ?? "";
+              ownerEmail = member["email"]?.toString().trim() ?? "";
             }
           } catch (_) {}
         }
@@ -110,11 +101,13 @@ class HomeTabs extends StatelessWidget {
       return;
     }
 
+    final strings = AppStrings.of(context);
+
     final ownerDisplay = ownerName.isNotEmpty
         ? ownerName
         : ownerEmail.isNotEmpty
         ? ownerEmail
-        : "Chưa có thông tin";
+        : strings.t("Chưa có thông tin");
 
     showModalBottomSheet<void>(
       context: context,
@@ -123,17 +116,10 @@ class HomeTabs extends StatelessWidget {
       builder: (sheetContext) {
         return SafeArea(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(
-              16,
-              10,
-              16,
-              18,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
             decoration: const BoxDecoration(
               color: SafeHomeColors.background,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(28),
-              ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -153,14 +139,10 @@ class HomeTabs extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: SafeHomeColors.surface,
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(
-                      color: SafeHomeColors.border,
-                    ),
+                    border: Border.all(color: SafeHomeColors.border),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(
-                          alpha: 0.04,
-                        ),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 15,
                         offset: const Offset(0, 6),
                       ),
@@ -169,9 +151,7 @@ class HomeTabs extends StatelessWidget {
                   child: Column(
                     children: [
                       Icon(
-                        isShared
-                            ? Icons.share_rounded
-                            : Icons.home_rounded,
+                        isShared ? Icons.share_rounded : Icons.home_rounded,
                         size: 34,
                         color: SafeHomeColors.primary,
                       ),
@@ -189,18 +169,17 @@ class HomeTabs extends StatelessWidget {
                       const SizedBox(height: 14),
                       _homeInfoRow(
                         icon: Icons.location_on_outlined,
-                        label: "Địa chỉ",
+                        label: strings.t("Địa chỉ"),
                         value: address.isNotEmpty
                             ? address
-                            : "Chưa cập nhật",
+                            : strings.t("Chưa cập nhật"),
                       ),
                       const SizedBox(height: 9),
                       _homeInfoRow(
                         icon: Icons.person_outline_rounded,
-                        label: "Chủ nhà",
+                        label: strings.t("Chủ nhà"),
                         value: ownerDisplay,
-                        subtitle:
-                        ownerName.isNotEmpty && ownerEmail.isNotEmpty
+                        subtitle: ownerName.isNotEmpty && ownerEmail.isNotEmpty
                             ? ownerEmail
                             : null,
                       ),
@@ -224,11 +203,7 @@ class HomeTabs extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 19,
-          color: SafeHomeColors.primary,
-        ),
+        Icon(icon, size: 19, color: SafeHomeColors.primary),
         const SizedBox(width: 9),
         Expanded(
           child: Column(
@@ -252,8 +227,7 @@ class HomeTabs extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              if (subtitle != null &&
-                  subtitle.trim().isNotEmpty) ...[
+              if (subtitle != null && subtitle.trim().isNotEmpty) ...[
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
@@ -310,26 +284,17 @@ class HomeTabs extends StatelessWidget {
           scrollController: controller,
           itemCount: visibleHomes.length,
           onReorderItem: (oldIndex, newIndex) {
-            if (oldIndex < 0 ||
-                oldIndex >= visibleHomes.length) {
+            if (oldIndex < 0 || oldIndex >= visibleHomes.length) {
               return;
             }
 
-            final reorderedHomes =
-            List<String>.from(visibleHomes);
+            final reorderedHomes = List<String>.from(visibleHomes);
 
-            final movedHome =
-            reorderedHomes.removeAt(oldIndex);
+            final movedHome = reorderedHomes.removeAt(oldIndex);
 
-            final insertIndex = newIndex.clamp(
-              0,
-              reorderedHomes.length,
-            );
+            final insertIndex = newIndex.clamp(0, reorderedHomes.length);
 
-            reorderedHomes.insert(
-              insertIndex,
-              movedHome,
-            );
+            reorderedHomes.insert(insertIndex, movedHome);
 
             onReorder(reorderedHomes);
           },
@@ -337,14 +302,8 @@ class HomeTabs extends StatelessWidget {
             return Material(
               color: Colors.transparent,
               child: ScaleTransition(
-                scale: Tween<double>(
-                  begin: 1,
-                  end: 1.035,
-                ).animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOut,
-                  ),
+                scale: Tween<double>(begin: 1, end: 1.035).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
                 ),
                 child: child,
               ),
@@ -361,11 +320,9 @@ class HomeTabs extends StatelessWidget {
             final unread = unreadChatByHome[homeId] ?? 0;
             final statusColor = getHomeColor(homeId);
 
-            final rawName =
-                home["_customName"] ?? home["name"] ?? homeId;
+            final rawName = home["_customName"] ?? home["name"] ?? homeId;
 
-            final displayName =
-            rawName.toString().trim().isEmpty
+            final displayName = rawName.toString().trim().isEmpty
                 ? strings.t("Nhà chưa đặt tên")
                 : rawName.toString().trim();
 
@@ -396,85 +353,71 @@ class HomeTabs extends StatelessWidget {
                       onSelect(homeId);
                     },
                     child: AnimatedOpacity(
-                      duration:
-                      const Duration(milliseconds: 220),
+                      duration: const Duration(milliseconds: 220),
                       curve: Curves.easeOutCubic,
                       opacity: isSelected ? 1 : 0.48,
                       child: AnimatedContainer(
-                        duration:
-                        const Duration(milliseconds: 220),
+                        duration: const Duration(milliseconds: 220),
                         curve: Curves.easeOutCubic,
                         width: isSelected ? 176 : 142,
-                        margin:
-                        const EdgeInsets.only(right: 8),
+                        height: 52,
+                        margin: const EdgeInsets.only(right: 8),
                         padding: EdgeInsets.fromLTRB(
                           isSelected ? 11 : 8,
-                          5,
+                          4,
                           isSelected ? 15 : 12,
-                          5,
+                          4,
                         ),
                         decoration: BoxDecoration(
                           color: SafeHomeColors.surface,
-                          borderRadius:
-                          BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: statusColor.withValues(
-                              alpha:
-                              isSelected ? 0.62 : 0.42,
+                              alpha: isSelected ? 0.62 : 0.42,
                             ),
-                            width:
-                            isSelected ? 1.35 : 0.9,
+                            width: isSelected ? 1.35 : 0.9,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color:
-                              Colors.black.withValues(
-                                alpha:
-                                isSelected ? 0.065 : 0.025,
+                              color: Colors.black.withValues(
+                                alpha: isSelected ? 0.065 : 0.025,
                               ),
-                              blurRadius:
-                              isSelected ? 13 : 7,
+                              blurRadius: isSelected ? 13 : 7,
                               offset: const Offset(0, 4),
                             ),
                           ],
                         ),
                         child: Stack(
+                          alignment: Alignment.center,
                           clipBehavior: Clip.none,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Icon(
                                   isShared
                                       ? Icons.share_rounded
                                       : Icons.home_rounded,
-                                  size:
-                                  isSelected ? 24 : 21,
+                                  size: isSelected ? 24 : 21,
                                   color: statusColor,
                                 ),
-                                SizedBox(
-                                  width:
-                                  isSelected ? 10 : 8,
-                                ),
+                                SizedBox(width: isSelected ? 10 : 8),
                                 Expanded(
                                   child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         displayName,
                                         maxLines: 1,
-                                        overflow:
-                                        TextOverflow.ellipsis,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: statusColor,
-                                          fontSize:
-                                          isSelected
-                                              ? 17
-                                              : 13,
-                                          fontWeight:
-                                          isSelected
+                                          fontSize: isSelected ? 17 : 13,
+                                          height: 1.05,
+                                          fontWeight: isSelected
                                               ? FontWeight.w900
                                               : FontWeight.w700,
                                           letterSpacing: -0.15,
@@ -485,19 +428,14 @@ class HomeTabs extends StatelessWidget {
                                         Text(
                                           strings.t("Nhà được chia sẻ"),
                                           maxLines: 1,
-                                          overflow:
-                                          TextOverflow.ellipsis,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            color: statusColor
-                                                .withValues(
+                                            color: statusColor.withValues(
                                               alpha: 0.82,
                                             ),
-                                            fontSize:
-                                            isSelected
-                                                ? 10.5
-                                                : 10,
-                                            fontWeight:
-                                            FontWeight.w600,
+                                            fontSize: isSelected ? 10.5 : 10,
+                                            height: 1.05,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ],
@@ -511,51 +449,38 @@ class HomeTabs extends StatelessWidget {
                                 right: -7,
                                 top: -10,
                                 child: Container(
-                                  constraints:
-                                  const BoxConstraints(
+                                  constraints: const BoxConstraints(
                                     minWidth: 20,
                                     minHeight: 20,
                                   ),
                                   alignment: Alignment.center,
-                                  padding:
-                                  const EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 5,
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color:
-                                    SafeHomeColors.danger,
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                      999,
-                                    ),
+                                    color: SafeHomeColors.danger,
+                                    borderRadius: BorderRadius.circular(999),
                                     border: Border.all(
-                                      color:
-                                      SafeHomeColors.surface,
+                                      color: SafeHomeColors.surface,
                                       width: 2,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: SafeHomeColors
-                                            .danger
-                                            .withValues(
+                                        color: SafeHomeColors.danger.withValues(
                                           alpha: 0.24,
                                         ),
                                         blurRadius: 8,
-                                        offset:
-                                        const Offset(0, 3),
+                                        offset: const Offset(0, 3),
                                       ),
                                     ],
                                   ),
                                   child: Text(
-                                    unread > 99
-                                        ? "99+"
-                                        : unread.toString(),
+                                    unread > 99 ? "99+" : unread.toString(),
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 9,
-                                      fontWeight:
-                                      FontWeight.w900,
+                                      fontWeight: FontWeight.w900,
                                     ),
                                   ),
                                 ),

@@ -4,16 +4,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login_page.dart';
+import '../localization/app_strings.dart';
 import '../services/session_logout_service.dart';
+
 class ProfileSetupPage extends StatefulWidget {
   final String uid;
   final String email;
 
-  const ProfileSetupPage({
-    super.key,
-    required this.uid,
-    required this.email,
-  });
+  const ProfileSetupPage({super.key, required this.uid, required this.email});
 
   @override
   State<ProfileSetupPage> createState() => _ProfileSetupPageState();
@@ -94,13 +92,9 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
     try {
       final name = nameController.text.trim();
 
-      final day = dayController.text
-          .trim()
-          .padLeft(2, '0');
+      final day = dayController.text.trim().padLeft(2, '0');
 
-      final month = monthController.text
-          .trim()
-          .padLeft(2, '0');
+      final month = monthController.text.trim().padLeft(2, '0');
 
       final year = yearController.text.trim();
 
@@ -112,21 +106,22 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
           day.isEmpty ||
           month.isEmpty ||
           year.isEmpty) {
+        final strings = AppStrings.of(context);
         setState(() {
-          error = "Vui lòng nhập đủ thông tin";
+          error = strings.t("Vui lòng nhập đủ thông tin");
           saving = false;
         });
 
         return;
       }
 
-      final homeId =
-          "home_${DateTime.now().millisecondsSinceEpoch}";
+      final homeId = "home_${DateTime.now().millisecondsSinceEpoch}";
 
       final dob = "$year-$month-$day";
 
-      final accountRef =
-      FirebaseDatabase.instance.ref("accounts/${widget.uid}");
+      final accountRef = FirebaseDatabase.instance.ref(
+        "accounts/${widget.uid}",
+      );
 
       final accountSnap = await accountRef.get();
 
@@ -138,8 +133,8 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
       final oldHomeOrder = oldData["homeOrder"];
 
       final hasHomes = oldHomes is Map && oldHomes.isNotEmpty;
-      final authenticatedEmail =
-      FirebaseAuth.instance.currentUser?.email?.trim();
+      final authenticatedEmail = FirebaseAuth.instance.currentUser?.email
+          ?.trim();
 
       if (authenticatedEmail == null || authenticatedEmail.isEmpty) {
         throw Exception("Không tìm thấy email Firebase Auth");
@@ -154,9 +149,9 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
         "phone": phone,
         "photoUrl": oldData["profile"] is Map
             ? (Map<String, dynamic>.from(
-          oldData["profile"] as Map,
-        )["photoUrl"] ??
-            "")
+                    oldData["profile"] as Map,
+                  )["photoUrl"] ??
+                  "")
             : "",
       });
 
@@ -176,16 +171,15 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
       if (!mounted) return;
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => HomePage(),
-        ),
-            (route) => false,
+        MaterialPageRoute(builder: (_) => HomePage()),
+        (route) => false,
       );
     } catch (e) {
       if (!mounted) return;
 
+      final strings = AppStrings.of(context);
       setState(() {
-        error = "Không thể lưu thông tin";
+        error = strings.t("Không thể lưu thông tin");
         saving = false;
       });
     }
@@ -193,9 +187,11 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Thiết lập tài khoản"),
+        title: Text(strings.t("Thiết lập tài khoản")),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
           onPressed: () async {
@@ -205,7 +201,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (_) => LoginPage()),
-                  (route) => false,
+              (route) => false,
             );
           },
         ),
@@ -216,7 +212,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: "Tên"),
+              decoration: InputDecoration(labelText: strings.t("Tên")),
             ),
 
             const SizedBox(height: 20),
@@ -224,10 +220,12 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: "Số điện thoại",
-                helperText: "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp",
-                prefixIcon: Icon(Icons.phone_rounded),
+              decoration: InputDecoration(
+                labelText: strings.t("Số điện thoại"),
+                helperText: strings.t(
+                  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp",
+                ),
+                prefixIcon: const Icon(Icons.phone_rounded),
               ),
             ),
 
@@ -239,18 +237,18 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 if (value == null) return;
                 setState(() => gender = value);
               },
-              child: const Row(
+              child: Row(
                 children: [
                   Expanded(
                     child: RadioListTile<String>(
                       value: "Nam",
-                      title: Text("Nam"),
+                      title: Text(strings.t("Nam")),
                     ),
                   ),
                   Expanded(
                     child: RadioListTile<String>(
                       value: "Nữ",
-                      title: Text("Nữ"),
+                      title: Text(strings.t("Nữ")),
                     ),
                   ),
                 ],
@@ -259,11 +257,14 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
 
             const SizedBox(height: 20),
 
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Ngày sinh",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                strings.t("Ngày sinh"),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
 
@@ -273,7 +274,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
               children: [
                 Expanded(
                   child: _autoBox(
-                    label: "Ngày",
+                    label: strings.t("Ngày"),
                     controller: dayController,
                     suggestions: (input) => _suggestNumbers(
                       input: input,
@@ -286,7 +287,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _autoBox(
-                    label: "Tháng",
+                    label: strings.t("Tháng"),
                     controller: monthController,
                     suggestions: (input) => _suggestNumbers(
                       input: input,
@@ -299,7 +300,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: _autoBox(
-                    label: "Năm",
+                    label: strings.t("Năm"),
                     controller: yearController,
                     suggestions: (input) => _suggestNumbers(
                       input: input,
@@ -314,10 +315,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
             if (error.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child: Text(
-                  error,
-                  style: const TextStyle(color: Colors.red),
-                ),
+                child: Text(error, style: const TextStyle(color: Colors.red)),
               ),
 
             const SizedBox(height: 30),
@@ -329,20 +327,20 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
                 onPressed: saving ? null : submit,
                 child: saving
                     ? const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2.4,
-                    color: Colors.white,
-                  ),
-                )
-                    : const Text(
-                  "Hoàn tất",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        strings.t("Hoàn tất"),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],

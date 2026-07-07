@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
 import 'home_page.dart';
 
 class SetPasswordPage extends StatefulWidget {
@@ -60,8 +61,18 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
+      final strings = AppStrings.of(context);
       setState(() {
-        error = e.message ?? "Không đặt được mật khẩu";
+        error = strings.sanitizeUserMessage(
+          e.message ?? "",
+          fallback: strings.choose(
+            vi: "Không đặt được mật khẩu",
+            en: "Could not set password",
+            zh: "无法设置密码",
+          ),
+        );
       });
     } finally {
       if (mounted) {

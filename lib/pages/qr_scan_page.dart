@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../localization/app_strings.dart';
+
 Future<String?> openQRScanner(
   BuildContext context, {
-  String title = "Quét QR HUB",
-  String subtitle = "Đưa mã QR vào giữa khung",
+  String? title,
+  String? subtitle,
 }) async {
+  final strings = AppStrings.of(context);
   final controller = MobileScannerController();
 
   return Navigator.push<String>(
     context,
     MaterialPageRoute(
-      builder: (_) =>
-          _QRScanPage(controller: controller, title: title, subtitle: subtitle),
+      builder: (_) => _QRScanPage(
+        controller: controller,
+        title: title ?? strings.t("Quét QR HUB"),
+        subtitle: subtitle ?? strings.t("Đưa mã QR vào giữa khung"),
+      ),
     ),
   );
 }

@@ -19,11 +19,11 @@ Future<void> showHomeAlarmMenuSheet({
     context: context,
     showDragHandle: false,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       bool localAlarmEnabled = alarmEnabled;
 
       return StatefulBuilder(
-        builder: (context, setModalState) {
+        builder: (stateContext, setModalState) {
           return SafeArea(
             child: Container(
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
@@ -86,7 +86,7 @@ Future<void> showHomeAlarmMenuSheet({
                       onChanged: (value) async {
                         final changed = await onAlarmEnabledChanged(value);
 
-                        if (!context.mounted) {
+                        if (!stateContext.mounted) {
                           return;
                         }
 
@@ -96,7 +96,7 @@ Future<void> showHomeAlarmMenuSheet({
                       },
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(sheetContext);
 
                       onOpenAlarmSchedule();
                     },
@@ -137,7 +137,7 @@ Future<void> showHomeAlarmMenuSheet({
                       ),
                     ),
                     onTap: () async {
-                      Navigator.pop(context);
+                      Navigator.pop(sheetContext);
 
                       await onOpenAlarmPause();
                     },
@@ -176,7 +176,7 @@ Future<void> showHomeAlarmMenuSheet({
                       ),
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(sheetContext);
 
                       onOpenReminderSchedule();
                     },

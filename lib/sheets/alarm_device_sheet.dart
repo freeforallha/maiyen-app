@@ -27,6 +27,7 @@ String _alarmRepeatLabel(Object? rawValue, AppStrings strings) {
           vi: "$value phút",
           en: "$value minutes",
           zh: "$value 分钟",
+          ko: "$value분",
         );
 }
 
@@ -229,6 +230,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           vi: "Không thể lưu chế độ Alarm",
           en: "Could not save Alarm mode",
           zh: "无法保存 Alarm 模式",
+          ko: "Alarm 모드를 저장할 수 없습니다",
         ),
         color: SafeHomeColors.danger,
         icon: Icons.error_rounded,
@@ -259,6 +261,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
             en: "You do not have permission to edit Home settings. Choose Only me.",
             zh: "你没有权限编辑按家庭设置。请选择仅自己。",
+            ko: "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
           ),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
@@ -280,6 +283,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             vi: "Nhà chưa có thiết bị an ninh để áp dụng",
             en: "This home has no security devices to apply",
             zh: "此家庭暂无可应用的安全设备",
+            ko: "이 집에는 적용할 보안 기기가 없습니다.",
           ),
           color: Colors.orange,
           icon: Icons.sensors_off_rounded,
@@ -350,6 +354,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
           en: "You do not have permission to edit Home settings. Choose Only me.",
           zh: "你没有权限编辑按家庭设置。请选择仅自己。",
+          ko: "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
         ),
         color: SafeHomeColors.danger,
         icon: Icons.lock_rounded,
@@ -369,6 +374,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           vi: "Nhà chưa có thiết bị an ninh để áp dụng",
           en: "This home has no security devices to apply",
           zh: "此家庭暂无可应用的安全设备",
+          ko: "이 집에는 적용할 보안 기기가 없습니다.",
         ),
         color: Colors.orange,
         icon: Icons.sensors_off_rounded,
@@ -396,11 +402,13 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         vi: "Chọn giờ bắt đầu Alarm",
                         en: "Choose Alarm start time",
                         zh: "选择 Alarm 开始时间",
+                        ko: "Alarm 시작 시간 선택",
                       )
                     : strings.choose(
                         vi: "Chọn giờ kết thúc Alarm",
                         en: "Choose Alarm end time",
                         zh: "选择 Alarm 结束时间",
+                        ko: "Alarm 종료 시간 선택",
                       ),
                 initial:
                     draft[field]?.toString() ??
@@ -441,6 +449,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       vi: "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
                       en: "Alarm applied to ${securityEntries.length} security devices",
                       zh: "Alarm 已应用到 ${securityEntries.length} 个安全设备",
+                      ko: "보안 기기 ${securityEntries.length}대에 Alarm을 적용했습니다",
                     ),
                     color: SafeHomeColors.success,
                     icon: Icons.check_circle_rounded,
@@ -461,6 +470,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     vi: "Không thể áp dụng Alarm cho toàn bộ thiết bị",
                     en: "Could not apply Alarm to all devices",
                     zh: "无法将 Alarm 应用到所有设备",
+                    ko: "전체 기기에 Alarm을 적용할 수 없습니다",
                   ),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
@@ -528,7 +538,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                 strings.choose(
                                   vi: "Áp dụng cùng một lịch cho ${securityEntries.length} thiết bị an ninh",
                                   en: "Apply the same schedule to ${securityEntries.length} security devices",
-                                  zh: "将同一计划应用到 ${securityEntries.length} 个安全设备",
+                                  zh: "将同一日程应用到 ${securityEntries.length} 个安全设备",
+                                  ko: "보안 기기 ${securityEntries.length}대에 동일한 일정을 적용합니다",
                                 ),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textSecondary,
@@ -629,6 +640,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             vi: "Bạn không có quyền sửa lịch Alarm của nhà",
             en: "You do not have permission to edit this home's Alarm schedule",
             zh: "你没有权限编辑此家庭的 Alarm 计划",
+            ko: "이 집의 Alarm 일정을 수정할 권한이 없습니다",
           ),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
@@ -816,11 +828,13 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               vi: "Chọn giờ bắt đầu Alarm",
               en: "Choose Alarm start time",
               zh: "选择 Alarm 开始时间",
+              ko: "Alarm 시작 시간 선택",
             )
           : AppStrings.of(context).choose(
               vi: "Chọn giờ kết thúc Alarm",
               en: "Choose Alarm end time",
               zh: "选择 Alarm 结束时间",
+              ko: "Alarm 종료 시간 선택",
             ),
       initial: alarm[field]?.toString() ?? "23:00",
     );
@@ -876,10 +890,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 Expanded(
                   child: _AlarmModeCard(
                     title: strings.t("Theo nhà"),
-                    subtitle: strings.choose(
-                      vi: "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
-                      en: "Use the shared schedule set by the Owner or Admin",
-                      zh: "使用屋主或管理员设置的共享计划",
+                    subtitle: strings.t(
+                      "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
                     ),
                     icon: Icons.home_rounded,
                     selected: mode == "home",
@@ -893,10 +905,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 Expanded(
                   child: _AlarmModeCard(
                     title: strings.t("Riêng tôi"),
-                    subtitle: strings.choose(
-                      vi: "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
-                      en: "Use a private schedule for your account only",
-                      zh: "仅为你的账户使用个人计划",
+                    subtitle: strings.t(
+                      "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
                     ),
                     icon: Icons.person_rounded,
                     selected: mode == "custom",
@@ -921,6 +931,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   vi: "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
                   en: "You are viewing the owner's schedule. Choose Only me to set your own Alarm schedule.",
                   zh: "你正在查看屋主的计划。选择仅自己即可设置个人 Alarm 计划。",
+                  ko: "집 주인의 일정을 보고 있습니다. 나만을 선택해 내 Alarm 일정을 설정하세요.",
                 ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -1182,6 +1193,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                         vi: "15 phút",
                         en: "15 minutes",
                         zh: "15 分钟",
+                        ko: "15분",
                       ),
                     ),
                   ),
@@ -1192,6 +1204,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                         vi: "30 phút",
                         en: "30 minutes",
                         zh: "30 分钟",
+                        ko: "30분",
                       ),
                     ),
                   ),
@@ -1202,6 +1215,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                         vi: "60 phút",
                         en: "60 minutes",
                         zh: "60 分钟",
+                        ko: "60분",
                       ),
                     ),
                   ),

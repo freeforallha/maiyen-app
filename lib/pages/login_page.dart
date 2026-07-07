@@ -86,13 +86,14 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       setState(() {
-        error =
-            e.message ??
-            strings.choose(
-              vi: "Không thể đăng nhập bằng Google",
-              en: "Could not sign in with Google",
-              zh: "无法使用 Google 登录",
-            );
+        error = strings.sanitizeUserMessage(
+          e.message ?? "",
+          fallback: strings.choose(
+            vi: "Không thể đăng nhập bằng Google",
+            en: "Could not sign in with Google",
+            zh: "无法使用 Google 登录",
+          ),
+        );
       });
     } catch (e) {
       safeDebugPrint("GOOGLE_LOGIN_ERROR");
@@ -101,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
 
       setState(() {
         error = strings.choose(
-          vi: "Không thể đăng nhập bằng Google: $e",
-          en: "Could not sign in with Google: $e",
-          zh: "无法使用 Google 登录：$e",
+          vi: "Không thể đăng nhập bằng Google",
+          en: "Could not sign in with Google",
+          zh: "无法使用 Google 登录",
         );
       });
     } finally {
@@ -248,7 +249,10 @@ class _LoginPageState extends State<LoginPage> {
         } else if (e.code == "invalid-credential") {
           error = strings.t("Sai email hoặc mật khẩu");
         } else {
-          error = e.message ?? strings.t("Lỗi đăng nhập");
+          error = strings.sanitizeUserMessage(
+            e.message ?? "",
+            fallback: strings.t("Lỗi đăng nhập"),
+          );
         }
       });
 
@@ -257,7 +261,10 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       setState(() {
-        error = e.toString().replaceFirst("Exception: ", "");
+        error = strings.sanitizeUserMessage(
+          e.toString().replaceFirst("Exception: ", ""),
+          fallback: strings.t("Lỗi đăng nhập"),
+        );
       });
 
       safeDebugPrint("EMAIL_LOGIN_ERROR");
@@ -375,6 +382,7 @@ class _LoginPageState extends State<LoginPage> {
                 option(code: "vi", title: "Tiếng Việt", subtitle: "Vietnamese"),
                 option(code: "en", title: "English", subtitle: "Tiếng Anh"),
                 option(code: "zh", title: "中文", subtitle: "Chinese Simplified"),
+                option(code: "ko", title: "한국어", subtitle: "Korean"),
               ],
             ),
           ),

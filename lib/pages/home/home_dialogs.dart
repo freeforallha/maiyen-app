@@ -30,9 +30,9 @@ Future<String?> showHomeTimeTextInputDialog({
     return reg.hasMatch(value.trim());
   }
 
-  return showDialog<String>(
+  final result = await showDialog<String>(
     context: context,
-    builder: (_) {
+    builder: (dialogContext) {
       return AlertDialog(
         title: Text(title),
         content: Column(
@@ -121,7 +121,7 @@ Future<String?> showHomeTimeTextInputDialog({
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(strings.t("Huỷ")),
           ),
           ElevatedButton(
@@ -132,7 +132,7 @@ Future<String?> showHomeTimeTextInputDialog({
 
               if (!isValidTime(value)) {
                 showTopToast(
-                  context,
+                  dialogContext,
                   strings.t("Giờ không hợp lệ"),
                   color: Colors.red,
                   icon: Icons.schedule_rounded,
@@ -140,7 +140,7 @@ Future<String?> showHomeTimeTextInputDialog({
                 return;
               }
 
-              Navigator.pop(context, value);
+              Navigator.pop(dialogContext, value);
             },
             child: Text(strings.t("OK")),
           ),
@@ -148,6 +148,11 @@ Future<String?> showHomeTimeTextInputDialog({
       );
     },
   );
+
+  hourController.dispose();
+  minuteController.dispose();
+
+  return result;
 }
 
 Future<void> showAlarmReceiveReminderDialog({
@@ -181,6 +186,9 @@ Future<void> showAlarmReceiveReminderDialog({
                       "Alarm is using My settings.\n\n"
                       "You will receive alerts according to the "
                       "personal Alarm schedules for this account.",
+                  ko:
+                      "Alarm이 나만 설정을 사용 중입니다.\n\n"
+                      "이 계정에 설정된 개인 Alarm 일정에 따라 알림을 받습니다.",
                 )
               : strings.choose(
                   vi:
@@ -192,6 +200,9 @@ Future<void> showAlarmReceiveReminderDialog({
                       "You will receive alerts according to the "
                       "shared schedules configured by the owner "
                       "or an administrator.",
+                  ko:
+                      "Alarm이 집 기준 설정을 사용 중입니다.\n\n"
+                      "집 주인 또는 관리자가 설정한 공용 일정에 따라 알림을 받습니다.",
                 ),
         ),
         actions: [
@@ -217,11 +228,23 @@ Future<bool> showConfirmDisableAlarmDialog({
     builder: (dialogContext) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: SafeHomeColors.danger),
-            SizedBox(width: 10),
-            Expanded(child: Text("Tắt toàn bộ Alarm?")),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: SafeHomeColors.danger,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                strings.choose(
+                  vi: "Tắt toàn bộ Alarm?",
+                  en: "Turn off all Alarm?",
+                  zh: "关闭全部 Alarm？",
+                  ko: "모든 Alarm을 끄시겠습니까?",
+                ),
+              ),
+            ),
           ],
         ),
         content: Text(
@@ -234,6 +257,10 @@ Future<bool> showConfirmDisableAlarmDialog({
                 "This action will disable every Alarm for this "
                 "home. You will no longer receive danger alerts "
                 "on this phone.",
+            zh: "此操作将关闭此家庭的所有 Alarm。你将不再在此手机上收到危险警报。",
+            ko:
+                "이 작업은 이 집의 모든 Alarm을 끕니다. "
+                "이 휴대전화에서 위험 알림을 더 이상 받지 않습니다.",
           ),
         ),
         actions: [
@@ -267,7 +294,7 @@ Future<void> showAlarmPauseReminderDialog({
 }) async {
   await showDialog<void>(
     context: context,
-    builder: (_) {
+    builder: (dialogContext) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(strings.t("Lưu ý tạm tắt Alarm")),
@@ -275,16 +302,15 @@ Future<void> showAlarmPauseReminderDialog({
           strings.choose(
             vi:
                 "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị "
-                "trong hôm nay, reminder sẽ được báo đến các thành viên khác "
-                "trong nhà. Khoảng thời gian tạm hoãn phải nằm trong khoảng thời gian đã được cài đặt của Alarm.",
-            en:
-                "This changes today's Alarm time for selected devices and notifies "
-                "other home members. The pause period must stay within the configured Alarm schedule.",
+                "trong hôm nay...",
+            en: "This action will change the alarm timing for some devices today...",
+            zh: "此操作将更改今天部分设备的报警时间……",
+            ko: "이 작업은 오늘 일부 기기의 Alarm 시간을 변경합니다...",
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(strings.t("Đã hiểu")),
           ),
         ],
@@ -302,32 +328,61 @@ Future<bool> showConfirmManualSecurityModeDialog({
     builder: (dialogContext) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: SafeHomeColors.warning),
-            SizedBox(width: 10),
-            Expanded(child: Text("Bật Bảo vệ thủ công?")),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: SafeHomeColors.warning,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                strings.choose(
+                  vi: "Bật Bảo vệ thủ công?",
+                  en: "Turn on manual Guard mode?",
+                  zh: "开启手动布防？",
+                  ko: "수동 Guard 모드를 켜시겠습니까?",
+                ),
+              ),
+            ),
           ],
         ),
-        content: const Text(
-          "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n"
-          "Tự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này "
-          "không tự tắt khi có người về nhà và chỉ được tắt khi "
-          "một thành viên có quyền chủ động chuyển về Bình thường.",
+        content: Text(
+          strings.choose(
+            vi:
+                "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n"
+                "Tự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này "
+                "không tự tắt khi có người về nhà và chỉ được tắt khi "
+                "một thành viên có quyền chủ động chuyển về Bình thường.",
+            en:
+                "Security devices will be monitored immediately.\n\n"
+                "Auto Guard when away will pause. This mode does not turn off "
+                "automatically when someone comes home and must be switched "
+                "back to Normal by a permitted member.",
+            zh:
+                "开启后，安全设备会立即开始监测。\n\n"
+                "离家自动布防将暂停。有人回家时此模式不会自动关闭，"
+                "只能由有权限的成员手动切换回普通模式。",
+            ko:
+                "켜면 보안 기기가 즉시 모니터링됩니다.\n\n"
+                "외출 시 자동 Guard는 일시 중지됩니다. 이 모드는 "
+                "누군가 집에 돌아와도 자동으로 꺼지지 않으며, 권한이 있는 "
+                "구성원이 직접 Normal로 전환해야 합니다.",
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext, false);
             },
-            child: const Text("Huỷ"),
+            child: Text(strings.t("Huỷ")),
           ),
           FilledButton.icon(
             onPressed: () {
               Navigator.pop(dialogContext, true);
             },
             icon: const Icon(Icons.shield_rounded),
-            label: const Text("Xác nhận"),
+            label: Text(strings.t("Xác nhận")),
           ),
         ],
       );

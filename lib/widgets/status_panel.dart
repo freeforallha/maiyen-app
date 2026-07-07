@@ -177,6 +177,7 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   List<String> _buildAutomaticSummary({
+    required AppStrings strings,
     required Map<String, dynamic> overall,
     required List<String> dangerIssues,
     required List<String> warningIssues,
@@ -186,12 +187,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final hasDevices = overall["hasDevices"] == true;
 
     if (!hasDevices) {
-      return [
-        _strings.choose(
-          vi: "Chưa có dữ liệu để đánh giá",
-          en: "Not enough data to evaluate",
-        ),
-      ];
+      return [strings.t("Chưa đủ dữ liệu để đánh giá")];
     }
     final summary = <String>[];
     final openCount = eventCounts["open"] ?? 0;
@@ -200,56 +196,64 @@ class _StatusPanelState extends State<StatusPanel> {
 
     if (dangerIssues.isNotEmpty || warningIssues.isNotEmpty) {
       summary.add(
-        _strings.t(
+        strings.t(
           "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
         ),
       );
 
       if (dangerIssues.isNotEmpty) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "${dangerIssues.length} vấn đề đang cần xử lý ngay.",
             en: "${dangerIssues.length} issues require immediate action.",
+            zh: "${dangerIssues.length} 个问题需要立即处理。",
+            ko: "${dangerIssues.length}개의 문제가 즉시 처리되어야 합니다.",
           ),
         );
       }
 
       if (warningIssues.isNotEmpty) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "${warningIssues.length} dấu hiệu nên được kiểm tra thêm.",
             en: "${warningIssues.length} items need further review.",
+            zh: "${warningIssues.length} 个迹象需要进一步检查。",
+            ko: "${warningIssues.length}개 항목을 추가로 확인해야 합니다.",
           ),
         );
       }
 
       if (openCount > 0) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "Gần đây cửa đã được mở $openCount lần.",
             en: "Doors were opened $openCount times recently.",
+            zh: "最近门被打开了 $openCount 次。",
+            ko: "최근 문이 $openCount번 열렸습니다.",
           ),
         );
       }
     } else {
-      summary.add(
-        _strings.t("Nhà đang hoạt động ổn định, bạn có thể yên tâm."),
-      );
+      summary.add(strings.t("Nhà đang hoạt động ổn định, bạn có thể yên tâm."));
 
       if (recentEvents.isNotEmpty) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "Có ${recentEvents.length} hoạt động gần đây được ghi nhận.",
             en: "${recentEvents.length} recent activities were recorded.",
+            zh: "已记录 ${recentEvents.length} 条近期活动。",
+            ko: "최근 활동 ${recentEvents.length}개가 기록되었습니다.",
           ),
         );
       }
 
       if (openCount > 0) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "Cửa được sử dụng $openCount lần gần đây.",
             en: "Doors were used $openCount times recently.",
+            zh: "最近门被使用了 $openCount 次。",
+            ko: "최근 문이 $openCount번 사용되었습니다.",
           ),
         );
       }
@@ -260,18 +264,22 @@ class _StatusPanelState extends State<StatusPanel> {
 
       if (hasSmokeDevice && smokeCount == 0) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "Cảm biến khói chưa ghi nhận bất thường.",
             en: "The smoke sensor has not detected an issue.",
+            zh: "烟雾传感器未记录异常。",
+            ko: "연기 감지기가 이상을 감지하지 않았습니다.",
           ),
         );
       }
 
       if (hasSosDevice && sosCount == 0) {
         summary.add(
-          _strings.choose(
+          strings.choose(
             vi: "Thiết bị SOS chưa ghi nhận cảnh báo.",
             en: "The SOS device has not recorded an alert.",
+            zh: "SOS 设备未记录警报。",
+            ko: "SOS 기기에 기록된 알림이 없습니다.",
           ),
         );
       }
@@ -279,7 +287,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     if (summary.length == 1) {
       summary.add(
-        _strings.t("Chưa có nhiều hoạt động mới để phân tích sâu hơn."),
+        strings.t("Chưa có nhiều hoạt động mới để phân tích sâu hơn."),
       );
     }
 
@@ -297,11 +305,17 @@ class _StatusPanelState extends State<StatusPanel> {
 
     String repeatText(int minutes) {
       return minutes == 0
-          ? _strings.choose(vi: "Không lặp lại", en: "Do not repeat", zh: "不重复")
+          ? _strings.choose(
+              vi: "Không lặp lại",
+              en: "No repeat",
+              zh: "不重复",
+              ko: "반복 없음",
+            )
           : _strings.choose(
               vi: "Lặp sau $minutes phút",
               en: "Repeat after $minutes minutes",
               zh: "$minutes 分钟后重复",
+              ko: "$minutes분 후 반복",
             );
     }
 
@@ -310,7 +324,7 @@ class _StatusPanelState extends State<StatusPanel> {
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
         return StatefulBuilder(
-          builder: (context, setSheetState) {
+          builder: (stateContext, setSheetState) {
             return SafeArea(
               child: Container(
                 padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
@@ -335,6 +349,7 @@ class _StatusPanelState extends State<StatusPanel> {
                         vi: "Chế độ nhà",
                         en: "Home mode",
                         zh: "家庭模式",
+                        ko: "집 모드",
                       ),
                       style: const TextStyle(
                         fontSize: 18,
@@ -349,17 +364,20 @@ class _StatusPanelState extends State<StatusPanel> {
                         vi: "Bình thường",
                         en: "Normal",
                         zh: "普通模式",
+                        ko: "일반",
                       ),
                       subtitle: isArmed
                           ? _strings.choose(
                               vi: "Chuyển về sử dụng thông thường",
                               en: "Switch back to normal use",
                               zh: "切换回普通模式",
+                              ko: "일반 사용으로 전환",
                             )
                           : _strings.choose(
                               vi: "Đang được sử dụng",
                               en: "Currently active",
                               zh: "当前使用中",
+                              ko: "사용 중",
                             ),
                       color: SafeHomeColors.safe,
                       onTap: () {
@@ -374,17 +392,20 @@ class _StatusPanelState extends State<StatusPanel> {
                         vi: "Bảo vệ",
                         en: "Guard",
                         zh: "布防",
+                        ko: "보호",
                       ),
                       subtitle: isArmed
                           ? _strings.choose(
                               vi: "Đang dùng • ${repeatText(localRepeatMinutes)}",
                               en: "Active • ${repeatText(localRepeatMinutes)}",
                               zh: "使用中 • ${repeatText(localRepeatMinutes)}",
+                              ko: "사용 중 • ${repeatText(localRepeatMinutes)}",
                             )
                           : _strings.choose(
                               vi: "Giám sát an ninh • ${repeatText(localRepeatMinutes)}",
                               en: "Security monitoring • ${repeatText(localRepeatMinutes)}",
                               zh: "安全监测 • ${repeatText(localRepeatMinutes)}",
+                              ko: "보안 모니터링 • ${repeatText(localRepeatMinutes)}",
                             ),
                       color: SafeHomeColors.danger,
                       onTap: () {
@@ -418,6 +439,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                     vi: "Lặp báo động khi sự cố vẫn còn",
                                     en: "Repeat Alarm while the issue remains",
                                     zh: "问题仍存在时重复 Alarm",
+                                    ko: "문제가 계속되면 Alarm 반복",
                                   ),
                                   style: const TextStyle(
                                     fontSize: 13.5,
@@ -434,6 +456,7 @@ class _StatusPanelState extends State<StatusPanel> {
                               vi: "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
                               en: "Choose 0 to alert once. This setting applies to manual Guard mode and Auto Guard when away.",
                               zh: "选择 0 表示只提醒一次。此设置同时用于手动布防和离家自动布防。",
+                              ko: "0을 선택하면 한 번만 알립니다. 이 설정은 수동 보호와 외출 시 자동 보호 모두에 적용됩니다.",
                             ),
                             style: const TextStyle(
                               fontSize: 11.5,
@@ -455,6 +478,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                 vi: "Thời gian lặp",
                                 en: "Repeat interval",
                                 zh: "重复间隔",
+                                ko: "반복 시간",
                               ),
                               labelStyle: const TextStyle(
                                 color: SafeHomeColors.textSecondary,
@@ -509,13 +533,15 @@ class _StatusPanelState extends State<StatusPanel> {
                                       minutes == 0
                                           ? _strings.choose(
                                               vi: "Không lặp lại",
-                                              en: "Do not repeat",
+                                              en: "No repeat",
                                               zh: "不重复",
+                                              ko: "반복 없음",
                                             )
                                           : _strings.choose(
                                               vi: "$minutes phút",
                                               en: "$minutes minutes",
                                               zh: "$minutes 分钟",
+                                              ko: "$minutes분",
                                             ),
                                       style: const TextStyle(
                                         fontSize: 14,
@@ -543,7 +569,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                     final saved = await widget
                                         .onSecurityModeRepeatChanged!(minutes);
 
-                                    if (!sheetContext.mounted) {
+                                    if (!stateContext.mounted) {
                                       return;
                                     }
 
@@ -637,6 +663,12 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   void _showStatusSummary(BuildContext context) {
+    if (!mounted) {
+      return;
+    }
+
+    final strings = AppStrings.of(context);
+
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -668,7 +700,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   children: [
                     Expanded(
                       child: Text(
-                        _strings.t("Tổng hợp trạng thái nhà"),
+                        strings.t("Tổng hợp trạng thái nhà"),
                         style: const TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w900,
@@ -683,7 +715,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Flexible(child: _buildLiveStatusSummaryList()),
+                Flexible(child: _buildLiveStatusSummaryList(strings)),
               ],
             ),
           ),
@@ -714,11 +746,11 @@ class _StatusPanelState extends State<StatusPanel> {
     return FirebaseAuth.instance.currentUser?.uid ?? "";
   }
 
-  Widget _buildLiveStatusSummaryList() {
+  Widget _buildLiveStatusSummaryList(AppStrings strings) {
     final ownerStream = _sharedOwnerUidStream();
 
     if (ownerStream == null) {
-      return _buildOwnerHomeStream(_fallbackOwnerUid());
+      return _buildOwnerHomeStream(_fallbackOwnerUid(), strings);
     }
 
     return StreamBuilder<DatabaseEvent>(
@@ -730,19 +762,19 @@ class _StatusPanelState extends State<StatusPanel> {
             ? sharedOwnerUid
             : _fallbackOwnerUid();
 
-        return _buildOwnerHomeStream(resolvedOwnerUid);
+        return _buildOwnerHomeStream(resolvedOwnerUid, strings);
       },
     );
   }
 
-  Widget _buildOwnerHomeStream(String ownerUid) {
+  Widget _buildOwnerHomeStream(String ownerUid, AppStrings strings) {
     final cleanOwnerUid = ownerUid.trim();
     final cleanHomeId = widget.homeId.trim();
 
     if (cleanOwnerUid.isEmpty || cleanHomeId.isEmpty) {
       return _summaryMessage(
         icon: Icons.home_work_outlined,
-        text: _strings.t("Chưa có dữ liệu trạng thái"),
+        text: strings.t("Chưa có dữ liệu trạng thái"),
       );
     }
 
@@ -756,14 +788,14 @@ class _StatusPanelState extends State<StatusPanel> {
             !snapshot.hasData) {
           return _summaryMessage(
             icon: Icons.hourglass_empty_rounded,
-            text: _strings.loading,
+            text: strings.loading,
           );
         }
 
         if (snapshot.hasError) {
           return _summaryMessage(
             icon: Icons.cloud_off_rounded,
-            text: _strings.t("Chưa có dữ liệu trạng thái"),
+            text: strings.t("Chưa có dữ liệu trạng thái"),
           );
         }
 
@@ -772,35 +804,79 @@ class _StatusPanelState extends State<StatusPanel> {
         if (liveHome.isEmpty) {
           return _summaryMessage(
             icon: Icons.home_work_outlined,
-            text: _strings.t("Chưa có dữ liệu trạng thái"),
+            text: strings.t("Chưa có dữ liệu trạng thái"),
           );
         }
 
-        return _buildStatusSummarySections(liveHome);
+        return _buildStatusSummarySections(liveHome, strings);
       },
     );
   }
 
-  Widget _buildStatusSummarySections(Map<String, dynamic> liveHome) {
+  bool _isEnvironmentSummaryLine(String text) {
+    final normalized = text.trim().toLowerCase();
+
+    return normalized.startsWith("môi trường hiện tại:") ||
+        normalized.startsWith("current environment:") ||
+        normalized.startsWith("当前环境") ||
+        normalized.startsWith("현재 환경:");
+  }
+
+  String _overviewEnvironmentLine({
+    required Map<String, dynamic> liveOverall,
+    required Map<String, dynamic> devices,
+    required AppStrings strings,
+  }) {
+    if (liveOverall["hasEnvironmentDevice"] != true) {
+      return "";
+    }
+
+    final panelEnvironment = widget.environmentText
+        .replaceAll(" | ", " / ")
+        .replaceAll(RegExp(r"\s+"), " ")
+        .trim();
+    final fallbackEnvironment = HomeDataHelpers.getHomeEnvironmentText(
+      devices: devices,
+    ).trim();
+    final environment = panelEnvironment.isNotEmpty
+        ? panelEnvironment
+        : fallbackEnvironment;
+
+    if (environment.isEmpty) {
+      return "";
+    }
+
+    return strings.statusText("Môi trường hiện tại: $environment");
+  }
+
+  Widget _buildStatusSummarySections(
+    Map<String, dynamic> liveHome,
+    AppStrings strings,
+  ) {
     final liveOverall = getHomeOverallStatus(liveHome);
     final liveEvents = safeMap(liveHome["events"]);
 
     final dangerIssues = List<String>.from(
       liveOverall["dangerIssues"] ?? const [],
-    ).map(_strings.statusText).toList();
+    ).map(strings.statusText).toList();
 
     final warningIssues = List<String>.from(
       liveOverall["warningIssues"] ?? const [],
-    ).map(_strings.statusText).toList();
+    ).map(strings.statusText).toList();
 
-    final safeSummary = List<String>.from(
+    final rawSafeSummary = List<String>.from(
       liveOverall["safeSummary"] ?? const [],
-    ).map(_strings.statusText).toList();
+    );
+    final safeSummary = rawSafeSummary
+        .where((line) => !_isEnvironmentSummaryLine(line))
+        .map(strings.statusText)
+        .toList();
 
     final recentEvents = _sortedRecentEvents(liveEvents);
     final eventCounts = _eventCounts(recentEvents);
 
     final automaticSummary = _buildAutomaticSummary(
+      strings: strings,
       overall: liveOverall,
       dangerIssues: dangerIssues,
       warningIssues: warningIssues,
@@ -810,20 +886,28 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final liveSecurityMode =
         normalizeSecurityMode(liveHome["securityMode"]) == "armed"
-        ? _strings.choose(vi: "Bảo vệ", en: "Guard", zh: "布防")
-        : _strings.choose(vi: "Bình thường", en: "Normal", zh: "普通模式");
+        ? strings.choose(vi: "Bảo vệ", en: "Guard", zh: "布防", ko: "보호")
+        : strings.choose(
+            vi: "Bình thường",
+            en: "Normal",
+            zh: "普通模式",
+            ko: "일반 모드",
+          );
 
     final devices = safeMap(liveHome["devices"]);
+    final environmentLine = _overviewEnvironmentLine(
+      liveOverall: liveOverall,
+      devices: devices,
+      strings: strings,
+    );
     final overviewItems = <String>[
-      _strings.choose(
-        vi: "Chế độ nhà: $liveSecurityMode",
+      strings.choose(
+        vi: "Gia đình: $liveSecurityMode",
         en: "Home mode: $liveSecurityMode",
         zh: "家庭模式：$liveSecurityMode",
+        ko: "집 모드: $liveSecurityMode",
       ),
-      if (liveOverall["hasEnvironmentDevice"] == true)
-        _strings.statusText(
-          "Môi trường hiện tại: ${HomeDataHelpers.getHomeEnvironmentText(devices: devices)}",
-        ),
+      if (environmentLine.isNotEmpty) environmentLine,
       ...safeSummary,
     ];
 
@@ -832,7 +916,7 @@ class _StatusPanelState extends State<StatusPanel> {
       children: [
         if (dangerIssues.isNotEmpty) ...[
           _summarySection(
-            title: _strings.t("Cần xử lý ngay"),
+            title: strings.t("Cần xử lý ngay"),
             icon: Icons.warning_amber_rounded,
             color: SafeHomeColors.danger,
             items: dangerIssues,
@@ -841,7 +925,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ],
         if (warningIssues.isNotEmpty) ...[
           _summarySection(
-            title: _strings.t("Cần kiểm tra"),
+            title: strings.t("Cần kiểm tra"),
             icon: Icons.info_outline_rounded,
             color: SafeHomeColors.warning,
             items: warningIssues,
@@ -849,18 +933,23 @@ class _StatusPanelState extends State<StatusPanel> {
           const SizedBox(height: 12),
         ],
         _summarySection(
-          title: _strings.t("Đánh giá tự động"),
+          title: strings.choose(
+            vi: "Tự động đánh giá",
+            en: "Automatic assessment",
+            zh: "自动评估",
+            ko: "자동 평가",
+          ),
           icon: Icons.auto_awesome_rounded,
           color: SafeHomeColors.info,
           items: automaticSummary,
         ),
         const SizedBox(height: 12),
         _summarySection(
-          title: _strings.t("Tổng quan hôm nay"),
+          title: strings.t("Tổng quan hôm nay"),
           icon: Icons.bar_chart_rounded,
           color: SafeHomeColors.safe,
           items: overviewItems.isEmpty
-              ? [_strings.t("Chưa có dữ liệu tổng quan")]
+              ? [strings.t("Chưa có dữ liệu tổng quan")]
               : overviewItems,
         ),
       ],
@@ -994,6 +1083,7 @@ class _StatusPanelState extends State<StatusPanel> {
       vi: "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
       en: "Manual Guard mode is on - switch to Normal to turn it off",
       zh: "手动布防已开启 - 切换到普通模式后关闭",
+      ko: "수동 Guard 모드가 켜져 있습니다 - 끄려면 Normal로 전환하세요",
     );
 
     final normalFirstLine = allLines.isNotEmpty
@@ -1002,14 +1092,11 @@ class _StatusPanelState extends State<StatusPanel> {
             vi: "Chưa có dữ liệu trạng thái",
             en: "No status data available",
             zh: "暂无状态数据",
+            ko: "상태 데이터가 없습니다",
           );
 
     final firstLine = noData
-        ? _strings.choose(
-            vi: "Chưa có dữ liệu để đánh giá",
-            en: "Not enough data to evaluate",
-            zh: "暂无足够数据可评估",
-          )
+        ? _strings.t("Chưa đủ dữ liệu để đánh giá")
         : manualSecurityMode
         ? manualSecurityModeText
         : normalFirstLine;
@@ -1024,9 +1111,13 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final secondLine = rotatingLines.isNotEmpty
         ? rotatingLines[_broadcastIndex % rotatingLines.length]
-        : _strings.t("Bấm vào để xem chi tiết");
+        : _strings.t("Nhấn để xem chi tiết...");
     final displayFirstLine = _strings.statusText(firstLine);
     final displaySecondLine = _strings.statusText(secondLine);
+    final displaySecondLineWithHint =
+        displaySecondLine.endsWith("...") || displaySecondLine.endsWith("…")
+        ? "$displaySecondLine →"
+        : "$displaySecondLine... →";
 
     final statusColor = _statusColor(level);
     final statusIcon = _statusIcon(level);
@@ -1066,30 +1157,35 @@ class _StatusPanelState extends State<StatusPanel> {
         vi: "Phát hiện ${issues.length} vấn đề cần xử lý",
         en: "${issues.length} issues need attention",
         zh: "发现 ${issues.length} 个问题需要处理",
+        ko: "${issues.length}개 문제를 처리해야 합니다",
       );
     } else if (smokeCount > 0) {
       subtitle = _strings.choose(
         vi: "Hôm nay đã ghi nhận cảnh báo khói",
         en: "A smoke alert was recorded today",
         zh: "今天已记录烟雾警报",
+        ko: "오늘 연기 경보가 기록되었습니다",
       );
     } else if (sosCount > 0) {
       subtitle = _strings.choose(
         vi: "Hôm nay đã ghi nhận cảnh báo SOS",
         en: "An SOS alert was recorded today",
         zh: "今天已记录 SOS 警报",
+        ko: "오늘 SOS 경보가 기록되었습니다",
       );
     } else if (openCount > 0) {
       subtitle = _strings.choose(
         vi: "Hôm nay các cửa đã được sử dụng $openCount lần",
         en: "Doors were used $openCount times today",
-        zh: "今天门已使用 $openCount 次",
+        zh: "今天门被使用了 $openCount 次",
+        ko: "오늘 문이 $openCount번 사용되었습니다",
       );
     } else if (recentEvents.isNotEmpty) {
       subtitle = _strings.choose(
         vi: "Đã ghi nhận ${recentEvents.length} hoạt động gần đây",
         en: "${recentEvents.length} recent activities recorded",
         zh: "已记录 ${recentEvents.length} 条近期活动",
+        ko: "최근 활동 ${recentEvents.length}개가 기록되었습니다",
       );
     } else {
       subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
@@ -1223,7 +1319,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       const SizedBox(width: 7),
                       Expanded(
                         child: Text(
-                          "$displaySecondLine... →",
+                          displaySecondLineWithHint,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -1250,11 +1346,13 @@ class _StatusPanelState extends State<StatusPanel> {
                                 vi: "Bảo vệ",
                                 en: "Guard",
                                 zh: "布防",
+                                ko: "보호",
                               )
                             : _strings.choose(
                                 vi: "Bình thường",
                                 en: "Normal",
                                 zh: "普通模式",
+                                ko: "일반",
                               ),
                         active: widget.securityMode == "armed",
                         activeColor: SafeHomeColors.danger,

@@ -58,6 +58,8 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                         ? "VI"
                         : code == "zh"
                         ? "中"
+                        : code == "ko"
+                        ? "KO"
                         : "EN",
                     style: TextStyle(
                       color: selected
@@ -165,6 +167,12 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 code: "zh",
                 title: "中文",
                 subtitle: "Chinese Simplified",
+              ),
+              languageOption(
+                sheetContext: sheetContext,
+                code: "ko",
+                title: "한국어",
+                subtitle: "Korean",
               ),
             ],
           ),
@@ -759,11 +767,10 @@ void showSettingsSheet({
                             vi: "Tự động Bảo vệ khi rời nhà",
                             en: "Auto Guard when away",
                             zh: "离家自动布防",
+                            ko: "외출 시 자동 보호",
                           ),
-                          subtitle: strings.choose(
-                            vi: "Đặt vị trí nhà và bật bảo vệ tự động",
-                            en: "Set the home location and automatic protection",
-                            zh: "设置家庭位置并开启自动布防",
+                          subtitle: strings.t(
+                            "Đặt vị trí nhà và bật bảo vệ tự động",
                           ),
                           color: const Color(0xFF2F8F6B),
                           onTap: () {
@@ -799,11 +806,10 @@ void showSettingsSheet({
                             vi: "Quản lý nhà",
                             en: "Home management",
                             zh: "家庭管理",
+                            ko: "집 관리",
                           ),
-                          subtitle: strings.choose(
-                            vi: "Chuyển quyền chủ nhà hoặc xoá nhà",
-                            en: "Transfer ownership or delete this home",
-                            zh: "转移所有权或删除此家庭",
+                          subtitle: strings.t(
+                            "Chuyển quyền chủ nhà hoặc xoá nhà",
                           ),
                           color: const Color(0xFF7656C8),
                           onTap: () {

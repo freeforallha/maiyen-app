@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 
 void showDeviceDetail({
@@ -29,6 +30,7 @@ void showDeviceDetail({
       return StreamBuilder<DatabaseEvent>(
         stream: deviceRef.onValue,
         builder: (context, snapshot) {
+          final strings = AppStrings.of(context);
           final raw = snapshot.data?.snapshot.value;
 
           late final Map<String, dynamic> device;
@@ -44,20 +46,20 @@ void showDeviceDetail({
                 color: SafeHomeColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
               ),
-              child: const SafeArea(
+              child: SafeArea(
                 top: false,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.sensors_off_rounded,
                       size: 44,
                       color: SafeHomeColors.textSecondary,
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Text(
-                      "Thiết bị không còn tồn tại",
-                      style: TextStyle(
+                      strings.t("Thiết bị không còn tồn tại"),
+                      style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -149,7 +151,7 @@ void showDeviceDetail({
               _infoRow(
                 icon: icon,
                 color: color,
-                title: title,
+                title: strings.t(title),
                 value: "$text$suffix",
               ),
             );
@@ -316,15 +318,15 @@ void showDeviceDetail({
                     _infoRow(
                       icon: health.icon,
                       color: health.color,
-                      title: "Tình trạng",
-                      value: health.text,
+                      title: strings.t("Tình trạng"),
+                      value: strings.statusText(health.text),
                       valueColor: health.color,
                     ),
                     _infoRow(
                       icon: displayStatus.icon,
                       color: displayStatus.color,
-                      title: displayStatus.title,
-                      value: displayStatus.value,
+                      title: strings.t(displayStatus.title),
+                      value: strings.statusText(displayStatus.value),
                       valueColor: displayStatus.color,
                     ),
                     if (showTamper)
@@ -333,8 +335,10 @@ void showDeviceDetail({
                         color: tamper
                             ? SafeHomeColors.danger
                             : SafeHomeColors.warning,
-                        title: "Tháo/Lắp",
-                        value: tamper ? "Bị tháo" : "Bình thường",
+                        title: strings.t("Tháo/Lắp"),
+                        value: strings.statusText(
+                          tamper ? "Bị tháo" : "Bình thường",
+                        ),
                         valueColor: tamper
                             ? SafeHomeColors.danger
                             : SafeHomeColors.textPrimary,
@@ -346,8 +350,8 @@ void showDeviceDetail({
                         color: battery != null && battery < 20
                             ? SafeHomeColors.danger
                             : SafeHomeColors.safe,
-                        title: "Pin",
-                        value: getBatteryText(device),
+                        title: strings.t("Pin"),
+                        value: strings.statusText(getBatteryText(device)),
                       ),
                     if (linkquality != null)
                       _infoRow(
@@ -355,7 +359,7 @@ void showDeviceDetail({
                         color: linkquality < 50
                             ? SafeHomeColors.danger
                             : SafeHomeColors.primary,
-                        title: "Tín hiệu",
+                        title: strings.t("Tín hiệu"),
                         value: "$linkquality",
                       ),
                     _infoRow(
@@ -363,9 +367,9 @@ void showDeviceDetail({
                       color: cameraType.isEmpty
                           ? SafeHomeColors.textSecondary
                           : SafeHomeColors.info,
-                      title: "Camera",
+                      title: strings.t("Camera"),
                       value: cameraType.isEmpty
-                          ? "Chưa liên kết"
+                          ? strings.t("Chưa liên kết")
                           : (cameraName.isNotEmpty
                                 ? cameraName
                                 : cameraType.toUpperCase()),
@@ -373,14 +377,14 @@ void showDeviceDetail({
                     _infoRow(
                       icon: Icons.access_time_rounded,
                       color: SafeHomeColors.primary,
-                      title: "Liên lạc cuối",
+                      title: strings.t("Liên lạc cuối"),
                       value: formatFullDate(lastSeen),
                     ),
                     if (deviceType == "sos")
                       _infoRow(
                         icon: Icons.history_rounded,
                         color: SafeHomeColors.warning,
-                        title: "Lần kích hoạt cuối",
+                        title: strings.t("Lần kích hoạt cuối"),
                         value: formatFullDate(lastTriggered),
                       )
                     else if (deviceType != "temperature" &&
@@ -388,7 +392,7 @@ void showDeviceDetail({
                       _infoRow(
                         icon: Icons.history_rounded,
                         color: SafeHomeColors.warning,
-                        title: "Event cuối",
+                        title: strings.t("Sự kiện cuối"),
                         value: formatFullDate(lastEvent),
                       ),
                     const SizedBox(height: 22),

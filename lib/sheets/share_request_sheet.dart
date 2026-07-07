@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 import '../services/share_service.dart';
 import '../services/home_notification_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 Future<bool?> showShareRequestSheet({
   required BuildContext context,
   required Map<String, dynamic> requests,
@@ -15,16 +17,13 @@ Future<bool?> showShareRequestSheet({
   final selected = <String>{};
   final db = FirebaseDatabase.instance;
 
-  final authenticatedUid =
-      FirebaseAuth.instance.currentUser?.uid ?? "";
+  final authenticatedUid = FirebaseAuth.instance.currentUser?.uid ?? "";
 
   if (authenticatedUid.isEmpty || authenticatedUid != uid) {
     return Future<bool?>.value(false);
   }
 
-  Future<bool> canHandleRequest(
-      Map<String, dynamic> data,
-      ) async {
+  Future<bool> canHandleRequest(Map<String, dynamic> data) async {
     final type = data["type"]?.toString() ?? "share_request";
     final homeId = data["homeId"]?.toString() ?? "";
 
@@ -52,9 +51,7 @@ Future<bool?> showShareRequestSheet({
           .get();
 
       final access = accessSnap.value is Map
-          ? Map<String, dynamic>.from(
-        accessSnap.value as Map,
-      )
+          ? Map<String, dynamic>.from(accessSnap.value as Map)
           : <String, dynamic>{};
 
       return access["ownerUid"]?.toString() == ownerUid &&
@@ -68,7 +65,7 @@ Future<bool?> showShareRequestSheet({
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       Future<void> removeRequestFromAllApprovers({
         required String requestKey,
         required String ownerUid,
@@ -83,19 +80,25 @@ Future<bool?> showShareRequestSheet({
 
       return StatefulBuilder(
         builder: (context, setSheetState) {
+          final strings = AppStrings.of(context);
+
           Future<void> acceptOne(
-              String requestKey,
-              Map<String, dynamic> data,
-              ) async {
-            if (!await canHandleRequest(data)) {
-              if (context.mounted) {
-                showTopToast(
-                  context,
-                  "Bạn không có quyền chấp nhận yêu cầu này",
-                  color: Colors.red,
-                  icon: Icons.lock_rounded,
-                );
-              }
+            String requestKey,
+            Map<String, dynamic> data,
+          ) async {
+            final canHandle = await canHandleRequest(data);
+
+            if (!context.mounted) {
+              return;
+            }
+
+            if (!canHandle) {
+              showTopToast(
+                context,
+                strings.permissionDeniedMessage,
+                color: Colors.red,
+                icon: Icons.lock_rounded,
+              );
 
               return;
             }
@@ -146,8 +149,7 @@ Future<bool?> showShareRequestSheet({
               var targetEmail = data["targetEmail"]?.toString() ?? "";
               var targetName = data["targetName"]?.toString() ?? "";
               var targetPhotoUrl = data["targetPhotoUrl"]?.toString() ?? "";
-              var targetPhone =
-                  data["targetPhone"]?.toString().trim() ?? "";
+              var targetPhone = data["targetPhone"]?.toString().trim() ?? "";
 
               if (targetUid == uid &&
                   (targetEmail.isEmpty ||
@@ -198,24 +200,20 @@ Future<bool?> showShareRequestSheet({
 
               if (targetPhone.isNotEmpty) {
                 await FirebaseDatabase.instance
-                    .ref(
-                  "homeMemberContacts/$homeId/$targetUid",
-                )
-                    .set({
-                  "phone": targetPhone,
-                });
+                    .ref("homeMemberContacts/$homeId/$targetUid")
+                    .set({"phone": targetPhone});
               }
 
               if (type == "join_request") {
                 await FirebaseDatabase.instance
                     .ref(
-                  "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
-                )
+                      "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
+                    )
                     .set({
-                  "email": targetEmail,
-                  "name": targetName,
-                  "sharedAt": DateTime.now().millisecondsSinceEpoch,
-                });
+                      "email": targetEmail,
+                      "name": targetName,
+                      "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                    });
               }
 
               try {
@@ -249,13 +247,17 @@ Future<bool?> showShareRequestSheet({
               syncApprovers: true,
             );
 
+            if (!context.mounted) {
+              return;
+            }
+
             setSheetState(() {
               items.remove(requestKey);
               selected.remove(requestKey);
             });
 
             if (items.isEmpty && context.mounted) {
-              Navigator.pop(context, true);
+              Navigator.pop(sheetContext, true);
               return;
             }
           }
@@ -265,15 +267,19 @@ Future<bool?> showShareRequestSheet({
               items[requestKey] ?? <String, dynamic>{},
             );
 
-            if (!await canHandleRequest(data)) {
-              if (context.mounted) {
-                showTopToast(
-                  context,
-                  "Bạn không có quyền từ chối yêu cầu này",
-                  color: Colors.red,
-                  icon: Icons.lock_rounded,
-                );
-              }
+            final canHandle = await canHandleRequest(data);
+
+            if (!context.mounted) {
+              return;
+            }
+
+            if (!canHandle) {
+              showTopToast(
+                context,
+                strings.permissionDeniedMessage,
+                color: Colors.red,
+                icon: Icons.lock_rounded,
+              );
 
               return;
             }
@@ -291,10 +297,12 @@ Future<bool?> showShareRequestSheet({
               );
             } else {
               await FirebaseDatabase.instance
-                  .ref(
-                "accounts/$uid/shareRequests/$requestKey",
-              )
+                  .ref("accounts/$uid/shareRequests/$requestKey")
                   .remove();
+            }
+
+            if (!context.mounted) {
+              return;
             }
 
             setSheetState(() {
@@ -303,7 +311,7 @@ Future<bool?> showShareRequestSheet({
             });
 
             if (items.isEmpty && context.mounted) {
-              Navigator.pop(context, true);
+              Navigator.pop(sheetContext, true);
             }
           }
 
@@ -317,9 +325,7 @@ Future<bool?> showShareRequestSheet({
                 padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
                 decoration: const BoxDecoration(
                   color: Color(0xFFF7FAF8),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30),
-                  ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -349,10 +355,10 @@ Future<bool?> showShareRequestSheet({
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            "Yêu cầu & lời mời",
-                            style: TextStyle(
+                            strings.t("Yêu cầu & lời mời"),
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
                             ),
@@ -382,10 +388,8 @@ Future<bool?> showShareRequestSheet({
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "Không có yêu cầu hoặc lời mời nào",
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                              ),
+                              strings.t("Không có yêu cầu hoặc lời mời nào"),
+                              style: TextStyle(color: Colors.grey.shade600),
                             ),
                           ],
                         ),
@@ -421,10 +425,11 @@ Future<bool?> showShareRequestSheet({
                             final rawHomeName =
                                 data["homeName"]?.toString().trim() ?? "";
 
-                            final homeName = rawHomeName.isNotEmpty &&
-                                !rawHomeName.startsWith("home_")
+                            final homeName =
+                                rawHomeName.isNotEmpty &&
+                                    !rawHomeName.startsWith("home_")
                                 ? rawHomeName
-                                : "Nhà chưa đặt tên";
+                                : strings.t("Nhà chưa đặt tên");
 
                             final Color color = isJoinRequest
                                 ? Colors.orange
@@ -439,10 +444,18 @@ Future<bool?> showShareRequestSheet({
                                 : Icons.home_work_rounded;
 
                             final String badgeText = isJoinRequest
-                                ? "Lời xin vào nhà"
+                                ? strings.choose(
+                                    vi: "Lời xin vào nhà",
+                                    en: "Home join request",
+                                    zh: "加入家庭请求",
+                                  )
                                 : isTransferOwner
-                                ? "Chuyển quyền chủ nhà"
-                                : "Lời mời gia nhập";
+                                ? strings.t("Chuyển quyền chủ nhà")
+                                : strings.choose(
+                                    vi: "Lời mời gia nhập",
+                                    en: "Join invitation",
+                                    zh: "加入邀请",
+                                  );
 
                             late final String title;
                             late final String subtitle;
@@ -452,27 +465,59 @@ Future<bool?> showShareRequestSheet({
                                   ? targetName
                                   : targetEmail.isNotEmpty
                                   ? targetEmail
-                                  : "Một người dùng SafeHome";
+                                  : strings.choose(
+                                      vi: "Một người dùng SafeHome",
+                                      en: "A SafeHome user",
+                                      zh: "一位 SafeHome 用户",
+                                    );
 
-                              subtitle = targetEmail.isNotEmpty &&
-                                  targetName.isNotEmpty
-                                  ? "$targetEmail\nXin gia nhập \"$homeName\""
-                                  : "Xin gia nhập \"$homeName\"";
-                            } else if (isTransferOwner) {
-                              title = "Nhận quyền chủ nhà";
                               subtitle =
-                              "Bạn được mời nhận quyền nhà \"$homeName\"";
+                                  targetEmail.isNotEmpty &&
+                                      targetName.isNotEmpty
+                                  ? strings.choose(
+                                      vi: "$targetEmail\nXin gia nhập \"$homeName\"",
+                                      en: "$targetEmail\nRequests to join \"$homeName\"",
+                                      zh: "$targetEmail\n申请加入“$homeName”",
+                                    )
+                                  : strings.choose(
+                                      vi: "Xin gia nhập \"$homeName\"",
+                                      en: "Requests to join \"$homeName\"",
+                                      zh: "申请加入“$homeName”",
+                                    );
+                            } else if (isTransferOwner) {
+                              title = strings.choose(
+                                vi: "Nhận quyền chủ nhà",
+                                en: "Receive home ownership",
+                                zh: "接收屋主权限",
+                              );
+                              subtitle = strings.choose(
+                                vi: "Bạn được mời nhận quyền nhà \"$homeName\"",
+                                en: "You were invited to receive ownership of \"$homeName\"",
+                                zh: "你被邀请接收“$homeName”的屋主权限",
+                              );
                             } else {
                               title = ownerName.isNotEmpty
                                   ? ownerName
                                   : ownerEmail.isNotEmpty
                                   ? ownerEmail
-                                  : "Lời mời từ chủ nhà";
+                                  : strings.choose(
+                                      vi: "Lời mời từ chủ nhà",
+                                      en: "Invitation from the owner",
+                                      zh: "来自屋主的邀请",
+                                    );
 
-                              subtitle = ownerEmail.isNotEmpty &&
-                                  ownerName.isNotEmpty
-                                  ? "$ownerEmail\nMời bạn gia nhập \"$homeName\""
-                                  : "Mời bạn gia nhập \"$homeName\"";
+                              subtitle =
+                                  ownerEmail.isNotEmpty && ownerName.isNotEmpty
+                                  ? strings.choose(
+                                      vi: "$ownerEmail\nMời bạn gia nhập \"$homeName\"",
+                                      en: "$ownerEmail\nInvites you to join \"$homeName\"",
+                                      zh: "$ownerEmail\n邀请你加入“$homeName”",
+                                    )
+                                  : strings.choose(
+                                      vi: "Mời bạn gia nhập \"$homeName\"",
+                                      en: "Invites you to join \"$homeName\"",
+                                      zh: "邀请你加入“$homeName”",
+                                    );
                             }
 
                             return Container(
@@ -483,9 +528,7 @@ Future<bool?> showShareRequestSheet({
                                 borderRadius: BorderRadius.circular(22),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(
-                                      alpha: 0.05,
-                                    ),
+                                    color: Colors.black.withValues(alpha: 0.05),
                                     blurRadius: 14,
                                     offset: const Offset(0, 6),
                                   ),
@@ -496,34 +539,32 @@ Future<bool?> showShareRequestSheet({
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor:
-                                        color.withValues(alpha: 0.12),
-                                        child: Icon(
-                                          icon,
-                                          color: color,
+                                        backgroundColor: color.withValues(
+                                          alpha: 0.12,
                                         ),
+                                        child: Icon(icon, color: color),
                                       ),
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               padding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 3,
-                                              ),
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 3,
+                                                  ),
                                               decoration: BoxDecoration(
                                                 color: color.withValues(
                                                   alpha: 0.12,
                                                 ),
                                                 borderRadius:
-                                                BorderRadius.circular(20),
+                                                    BorderRadius.circular(20),
                                               ),
                                               child: Text(
                                                 badgeText,
@@ -538,8 +579,7 @@ Future<bool?> showShareRequestSheet({
                                             Text(
                                               title,
                                               maxLines: 1,
-                                              overflow:
-                                              TextOverflow.ellipsis,
+                                              overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w800,
                                               ),
@@ -548,8 +588,7 @@ Future<bool?> showShareRequestSheet({
                                             Text(
                                               subtitle,
                                               maxLines: 2,
-                                              overflow:
-                                              TextOverflow.ellipsis,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 height: 1.35,
@@ -568,9 +607,14 @@ Future<bool?> showShareRequestSheet({
                                     children: [
                                       Expanded(
                                         child: OutlinedButton(
-                                          onPressed: () =>
-                                              denyOne(requestKey),
-                                          child: const Text("Từ chối"),
+                                          onPressed: () => denyOne(requestKey),
+                                          child: Text(
+                                            strings.choose(
+                                              vi: "Từ chối",
+                                              en: "Decline",
+                                              zh: "拒绝",
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 10),
@@ -582,10 +626,7 @@ Future<bool?> showShareRequestSheet({
                                           ),
                                           onPressed: () async {
                                             try {
-                                              await acceptOne(
-                                                requestKey,
-                                                data,
-                                              );
+                                              await acceptOne(requestKey, data);
                                             } catch (e) {
                                               safeDebugPrint(
                                                 "ACCEPT_REQUEST_ERROR: $e",
@@ -596,8 +637,16 @@ Future<bool?> showShareRequestSheet({
                                               showTopToast(
                                                 context,
                                                 isJoinRequest
-                                                    ? "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại."
-                                                    : "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                    ? strings.choose(
+                                                        vi: "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
+                                                        en: "Could not accept the join request. Please try again.",
+                                                        zh: "无法接受加入请求。请重试。",
+                                                      )
+                                                    : strings.choose(
+                                                        vi: "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                        en: "Could not accept the invitation. Please try again.",
+                                                        zh: "无法接受邀请。请重试。",
+                                                      ),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
                                               );
@@ -605,8 +654,16 @@ Future<bool?> showShareRequestSheet({
                                           },
                                           child: Text(
                                             isJoinRequest
-                                                ? "Cho phép"
-                                                : "Chấp nhận",
+                                                ? strings.choose(
+                                                    vi: "Cho phép",
+                                                    en: "Allow",
+                                                    zh: "允许",
+                                                  )
+                                                : strings.choose(
+                                                    vi: "Chấp nhận",
+                                                    en: "Accept",
+                                                    zh: "接受",
+                                                  ),
                                           ),
                                         ),
                                       ),

@@ -17,7 +17,6 @@ class HomeAlarmPauseFormData {
 
 Future<void> showHomeAlarmPauseSheet({
   required BuildContext context,
-  required AppStrings strings,
   required TimeOfDay initialStartTime,
   required TimeOfDay initialEndTime,
   required bool showRemoveButton,
@@ -56,9 +55,11 @@ Future<void> showHomeAlarmPauseSheet({
     isScrollControlled: true,
     showDragHandle: false,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       return StatefulBuilder(
-        builder: (context, setSheetState) {
+        builder: (stateContext, setSheetState) {
+          final sheetStrings = AppStrings.of(stateContext);
+
           return SafeArea(
             child: Container(
               padding: const EdgeInsets.all(20),
@@ -79,7 +80,7 @@ Future<void> showHomeAlarmPauseSheet({
                     ),
                   ),
                   Text(
-                    strings.t("⏸️ Tạm tắt Alarm hôm nay"),
+                    sheetStrings.t("Tạm tắt Alarm hôm nay"),
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -94,12 +95,14 @@ Future<void> showHomeAlarmPauseSheet({
                         child: InkWell(
                           onTap: () async {
                             final picked = await onPickTime(
-                              context: context,
-                              title: strings.t("Chọn giờ bắt đầu tạm tắt"),
+                              context: stateContext,
+                              title: sheetStrings.t("Chọn giờ bắt đầu tạm tắt"),
                               initial: format(startTime),
                             );
 
-                            if (picked == null) return;
+                            if (!stateContext.mounted || picked == null) {
+                              return;
+                            }
 
                             setSheetState(() {
                               startTime = parsePickedTime(picked, startTime);
@@ -114,7 +117,7 @@ Future<void> showHomeAlarmPauseSheet({
                             ),
                             child: Column(
                               children: [
-                                Text(strings.t("Từ giờ")),
+                                Text(sheetStrings.t("Từ")),
                                 const SizedBox(height: 6),
                                 Text(
                                   format(startTime),
@@ -133,12 +136,16 @@ Future<void> showHomeAlarmPauseSheet({
                         child: InkWell(
                           onTap: () async {
                             final picked = await onPickTime(
-                              context: context,
-                              title: strings.t("Chọn giờ kết thúc tạm tắt"),
+                              context: stateContext,
+                              title: sheetStrings.t(
+                                "Chọn giờ kết thúc tạm tắt",
+                              ),
                               initial: format(endTime),
                             );
 
-                            if (picked == null) return;
+                            if (!stateContext.mounted || picked == null) {
+                              return;
+                            }
 
                             setSheetState(() {
                               endTime = parsePickedTime(picked, endTime);
@@ -153,7 +160,7 @@ Future<void> showHomeAlarmPauseSheet({
                             ),
                             child: Column(
                               children: [
-                                Text(strings.t("Đến giờ")),
+                                Text(sheetStrings.t("Đến")),
                                 const SizedBox(height: 6),
                                 Text(
                                   format(endTime),
@@ -180,7 +187,7 @@ Future<void> showHomeAlarmPauseSheet({
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 3),
                           child: ChoiceChip(
-                            label: Text(strings.t(item)),
+                            label: Text(sheetStrings.t(item)),
                             selected: selected,
                             onSelected: (_) {
                               setSheetState(() {
@@ -199,10 +206,10 @@ Future<void> showHomeAlarmPauseSheet({
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.save_rounded),
-                      label: Text(strings.t("Lưu")),
+                      label: Text(sheetStrings.t("Lưu")),
                       onPressed: () async {
                         final saved = await onSave(
-                          context,
+                          sheetContext,
                           HomeAlarmPauseFormData(
                             startTime: startTime,
                             endTime: endTime,
@@ -210,9 +217,9 @@ Future<void> showHomeAlarmPauseSheet({
                           ),
                         );
 
-                        if (!context.mounted || !saved) return;
+                        if (!sheetContext.mounted || !saved) return;
 
-                        Navigator.pop(context);
+                        Navigator.of(sheetContext).pop();
                       },
                     ),
                   ),
@@ -224,13 +231,13 @@ Future<void> showHomeAlarmPauseSheet({
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         icon: const Icon(Icons.delete_outline_rounded),
-                        label: Text(strings.t("Xóa lịch tạm tắt")),
+                        label: Text(sheetStrings.t("Xoá lịch tạm tắt")),
                         onPressed: () async {
-                          final removed = await onRemove(context);
+                          final removed = await onRemove(sheetContext);
 
-                          if (!context.mounted || !removed) return;
+                          if (!sheetContext.mounted || !removed) return;
 
-                          Navigator.pop(context);
+                          Navigator.of(sheetContext).pop();
                         },
                       ),
                     ),

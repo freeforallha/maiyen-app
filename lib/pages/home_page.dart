@@ -451,7 +451,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              title: const Text("Xác nhận mật khẩu"),
+              title: Text(_strings.t("Xác nhận mật khẩu")),
               content: TextField(
                 autofocus: true,
                 obscureText: obscurePassword,
@@ -463,7 +463,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   submitPassword();
                 },
                 decoration: InputDecoration(
-                  labelText: "Mật khẩu tài khoản",
+                  labelText: _strings.t("Mật khẩu tài khoản"),
                   prefixIcon: const Icon(Icons.lock_outline_rounded),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -485,11 +485,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   onPressed: () {
                     Navigator.of(dialogContext).pop();
                   },
-                  child: const Text("Huỷ"),
+                  child: Text(_strings.t("Huỷ")),
                 ),
                 FilledButton(
                   onPressed: submitPassword,
-                  child: const Text("Xác nhận"),
+                  child: Text(_strings.t("Xác nhận")),
                 ),
               ],
             );
@@ -870,9 +870,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           showTopToast(
             context,
-            _strings.choose(
-              vi: "Không lấy được vị trí hiện tại: $error",
-              en: "Could not get the current location: $error",
+            _strings.sanitizeUserMessage(
+              error.toString(),
+              fallback: _strings.choose(
+                vi: "Không lấy được vị trí hiện tại",
+                en: "Could not get the current location",
+                zh: "无法获取当前位置",
+                ko: "현재 위치를 가져올 수 없습니다",
+              ),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -967,9 +972,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           showTopToast(
             context,
-            _strings.choose(
-              vi: "Không lưu được cài đặt: $error",
-              en: "Could not save the setting: $error",
+            _strings.sanitizeUserMessage(
+              error.toString(),
+              fallback: _strings.choose(
+                vi: "Không lưu được cài đặt",
+                en: "Could not save the setting",
+                zh: "无法保存设置",
+                ko: "설정을 저장할 수 없습니다",
+              ),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -1306,12 +1316,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   String formatAlarmSchedules() {
-    return HomeAlarmFormatters.formatAlarmSchedules(
+    final text = HomeAlarmFormatters.formatAlarmSchedules(
       alarmEnabled: alarmEnabled,
       selectedHome: selectedHome,
       devices: getDevices(),
       customRulesByHome: customRulesByHome,
     );
+
+    return _strings.t(text);
   }
 
   Map<String, dynamic> getDevices() {
@@ -2236,9 +2248,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       showTopToast(
         context,
-        _strings.choose(
-          vi: "Không gửi được yêu cầu xoá: $e",
-          en: "Could not send deletion request: $e",
+        _strings.sanitizeUserMessage(
+          e.toString(),
+          fallback: _strings.choose(
+            vi: "Không gửi được yêu cầu xoá",
+            en: "Could not send deletion request",
+            zh: "无法发送删除请求",
+            ko: "삭제 요청을 보낼 수 없습니다",
+          ),
         ),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
@@ -2256,6 +2273,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       message: _strings.choose(
         vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
         en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
+        zh: "SafeHome 正在从 \"$homeName\" 中移除 \"$deviceName\"。",
+        ko: "SafeHome이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
       ),
       homeName: homeName,
     );
@@ -2447,7 +2466,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     await showHomeAlarmPauseSheet(
       context: context,
-      strings: _strings,
       initialStartTime: startTime,
       initialEndTime: endTime,
       showRemoveButton: showRemoveButton,
@@ -2527,9 +2545,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           showTopToast(
             sheetContext,
-            _strings.choose(
-              vi: "Không lưu được tạm tắt Alarm: $e",
-              en: "Unable to save the Alarm pause: $e",
+            _strings.sanitizeUserMessage(
+              e.toString(),
+              fallback: _strings.choose(
+                vi: "Không lưu được tạm tắt Alarm",
+                en: "Unable to save the Alarm pause",
+                zh: "无法保存 Alarm 暂停",
+                ko: "Alarm 임시 중지를 저장할 수 없습니다",
+              ),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -2574,9 +2597,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           showTopToast(
             sheetContext,
-            _strings.choose(
-              vi: "Không xoá được lịch tạm tắt Alarm: $e",
-              en: "Unable to delete the Alarm pause schedule: $e",
+            _strings.sanitizeUserMessage(
+              e.toString(),
+              fallback: _strings.choose(
+                vi: "Không xoá được lịch tạm tắt Alarm",
+                en: "Unable to delete the Alarm pause schedule",
+                zh: "无法删除 Alarm 暂停计划",
+                ko: "Alarm 임시 중지 일정을 삭제할 수 없습니다",
+              ),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -2740,21 +2768,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final name = await showDialog<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(_strings.t("Thay tên")),
-        content: TextField(controller: controller),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(_strings.t("Hủy")),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: Text("OK"),
-          ),
-        ],
-      ),
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(_strings.t("Thay tên")),
+          content: TextField(controller: controller),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(_strings.t("Hủy")),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(dialogContext, controller.text),
+              child: Text(_strings.t("OK")),
+            ),
+          ],
+        );
+      },
     );
+
+    controller.dispose();
 
     if (name == null || name.trim().isEmpty) return;
 

@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String userName;
@@ -193,18 +194,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       if (!mounted) return;
 
+      final strings = AppStrings.of(context);
       showTopToast(
         context,
-        "Đã lưu thông tin",
+        strings.t("Đã lưu thông tin"),
         color: Colors.green,
         icon: Icons.check_circle_rounded,
       );
 
       Navigator.pop(context);
     } catch (e) {
+      if (!mounted) return;
+
+      final strings = AppStrings.of(context);
       showTopToast(
         context,
-        "Lỗi lưu profile",
+        strings.t("Lỗi lưu profile"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -219,6 +224,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     final imageFile = pickedImage;
     final avatarUrl = imageFile != null ? null : user?.photoURL;
     final ImageProvider? avatarImage = imageFile != null
@@ -228,7 +234,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         : null;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Thông tin cá nhân")),
+      appBar: AppBar(title: Text(strings.t("Thông tin cá nhân"))),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -280,17 +286,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(
               controller: nameController,
 
-              decoration: const InputDecoration(labelText: "Tên"),
+              decoration: InputDecoration(labelText: strings.t("Tên")),
             ),
 
             const SizedBox(height: 20),
 
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Giới tính",
+                strings.t("Giới tính"),
 
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
 
@@ -305,19 +314,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 });
               },
 
-              child: const Row(
+              child: Row(
                 children: [
                   Expanded(
                     child: RadioListTile<String>(
                       value: "Nam",
-                      title: Text("Nam"),
+                      title: Text(strings.t("Nam")),
                     ),
                   ),
 
                   Expanded(
                     child: RadioListTile<String>(
                       value: "Nữ",
-                      title: Text("Nữ"),
+                      title: Text(strings.t("Nữ")),
                     ),
                   ),
                 ],
@@ -329,17 +338,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(labelText: "Số điện thoại"),
+              decoration: InputDecoration(
+                labelText: strings.t("Số điện thoại"),
+              ),
             ),
 
             const SizedBox(height: 20),
 
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Ngày sinh",
+                strings.t("Ngày sinh"),
 
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
 
@@ -349,7 +363,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               children: [
                 Expanded(
                   child: _autoBox(
-                    label: "Ngày",
+                    label: strings.t("Ngày"),
                     controller: dayController,
 
                     suggestions: (input) => _suggestNumbers(
@@ -365,7 +379,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                 Expanded(
                   child: _autoBox(
-                    label: "Tháng",
+                    label: strings.t("Tháng"),
                     controller: monthController,
 
                     suggestions: (input) => _suggestNumbers(
@@ -381,7 +395,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                 Expanded(
                   child: _autoBox(
-                    label: "Năm",
+                    label: strings.t("Năm"),
                     controller: yearController,
 
                     suggestions: (input) => _suggestNumbers(
@@ -412,9 +426,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           color: Colors.white,
                         ),
                       )
-                    : const Text(
-                        "Lưu thay đổi",
-                        style: TextStyle(
+                    : Text(
+                        strings.t("Lưu thay đổi"),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),

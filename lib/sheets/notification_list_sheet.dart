@@ -113,7 +113,7 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
               const Icon(Icons.receipt_long_rounded, color: Colors.blueAccent),
               const SizedBox(width: 8),
               Text(
-                strings.t("Thông báo"),
+                strings.t("Thông báo Home"),
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -201,27 +201,22 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
                     final item = safeMap(visibleItems[i].value);
 
-                    String text = item["text"]?.toString() ?? "";
+                    final rawText = item["text"]?.toString() ?? "";
                     final type = item["type"]?.toString() ?? "";
+                    final text = strings.systemNotificationText(
+                      rawText,
+                      type: type,
+                    );
 
-                    text = text
-                        .replaceAll("Door opened", "Cửa mở")
-                        .replaceAll("Door closed", "Cửa đóng")
-                        .replaceAll("Tamper detected", "Phát hiện cạy phá")
-                        .replaceAll("Tamper cleared", "Tamper bình thường")
-                        .replaceAll("Motion detected", "Phát hiện chuyển động")
-                        .replaceAll("Battery low", "Pin yếu")
-                        .replaceAll("Device offline", "Thiết bị mất kết nối")
-                        .replaceAll("Device online", "Thiết bị đã kết nối lại")
-                        .replaceAll("Alarm triggered", "Báo động kích hoạt")
-                        .replaceAll("Alarm cleared", "Báo động đã tắt");
-
-                    final lower = text.toLowerCase();
+                    final lower = rawText.toLowerCase();
 
                     final isSafe =
                         lower.contains("đóng") ||
                         lower.contains("bình thường") ||
                         lower.contains("đã tắt") ||
+                        lower.contains("closed") ||
+                        lower.contains("cleared") ||
+                        lower.contains("online") ||
                         lower.contains("kết nối lại") ||
                         lower.contains("cập nhật");
 

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../localization/app_strings.dart';
+
 Future<String?> showPairDialog(BuildContext context) async {
   final controller = TextEditingController();
 
   final result = await showDialog<String>(
     context: context,
-    builder: (_) {
+    builder: (dialogContext) {
+      final strings = AppStrings.of(dialogContext);
+
       return AlertDialog(
         title: const Text("Nhập HUB ID"),
 
@@ -21,8 +25,8 @@ Future<String?> showPairDialog(BuildContext context) async {
 
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Huỷ"),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(strings.t("Huỷ")),
           ),
 
           ElevatedButton(
@@ -31,7 +35,7 @@ Future<String?> showPairDialog(BuildContext context) async {
 
               if (value.isEmpty) return;
 
-              Navigator.pop(context, value);
+              Navigator.pop(dialogContext, value);
             },
             child: const Text("Pair"),
           ),

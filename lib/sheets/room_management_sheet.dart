@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 
 Future<void> showRoomManagementSheet({
   required BuildContext context,
   required String ownerUid,
   required String homeId,
 }) async {
+  final strings = AppStrings.of(context);
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
   if (currentUid == null || currentUid.isEmpty) {
@@ -32,7 +34,7 @@ Future<void> showRoomManagementSheet({
       if (context.mounted) {
         showTopToast(
           context,
-          "Bạn không có quyền quản lý phòng",
+          strings.t("Bạn không có quyền quản lý phòng"),
           color: Colors.red,
           icon: Icons.lock_rounded,
         );
@@ -55,11 +57,11 @@ Future<void> showRoomManagementSheet({
     isScrollControlled: true,
     enableDrag: false,
     backgroundColor: Colors.transparent,
-    builder: (_) {
+    builder: (sheetContext) {
       return SafeArea(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.78,
+            maxHeight: MediaQuery.of(sheetContext).size.height * 0.78,
           ),
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
@@ -99,27 +101,31 @@ Future<void> showRoomManagementSheet({
                 );
 
                 final newName = await showDialog<String>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("Đổi tên phòng"),
+                  context: sheetContext,
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text(strings.t("Đổi tên phòng")),
                     content: TextField(
                       controller: controller,
-                      decoration: const InputDecoration(hintText: "Tên phòng"),
+                      decoration: InputDecoration(
+                        hintText: strings.t("Tên phòng"),
+                      ),
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("Huỷ"),
+                        onPressed: () => Navigator.pop(dialogContext),
+                        child: Text(strings.t("Huỷ")),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context, controller.text.trim());
+                          Navigator.pop(dialogContext, controller.text.trim());
                         },
-                        child: const Text("Lưu"),
+                        child: Text(strings.t("Lưu")),
                       ),
                     ],
                   ),
                 );
+
+                controller.dispose();
 
                 if (newName == null || newName.isEmpty) return;
 
@@ -128,20 +134,22 @@ Future<void> showRoomManagementSheet({
 
               Future<void> deleteRoom(String roomId) async {
                 final ok = await showDialog<bool>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("Xoá phòng"),
-                    content: const Text(
-                      "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.",
+                  context: sheetContext,
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text(strings.t("Xoá phòng")),
+                    content: Text(
+                      strings.t(
+                        "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.",
+                      ),
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context, false),
-                        child: const Text("Huỷ"),
+                        onPressed: () => Navigator.pop(dialogContext, false),
+                        child: Text(strings.t("Huỷ")),
                       ),
                       ElevatedButton(
-                        onPressed: () => Navigator.pop(context, true),
-                        child: const Text("Xoá"),
+                        onPressed: () => Navigator.pop(dialogContext, true),
+                        child: Text(strings.t("Xoá")),
                       ),
                     ],
                   ),
@@ -178,29 +186,31 @@ Future<void> showRoomManagementSheet({
                 final controller = TextEditingController();
 
                 final roomName = await showDialog<String>(
-                  context: context,
-                  builder: (_) => AlertDialog(
-                    title: const Text("Thêm phòng"),
+                  context: sheetContext,
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text(strings.t("Thêm phòng")),
                     content: TextField(
                       controller: controller,
-                      decoration: const InputDecoration(
-                        hintText: "Ví dụ: Phòng khách",
+                      decoration: InputDecoration(
+                        hintText: strings.t("Ví dụ: Phòng khách"),
                       ),
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("Huỷ"),
+                        onPressed: () => Navigator.pop(dialogContext),
+                        child: Text(strings.t("Huỷ")),
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context, controller.text.trim());
+                          Navigator.pop(dialogContext, controller.text.trim());
                         },
-                        child: const Text("Thêm"),
+                        child: Text(strings.t("Thêm")),
                       ),
                     ],
                   ),
                 );
+
+                controller.dispose();
 
                 if (roomName == null || roomName.isEmpty) return;
 
@@ -220,7 +230,7 @@ Future<void> showRoomManagementSheet({
 
                     showTopToast(
                       context,
-                      "Tên phòng đã tồn tại",
+                      strings.t("Tên phòng đã tồn tại"),
                       color: Colors.orange,
                       icon: Icons.info_rounded,
                     );
@@ -251,13 +261,16 @@ Future<void> showRoomManagementSheet({
 
                   const SizedBox(height: 18),
 
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.meeting_room_rounded, color: Colors.orange),
-                      SizedBox(width: 10),
+                      const Icon(
+                        Icons.meeting_room_rounded,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 10),
                       Text(
-                        "Quản lý phòng",
-                        style: TextStyle(
+                        strings.t("Quản lý phòng"),
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
                         ),
@@ -274,8 +287,12 @@ Future<void> showRoomManagementSheet({
 
                     return ListTile(
                       leading: const Icon(Icons.home_work_rounded),
-                      title: Text(room["name"]?.toString() ?? entry.key),
-                      subtitle: const Text("Phòng mặc định"),
+                      title: Text(
+                        entry.key == "unassigned"
+                            ? strings.t("Chưa phân phòng")
+                            : room["name"]?.toString() ?? entry.key,
+                      ),
+                      subtitle: Text(strings.t("Phòng mặc định")),
                     );
                   }),
 
@@ -323,14 +340,14 @@ Future<void> showRoomManagementSheet({
                                     await deleteRoom(entry.key);
                                   }
                                 },
-                                itemBuilder: (_) => const [
+                                itemBuilder: (_) => [
                                   PopupMenuItem(
                                     value: "rename",
-                                    child: Text("Đổi tên"),
+                                    child: Text(strings.t("Đổi tên")),
                                   ),
                                   PopupMenuItem(
                                     value: "delete",
-                                    child: Text("Xoá phòng"),
+                                    child: Text(strings.t("Xoá phòng")),
                                   ),
                                 ],
                               ),
@@ -349,7 +366,7 @@ Future<void> showRoomManagementSheet({
                       onPressed: () =>
                           addRoom([...unassignedEntry, ...normalEntries]),
                       icon: const Icon(Icons.add_rounded),
-                      label: const Text("Thêm phòng"),
+                      label: Text(strings.t("Thêm phòng")),
                     ),
                   ),
                 ],
