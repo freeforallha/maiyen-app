@@ -21,6 +21,7 @@ import '../services/share_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
+import '../widgets/system_health_sheet.dart';
 import 'all_home_page.dart';
 import 'home/home_add_sheets.dart';
 import 'home/home_alarm_menu_sheet.dart';
@@ -44,6 +45,7 @@ import '../helpers/top_toast.dart';
 import '../services/home_notification_service.dart';
 import '../services/auto_away_service.dart';
 import '../services/session_logout_service.dart';
+import '../services/system_usage_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
@@ -1681,7 +1683,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       startHubStatusGracePeriod();
       unawaited(_syncAutoAwayLocationMonitoring());
-
+      unawaited(SystemUsageService.recordAppOpen());
       if (mounted) {
         setState(() {});
       }
@@ -1701,6 +1703,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    unawaited(SystemUsageService.recordAppOpen());
     startHubStatusGracePeriod();
 
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -3267,6 +3270,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                       startHomeEventsListener();
                       startAlarmPauseListener();
+                    },
+                    onOpenSystemHealth: () {
+                      showSystemHealthSheet(
+                        context: context,
+                        ownerUid: getHomeOwnerUid(),
+                        homeId: selectedHome,
+                        securityMode: securityMode,
+                        securityModeSource: overviewSecurityModeSource,
+                      );
                     },
                     onOpenNotifications: openHomeNotifications,
                   ),

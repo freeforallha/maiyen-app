@@ -8,7 +8,6 @@ import '../helpers/home_helper.dart';
 import '../pages/home/home_data_helpers.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
-
 class StatusPanel extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -1372,6 +1371,8 @@ class _StatusPanelState extends State<StatusPanel> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 8),
+
                 const SizedBox(height: 9),
                 Row(
                   children: [

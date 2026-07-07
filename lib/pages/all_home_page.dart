@@ -1790,7 +1790,7 @@ class _AllHomePageState extends State<AllHomePage> {
       color: Colors.green,
       icon: Icons.check_circle_rounded,
     );
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {

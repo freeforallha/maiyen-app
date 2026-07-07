@@ -9,12 +9,14 @@ class HomeHeaderBar extends StatelessWidget {
     required this.unreadHomeNotificationCount,
     required this.onOpenHomeList,
     required this.onOpenNotifications,
+    required this.onOpenSystemHealth,
   });
 
   final String notificationTooltip;
   final int unreadHomeNotificationCount;
   final VoidCallback onOpenHomeList;
   final VoidCallback onOpenNotifications;
+  final VoidCallback onOpenSystemHealth;
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +60,37 @@ class HomeHeaderBar extends StatelessWidget {
                 ),
               ),
             ),
-            RichText(
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 29,
-                  height: 1,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1.1,
+            Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              child: InkWell(
+                onTap: onOpenSystemHealth,
+                borderRadius: BorderRadius.circular(12),
+                child:Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 29,
+                        height: 1,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -1.1,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "Safe",
+                          style: TextStyle(color: SafeHomeColors.primary),
+                        ),
+                        TextSpan(
+                          text: "Home",
+                          style: TextStyle(
+                            color: SafeHomeColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                children: [
-                  TextSpan(
-                    text: "Safe",
-                    style: TextStyle(color: SafeHomeColors.primary),
-                  ),
-                  TextSpan(
-                    text: "Home",
-                    style: TextStyle(color: SafeHomeColors.textPrimary),
-                  ),
-                ],
               ),
             ),
             Align(
@@ -93,15 +108,15 @@ class HomeHeaderBar extends StatelessWidget {
                     tooltip: notificationTooltip,
                     icon: const Icon(Icons.notifications_rounded, size: 21),
                     style:
-                        IconButton.styleFrom(
-                          foregroundColor: SafeHomeColors.info,
-                          backgroundColor: Colors.transparent,
-                          shape: const CircleBorder(),
-                        ).copyWith(
-                          overlayColor: WidgetStatePropertyAll(
-                            SafeHomeColors.info.withValues(alpha: 0.10),
-                          ),
-                        ),
+                    IconButton.styleFrom(
+                      foregroundColor: SafeHomeColors.info,
+                      backgroundColor: Colors.transparent,
+                      shape: const CircleBorder(),
+                    ).copyWith(
+                      overlayColor: WidgetStatePropertyAll(
+                        SafeHomeColors.info.withValues(alpha: 0.10),
+                      ),
+                    ),
                   ),
                   if (unreadHomeNotificationCount > 0)
                     Positioned(
