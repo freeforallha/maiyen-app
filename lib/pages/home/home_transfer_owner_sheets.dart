@@ -132,6 +132,8 @@ Future<bool> showTransferOwnerConfirmSheet({
                 strings.choose(
                   vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
                   en: "Transfer home ownership to:\n$targetEmail?",
+                  zh: "确定要将家庭所有权转移给：\n$targetEmail？",
+                  ko: "집 소유권을 다음 사람에게 이전하시겠습니까?\n$targetEmail",
                   ja: "家の所有権を次の相手に移転しますか？\n$targetEmail",
                 ),
                 textAlign: TextAlign.center,

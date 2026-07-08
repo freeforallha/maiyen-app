@@ -562,6 +562,372 @@ class AppStrings {
     ja: "新着メッセージがあります",
   );
 
+  String homeSecurityRepeatToast(int minutes) {
+    return minutes == 0
+        ? choose(
+            vi: "Mode Bảo vệ sẽ chỉ báo động một lần",
+            en: "Guard mode will alert only once",
+            zh: "保护模式只会警报一次",
+            ko: "보호 모드는 한 번만 경보를 보냅니다",
+            ja: "Guardモードは一度だけアラートします",
+          )
+        : choose(
+            vi: "Mode Bảo vệ sẽ lặp báo động sau $minutes phút",
+            en: "Guard mode will repeat the alert after $minutes minutes",
+            zh: "保护模式将在 $minutes 分钟后重复警报",
+            ko: "보호 모드는 $minutes분 후 경보를 반복합니다",
+            ja: "Guardモードは $minutes 分後にアラートを繰り返します",
+          );
+  }
+
+  String joinRequestsSentMessage(int count) => choose(
+    vi: "Đã gửi yêu cầu gia nhập $count nhà",
+    en: "Join requests sent for $count homes",
+    zh: "已发送 $count 个家庭的加入请求",
+    ko: "$count개 집에 가입 요청을 보냈습니다",
+    ja: "$count 件の家への参加リクエストを送信しました",
+  );
+
+  String joinRequestMessage({
+    required String requesterName,
+    required String homeName,
+  }) => choose(
+    vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
+    en: "$requesterName requested to join \"$homeName\".",
+    zh: "$requesterName 请求加入“$homeName”。",
+    ko: "$requesterName님이 \"$homeName\" 가입을 요청했습니다.",
+    ja: "$requesterName が「$homeName」への参加をリクエストしています。",
+  );
+
+  String homeDeletedMessage(String homeName) => choose(
+    vi: "Bạn đã xoá nhà \"$homeName\".",
+    en: "You deleted \"$homeName\".",
+    zh: "你已删除“$homeName”。",
+    ko: "\"$homeName\"을 삭제했습니다.",
+    ja: "「$homeName」を削除しました。",
+  );
+
+  String ownershipTransferRequestSentMessage({
+    required String homeName,
+    required String email,
+  }) => choose(
+    vi: "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"$homeName\" cho $email.",
+    en: "You sent an ownership transfer request for \"$homeName\" to $email.",
+    zh: "你已将“$homeName”的所有权转移请求发送给 $email。",
+    ko: "\"$homeName\"의 소유권 이전 요청을 $email에게 보냈습니다.",
+    ja: "「$homeName」の所有権譲渡リクエストを $email に送信しました。",
+  );
+
+  String ownershipTransferRequestMessage({
+    required String actorName,
+    required String homeName,
+  }) => choose(
+    vi: "$actorName muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
+    en: "$actorName wants to transfer ownership of \"$homeName\" to you.",
+    zh: "$actorName 想将“$homeName”的所有权转移给你。",
+    ko: "$actorName님이 \"$homeName\"의 소유권을 당신에게 이전하려고 합니다.",
+    ja: "$actorName が「$homeName」の所有権をあなたに譲渡したいと考えています。",
+  );
+
+  String shareInvitationMessage({
+    required String actorName,
+    required String homeName,
+  }) => choose(
+    vi: "$actorName đã mời bạn tham gia nhà \"$homeName\".",
+    en: "$actorName invited you to join \"$homeName\".",
+    zh: "$actorName 邀请你加入“$homeName”。",
+    ko: "$actorName님이 \"$homeName\"에 초대했습니다.",
+    ja: "$actorName が「$homeName」への参加に招待しました。",
+  );
+
+  String deviceDeleteInProgressMessage({
+    required String deviceName,
+    required String homeName,
+  }) => choose(
+    vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
+    en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
+    zh: "SafeHome 正在从“$homeName”中移除“$deviceName”。",
+    ko: "SafeHome이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
+    ja: "SafeHome は「$homeName」から「$deviceName」を削除しています。",
+  );
+
+  String deviceAddedMessage({
+    required String deviceName,
+    required String homeName,
+  }) => choose(
+    vi: "Thiết bị \"$deviceName\" đã xuất hiện trong \"$homeName\".",
+    en: "Device \"$deviceName\" was added to \"$homeName\".",
+    zh: "设备“$deviceName”已添加到“$homeName”。",
+    ko: "\"$homeName\"에 기기 \"$deviceName\"이 추가되었습니다.",
+    ja: "デバイス「$deviceName」が「$homeName」に追加されました。",
+  );
+
+  String homeCreatedMessage(String name) => choose(
+    vi: "Bạn đã tạo nhà \"$name\".",
+    en: "You created the home \"$name\".",
+    zh: "你已创建家庭“$name”。",
+    ko: "\"$name\" 집을 만들었습니다.",
+    ja: "家「$name」を作成しました。",
+  );
+
+  String homeInfoUpdatedMessage({
+    required String actorName,
+    required String newName,
+    required bool nameChanged,
+    required bool addressChanged,
+  }) {
+    if (nameChanged && addressChanged) {
+      return choose(
+        vi: "$actorName đã cập nhật tên nhà thành \"$newName\" và thay đổi địa chỉ.",
+        en: "$actorName updated the home name to \"$newName\" and changed its address.",
+        zh: "$actorName 已将家庭名称更新为“$newName”并更改了地址。",
+        ko: "$actorName님이 집 이름을 \"$newName\"(으)로 업데이트하고 주소를 변경했습니다.",
+        ja: "$actorName が家の名前を「$newName」に更新し、住所を変更しました。",
+      );
+    }
+
+    if (nameChanged) {
+      return choose(
+        vi: "$actorName đã đổi tên nhà thành \"$newName\".",
+        en: "$actorName renamed the home to \"$newName\".",
+        zh: "$actorName 已将家庭名称改为“$newName”。",
+        ko: "$actorName님이 집 이름을 \"$newName\"(으)로 변경했습니다.",
+        ja: "$actorName が家の名前を「$newName」に変更しました。",
+      );
+    }
+
+    return choose(
+      vi: "$actorName đã cập nhật địa chỉ của nhà \"$newName\".",
+      en: "$actorName updated the address of \"$newName\".",
+      zh: "$actorName 已更新“$newName”的地址。",
+      ko: "$actorName님이 \"$newName\"의 주소를 업데이트했습니다.",
+      ja: "$actorName が「$newName」の住所を更新しました。",
+    );
+  }
+
+  String deviceRenamedMessage({
+    required String actorName,
+    required String oldDeviceName,
+    required String newName,
+    required String homeName,
+  }) => choose(
+    vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
+    en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
+    zh: "$actorName 已在“$homeName”中将设备“$oldDeviceName”重命名为“$newName”。",
+    ko: "$actorName님이 \"$homeName\"에서 기기 \"$oldDeviceName\"의 이름을 \"$newName\"(으)로 변경했습니다.",
+    ja: "$actorName が「$homeName」でデバイス「$oldDeviceName」の名前を「$newName」に変更しました。",
+  );
+
+  String pairingCountdownText(int seconds) => choose(
+    vi: "Đang ghép nối: $seconds giây",
+    en: "Pairing: $seconds s",
+    zh: "正在配对: $seconds 秒",
+    ko: "페어링 중: $seconds초",
+    ja: "ペアリング中: $seconds 秒",
+  );
+
+  String pairingEnabledMessage({
+    required String homeName,
+    required int seconds,
+  }) => choose(
+    vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong $seconds giây.",
+    en: "Device pairing was enabled in \"$homeName\" for $seconds seconds.",
+    zh: "“$homeName”的设备配对模式已开启 $seconds 秒。",
+    ko: "\"$homeName\"에서 기기 추가 모드가 $seconds초 동안 활성화되었습니다.",
+    ja: "「$homeName」でデバイス追加モードが $seconds 秒間有効になりました。",
+  );
+
+  String alarmPauseWithinScheduleMessage({
+    required String start,
+    required String end,
+  }) => choose(
+    vi: "Khoảng thời gian phải nằm trong khung Alarm ($start → $end)",
+    en: "The pause period must be within the Alarm schedule ($start → $end)",
+    zh: "暂停时间必须在 Alarm 计划内 ($start → $end)",
+    ko: "일시 중지 시간은 Alarm 일정($start → $end) 안에 있어야 합니다",
+    ja: "一時停止期間は Alarm スケジュール（$start → $end）内である必要があります",
+  );
+
+  String firebaseRulesPassedSummary({
+    required int passCount,
+    required int total,
+  }) => choose(
+    vi: "$passCount/$total bài test đạt\n\n",
+    en: "$passCount/$total tests passed\n\n",
+    zh: "$passCount/$total 项测试通过\n\n",
+    ko: "$passCount/$total개 테스트 통과\n\n",
+    ja: "$passCount/$total 件のテストに合格\n\n",
+  );
+
+  String memberPhoneMissingProfileMessage(String name) => choose(
+    vi: "$name chưa cập nhật số điện thoại trong hồ sơ.",
+    en: "$name has not added a phone number to their profile.",
+    zh: "$name 尚未在个人资料中添加电话号码。",
+    ko: "$name님이 프로필에 전화번호를 추가하지 않았습니다.",
+    ja: "$name はプロフィールに電話番号を追加していません。",
+  );
+
+  String newChatInHomeTitle(String homeName) => choose(
+    vi: "Tin nhắn mới trong $homeName",
+    en: "New message in $homeName",
+    zh: "$homeName 有新消息",
+    ko: "$homeName 새 메시지",
+    ja: "$homeName に新しいメッセージがあります",
+  );
+
+  String searchResultCountText({
+    required int current,
+    required int total,
+  }) => choose(
+    vi: "$current/$total kết quả",
+    en: "$current/$total results",
+    zh: "$current/$total 个结果",
+    ko: "$current/$total개 결과",
+    ja: "$current/$total 件の結果",
+  );
+
+  String replyingToText(String name) => choose(
+    vi: "Đang trả lời $name",
+    en: "Replying to $name",
+    zh: "正在回复 $name",
+    ko: "$name님에게 답장 중",
+    ja: "$name に返信中",
+  );
+
+  String deviceSmokeDetectedMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" phát hiện khói trong \"$homeName\".",
+    en: "\"$name\" detected smoke in \"$homeName\".",
+    zh: "“$name”在“$homeName”中检测到烟雾。",
+    ko: "\"$homeName\"의 \"$name\"에서 연기가 감지되었습니다.",
+    ja: "「$name」が「$homeName」で煙を検知しました。",
+  );
+
+  String deviceReturnedNormalMessage(String name) => choose(
+    vi: "\"$name\" đã trở lại trạng thái bình thường.",
+    en: "\"$name\" has returned to normal.",
+    zh: "“$name”已恢复正常状态。",
+    ko: "\"$name\"이 정상 상태로 돌아왔습니다.",
+    ja: "「$name」は通常状態に戻りました。",
+  );
+
+  String deviceSosTriggeredMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
+    en: "\"$name\" triggered SOS in \"$homeName\".",
+    zh: "“$name”在“$homeName”中触发了 SOS。",
+    ko: "\"$homeName\"의 \"$name\"에서 SOS가 작동했습니다.",
+    ja: "「$name」が「$homeName」で SOS を起動しました。",
+  );
+
+  String deviceSosClearedMessage(String name) => choose(
+    vi: "\"$name\" đã hết trạng thái SOS.",
+    en: "\"$name\" is no longer in SOS state.",
+    zh: "“$name”的 SOS 状态已解除。",
+    ko: "\"$name\"의 SOS 상태가 해제되었습니다.",
+    ja: "「$name」の SOS 状態は解除されました。",
+  );
+
+  String deviceTamperDetectedMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
+    en: "\"$name\" reported tampering in \"$homeName\".",
+    zh: "“$name”在“$homeName”中报告被拆卸/撬动。",
+    ko: "\"$homeName\"의 \"$name\"에서 분리/강제 개방이 감지되었습니다.",
+    ja: "「$name」が「$homeName」で取り外し/こじ開けを検知しました。",
+  );
+
+  String deviceTamperClearedMessage(String name) => choose(
+    vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
+    en: "\"$name\" tamper alert has cleared.",
+    zh: "“$name”的拆卸/撬动警报已解除。",
+    ko: "\"$name\"의 분리 경고가 해제되었습니다.",
+    ja: "「$name」の取り外し警告は解除されました。",
+  );
+
+  String deviceDoorClosedMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" đã đóng trong \"$homeName\".",
+    en: "\"$name\" closed in \"$homeName\".",
+    zh: "“$name”已在“$homeName”中关闭。",
+    ko: "\"$homeName\"의 \"$name\"이 닫혔습니다.",
+    ja: "「$name」は「$homeName」で閉じました。",
+  );
+
+  String deviceDoorOpenMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" đang mở trong \"$homeName\".",
+    en: "\"$name\" is open in \"$homeName\".",
+    zh: "“$name”在“$homeName”中处于打开状态。",
+    ko: "\"$homeName\"의 \"$name\"이 열려 있습니다.",
+    ja: "「$name」は「$homeName」で開いています。",
+  );
+
+  String deviceLowBatteryMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
+    en: "\"$name\" in \"$homeName\" has a low battery.",
+    zh: "“$homeName”中的“$name”电量低。",
+    ko: "\"$homeName\"의 \"$name\" 배터리가 부족합니다.",
+    ja: "「$homeName」の「$name」はバッテリー残量が低下しています。",
+  );
+
+  String deviceOfflineMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
+    en: "\"$name\" in \"$homeName\" went offline.",
+    zh: "“$homeName”中的“$name”已断开连接。",
+    ko: "\"$homeName\"의 \"$name\" 연결이 끊어졌습니다.",
+    ja: "「$homeName」の「$name」はオフラインになりました。",
+  );
+
+  String deviceOnlineMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
+    en: "\"$name\" in \"$homeName\" is back online.",
+    zh: "“$homeName”中的“$name”已重新连接。",
+    ko: "\"$homeName\"의 \"$name\" 연결이 복구되었습니다.",
+    ja: "「$homeName」の「$name」はオンラインに戻りました。",
+  );
+
+  String deviceHighTemperatureMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
+    en: "\"$name\" recorded a high temperature in \"$homeName\".",
+    zh: "“$name”在“$homeName”中记录到高温。",
+    ko: "\"$homeName\"의 \"$name\"에서 높은 온도가 기록되었습니다.",
+    ja: "「$name」が「$homeName」で高温を記録しました。",
+  );
+
+  String deviceHighHumidityMessage({
+    required String name,
+    required String homeName,
+  }) => choose(
+    vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
+    en: "\"$name\" recorded high humidity in \"$homeName\".",
+    zh: "“$name”在“$homeName”中记录到高湿度。",
+    ko: "\"$homeName\"의 \"$name\"에서 높은 습도가 기록되었습니다.",
+    ja: "「$name」が「$homeName」で高い湿度を記録しました。",
+  );
+
   String alarmFallbackReason(String category) {
     switch (category.trim().toLowerCase()) {
       case "sos":
@@ -1592,6 +1958,16 @@ class AppStrings {
     "Không gửi được yêu cầu xoá": "Could not send deletion request",
     "Không lưu được cài đặt": "Could not save the setting",
     "Không lấy được vị trí hiện tại": "Could not get the current location",
+    "Không thể xác nhận tài khoản hiện tại": "Could not verify the current account",
+    "Mật khẩu không đúng": "Incorrect password",
+    "Không thể xác nhận mật khẩu": "Could not verify the password",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Only the Owner or an Admin can change the alarm repeat setting",
+    "Không lưu được thời gian lặp báo động": "Could not save the alarm repeat time",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ": "Only the Owner or an Admin can change Guard mode",
+    "Không thể thay đổi chế độ nhà": "Could not change the home mode",
+    "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Guard mode is on, but the notification could not be sent",
+    "Đã bật Mode Bảo vệ thủ công": "Manual Guard mode enabled",
+    "Đã chuyển nhà về Bình thường": "Home switched back to Normal",
     "60 phút": "60 minutes",
     "30 phút": "30 minutes",
     "15 phút": "15 minutes",
@@ -2221,6 +2597,16 @@ class AppStrings {
     "Không gửi được yêu cầu xoá": "无法发送删除请求",
     "Không lưu được cài đặt": "无法保存设置",
     "Không lấy được vị trí hiện tại": "无法获取当前位置",
+    "Không thể xác nhận tài khoản hiện tại": "无法验证当前账户",
+    "Mật khẩu không đúng": "密码不正确",
+    "Không thể xác nhận mật khẩu": "无法验证密码",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "只有屋主或管理员可以更改警报重复设置",
+    "Không lưu được thời gian lặp báo động": "无法保存警报重复时间",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ": "只有屋主或管理员可以更改保护模式",
+    "Không thể thay đổi chế độ nhà": "无法更改家庭模式",
+    "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "保护模式已开启，但无法发送通知",
+    "Đã bật Mode Bảo vệ thủ công": "手动保护模式已开启",
+    "Đã chuyển nhà về Bình thường": "家庭已切换回普通模式",
     "60 phút": "60 分钟",
     "30 phút": "30 分钟",
     "15 phút": "15 分钟",
@@ -2743,6 +3129,16 @@ class AppStrings {
     "Không gửi được yêu cầu xoá": "삭제 요청을 보낼 수 없습니다",
     "Không lưu được cài đặt": "설정을 저장할 수 없습니다",
     "Không lấy được vị trí hiện tại": "현재 위치를 가져올 수 없습니다",
+    "Không thể xác nhận tài khoản hiện tại": "현재 계정을 확인할 수 없습니다",
+    "Mật khẩu không đúng": "비밀번호가 올바르지 않습니다",
+    "Không thể xác nhận mật khẩu": "비밀번호를 확인할 수 없습니다",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "소유자 또는 관리자만 경보 반복 설정을 변경할 수 있습니다",
+    "Không lưu được thời gian lặp báo động": "경보 반복 시간을 저장할 수 없습니다",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ": "소유자 또는 관리자만 보호 모드를 변경할 수 있습니다",
+    "Không thể thay đổi chế độ nhà": "집 모드를 변경할 수 없습니다",
+    "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "보호 모드는 켜졌지만 알림을 보낼 수 없습니다",
+    "Đã bật Mode Bảo vệ thủ công": "수동 보호 모드가 켜졌습니다",
+    "Đã chuyển nhà về Bình thường": "집이 Normal로 전환되었습니다",
     "60 phút": "60분",
     "30 phút": "30분",
     "15 phút": "15분",
@@ -3509,6 +3905,16 @@ class AppStrings {
     "Không gửi được yêu cầu xoá": "削除リクエストを送信できません",
     "Không lưu được cài đặt": "設定を保存できません",
     "Không lấy được vị trí hiện tại": "現在地を取得できません",
+    "Không thể xác nhận tài khoản hiện tại": "現在のアカウントを確認できませんでした",
+    "Mật khẩu không đúng": "パスワードが正しくありません",
+    "Không thể xác nhận mật khẩu": "パスワードを確認できませんでした",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "所有者または管理者のみが警報の繰り返し設定を変更できます",
+    "Không lưu được thời gian lặp báo động": "警報の繰り返し時間を保存できませんでした",
+    "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ": "所有者または管理者のみがGuardモードを変更できます",
+    "Không thể thay đổi chế độ nhà": "家のモードを変更できませんでした",
+    "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Guardモードはオンですが、通知を送信できませんでした",
+    "Đã bật Mode Bảo vệ thủ công": "手動Guardモードがオンになりました",
+    "Đã chuyển nhà về Bình thường": "家をNormalに戻しました",
     "60 phút": "60 分",
     "30 phút": "30 分",
     "15 phút": "15 分",

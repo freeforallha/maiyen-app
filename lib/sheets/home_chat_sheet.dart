@@ -411,12 +411,7 @@ void showHomeChatSheet({
                         const SizedBox(height: 6),
 
                         Text(
-                          strings.choose(
-                            vi: "$name chưa cập nhật số điện thoại trong hồ sơ.",
-                            en: "$name has not added a phone number to their profile.",
-                            zh: "$name 尚未在个人资料中添加电话号码。",
-                            ja: "$name はプロフィールに電話番号を追加していません。",
-                          ),
+                          strings.memberPhoneMissingProfileMessage(name),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 13,
@@ -840,12 +835,7 @@ void showHomeChatSheet({
                   type: "chat",
                   category: "chat",
                   severity: "info",
-                  title: strings.choose(
-                    vi: "Tin nhắn mới trong $homeName",
-                    en: "New message in $homeName",
-                    zh: "$homeName 有新消息",
-                    ja: "$homeName に新しいメッセージがあります",
-                  ),
+                  title: strings.newChatInHomeTitle(homeName),
                   message: "$senderName: $preview",
                   entityType: "chat",
                   entityId: messageId,
@@ -1092,11 +1082,10 @@ void showHomeChatSheet({
                                     child: Text(
                                       currentSearchResultIds.isEmpty
                                           ? strings.t("Không có kết quả")
-                                          : strings.choose(
-                                              vi: "${activeSearchResult + 1}/${currentSearchResultIds.length} kết quả",
-                                              en: "${activeSearchResult + 1}/${currentSearchResultIds.length} results",
-                                              zh: "${activeSearchResult + 1}/${currentSearchResultIds.length} 个结果",
-                                              ja: "${activeSearchResult + 1}/${currentSearchResultIds.length} 件の結果",
+                                          : strings.searchResultCountText(
+                                              current: activeSearchResult + 1,
+                                              total: currentSearchResultIds
+                                                  .length,
                                             ),
                                       style: TextStyle(
                                         fontSize: 12,
@@ -1928,11 +1917,10 @@ void showHomeChatSheet({
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          strings.choose(
-                                            vi: "Đang trả lời ${replyDisplayName(replyingToMessage)}",
-                                            en: "Replying to ${replyDisplayName(replyingToMessage)}",
-                                            zh: "正在回复 ${replyDisplayName(replyingToMessage)}",
-                                            ja: "${replyDisplayName(replyingToMessage)} に返信中",
+                                          strings.replyingToText(
+                                            replyDisplayName(
+                                              replyingToMessage,
+                                            ),
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,

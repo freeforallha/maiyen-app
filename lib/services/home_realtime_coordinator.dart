@@ -837,10 +837,9 @@ class HomeRealtimeCoordinator {
                 event: {
                   "type": "device_added",
                   "title": strings.t("Thiết bị mới"),
-                  "message": strings.choose(
-                    vi: "Thiết bị \"$deviceName\" đã xuất hiện trong \"$homeName\".",
-                    en: "Device \"$deviceName\" was added to \"$homeName\".",
-                    ja: "デバイス「$deviceName」が「$homeName」に追加されました。",
+                  "message": strings.deviceAddedMessage(
+                    deviceName: deviceName,
+                    homeName: homeName,
                   ),
                   "severity": "info",
                 },

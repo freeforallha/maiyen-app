@@ -110,10 +110,9 @@ class HomePairingService {
           recipientUid: ownerUid,
           type: "join_request",
           title: strings.t("Yêu cầu gia nhập nhà"),
-          message: strings.choose(
-            vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-            en: "$requesterName requested to join \"$homeName\".",
-            ja: "$requesterName が「$homeName」への参加をリクエストしています。",
+          message: strings.joinRequestMessage(
+            requesterName: requesterName,
+            homeName: homeName,
           ),
           homeName: homeName,
           category: "member",
@@ -189,10 +188,9 @@ class HomePairingService {
         recipientUid: ownerUid,
         type: "join_request",
         title: strings.t("Yêu cầu gia nhập nhà"),
-        message: strings.choose(
-          vi: "$requesterName đang xin gia nhập nhà \"$homeName\".",
-          en: "$requesterName requested to join \"$homeName\".",
-          ja: "$requesterName が「$homeName」への参加をリクエストしています。",
+        message: strings.joinRequestMessage(
+          requesterName: requesterName,
+          homeName: homeName,
         ),
         homeName: homeName,
         category: "member",
@@ -246,10 +244,9 @@ class HomePairingService {
       type: "pair_started",
       category: "device",
       title: strings.t("Đã mở chế độ thêm thiết bị"),
-      message: strings.choose(
-        vi: "Chế độ thêm thiết bị đã được mở trong nhà \"$homeName\" trong 60 giây.",
-        en: "Device pairing was enabled in \"$homeName\" for 60 seconds.",
-        ja: "「$homeName」でデバイス追加モードが 60 秒間有効になりました。",
+      message: strings.pairingEnabledMessage(
+        homeName: homeName,
+        seconds: 60,
       ),
       homeName: homeName,
     );

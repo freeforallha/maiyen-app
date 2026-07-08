@@ -519,7 +519,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeSecurityReauthStatus.currentUserUnavailable:
         showTopToast(
           context,
-          "Không thể xác nhận tài khoản hiện tại",
+          _strings.t("Không thể xác nhận tài khoản hiện tại"),
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
@@ -527,7 +527,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeSecurityReauthStatus.wrongPassword:
         showTopToast(
           context,
-          "Mật khẩu không đúng",
+          _strings.t("Mật khẩu không đúng"),
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
@@ -535,7 +535,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeSecurityReauthStatus.failed:
         showTopToast(
           context,
-          "Không thể xác nhận mật khẩu",
+          _strings.t("Không thể xác nhận mật khẩu"),
           color: Colors.red,
           icon: Icons.error_outline_rounded,
         );
@@ -567,7 +567,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeSecurityRepeatStatus.noPermission:
         showTopToast(
           context,
-          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+          _strings.t(
+            "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+          ),
           color: Colors.orange,
           icon: Icons.lock_outline_rounded,
         );
@@ -576,7 +578,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         if (mounted) {
           showTopToast(
             context,
-            "Không lưu được thời gian lặp báo động",
+            _strings.t("Không lưu được thời gian lặp báo động"),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
           );
@@ -597,9 +599,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
         showTopToast(
           context,
-          normalized == 0
-              ? "Mode Bảo vệ sẽ chỉ báo động một lần"
-              : "Mode Bảo vệ sẽ lặp báo động sau $normalized phút",
+          _strings.homeSecurityRepeatToast(normalized),
           color: SafeHomeColors.primary,
           icon: Icons.repeat_rounded,
         );
@@ -625,7 +625,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeSecurityModePlanStatus.noPermission:
         showTopToast(
           context,
-          "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+          _strings.t(
+            "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+          ),
           color: Colors.orange,
           icon: Icons.lock_outline_rounded,
         );
@@ -687,7 +689,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (saveResult.status == HomeSecurityModeSaveStatus.failed) {
       showTopToast(
         context,
-        "Không thể thay đổi chế độ nhà",
+        _strings.t("Không thể thay đổi chế độ nhà"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -724,7 +726,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         if (mounted) {
           showTopToast(
             context,
-            "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
+            _strings.t("Đã bật Bảo vệ nhưng chưa gửi được thông báo"),
             color: Colors.orange,
             icon: Icons.notifications_off_outlined,
           );
@@ -736,7 +738,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       if (mounted) {
         showTopToast(
           context,
-          "Đã bật Mode Bảo vệ thủ công",
+          _strings.t("Đã bật Mode Bảo vệ thủ công"),
           color: SafeHomeColors.danger,
           icon: Icons.shield_rounded,
         );
@@ -748,7 +750,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (mounted) {
       showTopToast(
         context,
-        "Đã chuyển nhà về Bình thường",
+        _strings.t("Đã chuyển nhà về Bình thường"),
         color: SafeHomeColors.safe,
         icon: Icons.home_rounded,
       );
@@ -1754,11 +1756,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       case HomeScannedQrStatus.joinMultiSent:
         showTopToast(
           context,
-          _strings.choose(
-            vi: "Đã gửi yêu cầu gia nhập ${result.joinRequestCount} nhà",
-            en: "Join requests sent for ${result.joinRequestCount} homes",
-            ja: "${result.joinRequestCount} 件の家への参加リクエストを送信しました",
-          ),
+          _strings.joinRequestsSentMessage(result.joinRequestCount),
           color: SafeHomeColors.safe,
           icon: Icons.check_circle_rounded,
         );
@@ -1943,11 +1941,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       uid: uid,
       type: "home_deleted",
       title: _strings.t("Đã xoá nhà"),
-      message: _strings.choose(
-        vi: "Bạn đã xoá nhà \"$deletedHomeName\".",
-        en: "You deleted \"$deletedHomeName\".",
-        ja: "「$deletedHomeName」を削除しました。",
-      ),
+      message: _strings.homeDeletedMessage(deletedHomeName),
       homeId: deletedHomeId,
       homeName: deletedHomeName,
       entityType: "home",
@@ -2028,10 +2022,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       recipientUid: targetUid,
       type: "share_request",
       title: _strings.t("Lời mời chia sẻ nhà"),
-      message: _strings.choose(
-        vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} đã mời bạn tham gia nhà \"$homeName\".",
-        en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} invited you to join \"$homeName\".",
-        ja: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} が「$homeName」への参加に招待しました。",
+      message: _strings.shareInvitationMessage(
+        actorName: userName.isNotEmpty
+            ? userName
+            : (myEmail ?? _strings.t("Một chủ nhà")),
+        homeName: homeName,
       ),
       homeName: homeName,
       category: "member",
@@ -2160,10 +2155,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       recipientUid: targetUid,
       type: "transfer_owner_request",
       title: _strings.t("Yêu cầu chuyển quyền chủ nhà"),
-      message: _strings.choose(
-        vi: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} muốn chuyển quyền chủ nhà \"$homeName\" cho bạn.",
-        en: "${userName.isNotEmpty ? userName : (myEmail ?? "A homeowner")} wants to transfer ownership of \"$homeName\" to you.",
-        ja: "${userName.isNotEmpty ? userName : (myEmail ?? _strings.t("Một chủ nhà"))} が「$homeName」の所有権をあなたに譲渡したいと考えています。",
+      message: _strings.ownershipTransferRequestMessage(
+        actorName: userName.isNotEmpty
+            ? userName
+            : (myEmail ?? _strings.t("Một chủ nhà")),
+        homeName: homeName,
       ),
       homeName: homeName,
       category: "member",
@@ -2177,10 +2173,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       uid: uid,
       type: "transfer_owner_request",
       title: _strings.t("Đã gửi yêu cầu chuyển quyền"),
-      message: _strings.choose(
-        vi: "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"$homeName\" cho $targetEmail.",
-        en: "You sent an ownership transfer request for \"$homeName\" to $targetEmail.",
-        ja: "「$homeName」の所有権譲渡リクエストを $targetEmail に送信しました。",
+      message: _strings.ownershipTransferRequestSentMessage(
+        homeName: homeName,
+        email: targetEmail,
       ),
       homeId: homeId,
       ownerUid: uid,
@@ -2263,12 +2258,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       category: "device",
       severity: "warning",
       title: _strings.t("Đang xoá thiết bị"),
-      message: _strings.choose(
-        vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
-        en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
-        zh: "SafeHome 正在从 \"$homeName\" 中移除 \"$deviceName\"。",
-        ko: "SafeHome이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
-        ja: "SafeHome は「$homeName」から「$deviceName」を削除しています。",
+      message: _strings.deviceDeleteInProgressMessage(
+        deviceName: deviceName,
+        homeName: homeName,
       ),
       homeName: homeName,
     );
@@ -2389,11 +2381,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       uid: uid,
       type: "home_created",
       title: _strings.t("Đã tạo nhà mới"),
-      message: _strings.choose(
-        vi: "Bạn đã tạo nhà \"$name\".",
-        en: "You created the home \"$name\".",
-        ja: "家「$name」を作成しました。",
-      ),
+      message: _strings.homeCreatedMessage(name),
       homeId: id,
       homeName: name,
       entityType: "home",
@@ -2496,10 +2484,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           if (!startOk || !endOk) {
             showTopToast(
               sheetContext,
-              _strings.choose(
-                vi: "Khoảng thời gian phải nằm trong khung Alarm ($alarmStart → $alarmEnd)",
-                en: "The pause period must be within the Alarm schedule ($alarmStart → $alarmEnd)",
-                ja: "一時停止期間は Alarm スケジュール（$alarmStart → $alarmEnd）内である必要があります",
+              _strings.alarmPauseWithinScheduleMessage(
+                start: alarmStart,
+                end: alarmEnd,
               ),
               color: Colors.orange,
               icon: Icons.schedule_rounded,
@@ -2709,25 +2696,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     String message;
 
-    if (nameChanged && addressChanged) {
-      message = _strings.choose(
-        vi: "$actorName đã cập nhật tên nhà thành \"$newName\" và thay đổi địa chỉ.",
-        en: "$actorName updated the home name to \"$newName\" and changed its address.",
-        ja: "$actorName が家の名前を「$newName」に更新し、住所を変更しました。",
-      );
-    } else if (nameChanged) {
-      message = _strings.choose(
-        vi: "$actorName đã đổi tên nhà thành \"$newName\".",
-        en: "$actorName renamed the home to \"$newName\".",
-        ja: "$actorName が家の名前を「$newName」に変更しました。",
-      );
-    } else {
-      message = _strings.choose(
-        vi: "$actorName đã cập nhật địa chỉ của nhà \"$newName\".",
-        en: "$actorName updated the address of \"$newName\".",
-        ja: "$actorName が「$newName」の住所を更新しました。",
-      );
-    }
+    message = _strings.homeInfoUpdatedMessage(
+      actorName: actorName,
+      newName: newName,
+      nameChanged: nameChanged,
+      addressChanged: addressChanged,
+    );
 
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
@@ -2823,10 +2797,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         category: "device",
         severity: "info",
         title: _strings.t("Đã đổi tên thiết bị"),
-        message: _strings.choose(
-          vi: "$actorName đã đổi tên thiết bị \"$oldDeviceName\" thành \"$newName\" trong nhà \"$homeName\".",
-          en: "$actorName renamed device \"$oldDeviceName\" to \"$newName\" in \"$homeName\".",
-          ja: "$actorName が「$homeName」でデバイス「$oldDeviceName」の名前を「$newName」に変更しました。",
+        message: _strings.deviceRenamedMessage(
+          actorName: actorName,
+          oldDeviceName: oldDeviceName,
+          newName: newName,
+          homeName: homeName,
         ),
         deviceId: id,
         entityType: "device",
@@ -2930,7 +2905,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             width: double.maxFinite,
             child: SingleChildScrollView(
               child: SelectableText(
-                "${_strings.choose(vi: "$passCount/${results.length} bài test đạt\n\n", en: "$passCount/${results.length} tests passed\n\n", ja: "$passCount/${results.length} 件のテストに合格\n\n")}$lines",
+                "${_strings.firebaseRulesPassedSummary(passCount: passCount, total: results.length)}$lines",
               ),
             ),
           ),
@@ -3150,10 +3125,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewAlarmScheduleText = formatAlarmSchedules();
     final overviewEnvironmentText = getHomeEnvironmentText();
     final overviewOverall = getHomeOverallStatus(overviewHome);
-    final overviewPairingCountdownText = _strings.choose(
-      vi: "Đang ghép nối: $pairingCountdown giây",
-      en: "Pairing: $pairingCountdown s",
-      ja: "ペアリング中: $pairingCountdown 秒",
+    final overviewPairingCountdownText = _strings.pairingCountdownText(
+      pairingCountdown,
     );
     final canManageSelectedHome = canManageHome();
     const bottomBarHeight = 68.0;

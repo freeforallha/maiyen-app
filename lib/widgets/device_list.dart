@@ -138,6 +138,8 @@ class DeviceList extends StatelessWidget {
     return strings.choose(
       vi: "Cần kiểm tra: ${warnings.join(", ")}",
       en: "Needs attention: ${warnings.join(", ")}",
+      zh: "需要检查: ${warnings.join(", ")}",
+      ko: "확인 필요: ${warnings.join(", ")}",
       ja: "確認が必要: ${warnings.join(", ")}",
     );
   }

@@ -74,16 +74,11 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("Cảnh báo khói")
           : strings.t("Khói đã an toàn"),
       "message": active
-            ? strings.choose(
-                vi: "\"$name\" phát hiện khói trong \"$homeName\".",
-                en: "\"$name\" detected smoke in \"$homeName\".",
-                ja: "「$name」が「$homeName」で煙を検知しました。",
-              )
-            : strings.choose(
-                vi: "\"$name\" đã trở lại trạng thái bình thường.",
-                en: "\"$name\" has returned to normal.",
-                ja: "「$name」は通常状態に戻りました。",
-              ),
+          ? strings.deviceSmokeDetectedMessage(
+              name: name,
+              homeName: homeName,
+            )
+          : strings.deviceReturnedNormalMessage(name),
       "severity": active ? "critical" : "success",
     };
   }
@@ -96,16 +91,11 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("SOS được kích hoạt")
           : strings.t("SOS đã kết thúc"),
       "message": active
-            ? strings.choose(
-                vi: "\"$name\" vừa kích hoạt SOS trong \"$homeName\".",
-                en: "\"$name\" triggered SOS in \"$homeName\".",
-                ja: "「$name」が「$homeName」で SOS を起動しました。",
-              )
-            : strings.choose(
-                vi: "\"$name\" đã hết trạng thái SOS.",
-                en: "\"$name\" is no longer in SOS state.",
-                ja: "「$name」の SOS 状態は解除されました。",
-              ),
+          ? strings.deviceSosTriggeredMessage(
+              name: name,
+              homeName: homeName,
+            )
+          : strings.deviceSosClearedMessage(name),
       "severity": active ? "critical" : "success",
     };
   }
@@ -118,16 +108,11 @@ Map<String, String>? _deviceNotificationEvent({
           ? strings.t("Thiết bị bị tháo")
           : strings.t("Tamper bình thường"),
       "message": active
-            ? strings.choose(
-                vi: "\"$name\" báo bị tháo/cạy trong \"$homeName\".",
-                en: "\"$name\" reported tampering in \"$homeName\".",
-                ja: "「$name」が「$homeName」で取り外し/こじ開けを検知しました。",
-              )
-            : strings.choose(
-                vi: "\"$name\" đã hết cảnh báo tháo/cạy.",
-                en: "\"$name\" tamper alert has cleared.",
-                ja: "「$name」の取り外し警告は解除されました。",
-              ),
+          ? strings.deviceTamperDetectedMessage(
+              name: name,
+              homeName: homeName,
+            )
+          : strings.deviceTamperClearedMessage(name),
       "severity": active ? "critical" : "success",
     };
   }
@@ -138,15 +123,13 @@ Map<String, String>? _deviceNotificationEvent({
       "type": "device_contact",
       "title": closed ? strings.t("Cửa đã đóng") : strings.t("Cửa đang mở"),
       "message": closed
-          ? strings.choose(
-              vi: "\"$name\" đã đóng trong \"$homeName\".",
-              en: "\"$name\" closed in \"$homeName\".",
-              ja: "「$name」は「$homeName」で閉じました。",
+          ? strings.deviceDoorClosedMessage(
+              name: name,
+              homeName: homeName,
             )
-          : strings.choose(
-              vi: "\"$name\" đang mở trong \"$homeName\".",
-              en: "\"$name\" is open in \"$homeName\".",
-              ja: "「$name」は「$homeName」で開いています。",
+          : strings.deviceDoorOpenMessage(
+              name: name,
+              homeName: homeName,
             ),
       "severity": closed ? "success" : "warning",
     };
@@ -156,10 +139,9 @@ Map<String, String>? _deviceNotificationEvent({
     return {
       "type": "device_battery_low",
       "title": strings.t("Pin yếu"),
-      "message": strings.choose(
-        vi: "\"$name\" trong \"$homeName\" đang yếu pin.",
-        en: "\"$name\" in \"$homeName\" has a low battery.",
-        ja: "「$homeName」の「$name」はバッテリー残量が低下しています。",
+      "message": strings.deviceLowBatteryMessage(
+        name: name,
+        homeName: homeName,
       ),
       "severity": "warning",
     };
@@ -171,10 +153,9 @@ Map<String, String>? _deviceNotificationEvent({
       return {
         "type": "device_connection",
         "title": strings.t("Thiết bị offline"),
-        "message": strings.choose(
-          vi: "\"$name\" trong \"$homeName\" đã mất kết nối.",
-          en: "\"$name\" in \"$homeName\" went offline.",
-          ja: "「$homeName」の「$name」はオフラインになりました。",
+        "message": strings.deviceOfflineMessage(
+          name: name,
+          homeName: homeName,
         ),
         "severity": "warning",
       };
@@ -184,10 +165,9 @@ Map<String, String>? _deviceNotificationEvent({
       return {
         "type": "device_connection",
         "title": strings.t("Thiết bị online"),
-        "message": strings.choose(
-          vi: "\"$name\" trong \"$homeName\" đã kết nối trở lại.",
-          en: "\"$name\" in \"$homeName\" is back online.",
-          ja: "「$homeName」の「$name」はオンラインに戻りました。",
+        "message": strings.deviceOnlineMessage(
+          name: name,
+          homeName: homeName,
         ),
         "severity": "success",
       };
@@ -199,10 +179,9 @@ Map<String, String>? _deviceNotificationEvent({
     return {
       "type": "device_environment",
       "title": strings.t("Nhiệt độ cao"),
-      "message": strings.choose(
-        vi: "\"$name\" ghi nhận nhiệt độ cao trong \"$homeName\".",
-        en: "\"$name\" recorded a high temperature in \"$homeName\".",
-        ja: "「$name」が「$homeName」で高温を記録しました。",
+      "message": strings.deviceHighTemperatureMessage(
+        name: name,
+        homeName: homeName,
       ),
       "severity": "warning",
     };
@@ -212,10 +191,9 @@ Map<String, String>? _deviceNotificationEvent({
     return {
       "type": "device_environment",
       "title": strings.t("Độ ẩm cao"),
-      "message": strings.choose(
-        vi: "\"$name\" ghi nhận độ ẩm cao trong \"$homeName\".",
-        en: "\"$name\" recorded high humidity in \"$homeName\".",
-        ja: "「$name」が「$homeName」で高い湿度を記録しました。",
+      "message": strings.deviceHighHumidityMessage(
+        name: name,
+        homeName: homeName,
       ),
       "severity": "warning",
     };

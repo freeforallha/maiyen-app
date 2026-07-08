@@ -466,12 +466,14 @@ Future<bool?> showShareRequestSheet({
                                       vi: "$targetEmail\nXin gia nhập \"$homeName\"",
                                       en: "$targetEmail\nRequests to join \"$homeName\"",
                                       zh: "$targetEmail\n申请加入“$homeName”",
+                                      ko: "$targetEmail\n\"$homeName\" 가입 요청",
                                       ja: "$targetEmail\n「$homeName」への参加をリクエストしています",
                                     )
                                   : strings.choose(
                                       vi: "Xin gia nhập \"$homeName\"",
                                       en: "Requests to join \"$homeName\"",
                                       zh: "申请加入“$homeName”",
+                                      ko: "\"$homeName\" 가입 요청",
                                       ja: "「$homeName」への参加をリクエストしています",
                                     );
                             } else if (isTransferOwner) {
@@ -480,6 +482,7 @@ Future<bool?> showShareRequestSheet({
                                 vi: "Bạn được mời nhận quyền nhà \"$homeName\"",
                                 en: "You were invited to receive ownership of \"$homeName\"",
                                 zh: "你被邀请接收“$homeName”的屋主权限",
+                                ko: "\"$homeName\"의 소유권을 받도록 초대되었습니다",
                                 ja: "「$homeName」の所有権を受け取るよう招待されています",
                               );
                             } else {
@@ -495,12 +498,14 @@ Future<bool?> showShareRequestSheet({
                                       vi: "$ownerEmail\nMời bạn gia nhập \"$homeName\"",
                                       en: "$ownerEmail\nInvites you to join \"$homeName\"",
                                       zh: "$ownerEmail\n邀请你加入“$homeName”",
+                                      ko: "$ownerEmail\n\"$homeName\"에 초대했습니다",
                                       ja: "$ownerEmail\n「$homeName」への参加に招待しています",
                                     )
                                   : strings.choose(
                                       vi: "Mời bạn gia nhập \"$homeName\"",
                                       en: "Invites you to join \"$homeName\"",
                                       zh: "邀请你加入“$homeName”",
+                                      ko: "\"$homeName\"에 초대했습니다",
                                       ja: "「$homeName」への参加に招待しています",
                                     );
                             }

@@ -27,6 +27,7 @@ void showHomeEventSheet({
         vi: "${diff.inMinutes} phút trước",
         en: "${diff.inMinutes} minutes ago",
         zh: "${diff.inMinutes} 分钟前",
+        ko: "${diff.inMinutes}분 전",
         ja: "${diff.inMinutes} 分前",
       );
     }
@@ -35,6 +36,7 @@ void showHomeEventSheet({
         vi: "${diff.inHours} giờ trước",
         en: "${diff.inHours} hours ago",
         zh: "${diff.inHours} 小时前",
+        ko: "${diff.inHours}시간 전",
         ja: "${diff.inHours} 時間前",
       );
     }
@@ -42,6 +44,7 @@ void showHomeEventSheet({
       vi: "${diff.inDays} ngày trước",
       en: "${diff.inDays} days ago",
       zh: "${diff.inDays} 天前",
+      ko: "${diff.inDays}일 전",
       ja: "${diff.inDays} 日前",
     );
   }
