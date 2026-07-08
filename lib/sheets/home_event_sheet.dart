@@ -23,30 +23,12 @@ void showHomeEventSheet({
 
     if (diff.inMinutes < 1) return strings.t("Vừa xong");
     if (diff.inHours < 1) {
-      return strings.choose(
-        vi: "${diff.inMinutes} phút trước",
-        en: "${diff.inMinutes} minutes ago",
-        zh: "${diff.inMinutes} 分钟前",
-        ko: "${diff.inMinutes}분 전",
-        ja: "${diff.inMinutes} 分前",
-      );
+      return strings.minutesAgo(diff.inMinutes);
     }
     if (diff.inDays < 1) {
-      return strings.choose(
-        vi: "${diff.inHours} giờ trước",
-        en: "${diff.inHours} hours ago",
-        zh: "${diff.inHours} 小时前",
-        ko: "${diff.inHours}시간 전",
-        ja: "${diff.inHours} 時間前",
-      );
+      return strings.hoursAgo(diff.inHours);
     }
-    return strings.choose(
-      vi: "${diff.inDays} ngày trước",
-      en: "${diff.inDays} days ago",
-      zh: "${diff.inDays} 天前",
-      ko: "${diff.inDays}일 전",
-      ja: "${diff.inDays} 日前",
-    );
+    return strings.daysAgo(diff.inDays);
   }
 
   String cleanHomeName(String? value) {
@@ -304,9 +286,7 @@ void showHomeEventSheet({
                                   backgroundColor: Colors.red,
                                 ),
                                 onPressed: () => Navigator.pop(context, true),
-                                child: Text(
-                                  strings.t("Xoá"),
-                                ),
+                                child: Text(strings.t("Xoá")),
                               ),
                             ],
                           ),
@@ -377,7 +357,8 @@ void showHomeEventSheet({
                         final homeName = displayHomeName(item);
                         final timeText = formatTime(item["time"]);
                         final messageText = displayMessage(item, homeName);
-                        final metaText = homeName.isNotEmpty &&
+                        final metaText =
+                            homeName.isNotEmpty &&
                                 !messageText.contains(homeName)
                             ? "$homeName • $timeText"
                             : timeText;
@@ -405,9 +386,7 @@ void showHomeEventSheet({
                                     : FontWeight.w800,
                               ),
                             ),
-                            subtitle: Text(
-                              subtitleText,
-                            ),
+                            subtitle: Text(subtitleText),
                             isThreeLine: true,
                             onTap: () async {
                               final id = item["id"]?.toString() ?? "";

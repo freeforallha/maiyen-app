@@ -203,15 +203,22 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
 
                     final rawText = item["text"]?.toString() ?? "";
                     final type = item["type"]?.toString() ?? "";
-                    final text = strings.notificationMessage(
-                      {
-                        ...item,
-                        "type": type,
-                        "message": item["message"] ?? rawText,
-                        "title": item["title"] ?? rawText,
-                      },
+                    final notificationItem = {
+                      ...item,
+                      "type": type,
+                      "message": item["message"] ?? rawText,
+                      "title": item["title"] ?? rawText,
+                    };
+                    final titleText = strings.notificationTitle(
+                      notificationItem,
                       homeName: item["homeName"]?.toString() ?? "",
                     );
+                    final text = strings.notificationMessage({
+                      ...item,
+                      "type": type,
+                      "message": item["message"] ?? rawText,
+                      "title": item["title"] ?? rawText,
+                    }, homeName: item["homeName"]?.toString() ?? "");
 
                     final lower = "$rawText $text".toLowerCase();
 
@@ -256,14 +263,14 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
                         child: Icon(icon, color: color),
                       ),
                       title: Text(
-                        text,
+                        titleText,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: isSafe ? Colors.black : Colors.red.shade300,
                         ),
                       ),
                       subtitle: Text(
-                        formatTime(dt),
+                        "$text\n${formatTime(dt)}",
                         style: TextStyle(
                           color: isSafe ? Colors.grey : Colors.red.shade200,
                         ),

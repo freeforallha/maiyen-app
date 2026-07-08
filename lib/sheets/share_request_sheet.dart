@@ -221,7 +221,7 @@ Future<bool?> showShareRequestSheet({
                     ? targetName.trim()
                     : targetEmail.trim().isNotEmpty
                     ? targetEmail.trim()
-                    : "Một thành viên";
+                    : strings.t("Một thành viên");
 
                 await HomeNotificationService.notifyHome(
                   ownerUid: ownerUid,
@@ -229,12 +229,23 @@ Future<bool?> showShareRequestSheet({
                   type: "member_join",
                   category: "member",
                   severity: "success",
-                  title: "Thành viên mới",
-                  message: "$memberName đã gia nhập nhà \"$homeName\".",
+                  title: strings.memberJoinedHomeTitle(),
+                  message: strings.memberJoinedHomeMessage(
+                    memberName: memberName,
+                    homeName: homeName,
+                  ),
                   actorUid: targetUid,
                   entityType: "member",
                   entityId: targetUid,
                   homeName: homeName,
+                  data: {
+                    "type": "member_join",
+                    "memberName": memberName,
+                    "homeName": homeName,
+                    "actorUid": targetUid,
+                    "entityType": "member",
+                    "entityId": targetUid,
+                  },
                 );
               } catch (_) {}
             }
@@ -462,29 +473,14 @@ Future<bool?> showShareRequestSheet({
                               subtitle =
                                   targetEmail.isNotEmpty &&
                                       targetName.isNotEmpty
-                                  ? strings.choose(
-                                      vi: "$targetEmail\nXin gia nhập \"$homeName\"",
-                                      en: "$targetEmail\nRequests to join \"$homeName\"",
-                                      zh: "$targetEmail\n申请加入“$homeName”",
-                                      ko: "$targetEmail\n\"$homeName\" 가입 요청",
-                                      ja: "$targetEmail\n「$homeName」への参加をリクエストしています",
+                                  ? strings.joinHomeRequestTitle(
+                                      targetEmail,
+                                      homeName,
                                     )
-                                  : strings.choose(
-                                      vi: "Xin gia nhập \"$homeName\"",
-                                      en: "Requests to join \"$homeName\"",
-                                      zh: "申请加入“$homeName”",
-                                      ko: "\"$homeName\" 가입 요청",
-                                      ja: "「$homeName」への参加をリクエストしています",
-                                    );
+                                  : strings.joinHomeRequestSubtitle(homeName);
                             } else if (isTransferOwner) {
                               title = strings.t("Nhận quyền chủ nhà");
-                              subtitle = strings.choose(
-                                vi: "Bạn được mời nhận quyền nhà \"$homeName\"",
-                                en: "You were invited to receive ownership of \"$homeName\"",
-                                zh: "你被邀请接收“$homeName”的屋主权限",
-                                ko: "\"$homeName\"의 소유권을 받도록 초대되었습니다",
-                                ja: "「$homeName」の所有権を受け取るよう招待されています",
-                              );
+                              subtitle = strings.ownershipInviteTitle(homeName);
                             } else {
                               title = ownerName.isNotEmpty
                                   ? ownerName
@@ -494,20 +490,11 @@ Future<bool?> showShareRequestSheet({
 
                               subtitle =
                                   ownerEmail.isNotEmpty && ownerName.isNotEmpty
-                                  ? strings.choose(
-                                      vi: "$ownerEmail\nMời bạn gia nhập \"$homeName\"",
-                                      en: "$ownerEmail\nInvites you to join \"$homeName\"",
-                                      zh: "$ownerEmail\n邀请你加入“$homeName”",
-                                      ko: "$ownerEmail\n\"$homeName\"에 초대했습니다",
-                                      ja: "$ownerEmail\n「$homeName」への参加に招待しています",
+                                  ? strings.homeInviteTitle(
+                                      ownerEmail,
+                                      homeName,
                                     )
-                                  : strings.choose(
-                                      vi: "Mời bạn gia nhập \"$homeName\"",
-                                      en: "Invites you to join \"$homeName\"",
-                                      zh: "邀请你加入“$homeName”",
-                                      ko: "\"$homeName\"에 초대했습니다",
-                                      ja: "「$homeName」への参加に招待しています",
-                                    );
+                                  : strings.homeInviteSubtitle(homeName);
                             }
 
                             return Container(
@@ -598,9 +585,7 @@ Future<bool?> showShareRequestSheet({
                                       Expanded(
                                         child: OutlinedButton(
                                           onPressed: () => denyOne(requestKey),
-                                          child: Text(
-                                            strings.t("Từ chối"),
-                                          ),
+                                          child: Text(strings.t("Từ chối")),
                                         ),
                                       ),
                                       const SizedBox(width: 10),
@@ -623,8 +608,12 @@ Future<bool?> showShareRequestSheet({
                                               showTopToast(
                                                 context,
                                                 isJoinRequest
-                                                    ? strings.t("Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.")
-                                                    : strings.t("Không thể chấp nhận lời mời. Vui lòng thử lại."),
+                                                    ? strings.t(
+                                                        "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
+                                                      )
+                                                    : strings.t(
+                                                        "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                      ),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
                                               );

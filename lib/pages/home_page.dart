@@ -674,7 +674,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final homeName = getHomeDisplayName(homeId);
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
-        : FirebaseAuth.instance.currentUser?.email?.trim() ?? "Một thành viên";
+        : FirebaseAuth.instance.currentUser?.email?.trim() ??
+              _strings.t("Một thành viên");
 
     final saveResult = await _homeAlarmSecurityService.setSecurityMode(
       ownerUid: ownerUid,
@@ -1267,6 +1268,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         entityId: deviceId,
         homeName: homeName,
         data: {
+          "type": event["type"] ?? "device_event",
+          "event": event["event"] ?? event["type"] ?? "device_event",
+          "closed": event["closed"],
+          "availability": event["availability"],
+          "condition": event["condition"],
           "homeName": homeName,
           "deviceName": deviceName,
           "deviceType": device["type"]?.toString() ?? "",
@@ -1946,6 +1952,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       homeName: deletedHomeName,
       entityType: "home",
       entityId: deletedHomeId,
+      data: {"type": "home_deleted", "homeName": deletedHomeName},
     );
 
     homeOrder.remove(deletedHomeId);
@@ -2263,6 +2270,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homeName: homeName,
       ),
       homeName: homeName,
+      deviceId: id,
+      entityType: "device",
+      entityId: id,
+      data: {
+        "type": "device_delete_requested",
+        "deviceName": deviceName,
+        "homeName": homeName,
+      },
     );
   }
 
@@ -2380,12 +2395,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "home_created",
-      title: _strings.t("Đã tạo nhà mới"),
+      title: _strings.t("Đã tạo nhà"),
       message: _strings.homeCreatedMessage(name),
       homeId: id,
       homeName: name,
       entityType: "home",
       entityId: id,
+      data: {"type": "home_created", "homeName": name},
     );
   }
 
@@ -2716,11 +2732,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       homeName: newName,
       includeActor: true,
       data: {
+        "type": "home_updated",
         "actorName": actorName,
         "oldName": oldName,
         "newName": newName,
         "oldAddress": oldAddress,
         "newAddress": newAddress,
+        "homeName": newName,
       },
     );
   }
@@ -2809,9 +2827,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homeName: homeName,
         includeActor: true,
         data: {
+          "type": "device_renamed",
           "actorName": actorName,
+          "deviceName": newName,
+          "oldDeviceName": oldDeviceName,
+          "newDeviceName": newName,
           "oldName": oldDeviceName,
           "newName": newName,
+          "homeName": homeName,
         },
       );
     } catch (e) {
@@ -3095,7 +3118,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         homes[selectedHome]?["name"]?.toString() ?? _strings.t("Nhà");
     final overviewAlarmPauseText = (() {
       if (alarmPauseToday.isEmpty) {
-        return "Tắt";
+        return _strings.t("Tắt");
       }
 
       final now = DateTime.now();
@@ -3104,14 +3127,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
 
       if (alarmPauseToday["date"] != today) {
-        return "Tắt";
+        return _strings.t("Tắt");
       }
 
       final startText = alarmPauseToday["start"]?.toString().trim() ?? "";
       final endText = alarmPauseToday["end"]?.toString().trim() ?? "";
 
       if (startText.isEmpty || endText.isEmpty) {
-        return "Tắt";
+        return _strings.t("Tắt");
       }
 
       return "$startText → $endText";

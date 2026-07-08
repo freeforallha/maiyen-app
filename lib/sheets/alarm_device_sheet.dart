@@ -21,15 +21,7 @@ int _normalizeAlarmRepeatMinutes(Object? rawValue) {
 
 String _alarmRepeatLabel(Object? rawValue, AppStrings strings) {
   final value = _normalizeAlarmRepeatMinutes(rawValue);
-  return value == 0
-      ? strings.t("Không lặp lại")
-      : strings.choose(
-          vi: "$value phút",
-          en: "$value minutes",
-          zh: "$value 分钟",
-          ko: "$value분",
-          ja: "$value 分",
-        );
+  return value == 0 ? strings.t("Không lặp lại") : strings.minuteText(value);
 }
 
 class AlarmDeviceSheet extends StatefulWidget {
@@ -253,7 +245,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
+          AppStrings.of(
+            context,
+          ).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -336,7 +330,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     if (mode == "home" && !widget.canManageHome) {
       showTopToast(
         context,
-        AppStrings.of(context).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
+        AppStrings.of(
+          context,
+        ).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
         color: SafeHomeColors.danger,
         icon: Icons.lock_rounded,
       );
@@ -411,12 +407,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 if (mounted) {
                   showTopToast(
                     context,
-                    strings.choose(
-                      vi: "Đã áp dụng Alarm cho ${securityEntries.length} thiết bị an ninh",
-                      en: "Alarm applied to ${securityEntries.length} security devices",
-                      zh: "Alarm 已应用到 ${securityEntries.length} 个安全设备",
-                      ko: "보안 기기 ${securityEntries.length}대에 Alarm을 적용했습니다",
-                      ja: "${securityEntries.length} 台のセキュリティデバイスに Alarm を適用しました",
+                    strings.alarmAppliedToSecurityDevicesText(
+                      securityEntries.length,
                     ),
                     color: SafeHomeColors.success,
                     icon: Icons.check_circle_rounded,
@@ -497,13 +489,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                strings.choose(
-                                  vi: "Áp dụng cùng một lịch cho ${securityEntries.length} thiết bị an ninh",
-                                  en: "Apply the same schedule to ${securityEntries.length} security devices",
-                                  zh: "将同一日程应用到 ${securityEntries.length} 个安全设备",
-                                  ko: "보안 기기 ${securityEntries.length}대에 동일한 일정을 적용합니다",
-                                  ja: "${securityEntries.length} 台のセキュリティデバイスに同じスケジュールを適用します",
-                                ),
+                                strings
+                                    .applySameAlarmScheduleToSecurityDevicesText(
+                                      securityEntries.length,
+                                    ),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textSecondary,
                                   fontSize: 12,
@@ -766,11 +755,17 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   Column(
                     children: [
                       Row(
-                        children: suggestions.take(3).map(suggestionChip).toList(),
+                        children: suggestions
+                            .take(3)
+                            .map(suggestionChip)
+                            .toList(),
                       ),
                       const SizedBox(height: 8),
                       Row(
-                        children: suggestions.skip(3).map(suggestionChip).toList(),
+                        children: suggestions
+                            .skip(3)
+                            .map(suggestionChip)
+                            .toList(),
                       ),
                     ],
                   ),
@@ -781,10 +776,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   onPressed: () => Navigator.pop(dialogContext),
                   child: Text(strings.t("Huỷ")),
                 ),
-                ElevatedButton(
-                  onPressed: submit,
-                  child: Text(strings.t("OK")),
-                ),
+                ElevatedButton(onPressed: submit, child: Text(strings.t("OK"))),
               ],
             );
           },
@@ -893,7 +885,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             if (mode == "home" && isSharedUser) ...[
               const SizedBox(height: 10),
               Text(
-                strings.t("Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm."),
+                strings.t(
+                  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
+                ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -1149,21 +1143,15 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                   ),
                   DropdownMenuItem(
                     value: 15,
-                    child: Text(
-                      strings.t("15 phút"),
-                    ),
+                    child: Text(strings.t("15 phút")),
                   ),
                   DropdownMenuItem(
                     value: 30,
-                    child: Text(
-                      strings.t("30 phút"),
-                    ),
+                    child: Text(strings.t("30 phút")),
                   ),
                   DropdownMenuItem(
                     value: 60,
-                    child: Text(
-                      strings.t("60 phút"),
-                    ),
+                    child: Text(strings.t("60 phút")),
                   ),
                 ],
                 onChanged: enabled

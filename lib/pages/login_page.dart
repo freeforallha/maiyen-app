@@ -57,9 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       final user = credentialResult.user;
 
       if (user == null) {
-        throw Exception(
-          strings.t("Không thể đăng nhập bằng Google"),
-        );
+        throw Exception(strings.t("Không thể đăng nhập bằng Google"));
       }
 
       // Làm mới token trước khi AuthGate đọc Realtime Database.
@@ -317,6 +315,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  String _languageSubtitle(String code) {
+    switch (code) {
+      case "vi":
+        return "Vietnamese";
+      case "en":
+        return "English";
+      case "zh":
+        return "Chinese Simplified";
+      case "ko":
+        return "Korean";
+      case "ja":
+        return "Japanese";
+      case "de":
+        return "German";
+      case "ru":
+        return "Russian";
+      default:
+        return code;
+    }
+  }
+
   void _showLanguageSheet() {
     final strings = AppStrings.of(context);
 
@@ -384,11 +403,12 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                option(code: "vi", title: "Tiếng Việt", subtitle: "Vietnamese"),
-                option(code: "en", title: "English", subtitle: "Tiếng Anh"),
-                option(code: "zh", title: "中文", subtitle: "Chinese Simplified"),
-                option(code: "ko", title: "한국어", subtitle: "Korean"),
-                option(code: "ja", title: "日本語", subtitle: "Japanese"),
+                for (final code in AppLanguageController.supportedCodes)
+                  option(
+                    code: code,
+                    title: AppLanguageController.languageLabels[code] ?? code,
+                    subtitle: _languageSubtitle(code),
+                  ),
               ],
             ),
           ),

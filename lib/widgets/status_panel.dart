@@ -8,6 +8,7 @@ import '../helpers/home_helper.dart';
 import '../pages/home/home_data_helpers.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
+
 class StatusPanel extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -186,15 +187,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final hasDevices = overall["hasDevices"] == true;
 
     if (!hasDevices) {
-      return [
-        strings.choose(
-          vi: "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
-          en: "Add your first SafeHome device to start monitoring this home.",
-          zh: "请先添加第一个 SafeHome 设备以开始监控家庭。",
-          ko: "집 상태를 확인하려면 먼저 SafeHome 기기를 추가하세요.",
-          ja: "家の見守りを始めるには、まず SafeHome デバイスを追加してください。",
-        ),
-      ];
+      return [strings.statusAddFirstDeviceSuggestion()];
     }
 
     final suggestions = <String>[];
@@ -259,56 +252,36 @@ class _StatusPanelState extends State<StatusPanel> {
     final rawSafeText = rawSafeSummary.join("\n").toLowerCase();
     final allRawText = "$rawDangerText\n$rawWarningText\n$rawSafeText";
 
-    final hasEmergencyIssue = containsAny(
-      rawDangerText,
-      const [
-        "sos",
-        "có khói",
-        "rò rỉ gas",
-        "phát hiện khí co",
-        "phát hiện ngập nước",
-        "nhiệt độ nguy hiểm",
-      ],
-    );
+    final hasEmergencyIssue = containsAny(rawDangerText, const [
+      "sos",
+      "có khói",
+      "rò rỉ gas",
+      "phát hiện khí co",
+      "phát hiện ngập nước",
+      "nhiệt độ nguy hiểm",
+    ]);
 
-    final hasOpenIssue = containsAny(
-      "$rawDangerText\n$rawWarningText",
-      const [
-        "đang mở",
-        "khóa đang mở",
-      ],
-    );
+    final hasOpenIssue = containsAny("$rawDangerText\n$rawWarningText", const [
+      "đang mở",
+      "khóa đang mở",
+    ]);
 
-    final hasArmedOpenIssue = containsAny(
-      rawDangerText,
-      const [
-        "đang mở khi nhà ở chế độ bảo vệ",
-        "khóa đang mở khi nhà ở chế độ bảo vệ",
-        "đang mở trong giờ alarm",
-        "khóa đang mở trong giờ alarm",
-      ],
-    );
+    final hasArmedOpenIssue = containsAny(rawDangerText, const [
+      "đang mở khi nhà ở chế độ bảo vệ",
+      "khóa đang mở khi nhà ở chế độ bảo vệ",
+      "đang mở trong giờ alarm",
+      "khóa đang mở trong giờ alarm",
+    ]);
 
-    final hasUnknownMemberLocation = containsAny(
-      rawWarningText,
-      const [
-        "chưa xác định vị trí",
-      ],
-    );
+    final hasUnknownMemberLocation = containsAny(rawWarningText, const [
+      "chưa xác định vị trí",
+    ]);
 
-    final hasDisconnectedDevice = containsAny(
-      rawWarningText,
-      const [
-        "mất kết nối",
-      ],
-    );
+    final hasDisconnectedDevice = containsAny(rawWarningText, const [
+      "mất kết nối",
+    ]);
 
-    final hasLowBatteryDevice = containsAny(
-      rawWarningText,
-      const [
-        "pin yếu",
-      ],
-    );
+    final hasLowBatteryDevice = containsAny(rawWarningText, const ["pin yếu"]);
 
     final noMemberInside = RegExp(
       r"thành viên trong nhà:\s*0/",
@@ -318,8 +291,7 @@ class _StatusPanelState extends State<StatusPanel> {
       r"thành viên trong nhà:\s*[1-9][0-9]*/",
     ).hasMatch(allRawText);
 
-    final isArmed =
-        normalizeSecurityMode(liveHome["securityMode"]) == "armed";
+    final isArmed = normalizeSecurityMode(liveHome["securityMode"]) == "armed";
 
     final devices = safeMap(liveHome["devices"]);
     final schedules = safeMap(liveHome["schedules"]);
@@ -331,127 +303,47 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final hasAlarmSchedule =
         homeAlarm["enabled"] == true ||
-            hasEnabledScheduleValue(schedules["alarms"]) ||
-            hasEnabledDeviceAlarm(devices);
+        hasEnabledScheduleValue(schedules["alarms"]) ||
+        hasEnabledDeviceAlarm(devices);
 
     if (hasEmergencyIssue) {
-      addSuggestion(
-        strings.choose(
-          vi: "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.",
-          en: "Check emergency alerts first, then contact household members if needed.",
-          zh: "请先检查紧急警报，必要时联系家中成员。",
-          ko: "긴급 경보를 먼저 확인하고, 필요하면 가족 구성원에게 연락하세요.",
-          ja: "まず緊急アラートを確認し、必要なら家のメンバーに連絡してください。",
-        ),
-      );
+      addSuggestion(strings.statusEmergencyActionSuggestion());
     }
 
     if (hasOpenIssue && noMemberInside) {
-      addSuggestion(
-        strings.choose(
-          vi: "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.",
-          en: "No household member is home but a door or lock is open. Check it now.",
-          zh: "家中没有成员，但门或锁处于打开状态，请立即检查。",
-          ko: "집에 사람이 없는데 문이나 잠금장치가 열려 있습니다. 바로 확인하세요.",
-          ja: "家に誰もいないのにドアまたは鍵が開いています。すぐ確認してください。",
-        ),
-      );
+      addSuggestion(strings.statusOpenHomeEmptySuggestion());
     }
 
     if (hasArmedOpenIssue) {
-      addSuggestion(
-        strings.choose(
-          vi: "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.",
-          en: "Check the open door or lock before keeping this home in Guard mode.",
-          zh: "在保持防护模式前，请先检查打开的门或锁。",
-          ko: "보호 모드를 유지하기 전에 열린 문이나 잠금장치를 먼저 확인하세요.",
-          ja: "保護モードを維持する前に、開いているドアや鍵を確認してください。",
-        ),
-      );
+      addSuggestion(strings.statusArmedOpenSuggestion());
     }
 
     if (isArmed && hasMemberInside) {
-      addSuggestion(
-        strings.choose(
-          vi: "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.",
-          en: "Someone may still be home. If so, switch back to Normal mode.",
-          zh: "可能仍有人在家；如果属实，建议切回普通模式。",
-          ko: "아직 집에 사람이 있을 수 있습니다. 그렇다면 일반 모드로 전환하세요.",
-          ja: "まだ家に人がいる可能性があります。その場合は通常モードに戻してください。",
-        ),
-      );
+      addSuggestion(strings.statusMemberInsideWhileArmedSuggestion());
     }
 
     if (hasUnknownMemberLocation) {
-      addSuggestion(
-        strings.choose(
-          vi: "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.",
-          en: "Some members have unknown location. Ask them to open the app or check location permission.",
-          zh: "有成员位置未知，请提醒他们打开应用或检查定位权限。",
-          ko: "위치를 알 수 없는 구성원이 있습니다. 앱을 열거나 위치 권한을 확인하도록 알려주세요.",
-          ja: "位置が不明なメンバーがいます。アプリを開くか位置情報権限を確認してもらってください。",
-        ),
-      );
+      addSuggestion(strings.statusUnknownLocationSuggestion());
     }
 
     if (hasDisconnectedDevice) {
-      addSuggestion(
-        strings.choose(
-          vi: "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.",
-          en: "A device is disconnected. Check its battery, power, or placement.",
-          zh: "有设备已断开连接，请检查电池、电源或摆放位置。",
-          ko: "연결이 끊긴 기기가 있습니다. 배터리, 전원 또는 설치 위치를 확인하세요.",
-          ja: "接続が切れているデバイスがあります。電池・電源・設置場所を確認してください。",
-        ),
-      );
+      addSuggestion(strings.statusDisconnectedDeviceSuggestion());
     }
 
     if (hasLowBatteryDevice) {
-      addSuggestion(
-        strings.choose(
-          vi: "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.",
-          en: "A device has low battery. Replace it soon to avoid missed alerts.",
-          zh: "有设备电量低，建议尽快更换电池以避免漏报。",
-          ko: "배터리가 부족한 기기가 있습니다. 경보 누락을 막기 위해 빨리 교체하세요.",
-          ja: "電池残量が少ないデバイスがあります。アラートを逃さないよう早めに交換してください。",
-        ),
-      );
+      addSuggestion(strings.statusLowBatterySuggestion());
     }
 
     if (!hasReminderSchedule) {
-      addSuggestion(
-        strings.choose(
-          vi: "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
-          en: "Reminder is not set. Create a schedule to check your home regularly.",
-          zh: "尚未设置提醒，建议创建定期检查家庭的提醒。",
-          ko: "리마인더가 설정되어 있지 않습니다. 집을 정기적으로 확인할 일정을 만들어 보세요.",
-          ja: "リマインダーが未設定です。定期的に家を確認する予定を作成してください。",
-        ),
-      );
+      addSuggestion(strings.statusReminderMissingSuggestion());
     }
 
     if (!hasAlarmSchedule) {
-      addSuggestion(
-        strings.choose(
-          vi: "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.",
-          en: "Alarm schedule is not set. Enable protection for times you are usually away.",
-          zh: "尚未设置警报时间，建议在经常不在家的时段启用防护。",
-          ko: "알람 일정이 설정되어 있지 않습니다. 자주 집을 비우는 시간대에 보호를 켜세요.",
-          ja: "アラーム予定が未設定です。普段不在の時間帯に保護を有効にしてください。",
-        ),
-      );
+      addSuggestion(strings.statusAlarmMissingSuggestion());
     }
 
     if (suggestions.isEmpty) {
-      addSuggestion(
-        strings.choose(
-          vi: "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.",
-          en: "No immediate action is needed. Keep monitoring this home.",
-          zh: "目前没有需要立即处理的事项，请继续关注家庭状态。",
-          ko: "즉시 처리할 일은 없습니다. 집 상태를 계속 확인하세요.",
-          ja: "すぐ対応が必要な項目はありません。家の状態を引き続き確認してください。",
-        ),
-      );
+      addSuggestion(strings.statusNoImmediateActionSuggestion());
     }
 
     return suggestions;
@@ -467,15 +359,7 @@ class _StatusPanelState extends State<StatusPanel> {
     var repeatSaving = false;
 
     String repeatText(int minutes) {
-      return minutes == 0
-          ? _strings.t("Không lặp lại")
-          : _strings.choose(
-              vi: "Lặp sau $minutes phút",
-              en: "Repeat after $minutes minutes",
-              zh: "$minutes 分钟后重复",
-              ko: "$minutes분 후 반복",
-              ja: "$minutes 分後に繰り返し",
-            );
+      return _strings.alarmRepeatAfterText(minutes);
     }
 
     showModalBottomSheet<void>(
@@ -529,19 +413,11 @@ class _StatusPanelState extends State<StatusPanel> {
                       icon: Icons.shield_rounded,
                       title: _strings.t("Bảo vệ"),
                       subtitle: isArmed
-                          ? _strings.choose(
-                              vi: "Đang dùng • ${repeatText(localRepeatMinutes)}",
-                              en: "Active • ${repeatText(localRepeatMinutes)}",
-                              zh: "使用中 • ${repeatText(localRepeatMinutes)}",
-                              ko: "사용 중 • ${repeatText(localRepeatMinutes)}",
-                              ja: "有効 • ${repeatText(localRepeatMinutes)}",
+                          ? _strings.securityModeActiveText(
+                              repeatText(localRepeatMinutes),
                             )
-                          : _strings.choose(
-                              vi: "Giám sát an ninh • ${repeatText(localRepeatMinutes)}",
-                              en: "Security monitoring • ${repeatText(localRepeatMinutes)}",
-                              zh: "安全监测 • ${repeatText(localRepeatMinutes)}",
-                              ko: "보안 모니터링 • ${repeatText(localRepeatMinutes)}",
-                              ja: "セキュリティ監視 • ${repeatText(localRepeatMinutes)}",
+                          : _strings.securityModeMonitoringText(
+                              repeatText(localRepeatMinutes),
                             ),
                       color: SafeHomeColors.danger,
                       onTap: () {
@@ -583,7 +459,9 @@ class _StatusPanelState extends State<StatusPanel> {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            _strings.t("Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà."),
+                            _strings.t(
+                              "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
+                            ),
                             style: const TextStyle(
                               fontSize: 11.5,
                               height: 1.35,
@@ -653,13 +531,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                     child: Text(
                                       minutes == 0
                                           ? _strings.t("Không lặp lại")
-                                          : _strings.choose(
-                                              vi: "$minutes phút",
-                                              en: "$minutes minutes",
-                                              zh: "$minutes 分钟",
-                                              ko: "$minutes분",
-                                              ja: "$minutes 分",
-                                            ),
+                                          : _strings.minuteText(minutes),
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -971,7 +843,6 @@ class _StatusPanelState extends State<StatusPanel> {
     AppStrings strings,
   ) {
     final liveOverall = getHomeOverallStatus(liveHome);
-    final liveEvents = safeMap(liveHome["events"]);
 
     final rawDangerIssues = List<String>.from(
       liveOverall["dangerIssues"] ?? const [],
@@ -1014,13 +885,7 @@ class _StatusPanelState extends State<StatusPanel> {
       strings: strings,
     );
     final overviewItems = <String>[
-      strings.choose(
-        vi: "Gia đình: $liveSecurityMode",
-        en: "Home mode: $liveSecurityMode",
-        zh: "家庭模式：$liveSecurityMode",
-        ko: "집 모드: $liveSecurityMode",
-        ja: "家のモード: $liveSecurityMode",
-      ),
+      strings.familyModeText(liveSecurityMode),
       if (environmentLine.isNotEmpty) environmentLine,
       ...safeSummary,
     ];
@@ -1047,13 +912,7 @@ class _StatusPanelState extends State<StatusPanel> {
           const SizedBox(height: 12),
         ],
         _summarySection(
-          title: strings.choose(
-            vi: "Gợi ý xử lý",
-            en: "Suggested actions",
-            zh: "处理建议",
-            ko: "처리 제안",
-            ja: "対応の提案",
-          ),
+          title: strings.actionSuggestionTitle(),
           icon: Icons.tips_and_updates_rounded,
           color: SafeHomeColors.info,
           items: actionSuggestions,
@@ -1194,7 +1053,9 @@ class _StatusPanelState extends State<StatusPanel> {
     final manualSecurityMode =
         widget.securityMode == "armed" && widget.securityModeSource == "manual";
 
-    final manualSecurityModeText = _strings.t("Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường");
+    final manualSecurityModeText = _strings.t(
+      "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
+    );
 
     final normalFirstLine = allLines.isNotEmpty
         ? allLines.first
@@ -1258,33 +1119,15 @@ class _StatusPanelState extends State<StatusPanel> {
     if (noData) {
       subtitle = "";
     } else if (issues.isNotEmpty) {
-      subtitle = _strings.choose(
-        vi: "Phát hiện ${issues.length} vấn đề cần xử lý",
-        en: "${issues.length} issues need attention",
-        zh: "发现 ${issues.length} 个问题需要处理",
-        ko: "${issues.length}개 문제를 처리해야 합니다",
-        ja: "${issues.length} 件の問題に対応が必要です",
-      );
+      subtitle = _strings.detectedIssuesCountText(issues.length);
     } else if (smokeCount > 0) {
       subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo khói");
     } else if (sosCount > 0) {
       subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo SOS");
     } else if (openCount > 0) {
-      subtitle = _strings.choose(
-        vi: "Hôm nay các cửa đã được sử dụng $openCount lần",
-        en: "Doors were used $openCount times today",
-        zh: "今天门被使用了 $openCount 次",
-        ko: "오늘 문이 $openCount번 사용되었습니다",
-        ja: "今日はドアが $openCount 回使用されました",
-      );
+      subtitle = _strings.doorsUsedTodayText(openCount);
     } else if (recentEvents.isNotEmpty) {
-      subtitle = _strings.choose(
-        vi: "Đã ghi nhận ${recentEvents.length} hoạt động gần đây",
-        en: "${recentEvents.length} recent activities recorded",
-        zh: "已记录 ${recentEvents.length} 条近期活动",
-        ko: "최근 활동 ${recentEvents.length}개가 기록되었습니다",
-        ja: "最近のアクティビティが ${recentEvents.length} 件記録されました",
-      );
+      subtitle = _strings.recentActivitiesCountText(recentEvents.length);
     } else {
       subtitle = _strings.t("Ngôi nhà đang hoạt động ổn định");
     }

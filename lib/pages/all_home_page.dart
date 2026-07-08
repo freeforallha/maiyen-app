@@ -35,13 +35,7 @@ class _AllHomePageState extends State<AllHomePage> {
   String selectedHomeCountText([int? count]) {
     final value = count ?? selectedHomes.length;
 
-    return _strings.choose(
-      vi: "$value nhà đã chọn",
-      en: "$value homes selected",
-      zh: "已选择 $value 个家庭",
-      ko: "선택한 집 $value개",
-      ja: "$value 件の家を選択済み",
-    );
+    return _strings.selectedHomesCountText(value);
   }
 
   List<String> buildAllHomeSummaries() {
@@ -77,65 +71,27 @@ class _AllHomePageState extends State<AllHomePage> {
 
     if (dangerCount > 0) {
       summaries.add(
-        _strings.choose(
-          vi:
-              "🚨 $dangerCount nhà không an toàn"
-              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
-          en:
-              "🚨 $dangerCount unsafe homes"
-              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
-          zh:
-              "🚨 $dangerCount 个家庭不安全"
-              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
-          ko:
-              "🚨 안전하지 않은 집 $dangerCount개"
-              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
-          ja:
-              "🚨 安全ではない家 $dangerCount 件"
-              "${dangerReasons.isNotEmpty ? " • ${dangerReasons.first}" : ""}",
+        _strings.allHomeDangerCountText(
+          dangerCount,
+          reason: dangerReasons.isNotEmpty ? dangerReasons.first : "",
         ),
       );
     }
 
     if (warningCount > 0) {
       summaries.add(
-        _strings.choose(
-          vi:
-              "⚠️ $warningCount nhà cần chú ý"
-              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
-          en:
-              "⚠️ $warningCount homes need attention"
-              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
-          zh:
-              "⚠️ $warningCount 个家庭需要注意"
-              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
-          ko:
-              "⚠️ 주의가 필요한 집 $warningCount개"
-              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
-          ja:
-              "⚠️ 確認が必要な家 $warningCount 件"
-              "${warningReasons.isNotEmpty ? " • ${warningReasons.first}" : ""}",
+        _strings.allHomeWarningCountText(
+          warningCount,
+          reason: warningReasons.isNotEmpty ? warningReasons.first : "",
         ),
       );
     }
 
     if (safeCount > 0) {
-      summaries.add(
-        _strings.choose(
-          vi: "✅ $safeCount nhà an toàn",
-          en: "✅ $safeCount safe homes",
-          zh: "✅ $safeCount 个家庭安全",
-          ko: "✅ 안전한 집 $safeCount개",
-          ja: "✅ 安全な家 $safeCount 件",
-        ),
-      );
+      summaries.add(_strings.allHomeSafeCountText(safeCount));
     }
 
-    return summaries.isEmpty
-        ? [
-            _strings.t("🏡 Chưa có nhà nào"),
-          ]
-        : summaries;
+    return summaries.isEmpty ? [_strings.t("🏡 Chưa có nhà nào")] : summaries;
   }
 
   void showAllHomeSummarySheet() {
@@ -336,13 +292,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          _strings.choose(
-                            vi: "${homes.length} nhà đang được theo dõi",
-                            en: "${homes.length} homes monitored",
-                            zh: "正在监测 ${homes.length} 个家庭",
-                            ko: "집 ${homes.length}개를 모니터링 중입니다",
-                            ja: "${homes.length} 件の家を監視中",
-                          ),
+                          _strings.monitoredHomesCountText(homes.length),
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.grey.shade600,
@@ -611,9 +561,7 @@ class _AllHomePageState extends State<AllHomePage> {
           initialValue: oldName,
           autofocus: true,
           textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-            hintText: _strings.t("VD: Mr Chung"),
-          ),
+          decoration: InputDecoration(hintText: _strings.t("VD: Mr Chung")),
           onChanged: (value) {
             inputName = value.trim();
           },
@@ -1017,11 +965,17 @@ class _AllHomePageState extends State<AllHomePage> {
                     Column(
                       children: [
                         Row(
-                          children: suggestions.take(3).map(suggestionChip).toList(),
+                          children: suggestions
+                              .take(3)
+                              .map(suggestionChip)
+                              .toList(),
                         ),
                         const SizedBox(height: 8),
                         Row(
-                          children: suggestions.skip(3).map(suggestionChip).toList(),
+                          children: suggestions
+                              .skip(3)
+                              .map(suggestionChip)
+                              .toList(),
                         ),
                       ],
                     ),
@@ -1049,13 +1003,7 @@ class _AllHomePageState extends State<AllHomePage> {
         return _strings.t("Không lặp lại");
       }
 
-      return _strings.choose(
-      vi: "$minutes phút",
-      en: "$minutes minutes",
-      zh: "$minutes 分钟",
-      ko: "$minutes분",
-      ja: "$minutes 分",
-    );
+      return _strings.minuteText(minutes);
     }
 
     Future<int?> inputRepeatMinutes(int initial) async {
@@ -1068,9 +1016,7 @@ class _AllHomePageState extends State<AllHomePage> {
           return StatefulBuilder(
             builder: (context, setDialogState) {
               return AlertDialog(
-                title: Text(
-                  _strings.t("Thời gian lặp lại Alarm"),
-                ),
+                title: Text(_strings.t("Thời gian lặp lại Alarm")),
                 content: InputDecorator(
                   decoration: InputDecoration(
                     labelText: _strings.t("Lặp lại khi sự cố vẫn còn"),
@@ -1175,8 +1121,12 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
         content: Text(
           isReminderAction
-              ? _strings.t("Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.")
-              : _strings.t("Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi."),
+              ? _strings.t(
+                  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+                )
+              : _strings.t(
+                  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+                ),
         ),
         actions: [
           TextButton(
@@ -1322,44 +1272,12 @@ class _AllHomePageState extends State<AllHomePage> {
         title: Text(_strings.t("Cài đặt hoàn tất")),
         content: Text(
           action == "reminder"
-              ? _strings.choose(
-                  vi:
-                      "Đã cài Reminder cho $updatedHomes nhà."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-                  en:
-                      "Reminder was set for $updatedHomes homes."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-                  zh:
-                      "已为 $updatedHomes 个家庭设置 Reminder。"
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
-                  ko:
-                      "$updatedHomes개 집에 Reminder를 설정했습니다."
-                      "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
-                  ja:
-                      "$updatedHomes 件の家に Reminder を設定しました。"
-                      "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
-                )
-              : _strings.choose(
-                  vi:
-                      "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà.\n"
-                      "Thời gian lặp lại: ${repeatLabel(selectedAlarmRepeatMinutes)}."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
-                  en:
-                      "Alarm was set for $updatedDevices devices across $updatedHomes homes.\n"
-                      "Repeat time: ${repeatLabel(selectedAlarmRepeatMinutes)}."
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
-                  zh:
-                      "已为 $updatedHomes 个家庭中的 $updatedDevices 台设备设置 Alarm。\n"
-                      "重复时间：${repeatLabel(selectedAlarmRepeatMinutes)}。"
-                      "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
-                  ko:
-                      "$updatedHomes개 집의 기기 $updatedDevices대에 Alarm을 설정했습니다.\n"
-                      "반복 시간: ${repeatLabel(selectedAlarmRepeatMinutes)}."
-                      "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
-                  ja:
-                      "$updatedHomes 件の家にある $updatedDevices 台のデバイスに Alarm を設定しました。\n"
-                      "繰り返し時間: ${repeatLabel(selectedAlarmRepeatMinutes)}。"
-                      "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
+              ? _strings.allHomeReminderAppliedText(updatedHomes, skippedHomes)
+              : _strings.allHomeAlarmAppliedText(
+                  updatedDevices: updatedDevices,
+                  updatedHomes: updatedHomes,
+                  repeatLabel: repeatLabel(selectedAlarmRepeatMinutes),
+                  skippedHomes: skippedHomes,
                 ),
         ),
         actions: [
@@ -1384,7 +1302,9 @@ class _AllHomePageState extends State<AllHomePage> {
     String message = "";
 
     if (sharedCount > 0 && ownCount > 0) {
-      message = _strings.t("Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.");
+      message = _strings.t(
+        "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.",
+      );
     } else if (sharedCount > 0) {
       message = _strings.t("Bạn sẽ rời khỏi các nhà được chia sẻ.");
     } else {
@@ -1531,11 +1451,13 @@ class _AllHomePageState extends State<AllHomePage> {
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(26),
+                    ),
                   ),
                   child: SingleChildScrollView(
                     keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -1924,7 +1846,9 @@ class _AllHomePageState extends State<AllHomePage> {
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (sheetContext) {
-                              final bottomInset = MediaQuery.of(sheetContext).viewInsets.bottom;
+                              final bottomInset = MediaQuery.of(
+                                sheetContext,
+                              ).viewInsets.bottom;
                               final keyboardOpen = bottomInset > 0;
                               final qrSize = keyboardOpen ? 140.0 : 190.0;
 
@@ -1935,9 +1859,18 @@ class _AllHomePageState extends State<AllHomePage> {
                                   padding: EdgeInsets.only(bottom: bottomInset),
                                   child: Container(
                                     constraints: BoxConstraints(
-                                      maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
+                                      maxHeight:
+                                          MediaQuery.of(
+                                            sheetContext,
+                                          ).size.height *
+                                          0.92,
                                     ),
-                                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      20,
+                                      20,
+                                      20,
+                                      20,
+                                    ),
                                     decoration: const BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.vertical(
@@ -1945,7 +1878,9 @@ class _AllHomePageState extends State<AllHomePage> {
                                       ),
                                     ),
                                     child: SingleChildScrollView(
-                                      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                      keyboardDismissBehavior:
+                                          ScrollViewKeyboardDismissBehavior
+                                              .onDrag,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -1954,7 +1889,8 @@ class _AllHomePageState extends State<AllHomePage> {
                                             height: 5,
                                             decoration: BoxDecoration(
                                               color: Colors.grey.shade300,
-                                              borderRadius: BorderRadius.circular(20),
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
                                             ),
                                           ),
                                           const SizedBox(height: 18),
@@ -1990,20 +1926,29 @@ class _AllHomePageState extends State<AllHomePage> {
                                           ),
                                           const SizedBox(height: 18),
                                           TextFormField(
-                                            keyboardType: TextInputType.emailAddress,
-                                            textInputAction: TextInputAction.done,
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            textInputAction:
+                                                TextInputAction.done,
                                             decoration: InputDecoration(
-                                              prefixIcon: const Icon(Icons.email_rounded),
-                                              labelText: _strings.t("Email người nhận"),
+                                              prefixIcon: const Icon(
+                                                Icons.email_rounded,
+                                              ),
+                                              labelText: _strings.t(
+                                                "Email người nhận",
+                                              ),
                                               filled: true,
                                               fillColor: Colors.grey.shade100,
                                               border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(16),
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
                                                 borderSide: BorderSide.none,
                                               ),
                                             ),
                                             onChanged: (value) {
-                                              targetEmailText = value.trim().toLowerCase();
+                                              targetEmailText = value
+                                                  .trim()
+                                                  .toLowerCase();
                                             },
                                             onFieldSubmitted: (_) {
                                               Navigator.pop(
@@ -2016,8 +1961,12 @@ class _AllHomePageState extends State<AllHomePage> {
                                           SizedBox(
                                             width: double.infinity,
                                             child: ElevatedButton.icon(
-                                              icon: const Icon(Icons.share_rounded),
-                                              label: Text(_strings.t("Chia sẻ")),
+                                              icon: const Icon(
+                                                Icons.share_rounded,
+                                              ),
+                                              label: Text(
+                                                _strings.t("Chia sẻ"),
+                                              ),
                                               onPressed: () {
                                                 Navigator.pop(
                                                   sheetContext,
@@ -2119,15 +2068,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             builder: (_) => AlertDialog(
                               title: Text(_strings.t("Chia sẻ hoàn tất")),
                               content: Text(
-                                skipped > 0
-                                    ? _strings.choose(
-                                        vi: "Đã chia sẻ các nhà bạn có quyền.\n\n$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
-                                        en: "Homes you manage were shared.\n\n$skipped homes were skipped because you do not have sharing permission.",
-                                        zh: "已共享你有权限管理的家庭。\n\n$skipped 个家庭因没有共享权限而被跳过。",
-                                        ko: "관리 권한이 있는 집을 공유했습니다.\n\n공유 권한이 없어 $skipped개의 집은 건너뛰었습니다.",
-                                        ja: "管理権限のある家を共有しました。\n\n共有権限がないため $skipped 件の家をスキップしました。",
-                                      )
-                                    : _strings.t("Đã chia sẻ nhà thành công."),
+                                _strings.allHomeShareResultText(skipped),
                               ),
                               actions: [
                                 TextButton(

@@ -109,13 +109,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
           debugShowCheckedModeBanner: false,
           theme: SafeHomeTheme.light,
           locale: appLanguageController.locale,
-          supportedLocales: const [
-            Locale("vi"),
-            Locale("en"),
-            Locale("zh", "CN"),
-            Locale("ko", "KR"),
-            Locale("ja", "JP"),
-          ],
+          supportedLocales: AppLanguageController.supportedLocales,
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -322,9 +316,7 @@ class _AuthGateState extends State<AuthGate> {
                   child: ElevatedButton.icon(
                     onPressed: _retryProfileLoad,
                     icon: const Icon(Icons.refresh_rounded),
-                    label: Text(
-                      strings.t("Thử lại"),
-                    ),
+                    label: Text(strings.t("Thử lại")),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -478,35 +470,31 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
                 color: SafeHomeColors.primary,
               ),
               const SizedBox(width: 9),
-              Expanded(
-                child: Text(
-                  strings.t("Cho phép vị trí luôn luôn"),
-                ),
-              ),
+              Expanded(child: Text(strings.t("Cho phép vị trí luôn luôn"))),
             ],
           ),
           content: Text(
             currentlyWhileUsing
-                ? strings.t("SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.")
-                : strings.t("SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền."),
+                ? strings.t(
+                    "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+                  )
+                : strings.t(
+                    "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+                  ),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop(false);
               },
-              child: Text(
-                strings.t("Để sau"),
-              ),
+              child: Text(strings.t("Để sau")),
             ),
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(dialogContext).pop(true);
               },
               icon: const Icon(Icons.settings_rounded),
-              label: Text(
-                strings.t("Mở cài đặt"),
-              ),
+              label: Text(strings.t("Mở cài đặt")),
             ),
           ],
         );

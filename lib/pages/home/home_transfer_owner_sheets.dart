@@ -41,7 +41,7 @@ Future<String?> showTransferOwnerEmailSheet({
 
                 return SingleChildScrollView(
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -67,9 +67,9 @@ Future<String?> showTransferOwnerEmailSheet({
                           ),
                           suffixIcon: emailOk
                               ? IconButton(
-                            icon: const Icon(Icons.send_rounded),
-                            onPressed: submit,
-                          )
+                                  icon: const Icon(Icons.send_rounded),
+                                  onPressed: submit,
+                                )
                               : null,
                         ),
                         onChanged: (value) {
@@ -129,13 +129,7 @@ Future<bool> showTransferOwnerConfirmSheet({
               const SizedBox(height: 12),
 
               Text(
-                strings.choose(
-                  vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
-                  en: "Transfer home ownership to:\n$targetEmail?",
-                  zh: "确定要将家庭所有权转移给：\n$targetEmail？",
-                  ko: "집 소유권을 다음 사람에게 이전하시겠습니까?\n$targetEmail",
-                  ja: "家の所有権を次の相手に移転しますか？\n$targetEmail",
-                ),
+                strings.confirmTransferOwnerText(targetEmail),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 14,

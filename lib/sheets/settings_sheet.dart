@@ -5,6 +5,48 @@ import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 
+String _languageSubtitle(String code) {
+  switch (code) {
+    case "vi":
+      return "Vietnamese";
+    case "en":
+      return "English";
+    case "zh":
+      return "Chinese Simplified";
+    case "ko":
+      return "Korean";
+    case "ja":
+      return "Japanese";
+    case "de":
+      return "German";
+    case "ru":
+      return "Russian";
+    default:
+      return code;
+  }
+}
+
+String _languageBadge(String code) {
+  switch (code) {
+    case "vi":
+      return "VI";
+    case "en":
+      return "EN";
+    case "zh":
+      return "中";
+    case "ko":
+      return "KO";
+    case "ja":
+      return "日";
+    case "de":
+      return "DE";
+    case "ru":
+      return "RU";
+    default:
+      return code.toUpperCase();
+  }
+}
+
 Future<void> _showLanguageSheet(BuildContext context) async {
   final strings = AppStrings.of(context);
 
@@ -53,16 +95,8 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                         : SafeHomeColors.background,
                     borderRadius: BorderRadius.circular(14),
                   ),
-                    child: Text(
-                      code == "vi"
-                          ? "VI"
-                          : code == "zh"
-                          ? "中"
-                          : code == "ko"
-                          ? "KO"
-                          : code == "ja"
-                          ? "日"
-                          : "EN",
+                  child: Text(
+                    _languageBadge(code),
                     style: TextStyle(
                       color: selected
                           ? SafeHomeColors.primary
@@ -152,36 +186,13 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 ],
               ),
               const SizedBox(height: 15),
-              languageOption(
-                sheetContext: sheetContext,
-                code: "vi",
-                title: "Tiếng Việt",
-                subtitle: "Vietnamese",
-              ),
-              languageOption(
-                sheetContext: sheetContext,
-                code: "en",
-                title: "English",
-                subtitle: "Tiếng Anh",
-              ),
-              languageOption(
-                sheetContext: sheetContext,
-                code: "zh",
-                title: "中文",
-                subtitle: "Chinese Simplified",
-              ),
-              languageOption(
-                sheetContext: sheetContext,
-                code: "ko",
-                title: "한국어",
-                subtitle: "Korean",
-              ),
-              languageOption(
-                sheetContext: sheetContext,
-                code: "ja",
-                title: "日本語",
-                subtitle: "Japanese",
-              ),
+              for (final code in AppLanguageController.supportedCodes)
+                languageOption(
+                  sheetContext: sheetContext,
+                  code: code,
+                  title: AppLanguageController.languageLabels[code] ?? code,
+                  subtitle: _languageSubtitle(code),
+                ),
             ],
           ),
         ),

@@ -70,14 +70,12 @@ Map<String, String>? _deviceNotificationEvent({
     final active = current["smoke"] == true;
     return {
       "type": active ? "device_smoke" : "device_smoke_clear",
+      "event": active ? "smoke_detected" : "smoke_cleared",
       "title": active
           ? strings.t("Cảnh báo khói")
           : strings.t("Khói đã an toàn"),
       "message": active
-          ? strings.deviceSmokeDetectedMessage(
-              name: name,
-              homeName: homeName,
-            )
+          ? strings.deviceSmokeDetectedMessage(name: name, homeName: homeName)
           : strings.deviceReturnedNormalMessage(name),
       "severity": active ? "critical" : "success",
     };
@@ -87,14 +85,12 @@ Map<String, String>? _deviceNotificationEvent({
     final active = current["sosActive"] == true;
     return {
       "type": active ? "device_sos" : "device_sos_clear",
+      "event": active ? "sos_triggered" : "sos_cleared",
       "title": active
           ? strings.t("SOS được kích hoạt")
           : strings.t("SOS đã kết thúc"),
       "message": active
-          ? strings.deviceSosTriggeredMessage(
-              name: name,
-              homeName: homeName,
-            )
+          ? strings.deviceSosTriggeredMessage(name: name, homeName: homeName)
           : strings.deviceSosClearedMessage(name),
       "severity": active ? "critical" : "success",
     };
@@ -104,14 +100,12 @@ Map<String, String>? _deviceNotificationEvent({
     final active = current["tamper"] == true;
     return {
       "type": active ? "device_tamper" : "device_tamper_clear",
+      "event": active ? "tamper_detected" : "tamper_cleared",
       "title": active
           ? strings.t("Thiết bị bị tháo")
           : strings.t("Tamper bình thường"),
       "message": active
-          ? strings.deviceTamperDetectedMessage(
-              name: name,
-              homeName: homeName,
-            )
+          ? strings.deviceTamperDetectedMessage(name: name, homeName: homeName)
           : strings.deviceTamperClearedMessage(name),
       "severity": active ? "critical" : "success",
     };
@@ -121,16 +115,12 @@ Map<String, String>? _deviceNotificationEvent({
     final closed = current["contact"] == true;
     return {
       "type": "device_contact",
+      "event": closed ? "door_closed" : "door_open",
+      "closed": closed.toString(),
       "title": closed ? strings.t("Cửa đã đóng") : strings.t("Cửa đang mở"),
       "message": closed
-          ? strings.deviceDoorClosedMessage(
-              name: name,
-              homeName: homeName,
-            )
-          : strings.deviceDoorOpenMessage(
-              name: name,
-              homeName: homeName,
-            ),
+          ? strings.deviceDoorClosedMessage(name: name, homeName: homeName)
+          : strings.deviceDoorOpenMessage(name: name, homeName: homeName),
       "severity": closed ? "success" : "warning",
     };
   }
@@ -138,6 +128,7 @@ Map<String, String>? _deviceNotificationEvent({
   if (previous["batteryLow"] != true && current["batteryLow"] == true) {
     return {
       "type": "device_battery_low",
+      "event": "battery_low",
       "title": strings.t("Pin yếu"),
       "message": strings.deviceLowBatteryMessage(
         name: name,
@@ -152,11 +143,10 @@ Map<String, String>? _deviceNotificationEvent({
     if (availability == "offline") {
       return {
         "type": "device_connection",
+        "event": "device_offline",
+        "availability": "offline",
         "title": strings.t("Thiết bị offline"),
-        "message": strings.deviceOfflineMessage(
-          name: name,
-          homeName: homeName,
-        ),
+        "message": strings.deviceOfflineMessage(name: name, homeName: homeName),
         "severity": "warning",
       };
     }
@@ -164,11 +154,10 @@ Map<String, String>? _deviceNotificationEvent({
     if (availability == "online") {
       return {
         "type": "device_connection",
+        "event": "device_online",
+        "availability": "online",
         "title": strings.t("Thiết bị online"),
-        "message": strings.deviceOnlineMessage(
-          name: name,
-          homeName: homeName,
-        ),
+        "message": strings.deviceOnlineMessage(name: name, homeName: homeName),
         "severity": "success",
       };
     }
@@ -178,6 +167,8 @@ Map<String, String>? _deviceNotificationEvent({
       current["temperatureHigh"] == true) {
     return {
       "type": "device_environment",
+      "event": "high_temperature",
+      "condition": "temperature_high",
       "title": strings.t("Nhiệt độ cao"),
       "message": strings.deviceHighTemperatureMessage(
         name: name,
@@ -190,6 +181,8 @@ Map<String, String>? _deviceNotificationEvent({
   if (previous["humidityHigh"] != true && current["humidityHigh"] == true) {
     return {
       "type": "device_environment",
+      "event": "high_humidity",
+      "condition": "humidity_high",
       "title": strings.t("Độ ẩm cao"),
       "message": strings.deviceHighHumidityMessage(
         name: name,

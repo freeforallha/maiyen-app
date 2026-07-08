@@ -51,7 +51,7 @@ Future<bool?> showShareListSheet({
       ? directoryEmail
       : rawEmail.isNotEmpty
       ? rawEmail
-      : "Chủ nhà";
+      : strings.t("Chủ nhà");
 
   final directoryName = ownerDirectory["name"]?.toString().trim() ?? "";
 
@@ -492,7 +492,9 @@ Future<bool?> showShareListSheet({
                                           !canDeleteTarget) {
                                         showTopToast(
                                           sheetContext,
-                                          strings.t("Bạn không có quyền xoá thành viên này"),
+                                          strings.t(
+                                            "Bạn không có quyền xoá thành viên này",
+                                          ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -504,7 +506,9 @@ Future<bool?> showShareListSheet({
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
-                                          strings.t("Chỉ chủ nhà mới được thay đổi vai trò"),
+                                          strings.t(
+                                            "Chỉ chủ nhà mới được thay đổi vai trò",
+                                          ),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -517,18 +521,19 @@ Future<bool?> showShareListSheet({
                                             title: Text(
                                               targetUid == myUid
                                                   ? strings.t("Rời khỏi nhà?")
-                                                  : strings.t("Xoá thành viên?"),
+                                                  : strings.t(
+                                                      "Xoá thành viên?",
+                                                    ),
                                             ),
                                             content: Text(
                                               targetUid == myUid
-                                                  ? strings.t("Bạn chắc chắn muốn rời khỏi nhà này?")
-                                                  : strings.choose(
-                                                      vi: "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
-                                                      en: "Are you sure you want to remove $name from this home?",
-                                                      zh: "确定要将 $name 从此家庭中移除吗？",
-                                                      ko: "정말 이 집에서 $name 님을 삭제하시겠습니까?",
-                                                      ja: "$name をこの家から削除してもよろしいですか？",
-                                                    ),
+                                                  ? strings.t(
+                                                      "Bạn chắc chắn muốn rời khỏi nhà này?",
+                                                    )
+                                                  : strings
+                                                        .confirmRemoveMemberFromHomeText(
+                                                          name,
+                                                        ),
                                             ),
                                             actions: [
                                               TextButton(
@@ -611,7 +616,7 @@ Future<bool?> showShareListSheet({
                                           ? ownerName.trim()
                                           : ownerEmail.trim().isNotEmpty
                                           ? ownerEmail.trim()
-                                          : "Chủ nhà";
+                                          : strings.t("Chủ nhà");
 
                                       await db.ref().update({
                                         "${FirebasePaths.sharedMember(homeId, targetUid)}/role":

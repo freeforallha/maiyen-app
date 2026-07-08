@@ -3,7 +3,36 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLanguageController extends ChangeNotifier {
   static const String _storageKey = "safehome_language_code";
-  static const Set<String> supportedCodes = {"vi", "en", "zh", "ko", "ja"};
+  static const Set<String> supportedCodes = {
+    "vi",
+    "en",
+    "zh",
+    "ko",
+    "ja",
+    "de",
+    "ru",
+    "fr",
+  };
+  static const List<Locale> supportedLocales = [
+    Locale("vi"),
+    Locale("en"),
+    Locale("zh", "CN"),
+    Locale("ko", "KR"),
+    Locale("ja", "JP"),
+    Locale("de", "DE"),
+    Locale("ru", "RU"),
+    Locale("fr", "FR"),
+  ];
+  static const Map<String, String> languageLabels = {
+    "vi": "Tiếng Việt",
+    "en": "English",
+    "zh": "中文",
+    "ko": "한국어",
+    "ja": "日本語",
+    "de": "Deutsch",
+    "ru": "Русский",
+    "fr": "Français",
+  };
 
   Locale _locale = const Locale("vi");
   bool _loaded = false;
@@ -14,6 +43,9 @@ class AppLanguageController extends ChangeNotifier {
   bool get isChinese => languageCode == "zh";
   bool get isKorean => languageCode == "ko";
   bool get isJapanese => languageCode == "ja";
+  bool get isGerman => languageCode == "de";
+  bool get isRussian => languageCode == "ru";
+  bool get isFrench => languageCode == "fr";
 
   Locale _localeForCode(String code) {
     if (code == "zh") {
@@ -26,6 +58,18 @@ class AppLanguageController extends ChangeNotifier {
 
     if (code == "ja") {
       return const Locale("ja", "JP");
+    }
+
+    if (code == "de") {
+      return const Locale("de", "DE");
+    }
+
+    if (code == "ru") {
+      return const Locale("ru", "RU");
+    }
+
+    if (code == "fr") {
+      return const Locale("fr", "FR");
     }
 
     return Locale(code);

@@ -135,13 +135,7 @@ class DeviceList extends StatelessWidget {
       return strings.t("Kết nối cần kiểm tra");
     }
 
-    return strings.choose(
-      vi: "Cần kiểm tra: ${warnings.join(", ")}",
-      en: "Needs attention: ${warnings.join(", ")}",
-      zh: "需要检查: ${warnings.join(", ")}",
-      ko: "확인 필요: ${warnings.join(", ")}",
-      ja: "確認が必要: ${warnings.join(", ")}",
-    );
+    return strings.deviceWarningsText(warnings);
   }
 
   Color getConnectionColor(String status) {
@@ -170,13 +164,7 @@ class DeviceList extends StatelessWidget {
 
     if (diff.inMinutes < 1) return strings.t("Vừa xong");
     if (diff.inHours < 1) {
-      return strings.choose(
-        vi: "${diff.inMinutes} phút trước",
-        en: "${diff.inMinutes} minutes ago",
-        zh: "${diff.inMinutes} 分钟前",
-        ko: "${diff.inMinutes}분 전",
-        ja: "${diff.inMinutes} 分前",
-      );
+      return strings.minutesAgo(diff.inMinutes);
     }
 
     if (diff.inHours < 24) {
@@ -184,43 +172,19 @@ class DeviceList extends StatelessWidget {
       final m = diff.inMinutes % 60;
 
       if (m == 0) {
-        return strings.choose(
-          vi: "${h}h trước",
-          en: "${h}h ago",
-          zh: "$h 小时前",
-          ko: "$h시간 전",
-          ja: "$h 時間前",
-        );
+        return strings.hoursAgoShort(h);
       }
 
-      return strings.choose(
-        vi: "${h}h$m' trước",
-        en: "${h}h ${m}m ago",
-        zh: "$h 小时 $m 分钟前",
-        ko: "$h시간 $m분 전",
-        ja: "$h 時間 $m 分前",
-      );
+      return strings.hoursMinutesAgoShort(h, m);
     }
 
     if (diff.inDays < 30) {
-      return strings.choose(
-        vi: "${diff.inDays} ngày trước",
-        en: "${diff.inDays} days ago",
-        zh: "${diff.inDays} 天前",
-        ko: "${diff.inDays}일 전",
-        ja: "${diff.inDays} 日前",
-      );
+      return strings.daysAgo(diff.inDays);
     }
 
     final months = (diff.inDays / 30).floor();
 
-    return strings.choose(
-      vi: "$months tháng trước",
-      en: "$months months ago",
-      zh: "$months 个月前",
-      ko: "$months개월 전",
-      ja: "$months か月前",
-    );
+    return strings.monthsAgo(months);
   }
 
   bool isSosActive(Map<String, dynamic> d) {
@@ -488,13 +452,7 @@ class DeviceList extends StatelessWidget {
       return strings.t("Chưa có cập nhật");
     }
 
-    return strings.choose(
-      vi: "Cập nhật $value",
-      en: "Updated $value",
-      zh: "$value更新",
-      ko: "$value에 업데이트됨",
-      ja: "$valueに更新",
-    );
+    return strings.updatedAgoText(value);
   }
 
   Color getAccentColor(Map<String, dynamic> d) {
