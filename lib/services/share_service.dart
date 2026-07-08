@@ -1,7 +1,10 @@
-import 'package:firebase_database/firebase_database.dart';
-import '../services/home_notification_service.dart';
-import '../helpers/firebase_paths.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+import '../helpers/firebase_paths.dart';
+import '../localization/app_language_controller.dart';
+import '../localization/app_strings.dart';
+import '../services/home_notification_service.dart';
 
 class ShareService {
   static final _db = FirebaseDatabase.instance;
@@ -332,21 +335,32 @@ class ShareService {
         ? profileName
         : accountEmail.isNotEmpty
         ? accountEmail
-        : "Một thành viên";
+        : "";
 
     try {
+      final strings = AppStrings.fromLocale(appLanguageController.locale);
+
       await HomeNotificationService.notifyHome(
         ownerUid: realOwnerUid,
         homeId: homeId,
         type: "member_leave",
         category: "member",
         severity: "warning",
-        title: "Thành viên rời nhà",
-        message: "$memberName đã rời khỏi nhà \"$homeName\".",
+        title: strings.memberLeftHomeTitle(),
+        message: strings.memberLeftHomeMessage(
+          memberName: memberName,
+          homeName: homeName,
+        ),
         entityType: "member",
         entityId: currentUid,
         homeName: homeName,
         includeActor: false,
+        data: {
+          "type": "member_leave",
+          "memberName": memberName,
+          "homeName": homeName,
+          "memberUid": currentUid,
+        },
       );
     } catch (_) {
       // Lỗi thông báo không được ngăn người dùng rời nhà.

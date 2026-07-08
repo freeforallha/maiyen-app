@@ -133,13 +133,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     return summaries.isEmpty
         ? [
-            _strings.choose(
-              vi: "🏡 Chưa có nhà nào",
-              en: "🏡 No homes yet",
-              zh: "🏡 暂无家庭",
-              ko: "🏡 아직 집이 없습니다",
-              ja: "🏡 まだ家がありません",
-            ),
+            _strings.t("🏡 Chưa có nhà nào"),
           ]
         : summaries;
   }
@@ -618,13 +612,7 @@ class _AllHomePageState extends State<AllHomePage> {
           autofocus: true,
           textInputAction: TextInputAction.done,
           decoration: InputDecoration(
-            hintText: _strings.choose(
-              vi: "VD: Mr Chung",
-              en: "E.g. Mr Chung",
-              zh: "例如：Mr Chung",
-              ko: "예: Mr Chung",
-              ja: "例: Mr Chung",
-            ),
+            hintText: _strings.t("VD: Mr Chung"),
           ),
           onChanged: (value) {
             inputName = value.trim();
@@ -1058,13 +1046,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     String repeatLabel(int minutes) {
       if (minutes <= 0) {
-        return _strings.choose(
-          vi: "Không lặp lại",
-          en: "No repeat",
-          zh: "不重复",
-          ko: "반복 없음",
-          ja: "繰り返しなし",
-        );
+        return _strings.t("Không lặp lại");
       }
 
       return _strings.choose(
@@ -1087,23 +1069,11 @@ class _AllHomePageState extends State<AllHomePage> {
             builder: (context, setDialogState) {
               return AlertDialog(
                 title: Text(
-                  _strings.choose(
-                    vi: "Thời gian lặp lại Alarm",
-                    en: "Alarm repeat time",
-                    zh: "Alarm 重复时间",
-                    ko: "Alarm 반복 시간",
-                    ja: "Alarm の繰り返し時間",
-                  ),
+                  _strings.t("Thời gian lặp lại Alarm"),
                 ),
                 content: InputDecorator(
                   decoration: InputDecoration(
-                    labelText: _strings.choose(
-                      vi: "Lặp lại khi sự cố vẫn còn",
-                      en: "Repeat while the issue remains",
-                      zh: "问题仍存在时重复",
-                      ko: "문제가 계속되면 반복",
-                      ja: "問題が続く間は繰り返す",
-                    ),
+                    labelText: _strings.t("Lặp lại khi sự cố vẫn còn"),
                     prefixIcon: const Icon(
                       Icons.replay_rounded,
                       color: SafeHomeColors.danger,
@@ -1200,67 +1170,13 @@ class _AllHomePageState extends State<AllHomePage> {
       builder: (_) => AlertDialog(
         title: Text(
           isReminderAction
-              ? _strings.choose(
-                  vi: "Xác nhận thay đổi Reminder",
-                  en: "Confirm Reminder changes",
-                  zh: "确认更改 Reminder",
-                  ko: "Reminder 변경 확인",
-                  ja: "Reminder の変更を確認",
-                )
-              : _strings.choose(
-                  vi: "Xác nhận thay đổi Alarm",
-                  en: "Confirm Alarm changes",
-                  zh: "确认更改 Alarm",
-                  ko: "Alarm 변경 확인",
-                  ja: "Alarm の変更を確認",
-                ),
+              ? _strings.t("Xác nhận thay đổi Reminder")
+              : _strings.t("Xác nhận thay đổi Alarm"),
         ),
         content: Text(
           isReminderAction
-              ? _strings.choose(
-                  vi:
-                      "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n"
-                      "Những thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\n"
-                      "Reminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-                  en:
-                      "This will add a Home Reminder to the selected homes.\n\n"
-                      "Members using Home Reminder settings will be affected.\n"
-                      "Personal Reminder settings will not be changed.",
-                  zh:
-                      "此操作会为所选家庭添加 Home Reminder。\n\n"
-                      "正在使用按家庭 Reminder 设置的成员会受到影响。\n"
-                      "处于仅自己模式的个人 Reminder 不会改变。",
-                  ko:
-                      "선택한 집에 Home Reminder를 추가합니다.\n\n"
-                      "Reminder를 집 기준으로 사용하는 구성원이 영향을 받습니다.\n"
-                      "나만 모드의 개인 Reminder는 변경되지 않습니다.",
-                  ja:
-                      "選択した家に Home Reminder を追加します。\n\n"
-                      "家の Reminder 設定を使用しているメンバーに影響します。\n"
-                      "「自分のみ」モードの個人 Reminder は変更されません。",
-                )
-              : _strings.choose(
-                  vi:
-                      "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n"
-                      "Những thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\n"
-                      "Alarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-                  en:
-                      "This will change Home Alarm schedules for all security devices in the selected homes.\n\n"
-                      "Members using Home Alarm settings will be affected.\n"
-                      "Personal Alarm settings will not be changed.",
-                  zh:
-                      "此操作会更改所选家庭中所有安全设备的 Home Alarm 计划。\n\n"
-                      "正在使用按家庭 Alarm 设置的成员会受到影响。\n"
-                      "处于仅自己模式的个人 Alarm 不会改变。",
-                  ko:
-                      "선택한 집의 모든 보안 기기 Home Alarm 일정을 변경합니다.\n\n"
-                      "Alarm을 집 기준으로 사용하는 구성원이 영향을 받습니다.\n"
-                      "나만 모드의 개인 Alarm은 변경되지 않습니다.",
-                  ja:
-                      "選択した家のすべてのセキュリティデバイスの Home Alarm スケジュールを変更します。\n\n"
-                      "家の Alarm 設定を使用しているメンバーに影響します。\n"
-                      "「自分のみ」モードの個人 Alarm は変更されません。",
-                ),
+              ? _strings.t("Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.")
+              : _strings.t("Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi."),
         ),
         actions: [
           TextButton(
@@ -1468,37 +1384,11 @@ class _AllHomePageState extends State<AllHomePage> {
     String message = "";
 
     if (sharedCount > 0 && ownCount > 0) {
-      message = _strings.choose(
-        vi:
-        "Các nhà của bạn sẽ bị xoá.\n"
-            "Các nhà được chia sẻ sẽ được rời khỏi.",
-        en:
-        "Your homes will be deleted.\n"
-            "You will leave the shared homes.",
-        zh: "你的家庭将被删除。\n你将离开共享家庭。",
-        ko:
-        "내 집은 삭제됩니다.\n"
-            "공유된 집에서는 나가게 됩니다.",
-        ja:
-        "自分の家は削除されます。\n"
-            "共有された家からは退出します。",
-      );
+      message = _strings.t("Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.");
     } else if (sharedCount > 0) {
-      message = _strings.choose(
-        vi: "Bạn sẽ rời khỏi các nhà được chia sẻ.",
-        en: "You will leave the shared homes.",
-        zh: "你将离开共享家庭。",
-        ko: "공유된 집에서 나가게 됩니다.",
-        ja: "共有された家から退出します。",
-      );
+      message = _strings.t("Bạn sẽ rời khỏi các nhà được chia sẻ.");
     } else {
-      message = _strings.choose(
-        vi: "Các nhà đã chọn sẽ bị xoá vĩnh viễn.",
-        en: "Selected homes will be permanently deleted.",
-        zh: "所选家庭将被永久删除。",
-        ko: "선택한 집이 영구적으로 삭제됩니다.",
-        ja: "選択した家は完全に削除されます。",
-      );
+      message = _strings.t("Các nhà đã chọn sẽ bị xoá vĩnh viễn.");
     }
 
     final confirmOk = await showModalBottomSheet<bool>(
@@ -1779,13 +1669,7 @@ class _AllHomePageState extends State<AllHomePage> {
     showTopToast(
       context,
       sharedCount > 0 && ownCount == 0
-          ? _strings.choose(
-        vi: "Đã rời khỏi nhà",
-        en: "Left home",
-        zh: "已离开家庭",
-        ko: "집에서 나갔습니다",
-        ja: "家から退出しました",
-      )
+          ? _strings.t("Đã rời khỏi nhà")
           : _strings.t("Đã cập nhật"),
       color: Colors.green,
       icon: Icons.check_circle_rounded,
@@ -1833,13 +1717,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 controller: searchController,
                 autofocus: true,
                 decoration: InputDecoration(
-                  hintText: _strings.choose(
-                    vi: "Tìm nhà...",
-                    en: "Search homes...",
-                    zh: "搜索家庭...",
-                    ko: "집 검색...",
-                    ja: "家を検索...",
-                  ),
+                  hintText: _strings.t("Tìm nhà..."),
                   border: InputBorder.none,
                   filled: false,
                   contentPadding: EdgeInsets.zero,
@@ -2249,13 +2127,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                         ko: "관리 권한이 있는 집을 공유했습니다.\n\n공유 권한이 없어 $skipped개의 집은 건너뛰었습니다.",
                                         ja: "管理権限のある家を共有しました。\n\n共有権限がないため $skipped 件の家をスキップしました。",
                                       )
-                                    : _strings.choose(
-                                        vi: "Đã chia sẻ nhà thành công.",
-                                        en: "Homes shared successfully.",
-                                        zh: "家庭共享成功。",
-                                        ko: "집 공유가 완료되었습니다.",
-                                        ja: "家の共有が完了しました。",
-                                      ),
+                                    : _strings.t("Đã chia sẻ nhà thành công."),
                               ),
                               actions: [
                                 TextButton(

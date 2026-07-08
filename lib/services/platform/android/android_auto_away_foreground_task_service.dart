@@ -10,6 +10,8 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../firebase_options.dart';
+import '../../../localization/app_language_controller.dart';
+import '../../../localization/app_strings.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
@@ -24,6 +26,9 @@ void safeHomeAutoAwayForegroundTaskCallback() {
 
 class AndroidAutoAwayForegroundTaskService {
   const AndroidAutoAwayForegroundTaskService._();
+
+  static AppStrings get _strings =>
+      AppStrings.fromLocale(appLanguageController.locale);
 
   static bool _initialized = false;
 
@@ -56,12 +61,13 @@ class AndroidAutoAwayForegroundTaskService {
       return;
     }
 
+    final strings = _strings;
+
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'safehome_auto_away_location_v1',
-        channelName: 'SafeHome cập nhật vị trí',
-        channelDescription:
-        'Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.',
+        channelName: strings.updatingLocationNotificationTitle(),
+        channelDescription: strings.updatingLocationChannelDescription(),
         channelImportance: NotificationChannelImportance.LOW,
         priority: NotificationPriority.LOW,
         onlyAlertOnce: true,
@@ -147,13 +153,15 @@ class AndroidAutoAwayForegroundTaskService {
       return;
     }
 
+    final strings = _strings;
+
     await FlutterForegroundTask.startService(
       serviceId: _autoAwayForegroundServiceId,
       serviceTypes: const <ForegroundServiceTypes>[
         ForegroundServiceTypes.location,
       ],
-      notificationTitle: 'SafeHome đang cập nhật vị trí',
-      notificationText: 'Đang theo dõi để tự động bật Chế độ Bảo vệ.',
+      notificationTitle: strings.updatingLocationNotificationTitle(),
+      notificationText: strings.updatingLocationNotificationBody(),
       callback: safeHomeAutoAwayForegroundTaskCallback,
     );
   }

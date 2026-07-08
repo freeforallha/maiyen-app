@@ -58,12 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user == null) {
         throw Exception(
-          strings.choose(
-            vi: "Không thể đăng nhập bằng Google",
-            en: "Could not sign in with Google",
-            zh: "无法使用 Google 登录",
-            ja: "Google でログインできません",
-          ),
+          strings.t("Không thể đăng nhập bằng Google"),
         );
       }
 
@@ -89,12 +84,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         error = strings.sanitizeUserMessage(
           e.message ?? "",
-          fallback: strings.choose(
-            vi: "Không thể đăng nhập bằng Google",
-            en: "Could not sign in with Google",
-            zh: "无法使用 Google 登录",
-            ja: "Google でログインできません",
-          ),
+          fallback: strings.t("Không thể đăng nhập bằng Google"),
         );
       });
     } catch (e) {
@@ -103,12 +93,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       setState(() {
-        error = strings.choose(
-          vi: "Không thể đăng nhập bằng Google",
-          en: "Could not sign in with Google",
-          zh: "无法使用 Google 登录",
-          ja: "Google でログインできません",
-        );
+        error = strings.t("Không thể đăng nhập bằng Google");
       });
     } finally {
       if (mounted) {

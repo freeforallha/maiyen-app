@@ -227,13 +227,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
       showTopToast(
         context,
-        AppStrings.of(context).choose(
-          vi: "Không thể lưu chế độ Alarm",
-          en: "Could not save Alarm mode",
-          zh: "无法保存 Alarm 模式",
-          ko: "Alarm 모드를 저장할 수 없습니다",
-          ja: "Alarm モードを保存できません",
-        ),
+        AppStrings.of(context).t("Không thể lưu chế độ Alarm"),
         color: SafeHomeColors.danger,
         icon: Icons.error_rounded,
       );
@@ -259,13 +253,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).choose(
-            vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
-            en: "You do not have permission to edit Home settings. Choose Only me.",
-            zh: "你没有权限编辑按家庭设置。请选择仅自己。",
-            ko: "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
-            ja: "家の設定を編集する権限がありません。「自分のみ」を選択してください。",
-          ),
+          AppStrings.of(context).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -282,13 +270,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).choose(
-            vi: "Nhà chưa có thiết bị an ninh để áp dụng",
-            en: "This home has no security devices to apply",
-            zh: "此家庭暂无可应用的安全设备",
-            ko: "이 집에는 적용할 보안 기기가 없습니다.",
-            ja: "この家には適用できるセキュリティデバイスがありません",
-          ),
+          AppStrings.of(context).t("Nhà chưa có thiết bị an ninh để áp dụng"),
           color: Colors.orange,
           icon: Icons.sensors_off_rounded,
         );
@@ -354,13 +336,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     if (mode == "home" && !widget.canManageHome) {
       showTopToast(
         context,
-        AppStrings.of(context).choose(
-          vi: "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
-          en: "You do not have permission to edit Home settings. Choose Only me.",
-          zh: "你没有权限编辑按家庭设置。请选择仅自己。",
-          ko: "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
-          ja: "家の設定を編集する権限がありません。「自分のみ」を選択してください。",
-        ),
+        AppStrings.of(context).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
         color: SafeHomeColors.danger,
         icon: Icons.lock_rounded,
       );
@@ -375,13 +351,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     if (securityEntries.isEmpty) {
       showTopToast(
         context,
-        AppStrings.of(context).choose(
-          vi: "Nhà chưa có thiết bị an ninh để áp dụng",
-          en: "This home has no security devices to apply",
-          zh: "此家庭暂无可应用的安全设备",
-          ko: "이 집에는 적용할 보안 기기가 없습니다.",
-          ja: "この家には適用できるセキュリティデバイスがありません",
-        ),
+        AppStrings.of(context).t("Nhà chưa có thiết bị an ninh để áp dụng"),
         color: Colors.orange,
         icon: Icons.sensors_off_rounded,
       );
@@ -404,20 +374,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             Future<void> chooseTime(String field) async {
               final picked = await openTimeTextInput(
                 title: field == "start"
-                    ? strings.choose(
-                        vi: "Chọn giờ bắt đầu Alarm",
-                        en: "Choose Alarm start time",
-                        zh: "选择 Alarm 开始时间",
-                        ko: "Alarm 시작 시간 선택",
-                        ja: "Alarm の開始時刻を選択",
-                      )
-                    : strings.choose(
-                        vi: "Chọn giờ kết thúc Alarm",
-                        en: "Choose Alarm end time",
-                        zh: "选择 Alarm 结束时间",
-                        ko: "Alarm 종료 시간 선택",
-                        ja: "Alarm の終了時刻を選択",
-                      ),
+                    ? strings.t("Chọn giờ bắt đầu Alarm")
+                    : strings.t("Chọn giờ kết thúc Alarm"),
                 initial:
                     draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
@@ -475,13 +433,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                 showTopToast(
                   sheetContext,
-                  strings.choose(
-                    vi: "Không thể áp dụng Alarm cho toàn bộ thiết bị",
-                    en: "Could not apply Alarm to all devices",
-                    zh: "无法将 Alarm 应用到所有设备",
-                    ko: "전체 기기에 Alarm을 적용할 수 없습니다",
-                    ja: "すべてのデバイスに Alarm を適用できません",
-                  ),
+                  strings.t("Không thể áp dụng Alarm cho toàn bộ thiết bị"),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
                 );
@@ -647,13 +599,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).choose(
-            vi: "Bạn không có quyền sửa lịch Alarm của nhà",
-            en: "You do not have permission to edit this home's Alarm schedule",
-            zh: "你没有权限编辑此家庭的 Alarm 计划",
-            ko: "이 집의 Alarm 일정을 수정할 권한이 없습니다",
-            ja: "この家の Alarm スケジュールを編集する権限がありません",
-          ),
+          AppStrings.of(context).t("Bạn không có quyền sửa lịch Alarm của nhà"),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -854,20 +800,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }) async {
     final picked = await openTimeTextInput(
       title: field == "start"
-          ? AppStrings.of(context).choose(
-              vi: "Chọn giờ bắt đầu Alarm",
-              en: "Choose Alarm start time",
-              zh: "选择 Alarm 开始时间",
-              ko: "Alarm 시작 시간 선택",
-              ja: "Alarm の開始時刻を選択",
-            )
-          : AppStrings.of(context).choose(
-              vi: "Chọn giờ kết thúc Alarm",
-              en: "Choose Alarm end time",
-              zh: "选择 Alarm 结束时间",
-              ko: "Alarm 종료 시간 선택",
-              ja: "Alarm の終了時刻を選択",
-            ),
+          ? AppStrings.of(context).t("Chọn giờ bắt đầu Alarm")
+          : AppStrings.of(context).t("Chọn giờ kết thúc Alarm"),
       initial: alarm[field]?.toString() ?? "23:00",
     );
 
@@ -959,13 +893,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             if (mode == "home" && isSharedUser) ...[
               const SizedBox(height: 10),
               Text(
-                strings.choose(
-                  vi: "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
-                  en: "You are viewing the owner's schedule. Choose Only me to set your own Alarm schedule.",
-                  zh: "你正在查看屋主的计划。选择仅自己即可设置个人 Alarm 计划。",
-                  ko: "집 주인의 일정을 보고 있습니다. 나만을 선택해 내 Alarm 일정을 설정하세요.",
-                  ja: "所有者のスケジュールを表示しています。自分の Alarm スケジュールを設定するには「自分のみ」を選択してください。",
-                ),
+                strings.t("Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm."),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
@@ -1222,37 +1150,19 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                   DropdownMenuItem(
                     value: 15,
                     child: Text(
-                      strings.choose(
-                        vi: "15 phút",
-                        en: "15 minutes",
-                        zh: "15 分钟",
-                        ko: "15분",
-                        ja: "15 分",
-                      ),
+                      strings.t("15 phút"),
                     ),
                   ),
                   DropdownMenuItem(
                     value: 30,
                     child: Text(
-                      strings.choose(
-                        vi: "30 phút",
-                        en: "30 minutes",
-                        zh: "30 分钟",
-                        ko: "30분",
-                        ja: "30 分",
-                      ),
+                      strings.t("30 phút"),
                     ),
                   ),
                   DropdownMenuItem(
                     value: 60,
                     child: Text(
-                      strings.choose(
-                        vi: "60 phút",
-                        en: "60 minutes",
-                        zh: "60 分钟",
-                        ko: "60분",
-                        ja: "60 分",
-                      ),
+                      strings.t("60 phút"),
                     ),
                   ),
                 ],

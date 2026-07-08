@@ -268,25 +268,13 @@ class _StatusPanelState extends State<StatusPanel> {
 
       if (hasSmokeDevice && smokeCount == 0) {
         summary.add(
-          strings.choose(
-            vi: "Cảm biến khói chưa ghi nhận bất thường.",
-            en: "The smoke sensor has not detected an issue.",
-            zh: "烟雾传感器未记录异常。",
-            ko: "연기 감지기가 이상을 감지하지 않았습니다.",
-            ja: "煙センサーは異常を検知していません。",
-          ),
+          strings.t("Cảm biến khói chưa ghi nhận bất thường."),
         );
       }
 
       if (hasSosDevice && sosCount == 0) {
         summary.add(
-          strings.choose(
-            vi: "Thiết bị SOS chưa ghi nhận cảnh báo.",
-            en: "The SOS device has not recorded an alert.",
-            zh: "SOS 设备未记录警报。",
-            ko: "SOS 기기에 기록된 알림이 없습니다.",
-            ja: "SOS デバイスにアラートは記録されていません。",
-          ),
+          strings.t("Thiết bị SOS chưa ghi nhận cảnh báo."),
         );
       }
     }
@@ -311,13 +299,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     String repeatText(int minutes) {
       return minutes == 0
-          ? _strings.choose(
-              vi: "Không lặp lại",
-              en: "No repeat",
-              zh: "不重复",
-              ko: "반복 없음",
-              ja: "繰り返しなし",
-            )
+          ? _strings.t("Không lặp lại")
           : _strings.choose(
               vi: "Lặp sau $minutes phút",
               en: "Repeat after $minutes minutes",
@@ -353,13 +335,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       ),
                     ),
                     Text(
-                      _strings.choose(
-                        vi: "Chế độ nhà",
-                        en: "Home mode",
-                        zh: "家庭模式",
-                        ko: "집 모드",
-                        ja: "家のモード",
-                      ),
+                      _strings.t("Chế độ nhà"),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -369,28 +345,10 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 14),
                     _actionTile(
                       icon: Icons.shield_rounded,
-                      title: _strings.choose(
-                        vi: "Bình thường",
-                        en: "Normal",
-                        zh: "普通模式",
-                        ko: "일반",
-                        ja: "通常モード",
-                      ),
+                      title: _strings.t("Bình thường"),
                       subtitle: isArmed
-                          ? _strings.choose(
-                              vi: "Chuyển về sử dụng thông thường",
-                              en: "Switch back to normal use",
-                              zh: "切换回普通模式",
-                              ko: "일반 사용으로 전환",
-                              ja: "通常の使用に戻す",
-                            )
-                          : _strings.choose(
-                              vi: "Đang được sử dụng",
-                              en: "Currently active",
-                              zh: "当前使用中",
-                              ko: "사용 중",
-                              ja: "現在有効です",
-                            ),
+                          ? _strings.t("Chuyển về sử dụng thông thường")
+                          : _strings.t("Đang được sử dụng"),
                       color: SafeHomeColors.safe,
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -400,13 +358,7 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 8),
                     _actionTile(
                       icon: Icons.shield_rounded,
-                      title: _strings.choose(
-                        vi: "Bảo vệ",
-                        en: "Guard",
-                        zh: "布防",
-                        ko: "보호",
-                        ja: "警戒",
-                      ),
+                      title: _strings.t("Bảo vệ"),
                       subtitle: isArmed
                           ? _strings.choose(
                               vi: "Đang dùng • ${repeatText(localRepeatMinutes)}",
@@ -450,13 +402,7 @@ class _StatusPanelState extends State<StatusPanel> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  _strings.choose(
-                                    vi: "Lặp báo động khi sự cố vẫn còn",
-                                    en: "Repeat Alarm while the issue remains",
-                                    zh: "问题仍存在时重复 Alarm",
-                                    ko: "문제가 계속되면 Alarm 반복",
-                                    ja: "問題が続く間 Alarm を繰り返す",
-                                  ),
+                                  _strings.t("Lặp báo động khi sự cố vẫn còn"),
                                   style: const TextStyle(
                                     fontSize: 13.5,
                                     fontWeight: FontWeight.w900,
@@ -468,13 +414,7 @@ class _StatusPanelState extends State<StatusPanel> {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            _strings.choose(
-                              vi: "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
-                              en: "Choose 0 to alert once. This setting applies to manual Guard mode and Auto Guard when away.",
-                              zh: "选择 0 表示只提醒一次。此设置同时用于手动布防和离家自动布防。",
-                              ko: "0을 선택하면 한 번만 알립니다. 이 설정은 수동 보호와 외출 시 자동 보호 모두에 적용됩니다.",
-                              ja: "0 を選ぶと 1 回だけ通知します。この設定は手動 Guard モードと外出時の自動 Guard の両方に適用されます。",
-                            ),
+                            _strings.t("Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà."),
                             style: const TextStyle(
                               fontSize: 11.5,
                               height: 1.35,
@@ -491,13 +431,7 @@ class _StatusPanelState extends State<StatusPanel> {
                               color: SafeHomeColors.primary,
                             ),
                             decoration: InputDecoration(
-                              labelText: _strings.choose(
-                                vi: "Thời gian lặp",
-                                en: "Repeat interval",
-                                zh: "重复间隔",
-                                ko: "반복 시간",
-                                ja: "繰り返し間隔",
-                              ),
+                              labelText: _strings.t("Thời gian lặp"),
                               labelStyle: const TextStyle(
                                 color: SafeHomeColors.textSecondary,
                                 fontWeight: FontWeight.w700,
@@ -549,13 +483,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                     value: minutes,
                                     child: Text(
                                       minutes == 0
-                                          ? _strings.choose(
-                                              vi: "Không lặp lại",
-                                              en: "No repeat",
-                                              zh: "不重复",
-                                              ko: "반복 없음",
-                                              ja: "繰り返さない",
-                                            )
+                                          ? _strings.t("Không lặp lại")
                                           : _strings.choose(
                                               vi: "$minutes phút",
                                               en: "$minutes minutes",
@@ -906,20 +834,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final liveSecurityMode =
         normalizeSecurityMode(liveHome["securityMode"]) == "armed"
-        ? strings.choose(
-            vi: "Bảo vệ",
-            en: "Guard",
-            zh: "布防",
-            ko: "보호",
-            ja: "Guard",
-          )
-        : strings.choose(
-            vi: "Bình thường",
-            en: "Normal",
-            zh: "普通模式",
-            ko: "일반 모드",
-            ja: "通常モード",
-          );
+        ? strings.t("Bảo vệ")
+        : strings.t("Bình thường");
 
     final devices = safeMap(liveHome["devices"]);
     final environmentLine = _overviewEnvironmentLine(
@@ -961,13 +877,7 @@ class _StatusPanelState extends State<StatusPanel> {
           const SizedBox(height: 12),
         ],
         _summarySection(
-          title: strings.choose(
-            vi: "Tự động đánh giá",
-            en: "Automatic assessment",
-            zh: "自动评估",
-            ko: "자동 평가",
-            ja: "自動評価",
-          ),
+          title: strings.t("Tự động đánh giá"),
           icon: Icons.auto_awesome_rounded,
           color: SafeHomeColors.info,
           items: automaticSummary,
@@ -1108,23 +1018,11 @@ class _StatusPanelState extends State<StatusPanel> {
     final manualSecurityMode =
         widget.securityMode == "armed" && widget.securityModeSource == "manual";
 
-    final manualSecurityModeText = _strings.choose(
-      vi: "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
-      en: "Manual Guard mode is on - switch to Normal to turn it off",
-      zh: "手动布防已开启 - 切换到普通模式后关闭",
-      ko: "수동 Guard 모드가 켜져 있습니다 - 끄려면 Normal로 전환하세요",
-      ja: "手動警戒モードがオンです - オフにするには通常モードに切り替えてください",
-    );
+    final manualSecurityModeText = _strings.t("Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường");
 
     final normalFirstLine = allLines.isNotEmpty
         ? allLines.first
-        : _strings.choose(
-            vi: "Chưa có dữ liệu trạng thái",
-            en: "No status data available",
-            zh: "暂无状态数据",
-            ko: "상태 데이터가 없습니다",
-            ja: "状態データがありません",
-          );
+        : _strings.t("Chưa có dữ liệu trạng thái");
 
     final firstLine = noData
         ? _strings.t("Chưa đủ dữ liệu để đánh giá")
@@ -1192,21 +1090,9 @@ class _StatusPanelState extends State<StatusPanel> {
         ja: "${issues.length} 件の問題に対応が必要です",
       );
     } else if (smokeCount > 0) {
-      subtitle = _strings.choose(
-        vi: "Hôm nay đã ghi nhận cảnh báo khói",
-        en: "A smoke alert was recorded today",
-        zh: "今天已记录烟雾警报",
-        ko: "오늘 연기 경보가 기록되었습니다",
-        ja: "今日は煙アラートが記録されました",
-      );
+      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo khói");
     } else if (sosCount > 0) {
-      subtitle = _strings.choose(
-        vi: "Hôm nay đã ghi nhận cảnh báo SOS",
-        en: "An SOS alert was recorded today",
-        zh: "今天已记录 SOS 警报",
-        ko: "오늘 SOS 경보가 기록되었습니다",
-        ja: "今日は SOS アラートが記録されました",
-      );
+      subtitle = _strings.t("Hôm nay đã ghi nhận cảnh báo SOS");
     } else if (openCount > 0) {
       subtitle = _strings.choose(
         vi: "Hôm nay các cửa đã được sử dụng $openCount lần",
@@ -1380,20 +1266,8 @@ class _StatusPanelState extends State<StatusPanel> {
                       child: _alarmStatusItem(
                         icon: Icons.shield_rounded,
                         value: widget.securityMode == "armed"
-                            ? _strings.choose(
-                                vi: "Bảo vệ",
-                                en: "Guard",
-                                zh: "布防",
-                                ko: "보호",
-                                ja: "Guard",
-                              )
-                            : _strings.choose(
-                                vi: "Bình thường",
-                                en: "Normal",
-                                zh: "普通模式",
-                                ko: "일반",
-                                ja: "通常",
-                              ),
+                            ? _strings.t("Bảo vệ")
+                            : _strings.t("Bình thường"),
                         active: widget.securityMode == "armed",
                         activeColor: SafeHomeColors.danger,
                         onTap: () => _showSecurityModeOptions(context),

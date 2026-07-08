@@ -43,13 +43,7 @@ class SystemHealthStatusLine extends StatelessWidget {
           return _SystemHealthLineShell(
             icon: Icons.health_and_safety_rounded,
             color: SafeHomeColors.textSecondary,
-            text: strings.choose(
-              vi: 'Hệ thống: Đang kiểm tra...',
-              en: 'System: Checking...',
-              zh: '系统：正在检查...',
-              ko: '시스템: 확인 중...',
-              ja: 'システム: 確認中...',
-            ),
+            text: strings.t("Hệ thống: Đang kiểm tra..."),
             onTap: null,
           );
         }
@@ -175,13 +169,7 @@ Future<void> showSystemHealthSheet({
                     children: [
                       Expanded(
                         child: Text(
-                          strings.choose(
-                            vi: 'Hệ thống SafeHome',
-                            en: 'SafeHome System',
-                            zh: 'SafeHome 系统',
-                            ko: 'SafeHome 시스템',
-                            ja: 'SafeHome システム',
-                          ),
+                          strings.t("Hệ thống SafeHome"),
                           style: const TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.w900,
@@ -199,13 +187,7 @@ Future<void> showSystemHealthSheet({
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      strings.choose(
-                        vi: 'Kiểm tra điện thoại và cách bạn đang dùng app.',
-                        en: 'Checks your phone and how you use the app.',
-                        zh: '检查你的手机以及你使用应用的方式。',
-                        ko: '휴대폰과 앱 사용 상태를 확인합니다.',
-                        ja: 'スマートフォンとアプリの使い方を確認します。',
-                      ),
+                      strings.t("Kiểm tra điện thoại và cách bạn đang dùng app."),
                       style: const TextStyle(
                         fontSize: 12.5,
                         height: 1.3,
@@ -226,25 +208,13 @@ Future<void> showSystemHealthSheet({
                         shrinkWrap: true,
                         children: [
                           _SystemHealthSection(
-                            title: strings.choose(
-                              vi: 'Thiết bị của bạn',
-                              en: 'Your device',
-                              zh: '你的设备',
-                              ko: '내 기기',
-                              ja: 'あなたのデバイス',
-                            ),
+                            title: strings.t("Thiết bị của bạn"),
                             icon: Icons.phone_android_rounded,
                             items: data.deviceItems,
                           ),
                           const SizedBox(height: 12),
                           _SystemHealthSection(
-                            title: strings.choose(
-                              vi: 'Cách bạn đang dùng app',
-                              en: 'How you use the app',
-                              zh: '你使用应用的方式',
-                              ko: '앱 사용 방식',
-                              ja: 'アプリの使い方',
-                            ),
+                            title: strings.t("Cách bạn đang dùng app"),
                             icon: Icons.fact_check_rounded,
                             items: data.usageItems,
                           ),
@@ -401,13 +371,7 @@ class _SystemHealthSnapshot {
 
     if (dangerCount > 0) {
       return _SystemHealthSnapshot(
-        summaryText: strings.choose(
-          vi: 'Hệ thống: Có thể bỏ lỡ cảnh báo',
-          en: 'System: Alerts may be missed',
-          zh: '系统：可能会错过警报',
-          ko: '시스템: 알림을 놓칠 수 있음',
-          ja: 'システム: 警報を見逃す可能性',
-        ),
+        summaryText: strings.t("Hệ thống: Có thể bỏ lỡ cảnh báo"),
         summaryColor: SafeHomeColors.danger,
         summaryIcon: Icons.warning_rounded,
         deviceItems: deviceItems,
@@ -432,13 +396,7 @@ class _SystemHealthSnapshot {
     }
 
     return _SystemHealthSnapshot(
-      summaryText: strings.choose(
-        vi: 'Hệ thống: Sẵn sàng',
-        en: 'System: Ready',
-        zh: '系统：已就绪',
-        ko: '시스템: 준비됨',
-        ja: 'システム: 準備完了',
-      ),
+      summaryText: strings.t("Hệ thống: Sẵn sàng"),
       summaryColor: SafeHomeColors.safe,
       summaryIcon: Icons.health_and_safety_rounded,
       deviceItems: deviceItems,
@@ -477,35 +435,11 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.danger,
         icon: Icons.notifications_active_rounded,
         title: notificationOk
-            ? strings.choose(
-          vi: 'Đã bật thông báo',
-          en: 'Notifications are enabled',
-          zh: '已开启通知',
-          ko: '알림이 켜져 있음',
-          ja: '通知が有効です',
-        )
-            : strings.choose(
-          vi: 'Chưa bật thông báo',
-          en: 'Notifications are not enabled',
-          zh: '尚未开启通知',
-          ko: '알림이 꺼져 있음',
-          ja: '通知が有効ではありません',
-        ),
+            ? strings.t("Đã bật thông báo")
+            : strings.t("Chưa bật thông báo"),
         message: notificationOk
-            ? strings.choose(
-          vi: 'Điện thoại có thể nhận thông báo SafeHome.',
-          en: 'This phone can receive SafeHome notifications.',
-          zh: '此手机可以接收 SafeHome 通知。',
-          ko: '이 휴대폰은 SafeHome 알림을 받을 수 있습니다.',
-          ja: 'この端末は SafeHome の通知を受け取れます。',
-        )
-            : strings.choose(
-          vi: 'Cảnh báo có thể không hiển thị nếu thông báo bị tắt.',
-          en: 'Alerts may not appear if notifications are disabled.',
-          zh: '如果通知被关闭，警报可能不会显示。',
-          ko: '알림이 꺼져 있으면 경고가 표시되지 않을 수 있습니다.',
-          ja: '通知が無効だと警報が表示されない可能性があります。',
-        ),
+            ? strings.t("Điện thoại có thể nhận thông báo SafeHome.")
+            : strings.t("Cảnh báo có thể không hiển thị nếu thông báo bị tắt."),
       ),
       _SystemHealthItem(
         level: isAndroid && notificationOk
@@ -513,35 +447,11 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.info,
         icon: Icons.open_in_full_rounded,
         title: isAndroid
-            ? strings.choose(
-          vi: 'Cảnh báo toàn màn hình',
-          en: 'Full-screen alerts',
-          zh: '全屏警报',
-          ko: '전체 화면 경고',
-          ja: '全画面アラート',
-        )
-            : strings.choose(
-          vi: 'Cảnh báo trên iOS',
-          en: 'Alerts on iOS',
-          zh: 'iOS 上的警报',
-          ko: 'iOS 알림',
-          ja: 'iOS の警報',
-        ),
+            ? strings.t("Cảnh báo toàn màn hình")
+            : strings.t("Cảnh báo trên iOS"),
         message: isAndroid
-            ? strings.choose(
-          vi: 'Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.',
-          en: 'Android uses full-screen alerts; allow it in settings if the phone blocks it.',
-          zh: 'Android 使用全屏警报；如果手机阻止，请在设置中允许。',
-          ko: 'Android는 전체 화면 경고를 사용합니다. 휴대폰이 차단하면 설정에서 허용하세요.',
-          ja: 'Android は全画面警報を使います。端末がブロックする場合は設定で許可してください。',
-        )
-            : strings.choose(
-          vi: 'iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.',
-          en: 'iOS does not open full-screen like Android; the app uses system notifications and sound.',
-          zh: 'iOS 不像 Android 那样全屏打开；应用使用系统通知和声音。',
-          ko: 'iOS는 Android처럼 전체 화면으로 열리지 않으며 시스템 알림과 소리를 사용합니다.',
-          ja: 'iOS は Android のように全画面表示せず、システム通知と音を使います。',
-        ),
+            ? strings.t("Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.")
+            : strings.t("iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống."),
       ),
       _SystemHealthItem(
         level: !autoAwayEnabled
@@ -551,51 +461,15 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.danger,
         icon: Icons.location_on_rounded,
         title: locationAlways
-            ? strings.choose(
-          vi: 'Đã cấp vị trí luôn luôn',
-          en: 'Always location is allowed',
-          zh: '已允许始终定位',
-          ko: '항상 위치 권한 허용됨',
-          ja: '常に位置情報が許可されています',
-        )
-            : strings.choose(
-          vi: 'Chưa cấp vị trí luôn luôn',
-          en: 'Always location is not allowed',
-          zh: '尚未允许始终定位',
-          ko: '항상 위치 권한이 허용되지 않음',
-          ja: '常に位置情報が許可されていません',
-        ),
+            ? strings.t("Đã cấp vị trí luôn luôn")
+            : strings.t("Chưa cấp vị trí luôn luôn"),
         message: !autoAwayEnabled
-            ? strings.choose(
-          vi: 'Chỉ cần quyền này khi dùng Auto rời khỏi nhà.',
-          en: 'This is only required when using Auto Away.',
-          zh: '只有使用自动离家时才需要此权限。',
-          ko: '자동 외출 기능을 사용할 때만 필요합니다.',
-          ja: '自動外出を使う場合のみ必要です。',
-        )
+            ? strings.t("Chỉ cần quyền này khi dùng Auto rời khỏi nhà.")
             : !locationServiceEnabled
-            ? strings.choose(
-          vi: 'Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.',
-          en: 'Location service is off, so Auto Away may not work reliably.',
-          zh: '定位服务已关闭，因此自动离家可能不稳定。',
-          ko: '위치 서비스가 꺼져 있어 자동 외출이 안정적으로 작동하지 않을 수 있습니다.',
-          ja: '位置情報サービスがオフのため、自動外出が安定しない可能性があります。',
-        )
+            ? strings.t("Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.")
             : locationDenied
-            ? strings.choose(
-          vi: 'Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.',
-          en: 'Location permission is required for Auto Away.',
-          zh: '自动离家需要定位权限。',
-          ko: '자동 외출에는 위치 권한이 필요합니다.',
-          ja: '自動外出には位置情報の許可が必要です。',
-        )
-            : strings.choose(
-          vi: 'Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.',
-          en: 'Auto Away needs Always location to work reliably.',
-          zh: '自动离家需要始终定位才能稳定运行。',
-          ko: '자동 외출이 안정적으로 작동하려면 항상 위치 권한이 필요합니다.',
-          ja: '自動外出を安定して動かすには常に位置情報が必要です。',
-        ),
+            ? strings.t("Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.")
+            : strings.t("Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định."),
       ),
       if (isAndroid)
         _SystemHealthItem(
@@ -604,35 +478,11 @@ class _SystemHealthSnapshot {
               : _SystemHealthLevel.warning,
           icon: Icons.battery_saver_rounded,
           title: batteryUnrestricted
-              ? strings.choose(
-            vi: 'Tối ưu pin không chặn app',
-            en: 'Battery optimization is not blocking the app',
-            zh: '电池优化未阻止应用',
-            ko: '배터리 최적화가 앱을 차단하지 않음',
-            ja: 'バッテリー最適化はアプリを妨げていません',
-          )
-              : strings.choose(
-            vi: 'Chưa tắt tối ưu pin',
-            en: 'Battery optimization is still enabled',
-            zh: '尚未关闭电池优化',
-            ko: '배터리 최적화가 아직 켜져 있음',
-            ja: 'バッテリー最適化がまだ有効です',
-          ),
+              ? strings.t("Tối ưu pin không chặn app")
+              : strings.t("Chưa tắt tối ưu pin"),
           message: batteryUnrestricted
-              ? strings.choose(
-            vi: 'Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.',
-            en: 'The phone is less likely to delay SafeHome alerts.',
-            zh: '手机较少可能延迟 SafeHome 警报。',
-            ko: '휴대폰이 SafeHome 경고를 지연할 가능성이 낮습니다.',
-            ja: '端末が SafeHome の警報を遅らせる可能性は低いです。',
-          )
-              : strings.choose(
-            vi: 'Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.',
-            en: 'Some Android phones may delay alerts while battery optimization is on.',
-            zh: '某些 Android 手机在开启电池优化时可能延迟警报。',
-            ko: '일부 Android 휴대폰은 배터리 최적화가 켜져 있으면 경고가 지연될 수 있습니다.',
-            ja: '一部の Android 端末では、バッテリー最適化が有効だと警報が遅れる場合があります。',
-          ),
+              ? strings.t("Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.")
+              : strings.t("Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật."),
         ),
       if (isAndroid)
         _SystemHealthItem(
@@ -641,54 +491,18 @@ class _SystemHealthSnapshot {
               : _SystemHealthLevel.warning,
           icon: Icons.run_circle_rounded,
           title: !backgroundRestricted && autoStartConfirmed
-              ? strings.choose(
-            vi: 'Chạy nền ổn định',
-            en: 'Background use looks stable',
-            zh: '后台运行看起来稳定',
-            ko: '백그라운드 실행이 안정적입니다',
-            ja: 'バックグラウンド動作は安定しています',
-          )
-              : strings.choose(
-            vi: 'Cần kiểm tra chạy nền / tự khởi động',
-            en: 'Check background use / auto-start',
-            zh: '请检查后台运行 / 自启动',
-            ko: '백그라운드 실행 / 자동 시작 확인 필요',
-            ja: 'バックグラウンド動作 / 自動起動を確認してください',
-          ),
+              ? strings.t("Chạy nền ổn định")
+              : strings.t("Cần kiểm tra chạy nền / tự khởi động"),
           message: !backgroundRestricted && autoStartConfirmed
-              ? strings.choose(
-            vi: 'Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.',
-            en: 'The device has confirmed the important background conditions.',
-            zh: '设备已确认重要的后台条件。',
-            ko: '기기가 중요한 백그라운드 조건을 확인했습니다.',
-            ja: 'デバイスは重要なバックグラウンド条件を確認済みです。',
-          )
-              : strings.choose(
-            vi: 'Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.',
-            en: 'Check background permission and auto-start so alerts are not delayed.',
-            zh: '请检查后台权限和自启动，避免警报延迟。',
-            ko: '경고가 지연되지 않도록 백그라운드 권한과 자동 시작을 확인하세요.',
-            ja: '警報が遅れないようにバックグラウンド権限と自動起動を確認してください。',
-          ),
+              ? strings.t("Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.")
+              : strings.t("Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ."),
         ),
       if (isIos)
         _SystemHealthItem(
           level: _SystemHealthLevel.info,
           icon: Icons.phone_iphone_rounded,
-          title: strings.choose(
-            vi: 'Cơ chế iOS',
-            en: 'iOS behavior',
-            zh: 'iOS 机制',
-            ko: 'iOS 동작 방식',
-            ja: 'iOS の仕組み',
-          ),
-          message: strings.choose(
-            vi: 'iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.',
-            en: 'iOS controls background use more strictly than Android; keep notifications and Always location on if using Auto Away.',
-            zh: 'iOS 对后台运行的管理比 Android 更严格；使用自动离家时请保持通知和始终定位开启。',
-            ko: 'iOS는 Android보다 백그라운드를 더 엄격하게 관리합니다. 자동 외출을 사용하면 알림과 항상 위치 권한을 켜 두세요.',
-            ja: 'iOS は Android よりバックグラウンド動作を厳しく管理します。自動外出を使う場合は通知と常に位置情報をオンにしてください。',
-          ),
+          title: strings.t("Cơ chế iOS"),
+          message: strings.t("iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà."),
         ),
       _SystemHealthItem(
         level: fcmToken.isNotEmpty && notificationOk
@@ -696,20 +510,8 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.danger,
         icon: Icons.cloud_done_rounded,
         title: fcmToken.isNotEmpty
-            ? strings.choose(
-          vi: 'Thiết bị nhận cảnh báo bình thường',
-          en: 'This device can receive alerts',
-          zh: '此设备可以接收警报',
-          ko: '이 기기는 경고를 받을 수 있습니다',
-          ja: 'このデバイスは警報を受信できます',
-        )
-            : strings.choose(
-          vi: 'Thiết bị chưa đăng ký nhận cảnh báo',
-          en: 'This device is not registered for alerts',
-          zh: '此设备尚未注册接收警报',
-          ko: '이 기기는 경고 수신 등록이 되어 있지 않습니다',
-          ja: 'このデバイスは警報受信に登録されていません',
-        ),
+            ? strings.t("Thiết bị nhận cảnh báo bình thường")
+            : strings.t("Thiết bị chưa đăng ký nhận cảnh báo"),
         message: fcmToken.isNotEmpty
             ? strings.choose(
           vi: monitoringEligible || !autoAwayEnabled
@@ -728,13 +530,7 @@ class _SystemHealthSnapshot {
               ? 'この端末の FCM トークンは準備済みです。'
               : 'FCM トークンは準備済みですが、自動外出に必要な条件が不足しています。',
         )
-            : strings.choose(
-          vi: 'Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.',
-          en: 'Reopen the app or sign in again if this device does not receive alerts.',
-          zh: '如果此设备收不到警报，请重新打开应用或重新登录。',
-          ko: '이 기기가 경고를 받지 못하면 앱을 다시 열거나 다시 로그인하세요.',
-          ja: 'このデバイスが警報を受信しない場合は、アプリを開き直すか再ログインしてください。',
-        ),
+            : strings.t("Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo."),
       ),
     ];
   }
@@ -779,35 +575,11 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.warning,
         icon: Icons.notifications_active_rounded,
         title: reminderEnabled
-            ? strings.choose(
-          vi: 'Đã setup Reminder',
-          en: 'Reminder is set up',
-          zh: '已设置 Reminder',
-          ko: 'Reminder 설정됨',
-          ja: 'Reminder 設定済み',
-        )
-            : strings.choose(
-          vi: 'Chưa setup Reminder',
-          en: 'Reminder is not set up',
-          zh: '尚未设置 Reminder',
-          ko: 'Reminder가 설정되지 않음',
-          ja: 'Reminder が未設定です',
-        ),
+            ? strings.t("Đã setup Reminder")
+            : strings.t("Chưa setup Reminder"),
         message: reminderEnabled
-            ? strings.choose(
-          vi: 'App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.',
-          en: 'The app will remind you to check your home on schedule.',
-          zh: '应用会按计划提醒你检查家庭。',
-          ko: '앱이 설정된 일정에 따라 집 확인을 알려줍니다.',
-          ja: 'アプリが設定したスケジュールで家の確認を促します。',
-        )
-            : strings.choose(
-          vi: 'Nên có ít nhất một Reminder để không quên kiểm tra nhà.',
-          en: 'Set at least one Reminder so you do not forget to check your home.',
-          zh: '建议至少设置一个 Reminder，避免忘记检查家庭。',
-          ko: '집 확인을 잊지 않도록 최소 하나의 Reminder를 설정하세요.',
-          ja: '家の確認を忘れないように少なくとも 1 つ Reminder を設定してください。',
-        ),
+            ? strings.t("App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.")
+            : strings.t("Nên có ít nhất một Reminder để không quên kiểm tra nhà."),
       ),
       _SystemHealthItem(
         level: alarmScheduleEnabled
@@ -815,35 +587,11 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.warning,
         icon: Icons.crisis_alert_rounded,
         title: alarmScheduleEnabled
-            ? strings.choose(
-          vi: 'Đã set lịch Alarm',
-          en: 'Alarm schedule is set',
-          zh: '已设置 Alarm 时间表',
-          ko: 'Alarm 일정 설정됨',
-          ja: 'Alarm スケジュール設定済み',
-        )
-            : strings.choose(
-          vi: 'Chưa set lịch Alarm',
-          en: 'Alarm schedule is not set',
-          zh: '尚未设置 Alarm 时间表',
-          ko: 'Alarm 일정이 설정되지 않음',
-          ja: 'Alarm スケジュールが未設定です',
-        ),
+            ? strings.t("Đã set lịch Alarm")
+            : strings.t("Chưa set lịch Alarm"),
         message: alarmScheduleEnabled
-            ? strings.choose(
-          vi: 'Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.',
-          en: 'This home has an Alarm schedule or device-level alert schedule.',
-          zh: '此家庭已有 Alarm 时间表或设备级警报时间表。',
-          ko: '이 집에는 Alarm 일정 또는 기기별 경고 일정이 있습니다.',
-          ja: 'この家には Alarm スケジュールまたはデバイス別警報スケジュールがあります。',
-        )
-            : strings.choose(
-          vi: 'Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.',
-          en: 'Set an Alarm schedule for sleeping time or when you are away.',
-          zh: '建议为睡眠时间或外出时设置 Alarm 时间表。',
-          ko: '수면 시간이나 외출 시간에 Alarm 일정을 설정하세요.',
-          ja: '就寝中や外出時のために Alarm スケジュールを設定してください。',
-        ),
+            ? strings.t("Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.")
+            : strings.t("Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà."),
       ),
       _SystemHealthItem(
         level: emergencyTotal > 0
@@ -853,20 +601,8 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.warning,
         icon: Icons.emergency_rounded,
         title: emergencyTotal > 0
-            ? strings.choose(
-          vi: 'Đã có thiết bị khẩn cấp',
-          en: 'Emergency devices are added',
-          zh: '已添加紧急设备',
-          ko: '긴급 기기가 추가됨',
-          ja: '緊急デバイスが追加されています',
-        )
-            : strings.choose(
-          vi: 'Chưa có thiết bị khẩn cấp',
-          en: 'No emergency device yet',
-          zh: '尚无紧急设备',
-          ko: '긴급 기기 없음',
-          ja: '緊急デバイスがありません',
-        ),
+            ? strings.t("Đã có thiết bị khẩn cấp")
+            : strings.t("Chưa có thiết bị khẩn cấp"),
         message: emergencyTotal > 0
             ? strings.choose(
           vi: 'Hiện có $emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.',
@@ -875,13 +611,7 @@ class _SystemHealthSnapshot {
           ko: '긴급 기기 $emergencyTotal개가 있습니다. 권장 최소 구성: 연기 감지기와 SOS.',
           ja: '$emergencyTotal 個の緊急デバイスがあります。推奨最小構成: 煙センサーと SOS。',
         )
-            : strings.choose(
-          vi: 'Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.',
-          en: 'Add a smoke sensor, SOS, or emergency device suitable for your home.',
-          zh: '建议添加烟雾传感器、SOS 或适合家庭的紧急设备。',
-          ko: '집에 맞는 연기 감지기, SOS 또는 긴급 기기를 추가하세요.',
-          ja: '煙センサー、SOS、または家に合った緊急デバイスを追加してください。',
-        ),
+            : strings.t("Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà."),
       ),
       _SystemHealthItem(
         level: !autoAwayEnabled
@@ -891,51 +621,15 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.danger,
         icon: Icons.directions_walk_rounded,
         title: !autoAwayEnabled
-            ? strings.choose(
-          vi: 'Auto rời khỏi nhà chưa bật',
-          en: 'Auto Away is not enabled',
-          zh: '自动离家未开启',
-          ko: '자동 외출이 꺼져 있음',
-          ja: '自動外出は有効ではありません',
-        )
+            ? strings.t("Auto rời khỏi nhà chưa bật")
             : monitoringEligible
-            ? strings.choose(
-          vi: 'Auto rời khỏi nhà đã sẵn sàng',
-          en: 'Auto Away is ready',
-          zh: '自动离家已就绪',
-          ko: '자동 외출 준비됨',
-          ja: '自動外出は準備完了です',
-        )
-            : strings.choose(
-          vi: 'Auto rời khỏi nhà chưa ổn',
-          en: 'Auto Away is not ready',
-          zh: '自动离家尚未就绪',
-          ko: '자동 외출이 준비되지 않음',
-          ja: '自動外出は準備できていません',
-        ),
+            ? strings.t("Auto rời khỏi nhà đã sẵn sàng")
+            : strings.t("Auto rời khỏi nhà chưa ổn"),
         message: !autoAwayEnabled
-            ? strings.choose(
-          vi: 'Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.',
-          en: 'Enable it if you want Guard mode to turn on automatically when you leave.',
-          zh: '如果希望离家时自动开启布防，可以启用此功能。',
-          ko: '외출 시 보호 모드를 자동으로 켜려면 활성화하세요.',
-          ja: '外出時に自動で警戒モードにしたい場合は有効にしてください。',
-        )
+            ? strings.t("Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.")
             : monitoringEligible
-            ? strings.choose(
-          vi: 'Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.',
-          en: 'This device meets the requirements for Auto Away.',
-          zh: '此设备满足自动离家的运行条件。',
-          ko: '이 기기는 자동 외출에 필요한 조건을 충족합니다.',
-          ja: 'このデバイスは自動外出の条件を満たしています。',
-        )
-            : strings.choose(
-          vi: 'Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.',
-          en: 'Check Always location permission and background conditions.',
-          zh: '请检查始终定位权限和后台条件。',
-          ko: '항상 위치 권한과 백그라운드 조건을 확인하세요.',
-          ja: '常に位置情報の許可とバックグラウンド条件を確認してください。',
-        ),
+            ? strings.t("Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.")
+            : strings.t("Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền."),
       ),
       _SystemHealthItem(
         level: securityMode == 'armed'
@@ -961,51 +655,15 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.ok,
         icon: Icons.event_available_rounded,
         title: previousOpenAt <= 0
-            ? strings.choose(
-          vi: 'Đang ghi nhận tần suất vào app',
-          en: 'App check frequency is being recorded',
-          zh: '正在记录应用检查频率',
-          ko: '앱 확인 빈도를 기록 중',
-          ja: 'アプリ確認頻度を記録中',
-        )
+            ? strings.t("Đang ghi nhận tần suất vào app")
             : daysSincePreviousOpen >= 3
-            ? strings.choose(
-          vi: 'Đã lâu chưa vào app kiểm tra',
-          en: 'It has been a while since the last app check',
-          zh: '距离上次打开应用检查已有一段时间',
-          ko: '앱을 확인한 지 오래되었습니다',
-          ja: 'アプリ確認から時間が経っています',
-        )
-            : strings.choose(
-          vi: 'Tần suất vào app ổn',
-          en: 'App check frequency looks good',
-          zh: '应用检查频率良好',
-          ko: '앱 확인 빈도가 양호합니다',
-          ja: 'アプリ確認頻度は良好です',
-        ),
+            ? strings.t("Đã lâu chưa vào app kiểm tra")
+            : strings.t("Tần suất vào app ổn"),
         message: previousOpenAt <= 0
-            ? strings.choose(
-          vi: 'Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.',
-          en: 'After a few sessions, SafeHome can evaluate your app-check habit better.',
-          zh: '使用几次后，SafeHome 可以更好地评估你的应用检查习惯。',
-          ko: '몇 번 사용한 후 SafeHome이 앱 확인 습관을 더 잘 평가할 수 있습니다.',
-          ja: '数回使用すると、SafeHome がアプリ確認習慣をより正確に評価できます。',
-        )
+            ? strings.t("Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.")
             : daysSincePreviousOpen >= 3
-            ? strings.choose(
-          vi: 'Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.',
-          en: 'Open the app regularly to review permissions, schedules, and unread alerts.',
-          zh: '建议定期打开应用检查权限、时间表和未读警报。',
-          ko: '권한, 일정, 읽지 않은 경고를 확인하기 위해 앱을 정기적으로 여세요.',
-          ja: '権限、スケジュール、未読警報を確認するため定期的にアプリを開いてください。',
-        )
-            : strings.choose(
-          vi: 'Bạn đã mở app gần đây để kiểm tra trạng thái.',
-          en: 'You have opened the app recently to check status.',
-          zh: '你最近已打开应用检查状态。',
-          ko: '최근 앱을 열어 상태를 확인했습니다.',
-          ja: '最近アプリを開いて状態を確認しています。',
-        ),
+            ? strings.t("Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.")
+            : strings.t("Bạn đã mở app gần đây để kiểm tra trạng thái."),
       ),
     ];
   }
@@ -1078,32 +736,14 @@ class _SystemHealthSnapshot {
     required String securityModeSource,
   }) {
     if (securityMode != 'armed') {
-      return strings.choose(
-        vi: 'Bảo vệ đang tắt',
-        en: 'Guard mode is off',
-        zh: '布防已关闭',
-        ko: '보호 모드 꺼짐',
-        ja: '警戒モードはオフです',
-      );
+      return strings.t("Bảo vệ đang tắt");
     }
 
     if (securityModeSource == 'auto_away') {
-      return strings.choose(
-        vi: 'Bảo vệ tự động đang bật',
-        en: 'Auto Guard is on',
-        zh: '自动布防已开启',
-        ko: '자동 보호가 켜져 있음',
-        ja: '自動警戒がオンです',
-      );
+      return strings.t("Bảo vệ tự động đang bật");
     }
 
-    return strings.choose(
-      vi: 'Bảo vệ thủ công đang bật',
-      en: 'Manual Guard is on',
-      zh: '手动布防已开启',
-      ko: '수동 보호가 켜져 있음',
-      ja: '手動警戒がオンです',
-    );
+    return strings.t("Bảo vệ thủ công đang bật");
   }
 
   static String _securityModeMessage({
@@ -1112,32 +752,14 @@ class _SystemHealthSnapshot {
     required String securityModeSource,
   }) {
     if (securityMode != 'armed') {
-      return strings.choose(
-        vi: 'Nhà đang ở chế độ dùng bình thường.',
-        en: 'This home is currently in normal use.',
-        zh: '此家庭当前处于普通使用模式。',
-        ko: '이 집은 현재 일반 사용 모드입니다.',
-        ja: 'この家は現在通常モードです。',
-      );
+      return strings.t("Nhà đang ở chế độ dùng bình thường.");
     }
 
     if (securityModeSource == 'auto_away') {
-      return strings.choose(
-        vi: 'SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.',
-        en: 'SafeHome turned on Guard automatically because you left home.',
-        zh: '由于你已离家，SafeHome 已自动开启布防。',
-        ko: '집을 떠났기 때문에 SafeHome이 자동으로 보호를 켰습니다.',
-        ja: '外出したため SafeHome が自動で警戒をオンにしました。',
-      );
+      return strings.t("SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.");
     }
 
-    return strings.choose(
-      vi: 'Bạn hoặc thành viên đã chủ động bật Bảo vệ.',
-      en: 'You or a member manually turned on Guard.',
-      zh: '你或成员已手动开启布防。',
-      ko: '사용자 또는 구성원이 수동으로 보호를 켰습니다.',
-      ja: 'あなたまたはメンバーが手動で警戒をオンにしました。',
-    );
+    return strings.t("Bạn hoặc thành viên đã chủ động bật Bảo vệ.");
   }
 }
 

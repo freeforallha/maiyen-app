@@ -97,13 +97,7 @@ Future<bool?> showShareListSheet({
 
     final email = raw["email"]?.toString().trim().isNotEmpty == true
         ? raw["email"].toString().trim()
-        : strings.choose(
-            vi: "Không có email",
-            en: "No email",
-            zh: "无邮箱",
-            ko: "이메일 없음",
-            ja: "メールなし",
-          );
+        : strings.t("Không có email");
 
     final name = raw["name"]?.toString().trim().isNotEmpty == true
         ? raw["name"].toString().trim()
@@ -144,13 +138,7 @@ Future<bool?> showShareListSheet({
     if (cleanPhone.isEmpty) {
       showTopToast(
         callContext,
-        strings.choose(
-          vi: "Thành viên chưa cập nhật số điện thoại",
-          en: "This member has not added a phone number",
-          zh: "该成员尚未添加电话号码",
-          ko: "이 구성원이 전화번호를 추가하지 않았습니다",
-          ja: "このメンバーは電話番号を追加していません",
-        ),
+        strings.t("Thành viên chưa cập nhật số điện thoại"),
         color: Colors.orange,
         icon: Icons.phone_disabled_rounded,
       );
@@ -168,13 +156,7 @@ Future<bool?> showShareListSheet({
 
     showTopToast(
       callContext,
-      strings.choose(
-        vi: "Không mở được ứng dụng gọi điện",
-        en: "Could not open the phone app",
-        zh: "无法打开拨号应用",
-        ko: "전화 앱을 열 수 없습니다",
-        ja: "電話アプリを開けません",
-      ),
+      strings.t("Không mở được ứng dụng gọi điện"),
       color: Colors.red,
       icon: Icons.phone_disabled_rounded,
     );
@@ -235,20 +217,8 @@ Future<bool?> showShareListSheet({
 
     return Tooltip(
       message: hasPhone
-          ? strings.choose(
-              vi: "Gọi điện",
-              en: "Call",
-              zh: "拨打电话",
-              ko: "전화",
-              ja: "電話",
-            )
-          : strings.choose(
-              vi: "Chưa có số điện thoại",
-              en: "No phone number",
-              zh: "暂无电话号码",
-              ko: "전화번호 없음",
-              ja: "電話番号がありません",
-            ),
+          ? strings.t("Gọi điện")
+          : strings.t("Chưa có số điện thoại"),
       child: InkResponse(
         radius: 22,
         onTap: () {
@@ -436,13 +406,7 @@ Future<bool?> showShareListSheet({
                               member["email"]?.toString().trim().isNotEmpty ==
                                   true
                               ? member["email"].toString()
-                              : strings.choose(
-                                  vi: "Không có email",
-                                  en: "No email",
-                                  zh: "无邮箱",
-                                  ko: "이메일 없음",
-                                  ja: "メールなし",
-                                );
+                              : strings.t("Không có email");
 
                           final name =
                               member["name"]?.toString().trim().isNotEmpty ==
@@ -483,7 +447,7 @@ Future<bool?> showShareListSheet({
                                           Flexible(
                                             child: Text(
                                               targetUid == myUid
-                                                  ? "$name (${strings.choose(vi: "Bạn", en: "You", zh: "你", ko: "나", ja: "あなた")})"
+                                                  ? "$name (${strings.t("Bạn")})"
                                                   : name,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -528,13 +492,7 @@ Future<bool?> showShareListSheet({
                                           !canDeleteTarget) {
                                         showTopToast(
                                           sheetContext,
-                                          strings.choose(
-                                            vi: "Bạn không có quyền xoá thành viên này",
-                                            en: "You do not have permission to remove this member",
-                                            zh: "你没有权限移除此成员",
-                                            ko: "이 구성원을 삭제할 권한이 없습니다",
-                                            ja: "このメンバーを削除する権限がありません",
-                                          ),
+                                          strings.t("Bạn không có quyền xoá thành viên này"),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -546,13 +504,7 @@ Future<bool?> showShareListSheet({
                                           !isOwner) {
                                         showTopToast(
                                           sheetContext,
-                                          strings.choose(
-                                            vi: "Chỉ chủ nhà mới được thay đổi vai trò",
-                                            en: "Only the owner can change roles",
-                                            zh: "只有屋主可以更改角色",
-                                            ko: "집 주인만 역할을 변경할 수 있습니다",
-                                            ja: "役割を変更できるのは所有者のみです",
-                                          ),
+                                          strings.t("Chỉ chủ nhà mới được thay đổi vai trò"),
                                           color: Colors.orange,
                                           icon: Icons.lock_rounded,
                                         );
@@ -564,30 +516,12 @@ Future<bool?> showShareListSheet({
                                           builder: (_) => AlertDialog(
                                             title: Text(
                                               targetUid == myUid
-                                                  ? strings.choose(
-                                                      vi: "Rời khỏi nhà?",
-                                                      en: "Leave this home?",
-                                                      zh: "离开此家庭？",
-                                                      ko: "이 집에서 나가시겠습니까?",
-                                                      ja: "この家から退出しますか？",
-                                                    )
-                                                  : strings.choose(
-                                                      vi: "Xoá thành viên?",
-                                                      en: "Remove member?",
-                                                      zh: "移除成员？",
-                                                      ko: "구성원을 삭제하시겠습니까?",
-                                                      ja: "メンバーを削除しますか？",
-                                                    ),
+                                                  ? strings.t("Rời khỏi nhà?")
+                                                  : strings.t("Xoá thành viên?"),
                                             ),
                                             content: Text(
                                               targetUid == myUid
-                                                  ? strings.choose(
-                                                      vi: "Bạn chắc chắn muốn rời khỏi nhà này?",
-                                                      en: "Are you sure you want to leave this home?",
-                                                      zh: "确定要离开此家庭吗？",
-                                                      ko: "정말 이 집에서 나가시겠습니까?",
-                                                      ja: "この家から退出してもよろしいですか？",
-                                                    )
+                                                  ? strings.t("Bạn chắc chắn muốn rời khỏi nhà này?")
                                                   : strings.choose(
                                                       vi: "Bạn chắc chắn muốn xoá $name khỏi nhà này?",
                                                       en: "Are you sure you want to remove $name from this home?",
@@ -610,13 +544,7 @@ Future<bool?> showShareListSheet({
                                                   true,
                                                 ),
                                                 child: Text(
-                                                  strings.choose(
-                                                    vi: "Đồng ý",
-                                                    en: "OK",
-                                                    zh: "确定",
-                                                    ko: "확인",
-                                                    ja: "OK",
-                                                  ),
+                                                  strings.t("Đồng ý"),
                                                 ),
                                               ),
                                             ],
@@ -664,13 +592,7 @@ Future<bool?> showShareListSheet({
 
                                         showTopToast(
                                           sheetContext,
-                                          strings.choose(
-                                            vi: "Đã xoá thành viên",
-                                            en: "Member removed",
-                                            zh: "成员已移除",
-                                            ko: "구성원이 삭제되었습니다",
-                                            ja: "メンバーを削除しました",
-                                          ),
+                                          strings.t("Đã xoá thành viên"),
                                           color: Colors.green,
                                           icon: Icons.check_circle_rounded,
                                         );
@@ -684,12 +606,6 @@ Future<bool?> showShareListSheet({
                                         return;
                                       }
 
-                                      final oldRoleName = role == "admin"
-                                          ? "Admin"
-                                          : "Member";
-                                      final newRoleName = value == "admin"
-                                          ? "Admin"
-                                          : "Member";
                                       final actorName =
                                           ownerName.trim().isNotEmpty
                                           ? ownerName.trim()
@@ -710,19 +626,27 @@ Future<bool?> showShareListSheet({
                                         type: "member_role_changed",
                                         category: "member",
                                         severity: "info",
-                                        title: "Vai trò thành viên đã thay đổi",
-                                        message:
-                                            "$actorName đã đổi vai trò của $name từ $oldRoleName thành $newRoleName trong nhà \"$homeName\".",
+                                        title: strings.memberRoleChangedTitle(),
+                                        message: strings
+                                            .memberRoleChangedMessage(
+                                              actorName: actorName,
+                                              memberName: name,
+                                              oldRole: role,
+                                              newRole: value,
+                                              homeName: homeName,
+                                            ),
                                         entityType: "member",
                                         entityId: targetUid,
                                         homeName: homeName,
                                         includeActor: true,
                                         data: {
+                                          "type": "member_role_changed",
                                           "actorName": actorName,
                                           "memberName": name,
                                           "memberUid": targetUid,
                                           "oldRole": role,
                                           "newRole": value,
+                                          "homeName": homeName,
                                         },
                                       );
                                     },
@@ -742,13 +666,7 @@ Future<bool?> showShareListSheet({
                                         child: Text(
                                           targetUid == myUid
                                               ? strings.t("Rời khỏi nhà")
-                                              : strings.choose(
-                                                  vi: "Xoá thành viên",
-                                                  en: "Remove member",
-                                                  zh: "移除成员",
-                                                  ko: "구성원 삭제",
-                                                  ja: "メンバーを削除",
-                                                ),
+                                              : strings.t("Xoá thành viên"),
                                           style: const TextStyle(
                                             color: Colors.red,
                                           ),

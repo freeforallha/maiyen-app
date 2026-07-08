@@ -152,7 +152,7 @@ void showAllDevicesSheet({
                       "name": "Van thông minh",
                       "types": ["smart_valve"],
                     },
-                    
+
                     {
                       "name": "Chuông cửa",
                       "types": ["doorbell"],

@@ -6,6 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../app/safe_home_app.dart';
+import '../localization/app_language_controller.dart';
+import '../localization/app_strings.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
@@ -13,6 +15,9 @@ final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
 
 class NotificationService {
+  static AppStrings get _strings =>
+      AppStrings.fromLocale(appLanguageController.locale);
+
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
       ValueNotifier<Map<String, String>?>(null);
 
@@ -237,14 +242,15 @@ class NotificationService {
     required Map<String, dynamic> data,
   }) async {
     rememberAlarmIncident(data);
+    final strings = _strings;
 
     final title = data['title']?.toString().trim().isNotEmpty == true
         ? data['title'].toString().trim()
-        : '🚨 SafeHome phát hiện cảnh báo';
+        : strings.priorityAlarmNotificationTitle();
 
     final body = data['body']?.toString().trim().isNotEmpty == true
         ? data['body'].toString().trim()
-        : 'Mở SafeHome để kiểm tra ngay.';
+        : strings.openSafeHomeToCheckBody();
 
     final payload = 'priority_alarm::${jsonEncode(data)}';
 
@@ -325,6 +331,7 @@ class NotificationService {
 
   static void openAlarmFromData(Map<String, dynamic> data) {
     rememberAlarmIncident(data);
+    final strings = _strings;
 
     openAlarmPage(
       title: data['title']?.toString().trim().isNotEmpty == true
@@ -332,7 +339,7 @@ class NotificationService {
           : '🚨 SafeHome',
       body: data['body']?.toString().trim().isNotEmpty == true
           ? data['body'].toString().trim()
-          : 'Có cảnh báo cần kiểm tra ngay.',
+          : strings.alarmBody,
       alarmItemsJson: data['alarmItems']?.toString() ?? '',
       incidentId: data['incidentId']?.toString() ?? '',
       receiverUid: data['receiverUid']?.toString() ?? '',
@@ -345,6 +352,7 @@ class NotificationService {
   static Future<void> showChatNotification({
     required Map<String, dynamic> data,
   }) async {
+    final strings = _strings;
     final homeId = data["homeId"]?.toString().trim() ?? "";
 
     if (homeId.isEmpty || _activeHomeChatId == homeId) {
@@ -363,16 +371,16 @@ class NotificationService {
         ? rawTitle
         : unreadCount > 1
         ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
-              "$unreadCount tin nhắn mới"
+              "${strings.homeChatNewMessages(unreadCount)}"
         : homeName.isNotEmpty
         ? homeName
-        : "Tin nhắn HomeChat";
+        : strings.homeChatTitle();
 
     final body = rawBody.isNotEmpty
         ? rawBody
         : senderName.isNotEmpty
-        ? "$senderName đã gửi một tin nhắn"
-        : "Bạn có tin nhắn mới";
+        ? strings.homeChatSenderMessage(senderName)
+        : strings.homeChatNewMessage();
 
     final androidDetails = AndroidNotificationConfig.chatDetails(
       title: title,
@@ -423,11 +431,11 @@ class NotificationService {
     await localNotif.cancel(999998);
   }
 
-  static String lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
-  static String lastScheduleTitle = "Nhà";
+  static String lastScheduleBody = _strings.safetyReminderBody(isSafe: true);
+  static String lastScheduleTitle = _strings.defaultHomeName();
   static String lastReminderItemsJson = "";
   static String lastAlarmItemsJson = "";
-  static String lastAlarmBody = "Có cảnh báo an ninh cần kiểm tra ngay.";
+  static String lastAlarmBody = _strings.alarmBody;
   static const String reminderRouteName = "fullscreen_reminder";
 
   static bool _reminderPageOpen = false;
@@ -463,24 +471,24 @@ class NotificationService {
     required bool isSafe,
     required String reminderItemsJson,
   }) {
+    final strings = _strings;
     final existingItems = _decodeReminderItems(lastReminderItemsJson);
 
     final incomingItems = _decodeReminderItems(reminderItemsJson);
 
     if (incomingItems.isEmpty) {
-      final cleanBody = body
-          .replaceAll("⚠️", "")
-          .replaceAll("✅", "")
-          .replaceAll("CHƯA AN TOÀN", "")
-          .replaceAll("ĐÃ AN TOÀN", "")
-          .trim();
+      final cleanBody = strings.stripSafetyStatusText(body);
 
       incomingItems.add({
         "homeId": "",
-        "homeName": title.trim().isEmpty ? "Nhà" : title.trim(),
+        "homeName": title.trim().isEmpty ? strings.defaultHomeName() : title.trim(),
         "reasons": isSafe
             ? <String>[]
-            : <String>[cleanBody.isEmpty ? "Có mục cần kiểm tra" : cleanBody],
+            : <String>[
+                cleanBody.isEmpty
+                    ? strings.defaultUnsafeReminderReason()
+                    : cleanBody,
+              ],
       });
     }
 
@@ -491,7 +499,7 @@ class NotificationService {
 
       final homeName = item["homeName"]?.toString().trim().isNotEmpty == true
           ? item["homeName"].toString().trim()
-          : "Nhà";
+          : strings.defaultHomeName();
 
       final key = homeId.isNotEmpty ? homeId : homeName.toLowerCase();
 
@@ -535,11 +543,11 @@ class NotificationService {
     lastReminderItemsJson = jsonEncode(mergedItems);
 
     lastScheduleTitle = mergedItems.length == 1
-        ? mergedItems.first["homeName"]?.toString() ?? "Nhà"
+        ? mergedItems.first["homeName"]?.toString() ?? strings.defaultHomeName()
         : "SafeHome Reminder";
 
     if (!hasUnsafe) {
-      lastScheduleBody = "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.";
+      lastScheduleBody = strings.safetyReminderBody(isSafe: true);
       return;
     }
 
@@ -550,12 +558,12 @@ class NotificationService {
 
       if (reasons is! List || reasons.isEmpty) continue;
 
-      final homeName = item["homeName"]?.toString() ?? "Nhà";
+      final homeName = item["homeName"]?.toString() ?? strings.defaultHomeName();
 
       issueLines.add("$homeName: ${reasons.join(", ")}");
     }
 
-    lastScheduleBody = "⚠️ CHƯA AN TOÀN\n${issueLines.join("\n")}";
+    lastScheduleBody = "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
   }
 
   static void openOrMergeReminderPage({
@@ -635,10 +643,11 @@ class NotificationService {
         }
 
         if (payload.startsWith('alarm_summary|')) {
+          final strings = _strings;
           final parts = payload.split('|');
           final body = parts.length > 1
               ? Uri.decodeComponent(parts[1])
-              : 'Có cảnh báo cần kiểm tra';
+              : strings.alarmFallback;
 
           final alarmItems = parts.length > 2
               ? Uri.decodeComponent(parts[2])
@@ -847,7 +856,7 @@ class NotificationService {
   static void clearActiveAlarms({bool clearIncidentContexts = true}) {
     activeAlarmItems.clear();
     lastAlarmItemsJson = '';
-    lastAlarmBody = 'Có cảnh báo an ninh cần kiểm tra ngay.';
+    lastAlarmBody = _strings.alarmBody;
 
     if (clearIncidentContexts) {
       _activeAlarmIncidentContexts.clear();
@@ -861,33 +870,34 @@ class NotificationService {
     String title = '',
     bool forceShow = false,
   }) async {
+    final strings = _strings;
     final cleanReason = reason.trim();
     final cleanTitle = title.trim();
 
-    final reminderBody = isSafe
-        ? "✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi."
-        : cleanReason.isEmpty
-        ? "⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn."
-        : "⚠️ CHƯA AN TOÀN\n$cleanReason";
+    final reminderBody = strings.safetyReminderBody(
+      isSafe: isSafe,
+      reason: cleanReason,
+    );
 
     // Chỉ gộp dữ liệu để cập nhật cùng notification.
     // Không mở trang Reminder toàn màn hình.
     _mergeReminderSession(
-      title: cleanTitle.isNotEmpty ? cleanTitle : "Nhà",
+      title: cleanTitle.isNotEmpty ? cleanTitle : strings.defaultHomeName(),
       body: reminderBody,
       isSafe: isSafe,
       reminderItemsJson: reminderItemsJson,
     );
 
-    final notificationTitle = isSafe
-        ? '${lastScheduleTitle.trim().isEmpty ? "SafeHome" : lastScheduleTitle} · Đã an toàn'
-        : '${lastScheduleTitle.trim().isEmpty ? "SafeHome" : lastScheduleTitle} · Cần kiểm tra';
+    final notificationTitle = strings.safetyReminderNotificationTitle(
+      homeTitle: lastScheduleTitle.trim().isEmpty
+          ? "SafeHome"
+          : lastScheduleTitle,
+      isSafe: isSafe,
+    );
 
     final notificationBody = isSafe
-        ? 'Hãy an tâm nghỉ ngơi.'
-        : cleanReason.isEmpty
-        ? 'Có thiết bị chưa an toàn.'
-        : cleanReason;
+        ? strings.safeReminderBody()
+        : strings.unsafeReminderBody(cleanReason);
 
     final androidDetails = AndroidNotificationConfig.reminderDetails(
       title: notificationTitle,

@@ -21,17 +21,18 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
   Future<void> savePassword() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
+    final strings = AppStrings.of(context);
 
     final pass = passController.text.trim();
     final confirm = confirmController.text.trim();
 
     if (pass.length < 6) {
-      setState(() => error = "Mật khẩu tối thiểu 6 ký tự");
+      setState(() => error = strings.t("Mật khẩu tối thiểu 6 ký tự"));
       return;
     }
 
     if (pass != confirm) {
-      setState(() => error = "Mật khẩu nhập lại không khớp");
+      setState(() => error = strings.t("Mật khẩu nhập lại không khớp"));
       return;
     }
 
@@ -63,16 +64,10 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
 
-      final strings = AppStrings.of(context);
       setState(() {
         error = strings.sanitizeUserMessage(
           e.message ?? "",
-          fallback: strings.choose(
-            vi: "Không đặt được mật khẩu",
-            en: "Could not set password",
-            zh: "无法设置密码",
-            ja: "パスワードを設定できません",
-          ),
+          fallback: strings.t("Không đặt được mật khẩu"),
         );
       });
     } finally {
@@ -91,18 +86,22 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tạo mật khẩu"),
+        title: Text(strings.t("Tạo mật khẩu")),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(18),
         child: Column(
           children: [
-            const Text(
-              "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.",
-              style: TextStyle(fontSize: 15),
+            Text(
+              strings.t(
+                "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.",
+              ),
+              style: const TextStyle(fontSize: 15),
             ),
 
             const SizedBox(height: 20),
@@ -110,13 +109,17 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
             TextField(
               controller: passController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: "Mật khẩu mới"),
+              decoration: InputDecoration(
+                labelText: strings.t("Mật khẩu mới"),
+              ),
             ),
 
             TextField(
               controller: confirmController,
               obscureText: true,
-              decoration: const InputDecoration(labelText: "Nhập lại mật khẩu"),
+              decoration: InputDecoration(
+                labelText: strings.t("Nhập lại mật khẩu"),
+              ),
             ),
 
             if (error.isNotEmpty)
@@ -134,7 +137,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
                 onPressed: saving ? null : savePassword,
                 child: saving
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Hoàn tất"),
+                    : Text(strings.t("Hoàn tất")),
               ),
             ),
           ],

@@ -11,12 +11,12 @@ Future<String?> showPairDialog(BuildContext context) {
       final strings = AppStrings.of(dialogContext);
 
       return AlertDialog(
-        title: const Text("Nhập HUB ID"),
+        title: Text(strings.t("Nhập HUB ID")),
         content: TextField(
           autofocus: true,
           textCapitalization: TextCapitalization.characters,
-          decoration: const InputDecoration(
-            hintText: "VD: HUB_001",
+          decoration: InputDecoration(
+            hintText: strings.t("VD: HUB_001"),
             border: OutlineInputBorder(),
           ),
           onChanged: (value) {
@@ -37,7 +37,7 @@ Future<String?> showPairDialog(BuildContext context) {
               if (hubId.isEmpty) return;
               Navigator.pop(dialogContext, hubId);
             },
-            child: const Text("Pair"),
+            child: Text(strings.t("Pair")),
           ),
         ],
       );

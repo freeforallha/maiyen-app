@@ -519,11 +519,7 @@ void showSettingsSheet({
                       const SizedBox(width: 9),
                       Expanded(
                         child: Text(
-                          strings.choose(
-                            vi: "Quản lý nhà",
-                            en: "Home management",
-                            ja: "家の管理",
-                          ),
+                          strings.t("Quản lý nhà"),
                           style: const TextStyle(
                             color: SafeHomeColors.textPrimary,
                             fontSize: 18,
@@ -772,13 +768,7 @@ void showSettingsSheet({
                       if (role == "owner" || role == "admin")
                         tile(
                           icon: Icons.location_on_rounded,
-                          title: strings.choose(
-                            vi: "Tự động Bảo vệ khi rời nhà",
-                            en: "Auto Guard when away",
-                            zh: "离家自动布防",
-                            ko: "외출 시 자동 보호",
-                            ja: "外出時の自動 Guard",
-                          ),
+                          title: strings.t("Tự động Bảo vệ khi rời nhà"),
                           subtitle: strings.t(
                             "Đặt vị trí nhà và bật bảo vệ tự động",
                           ),
@@ -812,13 +802,7 @@ void showSettingsSheet({
                       if (role == "owner")
                         tile(
                           icon: Icons.home_work_rounded,
-                          title: strings.choose(
-                            vi: "Quản lý nhà",
-                            en: "Home management",
-                            zh: "家庭管理",
-                            ko: "집 관리",
-                            ja: "家の管理",
-                          ),
+                          title: strings.t("Quản lý nhà"),
                           subtitle: strings.t(
                             "Chuyển quyền chủ nhà hoặc xoá nhà",
                           ),

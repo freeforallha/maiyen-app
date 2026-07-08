@@ -874,13 +874,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             context,
             _strings.sanitizeUserMessage(
               error.toString(),
-              fallback: _strings.choose(
-                vi: "Không lấy được vị trí hiện tại",
-                en: "Could not get the current location",
-                zh: "无法获取当前位置",
-                ko: "현재 위치를 가져올 수 없습니다",
-                ja: "現在地を取得できません",
-              ),
+              fallback: _strings.t("Không lấy được vị trí hiện tại"),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -977,13 +971,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             context,
             _strings.sanitizeUserMessage(
               error.toString(),
-              fallback: _strings.choose(
-                vi: "Không lưu được cài đặt",
-                en: "Could not save the setting",
-                zh: "无法保存设置",
-                ko: "설정을 저장할 수 없습니다",
-                ja: "設定を保存できません",
-              ),
+              fallback: _strings.t("Không lưu được cài đặt"),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -2260,13 +2248,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         context,
         _strings.sanitizeUserMessage(
           e.toString(),
-          fallback: _strings.choose(
-            vi: "Không gửi được yêu cầu xoá",
-            en: "Could not send deletion request",
-            zh: "无法发送删除请求",
-            ko: "삭제 요청을 보낼 수 없습니다",
-            ja: "削除リクエストを送信できません",
-          ),
+          fallback: _strings.t("Không gửi được yêu cầu xoá"),
         ),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
@@ -2561,13 +2543,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             sheetContext,
             _strings.sanitizeUserMessage(
               e.toString(),
-              fallback: _strings.choose(
-                vi: "Không lưu được tạm tắt Alarm",
-                en: "Unable to save the Alarm pause",
-                zh: "无法保存 Alarm 暂停",
-                ko: "Alarm 임시 중지를 저장할 수 없습니다",
-                ja: "Alarm の一時停止を保存できません",
-              ),
+              fallback: _strings.t("Không lưu được tạm tắt Alarm"),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,
@@ -2614,13 +2590,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             sheetContext,
             _strings.sanitizeUserMessage(
               e.toString(),
-              fallback: _strings.choose(
-                vi: "Không xoá được lịch tạm tắt Alarm",
-                en: "Unable to delete the Alarm pause schedule",
-                zh: "无法删除 Alarm 暂停计划",
-                ko: "Alarm 임시 중지 일정을 삭제할 수 없습니다",
-                ja: "Alarm の一時停止スケジュールを削除できません",
-              ),
+              fallback: _strings.t("Không xoá được lịch tạm tắt Alarm"),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,

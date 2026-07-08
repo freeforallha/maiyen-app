@@ -302,12 +302,7 @@ void showHomeEventSheet({
                                 ),
                                 onPressed: () => Navigator.pop(context, true),
                                 child: Text(
-                                  strings.choose(
-                                    vi: "Xoá",
-                                    en: "Delete",
-                                    zh: "删除",
-                                    ja: "削除",
-                                  ),
+                                  strings.t("Xoá"),
                                 ),
                               ),
                             ],

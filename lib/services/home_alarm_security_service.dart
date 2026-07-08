@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+import 'package:safehome_app/helpers/debug_log.dart';
 
+import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import 'home_notification_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+
 enum HomeSecurityRepeatStatus { saved, homeUnavailable, noPermission, failed }
 
 class HomeSecurityRepeatResult {
@@ -224,6 +226,8 @@ class HomeAlarmSecurityService {
     required int securityModeRepeatMinutes,
   }) async {
     try {
+      final strings = AppStrings.fromLocale(appLanguageController.locale);
+
       await HomeNotificationService.notifyHome(
         ownerUid: ownerUid,
         homeId: homeId,
@@ -231,18 +235,21 @@ class HomeAlarmSecurityService {
         type: "manual_security_mode_enabled",
         category: "home",
         severity: "warning",
-        title: "Mode Bảo vệ thủ công đã bật",
-        message:
-            "$actorName đã bật Mode Bảo vệ thủ công cho "
-            "\"$homeName\". Chế độ này chỉ tắt khi một thành "
-            "viên có quyền chủ động chuyển về Bình thường. "
-            "${securityModeRepeatMinutes == 0 ? "Báo động không lặp lại." : "Báo động lặp sau $securityModeRepeatMinutes phút nếu sự cố vẫn còn."}",
+        title: strings.manualSecurityModeEnabledTitle(),
+        message: strings.manualSecurityModeEnabledMessage(
+          actorName: actorName,
+          homeName: homeName,
+          securityModeRepeatMinutes: securityModeRepeatMinutes,
+        ),
         actorUid: actorUid,
         entityType: "home",
         entityId: homeId,
         includeActor: true,
         writeHomeTimeline: true,
         data: {
+          "type": "manual_security_mode_enabled",
+          "actorName": actorName,
+          "homeName": homeName,
           "securityMode": "armed",
           "securityModeSource": "manual",
           "securityModeRepeatMinutes": securityModeRepeatMinutes,
@@ -357,30 +364,18 @@ class HomeAlarmSecurityService {
     await HomeNotificationService.addNotification(
       uid: uid,
       type: "alarm_setting_changed",
-      title: enabled ? strings.t("Đã bật Alarm") : strings.t("Đã tắt Alarm"),
-      message: enabled
-          ? strings.choose(
-              vi:
-                  "Bạn đã bật Alarm cho nhà "
-                  "\"$homeName\".",
-              en:
-                  "You enabled Alarm for "
-                  "\"$homeName\".",
-              ja:
-                  "「$homeName」の Alarm をオンにしました。",
-            )
-          : strings.choose(
-              vi:
-                  "Bạn đã tắt toàn bộ Alarm của nhà "
-                  "\"$homeName\".",
-              en:
-                  "You disabled every Alarm for "
-                  "\"$homeName\".",
-              ja:
-                  "「$homeName」のすべての Alarm をオフにしました。",
-            ),
+      title: strings.alarmSettingChangedTitle(enabled),
+      message: strings.alarmSettingChangedMessage(
+        enabled: enabled,
+        homeName: homeName,
+      ),
       homeId: homeId,
       homeName: homeName,
+      data: {
+        "type": "alarm_setting_changed",
+        "alarmEnabled": enabled,
+        "homeName": homeName,
+      },
     );
   }
 }

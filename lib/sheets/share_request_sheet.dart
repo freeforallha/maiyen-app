@@ -444,20 +444,10 @@ Future<bool?> showShareRequestSheet({
                                 : Icons.home_work_rounded;
 
                             final String badgeText = isJoinRequest
-                                ? strings.choose(
-                                    vi: "Lời xin vào nhà",
-                                    en: "Home join request",
-                                    zh: "加入家庭请求",
-                                    ja: "家への参加リクエスト",
-                                  )
+                                ? strings.t("Lời xin vào nhà")
                                 : isTransferOwner
                                 ? strings.t("Chuyển quyền chủ nhà")
-                                : strings.choose(
-                                    vi: "Lời mời gia nhập",
-                                    en: "Join invitation",
-                                    zh: "加入邀请",
-                                    ja: "参加招待",
-                                  );
+                                : strings.t("Lời mời gia nhập");
 
                             late final String title;
                             late final String subtitle;
@@ -467,12 +457,7 @@ Future<bool?> showShareRequestSheet({
                                   ? targetName
                                   : targetEmail.isNotEmpty
                                   ? targetEmail
-                                  : strings.choose(
-                                      vi: "Một người dùng SafeHome",
-                                      en: "A SafeHome user",
-                                      zh: "一位 SafeHome 用户",
-                                      ja: "SafeHome ユーザー",
-                                    );
+                                  : strings.t("Một người dùng SafeHome");
 
                               subtitle =
                                   targetEmail.isNotEmpty &&
@@ -490,12 +475,7 @@ Future<bool?> showShareRequestSheet({
                                       ja: "「$homeName」への参加をリクエストしています",
                                     );
                             } else if (isTransferOwner) {
-                              title = strings.choose(
-                                vi: "Nhận quyền chủ nhà",
-                                en: "Receive home ownership",
-                                zh: "接收屋主权限",
-                                ja: "家の所有権を受け取る",
-                              );
+                              title = strings.t("Nhận quyền chủ nhà");
                               subtitle = strings.choose(
                                 vi: "Bạn được mời nhận quyền nhà \"$homeName\"",
                                 en: "You were invited to receive ownership of \"$homeName\"",
@@ -507,12 +487,7 @@ Future<bool?> showShareRequestSheet({
                                   ? ownerName
                                   : ownerEmail.isNotEmpty
                                   ? ownerEmail
-                                  : strings.choose(
-                                      vi: "Lời mời từ chủ nhà",
-                                      en: "Invitation from the owner",
-                                      zh: "来自屋主的邀请",
-                                      ja: "所有者からの招待",
-                                    );
+                                  : strings.t("Lời mời từ chủ nhà");
 
                               subtitle =
                                   ownerEmail.isNotEmpty && ownerName.isNotEmpty
@@ -619,12 +594,7 @@ Future<bool?> showShareRequestSheet({
                                         child: OutlinedButton(
                                           onPressed: () => denyOne(requestKey),
                                           child: Text(
-                                            strings.choose(
-                                              vi: "Từ chối",
-                                              en: "Decline",
-                                              zh: "拒绝",
-                                              ja: "拒否",
-                                            ),
+                                            strings.t("Từ chối"),
                                           ),
                                         ),
                                       ),
@@ -648,18 +618,8 @@ Future<bool?> showShareRequestSheet({
                                               showTopToast(
                                                 context,
                                                 isJoinRequest
-                                                    ? strings.choose(
-                                                        vi: "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
-                                                        en: "Could not accept the join request. Please try again.",
-                                                        zh: "无法接受加入请求。请重试。",
-                                                        ja: "参加リクエストを承認できませんでした。もう一度お試しください。",
-                                                      )
-                                                    : strings.choose(
-                                                        vi: "Không thể chấp nhận lời mời. Vui lòng thử lại.",
-                                                        en: "Could not accept the invitation. Please try again.",
-                                                        zh: "无法接受邀请。请重试。",
-                                                        ja: "招待を承認できませんでした。もう一度お試しください。",
-                                                      ),
+                                                    ? strings.t("Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.")
+                                                    : strings.t("Không thể chấp nhận lời mời. Vui lòng thử lại."),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
                                               );
@@ -667,18 +627,8 @@ Future<bool?> showShareRequestSheet({
                                           },
                                           child: Text(
                                             isJoinRequest
-                                                ? strings.choose(
-                                                    vi: "Cho phép",
-                                                    en: "Allow",
-                                                    zh: "允许",
-                                                    ja: "許可",
-                                                  )
-                                                : strings.choose(
-                                                    vi: "Chấp nhận",
-                                                    en: "Accept",
-                                                    zh: "接受",
-                                                    ja: "承認",
-                                                  ),
+                                                ? strings.t("Cho phép")
+                                                : strings.t("Chấp nhận"),
                                           ),
                                         ),
                                       ),

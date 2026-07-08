@@ -1,15 +1,55 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../firebase_options.dart';
+import '../../../localization/app_strings.dart';
 import '../../notification_service.dart';
 import 'android_notification_config.dart';
 
+const String _languageStorageKey = 'safehome_language_code';
+
+Locale _localeForLanguageCode(String code) {
+  if (code == 'zh') {
+    return const Locale('zh', 'CN');
+  }
+
+  if (code == 'ko') {
+    return const Locale('ko', 'KR');
+  }
+
+  if (code == 'ja') {
+    return const Locale('ja', 'JP');
+  }
+
+  if (code == 'en') {
+    return const Locale('en');
+  }
+
+  return const Locale('vi');
+}
+
+Future<AppStrings> _backgroundStrings() async {
+  try {
+    final preferences = await SharedPreferences.getInstance();
+    final code = preferences.getString(_languageStorageKey) ?? 'vi';
+
+    return AppStrings.fromLocale(_localeForLanguageCode(code));
+  } catch (_) {
+    return AppStrings.fromLocale(
+      _localeForLanguageCode(PlatformDispatcher.instance.locale.languageCode),
+    );
+  }
+}
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  DartPluginRegistrant.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await localNotif.initialize(
@@ -53,13 +93,14 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {
+  final strings = await _backgroundStrings();
   final title = data['title']?.toString().trim().isNotEmpty == true
       ? data['title'].toString().trim()
-      : '🚨 SafeHome phát hiện cảnh báo';
+      : strings.priorityAlarmNotificationTitle();
 
   final body = data['body']?.toString().trim().isNotEmpty == true
       ? data['body'].toString().trim()
-      : 'Mở SafeHome để kiểm tra ngay.';
+      : strings.openSafeHomeToCheckBody();
 
   final payload = 'priority_alarm::${jsonEncode(data)}';
 
@@ -83,15 +124,16 @@ Future<void> _showBackgroundFullscreenAlarm(
   Map<String, dynamic> data,
   RemoteNotification? notification,
 ) async {
+  final strings = await _backgroundStrings();
   final title =
       data['title']?.toString() ??
       notification?.title?.toString() ??
-      '🚨 BÁO ĐỘNG SAFEHOME';
+      strings.priorityAlarmNotificationTitle();
 
   final body =
       data['body']?.toString() ??
       notification?.body?.toString() ??
-      'Có cảnh báo cần kiểm tra ngay.';
+      strings.alarmBody;
 
   final payload = 'alarm_siren::${jsonEncode(data)}';
 
@@ -115,7 +157,8 @@ Future<void> _showBackgroundFullscreenAlarm(
 Future<void> _showBackgroundScheduleNotification(
   Map<String, dynamic> data,
 ) async {
-  final body = _buildScheduleBody(data);
+  final strings = await _backgroundStrings();
+  final body = _buildScheduleBody(data, strings);
 
   final homeTitle = data['title']?.toString().trim().isNotEmpty == true
       ? data['title'].toString().trim()
@@ -126,9 +169,10 @@ Future<void> _showBackgroundScheduleNotification(
       data['isSafe']?.toString() == '1' ||
       data['isSafe']?.toString() == 'yes';
 
-  final notificationTitle = isSafe
-      ? '$homeTitle · Đã an toàn'
-      : '$homeTitle · Cần kiểm tra';
+  final notificationTitle = strings.safetyReminderNotificationTitle(
+    homeTitle: homeTitle,
+    isSafe: isSafe,
+  );
 
   await localNotif.cancel(999998);
 
@@ -148,6 +192,7 @@ Future<void> _showBackgroundScheduleNotification(
 }
 
 Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
+  final strings = await _backgroundStrings();
   final homeId = data['homeId']?.toString().trim() ?? '';
 
   if (homeId.isEmpty) {
@@ -168,16 +213,16 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
       ? rawTitle
       : unreadCount > 1
       ? '${homeName.isNotEmpty ? homeName : "HomeChat"} · '
-            '$unreadCount tin nhắn mới'
+            '${strings.homeChatNewMessages(unreadCount)}'
       : homeName.isNotEmpty
       ? homeName
-      : 'Tin nhắn HomeChat';
+      : strings.homeChatTitle();
 
   final body = rawBody.isNotEmpty
       ? rawBody
       : senderName.isNotEmpty
-      ? '$senderName đã gửi một tin nhắn'
-      : 'Bạn có tin nhắn mới';
+      ? strings.homeChatSenderMessage(senderName)
+      : strings.homeChatNewMessage();
 
   final payload =
       'home_chat::${jsonEncode({'homeId': homeId, 'homeName': homeName, 'ownerUid': data['ownerUid']?.toString() ?? '', 'messageId': data['messageId']?.toString() ?? ''})}';
@@ -211,7 +256,7 @@ int _chatNotificationId(String homeId) {
   return 200000 + (hash % 700000);
 }
 
-String _buildScheduleBody(Map<String, dynamic> data) {
+String _buildScheduleBody(Map<String, dynamic> data, AppStrings strings) {
   final isSafeText = data['isSafe']?.toString() ?? 'true';
 
   final isSafe =
@@ -219,11 +264,10 @@ String _buildScheduleBody(Map<String, dynamic> data) {
 
   final reason = data['reason']?.toString().trim() ?? '';
 
-  NotificationService.lastScheduleBody = isSafe
-      ? '✅ ĐÃ AN TOÀN\nHãy an tâm nghỉ ngơi.'
-      : reason.isEmpty
-      ? '⚠️ CHƯA AN TOÀN\nCó thiết bị chưa an toàn.'
-      : '⚠️ CHƯA AN TOÀN\n$reason';
+  NotificationService.lastScheduleBody = strings.safetyReminderBody(
+    isSafe: isSafe,
+    reason: reason,
+  );
 
   return NotificationService.lastScheduleBody;
 }

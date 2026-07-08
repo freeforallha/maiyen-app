@@ -401,12 +401,7 @@ void showHomeChatSheet({
                         const SizedBox(height: 12),
 
                         Text(
-                          strings.choose(
-                            vi: "Chưa có số điện thoại",
-                            en: "No phone number",
-                            zh: "暂无电话号码",
-                            ja: "電話番号がありません",
-                          ),
+                          strings.t("Chưa có số điện thoại"),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
@@ -468,12 +463,7 @@ void showHomeChatSheet({
 
                         showTopToast(
                           sheetContext,
-                          strings.choose(
-                            vi: "Không mở được ứng dụng gọi điện",
-                            en: "Could not open the phone app",
-                            zh: "无法打开拨号应用",
-                            ja: "電話アプリを開けません",
-                          ),
+                          strings.t("Không mở được ứng dụng gọi điện"),
                           color: Colors.red,
                           icon: Icons.phone_disabled_rounded,
                         );
@@ -1393,8 +1383,9 @@ void showHomeChatSheet({
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Text(
-                                                "Còn $unreadNoticeCount tin nhắn "
-                                                "chưa đọc",
+                                                strings.unreadChatNotice(
+                                                  unreadNoticeCount,
+                                                ),
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w700,

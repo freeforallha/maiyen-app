@@ -17,13 +17,7 @@ Future<bool> showConfirmDialog(BuildContext context, String title) async {
               Navigator.pop(dialogContext, false);
             },
             child: Text(
-              strings.choose(
-                vi: "Không",
-                en: "No",
-                zh: "否",
-                ko: "아니요",
-                ja: "いいえ",
-              ),
+              strings.t("Không"),
             ),
           ),
 

@@ -280,13 +280,7 @@ class _AuthGateState extends State<AuthGate> {
     final strings = AppStrings.of(context);
     final message = strings.sanitizeUserMessage(
       error?.toString() ?? "",
-      fallback: strings.choose(
-        vi: "Không thể tải dữ liệu tài khoản",
-        en: "Could not load account data",
-        zh: "无法加载账户数据",
-        ko: "계정 데이터를 불러올 수 없습니다",
-        ja: "アカウントデータを読み込めません",
-      ),
+      fallback: strings.t("Không thể tải dữ liệu tài khoản"),
     );
 
     return Scaffold(
@@ -305,13 +299,7 @@ class _AuthGateState extends State<AuthGate> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  strings.choose(
-                    vi: "Không thể tải dữ liệu tài khoản",
-                    en: "Could not load account data",
-                    zh: "无法加载账户数据",
-                    ko: "계정 데이터를 불러올 수 없습니다",
-                    ja: "アカウントデータを読み込めません",
-                  ),
+                  strings.t("Không thể tải dữ liệu tài khoản"),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: SafeHomeColors.textPrimary,
@@ -335,13 +323,7 @@ class _AuthGateState extends State<AuthGate> {
                     onPressed: _retryProfileLoad,
                     icon: const Icon(Icons.refresh_rounded),
                     label: Text(
-                      strings.choose(
-                        vi: "Thử lại",
-                        en: "Try again",
-                        zh: "重试",
-                        ko: "다시 시도",
-                        ja: "再試行",
-                      ),
+                      strings.t("Thử lại"),
                     ),
                   ),
                 ),
@@ -498,51 +480,15 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
               const SizedBox(width: 9),
               Expanded(
                 child: Text(
-                  strings.choose(
-                    vi: "Cho phép vị trí luôn luôn",
-                    en: "Always allow location",
-                    ja: "位置情報を常に許可",
-                  ),
+                  strings.t("Cho phép vị trí luôn luôn"),
                 ),
               ),
             ],
           ),
           content: Text(
             currentlyWhileUsing
-                ? strings.choose(
-                    vi:
-                        "SafeHome hiện chỉ được truy cập vị trí "
-                        "khi bạn đang sử dụng ứng dụng.\n\n"
-                        "Hãy chọn quyền Vị trí và chuyển sang "
-                        "\"Luôn cho phép\" để tính năng tự động "
-                        "Bảo vệ khi rời nhà hoạt động khi ứng dụng "
-                        "đang chạy nền.",
-                    en:
-                        "SafeHome can currently access location only "
-                        "while the app is in use.\n\n"
-                        "Open Location permission and select "
-                        "\"Allow all the time\" so automatic protection "
-                        "continues working in the background.",
-                    ja:
-                        "SafeHome は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n"
-                        "位置情報の権限を開き、\"常に許可\" を選択すると、"
-                        "外出時の自動保護がバックグラウンドでも動作し続けます。",
-                  )
-                : strings.choose(
-                    vi:
-                        "SafeHome cần quyền vị trí "
-                        "\"Luôn cho phép\" để nhận biết khi bạn "
-                        "rời hoặc trở về nhà, kể cả khi ứng dụng "
-                        "đang chạy nền.",
-                    en:
-                        "SafeHome needs always-on location permission "
-                        "to detect when you leave or return home, "
-                        "including while the app is in the background.",
-                    ja:
-                        "SafeHome には、外出または帰宅を検知するために "
-                        "\"常に許可\" の位置情報権限が必要です。"
-                        "アプリがバックグラウンドで動作している場合も含まれます。",
-                  ),
+                ? strings.t("SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.")
+                : strings.t("SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền."),
           ),
           actions: [
             TextButton(
@@ -550,7 +496,7 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
                 Navigator.of(dialogContext).pop(false);
               },
               child: Text(
-                strings.choose(vi: "Để sau", en: "Later", ja: "後で"),
+                strings.t("Để sau"),
               ),
             ),
             ElevatedButton.icon(
@@ -559,11 +505,7 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
               },
               icon: const Icon(Icons.settings_rounded),
               label: Text(
-                strings.choose(
-                  vi: "Mở cài đặt",
-                  en: "Open settings",
-                  ja: "設定を開く",
-                ),
+                strings.t("Mở cài đặt"),
               ),
             ),
           ],

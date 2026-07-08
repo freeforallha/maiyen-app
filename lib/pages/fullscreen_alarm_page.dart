@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../app/safe_home_app.dart';
 import '../helpers/top_toast.dart';
+import '../localization/app_strings.dart';
 import '../services/notification_service.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
@@ -42,15 +43,39 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   late String currentAlarmItemsJson;
   bool get isReminder => widget.silentMode;
 
-  bool get isSafeReminder =>
-      isReminder && currentReminderBody.toUpperCase().contains("ĐÃ AN TOÀN");
+  bool get isSafeReminder {
+    if (!isReminder) {
+      return false;
+    }
+
+    try {
+      final decoded = jsonDecode(currentReminderItemsJson.trim());
+
+      if (decoded is List && decoded.isNotEmpty) {
+        return decoded.whereType<Map>().every((item) {
+          final reasons = item["reasons"];
+
+          if (reasons is! List) {
+            return true;
+          }
+
+          return reasons.every(
+            (reason) => reason?.toString().trim().isEmpty ?? true,
+          );
+        });
+      }
+    } catch (_) {}
+
+    return currentReminderBody.contains("✅") &&
+        !currentReminderBody.contains("⚠️");
+  }
 
   String get reminderHomeName {
     final raw = currentReminderTitle.trim();
     final lower = raw.toLowerCase();
 
     if (raw.isEmpty || lower.contains("safehome")) {
-      return "Nhà";
+      return "";
     }
 
     return raw;
@@ -123,7 +148,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     showTopToast(
       context,
-      'Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.',
+      AppStrings.of(context).alarmActionErrorMessage(),
       color: Colors.red,
       icon: Icons.wifi_off_rounded,
     );
@@ -242,7 +267,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
   }
 
-  Map<String, List<String>> buildReminderIssueMap() {
+  Map<String, List<String>> buildReminderIssueMap(AppStrings strings) {
     final Map<String, List<String>> result = {};
 
     try {
@@ -260,7 +285,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             final homeName =
                 data["homeName"]?.toString().trim().isNotEmpty == true
                 ? data["homeName"].toString().trim()
-                : "Nhà";
+                : strings.defaultHomeName();
 
             final rawReasons = data["reasons"];
             final reasons = <String>[];
@@ -278,8 +303,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             final homeReasons = result.putIfAbsent(homeName, () => []);
 
             if (reasons.isEmpty) {
-              if (!homeReasons.contains("Đã an toàn")) {
-                homeReasons.add("Đã an toàn");
+              final safeReason = strings.safeReminderBody();
+
+              if (!homeReasons.contains(safeReason)) {
+                homeReasons.add(safeReason);
               }
             } else {
               for (final reason in reasons) {
@@ -297,22 +324,22 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       return result;
     }
 
-    final homeName = reminderHomeName;
+    final homeName = reminderHomeName.isNotEmpty
+        ? reminderHomeName
+        : strings.defaultHomeName();
 
     if (isSafeReminder) {
       return {
-        homeName: ["Hãy an tâm nghỉ ngơi"],
+        homeName: [strings.safeReminderBody()],
       };
     }
 
-    final bodyText = currentReminderBody
-        .replaceAll("⚠️", "")
-        .replaceAll("CHƯA AN TOÀN", "")
-        .replaceAll("ĐÃ AN TOÀN", "")
-        .trim();
+    final bodyText = strings.stripSafetyStatusText(currentReminderBody);
 
     return {
-      homeName: [bodyText.isNotEmpty ? bodyText : "Có mục cần kiểm tra"],
+      homeName: [
+        bodyText.isNotEmpty ? bodyText : strings.defaultUnsafeReminderReason(),
+      ],
     };
   }
 
@@ -404,41 +431,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     }
   }
 
-  String alarmTitle(String type) {
-    switch (type) {
-      case "sos":
-        return "CẢNH BÁO SOS";
-      case "smoke":
-        return "CẢNH BÁO KHÓI / CHÁY";
-      case "flood":
-        return "CẢNH BÁO NGẬP NƯỚC";
-      case "gas":
-        return "CẢNH BÁO RÒ KHÍ";
-      case "door":
-        return "CẢNH BÁO CỬA";
-      default:
-        return "CẢNH BÁO AN NINH";
-    }
+  String alarmTitle(String type, AppStrings strings) {
+    return strings.alarmCategoryTitle(type);
   }
 
-  String fallbackReason(String type) {
-    switch (type) {
-      case "sos":
-        return "Có nút SOS vừa được kích hoạt";
-      case "smoke":
-        return "Có dấu hiệu khói hoặc cháy";
-      case "flood":
-        return "Có dấu hiệu ngập nước";
-      case "gas":
-        return "Có dấu hiệu rò khí";
-      case "door":
-        return "Có cửa đang mở hoặc thiết bị bị tháo";
-      default:
-        return "Có thiết bị đang cảnh báo";
-    }
+  String fallbackReason(String type, AppStrings strings) {
+    return strings.alarmFallbackReason(type);
   }
 
-  Map<String, List<String>> buildAlarmIssueMap(String type) {
+  Map<String, List<String>> buildAlarmIssueMap(
+    String type,
+    AppStrings strings,
+  ) {
     final items = alarmItems();
     final Map<String, List<String>> result = {};
 
@@ -449,7 +453,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       final reason = item["reason"]?.toString().trim();
 
       final realHomeName = homeName == null || homeName.isEmpty
-          ? "Nhà"
+          ? strings.defaultHomeName()
           : homeName;
 
       String text = "";
@@ -471,7 +475,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       }
 
       if (text.isEmpty) {
-        text = fallbackReason(type);
+        text = fallbackReason(type, strings);
       }
 
       final homeReasons = result.putIfAbsent(realHomeName, () => []);
@@ -491,7 +495,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     }
 
     return {
-      "SafeHome": [fallbackReason(type)],
+      "SafeHome": [fallbackReason(type, strings)],
     };
   }
 
@@ -567,24 +571,23 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (!context.mounted) return;
 
+    final strings = AppStrings.of(context);
+
     final ok = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
-          title: const Text('Xác nhận tắt cảnh báo'),
-          content: const Text(
-            'Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\n'
-            'Bạn chắc chắn muốn tắt cảnh báo?',
-          ),
+          title: Text(strings.t("Xác nhận tắt cảnh báo")),
+          content: Text(strings.confirmStopAlarmBody()),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('HỦY'),
+              child: Text(strings.t("HỦY")),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('XÁC NHẬN'),
+              child: Text(strings.t("XÁC NHẬN")),
             ),
           ],
         );
@@ -639,8 +642,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Widget _buildReminderUI(BuildContext context) {
+    final strings = AppStrings.of(context);
     final safe = isSafeReminder;
-    final issueMap = buildReminderIssueMap();
+    final issueMap = buildReminderIssueMap(strings);
     const reminderSubtitle = "SafeHome Security Reminder";
 
     final Color accent = safe ? Colors.green : Colors.orange;
@@ -706,7 +710,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                           ),
                           const SizedBox(height: 14),
                           Text(
-                            safe ? "ĐÃ AN TOÀN" : "CẦN KIỂM TRA",
+                            safe
+                                ? strings.safeStatusTitle()
+                                : strings.unsafeStatusTitle(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: accent,
@@ -780,7 +786,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            "Tự đóng sau ${formatRemainingTime()}",
+                            strings.autoCloseAfter(formatRemainingTime()),
                             style: TextStyle(
                               color: Colors.grey.shade700,
                               fontSize: 14,
@@ -805,9 +811,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         ),
                       ),
                       icon: const Icon(Icons.home_rounded),
-                      label: const Text(
-                        "KIỂM TRA NHÀ",
-                        style: TextStyle(
+                      label: Text(
+                        strings.t("KIỂM TRA NHÀ"),
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w900,
                         ),
@@ -819,7 +825,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                   TextButton(
                     onPressed: closeReminder,
                     child: Text(
-                      "ĐÓNG NHẮC NHỞ",
+                      strings.t("ĐÓNG NHẮC NHỞ"),
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontWeight: FontWeight.w800,
@@ -836,21 +842,19 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Widget _buildAlarmUI(BuildContext context) {
+    final strings = AppStrings.of(context);
     final type = alarmType();
-    final issueMap = buildAlarmIssueMap(type);
+    final issueMap = buildAlarmIssueMap(type, strings);
     final nextAlarmMap = buildNextAlarmMap();
 
     final isEmergency =
         type == 'sos' || type == 'smoke' || type == 'flood' || type == 'gas';
 
     final repeatText = isEmergency
-        ? 'Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang '
-              'gọi điện khẩn cấp.'
+        ? strings.alarmEmergencyEscalationText()
         : nextAlarmMap.isNotEmpty
-        ? 'Báo lại lúc ${nextAlarmMap.values.first} '
-              'nếu vấn đề chưa được xử lý.'
-        : 'Sẽ báo lại theo lịch Alarm đã cài '
-              'nếu vấn đề chưa được xử lý.';
+        ? strings.alarmRepeatAtText(nextAlarmMap.values.first)
+        : strings.alarmRepeatByScheduleText();
 
     final Color bgColor = switch (type) {
       "sos" => const Color(0xFF3A0508),
@@ -913,7 +917,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         const SizedBox(height: 18),
 
                         Text(
-                          alarmTitle(type),
+                          alarmTitle(type, strings),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: accent,
@@ -926,7 +930,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         const SizedBox(height: 6),
 
                         Text(
-                          "SafeHome Security Alert",
+                          strings.t("SafeHome Security Alert"),
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 13,
@@ -1052,9 +1056,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                       ),
                     ),
                     icon: const Icon(Icons.home_rounded),
-                    label: const Text(
-                      "KIỂM TRA NHÀ",
-                      style: TextStyle(
+                    label: Text(
+                      strings.t("KIỂM TRA NHÀ"),
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                       ),
@@ -1074,9 +1078,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     ),
                   ),
                   icon: const Icon(Icons.power_settings_new_rounded, size: 19),
-                  label: const Text(
-                    "TẮT CẢNH BÁO",
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+                  label: Text(
+                    strings.stopAlarmLabel(),
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   onPressed: () => confirmStopAlarm(context),
                 ),
