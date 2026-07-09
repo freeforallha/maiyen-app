@@ -1,10 +1,19 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:safehome_app/localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
+
+  static const legacyAlarmChannelId = 'alarm_channel_silent_v3';
+  static const alarmFullscreenChannelId = 'safehome_alarm_fullscreen_v5';
+  static const emergencyPriorityChannelId = 'safehome_emergency_priority_v2';
+  static const scheduleFullscreenChannelId =
+      'safehome_schedule_fullscreen_channel_v2';
+  static const reminderPriorityChannelId = 'safehome_reminder_priority_v3';
+  static const chatChannelId = 'safehome_chat_channel_v2';
 
   static const initializationSettings = AndroidInitializationSettings(
     'ic_stat_safehome',
@@ -13,8 +22,9 @@ class AndroidNotificationConfig {
   static bool get isAndroid => Platform.isAndroid;
 
   static Future<void> configure(
-    FlutterLocalNotificationsPlugin localNotif,
-  ) async {
+    FlutterLocalNotificationsPlugin localNotif, {
+    required AppStrings strings,
+  }) async {
     if (!isAndroid) {
       return;
     }
@@ -29,65 +39,66 @@ class AndroidNotificationConfig {
 
     safeDebugPrint('FULL_SCREEN_INTENT_PERMISSION: $fullScreenPermission');
 
-    await createChannels(localNotif);
+    await createChannels(localNotif, strings: strings);
   }
 
   static Future<void> createChannels(
-    FlutterLocalNotificationsPlugin localNotif,
-  ) async {
+    FlutterLocalNotificationsPlugin localNotif, {
+    required AppStrings strings,
+  }) async {
     final androidPlugin = localNotif
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
 
-    const legacyAlarmChannel = AndroidNotificationChannel(
-      'alarm_channel_silent_v3',
+    final legacyAlarmChannel = AndroidNotificationChannel(
+      legacyAlarmChannelId,
       'Alarm Channel Silent V3',
-      description: 'Kênh Alarm cũ để giữ tương thích',
+      description: strings.androidLegacyAlarmChannelDescription(),
       importance: Importance.max,
       playSound: false,
       enableVibration: true,
     );
 
-    const alarmFullscreenChannel = AndroidNotificationChannel(
-      'safehome_alarm_fullscreen_v4',
-      'SafeHome Alarm Fullscreen',
-      description: 'Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm',
+    final alarmFullscreenChannel = AndroidNotificationChannel(
+      alarmFullscreenChannelId,
+      strings.androidAlarmFullscreenChannelName(),
+      description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
       playSound: false,
       enableVibration: true,
     );
 
-    const emergencyPriorityChannel = AndroidNotificationChannel(
-      'safehome_emergency_priority_v1',
-      'SafeHome Emergency Priority',
-      description: 'Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình',
+    final emergencyPriorityChannel = AndroidNotificationChannel(
+      emergencyPriorityChannelId,
+      strings.androidEmergencyPriorityChannelName(),
+      description: strings.androidEmergencyPriorityChannelDescription(),
       importance: Importance.max,
       playSound: true,
       enableVibration: true,
     );
 
-    const scheduleFullscreenChannel = AndroidNotificationChannel(
-      'safehome_schedule_fullscreen_channel',
-      'SafeHome Schedule Fullscreen',
-      description: 'Nhắc nhở SafeHome toàn màn hình không âm thanh',
+    final scheduleFullscreenChannel = AndroidNotificationChannel(
+      scheduleFullscreenChannelId,
+      strings.androidScheduleFullscreenChannelName(),
+      description: strings.androidScheduleFullscreenChannelDescription(),
       importance: Importance.max,
       playSound: false,
     );
 
-    const reminderChannel = AndroidNotificationChannel(
-      'safehome_reminder_priority_v2',
-      'SafeHome Reminder Priority',
-      description: 'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
+    final reminderChannel = AndroidNotificationChannel(
+      reminderPriorityChannelId,
+      strings.androidReminderPriorityChannelName(),
+      description: strings.androidReminderPriorityChannelDescription(),
       importance: Importance.max,
       playSound: true,
       enableVibration: true,
     );
 
-    const chatChannel = AndroidNotificationChannel(
-      'safehome_chat_channel_v1',
-      'Tin nhắn HomeChat',
-      description: 'Tin nhắn mới trong các nhà SafeHome',
+    final chatChannel = AndroidNotificationChannel(
+      chatChannelId,
+      strings.homeChatTitle(),
+      description: strings.androidHomeChatChannelDescription(),
       importance: Importance.high,
       playSound: true,
       enableVibration: true,
@@ -102,44 +113,45 @@ class AndroidNotificationConfig {
   }
 
   static Future<void> createBackgroundChannels(
-    FlutterLocalNotificationsPlugin localNotif,
-  ) async {
+    FlutterLocalNotificationsPlugin localNotif, {
+    required AppStrings strings,
+  }) async {
     final androidPlugin = localNotif
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
 
-    const alarmFullscreenChannel = AndroidNotificationChannel(
-      'safehome_alarm_fullscreen_v4',
-      'SafeHome Alarm Fullscreen',
-      description: 'Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm',
+    final alarmFullscreenChannel = AndroidNotificationChannel(
+      alarmFullscreenChannelId,
+      strings.androidAlarmFullscreenChannelName(),
+      description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
       playSound: false,
       enableVibration: true,
     );
 
-    const emergencyPriorityChannel = AndroidNotificationChannel(
-      'safehome_emergency_priority_v1',
-      'SafeHome Emergency Priority',
-      description: 'Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình',
+    final emergencyPriorityChannel = AndroidNotificationChannel(
+      emergencyPriorityChannelId,
+      strings.androidEmergencyPriorityChannelName(),
+      description: strings.androidEmergencyPriorityChannelDescription(),
       importance: Importance.max,
       playSound: true,
       enableVibration: true,
     );
 
-    const reminderPriorityChannel = AndroidNotificationChannel(
-      'safehome_reminder_priority_v2',
-      'SafeHome Reminder Priority',
-      description: 'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
+    final reminderPriorityChannel = AndroidNotificationChannel(
+      reminderPriorityChannelId,
+      strings.androidReminderPriorityChannelName(),
+      description: strings.androidReminderPriorityChannelDescription(),
       importance: Importance.max,
       playSound: true,
       enableVibration: true,
     );
 
-    const chatChannel = AndroidNotificationChannel(
-      'safehome_chat_channel_v1',
-      'Tin nhắn HomeChat',
-      description: 'Tin nhắn mới trong các nhà SafeHome',
+    final chatChannel = AndroidNotificationChannel(
+      chatChannelId,
+      strings.homeChatTitle(),
+      description: strings.androidHomeChatChannelDescription(),
       importance: Importance.high,
       playSound: true,
       enableVibration: true,
@@ -154,12 +166,12 @@ class AndroidNotificationConfig {
   static AndroidNotificationDetails priorityAlarmDetails({
     required String title,
     required String body,
+    required AppStrings strings,
   }) {
     return AndroidNotificationDetails(
-      'safehome_emergency_priority_v1',
-      'SafeHome Emergency Priority',
-      channelDescription:
-          'Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình',
+      emergencyPriorityChannelId,
+      strings.androidEmergencyPriorityChannelName(),
+      channelDescription: strings.androidEmergencyPriorityChannelDescription(),
       visibility: NotificationVisibility.public,
       importance: Importance.max,
       priority: Priority.max,
@@ -180,12 +192,12 @@ class AndroidNotificationConfig {
   static AndroidNotificationDetails fullscreenAlarmDetails({
     required String title,
     required String body,
+    required AppStrings strings,
   }) {
     return AndroidNotificationDetails(
-      'safehome_alarm_fullscreen_v4',
-      'SafeHome Alarm Fullscreen',
-      channelDescription:
-          'Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm',
+      alarmFullscreenChannelId,
+      strings.androidAlarmFullscreenChannelName(),
+      channelDescription: strings.androidAlarmFullscreenChannelDescription(),
       visibility: NotificationVisibility.public,
       importance: Importance.max,
       priority: Priority.max,
@@ -206,12 +218,13 @@ class AndroidNotificationConfig {
   static AndroidNotificationDetails chatDetails({
     required String title,
     required String body,
+    required AppStrings strings,
     String? tag,
   }) {
     return AndroidNotificationDetails(
-      'safehome_chat_channel_v1',
-      'Tin nhắn HomeChat',
-      channelDescription: 'Tin nhắn mới trong các nhà SafeHome',
+      chatChannelId,
+      strings.homeChatTitle(),
+      channelDescription: strings.androidHomeChatChannelDescription(),
       importance: Importance.high,
       priority: Priority.high,
       category: AndroidNotificationCategory.message,
@@ -226,12 +239,12 @@ class AndroidNotificationConfig {
     required String title,
     required String body,
     required String bigText,
+    required AppStrings strings,
   }) {
     return AndroidNotificationDetails(
-      'safehome_reminder_priority_v2',
-      'SafeHome Reminder Priority',
-      channelDescription:
-          'Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình',
+      reminderPriorityChannelId,
+      strings.androidReminderPriorityChannelName(),
+      channelDescription: strings.androidReminderPriorityChannelDescription(),
       visibility: NotificationVisibility.public,
       importance: Importance.max,
       priority: Priority.max,

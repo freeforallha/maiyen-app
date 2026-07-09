@@ -15,6 +15,7 @@ import '../../../localization/app_strings.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 const String _autoAwayTaskDataKey =
     'safehome_auto_away_foreground_task_config_v1';
 const int _autoAwayForegroundServiceId = 884201;
@@ -91,6 +92,23 @@ class AndroidAutoAwayForegroundTaskService {
     );
 
     _initialized = true;
+  }
+
+  static Future<void> refreshNotificationLanguage() async {
+    if (!_isAndroid) {
+      return;
+    }
+
+    if (!await FlutterForegroundTask.isRunningService) {
+      return;
+    }
+
+    final strings = _strings;
+
+    await FlutterForegroundTask.updateService(
+      notificationTitle: strings.updatingLocationNotificationTitle(),
+      notificationText: strings.updatingLocationNotificationBody(),
+    );
   }
 
   static Future<void> syncForHomes({
@@ -299,7 +317,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
       }
 
       final config = decoded.map(
-            (key, value) => MapEntry(key.toString(), value),
+        (key, value) => MapEntry(key.toString(), value),
       );
       final uid = config['uid']?.toString().trim() ?? '';
       final homes = _asMap(config['homes']);
@@ -330,7 +348,7 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
       await AccountSessionService.touchFromBackground(uid: uid);
 
       final locationServiceEnabled =
-      await Geolocator.isLocationServiceEnabled();
+          await Geolocator.isLocationServiceEnabled();
       final permission = await Geolocator.checkPermission();
 
       if (!locationServiceEnabled || permission != LocationPermission.always) {

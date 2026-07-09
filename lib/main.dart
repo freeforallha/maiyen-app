@@ -3,29 +3,22 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'firebase_options.dart';
 import 'app/safe_home_app.dart';
+import 'firebase_options.dart';
 import 'helpers/debug_log.dart';
 import 'services/notification_service.dart';
 import 'services/platform/platform_bootstrap_service.dart';
 
 Future<FirebaseApp>? _firebaseInitialization;
 bool _deferredStartupScheduled = false;
+bool _safeHomeAppStarted = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final firebaseReady = await _initializeFirebaseForStartup(
-    timeout: const Duration(seconds: 4),
-    label: 'STARTUP_FIREBASE_INIT',
-  );
-
-  if (firebaseReady) {
-    runApp(SafeHomeApp());
-    _scheduleDeferredStartupInit();
-    return;
-  }
-
+  // Quan trọng:
+  // Không chờ Firebase trước runApp().
+  // Luôn vẽ Splash ngay để tránh màn trắng/đen native khi app vừa mở.
   runApp(const _StartupFallbackApp());
 
   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -61,14 +54,15 @@ Future<bool> _initializeFirebaseForStartup({
 }
 
 Future<void> _finishFirebaseStartupAfterFirstFrame() async {
-  while (true) {
+  while (!_safeHomeAppStarted) {
     final ready = await _initializeFirebaseForStartup(
       timeout: const Duration(seconds: 12),
       label: 'POST_FRAME_FIREBASE_INIT',
     );
 
     if (ready) {
-      runApp(SafeHomeApp());
+      _safeHomeAppStarted = true;
+      runApp(const SafeHomeApp());
       _scheduleDeferredStartupInit();
       return;
     }

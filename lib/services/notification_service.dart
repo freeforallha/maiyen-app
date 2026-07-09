@@ -11,6 +11,7 @@ import '../localization/app_strings.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
 
@@ -103,6 +104,129 @@ class NotificationService {
     } catch (_) {}
 
     return null;
+  }
+
+  static List<Map<String, dynamic>> _alarmItemsFromValue(dynamic value) {
+    if (value is List) {
+      return value
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .toList();
+    }
+
+    final raw = value?.toString().trim() ?? '';
+
+    if (raw.isEmpty) {
+      return const [];
+    }
+
+    try {
+      final decoded = jsonDecode(raw);
+
+      if (decoded is List) {
+        return decoded
+            .whereType<Map>()
+            .map((item) => Map<String, dynamic>.from(item))
+            .toList();
+      }
+
+      if (decoded is Map) {
+        return [Map<String, dynamic>.from(decoded)];
+      }
+    } catch (_) {}
+
+    return const [];
+  }
+
+  static List<Map<String, dynamic>> _alarmItemsFromData(
+    Map<String, dynamic> data,
+  ) {
+    final directItems = _alarmItemsFromValue(data['alarmItems']);
+
+    if (directItems.isNotEmpty) {
+      return directItems;
+    }
+
+    return _alarmItemsFromValue(data['alarmItemsJson']);
+  }
+
+  static String localizedAlarmBodyForData(
+    Map<String, dynamic> data,
+    AppStrings strings,
+  ) {
+    final items = _alarmItemsFromData(data);
+    final lines = <String>[];
+
+    for (final item in items) {
+      final deviceName =
+          item['deviceName']?.toString().trim().isNotEmpty == true
+          ? item['deviceName'].toString().trim()
+          : item['name']?.toString().trim() ?? '';
+      final reason = item['reason']?.toString().trim() ?? '';
+      final translatedReason = reason.isEmpty ? '' : strings.statusText(reason);
+
+      String line = '';
+
+      if (deviceName.isNotEmpty && translatedReason.isNotEmpty) {
+        line =
+            translatedReason.toLowerCase().startsWith(
+              '${deviceName.toLowerCase()}:',
+            )
+            ? translatedReason
+            : '$deviceName: $translatedReason';
+      } else if (translatedReason.isNotEmpty) {
+        line = translatedReason;
+      } else if (deviceName.isNotEmpty) {
+        line = deviceName;
+      }
+
+      if (line.isNotEmpty && !lines.contains(line)) {
+        lines.add(line);
+      }
+    }
+
+    if (lines.isNotEmpty) {
+      return lines.join('\n');
+    }
+
+    final rawBody = data['body']?.toString().trim() ?? '';
+
+    if (rawBody.isEmpty) {
+      return strings.alarmBody;
+    }
+
+    return strings.statusText(rawBody);
+  }
+
+  static String localizedNotificationTitle(
+    String rawTitle,
+    AppStrings strings,
+    String fallback,
+  ) {
+    final cleanTitle = rawTitle.trim();
+
+    if (cleanTitle.isEmpty) {
+      return fallback;
+    }
+
+    final lowerTitle = cleanTitle.toLowerCase();
+    if (lowerTitle.contains('safehome') ||
+        const {
+          'alarm',
+          'reminder',
+          'sos',
+          'hub',
+          'qr',
+          'fcm',
+          'uid',
+          'firebase',
+          'app check',
+          'camera',
+        }.contains(lowerTitle)) {
+      return cleanTitle;
+    }
+
+    return strings.t(cleanTitle);
   }
 
   static void rememberAlarmIncident(Map<String, dynamic> data) {
@@ -244,19 +368,20 @@ class NotificationService {
     rememberAlarmIncident(data);
     final strings = _strings;
 
-    final title = data['title']?.toString().trim().isNotEmpty == true
-        ? data['title'].toString().trim()
-        : strings.priorityAlarmNotificationTitle();
+    final title = localizedNotificationTitle(
+      data['title']?.toString() ?? '',
+      strings,
+      strings.priorityAlarmNotificationTitle(),
+    );
 
-    final body = data['body']?.toString().trim().isNotEmpty == true
-        ? data['body'].toString().trim()
-        : strings.openSafeHomeToCheckBody();
+    final body = localizedAlarmBodyForData(data, strings);
 
     final payload = 'priority_alarm::${jsonEncode(data)}';
 
     final androidDetails = AndroidNotificationConfig.priorityAlarmDetails(
       title: title,
       body: body,
+      strings: strings,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -334,13 +459,16 @@ class NotificationService {
     final strings = _strings;
 
     openAlarmPage(
-      title: data['title']?.toString().trim().isNotEmpty == true
-          ? data['title'].toString().trim()
-          : '🚨 SafeHome',
-      body: data['body']?.toString().trim().isNotEmpty == true
-          ? data['body'].toString().trim()
-          : strings.alarmBody,
-      alarmItemsJson: data['alarmItems']?.toString() ?? '',
+      title: localizedNotificationTitle(
+        data['title']?.toString() ?? '',
+        strings,
+        '🚨 SafeHome',
+      ),
+      body: localizedAlarmBodyForData(data, strings),
+      alarmItemsJson:
+          data['alarmItems']?.toString() ??
+          data['alarmItemsJson']?.toString() ??
+          '',
       incidentId: data['incidentId']?.toString() ?? '',
       receiverUid: data['receiverUid']?.toString() ?? '',
       ownerUid: data['ownerUid']?.toString() ?? '',
@@ -385,6 +513,7 @@ class NotificationService {
     final androidDetails = AndroidNotificationConfig.chatDetails(
       title: title,
       body: body,
+      strings: strings,
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -481,7 +610,9 @@ class NotificationService {
 
       incomingItems.add({
         "homeId": "",
-        "homeName": title.trim().isEmpty ? strings.defaultHomeName() : title.trim(),
+        "homeName": title.trim().isEmpty
+            ? strings.defaultHomeName()
+            : title.trim(),
         "reasons": isSafe
             ? <String>[]
             : <String>[
@@ -558,12 +689,14 @@ class NotificationService {
 
       if (reasons is! List || reasons.isEmpty) continue;
 
-      final homeName = item["homeName"]?.toString() ?? strings.defaultHomeName();
+      final homeName =
+          item["homeName"]?.toString() ?? strings.defaultHomeName();
 
       issueLines.add("$homeName: ${reasons.join(", ")}");
     }
 
-    lastScheduleBody = "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
+    lastScheduleBody =
+        "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
   }
 
   static void openOrMergeReminderPage({
@@ -645,17 +778,18 @@ class NotificationService {
         if (payload.startsWith('alarm_summary|')) {
           final strings = _strings;
           final parts = payload.split('|');
-          final body = parts.length > 1
+          final rawBody = parts.length > 1
               ? Uri.decodeComponent(parts[1])
               : strings.alarmFallback;
 
           final alarmItems = parts.length > 2
               ? Uri.decodeComponent(parts[2])
               : '';
+          final alarmData = {'body': rawBody, 'alarmItemsJson': alarmItems};
 
           openAlarmPage(
             title: '🚨 SafeHome',
-            body: body,
+            body: localizedAlarmBodyForData(alarmData, strings),
             alarmItemsJson: alarmItems,
           );
 
@@ -663,9 +797,15 @@ class NotificationService {
         }
 
         if (payload == 'alarm') {
+          final strings = _strings;
+          final alarmData = {
+            'body': lastAlarmBody,
+            'alarmItemsJson': lastAlarmItemsJson,
+          };
+
           openAlarmPage(
             title: '🚨 SafeHome',
-            body: lastAlarmBody,
+            body: localizedAlarmBodyForData(alarmData, strings),
             alarmItemsJson: lastAlarmItemsJson,
           );
 
@@ -703,7 +843,7 @@ class NotificationService {
       }
     }
 
-    await AndroidNotificationConfig.configure(localNotif);
+    await AndroidNotificationConfig.configure(localNotif, strings: _strings);
   }
 
   static const String alarmRouteName = 'fullscreen_alarm';
@@ -770,9 +910,15 @@ class NotificationService {
     _pendingAlarmOpenTimer?.cancel();
     _pendingAlarmOpenTimer = null;
 
+    final strings = _strings;
+
     openAlarmPage(
-      title: data['title']?.toString() ?? '🚨 SafeHome',
-      body: data['body']?.toString() ?? lastAlarmBody,
+      title: localizedNotificationTitle(
+        data['title']?.toString() ?? '',
+        strings,
+        '🚨 SafeHome',
+      ),
+      body: localizedAlarmBodyForData(data, strings),
       alarmItemsJson: data['alarmItemsJson']?.toString() ?? '',
       incidentId: data['incidentId']?.toString() ?? '',
       receiverUid: data['receiverUid']?.toString() ?? '',
@@ -903,6 +1049,7 @@ class NotificationService {
       title: notificationTitle,
       body: notificationBody,
       bigText: lastScheduleBody,
+      strings: strings,
     );
 
     const iosDetails = DarwinNotificationDetails(

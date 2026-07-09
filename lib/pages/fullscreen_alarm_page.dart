@@ -293,9 +293,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             if (rawReasons is List) {
               for (final reason in rawReasons) {
                 final text = reason?.toString().trim() ?? "";
+                final translatedText = strings.statusText(text);
 
-                if (text.isNotEmpty && !reasons.contains(text)) {
-                  reasons.add(text);
+                if (translatedText.isNotEmpty &&
+                    !reasons.contains(translatedText)) {
+                  reasons.add(translatedText);
                 }
               }
             }
@@ -310,8 +312,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               }
             } else {
               for (final reason in reasons) {
-                if (!homeReasons.contains(reason)) {
-                  homeReasons.add(reason);
+                final translatedReason = strings.statusText(reason);
+
+                if (!homeReasons.contains(translatedReason)) {
+                  homeReasons.add(translatedReason);
                 }
               }
             }
@@ -451,6 +455,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       final deviceName = item["deviceName"]?.toString().trim();
       final name = item["name"]?.toString().trim();
       final reason = item["reason"]?.toString().trim();
+      final translatedReason = reason == null || reason.isEmpty
+          ? ""
+          : strings.statusText(reason);
 
       final realHomeName = homeName == null || homeName.isEmpty
           ? strings.defaultHomeName()
@@ -464,13 +471,15 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
         text = name;
       }
 
-      if (reason != null && reason.isNotEmpty) {
+      if (translatedReason.isNotEmpty) {
         if (text.isEmpty) {
-          text = reason;
-        } else if (reason.toLowerCase().startsWith(text.toLowerCase())) {
-          text = reason;
+          text = translatedReason;
+        } else if (translatedReason.toLowerCase().startsWith(
+          "${text.toLowerCase()}:",
+        )) {
+          text = translatedReason;
         } else {
-          text = "$text: $reason";
+          text = "$text: $translatedReason";
         }
       }
 
@@ -490,7 +499,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final body = currentAlarmBody.trim();
     if (body.isNotEmpty && body.length < 160) {
       return {
-        "SafeHome": [body],
+        "SafeHome": [strings.statusText(body)],
       };
     }
 

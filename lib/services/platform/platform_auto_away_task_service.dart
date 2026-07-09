@@ -38,4 +38,12 @@ class PlatformAutoAwayTaskService {
 
     await AndroidAutoAwayForegroundTaskService.stop();
   }
+
+  static Future<void> refreshNotificationLanguage() async {
+    if (!_isAndroid) {
+      return;
+    }
+
+    await AndroidAutoAwayForegroundTaskService.refreshNotificationLanguage();
+  }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
+import '../services/platform/platform_auto_away_task_service.dart';
 
 String _languageSubtitle(String code) {
   switch (code) {
@@ -23,6 +24,8 @@ String _languageSubtitle(String code) {
       return "Russian";
     case "fr":
       return "French";
+    case "es":
+      return "Spanish";
     default:
       return code;
   }
@@ -46,6 +49,8 @@ String _languageBadge(String code) {
       return "RU";
     case "fr":
       return "FR";
+    case "es":
+      return "ES";
     default:
       return code.toUpperCase();
   }
@@ -73,6 +78,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
           borderRadius: BorderRadius.circular(18),
           onTap: () async {
             await appLanguageController.setLanguageCode(code);
+            await PlatformAutoAwayTaskService.refreshNotificationLanguage();
 
             if (sheetContext.mounted) {
               Navigator.of(sheetContext).pop();

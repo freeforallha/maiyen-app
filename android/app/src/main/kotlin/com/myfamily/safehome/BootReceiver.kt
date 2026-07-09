@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
+import java.util.Locale
 
 class BootReceiver : BroadcastReceiver() {
 
@@ -99,7 +100,7 @@ class BootReceiver : BroadcastReceiver() {
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description =
-                    "Thông báo SafeHome đã tự khởi chạy"
+                    bootChannelDescription()
             }
 
             manager.createNotificationChannel(channel)
@@ -110,7 +111,7 @@ class BootReceiver : BroadcastReceiver() {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("SafeHome")
                 .setContentText(
-                    "Đã sẵn sàng theo dõi bảo vệ tự động"
+                    bootNotificationText()
                 )
                 .setPriority(
                     NotificationCompat.PRIORITY_HIGH
@@ -119,5 +120,33 @@ class BootReceiver : BroadcastReceiver() {
                 .build()
 
         manager.notify(999001, notification)
+    }
+
+    private fun bootChannelDescription(): String {
+        return when (Locale.getDefault().language) {
+            "en" -> "SafeHome auto-start notification"
+            "zh" -> "SafeHome 自动启动通知"
+            "ko" -> "SafeHome 자동 시작 알림"
+            "ja" -> "SafeHome 自動起動通知"
+            "de" -> "SafeHome Autostart-Benachrichtigung"
+            "ru" -> "Уведомление об автозапуске SafeHome"
+            "fr" -> "Notification de démarrage automatique SafeHome"
+            "es" -> "Notificación de inicio automático de SafeHome"
+            else -> "Thông báo SafeHome đã tự khởi chạy"
+        }
+    }
+
+    private fun bootNotificationText(): String {
+        return when (Locale.getDefault().language) {
+            "en" -> "Ready to monitor automatic protection"
+            "zh" -> "已准备好监控自动保护"
+            "ko" -> "자동 보호 모니터링 준비 완료"
+            "ja" -> "自動保護の監視準備ができました"
+            "de" -> "Bereit zur Überwachung des automatischen Schutzes"
+            "ru" -> "Готово к мониторингу автоматической охраны"
+            "fr" -> "Prêt à surveiller la protection automatique"
+            "es" -> "Listo para supervisar la protección automática"
+            else -> "Đã sẵn sàng theo dõi bảo vệ tự động"
+        }
     }
 }

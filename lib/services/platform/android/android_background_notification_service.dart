@@ -12,37 +12,72 @@ import '../../notification_service.dart';
 import 'android_notification_config.dart';
 
 const String _languageStorageKey = 'safehome_language_code';
+const Set<String> _supportedLanguageCodes = {
+  'vi',
+  'en',
+  'zh',
+  'ko',
+  'ja',
+  'de',
+  'ru',
+  'fr',
+  'es',
+};
+
+String? _supportedLanguageCode(String? code) {
+  final cleanCode = code?.trim().toLowerCase() ?? '';
+
+  if (_supportedLanguageCodes.contains(cleanCode)) {
+    return cleanCode;
+  }
+
+  return null;
+}
 
 Locale _localeForLanguageCode(String code) {
-  if (code == 'zh') {
-    return const Locale('zh', 'CN');
+  switch (code) {
+    case 'zh':
+      return const Locale('zh', 'CN');
+    case 'ko':
+      return const Locale('ko', 'KR');
+    case 'ja':
+      return const Locale('ja', 'JP');
+    case 'de':
+      return const Locale('de', 'DE');
+    case 'ru':
+      return const Locale('ru', 'RU');
+    case 'fr':
+      return const Locale('fr', 'FR');
+    case 'es':
+      return const Locale('es', 'ES');
+    case 'en':
+      return const Locale('en');
+    case 'vi':
+    default:
+      return const Locale('vi');
   }
-
-  if (code == 'ko') {
-    return const Locale('ko', 'KR');
-  }
-
-  if (code == 'ja') {
-    return const Locale('ja', 'JP');
-  }
-
-  if (code == 'en') {
-    return const Locale('en');
-  }
-
-  return const Locale('vi');
 }
 
 Future<AppStrings> _backgroundStrings() async {
   try {
     final preferences = await SharedPreferences.getInstance();
-    final code = preferences.getString(_languageStorageKey) ?? 'vi';
+    final savedCode = _supportedLanguageCode(
+      preferences.getString(_languageStorageKey),
+    );
+    final systemCode = _supportedLanguageCode(
+      PlatformDispatcher.instance.locale.languageCode,
+    );
+    final code = savedCode ?? systemCode ?? 'vi';
 
     return AppStrings.fromLocale(_localeForLanguageCode(code));
   } catch (_) {
-    return AppStrings.fromLocale(
-      _localeForLanguageCode(PlatformDispatcher.instance.locale.languageCode),
-    );
+    final systemCode =
+        _supportedLanguageCode(
+          PlatformDispatcher.instance.locale.languageCode,
+        ) ??
+        'vi';
+
+    return AppStrings.fromLocale(_localeForLanguageCode(systemCode));
   }
 }
 
@@ -58,7 +93,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     ),
   );
 
-  await AndroidNotificationConfig.createBackgroundChannels(localNotif);
+  final strings = await _backgroundStrings();
+
+  await AndroidNotificationConfig.createBackgroundChannels(
+    localNotif,
+    strings: strings,
+  );
 
   final type = message.data['type']?.toString() ?? '';
 
@@ -94,13 +134,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {
   final strings = await _backgroundStrings();
-  final title = data['title']?.toString().trim().isNotEmpty == true
-      ? data['title'].toString().trim()
-      : strings.priorityAlarmNotificationTitle();
+  final title = NotificationService.localizedNotificationTitle(
+    data['title']?.toString() ?? '',
+    strings,
+    strings.priorityAlarmNotificationTitle(),
+  );
 
-  final body = data['body']?.toString().trim().isNotEmpty == true
-      ? data['body'].toString().trim()
-      : strings.openSafeHomeToCheckBody();
+  final body = NotificationService.localizedAlarmBodyForData(data, strings);
 
   final payload = 'priority_alarm::${jsonEncode(data)}';
 
@@ -114,6 +154,7 @@ Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {
       android: AndroidNotificationConfig.priorityAlarmDetails(
         title: title,
         body: body,
+        strings: strings,
       ),
     ),
     payload: payload,
@@ -125,15 +166,21 @@ Future<void> _showBackgroundFullscreenAlarm(
   RemoteNotification? notification,
 ) async {
   final strings = await _backgroundStrings();
-  final title =
-      data['title']?.toString() ??
-      notification?.title?.toString() ??
-      strings.priorityAlarmNotificationTitle();
+  final title = NotificationService.localizedNotificationTitle(
+    data['title']?.toString().trim().isNotEmpty == true
+        ? data['title'].toString()
+        : notification?.title?.toString() ?? '',
+    strings,
+    strings.priorityAlarmNotificationTitle(),
+  );
+  final bodyData = Map<String, dynamic>.from(data);
 
-  final body =
-      data['body']?.toString() ??
-      notification?.body?.toString() ??
-      strings.alarmBody;
+  if (bodyData['body']?.toString().trim().isNotEmpty != true &&
+      notification?.body?.toString().trim().isNotEmpty == true) {
+    bodyData['body'] = notification!.body!.trim();
+  }
+
+  final body = NotificationService.localizedAlarmBodyForData(bodyData, strings);
 
   final payload = 'alarm_siren::${jsonEncode(data)}';
 
@@ -148,6 +195,7 @@ Future<void> _showBackgroundFullscreenAlarm(
       android: AndroidNotificationConfig.fullscreenAlarmDetails(
         title: title,
         body: body,
+        strings: strings,
       ),
     ),
     payload: payload,
@@ -185,6 +233,7 @@ Future<void> _showBackgroundScheduleNotification(
         title: notificationTitle,
         body: body,
         bigText: body,
+        strings: strings,
       ),
     ),
     payload: 'open_home',
@@ -239,6 +288,7 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
       android: AndroidNotificationConfig.chatDetails(
         title: title,
         body: body,
+        strings: strings,
         tag: 'home_chat_$homeId',
       ),
     ),

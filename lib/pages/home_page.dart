@@ -239,8 +239,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> openHomeNotificationTarget(
-    Map<String, dynamic> notification,
-  ) async {
+      Map<String, dynamic> notification,
+      ) async {
     final homeId = notification["homeId"]?.toString() ?? "";
 
     if (homeId.isEmpty || !homes.containsKey(homeId)) {
@@ -304,16 +304,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Map<String, dynamic> homes = {};
   final HomeListenerService _homeListenerService = HomeListenerService();
   final HomeAccountRealtimeCoordinator _homeAccountRealtimeCoordinator =
-      HomeAccountRealtimeCoordinator();
+  HomeAccountRealtimeCoordinator();
   final HomeAlarmSecurityService _homeAlarmSecurityService =
-      HomeAlarmSecurityService();
+  HomeAlarmSecurityService();
   final HomeAutoAwayCoordinator _homeAutoAwayCoordinator =
-      HomeAutoAwayCoordinator();
+  HomeAutoAwayCoordinator();
   final HomePairingService _homePairingService = HomePairingService();
   final HomeRealtimeCoordinator _homeRealtimeCoordinator =
-      HomeRealtimeCoordinator();
+  HomeRealtimeCoordinator();
   final HomeSelectionStateService _homeSelectionStateService =
-      HomeSelectionStateService();
+  HomeSelectionStateService();
   final Set<String> _ownedHomeIds = <String>{};
   Map<String, dynamic> _sharedHomesSnapshot = {};
   Object? _savedHomeOrder;
@@ -376,14 +376,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Future<void> showAlarmReceiveReminder() async {
     var useCustomMode =
         safeMap(customRulesByHome[selectedHome])["mode"]?.toString() ==
-        "custom";
+            "custom";
 
     try {
       final modeSnapshot = await FirebaseDatabase.instance
           .ref(
-            "accounts/$uid/customRules/"
+        "accounts/$uid/customRules/"
             "$selectedHome/mode",
-          )
+      )
           .get();
 
       useCustomMode = modeSnapshot.value?.toString() == "custom";
@@ -675,7 +675,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : FirebaseAuth.instance.currentUser?.email?.trim() ??
-              _strings.t("Một thành viên");
+        _strings.t("Một thành viên");
 
     final saveResult = await _homeAlarmSecurityService.setSecurityMode(
       ownerUid: ownerUid,
@@ -715,13 +715,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (nextMode == "armed") {
       final notificationStatus = await _homeAlarmSecurityService
           .notifyManualSecurityModeEnabled(
-            ownerUid: ownerUid,
-            homeId: homeId,
-            homeName: homeName,
-            actorUid: uid,
-            actorName: actorName,
-            securityModeRepeatMinutes: plan.repeatMinutes,
-          );
+        ownerUid: ownerUid,
+        homeId: homeId,
+        homeName: homeName,
+        actorUid: uid,
+        actorName: actorName,
+        securityModeRepeatMinutes: plan.repeatMinutes,
+      );
 
       if (notificationStatus == HomeSecurityNotificationStatus.failed) {
         if (mounted) {
@@ -888,7 +888,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onSave: (data) async {
         if (data.enabled) {
           final hasBackgroundPermission =
-              await AutoAwayService.ensureBackgroundPermission();
+          await AutoAwayService.ensureBackgroundPermission();
 
           if (!hasBackgroundPermission) {
             if (!mounted) {
@@ -1045,15 +1045,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     unawaited(
       _homeAlarmSecurityService
           .recordAlarmEnabledNotification(
-            uid: uid,
-            homeId: homeId,
-            homeName: homeName,
-            enabled: enabled,
-            strings: _strings,
-          )
+        uid: uid,
+        homeId: homeId,
+        homeName: homeName,
+        enabled: enabled,
+        strings: _strings,
+      )
           .catchError((Object error) {
-            safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
-          }),
+        safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
+      }),
     );
 
     if (enabled) {
@@ -1076,6 +1076,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   // Firebase không phát sự kiện chỉ vì thời gian trôi qua.
   // Timer này buộc UI đánh giá lại tuổi heartbeat khi app đang mở.
   Timer? hubStatusRefreshTimer;
+  bool _deferredHomeStartupStarted = false;
+  bool _secondaryHomeListenersReady = false;
+  bool _singleHomeIdentityReady = false;
   // Android dùng foreground task độc lập để heartbeat vẫn chạy
   // khi app ở nền, tắt màn hình hoặc bị vuốt khỏi Recent Apps.
   // Các nền tảng khác giữ timer cũ.
@@ -1198,10 +1201,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         final nextTotal = snapshot.total;
         final unchanged =
             nextTotal == unreadChatCount &&
-            nextUnreadByHome.length == unreadChatByHome.length &&
-            nextUnreadByHome.entries.every(
-              (entry) => unreadChatByHome[entry.key] == entry.value,
-            );
+                nextUnreadByHome.length == unreadChatByHome.length &&
+                nextUnreadByHome.entries.every(
+                      (entry) => unreadChatByHome[entry.key] == entry.value,
+                );
 
         if (unchanged) {
           return;
@@ -1293,9 +1296,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         if (modeSnap.value?.toString() == "custom") {
           final customSnap = await FirebaseDatabase.instance
               .ref(
-                "accounts/$uid/customRules/"
+            "accounts/$uid/customRules/"
                 "$selectedHome/notifications/items",
-              )
+          )
               .get();
 
           return HomeAlarmFormatters.hasEnabledScheduleValue(customSnap.value);
@@ -1304,9 +1307,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       final homeSnap = await FirebaseDatabase.instance
           .ref(
-            "accounts/${getHomeOwnerUid()}/homes/"
+        "accounts/${getHomeOwnerUid()}/homes/"
             "$selectedHome/schedules/notifications",
-          )
+      )
           .get();
 
       return HomeAlarmFormatters.hasEnabledScheduleValue(homeSnap.value);
@@ -1488,22 +1491,30 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }) {
     if (!mounted) return;
 
+    // Các phần này cần cho trạng thái nhà chính, giữ chạy sớm.
     _ensureSelectedHomeRoomModel();
     startHomeEventsListener();
     startAlarmPauseListener();
-    syncHomeChatListeners();
     syncHomePresenceListeners();
-    syncDeviceNotificationBridge();
 
     if (syncPhone) {
       _syncPhoneToCurrentHomes();
     }
 
+    // Các listener phụ chỉ chạy sau khi HomePage đã vẽ xong.
+    // Mục tiêu: giảm đơ/trắng khi vừa login.
+    if (!_secondaryHomeListenersReady) {
+      return;
+    }
+
+    syncHomeChatListeners();
+    syncDeviceNotificationBridge();
+
     if (syncAutoAway) {
       unawaited(
         AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
-          Object error,
-        ) {
+            Object error,
+            ) {
           safeDebugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
         }),
       );
@@ -1526,8 +1537,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final wasOwned = _ownedHomeIds.contains(homeId);
     final autoAwayChanged =
         !wasOwned ||
-        _autoAwayConfigSignature(previousHome) !=
-            _autoAwayConfigSignature(homeData);
+            _autoAwayConfigSignature(previousHome) !=
+                _autoAwayConfigSignature(homeData);
 
     setState(() {
       _ownedHomeIds.add(homeId);
@@ -1581,8 +1592,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         final wasLoaded = previousHome['_shared'] == true;
         final autoAwayChanged =
             !wasLoaded ||
-            _autoAwayConfigSignature(previousHome) !=
-                _autoAwayConfigSignature(home);
+                _autoAwayConfigSignature(previousHome) !=
+                    _autoAwayConfigSignature(home);
 
         setState(() {
           homes[homeId] = home;
@@ -1651,7 +1662,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           alarmSettings = settings;
           alarmEnabled =
               selectedHome.isEmpty ||
-              safeMap(alarmSettings[selectedHome])['enabled'] != false;
+                  safeMap(alarmSettings[selectedHome])['enabled'] != false;
         });
       },
       onCustomRulesChanged: (rules) {
@@ -1709,30 +1720,79 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     uid = currentUser.uid;
-    AutoAwayService.activateForSignedInUser(uid);
-    // Foreground task được đồng bộ sau khi listener tải danh sách nhà.
 
-    // Chỉ cần đánh giá lại tuổi heartbeat định kỳ khi backend im lặng.
-    // Realtime hubStatus vẫn cập nhật ngay qua listener từng nhà.
-    hubStatusRefreshTimer = Timer.periodic(const Duration(seconds: 15), (_) {
-      if (!mounted || homes.isEmpty) {
-        return;
-      }
+    // ALARM-CRITICAL:
+    // Giữ FCM + foreground alarm listener chạy ngay, không defer.
+    // Đây là đường nhận alarm khi app đang mở.
+    unawaited(
+      FCMService.setupFCM(uid: uid).catchError((Object error) {
+        safeDebugPrint("FCM_SETUP_ERROR: $error");
+      }),
+    );
+    FCMService.listenForeground(localNotif: localNotif);
 
-      setState(() {});
+    // Dữ liệu nhà chính vẫn cần chạy sớm để hiện UI.
+    _startAccountPathListeners();
+    Future<void>.delayed(const Duration(milliseconds: 1200), () {
+      if (!mounted) return;
+
+      setState(() {
+        _singleHomeIdentityReady = true;
+      });
     });
+    // Các phần không trực tiếp quyết định tốc độ nhận Alarm chạy sau frame đầu.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_startDeferredHomeStartup());
+    });
+  }
+  Future<void> _startDeferredHomeStartup() async {
+    if (_deferredHomeStartupStarted) {
+      return;
+    }
+
+    _deferredHomeStartupStarted = true;
+
+    // Chờ HomePage vẽ frame đầu xong rồi mới bật các phần phụ.
+    await Future<void>.delayed(const Duration(milliseconds: 700));
+
+    if (!mounted || uid.isEmpty) {
+      return;
+    }
+
+    _secondaryHomeListenersReady = true;
+
+    // Không nằm trên đường nhận alarm realtime.
+    AutoAwayService.activateForSignedInUser(uid);
+
+    hubStatusRefreshTimer ??= Timer.periodic(
+      const Duration(seconds: 15),
+          (_) {
+        if (!mounted || homes.isEmpty) {
+          return;
+        }
+
+        setState(() {});
+      },
+    );
 
     NotificationService.chatOpenRequest.addListener(_handleChatOpenRequest);
     _handleChatOpenRequest();
 
-    FCMService.setupFCM(uid: uid);
-    FCMService.listenForeground(localNotif: localNotif);
-
     startNotificationListener();
     syncHomeChatListeners();
-    _startAccountPathListeners();
-  }
+    syncDeviceNotificationBridge();
 
+    unawaited(
+      AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
+          Object error,
+          ) {
+        safeDebugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
+      }),
+    );
+
+    unawaited(_syncAutoAwayLocationMonitoring());
+    unawaited(_tryOpenPendingChat());
+  }
   Future<void> handleScannedQR(String code) async {
     final result = await _homePairingService.handleScannedQr(
       code: code,
@@ -2147,15 +2207,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/shareRequests/transfer_${homeId}_$uid")
         .set({
-          "type": "transfer_owner_request",
-          "homeId": homeId,
-          "oldOwnerUid": uid,
-          "newOwnerUid": targetUid,
-          "ownerEmail": myEmail ?? "",
-          "targetEmail": targetEmail,
-          "homeName": homeName,
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
+      "type": "transfer_owner_request",
+      "homeId": homeId,
+      "oldOwnerUid": uid,
+      "newOwnerUid": targetUid,
+      "ownerEmail": myEmail ?? "",
+      "targetEmail": targetEmail,
+      "homeName": homeName,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    });
     await HomeNotificationService.notifyHome(
       ownerUid: uid,
       homeId: homeId,
@@ -2223,17 +2283,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     try {
       await FirebaseDatabase.instance
           .ref(
-            "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
-          )
+        "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
+      )
           .set({
-            "ownerUid": ownerUid,
-            "homeId": selectedHome,
-            "deviceId": id,
-            "deviceName": deviceName,
-            "requestedBy": uid,
-            "time": DateTime.now().millisecondsSinceEpoch,
-            "status": "pending",
-          });
+        "ownerUid": ownerUid,
+        "homeId": selectedHome,
+        "deviceId": id,
+        "deviceName": deviceName,
+        "requestedBy": uid,
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "status": "pending",
+      });
 
       if (!mounted) return;
 
@@ -2524,21 +2584,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         try {
           await FirebaseDatabase.instance
               .ref(
-                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-              )
+            "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+          )
               .set({
-                "status": "pending",
-                "ownerUid": ownerUid,
-                "homeId": selectedHome,
-                "homeName": homeName,
-                "date": date,
-                "start": pauseStartText,
-                "end": pauseEndText,
-                "reason": data.reason,
-                "createdByUid": uid,
-                "createdByName": userName,
-                "createdAt": createdAt,
-              });
+            "status": "pending",
+            "ownerUid": ownerUid,
+            "homeId": selectedHome,
+            "homeName": homeName,
+            "date": date,
+            "start": pauseStartText,
+            "end": pauseEndText,
+            "reason": data.reason,
+            "createdByUid": uid,
+            "createdByName": userName,
+            "createdAt": createdAt,
+          });
         } catch (e) {
           if (!sheetContext.mounted) return false;
 
@@ -2575,17 +2635,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         try {
           await FirebaseDatabase.instance
               .ref(
-                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-              )
+            "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+          )
               .set({
-                "status": "pending",
-                "action": "remove",
-                "ownerUid": ownerUid,
-                "homeId": selectedHome,
-                "createdByUid": uid,
-                "createdByName": userName,
-                "createdAt": DateTime.now().millisecondsSinceEpoch,
-              });
+            "status": "pending",
+            "action": "remove",
+            "ownerUid": ownerUid,
+            "homeId": selectedHome,
+            "createdByUid": uid,
+            "createdByName": userName,
+            "createdAt": DateTime.now().millisecondsSinceEpoch,
+          });
         } catch (e) {
           if (!sheetContext.mounted) return false;
 
@@ -2618,9 +2678,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final currentName = usePersonalName
         ? (homes[selectedHome]?["_customName"] ??
-                  homes[selectedHome]?["name"] ??
-                  selectedHome)
-              .toString()
+        homes[selectedHome]?["name"] ??
+        selectedHome)
+        .toString()
         : (homes[selectedHome]?["name"] ?? selectedHome).toString();
 
     final currentAddress = homes[selectedHome]?["address"]?.toString() ?? "";
@@ -2909,10 +2969,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final lines = results.entries
         .map((entry) {
-          final icon = entry.value == "PASS" ? "✅" : "❌";
+      final icon = entry.value == "PASS" ? "✅" : "❌";
 
-          return "$icon ${entry.key}: ${entry.value}";
-        })
+      return "$icon ${entry.key}: ${entry.value}";
+    })
         .join("\n\n");
 
     await showDialog<void>(
@@ -3073,25 +3133,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onDeleteHome: isOwner()
           ? deleteHome
           : () {
-              showTopToast(
-                context,
-                _strings.t("Chỉ chủ nhà mới được xoá nhà"),
-                color: Colors.orange,
-                icon: Icons.lock_rounded,
-              );
-            },
+        showTopToast(
+          context,
+          _strings.t("Chỉ chủ nhà mới được xoá nhà"),
+          color: Colors.orange,
+          icon: Icons.lock_rounded,
+        );
+      },
       onRenameHome: renameHome,
       onSecurityTest: runFirebaseSecurityTest,
       onTransferOwner: isOwner()
           ? transferOwner
           : () {
-              showTopToast(
-                context,
-                _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
-                color: Colors.orange,
-                icon: Icons.admin_panel_settings_rounded,
-              );
-            },
+        showTopToast(
+          context,
+          _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+          color: Colors.orange,
+          icon: Icons.admin_panel_settings_rounded,
+        );
+      },
       context: context,
       inviteCountNotifier: inviteCountNotifier,
       onShareRequests: () {
@@ -3142,9 +3202,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewSecurityModeSource =
         overviewHome["securityModeSource"]?.toString().trim() ?? "";
     final overviewSecurityModeRepeatMinutes =
-        _normalizeSecurityModeRepeatMinutes(
-          overviewHome["securityModeRepeatMinutes"],
-        );
+    _normalizeSecurityModeRepeatMinutes(
+      overviewHome["securityModeRepeatMinutes"],
+    );
     final overviewAlarmScheduleText = formatAlarmSchedules();
     final overviewEnvironmentText = getHomeEnvironmentText();
     final overviewOverall = getHomeOverallStatus(overviewHome);
@@ -3209,13 +3269,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         selectedHome = selected;
 
                         securityMode =
-                            currentHome["securityMode"]?.toString() == "armed"
+                        currentHome["securityMode"]?.toString() == "armed"
                             ? "armed"
                             : "normal";
 
                         alarmEnabled =
                             safeMap(alarmSettings[selected])["enabled"] !=
-                            false;
+                                false;
 
                         start = parsedAlarm["start"];
                         end = parsedAlarm["end"];
@@ -3252,46 +3312,51 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                   Padding(
                     padding: EdgeInsets.zero,
-                    child: HomeTabs(
-                      unreadChatByHome: unreadChatByHome,
-                      controller: homeTabController,
-                      homes: homes,
-                      homeOrder: homeOrder,
-                      selectedHome: selectedHome,
-                      currentUserName: userName,
-                      currentUserEmail:
-                          FirebaseAuth.instance.currentUser?.email ?? "",
-                      onSelect: (h) {
-                        if (h == selectedHome) return;
+                    child: _SoftHomeTabsAppear(
+                      animationKey: homeOrder.join("|"),
+                      child: HomeTabs(
+                        singleHomeIdentityEnabled: _singleHomeIdentityReady,
+                        unreadChatByHome: unreadChatByHome,
+                        controller: homeTabController,
+                        homes: homes,
+                        homeOrder: homeOrder,
+                        selectedHome: selectedHome,
+                        currentUserName: userName,
+                        currentUserEmail:
+                        FirebaseAuth.instance.currentUser?.email ?? "",
+                        onSelect: (h) {
+                          if (h == selectedHome) return;
 
-                        final currentHome = safeMap(homes[h]);
-                        final parsedAlarm = HomeStateParser.parseAlarm(
-                          currentHome,
-                        );
-
-                        setState(() {
-                          selectedHome = h;
-
-                          securityMode =
-                              currentHome["securityMode"]?.toString() == "armed"
-                              ? "armed"
-                              : "normal";
-
-                          alarmEnabled =
-                              safeMap(alarmSettings[h])["enabled"] != false;
-
-                          start = parsedAlarm["start"];
-                          end = parsedAlarm["end"];
-                          alarmPauseToday = safeMap(
-                            currentHome["alarmPauseToday"],
+                          final currentHome = safeMap(homes[h]);
+                          final parsedAlarm = HomeStateParser.parseAlarm(
+                            currentHome,
                           );
-                        });
 
-                        startHomeEventsListener();
-                        startAlarmPauseListener();
-                      },
-                      onReorder: reorderHomeTabs,
-                      getHomeColor: getHomeColor,
+                          setState(() {
+                            selectedHome = h;
+
+                            securityMode =
+                            currentHome["securityMode"]?.toString() ==
+                                "armed"
+                                ? "armed"
+                                : "normal";
+
+                            alarmEnabled =
+                                safeMap(alarmSettings[h])["enabled"] != false;
+
+                            start = parsedAlarm["start"];
+                            end = parsedAlarm["end"];
+                            alarmPauseToday = safeMap(
+                              currentHome["alarmPauseToday"],
+                            );
+                          });
+
+                          startHomeEventsListener();
+                          startAlarmPauseListener();
+                        },
+                        onReorder: reorderHomeTabs,
+                        getHomeColor: getHomeColor,
+                      ),
                     ),
                   ),
                   const SizedBox(height: sectionGap),
@@ -3299,130 +3364,137 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Expanded(
                     child: Stack(
                       children: [
-                        DeviceList(
-                          devices: devices,
-                          selectedRoomId: selectedRoomId,
-                          securityMode: securityMode,
-                          bottomPadding: deviceListBottomPadding,
-                          header: HomeOverviewHeader(
-                            ownerUid: overviewOwnerUid,
-                            homeId: selectedHome,
-                            homeName: overviewHomeName,
-                            alarmPauseText: overviewAlarmPauseText,
-                            onAlarmPauseToday: () {
-                              openAlarmPauseSheetWithReminder();
-                            },
-                            environmentText: overviewEnvironmentText,
-                            homeEvents: homeEvents,
-                            onEnvironmentTap: () {
-                              final tempDevice = getTemperatureDevice();
-
-                              if (tempDevice == null) return;
-
-                              openDeviceDetailSheet(
-                                deviceId: tempDevice["id"],
-                                device: tempDevice["data"],
-                              );
-                            },
-                            overall: overviewOverall,
-                            securityMode: securityMode,
-                            securityModeSource: overviewSecurityModeSource,
-                            securityModeRepeatMinutes:
-                                overviewSecurityModeRepeatMinutes,
-                            onSecurityModeRepeatChanged: canManageSelectedHome
-                                ? setSecurityModeRepeatMinutes
-                                : null,
-                            onSecurityModeChanged: setSecurityMode,
-                            alarmEnabled: alarmEnabled,
-                            onAlarmEnabledChanged: canManageSelectedHome
-                                ? setAlarmEnabled
-                                : null,
-                            onScheduleNotification:
-                                openScheduleNotificationSheet,
-                            onScheduleAlarm: openAlarmDeviceSheet,
-                            alarmStart: overviewAlarmScheduleText,
-                            alarmEnd: "",
-                            rooms: overviewRooms,
+                        _SoftHomeContentAppear(
+                          animationKey: selectedHome,
+                          child: DeviceList(
+                            devices: devices,
                             selectedRoomId: selectedRoomId,
-                            onSelectRoom: (roomId) {
-                              setState(() {
-                                selectedRoomId = roomId;
-                              });
-                            },
-                            onReorderRooms: (roomIds) async {
+                            securityMode: securityMode,
+                            bottomPadding: deviceListBottomPadding,
+                            header: HomeOverviewHeader(
+                              ownerUid: overviewOwnerUid,
+                              homeId: selectedHome,
+                              homeName: overviewHomeName,
+                              alarmPauseText: overviewAlarmPauseText,
+                              onAlarmPauseToday: () {
+                                openAlarmPauseSheetWithReminder();
+                              },
+                              environmentText: overviewEnvironmentText,
+                              homeEvents: homeEvents,
+                              onEnvironmentTap: () {
+                                final tempDevice = getTemperatureDevice();
+
+                                if (tempDevice == null) return;
+
+                                openDeviceDetailSheet(
+                                  deviceId: tempDevice["id"],
+                                  device: tempDevice["data"],
+                                );
+                              },
+                              overall: overviewOverall,
+                              securityMode: securityMode,
+                              securityModeSource: overviewSecurityModeSource,
+                              securityModeRepeatMinutes:
+                              overviewSecurityModeRepeatMinutes,
+                              onSecurityModeRepeatChanged: canManageSelectedHome
+                                  ? setSecurityModeRepeatMinutes
+                                  : null,
+                              onSecurityModeChanged: setSecurityMode,
+                              alarmEnabled: alarmEnabled,
+                              onAlarmEnabledChanged: canManageSelectedHome
+                                  ? setAlarmEnabled
+                                  : null,
+                              onScheduleNotification:
+                              openScheduleNotificationSheet,
+                              onScheduleAlarm: openAlarmDeviceSheet,
+                              alarmStart: overviewAlarmScheduleText,
+                              alarmEnd: "",
+                              rooms: overviewRooms,
+                              selectedRoomId: selectedRoomId,
+                              onSelectRoom: (roomId) {
+                                setState(() {
+                                  selectedRoomId = roomId;
+                                });
+                              },
+                              onReorderRooms: (roomIds) async {
+                                if (!canManageHome()) {
+                                  showTopToast(
+                                    context,
+                                    _strings.t(
+                                      "Bạn không có quyền sắp xếp phòng",
+                                    ),
+                                    color: Colors.orange,
+                                    icon: Icons.lock_rounded,
+                                  );
+                                  return;
+                                }
+
+                                final ownerUid = getHomeOwnerUid();
+                                final updates = <String, Object?>{};
+
+                                for (var i = 0; i < roomIds.length; i++) {
+                                  updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
+                                      i + 1;
+                                }
+
+                                if (updates.isNotEmpty) {
+                                  await FirebaseDatabase.instance.ref().update(
+                                    updates,
+                                  );
+                                }
+                              },
+                              pairingCountdown: pairingCountdown,
+                              pairingCountdownText:
+                              overviewPairingCountdownText,
+                              sectionGap: sectionGap,
+                            ),
+                            isShared: homes[selectedHome]?["_shared"] == true,
+                            ownerEmail:
+                            homes[selectedHome]?["_ownerEmail"]
+                                ?.toString() ??
+                                "",
+                            onRename: canManageHome() ? renameDevice : (_) {},
+                            onDelete: canManageHome() ? deleteDevice : (_) {},
+                            onPairSensor: () async {
                               if (!canManageHome()) {
                                 showTopToast(
                                   context,
-                                  _strings.t(
-                                    "Bạn không có quyền sắp xếp phòng",
-                                  ),
+                                  _strings.t("Bạn không có quyền thêm thiết bị"),
                                   color: Colors.orange,
                                   icon: Icons.lock_rounded,
                                 );
                                 return;
                               }
 
-                              final ownerUid = getHomeOwnerUid();
-                              final updates = <String, Object?>{};
+                              final result = await showHomePairSensorSheet(
+                                context: context,
+                                strings: _strings,
+                              );
 
-                              for (var i = 0; i < roomIds.length; i++) {
-                                updates["accounts/$ownerUid/homes/$selectedHome/rooms/${roomIds[i]}/order"] =
-                                    i + 1;
+                              if (result == HomePairSensorMethod.scanQr) {
+                                if (!context.mounted) return;
+
+                                final code = await openQRScanner(context);
+
+                                if (code != null) {
+                                  pairSensor(code);
+                                }
                               }
 
-                              if (updates.isNotEmpty) {
-                                await FirebaseDatabase.instance.ref().update(
-                                  updates,
-                                );
+                              if (result == HomePairSensorMethod.manualHubId) {
+                                if (!context.mounted) return;
+
+                                final hubId = await showPairDialog(context);
+
+                                if (hubId == null || hubId.trim().isEmpty) {
+                                  return;
+                                }
+
+                                pairSensor(hubId.trim());
                               }
                             },
-                            pairingCountdown: pairingCountdown,
-                            pairingCountdownText: overviewPairingCountdownText,
-                            sectionGap: sectionGap,
+                            onTapDevice: openSelectedDeviceDetail,
                           ),
-                          isShared: homes[selectedHome]?["_shared"] == true,
-                          ownerEmail:
-                              homes[selectedHome]?["_ownerEmail"]?.toString() ??
-                              "",
-                          onRename: canManageHome() ? renameDevice : (_) {},
-                          onDelete: canManageHome() ? deleteDevice : (_) {},
-                          onPairSensor: () async {
-                            if (!canManageHome()) {
-                              showTopToast(
-                                context,
-                                _strings.t("Bạn không có quyền thêm thiết bị"),
-                                color: Colors.orange,
-                                icon: Icons.lock_rounded,
-                              );
-                              return;
-                            }
-
-                            final result = await showHomePairSensorSheet(
-                              context: context,
-                              strings: _strings,
-                            );
-
-                            if (result == HomePairSensorMethod.scanQr) {
-                              if (!context.mounted) return;
-
-                              final code = await openQRScanner(context);
-
-                              if (code != null) {
-                                pairSensor(code);
-                              }
-                            }
-
-                            if (result == HomePairSensorMethod.manualHubId) {
-                              if (!context.mounted) return;
-
-                              final hubId = await showPairDialog(context);
-
-                              if (hubId == null || hubId.trim().isEmpty) return;
-
-                              pairSensor(hubId.trim());
-                            }
-                          },
-                          onTapDevice: openSelectedDeviceDetail,
                         ),
                       ],
                     ),
@@ -3447,7 +3519,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   if (!context.mounted) return;
 
                   final alarmScheduleText =
-                      formatAlarmSchedules().trim().isEmpty
+                  formatAlarmSchedules().trim().isEmpty
                       ? _strings.t("Chưa thiết lập thời gian")
                       : formatAlarmSchedules();
 
@@ -3493,5 +3565,154 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     unawaited(_homeListenerService.dispose());
     homeTabController.dispose();
     super.dispose();
+  }
+}
+class _SoftHomeContentAppear extends StatefulWidget {
+  const _SoftHomeContentAppear({
+    required this.animationKey,
+    required this.child,
+  });
+
+  final String animationKey;
+  final Widget child;
+
+  @override
+  State<_SoftHomeContentAppear> createState() => _SoftHomeContentAppearState();
+}
+
+class _SoftHomeContentAppearState extends State<_SoftHomeContentAppear>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _opacity;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 680),
+    );
+
+    final curve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    );
+
+    _opacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(curve);
+
+    _scale = Tween<double>(
+      begin: 0.975,
+      end: 1.0,
+    ).animate(curve);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _controller.forward();
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant _SoftHomeContentAppear oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.animationKey != widget.animationKey) {
+      _controller
+        ..reset()
+        ..forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: ScaleTransition(
+        scale: _scale,
+        alignment: Alignment.topCenter,
+        child: widget.child,
+      ),
+    );
+  }
+}
+class _SoftHomeTabsAppear extends StatelessWidget {
+  const _SoftHomeTabsAppear({
+    required this.animationKey,
+    required this.child,
+  });
+
+  final String animationKey;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRect(
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 920),
+        reverseDuration: const Duration(milliseconds: 520),
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        layoutBuilder: (currentChild, previousChildren) {
+          return Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              ...previousChildren,
+              if (currentChild != null) currentChild,
+            ],
+          );
+        },
+        transitionBuilder: (child, animation) {
+          return AnimatedBuilder(
+            animation: animation,
+            child: child,
+            builder: (context, child) {
+              final isOutgoing = animation.status == AnimationStatus.reverse;
+
+              if (isOutgoing) {
+                final value = Curves.easeInOutCubic.transform(animation.value);
+
+                return Opacity(
+                  opacity: value.clamp(0.0, 1.0),
+                  child: Transform.scale(
+                    scale: 0.90 + (0.10 * value),
+                    alignment: Alignment.centerLeft,
+                    child: child,
+                  ),
+                );
+              }
+
+              final value = Curves.easeOutCubic.transform(animation.value);
+              final dx = (1 - value) * 72;
+
+              return Opacity(
+                opacity: value.clamp(0.0, 1.0),
+                child: Transform.translate(
+                  offset: Offset(dx, 0),
+                  child: Transform.scale(
+                    scale: 0.975 + (0.025 * value),
+                    alignment: Alignment.centerRight,
+                    child: child,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        child: KeyedSubtree(
+          key: ValueKey("home_tabs_$animationKey"),
+          child: child,
+        ),
+      ),
+    );
   }
 }

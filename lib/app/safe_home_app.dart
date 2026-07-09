@@ -225,23 +225,22 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Future<void> checkAuth() async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    // Xoá mật khẩu mà phiên bản app cũ từng lưu.
-    // Firebase Auth tự duy trì phiên bằng token bảo mật của SDK.
-    try {
-      await AutoLoginService.removeLegacyPassword();
-    } catch (error) {
-      safeDebugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
-    }
-
+    // Không chờ cố định 2 giây nữa.
+    // Firebase Auth đã sẵn sàng sau Firebase.initializeApp().
     user = FirebaseAuth.instance.currentUser;
 
-    if (!mounted) return;
+    if (mounted) {
+      setState(() {
+        ready = true;
+      });
+    }
 
-    setState(() {
-      ready = true;
-    });
+    // Việc dọn mật khẩu legacy không cần chặn UI.
+    unawaited(
+      AutoLoginService.removeLegacyPassword().catchError((Object error) {
+        safeDebugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
+      }),
+    );
   }
 
   Future<DatabaseEvent> _loadProfile(String uid) {

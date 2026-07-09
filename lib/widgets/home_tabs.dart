@@ -7,6 +7,7 @@ class HomeTabs extends StatelessWidget {
   final Map<String, dynamic> homes;
   final List<String> homeOrder;
   final String selectedHome;
+  final bool singleHomeIdentityEnabled;
 
   final Function(String) onSelect;
   final Future<void> Function(List<String>) onReorder;
@@ -17,6 +18,7 @@ class HomeTabs extends StatelessWidget {
   final String currentUserEmail;
 
   const HomeTabs({
+    this.singleHomeIdentityEnabled = true,
     super.key,
     required this.homes,
     required this.homeOrder,
@@ -245,7 +247,15 @@ class HomeTabs extends StatelessWidget {
       ],
     );
   }
+  int _presenceCount(Map<String, dynamic> home, String key) {
+    final presenceSummary = home["presenceSummary"];
 
+    if (presenceSummary is! Map) {
+      return 0;
+    }
+
+    return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
+  }
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
@@ -259,7 +269,181 @@ class HomeTabs extends StatelessWidget {
     if (visibleHomes.isEmpty) {
       return const SizedBox(height: 58);
     }
+    if (visibleHomes.length == 1 && !singleHomeIdentityEnabled) {
+      return const SizedBox(height: 58);
+    }
+    if (visibleHomes.length == 1) {
+      final homeId = visibleHomes.first;
 
+      final home = Map<String, dynamic>.from(
+        homes[homeId] ?? <String, dynamic>{},
+      );
+
+      final rawName = home["_customName"] ?? home["name"] ?? homeId;
+
+      final displayName = rawName.toString().trim().isEmpty
+          ? strings.t("Nhà chưa đặt tên")
+          : rawName.toString().trim();
+
+      final address = home["address"]?.toString().trim() ?? "";
+      final isShared = home["_shared"] == true;
+      final statusColor = getHomeColor(homeId);
+      final unread = unreadChatByHome[homeId] ?? 0;
+
+      final totalMemberCount = _presenceCount(home, "totalMemberCount");
+      final showMemberBadge = totalMemberCount > 0;
+
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(12, 3, 12, 3),
+        child: Material(
+          color: SafeHomeColors.surface,
+          borderRadius: BorderRadius.circular(20),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: () {
+              _showSelectedHomeInfo(
+                context: context,
+                homeId: homeId,
+                home: home,
+                displayName: displayName,
+                isShared: isShared,
+              );
+            },
+            child: Container(
+              height: 58,
+              padding: const EdgeInsets.fromLTRB(13, 7, 13, 7),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: statusColor.withValues(alpha: 0.46),
+                  width: 1.1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.045),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: showMemberBadge || unread > 0 ? 52 : 0,                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          isShared ? Icons.share_rounded : Icons.home_rounded,
+                          size: 25,
+                          color: statusColor,
+                        ),
+                        const SizedBox(width: 11),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                displayName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: statusColor,
+                                  fontSize: 17,
+                                  height: 1.05,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.15,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                address.isNotEmpty
+                                    ? address
+                                    : isShared
+                                    ? strings.t("Nhà được chia sẻ")
+                                    : strings.t("Nhà của bạn"),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: SafeHomeColors.textSecondary
+                                      .withValues(alpha: 0.82),
+                                  fontSize: 11,
+                                  height: 1.05,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (showMemberBadge)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.groups_rounded,
+                            size: 16,
+                            color: statusColor,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            totalMemberCount.toString(),
+                            style: TextStyle(
+                              color: statusColor,
+                              fontSize: 13,
+                              height: 1,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (unread > 0)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        constraints: const BoxConstraints(
+                          minWidth: 21,
+                          minHeight: 21,
+                        ),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: SafeHomeColors.danger,
+                          borderRadius: BorderRadius.circular(999),
+                          border: Border.all(
+                            color: SafeHomeColors.surface,
+                            width: 2,
+                          ),
+                        ),
+                        child: Text(
+                          unread > 99 ? "99+" : unread.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       height: 58,
       child: ShaderMask(

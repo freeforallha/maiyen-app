@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auto_login_service.dart';
+import '../services/platform/platform_auto_away_task_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -333,6 +334,8 @@ class _LoginPageState extends State<LoginPage> {
         return "Russian";
       case "fr":
         return "French";
+      case "es":
+        return "Spanish";
       default:
         return code;
     }
@@ -365,9 +368,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             title: Text(title),
             subtitle: Text(subtitle),
-            onTap: () {
-              appLanguageController.setLanguageCode(code);
-              Navigator.of(sheetContext).pop();
+            onTap: () async {
+              await appLanguageController.setLanguageCode(code);
+              await PlatformAutoAwayTaskService.refreshNotificationLanguage();
+
+              if (sheetContext.mounted) {
+                Navigator.of(sheetContext).pop();
+              }
             },
           );
         }
