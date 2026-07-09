@@ -21,6 +21,8 @@ String _languageSubtitle(String code) {
       return "German";
     case "ru":
       return "Russian";
+    case "fr":
+      return "French";
     default:
       return code;
   }
@@ -42,6 +44,8 @@ String _languageBadge(String code) {
       return "DE";
     case "ru":
       return "RU";
+    case "fr":
+      return "FR";
     default:
       return code.toUpperCase();
   }
@@ -49,6 +53,8 @@ String _languageBadge(String code) {
 
 Future<void> _showLanguageSheet(BuildContext context) async {
   final strings = AppStrings.of(context);
+  bool isSearching = false;
+  String query = "";
 
   Widget languageOption({
     required BuildContext sheetContext,
@@ -148,54 +154,166 @@ Future<void> _showLanguageSheet(BuildContext context) async {
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
+    useSafeArea: true,
     builder: (sheetContext) {
-      return SafeArea(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-          decoration: const BoxDecoration(
-            color: SafeHomeColors.background,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 44,
-                height: 5,
-                margin: const EdgeInsets.only(bottom: 15),
-                decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.language_rounded,
-                    color: SafeHomeColors.primary,
-                  ),
-                  const SizedBox(width: 9),
-                  Text(
-                    strings.chooseLanguage,
-                    style: const TextStyle(
-                      color: SafeHomeColors.textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
+      return StatefulBuilder(
+        builder: (context, setSheetState) {
+          final q = query.trim().toLowerCase();
+          final visibleCodes = AppLanguageController.supportedCodes.where((
+            code,
+          ) {
+            final title = AppLanguageController.languageLabels[code] ?? code;
+            final subtitle = _languageSubtitle(code);
+
+            if (q.isEmpty) {
+              return true;
+            }
+
+            return code.toLowerCase().contains(q) ||
+                title.toLowerCase().contains(q) ||
+                subtitle.toLowerCase().contains(q);
+          }).toList();
+          final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
+          final screenHeight = MediaQuery.sizeOf(sheetContext).height;
+          final maxSheetHeight = screenHeight - bottomInset - 24;
+          final constrainedMaxHeight = maxSheetHeight
+              .clamp(320.0, screenHeight * 0.92)
+              .toDouble();
+
+          return AnimatedPadding(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+            padding: EdgeInsets.only(bottom: bottomInset),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: constrainedMaxHeight),
+                child: SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+                    decoration: const BoxDecoration(
+                      color: SafeHomeColors.background,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(28),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 5,
+                          margin: const EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.border,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.language_rounded,
+                              color: SafeHomeColors.primary,
+                            ),
+                            const SizedBox(width: 9),
+                            Expanded(
+                              child: Text(
+                                strings.chooseLanguage,
+                                style: const TextStyle(
+                                  color: SafeHomeColors.textPrimary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: strings.t("Tìm ngôn ngữ"),
+                              onPressed: () {
+                                setSheetState(() {
+                                  isSearching = !isSearching;
+
+                                  if (!isSearching) {
+                                    query = "";
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                isSearching
+                                    ? Icons.close_rounded
+                                    : Icons.search_rounded,
+                                color: SafeHomeColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (isSearching) ...[
+                          const SizedBox(height: 10),
+                          TextField(
+                            autofocus: true,
+                            textInputAction: TextInputAction.search,
+                            decoration: InputDecoration(
+                              hintText: strings.t("Tìm ngôn ngữ"),
+                              prefixIcon: const Icon(Icons.search_rounded),
+                              filled: true,
+                              fillColor: SafeHomeColors.surface,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 12,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setSheetState(() {
+                                query = value;
+                              });
+                            },
+                          ),
+                        ],
+                        const SizedBox(height: 15),
+                        Flexible(
+                          child: ListView(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            children: visibleCodes.isEmpty
+                                ? [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 18,
+                                      ),
+                                      child: Text(
+                                        strings.t("Không có kết quả"),
+                                        style: const TextStyle(
+                                          color: SafeHomeColors.textSecondary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ]
+                                : [
+                                    for (final code in visibleCodes)
+                                      languageOption(
+                                        sheetContext: sheetContext,
+                                        code: code,
+                                        title:
+                                            AppLanguageController
+                                                .languageLabels[code] ??
+                                            code,
+                                        subtitle: _languageSubtitle(code),
+                                      ),
+                                  ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              for (final code in AppLanguageController.supportedCodes)
-                languageOption(
-                  sheetContext: sheetContext,
-                  code: code,
-                  title: AppLanguageController.languageLabels[code] ?? code,
-                  subtitle: _languageSubtitle(code),
                 ),
-            ],
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       );
     },
   );
