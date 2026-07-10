@@ -1,10 +1,17 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
-class DeviceList extends StatelessWidget {
+class DeviceList extends StatefulWidget {
+  final String homeId;
   final Map<String, dynamic> devices;
   final String selectedRoomId;
   final String securityMode;
@@ -21,6 +28,7 @@ class DeviceList extends StatelessWidget {
   const DeviceList({
     this.header,
     super.key,
+    required this.homeId,
     required this.devices,
     required this.isShared,
     required this.ownerEmail,
@@ -32,6 +40,191 @@ class DeviceList extends StatelessWidget {
     this.securityMode = "normal",
     this.bottomPadding = 28,
   });
+
+  @override
+  State<DeviceList> createState() => _DeviceListState();
+}
+
+class _DeviceListState extends State<DeviceList> {
+  StreamSubscription<DatabaseEvent>? _deviceOrderSubscription;
+  final Map<String, GlobalKey> _sectionGridKeys = {};
+  String? _draggingDeviceId;
+  String? _draggingSectionKey;
+  List<String>? _draggingSectionOrder;
+  Offset _draggingCardOffset = Offset.zero;
+  Offset _draggingPointerOffset = Offset.zero;
+  bool _draggingDeviceDropping = false;
+  Timer? _deviceDropTimer;
+  Map<String, Map<String, int>> _deviceOrderMap = {};
+  Map<String, Map<String, int>> _localDeviceOrderMap = {};
+  Map<String, Map<String, int>> _optimisticDeviceOrderMap = {};
+
+  Map<String, dynamic> get devices => widget.devices;
+  String get selectedRoomId => widget.selectedRoomId;
+  String get securityMode => widget.securityMode;
+  Widget? get header => widget.header;
+  double get bottomPadding => widget.bottomPadding;
+  VoidCallback get onPairSensor => widget.onPairSensor;
+  Function(String) get onTapDevice => widget.onTapDevice;
+
+  String get _currentUid => FirebaseAuth.instance.currentUser?.uid ?? "";
+  String get _homeId => widget.homeId.trim();
+
+  static const String _deviceOrderRoot = "deviceOrder";
+
+  @override
+  void initState() {
+    super.initState();
+    _startDeviceOrderListener();
+  }
+
+  @override
+  void didUpdateWidget(covariant DeviceList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.homeId != widget.homeId) {
+      _deviceOrderMap = {};
+      _localDeviceOrderMap = {};
+      _optimisticDeviceOrderMap = {};
+      _clearDeviceDragState();
+      _startDeviceOrderListener();
+    }
+  }
+
+  @override
+  void dispose() {
+    _deviceOrderSubscription?.cancel();
+    _deviceDropTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startDeviceOrderListener() {
+    _deviceOrderSubscription?.cancel();
+    _deviceOrderSubscription = null;
+
+    final uid = _currentUid;
+    final homeId = _homeId;
+
+    if (uid.isEmpty || homeId.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _deviceOrderMap = {};
+          _localDeviceOrderMap = {};
+          _optimisticDeviceOrderMap = {};
+        });
+      }
+
+      return;
+    }
+
+    unawaited(_loadLocalDeviceOrder(uid: uid, homeId: homeId));
+
+    _deviceOrderSubscription = FirebaseDatabase.instance
+        .ref("accounts/$uid/$_deviceOrderRoot/$homeId")
+        .onValue
+        .listen((event) {
+      final raw = event.snapshot.value;
+      final orderMap = <String, Map<String, int>>{};
+
+      if (raw is Map) {
+        raw.forEach((sectionKey, sectionValue) {
+          if (sectionValue is! Map) {
+            return;
+          }
+
+          final sectionOrders = <String, int>{};
+
+          sectionValue.forEach((deviceId, value) {
+            final order = int.tryParse(value?.toString() ?? "");
+
+            if (order != null) {
+              sectionOrders[deviceId.toString()] = order;
+            }
+          });
+
+          orderMap[sectionKey.toString()] = sectionOrders;
+        });
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        _deviceOrderMap = orderMap;
+        _optimisticDeviceOrderMap.removeWhere((sectionKey, sectionOrders) {
+          final syncedOrders = orderMap[sectionKey];
+
+          return syncedOrders != null &&
+              _sameDeviceOrder(syncedOrders, sectionOrders);
+        });
+      });
+    });
+  }
+
+
+  String _localOrderPrefsKey({required String uid, required String homeId}) {
+    return "safehome_device_order_${uid}_$homeId";
+  }
+
+  Future<void> _loadLocalDeviceOrder({
+    required String uid,
+    required String homeId,
+  }) async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      final raw = preferences.getString(
+        _localOrderPrefsKey(uid: uid, homeId: homeId),
+      );
+
+      if (raw == null || raw.trim().isEmpty) {
+        return;
+      }
+
+      final decoded = jsonDecode(raw);
+      final localMap = <String, Map<String, int>>{};
+
+      if (decoded is Map) {
+        decoded.forEach((sectionKey, sectionValue) {
+          if (sectionValue is! Map) {
+            return;
+          }
+
+          final sectionOrders = <String, int>{};
+
+          sectionValue.forEach((deviceId, value) {
+            final order = int.tryParse(value?.toString() ?? "");
+
+            if (order != null) {
+              sectionOrders[deviceId.toString()] = order;
+            }
+          });
+
+          localMap[sectionKey.toString()] = sectionOrders;
+        });
+      }
+
+      if (!mounted || uid != _currentUid || homeId != _homeId) {
+        return;
+      }
+
+      setState(() {
+        _localDeviceOrderMap = localMap;
+      });
+    } catch (_) {}
+  }
+
+  Future<void> _saveLocalDeviceOrder({
+    required String uid,
+    required String homeId,
+    required Map<String, Map<String, int>> orderMap,
+  }) async {
+    try {
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.setString(
+        _localOrderPrefsKey(uid: uid, homeId: homeId),
+        jsonEncode(orderMap),
+      );
+    } catch (_) {}
+  }
 
   Map<String, dynamic> safeMap(dynamic data) {
     if (data == null) return {};
@@ -92,10 +285,10 @@ class DeviceList extends StatelessWidget {
   }
 
   String getConnectionDescription(
-    Map<String, dynamic> d,
-    String status,
-    AppStrings strings,
-  ) {
+      Map<String, dynamic> d,
+      String status,
+      AppStrings strings,
+      ) {
     if (status == "off") {
       return strings.t("Thiết bị đang Offline");
     }
@@ -315,8 +508,8 @@ class DeviceList extends StatelessWidget {
       case "heat":
         final active =
             isActiveDeviceSignal(d["heat"]) ||
-            isActiveDeviceSignal(d["heat_alarm"]) ||
-            isActiveDeviceSignal(d["high_temperature_alarm"]);
+                isActiveDeviceSignal(d["heat_alarm"]) ||
+                isActiveDeviceSignal(d["high_temperature_alarm"]);
 
         return active
             ? strings.t("Nhiệt độ nguy hiểm")
@@ -325,7 +518,7 @@ class DeviceList extends StatelessWidget {
       case "carbon_monoxide":
         final active =
             isActiveDeviceSignal(d["carbon_monoxide"]) ||
-            isActiveDeviceSignal(d["co_alarm"]);
+                isActiveDeviceSignal(d["co_alarm"]);
 
         return active
             ? strings.t("Phát hiện khí CO")
@@ -339,7 +532,7 @@ class DeviceList extends StatelessWidget {
       case "gas":
         final active =
             isActiveDeviceSignal(d["gas"]) ||
-            isActiveDeviceSignal(d["gas_alarm"]);
+                isActiveDeviceSignal(d["gas_alarm"]);
 
         return active ? strings.t("Rò rỉ gas") : strings.t("Bình thường");
 
@@ -347,8 +540,8 @@ class DeviceList extends StatelessWidget {
       case "flood":
         final active =
             isActiveDeviceSignal(d["water_leak"]) ||
-            isActiveDeviceSignal(d["leak"]) ||
-            isActiveDeviceSignal(d["water"]);
+                isActiveDeviceSignal(d["leak"]) ||
+                isActiveDeviceSignal(d["water"]);
 
         return active
             ? strings.t("Phát hiện ngập nước")
@@ -357,7 +550,7 @@ class DeviceList extends StatelessWidget {
       case "motion":
         final active =
             isActiveDeviceSignal(d["occupancy"]) ||
-            isActiveDeviceSignal(d["motion"]);
+                isActiveDeviceSignal(d["motion"]);
 
         return active
             ? strings.t("Phát hiện chuyển động")
@@ -366,7 +559,7 @@ class DeviceList extends StatelessWidget {
       case "presence":
         final active =
             isActiveDeviceSignal(d["presence"]) ||
-            isActiveDeviceSignal(d["occupancy"]);
+                isActiveDeviceSignal(d["occupancy"]);
 
         return active
             ? strings.t("Phát hiện hiện diện")
@@ -383,8 +576,8 @@ class DeviceList extends StatelessWidget {
       case "glass_break":
         final active =
             isActiveDeviceSignal(d["glass_break"]) ||
-            isActiveDeviceSignal(d["broken_glass"]) ||
-            isRecentDeviceEvent(d);
+                isActiveDeviceSignal(d["broken_glass"]) ||
+                isRecentDeviceEvent(d);
 
         return active
             ? strings.t("Phát hiện kính vỡ")
@@ -475,8 +668,412 @@ class DeviceList extends StatelessWidget {
     return getAccentColor(d).withValues(alpha: 0.11);
   }
 
+  Map<String, Map<String, int>> _copyDeviceOrderMap(
+      Map<String, Map<String, int>> source,
+      ) {
+    return source.map(
+          (sectionKey, sectionOrders) =>
+          MapEntry(sectionKey, Map<String, int>.from(sectionOrders)),
+    );
+  }
+
+  bool _sameDeviceOrder(Map<String, int> a, Map<String, int> b) {
+    if (a.length != b.length) {
+      return false;
+    }
+
+    for (final entry in a.entries) {
+      if (b[entry.key] != entry.value) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  Map<String, int> _effectiveSectionOrders(String sectionKey) {
+    return <String, int>{
+      ...?_deviceOrderMap[sectionKey],
+      ...?_localDeviceOrderMap[sectionKey],
+      ...?_optimisticDeviceOrderMap[sectionKey],
+    };
+  }
+
+  String _sectionKeyForGroup(String groupName) {
+    switch (groupName) {
+      case "An ninh ra/vào":
+        return "access";
+      case "Nguy hiểm khẩn cấp":
+        return "emergency";
+      case "Điều khiển & hạ tầng":
+        return "infrastructure";
+      case "Môi trường":
+        return "environment";
+      default:
+        return "other";
+    }
+  }
+
+  int _deviceOrderOf(String sectionKey, String deviceId, int fallbackIndex) {
+    return _effectiveSectionOrders(sectionKey)[deviceId] ??
+        (1000000 + fallbackIndex);
+  }
+
+  String _deviceSortName(MapEntry<String, dynamic> entry) {
+    final d = safeMap(entry.value);
+    final name = d["name"]?.toString().trim() ?? "";
+
+    return name.isNotEmpty ? name.toLowerCase() : entry.key.toLowerCase();
+  }
+
+  void _sortDeviceEntries(
+      String sectionKey,
+      List<MapEntry<String, dynamic>> entries,
+      ) {
+    final fallbackIndexes = <String, int>{};
+    final sectionOrders = _effectiveSectionOrders(sectionKey);
+
+    for (var i = 0; i < entries.length; i++) {
+      fallbackIndexes[entries[i].key] = i;
+    }
+
+    entries.sort((a, b) {
+      final aOrder = sectionOrders[a.key];
+      final bOrder = sectionOrders[b.key];
+
+      if (aOrder != null || bOrder != null) {
+        final orderCompare =
+        _deviceOrderOf(
+          sectionKey,
+          a.key,
+          fallbackIndexes[a.key] ?? 0,
+        ).compareTo(
+          _deviceOrderOf(sectionKey, b.key, fallbackIndexes[b.key] ?? 0),
+        );
+
+        if (orderCompare != 0) {
+          return orderCompare;
+        }
+      }
+
+      final nameCompare = _deviceSortName(a).compareTo(_deviceSortName(b));
+
+      if (nameCompare != 0) {
+        return nameCompare;
+      }
+
+      return a.key.compareTo(b.key);
+    });
+  }
+
+  bool get _canReorderDevices => _currentUid.isNotEmpty && _homeId.isNotEmpty;
+
+  String _deviceOrderPath(String sectionKey, String deviceId) {
+    return "accounts/$_currentUid/$_deviceOrderRoot/$_homeId/$sectionKey/$deviceId";
+  }
+
+  GlobalKey _sectionGridKey(String sectionKey) {
+    return _sectionGridKeys.putIfAbsent(
+      sectionKey,
+          () => GlobalKey(debugLabel: "device_grid_$sectionKey"),
+    );
+  }
+
+  void _clearDeviceDragState() {
+    _deviceDropTimer?.cancel();
+    _deviceDropTimer = null;
+    _draggingDeviceId = null;
+    _draggingSectionKey = null;
+    _draggingSectionOrder = null;
+    _draggingCardOffset = Offset.zero;
+    _draggingPointerOffset = Offset.zero;
+    _draggingDeviceDropping = false;
+  }
+
+  double _deviceGridItemHeight(bool compact) {
+    // Giữ card gọn như layout cũ nhưng chừa dư rất nhẹ
+    // để Column bên trong không bị overflow 0.x pixels.
+    return compact ? 70.0 : 75.0;
+  }
+
+  Offset _deviceGridOffsetForIndex({
+    required int index,
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+  }) {
+    return Offset(
+      (index % 2) * (itemWidth + spacing),
+      (index ~/ 2) * (itemHeight + spacing),
+    );
+  }
+
+  int _nearestDeviceGridIndex({
+    required Offset pointer,
+    required int itemCount,
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+  }) {
+    if (itemCount <= 1) {
+      return 0;
+    }
+
+    var bestIndex = 0;
+    var bestDistance = double.infinity;
+
+    for (var i = 0; i < itemCount; i++) {
+      final topLeft = _deviceGridOffsetForIndex(
+        index: i,
+        itemWidth: itemWidth,
+        itemHeight: itemHeight,
+        spacing: spacing,
+      );
+
+      final center = topLeft + Offset(itemWidth / 2, itemHeight / 2);
+      final distance = (center - pointer).distance;
+
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestIndex = i;
+      }
+    }
+
+    return bestIndex;
+  }
+
+  List<MapEntry<String, dynamic>> _dragPreviewEntries(
+      String sectionKey,
+      List<MapEntry<String, dynamic>> entries,
+      ) {
+    final dragOrder = _draggingSectionOrder;
+
+    if (_draggingSectionKey != sectionKey || dragOrder == null) {
+      return entries;
+    }
+
+    final byId = {
+      for (final entry in entries) entry.key: entry,
+    };
+
+    final ordered = <MapEntry<String, dynamic>>[];
+
+    for (final id in dragOrder) {
+      final entry = byId.remove(id);
+
+      if (entry != null) {
+        ordered.add(entry);
+      }
+    }
+
+    ordered.addAll(byId.values);
+    return ordered;
+  }
+
+  void _startDeviceDrag({
+    required String sectionKey,
+    required List<MapEntry<String, dynamic>> entries,
+    required String deviceId,
+    required int index,
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+    required LongPressStartDetails details,
+  }) {
+    if (!_canReorderDevices || entries.length <= 1) {
+      return;
+    }
+
+    final gridKey = _sectionGridKey(sectionKey);
+    final renderObject = gridKey.currentContext?.findRenderObject();
+
+    if (renderObject is! RenderBox) {
+      return;
+    }
+
+    final pointer = renderObject.globalToLocal(details.globalPosition);
+    final itemOffset = _deviceGridOffsetForIndex(
+      index: index,
+      itemWidth: itemWidth,
+      itemHeight: itemHeight,
+      spacing: spacing,
+    );
+
+    _deviceDropTimer?.cancel();
+    _deviceDropTimer = null;
+
+    setState(() {
+      _draggingSectionKey = sectionKey;
+      _draggingDeviceId = deviceId;
+      _draggingSectionOrder = entries.map((entry) => entry.key).toList();
+      _draggingPointerOffset = pointer - itemOffset;
+      _draggingCardOffset = itemOffset;
+      _draggingDeviceDropping = false;
+    });
+  }
+
+  void _updateDeviceDrag({
+    required String sectionKey,
+    required int itemCount,
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+    required LongPressMoveUpdateDetails details,
+  }) {
+    final draggingDeviceId = _draggingDeviceId;
+    final dragOrder = _draggingSectionOrder;
+
+    if (draggingDeviceId == null ||
+        dragOrder == null ||
+        _draggingSectionKey != sectionKey ||
+        _draggingDeviceDropping) {
+      return;
+    }
+
+    final gridKey = _sectionGridKey(sectionKey);
+    final renderObject = gridKey.currentContext?.findRenderObject();
+
+    if (renderObject is! RenderBox) {
+      return;
+    }
+
+    final pointer = renderObject.globalToLocal(details.globalPosition);
+    final cardOffset = pointer - _draggingPointerOffset;
+    final targetIndex = _nearestDeviceGridIndex(
+      pointer: pointer,
+      itemCount: itemCount,
+      itemWidth: itemWidth,
+      itemHeight: itemHeight,
+      spacing: spacing,
+    );
+
+    final nextOrder = List<String>.from(dragOrder);
+    nextOrder.remove(draggingDeviceId);
+
+    final insertIndex = targetIndex.clamp(0, nextOrder.length);
+    nextOrder.insert(insertIndex, draggingDeviceId);
+
+    if (_sameStringList(nextOrder, dragOrder) &&
+        (cardOffset - _draggingCardOffset).distance < 0.5) {
+      return;
+    }
+
+    setState(() {
+      _draggingCardOffset = cardOffset;
+      _draggingSectionOrder = nextOrder;
+    });
+  }
+
+  bool _sameStringList(List<String> a, List<String> b) {
+    if (a.length != b.length) {
+      return false;
+    }
+
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  Future<void> _finishDeviceDrag(
+      String sectionKey, {
+        required double itemWidth,
+        required double itemHeight,
+        required double spacing,
+      }) async {
+    final finalOrder = _draggingSectionOrder;
+    final draggingDeviceId = _draggingDeviceId;
+    final draggingSectionKey = _draggingSectionKey;
+
+    if (finalOrder == null ||
+        draggingDeviceId == null ||
+        draggingSectionKey != sectionKey) {
+      if (mounted) {
+        setState(_clearDeviceDragState);
+      }
+
+      return;
+    }
+
+    final finalIndex = finalOrder.indexOf(draggingDeviceId);
+    final finalOffset = finalIndex < 0
+        ? _draggingCardOffset
+        : _deviceGridOffsetForIndex(
+      index: finalIndex,
+      itemWidth: itemWidth,
+      itemHeight: itemHeight,
+      spacing: spacing,
+    );
+
+    final updatedOptimisticOrder = _copyDeviceOrderMap(_optimisticDeviceOrderMap);
+    final updatedLocalOrder = _copyDeviceOrderMap(_localDeviceOrderMap);
+    final sectionOrder = Map<String, int>.from(
+      _effectiveSectionOrders(sectionKey),
+    );
+
+    for (var i = 0; i < finalOrder.length; i++) {
+      sectionOrder[finalOrder[i]] = i * 10;
+    }
+
+    updatedOptimisticOrder[sectionKey] = sectionOrder;
+    updatedLocalOrder[sectionKey] = sectionOrder;
+
+    if (mounted) {
+      setState(() {
+        _optimisticDeviceOrderMap = updatedOptimisticOrder;
+        _localDeviceOrderMap = updatedLocalOrder;
+        _draggingCardOffset = finalOffset;
+        _draggingDeviceDropping = true;
+      });
+
+      _deviceDropTimer?.cancel();
+      _deviceDropTimer = Timer(const Duration(milliseconds: 350), () {
+        if (!mounted ||
+            _draggingDeviceId != draggingDeviceId ||
+            _draggingSectionKey != sectionKey) {
+          return;
+        }
+
+        setState(_clearDeviceDragState);
+      });
+    }
+
+    unawaited(
+      _saveLocalDeviceOrder(
+        uid: _currentUid,
+        homeId: _homeId,
+        orderMap: updatedLocalOrder,
+      ),
+    );
+
+    final updates = <String, Object?>{};
+
+    for (var i = 0; i < finalOrder.length; i++) {
+      updates[_deviceOrderPath(sectionKey, finalOrder[i])] = i * 10;
+    }
+
+    try {
+      await FirebaseDatabase.instance.ref().update(updates);
+    } catch (_) {
+      // Nếu Firebase Rules chưa mở deviceOrder, thứ tự vẫn được giữ local
+      // trên máy này bằng SharedPreferences.
+    }
+  }
+
+  void _cancelDeviceDrag() {
+    if (!mounted) {
+      return;
+    }
+
+    setState(_clearDeviceDragState);
+  }
+
   List<MapEntry<String, dynamic>> _groupEntries(String groupName) {
-    return devices.entries.where((entry) {
+    final sectionKey = _sectionKeyForGroup(groupName);
+    final entries = devices.entries.where((entry) {
       final d = safeMap(entry.value);
       final type = d["type"]?.toString() ?? "door";
 
@@ -492,6 +1089,10 @@ class DeviceList extends StatelessWidget {
 
       return roomId == selectedRoomId;
     }).toList();
+
+    _sortDeviceEntries(sectionKey, entries);
+
+    return entries;
   }
 
   Widget _deviceCard({
@@ -511,7 +1112,7 @@ class DeviceList extends StatelessWidget {
     final accentColor = getAccentColor(d);
 
     final cardStatusColor =
-        accentColor == SafeHomeColors.danger || connectionStatus == "off"
+    accentColor == SafeHomeColors.danger || connectionStatus == "off"
         ? SafeHomeColors.danger
         : connectionStatus == "warn"
         ? SafeHomeColors.warning
@@ -640,6 +1241,226 @@ class DeviceList extends StatelessWidget {
     );
   }
 
+  Widget _deviceGridItem({
+    required String sectionKey,
+    required MapEntry<String, dynamic> entry,
+    required double itemWidth,
+    required bool compact,
+    required AppStrings strings,
+  }) {
+    return SizedBox(
+      width: itemWidth,
+      child: _deviceCard(
+        id: entry.key,
+        d: safeMap(entry.value),
+        compact: compact,
+        strings: strings,
+      ),
+    );
+  }
+
+  Widget _animatedPositionedDeviceCard({
+    required String sectionKey,
+    required MapEntry<String, dynamic> entry,
+    required int index,
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+    required bool compact,
+    required AppStrings strings,
+    required List<MapEntry<String, dynamic>> sourceEntries,
+  }) {
+    final deviceId = entry.key;
+    final isDragging =
+        _draggingSectionKey == sectionKey && _draggingDeviceId == deviceId;
+    final safeIndex = index < 0 ? 0 : index;
+    final targetOffset = isDragging
+        ? _draggingCardOffset
+        : _deviceGridOffsetForIndex(
+      index: safeIndex,
+      itemWidth: itemWidth,
+      itemHeight: itemHeight,
+      spacing: spacing,
+    );
+
+    final card = SizedBox(
+      width: itemWidth,
+      height: itemHeight,
+      child: _deviceGridItem(
+        sectionKey: sectionKey,
+        entry: entry,
+        itemWidth: itemWidth,
+        compact: compact,
+        strings: strings,
+      ),
+    );
+
+    final wrappedCard = isDragging
+        ? Transform.scale(
+      scale: _draggingDeviceDropping ? 1.0 : 1.012,
+      child: Material(
+        color: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: _draggingDeviceDropping ? 0 : 7,
+        shadowColor: Colors.black.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(17),
+        child: card,
+      ),
+    )
+        : card;
+
+    return AnimatedPositioned(
+      key: ValueKey("device_positioned_${sectionKey}_$deviceId"),
+      duration: isDragging
+          ? (_draggingDeviceDropping
+          ? const Duration(milliseconds: 340)
+          : Duration.zero)
+          : const Duration(milliseconds: 270),
+      curve: Curves.easeOutCubic,
+      left: targetOffset.dx,
+      top: targetOffset.dy,
+      width: itemWidth,
+      height: itemHeight,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPressStart: isDragging
+            ? null
+            : (details) {
+          _startDeviceDrag(
+            sectionKey: sectionKey,
+            entries: sourceEntries,
+            deviceId: deviceId,
+            index: index,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+            spacing: spacing,
+            details: details,
+          );
+        },
+        onLongPressMoveUpdate: (details) {
+          _updateDeviceDrag(
+            sectionKey: sectionKey,
+            itemCount: sourceEntries.length,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+            spacing: spacing,
+            details: details,
+          );
+        },
+        onLongPressEnd: (_) {
+          unawaited(
+            _finishDeviceDrag(
+              sectionKey,
+              itemWidth: itemWidth,
+              itemHeight: itemHeight,
+              spacing: spacing,
+            ),
+          );
+        },
+        onLongPressCancel: _cancelDeviceDrag,
+        child: wrappedCard,
+      ),
+    );
+  }
+
+  Widget _reorderableDeviceSection({
+    required String groupName,
+    required List<MapEntry<String, dynamic>> entries,
+    required double spacing,
+    required double itemWidth,
+    required bool compact,
+    required AppStrings strings,
+  }) {
+    final sectionKey = _sectionKeyForGroup(groupName);
+    final canReorder = _canReorderDevices && entries.length > 1;
+    final itemHeight = _deviceGridItemHeight(compact);
+    final visibleEntries = canReorder
+        ? _dragPreviewEntries(sectionKey, entries)
+        : entries;
+    final totalRows = (visibleEntries.length / 2).ceil();
+    final sectionHeight = visibleEntries.isEmpty
+        ? 0.0
+        : (totalRows * itemHeight) + ((totalRows - 1) * spacing);
+    final gridKey = _sectionGridKey(sectionKey);
+
+    if (!canReorder) {
+      return SizedBox(
+        key: ValueKey(
+          "device-section-static-${widget.homeId}-$selectedRoomId-$sectionKey",
+        ),
+        height: sectionHeight,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            for (var index = 0; index < visibleEntries.length; index++)
+              Positioned(
+                left: _deviceGridOffsetForIndex(
+                  index: index,
+                  itemWidth: itemWidth,
+                  itemHeight: itemHeight,
+                  spacing: spacing,
+                ).dx,
+                top: _deviceGridOffsetForIndex(
+                  index: index,
+                  itemWidth: itemWidth,
+                  itemHeight: itemHeight,
+                  spacing: spacing,
+                ).dy,
+                width: itemWidth,
+                height: itemHeight,
+                child: SizedBox(
+                  width: itemWidth,
+                  height: itemHeight,
+                  child: _deviceGridItem(
+                    sectionKey: sectionKey,
+                    entry: visibleEntries[index],
+                    itemWidth: itemWidth,
+                    compact: compact,
+                    strings: strings,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
+    }
+
+    final activeDraggingDeviceId =
+    _draggingSectionKey == sectionKey ? _draggingDeviceId : null;
+    final paintEntries = <MapEntry<String, dynamic>>[
+      ...visibleEntries.where((entry) => entry.key != activeDraggingDeviceId),
+      if (activeDraggingDeviceId != null)
+        ...visibleEntries.where((entry) => entry.key == activeDraggingDeviceId),
+    ];
+
+    return SizedBox(
+      key: ValueKey(
+        "device-section-animated-${widget.homeId}-$selectedRoomId-$sectionKey",
+      ),
+      height: sectionHeight,
+      child: Stack(
+        key: gridKey,
+        clipBehavior: Clip.none,
+        children: [
+          for (final entry in paintEntries)
+            _animatedPositionedDeviceCard(
+              sectionKey: sectionKey,
+              entry: entry,
+              index: visibleEntries.indexWhere(
+                    (visibleEntry) => visibleEntry.key == entry.key,
+              ),
+              itemWidth: itemWidth,
+              itemHeight: itemHeight,
+              spacing: spacing,
+              compact: compact,
+              strings: strings,
+              sourceEntries: entries,
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _addDeviceButton() {
     return Material(
       color: SafeHomeColors.primarySoft,
@@ -764,20 +1585,13 @@ class DeviceList extends StatelessWidget {
                     if (securityEntries.isEmpty)
                       _emptySecurityState(strings)
                     else
-                      Wrap(
+                      _reorderableDeviceSection(
+                        groupName: "An ninh ra/vào",
+                        entries: securityEntries,
                         spacing: spacing,
-                        runSpacing: spacing,
-                        children: securityEntries.map((entry) {
-                          return SizedBox(
-                            width: itemWidth,
-                            child: _deviceCard(
-                              id: entry.key,
-                              d: safeMap(entry.value),
-                              compact: compact,
-                              strings: strings,
-                            ),
-                          );
-                        }).toList(),
+                        itemWidth: itemWidth,
+                        compact: compact,
+                        strings: strings,
                       ),
                     if (emergencyEntries.isNotEmpty) ...[
                       const SizedBox(height: 16),
@@ -786,20 +1600,13 @@ class DeviceList extends StatelessWidget {
                         count: emergencyEntries.length,
                         showAddButton: false,
                       ),
-                      Wrap(
+                      _reorderableDeviceSection(
+                        groupName: "Nguy hiểm khẩn cấp",
+                        entries: emergencyEntries,
                         spacing: spacing,
-                        runSpacing: spacing,
-                        children: emergencyEntries.map((entry) {
-                          return SizedBox(
-                            width: itemWidth,
-                            child: _deviceCard(
-                              id: entry.key,
-                              d: safeMap(entry.value),
-                              compact: compact,
-                              strings: strings,
-                            ),
-                          );
-                        }).toList(),
+                        itemWidth: itemWidth,
+                        compact: compact,
+                        strings: strings,
                       ),
                     ],
                     if (infrastructureEntries.isNotEmpty) ...[
@@ -809,20 +1616,13 @@ class DeviceList extends StatelessWidget {
                         count: infrastructureEntries.length,
                         showAddButton: false,
                       ),
-                      Wrap(
+                      _reorderableDeviceSection(
+                        groupName: "Điều khiển & hạ tầng",
+                        entries: infrastructureEntries,
                         spacing: spacing,
-                        runSpacing: spacing,
-                        children: infrastructureEntries.map((entry) {
-                          return SizedBox(
-                            width: itemWidth,
-                            child: _deviceCard(
-                              id: entry.key,
-                              d: safeMap(entry.value),
-                              compact: compact,
-                              strings: strings,
-                            ),
-                          );
-                        }).toList(),
+                        itemWidth: itemWidth,
+                        compact: compact,
+                        strings: strings,
                       ),
                     ],
                   ],
