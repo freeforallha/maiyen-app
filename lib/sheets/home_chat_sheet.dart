@@ -322,7 +322,7 @@ void showHomeChatSheet({
     if (memberUid.isEmpty) {
       showTopToast(
         sheetContext,
-        "Không tìm thấy người dùng",
+        AppStrings.of(sheetContext).t("Không tìm thấy người dùng"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -342,7 +342,7 @@ void showHomeChatSheet({
 
       showTopToast(
         sheetContext,
-        "Không đọc được số điện thoại",
+        AppStrings.of(sheetContext).t("Không đọc được số điện thoại"),
         color: Colors.red,
         icon: Icons.error_outline_rounded,
       );
@@ -761,7 +761,7 @@ void showHomeChatSheet({
           String replyDisplayName(Map<String, dynamic>? message) {
             final name = message?["name"]?.toString().trim() ?? "";
 
-            return name.isNotEmpty ? name : "một thành viên";
+            return name.isNotEmpty ? name : strings.t("Một thành viên");
           }
 
           Future<void> sendCurrentMessage() async {
@@ -772,7 +772,7 @@ void showHomeChatSheet({
             if (text.length > ChatService.maxMessageLength) {
               showTopToast(
                 ctx,
-                "Tin nhắn quá dài",
+                AppStrings.of(ctx).t("Tin nhắn quá dài"),
                 color: Colors.orange,
                 icon: Icons.text_fields_rounded,
               );
@@ -870,7 +870,7 @@ void showHomeChatSheet({
 
                 showTopToast(
                   ctx,
-                  "Không gửi được tin nhắn",
+                  AppStrings.of(ctx).t("Không gửi được tin nhắn"),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
                 );
@@ -1428,11 +1428,13 @@ void showHomeChatSheet({
                                                     : const Icon(
                                                         Icons.history_rounded,
                                                         size: 18,
-                                                      ),
+                                                ),
                                                 label: Text(
                                                   loadingOlderMessages
-                                                      ? "Đang tải..."
-                                                      : "Tải tin cũ hơn",
+                                                      ? strings.t("Đang tải...")
+                                                      : strings.t(
+                                                          "Tải tin cũ hơn",
+                                                        ),
                                                 ),
                                               ),
                                             ),
@@ -1714,7 +1716,7 @@ void showHomeChatSheet({
                                                                           Text(
                                                                             replyName.isNotEmpty
                                                                                 ? replyName
-                                                                                : "Một thành viên",
+                                                                                : strings.t("Một thành viên"),
                                                                             maxLines:
                                                                                 1,
                                                                             overflow:
@@ -2191,6 +2193,7 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
 
   Widget _buildIndicator(BuildContext context, List<ChatTypingMember> members) {
     final colors = Theme.of(context).colorScheme;
+    final strings = AppStrings.of(context);
 
     return Padding(
       key: ValueKey(members.map((member) => member.uid).join("|")),
@@ -2208,7 +2211,7 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _typingLabel(members),
+                _typingLabel(members, strings),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -2266,24 +2269,26 @@ class _TypingIndicatorState extends State<_TypingIndicator> {
     );
   }
 
-  String _typingLabel(List<ChatTypingMember> members) {
-    final names = members.map(_typingName).toList();
+  String _typingLabel(List<ChatTypingMember> members, AppStrings strings) {
+    final names = members
+        .map((member) => _typingName(member, strings))
+        .toList();
 
     if (names.length == 1) {
-      return "${names.first} đang chuẩn bị gửi tin...";
+      return strings.chatTypingOne(names.first);
     }
 
     if (names.length == 2) {
-      return "${names[0]} và ${names[1]} đang chuẩn bị gửi tin...";
+      return strings.chatTypingTwo(names[0], names[1]);
     }
 
-    return "${names.first} và ${names.length - 1} người khác đang chuẩn bị gửi tin...";
+    return strings.chatTypingMany(names.first, names.length - 1);
   }
 
-  String _typingName(ChatTypingMember member) {
+  String _typingName(ChatTypingMember member, AppStrings strings) {
     final name = member.name.trim();
 
-    if (name.isEmpty) return "Một thành viên";
+    if (name.isEmpty) return strings.t("Một thành viên");
 
     return name;
   }

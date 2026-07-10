@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,6 +85,18 @@ class AppLanguageController extends ChangeNotifier {
     return Locale(code);
   }
 
+  String _systemSupportedLanguageCode() {
+    final systemCode = ui.PlatformDispatcher.instance.locale.languageCode
+        .trim()
+        .toLowerCase();
+
+    if (supportedCodes.contains(systemCode)) {
+      return systemCode;
+    }
+
+    return "vi";
+  }
+
   Future<void> load() async {
     if (_loaded) {
       return;
@@ -92,16 +106,25 @@ class AppLanguageController extends ChangeNotifier {
 
     try {
       final preferences = await SharedPreferences.getInstance();
-      final savedCode = preferences.getString(_storageKey);
+      final savedCode = preferences
+          .getString(_storageKey)
+          ?.trim()
+          .toLowerCase();
+      final code = savedCode != null && supportedCodes.contains(savedCode)
+          ? savedCode
+          : _systemSupportedLanguageCode();
 
-      if (savedCode != null &&
-          supportedCodes.contains(savedCode) &&
-          savedCode != languageCode) {
-        _locale = _localeForCode(savedCode);
+      if (code != languageCode) {
+        _locale = _localeForCode(code);
         notifyListeners();
       }
     } catch (_) {
-      // Giữ tiếng Việt nếu không đọc được cài đặt trên máy.
+      final code = _systemSupportedLanguageCode();
+
+      if (code != languageCode) {
+        _locale = _localeForCode(code);
+        notifyListeners();
+      }
     }
   }
 

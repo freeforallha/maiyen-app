@@ -3313,7 +3313,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Padding(
                     padding: EdgeInsets.zero,
                     child: _SoftHomeTabsAppear(
-                      animationKey: homeOrder.join("|"),
+                      animationKey: (() {
+                        final visibleHomeCount = homeOrder
+                            .where((homeId) => homes.containsKey(homeId))
+                            .toSet()
+                            .length;
+
+                        if (visibleHomeCount <= 1 && !_singleHomeIdentityReady) {
+                          return "single_wait";
+                        }
+
+                        return visibleHomeCount <= 1 ? "single" : "multi";
+                      })(),
                       child: HomeTabs(
                         singleHomeIdentityEnabled: _singleHomeIdentityReady,
                         unreadChatByHome: unreadChatByHome,
@@ -3656,62 +3667,47 @@ class _SoftHomeTabsAppear extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 920),
-        reverseDuration: const Duration(milliseconds: 520),
-        switchInCurve: Curves.easeOutCubic,
-        switchOutCurve: Curves.easeInCubic,
-        layoutBuilder: (currentChild, previousChildren) {
-          return Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              ...previousChildren,
-              if (currentChild != null) currentChild,
-            ],
-          );
-        },
-        transitionBuilder: (child, animation) {
-          return AnimatedBuilder(
-            animation: animation,
-            child: child,
-            builder: (context, child) {
-              final isOutgoing = animation.status == AnimationStatus.reverse;
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 880),
+      reverseDuration: const Duration(milliseconds: 520),
+      switchInCurve: Curves.easeOutQuart,
+      switchOutCurve: Curves.easeOutQuart,
 
-              if (isOutgoing) {
-                final value = Curves.easeInOutCubic.transform(animation.value);
+      // Không giữ widget cũ ở dưới nữa.
+      // Như vậy khi chuyển 1 home -> nhiều home hoặc xoá ngược lại,
+      // sẽ không còn lộ cái khung card cũ.
+      layoutBuilder: (currentChild, previousChildren) {
+        return currentChild ?? const SizedBox(height: 58);
+      },
 
-                return Opacity(
-                  opacity: value.clamp(0.0, 1.0),
-                  child: Transform.scale(
-                    scale: 0.90 + (0.10 * value),
-                    alignment: Alignment.centerLeft,
-                    child: child,
-                  ),
-                );
-              }
+      transitionBuilder: (child, animation) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutQuart,
+        );
 
-              final value = Curves.easeOutCubic.transform(animation.value);
-              final dx = (1 - value) * 72;
+        return FadeTransition(
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.10, 0),
+              end: Offset.zero,
+            ).animate(curved),
+            child: ScaleTransition(
+              scale: Tween<double>(
+                begin: 0.985,
+                end: 1.0,
+              ).animate(curved),
+              alignment: Alignment.centerRight,
+              child: child,
+            ),
+          ),
+        );
+      },
 
-              return Opacity(
-                opacity: value.clamp(0.0, 1.0),
-                child: Transform.translate(
-                  offset: Offset(dx, 0),
-                  child: Transform.scale(
-                    scale: 0.975 + (0.025 * value),
-                    alignment: Alignment.centerRight,
-                    child: child,
-                  ),
-                ),
-              );
-            },
-          );
-        },
-        child: KeyedSubtree(
-          key: ValueKey("home_tabs_$animationKey"),
-          child: child,
-        ),
+      child: KeyedSubtree(
+        key: ValueKey("home_tabs_mode_$animationKey"),
+        child: child,
       ),
     );
   }

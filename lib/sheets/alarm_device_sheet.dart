@@ -24,6 +24,48 @@ String _alarmRepeatLabel(Object? rawValue, AppStrings strings) {
   return value == 0 ? strings.t("Không lặp lại") : strings.minuteText(value);
 }
 
+List<int> _normalizeAlarmDays(Object? rawValue) {
+  final parsed = <int>[];
+
+  if (rawValue is Iterable) {
+    for (final item in rawValue) {
+      final day = item is num
+          ? item.toInt()
+          : int.tryParse(item?.toString() ?? "");
+
+      if (day != null && day >= 1 && day <= 7 && !parsed.contains(day)) {
+        parsed.add(day);
+      }
+    }
+  }
+
+  parsed.sort();
+
+  return parsed.isEmpty ? const [1, 2, 3, 4, 5, 6, 7] : parsed;
+}
+
+String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
+  final days = _normalizeAlarmDays(rawValue);
+
+  if (days.length == 7) {
+    return strings.t("Hằng ngày");
+  }
+
+  const labels = {
+    1: "T2",
+    2: "T3",
+    3: "T4",
+    4: "T5",
+    5: "T6",
+    6: "T7",
+    7: "CN",
+  };
+
+  return days.map((day) => labels[day] ?? "").where((label) {
+    return label.isNotEmpty;
+  }).join(", ");
+}
+
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -75,37 +117,37 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         .ref("accounts/$currentUid/customRules/${widget.homeId}")
         .get()
         .then((snap) {
-          if (!mounted) return;
+      if (!mounted) return;
 
-          final data = snap.value;
+      final data = snap.value;
 
-          if (data is Map) {
-            final map = Map<String, dynamic>.from(data);
-            final savedMode = map["mode"]?.toString();
-            final customDevices = map["devices"];
+      if (data is Map) {
+        final map = Map<String, dynamic>.from(data);
+        final savedMode = map["mode"]?.toString();
+        final customDevices = map["devices"];
 
-            if (customDevices is Map) {
-              for (final entry in customDevices.entries) {
-                final deviceId = entry.key.toString();
-                final deviceData = Map<String, dynamic>.from(
-                  entry.value as Map,
-                );
+        if (customDevices is Map) {
+          for (final entry in customDevices.entries) {
+            final deviceId = entry.key.toString();
+            final deviceData = Map<String, dynamic>.from(
+              entry.value as Map,
+            );
 
-                if (deviceData["alarm"] is Map) {
-                  customAlarms[deviceId] = Map<String, dynamic>.from(
-                    deviceData["alarm"],
-                  );
-                }
-              }
+            if (deviceData["alarm"] is Map) {
+              customAlarms[deviceId] = Map<String, dynamic>.from(
+                deviceData["alarm"],
+              );
             }
+          }
+        }
 
-            setState(() {
-              if (savedMode == "custom" || savedMode == "home") {
-                mode = savedMode == "custom" ? "custom" : "home";
-              }
-            });
+        setState(() {
+          if (savedMode == "custom" || savedMode == "home") {
+            mode = savedMode == "custom" ? "custom" : "home";
           }
         });
+      }
+    });
   }
 
   Map<String, dynamic> _defaultAlarm() {
@@ -114,6 +156,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       "start": "23:00",
       "end": "06:00",
       "repeatMinutes": 30,
+      "days": const [1, 2, 3, 4, 5, 6, 7],
     };
   }
 
@@ -172,9 +215,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
           final rawAlarm =
               customAlarms[deviceId] ??
-              customAlarms[realDeviceId] ??
-              homeAlarms[deviceId] ??
-              homeAlarms[realDeviceId];
+                  customAlarms[realDeviceId] ??
+                  homeAlarms[deviceId] ??
+                  homeAlarms[realDeviceId];
 
           final alarm = rawAlarm is Map
               ? Map<String, dynamic>.from(rawAlarm)
@@ -234,9 +277,28 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     }
   }
 
+  Map<String, dynamic> normalizeAlarmForSave(Map<String, dynamic> alarm) {
+    final nextAlarm = Map<String, dynamic>.from(alarm);
+
+    nextAlarm["days"] = _normalizeAlarmDays(nextAlarm["days"]);
+    nextAlarm["repeatMinutes"] = _normalizeAlarmRepeatMinutes(
+      nextAlarm["repeatMinutes"],
+    );
+
+    nextAlarm["start"] = (nextAlarm["start"]?.toString().trim().isNotEmpty == true)
+        ? nextAlarm["start"].toString().trim()
+        : "23:00";
+
+    nextAlarm["end"] = (nextAlarm["end"]?.toString().trim().isNotEmpty == true)
+        ? nextAlarm["end"].toString().trim()
+        : "06:00";
+
+    return nextAlarm;
+  }
+
   Future<void> saveAlarmForAllSecurityDevices(
-    Map<String, dynamic> alarm,
-  ) async {
+      Map<String, dynamic> alarm,
+      ) async {
     if (applyingAll) {
       return;
     }
@@ -286,7 +348,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             ? device["_homeId"].toString().trim()
             : widget.homeId;
         final realDeviceId =
-            device["_deviceId"]?.toString().trim().isNotEmpty == true
+        device["_deviceId"]?.toString().trim().isNotEmpty == true
             ? device["_deviceId"].toString().trim()
             : deviceId;
 
@@ -294,7 +356,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             ? "accounts/$currentUid/customRules/$homeId/devices/$realDeviceId/alarm"
             : "accounts/${widget.ownerUid}/homes/$homeId/devices/$realDeviceId/alarm";
 
-        updates[path] = Map<String, dynamic>.from(alarm);
+        updates[path] = normalizeAlarmForSave(alarm);
       }
 
       await FirebaseDatabase.instance.ref().update(updates);
@@ -306,7 +368,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       setState(() {
         for (final entry in securityEntries) {
           final deviceId = entry.key.toString();
-          final copiedAlarm = Map<String, dynamic>.from(alarm);
+          final copiedAlarm = normalizeAlarmForSave(alarm);
 
           if (mode == "custom") {
             customAlarms[deviceId] = copiedAlarm;
@@ -373,7 +435,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     ? strings.t("Chọn giờ bắt đầu Alarm")
                     : strings.t("Chọn giờ kết thúc Alarm"),
                 initial:
-                    draft[field]?.toString() ??
+                draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
               );
 
@@ -491,8 +553,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               Text(
                                 strings
                                     .applySameAlarmScheduleToSecurityDevicesText(
-                                      securityEntries.length,
-                                    ),
+                                  securityEntries.length,
+                                ),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textSecondary,
                                   fontSize: 12,
@@ -507,10 +569,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           onChanged: saving
                               ? null
                               : (value) {
-                                  setSheetState(() {
-                                    draft["enabled"] = value;
-                                  });
-                                },
+                            setSheetState(() {
+                              draft["enabled"] = value;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -552,6 +614,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         });
                       },
                     ),
+                    const SizedBox(height: 12),
+                    _AlarmWeekdaySelector(
+                      days: _normalizeAlarmDays(draft["days"]),
+                      enabled: !saving,
+                      onChanged: (days) {
+                        setSheetState(() {
+                          draft["days"] = days;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 18),
                     SizedBox(
                       width: double.infinity,
@@ -559,12 +631,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         onPressed: saving ? null : applyToAll,
                         icon: saving
                             ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
                             : const Icon(Icons.done_all_rounded),
                         label: Text(
                           saving
@@ -605,13 +677,15 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         ? "accounts/$currentUid/customRules/$homeId/devices/$realDeviceId/alarm"
         : "accounts/${widget.ownerUid}/homes/$homeId/devices/$realDeviceId/alarm";
 
-    await FirebaseDatabase.instance.ref(path).set(alarm);
+    final alarmToSave = normalizeAlarmForSave(alarm);
+
+    await FirebaseDatabase.instance.ref(path).set(alarmToSave);
 
     setState(() {
       if (mode == "custom") {
-        customAlarms[deviceId] = alarm;
+        customAlarms[deviceId] = alarmToSave;
       } else {
-        homeAlarms[deviceId] = alarm;
+        homeAlarms[deviceId] = alarmToSave;
       }
     });
   }
@@ -907,10 +981,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     : showQuickAlarmForAllSheet,
                 icon: applyingAll
                     ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
                     : const Icon(Icons.tune_rounded),
                 label: Text(
                   applyingAll
@@ -988,7 +1062,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
-                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
+                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmDaysLabel(alarm["days"], strings)} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 12,
@@ -1005,11 +1079,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               onChanged: readOnly
                                   ? null
                                   : (v) async {
-                                      final nextAlarm =
-                                          Map<String, dynamic>.from(alarm);
-                                      nextAlarm["enabled"] = v;
-                                      await saveAlarm(deviceId, nextAlarm);
-                                    },
+                                final nextAlarm =
+                                Map<String, dynamic>.from(alarm);
+                                nextAlarm["enabled"] = v;
+                                await saveAlarm(deviceId, nextAlarm);
+                              },
                             ),
 
                             IconButton(
@@ -1076,6 +1150,21 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               await saveAlarm(deviceId, nextAlarm);
                             },
                           ),
+
+                          const SizedBox(height: 10),
+
+                          _AlarmWeekdaySelector(
+                            days: _normalizeAlarmDays(alarm["days"]),
+                            enabled: !readOnly,
+                            onChanged: (days) async {
+                              final nextAlarm = Map<String, dynamic>.from(
+                                alarm,
+                              );
+                              nextAlarm["days"] = days;
+
+                              await saveAlarm(deviceId, nextAlarm);
+                            },
+                          ),
                         ],
                       ],
                     ),
@@ -1084,6 +1173,147 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AlarmWeekdaySelector extends StatelessWidget {
+  final List<int> days;
+  final bool enabled;
+  final ValueChanged<List<int>> onChanged;
+
+  const _AlarmWeekdaySelector({
+    required this.days,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final selectedDays = _normalizeAlarmDays(days);
+
+    const dayItems = [
+      {"value": 1, "label": "T2"},
+      {"value": 2, "label": "T3"},
+      {"value": 3, "label": "T4"},
+      {"value": 4, "label": "T5"},
+      {"value": 5, "label": "T6"},
+      {"value": 6, "label": "T7"},
+      {"value": 7, "label": "CN"},
+    ];
+
+    void toggleDay(int day) {
+      if (!enabled) {
+        return;
+      }
+
+      final nextDays = List<int>.from(selectedDays);
+
+      if (nextDays.contains(day)) {
+        if (nextDays.length == 1) {
+          return;
+        }
+
+        nextDays.remove(day);
+      } else {
+        nextDays.add(day);
+      }
+
+      nextDays.sort();
+      onChanged(nextDays);
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
+      decoration: BoxDecoration(
+        color: SafeHomeColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: SafeHomeColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            strings.t("Ngày trong tuần"),
+            style: const TextStyle(
+              color: SafeHomeColors.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 9),
+          Wrap(
+            spacing: 7,
+            runSpacing: 7,
+            children: [
+              for (final item in dayItems)
+                _AlarmDayChip(
+                  label: item["label"]!.toString(),
+                  selected: selectedDays.contains(item["value"]),
+                  enabled: enabled,
+                  onTap: () => toggleDay(item["value"] as int),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AlarmDayChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  const _AlarmDayChip({
+    required this.label,
+    required this.selected,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = SafeHomeColors.danger;
+
+    return InkWell(
+      onTap: enabled ? onTap : null,
+      borderRadius: BorderRadius.circular(999),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        curve: Curves.easeOut,
+        width: 39,
+        height: 34,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected
+              ? activeColor.withValues(alpha: enabled ? 0.13 : 0.06)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(
+            color: selected
+                ? activeColor.withValues(alpha: enabled ? 0.65 : 0.28)
+                : SafeHomeColors.border,
+            width: selected ? 1.4 : 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: selected
+                ? activeColor.withValues(alpha: enabled ? 1 : 0.45)
+                : SafeHomeColors.textSecondary.withValues(
+              alpha: enabled ? 1 : 0.45,
+            ),
+            fontSize: 12,
+            fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+          ),
         ),
       ),
     );
@@ -1156,10 +1386,10 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                 ],
                 onChanged: enabled
                     ? (nextValue) {
-                        if (nextValue != null) {
-                          onChanged(nextValue);
-                        }
-                      }
+                  if (nextValue != null) {
+                    onChanged(nextValue);
+                  }
+                }
                     : null,
               ),
             ),
@@ -1215,12 +1445,12 @@ class _AlarmModeCard extends StatelessWidget {
               ),
               boxShadow: selected
                   ? [
-                      BoxShadow(
-                        color: accent.withValues(alpha: 0.10),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
-                      ),
-                    ]
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.10),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ]
                   : null,
             ),
             child: Column(
@@ -1248,17 +1478,17 @@ class _AlarmModeCard extends StatelessWidget {
                       duration: const Duration(milliseconds: 160),
                       child: selected
                           ? Icon(
-                              Icons.check_circle_rounded,
-                              key: const ValueKey("selected"),
-                              color: accent,
-                              size: 22,
-                            )
+                        Icons.check_circle_rounded,
+                        key: const ValueKey("selected"),
+                        color: accent,
+                        size: 22,
+                      )
                           : Icon(
-                              Icons.circle_outlined,
-                              key: const ValueKey("unselected"),
-                              color: SafeHomeColors.border,
-                              size: 22,
-                            ),
+                        Icons.circle_outlined,
+                        key: const ValueKey("unselected"),
+                        color: SafeHomeColors.border,
+                        size: 22,
+                      ),
                     ),
                   ],
                 ),

@@ -208,8 +208,11 @@ Future<void> _showBackgroundScheduleNotification(
   final strings = await _backgroundStrings();
   final body = _buildScheduleBody(data, strings);
 
-  final homeTitle = data['title']?.toString().trim().isNotEmpty == true
-      ? data['title'].toString().trim()
+  final rawHomeTitle = data['title']?.toString().trim() ?? '';
+  final homeTitle = rawHomeTitle == 'Nhà'
+      ? strings.defaultHomeName()
+      : rawHomeTitle.isNotEmpty
+      ? rawHomeTitle
       : 'SafeHome';
 
   final isSafe =
@@ -259,7 +262,7 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
   final rawBody = data['body']?.toString().trim() ?? '';
 
   final title = rawTitle.isNotEmpty
-      ? rawTitle
+      ? NotificationService.localizedExactTextOrRaw(rawTitle, strings)
       : unreadCount > 1
       ? '${homeName.isNotEmpty ? homeName : "HomeChat"} · '
             '${strings.homeChatNewMessages(unreadCount)}'
@@ -268,7 +271,7 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
       : strings.homeChatTitle();
 
   final body = rawBody.isNotEmpty
-      ? rawBody
+      ? NotificationService.localizedExactTextOrRaw(rawBody, strings)
       : senderName.isNotEmpty
       ? strings.homeChatSenderMessage(senderName)
       : strings.homeChatNewMessage();

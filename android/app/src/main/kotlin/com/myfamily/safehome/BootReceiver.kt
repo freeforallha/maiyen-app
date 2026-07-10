@@ -124,6 +124,7 @@ class BootReceiver : BroadcastReceiver() {
 
     private fun bootChannelDescription(): String {
         return when (Locale.getDefault().language) {
+            "vi" -> "Thông báo SafeHome đã tự khởi chạy"
             "en" -> "SafeHome auto-start notification"
             "zh" -> "SafeHome 自动启动通知"
             "ko" -> "SafeHome 자동 시작 알림"
@@ -138,6 +139,7 @@ class BootReceiver : BroadcastReceiver() {
 
     private fun bootNotificationText(): String {
         return when (Locale.getDefault().language) {
+            "vi" -> "Đã sẵn sàng theo dõi bảo vệ tự động"
             "en" -> "Ready to monitor automatic protection"
             "zh" -> "已准备好监控自动保护"
             "ko" -> "자동 보호 모니터링 준비 완료"

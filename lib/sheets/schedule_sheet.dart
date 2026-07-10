@@ -113,7 +113,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       if (mounted) {
         showTopToast(
           context,
-          "Bạn không có quyền sửa lịch chung của nhà",
+          AppStrings.of(context).t(
+            "Bạn không có quyền sửa lịch chung của nhà",
+          ),
           color: Colors.red,
           icon: Icons.lock_rounded,
         );

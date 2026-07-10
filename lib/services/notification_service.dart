@@ -22,6 +22,37 @@ class NotificationService {
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
       ValueNotifier<Map<String, String>?>(null);
 
+  static String localizedExactTextOrRaw(String raw, AppStrings strings) {
+    final clean = raw.trim();
+
+    if (clean.isEmpty) {
+      return "";
+    }
+
+    final exact = strings.t(clean);
+    if (exact != clean) {
+      return exact;
+    }
+
+    const newMessageInPrefix = "Tin nhắn mới trong ";
+    if (clean.startsWith(newMessageInPrefix)) {
+      final homeName = clean.replaceFirst(newMessageInPrefix, "").trim();
+      if (homeName.isNotEmpty) {
+        return strings.newMessageInHome(homeName);
+      }
+    }
+
+    const sentMessageSuffix = " đã gửi một tin nhắn";
+    if (clean.endsWith(sentMessageSuffix)) {
+      final senderName = clean.replaceFirst(sentMessageSuffix, "").trim();
+      if (senderName.isNotEmpty) {
+        return strings.homeChatSenderMessage(senderName);
+      }
+    }
+
+    return clean;
+  }
+
   static String? _activeHomeChatId;
 
   static void markHomeChatOpened(String homeId) {
@@ -496,7 +527,7 @@ class NotificationService {
         int.tryParse(data["unreadCount"]?.toString() ?? "1") ?? 1;
 
     final title = rawTitle.isNotEmpty
-        ? rawTitle
+        ? localizedExactTextOrRaw(rawTitle, strings)
         : unreadCount > 1
         ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
               "${strings.homeChatNewMessages(unreadCount)}"
@@ -505,7 +536,7 @@ class NotificationService {
         : strings.homeChatTitle();
 
     final body = rawBody.isNotEmpty
-        ? rawBody
+        ? localizedExactTextOrRaw(rawBody, strings)
         : senderName.isNotEmpty
         ? strings.homeChatSenderMessage(senderName)
         : strings.homeChatNewMessage();
@@ -607,6 +638,9 @@ class NotificationService {
 
     if (incomingItems.isEmpty) {
       final cleanBody = strings.stripSafetyStatusText(body);
+      final translatedCleanBody = cleanBody.isEmpty
+          ? ""
+          : strings.statusText(cleanBody);
 
       incomingItems.add({
         "homeId": "",
@@ -616,9 +650,9 @@ class NotificationService {
         "reasons": isSafe
             ? <String>[]
             : <String>[
-                cleanBody.isEmpty
+                translatedCleanBody.isEmpty
                     ? strings.defaultUnsafeReminderReason()
-                    : cleanBody,
+                    : translatedCleanBody,
               ],
       });
     }
@@ -640,9 +674,10 @@ class NotificationService {
       if (rawReasons is List) {
         for (final reason in rawReasons) {
           final text = reason?.toString().trim() ?? "";
+          final translatedText = text.isEmpty ? "" : strings.statusText(text);
 
-          if (text.isNotEmpty && !reasons.contains(text)) {
-            reasons.add(text);
+          if (translatedText.isNotEmpty && !reasons.contains(translatedText)) {
+            reasons.add(translatedText);
           }
         }
       }
@@ -1019,6 +1054,9 @@ class NotificationService {
     final strings = _strings;
     final cleanReason = reason.trim();
     final cleanTitle = title.trim();
+    final localizedTitle = cleanTitle == "Nhà"
+        ? strings.defaultHomeName()
+        : cleanTitle;
 
     final reminderBody = strings.safetyReminderBody(
       isSafe: isSafe,
@@ -1028,7 +1066,9 @@ class NotificationService {
     // Chỉ gộp dữ liệu để cập nhật cùng notification.
     // Không mở trang Reminder toàn màn hình.
     _mergeReminderSession(
-      title: cleanTitle.isNotEmpty ? cleanTitle : strings.defaultHomeName(),
+      title: localizedTitle.isNotEmpty
+          ? localizedTitle
+          : strings.defaultHomeName(),
       body: reminderBody,
       isSafe: isSafe,
       reminderItemsJson: reminderItemsJson,

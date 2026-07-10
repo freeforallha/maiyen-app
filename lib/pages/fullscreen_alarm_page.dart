@@ -339,10 +339,15 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     }
 
     final bodyText = strings.stripSafetyStatusText(currentReminderBody);
+    final translatedBodyText = bodyText.isEmpty
+        ? ""
+        : strings.statusText(bodyText);
 
     return {
       homeName: [
-        bodyText.isNotEmpty ? bodyText : strings.defaultUnsafeReminderReason(),
+        translatedBodyText.isNotEmpty
+            ? translatedBodyText
+            : strings.defaultUnsafeReminderReason(),
       ],
     };
   }
