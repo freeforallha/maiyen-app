@@ -44,26 +44,210 @@ List<int> _normalizeAlarmDays(Object? rawValue) {
   return parsed.isEmpty ? const [1, 2, 3, 4, 5, 6, 7] : parsed;
 }
 
+
+String _alarmWeekdayFullLabel(int day, AppStrings strings) {
+  switch (day) {
+    case 1:
+      return strings.choose(
+        vi: "Thứ 2",
+        en: "Monday",
+        zh: "星期一",
+        ko: "월요일",
+        ja: "月曜日",
+        de: "Montag",
+        ru: "Понедельник",
+        fr: "Lundi",
+        es: "Lunes",
+      );
+    case 2:
+      return strings.choose(
+        vi: "Thứ 3",
+        en: "Tuesday",
+        zh: "星期二",
+        ko: "화요일",
+        ja: "火曜日",
+        de: "Dienstag",
+        ru: "Вторник",
+        fr: "Mardi",
+        es: "Martes",
+      );
+    case 3:
+      return strings.choose(
+        vi: "Thứ 4",
+        en: "Wednesday",
+        zh: "星期三",
+        ko: "수요일",
+        ja: "水曜日",
+        de: "Mittwoch",
+        ru: "Среда",
+        fr: "Mercredi",
+        es: "Miércoles",
+      );
+    case 4:
+      return strings.choose(
+        vi: "Thứ 5",
+        en: "Thursday",
+        zh: "星期四",
+        ko: "목요일",
+        ja: "木曜日",
+        de: "Donnerstag",
+        ru: "Четверг",
+        fr: "Jeudi",
+        es: "Jueves",
+      );
+    case 5:
+      return strings.choose(
+        vi: "Thứ 6",
+        en: "Friday",
+        zh: "星期五",
+        ko: "금요일",
+        ja: "金曜日",
+        de: "Freitag",
+        ru: "Пятница",
+        fr: "Vendredi",
+        es: "Viernes",
+      );
+    case 6:
+      return strings.choose(
+        vi: "Thứ 7",
+        en: "Saturday",
+        zh: "星期六",
+        ko: "토요일",
+        ja: "土曜日",
+        de: "Samstag",
+        ru: "Суббота",
+        fr: "Samedi",
+        es: "Sábado",
+      );
+    case 7:
+      return strings.choose(
+        vi: "Chủ nhật",
+        en: "Sunday",
+        zh: "星期日",
+        ko: "일요일",
+        ja: "日曜日",
+        de: "Sonntag",
+        ru: "Воскресенье",
+        fr: "Dimanche",
+        es: "Domingo",
+      );
+    default:
+      return "";
+  }
+}
+
+String _alarmWeekdayShortLabel(int day, AppStrings strings) {
+  switch (day) {
+    case 1:
+      return strings.choose(
+        vi: "T2",
+        en: "Mon",
+        zh: "周一",
+        ko: "월",
+        ja: "月",
+        de: "Mo",
+        ru: "Пн",
+        fr: "Lun",
+        es: "Lun",
+      );
+    case 2:
+      return strings.choose(
+        vi: "T3",
+        en: "Tue",
+        zh: "周二",
+        ko: "화",
+        ja: "火",
+        de: "Di",
+        ru: "Вт",
+        fr: "Mar",
+        es: "Mar",
+      );
+    case 3:
+      return strings.choose(
+        vi: "T4",
+        en: "Wed",
+        zh: "周三",
+        ko: "수",
+        ja: "水",
+        de: "Mi",
+        ru: "Ср",
+        fr: "Mer",
+        es: "Mié",
+      );
+    case 4:
+      return strings.choose(
+        vi: "T5",
+        en: "Thu",
+        zh: "周四",
+        ko: "목",
+        ja: "木",
+        de: "Do",
+        ru: "Чт",
+        fr: "Jeu",
+        es: "Jue",
+      );
+    case 5:
+      return strings.choose(
+        vi: "T6",
+        en: "Fri",
+        zh: "周五",
+        ko: "금",
+        ja: "金",
+        de: "Fr",
+        ru: "Пт",
+        fr: "Ven",
+        es: "Vie",
+      );
+    case 6:
+      return strings.choose(
+        vi: "T7",
+        en: "Sat",
+        zh: "周六",
+        ko: "토",
+        ja: "土",
+        de: "Sa",
+        ru: "Сб",
+        fr: "Sam",
+        es: "Sáb",
+      );
+    case 7:
+      return strings.choose(
+        vi: "CN",
+        en: "Sun",
+        zh: "周日",
+        ko: "일",
+        ja: "日",
+        de: "So",
+        ru: "Вс",
+        fr: "Dim",
+        es: "Dom",
+      );
+    default:
+      return "";
+  }
+}
+
 String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
   final days = _normalizeAlarmDays(rawValue);
 
   if (days.length == 7) {
-    return strings.t("Hằng ngày");
+    return strings.choose(
+      vi: "Hằng ngày",
+      en: "Every day",
+      zh: "每天",
+      ko: "매일",
+      ja: "毎日",
+      de: "Täglich",
+      ru: "Каждый день",
+      fr: "Tous les jours",
+      es: "Todos los días",
+    );
   }
 
-  const labels = {
-    1: "T2",
-    2: "T3",
-    3: "T4",
-    4: "T5",
-    5: "T6",
-    6: "T7",
-    7: "CN",
-  };
-
-  return days.map((day) => labels[day] ?? "").where((label) {
-    return label.isNotEmpty;
-  }).join(", ");
+  return days
+      .map((day) => _alarmWeekdayShortLabel(day, strings))
+      .where((label) => label.isNotEmpty)
+      .join(", ");
 }
 
 class AlarmDeviceSheet extends StatefulWidget {
@@ -526,14 +710,14 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           width: 46,
                           height: 46,
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.danger.withValues(
+                            color: SafeHomeColors.primary.withValues(
                               alpha: 0.10,
                             ),
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: const Icon(
                             Icons.security_rounded,
-                            color: SafeHomeColors.danger,
+                            color: SafeHomeColors.primary,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -542,7 +726,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                strings.t("Thiết lập nhanh Alarm"),
+                                strings.t("Đặt Home Alarm"),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textPrimary,
                                   fontSize: 17,
@@ -628,6 +812,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.icon(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: SafeHomeColors.primary,
+                          foregroundColor: Colors.white,
+                        ),
                         onPressed: saving ? null : applyToAll,
                         icon: saving
                             ? const SizedBox(
@@ -641,7 +829,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         label: Text(
                           saving
                               ? strings.t("Đang áp dụng...")
-                              : strings.t("Áp dụng cho toàn bộ thiết bị"),
+                              : strings.t("Xác nhận"),
                         ),
                       ),
                     ),
@@ -993,9 +1181,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 ),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(48),
-                  foregroundColor: SafeHomeColors.danger,
+                  foregroundColor: SafeHomeColors.primary,
                   side: BorderSide(
-                    color: SafeHomeColors.danger.withValues(alpha: 0.35),
+                    color: SafeHomeColors.primary.withValues(alpha: 0.35),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -1025,10 +1213,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.07),
+                      color: SafeHomeColors.primary.withValues(
+                        alpha: 0.07,
+                      ),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                        color: Colors.red.withValues(alpha: 0.10),
+                        color: SafeHomeColors.primary.withValues(alpha: 0.10),
                       ),
                     ),
                     child: Column(
@@ -1038,7 +1228,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           children: [
                             const Icon(
                               Icons.shield_moon_rounded,
-                              color: Colors.red,
+                              color: SafeHomeColors.primary,
                             ),
                             const SizedBox(width: 10),
 
@@ -1195,14 +1385,12 @@ class _AlarmWeekdaySelector extends StatelessWidget {
     final strings = AppStrings.of(context);
     final selectedDays = _normalizeAlarmDays(days);
 
-    const dayItems = [
-      {"value": 1, "label": "T2"},
-      {"value": 2, "label": "T3"},
-      {"value": 3, "label": "T4"},
-      {"value": 4, "label": "T5"},
-      {"value": 5, "label": "T6"},
-      {"value": 6, "label": "T7"},
-      {"value": 7, "label": "CN"},
+    final dayItems = [
+      for (var day = 1; day <= 7; day++)
+        (
+        value: day,
+        label: _alarmWeekdayFullLabel(day, strings),
+        ),
     ];
 
     void toggleDay(int day) {
@@ -1226,9 +1414,25 @@ class _AlarmWeekdaySelector extends StatelessWidget {
       onChanged(nextDays);
     }
 
+    Widget dayButton(int index) {
+      final item = dayItems[index];
+
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: _AlarmDayChip(
+            label: item.label,
+            selected: selectedDays.contains(item.value),
+            enabled: enabled,
+            onTap: () => toggleDay(item.value),
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
+      padding: const EdgeInsets.fromLTRB(11, 10, 11, 12),
       decoration: BoxDecoration(
         color: SafeHomeColors.surface,
         borderRadius: BorderRadius.circular(14),
@@ -1237,26 +1441,32 @@ class _AlarmWeekdaySelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            strings.t("Ngày trong tuần"),
-            style: const TextStyle(
-              color: SafeHomeColors.textPrimary,
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
+          Padding(
+            padding: const EdgeInsets.only(left: 3),
+            child: Text(
+              strings.t("Ngày trong tuần"),
+              style: const TextStyle(
+                color: SafeHomeColors.textPrimary,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           const SizedBox(height: 9),
-          Wrap(
-            spacing: 7,
-            runSpacing: 7,
+          Row(
             children: [
-              for (final item in dayItems)
-                _AlarmDayChip(
-                  label: item["label"]!.toString(),
-                  selected: selectedDays.contains(item["value"]),
-                  enabled: enabled,
-                  onTap: () => toggleDay(item["value"] as int),
-                ),
+              dayButton(0),
+              dayButton(1),
+              dayButton(2),
+              dayButton(3),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              dayButton(4),
+              dayButton(5),
+              dayButton(6),
             ],
           ),
         ],
@@ -1280,22 +1490,21 @@ class _AlarmDayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = SafeHomeColors.danger;
+    final activeColor = SafeHomeColors.primary;
 
     return InkWell(
       onTap: enabled ? onTap : null,
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: BorderRadius.circular(12),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
         curve: Curves.easeOut,
-        width: 39,
-        height: 34,
-        alignment: Alignment.center,
+        height: 42,
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
         decoration: BoxDecoration(
           color: selected
               ? activeColor.withValues(alpha: enabled ? 0.13 : 0.06)
               : Colors.white,
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: selected
                 ? activeColor.withValues(alpha: enabled ? 0.65 : 0.28)
@@ -1303,16 +1512,22 @@ class _AlarmDayChip extends StatelessWidget {
             width: selected ? 1.4 : 1,
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected
-                ? activeColor.withValues(alpha: enabled ? 1 : 0.45)
-                : SafeHomeColors.textSecondary.withValues(
-              alpha: enabled ? 1 : 0.45,
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              style: TextStyle(
+                color: selected
+                    ? activeColor.withValues(alpha: enabled ? 1 : 0.45)
+                    : SafeHomeColors.textSecondary.withValues(
+                  alpha: enabled ? 1 : 0.45,
+                ),
+                fontSize: 12,
+                fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
+              ),
             ),
-            fontSize: 12,
-            fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
           ),
         ),
       ),
@@ -1419,7 +1634,7 @@ class _AlarmModeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = SafeHomeColors.danger;
+    final accent = SafeHomeColors.primary;
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 160),

@@ -60,7 +60,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
           }
 
           return reasons.every(
-            (reason) => reason?.toString().trim().isEmpty ?? true,
+                (reason) => reason?.toString().trim().isEmpty ?? true,
           );
         });
       }
@@ -283,7 +283,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             final data = Map<String, dynamic>.from(item);
 
             final homeName =
-                data["homeName"]?.toString().trim().isNotEmpty == true
+            data["homeName"]?.toString().trim().isNotEmpty == true
                 ? data["homeName"].toString().trim()
                 : strings.defaultHomeName();
 
@@ -449,9 +449,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Map<String, List<String>> buildAlarmIssueMap(
-    String type,
-    AppStrings strings,
-  ) {
+      String type,
+      AppStrings strings,
+      ) {
     final items = alarmItems();
     final Map<String, List<String>> result = {};
 
@@ -542,9 +542,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (!widget.silentMode) {
       final acknowledged =
-          await NotificationService.resolveActiveAlarmIncidents(
-            action: 'check_home',
-          );
+      await NotificationService.resolveActiveAlarmIncidents(
+        action: 'check_home',
+      );
 
       if (!acknowledged) {
         await startAlarmSound();
@@ -630,27 +630,45 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Widget _buildFadedScrollArea({required Widget child}) {
+    const scrollPadding = EdgeInsets.fromLTRB(0, 24, 0, 28);
+    const totalVerticalPadding = 52.0;
+
     return Expanded(
-      child: ShaderMask(
-        blendMode: BlendMode.dstIn,
-        shaderCallback: (bounds) {
-          return const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.transparent,
-              Colors.black,
-              Colors.black,
-              Colors.transparent,
-            ],
-            stops: [0.0, 0.08, 0.88, 1.0],
-          ).createShader(bounds);
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final centeredMinHeight =
+          constraints.maxHeight > totalVerticalPadding
+              ? constraints.maxHeight - totalVerticalPadding
+              : 0.0;
+
+          return ShaderMask(
+            blendMode: BlendMode.dstIn,
+            shaderCallback: (bounds) {
+              return const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black,
+                  Colors.black,
+                  Colors.transparent,
+                ],
+                stops: [0.0, 0.06, 0.92, 1.0],
+              ).createShader(bounds);
+            },
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: scrollPadding,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: centeredMinHeight),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: child,
+                ),
+              ),
+            ),
+          );
         },
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(0, 40, 0, 46),
-          child: child,
-        ),
       ),
     );
   }
@@ -766,7 +784,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         entry.key,
@@ -778,7 +796,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                       ),
                                       const SizedBox(height: 8),
                                       ...entry.value.map(
-                                        (item) => Padding(
+                                            (item) => Padding(
                                           padding: const EdgeInsets.only(
                                             bottom: 6,
                                           ),
@@ -982,13 +1000,13 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                     ),
                                     const SizedBox(height: 8),
                                     ...entry.value.map(
-                                      (reason) => Padding(
+                                          (reason) => Padding(
                                         padding: const EdgeInsets.only(
                                           bottom: 6,
                                         ),
                                         child: Row(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Icon(
                                               Icons.warning_amber_rounded,

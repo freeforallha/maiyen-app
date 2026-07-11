@@ -258,7 +258,7 @@ Future<void> showAlarmPauseReminderDialog({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(strings.t("Lưu ý tạm tắt Alarm")),
         content: Text(
-          strings.t("Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay..."),
+          strings.alarmPauseReminderText(),
         ),
         actions: [
           TextButton(

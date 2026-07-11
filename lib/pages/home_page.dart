@@ -1851,7 +1851,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         );
         return;
       case HomeScannedQrStatus.pairHubId:
-        pairSensor(result.hubId);
         showTopToast(
           context,
           _strings.t("QR này không phải mã xin gia nhập nhà"),
@@ -2387,7 +2386,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
-    final code = await openQRScanner(context);
+    final code = await openQRScanner(
+      context,
+      mode: SafeHomeQrScanMode.joinHome,
+    );
 
     if (!mounted || code == null || code.trim().isEmpty) {
       return;
@@ -2399,7 +2401,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         !value.startsWith("safehome_join_multi|")) {
       showTopToast(
         context,
-        _strings.t("QR này không phải mã xin gia nhập Home"),
+        _strings.t("QR này không phải mã xin gia nhập nhà"),
         color: Colors.orange,
         icon: Icons.qr_code_2_rounded,
       );
@@ -3760,7 +3762,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               if (result == HomePairSensorMethod.scanQr) {
                                 if (!context.mounted) return;
 
-                                final code = await openQRScanner(context);
+                                final code = await openQRScanner(
+                                  context,
+                                  mode: SafeHomeQrScanMode.pairDevice,
+                                );
 
                                 if (code != null) {
                                   pairSensor(code);

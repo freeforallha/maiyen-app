@@ -234,6 +234,10 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                             ),
                             IconButton(
                               tooltip: strings.t("Tìm ngôn ngữ"),
+                              style: IconButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                foregroundColor: SafeHomeColors.primary,
+                              ),
                               onPressed: () {
                                 setSheetState(() {
                                   isSearching = !isSearching;

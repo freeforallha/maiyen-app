@@ -215,7 +215,7 @@ Future<String?> showShareHomeSheet({
   required String qrData,
 }) async {
   String inputEmail = "";
-
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
@@ -260,56 +260,95 @@ Future<String?> showShareHomeSheet({
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          strings.t("Chia sẻ nhà"),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                          ),
+                      Container(
+                        width: 42,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       const SizedBox(height: 18),
+
+                      Text(
+                        strings.t("Chia sẻ nhà"),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      Text(
+                        strings.t("Mời thành viên bằng mã QR"),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      QrImageView(
+                        data: qrData,
+                        version: QrVersions.auto,
+                        size: qrSize,
+                      ),
+                      const SizedBox(height: 18),
+
+                      Row(
+                        children: [
+                          const Expanded(child: Divider()),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              strings.t("Hoặc"),
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Expanded(child: Divider()),
+                        ],
+                      ),
+                      const SizedBox(height: 18),
+
                       TextFormField(
-                        autofocus: true,
+                        autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
                         onChanged: (value) {
                           inputEmail = value;
                           setSheetState(() {});
                         },
-                        onFieldSubmitted: (_) => submit(),
+                        onFieldSubmitted: (_) {
+                          if (emailOk) {
+                            submit();
+                          }
+                        },
                         decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.email_rounded),
                           labelText: strings.t("Email người nhận"),
                           filled: true,
                           fillColor: Colors.grey.shade100,
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide.none,
                           ),
-                          suffixIcon: emailOk
-                              ? IconButton(
-                            icon: const Icon(Icons.send_rounded),
-                            onPressed: submit,
-                          )
-                              : null,
                         ),
                       ),
                       const SizedBox(height: 18),
-                      Text(
-                        strings.t("Mời thành viên bằng mã QR"),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
+
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: emailOk ? submit : null,
+                          icon: const Icon(Icons.share_rounded),
+                          label: Text(strings.t("Chia sẻ")),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      QrImageView(
-                        data: qrData,
-                        version: QrVersions.auto,
-                        size: qrSize,
-                      ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 4),
                     ],
                   ),
                 ),

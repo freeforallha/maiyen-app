@@ -658,12 +658,6 @@ void showHomeChatSheet({
                 initialLastRead = 0;
               }
 
-              try {
-                await ChatService.markAsRead(homeId: homeId, uid: user.uid);
-              } catch (_) {
-                // Không để lỗi cập nhật trạng thái đọc làm hỏng Home Chat.
-              }
-
               if (isChatSheetClosed || !ctx.mounted) {
                 return;
               }
@@ -1174,6 +1168,7 @@ void showHomeChatSheet({
                                     ChatService.markAsRead(
                                       homeId: homeId,
                                       uid: user.uid,
+                                      lastReadAt: latestMessageTime,
                                     ).catchError((_) {}),
                                   );
                                 }

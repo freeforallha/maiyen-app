@@ -130,12 +130,17 @@ class ChatService {
   static Future<void> markAsRead({
     required String homeId,
     required String uid,
+    required int lastReadAt,
   }) async {
+    if (lastReadAt <= 0) {
+      return;
+    }
+
     await FirebaseDatabase.instance.ref().update({
-      FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
+      FirebasePaths.homeLastRead(homeId, uid): lastReadAt,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/count": 0,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt":
-      _serverTimestamp,
+      lastReadAt,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/updatedAt":
       _serverTimestamp,
     });

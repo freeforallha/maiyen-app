@@ -3,12 +3,21 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../localization/app_strings.dart';
 
+enum SafeHomeQrScanMode { pairDevice, joinHome }
+
+bool _isJoinHomeQr(String value) {
+  return value.startsWith("safehome_join|") ||
+      value.startsWith("safehome_join_multi|");
+}
+
+bool _looksLikeJoinHomeQr(String value) {
+  return value.startsWith("safehome_join");
+}
+
 Future<String?> openQRScanner(
   BuildContext context, {
-  String? title,
-  String? subtitle,
+  required SafeHomeQrScanMode mode,
 }) async {
-  final strings = AppStrings.of(context);
   final controller = MobileScannerController();
 
   return Navigator.push<String>(
@@ -16,8 +25,7 @@ Future<String?> openQRScanner(
     MaterialPageRoute(
       builder: (_) => _QRScanPage(
         controller: controller,
-        title: title ?? strings.t("Quét QR HUB"),
-        subtitle: subtitle ?? strings.t("Đưa mã QR vào giữa khung"),
+        mode: mode,
       ),
     ),
   );
@@ -25,13 +33,11 @@ Future<String?> openQRScanner(
 
 class _QRScanPage extends StatefulWidget {
   final MobileScannerController controller;
-  final String title;
-  final String subtitle;
+  final SafeHomeQrScanMode mode;
 
   const _QRScanPage({
     required this.controller,
-    required this.title,
-    required this.subtitle,
+    required this.mode,
   });
 
   @override
@@ -42,6 +48,7 @@ class _QRScanPageState extends State<_QRScanPage>
     with SingleTickerProviderStateMixin {
   late AnimationController scanController;
   bool scanned = false;
+  String? scanError;
 
   @override
   void initState() {
@@ -73,11 +80,48 @@ class _QRScanPageState extends State<_QRScanPage>
 
     if (!mounted) return;
 
-    Navigator.pop(context, code.trim());
+    final value = code.trim();
+    final isJoinHomeQr = _isJoinHomeQr(value);
+    final acceptsCode = switch (widget.mode) {
+      SafeHomeQrScanMode.joinHome => isJoinHomeQr,
+      SafeHomeQrScanMode.pairDevice => !_looksLikeJoinHomeQr(value),
+    };
+
+    if (!acceptsCode) {
+      final strings = AppStrings.of(context);
+
+      setState(() {
+        scanError = widget.mode == SafeHomeQrScanMode.joinHome
+            ? strings.t("QR này không phải mã xin gia nhập nhà")
+            : strings.t("QR này không phải mã thiết bị");
+      });
+
+      await Future<void>.delayed(const Duration(milliseconds: 900));
+
+      if (!mounted) return;
+
+      scanned = false;
+      await widget.controller.start();
+      return;
+    }
+
+    Navigator.pop(context, value);
   }
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final isJoinHome = widget.mode == SafeHomeQrScanMode.joinHome;
+    final title = isJoinHome
+        ? strings.t("Quét QR xin gia nhập nhà")
+        : strings.t("Quét QR để thêm thiết bị");
+    final subtitle = isJoinHome
+        ? strings.t("Đưa mã QR chia sẻ nhà vào khung hình")
+        : strings.t("Đưa mã QR vào giữa khung");
+    final helpText = isJoinHome
+        ? strings.t("Mã QR này do chủ nhà chia sẻ")
+        : null;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -128,7 +172,7 @@ class _QRScanPageState extends State<_QRScanPage>
             child: Column(
               children: [
                 Text(
-                  widget.title,
+                  title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
@@ -138,10 +182,33 @@ class _QRScanPageState extends State<_QRScanPage>
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  widget.subtitle,
+                  subtitle,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.white70, fontSize: 15),
                 ),
+                if (helpText != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    helpText,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white60,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+                if (scanError != null) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    scanError!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

@@ -7,6 +7,7 @@ import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
+import '../services/home_realtime_coordinator.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 class AllHomePage extends StatefulWidget {
@@ -21,6 +22,10 @@ class AllHomePage extends StatefulWidget {
 class _AllHomePageState extends State<AllHomePage> {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> homes = {};
+  Map<String, int> unreadChatCounts = {};
+  final HomeRealtimeCoordinator _homeRealtimeCoordinator =
+      HomeRealtimeCoordinator();
+  String _chatUnreadUid = "";
   final ValueNotifier<int> homesRevision = ValueNotifier<int>(0);
 
   Set<String> selectedHomes = {};
@@ -337,13 +342,58 @@ class _AllHomePageState extends State<AllHomePage> {
   StreamSubscription<DatabaseEvent>? ownHomesSubscription;
   StreamSubscription<DatabaseEvent>? sharedHomesSubscription;
   StreamSubscription<DatabaseEvent>? groupNamesSubscription;
+  StreamSubscription<User?>? chatAuthSubscription;
 
   final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions =
-      {};
+  {};
 
   void notifyHomesChanged() {
     if (!mounted) return;
     homesRevision.value = homesRevision.value + 1;
+    syncChatUnreadCounts();
+  }
+
+  void syncChatUnreadCounts() {
+    final currentUid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+    if (!mounted || currentUid.isEmpty) {
+      return;
+    }
+
+    if (_chatUnreadUid != currentUid) {
+      _chatUnreadUid = currentUid;
+
+      if (unreadChatCounts.isNotEmpty) {
+        setState(() {
+          unreadChatCounts = {};
+        });
+      }
+    }
+
+    _homeRealtimeCoordinator.syncHomeChatListeners(
+      uid: currentUid,
+      homes: homes,
+      onUnreadChanged: (snapshot) {
+        if (!mounted || FirebaseAuth.instance.currentUser?.uid != currentUid) {
+          return;
+        }
+
+        final nextCounts = snapshot.unreadByHome;
+        final unchanged =
+            nextCounts.length == unreadChatCounts.length &&
+            nextCounts.entries.every(
+              (entry) => unreadChatCounts[entry.key] == entry.value,
+            );
+
+        if (unchanged) {
+          return;
+        }
+
+        setState(() {
+          unreadChatCounts = nextCounts;
+        });
+      },
+    );
   }
 
   @override
@@ -364,163 +414,185 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final uid = currentUser.uid;
 
+    syncChatUnreadCounts();
+    chatAuthSubscription = FirebaseAuth.instance.authStateChanges().listen((
+      user,
+    ) {
+      if (!mounted) return;
+
+      if (user == null) {
+        _homeRealtimeCoordinator.dispose();
+        _chatUnreadUid = "";
+
+        if (unreadChatCounts.isNotEmpty) {
+          setState(() {
+            unreadChatCounts = {};
+          });
+        }
+
+        return;
+      }
+
+      syncChatUnreadCounts();
+    });
+
     ownHomesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/homes")
         .onValue
         .listen((event) {
-          final ownHomes = event.snapshot.value is Map
-              ? Map<String, dynamic>.from(event.snapshot.value as Map)
-              : <String, dynamic>{};
+      final ownHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
 
-          if (!mounted) return;
+      if (!mounted) return;
 
-          setState(() {
-            homes.removeWhere((key, value) {
-              final home = safeMap(value);
-              return home["_shared"] != true;
-            });
-
-            for (final entry in ownHomes.entries) {
-              homes[entry.key] = entry.value;
-            }
-          });
-          notifyHomesChanged();
+      setState(() {
+        homes.removeWhere((key, value) {
+          final home = safeMap(value);
+          return home["_shared"] != true;
         });
+
+        for (final entry in ownHomes.entries) {
+          homes[entry.key] = entry.value;
+        }
+      });
+      notifyHomesChanged();
+    });
 
     sharedHomesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/sharedHomes")
         .onValue
         .listen((event) {
-          final sharedHomes = event.snapshot.value is Map
-              ? Map<String, dynamic>.from(event.snapshot.value as Map)
-              : <String, dynamic>{};
+      final sharedHomes = event.snapshot.value is Map
+          ? Map<String, dynamic>.from(event.snapshot.value as Map)
+          : <String, dynamic>{};
 
-          final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
+      final activeIds = sharedHomes.keys.map((e) => e.toString()).toSet();
 
-          for (final oldId in sharedHomeSubscriptions.keys.toList()) {
-            if (!activeIds.contains(oldId)) {
-              sharedHomeSubscriptions.remove(oldId)?.cancel();
+      for (final oldId in sharedHomeSubscriptions.keys.toList()) {
+        if (!activeIds.contains(oldId)) {
+          sharedHomeSubscriptions.remove(oldId)?.cancel();
 
-              if (mounted) {
-                setState(() {
-                  homes.remove(oldId);
-                });
-                notifyHomesChanged();
-              }
-            }
+          if (mounted) {
+            setState(() {
+              homes.remove(oldId);
+            });
+            notifyHomesChanged();
           }
+        }
+      }
 
-          for (final entry in sharedHomes.entries) {
-            final homeId = entry.key.toString();
-            final sharedInfo = safeMap(entry.value);
+      for (final entry in sharedHomes.entries) {
+        final homeId = entry.key.toString();
+        final sharedInfo = safeMap(entry.value);
 
-            final ownerUid = sharedInfo["ownerUid"]?.toString().trim() ?? "";
+        final ownerUid = sharedInfo["ownerUid"]?.toString().trim() ?? "";
 
-            final role = sharedInfo["role"]?.toString().trim() ?? "member";
+        final role = sharedInfo["role"]?.toString().trim() ?? "member";
 
-            if (ownerUid.isEmpty) {
-              continue;
+        if (ownerUid.isEmpty) {
+          continue;
+        }
+
+        if (sharedHomeSubscriptions.containsKey(homeId)) {
+          continue;
+        }
+
+        final sub = FirebaseDatabase.instance
+            .ref("accounts/$ownerUid/homes/$homeId")
+            .onValue
+            .listen(
+              (homeEvent) {
+            final rawHome = homeEvent.snapshot.value;
+
+            if (rawHome is! Map) {
+              if (!mounted) return;
+
+              setState(() {
+                homes.remove(homeId);
+              });
+              notifyHomesChanged();
+
+              return;
             }
 
-            if (sharedHomeSubscriptions.containsKey(homeId)) {
-              continue;
+            final newHome = {
+              ...Map<String, dynamic>.from(rawHome),
+              "_shared": true,
+              "_ownerUid": ownerUid,
+              "_ownerEmail": "",
+              "_ownerName": "",
+              "_ownerPhotoUrl": "",
+              "_role": role,
+            };
+
+            if (!mounted) return;
+
+            setState(() {
+              homes[homeId] = newHome;
+            });
+            notifyHomesChanged();
+          },
+          onError: (Object error) {
+            safeDebugPrint("ALL_HOME_SHARED_HOME_ERROR: $error");
+          },
+        );
+
+        sharedHomeSubscriptions[homeId] = sub;
+
+        FirebaseDatabase.instance
+            .ref("userDirectory/$ownerUid")
+            .get()
+            .then((directorySnap) {
+          final directory = safeMap(directorySnap.value);
+
+          final ownerEmail =
+              directory["email"]?.toString().trim() ?? "";
+
+          final ownerName = directory["name"]?.toString().trim() ?? "";
+
+          final ownerPhotoUrl =
+              directory["photoUrl"]?.toString().trim() ?? "";
+
+          if (!mounted) return;
+
+          setState(() {
+            final currentHome = safeMap(homes[homeId]);
+
+            if (currentHome.isEmpty) {
+              return;
             }
 
-            final sub = FirebaseDatabase.instance
-                .ref("accounts/$ownerUid/homes/$homeId")
-                .onValue
-                .listen(
-                  (homeEvent) {
-                    final rawHome = homeEvent.snapshot.value;
-
-                    if (rawHome is! Map) {
-                      if (!mounted) return;
-
-                      setState(() {
-                        homes.remove(homeId);
-                      });
-                      notifyHomesChanged();
-
-                      return;
-                    }
-
-                    final newHome = {
-                      ...Map<String, dynamic>.from(rawHome),
-                      "_shared": true,
-                      "_ownerUid": ownerUid,
-                      "_ownerEmail": "",
-                      "_ownerName": "",
-                      "_ownerPhotoUrl": "",
-                      "_role": role,
-                    };
-
-                    if (!mounted) return;
-
-                    setState(() {
-                      homes[homeId] = newHome;
-                    });
-                    notifyHomesChanged();
-                  },
-                  onError: (Object error) {
-                    safeDebugPrint("ALL_HOME_SHARED_HOME_ERROR: $error");
-                  },
-                );
-
-            sharedHomeSubscriptions[homeId] = sub;
-
-            FirebaseDatabase.instance
-                .ref("userDirectory/$ownerUid")
-                .get()
-                .then((directorySnap) {
-                  final directory = safeMap(directorySnap.value);
-
-                  final ownerEmail =
-                      directory["email"]?.toString().trim() ?? "";
-
-                  final ownerName = directory["name"]?.toString().trim() ?? "";
-
-                  final ownerPhotoUrl =
-                      directory["photoUrl"]?.toString().trim() ?? "";
-
-                  if (!mounted) return;
-
-                  setState(() {
-                    final currentHome = safeMap(homes[homeId]);
-
-                    if (currentHome.isEmpty) {
-                      return;
-                    }
-
-                    homes[homeId] = {
-                      ...currentHome,
-                      "_ownerEmail": ownerEmail,
-                      "_ownerName": ownerName,
-                      "_ownerPhotoUrl": ownerPhotoUrl,
-                      "_role": role,
-                    };
-                  });
-                  notifyHomesChanged();
-                })
-                .catchError((Object error) {
-                  safeDebugPrint("ALL_HOME_USER_DIRECTORY_ERROR: $error");
-                });
-          }
+            homes[homeId] = {
+              ...currentHome,
+              "_ownerEmail": ownerEmail,
+              "_ownerName": ownerName,
+              "_ownerPhotoUrl": ownerPhotoUrl,
+              "_role": role,
+            };
+          });
+          notifyHomesChanged();
+        })
+            .catchError((Object error) {
+          safeDebugPrint("ALL_HOME_USER_DIRECTORY_ERROR: $error");
         });
+      }
+    });
 
     groupNamesSubscription = FirebaseDatabase.instance
         .ref("accounts/$uid/groupNames")
         .onValue
         .listen((event) {
-          final names = event.snapshot.value is Map
-              ? Map<String, String>.from(event.snapshot.value as Map)
-              : <String, String>{};
+      final names = event.snapshot.value is Map
+          ? Map<String, String>.from(event.snapshot.value as Map)
+          : <String, String>{};
 
-          if (!mounted) return;
+      if (!mounted) return;
 
-          setState(() {
-            customNames = names;
-          });
-        });
+      setState(() {
+        customNames = names;
+      });
+    });
   }
 
   Map<String, List<String>> groupedHomes() {
@@ -624,7 +696,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final displayName =
         customNames[groupKey] ??
-        (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
+            (isYourHomes ? _strings.t("Nhà của tôi") : ownerText);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 12),
@@ -735,11 +807,25 @@ class _AllHomePageState extends State<AllHomePage> {
             runSpacing: 8,
             children: ids.map((homeId) {
               final data = safeMap(homes[homeId]);
+              final unreadCount = unreadChatCounts[homeId] ?? 0;
 
               return SizedBox(
                 width: 55,
                 height: 55,
-                child: buildHomeCard(context, homeId, data),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: buildHomeCard(context, homeId, data),
+                    ),
+                    if (unreadCount > 0)
+                      Positioned(
+                        top: -4,
+                        right: -4,
+                        child: buildUnreadChatBadge(unreadCount),
+                      ),
+                  ],
+                ),
               );
             }).toList(),
           ),
@@ -748,11 +834,43 @@ class _AllHomePageState extends State<AllHomePage> {
     );
   }
 
+  Widget buildUnreadChatBadge(int unreadCount) {
+    return IgnorePointer(
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: SafeHomeColors.danger,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: SafeHomeColors.surface, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.14),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Text(
+          unreadCount > 99 ? "99+" : unreadCount.toString(),
+          maxLines: 1,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 9,
+            height: 1,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildHomeCard(
-    BuildContext context,
-    String homeId,
-    Map<String, dynamic> data,
-  ) {
+      BuildContext context,
+      String homeId,
+      Map<String, dynamic> data,
+      ) {
     final status = getHomeOverallStatus(data);
     final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
@@ -1006,60 +1124,508 @@ class _AllHomePageState extends State<AllHomePage> {
       return _strings.minuteText(minutes);
     }
 
-    Future<int?> inputRepeatMinutes(int initial) async {
-      const options = [0, 15, 30, 60];
-      var selected = options.contains(initial) ? initial : 30;
+    Future<Map<String, dynamic>?> inputAlarmConfig() async {
+      var start = "23:00";
+      var end = "06:00";
+      var repeatMinutes = 30;
+      final selectedDays = <int>{1, 2, 3, 4, 5, 6, 7};
 
-      return showDialog<int>(
+      final dayItems = [
+        (
+        value: 1,
+        label: _strings.choose(
+          vi: "Thứ 2",
+          en: "Monday",
+          zh: "星期一",
+          ko: "월요일",
+          ja: "月曜日",
+          de: "Montag",
+          ru: "Понедельник",
+          fr: "Lundi",
+          es: "Lunes",
+        ),
+        ),
+        (
+        value: 2,
+        label: _strings.choose(
+          vi: "Thứ 3",
+          en: "Tuesday",
+          zh: "星期二",
+          ko: "화요일",
+          ja: "火曜日",
+          de: "Dienstag",
+          ru: "Вторник",
+          fr: "Mardi",
+          es: "Martes",
+        ),
+        ),
+        (
+        value: 3,
+        label: _strings.choose(
+          vi: "Thứ 4",
+          en: "Wednesday",
+          zh: "星期三",
+          ko: "수요일",
+          ja: "水曜日",
+          de: "Mittwoch",
+          ru: "Среда",
+          fr: "Mercredi",
+          es: "Miércoles",
+        ),
+        ),
+        (
+        value: 4,
+        label: _strings.choose(
+          vi: "Thứ 5",
+          en: "Thursday",
+          zh: "星期四",
+          ko: "목요일",
+          ja: "木曜日",
+          de: "Donnerstag",
+          ru: "Четверг",
+          fr: "Jeudi",
+          es: "Jueves",
+        ),
+        ),
+        (
+        value: 5,
+        label: _strings.choose(
+          vi: "Thứ 6",
+          en: "Friday",
+          zh: "星期五",
+          ko: "금요일",
+          ja: "金曜日",
+          de: "Freitag",
+          ru: "Пятница",
+          fr: "Vendredi",
+          es: "Viernes",
+        ),
+        ),
+        (
+        value: 6,
+        label: _strings.choose(
+          vi: "Thứ 7",
+          en: "Saturday",
+          zh: "星期六",
+          ko: "토요일",
+          ja: "土曜日",
+          de: "Samstag",
+          ru: "Суббота",
+          fr: "Samedi",
+          es: "Sábado",
+        ),
+        ),
+        (
+        value: 7,
+        label: _strings.choose(
+          vi: "Chủ nhật",
+          en: "Sunday",
+          zh: "星期日",
+          ko: "일요일",
+          ja: "日曜日",
+          de: "Sonntag",
+          ru: "Воскресенье",
+          fr: "Dimanche",
+          es: "Domingo",
+        ),
+        ),
+      ];
+
+      return showModalBottomSheet<Map<String, dynamic>>(
         context: context,
-        builder: (dialogContext) {
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (sheetContext) {
           return StatefulBuilder(
-            builder: (context, setDialogState) {
-              return AlertDialog(
-                title: Text(_strings.t("Thời gian lặp lại Alarm")),
-                content: InputDecorator(
-                  decoration: InputDecoration(
-                    labelText: _strings.t("Lặp lại khi sự cố vẫn còn"),
-                    prefixIcon: const Icon(
-                      Icons.replay_rounded,
-                      color: SafeHomeColors.danger,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
+            builder: (innerContext, setSheetState) {
+              Future<void> chooseTime(bool isStart) async {
+                final picked = await inputTime(
+                  isStart
+                      ? _strings.t("Giờ bắt đầu Alarm")
+                      : _strings.t("Giờ kết thúc Alarm"),
+                  isStart ? start : end,
+                );
+
+                if (picked == null || !sheetContext.mounted) {
+                  return;
+                }
+
+                setSheetState(() {
+                  if (isStart) {
+                    start = picked;
+                  } else {
+                    end = picked;
+                  }
+                });
+              }
+
+              void toggleDay(int day) {
+                setSheetState(() {
+                  if (selectedDays.contains(day)) {
+                    // Giữ tối thiểu một ngày để lịch Alarm luôn hợp lệ.
+                    if (selectedDays.length > 1) {
+                      selectedDays.remove(day);
+                    }
+                  } else {
+                    selectedDays.add(day);
+                  }
+                });
+              }
+
+              Widget timeButton({
+                required String label,
+                required String value,
+                required VoidCallback onTap,
+              }) {
+                return Expanded(
+                  child: InkWell(
+                    onTap: onTap,
+                    borderRadius: BorderRadius.circular(14),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: SafeHomeColors.border),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            label,
+                            style: const TextStyle(
+                              color: SafeHomeColors.textSecondary,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            value,
+                            style: const TextStyle(
+                              color: SafeHomeColors.textPrimary,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<int>(
-                      value: selected,
-                      isExpanded: true,
-                      items: options.map((minutes) {
-                        return DropdownMenuItem<int>(
-                          value: minutes,
-                          child: Text(repeatLabel(minutes)),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        if (value == null) return;
+                );
+              }
 
-                        setDialogState(() {
-                          selected = value;
-                        });
-                      },
+              Widget dayButton(int value, String label) {
+                final selected = selectedDays.contains(value);
+
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: InkWell(
+                      onTap: () => toggleDay(value),
+                      borderRadius: BorderRadius.circular(12),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 160),
+                        height: 42,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 7,
+                        ),
+                        decoration: BoxDecoration(
+                          color: selected
+                              ? SafeHomeColors.primary.withValues(alpha: 0.12)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: selected
+                                ? SafeHomeColors.primary.withValues(alpha: 0.55)
+                                : SafeHomeColors.border,
+                            width: selected ? 1.3 : 1,
+                          ),
+                        ),
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: selected
+                                    ? SafeHomeColors.primary
+                                    : SafeHomeColors.textPrimary,
+                                fontSize: 12,
+                                fontWeight: selected
+                                    ? FontWeight.w800
+                                    : FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              return SafeArea(
+                child: AnimatedPadding(
+                  duration: const Duration(milliseconds: 180),
+                  curve: Curves.easeOut,
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(innerContext).viewInsets.bottom,
+                  ),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxHeight:
+                      MediaQuery.of(innerContext).size.height * 0.92,
+                    ),
+                    padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(28),
+                      ),
+                    ),
+                    child: SingleChildScrollView(
+                      keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 44,
+                            height: 5,
+                            margin: const EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.border,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 46,
+                                height: 46,
+                                decoration: BoxDecoration(
+                                  color: SafeHomeColors.primary.withValues(
+                                    alpha: 0.10,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: const Icon(
+                                  Icons.security_rounded,
+                                  color: SafeHomeColors.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _strings.t("Đặt Home Alarm"),
+                                      style: const TextStyle(
+                                        color: SafeHomeColors.textPrimary,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      selectedHomeCountText(),
+                                      style: const TextStyle(
+                                        color: SafeHomeColors.textSecondary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 18),
+                          Row(
+                            children: [
+                              timeButton(
+                                label: _strings.t("Bắt đầu"),
+                                value: start,
+                                onTap: () => chooseTime(true),
+                              ),
+                              const SizedBox(width: 10),
+                              timeButton(
+                                label: _strings.t("Kết thúc"),
+                                value: end,
+                                onTap: () => chooseTime(false),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 7,
+                            ),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.surface,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: SafeHomeColors.border,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    _strings.t("Thời gian lặp lại"),
+                                    style: const TextStyle(
+                                      color: SafeHomeColors.textPrimary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<int>(
+                                      value: repeatMinutes,
+                                      isExpanded: true,
+                                      alignment: Alignment.centerRight,
+                                      icon: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: SafeHomeColors.textSecondary,
+                                      ),
+                                      items: [
+                                        DropdownMenuItem(
+                                          value: 0,
+                                          child: Text(
+                                            _strings.t("Không lặp lại"),
+                                          ),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 15,
+                                          child: Text(_strings.t("15 phút")),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 30,
+                                          child: Text(_strings.t("30 phút")),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: 60,
+                                          child: Text(_strings.t("60 phút")),
+                                        ),
+                                      ],
+                                      onChanged: (value) {
+                                        if (value == null) {
+                                          return;
+                                        }
+
+                                        setSheetState(() {
+                                          repeatMinutes = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.fromLTRB(11, 10, 11, 12),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.surface,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: SafeHomeColors.border,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 3),
+                                  child: Text(
+                                    _strings.t("Ngày trong tuần"),
+                                    style: const TextStyle(
+                                      color: SafeHomeColors.textPrimary,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 9),
+                                Row(
+                                  children: [
+                                    dayButton(
+                                      dayItems[0].value,
+                                      dayItems[0].label,
+                                    ),
+                                    dayButton(
+                                      dayItems[1].value,
+                                      dayItems[1].label,
+                                    ),
+                                    dayButton(
+                                      dayItems[2].value,
+                                      dayItems[2].label,
+                                    ),
+                                    dayButton(
+                                      dayItems[3].value,
+                                      dayItems[3].label,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    dayButton(
+                                      dayItems[4].value,
+                                      dayItems[4].label,
+                                    ),
+                                    dayButton(
+                                      dayItems[5].value,
+                                      dayItems[5].label,
+                                    ),
+                                    dayButton(
+                                      dayItems[6].value,
+                                      dayItems[6].label,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton.icon(
+                              style: FilledButton.styleFrom(
+                                backgroundColor: SafeHomeColors.primary,
+                                foregroundColor: Colors.white,
+                              ),
+                              onPressed: () {
+                                final days = selectedDays.toList()..sort();
+
+                                Navigator.pop(sheetContext, {
+                                  "start": start,
+                                  "end": end,
+                                  "repeatMinutes": repeatMinutes,
+                                  "days": days,
+                                });
+                              },
+                              icon: const Icon(Icons.done_all_rounded),
+                              label: Text(_strings.t("Xác nhận")),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(dialogContext),
-                    child: Text(_strings.t("Huỷ")),
-                  ),
-                  FilledButton(
-                    onPressed: () {
-                      Navigator.pop(dialogContext, selected);
-                    },
-                    child: Text(_strings.t("Xác nhận")),
-                  ),
-                ],
               );
             },
           );
@@ -1070,7 +1636,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final action = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (_) {
+      builder: (actionSheetContext) {
         return SafeArea(
           child: Container(
             padding: const EdgeInsets.all(18),
@@ -1088,7 +1654,8 @@ class _AllHomePageState extends State<AllHomePage> {
                   ),
                   title: Text(_strings.t("Đặt Home Reminder")),
                   subtitle: Text(selectedHomeCountText()),
-                  onTap: () => Navigator.pop(context, "reminder"),
+                  onTap: () =>
+                      Navigator.pop(actionSheetContext, "reminder"),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -1097,7 +1664,8 @@ class _AllHomePageState extends State<AllHomePage> {
                   ),
                   title: Text(_strings.t("Đặt Home Alarm")),
                   subtitle: Text(selectedHomeCountText()),
-                  onTap: () => Navigator.pop(context, "alarm"),
+                  onTap: () =>
+                      Navigator.pop(actionSheetContext, "alarm"),
                 ),
               ],
             ),
@@ -1109,11 +1677,15 @@ class _AllHomePageState extends State<AllHomePage> {
     if (action == null) return;
     if (!mounted) return;
 
+    // Chờ bottom sheet đóng hoàn toàn trước khi mở dialog kế tiếp.
+    await Future<void>.delayed(const Duration(milliseconds: 180));
+    if (!mounted) return;
+
     final isReminderAction = action == "reminder";
 
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (confirmDialogContext) => AlertDialog(
         title: Text(
           isReminderAction
               ? _strings.t("Xác nhận thay đổi Reminder")
@@ -1122,19 +1694,19 @@ class _AllHomePageState extends State<AllHomePage> {
         content: Text(
           isReminderAction
               ? _strings.t(
-                  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-                )
+            "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+          )
               : _strings.t(
-                  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-                ),
+            "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+          ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(confirmDialogContext, false),
             child: Text(_strings.t("Huỷ")),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(confirmDialogContext, true),
             child: Text(_strings.t("Tiếp tục")),
           ),
         ],
@@ -1142,6 +1714,11 @@ class _AllHomePageState extends State<AllHomePage> {
     );
 
     if (confirmed != true) return;
+
+    // Tránh mở dialog chọn giờ khi dialog xác nhận vẫn đang chạy animation đóng.
+    await Future<void>.delayed(const Duration(milliseconds: 140));
+    if (!mounted) return;
+
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser == null) {
@@ -1178,10 +1755,10 @@ class _AllHomePageState extends State<AllHomePage> {
 
         final currentNotifications = currentNotificationsRaw is List
             ? List<Map<String, dynamic>>.from(
-                currentNotificationsRaw.map(
-                  (e) => Map<String, dynamic>.from(e),
-                ),
-              )
+          currentNotificationsRaw.map(
+                (e) => Map<String, dynamic>.from(e),
+          ),
+        )
             : <Map<String, dynamic>>[];
 
         currentNotifications.add({"enabled": true, "time": time});
@@ -1194,22 +1771,22 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     if (action == "alarm") {
-      final start = await inputTime(_strings.t("Giờ bắt đầu Alarm"), "23:00");
-      if (start == null) return;
+      final alarmConfig = await inputAlarmConfig();
+      if (alarmConfig == null) return;
 
-      final end = await inputTime(_strings.t("Giờ kết thúc Alarm"), "06:00");
-      if (end == null) return;
-
-      final repeatMinutes = await inputRepeatMinutes(30);
-      if (repeatMinutes == null) return;
+      final repeatMinutes =
+          (alarmConfig["repeatMinutes"] as num?)?.toInt() ?? 30;
 
       selectedAlarmRepeatMinutes = repeatMinutes;
 
       final alarmData = {
         "enabled": true,
-        "start": start,
-        "end": end,
+        "start": alarmConfig["start"]?.toString() ?? "23:00",
+        "end": alarmConfig["end"]?.toString() ?? "06:00",
         "repeatMinutes": repeatMinutes,
+        "days": List<int>.from(
+          alarmConfig["days"] as List? ?? const [1, 2, 3, 4, 5, 6, 7],
+        ),
       };
 
       for (final homeId in selectedHomes) {
@@ -1274,11 +1851,11 @@ class _AllHomePageState extends State<AllHomePage> {
           action == "reminder"
               ? _strings.allHomeReminderAppliedText(updatedHomes, skippedHomes)
               : _strings.allHomeAlarmAppliedText(
-                  updatedDevices: updatedDevices,
-                  updatedHomes: updatedHomes,
-                  repeatLabel: repeatLabel(selectedAlarmRepeatMinutes),
-                  skippedHomes: skippedHomes,
-                ),
+            updatedDevices: updatedDevices,
+            updatedHomes: updatedHomes,
+            repeatLabel: repeatLabel(selectedAlarmRepeatMinutes),
+            skippedHomes: skippedHomes,
+          ),
         ),
         actions: [
           TextButton(
@@ -1457,7 +2034,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   ),
                   child: SingleChildScrollView(
                     keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -1622,70 +2199,70 @@ class _AllHomePageState extends State<AllHomePage> {
             },
             icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
             style:
-                IconButton.styleFrom(
-                  foregroundColor: SafeHomeColors.textPrimary,
-                  backgroundColor: Colors.transparent,
-                  shape: const CircleBorder(),
-                ).copyWith(
-                  overlayColor: WidgetStatePropertyAll(
-                    SafeHomeColors.primary.withValues(alpha: 0.10),
-                  ),
-                ),
+            IconButton.styleFrom(
+              foregroundColor: SafeHomeColors.textPrimary,
+              backgroundColor: Colors.transparent,
+              shape: const CircleBorder(),
+            ).copyWith(
+              overlayColor: WidgetStatePropertyAll(
+                SafeHomeColors.primary.withValues(alpha: 0.10),
+              ),
+            ),
           ),
         ),
 
         title: isSearching
             ? TextField(
-                controller: searchController,
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: _strings.t("Tìm nhà..."),
-                  border: InputBorder.none,
-                  filled: false,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    search = value.toLowerCase().trim();
-                  });
-                },
-              )
+          controller: searchController,
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: _strings.t("Tìm nhà..."),
+            border: InputBorder.none,
+            filled: false,
+            contentPadding: EdgeInsets.zero,
+          ),
+          onChanged: (value) {
+            setState(() {
+              search = value.toLowerCase().trim();
+            });
+          },
+        )
             : Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: showAllHomeSummarySheet,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 4,
-                    ),
-                    child: RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.3,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "Safe",
-                            style: TextStyle(color: SafeHomeColors.primary),
-                          ),
-                          TextSpan(
-                            text: "All",
-                            style: TextStyle(color: SafeHomeColors.textPrimary),
-                          ),
-                          TextSpan(
-                            text: "Home",
-                            style: TextStyle(color: SafeHomeColors.textPrimary),
-                          ),
-                        ],
-                      ),
-                    ),
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: showAllHomeSummarySheet,
+            borderRadius: BorderRadius.circular(10),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+                vertical: 4,
+              ),
+              child: RichText(
+                text: const TextSpan(
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.3,
                   ),
+                  children: [
+                    TextSpan(
+                      text: "Safe",
+                      style: TextStyle(color: SafeHomeColors.primary),
+                    ),
+                    TextSpan(
+                      text: "All",
+                      style: TextStyle(color: SafeHomeColors.textPrimary),
+                    ),
+                    TextSpan(
+                      text: "Home",
+                      style: TextStyle(color: SafeHomeColors.textPrimary),
+                    ),
+                  ],
                 ),
               ),
+            ),
+          ),
+        ),
 
         actions: [
           IconButton(
@@ -1697,15 +2274,15 @@ class _AllHomePageState extends State<AllHomePage> {
               size: 23,
             ),
             style:
-                IconButton.styleFrom(
-                  foregroundColor: SafeHomeColors.textPrimary,
-                  backgroundColor: Colors.transparent,
-                  shape: const CircleBorder(),
-                ).copyWith(
-                  overlayColor: WidgetStatePropertyAll(
-                    SafeHomeColors.primary.withValues(alpha: 0.10),
-                  ),
-                ),
+            IconButton.styleFrom(
+              foregroundColor: SafeHomeColors.textPrimary,
+              backgroundColor: Colors.transparent,
+              shape: const CircleBorder(),
+            ).copyWith(
+              overlayColor: WidgetStatePropertyAll(
+                SafeHomeColors.primary.withValues(alpha: 0.10),
+              ),
+            ),
             onPressed: () {
               setState(() {
                 isSearching = !isSearching;
@@ -1723,15 +2300,15 @@ class _AllHomePageState extends State<AllHomePage> {
               tooltip: _strings.t("Bỏ chọn"),
               icon: const Icon(Icons.deselect_rounded, size: 22),
               style:
-                  IconButton.styleFrom(
-                    foregroundColor: SafeHomeColors.danger,
-                    backgroundColor: Colors.transparent,
-                    shape: const CircleBorder(),
-                  ).copyWith(
-                    overlayColor: WidgetStatePropertyAll(
-                      SafeHomeColors.danger.withValues(alpha: 0.10),
-                    ),
-                  ),
+              IconButton.styleFrom(
+                foregroundColor: SafeHomeColors.danger,
+                backgroundColor: Colors.transparent,
+                shape: const CircleBorder(),
+              ).copyWith(
+                overlayColor: WidgetStatePropertyAll(
+                  SafeHomeColors.danger.withValues(alpha: 0.10),
+                ),
+              ),
               onPressed: () {
                 setState(() {
                   selectedHomes.clear();
@@ -1846,140 +2423,174 @@ class _AllHomePageState extends State<AllHomePage> {
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (sheetContext) {
-                              final bottomInset = MediaQuery.of(
-                                sheetContext,
-                              ).viewInsets.bottom;
-                              final keyboardOpen = bottomInset > 0;
-                              final qrSize = keyboardOpen ? 140.0 : 190.0;
+                              return StatefulBuilder(
+                                builder: (context, setSheetState) {
+                                  final bottomInset = MediaQuery.of(
+                                    sheetContext,
+                                  ).viewInsets.bottom;
+                                  final keyboardOpen = bottomInset > 0;
+                                  final qrSize = keyboardOpen ? 140.0 : 190.0;
+                                  final emailOk = RegExp(
+                                    r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                                  ).hasMatch(targetEmailText);
 
-                              return SafeArea(
-                                child: AnimatedPadding(
-                                  duration: const Duration(milliseconds: 180),
-                                  curve: Curves.easeOut,
-                                  padding: EdgeInsets.only(bottom: bottomInset),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                      maxHeight:
+                                  return SafeArea(
+                                    child: AnimatedPadding(
+                                      duration: const Duration(milliseconds: 180),
+                                      curve: Curves.easeOut,
+                                      padding: EdgeInsets.only(bottom: bottomInset),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight:
                                           MediaQuery.of(
                                             sheetContext,
                                           ).size.height *
-                                          0.92,
-                                    ),
-                                    padding: const EdgeInsets.fromLTRB(
-                                      20,
-                                      20,
-                                      20,
-                                      20,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(26),
-                                      ),
-                                    ),
-                                    child: SingleChildScrollView(
-                                      keyboardDismissBehavior:
+                                              0.92,
+                                        ),
+                                        padding: const EdgeInsets.fromLTRB(
+                                          20,
+                                          20,
+                                          20,
+                                          20,
+                                        ),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(26),
+                                          ),
+                                        ),
+                                        child: SingleChildScrollView(
+                                          keyboardDismissBehavior:
                                           ScrollViewKeyboardDismissBehavior
                                               .onDrag,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 42,
-                                            height: 5,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade300,
-                                              borderRadius:
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: 42,
+                                                height: 5,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade300,
+                                                  borderRadius:
                                                   BorderRadius.circular(20),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 18),
-                                          Text(
-                                            _strings.t("Chia sẻ nhà đã chọn"),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w800,
-                                            ),
-                                          ),
-                                          Text(
-                                            _strings.t(
-                                              "Hoặc quét QR để xin gia nhập các nhà đã chọn",
-                                            ),
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 12),
-                                          QrImageView(
-                                            data: qrData,
-                                            version: QrVersions.auto,
-                                            size: qrSize,
-                                          ),
-                                          const SizedBox(height: 18),
-                                          Text(
-                                            selectedHomeCountText(),
-                                            style: TextStyle(
-                                              color: Colors.grey.shade600,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 18),
-                                          TextFormField(
-                                            keyboardType:
+                                                ),
+                                              ),
+                                              const SizedBox(height: 18),
+                                              Text(
+                                                _strings.t("Chia sẻ nhà đã chọn"),
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                              ),
+                                              Text(
+                                                _strings.t(
+                                                  "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 12),
+                                              QrImageView(
+                                                data: qrData,
+                                                version: QrVersions.auto,
+                                                size: qrSize,
+                                              ),
+                                              const SizedBox(height: 18),
+                                              Text(
+                                                selectedHomeCountText(),
+                                                style: TextStyle(
+                                                  color: Colors.grey.shade600,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 18),
+                                              TextFormField(
+                                                keyboardType:
                                                 TextInputType.emailAddress,
-                                            textInputAction:
+                                                textInputAction:
                                                 TextInputAction.done,
-                                            decoration: InputDecoration(
-                                              prefixIcon: const Icon(
-                                                Icons.email_rounded,
-                                              ),
-                                              labelText: _strings.t(
-                                                "Email người nhận",
-                                              ),
-                                              filled: true,
-                                              fillColor: Colors.grey.shade100,
-                                              border: OutlineInputBorder(
-                                                borderRadius:
+                                                decoration: InputDecoration(
+                                                  prefixIcon: const Icon(
+                                                    Icons.email_rounded,
+                                                  ),
+                                                  labelText: _strings.t(
+                                                    "Email người nhận",
+                                                  ),
+                                                  filled: true,
+                                                  fillColor: Colors.grey.shade100,
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
                                                     BorderRadius.circular(16),
-                                                borderSide: BorderSide.none,
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                ),
+                                                onChanged: (value) {
+                                                  setSheetState(() {
+                                                    targetEmailText = value
+                                                        .trim()
+                                                        .toLowerCase();
+                                                  });
+                                                },
+                                                onFieldSubmitted: (_) {
+                                                  if (!emailOk) {
+                                                    return;
+                                                  }
+
+                                                  FocusManager
+                                                      .instance
+                                                      .primaryFocus
+                                                      ?.unfocus();
+
+                                                  Navigator.pop(
+                                                    sheetContext,
+                                                    targetEmailText,
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                            onChanged: (value) {
-                                              targetEmailText = value
-                                                  .trim()
-                                                  .toLowerCase();
-                                            },
-                                            onFieldSubmitted: (_) {
-                                              Navigator.pop(
-                                                sheetContext,
-                                                targetEmailText,
-                                              );
-                                            },
+                                              const SizedBox(height: 18),
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: ElevatedButton.icon(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                    SafeHomeColors.primary,
+                                                    foregroundColor: Colors.white,
+                                                    disabledBackgroundColor:
+                                                    Colors.grey.shade300,
+                                                    disabledForegroundColor:
+                                                    Colors.grey.shade600,
+                                                  ),
+                                                  icon: const Icon(
+                                                    Icons.share_rounded,
+                                                  ),
+                                                  label: Text(
+                                                    _strings.t("Chia sẻ"),
+                                                  ),
+                                                  onPressed: emailOk
+                                                      ? () {
+                                                    FocusManager
+                                                        .instance
+                                                        .primaryFocus
+                                                        ?.unfocus();
+
+                                                    Navigator.pop(
+                                                      sheetContext,
+                                                      targetEmailText,
+                                                    );
+                                                  }
+                                                      : null,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(height: 18),
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: ElevatedButton.icon(
-                                              icon: const Icon(
-                                                Icons.share_rounded,
-                                              ),
-                                              label: Text(
-                                                _strings.t("Chia sẻ"),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                  sheetContext,
-                                                  targetEmailText,
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             },
                           );
@@ -2027,8 +2638,8 @@ class _AllHomePageState extends State<AllHomePage> {
 
                             final canShare =
                                 home["_shared"] != true ||
-                                role == "owner" ||
-                                role == "admin";
+                                    role == "owner" ||
+                                    role == "admin";
 
                             if (!canShare) {
                               skipped++;
@@ -2037,29 +2648,29 @@ class _AllHomePageState extends State<AllHomePage> {
 
                             await FirebaseDatabase.instance
                                 .ref(
-                                  "accounts/$targetUid/shareRequests/$homeId",
-                                )
+                              "accounts/$targetUid/shareRequests/$homeId",
+                            )
                                 .set({
-                                  "ownerUid": myUid,
-                                  "homeId": homeId,
-                                  "ownerEmail":
-                                      FirebaseAuth
-                                          .instance
-                                          .currentUser
-                                          ?.email ??
-                                      "",
-                                  "time": DateTime.now().millisecondsSinceEpoch,
-                                });
+                              "ownerUid": myUid,
+                              "homeId": homeId,
+                              "ownerEmail":
+                              FirebaseAuth
+                                  .instance
+                                  .currentUser
+                                  ?.email ??
+                                  "",
+                              "time": DateTime.now().millisecondsSinceEpoch,
+                            });
 
                             await FirebaseDatabase.instance
                                 .ref(
-                                  "accounts/$myUid/shareList/$homeId/$targetUid",
-                                )
+                              "accounts/$myUid/shareList/$homeId/$targetUid",
+                            )
                                 .set({
-                                  "email": targetEmail,
-                                  "sharedAt":
-                                      DateTime.now().millisecondsSinceEpoch,
-                                });
+                              "email": targetEmail,
+                              "sharedAt":
+                              DateTime.now().millisecondsSinceEpoch,
+                            });
                           }
                           if (!context.mounted) return;
 
@@ -2141,7 +2752,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                     padding: const EdgeInsets.all(16),
                                     constraints: BoxConstraints(
                                       maxHeight:
-                                          MediaQuery.of(context).size.height *
+                                      MediaQuery.of(context).size.height *
                                           0.8,
                                     ),
                                     child: FutureBuilder(
@@ -2165,7 +2776,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                             final home = safeMap(homes[homeId]);
                                             final homeName =
                                                 home["name"]?.toString() ??
-                                                homeId;
+                                                    homeId;
                                             final users = safeMap(raw[homeId]);
 
                                             return Container(
@@ -2176,18 +2787,18 @@ class _AllHomePageState extends State<AllHomePage> {
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(18),
+                                                BorderRadius.circular(18),
                                               ),
                                               child: Column(
                                                 crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     homeName,
                                                     style: const TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
-                                                          FontWeight.w700,
+                                                      FontWeight.w700,
                                                     ),
                                                   ),
                                                   const SizedBox(height: 10),
@@ -2203,39 +2814,39 @@ class _AllHomePageState extends State<AllHomePage> {
                                                   ...users.entries.map((e) {
                                                     final targetUid = e.key;
                                                     final data =
-                                                        Map<
-                                                          String,
-                                                          dynamic
-                                                        >.from(e.value);
+                                                    Map<
+                                                        String,
+                                                        dynamic
+                                                    >.from(e.value);
 
                                                     final email =
                                                         data["email"] ??
-                                                        "Unknown";
+                                                            "Unknown";
 
                                                     return Container(
                                                       margin:
-                                                          const EdgeInsets.only(
-                                                            bottom: 8,
-                                                          ),
+                                                      const EdgeInsets.only(
+                                                        bottom: 8,
+                                                      ),
                                                       decoration: BoxDecoration(
                                                         color: Colors
                                                             .grey
                                                             .shade100,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                              14,
-                                                            ),
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
                                                       ),
                                                       child: ListTile(
                                                         dense: true,
                                                         leading:
-                                                            const CircleAvatar(
-                                                              radius: 16,
-                                                              child: Icon(
-                                                                Icons.person,
-                                                                size: 18,
-                                                              ),
-                                                            ),
+                                                        const CircleAvatar(
+                                                          radius: 16,
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            size: 18,
+                                                          ),
+                                                        ),
                                                         title: Text(email),
                                                         trailing: IconButton(
                                                           icon: const Icon(
@@ -2247,15 +2858,15 @@ class _AllHomePageState extends State<AllHomePage> {
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                                  "accounts/$targetUid/sharedHomes/$homeId",
-                                                                )
+                                                              "accounts/$targetUid/sharedHomes/$homeId",
+                                                            )
                                                                 .remove();
 
                                                             await FirebaseDatabase
                                                                 .instance
                                                                 .ref(
-                                                                  "accounts/$uid/shareList/$homeId/$targetUid",
-                                                                )
+                                                              "accounts/$uid/shareList/$homeId/$targetUid",
+                                                            )
                                                                 .remove();
 
                                                             setSheetState(() {
@@ -2324,6 +2935,9 @@ class _AllHomePageState extends State<AllHomePage> {
     ownHomesSubscription?.cancel();
     sharedHomesSubscription?.cancel();
     groupNamesSubscription?.cancel();
+    chatAuthSubscription?.cancel();
+    _homeRealtimeCoordinator.dispose();
+    unreadChatCounts.clear();
 
     for (final sub in sharedHomeSubscriptions.values) {
       sub.cancel();

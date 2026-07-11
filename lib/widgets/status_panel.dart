@@ -1102,10 +1102,12 @@ class _StatusPanelState extends State<StatusPanel> {
         ? rawAlarmScheduleText
         : _strings.t("Tắt");
 
+    final alarmPauseText = widget.alarmPauseText.trim();
+
     final alarmPauseSet =
-        widget.alarmPauseText.trim().isNotEmpty &&
-        widget.alarmPauseText != "Tắt" &&
-        widget.alarmPauseText != "Chưa thiết lập";
+        alarmPauseText.isNotEmpty &&
+            alarmPauseText != _strings.t("Tắt") &&
+            alarmPauseText != _strings.t("Chưa thiết lập");
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -1315,7 +1317,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       child: _alarmStatusItem(
                         icon: Icons.pause_circle_outline_rounded,
                         value: alarmPauseSet
-                            ? widget.alarmPauseText
+                            ? alarmPauseText
                             : _strings.t("Tắt"),
                         active: alarmPauseSet,
                         activeColor: SafeHomeColors.warning,

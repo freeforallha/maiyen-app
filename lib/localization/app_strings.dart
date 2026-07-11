@@ -1857,6 +1857,36 @@ class AppStrings {
     ),
   );
 
+  String alarmPauseReminderText() => choose(
+    vi:
+    'Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n'
+        'Báo động của các thiết bị thuộc trường "Nguy hiểm khẩn cấp" và báo động ở chế độ "Bảo vệ" sẽ không bị ảnh hưởng bởi chức năng này.',
+    en:
+    'This action will change today\'s Alarm time for some devices.\n\n'
+        'Alarms from devices in the "Emergency danger" category and alarms in "Guard" mode will not be affected by this feature.',
+    zh:
+    '此操作将更改部分设备今天的 Alarm 时间。\n\n'
+        '“紧急危险”类别中的设备警报，以及“警戒”模式下的警报，不受此功能影响。',
+    ko:
+    '이 작업은 일부 기기의 오늘 Alarm 시간을 변경합니다.\n\n'
+        '"긴급 위험" 항목에 속한 기기의 경보와 "보호" 모드의 경보는 이 기능의 영향을 받지 않습니다.',
+    ja:
+    'この操作により、一部のデバイスの本日の Alarm 時間が変更されます。\n\n'
+        '「緊急の危険」カテゴリに属するデバイスの警報と「警戒」モードの警報は、この機能の影響を受けません。',
+    de:
+    'Diese Aktion ändert die heutige Alarm-Zeit für einige Geräte.\n\n'
+        'Alarme von Geräten in der Kategorie „Akute Gefahr“ sowie Alarme im Modus „Schutz“ werden von dieser Funktion nicht beeinflusst.',
+    ru:
+    'Это действие изменит время Alarm сегодня для некоторых устройств.\n\n'
+        'Сигналы устройств из категории «Экстренная опасность» и сигналы в режиме «Охрана» не будут затронуты этой функцией.',
+    fr:
+    'Cette action modifiera aujourd\'hui l\'heure de l\'Alarm pour certains appareils.\n\n'
+        'Les alarmes des appareils de la catégorie « Danger urgent » et les alarmes en mode « Protection » ne seront pas affectées par cette fonction.',
+    es:
+    'Esta acción cambiará hoy la hora de Alarm de algunos dispositivos.\n\n'
+        'Las alarmas de los dispositivos de la categoría «Peligro de emergencia» y las alarmas en modo «Protección» no se verán afectadas por esta función.',
+  );
+
   String firebaseRulesPassedSummary({
     required int passCount,
     required int total,
@@ -3340,6 +3370,14 @@ class AppStrings {
     "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Others can scan this code to request access to the home.",
     "Chia sẻ nhà": "Share home",
     "Quét QR để xin gia nhập nhà": "Scan QR to join a home",
+    "Quét QR xin gia nhập nhà": "Scan QR to join home",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "Place the shared home QR code inside the frame",
+    "Mã QR này do chủ nhà chia sẻ":
+    "This QR code is shared by the home owner",
+    "Nhập mã mời": "Enter invitation code",
+    "Gửi yêu cầu gia nhập": "Send join request",
+    "QR này không phải mã thiết bị": "This QR code is not a device code",
     "Xin gia nhập nhà": "Request to join home",
     "Quét mã QR chia sẻ nhà": "Scan a home sharing QR code",
     "Mời thành viên bằng mã QR": "Invite member with QR code",
@@ -4202,6 +4240,12 @@ class AppStrings {
     "QR của nhà này": "此家庭的二维码",
     "Chia sẻ nhà": "共享家庭",
     "Quét QR để xin gia nhập nhà": "扫描二维码加入家庭",
+    "Quét QR xin gia nhập nhà": "扫描二维码加入家庭",
+    "Đưa mã QR chia sẻ nhà vào khung hình": "将共享家庭二维码放入框内",
+    "Mã QR này do chủ nhà chia sẻ": "此二维码由房主分享",
+    "Nhập mã mời": "输入邀请码",
+    "Gửi yêu cầu gia nhập": "发送加入请求",
+    "QR này không phải mã thiết bị": "此二维码不是设备码",
     "Xin gia nhập nhà": "申请加入家庭",
     "Quét mã QR chia sẻ nhà": "扫描家庭共享二维码",
     "Mời thành viên bằng mã QR": "使用二维码邀请成员",
@@ -5582,6 +5626,14 @@ class AppStrings {
     "Phát hiện khói": "연기 감지",
     "Quét mã QR chia sẻ nhà": "집 공유 QR 코드 스캔",
     "Quét QR để xin gia nhập nhà": "QR을 스캔하여 집 참여 요청",
+    "Quét QR xin gia nhập nhà": "집에 가입하려면 QR 스캔",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "공유된 집 QR 코드를 프레임 안에 맞춰주세요",
+    "Mã QR này do chủ nhà chia sẻ":
+    "이 QR 코드는 집 소유자가 공유한 것입니다",
+    "Nhập mã mời": "초대 코드 입력",
+    "Gửi yêu cầu gia nhập": "가입 요청 보내기",
+    "QR này không phải mã thiết bị": "이 QR 코드는 기기 코드가 아닙니다",
     "Tạm dừng": "일시 중지",
     "Tamper cleared": "탈거 감지 해제",
     "Tamper detected": "탈거 감지",
@@ -6443,6 +6495,14 @@ class AppStrings {
     "Phát hiện khói": "煙を検知",
     "Quét mã QR chia sẻ nhà": "共有QRコードをスキャン",
     "Quét QR để xin gia nhập nhà": "QRをスキャンして家への参加をリクエスト",
+    "Quét QR xin gia nhập nhà": "家に参加するQRをスキャン",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "共有された家のQRコードを枠内に合わせてください",
+    "Mã QR này do chủ nhà chia sẻ":
+    "このQRコードは家の所有者が共有したものです",
+    "Nhập mã mời": "招待コードを入力",
+    "Gửi yêu cầu gia nhập": "参加リクエストを送信",
+    "QR này không phải mã thiết bị": "このQRコードはデバイスコードではありません",
     "Rung/chấn động": "振動",
     "SafeHome": "SafeHome",
     "SOS": "SOS",
@@ -6832,6 +6892,15 @@ class AppStrings {
     "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Andere können diesen Code scannen, um Zugang zum Zuhause anzufordern.",
     "Chia sẻ nhà": "Zuhause teilen",
     "Quét QR để xin gia nhập nhà": "QR scannen, um den Beitritt zum Zuhause anzufordern",
+    "Quét QR xin gia nhập nhà":
+    "QR scannen, um dem Zuhause beizutreten",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "Platziere den geteilten Zuhause-QR-Code im Rahmen",
+    "Mã QR này do chủ nhà chia sẻ":
+    "Dieser QR-Code wurde vom Hauseigentümer geteilt",
+    "Nhập mã mời": "Einladungscode eingeben",
+    "Gửi yêu cầu gia nhập": "Beitrittsanfrage senden",
+    "QR này không phải mã thiết bị": "Dieser QR-Code ist kein Gerätecode",
     "Xin gia nhập nhà": "Zugang zum Zuhause anfragen",
     "Quét mã QR chia sẻ nhà": "Freigabe-QR-Code scannen",
     "Mời thành viên bằng mã QR": "Mitglied per QR-Code einladen",
@@ -7705,6 +7774,15 @@ class AppStrings {
     "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Другие могут отсканировать этот код, чтобы запросить доступ к дому.",
     "Chia sẻ nhà": "Поделиться домом",
     "Quét QR để xin gia nhập nhà": "Сканируйте QR, чтобы запросить присоединение к дому",
+    "Quét QR xin gia nhập nhà": "Сканировать QR для входа в дом",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "Поместите QR-код общего дома в рамку",
+    "Mã QR này do chủ nhà chia sẻ":
+    "Этот QR-код предоставлен владельцем дома",
+    "Nhập mã mời": "Введите код приглашения",
+    "Gửi yêu cầu gia nhập": "Отправить запрос на вступление",
+    "QR này không phải mã thiết bị":
+    "Этот QR-код не является кодом устройства",
     "Xin gia nhập nhà": "Запросить присоединение к дому",
     "Quét mã QR chia sẻ nhà": "Сканировать QR-код общего доступа к дому",
     "Mời thành viên bằng mã QR": "Пригласить участника по QR-коду",
@@ -8603,6 +8681,16 @@ class AppStrings {
     "Chia sẻ nhà": "Partager maison",
     "Quét QR để xin gia nhập nhà":
     "Scanner un QR pour demander l'accès à une maison",
+    "Quét QR xin gia nhập nhà":
+    "Scanner le QR pour rejoindre la maison",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "Placez le QR de partage de maison dans le cadre",
+    "Mã QR này do chủ nhà chia sẻ":
+    "Ce QR est partagé par le propriétaire de la maison",
+    "Nhập mã mời": "Saisir le code d'invitation",
+    "Gửi yêu cầu gia nhập": "Envoyer la demande d'accès",
+    "QR này không phải mã thiết bị":
+    "Ce QR n'est pas un code d'appareil",
     "Xin gia nhập nhà": "Demander l'accès à la maison",
     "Quét mã QR chia sẻ nhà": "Scanner le QR de partage de maison",
     "Mời thành viên bằng mã QR": "Inviter un membre avec un QR",
@@ -9701,6 +9789,16 @@ class AppStrings {
     "Chia sẻ nhà": "Compartir casa",
     "Quét QR để xin gia nhập nhà":
     "Escanear QR para solicitar acceso a la casa",
+    "Quét QR xin gia nhập nhà":
+    "Escanear QR para unirse a la casa",
+    "Đưa mã QR chia sẻ nhà vào khung hình":
+    "Coloca el QR compartido de la casa dentro del marco",
+    "Mã QR này do chủ nhà chia sẻ":
+    "Este QR lo comparte el propietario de la casa",
+    "Nhập mã mời": "Introducir código de invitación",
+    "Gửi yêu cầu gia nhập": "Enviar solicitud de unión",
+    "QR này không phải mã thiết bị":
+    "Este QR no es un código de dispositivo",
     "Xin gia nhập nhà": "Solicitar acceso a la casa",
     "Quét mã QR chia sẻ nhà": "Escanear un código QR para compartir la casa",
     "Mời thành viên bằng mã QR": "Invitar a un miembro mediante código QR",

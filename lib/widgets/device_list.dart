@@ -1274,6 +1274,8 @@ class _DeviceListState extends State<DeviceList> {
     final isDragging =
         _draggingSectionKey == sectionKey && _draggingDeviceId == deviceId;
     final safeIndex = index < 0 ? 0 : index;
+    final isSectionDragging =
+        _draggingSectionKey == sectionKey && _draggingDeviceId != null;
     final targetOffset = isDragging
         ? _draggingCardOffset
         : _deviceGridOffsetForIndex(
@@ -1315,7 +1317,9 @@ class _DeviceListState extends State<DeviceList> {
           ? (_draggingDeviceDropping
           ? const Duration(milliseconds: 340)
           : Duration.zero)
-          : const Duration(milliseconds: 270),
+          : isSectionDragging
+          ? const Duration(milliseconds: 270)
+          : Duration.zero,
       curve: Curves.easeOutCubic,
       left: targetOffset.dx,
       top: targetOffset.dy,
