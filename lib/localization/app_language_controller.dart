@@ -15,6 +15,9 @@ class AppLanguageController extends ChangeNotifier {
     "ru",
     "fr",
     "es",
+    "id",
+    "th",
+    "ms",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -26,6 +29,9 @@ class AppLanguageController extends ChangeNotifier {
     Locale("ru", "RU"),
     Locale("fr", "FR"),
     Locale("es", "ES"),
+    Locale("id", "ID"),
+    Locale("th", "TH"),
+    Locale("ms", "MY"),
   ];
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
@@ -37,6 +43,9 @@ class AppLanguageController extends ChangeNotifier {
     "ru": "Русский",
     "fr": "Français",
     "es": "Español",
+    "id": "Bahasa Indonesia",
+    "th": "ภาษาไทย",
+    "ms": "Bahasa Melayu",
   };
 
   Locale _locale = const Locale("vi");
@@ -52,6 +61,9 @@ class AppLanguageController extends ChangeNotifier {
   bool get isRussian => languageCode == "ru";
   bool get isFrench => languageCode == "fr";
   bool get isSpanish => languageCode == "es";
+  bool get isIndonesian => languageCode == "id";
+  bool get isThai => languageCode == "th";
+  bool get isMalay => languageCode == "ms";
 
   Locale _localeForCode(String code) {
     if (code == "zh") {
@@ -80,6 +92,18 @@ class AppLanguageController extends ChangeNotifier {
 
     if (code == "es") {
       return const Locale("es", "ES");
+    }
+
+    if (code == "id") {
+      return const Locale("id", "ID");
+    }
+
+    if (code == "th") {
+      return const Locale("th", "TH");
+    }
+
+    if (code == "ms") {
+      return const Locale("ms", "MY");
     }
 
     return Locale(code);

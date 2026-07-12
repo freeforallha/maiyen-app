@@ -133,6 +133,7 @@ class BootReceiver : BroadcastReceiver() {
             "ru" -> "Уведомление об автозапуске SafeHome"
             "fr" -> "Notification de démarrage automatique SafeHome"
             "es" -> "Notificación de inicio automático de SafeHome"
+            "id" -> "Notifikasi mulai otomatis SafeHome"
             else -> "Thông báo SafeHome đã tự khởi chạy"
         }
     }
@@ -148,6 +149,7 @@ class BootReceiver : BroadcastReceiver() {
             "ru" -> "Готово к мониторингу автоматической охраны"
             "fr" -> "Prêt à surveiller la protection automatique"
             "es" -> "Listo para supervisar la protección automática"
+            "id" -> "Siap memantau perlindungan otomatis"
             else -> "Đã sẵn sàng theo dõi bảo vệ tự động"
         }
     }

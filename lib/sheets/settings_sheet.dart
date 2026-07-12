@@ -26,6 +26,12 @@ String _languageSubtitle(String code) {
       return "French";
     case "es":
       return "Spanish";
+    case "id":
+      return "Indonesian";
+    case "th":
+      return "Thai";
+    case "ms":
+      return "Malay";
     default:
       return code;
   }
@@ -51,6 +57,12 @@ String _languageBadge(String code) {
       return "FR";
     case "es":
       return "ES";
+    case "id":
+      return "ID";
+    case "th":
+      return "TH";
+    case "ms":
+      return "MS";
     default:
       return code.toUpperCase();
   }

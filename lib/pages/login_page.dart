@@ -336,6 +336,12 @@ class _LoginPageState extends State<LoginPage> {
         return "French";
       case "es":
         return "Spanish";
+      case "id":
+        return "Indonesian";
+      case "th":
+        return "Thai";
+      case "ms":
+        return "Malay";
       default:
         return code;
     }

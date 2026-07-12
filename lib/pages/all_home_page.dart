@@ -1143,6 +1143,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Понедельник",
           fr: "Lundi",
           es: "Lunes",
+          id: "Senin",
+          th: "วันจันทร์",
+          ms: "Isnin",
         ),
         ),
         (
@@ -1157,6 +1160,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Вторник",
           fr: "Mardi",
           es: "Martes",
+          id: "Selasa",
+          th: "วันอังคาร",
+          ms: "Selasa",
         ),
         ),
         (
@@ -1171,6 +1177,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Среда",
           fr: "Mercredi",
           es: "Miércoles",
+          id: "Rabu",
+          th: "วันพุธ",
+          ms: "Rabu",
         ),
         ),
         (
@@ -1185,6 +1194,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Четверг",
           fr: "Jeudi",
           es: "Jueves",
+          id: "Kamis",
+          th: "วันพฤหัสบดี",
+          ms: "Khamis",
         ),
         ),
         (
@@ -1199,6 +1211,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Пятница",
           fr: "Vendredi",
           es: "Viernes",
+          id: "Jumat",
+          th: "วันศุกร์",
+          ms: "Jumaat",
         ),
         ),
         (
@@ -1213,6 +1228,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Суббота",
           fr: "Samedi",
           es: "Sábado",
+          id: "Sabtu",
+          th: "วันเสาร์",
+          ms: "Sabtu",
         ),
         ),
         (
@@ -1227,6 +1245,9 @@ class _AllHomePageState extends State<AllHomePage> {
           ru: "Воскресенье",
           fr: "Dimanche",
           es: "Domingo",
+          id: "Minggu",
+          th: "วันอาทิตย์",
+          ms: "Ahad",
         ),
         ),
       ];

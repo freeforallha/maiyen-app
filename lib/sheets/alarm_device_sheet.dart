@@ -58,6 +58,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Понедельник",
         fr: "Lundi",
         es: "Lunes",
+        id: "Senin",
+        th: "วันจันทร์",
+        ms: "Isnin",
       );
     case 2:
       return strings.choose(
@@ -70,6 +73,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Вторник",
         fr: "Mardi",
         es: "Martes",
+        id: "Selasa",
+        th: "วันอังคาร",
+        ms: "Selasa",
       );
     case 3:
       return strings.choose(
@@ -82,6 +88,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Среда",
         fr: "Mercredi",
         es: "Miércoles",
+        id: "Rabu",
+        th: "วันพุธ",
+        ms: "Rabu",
       );
     case 4:
       return strings.choose(
@@ -94,6 +103,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Четверг",
         fr: "Jeudi",
         es: "Jueves",
+        id: "Kamis",
+        th: "วันพฤหัสบดี",
+        ms: "Khamis",
       );
     case 5:
       return strings.choose(
@@ -106,6 +118,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Пятница",
         fr: "Vendredi",
         es: "Viernes",
+        id: "Jumat",
+        th: "วันศุกร์",
+        ms: "Jumaat",
       );
     case 6:
       return strings.choose(
@@ -118,6 +133,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Суббота",
         fr: "Samedi",
         es: "Sábado",
+        id: "Sabtu",
+        th: "วันเสาร์",
+        ms: "Sabtu",
       );
     case 7:
       return strings.choose(
@@ -130,6 +148,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         ru: "Воскресенье",
         fr: "Dimanche",
         es: "Domingo",
+        id: "Minggu",
+        th: "วันอาทิตย์",
+        ms: "Ahad",
       );
     default:
       return "";
@@ -149,6 +170,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Пн",
         fr: "Lun",
         es: "Lun",
+        id: "Sen",
+        th: "จ.",
+        ms: "Isn",
       );
     case 2:
       return strings.choose(
@@ -161,6 +185,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Вт",
         fr: "Mar",
         es: "Mar",
+        id: "Sel",
+        th: "อ.",
+        ms: "Sel",
       );
     case 3:
       return strings.choose(
@@ -173,6 +200,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Ср",
         fr: "Mer",
         es: "Mié",
+        id: "Rab",
+        th: "พ.",
+        ms: "Rab",
       );
     case 4:
       return strings.choose(
@@ -185,6 +215,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Чт",
         fr: "Jeu",
         es: "Jue",
+        id: "Kam",
+        th: "พฤ.",
+        ms: "Kha",
       );
     case 5:
       return strings.choose(
@@ -197,6 +230,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Пт",
         fr: "Ven",
         es: "Vie",
+        id: "Jum",
+        th: "ศ.",
+        ms: "Jum",
       );
     case 6:
       return strings.choose(
@@ -209,6 +245,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Сб",
         fr: "Sam",
         es: "Sáb",
+        id: "Sab",
+        th: "ส.",
+        ms: "Sab",
       );
     case 7:
       return strings.choose(
@@ -221,6 +260,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         ru: "Вс",
         fr: "Dim",
         es: "Dom",
+        id: "Min",
+        th: "อา.",
+        ms: "Ahd",
       );
     default:
       return "";
@@ -241,6 +283,9 @@ String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
       ru: "Каждый день",
       fr: "Tous les jours",
       es: "Todos los días",
+      id: "Setiap hari",
+      th: "ทุกวัน",
+      ms: "Setiap hari",
     );
   }
 
