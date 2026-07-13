@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../helpers/firebase_paths.dart';
 import 'installation_id_service.dart';
 import 'notification_service.dart';
+import 'single_device_session_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 class FCMService {
   static bool _foregroundListening = false;
@@ -41,23 +42,28 @@ class FCMService {
       return;
     }
 
-    final installationId = await InstallationIdService.getOrCreate();
+    final identity =
+    await SingleDeviceSessionService.currentSessionIdentityIfActive(
+      uid: cleanUid,
+    );
+
+    if (identity == null) {
+      return;
+    }
+
     final now = DateTime.now().millisecondsSinceEpoch;
 
-    await FirebaseDatabase.instance.ref().update({
-      // Giữ tương thích với backend/app cũ trong thời gian chuyển đổi.
-      FirebasePaths.fcmToken(cleanUid): cleanToken,
-
-      // Một tài khoản có thể lưu nhiều điện thoại.
+    await FirebaseDatabase.instance.ref(
       FirebasePaths.fcmTokenInstallation(
         cleanUid,
-        installationId,
-      ): {
-        'installationId': installationId,
-        'token': cleanToken,
-        'platform': _platformName(),
-        'updatedAt': now,
-      },
+        identity.installationId,
+      ),
+    ).set({
+      'installationId': identity.installationId,
+      'sessionId': identity.sessionId,
+      'token': cleanToken,
+      'platform': _platformName(),
+      'updatedAt': now,
     });
   }
 
@@ -152,32 +158,13 @@ class FCMService {
     }
 
     final installationId = await InstallationIdService.getOrCreate();
-    final currentToken =
-    await FirebaseMessaging.instance.getToken();
 
-    final updates = <String, Object?>{
+    await FirebaseDatabase.instance.ref(
       FirebasePaths.fcmTokenInstallation(
         cleanUid,
         installationId,
-      ): null,
-    };
-
-    if (currentToken != null &&
-        currentToken.trim().isNotEmpty) {
-      final legacyRef = FirebaseDatabase.instance.ref(
-        FirebasePaths.fcmToken(cleanUid),
-      );
-
-      final legacySnapshot = await legacyRef.get();
-      final legacyToken =
-          legacySnapshot.value?.toString().trim() ?? '';
-
-      if (legacyToken == currentToken.trim()) {
-        updates[FirebasePaths.fcmToken(cleanUid)] = null;
-      }
-    }
-
-    await FirebaseDatabase.instance.ref().update(updates);
+      ),
+    ).remove();
 
     if (_activeUid == cleanUid) {
       _activeUid = '';

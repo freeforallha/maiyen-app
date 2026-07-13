@@ -4,6 +4,9 @@ import 'profile_setup_page.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../services/auto_login_service.dart';
 import '../services/platform/platform_auto_away_task_service.dart';
+import '../services/session_logout_service.dart';
+import '../services/single_device_session_service.dart';
+import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -25,22 +28,128 @@ class _LoginPageState extends State<LoginPage> {
   String error = "";
   bool loading = false;
   bool rememberLogin = true;
+  Future<bool>? _sessionConflictDialogFuture;
+  bool _forcedLogoutNoticeCheckScheduled = false;
+
+  Future<bool> _claimSessionAfterConfirmation(User user) async {
+    var allowReplacingOtherInstallation =
+        await SingleDeviceSessionService.hasActiveSessionOnAnotherInstallation(
+          uid: user.uid,
+        );
+
+    if (allowReplacingOtherInstallation &&
+        !await _confirmReplacingActiveSession()) {
+      return false;
+    }
+
+    try {
+      await SingleDeviceSessionService.claimForInteractiveLogin(
+        uid: user.uid,
+        allowReplacingOtherInstallation: allowReplacingOtherInstallation,
+      );
+      return true;
+    } on ActiveSessionConflictException {
+      if (allowReplacingOtherInstallation ||
+          !await _confirmReplacingActiveSession()) {
+        return false;
+      }
+
+      allowReplacingOtherInstallation = true;
+      await SingleDeviceSessionService.claimForInteractiveLogin(
+        uid: user.uid,
+        allowReplacingOtherInstallation: true,
+      );
+      return true;
+    }
+  }
+
+  Future<bool> _confirmReplacingActiveSession() {
+    final running = _sessionConflictDialogFuture;
+
+    if (running != null) {
+      return running;
+    }
+
+    final future = _showSessionConflictDialog();
+    _sessionConflictDialogFuture = future;
+
+    return future.whenComplete(() {
+      if (identical(_sessionConflictDialogFuture, future)) {
+        _sessionConflictDialogFuture = null;
+      }
+    });
+  }
+
+  Future<bool> _showSessionConflictDialog() async {
+    if (!mounted) {
+      return false;
+    }
+
+    final strings = AppStrings.of(context);
+
+    return await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(strings.accountInUseTitle),
+            content: Text(strings.accountInUseMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(strings.t("Huỷ")),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(dialogContext).pop(true),
+                child: Text(strings.continueSignInLabel),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
+  void _scheduleForcedLogoutNoticeCheck() {
+    if (_forcedLogoutNoticeCheckScheduled) {
+      return;
+    }
+
+    _forcedLogoutNoticeCheckScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _forcedLogoutNoticeCheckScheduled = false;
+
+      if (!mounted || !SessionLogoutService.consumeForcedLogoutNotice()) {
+        return;
+      }
+
+      final strings = AppStrings.of(context);
+      showTopToast(
+        context,
+        strings.forcedRemoteSessionLogoutMessage,
+        color: SafeHomeColors.danger,
+        icon: Icons.logout_rounded,
+      );
+    });
+  }
 
   Future<void> signInWithGoogle() async {
     if (loading) return;
 
     final strings = AppStrings.of(context);
+    var sessionClaimed = false;
 
     setState(() {
       loading = true;
       error = "";
     });
 
+    SingleDeviceSessionService.prepareForInteractiveLogin();
+
     try {
       final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
+        SingleDeviceSessionService.cancelInteractiveLogin();
         return;
       }
 
@@ -63,6 +172,12 @@ class _LoginPageState extends State<LoginPage> {
 
       // Làm mới token trước khi AuthGate đọc Realtime Database.
       await user.getIdToken(true);
+
+      sessionClaimed = await _claimSessionAfterConfirmation(user);
+
+      if (!sessionClaimed) {
+        return;
+      }
 
       // Google Sign-In không dùng mật khẩu đã lưu của tài khoản email trước đó.
       try {
@@ -95,6 +210,18 @@ class _LoginPageState extends State<LoginPage> {
         error = strings.t("Không thể đăng nhập bằng Google");
       });
     } finally {
+      if (!sessionClaimed) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          try {
+            await SessionLogoutService.signOutCurrentUser();
+          } catch (logoutError) {
+            safeDebugPrint("GOOGLE_LOGIN_CLEANUP_SIGN_OUT_ERROR: $logoutError");
+          }
+        }
+
+        SingleDeviceSessionService.cancelInteractiveLogin();
+      }
+
       if (mounted) {
         setState(() {
           loading = false;
@@ -174,6 +301,7 @@ class _LoginPageState extends State<LoginPage> {
     if (loading) return;
 
     final strings = AppStrings.of(context);
+    var sessionClaimed = false;
 
     setState(() {
       loading = true;
@@ -189,12 +317,28 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       if (isLogin) {
-        await FirebaseAuth.instance
+        SingleDeviceSessionService.prepareForInteractiveLogin();
+
+        final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
               email: emailInput,
               password: passwordInput,
             )
             .timeout(const Duration(seconds: 20));
+
+        final user = credential.user;
+
+        if (user == null) {
+          throw Exception(strings.t("Lỗi đăng nhập"));
+        }
+
+        await user.getIdToken(true);
+
+        sessionClaimed = await _claimSessionAfterConfirmation(user);
+
+        if (!sessionClaimed) {
+          return;
+        }
 
         if (rememberLogin) {
           await AutoLoginService.saveLogin(
@@ -213,6 +357,8 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception(strings.t("Mật khẩu xác nhận không khớp"));
       }
 
+      SingleDeviceSessionService.prepareForInteractiveLogin();
+
       final cred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: emailInput,
@@ -224,6 +370,14 @@ class _LoginPageState extends State<LoginPage> {
 
       if (user == null) {
         throw Exception(strings.t("Không thể tạo tài khoản"));
+      }
+
+      await user.getIdToken(true);
+
+      sessionClaimed = await _claimSessionAfterConfirmation(user);
+
+      if (!sessionClaimed) {
+        return;
       }
 
       await AutoLoginService.saveLogin(
@@ -273,6 +427,18 @@ class _LoginPageState extends State<LoginPage> {
 
       safeDebugPrint("EMAIL_LOGIN_ERROR");
     } finally {
+      if (!sessionClaimed) {
+        if (FirebaseAuth.instance.currentUser != null) {
+          try {
+            await SessionLogoutService.signOutCurrentUser();
+          } catch (logoutError) {
+            safeDebugPrint("EMAIL_LOGIN_CLEANUP_SIGN_OUT_ERROR: $logoutError");
+          }
+        }
+
+        SingleDeviceSessionService.cancelInteractiveLogin();
+      }
+
       if (mounted) {
         setState(() {
           loading = false;
@@ -284,6 +450,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    SessionLogoutService.forcedLogoutNoticeRevision.addListener(
+      _scheduleForcedLogoutNoticeCheck,
+    );
+    _scheduleForcedLogoutNoticeCheck();
 
     AutoLoginService.loadSavedLogin().then((saved) {
       if (!mounted) return;
@@ -301,6 +472,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    SessionLogoutService.forcedLogoutNoticeRevision.removeListener(
+      _scheduleForcedLogoutNoticeCheck,
+    );
     email.dispose();
     pass.dispose();
     confirmPass.dispose();

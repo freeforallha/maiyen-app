@@ -6,23 +6,22 @@ import 'package:flutter/widgets.dart';
 
 import 'installation_id_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class AccountSessionService {
   const AccountSessionService._();
 
-  static const Duration _heartbeatInterval =
-  Duration(minutes: 5);
+  static const Duration _heartbeatInterval = Duration(minutes: 5);
 
   static String _activeUid = '';
   static String _installationId = '';
+  static String _sessionId = '';
   static bool _loggingOut = false;
   static bool _databaseConnected = false;
-  static AppLifecycleState _lifecycleState =
-      AppLifecycleState.resumed;
+  static AppLifecycleState _lifecycleState = AppLifecycleState.resumed;
 
   static DatabaseReference? _sessionRef;
   static Timer? _heartbeatTimer;
-  static StreamSubscription<DatabaseEvent>?
-  _connectionSubscription;
+  static StreamSubscription<DatabaseEvent>? _connectionSubscription;
   static Future<void>? _activationInProgress;
 
   static String _platformName() {
@@ -59,20 +58,24 @@ class AccountSessionService {
 
   static Future<void> activate({
     required String uid,
+    required String sessionId,
   }) {
     final cleanUid = uid.trim();
+    final cleanSessionId = sessionId.trim();
 
-    if (cleanUid.isEmpty) {
+    if (cleanUid.isEmpty || cleanSessionId.isEmpty) {
       return Future<void>.value();
     }
 
     final running = _activationInProgress;
 
-    if (running != null && _activeUid == cleanUid) {
+    if (running != null &&
+        _activeUid == cleanUid &&
+        _sessionId == cleanSessionId) {
       return running;
     }
 
-    final future = _activateInternal(cleanUid);
+    final future = _activateInternal(cleanUid, cleanSessionId);
     _activationInProgress = future;
 
     return future.whenComplete(() {
@@ -83,17 +86,18 @@ class AccountSessionService {
   }
 
   static Future<void> _activateInternal(
-      String cleanUid,
-      ) async {
+    String cleanUid,
+    String cleanSessionId,
+  ) async {
     if (_activeUid.isNotEmpty &&
-        _activeUid != cleanUid) {
+        (_activeUid != cleanUid || _sessionId != cleanSessionId)) {
       await deactivateLocal();
     }
 
     _activeUid = cleanUid;
     _loggingOut = false;
-    _installationId =
-    await InstallationIdService.getOrCreate();
+    _sessionId = cleanSessionId;
+    _installationId = await InstallationIdService.getOrCreate();
 
     final ref = FirebaseDatabase.instance.ref(
       'accounts/$cleanUid/sessions/$_installationId',
@@ -109,59 +113,40 @@ class AccountSessionService {
         .onValue
         .listen(
           (event) {
-        final connected = event.snapshot.value == true;
-        _databaseConnected = connected;
+            final connected = event.snapshot.value == true;
+            _databaseConnected = connected;
 
-        if (!connected ||
-            _loggingOut ||
-            _activeUid != cleanUid) {
-          return;
-        }
+            if (!connected || _loggingOut || _activeUid != cleanUid) {
+              return;
+            }
 
-        unawaited(
-          _markConnected(
-            uid: cleanUid,
-            ref: ref,
-          ).catchError((Object error) {
-            safeDebugPrint(
-              'ACCOUNT_SESSION_CONNECTED_ERROR: $error',
+            unawaited(
+              _markConnected(uid: cleanUid, ref: ref).catchError((
+                Object error,
+              ) {
+                safeDebugPrint('ACCOUNT_SESSION_CONNECTED_ERROR: $error');
+              }),
             );
-          }),
+          },
+          onError: (Object error) {
+            safeDebugPrint('ACCOUNT_SESSION_CONNECTION_LISTENER_ERROR: $error');
+          },
         );
-      },
-      onError: (Object error) {
-        safeDebugPrint(
-          'ACCOUNT_SESSION_CONNECTION_LISTENER_ERROR: $error',
-        );
-      },
-    );
 
-    await _writeSignedInState(
-      uid: cleanUid,
-      ref: ref,
-      includeLoginTime: true,
-    );
+    await _writeSignedInState(uid: cleanUid, ref: ref, includeLoginTime: true);
 
     _heartbeatTimer?.cancel();
-    _heartbeatTimer = Timer.periodic(
-      _heartbeatInterval,
-          (_) {
-        if (_loggingOut || _activeUid != cleanUid) {
-          return;
-        }
+    _heartbeatTimer = Timer.periodic(_heartbeatInterval, (_) {
+      if (_loggingOut || _activeUid != cleanUid) {
+        return;
+      }
 
-        unawaited(
-          _writeSignedInState(
-            uid: cleanUid,
-            ref: ref,
-          ).catchError((Object error) {
-            safeDebugPrint(
-              'ACCOUNT_SESSION_HEARTBEAT_ERROR: $error',
-            );
-          }),
-        );
-      },
-    );
+      unawaited(
+        _writeSignedInState(uid: cleanUid, ref: ref).catchError((Object error) {
+          safeDebugPrint('ACCOUNT_SESSION_HEARTBEAT_ERROR: $error');
+        }),
+      );
+    });
   }
 
   static Future<void> _markConnected({
@@ -177,6 +162,7 @@ class AccountSessionService {
     // nhưng connected sẽ phản ánh đúng là thiết bị đã mất kết nối.
     await ref.onDisconnect().update({
       'installationId': _installationId,
+      'sessionId': _sessionId,
       'signedIn': true,
       'connected': false,
       'appState': 'background',
@@ -186,11 +172,7 @@ class AccountSessionService {
 
     _databaseConnected = true;
 
-    await _writeSignedInState(
-      uid: uid,
-      ref: ref,
-      connected: true,
-    );
+    await _writeSignedInState(uid: uid, ref: ref, connected: true);
   }
 
   static Future<void> _writeSignedInState({
@@ -203,8 +185,13 @@ class AccountSessionService {
       return;
     }
 
+    if (_sessionId.isEmpty) {
+      return;
+    }
+
     final updates = <String, Object?>{
       'installationId': _installationId,
+      'sessionId': _sessionId,
       'signedIn': true,
       'appState': _appStateName(),
       'platform': _platformName(),
@@ -212,8 +199,7 @@ class AccountSessionService {
       'signedOutAt': null,
     };
 
-    updates['connected'] =
-        connected ?? _databaseConnected;
+    updates['connected'] = connected ?? _databaseConnected;
 
     if (includeLoginTime) {
       updates['lastLoginAt'] = ServerValue.timestamp;
@@ -222,9 +208,7 @@ class AccountSessionService {
     await ref.update(updates);
   }
 
-  static Future<void> updateLifecycle(
-      AppLifecycleState state,
-      ) async {
+  static Future<void> updateLifecycle(AppLifecycleState state) async {
     _lifecycleState = state;
 
     final uid = _activeUid;
@@ -235,23 +219,20 @@ class AccountSessionService {
     }
 
     try {
-      await _writeSignedInState(
-        uid: uid,
-        ref: ref,
-      );
+      await _writeSignedInState(uid: uid, ref: ref);
     } catch (error) {
-      safeDebugPrint(
-        'ACCOUNT_SESSION_LIFECYCLE_ERROR: $error',
-      );
+      safeDebugPrint('ACCOUNT_SESSION_LIFECYCLE_ERROR: $error');
     }
   }
 
   static Future<void> markSignedOut({
     required String uid,
+    required String sessionId,
   }) async {
     final cleanUid = uid.trim();
+    final cleanSessionId = sessionId.trim();
 
-    if (cleanUid.isEmpty) {
+    if (cleanUid.isEmpty || cleanSessionId.isEmpty) {
       return;
     }
 
@@ -274,13 +255,12 @@ class AccountSessionService {
     try {
       await ref.onDisconnect().cancel();
     } catch (error) {
-      safeDebugPrint(
-        'ACCOUNT_SESSION_CANCEL_DISCONNECT_ERROR: $error',
-      );
+      safeDebugPrint('ACCOUNT_SESSION_CANCEL_DISCONNECT_ERROR: $error');
     }
 
     await ref.update({
       'installationId': installationId,
+      'sessionId': cleanSessionId,
       'signedIn': false,
       'connected': false,
       'appState': 'signed_out',
@@ -292,6 +272,7 @@ class AccountSessionService {
     if (_activeUid == cleanUid) {
       _activeUid = '';
       _installationId = '';
+      _sessionId = '';
       _sessionRef = null;
     }
   }
@@ -305,6 +286,7 @@ class AccountSessionService {
 
     _activeUid = '';
     _installationId = '';
+    _sessionId = '';
     _sessionRef = null;
     _loggingOut = false;
     _databaseConnected = false;
@@ -313,28 +295,28 @@ class AccountSessionService {
   @pragma('vm:entry-point')
   static Future<void> touchFromBackground({
     required String uid,
+    required String sessionId,
   }) async {
     final cleanUid = uid.trim();
+    final cleanSessionId = sessionId.trim();
 
-    if (cleanUid.isEmpty) {
+    if (cleanUid.isEmpty || cleanSessionId.isEmpty) {
       return;
     }
 
-    final installationId =
-    await InstallationIdService.getOrCreate();
+    final installationId = await InstallationIdService.getOrCreate();
 
     await FirebaseDatabase.instance
-        .ref(
-      'accounts/$cleanUid/sessions/$installationId',
-    )
+        .ref('accounts/$cleanUid/sessions/$installationId')
         .update({
-      'installationId': installationId,
-      'signedIn': true,
-      'connected': false,
-      'appState': 'background_event',
-      'platform': _platformName(),
-      'lastSeenAt': ServerValue.timestamp,
-      'signedOutAt': null,
-    });
+          'installationId': installationId,
+          'sessionId': cleanSessionId,
+          'signedIn': true,
+          'connected': false,
+          'appState': 'background_event',
+          'platform': _platformName(),
+          'lastSeenAt': ServerValue.timestamp,
+          'signedOutAt': null,
+        });
   }
 }

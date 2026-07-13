@@ -13,12 +13,29 @@ import '../services/account_session_service.dart';
 import '../services/auto_away_service.dart';
 import '../services/auto_login_service.dart';
 import '../services/session_logout_service.dart';
+import '../services/single_device_session_service.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
+bool _remoteSessionSignOutRunning = false;
+
+Future<void> forceSignOutForRemoteSession() async {
+  if (_remoteSessionSignOutRunning) {
+    return;
+  }
+
+  _remoteSessionSignOutRunning = true;
+
+  try {
+    await SessionLogoutService.signOutCurrentUser(forcedByRemoteSession: true);
+  } finally {
+    _remoteSessionSignOutRunning = false;
+  }
+}
 
 class SafeHomeApp extends StatefulWidget {
   const SafeHomeApp({super.key});
@@ -37,21 +54,12 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
     appLanguageController.load();
 
     _authSessionSubscription = FirebaseAuth.instance.authStateChanges().listen(
-      (user) {
+          (user) {
         if (user == null) {
           unawaited(AccountSessionService.deactivateLocal());
+          unawaited(SingleDeviceSessionService.stopActiveSessionListener());
           return;
         }
-
-        AutoAwayService.activateForSignedInUser(user.uid);
-
-        unawaited(
-          AccountSessionService.activate(uid: user.uid).catchError((
-            Object error,
-          ) {
-            safeDebugPrint('ACCOUNT_SESSION_ACTIVATE_ERROR: $error');
-          }),
-        );
       },
       onError: (Object error) {
         safeDebugPrint('ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error');
@@ -73,23 +81,47 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
       return;
     }
 
-    _activateResumeServices();
+    unawaited(_validateSessionOnResume());
   }
 
-  void _activateResumeServices() {
+  Future<void> _validateSessionOnResume() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       return;
     }
 
-    AutoAwayService.activateForSignedInUser(user.uid);
+    try {
+      final result = await SingleDeviceSessionService.ensureValidSession(
+        uid: user.uid,
+        allowLegacyBootstrap: false,
+      );
 
-    unawaited(
-      AccountSessionService.activate(uid: user.uid).catchError((Object error) {
-        safeDebugPrint('ACCOUNT_SESSION_RESUME_ACTIVATE_ERROR: $error');
-      }),
-    );
+      final identity = result.identity;
+
+      if (!result.isValid || identity == null) {
+        await forceSignOutForRemoteSession();
+        return;
+      }
+
+      await AccountSessionService.activate(
+        uid: user.uid,
+        sessionId: identity.sessionId,
+      );
+
+      SingleDeviceSessionService.startActiveSessionListener(
+        uid: user.uid,
+        onSessionRevoked: forceSignOutForRemoteSession,
+      );
+
+      AutoAwayService.activateForSignedInUser(user.uid);
+
+      // [DÙNG CHUNG] Đối chiếu incident với Firebase mỗi khi app resume.
+      // Đây là lớp bảo vệ bắt buộc cho iOS vì silent push có thể bị trì hoãn.
+      await NotificationService.reconcileActiveAlarmIncidents();
+    } catch (error) {
+      safeDebugPrint('ACTIVE_SESSION_RESUME_CHECK_ERROR: $error');
+    }
   }
 
   @override
@@ -215,6 +247,8 @@ class _AuthGateState extends State<AuthGate> {
   bool ready = false;
   User? user;
 
+  String _sessionFutureUid = "";
+  Future<bool>? _sessionFuture;
   String _profileFutureUid = "";
   Future<DatabaseEvent>? _profileFuture;
 
@@ -267,6 +301,56 @@ class _AuthGateState extends State<AuthGate> {
 
   Future<void> _signOutAfterProfileError() async {
     await SessionLogoutService.signOutCurrentUser();
+  }
+
+  Future<bool> _ensureSessionReady(String uid) {
+    final cleanUid = uid.trim();
+    var future = _sessionFuture;
+
+    if (future == null || _sessionFutureUid != cleanUid) {
+      _sessionFutureUid = cleanUid;
+      future = _ensureSessionReadyInternal(cleanUid);
+      _sessionFuture = future;
+    }
+
+    return future;
+  }
+
+  Future<bool> _ensureSessionReadyInternal(String uid) async {
+    if (uid.isEmpty) {
+      return false;
+    }
+
+    final result = await SingleDeviceSessionService.ensureValidSession(
+      uid: uid,
+      allowLegacyBootstrap: true,
+    );
+    final identity = result.identity;
+
+    if (!result.isValid || identity == null) {
+      await forceSignOutForRemoteSession();
+      return false;
+    }
+
+    await AccountSessionService.activate(
+      uid: uid,
+      sessionId: identity.sessionId,
+    );
+
+    SingleDeviceSessionService.startActiveSessionListener(
+      uid: uid,
+      onSessionRevoked: forceSignOutForRemoteSession,
+    );
+
+    AutoAwayService.activateForSignedInUser(uid);
+    return true;
+  }
+
+  void _resetSessionAndProfileFutures() {
+    _sessionFutureUid = "";
+    _sessionFuture = null;
+    _profileFutureUid = "";
+    _profileFuture = null;
   }
 
   Widget _buildProfileLoadError(Object? error) {
@@ -337,61 +421,91 @@ class _AuthGateState extends State<AuthGate> {
       return const SafeHomeSplash();
     }
 
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.userChanges(),
-      initialData: user,
-      builder: (context, snap) {
-        final currentUser = snap.data ?? FirebaseAuth.instance.currentUser;
+    return ValueListenableBuilder<bool>(
+      valueListenable: SingleDeviceSessionService.interactiveLoginInProgress,
+      builder: (context, interactiveLoginInProgress, _) {
+        return StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.userChanges(),
+          initialData: user,
+          builder: (context, snap) {
+            final currentUser = snap.data ?? FirebaseAuth.instance.currentUser;
 
-        if (currentUser == null) {
-          return const LoginPage();
-        }
-
-        return FutureBuilder<DatabaseEvent>(
-          future: _loadProfile(currentUser.uid),
-          builder: (context, profileSnap) {
-            if (profileSnap.connectionState == ConnectionState.waiting) {
-              return const SafeHomeSplash();
+            if (currentUser == null || interactiveLoginInProgress) {
+              _resetSessionAndProfileFutures();
+              return const LoginPage();
             }
 
-            if (profileSnap.hasError) {
-              safeDebugPrint("PROFILE_LOAD_ERROR: ${profileSnap.error}");
+            return FutureBuilder<bool>(
+              future: _ensureSessionReady(currentUser.uid),
+              builder: (context, sessionSnap) {
+                if (sessionSnap.connectionState == ConnectionState.waiting) {
+                  return const SafeHomeSplash();
+                }
 
-              return _buildProfileLoadError(profileSnap.error);
-            }
+                if (sessionSnap.hasError) {
+                  safeDebugPrint(
+                    "ACTIVE_SESSION_LOAD_ERROR: ${sessionSnap.error}",
+                  );
 
-            if (!profileSnap.hasData) {
-              return _buildProfileLoadError(
-                "Không nhận được dữ liệu từ Firebase",
-              );
-            }
+                  return _buildProfileLoadError(sessionSnap.error);
+                }
 
-            final profileEvent = profileSnap.data;
+                if (sessionSnap.data != true) {
+                  return const LoginPage();
+                }
 
-            if (profileEvent == null) {
-              return _buildProfileLoadError(
-                "Không nhận được dữ liệu từ Firebase",
-              );
-            }
+                return FutureBuilder<DatabaseEvent>(
+                  future: _loadProfile(currentUser.uid),
+                  builder: (context, profileSnap) {
+                    if (profileSnap.connectionState ==
+                        ConnectionState.waiting) {
+                      return const SafeHomeSplash();
+                    }
 
-            final value = profileEvent.snapshot.value;
+                    if (profileSnap.hasError) {
+                      safeDebugPrint(
+                        "PROFILE_LOAD_ERROR: ${profileSnap.error}",
+                      );
 
-            final profile = value is Map
-                ? Map<String, dynamic>.from(value)
-                : <String, dynamic>{};
+                      return _buildProfileLoadError(profileSnap.error);
+                    }
 
-            final name = profile["name"]?.toString().trim() ?? "";
-            final gender = profile["gender"]?.toString().trim() ?? "";
-            final phone = profile["phone"]?.toString().trim() ?? "";
+                    if (!profileSnap.hasData) {
+                      return _buildProfileLoadError(
+                        "Không nhận được dữ liệu từ Firebase",
+                      );
+                    }
 
-            if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
-              return ProfileSetupPage(
-                uid: currentUser.uid,
-                email: currentUser.email ?? "",
-              );
-            }
+                    final profileEvent = profileSnap.data;
 
-            return const LocationPermissionGate(child: HomePage());
+                    if (profileEvent == null) {
+                      return _buildProfileLoadError(
+                        "Không nhận được dữ liệu từ Firebase",
+                      );
+                    }
+
+                    final value = profileEvent.snapshot.value;
+
+                    final profile = value is Map
+                        ? Map<String, dynamic>.from(value)
+                        : <String, dynamic>{};
+
+                    final name = profile["name"]?.toString().trim() ?? "";
+                    final gender = profile["gender"]?.toString().trim() ?? "";
+                    final phone = profile["phone"]?.toString().trim() ?? "";
+
+                    if (name.isEmpty || gender.isEmpty || phone.isEmpty) {
+                      return ProfileSetupPage(
+                        uid: currentUser.uid,
+                        email: currentUser.email ?? "",
+                      );
+                    }
+
+                    return const LocationPermissionGate(child: HomePage());
+                  },
+                );
+              },
+            );
           },
         );
       },
@@ -475,11 +589,11 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
           content: Text(
             currentlyWhileUsing
                 ? strings.t(
-                    "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
-                  )
+              "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+            )
                 : strings.t(
-                    "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
-                  ),
+              "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+            ),
           ),
           actions: [
             TextButton(

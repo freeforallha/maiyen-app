@@ -121,16 +121,16 @@ class FirebaseSecurityTestService {
 
     final pauseExists =
         homeData.containsKey("alarmPauseToday") &&
-        homeData["alarmPauseToday"] != null;
+            homeData["alarmPauseToday"] != null;
 
     final pauseTestValue = pauseExists
         ? homeData["alarmPauseToday"]
         : <String, dynamic>{
-            "date": "security_test",
-            "start": "00:00",
-            "end": "00:01",
-            "reason": "security_test",
-          };
+      "date": "security_test",
+      "start": "00:00",
+      "end": "00:01",
+      "reason": "security_test",
+    };
 
     await expectDenied(
       label: "alarmPauseToday",
@@ -140,8 +140,8 @@ class FirebaseSecurityTestService {
       cleanup: pauseExists
           ? null
           : () async {
-              await homeRef.child("alarmPauseToday").remove();
-            },
+        await homeRef.child("alarmPauseToday").remove();
+      },
     );
 
     final fieldFallbackValues = <String, Object?>{
@@ -170,8 +170,8 @@ class FirebaseSecurityTestService {
         cleanup: fieldExists
             ? null
             : () async {
-                await fieldRef.remove();
-              },
+          await fieldRef.remove();
+        },
       );
     }
 

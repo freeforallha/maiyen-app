@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
 import 'android/android_auto_away_foreground_task_service.dart';
-import 'android/android_background_notification_service.dart';
+import 'firebase_background_message_service.dart';
 
 class PlatformBootstrapService {
   const PlatformBootstrapService._();
@@ -29,10 +29,17 @@ class PlatformBootstrapService {
   }
 
   static void registerBackgroundHandlers() {
-    if (!_isAndroid) {
+    if (kIsWeb) {
       return;
     }
 
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    if (defaultTargetPlatform != TargetPlatform.android &&
+        defaultTargetPlatform != TargetPlatform.iOS) {
+      return;
+    }
+
+    FirebaseMessaging.onBackgroundMessage(
+      safeHomeFirebaseMessagingBackgroundHandler,
+    );
   }
 }

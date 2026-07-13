@@ -13,14 +13,14 @@ import 'platform/android/android_notification_config.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
 class NotificationService {
   static AppStrings get _strings =>
       AppStrings.fromLocale(appLanguageController.locale);
 
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
-      ValueNotifier<Map<String, String>?>(null);
+  ValueNotifier<Map<String, String>?>(null);
 
   static String localizedExactTextOrRaw(String raw, AppStrings strings) {
     final clean = raw.trim();
@@ -107,7 +107,7 @@ class NotificationService {
   static const int alarmNotificationId = 999999;
 
   static final Map<String, Map<String, String>> _activeAlarmIncidentContexts =
-      {};
+  {};
 
   static final ValueNotifier<int> alarmResolvedRevision = ValueNotifier<int>(0);
 
@@ -118,9 +118,9 @@ class NotificationService {
       _activeAlarmIncidentContexts.isNotEmpty;
 
   static Map<String, dynamic>? _decodeAlarmPayload(
-    String payload,
-    String prefix,
-  ) {
+      String payload,
+      String prefix,
+      ) {
     if (!payload.startsWith('$prefix::')) {
       return null;
     }
@@ -170,8 +170,8 @@ class NotificationService {
   }
 
   static List<Map<String, dynamic>> _alarmItemsFromData(
-    Map<String, dynamic> data,
-  ) {
+      Map<String, dynamic> data,
+      ) {
     final directItems = _alarmItemsFromValue(data['alarmItems']);
 
     if (directItems.isNotEmpty) {
@@ -182,15 +182,15 @@ class NotificationService {
   }
 
   static String localizedAlarmBodyForData(
-    Map<String, dynamic> data,
-    AppStrings strings,
-  ) {
+      Map<String, dynamic> data,
+      AppStrings strings,
+      ) {
     final items = _alarmItemsFromData(data);
     final lines = <String>[];
 
     for (final item in items) {
       final deviceName =
-          item['deviceName']?.toString().trim().isNotEmpty == true
+      item['deviceName']?.toString().trim().isNotEmpty == true
           ? item['deviceName'].toString().trim()
           : item['name']?.toString().trim() ?? '';
       final reason = item['reason']?.toString().trim() ?? '';
@@ -200,9 +200,9 @@ class NotificationService {
 
       if (deviceName.isNotEmpty && translatedReason.isNotEmpty) {
         line =
-            translatedReason.toLowerCase().startsWith(
-              '${deviceName.toLowerCase()}:',
-            )
+        translatedReason.toLowerCase().startsWith(
+          '${deviceName.toLowerCase()}:',
+        )
             ? translatedReason
             : '$deviceName: $translatedReason';
       } else if (translatedReason.isNotEmpty) {
@@ -230,10 +230,10 @@ class NotificationService {
   }
 
   static String localizedNotificationTitle(
-    String rawTitle,
-    AppStrings strings,
-    String fallback,
-  ) {
+      String rawTitle,
+      AppStrings strings,
+      String fallback,
+      ) {
     final cleanTitle = rawTitle.trim();
 
     if (cleanTitle.isEmpty) {
@@ -268,7 +268,7 @@ class NotificationService {
     final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     final receiverUid =
-        data['receiverUid']?.toString().trim().isNotEmpty == true
+    data['receiverUid']?.toString().trim().isNotEmpty == true
         ? data['receiverUid'].toString().trim()
         : currentUid;
 
@@ -360,7 +360,7 @@ class NotificationService {
     } else {
       targets.addAll(
         _activeAlarmIncidentContexts.values.map(
-          (item) => Map<String, String>.from(item),
+              (item) => Map<String, String>.from(item),
         ),
       );
     }
@@ -433,21 +433,15 @@ class NotificationService {
   }
 
   static Future<void> handlePriorityAlarmOpened(
-    Map<String, dynamic> data,
-  ) async {
+      Map<String, dynamic> data,
+      ) async {
     rememberAlarmIncident(data);
     await stopEmergencyNotification();
 
-    final incidentId = data['incidentId']?.toString().trim() ?? '';
-
-    final ok = await resolveActiveAlarmIncidents(
-      action: 'check_home',
-      incidentId: incidentId,
-    );
-
-    if (ok && incidentId.isNotEmpty) {
-      _activeAlarmIncidentContexts.remove(incidentId);
-    }
+    // Chạm vào notification chỉ mở ứng dụng để kiểm tra.
+    // Không được gửi check_home/stop vì incident phải tiếp tục
+    // cho tới khi cảm biến an toàn hoặc người dùng chủ động tắt.
+    await reconcileActiveAlarmIncidents();
   }
 
   static Future<void> handleAlarmResolved(Map<String, dynamic> data) async {
@@ -465,6 +459,56 @@ class NotificationService {
       clearActiveAlarms(clearIncidentContexts: false);
       alarmResolvedRevision.value++;
     }
+  }
+
+  static Future<bool> reconcileActiveAlarmIncidents() async {
+    final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+    if (currentUid.isEmpty || _activeAlarmIncidentContexts.isEmpty) {
+      return _activeAlarmIncidentContexts.isNotEmpty;
+    }
+
+    final incidentIds = List<String>.from(
+      _activeAlarmIncidentContexts.keys,
+    );
+    var removedAny = false;
+
+    for (final incidentId in incidentIds) {
+      final context = _activeAlarmIncidentContexts[incidentId];
+      final receiverUid = context?['receiverUid']?.trim().isNotEmpty == true
+          ? context!['receiverUid']!.trim()
+          : currentUid;
+
+      if (receiverUid != currentUid) {
+        _activeAlarmIncidentContexts.remove(incidentId);
+        removedAny = true;
+        continue;
+      }
+
+      try {
+        final snapshot = await FirebaseDatabase.instance
+            .ref('accounts/$receiverUid/alarmIncidents/$incidentId/status')
+            .get();
+        final status = snapshot.value?.toString().trim() ?? '';
+
+        if (status != 'active') {
+          _activeAlarmIncidentContexts.remove(incidentId);
+          removedAny = true;
+        }
+      } catch (error) {
+        // Fail-safe: khi chưa đọc được Firebase, giữ incident hiện tại
+        // để không vô tình tắt Alarm thật.
+        safeDebugPrint('ALARM INCIDENT RECONCILE ERROR: $error');
+      }
+    }
+
+    if (_activeAlarmIncidentContexts.isEmpty && removedAny) {
+      await stopAllAlarmNotifications();
+      clearActiveAlarms(clearIncidentContexts: false);
+      alarmResolvedRevision.value++;
+    }
+
+    return _activeAlarmIncidentContexts.isNotEmpty;
   }
 
   static Future<bool> handleAlarmNotificationPayload(String payload) async {
@@ -497,7 +541,7 @@ class NotificationService {
       ),
       body: localizedAlarmBodyForData(data, strings),
       alarmItemsJson:
-          data['alarmItems']?.toString() ??
+      data['alarmItems']?.toString() ??
           data['alarmItemsJson']?.toString() ??
           '',
       incidentId: data['incidentId']?.toString() ?? '',
@@ -530,7 +574,7 @@ class NotificationService {
         ? localizedExactTextOrRaw(rawTitle, strings)
         : unreadCount > 1
         ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
-              "${strings.homeChatNewMessages(unreadCount)}"
+        "${strings.homeChatNewMessages(unreadCount)}"
         : homeName.isNotEmpty
         ? homeName
         : strings.homeChatTitle();
@@ -650,10 +694,10 @@ class NotificationService {
         "reasons": isSafe
             ? <String>[]
             : <String>[
-                translatedCleanBody.isEmpty
-                    ? strings.defaultUnsafeReminderReason()
-                    : translatedCleanBody,
-              ],
+          translatedCleanBody.isEmpty
+              ? strings.defaultUnsafeReminderReason()
+              : translatedCleanBody,
+        ],
       });
     }
 
@@ -684,7 +728,7 @@ class NotificationService {
 
       final current = merged.putIfAbsent(
         key,
-        () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
+            () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
       );
 
       final currentReasons = List<String>.from(current["reasons"] as List);
@@ -731,7 +775,7 @@ class NotificationService {
     }
 
     lastScheduleBody =
-        "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
+    "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
   }
 
   static void openOrMergeReminderPage({
@@ -761,16 +805,16 @@ class NotificationService {
 
     navigator
         .push(
-          MaterialPageRoute(
-            settings: const RouteSettings(name: reminderRouteName),
-            builder: (_) => FullscreenAlarmPage(
-              title: lastScheduleTitle,
-              body: lastScheduleBody,
-              silentMode: true,
-              reminderItemsJson: lastReminderItemsJson,
-            ),
-          ),
-        )
+      MaterialPageRoute(
+        settings: const RouteSettings(name: reminderRouteName),
+        builder: (_) => FullscreenAlarmPage(
+          title: lastScheduleTitle,
+          body: lastScheduleBody,
+          silentMode: true,
+          reminderItemsJson: lastReminderItemsJson,
+        ),
+      ),
+    )
         .whenComplete(markReminderPageClosed);
   }
 
@@ -781,12 +825,15 @@ class NotificationService {
       sound: true,
     );
 
+    // [iOS] Tắt hiển thị APNs tự động khi app đang foreground.
+    // onMessage bên dưới sẽ tạo đúng một local notification đã bản địa hoá.
+    // Android không bị ảnh hưởng bởi tuỳ chọn này.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+      alert: false,
+      badge: false,
+      sound: false,
+    );
 
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -1022,15 +1069,15 @@ class NotificationService {
 
     navigator
         .push(
-          MaterialPageRoute(
-            settings: const RouteSettings(name: alarmRouteName),
-            builder: (_) => FullscreenAlarmPage(
-              title: title,
-              body: lastAlarmBody,
-              alarmItemsJson: lastAlarmItemsJson,
-            ),
-          ),
-        )
+      MaterialPageRoute(
+        settings: const RouteSettings(name: alarmRouteName),
+        builder: (_) => FullscreenAlarmPage(
+          title: title,
+          body: lastAlarmBody,
+          alarmItemsJson: lastAlarmItemsJson,
+        ),
+      ),
+    )
         .whenComplete(markAlarmPageClosed);
   }
 

@@ -14,6 +14,7 @@ import '../../../localization/app_language_controller.dart';
 import '../../../localization/app_strings.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
+import '../../single_device_session_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 const String _autoAwayTaskDataKey =
@@ -342,10 +343,22 @@ class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
         return;
       }
 
+      final sessionIdentity =
+          await SingleDeviceSessionService.currentSessionIdentityIfActive(
+            uid: uid,
+          );
+
+      if (sessionIdentity == null) {
+        return;
+      }
+
       // Giữ session còn sống khi foreground service Auto Away vẫn chạy.
       // Nếu điện thoại shutdown / hết pin, heartbeat này sẽ dừng,
       // backend có thể chuyển vị trí thành unknown sau ngưỡng stale.
-      await AccountSessionService.touchFromBackground(uid: uid);
+      await AccountSessionService.touchFromBackground(
+        uid: uid,
+        sessionId: sessionIdentity.sessionId,
+      );
 
       final locationServiceEnabled =
           await Geolocator.isLocationServiceEnabled();

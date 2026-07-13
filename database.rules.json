@@ -15,6 +15,154 @@
         "fcmToken": {
           ".write": "auth != null && auth.uid == $uid"
         },
+        "fcmTokens": {
+          "$installationId": {
+            ".write": "auth != null && auth.uid == $uid && (!newData.exists() || newData.child('installationId').val() == $installationId)",
+            ".validate": "!newData.exists() || newData.hasChildren(['installationId', 'token', 'platform', 'updatedAt'])",
+            "installationId": {
+              ".validate": "newData.isString() && newData.val() == $installationId && newData.val().matches(/^[A-Za-z0-9_-]{16,80}$/)"
+            },
+            "token": {
+              ".validate": "newData.isString() && newData.val().length > 20 && newData.val().length <= 4096"
+            },
+            "platform": {
+              ".validate": "newData.isString() && newData.val().matches(/^(android|ios|macos|windows|linux|web|unknown)$/)"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "activeSession": {
+          ".read": "auth != null && auth.uid == $uid",
+          ".write": "auth != null && auth.uid == $uid",
+          ".validate": "!newData.exists() || newData.hasChildren(['installationId', 'sessionId', 'platform', 'activatedAt', 'lastSeenAt'])",
+          "installationId": {
+            ".validate": "newData.isString() && newData.val().matches(/^[A-Za-z0-9_-]{16,80}$/)"
+          },
+          "sessionId": {
+            ".validate": "newData.isString() && newData.val().matches(/^[A-Fa-f0-9]{32,128}$/)"
+          },
+          "platform": {
+            ".validate": "newData.isString() && newData.val().matches(/^(android|ios|macos|windows|linux|web|unknown)$/)"
+          },
+          "activatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "lastSeenAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "sessions": {
+          "$installationId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && auth.uid == $uid && newData.exists() && newData.child('installationId').val() == $installationId && newData.child('sessionId').isString() && ((root.child('accounts').child($uid).child('activeSession').child('installationId').val() == $installationId && root.child('accounts').child($uid).child('activeSession').child('sessionId').val() == newData.child('sessionId').val()) || (data.exists() && data.child('installationId').val() == $installationId && data.child('sessionId').val() == newData.child('sessionId').val() && newData.child('signedIn').val() == false))",
+            ".validate": "newData.hasChildren(['installationId', 'sessionId', 'signedIn', 'connected', 'appState', 'platform', 'lastSeenAt'])",
+            "installationId": {
+              ".validate": "newData.isString() && newData.val() == $installationId && newData.val().matches(/^[A-Za-z0-9_-]{16,80}$/)"
+            },
+            "sessionId": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Fa-f0-9]{32,128}$/)"
+            },
+            "signedIn": {
+              ".validate": "newData.isBoolean()"
+            },
+            "connected": {
+              ".validate": "newData.isBoolean()"
+            },
+            "appState": {
+              ".validate": "newData.isString() && newData.val().matches(/^(foreground|inactive|background|detached|background_event|signed_out)$/)"
+            },
+            "platform": {
+              ".validate": "newData.isString() && newData.val().matches(/^(android|ios|macos|windows|linux|web|unknown)$/)"
+            },
+            "lastSeenAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "lastLoginAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "signedOutAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "homePresence": {
+          "$homeId": {
+            ".read": "auth != null && auth.uid == $uid",
+            ".write": "auth != null && auth.uid == $uid && ((!newData.exists() && data.exists() && root.child('accounts').child($uid).child('activeSession').child('installationId').val() == data.child('installationId').val() && root.child('accounts').child($uid).child('activeSession').child('sessionId').val() == data.child('sessionId').val()) || (newData.exists() && newData.child('installationId').isString() && newData.child('sessionId').isString() && root.child('accounts').child($uid).child('activeSession').child('installationId').val() == newData.child('installationId').val() && root.child('accounts').child($uid).child('activeSession').child('sessionId').val() == newData.child('sessionId').val()))",
+            ".validate": "!newData.exists() || newData.hasChildren(['ownerUid', 'homeId', 'installationId', 'sessionId'])",
+            "ownerUid": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 128"
+            },
+            "homeId": {
+              ".validate": "newData.isString() && newData.val() == $homeId && newData.val().length > 0 && newData.val().length <= 128"
+            },
+            "installationId": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Za-z0-9_-]{16,80}$/)"
+            },
+            "sessionId": {
+              ".validate": "newData.isString() && newData.val().matches(/^[A-Fa-f0-9]{32,128}$/)"
+            },
+            "state": {
+              ".validate": "newData.isString() && newData.val().matches(/^(inside|outside|unknown)$/)"
+            },
+            "event": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "source": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 80"
+            },
+            "updatedAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "lastConfirmedAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "lastEventOccurredAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "lastTransitionAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "lastLocationCheckAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "monitoringCheckedAt": {
+              ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+            },
+            "monitoringEligible": {
+              ".validate": "newData.isBoolean()"
+            },
+            "monitoringAvailable": {
+              ".validate": "newData.isBoolean()"
+            },
+            "locationAlwaysGranted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "batteryUnrestricted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "backgroundRestricted": {
+              ".validate": "newData.isBoolean()"
+            },
+            "autoStartConfirmed": {
+              ".validate": "newData.isBoolean()"
+            },
+            "$other": {
+              ".validate": true
+            }
+          }
+        },
         "homes": {
           "$homeId": {
             ".read": "auth != null && (auth.uid == $uid || root.child('accounts').child(auth.uid).child('sharedHomes').child($homeId).child('ownerUid').val() == $uid)",
