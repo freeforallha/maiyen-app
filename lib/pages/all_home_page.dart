@@ -1135,6 +1135,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 1,
         label: _strings.choose(
           vi: "Thứ 2",
+          fil: "Lunes",
+          km: "ថ្ងៃចន្ទ",
           en: "Monday",
           zh: "星期一",
           ko: "월요일",
@@ -1152,6 +1154,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 2,
         label: _strings.choose(
           vi: "Thứ 3",
+          fil: "Martes",
+          km: "ថ្ងៃអង្គារ",
           en: "Tuesday",
           zh: "星期二",
           ko: "화요일",
@@ -1169,6 +1173,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 3,
         label: _strings.choose(
           vi: "Thứ 4",
+          fil: "Miyerkules",
+          km: "ថ្ងៃពុធ",
           en: "Wednesday",
           zh: "星期三",
           ko: "수요일",
@@ -1186,6 +1192,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 4,
         label: _strings.choose(
           vi: "Thứ 5",
+          fil: "Huwebes",
+          km: "ថ្ងៃព្រហស្បតិ៍",
           en: "Thursday",
           zh: "星期四",
           ko: "목요일",
@@ -1203,6 +1211,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 5,
         label: _strings.choose(
           vi: "Thứ 6",
+          fil: "Biyernes",
+          km: "ថ្ងៃសុក្រ",
           en: "Friday",
           zh: "星期五",
           ko: "금요일",
@@ -1220,6 +1230,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 6,
         label: _strings.choose(
           vi: "Thứ 7",
+          fil: "Sabado",
+          km: "ថ្ងៃសៅរ៍",
           en: "Saturday",
           zh: "星期六",
           ko: "토요일",
@@ -1237,6 +1249,8 @@ class _AllHomePageState extends State<AllHomePage> {
         value: 7,
         label: _strings.choose(
           vi: "Chủ nhật",
+          fil: "Linggo",
+          km: "ថ្ងៃអាទិត្យ",
           en: "Sunday",
           zh: "星期日",
           ko: "일요일",

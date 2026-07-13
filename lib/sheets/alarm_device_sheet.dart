@@ -50,6 +50,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 1:
       return strings.choose(
         vi: "Thứ 2",
+        fil: "Lunes",
+        km: "ថ្ងៃចន្ទ",
         en: "Monday",
         zh: "星期一",
         ko: "월요일",
@@ -65,6 +67,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 2:
       return strings.choose(
         vi: "Thứ 3",
+        fil: "Martes",
+        km: "ថ្ងៃអង្គារ",
         en: "Tuesday",
         zh: "星期二",
         ko: "화요일",
@@ -80,6 +84,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 3:
       return strings.choose(
         vi: "Thứ 4",
+        fil: "Miyerkules",
+        km: "ថ្ងៃពុធ",
         en: "Wednesday",
         zh: "星期三",
         ko: "수요일",
@@ -95,6 +101,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 4:
       return strings.choose(
         vi: "Thứ 5",
+        fil: "Huwebes",
+        km: "ថ្ងៃព្រហស្បតិ៍",
         en: "Thursday",
         zh: "星期四",
         ko: "목요일",
@@ -110,6 +118,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 5:
       return strings.choose(
         vi: "Thứ 6",
+        fil: "Biyernes",
+        km: "ថ្ងៃសុក្រ",
         en: "Friday",
         zh: "星期五",
         ko: "금요일",
@@ -125,6 +135,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 6:
       return strings.choose(
         vi: "Thứ 7",
+        fil: "Sabado",
+        km: "ថ្ងៃសៅរ៍",
         en: "Saturday",
         zh: "星期六",
         ko: "토요일",
@@ -140,6 +152,8 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 7:
       return strings.choose(
         vi: "Chủ nhật",
+        fil: "Linggo",
+        km: "ថ្ងៃអាទិត្យ",
         en: "Sunday",
         zh: "星期日",
         ko: "일요일",
@@ -162,6 +176,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 1:
       return strings.choose(
         vi: "T2",
+        fil: "Lun",
+        km: "ច.",
         en: "Mon",
         zh: "周一",
         ko: "월",
@@ -177,6 +193,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 2:
       return strings.choose(
         vi: "T3",
+        fil: "Mar",
+        km: "អ.",
         en: "Tue",
         zh: "周二",
         ko: "화",
@@ -192,6 +210,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 3:
       return strings.choose(
         vi: "T4",
+        fil: "Miy",
+        km: "ព.",
         en: "Wed",
         zh: "周三",
         ko: "수",
@@ -207,6 +227,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 4:
       return strings.choose(
         vi: "T5",
+        fil: "Huw",
+        km: "ព្រ.",
         en: "Thu",
         zh: "周四",
         ko: "목",
@@ -222,6 +244,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 5:
       return strings.choose(
         vi: "T6",
+        fil: "Biy",
+        km: "សុ.",
         en: "Fri",
         zh: "周五",
         ko: "금",
@@ -237,6 +261,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 6:
       return strings.choose(
         vi: "T7",
+        fil: "Sab",
+        km: "សៅ.",
         en: "Sat",
         zh: "周六",
         ko: "토",
@@ -252,6 +278,8 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 7:
       return strings.choose(
         vi: "CN",
+        fil: "Lin",
+        km: "អា.",
         en: "Sun",
         zh: "周日",
         ko: "일",
@@ -275,6 +303,8 @@ String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
   if (days.length == 7) {
     return strings.choose(
       vi: "Hằng ngày",
+      fil: "Araw-araw",
+      km: "រាល់ថ្ងៃ",
       en: "Every day",
       zh: "每天",
       ko: "매일",

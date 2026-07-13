@@ -25,6 +25,8 @@ const Set<String> _supportedLanguageCodes = {
   'id',
   'th',
   'ms',
+  'fil',
+  'km',
 };
 
 String? _supportedLanguageCode(String? code) {
@@ -59,6 +61,10 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('th', 'TH');
     case 'ms':
       return const Locale('ms', 'MY');
+    case 'fil':
+      return const Locale('fil', 'PH');
+    case 'km':
+      return const Locale('km', 'KH');
     case 'en':
       return const Locale('en');
     case 'vi':

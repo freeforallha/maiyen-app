@@ -32,6 +32,10 @@ String _languageSubtitle(String code) {
       return "Thai";
     case "ms":
       return "Malay";
+    case "fil":
+      return "Filipino";
+    case "km":
+      return "Khmer";
     default:
       return code;
   }
@@ -63,6 +67,10 @@ String _languageBadge(String code) {
       return "TH";
     case "ms":
       return "MS";
+    case "fil":
+      return "FIL";
+    case "km":
+      return "KM";
     default:
       return code.toUpperCase();
   }
