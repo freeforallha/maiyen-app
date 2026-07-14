@@ -52,23 +52,37 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     super.initState();
 
     if (widget.type == "notification" && isSharedUser) {
-      FirebaseDatabase.instance
-          .ref("accounts/$currentUid/customRules/${widget.homeId}/mode")
-          .get()
-          .then((snap) {
-            final value = snap.value?.toString();
-
-            if (value == "custom" || value == "home") {
-              setState(() {
-                reminderMode = value == "custom" ? "custom" : "home";
-              });
-            }
-
-            load();
-          });
+      _loadReminderModeAndSchedules();
     } else {
       load();
     }
+  }
+
+  Future<void> _loadReminderModeAndSchedules() async {
+    final snap = await FirebaseDatabase.instance
+        .ref("accounts/$currentUid/customRules/${widget.homeId}")
+        .get();
+
+    if (!mounted) {
+      return;
+    }
+
+    final data = snap.value;
+    String? savedMode;
+
+    if (data is Map) {
+      final map = Map<String, dynamic>.from(data);
+      savedMode =
+          map["reminderMode"]?.toString() ?? map["mode"]?.toString();
+    }
+
+    if (savedMode == "custom" || savedMode == "home") {
+      setState(() {
+        reminderMode = savedMode == "custom" ? "custom" : "home";
+      });
+    }
+
+    await load();
   }
 
   Future<void> load() async {
@@ -106,8 +120,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   Future<void> saveSchedules() async {
     final isCustomReminder =
         widget.type == "notification" &&
-        isSharedUser &&
-        reminderMode == "custom";
+            isSharedUser &&
+            reminderMode == "custom";
 
     if (!isCustomReminder && !widget.canManageHome) {
       if (mounted) {
@@ -597,8 +611,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                     await FirebaseDatabase.instance
                         .ref(
-                          "accounts/$currentUid/customRules/${widget.homeId}/mode",
-                        )
+                      "accounts/$currentUid/customRules/${widget.homeId}/reminderMode",
+                    )
                         .set(nextMode);
 
                     setState(() {
@@ -699,12 +713,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                             icon: const Icon(Icons.delete_outline),
                             onPressed: canEditAlarm
                                 ? () async {
-                                    setState(() {
-                                      alarms.removeAt(i);
-                                    });
+                              setState(() {
+                                alarms.removeAt(i);
+                              });
 
-                                    saveSchedules();
-                                  }
+                              saveSchedules();
+                            }
                                 : null,
                           ),
                         ],
@@ -774,12 +788,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         value: item["enabled"] == true,
                         onChanged: canEditCurrentReminder
                             ? (v) async {
-                                setState(() {
-                                  notifications[i]["enabled"] = v;
-                                });
+                          setState(() {
+                            notifications[i]["enabled"] = v;
+                          });
 
-                                saveSchedules();
-                              }
+                          saveSchedules();
+                        }
                             : null,
                       ),
                       title: GestureDetector(

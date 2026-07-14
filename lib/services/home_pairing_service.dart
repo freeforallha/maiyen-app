@@ -72,61 +72,45 @@ class HomePairingService {
       final targetData = await ShareService.loadAccount(uid);
       final targetProfile = safeMap(targetData["profile"]);
       final requesterName =
-          targetProfile["name"]?.toString().trim().isNotEmpty == true
+      targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
           : myEmail ?? strings.t("Một người dùng");
+
+      var sentCount = 0;
 
       for (final homeId in homeIds) {
         final homeName = await HomeNotificationService.resolveHomeName(
           homeId: homeId,
           ownerUid: ownerUid,
         );
-        final requestKey = "${homeId}_$uid";
         final requestData = {
+          "status": "pending",
           "homeId": homeId,
           "homeName": homeName,
           "ownerUid": ownerUid,
           "targetUid": uid,
           "targetEmail": myEmail ?? "",
           "targetName": requesterName,
+          "targetPhotoUrl":
+          targetProfile["photoUrl"]?.toString().trim() ?? "",
           "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
           "type": "join_request",
           "time": DateTime.now().millisecondsSinceEpoch,
         };
 
-        final updates = <String, Object?>{
-          "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-        };
-
         try {
-          await FirebaseDatabase.instance.ref().update(updates);
+          await FirebaseDatabase.instance
+              .ref(FirebasePaths.homeJoinRequest(homeId, uid))
+              .set(requestData);
+          sentCount++;
         } catch (e) {
           safeDebugPrint("QR_JOIN_UPDATE_ERROR: $e");
         }
-
-        await HomeNotificationService.notifyHome(
-          ownerUid: ownerUid,
-          homeId: homeId,
-          recipientUid: ownerUid,
-          type: "join_request",
-          title: strings.t("Yêu cầu gia nhập nhà"),
-          message: strings.joinRequestMessage(
-            requesterName: requesterName,
-            homeName: homeName,
-          ),
-          homeName: homeName,
-          category: "member",
-          severity: "info",
-          entityType: "member",
-          entityId: uid,
-          includeActor: false,
-          writeHomeTimeline: false,
-        );
       }
 
       return HomeScannedQrResult(
         status: HomeScannedQrStatus.joinMultiSent,
-        joinRequestCount: homeIds.length,
+        joinRequestCount: sentCount,
       );
     }
 
@@ -155,51 +139,33 @@ class HomePairingService {
       final targetData = await ShareService.loadAccount(uid);
       final targetProfile = safeMap(targetData["profile"]);
       final requesterName =
-          targetProfile["name"]?.toString().trim().isNotEmpty == true
+      targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
           : myEmail ?? strings.t("Một người dùng");
 
-      final requestKey = "${homeId}_$uid";
       final homeName = await HomeNotificationService.resolveHomeName(
         homeId: homeId,
         ownerUid: ownerUid,
       );
 
       final requestData = {
+        "status": "pending",
         "homeId": homeId,
         "homeName": homeName,
         "ownerUid": ownerUid,
         "targetUid": uid,
         "targetEmail": myEmail ?? "",
         "targetName": requesterName,
+        "targetPhotoUrl":
+        targetProfile["photoUrl"]?.toString().trim() ?? "",
         "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
         "type": "join_request",
         "time": DateTime.now().millisecondsSinceEpoch,
       };
 
-      final updates = <String, Object?>{
-        "accounts/$ownerUid/shareRequests/$requestKey": requestData,
-      };
-
-      await FirebaseDatabase.instance.ref().update(updates);
-      await HomeNotificationService.notifyHome(
-        ownerUid: ownerUid,
-        homeId: homeId,
-        recipientUid: ownerUid,
-        type: "join_request",
-        title: strings.t("Yêu cầu gia nhập nhà"),
-        message: strings.joinRequestMessage(
-          requesterName: requesterName,
-          homeName: homeName,
-        ),
-        homeName: homeName,
-        category: "member",
-        severity: "info",
-        entityType: "member",
-        entityId: uid,
-        includeActor: false,
-        writeHomeTimeline: false,
-      );
+      await FirebaseDatabase.instance
+          .ref(FirebasePaths.homeJoinRequest(homeId, uid))
+          .set(requestData);
 
       return const HomeScannedQrResult(
         status: HomeScannedQrStatus.joinSingleSent,
@@ -227,17 +193,17 @@ class HomePairingService {
     await FirebaseDatabase.instance
         .ref(FirebasePaths.pairRequest(requestId))
         .set({
-          "active": true,
-          "hubId": hubId.trim(),
-          "homeId": homeId,
-          "ownerUid": ownerUid,
-          "requestedBy": uid,
-          "roomId": selectedRoomId == "overview"
-              ? "unassigned"
-              : selectedRoomId,
-          "duration": 60,
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
+      "active": true,
+      "hubId": hubId.trim(),
+      "homeId": homeId,
+      "ownerUid": ownerUid,
+      "requestedBy": uid,
+      "roomId": selectedRoomId == "overview"
+          ? "unassigned"
+          : selectedRoomId,
+      "duration": 60,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    });
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
       homeId: homeId,

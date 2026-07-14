@@ -382,7 +382,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
       if (data is Map) {
         final map = Map<String, dynamic>.from(data);
-        final savedMode = map["mode"]?.toString();
+        final savedMode =
+            map["alarmMode"]?.toString() ?? map["mode"]?.toString();
         final customDevices = map["devices"];
 
         if (customDevices is Map) {
@@ -448,7 +449,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
     try {
       if (nextMode == "custom") {
-        final updates = <String, Object?>{"mode": "custom"};
+        final updates = <String, Object?>{"alarmMode": "custom"};
 
         final nextCustomAlarms = <String, dynamic>{};
 
@@ -504,7 +505,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         return;
       }
 
-      await rulesRef.child("mode").set("home");
+      await rulesRef.child("alarmMode").set("home");
 
       if (!mounted) {
         return;

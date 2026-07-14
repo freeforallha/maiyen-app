@@ -68,14 +68,55 @@ Future<bool?> showShareRequestSheet({
     builder: (sheetContext) {
       Future<void> removeRequestFromAllApprovers({
         required String requestKey,
-        required String ownerUid,
-        required String homeId,
+        required Map<String, dynamic> data,
         required String currentUid,
-        required bool syncApprovers,
       }) async {
-        await FirebaseDatabase.instance
-            .ref("accounts/$currentUid/shareRequests/$requestKey")
-            .remove();
+        final type = data["type"]?.toString() ?? "share_request";
+        final ownerUid = data["ownerUid"]?.toString().trim() ?? "";
+        final homeId = data["homeId"]?.toString().trim() ?? "";
+        final targetUid = data["targetUid"]?.toString().trim() ?? "";
+
+        if (type != "join_request" ||
+            ownerUid.isEmpty ||
+            homeId.isEmpty ||
+            targetUid.isEmpty) {
+          await FirebaseDatabase.instance
+              .ref("accounts/$currentUid/shareRequests/$requestKey")
+              .remove();
+          return;
+        }
+
+        final approverUids = <String>{ownerUid, currentUid};
+        final rawApprovers = data["approverUids"];
+
+        if (rawApprovers is Map) {
+          for (final entry in rawApprovers.entries) {
+            final approverUid = entry.key.toString().trim();
+            final enabled = entry.value == true;
+
+            if (approverUid.isNotEmpty && enabled) {
+              approverUids.add(approverUid);
+            }
+          }
+        } else if (rawApprovers is List) {
+          for (final rawUid in rawApprovers) {
+            final approverUid = rawUid?.toString().trim() ?? "";
+
+            if (approverUid.isNotEmpty) {
+              approverUids.add(approverUid);
+            }
+          }
+        }
+
+        final updates = <String, Object?>{
+          FirebasePaths.homeJoinRequest(homeId, targetUid): null,
+        };
+
+        for (final approverUid in approverUids) {
+          updates["accounts/$approverUid/shareRequests/$requestKey"] = null;
+        }
+
+        await FirebaseDatabase.instance.ref().update(updates);
       }
 
       return StatefulBuilder(
@@ -83,9 +124,9 @@ Future<bool?> showShareRequestSheet({
           final strings = AppStrings.of(context);
 
           Future<void> acceptOne(
-            String requestKey,
-            Map<String, dynamic> data,
-          ) async {
+              String requestKey,
+              Map<String, dynamic> data,
+              ) async {
             final canHandle = await canHandleRequest(data);
 
             if (!context.mounted) {
@@ -124,10 +165,8 @@ Future<bool?> showShareRequestSheet({
             if (targetUid == ownerUid) {
               await removeRequestFromAllApprovers(
                 requestKey: requestKey,
-                ownerUid: ownerUid,
-                homeId: homeId,
+                data: data,
                 currentUid: uid,
-                syncApprovers: true,
               );
 
               setSheetState(() {
@@ -207,13 +246,13 @@ Future<bool?> showShareRequestSheet({
               if (type == "join_request") {
                 await FirebaseDatabase.instance
                     .ref(
-                      "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
-                    )
+                  "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
+                )
                     .set({
-                      "email": targetEmail,
-                      "name": targetName,
-                      "sharedAt": DateTime.now().millisecondsSinceEpoch,
-                    });
+                  "email": targetEmail,
+                  "name": targetName,
+                  "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                });
               }
 
               try {
@@ -252,10 +291,8 @@ Future<bool?> showShareRequestSheet({
 
             await removeRequestFromAllApprovers(
               requestKey: requestKey,
-              ownerUid: ownerUid,
-              homeId: homeId,
+              data: data,
               currentUid: uid,
-              syncApprovers: true,
             );
 
             if (!context.mounted) {
@@ -301,10 +338,8 @@ Future<bool?> showShareRequestSheet({
             if (homeId.isNotEmpty && ownerUid.isNotEmpty) {
               await removeRequestFromAllApprovers(
                 requestKey: requestKey,
-                ownerUid: ownerUid,
-                homeId: homeId,
+                data: data,
                 currentUid: uid,
-                syncApprovers: true,
               );
             } else {
               await FirebaseDatabase.instance
@@ -437,8 +472,8 @@ Future<bool?> showShareRequestSheet({
                                 data["homeName"]?.toString().trim() ?? "";
 
                             final homeName =
-                                rawHomeName.isNotEmpty &&
-                                    !rawHomeName.startsWith("home_")
+                            rawHomeName.isNotEmpty &&
+                                !rawHomeName.startsWith("home_")
                                 ? rawHomeName
                                 : strings.t("Nhà chưa đặt tên");
 
@@ -471,12 +506,12 @@ Future<bool?> showShareRequestSheet({
                                   : strings.t("Một người dùng SafeHome");
 
                               subtitle =
-                                  targetEmail.isNotEmpty &&
-                                      targetName.isNotEmpty
+                              targetEmail.isNotEmpty &&
+                                  targetName.isNotEmpty
                                   ? strings.joinHomeRequestTitle(
-                                      targetEmail,
-                                      homeName,
-                                    )
+                                targetEmail,
+                                homeName,
+                              )
                                   : strings.joinHomeRequestSubtitle(homeName);
                             } else if (isTransferOwner) {
                               title = strings.t("Nhận quyền chủ nhà");
@@ -489,11 +524,11 @@ Future<bool?> showShareRequestSheet({
                                   : strings.t("Lời mời từ chủ nhà");
 
                               subtitle =
-                                  ownerEmail.isNotEmpty && ownerName.isNotEmpty
+                              ownerEmail.isNotEmpty && ownerName.isNotEmpty
                                   ? strings.homeInviteTitle(
-                                      ownerEmail,
-                                      homeName,
-                                    )
+                                ownerEmail,
+                                homeName,
+                              )
                                   : strings.homeInviteSubtitle(homeName);
                             }
 
@@ -516,7 +551,7 @@ Future<bool?> showShareRequestSheet({
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         backgroundColor: color.withValues(
@@ -528,20 +563,20 @@ Future<bool?> showShareRequestSheet({
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 3,
-                                                  ),
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 3,
+                                              ),
                                               decoration: BoxDecoration(
                                                 color: color.withValues(
                                                   alpha: 0.12,
                                                 ),
                                                 borderRadius:
-                                                    BorderRadius.circular(20),
+                                                BorderRadius.circular(20),
                                               ),
                                               child: Text(
                                                 badgeText,
@@ -609,11 +644,11 @@ Future<bool?> showShareRequestSheet({
                                                 context,
                                                 isJoinRequest
                                                     ? strings.t(
-                                                        "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
-                                                      )
+                                                  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
+                                                )
                                                     : strings.t(
-                                                        "Không thể chấp nhận lời mời. Vui lòng thử lại.",
-                                                      ),
+                                                  "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                ),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
                                               );

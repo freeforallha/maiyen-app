@@ -12,7 +12,10 @@ class HomeAlarmFormatters {
   }) {
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
 
-    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
+    final alarmMode =
+        selectedRules["alarmMode"]?.toString() ??
+            selectedRules["mode"]?.toString();
+    final useCustomMode = alarmMode == "custom";
 
     final customDevices = safeMap(selectedRules["devices"]);
 
@@ -61,7 +64,10 @@ class HomeAlarmFormatters {
 
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
 
-    final useCustomMode = selectedRules["mode"]?.toString() == "custom";
+    final alarmMode =
+        selectedRules["alarmMode"]?.toString() ??
+            selectedRules["mode"]?.toString();
+    final useCustomMode = alarmMode == "custom";
 
     final customDevices = safeMap(selectedRules["devices"]);
 

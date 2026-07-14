@@ -68,6 +68,9 @@ class HomeOverviewHeader extends StatelessWidget {
     final safeSummary = List<String>.from(
       overall["safeSummary"] ?? const [],
     );
+    final presenceWarnings = List<String>.from(
+      overall["presenceWarnings"] ?? const [],
+    );
 
     return [
       "status",
@@ -75,6 +78,7 @@ class HomeOverviewHeader extends StatelessWidget {
       homeId,
       overall["level"]?.toString() ?? "",
       issues.join("|"),
+      presenceWarnings.join("|"),
       safeSummary.join("|"),
     ].join("|");
   }

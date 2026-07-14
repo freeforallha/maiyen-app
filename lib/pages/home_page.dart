@@ -239,8 +239,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> openHomeNotificationTarget(
-    Map<String, dynamic> notification,
-  ) async {
+      Map<String, dynamic> notification,
+      ) async {
     final homeId = notification["homeId"]?.toString() ?? "";
 
     if (homeId.isEmpty || !homes.containsKey(homeId)) {
@@ -304,16 +304,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Map<String, dynamic> homes = {};
   final HomeListenerService _homeListenerService = HomeListenerService();
   final HomeAccountRealtimeCoordinator _homeAccountRealtimeCoordinator =
-      HomeAccountRealtimeCoordinator();
+  HomeAccountRealtimeCoordinator();
   final HomeAlarmSecurityService _homeAlarmSecurityService =
-      HomeAlarmSecurityService();
+  HomeAlarmSecurityService();
   final HomeAutoAwayCoordinator _homeAutoAwayCoordinator =
-      HomeAutoAwayCoordinator();
+  HomeAutoAwayCoordinator();
   final HomePairingService _homePairingService = HomePairingService();
   final HomeRealtimeCoordinator _homeRealtimeCoordinator =
-      HomeRealtimeCoordinator();
+  HomeRealtimeCoordinator();
   final HomeSelectionStateService _homeSelectionStateService =
-      HomeSelectionStateService();
+  HomeSelectionStateService();
   final Set<String> _ownedHomeIds = <String>{};
   Map<String, dynamic> _sharedHomesSnapshot = {};
   Object? _savedHomeOrder;
@@ -374,19 +374,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> showAlarmReceiveReminder() async {
-    var useCustomMode =
-        safeMap(customRulesByHome[selectedHome])["mode"]?.toString() ==
-        "custom";
+    final cachedRules = safeMap(customRulesByHome[selectedHome]);
+    final cachedAlarmMode =
+        cachedRules["alarmMode"]?.toString() ??
+            cachedRules["mode"]?.toString();
+    var useCustomMode = cachedAlarmMode == "custom";
 
     try {
-      final modeSnapshot = await FirebaseDatabase.instance
-          .ref(
-            "accounts/$uid/customRules/"
-            "$selectedHome/mode",
-          )
+      final rulesSnapshot = await FirebaseDatabase.instance
+          .ref("accounts/$uid/customRules/$selectedHome")
           .get();
+      final rules = safeMap(rulesSnapshot.value);
+      final alarmMode =
+          rules["alarmMode"]?.toString() ?? rules["mode"]?.toString();
 
-      useCustomMode = modeSnapshot.value?.toString() == "custom";
+      useCustomMode = alarmMode == "custom";
     } catch (error) {
       safeDebugPrint("READ_ALARM_MODE_FOR_REMINDER_ERROR: $error");
     }
@@ -675,7 +677,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : FirebaseAuth.instance.currentUser?.email?.trim() ??
-              _strings.t("Một thành viên");
+        _strings.t("Một thành viên");
 
     final saveResult = await _homeAlarmSecurityService.setSecurityMode(
       ownerUid: ownerUid,
@@ -715,13 +717,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (nextMode == "armed") {
       final notificationStatus = await _homeAlarmSecurityService
           .notifyManualSecurityModeEnabled(
-            ownerUid: ownerUid,
-            homeId: homeId,
-            homeName: homeName,
-            actorUid: uid,
-            actorName: actorName,
-            securityModeRepeatMinutes: plan.repeatMinutes,
-          );
+        ownerUid: ownerUid,
+        homeId: homeId,
+        homeName: homeName,
+        actorUid: uid,
+        actorName: actorName,
+        securityModeRepeatMinutes: plan.repeatMinutes,
+      );
 
       if (notificationStatus == HomeSecurityNotificationStatus.failed) {
         if (mounted) {
@@ -888,7 +890,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onSave: (data) async {
         if (data.enabled) {
           final hasBackgroundPermission =
-              await AutoAwayService.ensureBackgroundPermission();
+          await AutoAwayService.ensureBackgroundPermission();
 
           if (!hasBackgroundPermission) {
             if (!mounted) {
@@ -1045,15 +1047,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     unawaited(
       _homeAlarmSecurityService
           .recordAlarmEnabledNotification(
-            uid: uid,
-            homeId: homeId,
-            homeName: homeName,
-            enabled: enabled,
-            strings: _strings,
-          )
+        uid: uid,
+        homeId: homeId,
+        homeName: homeName,
+        enabled: enabled,
+        strings: _strings,
+      )
           .catchError((Object error) {
-            safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
-          }),
+        safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
+      }),
     );
 
     if (enabled) {
@@ -1201,10 +1203,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         final nextTotal = snapshot.total;
         final unchanged =
             nextTotal == unreadChatCount &&
-            nextUnreadByHome.length == unreadChatByHome.length &&
-            nextUnreadByHome.entries.every(
-              (entry) => unreadChatByHome[entry.key] == entry.value,
-            );
+                nextUnreadByHome.length == unreadChatByHome.length &&
+                nextUnreadByHome.entries.every(
+                      (entry) => unreadChatByHome[entry.key] == entry.value,
+                );
 
         if (unchanged) {
           return;
@@ -1289,16 +1291,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       final isShared = homes[selectedHome]?["_shared"] == true;
 
       if (isShared) {
-        final modeSnap = await FirebaseDatabase.instance
-            .ref("accounts/$uid/customRules/$selectedHome/mode")
+        final rulesSnap = await FirebaseDatabase.instance
+            .ref("accounts/$uid/customRules/$selectedHome")
             .get();
+        final rules = safeMap(rulesSnap.value);
+        final reminderMode =
+            rules["reminderMode"]?.toString() ?? rules["mode"]?.toString();
 
-        if (modeSnap.value?.toString() == "custom") {
+        if (reminderMode == "custom") {
           final customSnap = await FirebaseDatabase.instance
               .ref(
-                "accounts/$uid/customRules/"
+            "accounts/$uid/customRules/"
                 "$selectedHome/notifications/items",
-              )
+          )
               .get();
 
           return HomeAlarmFormatters.hasEnabledScheduleValue(customSnap.value);
@@ -1307,9 +1312,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       final homeSnap = await FirebaseDatabase.instance
           .ref(
-            "accounts/${getHomeOwnerUid()}/homes/"
+        "accounts/${getHomeOwnerUid()}/homes/"
             "$selectedHome/schedules/notifications",
-          )
+      )
           .get();
 
       return HomeAlarmFormatters.hasEnabledScheduleValue(homeSnap.value);
@@ -1513,8 +1518,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (syncAutoAway) {
       unawaited(
         AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
-          Object error,
-        ) {
+            Object error,
+            ) {
           safeDebugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
         }),
       );
@@ -1537,8 +1542,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final wasOwned = _ownedHomeIds.contains(homeId);
     final autoAwayChanged =
         !wasOwned ||
-        _autoAwayConfigSignature(previousHome) !=
-            _autoAwayConfigSignature(homeData);
+            _autoAwayConfigSignature(previousHome) !=
+                _autoAwayConfigSignature(homeData);
 
     setState(() {
       _ownedHomeIds.add(homeId);
@@ -1592,8 +1597,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         final wasLoaded = previousHome['_shared'] == true;
         final autoAwayChanged =
             !wasLoaded ||
-            _autoAwayConfigSignature(previousHome) !=
-                _autoAwayConfigSignature(home);
+                _autoAwayConfigSignature(previousHome) !=
+                    _autoAwayConfigSignature(home);
 
         setState(() {
           homes[homeId] = home;
@@ -1662,7 +1667,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           alarmSettings = settings;
           alarmEnabled =
               selectedHome.isEmpty ||
-              safeMap(alarmSettings[selectedHome])['enabled'] != false;
+                  safeMap(alarmSettings[selectedHome])['enabled'] != false;
         });
       },
       onCustomRulesChanged: (rules) {
@@ -1782,8 +1787,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     unawaited(
       AutoAwayService.syncForHomes(uid: uid, homes: homes).catchError((
-        Object error,
-      ) {
+          Object error,
+          ) {
         safeDebugPrint('AUTO_AWAY_HOME_STRUCTURE_SYNC_ERROR: $error');
       }),
     );
@@ -2205,15 +2210,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     await FirebaseDatabase.instance
         .ref("accounts/$targetUid/shareRequests/transfer_${homeId}_$uid")
         .set({
-          "type": "transfer_owner_request",
-          "homeId": homeId,
-          "oldOwnerUid": uid,
-          "newOwnerUid": targetUid,
-          "ownerEmail": myEmail ?? "",
-          "targetEmail": targetEmail,
-          "homeName": homeName,
-          "time": DateTime.now().millisecondsSinceEpoch,
-        });
+      "type": "transfer_owner_request",
+      "homeId": homeId,
+      "oldOwnerUid": uid,
+      "newOwnerUid": targetUid,
+      "ownerEmail": myEmail ?? "",
+      "targetEmail": targetEmail,
+      "homeName": homeName,
+      "time": DateTime.now().millisecondsSinceEpoch,
+    });
     await HomeNotificationService.notifyHome(
       ownerUid: uid,
       homeId: homeId,
@@ -2281,17 +2286,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     try {
       await FirebaseDatabase.instance
           .ref(
-            "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
-          )
+        "device_delete_requests/${DateTime.now().millisecondsSinceEpoch}_$id",
+      )
           .set({
-            "ownerUid": ownerUid,
-            "homeId": selectedHome,
-            "deviceId": id,
-            "deviceName": deviceName,
-            "requestedBy": uid,
-            "time": DateTime.now().millisecondsSinceEpoch,
-            "status": "pending",
-          });
+        "ownerUid": ownerUid,
+        "homeId": selectedHome,
+        "deviceId": id,
+        "deviceName": deviceName,
+        "requestedBy": uid,
+        "time": DateTime.now().millisecondsSinceEpoch,
+        "status": "pending",
+      });
 
       if (!mounted) return;
 
@@ -2563,11 +2568,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     bool intervalsOverlap(
-      DateTime aStart,
-      DateTime aEnd,
-      DateTime bStart,
-      DateTime bEnd,
-    ) {
+        DateTime aStart,
+        DateTime aEnd,
+        DateTime bStart,
+        DateTime bEnd,
+        ) {
       return aStart.isBefore(bEnd) && bStart.isBefore(aEnd);
     }
 
@@ -2739,8 +2744,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
     final hasActiveOrFuturePause =
         alarmPauseToday.isNotEmpty &&
-        existingEndAt != null &&
-        existingEndAt > DateTime.now().millisecondsSinceEpoch;
+            existingEndAt != null &&
+            existingEndAt > DateTime.now().millisecondsSinceEpoch;
 
     final startTime = parseTime(
       alarmPauseToday["start"]?.toString(),
@@ -2853,23 +2858,23 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         try {
           await FirebaseDatabase.instance
               .ref(
-                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-              )
+            "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+          )
               .set({
-                "status": "pending",
-                "ownerUid": ownerUid,
-                "homeId": selectedHome,
-                "homeName": homeName,
-                "date": pauseDate,
-                "start": effectivePauseStartText,
-                "end": pauseEndText,
-                "startAt": startAtMs,
-                "endAt": endAtMs,
-                "reason": data.reason,
-                "createdByUid": uid,
-                "createdByName": userName,
-                "createdAt": createdAt,
-              });
+            "status": "pending",
+            "ownerUid": ownerUid,
+            "homeId": selectedHome,
+            "homeName": homeName,
+            "date": pauseDate,
+            "start": effectivePauseStartText,
+            "end": pauseEndText,
+            "startAt": startAtMs,
+            "endAt": endAtMs,
+            "reason": data.reason,
+            "createdByUid": uid,
+            "createdByName": userName,
+            "createdAt": createdAt,
+          });
         } catch (e) {
           if (!sheetContext.mounted) return false;
 
@@ -2908,17 +2913,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         try {
           await FirebaseDatabase.instance
               .ref(
-                "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
-              )
+            "alarm_pause_requests/${DateTime.now().millisecondsSinceEpoch}_$uid",
+          )
               .set({
-                "status": "pending",
-                "action": "remove",
-                "ownerUid": ownerUid,
-                "homeId": selectedHome,
-                "createdByUid": uid,
-                "createdByName": userName,
-                "createdAt": DateTime.now().millisecondsSinceEpoch,
-              });
+            "status": "pending",
+            "action": "remove",
+            "ownerUid": ownerUid,
+            "homeId": selectedHome,
+            "createdByUid": uid,
+            "createdByName": userName,
+            "createdAt": DateTime.now().millisecondsSinceEpoch,
+          });
         } catch (e) {
           if (!sheetContext.mounted) return false;
 
@@ -2951,9 +2956,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final currentName = usePersonalName
         ? (homes[selectedHome]?["_customName"] ??
-                  homes[selectedHome]?["name"] ??
-                  selectedHome)
-              .toString()
+        homes[selectedHome]?["name"] ??
+        selectedHome)
+        .toString()
         : (homes[selectedHome]?["name"] ?? selectedHome).toString();
 
     final currentAddress = homes[selectedHome]?["address"]?.toString() ?? "";
@@ -3242,10 +3247,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final lines = results.entries
         .map((entry) {
-          final icon = entry.value == "PASS" ? "✅" : "❌";
+      final icon = entry.value == "PASS" ? "✅" : "❌";
 
-          return "$icon ${entry.key}: ${entry.value}";
-        })
+      return "$icon ${entry.key}: ${entry.value}";
+    })
         .join("\n\n");
 
     await showDialog<void>(
@@ -3406,25 +3411,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onDeleteHome: isOwner()
           ? deleteHome
           : () {
-              showTopToast(
-                context,
-                _strings.t("Chỉ chủ nhà mới được xoá nhà"),
-                color: Colors.orange,
-                icon: Icons.lock_rounded,
-              );
-            },
+        showTopToast(
+          context,
+          _strings.t("Chỉ chủ nhà mới được xoá nhà"),
+          color: Colors.orange,
+          icon: Icons.lock_rounded,
+        );
+      },
       onRenameHome: renameHome,
       onSecurityTest: runFirebaseSecurityTest,
       onTransferOwner: isOwner()
           ? transferOwner
           : () {
-              showTopToast(
-                context,
-                _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
-                color: Colors.orange,
-                icon: Icons.admin_panel_settings_rounded,
-              );
-            },
+        showTopToast(
+          context,
+          _strings.t("Chỉ chủ nhà mới được chuyển quyền"),
+          color: Colors.orange,
+          icon: Icons.admin_panel_settings_rounded,
+        );
+      },
       context: context,
       inviteCountNotifier: inviteCountNotifier,
       onShareRequests: () {
@@ -3475,9 +3480,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewSecurityModeSource =
         overviewHome["securityModeSource"]?.toString().trim() ?? "";
     final overviewSecurityModeRepeatMinutes =
-        _normalizeSecurityModeRepeatMinutes(
-          overviewHome["securityModeRepeatMinutes"],
-        );
+    _normalizeSecurityModeRepeatMinutes(
+      overviewHome["securityModeRepeatMinutes"],
+    );
     final overviewAlarmScheduleText = formatAlarmSchedules();
     final overviewEnvironmentText = getHomeEnvironmentText();
     final overviewOverall = getHomeOverallStatus(overviewHome);
@@ -3542,13 +3547,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         selectedHome = selected;
 
                         securityMode =
-                            currentHome["securityMode"]?.toString() == "armed"
+                        currentHome["securityMode"]?.toString() == "armed"
                             ? "armed"
                             : "normal";
 
                         alarmEnabled =
                             safeMap(alarmSettings[selected])["enabled"] !=
-                            false;
+                                false;
 
                         start = parsedAlarm["start"];
                         end = parsedAlarm["end"];
@@ -3608,7 +3613,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         selectedHome: selectedHome,
                         currentUserName: userName,
                         currentUserEmail:
-                            FirebaseAuth.instance.currentUser?.email ?? "",
+                        FirebaseAuth.instance.currentUser?.email ?? "",
                         onSelect: (h) {
                           if (h == selectedHome) return;
 
@@ -3621,8 +3626,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             selectedHome = h;
 
                             securityMode =
-                                currentHome["securityMode"]?.toString() ==
-                                    "armed"
+                            currentHome["securityMode"]?.toString() ==
+                                "armed"
                                 ? "armed"
                                 : "normal";
 
@@ -3681,7 +3686,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               securityMode: securityMode,
                               securityModeSource: overviewSecurityModeSource,
                               securityModeRepeatMinutes:
-                                  overviewSecurityModeRepeatMinutes,
+                              overviewSecurityModeRepeatMinutes,
                               onSecurityModeRepeatChanged: canManageSelectedHome
                                   ? setSecurityModeRepeatMinutes
                                   : null,
@@ -3691,7 +3696,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   ? setAlarmEnabled
                                   : null,
                               onScheduleNotification:
-                                  openScheduleNotificationSheet,
+                              openScheduleNotificationSheet,
                               onScheduleAlarm: openAlarmDeviceSheet,
                               alarmStart: overviewAlarmScheduleText,
                               alarmEnd: "",
@@ -3731,13 +3736,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               },
                               pairingCountdown: pairingCountdown,
                               pairingCountdownText:
-                                  overviewPairingCountdownText,
+                              overviewPairingCountdownText,
                               sectionGap: sectionGap,
                             ),
                             isShared: homes[selectedHome]?["_shared"] == true,
                             ownerEmail:
-                                homes[selectedHome]?["_ownerEmail"]
-                                    ?.toString() ??
+                            homes[selectedHome]?["_ownerEmail"]
+                                ?.toString() ??
                                 "",
                             onRename: canManageHome() ? renameDevice : (_) {},
                             onDelete: canManageHome() ? deleteDevice : (_) {},
@@ -3810,7 +3815,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   if (!context.mounted) return;
 
                   final alarmScheduleText =
-                      formatAlarmSchedules().trim().isEmpty
+                  formatAlarmSchedules().trim().isEmpty
                       ? _strings.t("Chưa thiết lập thời gian")
                       : formatAlarmSchedules();
 

@@ -4448,6 +4448,9 @@ class AppStrings {
     "Tạo tài khoản": "Create account",
     "Thành viên": "Member",
     "Thành viên trong nhà": "Home members",
+    "Thành viên đang ở trong nhà": "Members currently at home",
+    "Thành viên đang ở ngoài": "Members currently away",
+    "Thành viên chưa xác định vị trí": "Members with unknown location",
     "Thay đổi ngôn ngữ hiển thị": "Change the display language",
     "Thêm, đổi tên và sắp xếp phòng": "Add, rename and reorder rooms",
     "Thiết bị đang được giám sát": "Device is being monitored",
@@ -5458,6 +5461,9 @@ class AppStrings {
     "Tạo tài khoản": "创建账号",
     "Thành viên": "成员",
     "Thành viên trong nhà": "家庭成员",
+    "Thành viên đang ở trong nhà": "当前在家的成员",
+    "Thành viên đang ở ngoài": "当前在外的成员",
+    "Thành viên chưa xác định vị trí": "位置未知的成员",
     "Thay đổi ngôn ngữ hiển thị": "更改显示语言",
     "Thêm, đổi tên và sắp xếp phòng": "添加、重命名和排序房间",
     "Thiết bị đang được giám sát": "设备正在被监控",
@@ -5701,6 +5707,9 @@ class AppStrings {
     "Nhà đã chia sẻ": "공유된 집",
     "Nhà được chia sẻ": "공유된 집",
     "Thành viên trong nhà": "집 구성원",
+    "Thành viên đang ở trong nhà": "현재 집에 있는 구성원",
+    "Thành viên đang ở ngoài": "현재 외출 중인 구성원",
+    "Thành viên chưa xác định vị trí": "위치를 확인할 수 없는 구성원",
     "Chưa có thông tin": "정보 없음",
     "Chưa cập nhật": "아직 업데이트 없음",
     "Chủ nhà": "집 소유자",
@@ -6827,6 +6836,9 @@ class AppStrings {
     "Thoát tài khoản khỏi thiết bị này": "このデバイスからログアウト",
     "Chia sẻ nhà": "家を共有",
     "Thành viên trong nhà": "家のメンバー",
+    "Thành viên đang ở trong nhà": "現在家にいるメンバー",
+    "Thành viên đang ở ngoài": "現在外出中のメンバー",
+    "Thành viên chưa xác định vị trí": "位置を確認できないメンバー",
     "Quản lý phòng": "部屋の管理",
     "Toàn bộ thiết bị": "すべてのデバイス",
     "Toàn bộ thiết bị SafeHome": "すべての SafeHome デバイス",
@@ -8551,6 +8563,9 @@ class AppStrings {
     "Tạo tài khoản": "Konto erstellen",
     "Thành viên": "Mitglieder",
     "Thành viên trong nhà": "Mitglieder im Zuhause",
+    "Thành viên đang ở trong nhà": "Mitglieder, die derzeit zu Hause sind",
+    "Thành viên đang ở ngoài": "Mitglieder, die derzeit unterwegs sind",
+    "Thành viên chưa xác định vị trí": "Mitglieder mit unbekanntem Standort",
     "Thay đổi ngôn ngữ hiển thị": "Anzeigesprache ändern",
     "Thêm, đổi tên và sắp xếp phòng":
         "Räume hinzufügen, umbenennen und neu anordnen",
@@ -9646,6 +9661,9 @@ class AppStrings {
     "Tạo tài khoản": "Создать аккаунт",
     "Thành viên": "Участники",
     "Thành viên trong nhà": "Участники дома",
+    "Thành viên đang ở trong nhà": "Участники, находящиеся дома",
+    "Thành viên đang ở ngoài": "Участники, находящиеся вне дома",
+    "Thành viên chưa xác định vị trí": "Участники с неизвестным местоположением",
     "Thay đổi ngôn ngữ hiển thị": "Изменить язык отображения",
     "Thêm, đổi tên và sắp xếp phòng":
         "Добавление, переименование и сортировка комнат",
@@ -10770,6 +10788,9 @@ class AppStrings {
     "Tạo tài khoản": "Créer un compte",
     "Thành viên": "Membre",
     "Thành viên trong nhà": "Membres de la maison",
+    "Thành viên đang ở trong nhà": "Membres actuellement à la maison",
+    "Thành viên đang ở ngoài": "Membres actuellement à l’extérieur",
+    "Thành viên chưa xác định vị trí": "Membres dont la position est inconnue",
     "Thay đổi ngôn ngữ hiển thị": "Changer la langue d'affichage",
     "Thêm, đổi tên và sắp xếp phòng":
         "Ajouter, renommer et organiser les pièces",
@@ -11890,6 +11911,9 @@ class AppStrings {
     "Tạo tài khoản": "Crear cuenta",
     "Thành viên": "Miembro",
     "Thành viên trong nhà": "Miembros de la casa",
+    "Thành viên đang ở trong nhà": "Miembros que están en casa",
+    "Thành viên đang ở ngoài": "Miembros que están fuera",
+    "Thành viên chưa xác định vị trí": "Miembros con ubicación desconocida",
     "Thay đổi ngôn ngữ hiển thị": "Cambiar idioma de visualización",
     "Thêm, đổi tên và sắp xếp phòng":
         "Añadir, renombrar y ordenar habitaciones",
@@ -12992,6 +13016,9 @@ class AppStrings {
     "Tạo tài khoản": "Buat akun",
     "Thành viên": "Anggota",
     "Thành viên trong nhà": "Anggota DPR",
+    "Thành viên đang ở trong nhà": "Anggota yang sedang berada di rumah",
+    "Thành viên đang ở ngoài": "Anggota yang sedang berada di luar",
+    "Thành viên chưa xác định vị trí": "Anggota dengan lokasi yang belum diketahui",
     "Thay đổi ngôn ngữ hiển thị": "Mengubah bahasa tampilan",
     "Thêm, đổi tên và sắp xếp phòng":
         "Menambah, mengganti nama, dan mengatur ruangan",
@@ -14059,6 +14086,9 @@ class AppStrings {
     "Tạo tài khoản": "สร้างบัญชี",
     "Thành viên": "สมาชิก",
     "Thành viên trong nhà": "สมาชิกในบ้าน",
+    "Thành viên đang ở trong nhà": "สมาชิกที่อยู่ในบ้านขณะนี้",
+    "Thành viên đang ở ngoài": "สมาชิกที่อยู่นอกบ้านขณะนี้",
+    "Thành viên chưa xác định vị trí": "สมาชิกที่ไม่ทราบตำแหน่ง",
     "Thay đổi ngôn ngữ hiển thị": "เปลี่ยนภาษาที่แสดง",
     "Thêm, đổi tên và sắp xếp phòng": "เพิ่ม เปลี่ยนชื่อ และจัดระเบียบห้อง",
     "Thiết bị đang được giám sát": "อุปกรณ์ที่กำลังถูกตรวจสอบ",
@@ -15163,6 +15193,9 @@ class AppStrings {
     "Tạo tài khoản": "Cipta akaun",
     "Thành viên": "Ahli",
     "Thành viên trong nhà": "Ahli rumah",
+    "Thành viên đang ở trong nhà": "Ahli yang sedang berada di rumah",
+    "Thành viên đang ở ngoài": "Ahli yang sedang berada di luar",
+    "Thành viên chưa xác định vị trí": "Ahli yang lokasinya belum diketahui",
     "Thay đổi ngôn ngữ hiển thị": "Tukar bahasa paparan",
     "Thêm, đổi tên và sắp xếp phòng": "Tambah, namakan semula dan susun bilik",
     "Thiết bị đang được giám sát": "Peranti sedang dipantau",
@@ -16285,6 +16318,9 @@ class AppStrings {
     "Tạo tài khoản": "Gumawa ng account",
     "Thành viên": "Miyembro",
     "Thành viên trong nhà": "Mga miyembro ng bahay",
+    "Thành viên đang ở trong nhà": "Mga miyembrong kasalukuyang nasa bahay",
+    "Thành viên đang ở ngoài": "Mga miyembrong kasalukuyang nasa labas",
+    "Thành viên chưa xác định vị trí": "Mga miyembrong hindi matukoy ang lokasyon",
     "Thay đổi ngôn ngữ hiển thị": "Palitan ang wikang ipinapakita",
     "Thêm, đổi tên và sắp xếp phòng":
         "Magdagdag, magpalit ng pangalan, at mag-ayos ng mga kuwarto",
@@ -17381,6 +17417,9 @@ class AppStrings {
     "Tạo tài khoản": "បង្កើតគណនី",
     "Thành viên": "សមាជិក",
     "Thành viên trong nhà": "អ្នកនៅក្នុងផ្ទះ",
+    "Thành viên đang ở trong nhà": "សមាជិកដែលកំពុងនៅក្នុងផ្ទះ",
+    "Thành viên đang ở ngoài": "សមាជិកដែលកំពុងនៅខាងក្រៅ",
+    "Thành viên chưa xác định vị trí": "សមាជិកដែលមិនស្គាល់ទីតាំង",
     "Thay đổi ngôn ngữ hiển thị": "ផ្លាស់ប្ដូរភាសាបង្ហាញ",
     "Thêm, đổi tên và sắp xếp phòng": "បន្ថែម ប្ដូរឈ្មោះ និងរៀបចំលំដាប់បន្ទប់",
     "Thiết bị đang được giám sát": "ឧបករណ៍កំពុងត្រូវបានតាមដាន",
@@ -18929,83 +18968,36 @@ class AppStrings {
     }
 
     final membersAtHomeMatch = RegExp(
-      r"^Thành viên trong nhà: (\d+)/(\d+)$",
+      r"^(?:Thành viên đang ở trong nhà|Thành viên trong nhà): (\d+)/(\d+)$",
     ).firstMatch(text);
+
     if (membersAtHomeMatch != null) {
       final count =
           "${membersAtHomeMatch.group(1)}/${membersAtHomeMatch.group(2)}";
-      return choose(
-        vi: "Thành viên trong nhà: $count",
-        fil: "Mga miyembrong nasa bahay: $count",
-        km: "អ្នកកំពុងនៅក្នុងផ្ទះ៖ $count",
-        en: "Members at home: $count",
-        zh: "在家成员：$count",
-        ko: "집 구성원: $count",
-        ja: "在宅メンバー: $count",
-        de: 'Mitglieder zuhause: $count',
-        ru: 'Участников дома сейчас: $count',
 
-        es: "Miembros en casa: $count",
-        fr: _fr(
-          vi: "Thành viên trong nhà: $count",
-          en: "Members at home: $count",
-        ),
-        id: "Anggota di rumah: $count",
-        th: "สมาชิกที่อยู่บ้าน: $count คน",
-        ms: "Ahli di rumah: $count",
-      );
+      return '${t("Thành viên đang ở trong nhà")}: $count';
     }
 
     final membersAwayMatch = RegExp(
-      r"^Thành viên bên ngoài: (\d+)/(\d+)$",
+      r"^(?:Thành viên đang ở ngoài|Thành viên bên ngoài): (\d+)/(\d+)$",
     ).firstMatch(text);
-    if (membersAwayMatch != null) {
-      final count = "${membersAwayMatch.group(1)}/${membersAwayMatch.group(2)}";
-      return choose(
-        vi: "Thành viên bên ngoài: $count",
-        fil: "Mga miyembrong nasa labas: $count",
-        km: "សមាជិកនៅក្រៅផ្ទះ៖ $count",
-        en: "Members away: $count",
-        zh: "外出成员：$count",
-        ko: "외출 구성원: $count",
-        ja: "外出中のメンバー: $count",
-        de: 'Mitglieder abwesend: $count',
-        ru: 'Участников вне дома: $count',
 
-        es: "Miembros fuera: $count",
-        fr: _fr(vi: "Thành viên bên ngoài: $count", en: "Members away: $count"),
-        id: "Anggota di luar: $count",
-        th: "สมาชิกที่อยู่นอกบ้าน: $count คน",
-        ms: "Ahli di luar rumah: $count",
-      );
+    if (membersAwayMatch != null) {
+      final count =
+          "${membersAwayMatch.group(1)}/${membersAwayMatch.group(2)}";
+
+      return '${t("Thành viên đang ở ngoài")}: $count';
     }
 
     final unknownLocationMatch = RegExp(
       r"^(?:Thành viên chưa xác định vị trí|Chưa xác định vị trí): (\d+)/(\d+)$",
     ).firstMatch(text);
+
     if (unknownLocationMatch != null) {
       final count =
           "${unknownLocationMatch.group(1)}/${unknownLocationMatch.group(2)}";
-      return choose(
-        vi: "Chưa xác định vị trí: $count",
-        fil: "Hindi matukoy ang lokasyon: $count",
-        km: "មិនស្គាល់ទីតាំង៖ $count",
-        en: "Location unknown: $count",
-        zh: "位置未知：$count",
-        ko: "위치 알 수 없음: $count",
-        ja: "位置不明: $count",
-        de: 'Standort unbekannt: $count',
-        ru: 'Местоположение неизвестно: $count',
 
-        es: "Ubicación desconocida: $count",
-        fr: _fr(
-          vi: "Chưa xác định vị trí: $count",
-          en: "Location unknown: $count",
-        ),
-        id: "Lokasi tidak diketahui: $count",
-        th: "ไม่ทราบตำแหน่ง: $count คน",
-        ms: "Lokasi tidak diketahui: $count",
-      );
+      return '${t("Thành viên chưa xác định vị trí")}: $count';
     }
 
     if (text.startsWith("Môi trường hiện tại: ")) {

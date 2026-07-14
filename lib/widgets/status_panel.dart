@@ -284,11 +284,11 @@ class _StatusPanelState extends State<StatusPanel> {
     final hasLowBatteryDevice = containsAny(rawWarningText, const ["pin yếu"]);
 
     final noMemberInside = RegExp(
-      r"thành viên trong nhà:\s*0/",
+      r"thành viên(?: đang ở)? trong nhà:\s*0/",
     ).hasMatch(allRawText);
 
     final hasMemberInside = RegExp(
-      r"thành viên trong nhà:\s*[1-9][0-9]*/",
+      r"thành viên(?: đang ở)? trong nhà:\s*[1-9][0-9]*/",
     ).hasMatch(allRawText);
 
     final isArmed = normalizeSecurityMode(liveHome["securityMode"]) == "armed";
@@ -303,8 +303,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final hasAlarmSchedule =
         homeAlarm["enabled"] == true ||
-        hasEnabledScheduleValue(schedules["alarms"]) ||
-        hasEnabledDeviceAlarm(devices);
+            hasEnabledScheduleValue(schedules["alarms"]) ||
+            hasEnabledDeviceAlarm(devices);
 
     if (hasEmergencyIssue) {
       addSuggestion(strings.statusEmergencyActionSuggestion());
@@ -353,7 +353,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final isArmed = widget.securityMode == "armed";
     final allowedRepeatMinutes = <int>[0, 15, 30, 60];
     var localRepeatMinutes =
-        allowedRepeatMinutes.contains(widget.securityModeRepeatMinutes)
+    allowedRepeatMinutes.contains(widget.securityModeRepeatMinutes)
         ? widget.securityModeRepeatMinutes
         : 0;
     var repeatSaving = false;
@@ -414,11 +414,11 @@ class _StatusPanelState extends State<StatusPanel> {
                       title: _strings.t("Bảo vệ"),
                       subtitle: isArmed
                           ? _strings.securityModeActiveText(
-                              repeatText(localRepeatMinutes),
-                            )
+                        repeatText(localRepeatMinutes),
+                      )
                           : _strings.securityModeMonitoringText(
-                              repeatText(localRepeatMinutes),
-                            ),
+                        repeatText(localRepeatMinutes),
+                      ),
                       color: SafeHomeColors.danger,
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -489,14 +489,14 @@ class _StatusPanelState extends State<StatusPanel> {
                               ),
                               suffixIcon: repeatSaving
                                   ? const Padding(
-                                      padding: EdgeInsets.all(14),
-                                      child: SizedBox.square(
-                                        dimension: 18,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        ),
-                                      ),
-                                    )
+                                padding: EdgeInsets.all(14),
+                                child: SizedBox.square(
+                                  dimension: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              )
                                   : null,
                               filled: true,
                               fillColor: SafeHomeColors.surface,
@@ -527,49 +527,49 @@ class _StatusPanelState extends State<StatusPanel> {
                             items: allowedRepeatMinutes
                                 .map(
                                   (minutes) => DropdownMenuItem<int>(
-                                    value: minutes,
-                                    child: Text(
-                                      minutes == 0
-                                          ? _strings.t("Không lặp lại")
-                                          : _strings.minuteText(minutes),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: SafeHomeColors.textPrimary,
-                                      ),
-                                    ),
+                                value: minutes,
+                                child: Text(
+                                  minutes == 0
+                                      ? _strings.t("Không lặp lại")
+                                      : _strings.minuteText(minutes),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: SafeHomeColors.textPrimary,
                                   ),
-                                )
+                                ),
+                              ),
+                            )
                                 .toList(),
                             onChanged:
-                                widget.onSecurityModeRepeatChanged == null ||
-                                    repeatSaving
+                            widget.onSecurityModeRepeatChanged == null ||
+                                repeatSaving
                                 ? null
                                 : (minutes) async {
-                                    if (minutes == null ||
-                                        minutes == localRepeatMinutes) {
-                                      return;
-                                    }
+                              if (minutes == null ||
+                                  minutes == localRepeatMinutes) {
+                                return;
+                              }
 
-                                    setSheetState(() {
-                                      repeatSaving = true;
-                                    });
+                              setSheetState(() {
+                                repeatSaving = true;
+                              });
 
-                                    final saved = await widget
-                                        .onSecurityModeRepeatChanged!(minutes);
+                              final saved = await widget
+                                  .onSecurityModeRepeatChanged!(minutes);
 
-                                    if (!stateContext.mounted) {
-                                      return;
-                                    }
+                              if (!stateContext.mounted) {
+                                return;
+                              }
 
-                                    setSheetState(() {
-                                      if (saved) {
-                                        localRepeatMinutes = minutes;
-                                      }
+                              setSheetState(() {
+                                if (saved) {
+                                  localRepeatMinutes = minutes;
+                                }
 
-                                      repeatSaving = false;
-                                    });
-                                  },
+                                repeatSaving = false;
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -839,9 +839,9 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   Widget _buildStatusSummarySections(
-    Map<String, dynamic> liveHome,
-    AppStrings strings,
-  ) {
+      Map<String, dynamic> liveHome,
+      AppStrings strings,
+      ) {
     final liveOverall = getHomeOverallStatus(liveHome);
 
     final rawDangerIssues = List<String>.from(
@@ -852,9 +852,16 @@ class _StatusPanelState extends State<StatusPanel> {
       liveOverall["warningIssues"] ?? const [],
     );
 
+    final rawPresenceWarnings = List<String>.from(
+      liveOverall["presenceWarnings"] ?? const [],
+    );
+
     final dangerIssues = rawDangerIssues.map(strings.statusText).toList();
 
-    final warningIssues = rawWarningIssues.map(strings.statusText).toList();
+    final warningIssues = [
+      ...rawWarningIssues,
+      ...rawPresenceWarnings,
+    ].map(strings.statusText).toList();
 
     final rawSafeSummary = List<String>.from(
       liveOverall["safeSummary"] ?? const [],
@@ -869,12 +876,15 @@ class _StatusPanelState extends State<StatusPanel> {
       liveHome: liveHome,
       overall: liveOverall,
       rawDangerIssues: rawDangerIssues,
-      rawWarningIssues: rawWarningIssues,
+      rawWarningIssues: [
+        ...rawWarningIssues,
+        ...rawPresenceWarnings,
+      ],
       rawSafeSummary: rawSafeSummary,
     );
 
     final liveSecurityMode =
-        normalizeSecurityMode(liveHome["securityMode"]) == "armed"
+    normalizeSecurityMode(liveHome["securityMode"]) == "armed"
         ? strings.t("Bảo vệ")
         : strings.t("Bình thường");
 
@@ -1081,7 +1091,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final displayFirstLine = _strings.statusText(firstLine);
     final displaySecondLine = _strings.statusText(secondLine);
     final displaySecondLineWithHint =
-        displaySecondLine.endsWith("...") || displaySecondLine.endsWith("…")
+    displaySecondLine.endsWith("...") || displaySecondLine.endsWith("…")
         ? "$displaySecondLine →"
         : "$displaySecondLine... →";
 
@@ -1090,9 +1100,9 @@ class _StatusPanelState extends State<StatusPanel> {
     final statusText = _statusText(level);
 
     final rawAlarmScheduleText =
-        widget.alarmEnabled &&
-            widget.alarmStart.trim().isNotEmpty &&
-            widget.alarmStart != "Tắt"
+    widget.alarmEnabled &&
+        widget.alarmStart.trim().isNotEmpty &&
+        widget.alarmStart != "Tắt"
         ? widget.alarmStart.trim()
         : "";
 
@@ -1136,9 +1146,9 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final environment = widget.overall["hasEnvironmentDevice"] == true
         ? widget.environmentText
-              .replaceAll("/", " | ")
-              .replaceAll("  ", " ")
-              .trim()
+        .replaceAll("/", " | ")
+        .replaceAll("  ", " ")
+        .trim()
         : "";
 
     return Padding(

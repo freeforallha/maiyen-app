@@ -657,6 +657,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       "level": "no_data",
       "dangerIssues": <String>[],
       "warningIssues": <String>[],
+      "presenceWarnings": <String>[],
       "issues": <String>[],
       "safeSummary": <String>[
         "Chưa có dữ liệu để đánh giá",
@@ -678,6 +679,10 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   final safeSummary = List<String>.from(
     overall["safeSummary"] ?? const <String>[],
   );
+
+  // Thông tin vị trí thành viên chỉ dùng để hiển thị riêng.
+  // Nó không được làm thay đổi trạng thái chung của ngôi nhà.
+  final presenceWarnings = <String>[];
 
   // ================= HUB =================
 
@@ -737,24 +742,19 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
 // Auto Away backend vẫn dùng known/eligible riêng để quyết định bật Bảo vệ.
     if (totalMemberCount > 0) {
       final insideText =
-          "Thành viên trong nhà: $insideCount/$totalMemberCount";
+          "Thành viên đang ở trong nhà: $insideCount/$totalMemberCount";
 
-      if (insideCount > 0) {
-        safeSummary.insert(0, insideText);
-      } else if (dangerIssues.isNotEmpty) {
-        dangerIssues.add(insideText);
-      } else {
-        warningIssues.add(insideText);
-      }
+      // Số người trong/ngoài nhà là thông tin tổng quan, không phải lỗi.
+      safeSummary.insert(0, insideText);
 
       if (outsideCount > 0) {
         safeSummary.add(
-          "Thành viên bên ngoài: $outsideCount/$totalMemberCount",
+          "Thành viên đang ở ngoài: $outsideCount/$totalMemberCount",
         );
       }
 
       if (unknownCount > 0) {
-        warningIssues.add(
+        presenceWarnings.add(
           "Thành viên chưa xác định vị trí: $unknownCount/$totalMemberCount",
         );
       }
@@ -773,6 +773,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     "level": level,
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
+    "presenceWarnings": presenceWarnings,
     "issues": [...dangerIssues, ...warningIssues],
     "safeSummary": safeSummary,
     "hubTracked": hubTracked,
