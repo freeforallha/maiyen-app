@@ -430,6 +430,68 @@ class NotificationService {
     return true;
   }
 
+  static Future<bool> muteActiveHomeSirens({
+    String incidentId = '',
+  }) async {
+    final targets = <Map<String, String>>[];
+
+    if (incidentId.trim().isNotEmpty) {
+      final context = _activeAlarmIncidentContexts[incidentId.trim()];
+
+      targets.add(
+        context ??
+            {
+              'incidentId': incidentId.trim(),
+              'receiverUid': FirebaseAuth.instance.currentUser?.uid ?? '',
+            },
+      );
+    } else {
+      targets.addAll(
+        _activeAlarmIncidentContexts.values.map(
+              (item) => Map<String, String>.from(item),
+        ),
+      );
+    }
+
+    if (targets.isEmpty) {
+      return false;
+    }
+
+    // Một request cho mỗi Home là đủ. Backend sẽ snapshot toàn bộ incident
+    // đang active trong Home và tắt tất cả còi vật lý của Home đó.
+    final processedHomes = <String>{};
+
+    for (final target in targets) {
+      final ownerUid = target['ownerUid'] ?? '';
+      final homeId = target['homeId'] ?? '';
+      final fallbackIncidentId = target['incidentId'] ?? '';
+
+      if (fallbackIncidentId.isEmpty) {
+        return false;
+      }
+
+      final homeKey = ownerUid.isNotEmpty && homeId.isNotEmpty
+          ? '$ownerUid|$homeId'
+          : 'incident:$fallbackIncidentId';
+
+      if (!processedHomes.add(homeKey)) {
+        continue;
+      }
+
+      final ok = await _sendAlarmIncidentAction(
+        incidentId: fallbackIncidentId,
+        receiverUid: target['receiverUid'] ?? '',
+        action: 'mute_siren',
+      );
+
+      if (!ok) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   static Future<void> showPriorityAlarmNotification({
     required Map<String, dynamic> data,
   }) async {

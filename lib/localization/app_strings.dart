@@ -1451,6 +1451,44 @@ class AppStrings {
     km: "រកមិនឃើញការជូនដំណឹងសកម្ម ឬមិនអាចផ្ញើពាក្យបញ្ជាបិទស៊ីរ៉ែនបាន។",
   );
 
+  // Giữ tương thích với FullscreenAlarmPage từ commit local 7a47dac.
+  // Hai API này chỉ tắt còi vật lý; incident/cảnh báo vẫn tiếp tục hoạt động.
+  String muteHomeSirenLabel() => choose(
+    vi: "TẮT CÒI TRONG NHÀ",
+    my: "အိမ်ရှိ ဥဩကို ပိတ်ရန်",
+    en: "SILENCE HOME SIREN",
+    zh: "关闭家中警报器",
+    ko: "집 사이렌 끄기",
+    ja: "家のサイレンを停止",
+    de: "HAUSSIRENE STUMMSCHALTEN",
+    ru: "ВЫКЛЮЧИТЬ СИРЕНУ ДОМА",
+    fr: "COUPER LA SIRÈNE DU DOMICILE",
+    es: "SILENCIAR SIRENA DE CASA",
+    id: "MATIKAN SIRENE RUMAH",
+    th: "ปิดเสียงไซเรนในบ้าน",
+    ms: "SENYAPKAN SIREN RUMAH",
+    fil: "PATAYIN ANG SIRENA SA BAHAY",
+    km: "បិទសំឡេងស៊ីរ៉ែនក្នុងផ្ទះ",
+  );
+
+  String homeSirenMutedMessage() => choose(
+    vi: "Đã tắt còi trong nhà. Cảnh báo vẫn tiếp tục cho đến khi được xử lý.",
+    my: "အိမ်ရှိ ဥဩကို ပိတ်ပြီးပါပြီ။ သတိပေးချက်ကို ကိုင်တွယ်ဖြေရှင်းပြီးသည်အထိ ဆက်လက်အသက်ဝင်နေမည်။",
+    en: "The home siren is silenced. The alert remains active until it is handled.",
+    zh: "家中警报器已关闭。警报会保持有效，直到问题得到处理。",
+    ko: "집 사이렌을 껐습니다. 문제가 처리될 때까지 경보는 계속 유지됩니다.",
+    ja: "家のサイレンを停止しました。対応が完了するまでアラートは継続します。",
+    de: "Die Haussirene wurde stummgeschaltet. Der Alarm bleibt aktiv, bis er bearbeitet wurde.",
+    ru: "Сирена дома выключена. Тревога останется активной до устранения причины.",
+    fr: "La sirène du domicile est coupée. L’alerte reste active jusqu’à sa prise en charge.",
+    es: "La sirena de casa está silenciada. La alerta seguirá activa hasta que se resuelva.",
+    id: "Sirene rumah telah dimatikan. Peringatan tetap aktif sampai ditangani.",
+    th: "ปิดเสียงไซเรนในบ้านแล้ว การแจ้งเตือนจะยังทำงานจนกว่าจะได้รับการจัดการ",
+    ms: "Siren rumah telah disenyapkan. Amaran kekal aktif sehingga ditangani.",
+    fil: "Napatay na ang sirena sa bahay. Mananatiling aktibo ang alerto hanggang maresolba.",
+    km: "បានបិទសំឡេងស៊ីរ៉ែនក្នុងផ្ទះ។ ការជូនដំណឹងនៅតែសកម្មរហូតដល់បានដោះស្រាយ។",
+  );
+
   String defaultHomeName() => choose(
     vi: "Nhà",
     en: "Home",

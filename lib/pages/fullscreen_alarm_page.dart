@@ -41,6 +41,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   late String currentReminderItemsJson;
   late String currentAlarmBody;
   late String currentAlarmItemsJson;
+  bool _isMutingHomeSiren = false;
   bool get isReminder => widget.silentMode;
 
   bool get isSafeReminder {
@@ -151,6 +152,36 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       AppStrings.of(context).alarmActionErrorMessage(),
       color: Colors.red,
       icon: Icons.wifi_off_rounded,
+    );
+  }
+
+  Future<void> muteHomeSiren() async {
+    if (_isMutingHomeSiren) {
+      return;
+    }
+
+    setState(() {
+      _isMutingHomeSiren = true;
+    });
+
+    final muted = await NotificationService.muteActiveHomeSirens();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isMutingHomeSiren = false;
+    });
+
+    if (!muted) {
+      _showAlarmActionError();
+      return;
+    }
+
+    showTopToast(
+      context,
+      AppStrings.of(context).homeSirenMutedMessage(),
+      color: Colors.orange.shade700,
+      icon: Icons.volume_off_rounded,
     );
   }
 
@@ -1089,7 +1120,49 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      disabledForegroundColor:
+                      Colors.white.withValues(alpha: 0.65),
+                      side: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    icon: _isMutingHomeSiren
+                        ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                        : const Icon(
+                      Icons.notifications_off_rounded,
+                      size: 20,
+                    ),
+                    label: Text(
+                      strings.muteHomeSirenLabel(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    onPressed:
+                    _isMutingHomeSiren ? null : muteHomeSiren,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
 
                 TextButton.icon(
                   style: TextButton.styleFrom(
