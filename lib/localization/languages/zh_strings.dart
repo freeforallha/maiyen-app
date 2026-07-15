@@ -981,4 +981,22 @@ const Map<String, String> zhStrings = {
   "Khoảng tạm tắt không hợp lệ": "Alarm 暂停时间范围无效",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "暂停时间范围与任何已启用的 Alarm 计划均不重叠",
+
+  // Device alarm policy
+  "Cấu hình báo động": "报警设置",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "控制此传感器触发警报的方式。",
+  "Tham gia báo động": "参与报警",
+  "Tắt để cảm biến không tạo Alarm.": "关闭后，此传感器将不会触发 Alarm。",
+  "Bật còi vật lý": "启用实体警号",
+  "Cho phép kích hoạt còi trong nhà.": "允许启动室内警号。",
+  "Đánh thức màn hình": "唤醒屏幕",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "在手机上显示全屏警报。",
+  "Độ trễ kích hoạt": "触发延迟",
+  "Chỉ áp dụng cho cảm biến an ninh.": "仅适用于安防传感器。",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "紧急传感器始终立即触发。",
+  "Ngay lập tức": "立即",
+  "giây": "秒",
+  "Đã lưu cấu hình báo động": "报警设置已保存",
+  "Không thể lưu cấu hình báo động": "无法保存报警设置",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "只有屋主和管理员可以更改此设置。",
 };

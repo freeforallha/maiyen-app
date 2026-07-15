@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../app/safe_home_app.dart';
+import '../helpers/top_toast.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import '../pages/fullscreen_alarm_page.dart';
@@ -260,37 +261,146 @@ class NotificationService {
     return strings.t(cleanTitle);
   }
 
+  static String normalizedIncidentEventCategory(
+    Map<String, dynamic> data,
+  ) {
+    final direct = data['eventCategory']?.toString().trim().toLowerCase() ?? '';
+
+    if (direct == 'emergency' || direct == 'security' || direct == 'system_warning') {
+      return direct;
+    }
+
+    final flow =
+        data['alarmFlowType']?.toString().trim().toLowerCase() ??
+        data['flowType']?.toString().trim().toLowerCase() ??
+        '';
+
+    if (flow == 'emergency') return 'emergency';
+    if (flow == 'security') return 'security';
+
+    final level = data['alarmLevel']?.toString().trim().toLowerCase() ?? '';
+    if (level == 'emergency') return 'emergency';
+    if (level == 'alarm') return 'security';
+
+    return 'security';
+  }
+
+  static String normalizedIncidentAlarmLevel(
+    Map<String, dynamic> data,
+  ) {
+    final direct = data['alarmLevel']?.toString().trim().toLowerCase() ?? '';
+
+    if ({'info', 'warning', 'alarm', 'emergency'}.contains(direct)) {
+      return direct;
+    }
+
+    final category = normalizedIncidentEventCategory(data);
+    if (category == 'emergency') return 'emergency';
+    if (category == 'system_warning') return 'warning';
+
+    final severity = data['severity']?.toString().trim().toLowerCase() ?? '';
+    if (severity == 'critical') return 'emergency';
+
+    return 'alarm';
+  }
+
+  static String normalizedIncidentStatus(
+    Map<String, dynamic> data,
+  ) {
+    final status =
+        data['incidentStatus']?.toString().trim().toLowerCase() ??
+        data['status']?.toString().trim().toLowerCase() ??
+        '';
+
+    return status.isEmpty ? 'active' : status;
+  }
+
+  static void _syncAlarmPresentationFromActiveIncidents() {
+    if (_activeAlarmIncidentContexts.isEmpty) {
+      lastAlarmEventCategory = '';
+      lastAlarmLevel = '';
+      return;
+    }
+
+    final contexts = _activeAlarmIncidentContexts.values;
+    final hasEmergency = contexts.any(
+      (context) =>
+          context['eventCategory'] == 'emergency' ||
+          context['alarmLevel'] == 'emergency',
+    );
+
+    if (hasEmergency) {
+      lastAlarmEventCategory = 'emergency';
+      lastAlarmLevel = 'emergency';
+      return;
+    }
+
+    final hasAlarm = contexts.any(
+      (context) => context['alarmLevel'] == 'alarm',
+    );
+
+    lastAlarmEventCategory = 'security';
+    lastAlarmLevel = hasAlarm ? 'alarm' : 'warning';
+  }
+
   static void rememberAlarmIncident(Map<String, dynamic> data) {
     final incidentId = data['incidentId']?.toString().trim() ?? '';
 
     if (incidentId.isEmpty) return;
 
+    final status = normalizedIncidentStatus(data);
+
+    if (status != 'active') {
+      _activeAlarmIncidentContexts.remove(incidentId);
+      return;
+    }
+
     final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     final receiverUid =
-    data['receiverUid']?.toString().trim().isNotEmpty == true
-        ? data['receiverUid'].toString().trim()
-        : currentUid;
+        data['receiverUid']?.toString().trim().isNotEmpty == true
+            ? data['receiverUid'].toString().trim()
+            : currentUid;
 
     final ownerUid = data['ownerUid']?.toString().trim() ?? '';
-
     final homeId = data['homeId']?.toString().trim() ?? '';
-
-    final flowType = data['alarmFlowType']?.toString().trim() ?? '';
+    final eventCategory = normalizedIncidentEventCategory(data);
+    final alarmLevel = normalizedIncidentAlarmLevel(data);
+    final flowType =
+        data['alarmFlowType']?.toString().trim().isNotEmpty == true
+            ? data['alarmFlowType'].toString().trim()
+            : eventCategory;
 
     // Mỗi người chỉ giữ incident mới nhất của cùng một nhà
-    // và cùng luồng cảnh báo. Incident cũ đã superseded
+    // và cùng nhóm sự kiện. Incident cũ đã superseded
     // không được gửi xác nhận lại.
-    if (homeId.isNotEmpty && flowType.isNotEmpty) {
+    final supersededIncidentIds = <String>{};
+
+    if (homeId.isNotEmpty && eventCategory.isNotEmpty) {
       _activeAlarmIncidentContexts.removeWhere((oldIncidentId, context) {
         if (oldIncidentId == incidentId) {
           return false;
         }
 
-        return context['receiverUid'] == receiverUid &&
+        final shouldRemove =
+            context['receiverUid'] == receiverUid &&
             context['homeId'] == homeId &&
-            context['flowType'] == flowType;
+            context['eventCategory'] == eventCategory;
+
+        if (shouldRemove) {
+          supersededIncidentIds.add(oldIncidentId);
+        }
+
+        return shouldRemove;
       });
+    }
+
+    if (supersededIncidentIds.isNotEmpty) {
+      activeAlarmItems.removeWhere(
+        (item) => supersededIncidentIds.contains(
+          item['incidentId']?.toString().trim() ?? '',
+        ),
+      );
     }
 
     _activeAlarmIncidentContexts[incidentId] = {
@@ -299,7 +409,12 @@ class NotificationService {
       'ownerUid': ownerUid,
       'homeId': homeId,
       'flowType': flowType,
+      'eventCategory': eventCategory,
+      'alarmLevel': alarmLevel,
+      'status': status,
     };
+
+    _syncAlarmPresentationFromActiveIncidents();
   }
 
   static Future<bool> _sendAlarmIncidentAction({
@@ -343,38 +458,135 @@ class NotificationService {
 
 
 
+  static bool _isValidHubId(String value) {
+    return RegExp(r'^dev_[a-f0-9]{16}$').hasMatch(value);
+  }
+
+  static Future<String> _resolveHomeHubId({
+    required String requestedBy,
+    required String homeId,
+    required String fallbackHubId,
+  }) async {
+    try {
+      String ownerUid = requestedBy;
+
+      final ownHomeSnap = await FirebaseDatabase.instance
+          .ref('accounts/$requestedBy/homes/$homeId')
+          .get();
+
+      DataSnapshot homeSnap = ownHomeSnap;
+
+      if (!ownHomeSnap.exists) {
+        final sharedHomeSnap = await FirebaseDatabase.instance
+            .ref('accounts/$requestedBy/sharedHomes/$homeId')
+            .get();
+        final sharedHome = sharedHomeSnap.value;
+
+        if (sharedHome is Map) {
+          ownerUid = sharedHome['ownerUid']?.toString().trim() ?? '';
+        }
+
+        if (ownerUid.isNotEmpty) {
+          homeSnap = await FirebaseDatabase.instance
+              .ref('accounts/$ownerUid/homes/$homeId')
+              .get();
+        }
+      }
+
+      final rawHome = homeSnap.value;
+
+      if (rawHome is Map) {
+        final databaseHubId = rawHome['hubId']?.toString().trim() ?? '';
+
+        if (_isValidHubId(databaseHubId)) {
+          return databaseHubId;
+        }
+      }
+    } catch (error) {
+      safeDebugPrint('HOME SIREN HUB RESOLVE ERROR: $error');
+    }
+
+    final cleanFallbackHubId = fallbackHubId.trim();
+    return _isValidHubId(cleanFallbackHubId) ? cleanFallbackHubId : '';
+  }
+
   static Future<bool> muteHomeSiren({
     required String homeId,
     required String hubId,
   }) async {
     final requestedBy = FirebaseAuth.instance.currentUser?.uid ?? '';
     final cleanHomeId = homeId.trim();
-    final cleanHubId = hubId.trim();
 
-    if (requestedBy.isEmpty ||
-        cleanHomeId.isEmpty ||
-        cleanHubId.isEmpty) {
+    if (requestedBy.isEmpty || cleanHomeId.isEmpty) {
       return false;
     }
 
-    try {
-      final ref = FirebaseDatabase.instance
-          .ref('home_siren_action_requests')
-          .push();
+    final resolvedHubId = await _resolveHomeHubId(
+      requestedBy: requestedBy,
+      homeId: cleanHomeId,
+      fallbackHubId: hubId,
+    );
 
+    if (resolvedHubId.isEmpty) {
+      return false;
+    }
+
+    final ref = FirebaseDatabase.instance
+        .ref('home_siren_action_requests')
+        .push();
+    final result = Completer<bool>();
+    StreamSubscription<DatabaseEvent>? subscription;
+
+    try {
       await ref.set({
         'status': 'pending',
         'homeId': cleanHomeId,
-        'hubId': cleanHubId,
+        'hubId': resolvedHubId,
         'requestedBy': requestedBy,
         'action': 'mute',
         'createdAt': ServerValue.timestamp,
       });
 
-      return true;
+      // Chỉ mở listener sau khi node đã tồn tại, vì Firebase Rules đọc dựa
+      // trên requestedBy. Backend giữ kết quả 30 giây nên không có race.
+      subscription = ref.onValue.listen(
+        (event) {
+          final raw = event.snapshot.value;
+
+          if (raw is! Map || result.isCompleted) {
+            return;
+          }
+
+          final status = raw['status']?.toString().trim() ?? '';
+
+          if (status == 'succeeded') {
+            result.complete(true);
+          } else if (status == 'failed' || status == 'rejected') {
+            result.complete(false);
+          }
+        },
+        onError: (Object error) {
+          safeDebugPrint('HOME SIREN RESULT LISTENER ERROR: $error');
+
+          if (!result.isCompleted) {
+            result.complete(false);
+          }
+        },
+      );
+
+      return await result.future.timeout(
+        const Duration(seconds: 25),
+        onTimeout: () => false,
+      );
     } catch (error) {
       safeDebugPrint('HOME SIREN MUTE REQUEST ERROR: $error');
       return false;
+    } finally {
+      final activeSubscription = subscription;
+
+      if (activeSubscription != null) {
+        await activeSubscription.cancel();
+      }
     }
   }
 
@@ -545,19 +757,52 @@ class NotificationService {
 
   static Future<void> handleAlarmResolved(Map<String, dynamic> data) async {
     final incidentId = data['incidentId']?.toString().trim() ?? '';
+    final action =
+        data['resolutionAction']?.toString().trim().isNotEmpty == true
+            ? data['resolutionAction'].toString().trim()
+            : data['action']?.toString().trim() ?? 'resolved';
+    final resolvedMessage = _strings.alarmIncidentResolvedMessage(action);
 
     if (incidentId.isNotEmpty) {
       _activeAlarmIncidentContexts.remove(incidentId);
+      activeAlarmItems.removeWhere(
+        (item) =>
+            item['incidentId']?.toString().trim() == incidentId,
+      );
     } else {
       _activeAlarmIncidentContexts.clear();
+      activeAlarmItems.clear();
     }
 
-    await stopAllAlarmNotifications();
+    _syncAlarmPresentationFromActiveIncidents();
+    lastAlarmItemsJson = activeAlarmItems.isEmpty
+        ? ''
+        : jsonEncode(activeAlarmItems);
 
     if (_activeAlarmIncidentContexts.isEmpty) {
+      await stopAllAlarmNotifications();
       clearActiveAlarms(clearIncidentContexts: false);
       alarmResolvedRevision.value++;
+    } else {
+      // Còn incident khác đang hoạt động: chỉ cập nhật nội dung màn hình,
+      // tuyệt đối không tắt notification/âm thanh của sự cố còn lại.
+      alarmRevision.value++;
     }
+
+    unawaited(
+      Future<void>.delayed(const Duration(milliseconds: 350), () {
+        final context = appNavigatorKey.currentContext;
+
+        if (context == null) return;
+
+        showTopToast(
+          context,
+          resolvedMessage,
+          color: Colors.green.shade700,
+          icon: Icons.check_circle_rounded,
+        );
+      }),
+    );
   }
 
   static Future<bool> reconcileActiveAlarmIncidents() async {
@@ -648,6 +893,8 @@ class NotificationService {
       ownerUid: data['ownerUid']?.toString() ?? '',
       homeId: data['homeId']?.toString() ?? '',
       flowType: data['alarmFlowType']?.toString() ?? '',
+      eventCategory: normalizedIncidentEventCategory(data),
+      alarmLevel: normalizedIncidentAlarmLevel(data),
     );
   }
 
@@ -739,6 +986,8 @@ class NotificationService {
   static String lastReminderItemsJson = "";
   static String lastAlarmItemsJson = "";
   static String lastAlarmBody = _strings.alarmBody;
+  static String lastAlarmEventCategory = "";
+  static String lastAlarmLevel = "";
   static const String reminderRouteName = "fullscreen_reminder";
 
   static bool _reminderPageOpen = false;
@@ -1106,6 +1355,8 @@ class NotificationService {
       ownerUid: data['ownerUid']?.toString() ?? '',
       homeId: data['homeId']?.toString() ?? '',
       flowType: data['flowType']?.toString() ?? '',
+      eventCategory: data['eventCategory']?.toString() ?? '',
+      alarmLevel: data['alarmLevel']?.toString() ?? '',
     );
   }
 
@@ -1118,6 +1369,8 @@ class NotificationService {
     String ownerUid = '',
     String homeId = '',
     String flowType = '',
+    String eventCategory = '',
+    String alarmLevel = '',
   }) {
     if (incidentId.trim().isNotEmpty) {
       rememberAlarmIncident({
@@ -1126,10 +1379,20 @@ class NotificationService {
         'ownerUid': ownerUid,
         'homeId': homeId,
         'alarmFlowType': flowType,
+        'eventCategory': eventCategory,
+        'alarmLevel': alarmLevel,
+        'incidentStatus': 'active',
       });
     }
 
     lastAlarmBody = body;
+    final incidentData = <String, dynamic>{
+      'alarmFlowType': flowType,
+      'eventCategory': eventCategory,
+      'alarmLevel': alarmLevel,
+    };
+    lastAlarmEventCategory = normalizedIncidentEventCategory(incidentData);
+    lastAlarmLevel = normalizedIncidentAlarmLevel(incidentData);
     _addAlarmItems(alarmItemsJson);
 
     lastAlarmItemsJson = activeAlarmItems.isEmpty
@@ -1154,6 +1417,8 @@ class NotificationService {
         'ownerUid': ownerUid,
         'homeId': homeId,
         'flowType': flowType,
+        'eventCategory': eventCategory,
+        'alarmLevel': alarmLevel,
       };
 
       _pendingAlarmOpenTimer?.cancel();
@@ -1174,6 +1439,8 @@ class NotificationService {
           title: title,
           body: lastAlarmBody,
           alarmItemsJson: lastAlarmItemsJson,
+          eventCategory: eventCategory,
+          alarmLevel: alarmLevel,
         ),
       ),
     )
@@ -1184,6 +1451,8 @@ class NotificationService {
     activeAlarmItems.clear();
     lastAlarmItemsJson = '';
     lastAlarmBody = _strings.alarmBody;
+    lastAlarmEventCategory = '';
+    lastAlarmLevel = '';
 
     if (clearIncidentContexts) {
       _activeAlarmIncidentContexts.clear();

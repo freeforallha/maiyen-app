@@ -1097,4 +1097,22 @@ const Map<String, String> msStrings = {
   "Khoảng tạm tắt không hợp lệ": "Tempoh Jeda Alarm tidak sah",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Tempoh Jeda Alarm tidak bertindih dengan mana-mana Jadual Alarm yang aktif",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Tetapan penggera",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Tetapkan cara sensor ini mencetuskan amaran.",
+  "Tham gia báo động": "Sertai penggera",
+  "Tắt để cảm biến không tạo Alarm.": "Matikan supaya sensor ini tidak mencipta Alarm.",
+  "Bật còi vật lý": "Aktifkan siren fizikal",
+  "Cho phép kích hoạt còi trong nhà.": "Benarkan siren di dalam rumah diaktifkan.",
+  "Đánh thức màn hình": "Hidupkan skrin",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Paparkan amaran skrin penuh pada telefon.",
+  "Độ trễ kích hoạt": "Kelewatan pencetus",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Hanya digunakan untuk sensor keselamatan.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Sensor kecemasan sentiasa dicetuskan serta-merta.",
+  "Ngay lập tức": "Serta-merta",
+  "giây": "saat",
+  "Đã lưu cấu hình báo động": "Tetapan penggera telah disimpan",
+  "Không thể lưu cấu hình báo động": "Tidak dapat menyimpan tetapan penggera",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Hanya pemilik rumah dan pentadbir boleh mengubah tetapan ini.",
 };

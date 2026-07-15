@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
@@ -460,9 +461,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   bool isSecurityDevice(Map d) {
-    final type = d["type"]?.toString();
-
-    return type == "door" || type == "door_lock" || type == "motion";
+    return isSecurityDeviceType(d["type"]);
   }
 
   Map<String, dynamic> alarmOf(String deviceId) {

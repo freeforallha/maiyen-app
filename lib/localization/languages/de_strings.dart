@@ -1103,4 +1103,22 @@ const Map<String, String> deStrings = {
   "Khoảng tạm tắt không hợp lệ": "Ungültiger Zeitraum für die Alarm-Pause",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Der Pausenzeitraum überschneidet sich mit keinem aktiven Alarm-Zeitplan",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Alarmeinstellungen",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Lege fest, wie dieser Sensor Warnungen auslöst.",
+  "Tham gia báo động": "Am Alarm teilnehmen",
+  "Tắt để cảm biến không tạo Alarm.": "Deaktivieren, damit dieser Sensor keinen Alarm auslöst.",
+  "Bật còi vật lý": "Physische Sirene aktivieren",
+  "Cho phép kích hoạt còi trong nhà.": "Erlaubt das Aktivieren der Sirene im Haus.",
+  "Đánh thức màn hình": "Bildschirm aktivieren",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Zeigt eine Vollbildwarnung auf dem Telefon an.",
+  "Độ trễ kích hoạt": "Auslöseverzögerung",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Gilt nur für Sicherheitssensoren.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Notfallsensoren lösen immer sofort aus.",
+  "Ngay lập tức": "Sofort",
+  "giây": "Sekunden",
+  "Đã lưu cấu hình báo động": "Alarmeinstellungen gespeichert",
+  "Không thể lưu cấu hình báo động": "Alarmeinstellungen konnten nicht gespeichert werden",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Nur der Hauseigentümer und Administratoren können diese Einstellung ändern.",
 };

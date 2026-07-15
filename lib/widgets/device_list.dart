@@ -569,8 +569,7 @@ class _DeviceListState extends State<DeviceList> {
             : strings.t("Không phát hiện hiện diện");
 
       case "vibration":
-        final active =
-            isActiveDeviceSignal(d["vibration"]) || isRecentDeviceEvent(d);
+        final active = isVibrationEventActive(d);
 
         return active
             ? strings.t("Phát hiện rung/chấn động")
@@ -796,7 +795,23 @@ class _DeviceListState extends State<DeviceList> {
     _draggingDeviceDropping = false;
   }
 
-  double _deviceGridItemHeight(bool compact) {
+  double _deviceGridItemHeight(
+    bool compact,
+    List<MapEntry<String, dynamic>> entries,
+  ) {
+    final hasActiveSiren = entries.any((entry) {
+      final device = safeMap(entry.value);
+      final type = device["type"]?.toString() ?? "";
+
+      return type == "siren" &&
+          (isActiveDeviceSignal(device["alarm"]) ||
+              normalizeDeviceSwitchState(device) == "on");
+    });
+
+    if (hasActiveSiren) {
+      return compact ? 106.0 : 114.0;
+    }
+
     // Giữ card gọn như layout cũ nhưng chừa dư rất nhẹ
     // để Column bên trong không bị overflow 0.x pixels.
     return compact ? 70.0 : 75.0;
@@ -1151,7 +1166,7 @@ class _DeviceListState extends State<DeviceList> {
     if (muted) {
       showTopToast(
         context,
-        strings.sirenStoppedMessage(),
+        strings.homeSirenMutedMessage(),
         color: SafeHomeColors.safe,
         icon: Icons.volume_off_rounded,
       );
@@ -1166,42 +1181,58 @@ class _DeviceListState extends State<DeviceList> {
     );
   }
 
-  Widget _sirenStopButton({
+  Widget _sirenStopAction({
     required bool compact,
     required AppStrings strings,
   }) {
-    final buttonSize = compact ? 25.0 : 27.0;
-
     return Tooltip(
       message: strings.stopSirenLabel(),
       child: Semantics(
         button: true,
         label: strings.stopSirenLabel(),
         child: Material(
-          color: SafeHomeColors.danger.withValues(alpha: 0.11),
-          borderRadius: BorderRadius.circular(9),
+          color: SafeHomeColors.danger.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(11),
           child: InkWell(
             onTap: _mutingHomeSiren
                 ? null
                 : () => _confirmMuteHomeSiren(strings),
-            borderRadius: BorderRadius.circular(9),
+            borderRadius: BorderRadius.circular(11),
             child: SizedBox(
-              width: buttonSize,
-              height: buttonSize,
-              child: Center(
-                child: _mutingHomeSiren
-                    ? SizedBox(
-                        width: compact ? 13 : 14,
-                        height: compact ? 13 : 14,
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Icon(
-                        Icons.volume_off_rounded,
-                        size: compact ? 15 : 16,
+              width: double.infinity,
+              height: compact ? 30 : 32,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_mutingHomeSiren)
+                    SizedBox(
+                      width: compact ? 14 : 15,
+                      height: compact ? 14 : 15,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  else
+                    Icon(
+                      Icons.volume_off_rounded,
+                      size: compact ? 16 : 17,
+                      color: SafeHomeColors.danger,
+                    ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      strings.stopSirenLabel(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: compact ? 11.2 : 11.8,
+                        height: 1,
+                        fontWeight: FontWeight.w900,
                         color: SafeHomeColors.danger,
                       ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1317,13 +1348,6 @@ class _DeviceListState extends State<DeviceList> {
                       ],
                     ),
                   ),
-                  if (sirenIsOn) ...[
-                    const SizedBox(width: 5),
-                    _sirenStopButton(
-                      compact: compact,
-                      strings: strings,
-                    ),
-                  ],
                 ],
               ),
               const SizedBox(height: 7),
@@ -1360,6 +1384,13 @@ class _DeviceListState extends State<DeviceList> {
                   ),
                 ],
               ),
+              if (sirenIsOn) ...[
+                const SizedBox(height: 6),
+                _sirenStopAction(
+                  compact: compact,
+                  strings: strings,
+                ),
+              ],
             ],
           ),
         ),
@@ -1503,7 +1534,7 @@ class _DeviceListState extends State<DeviceList> {
   }) {
     final sectionKey = _sectionKeyForGroup(groupName);
     final canReorder = _canReorderDevices && entries.length > 1;
-    final itemHeight = _deviceGridItemHeight(compact);
+    final itemHeight = _deviceGridItemHeight(compact, entries);
     final visibleEntries = canReorder
         ? _dragPreviewEntries(sectionKey, entries)
         : entries;

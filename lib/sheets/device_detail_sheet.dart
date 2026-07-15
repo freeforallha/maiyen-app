@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
+import 'device_alarm_policy_sheet.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 
@@ -15,6 +16,7 @@ void showDeviceDetail({
   VoidCallback? onRename,
   VoidCallback? onDelete,
   required VoidCallback onNotification,
+  required bool canManageAlarmPolicy,
 }) {
   final deviceRef = FirebaseDatabase.instance.ref(
     "accounts/$ownerUid/homes/$homeId/devices/$id",
@@ -94,6 +96,11 @@ void showDeviceDetail({
           final displayStatus = _getDeviceDisplayStatus(device);
 
           final deviceName = device["name"]?.toString().trim() ?? "";
+          final supportsAlarmPolicy = supportsDeviceAlarmPolicy(deviceType);
+          final alarmPolicy = DeviceAlarmPolicySettings.fromDevice(
+            device: device,
+            deviceType: deviceType,
+          );
 
           final hasBattery =
               device["battery"] != null ||
@@ -350,6 +357,26 @@ void showDeviceDetail({
                         title: strings.t("Sự kiện cuối"),
                         value: formatFullDate(lastEvent),
                       ),
+                    if (supportsAlarmPolicy) ...[
+                      const SizedBox(height: 8),
+                      _alarmPolicyCard(
+                        strings: strings,
+                        settings: alarmPolicy,
+                        isEmergency: isEmergencyAlarmPolicyDevice(deviceType),
+                        onTap: () {
+                          showDeviceAlarmPolicySheet(
+                            context: context,
+                            ownerUid: ownerUid,
+                            homeId: homeId,
+                            deviceId: id,
+                            deviceName: deviceName.isNotEmpty ? deviceName : id,
+                            deviceType: deviceType,
+                            device: device,
+                            canEdit: canManageAlarmPolicy,
+                          );
+                        },
+                      ),
+                    ],
                     const SizedBox(height: 22),
                     if (onDelete != null)
                       Center(
@@ -453,8 +480,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
       );
 
     case "vibration":
-      final detected =
-          active(const ["vibration", "shock"]) || isRecentDeviceEvent(device);
+      final detected = isVibrationEventActive(device);
 
       return _DeviceDisplayStatus(
         title: "Rung/chấn động",
@@ -717,6 +743,81 @@ _DeviceHealth _getDeviceHealth({
     text: "Cần kiểm tra",
     icon: Icons.info_rounded,
     color: SafeHomeColors.warning,
+  );
+}
+
+Widget _alarmPolicyCard({
+  required AppStrings strings,
+  required DeviceAlarmPolicySettings settings,
+  required bool isEmergency,
+  required VoidCallback onTap,
+}) {
+  final statusColor = settings.enabled
+      ? SafeHomeColors.safe
+      : SafeHomeColors.textSecondary;
+  final delayText = isEmergency || settings.triggerDelaySeconds == 0
+      ? strings.t("Ngay lập tức")
+      : "${settings.triggerDelaySeconds} ${strings.t("giây")}";
+
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(16),
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: SafeHomeColors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: SafeHomeColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: SafeHomeColors.danger.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(
+              Icons.notifications_active_rounded,
+              color: SafeHomeColors.danger,
+              size: 21,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  strings.t("Cấu hình báo động"),
+                  style: const TextStyle(
+                    color: SafeHomeColors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  settings.enabled
+                      ? "${strings.t("Đang bật")} • $delayText"
+                      : strings.t("Đang tắt"),
+                  style: TextStyle(
+                    color: statusColor,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: SafeHomeColors.textSecondary,
+          ),
+        ],
+      ),
+    ),
   );
 }
 

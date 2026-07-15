@@ -16,6 +16,8 @@ class FullscreenAlarmPage extends StatefulWidget {
   final bool silentMode;
   final String alarmItemsJson;
   final String reminderItemsJson;
+  final String eventCategory;
+  final String alarmLevel;
 
   const FullscreenAlarmPage({
     super.key,
@@ -24,6 +26,8 @@ class FullscreenAlarmPage extends StatefulWidget {
     this.silentMode = false,
     this.reminderItemsJson = "",
     this.alarmItemsJson = "",
+    this.eventCategory = "",
+    this.alarmLevel = "",
   });
 
   @override
@@ -41,6 +45,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   late String currentReminderItemsJson;
   late String currentAlarmBody;
   late String currentAlarmItemsJson;
+  late String currentEventCategory;
+  late String currentAlarmLevel;
   bool _isMutingHomeSiren = false;
   bool get isReminder => widget.silentMode;
 
@@ -91,6 +97,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     currentReminderItemsJson = widget.reminderItemsJson;
     currentAlarmBody = widget.body;
     currentAlarmItemsJson = widget.alarmItemsJson;
+    currentEventCategory = widget.eventCategory;
+    currentAlarmLevel = widget.alarmLevel;
     if (widget.silentMode) {
       _loadLatestReminderSession();
 
@@ -227,6 +235,17 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
     if (latestItems.isNotEmpty) {
       currentAlarmItemsJson = latestItems;
+    }
+
+    final latestCategory = NotificationService.lastAlarmEventCategory.trim();
+    final latestLevel = NotificationService.lastAlarmLevel.trim();
+
+    if (latestCategory.isNotEmpty) {
+      currentEventCategory = latestCategory;
+    }
+
+    if (latestLevel.isNotEmpty) {
+      currentAlarmLevel = latestLevel;
     }
   }
 
@@ -427,22 +446,30 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
 
   String alarmType() {
     final items = alarmItems();
+    final types = items
+        .map((item) => item["type"]?.toString().trim().toLowerCase() ?? "")
+        .where((type) => type.isNotEmpty)
+        .toSet();
 
-    for (final item in items) {
-      final type = item["type"]?.toString().trim().toLowerCase();
-
-      if (type != null && type.isNotEmpty) {
-        if (type == "sos") return "sos";
-        if (type == "smoke") return "smoke";
-        if (type == "flood") return "flood";
-        if (type == "gas") return "gas";
-        if (type == "door" ||
-            type == "window" ||
-            type == "gate" ||
-            type == "lock") {
-          return "door";
-        }
-      }
+    // Luôn ưu tiên sự cố khẩn cấp nếu nhiều incident cùng cập nhật
+    // trên một màn hình Alarm đang mở.
+    if (types.contains("sos")) return "sos";
+    if (types.contains("smoke") || types.contains("heat")) return "smoke";
+    if (types.contains("carbon_monoxide") || types.contains("gas")) {
+      return "gas";
+    }
+    if (types.contains("flood") || types.contains("water_leak")) {
+      return "flood";
+    }
+    if (types.any(
+      (type) =>
+          type == "door" ||
+          type == "window" ||
+          type == "gate" ||
+          type == "lock" ||
+          type == "door_lock",
+    )) {
+      return "door";
     }
 
     final allText = [
@@ -900,8 +927,16 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final issueMap = buildAlarmIssueMap(type, strings);
     final nextAlarmMap = buildNextAlarmMap();
 
+    final normalizedCategory = currentEventCategory.trim().toLowerCase();
+    final normalizedLevel = currentAlarmLevel.trim().toLowerCase();
     final isEmergency =
-        type == 'sos' || type == 'smoke' || type == 'flood' || type == 'gas';
+        normalizedCategory == 'emergency' ||
+        normalizedLevel == 'emergency' ||
+        type == 'sos' ||
+        type == 'smoke' ||
+        type == 'flood' ||
+        type == 'gas';
+    final displayedLevel = isEmergency ? 'emergency' : 'alarm';
 
     final repeatText = isEmergency
         ? strings.alarmEmergencyEscalationText()
@@ -988,6 +1023,62 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                             color: Colors.grey.shade600,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.09),
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: accent.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                isEmergency
+                                    ? Icons.warning_amber_rounded
+                                    : Icons.crisis_alert_rounded,
+                                color: accent,
+                                size: 17,
+                              ),
+                              const SizedBox(width: 7),
+                              Text(
+                                strings.alarmIncidentLevelLabel(displayedLevel),
+                                style: TextStyle(
+                                  color: accent,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: accent.withValues(alpha: 0.55),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                strings.alarmIncidentActiveLabel(),
+                                style: TextStyle(
+                                  color: Colors.grey.shade700,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
 

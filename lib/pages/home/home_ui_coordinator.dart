@@ -25,6 +25,7 @@ class HomeUiCoordinator {
     required VoidCallback? onRename,
     required VoidCallback? onDelete,
     required VoidCallback onNotification,
+    required bool canManageAlarmPolicy,
   }) {
     showDeviceDetail(
       context: context,
@@ -35,6 +36,7 @@ class HomeUiCoordinator {
       onRename: onRename,
       onDelete: onDelete,
       onNotification: onNotification,
+      canManageAlarmPolicy: canManageAlarmPolicy,
     );
   }
 

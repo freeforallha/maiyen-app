@@ -1064,4 +1064,22 @@ const Map<String, String> viStrings = {
   "Khoảng tạm tắt không hợp lệ": "Khoảng tạm tắt không hợp lệ",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Cấu hình báo động",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Điều khiển cách cảm biến này kích hoạt cảnh báo.",
+  "Tham gia báo động": "Tham gia báo động",
+  "Tắt để cảm biến không tạo Alarm.": "Tắt để cảm biến không tạo Alarm.",
+  "Bật còi vật lý": "Bật còi vật lý",
+  "Cho phép kích hoạt còi trong nhà.": "Cho phép kích hoạt còi trong nhà.",
+  "Đánh thức màn hình": "Đánh thức màn hình",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Hiển thị cảnh báo toàn màn hình trên điện thoại.",
+  "Độ trễ kích hoạt": "Độ trễ kích hoạt",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Chỉ áp dụng cho cảm biến an ninh.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.",
+  "Ngay lập tức": "Ngay lập tức",
+  "giây": "giây",
+  "Đã lưu cấu hình báo động": "Đã lưu cấu hình báo động",
+  "Không thể lưu cấu hình báo động": "Không thể lưu cấu hình báo động",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
 };

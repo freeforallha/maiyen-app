@@ -1118,4 +1118,22 @@ const Map<String, String> filStrings = {
   "Khoảng tạm tắt không hợp lệ": "Di-wastong saklaw ng pag-pause ng Alarm",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Hindi nag-o-overlap ang saklaw ng pag-pause sa anumang aktibong iskedyul ng Alarm",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Mga setting ng alarm",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Itakda kung paano nagpapagana ng alerto ang sensor na ito.",
+  "Tham gia báo động": "Isama sa alarm",
+  "Tắt để cảm biến không tạo Alarm.": "I-off para hindi gumawa ng Alarm ang sensor na ito.",
+  "Bật còi vật lý": "I-enable ang pisikal na sirena",
+  "Cho phép kích hoạt còi trong nhà.": "Payagang gumana ang sirena sa loob ng bahay.",
+  "Đánh thức màn hình": "Gisingin ang screen",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Magpakita ng full-screen na alerto sa telepono.",
+  "Độ trễ kích hoạt": "Antala bago mag-trigger",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Para lamang sa mga security sensor.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Palaging agad na nagti-trigger ang mga emergency sensor.",
+  "Ngay lập tức": "Agad",
+  "giây": "segundo",
+  "Đã lưu cấu hình báo động": "Nai-save ang mga setting ng alarm",
+  "Không thể lưu cấu hình báo động": "Hindi ma-save ang mga setting ng alarm",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Tanging ang may-ari ng bahay at mga administrator ang maaaring magbago ng setting na ito.",
 };

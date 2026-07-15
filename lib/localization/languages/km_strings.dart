@@ -1078,4 +1078,22 @@ const Map<String, String> kmStrings = {
   "Khoảng tạm tắt không hợp lệ": "ចន្លោះពេលផ្អាក Alarm មិនត្រឹមត្រូវ",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "ចន្លោះពេលផ្អាកមិនត្រួតលើកាលវិភាគ Alarm ដែលកំពុងដំណើរការណាមួយទេ",
+
+  // Device alarm policy
+  "Cấu hình báo động": "ការកំណត់សំឡេងរោទិ៍",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "កំណត់របៀបដែលឧបករណ៍ចាប់សញ្ញានេះបើកការព្រមាន។",
+  "Tham gia báo động": "ចូលរួមក្នុងសំឡេងរោទិ៍",
+  "Tắt để cảm biến không tạo Alarm.": "បិទ ដើម្បីកុំឱ្យឧបករណ៍នេះបង្កើត Alarm។",
+  "Bật còi vật lý": "បើកស៊ីរ៉ែនក្នុងផ្ទះ",
+  "Cho phép kích hoạt còi trong nhà.": "អនុញ្ញាតឱ្យបើកស៊ីរ៉ែនក្នុងផ្ទះ។",
+  "Đánh thức màn hình": "ដាស់អេក្រង់",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "បង្ហាញការព្រមានពេញអេក្រង់លើទូរសព្ទ។",
+  "Độ trễ kích hoạt": "ពេលពន្យារការបើក",
+  "Chỉ áp dụng cho cảm biến an ninh.": "អនុវត្តតែចំពោះឧបករណ៍ចាប់សញ្ញាសុវត្ថិភាព។",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "ឧបករណ៍ចាប់សញ្ញាបន្ទាន់តែងតែបើកភ្លាមៗ។",
+  "Ngay lập tức": "ភ្លាមៗ",
+  "giây": "វិនាទី",
+  "Đã lưu cấu hình báo động": "បានរក្សាទុកការកំណត់សំឡេងរោទិ៍",
+  "Không thể lưu cấu hình báo động": "មិនអាចរក្សាទុកការកំណត់សំឡេងរោទិ៍បាន",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "មានតែម្ចាស់ផ្ទះ និងអ្នកគ្រប់គ្រងប៉ុណ្ណោះដែលអាចផ្លាស់ប្តូរការកំណត់នេះ។",
 };

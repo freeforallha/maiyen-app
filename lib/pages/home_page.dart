@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onRename: canManageHome() ? () => renameDevice(deviceId) : null,
       onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
       onNotification: () => openNotificationList(deviceId),
+      canManageAlarmPolicy: canManageHome(),
     );
   }
 

@@ -1054,4 +1054,22 @@ const Map<String, String> thStrings = {
   "Khoảng tạm tắt không hợp lệ": "ช่วงเวลาหยุด Alarm ชั่วคราวไม่ถูกต้อง",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "ช่วงหยุด Alarm ชั่วคราวไม่ทับซ้อนกับกำหนดเวลา Alarm ที่เปิดใช้งานอยู่",
+
+  // Device alarm policy
+  "Cấu hình báo động": "การตั้งค่าสัญญาณเตือน",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "กำหนดวิธีที่เซ็นเซอร์นี้เรียกใช้การแจ้งเตือน",
+  "Tham gia báo động": "เข้าร่วมระบบเตือนภัย",
+  "Tắt để cảm biến không tạo Alarm.": "ปิดเพื่อไม่ให้เซ็นเซอร์นี้สร้าง Alarm",
+  "Bật còi vật lý": "เปิดไซเรนภายในบ้าน",
+  "Cho phép kích hoạt còi trong nhà.": "อนุญาตให้เปิดไซเรนภายในบ้าน",
+  "Đánh thức màn hình": "ปลุกหน้าจอ",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "แสดงการแจ้งเตือนแบบเต็มหน้าจอบนโทรศัพท์",
+  "Độ trễ kích hoạt": "เวลาหน่วงก่อนทำงาน",
+  "Chỉ áp dụng cho cảm biến an ninh.": "ใช้กับเซ็นเซอร์ความปลอดภัยเท่านั้น",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "เซ็นเซอร์ฉุกเฉินจะทำงานทันทีเสมอ",
+  "Ngay lập tức": "ทันที",
+  "giây": "วินาที",
+  "Đã lưu cấu hình báo động": "บันทึกการตั้งค่าสัญญาณเตือนแล้ว",
+  "Không thể lưu cấu hình báo động": "ไม่สามารถบันทึกการตั้งค่าสัญญาณเตือนได้",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "เฉพาะเจ้าของบ้านและผู้ดูแลระบบเท่านั้นที่เปลี่ยนการตั้งค่านี้ได้",
 };

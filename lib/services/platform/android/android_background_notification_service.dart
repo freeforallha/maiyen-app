@@ -129,10 +129,16 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 
   if (type == 'alarm_resolved') {
-    await Future.wait([
-      localNotif.cancel(NotificationService.emergencyNotificationId),
-      localNotif.cancel(NotificationService.alarmNotificationId),
-    ]);
+    final hasRemainingActiveIncidents =
+        message.data['hasRemainingActiveIncidents']?.toString() == 'true';
+
+    if (!hasRemainingActiveIncidents) {
+      await Future.wait([
+        localNotif.cancel(NotificationService.emergencyNotificationId),
+        localNotif.cancel(NotificationService.alarmNotificationId),
+      ]);
+    }
+
     return;
   }
 

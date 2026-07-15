@@ -1003,4 +1003,22 @@ const Map<String, String> koStrings = {
   "Khoảng tạm tắt không hợp lệ": "Alarm 일시 중지 범위가 올바르지 않습니다",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "일시 중지 범위가 활성화된 Alarm 일정과 겹치지 않습니다",
+
+  // Device alarm policy
+  "Cấu hình báo động": "알람 설정",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "이 센서가 경보를 작동하는 방식을 설정합니다.",
+  "Tham gia báo động": "알람에 참여",
+  "Tắt để cảm biến không tạo Alarm.": "끄면 이 센서가 Alarm을 생성하지 않습니다.",
+  "Bật còi vật lý": "실내 사이렌 켜기",
+  "Cho phép kích hoạt còi trong nhà.": "실내 사이렌이 작동하도록 허용합니다.",
+  "Đánh thức màn hình": "화면 깨우기",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "휴대전화에 전체 화면 경보를 표시합니다.",
+  "Độ trễ kích hoạt": "작동 지연",
+  "Chỉ áp dụng cho cảm biến an ninh.": "보안 센서에만 적용됩니다.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "긴급 센서는 항상 즉시 작동합니다.",
+  "Ngay lập tức": "즉시",
+  "giây": "초",
+  "Đã lưu cấu hình báo động": "알람 설정을 저장했습니다",
+  "Không thể lưu cấu hình báo động": "알람 설정을 저장할 수 없습니다",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "집 소유자와 관리자만 이 설정을 변경할 수 있습니다.",
 };

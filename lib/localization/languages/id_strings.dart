@@ -1093,4 +1093,22 @@ const Map<String, String> idStrings = {
   "Khoảng tạm tắt không hợp lệ": "Rentang jeda Alarm tidak valid",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Rentang jeda tidak bertepatan dengan jadwal Alarm aktif mana pun",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Pengaturan alarm",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Atur cara sensor ini memicu peringatan.",
+  "Tham gia báo động": "Ikut dalam alarm",
+  "Tắt để cảm biến không tạo Alarm.": "Matikan agar sensor ini tidak membuat Alarm.",
+  "Bật còi vật lý": "Aktifkan sirene fisik",
+  "Cho phép kích hoạt còi trong nhà.": "Izinkan sirene di dalam rumah aktif.",
+  "Đánh thức màn hình": "Nyalakan layar",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Tampilkan peringatan layar penuh di ponsel.",
+  "Độ trễ kích hoạt": "Jeda pemicu",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Hanya berlaku untuk sensor keamanan.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Sensor darurat selalu terpicu seketika.",
+  "Ngay lập tức": "Seketika",
+  "giây": "detik",
+  "Đã lưu cấu hình báo động": "Pengaturan alarm disimpan",
+  "Không thể lưu cấu hình báo động": "Tidak dapat menyimpan pengaturan alarm",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Hanya pemilik rumah dan administrator yang dapat mengubah pengaturan ini.",
 };

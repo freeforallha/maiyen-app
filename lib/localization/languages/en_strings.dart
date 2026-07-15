@@ -1067,4 +1067,22 @@ const Map<String, String> enStrings = {
   "Khoảng tạm tắt không hợp lệ": "Invalid Alarm pause range",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "The pause range does not overlap any active Alarm schedule",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Alarm settings",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Control how this sensor triggers alerts.",
+  "Tham gia báo động": "Participate in alarms",
+  "Tắt để cảm biến không tạo Alarm.": "Turn off to prevent this sensor from creating an Alarm.",
+  "Bật còi vật lý": "Enable physical siren",
+  "Cho phép kích hoạt còi trong nhà.": "Allow the indoor siren to activate.",
+  "Đánh thức màn hình": "Wake screen",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Show a full-screen alert on the phone.",
+  "Độ trễ kích hoạt": "Trigger delay",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Only applies to security sensors.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Emergency sensors always trigger immediately.",
+  "Ngay lập tức": "Immediately",
+  "giây": "seconds",
+  "Đã lưu cấu hình báo động": "Alarm settings saved",
+  "Không thể lưu cấu hình báo động": "Could not save alarm settings",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Only the home owner and administrators can change this setting.",
 };

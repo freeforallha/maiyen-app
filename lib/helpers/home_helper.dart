@@ -13,6 +13,24 @@ Map<String, dynamic> safeMap(dynamic data) {
 }
 const double environmentWarningTemperatureC = 40;
 const double environmentWarningHumidityPercent = 90;
+
+const Set<String> securityDeviceTypes = {
+  "door",
+  "window",
+  "gate",
+  "lock",
+  "door_lock",
+  "motion",
+  "presence",
+  "vibration",
+  "glass_break",
+};
+
+bool isSecurityDeviceType(dynamic rawType) {
+  final type = rawType?.toString().trim().toLowerCase() ?? "";
+  return securityDeviceTypes.contains(type);
+}
+
 double heartbeatLimitHours(String type) {
   switch (type) {
     case "temperature":
@@ -202,6 +220,41 @@ bool isRecentDeviceEvent(
       .inMilliseconds;
 
   return ageMs >= 0 && ageMs <= withinMs;
+}
+
+bool isVibrationEventActive(
+    Map<String, dynamic> device, {
+      int withinMs = 15 * 1000,
+    }) {
+  final now = DateTime.now().millisecondsSinceEpoch;
+  final activeUntil = int.tryParse(
+    device["vibration_active_until"]?.toString() ?? "",
+  ) ??
+      0;
+
+  // Khi backend đã ghi cửa sổ rung, đây là nguồn trạng thái ưu tiên.
+  // Nhờ vậy một packet `vibration: true` bị kẹt không làm UI cảnh báo mãi.
+  if (activeUntil > 0) {
+    return now < activeUntil;
+  }
+
+  final lastVibration = parseLastSeen(
+    device["last_vibration_at"] ?? device["last_event"],
+  );
+
+  if (lastVibration != null) {
+    final ageMs = DateTime.now()
+        .toUtc()
+        .difference(lastVibration.toUtc())
+        .inMilliseconds;
+
+    if (ageMs >= 0 && ageMs <= withinMs) {
+      return true;
+    }
+  }
+
+  return isActiveDeviceSignal(device["vibration"]) ||
+      isActiveDeviceSignal(device["shock"]);
 }
 
 String normalizeAvailability(dynamic value) {
@@ -423,25 +476,20 @@ Map<String, dynamic> evaluateDeviceStatus(
       device["action"]?.toString().trim().toLowerCase() ?? "";
 
   final vibrationActive =
-      (type == "vibration" || type == "glass_break") &&
+      type == "vibration" && isVibrationEventActive(device);
+
+  final glassBreakActive =
+      type == "glass_break" &&
           (_hasTrueFlag(
             device,
-            const [
-              "vibration",
-              "shock",
-              "glass_break",
-              "broken_glass",
-            ],
+            const ["glass_break", "broken_glass"],
           ) ||
               (isRecentDeviceEvent(device) &&
-                  (action.contains("vibration") ||
-                      action.contains("shock") ||
-                      action.contains("tilt") ||
-                      action.contains("drop") ||
-                      action.contains("glass"))));
+                  (action.contains("glass") ||
+                      action.contains("break"))));
 
-  if (vibrationActive) {
-    final issue = type == "glass_break"
+  if (vibrationActive || glassBreakActive) {
+    final issue = glassBreakActive
         ? "Phát hiện kính vỡ"
         : "Phát hiện rung/chấn động";
 
@@ -696,7 +744,9 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   if (hubTracked && hubChecking) {
     safeSummary.add("Đang kiểm tra kết nối Hub");
   } else if (hubTracked && !hubOnline && hubIssue.isNotEmpty) {
-    dangerIssues.insert(0, hubIssue);
+    // Hub/MQTT mất kết nối làm khả năng bảo vệ không đầy đủ nhưng không phải
+    // sự cố nguy hiểm thực tế như khói, CO hoặc đột nhập.
+    warningIssues.insert(0, hubIssue);
   } else if (hubTracked && hubOnline) {
     safeSummary.add("Hub kết nối bình thường");
   }

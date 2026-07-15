@@ -1846,8 +1846,7 @@ class _AllHomePageState extends State<AllHomePage> {
           final device = safeMap(entry.value);
           final type = device["type"]?.toString();
 
-          final isSecurity =
-              type == "door" || type == "door_lock" || type == "motion";
+          final isSecurity = isSecurityDeviceType(type);
 
           if (!isSecurity) continue;
 

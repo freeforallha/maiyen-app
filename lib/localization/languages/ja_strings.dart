@@ -997,4 +997,22 @@ const Map<String, String> jaStrings = {
   "Khoảng tạm tắt không hợp lệ": "Alarm の一時停止期間が無効です",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "一時停止期間は有効な Alarm スケジュールと重なっていません",
+
+  // Device alarm policy
+  "Cấu hình báo động": "アラーム設定",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "このセンサーが警報を作動させる方法を設定します。",
+  "Tham gia báo động": "アラームに参加",
+  "Tắt để cảm biến không tạo Alarm.": "オフにすると、このセンサーはAlarmを作成しません。",
+  "Bật còi vật lý": "屋内サイレンを有効化",
+  "Cho phép kích hoạt còi trong nhà.": "屋内サイレンの作動を許可します。",
+  "Đánh thức màn hình": "画面を起動",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "スマートフォンに全画面警報を表示します。",
+  "Độ trễ kích hoạt": "作動遅延",
+  "Chỉ áp dụng cho cảm biến an ninh.": "セキュリティセンサーにのみ適用されます。",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "緊急センサーは常に直ちに作動します。",
+  "Ngay lập tức": "すぐに",
+  "giây": "秒",
+  "Đã lưu cấu hình báo động": "アラーム設定を保存しました",
+  "Không thể lưu cấu hình báo động": "アラーム設定を保存できません",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "家の所有者と管理者のみがこの設定を変更できます。",
 };

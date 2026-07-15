@@ -1104,4 +1104,22 @@ const Map<String, String> esStrings = {
   "Khoảng tạm tắt không hợp lệ": "Intervalo de pausa de Alarm no válido",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "El intervalo de pausa no coincide con ninguna programación de Alarm activa",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Configuración de alarma",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Controla cómo este sensor activa las alertas.",
+  "Tham gia báo động": "Participar en la alarma",
+  "Tắt để cảm biến không tạo Alarm.": "Desactívalo para impedir que este sensor genere una Alarm.",
+  "Bật còi vật lý": "Activar sirena física",
+  "Cho phép kích hoạt còi trong nhà.": "Permite activar la sirena de la casa.",
+  "Đánh thức màn hình": "Activar la pantalla",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Muestra una alerta a pantalla completa en el teléfono.",
+  "Độ trễ kích hoạt": "Retraso de activación",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Solo se aplica a sensores de seguridad.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Los sensores de emergencia siempre se activan de inmediato.",
+  "Ngay lập tức": "Inmediatamente",
+  "giây": "segundos",
+  "Đã lưu cấu hình báo động": "Configuración de alarma guardada",
+  "Không thể lưu cấu hình báo động": "No se pudo guardar la configuración de alarma",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Solo el propietario de la casa y los administradores pueden cambiar este ajuste.",
 };

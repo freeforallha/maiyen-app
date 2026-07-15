@@ -6361,6 +6361,249 @@ class AppStrings {
     es: "Zona de peligro",
     fr: _fr(vi: "Khu vực nguy hiểm", en: "Danger zone"),
   );
+
+  String alarmIncidentLevelLabel(String level) {
+    switch (level.trim().toLowerCase()) {
+      case "emergency":
+        return choose(
+          vi: "KHẨN CẤP",
+          en: "EMERGENCY",
+          zh: "紧急",
+          ko: "긴급",
+          ja: "緊急",
+          de: "NOTFALL",
+          ru: "ЭКСТРЕННО",
+          fr: "URGENCE",
+          es: "EMERGENCIA",
+          id: "DARURAT",
+          th: "ฉุกเฉิน",
+          ms: "KECEMASAN",
+          fil: "EMERGENCY",
+          km: "បន្ទាន់",
+          my: "အရေးပေါ်",
+        );
+      case "warning":
+        return choose(
+          vi: "CẦN CHÚ Ý",
+          en: "WARNING",
+          zh: "注意",
+          ko: "주의",
+          ja: "注意",
+          de: "WARNUNG",
+          ru: "ВНИМАНИЕ",
+          fr: "ATTENTION",
+          es: "ADVERTENCIA",
+          id: "PERINGATAN",
+          th: "คำเตือน",
+          ms: "AMARAN",
+          fil: "BABALA",
+          km: "ការព្រមាន",
+          my: "သတိပေးချက်",
+        );
+      case "info":
+        return choose(
+          vi: "THÔNG TIN",
+          en: "INFORMATION",
+          zh: "信息",
+          ko: "정보",
+          ja: "情報",
+          de: "INFORMATION",
+          ru: "ИНФОРМАЦИЯ",
+          fr: "INFORMATION",
+          es: "INFORMACIÓN",
+          id: "INFORMASI",
+          th: "ข้อมูล",
+          ms: "MAKLUMAT",
+          fil: "IMPORMASYON",
+          km: "ព័ត៌មាន",
+          my: "အချက်အလက်",
+        );
+      case "alarm":
+      default:
+        return choose(
+          vi: "BÁO ĐỘNG",
+          en: "ALARM",
+          zh: "警报",
+          ko: "경보",
+          ja: "警報",
+          de: "ALARM",
+          ru: "ТРЕВОГА",
+          fr: "ALARME",
+          es: "ALARMA",
+          id: "ALARM",
+          th: "สัญญาณเตือน",
+          ms: "PENGGERA",
+          fil: "ALARM",
+          km: "សំឡេងរោទិ៍",
+          my: "အချက်ပေးသံ",
+        );
+    }
+  }
+
+  String alarmIncidentActiveLabel() => choose(
+    vi: "Đang hoạt động",
+    en: "Active",
+    zh: "正在进行",
+    ko: "활성",
+    ja: "対応中",
+    de: "Aktiv",
+    ru: "Активно",
+    fr: "Active",
+    es: "Activa",
+    id: "Aktif",
+    th: "กำลังทำงาน",
+    ms: "Aktif",
+    fil: "Aktibo",
+    km: "កំពុងដំណើរការ",
+    my: "လုပ်ဆောင်နေသည်",
+  );
+
+  String alarmIncidentResolutionReason(String action) {
+    final value = action.trim().toLowerCase();
+
+    if (value.contains("device_state_resolved") ||
+        value.contains("condition_cleared") ||
+        value.contains("sensor_cleared")) {
+      return choose(
+        vi: "Cảm biến đã trở lại trạng thái an toàn.",
+        en: "The sensor returned to a safe state.",
+        zh: "传感器已恢复到安全状态。",
+        ko: "센서가 안전 상태로 돌아왔습니다.",
+        ja: "センサーが安全な状態に戻りました。",
+        de: "Der Sensor ist wieder in einem sicheren Zustand.",
+        ru: "Датчик вернулся в безопасное состояние.",
+        fr: "Le capteur est revenu à un état sûr.",
+        es: "El sensor volvió a un estado seguro.",
+        id: "Sensor kembali ke kondisi aman.",
+        th: "เซ็นเซอร์กลับสู่สถานะปลอดภัยแล้ว",
+        ms: "Sensor telah kembali ke keadaan selamat.",
+        fil: "Bumalik na sa ligtas na estado ang sensor.",
+        km: "ឧបករណ៍ចាប់សញ្ញាបានត្រឡប់ទៅស្ថានភាពសុវត្ថិភាព។",
+        my: "အာရုံခံကိရိယာသည် လုံခြုံသောအခြေအနေသို့ ပြန်ရောက်ပါပြီ။",
+      );
+    }
+
+    if (value == "stop" || value.contains("manual")) {
+      return choose(
+        vi: "Người dùng đã tắt cảnh báo.",
+        en: "The alert was stopped by a user.",
+        zh: "用户已停止警报。",
+        ko: "사용자가 경보를 중지했습니다.",
+        ja: "ユーザーが警報を停止しました。",
+        de: "Der Alarm wurde von einem Benutzer beendet.",
+        ru: "Пользователь остановил тревогу.",
+        fr: "L’alerte a été arrêtée par un utilisateur.",
+        es: "Un usuario detuvo la alerta.",
+        id: "Peringatan dihentikan oleh pengguna.",
+        th: "ผู้ใช้หยุดการแจ้งเตือนแล้ว",
+        ms: "Amaran telah dihentikan oleh pengguna.",
+        fil: "Itinigil ng user ang alerto.",
+        km: "អ្នកប្រើបានបញ្ឈប់ការជូនដំណឹង។",
+        my: "အသုံးပြုသူက သတိပေးချက်ကို ရပ်လိုက်ပါသည်။",
+      );
+    }
+
+    if (value.contains("schedule") || value.contains("outside_window")) {
+      return choose(
+        vi: "Khung giờ bảo vệ đã kết thúc.",
+        en: "The protection schedule ended.",
+        zh: "保护时段已结束。",
+        ko: "보호 일정이 종료되었습니다.",
+        ja: "保護スケジュールが終了しました。",
+        de: "Der Schutzzeitplan ist beendet.",
+        ru: "Расписание охраны завершилось.",
+        fr: "La période de protection est terminée.",
+        es: "El horario de protección terminó.",
+        id: "Jadwal perlindungan telah berakhir.",
+        th: "ช่วงเวลาการป้องกันสิ้นสุดแล้ว",
+        ms: "Jadual perlindungan telah tamat.",
+        fil: "Natapos na ang iskedyul ng proteksiyon.",
+        km: "កាលវិភាគការពារបានបញ្ចប់។",
+        my: "ကာကွယ်ရေးအချိန်ဇယား ပြီးဆုံးသွားပါပြီ။",
+      );
+    }
+
+    if (value.contains("mode") || value.contains("disarmed")) {
+      return choose(
+        vi: "Chế độ Bảo vệ đã được tắt.",
+        en: "Protection mode was turned off.",
+        zh: "保护模式已关闭。",
+        ko: "보호 모드가 꺼졌습니다.",
+        ja: "保護モードが解除されました。",
+        de: "Der Schutzmodus wurde ausgeschaltet.",
+        ru: "Режим охраны выключен.",
+        fr: "Le mode Protection a été désactivé.",
+        es: "El modo Protección se desactivó.",
+        id: "Mode Perlindungan dinonaktifkan.",
+        th: "ปิดโหมดป้องกันแล้ว",
+        ms: "Mod Perlindungan telah dimatikan.",
+        fil: "In-off ang Protection mode.",
+        km: "របៀបការពារត្រូវបានបិទ។",
+        my: "ကာကွယ်မှုမုဒ်ကို ပိတ်လိုက်ပါပြီ။",
+      );
+    }
+
+    if (value.contains("expired")) {
+      return choose(
+        vi: "Cảnh báo tức thời đã tự kết thúc.",
+        en: "The temporary alert ended automatically.",
+        zh: "临时警报已自动结束。",
+        ko: "일시 경보가 자동으로 종료되었습니다.",
+        ja: "一時的な警報が自動的に終了しました。",
+        de: "Der temporäre Alarm wurde automatisch beendet.",
+        ru: "Временная тревога завершилась автоматически.",
+        fr: "L’alerte temporaire s’est terminée automatiquement.",
+        es: "La alerta temporal terminó automáticamente.",
+        id: "Peringatan sementara berakhir otomatis.",
+        th: "การแจ้งเตือนชั่วคราวสิ้นสุดโดยอัตโนมัติ",
+        ms: "Amaran sementara tamat secara automatik.",
+        fil: "Awtomatikong natapos ang pansamantalang alerto.",
+        km: "ការជូនដំណឹងបណ្តោះអាសន្នបានបញ្ចប់ដោយស្វ័យប្រវត្តិ។",
+        my: "ယာယီသတိပေးချက်သည် အလိုအလျောက် ပြီးဆုံးသွားပါပြီ။",
+      );
+    }
+
+    return choose(
+      vi: "Điều kiện cảnh báo không còn hoạt động.",
+      en: "The alert condition is no longer active.",
+      zh: "警报条件已不再存在。",
+      ko: "경보 조건이 더 이상 활성 상태가 아닙니다.",
+      ja: "警報条件はすでに解消されています。",
+      de: "Die Alarmbedingung ist nicht mehr aktiv.",
+      ru: "Условие тревоги больше не активно.",
+      fr: "La condition d’alerte n’est plus active.",
+      es: "La condición de alerta ya no está activa.",
+      id: "Kondisi peringatan sudah tidak aktif.",
+      th: "เงื่อนไขการแจ้งเตือนไม่ทำงานแล้ว",
+      ms: "Keadaan amaran tidak lagi aktif.",
+      fil: "Hindi na aktibo ang kondisyon ng alerto.",
+      km: "លក្ខខណ្ឌការជូនដំណឹងលែងសកម្ម។",
+      my: "သတိပေးချက်အခြေအနေသည် မလုပ်ဆောင်တော့ပါ။",
+    );
+  }
+
+  String alarmIncidentResolvedMessage(String action) {
+    final reason = alarmIncidentResolutionReason(action);
+
+    return choose(
+      vi: "Cảnh báo đã kết thúc: $reason",
+      en: "Alert ended: $reason",
+      zh: "警报已结束：$reason",
+      ko: "경보 종료: $reason",
+      ja: "警報終了: $reason",
+      de: "Alarm beendet: $reason",
+      ru: "Тревога завершена: $reason",
+      fr: "Alerte terminée : $reason",
+      es: "Alerta finalizada: $reason",
+      id: "Peringatan berakhir: $reason",
+      th: "สิ้นสุดการแจ้งเตือน: $reason",
+      ms: "Amaran tamat: $reason",
+      fil: "Natapos ang alerto: $reason",
+      km: "ការជូនដំណឹងបានបញ្ចប់៖ $reason",
+      my: "သတိပေးချက်ပြီးဆုံးပါပြီ: $reason",
+    );
+  }
+
   String get deleteHome => t("Xoá nhà");
   String get deleteHomeSubtitle => choose(
     vi: "Xoá toàn bộ dữ liệu và thiết bị",

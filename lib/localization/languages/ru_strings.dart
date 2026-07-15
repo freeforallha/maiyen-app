@@ -1080,4 +1080,22 @@ const Map<String, String> ruStrings = {
   "Khoảng tạm tắt không hợp lệ": "Недопустимый интервал приостановки Alarm",
   "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
       "Интервал приостановки не совпадает ни с одним активным расписанием Alarm",
+
+  // Device alarm policy
+  "Cấu hình báo động": "Настройки тревоги",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Настройте, как этот датчик запускает оповещения.",
+  "Tham gia báo động": "Участвовать в тревоге",
+  "Tắt để cảm biến không tạo Alarm.": "Отключите, чтобы датчик не создавал Alarm.",
+  "Bật còi vật lý": "Включить домашнюю сирену",
+  "Cho phép kích hoạt còi trong nhà.": "Разрешает включение сирены в доме.",
+  "Đánh thức màn hình": "Включать экран",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Показывать полноэкранное оповещение на телефоне.",
+  "Độ trễ kích hoạt": "Задержка срабатывания",
+  "Chỉ áp dụng cho cảm biến an ninh.": "Применяется только к охранным датчикам.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Аварийные датчики всегда срабатывают немедленно.",
+  "Ngay lập tức": "Немедленно",
+  "giây": "секунд",
+  "Đã lưu cấu hình báo động": "Настройки тревоги сохранены",
+  "Không thể lưu cấu hình báo động": "Не удалось сохранить настройки тревоги",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Только владелец дома и администраторы могут изменить эту настройку.",
 };
