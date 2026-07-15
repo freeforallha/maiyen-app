@@ -520,6 +520,8 @@ class _LoginPageState extends State<LoginPage> {
         return "Filipino";
       case "km":
         return "Khmer";
+      case "my":
+        return "Burmese • Myanmar 🇲🇲";
       default:
         return code;
     }

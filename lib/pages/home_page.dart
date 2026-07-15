@@ -3658,6 +3658,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           animationKey: selectedHome,
                           child: DeviceList(
                             homeId: selectedHome,
+                            hubId:
+                                homes[selectedHome]?["hubId"]?.toString() ?? "",
                             devices: devices,
                             selectedRoomId: selectedRoomId,
                             securityMode: securityMode,

@@ -341,6 +341,43 @@ class NotificationService {
     }
   }
 
+
+
+  static Future<bool> muteHomeSiren({
+    required String homeId,
+    required String hubId,
+  }) async {
+    final requestedBy = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final cleanHomeId = homeId.trim();
+    final cleanHubId = hubId.trim();
+
+    if (requestedBy.isEmpty ||
+        cleanHomeId.isEmpty ||
+        cleanHubId.isEmpty) {
+      return false;
+    }
+
+    try {
+      final ref = FirebaseDatabase.instance
+          .ref('home_siren_action_requests')
+          .push();
+
+      await ref.set({
+        'status': 'pending',
+        'homeId': cleanHomeId,
+        'hubId': cleanHubId,
+        'requestedBy': requestedBy,
+        'action': 'mute',
+        'createdAt': ServerValue.timestamp,
+      });
+
+      return true;
+    } catch (error) {
+      safeDebugPrint('HOME SIREN MUTE REQUEST ERROR: $error');
+      return false;
+    }
+  }
+
   static Future<bool> resolveActiveAlarmIncidents({
     required String action,
     String incidentId = '',

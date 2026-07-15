@@ -27,13 +27,17 @@ const Set<String> _supportedLanguageCodes = {
   'ms',
   'fil',
   'km',
+  'my',
 };
 
 String? _supportedLanguageCode(String? code) {
   final cleanCode = code?.trim().toLowerCase() ?? '';
+  final normalizedCode = cleanCode == 'my_mm' || cleanCode == 'my-mm'
+      ? 'my'
+      : cleanCode;
 
-  if (_supportedLanguageCodes.contains(cleanCode)) {
-    return cleanCode;
+  if (_supportedLanguageCodes.contains(normalizedCode)) {
+    return normalizedCode;
   }
 
   return null;
@@ -65,6 +69,8 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('fil', 'PH');
     case 'km':
       return const Locale('km', 'KH');
+    case 'my':
+      return const Locale('my', 'MM');
     case 'en':
       return const Locale('en');
     case 'vi':

@@ -36,6 +36,8 @@ String _languageSubtitle(String code) {
       return "Filipino";
     case "km":
       return "Khmer";
+    case "my":
+      return "Burmese • Myanmar 🇲🇲";
     default:
       return code;
   }
@@ -71,6 +73,8 @@ String _languageBadge(String code) {
       return "FIL";
     case "km":
       return "KM";
+    case "my":
+      return "🇲🇲";
     default:
       return code.toUpperCase();
   }

@@ -1,0 +1,1100 @@
+const Map<String, String> msStrings = {
+  "Không tìm thấy người dùng": "Pengguna tidak ditemui",
+  "Không đọc được số điện thoại": "Tidak boleh membaca nombor telefon",
+  "Tin nhắn quá dài": "Mesej terlalu panjang",
+  "Không gửi được tin nhắn": "Tidak dapat menghantar mesej",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Anda tidak mempunyai kebenaran untuk mengubah jadual bersama rumah",
+  "Nhà của bạn": "Rumah anda",
+  "Tải tin cũ hơn": "Muatkan mesej terdahulu",
+  "Nhà chưa đặt tên": "Rumah belum dinamakan",
+  "Nhà": "Rumah",
+  "Chưa có thông tin": "Tiada maklumat lagi",
+  "Chưa cập nhật": "Belum dikemas kini",
+  "Chủ nhà": "Pemilik rumah",
+  "Nhà được chia sẻ": "Rumah dikongsi",
+  "Địa chỉ": "Alamat",
+  "An ninh ra/vào": "Keselamatan masuk/keluar",
+  "Nguy hiểm khẩn cấp": "Bahaya kecemasan",
+  "Điều khiển & hạ tầng": "Kawalan & infrastruktur",
+  "Môi trường": "Persekitaran",
+  "Toàn bộ thiết bị SafeHome": "Semua peranti SafeHome",
+  "Cửa ra/vào": "Pintu masuk/keluar",
+  "Cửa": "Pintu",
+  "Cửa sổ": "Tingkap",
+  "Cổng": "Gerbang",
+  "Khóa thông minh": "Kunci pintar",
+  "Chuyển động": "Pergerakan",
+  "Hiện diện": "Kehadiran",
+  "Rung/chấn động": "Getaran/kejutan",
+  "Kính vỡ": "Kaca pecah",
+  "Báo khói": "Penggera asap",
+  "Báo nhiệt": "Penggera haba",
+  "Khí CO": "Gas CO",
+  "Báo gas": "Penggera gas",
+  "Báo ngập/rò nước": "Amaran banjir/kebocoran air",
+  "Nút SOS": "Butang SOS",
+  "Nhiệt độ/Độ ẩm": "Suhu/Kelembapan",
+  "Bụi mịn PM2.5": "Debu halus PM2.5",
+  "CO₂": "CO₂",
+  "Chất lượng không khí": "Kualiti udara",
+  "Ổ điện thông minh": "Soket pintar",
+  "Còi báo động": "Siren",
+  "Van thông minh": "Injap pintar",
+  "Camera": "Kamera",
+  "Chuông cửa": "Loceng pintu",
+  "Bàn phím an ninh": "Papan kekunci keselamatan",
+  "Bộ mở rộng sóng": "Pengulang isyarat",
+  "Hub trung tâm": "Hub pusat",
+  "Đo điện năng": "Pemantauan tenaga elektrik",
+  "Nguồn dự phòng UPS": "Bekalan kuasa sandaran UPS",
+  "Thiết bị đang Offline": "Peranti terputus sambungan",
+  "Thiết bị đang Online": "Peranti dalam talian",
+  "lâu không phản hồi": "tiada respons untuk masa yang lama",
+  "Kết nối cần kiểm tra": "Sambungan perlu diperiksa",
+  "Vừa xong": "Baru sahaja",
+  "Bị tháo": "Diusik",
+  "Có khói": "Asap",
+  "Bình thường": "Normal",
+  "Bảo vệ": "Perlindungan",
+  "Chế độ Bảo vệ": "Mod Perlindungan",
+  "Tự động Bảo vệ khi rời nhà":
+      "Mod Perlindungan automatik apabila meninggalkan rumah",
+  "Đã kích hoạt": "Didayakan",
+  "Sẵn sàng": "Sedia",
+  "Đang đóng": "Sedang ditutup",
+  "Đang mở": "Sedang dibuka",
+  "Rò rỉ gas": "Kebocoran gas",
+  "Phát hiện ngập nước": "Banjir dikesan",
+  "Phát hiện chuyển động": "Pergerakan dikesan",
+  "Không có chuyển động": "Tiada pergerakan",
+  "Phát hiện hiện diện": "Kehadiran dikesan",
+  "Không phát hiện hiện diện": "Tiada kehadiran dikesan",
+  "Phát hiện rung/chấn động": "Getaran/kejutan dikesan",
+  "Không có rung bất thường": "Tiada getaran yang tidak normal",
+  "Phát hiện kính vỡ": "Kaca pecah dikesan",
+  "Không có cảnh báo kính vỡ": "Tiada amaran kaca pecah",
+  "Nhiệt độ nguy hiểm": "Suhu berbahaya",
+  "Phát hiện khí CO": "Gas CO dikesan",
+  "Không phát hiện khí CO": "Tiada gas CO dikesan",
+  "Khóa đang mở": "Kunci dibuka",
+  "Khóa đang đóng": "Kunci ditutup",
+  "Đang bật": "Dihidupkan",
+  "Đang tắt": "Dimatikan",
+  "Đang theo dõi điện năng": "Memantau tenaga elektrik",
+  "Đang dùng nguồn dự phòng": "Menggunakan kuasa sandaran",
+  "Nguồn điện bình thường": "Bekalan kuasa biasa",
+  "Còi đang bật": "Siren dihidupkan",
+  "Còi sẵn sàng": "Siren sedia",
+  "Van đang mở": "Injap terbuka",
+  "Van đã đóng": "Injap ditutup",
+  "Đang hoạt động": "Aktif",
+  "Đang theo dõi": "Sedang dipantau",
+  "Chưa nhận diện": "Belum dikenal pasti",
+  "Chưa có cập nhật": "Belum ada kemas kini",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Belum ada peranti. Tekan butang + untuk menambah peranti dan mula memantau keselamatan rumah",
+  "CHƯA AN TOÀN": "TIDAK SELAMAT",
+  "ĐÃ AN TOÀN": "SELAMAT",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Rumah menunjukkan tanda-tanda memerlukan pemeriksaan, anda harus menyemak status di bawah.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Rumah beroperasi dengan stabil, jadi anda boleh berasa tenang.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Tiada tanda asap atau kelainan SOS.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Masih belum banyak aktiviti baru untuk analisis lanjut.",
+  "Hub kết nối bình thường": "Sambungan Hub normal",
+  "Cài đặt cảnh báo cho nhà hiện tại": "Tetapan penggera untuk rumah semasa",
+  "Nhận cảnh báo Alarm": "Terima amaran Alarm",
+  "Đang bật cho tài khoản này": "Didayakan untuk akaun ini",
+  "Đang tắt cho tài khoản này": "Dimatikan untuk akaun ini",
+  "Hẹn giờ Reminder": "Pemasa Reminder",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Ingatkan untuk memeriksa rumah dari semasa ke semasa",
+  "Hẹn giờ Alarm": "Pemasa Alarm",
+  "Chưa thiết lập": "Belum disediakan lagi",
+  "Chưa thiết lập thời gian": "Tiada masa ditetapkan lagi",
+  "Tổng hợp trạng thái nhà": "Ringkasan status rumah",
+  "Cần xử lý ngay": "Perlu ditangani segera",
+  "Đánh giá tự động": "Penilaian automatik",
+  "Tự động đánh giá": "Menilai secara automatik",
+  "Tổng quan hôm nay": "Gambaran keseluruhan hari ini",
+  "Chưa có dữ liệu tổng quan": "Tiada data umum lagi",
+  "Chưa có dữ liệu trạng thái": "Tiada data status lagi",
+  "Chưa đủ dữ liệu để đánh giá": "Tidak cukup data untuk dinilai",
+  "Chưa có dữ liệu để đánh giá": "Belum ada data untuk dinilai",
+  "Bấm vào để xem chi tiết": "Ketik untuk melihat butiran",
+  "Nhấn để xem chi tiết...": "Ketik untuk melihat butiran...",
+  "Tạm dừng": "Jeda",
+  "Tắt": "Matikan",
+  "Chi tiết": "Butiran",
+  "Tổng hợp trạng thái": "Ringkasan status",
+  "Không an toàn": "Tidak selamat",
+  "Cần chú ý": "Perlu diperiksa",
+  "An toàn": "Selamat",
+  "Không có": "Tiada",
+  "Đổi tên nhóm": "Namakan semula kumpulan",
+  "Huỷ": "Batal",
+  "Lưu": "Simpan",
+  "Thêm": "Tambah",
+  "Xoá": "Padam",
+  "Đổi tên": "Tukar nama",
+  "Nhà của tôi": "Rumah saya",
+  "Bỏ chọn toàn bộ nhóm": "Nyahpilih keseluruhan kumpulan",
+  "Chọn toàn bộ nhóm": "Pilih keseluruhan kumpulan",
+  "Bỏ chọn": "Nyahpilih",
+  "Quay lại": "Kembali",
+  "Tìm kiếm": "Cari",
+  "Đóng tìm kiếm": "Tutup carian",
+  "Giờ": "jam",
+  "Phút": "minit",
+  "Đặt Home Reminder": "Tetapkan Reminder rumah",
+  "Đặt Home Alarm": "Tetapkan Alarm rumah",
+  "Xác nhận thay đổi": "Sahkan perubahan",
+  "Tiếp tục": "Teruskan",
+  "Giờ Reminder": "Masa Reminder",
+  "Giờ bắt đầu Alarm": "Masa mula Alarm",
+  "Giờ kết thúc Alarm": "Masa tamat Alarm",
+  "Không có nhà nào đủ điều kiện để cài": "Tiada rumah yang layak ditetapkan",
+  "Cài đặt hoàn tất": "Tetapan selesai",
+  "Xác nhận rời nhà": "Pengesahan keluar rumah",
+  "Xác nhận xoá nhà": "Sahkan pemadaman rumah",
+  "Nhập mật khẩu": "Masukkan kata laluan",
+  "Mật khẩu tài khoản": "Kata laluan akaun",
+  "Rời khỏi nhà": "Tinggalkan rumah",
+  "Xoá nhà": "Padamkan rumah",
+  "Sai mật khẩu": "Kata laluan salah",
+  "Đã rời khỏi home": "Telah meninggalkan rumah",
+  "Đã cập nhật": "Telah dikemas kini",
+  "Tìm home...": "Cari rumah...",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Tetapkan lokasi rumah dan dayakan perlindungan automatik",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Pindahkan hak pemilik rumah atau padam rumah",
+  "Đặt Reminder / Alarm nhà đã chọn":
+      "Tetapkan Reminder / Alarm ke rumah terpilih",
+  "Chia sẻ nhà đã chọn": "Kongsi rumah yang dipilih",
+  "Mở danh sách chia sẻ nhà": "Buka senarai perkongsian rumah",
+  "Xoá các nhà đã chọn?": "Padamkan rumah yang dipilih?",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Rumah yang dipilih akan dipadamkan secara kekal.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Atau imbas QR untuk memohon menyertai rumah terpilih",
+  "Email người nhận": "E-mel penerima",
+  "Chia sẻ": "Kongsi",
+  "Email chưa đăng ký": "E-mel tidak berdaftar",
+  "Chia sẻ hoàn tất": "Perkongsian selesai",
+  "Mở List chia sẻ nhà": "Buka senarai perkongsian rumah",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Tiada rumah yang anda dibenarkan urus",
+  "Chưa share cho ai": "Belum dikongsi dengan sesiapa",
+  "Tìm nhà": "Cari rumah",
+  "Xoá các nhà đã chọn ?": "Padamkan rumah yang dipilih?",
+  "Thông báo Home": "Pemberitahuan rumah",
+  "Thông báo nhà": "Pemberitahuan rumah",
+  "Vai trò thành viên đã thay đổi": "Peranan ahli telah berubah",
+  "Xoá tất cả thông báo?": "Padamkan semua pemberitahuan?",
+  "Toàn bộ thông báo nhà sẽ bị xoá.": "Semua notis rumah akan dipadamkan.",
+  "Chưa có thông báo nào": "Belum ada pemberitahuan",
+  "Chưa có thông báo": "Belum ada pemberitahuan",
+  "Vuốt lên để tải thêm": "Leret ke atas untuk memuatkan lagi",
+  "Không có thiết bị": "Tiada peranti",
+  "Chỉ chủ nhà mới được xoá nhà":
+      "Hanya pemilik rumah yang boleh memadam rumah itu",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Hanya pemilik rumah boleh memindahkan hak",
+  "Lưu ý khi bật Alarm": "Perhatian semasa menghidupkan Alarm",
+  "Alarm đã được bật": "Alarm didayakan",
+  "Đã hiểu": "Difahamkan",
+  "Lưu ý tạm tắt Alarm": "Perhatian semasa menjeda Alarm",
+  "Đã bật Alarm": "Alarm didayakan",
+  "Đã tắt Alarm": "Alarm dilumpuhkan",
+  "Tắt Alarm": "Matikan Alarm",
+  "Cả ngày": "Sepanjang hari",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Anda tidak mempunyai kebenaran untuk melakukan operasi ini.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Operasi tidak dapat diselesaikan. Sila cuba lagi.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "QR untuk menyertai beberapa rumah tidak sah",
+  "Bạn đang là chủ các nhà này": "Anda adalah pemilik rumah-rumah ini",
+  "Một người dùng": "Seorang pengguna",
+  "Yêu cầu gia nhập nhà": "Permintaan untuk menyertai rumah",
+  "Đã gửi yêu cầu gia nhập nhà":
+      "Permintaan untuk menyertai rumah telah dihantar",
+  "QR gia nhập không hợp lệ": "QR penyertaan tidak sah",
+  "Bạn đang là chủ nhà này": "Anda adalah pemilik rumah ini",
+  "QR này không phải mã xin gia nhập nhà":
+      "QR ini bukan kod permintaan untuk menyertai rumah",
+  "Bạn không có quyền thêm thiết bị":
+      "Anda tidak mempunyai kebenaran untuk menambah peranti",
+  "Đã mở chế độ thêm thiết bị": "Mod penambahan peranti telah dibuka",
+  "Rời khỏi Home này?": "Tinggalkan rumah ini?",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Rumah ini dan semua peranti di dalamnya akan dipadamkan secara kekal.",
+  "Đã xoá nhà": "Rumah telah dipadam",
+  "QR của nhà này": "QR rumah ini",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Orang lain mengimbas kod ini untuk menghantar permintaan untuk menyertai rumah.",
+  "Chia sẻ nhà": "Kongsi rumah",
+  "Quét QR để xin gia nhập nhà": "Imbas QR untuk memohon menyertai rumah",
+  "Quét QR xin gia nhập nhà": "Imbas QR untuk memohon menyertai rumah",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Letakkan QR perkongsian rumah di dalam bingkai",
+  "Mã QR này do chủ nhà chia sẻ": "QR ini dikongsi oleh pemilik rumah",
+  "Nhập mã mời": "Masukkan kod jemputan",
+  "Gửi yêu cầu gia nhập": "Hantar permintaan untuk menyertai",
+  "QR này không phải mã thiết bị": "QR ini bukan kod peranti",
+  "Xin gia nhập nhà": "Mohon menyertai rumah",
+  "Quét mã QR chia sẻ nhà": "Imbas kod QR perkongsian rumah",
+  "Mời thành viên bằng mã QR": "Jemput ahli dengan kod QR",
+  "Không thể share cho chính bạn": "Tidak boleh berkongsi dengan diri sendiri",
+  "Lời mời chia sẻ nhà": "Jemputan untuk berkongsi rumah",
+  "Đã share home": "Rumah telah dikongsi",
+  "Chuyển quyền chủ nhà": "Pindahkan hak pemilik rumah",
+  "Không thể chuyển quyền cho chính bạn":
+      "Hak tidak boleh dipindahkan kepada diri sendiri",
+  "Không tìm thấy user": "Pengguna tidak ditemui",
+  "Không tìm thấy tài khoản": "Akaun tidak ditemui",
+  "Xác nhận chuyển quyền": "Sahkan pemindahan hak",
+  "Chuyển": "Pindahkan",
+  "Xác nhận mật khẩu": "Sahkan kata laluan",
+  "Yêu cầu chuyển quyền chủ nhà": "Permintaan pemindahan hak pemilik rumah",
+  "Đã gửi yêu cầu chuyển quyền": "Permintaan pemindahan dihantar",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Permintaan pemindahan hak pemilik rumah telah dihantar",
+  "Bạn không có quyền xoá thiết bị":
+      "Anda tidak mempunyai kebenaran untuk memadam peranti",
+  "Xóa Device?": "Padamkan Peranti?",
+  "Đã gửi yêu cầu xoá thiết bị": "Permintaan pemadaman peranti dihantar",
+  "Đang xoá thiết bị": "Memadam peranti",
+  "Đăng xuất?": "Log keluar?",
+  "Thêm nhà": "Tambah rumah",
+  "Thêm nhà mới": "Tambah rumah baru",
+  "Tạo nhà mới": "Buat rumah baharu",
+  "Tạo một ngôi nhà mới của bạn": "Cipta rumah baharu anda",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Imbas kod QR yang dikongsi oleh pemilik rumah",
+  "Tên nhà": "Nama rumah",
+  "Số điện thoại": "Nombor telefon",
+  "Nam": "Lelaki",
+  "Nữ": "Perempuan",
+  "Ngày": "Hari",
+  "Tháng": "Bulan",
+  "Năm": "Tahun",
+  "Thông tin cá nhân": "Maklumat peribadi",
+  "Thiết lập tài khoản": "Sediakan akaun",
+  "Vui lòng nhập đủ thông tin": "Sila masukkan maklumat yang mencukupi",
+  "Không thể lưu thông tin": "Tidak dapat menyimpan maklumat",
+  "Đã lưu thông tin": "Maklumat disimpan",
+  "Lỗi lưu profile": "Ralat menyimpan profil",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Tambah nombor telefon untuk kecemasan",
+  "Hoàn tất": "Selesai",
+  "Đã tạo nhà mới": "Rumah baharu dibuat",
+  "Về muộn": "Pulang lewat",
+  "Ra ngoài": "Pergi keluar",
+  "Khác": "Lain-lain",
+  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ Jeda Alarm hari ini",
+  "Chọn giờ bắt đầu tạm tắt": "Pilih masa mula jeda",
+  "Từ": "Dari",
+  "Từ giờ": "Mulai sekarang",
+  "Chọn giờ kết thúc tạm tắt": "Pilih masa tamat jeda",
+  "Đến": "Hingga",
+  "Đến giờ": "Hingga masa",
+  "Xoá lịch tạm tắt": "Padam jadual henti sementara Alarm",
+  "Xóa lịch tạm tắt": "Padam jadual henti sementara Alarm",
+  "Giới tính": "Jantina",
+  "SĐT": "Nombor telefon",
+  "Ngày sinh": "Tarikh lahir",
+  "Yêu cầu & lời mời": "Permintaan & jemputan",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Lihat jemputan untuk berkongsi dan memohon untuk menyertai",
+  "Cài đặt bảo mật": "Tetapan keselamatan",
+  "Quyền báo động toàn màn hình": "Kebenaran penggera skrin penuh",
+  "Báo động toàn màn hình": "Amaran skrin penuh",
+  "Đã được cấp quyền": "Kebenaran diberikan",
+  "Chưa được cấp quyền": "Kebenaran tidak diberikan",
+  "Mở cài đặt hệ thống": "Buka tetapan sistem",
+  "Đăng xuất": "Log keluar",
+  "Thoát tài khoản khỏi thiết bị này": "Log keluar dari peranti ini",
+  "Không có yêu cầu hoặc lời mời nào": "Tiada permintaan atau jemputan",
+  "Xoá tài khoản": "Padam akaun",
+  "Hành động này sẽ xoá toàn bộ dữ liệu:":
+      "Tindakan ini akan memadamkan semua data:",
+  "Nhà và thiết bị": "Rumah dan peranti",
+  "Chia sẻ và quyền truy cập": "Perkongsian dan kebenaran akses",
+  "Toàn bộ dữ liệu liên quan": "Semua data berkaitan",
+  "Mật khẩu xác nhận": "Kata laluan pengesahan",
+  "Đã xoá tài khoản": "Akaun telah dipadam",
+  "Xoá thất bại": "Gagal memadam",
+  "Lỗi xoá tài khoản": "Ralat semasa memadam akaun",
+  "Tình trạng": "Status",
+  "Tháo/Lắp": "Dibuka/Dicungkil",
+  "Pin": "Bateri",
+  "Tín hiệu": "Isyarat",
+  "Chưa liên kết": "Tidak dipautkan",
+  "Liên lạc cuối": "Sambungan terakhir",
+  "Event cuối": "Peristiwa terkini",
+  "Sự kiện cuối": "Peristiwa terkini",
+  "Lần kích hoạt cuối": "Kali terakhir dicetuskan",
+  "Thiết bị không còn tồn tại": "Peranti tidak lagi wujud",
+  "Mất kết nối": "Terputus sambungan",
+  "Online": "dalam talian",
+  "Offline": "Luar talian",
+  "Loại thiết bị": "Jenis peranti",
+  "Nhiệt độ": "Suhu",
+  "Độ ẩm": "Kelembapan",
+  "Công suất": "Kuasa",
+  "Điện áp": "Voltan",
+  "Dòng điện": "Arus elektrik",
+  "Điện năng": "Tenaga elektrik",
+  "Cường độ rung": "Keamatan getaran",
+  "Góc nghiêng": "Sudut kecondongan",
+  "Độ mở van": "Tahap bukaan injap",
+  "Nguồn dự phòng": "Kuasa sandaran",
+  "Ngập/rò nước": "Banjir/kebocoran air",
+  "Phát hiện khói": "Pengesanan asap",
+  "Quản lý phòng": "Pengurusan bilik",
+  "Bạn không có quyền quản lý phòng":
+      "Anda tidak mempunyai kebenaran untuk menguruskan bilik",
+  "Đổi tên phòng": "Namakan semula bilik",
+  "Tên phòng": "Nama bilik",
+  "Xoá phòng": "Padamkan bilik",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Peranti dalam bilik ini akan dipindahkan ke Belum ditetapkan bilik.",
+  "Thêm phòng": "Tambah bilik",
+  "Ví dụ: Phòng khách": "Contoh: Ruang tamu",
+  "Phòng khách": "Ruang tamu",
+  "Tên phòng đã tồn tại": "Nama bilik sudah wujud",
+  "Chưa phân phòng": "Belum ditetapkan bilik",
+  "Phòng mặc định": "Bilik lalai",
+  "Phát hiện bất thường": "Keadaan luar biasa dikesan",
+  "Phát hiện cạy phá": "Percubaan buka/cungkil dikesan",
+  "Tamper detected": "Gangguan dikesan",
+  "Tamper cleared": "Amaran gangguan telah tamat",
+  "Door opened": "Pintu dibuka",
+  "Door closed": "Pintu ditutup",
+  "Motion detected": "Pergerakan dikesan",
+  "Battery low": "Bateri lemah",
+  "Device offline": "Peranti terputus sambungan",
+  "Device online": "Peranti dalam talian",
+  "Alarm triggered": "Alarm dicetuskan",
+  "Alarm cleared": "Alarm telah tamat",
+  "Cửa mở": "Pintu terbuka",
+  "Cửa đóng": "Pintu ditutup",
+  "Chưa đặt vị trí nhà": "Lokasi rumah belum ditetapkan lagi",
+  "Đặt vị trí nhà tại đây": "Tetapkan lokasi rumah di sini",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Sila tetapkan lokasi rumah sebelum menghidupkan Mod Perlindungan automatik",
+  "Bán kính bảo vệ mặc định: 150 m": "Jejari perlindungan lalai: 150 m",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+      "Setiap ahli perlu memberikan kebenaran lokasi Sentiasa Benarkan supaya status keluar/masuk rumah berfungsi apabila aplikasi berjalan di latar belakang.",
+  "Lưu cài đặt": "Simpan tetapan",
+  "Đã đặt vị trí nhà": "Lokasi rumah telah ditetapkan",
+  "Đang lấy vị trí...": "Sedang mendapatkan lokasi...",
+  "Đang lưu...": "Sedang menyimpan...",
+  "Đổi tên hiển thị": "Tukar nama paparan",
+  "Cập nhật thông tin nhà": "Kemas kini maklumat rumah",
+  "Nhập địa chỉ của nhà": "Masukkan alamat rumah",
+  "Lưu thay đổi": "Simpan perubahan",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Nama ini hanya dipaparkan pada akaun anda.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Nama dan alamat akan dikemas kini untuk semua ahli keluarga.",
+  "Một thành viên": "Seorang ahli",
+  "Đã cập nhật thông tin nhà": "Maklumat rumah dikemas kini",
+  "Thay tên": "Nama ditukar",
+  "Đã đổi tên thiết bị": "Nama peranti ditukar",
+  "Chưa chọn nhà để kiểm tra": "Belum pilih rumah untuk diperiksa",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Sila lakukan ujian menggunakan akaun Pemilik",
+  "Không đọc được dữ liệu nhà": "Tidak dapat membaca data rumah",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Rumah perlu mempunyai sekurang-kurangnya satu peranti untuk ujian",
+  "Đóng": "Tutup",
+  "Đã thiết lập": "Telah disediakan",
+  "Quét QR": "Imbas QR",
+  "Quét QR để thêm thiết bị": "Imbas QR untuk menambah peranti",
+  "Nhập HUB ID thủ công": "Masukkan HUB ID secara manual",
+  "Bạn không có quyền sắp xếp phòng":
+      "Anda tidak mempunyai kebenaran untuk mengatur bilik",
+  "Cảnh báo khói": "Amaran asap",
+  "Cập nhật thiết bị": "Kemas kini peranti",
+  "Cửa đang mở": "Pintu terbuka",
+  "Cửa đã đóng": "Pintu ditutup",
+  "Firebase Rules: CÓ LỖI": "Firebase Rules: RALAT",
+  "Firebase Rules: ĐẠT": "Firebase Rules: LULUS",
+  "Giờ không hợp lệ": "Masa tidak sah",
+  "Khôi phục mật khẩu": "Tetapkan semula kata laluan",
+  "Nhập email của bạn": "Masukkan e-mel anda",
+  "Gửi": "Hantar",
+  "Đã gửi email khôi phục": "E-mel pemulihan dihantar",
+  "Không gửi được email": "Tidak dapat menghantar e-mel",
+  "Vui lòng nhập email và mật khẩu": "Sila masukkan e-mel dan kata laluan",
+  "Mật khẩu xác nhận không khớp": "Kata laluan pengesahan tidak sepadan",
+  "Không thể tạo tài khoản": "Tidak dapat mencipta akaun",
+  "Sai tài khoản": "Akaun salah",
+  "Email đã tồn tại": "E-mel telah digunakan",
+  "Mật khẩu quá yếu": "Kata laluan terlalu lemah",
+  "Sai email hoặc mật khẩu": "E-mel atau kata laluan salah",
+  "Lỗi đăng nhập": "Ralat log masuk",
+  "Email": "E-mel",
+  "Mật khẩu": "Kata laluan",
+  "Ghi nhớ tài khoản": "Ingat akaun",
+  "Đăng nhập": "Log masuk",
+  "Đăng ký mới": "Daftar akaun baharu",
+  "Quên mật khẩu?": "Terlupa kata laluan?",
+  "Chưa có tài khoản? Đăng ký": "Belum mempunyai akaun? Daftar",
+  "Đã có tài khoản? Đăng nhập": "Sudah mempunyai akaun? Log masuk",
+  "Tính năng đang được phát triển": "Ciri dalam pembangunan",
+  "Thông báo": "Pemberitahuan",
+  "Chat trong nhà": "Berbual di dalam rumah",
+  "Tìm kiếm tin nhắn": "Cari mesej",
+  "Xem thành viên": "Lihat ahli",
+  "Tìm nội dung hoặc tên người gửi": "Cari kandungan atau nama pengirim",
+  "Xoá từ khoá": "Padam kata kunci",
+  "Không có kết quả": "Tiada hasil",
+  "Tìm ngôn ngữ": "Cari bahasa",
+  "Kết quả trước": "Keputusan sebelumnya",
+  "Kết quả tiếp theo": "Keputusan seterusnya",
+  "Chưa có tin nhắn": "Tiada mesej lagi",
+  "Không tìm thấy thành viên phù hợp": "Tiada ahli yang sepadan ditemui",
+  "Nhắc đến trong tin nhắn": "Disebut dalam mesej",
+  "Huỷ trả lời": "Batalkan balasan",
+  "Nhắn gì đó...": "Taip mesej...",
+  "Gọi điện": "Buat panggilan",
+  "Alarm thiết bị": "Alarm peranti",
+  "Chế độ áp dụng": "Mod penggunaan",
+  "Theo nhà": "Mengikut rumah",
+  "Riêng tôi": "Untuk saya sahaja",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Gunakan jadual bersama yang ditetapkan oleh Pemilik rumah atau Pentadbir",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Gunakan jadual peribadi yang hanya terpakai pada akaun anda",
+  "Thiết lập nhanh Alarm": "Persediaan pantas Alarm",
+  "Thiết lập nhanh toàn bộ thiết bị":
+      "Persediaan pantas bagi keseluruhan peranti",
+  "Áp dụng cho toàn bộ thiết bị": "Terpakai kepada semua peranti",
+  "Bắt đầu": "Mula",
+  "Kết thúc": "Tamat",
+  "Thời gian lặp lại": "Masa berulang",
+  "Không lặp lại": "Tidak berulang",
+  "Quét QR HUB": "Imbas QR HUB",
+  "Đưa mã QR vào giữa khung": "Masukkan kod QR di tengah bingkai",
+  "Đang áp dụng...": "Sedang diterapkan...",
+  "Hôm nay đã ghi nhận cảnh báo SOS": "Makluman SOS telah direkodkan hari ini",
+  "Hôm nay đã ghi nhận cảnh báo khói": "Amaran asap telah direkodkan hari ini",
+  "Khói đã an toàn": "Keadaan asap kembali normal",
+  "Không tìm thấy nhà của thông báo này":
+      "Rumah untuk pemberitahuan ini tidak ditemui",
+  "Không tìm thấy thiết bị trong nhà này": "Tiada peranti ditemui di rumah ini",
+  "Một chủ nhà": "Seorang pemilik rumah",
+  "Ngôi nhà đang hoạt động ổn định": "Rumah beroperasi dengan stabil",
+  "Nhiệt độ cao": "Suhu tinggi",
+  "OK": "OK",
+  "Pin yếu": "Bateri lemah",
+  "SOS đã kết thúc": "SOS selesai",
+  "SOS được kích hoạt": "SOS diaktifkan",
+  "Tamper bình thường": "Gangguan telah tamat",
+  "Thiết bị bị tháo": "Peranti diusik",
+  "Thiết bị mới": "Peranti baharu",
+  "Thiết bị offline": "Peranti luar talian",
+  "Thiết bị online": "Peranti dalam talian",
+  "Báo động kích hoạt": "Alarm dicetuskan",
+  "Báo động đã tắt": "Penggera telah tamat",
+  "Tạm tắt Alarm hôm nay": "Jeda Alarm hari ini",
+  "Độ ẩm cao": "Kelembapan tinggi",
+  "Thử lại": "Cuba lagi",
+  "Không thể tải dữ liệu tài khoản": "Tidak dapat memuatkan data akaun",
+  "Không": "Tidak",
+  "Đã chia sẻ nhà thành công.": "Rumah berjaya dikongsi.",
+  "Tìm nhà...": "Cari rumah...",
+  "Đã rời khỏi nhà": "Meninggalkan rumah",
+  "Bạn sẽ rời khỏi các nhà được chia sẻ.":
+      "Anda akan meninggalkan rumah kongsi.",
+  "Các nhà của bạn sẽ bị xoá.\n": "Rumah anda akan dipadamkan.\n",
+  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Ini akan menukar jadual Alarm rumah semua peranti keselamatan di rumah yang dipilih.\n\n",
+  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
+      "Ini akan menambahkan Reminder rumah pada rumah yang dipilih.\n\n",
+  "Xác nhận thay đổi Alarm": "Sahkan perubahan Alarm",
+  "Xác nhận thay đổi Reminder": "Sahkan perubahan Reminder",
+  "Lặp lại khi sự cố vẫn còn": "Ulangi jika masalah berterusan",
+  "Thời gian lặp lại Alarm": "Masa pengulangan Alarm",
+  "VD: Mr Chung": "Contoh: Encik Chung",
+  "🏡 Chưa có nhà nào": "🏡 Belum ada rumah",
+  "Vẫn chuyển về Bình thường": "Tetap tukar kepada Mod Normal",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Mod Perlindungan automatik apabila meninggalkan rumah masih dihidupkan. Jika semua ahli masih berada di luar, sistem mungkin menghidupkan semula Mod Perlindungan selepas beberapa minit.",
+  "Chuyển về Bình thường?": "Tukar kepada Mod Normal?",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Apabila didayakan, peranti keselamatan akan dipantau serta-merta.\n\n",
+  "Bật Bảo vệ thủ công?": "Hidupkan Mod Perlindungan manual?",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Tindakan ini akan mengubah masa Alarm bagi sesetengah peranti ",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Tindakan ini akan mematikan semua Alarm rumah ",
+  "Tắt toàn bộ Alarm?": "Matikan semua Alarm?",
+  "Không xoá được lịch tạm tắt Alarm":
+      "Tidak dapat memadam jadual henti sementara Alarm",
+  "Không lưu được tạm tắt Alarm": "Tidak dapat menyimpan Jeda Alarm",
+  "Không gửi được yêu cầu xoá": "Tidak dapat menghantar permintaan pemadaman",
+  "Không lưu được cài đặt": "Tidak dapat menyimpan tetapan",
+  "Không lấy được vị trí hiện tại": "Tidak dapat memperoleh lokasi semasa",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Tidak dapat mengesahkan akaun semasa",
+  "Mật khẩu không đúng": "Kata laluan salah",
+  "Không thể xác nhận mật khẩu": "Tidak dapat mengesahkan kata laluan",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Hanya Pemilik rumah atau Pentadbir yang dibenarkan mengubah ulangan Alarm",
+  "Không lưu được thời gian lặp báo động":
+      "Tidak dapat menyimpan masa ulangan Alarm",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+      "Hanya Pemilik rumah atau Pentadbir yang berhak menukar Mod Perlindungan",
+  "Không thể thay đổi chế độ nhà": "Tidak dapat menukar mod rumah",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Mod Perlindungan telah dihidupkan tetapi pemberitahuan belum dapat dihantar",
+  "Đã bật Mode Bảo vệ thủ công": "Mod Perlindungan manual telah dihidupkan",
+  "Đã chuyển nhà về Bình thường": "Rumah telah ditukar kepada Mod Normal",
+  "60 phút": "60 minit",
+  "30 phút": "30 minit",
+  "15 phút": "15 minit",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
+      "Anda sedang melihat jadual pemilik rumah. Pilih Untuk saya sahaja untuk menetapkan jadual Alarm anda sendiri.",
+  "Chọn giờ kết thúc Alarm": "Pilih masa tamat Alarm",
+  "Chọn giờ bắt đầu Alarm": "Pilih masa mula Alarm",
+  "Bạn không có quyền sửa lịch Alarm của nhà":
+      "Anda tidak mempunyai kebenaran untuk mengubah Jadual Alarm rumah",
+  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
+      "Tidak dapat menggunakan Alarm pada semua peranti",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Rumah belum mempunyai peranti keselamatan untuk digunakan",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Anda tidak mempunyai kebenaran untuk mengubah jadual Mengikut rumah. Sila pilih Untuk saya sahaja.",
+  "Không thể lưu chế độ Alarm": "Tidak dapat menyimpan mod Alarm",
+  "Thêm Reminder": "Tambah Reminder",
+  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Reminder akan mengingatkan anda untuk menyemak status keselamatan rumah anda pada masa yang dipilih.",
+  "Thêm khung giờ Alarm": "Tambah slot masa Alarm",
+  "Đang sử dụng Reminder riêng của bạn": "Menggunakan Reminder anda sendiri",
+  "Đang sử dụng Reminder của chủ nhà": "Menggunakan Reminder pemilik rumah",
+  "Sửa giờ Reminder": "Ubah suai masa Reminder",
+  "Sửa giờ kết thúc Alarm": "Ubah masa tamat Alarm",
+  "Sửa giờ bắt đầu Alarm": "Ubah masa mula Alarm",
+  "Xoá Reminder": "Padamkan Reminder",
+  "Mỗi 1 giờ": "Setiap 1 jam",
+  "Mỗi 30 phút": "Setiap 30 minit",
+  "Mỗi 15 phút": "Setiap 15 minit",
+  "Không báo lại": "Jangan ulang amaran",
+  "Báo lại khi vẫn chưa an toàn":
+      "Ulang amaran jika keadaan masih belum selamat",
+  "Báo lại mỗi 1 giờ": "Ulang amaran setiap 1 jam",
+  "Báo lại mỗi 30 phút": "Ulang amaran setiap 30 minit",
+  "Báo lại mỗi 15 phút": "Ulang amaran setiap 15 minit",
+  "Quản lý nhà": "Urus rumah",
+  "Xoá thành viên": "Alih keluar ahli",
+  "Đã xoá thành viên": "Ahli telah dialih keluar",
+  "Đồng ý": "OK",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Adakah anda pasti mahu meninggalkan rumah ini?",
+  "Xoá thành viên?": "Alih keluar ahli?",
+  "Rời khỏi nhà?": "Tinggalkan rumah?",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Hanya pemilik rumah boleh menukar peranan",
+  "Bạn không có quyền xoá thành viên này":
+      "Anda tidak mempunyai kebenaran untuk mengalih keluar ahli ini",
+  "Bạn": "Anda",
+  "Không có email": "Tiada e-mel",
+  "Chưa có số điện thoại": "Belum ada nombor telefon",
+  "Không mở được ứng dụng gọi điện": "Tidak dapat membuka aplikasi panggilan",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Ahli belum mengemas kini nombor telefon",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Mod Perlindungan manual dihidupkan - hanya dimatikan apabila ditukar kepada Mod Normal",
+  "Thời gian lặp": "Masa ulangan",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Pilih 0 untuk memberi amaran sekali sahaja. Tetapan ini digunakan untuk Mod Perlindungan manual dan Mod Perlindungan automatik apabila meninggalkan rumah.",
+  "Lặp báo động khi sự cố vẫn còn": "Ulang penggera apabila masalah berterusan",
+  "Đang được sử dụng": "Digunakan",
+  "Chuyển về sử dụng thông thường": "Kembali ke penggunaan biasa",
+  "Chế độ nhà": "Mod rumah",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "Peranti SOS belum merekodkan penggera.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Sensor asap tidak merekodkan sebarang kelainan.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Anda atau ahli yang dibenarkan telah menghidupkan Mod Perlindungan.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome menghidupkan Mod Perlindungan secara automatik kerana anda telah meninggalkan rumah.",
+  "Nhà đang ở chế độ dùng bình thường.": "Rumah berada dalam Mod Normal.",
+  "Bảo vệ thủ công đang bật": "Mod Perlindungan manual dihidupkan",
+  "Bảo vệ tự động đang bật": "Mod Perlindungan automatik dihidupkan",
+  "Bảo vệ đang tắt": "Mod Perlindungan dimatikan",
+  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+      "Anda membuka apl baru-baru ini untuk menyemak status.",
+  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Anda sebaiknya membuka aplikasi secara berkala untuk menyemak kebenaran, jadual dan amaran yang belum dibaca.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+      "Selepas beberapa penggunaan, SafeHome akan menilai tabiat menyemak apl dengan lebih baik.",
+  "Tần suất vào app ổn": "Kekerapan mengakses apl adalah baik",
+  "Đã lâu chưa vào app kiểm tra": "Sudah lama tidak menyemak apl",
+  "Đang ghi nhận tần suất vào app": "Sedang merekod kekerapan membuka apl",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Kebenaran lokasi Sentiasa Benarkan dan keadaan latar belakang perlu diperiksa.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Peranti ini memenuhi syarat untuk ciri automatik apabila meninggalkan rumah.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Anda boleh menghidupkannya untuk menukar rumah kepada Mod Perlindungan secara automatik apabila meninggalkan rumah.",
+  "Auto rời khỏi nhà chưa ổn":
+      "Automatik apabila meninggalkan rumah belum stabil",
+  "Auto rời khỏi nhà đã sẵn sàng":
+      "Automatik apabila meninggalkan rumah sudah sedia",
+  "Auto rời khỏi nhà chưa bật":
+      "Automatik apabila meninggalkan rumah belum dihidupkan",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Sebaiknya tambah pengesan asap, SOS atau peranti kecemasan yang sesuai untuk rumah.",
+  "Chưa có thiết bị khẩn cấp": "Tiada peranti kecemasan",
+  "Đã có thiết bị khẩn cấp": "Peranti kecemasan tersedia",
+  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
+      "Sebaiknya tetapkan Jadual Alarm untuk waktu tidur atau ketika tiada orang di rumah.",
+  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
+      "Rumah sudah mempunyai Jadual Alarm atau jadual amaran mengikut peranti.",
+  "Chưa set lịch Alarm": "Jadual Alarm belum ditetapkan",
+  "Đã set lịch Alarm": "Jadual Alarm telah ditetapkan",
+  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
+      "Sebaiknya tetapkan sekurang-kurangnya satu Reminder supaya anda tidak terlupa memeriksa rumah.",
+  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Aplikasi akan mengingatkan anda untuk memeriksa rumah mengikut jadual yang ditetapkan.",
+  "Chưa setup Reminder": "Reminder belum disediakan lagi",
+  "Đã setup Reminder": "Reminder telah disediakan",
+  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Sila buka semula apl atau log masuk semula jika peranti tidak menerima amaran.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Peranti belum didaftarkan untuk menerima amaran",
+  "Thiết bị nhận cảnh báo bình thường": "Peranti menerima amaran seperti biasa",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS mengurus aktiviti latar belakang dengan lebih ketat berbanding Android; pastikan pemberitahuan dan lokasi Sentiasa Benarkan dihidupkan jika menggunakan ciri automatik apabila meninggalkan rumah.",
+  "Cơ chế iOS": "Mekanisme iOS",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Semak kebenaran berjalan di latar belakang dan mula automatik supaya amaran tidak lewat.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Peranti telah mengesahkan keadaan latar belakang yang kritikal.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Perlu semak latar belakang / mula automatik",
+  "Chạy nền ổn định": "Latar belakang berjalan stabil",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Sesetengah peranti Android mungkin menangguhkan amaran jika pengoptimuman bateri didayakan.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefon kurang berkemungkinan melengahkan amaran SafeHome.",
+  "Chưa tắt tối ưu pin": "Pengoptimuman bateri belum dimatikan.",
+  "Tối ưu pin không chặn app": "Pengoptimuman bateri tidak menyekat apl.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Ciri automatik apabila meninggalkan rumah memerlukan kebenaran lokasi Sentiasa Benarkan untuk berfungsi dengan stabil.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Kebenaran lokasi perlu diberikan agar ciri automatik apabila meninggalkan rumah berfungsi.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Perkhidmatan lokasi dimatikan, jadi ciri automatik apabila meninggalkan rumah mungkin tidak stabil.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Kebenaran ini hanya diperlukan untuk ciri automatik apabila meninggalkan rumah.",
+  "Chưa cấp vị trí luôn luôn":
+      "Kebenaran lokasi Sentiasa Benarkan belum diberikan",
+  "Đã cấp vị trí luôn luôn":
+      "Kebenaran lokasi Sentiasa Benarkan telah diberikan",
+  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+      "iOS tidak membuka skrin penuh seperti Android; Aplikasi ini menggunakan pemberitahuan dan bunyi sistem.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android menggunakan makluman skrin penuh; Jika peranti anda menyekatnya, sila berikan kebenaran dalam tetapan.",
+  "Cảnh báo trên iOS": "Amaran pada iOS",
+  "Cảnh báo toàn màn hình": "Amaran skrin penuh",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Amaran mungkin tidak dipaparkan jika pemberitahuan dimatikan.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Telefon boleh menerima pemberitahuan SafeHome.",
+  "Chưa bật thông báo": "Pemberitahuan belum dihidupkan",
+  "Đã bật thông báo": "Pemberitahuan telah dihidupkan",
+  "Hệ thống: Sẵn sàng": "Sistem: Sedia",
+  "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistem: Mungkin terlepas amaran",
+  "Cách bạn đang dùng app": "Cara anda menggunakan apl",
+  "Thiết bị của bạn": "Peranti anda",
+  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+      "Semak telefon anda dan cara anda menggunakan apl itu.",
+  "Hệ thống SafeHome": "Sistem SafeHome",
+  "Hệ thống: Đang kiểm tra...": "Sistem: Menyemak...",
+  "Tên": "Nama",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Anda tidak mempunyai kebenaran untuk mengubah lokasi rumah",
+  "Hãy bật GPS để đặt vị trí nhà": "Hidupkan GPS untuk menetapkan lokasi rumah",
+  "Bạn chưa cấp quyền vị trí": "Anda belum memberikan kebenaran lokasi",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Berikan kebenaran lokasi dalam Tetapan aplikasi",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Mod Perlindungan automatik apabila semua orang meninggalkan rumah telah dihidupkan",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Mod Perlindungan automatik apabila semua orang meninggalkan rumah telah dimatikan",
+  "Không thể thay đổi trạng thái Alarm": "Status Alarm tidak boleh ditukar",
+  "Đã tắt toàn bộ Alarm của nhà": "Semua Alarm rumah telah dimatikan",
+  "QR này không phải mã xin gia nhập Home":
+      "QR ini bukan kod permohonan untuk menyertai rumah",
+  "Thêm Home": "Tambah rumah",
+  "Mở cài đặt": "Buka tetapan",
+  "Để sau": "Nanti",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome memerlukan kebenaran lokasi \"Sentiasa Benarkan\" untuk mengesan apabila anda meninggalkan atau pulang ke rumah, termasuk ketika aplikasi berjalan di latar belakang.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome kini hanya boleh mengakses lokasi semasa anda menggunakan aplikasi.\n\nPilih kebenaran Lokasi dan tukar kepada \"Sentiasa Benarkan\" supaya Mod Perlindungan automatik apabila meninggalkan rumah berfungsi ketika aplikasi berjalan di latar belakang.",
+  "Cho phép vị trí luôn luôn": "Benarkan lokasi pada setiap masa",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Rumah anda akan dipadamkan.\nRumah kongsi akan ditinggalkan.",
+  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tindakan ini akan mengubah jadual Alarm rumah bagi semua peranti keselamatan di rumah yang dipilih.\n\nAhli yang menggunakan Alarm 'Mengikut rumah' akan terjejas.\nAlarm peribadi dalam mod 'Untuk saya sahaja' tidak akan berubah.",
+  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tindakan ini akan menambahkan Reminder rumah pada rumah yang dipilih.\n\nAhli yang menggunakan Reminder 'Mengikut rumah' akan terjejas.\nReminder peribadi dalam mod 'Untuk saya sahaja' tidak akan berubah.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Apabila dihidupkan, peranti keselamatan akan dipantau serta-merta.\n\nMod Perlindungan automatik apabila meninggalkan rumah akan dijeda. Mod ini tidak dimatikan secara automatik apabila seseorang pulang dan hanya boleh dimatikan apabila ahli yang dibenarkan menukarnya kepada Mod Normal.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Tindakan ini akan mengubah masa Alarm bagi sesetengah peranti pada hari ini...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Tindakan ini akan mematikan semua Alarm rumah. Anda tidak lagi menerima amaran bahaya pada telefon.",
+  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarm menggunakan mod Mengikut rumah.\n\nAnda akan menerima amaran mengikut Jadual Alarm bersama yang ditetapkan oleh Pemilik rumah atau Pentadbir.",
+  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
+      "Alarm menggunakan mod Untuk saya sahaja.\n\nAnda akan menerima amaran mengikut Jadual Alarm peribadi yang ditetapkan untuk akaun ini.",
+  "Không thể đăng nhập bằng Google": "Tidak boleh log masuk dengan Google",
+  "Không đặt được mật khẩu": "Tidak dapat menetapkan kata laluan",
+  "Chấp nhận": "Terima",
+  "Cho phép": "Benarkan",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Tidak dapat menerima jemputan. Sila cuba lagi.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Tidak dapat menerima permintaan untuk menyertai rumah. Sila cuba lagi.",
+  "Từ chối": "Tolak",
+  "Lời mời từ chủ nhà": "Jemputan daripada pemilik rumah",
+  "Nhận quyền chủ nhà": "Terima hak pemilik rumah",
+  "Một người dùng SafeHome": "Satu-satunya pengguna SafeHome",
+  "Lời mời gia nhập": "Jemputan untuk menyertai",
+  "Lời xin vào nhà": "Permintaan untuk menyertai rumah",
+  "Nhập HUB ID": "Masukkan HUB ID",
+  "VD: HUB_001": "Contohnya: HUB_001",
+  "Pair": "berpasangan",
+  "Mật khẩu tối thiểu 6 ký tự": "Kata laluan minimum 6 aksara",
+  "Mật khẩu nhập lại không khớp":
+      "Kata laluan yang dimasukkan semula tidak sepadan",
+  "Tạo mật khẩu": "Buat kata laluan",
+  "Mật khẩu mới": "Kata laluan baharu",
+  "Nhập lại mật khẩu": "Masukkan semula kata laluan",
+  "Xác nhận tắt cảnh báo": "Sahkan amaran dimatikan",
+  "HỦY": "BATAL",
+  "XÁC NHẬN": "SAHKAN",
+  "CẦN KIỂM TRA": "PERLU DIPERIKSA",
+  "KIỂM TRA NHÀ": "PEMERIKSAAN RUMAH",
+  "ĐÓNG NHẮC NHỞ": "TUTUP REMINDER",
+  "SafeHome Security Alert": "Makluman Keselamatan SafeHome",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Pilih kebenaran lokasi Sentiasa Benarkan dalam Tetapan aplikasi",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Akaun Google perlu mencipta kata laluan tambahan untuk menggunakan fungsi keselamatan.",
+  "Alarm": "Alarm",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Anda tidak mempunyai kebenaran untuk melakukan operasi ini.",
+  "Cài đặt": "Tetapan",
+  "Cập nhật": "Kemas kini",
+  "Chọn ngôn ngữ": "Pilih bahasa",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Tiada data peranti tersedia untuk penilaian",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Pindahkan pemilikan kepada ahli lain",
+  "Có": "Ya",
+  "Cửa đã đóng an toàn": "Pintu ditutup dengan selamat",
+  "Đã xảy ra lỗi. Vui lòng thử lại.": "Ralat telah berlaku. Sila cuba lagi.",
+  "Đang kiểm tra kết nối Hub": "Menyemak sambungan Hub",
+  "Đang mở khi nhà ở chế độ Bảo vệ":
+      "Terbuka apabila rumah berada dalam Mod Perlindungan",
+  "Đang mở trong giờ Alarm": "Dibuka pada waktu Alarm",
+  "Đang tải...": "Sedang memuatkan...",
+  "Hồ sơ, yêu cầu và lời mời tham gia":
+      "Profil, permintaan dan jemputan untuk menyertai",
+  "Hub chưa gửi trạng thái": "Hub belum menghantar status lagi",
+  "Hub mất kết nối": "Hub terputus sambungan",
+  "Hub tín hiệu bình thường": "Isyarat Hub adalah normal",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Kunci terbuka apabila rumah berada dalam Mod Perlindungan",
+  "Khóa đang mở trong giờ Alarm": "Kunci dibuka pada waktu Alarm",
+  "Không có thông báo": "Tiada pemberitahuan",
+  "Khu vực nguy hiểm": "Kawasan berbahaya",
+  "Kiểm tra thiết bị trong nhà này": "Periksa peranti di rumah ini",
+  "Mất điện lưới": "Bekalan elektrik utama terputus",
+  "Mời người khác tham gia nhà này":
+      "Jemput orang lain untuk menyertai rumah ini",
+  "Môi trường hiện tại": "Persekitaran semasa",
+  "MQTT mất kết nối": "MQTT sambungan terputus",
+  "Ngôn ngữ": "Bahasa",
+  "Nhà đã chia sẻ": "Rumah dikongsi",
+  "Nhà đang hoạt động bình thường": "Rumah beroperasi seperti biasa",
+  "Nhập email": "Masukkan e-mel",
+  "Phòng": "Bilik",
+  "Quản trị viên": "Pentadbir",
+  "Reminder": "Reminder",
+  "SafeHome": "SafeHome",
+  "Sóng yếu": "Isyarat lemah",
+  "SOS": "SOS",
+  "Tài khoản & hệ thống": "Akaun & sistem",
+  "Tài khoản cá nhân": "Akaun peribadi",
+  "Tạo tài khoản": "Cipta akaun",
+  "Thành viên": "Ahli",
+  "Thành viên trong nhà": "Ahli rumah",
+  "Thành viên đang ở trong nhà": "Ahli yang sedang berada di rumah",
+  "Thành viên đang ở ngoài": "Ahli yang sedang berada di luar",
+  "Thành viên chưa xác định vị trí": "Ahli yang lokasinya belum diketahui",
+  "Thay đổi ngôn ngữ hiển thị": "Tukar bahasa paparan",
+  "Thêm, đổi tên và sắp xếp phòng": "Tambah, namakan semula dan susun bilik",
+  "Thiết bị đang được giám sát": "Peranti sedang dipantau",
+  "Tiếng Anh": "Bahasa Inggeris",
+  "Tiếng Hàn": "Bahasa Korea",
+  "Tiếng Nhật": "Bahasa Jepun",
+  "Tiếng Trung": "Bahasa Cina",
+  "Tiếng Việt": "Bahasa Vietnam",
+  "Toàn bộ thiết bị": "Semua peranti",
+  "Vai trò": "Peranan",
+  "Về nhà": "pulang ke rumah",
+  "Xem và quản lý quyền thành viên": "Lihat dan urus kebenaran ahli",
+  "Xóa": "Padam",
+  "Xóa nhà": "Padamkan rumah",
+  "Xoá toàn bộ dữ liệu và thiết bị": "Padamkan semua data dan peranti",
+  "TẮT CẢNH BÁO": "MATIKAN AMARAN",
+  "Đã tạo nhà": "Rumah dibuat",
+  "Mode Bảo vệ thủ công đã bật": "Mod Perlindungan Manual didayakan",
+  "Báo động không lặp lại.": "Penggera tidak berulang.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Alarm akan berulang selepas \$securityModeRepeatMinutes minit jika masalah berterusan.",
+  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName telah menghidupkan Mod Perlindungan manual untuk \"\$homeName\". Mod ini hanya dimatikan apabila ahli yang dibenarkan menukarnya kepada Mod Normal. \$repeatMessage",
+  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
+      "Anda telah mendayakan Alarm untuk rumah \"\$homeName\".",
+  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
+      "Anda telah melumpuhkan semua Alarm rumah \"\$homeName\".",
+  "Thành viên mới": "Ahli baharu",
+  "Thành viên rời nhà": "Ahli meninggalkan rumah",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName meninggalkan rumah \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName menukar peranan \$memberName daripada \$oldRoleName kepada \$newRoleName dalam rumah \"\$homeName\".",
+  "Còn \$count tin nhắn chưa đọc": "Masih ada \$count mesej belum dibaca",
+  "Hãy an tâm nghỉ ngơi.": "Berehatlah dengan tenang.",
+  "Có thiết bị chưa an toàn.": "Terdapat peranti yang belum selamat.",
+  "SafeHome đang cập nhật vị trí": "SafeHome mengemas kini lokasi",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Sedang memantau untuk menghidupkan Mod Perlindungan secara automatik.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Gunakan lokasi untuk menghidupkan Mod Perlindungan secara automatik apabila semua orang meninggalkan rumah.",
+  "CẢNH BÁO SOS": "AMARAN SOS",
+  "CẢNH BÁO KHÓI / CHÁY": "AMARAN ASAP / KEBAKARAN",
+  "CẢNH BÁO NGẬP NƯỚC": "AMARAN BANJIR",
+  "CẢNH BÁO RÒ KHÍ": "AMARAN KEBOCORAN GAS",
+  "CẢNH BÁO CỬA": "AMARAN PINTU",
+  "CẢNH BÁO AN NINH": "AMARAN KESELAMATAN",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Tidak dapat mengesahkan dengan SafeHome. Sila semak sambungan anda dan cuba lagi.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Hanya matikan penggera apabila anda telah menyemak keadaan di rumah anda.\n\nAdakah anda pasti mahu mematikan penggera?",
+  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome mengesan amaran",
+  "Mở SafeHome để kiểm tra ngay.": "Buka SafeHome untuk memeriksa sekarang.",
+  "\$count tin nhắn mới": "\$count mesej baharu",
+  "Tin nhắn HomeChat": "Mesej HomeChat",
+  "\$senderName đã gửi một tin nhắn": "\$senderName menghantar mesej",
+  "Bạn có tin nhắn mới": "Anda mempunyai mesej baharu",
+  "Mode Bảo vệ sẽ chỉ báo động một lần":
+      "Mod Perlindungan hanya akan membunyikan Alarm sekali",
+  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Mod Perlindungan akan mengulangi Alarm selepas \$minutes minit",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Permintaan untuk menyertai \$count rumah telah dihantar",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName memohon untuk menyertai rumah \"\$homeName\".",
+  "Bạn đã xoá nhà \"\$homeName\".":
+      "Anda telah memadamkan rumah \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Anda telah menghantar permintaan pemindahan hak pemilik rumah \"\$homeName\" kepada \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName mahu memindahkan hak pemilik rumah \"\$homeName\" kepada anda.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName telah menjemput anda untuk menyertai rumah \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome sedang memadam peranti \"\$deviceName\" daripada rumah \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Peranti \"\$deviceName\" telah ditambahkan pada \"\$homeName\".",
+  "Bạn đã tạo nhà \"\$name\".": "Anda telah mencipta rumah \"\$name\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName mengemas kini nama rumah kepada \"\$newName\" dan menukar alamat.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName telah menukar nama rumah kepada \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName mengemas kini alamat rumah \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName menamakan semula peranti \"\$oldDeviceName\" kepada \"\$newName\" dalam rumah \"\$homeName\".",
+  "Đang ghép nối: \$seconds giây": "Sedang berpasangan: \$seconds saat",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Mod tambah peranti telah dibuka di rumah \"\$homeName\" selama \$seconds saat.",
+  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
+      "Tempoh Jeda Alarm mesti berada dalam Jadual Alarm (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total ujian lulus\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name belum mengemas kini nombor telefon dalam profilnya.",
+  "Tin nhắn mới trong \$homeName": "Mesej baharu dalam \$homeName",
+  "\$current/\$total kết quả": "\$current/\$total hasil",
+  "Đang trả lời \$name": "Membalas \$name",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" mengesan asap di \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" telah kembali ke status normal.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" baru sahaja mengaktifkan SOS di \"\$homeName\".",
+  "\"\$name\" đã hết trạng thái SOS.":
+      "Status SOS untuk \"\$name\" telah tamat.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" mengesan gangguan di \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Amaran gangguan untuk \"\$name\" telah tamat.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" telah ditutup di \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" sedang terbuka di \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "Bateri \"\$name\" di \"\$homeName\" lemah.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$name\" di \"\$homeName\" telah terputus sambungan.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$name\" di \"\$homeName\" telah disambungkan semula.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" mengesan suhu tinggi di \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" mengesan kelembapan tinggi di \"\$homeName\".",
+  "Có nút SOS vừa được kích hoạt":
+      "Terdapat butang SOS yang baru sahaja diaktifkan",
+  "Có dấu hiệu khói hoặc cháy": "Terdapat tanda-tanda asap atau kebakaran",
+  "Có dấu hiệu ngập nước": "Terdapat tanda-tanda banjir",
+  "Có dấu hiệu rò khí": "Terdapat tanda kebocoran gas",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Terdapat pintu terbuka atau peranti diusik",
+  "Có thiết bị đang cảnh báo": "Terdapat amaran peranti",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jika tiada siapa yang mengesahkan, SafeHome akan bertukar kepada panggilan kecemasan.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Amaran akan diulang pada \$time jika masalah belum diselesaikan.",
+  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
+      "Amaran akan diulang mengikut Jadual Alarm jika masalah belum diselesaikan.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" telah ditutup di \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" sedang terbuka di \"\$resolvedHomeName\".",
+  "\$count nhà đã chọn": "\$count rumah terpilih",
+  "🚨 \$count nhà không an toàn\$suffix":
+      "🚨 \$count rumah tidak selamat\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count rumah memerlukan perhatian\$suffix",
+  "✅ \$count nhà an toàn": "✅ \$count rumah selamat",
+  "\$count nhà đang được theo dõi": "\$count rumah sedang dipantau",
+  "\$minutes phút": "\$minutes minit",
+  "Đã cài Reminder cho \$updatedHomes nhà.":
+      "Reminder telah ditetapkan untuk \$updatedHomes rumah.",
+  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarm telah ditetapkan untuk \$updatedDevices peranti di \$updatedHomes rumah.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Rumah yang anda urus telah dikongsi.\n\n\$skipped rumah dilangkau kerana anda tiada kebenaran untuk berkongsi.",
+  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
+      "Alarm telah digunakan pada \$count peranti keselamatan",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Gunakan jadual yang sama pada \$count peranti keselamatan",
+  "\$count phút trước": "\$count minit yang lalu",
+  "\$count giờ trước": "\$count jam yang lalu",
+  "\${count}h trước": "\${count} jam lalu",
+  "\${hours}h\$minutes' trước": "\${hours} jam \$minutes minit lalu",
+  "\$count ngày trước": "\$count hari yang lalu",
+  "\$count tháng trước": "\$count bulan lalu",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Adakah anda pasti mahu mengalih keluar \$name daripada rumah ini?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nMemohon untuk menyertai \"\$homeName\"",
+  "Xin gia nhập \"\$homeName\"": "Memohon untuk menyertai \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Anda dijemput untuk menerima hak pemilik rumah bagi \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nMenjemput anda untuk menyertai \"\$homeName\"",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Anda dijemput untuk menyertai \"\$homeName\"",
+  "Cần kiểm tra: \$joined": "Perlu diperiksa: \$joined",
+  "Cập nhật \$value": "Dikemas kini \$value",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Tambahkan peranti SafeHome pertama untuk memulakan pemantauan di rumah.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Semak makluman kecemasan dahulu, kemudian hubungi ahli keluarga jika perlu.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Tiada ahli di rumah tetapi pintu atau kunci masih terbuka. Periksa segera.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Periksa pintu atau kunci yang terbuka sebelum mengekalkan rumah dalam Mod Perlindungan.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Mungkin masih ada orang di rumah; jika ya, sebaiknya tukar kepada Mod Normal.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+      "Terdapat ahli yang lokasinya belum ditentukan, sila ingatkan mereka untuk membuka aplikasi atau menyemak kebenaran lokasi.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Peranti telah terputus sambungan, semak bateri, kuasa atau lokasi peranti.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Terdapat peranti dengan bateri lemah. Gantikan bateri secepat mungkin supaya amaran tidak terlepas.",
+  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Anda belum menetapkan Reminder, anda harus membuat jadual untuk mengingatkan anda supaya memeriksa rumah anda secara berkala.",
+  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Anda belum menetapkan Jadual Alarm. Sebaiknya hidupkan Mod Perlindungan pada waktu rumah biasanya kosong.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Tiada apa yang perlu dilakukan segera, anda hanya perlu terus memantau status rumah.",
+  "Lặp sau \$minutes phút": "Ulang selepas \$minutes minit",
+  "Đang dùng • \$repeatText": "Aktif • \$repeatText",
+  "Giám sát an ninh • \$repeatText": "Pemantauan keselamatan • \$repeatText",
+  "Gia đình: \$mode": "Mod rumah: \$mode",
+  "Gợi ý xử lý": "Pengendalian yang dicadangkan",
+  "Phát hiện \$count vấn đề cần xử lý":
+      "Dikesan \$count masalah yang perlu ditangani",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Hari ini pintu telah digunakan \$count kali",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "\$count aktiviti terkini telah direkodkan",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistem: \$issueCount perkara perlu diperiksa",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "Token FCM tersedia pada telefon ini.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "Token FCM sudah sedia, tetapi ciri automatik apabila meninggalkan rumah masih belum memenuhi semua syarat.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "\$emergencyTotal peranti kecemasan tersedia. Cadangan minimum: pengesan asap dan SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Adakah anda pasti mahu memindahkan hak pemilik rumah kepada:\n\$targetEmail?",
+  "\$count cửa đã đóng an toàn": "\$count pintu telah ditutup dengan selamat",
+  "\$count cửa và khóa đã an toàn": "\$count pintu dan kunci selamat",
+  "\$count thiết bị đang được theo dõi": "\$count peranti sedang dipantau",
+  "Cập nhật \$timeText": "Dikemas kini \$timeText",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Data terkini dikemas kini \$count minit lalu",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Data terkini dikemas kini \$count jam lalu",
+  "Thành viên trong nhà: \$count": "Ahli di rumah: \$count",
+  "Thành viên bên ngoài: \$count": "Ahli di luar rumah: \$count",
+  "Chưa xác định vị trí: \$count": "Lokasi tidak diketahui: \$count",
+  "Môi trường hiện tại: \$environment": "Persekitaran semasa: \$environment",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Terbuka ketika rumah dalam Mod Perlindungan",
+  "An tâm hơn trong từng ngôi nhà": "Lebih tenang di setiap rumah",
+  "Báo động SafeHome": "Alarm SafeHome",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Terdapat amaran keselamatan yang perlu diperiksa dengan segera.",
+  "Có cảnh báo cần kiểm tra": "Terdapat amaran yang perlu diperiksa",
+  "Tự đóng sau \$time": "Ditutup secara automatik dalam \$time",
+  "Ngày trong tuần": "Hari dalam minggu",
+  "Hoặc": "Atau",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Masa mula dan tamat tidak boleh sama",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Masa tamat mestilah selepas masa semasa",
+  "Khoảng tạm tắt không hợp lệ": "Tempoh Jeda Alarm tidak sah",
+  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
+      "Tempoh Jeda Alarm tidak bertindih dengan mana-mana Jadual Alarm yang aktif",
+};

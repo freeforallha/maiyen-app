@@ -44,12 +44,12 @@ List<int> _normalizeAlarmDays(Object? rawValue) {
   return parsed.isEmpty ? const [1, 2, 3, 4, 5, 6, 7] : parsed;
 }
 
-
 String _alarmWeekdayFullLabel(int day, AppStrings strings) {
   switch (day) {
     case 1:
       return strings.choose(
         vi: "Thứ 2",
+        my: "တနင်္လာနေ့",
         fil: "Lunes",
         km: "ថ្ងៃចន្ទ",
         en: "Monday",
@@ -67,6 +67,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 2:
       return strings.choose(
         vi: "Thứ 3",
+        my: "အင်္ဂါနေ့",
         fil: "Martes",
         km: "ថ្ងៃអង្គារ",
         en: "Tuesday",
@@ -84,6 +85,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 3:
       return strings.choose(
         vi: "Thứ 4",
+        my: "ဗုဒ္ဓဟူးနေ့",
         fil: "Miyerkules",
         km: "ថ្ងៃពុធ",
         en: "Wednesday",
@@ -101,6 +103,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 4:
       return strings.choose(
         vi: "Thứ 5",
+        my: "ကြာသပတေးနေ့",
         fil: "Huwebes",
         km: "ថ្ងៃព្រហស្បតិ៍",
         en: "Thursday",
@@ -118,6 +121,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 5:
       return strings.choose(
         vi: "Thứ 6",
+        my: "သောကြာနေ့",
         fil: "Biyernes",
         km: "ថ្ងៃសុក្រ",
         en: "Friday",
@@ -135,6 +139,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 6:
       return strings.choose(
         vi: "Thứ 7",
+        my: "စနေနေ့",
         fil: "Sabado",
         km: "ថ្ងៃសៅរ៍",
         en: "Saturday",
@@ -152,6 +157,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
     case 7:
       return strings.choose(
         vi: "Chủ nhật",
+        my: "တနင်္ဂနွေနေ့",
         fil: "Linggo",
         km: "ថ្ងៃអាទិត្យ",
         en: "Sunday",
@@ -176,6 +182,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 1:
       return strings.choose(
         vi: "T2",
+        my: "တနင်္လာ",
         fil: "Lun",
         km: "ច.",
         en: "Mon",
@@ -193,6 +200,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 2:
       return strings.choose(
         vi: "T3",
+        my: "အင်္ဂါ",
         fil: "Mar",
         km: "អ.",
         en: "Tue",
@@ -210,6 +218,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 3:
       return strings.choose(
         vi: "T4",
+        my: "ဗုဒ္ဓဟူး",
         fil: "Miy",
         km: "ព.",
         en: "Wed",
@@ -227,6 +236,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 4:
       return strings.choose(
         vi: "T5",
+        my: "ကြာသပတေး",
         fil: "Huw",
         km: "ព្រ.",
         en: "Thu",
@@ -244,6 +254,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 5:
       return strings.choose(
         vi: "T6",
+        my: "သောကြာ",
         fil: "Biy",
         km: "សុ.",
         en: "Fri",
@@ -261,6 +272,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 6:
       return strings.choose(
         vi: "T7",
+        my: "စနေ",
         fil: "Sab",
         km: "សៅ.",
         en: "Sat",
@@ -278,6 +290,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
     case 7:
       return strings.choose(
         vi: "CN",
+        my: "တနင်္ဂနွေ",
         fil: "Lin",
         km: "អា.",
         en: "Sun",
@@ -303,6 +316,7 @@ String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
   if (days.length == 7) {
     return strings.choose(
       vi: "Hằng ngày",
+      my: "နေ့တိုင်း",
       fil: "Araw-araw",
       km: "រាល់ថ្ងៃ",
       en: "Every day",
@@ -365,49 +379,55 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
-      final device = Map<String, dynamic>.from(entry.value);
+      final rawDevice = entry.value;
 
-      homeAlarms[deviceId] = Map<String, dynamic>.from(
-        device["alarm"] ?? _defaultAlarm(),
-      );
+      if (rawDevice is! Map) {
+        continue;
+      }
+
+      final device = Map<String, dynamic>.from(rawDevice);
+
+      homeAlarms[deviceId] = _readAlarmMap(device["alarm"]);
     }
 
     FirebaseDatabase.instance
         .ref("accounts/$currentUid/customRules/${widget.homeId}")
         .get()
         .then((snap) {
-      if (!mounted) return;
+          if (!mounted) return;
 
-      final data = snap.value;
+          final data = snap.value;
 
-      if (data is Map) {
-        final map = Map<String, dynamic>.from(data);
-        final savedMode =
-            map["alarmMode"]?.toString() ?? map["mode"]?.toString();
-        final customDevices = map["devices"];
+          if (data is Map) {
+            final map = Map<String, dynamic>.from(data);
+            final savedMode =
+                map["alarmMode"]?.toString() ?? map["mode"]?.toString();
+            final customDevices = map["devices"];
 
-        if (customDevices is Map) {
-          for (final entry in customDevices.entries) {
-            final deviceId = entry.key.toString();
-            final deviceData = Map<String, dynamic>.from(
-              entry.value as Map,
-            );
+            if (customDevices is Map) {
+              for (final entry in customDevices.entries) {
+                final deviceId = entry.key.toString();
+                final rawDeviceData = entry.value;
 
-            if (deviceData["alarm"] is Map) {
-              customAlarms[deviceId] = Map<String, dynamic>.from(
-                deviceData["alarm"],
-              );
+                if (rawDeviceData is! Map) {
+                  continue;
+                }
+
+                final deviceData = Map<String, dynamic>.from(rawDeviceData);
+
+                if (deviceData.containsKey("alarm")) {
+                  customAlarms[deviceId] = _readAlarmMap(deviceData["alarm"]);
+                }
+              }
             }
-          }
-        }
 
-        setState(() {
-          if (savedMode == "custom" || savedMode == "home") {
-            mode = savedMode == "custom" ? "custom" : "home";
+            setState(() {
+              if (savedMode == "custom" || savedMode == "home") {
+                mode = savedMode == "custom" ? "custom" : "home";
+              }
+            });
           }
         });
-      }
-    });
   }
 
   Map<String, dynamic> _defaultAlarm() {
@@ -418,6 +438,25 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       "repeatMinutes": 30,
       "days": const [1, 2, 3, 4, 5, 6, 7],
     };
+  }
+
+  Map<String, dynamic> _readAlarmMap(Object? rawValue) {
+    final alarm = Map<String, dynamic>.from(_defaultAlarm());
+
+    if (rawValue is Map) {
+      alarm.addAll(Map<String, dynamic>.from(rawValue));
+    } else if (rawValue is bool) {
+      // Tương thích dữ liệu cũ từng lưu alarm dưới dạng true/false.
+      alarm["enabled"] = rawValue;
+    }
+
+    alarm["repeatMinutes"] = _normalizeAlarmRepeatMinutes(
+      alarm["repeatMinutes"],
+    );
+
+    alarm["days"] = _normalizeAlarmDays(alarm["days"]);
+
+    return alarm;
   }
 
   bool isSecurityDevice(Map d) {
@@ -431,7 +470,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         ? customAlarms[deviceId] ?? homeAlarms[deviceId]
         : homeAlarms[deviceId];
 
-    return Map<String, dynamic>.from(source ?? _defaultAlarm());
+    return _readAlarmMap(source);
   }
 
   Future<void> saveMode(String nextMode) async {
@@ -475,9 +514,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
           final rawAlarm =
               customAlarms[deviceId] ??
-                  customAlarms[realDeviceId] ??
-                  homeAlarms[deviceId] ??
-                  homeAlarms[realDeviceId];
+              customAlarms[realDeviceId] ??
+              homeAlarms[deviceId] ??
+              homeAlarms[realDeviceId];
 
           final alarm = rawAlarm is Map
               ? Map<String, dynamic>.from(rawAlarm)
@@ -545,7 +584,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       nextAlarm["repeatMinutes"],
     );
 
-    nextAlarm["start"] = (nextAlarm["start"]?.toString().trim().isNotEmpty == true)
+    nextAlarm["start"] =
+        (nextAlarm["start"]?.toString().trim().isNotEmpty == true)
         ? nextAlarm["start"].toString().trim()
         : "23:00";
 
@@ -557,8 +597,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }
 
   Future<void> saveAlarmForAllSecurityDevices(
-      Map<String, dynamic> alarm,
-      ) async {
+    Map<String, dynamic> alarm,
+  ) async {
     if (applyingAll) {
       return;
     }
@@ -608,7 +648,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             ? device["_homeId"].toString().trim()
             : widget.homeId;
         final realDeviceId =
-        device["_deviceId"]?.toString().trim().isNotEmpty == true
+            device["_deviceId"]?.toString().trim().isNotEmpty == true
             ? device["_deviceId"].toString().trim()
             : deviceId;
 
@@ -695,7 +735,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     ? strings.t("Chọn giờ bắt đầu Alarm")
                     : strings.t("Chọn giờ kết thúc Alarm"),
                 initial:
-                draft[field]?.toString() ??
+                    draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
               );
 
@@ -813,8 +853,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               Text(
                                 strings
                                     .applySameAlarmScheduleToSecurityDevicesText(
-                                  securityEntries.length,
-                                ),
+                                      securityEntries.length,
+                                    ),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textSecondary,
                                   fontSize: 12,
@@ -829,10 +869,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           onChanged: saving
                               ? null
                               : (value) {
-                            setSheetState(() {
-                              draft["enabled"] = value;
-                            });
-                          },
+                                  setSheetState(() {
+                                    draft["enabled"] = value;
+                                  });
+                                },
                         ),
                       ],
                     ),
@@ -895,12 +935,12 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         onPressed: saving ? null : applyToAll,
                         icon: saving
                             ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : const Icon(Icons.done_all_rounded),
                         label: Text(
                           saving
@@ -1245,10 +1285,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     : showQuickAlarmForAllSheet,
                 icon: applyingAll
                     ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Icon(Icons.tune_rounded),
                 label: Text(
                   applyingAll
@@ -1289,9 +1329,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     margin: const EdgeInsets.only(bottom: 10),
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: SafeHomeColors.primary.withValues(
-                        alpha: 0.07,
-                      ),
+                      color: SafeHomeColors.primary.withValues(alpha: 0.07),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
                         color: SafeHomeColors.primary.withValues(alpha: 0.10),
@@ -1345,11 +1383,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               onChanged: readOnly
                                   ? null
                                   : (v) async {
-                                final nextAlarm =
-                                Map<String, dynamic>.from(alarm);
-                                nextAlarm["enabled"] = v;
-                                await saveAlarm(deviceId, nextAlarm);
-                              },
+                                      final nextAlarm =
+                                          Map<String, dynamic>.from(alarm);
+                                      nextAlarm["enabled"] = v;
+                                      await saveAlarm(deviceId, nextAlarm);
+                                    },
                             ),
 
                             IconButton(
@@ -1463,10 +1501,7 @@ class _AlarmWeekdaySelector extends StatelessWidget {
 
     final dayItems = [
       for (var day = 1; day <= 7; day++)
-        (
-        value: day,
-        label: _alarmWeekdayFullLabel(day, strings),
-        ),
+        (value: day, label: _alarmWeekdayFullLabel(day, strings)),
     ];
 
     void toggleDay(int day) {
@@ -1530,21 +1565,10 @@ class _AlarmWeekdaySelector extends StatelessWidget {
           ),
           const SizedBox(height: 9),
           Row(
-            children: [
-              dayButton(0),
-              dayButton(1),
-              dayButton(2),
-              dayButton(3),
-            ],
+            children: [dayButton(0), dayButton(1), dayButton(2), dayButton(3)],
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              dayButton(4),
-              dayButton(5),
-              dayButton(6),
-            ],
-          ),
+          Row(children: [dayButton(4), dayButton(5), dayButton(6)]),
         ],
       ),
     );
@@ -1598,8 +1622,8 @@ class _AlarmDayChip extends StatelessWidget {
                 color: selected
                     ? activeColor.withValues(alpha: enabled ? 1 : 0.45)
                     : SafeHomeColors.textSecondary.withValues(
-                  alpha: enabled ? 1 : 0.45,
-                ),
+                        alpha: enabled ? 1 : 0.45,
+                      ),
                 fontSize: 12,
                 fontWeight: selected ? FontWeight.w900 : FontWeight.w700,
               ),
@@ -1677,10 +1701,10 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                 ],
                 onChanged: enabled
                     ? (nextValue) {
-                  if (nextValue != null) {
-                    onChanged(nextValue);
-                  }
-                }
+                        if (nextValue != null) {
+                          onChanged(nextValue);
+                        }
+                      }
                     : null,
               ),
             ),
@@ -1736,12 +1760,12 @@ class _AlarmModeCard extends StatelessWidget {
               ),
               boxShadow: selected
                   ? [
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.10),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
-                ),
-              ]
+                      BoxShadow(
+                        color: accent.withValues(alpha: 0.10),
+                        blurRadius: 14,
+                        offset: const Offset(0, 5),
+                      ),
+                    ]
                   : null,
             ),
             child: Column(
@@ -1769,17 +1793,17 @@ class _AlarmModeCard extends StatelessWidget {
                       duration: const Duration(milliseconds: 160),
                       child: selected
                           ? Icon(
-                        Icons.check_circle_rounded,
-                        key: const ValueKey("selected"),
-                        color: accent,
-                        size: 22,
-                      )
+                              Icons.check_circle_rounded,
+                              key: const ValueKey("selected"),
+                              color: accent,
+                              size: 22,
+                            )
                           : Icon(
-                        Icons.circle_outlined,
-                        key: const ValueKey("unselected"),
-                        color: SafeHomeColors.border,
-                        size: 22,
-                      ),
+                              Icons.circle_outlined,
+                              key: const ValueKey("unselected"),
+                              color: SafeHomeColors.border,
+                              size: 22,
+                            ),
                     ),
                   ],
                 ),

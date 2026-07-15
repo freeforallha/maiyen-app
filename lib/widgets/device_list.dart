@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/home_helper.dart';
-import '../safehome_theme.dart';
+import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
+import '../safehome_theme.dart';
+import '../services/notification_service.dart';
 
 class DeviceList extends StatefulWidget {
   final String homeId;
+  final String hubId;
   final Map<String, dynamic> devices;
   final String selectedRoomId;
   final String securityMode;
@@ -29,6 +32,7 @@ class DeviceList extends StatefulWidget {
     this.header,
     super.key,
     required this.homeId,
+    required this.hubId,
     required this.devices,
     required this.isShared,
     required this.ownerEmail,
@@ -54,6 +58,7 @@ class _DeviceListState extends State<DeviceList> {
   Offset _draggingCardOffset = Offset.zero;
   Offset _draggingPointerOffset = Offset.zero;
   bool _draggingDeviceDropping = false;
+  bool _mutingHomeSiren = false;
   Timer? _deviceDropTimer;
   Map<String, Map<String, int>> _deviceOrderMap = {};
   Map<String, Map<String, int>> _localDeviceOrderMap = {};
@@ -69,6 +74,7 @@ class _DeviceListState extends State<DeviceList> {
 
   String get _currentUid => FirebaseAuth.instance.currentUser?.uid ?? "";
   String get _homeId => widget.homeId.trim();
+  String get _hubId => widget.hubId.trim();
 
   static const String _deviceOrderRoot = "deviceOrder";
 
@@ -422,7 +428,6 @@ class _DeviceListState extends State<DeviceList> {
       case "ups":
       case "siren":
       case "smart_valve":
-      case "camera":
       case "doorbell":
       case "keypad":
       case "repeater":
@@ -459,7 +464,7 @@ class _DeviceListState extends State<DeviceList> {
       case "heat":
         return Icons.thermostat_rounded;
       case "carbon_monoxide":
-        return Icons.cloud_rounded;
+        return Icons.dangerous_rounded;
       case "gas":
         return Icons.gas_meter_rounded;
       case "water_leak":
@@ -477,8 +482,6 @@ class _DeviceListState extends State<DeviceList> {
         return Icons.notifications_active_rounded;
       case "smart_valve":
         return Icons.water_drop_rounded;
-      case "camera":
-        return Icons.videocam_rounded;
       case "doorbell":
         return Icons.notifications_rounded;
       case "keypad":
@@ -617,7 +620,11 @@ class _DeviceListState extends State<DeviceList> {
             : strings.t("Nguồn điện bình thường");
 
       case "siren":
-        return normalizeDeviceSwitchState(d) == "on"
+        final active =
+            isActiveDeviceSignal(d["alarm"]) ||
+            normalizeDeviceSwitchState(d) == "on";
+
+        return active
             ? strings.t("Còi đang bật")
             : strings.t("Còi sẵn sàng");
 
@@ -626,7 +633,6 @@ class _DeviceListState extends State<DeviceList> {
             ? strings.t("Van đang mở")
             : strings.t("Van đã đóng");
 
-      case "camera":
       case "doorbell":
       case "keypad":
       case "repeater":
@@ -1095,6 +1101,115 @@ class _DeviceListState extends State<DeviceList> {
     return entries;
   }
 
+  Future<void> _confirmMuteHomeSiren(AppStrings strings) async {
+    if (_mutingHomeSiren || !mounted) {
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(strings.confirmStopSirenTitle()),
+          content: Text(strings.confirmStopSirenBody()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(strings.t("HỦY")),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              icon: const Icon(Icons.volume_off_rounded),
+              label: Text(strings.stopSirenLabel()),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _mutingHomeSiren = true;
+    });
+
+    final muted = await NotificationService.muteHomeSiren(
+      homeId: _homeId,
+      hubId: _hubId,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _mutingHomeSiren = false;
+    });
+
+    if (muted) {
+      showTopToast(
+        context,
+        strings.sirenStoppedMessage(),
+        color: SafeHomeColors.safe,
+        icon: Icons.volume_off_rounded,
+      );
+      return;
+    }
+
+    showTopToast(
+      context,
+      strings.sirenStopUnavailableMessage(),
+      color: SafeHomeColors.danger,
+      icon: Icons.error_outline_rounded,
+    );
+  }
+
+  Widget _sirenStopButton({
+    required bool compact,
+    required AppStrings strings,
+  }) {
+    final buttonSize = compact ? 25.0 : 27.0;
+
+    return Tooltip(
+      message: strings.stopSirenLabel(),
+      child: Semantics(
+        button: true,
+        label: strings.stopSirenLabel(),
+        child: Material(
+          color: SafeHomeColors.danger.withValues(alpha: 0.11),
+          borderRadius: BorderRadius.circular(9),
+          child: InkWell(
+            onTap: _mutingHomeSiren
+                ? null
+                : () => _confirmMuteHomeSiren(strings),
+            borderRadius: BorderRadius.circular(9),
+            child: SizedBox(
+              width: buttonSize,
+              height: buttonSize,
+              child: Center(
+                child: _mutingHomeSiren
+                    ? SizedBox(
+                        width: compact ? 13 : 14,
+                        height: compact ? 13 : 14,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Icon(
+                        Icons.volume_off_rounded,
+                        size: compact ? 15 : 16,
+                        color: SafeHomeColors.danger,
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _deviceCard({
     required String id,
     required Map<String, dynamic> d,
@@ -1102,6 +1217,10 @@ class _DeviceListState extends State<DeviceList> {
     required AppStrings strings,
   }) {
     final type = d["type"]?.toString() ?? "door";
+    final sirenIsOn =
+        type == "siren" &&
+        (isActiveDeviceSignal(d["alarm"]) ||
+            normalizeDeviceSwitchState(d) == "on");
     final connectionStatus = getConnectionStatus(d);
     final connectionColor = getConnectionColor(connectionStatus);
     final connectionDescription = getConnectionDescription(
@@ -1198,6 +1317,13 @@ class _DeviceListState extends State<DeviceList> {
                       ],
                     ),
                   ),
+                  if (sirenIsOn) ...[
+                    const SizedBox(width: 5),
+                    _sirenStopButton(
+                      compact: compact,
+                      strings: strings,
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 7),

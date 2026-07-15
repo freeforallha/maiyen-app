@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
-import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 
@@ -84,10 +83,6 @@ void showDeviceDetail({
           final tamper = parseDeviceBool(device["tamper"]) == true;
           final temperature = device["temperature"];
           final humidity = device["humidity"];
-
-          final camera = safeMap(device["camera"]);
-          final cameraType = camera["type"]?.toString().trim() ?? "";
-          final cameraName = camera["name"]?.toString().trim() ?? "";
 
           final health = _getDeviceHealth(
             availability: availability,
@@ -278,16 +273,6 @@ void showDeviceDetail({
                           onTap: onNotification,
                         ),
                         const SizedBox(width: 8),
-                        _iconButton(
-                          icon: Icons.videocam_rounded,
-                          color: cameraType.isEmpty
-                              ? SafeHomeColors.textSecondary
-                              : SafeHomeColors.info,
-                          onTap: () {
-                            _showCameraUnderDevelopment(sheetContext);
-                          },
-                        ),
-                        const SizedBox(width: 8),
                         if (onRename != null)
                           _iconButton(
                             icon: Icons.edit_rounded,
@@ -344,22 +329,6 @@ void showDeviceDetail({
                         title: strings.t("Tín hiệu"),
                         value: "$linkquality",
                       ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => _showCameraUnderDevelopment(sheetContext),
-                      child: _infoRow(
-                        icon: Icons.videocam_rounded,
-                        color: cameraType.isEmpty
-                            ? SafeHomeColors.textSecondary
-                            : SafeHomeColors.info,
-                        title: strings.t("Camera"),
-                        value: cameraType.isEmpty
-                            ? strings.t("Chưa liên kết")
-                            : (cameraName.isNotEmpty
-                                  ? cameraName
-                                  : cameraType.toUpperCase()),
-                      ),
-                    ),
                     _infoRow(
                       icon: Icons.access_time_rounded,
                       color: SafeHomeColors.primary,
@@ -538,7 +507,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
       return _DeviceDisplayStatus(
         title: "Khí CO",
         value: detected ? "Phát hiện khí CO" : "Không phát hiện khí CO",
-        icon: Icons.cloud_rounded,
+        icon: Icons.dangerous_rounded,
         color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
       );
 
@@ -618,7 +587,9 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
       );
 
     case "siren":
-      final on = normalizeDeviceSwitchState(device) == "on";
+      final on =
+          isActiveDeviceSignal(device["alarm"]) ||
+          normalizeDeviceSwitchState(device) == "on";
 
       return _DeviceDisplayStatus(
         title: "Còi báo động",
@@ -635,14 +606,6 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         value: open ? "Van đang mở" : "Van đã đóng",
         icon: Icons.water_drop_rounded,
         color: open ? SafeHomeColors.info : SafeHomeColors.safe,
-      );
-
-    case "camera":
-      return const _DeviceDisplayStatus(
-        title: "Camera",
-        value: "Đang hoạt động",
-        icon: Icons.videocam_rounded,
-        color: SafeHomeColors.info,
       );
 
     case "doorbell":
@@ -875,13 +838,3 @@ String getBatteryText(Map<String, dynamic> d) {
   return "N/A";
 }
 
-void _showCameraUnderDevelopment(BuildContext context) {
-  final strings = AppStrings.of(context);
-
-  showTopToast(
-    context,
-    strings.t("Tính năng đang được phát triển"),
-    color: Colors.orange,
-    icon: Icons.construction_rounded,
-  );
-}

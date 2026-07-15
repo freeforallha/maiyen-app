@@ -20,6 +20,7 @@ class AppLanguageController extends ChangeNotifier {
     "ms",
     "fil",
     "km",
+    "my",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -36,6 +37,7 @@ class AppLanguageController extends ChangeNotifier {
     Locale("ms", "MY"),
     Locale("fil", "PH"),
     Locale("km", "KH"),
+    Locale("my", "MM"),
   ];
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
@@ -52,6 +54,7 @@ class AppLanguageController extends ChangeNotifier {
     "ms": "Bahasa Melayu",
     "fil": "Filipino",
     "km": "ភាសាខ្មែរ",
+    "my": "မြန်မာဘာသာ",
   };
 
   Locale _locale = const Locale("vi");
@@ -72,8 +75,25 @@ class AppLanguageController extends ChangeNotifier {
   bool get isMalay => languageCode == "ms";
   bool get isFilipino => languageCode == "fil";
   bool get isKhmer => languageCode == "km";
+  bool get isBurmese => languageCode == "my";
+
+  String _normalizeLanguageCode(String code) {
+    final cleanCode = code.trim().toLowerCase();
+
+    if (cleanCode == "my_mm" || cleanCode == "my-mm") {
+      return "my";
+    }
+
+    return cleanCode;
+  }
 
   Locale _localeForCode(String code) {
+    final normalizedCode = _normalizeLanguageCode(code);
+
+    if (normalizedCode == "my") {
+      return const Locale("my", "MM");
+    }
+
     if (code == "zh") {
       return const Locale("zh", "CN");
     }
@@ -126,9 +146,9 @@ class AppLanguageController extends ChangeNotifier {
   }
 
   String _systemSupportedLanguageCode() {
-    final systemCode = ui.PlatformDispatcher.instance.locale.languageCode
-        .trim()
-        .toLowerCase();
+    final systemCode = _normalizeLanguageCode(
+      ui.PlatformDispatcher.instance.locale.languageCode,
+    );
 
     if (supportedCodes.contains(systemCode)) {
       return systemCode;
@@ -146,10 +166,10 @@ class AppLanguageController extends ChangeNotifier {
 
     try {
       final preferences = await SharedPreferences.getInstance();
-      final savedCode = preferences
-          .getString(_storageKey)
-          ?.trim()
-          .toLowerCase();
+      final savedValue = preferences.getString(_storageKey);
+      final savedCode = savedValue == null
+          ? null
+          : _normalizeLanguageCode(savedValue);
       final code = savedCode != null && supportedCodes.contains(savedCode)
           ? savedCode
           : _systemSupportedLanguageCode();
@@ -169,16 +189,23 @@ class AppLanguageController extends ChangeNotifier {
   }
 
   Future<void> setLanguageCode(String code) async {
-    if (!supportedCodes.contains(code) || code == languageCode) {
+    final cleanCode = code.trim().toLowerCase();
+    final normalizedCode =
+        cleanCode == "my" || cleanCode == "my_mm" || cleanCode == "my-mm"
+        ? "my"
+        : code;
+
+    if (!supportedCodes.contains(normalizedCode) ||
+        normalizedCode == languageCode) {
       return;
     }
 
-    _locale = _localeForCode(code);
+    _locale = _localeForCode(normalizedCode);
     notifyListeners();
 
     try {
       final preferences = await SharedPreferences.getInstance();
-      await preferences.setString(_storageKey, code);
+      await preferences.setString(_storageKey, normalizedCode);
     } catch (_) {
       // Ngôn ngữ vẫn đổi trong phiên hiện tại.
     }

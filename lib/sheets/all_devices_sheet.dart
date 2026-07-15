@@ -222,7 +222,7 @@ IconData _deviceIcon(String type) {
     case "heat":
       return Icons.thermostat_rounded;
     case "carbon_monoxide":
-      return Icons.cloud_rounded;
+      return Icons.dangerous_rounded;
     case "gas":
       return Icons.gas_meter_rounded;
     case "water_leak":
@@ -236,8 +236,6 @@ IconData _deviceIcon(String type) {
       return Icons.notifications_active_rounded;
     case "smart_valve":
       return Icons.water_drop_rounded;
-    case "camera":
-      return Icons.videocam_rounded;
     case "doorbell":
       return Icons.notifications_rounded;
     case "keypad":
