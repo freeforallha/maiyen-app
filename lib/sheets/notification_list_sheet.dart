@@ -113,7 +113,7 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
               const Icon(Icons.receipt_long_rounded, color: Colors.blueAccent),
               const SizedBox(width: 8),
               Text(
-                strings.t("Thông báo Home"),
+                strings.notifications,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

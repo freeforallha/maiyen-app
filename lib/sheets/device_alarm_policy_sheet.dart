@@ -136,9 +136,17 @@ class _DeviceAlarmPolicySheet extends StatefulWidget {
       _DeviceAlarmPolicySheetState();
 }
 
-class _DeviceAlarmPolicySheetState
-    extends State<_DeviceAlarmPolicySheet> {
-  static const List<int> _standardDelayOptions = [0, 5, 10, 15, 30, 60, 90, 120];
+class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
+  static const List<int> _standardDelayOptions = [
+    0,
+    5,
+    10,
+    15,
+    30,
+    60,
+    90,
+    120,
+  ];
 
   late bool _enabled;
   late bool _physicalSirenEnabled;
@@ -146,8 +154,7 @@ class _DeviceAlarmPolicySheetState
   late int _triggerDelaySeconds;
   bool _saving = false;
 
-  bool get _isEmergency =>
-      isEmergencyAlarmPolicyDevice(widget.deviceType);
+  bool get _isEmergency => isEmergencyAlarmPolicyDevice(widget.deviceType);
 
   @override
   void initState() {
@@ -164,8 +171,7 @@ class _DeviceAlarmPolicySheetState
     final options = <int>{
       ..._standardDelayOptions,
       _triggerDelaySeconds,
-    }.where((value) => value >= 0 && value <= 120).toList()
-      ..sort();
+    }.where((value) => value >= 0 && value <= 120).toList()..sort();
 
     return options;
   }
@@ -273,7 +279,7 @@ class _DeviceAlarmPolicySheetState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          strings.t('Cấu hình báo động'),
+                          strings.alarmSettings,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -297,9 +303,7 @@ class _DeviceAlarmPolicySheetState
               ),
               const SizedBox(height: 12),
               Text(
-                strings.t(
-                  'Điều khiển cách cảm biến này kích hoạt cảnh báo.',
-                ),
+                strings.t('Điều khiển cách cảm biến này kích hoạt cảnh báo.'),
                 style: const TextStyle(
                   color: SafeHomeColors.textSecondary,
                   height: 1.35,
@@ -312,7 +316,7 @@ class _DeviceAlarmPolicySheetState
                 subtitle: strings.t(
                   _isEmergency
                       ? 'Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.'
-                      : 'Tắt để cảm biến không tạo Alarm.',
+                      : 'Tắt để cảm biến không tạo báo động.',
                 ),
                 value: _isEmergency ? true : _enabled,
                 enabled: controlsEnabled && !_isEmergency,
@@ -396,10 +400,7 @@ class _DeviceAlarmPolicySheetState
     );
   }
 
-  Widget _delayCard({
-    required AppStrings strings,
-    required bool enabled,
-  }) {
+  Widget _delayCard({required AppStrings strings, required bool enabled}) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
       decoration: BoxDecoration(
@@ -496,9 +497,7 @@ Widget _policySwitchTile({
       onChanged: enabled ? onChanged : null,
       secondary: Icon(
         icon,
-        color: enabled
-            ? SafeHomeColors.primary
-            : SafeHomeColors.textSecondary,
+        color: enabled ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
       ),
       title: Text(
         title,

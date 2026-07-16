@@ -103,6 +103,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Senin",
         th: "วันจันทร์",
         ms: "Isnin",
+        lo: "ວັນຈັນ",
       );
     case 2:
       return strings.choose(
@@ -121,6 +122,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Selasa",
         th: "วันอังคาร",
         ms: "Selasa",
+        lo: "ວັນອັງຄານ",
       );
     case 3:
       return strings.choose(
@@ -139,6 +141,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Rabu",
         th: "วันพุธ",
         ms: "Rabu",
+        lo: "ວັນພຸດ",
       );
     case 4:
       return strings.choose(
@@ -157,6 +160,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Kamis",
         th: "วันพฤหัสบดี",
         ms: "Khamis",
+        lo: "ວັນພະຫັດ",
       );
     case 5:
       return strings.choose(
@@ -175,6 +179,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Jumat",
         th: "วันศุกร์",
         ms: "Jumaat",
+        lo: "ວັນສຸກ",
       );
     case 6:
       return strings.choose(
@@ -193,6 +198,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Sabtu",
         th: "วันเสาร์",
         ms: "Sabtu",
+        lo: "ວັນເສົາ",
       );
     case 7:
       return strings.choose(
@@ -211,6 +217,7 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         id: "Minggu",
         th: "วันอาทิตย์",
         ms: "Ahad",
+        lo: "ວັນອາທິດ",
       );
     default:
       return "";
@@ -236,6 +243,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Sen",
         th: "จ.",
         ms: "Isn",
+        lo: "ຈ.",
       );
     case 2:
       return strings.choose(
@@ -254,6 +262,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Sel",
         th: "อ.",
         ms: "Sel",
+        lo: "ອ.",
       );
     case 3:
       return strings.choose(
@@ -272,6 +281,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Rab",
         th: "พ.",
         ms: "Rab",
+        lo: "ພ.",
       );
     case 4:
       return strings.choose(
@@ -290,6 +300,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Kam",
         th: "พฤ.",
         ms: "Kha",
+        lo: "ພຫ.",
       );
     case 5:
       return strings.choose(
@@ -308,6 +319,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Jum",
         th: "ศ.",
         ms: "Jum",
+        lo: "ສຸ.",
       );
     case 6:
       return strings.choose(
@@ -326,6 +338,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Sab",
         th: "ส.",
         ms: "Sab",
+        lo: "ສ.",
       );
     case 7:
       return strings.choose(
@@ -344,6 +357,7 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         id: "Min",
         th: "อา.",
         ms: "Ahd",
+        lo: "ອາ.",
       );
     default:
       return "";
@@ -370,6 +384,7 @@ String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
       id: "Setiap hari",
       th: "ทุกวัน",
       ms: "Setiap hari",
+      lo: "ທຸກມື້",
     );
   }
 
@@ -599,7 +614,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
       showTopToast(
         context,
-        AppStrings.of(context).t("Không thể lưu chế độ Alarm"),
+        AppStrings.of(context).t("Không thể lưu chế độ báo động"),
         color: SafeHomeColors.danger,
         icon: Icons.error_rounded,
       );
@@ -770,8 +785,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
             Future<void> chooseTime(String field) async {
               final picked = await openTimeTextInput(
                 title: field == "start"
-                    ? strings.t("Chọn giờ bắt đầu Alarm")
-                    : strings.t("Chọn giờ kết thúc Alarm"),
+                    ? strings.t("Chọn giờ bắt đầu báo động")
+                    : strings.t("Chọn giờ kết thúc báo động"),
                 initial:
                     draft[field]?.toString() ??
                     (field == "start" ? "23:00" : "06:00"),
@@ -825,7 +840,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
                 showTopToast(
                   sheetContext,
-                  strings.t("Không thể áp dụng Alarm cho toàn bộ thiết bị"),
+                  strings.t("Không thể áp dụng báo động cho toàn bộ thiết bị"),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
                 );
@@ -880,7 +895,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                strings.t("Đặt Home Alarm"),
+                                strings.t("Đặt báo động cho nhà"),
                                 style: const TextStyle(
                                   color: SafeHomeColors.textPrimary,
                                   fontSize: 17,
@@ -1002,7 +1017,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).t("Bạn không có quyền sửa lịch Alarm của nhà"),
+          AppStrings.of(
+            context,
+          ).t("Bạn không có quyền sửa lịch báo động của nhà"),
           color: SafeHomeColors.danger,
           icon: Icons.lock_rounded,
         );
@@ -1208,8 +1225,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   }) async {
     final picked = await openTimeTextInput(
       title: field == "start"
-          ? AppStrings.of(context).t("Chọn giờ bắt đầu Alarm")
-          : AppStrings.of(context).t("Chọn giờ kết thúc Alarm"),
+          ? AppStrings.of(context).t("Chọn giờ bắt đầu báo động")
+          : AppStrings.of(context).t("Chọn giờ kết thúc báo động"),
       initial: alarm[field]?.toString() ?? "23:00",
     );
 
@@ -1239,7 +1256,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              strings.t("Alarm thiết bị"),
+              strings.t("Báo động thiết bị"),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
 
@@ -1302,7 +1319,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               const SizedBox(height: 10),
               Text(
                 strings.t(
-                  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
+                  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.",
                 ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -1420,8 +1437,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
-                                                color: SafeHomeColors
-                                                    .textPrimary,
+                                                color:
+                                                    SafeHomeColors.textPrimary,
                                                 fontWeight: FontWeight.w900,
                                                 fontSize: 15,
                                               ),
@@ -1458,7 +1475,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                       await saveAlarm(deviceId, nextAlarm);
                                     },
                             ),
-
                           ],
                         ),
 

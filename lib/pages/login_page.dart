@@ -522,9 +522,15 @@ class _LoginPageState extends State<LoginPage> {
         return "Khmer";
       case "my":
         return "Burmese • Myanmar 🇲🇲";
+      case "lo":
+        return appLanguageController.languageCode == "vi" ? "Tiếng Lào" : "Lao";
       default:
         return code;
     }
+  }
+
+  String _languageSearchAliases(String code) {
+    return code == "lo" ? "lao tiếng lào ລາວ" : "";
   }
 
   void _showLanguageSheet() {
@@ -573,6 +579,7 @@ class _LoginPageState extends State<LoginPage> {
             ) {
               final title = AppLanguageController.languageLabels[code] ?? code;
               final subtitle = _languageSubtitle(code);
+              final aliases = _languageSearchAliases(code);
 
               if (q.isEmpty) {
                 return true;
@@ -580,7 +587,8 @@ class _LoginPageState extends State<LoginPage> {
 
               return code.toLowerCase().contains(q) ||
                   title.toLowerCase().contains(q) ||
-                  subtitle.toLowerCase().contains(q);
+                  subtitle.toLowerCase().contains(q) ||
+                  aliases.contains(q);
             }).toList();
             final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
             final screenHeight = MediaQuery.sizeOf(sheetContext).height;

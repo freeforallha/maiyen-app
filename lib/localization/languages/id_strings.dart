@@ -28,11 +28,11 @@ const Map<String, String> idStrings = {
   "Hiện diện": "Kehadiran",
   "Rung/chấn động": "Getaran/kejutan",
   "Kính vỡ": "Kaca pecah",
-  "Báo khói": "Alarm asap",
-  "Báo nhiệt": "Alarm panas",
+  "Báo khói": "alarm asap",
+  "Báo nhiệt": "alarm panas",
   "Khí CO": "CO gas",
-  "Báo gas": "Alarm gas",
-  "Báo ngập/rò nước": "Alarm banjir/bocor air",
+  "Báo gas": "alarm gas",
+  "Báo ngập/rò nước": "alarm banjir/bocor air",
   "Nút SOS": "Tombol SOS",
   "Nhiệt độ/Độ ẩm": "Suhu/Kelembaban",
   "Bụi mịn PM2.5": "Debu halus PM2.5",
@@ -105,13 +105,13 @@ const Map<String, String> idStrings = {
       "Tidak banyak kegiatan baru untuk analisis lebih dalam.",
   "Hub kết nối bình thường": "Hub terhubung secara normal",
   "Cài đặt cảnh báo cho nhà hiện tại": "Pasang alarm untuk rumah Anda saat ini",
-  "Nhận cảnh báo Alarm": "Terima peringatan Alarm",
+  "Nhận cảnh báo báo động": "Terima peringatan alarm",
   "Đang bật cho tài khoản này": "Diaktifkan untuk akun ini",
   "Đang tắt cho tài khoản này": "Nonaktif untuk akun ini",
-  "Hẹn giờ Reminder": "pengatur waktu Reminder",
+  "Hẹn giờ nhắc nhở": "pengatur waktu pengingat",
   "Nhắc kiểm tra nhà theo thời gian":
       "Ingatkan untuk memeriksa rumah dari waktu ke waktu",
-  "Hẹn giờ Alarm": "Pengatur waktu Alarm",
+  "Hẹn giờ báo động": "Pengatur waktu alarm",
   "Chưa thiết lập": "Belum diatur",
   "Chưa thiết lập thời gian": "Belum ada waktu yang ditentukan",
   "Tổng hợp trạng thái nhà": "Ringkasan status rumah",
@@ -148,13 +148,13 @@ const Map<String, String> idStrings = {
   "Đóng tìm kiếm": "Tutup pencarian",
   "Giờ": "Jam",
   "Phút": "Menit",
-  "Đặt Home Reminder": "Atur Reminder rumah",
-  "Đặt Home Alarm": "Atur Alarm rumah",
+  "Đặt nhắc nhở cho nhà": "Atur pengingat rumah",
+  "Đặt báo động cho nhà": "Atur alarm rumah",
   "Xác nhận thay đổi": "Konfirmasikan perubahan",
   "Tiếp tục": "Lanjutkan",
-  "Giờ Reminder": "Jam Reminder",
-  "Giờ bắt đầu Alarm": "Waktu mulai Alarm",
-  "Giờ kết thúc Alarm": "Waktu berakhir Alarm",
+  "Giờ nhắc nhở": "Jam pengingat",
+  "Giờ bắt đầu báo động": "Waktu mulai alarm",
+  "Giờ kết thúc báo động": "Waktu berakhir alarm",
   "Không có nhà nào đủ điều kiện để cài":
       "Tidak ada rumah yang memenuhi syarat",
   "Cài đặt hoàn tất": "Instalasi selesai",
@@ -171,8 +171,8 @@ const Map<String, String> idStrings = {
   "Đặt vị trí nhà và bật bảo vệ tự động":
       "Tetapkan lokasi rumah dan aktifkan perlindungan otomatis",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Alihkan kepemilikan atau hapus rumah",
-  "Đặt Reminder / Alarm nhà đã chọn":
-      "Atur Reminder / Alarm untuk rumah yang dipilih",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Atur pengingat / alarm untuk rumah yang dipilih",
   "Chia sẻ nhà đã chọn": "Bagikan rumah yang dipilih",
   "Mở danh sách chia sẻ nhà": "Buka daftar berbagi rumah",
   "Xoá các nhà đã chọn?": "Hapus rumah yang dipilih?",
@@ -203,13 +203,13 @@ const Map<String, String> idStrings = {
       "Hanya pemilik rumah yang dapat menghapus rumah",
   "Chỉ chủ nhà mới được chuyển quyền":
       "Hanya pemilik rumah yang dapat mengalihkan hak",
-  "Lưu ý khi bật Alarm": "Catatan tentang pengaktifan Alarm",
-  "Alarm đã được bật": "Alarm dihidupkan",
+  "Lưu ý khi bật báo động": "Catatan tentang pengaktifan alarm",
+  "Báo động đã được bật": "alarm dihidupkan",
   "Đã hiểu": "Dipahami",
-  "Lưu ý tạm tắt Alarm": "Catatan: nonaktifkan sementara Alarm",
-  "Đã bật Alarm": "Diaktifkan Alarm",
-  "Đã tắt Alarm": "Alarm dinonaktifkan",
-  "Tắt Alarm": "Matikan Alarm",
+  "Lưu ý tạm tắt báo động": "Catatan: nonaktifkan sementara alarm",
+  "Đã bật báo động": "Diaktifkan alarm",
+  "Đã tắt báo động": "alarm dinonaktifkan",
+  "Tắt báo động": "Hentikan alarm",
   "Cả ngày": "Sepanjang hari",
   "Bạn không có quyền thực hiện thao tác này.":
       "Anda tidak memiliki izin untuk melakukan operasi ini.",
@@ -296,7 +296,7 @@ const Map<String, String> idStrings = {
   "Về muộn": "Pulang larut malam",
   "Ra ngoài": "Keluar",
   "Khác": "Lainnya",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ Jeda Alarm hari ini",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Jeda alarm hari ini",
   "Chọn giờ bắt đầu tạm tắt": "Pilih waktu untuk mulai mematikan",
   "Từ": "Dari",
   "Từ giờ": "Mulai sekarang",
@@ -341,8 +341,8 @@ const Map<String, String> idStrings = {
   "Lần kích hoạt cuối": "Aktivasi terakhir",
   "Thiết bị không còn tồn tại": "Perangkat tidak lagi ada",
   "Mất kết nối": "Koneksi terputus",
-  "Online": "Online",
-  "Offline": "Offline",
+  "Online": "Daring",
+  "Offline": "Luring",
   "Loại thiết bị": "Jenis perangkat",
   "Nhiệt độ": "Suhu",
   "Độ ẩm": "Kelembapan",
@@ -380,8 +380,6 @@ const Map<String, String> idStrings = {
   "Battery low": "Baterai lemah",
   "Device offline": "Perangkat terputus",
   "Device online": "Perangkat kembali online",
-  "Alarm triggered": "Alarm dipicu",
-  "Alarm cleared": "Alarm dibersihkan",
   "Cửa mở": "Pintunya terbuka",
   "Cửa đóng": "Pintu tertutup",
   "Chưa đặt vị trí nhà": "Lokasi rumah belum ditetapkan",
@@ -389,7 +387,7 @@ const Map<String, String> idStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "Tetapkan lokasi rumah sebelum mengaktifkan Mode Perlindungan otomatis",
   "Bán kính bảo vệ mặc định: 150 m": "Radius perlindungan bawaan: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "Setiap anggota harus memberikan izin lokasi Selalu Izinkan agar status berangkat/tiba aktif saat aplikasi berjalan di latar belakang.",
   "Lưu cài đặt": "Simpan pengaturan",
   "Đã đặt vị trí nhà": "Lokasi rumah telah ditetapkan",
@@ -420,7 +418,7 @@ const Map<String, String> idStrings = {
   "Nhập HUB ID thủ công": "Masukkan HUB ID Manual",
   "Bạn không có quyền sắp xếp phòng":
       "Anda tidak memiliki izin penyortiran ruangan",
-  "Cảnh báo khói": "Alarm asap",
+  "Cảnh báo khói": "alarm asap",
   "Cập nhật thiết bị": "Pembaruan perangkat",
   "Cửa đang mở": "Pintu terbuka",
   "Cửa đã đóng": "Pintu tertutup",
@@ -440,7 +438,7 @@ const Map<String, String> idStrings = {
   "Mật khẩu quá yếu": "Kata sandi terlalu lemah",
   "Sai email hoặc mật khẩu": "Email atau kata sandi salah",
   "Lỗi đăng nhập": "Kesalahan login",
-  "Email": "Email",
+  "Email": "Surel",
   "Mật khẩu": "Kata sandi",
   "Ghi nhớ tài khoản": "Ingat akun",
   "Đăng nhập": "Masuk",
@@ -449,7 +447,7 @@ const Map<String, String> idStrings = {
   "Chưa có tài khoản? Đăng ký": "Belum punya akun? Daftar",
   "Đã có tài khoản? Đăng nhập": "Sudah punya akun? Masuk",
   "Tính năng đang được phát triển": "Fitur dalam pengembangan",
-  "Thông báo": "Pengumuman",
+  "Thông báo": "Notifikasi",
   "Chat trong nhà": "Obrolan internal",
   "Tìm kiếm tin nhắn": "Cari pesan",
   "Xem thành viên": "Lihat anggota",
@@ -465,7 +463,7 @@ const Map<String, String> idStrings = {
   "Huỷ trả lời": "Batalkan balasan",
   "Nhắn gì đó...": "Kirim pesan sesuatu...",
   "Gọi điện": "Hubungi",
-  "Alarm thiết bị": "Alarm perangkat",
+  "Báo động thiết bị": "alarm perangkat",
   "Chế độ áp dụng": "Mode yang berlaku",
   "Theo nhà": "Mengikuti rumah",
   "Riêng tôi": "Hanya saya",
@@ -473,7 +471,7 @@ const Map<String, String> idStrings = {
       "Gunakan jadwal bersama yang ditetapkan oleh Pemilik rumah atau Administrator",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Gunakan kalender pribadi yang hanya berlaku untuk akun Anda",
-  "Thiết lập nhanh Alarm": "Pengaturan cepat Alarm",
+  "Thiết lập nhanh báo động": "Pengaturan cepat alarm",
   "Thiết lập nhanh toàn bộ thiết bị": "Pengaturan cepat semua perangkat",
   "Áp dụng cho toàn bộ thiết bị": "Berlaku untuk semua perangkat",
   "Bắt đầu": "Mulai",
@@ -483,8 +481,8 @@ const Map<String, String> idStrings = {
   "Quét QR HUB": "Pindai QR HUB",
   "Đưa mã QR vào giữa khung": "Masukkan kode QR ke tengah bingkai",
   "Đang áp dụng...": "Menerapkan...",
-  "Hôm nay đã ghi nhận cảnh báo SOS": "Alarm direkam hari ini SOS",
-  "Hôm nay đã ghi nhận cảnh báo khói": "Alarm asap direkam hari ini",
+  "Hôm nay đã ghi nhận cảnh báo SOS": "alarm direkam hari ini SOS",
+  "Hôm nay đã ghi nhận cảnh báo khói": "alarm asap direkam hari ini",
   "Khói đã an toàn": "Asapnya aman",
   "Không tìm thấy nhà của thông báo này":
       "Rumah tidak ditemukan untuk pesan ini",
@@ -502,9 +500,9 @@ const Map<String, String> idStrings = {
   "Thiết bị mới": "Perangkat baru",
   "Thiết bị offline": "Perangkat terputus",
   "Thiết bị online": "Perangkat kembali online",
-  "Báo động kích hoạt": "Alarm aktif",
-  "Báo động đã tắt": "Alarm dinonaktifkan",
-  "Tạm tắt Alarm hôm nay": "Jeda Alarm hari ini",
+  "Báo động kích hoạt": "alarm aktif",
+  "Báo động đã tắt": "alarm dinonaktifkan",
+  "Tạm tắt báo động hôm nay": "Jeda alarm hari ini",
   "Độ ẩm cao": "Kelembapan tinggi",
   "Thử lại": "Coba lagi",
   "Không thể tải dữ liệu tài khoản": "Tidak dapat memuat data akun",
@@ -515,14 +513,14 @@ const Map<String, String> idStrings = {
   "Bạn sẽ rời khỏi các nhà được chia sẻ.":
       "Anda akan meninggalkan rumah bersama.",
   "Các nhà của bạn sẽ bị xoá.\n": "Rumah Anda akan dihapus.\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "Ini akan mengubah jadwal Alarm rumah semua perangkat keamanan di rumah yang dipilih.\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "Ini akan menambahkan Reminder rumah ke rumah yang dipilih.\n\n",
-  "Xác nhận thay đổi Alarm": "Konfirmasi perubahan Alarm",
-  "Xác nhận thay đổi Reminder": "Konfirmasi perubahan Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Ini akan mengubah jadwal alarm rumah semua perangkat keamanan di rumah yang dipilih.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Ini akan menambahkan pengingat rumah ke rumah yang dipilih.\n\n",
+  "Xác nhận thay đổi báo động": "Konfirmasi perubahan alarm",
+  "Xác nhận thay đổi nhắc nhở": "Konfirmasi perubahan pengingat",
   "Lặp lại khi sự cố vẫn còn": "Ulangi selama masalah masih berlanjut",
-  "Thời gian lặp lại Alarm": "Ulangi waktu Alarm",
+  "Thời gian lặp lại báo động": "Ulangi waktu alarm",
   "VD: Mr Chung": "Contoh: Tuan Chung",
   "🏡 Chưa có nhà nào": "🏡 Belum ada rumah",
   "Vẫn chuyển về Bình thường": "Kembali ke Mode Normal",
@@ -535,11 +533,11 @@ const Map<String, String> idStrings = {
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
       "Tindakan ini akan mengubah waktu alarm beberapa perangkat",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "Tindakan ini akan menonaktifkan semua Alarm di rumah ",
-  "Tắt toàn bộ Alarm?": "Nonaktifkan semua Alarm?",
-  "Không xoá được lịch tạm tắt Alarm":
-      "Tidak dapat menghapus jadwal jeda Alarm",
-  "Không lưu được tạm tắt Alarm": "Tidak dapat menyimpan jeda Alarm",
+      "Tindakan ini akan menonaktifkan semua alarm di rumah ",
+  "Tắt toàn bộ báo động?": "Nonaktifkan semua alarm?",
+  "Không xoá được lịch tạm tắt báo động":
+      "Tidak dapat menghapus jadwal jeda alarm",
+  "Không lưu được tạm tắt báo động": "Tidak dapat menyimpan jeda alarm",
   "Không gửi được yêu cầu xoá": "Tidak dapat mengirim permintaan penghapusan",
   "Không lưu được cài đặt": "Tidak dapat menyimpan pengaturan",
   "Không lấy được vị trí hiện tại": "Tidak dapat memperoleh lokasi saat ini",
@@ -551,39 +549,39 @@ const Map<String, String> idStrings = {
       "Hanya Pemilik rumah atau Administrator yang berhak mengubah pengulangan alarm",
   "Không lưu được thời gian lặp báo động":
       "Tidak dapat menyimpan waktu pengulangan alarm",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "Hanya Pemilik rumah atau Administrator yang berhak mengubah Mode Perlindungan",
   "Không thể thay đổi chế độ nhà": "Tidak dapat mengubah mode rumah",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "Mode Perlindungan aktif, tetapi notifikasi belum terkirim",
-  "Đã bật Mode Bảo vệ thủ công": "Mode Perlindungan Manual diaktifkan",
+  "Đã bật Chế độ Bảo vệ thủ công": "Mode Perlindungan Manual diaktifkan",
   "Đã chuyển nhà về Bình thường": "Rumah telah kembali ke Mode Normal",
   "60 phút": "60 menit",
   "30 phút": "30 menit",
   "15 phút": "15 menit",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "Anda sedang melihat jadwal Pemilik rumah. Pilih Hanya saya untuk mengatur jadwal Alarm sendiri.",
-  "Chọn giờ kết thúc Alarm": "Pilih waktu berakhir Alarm",
-  "Chọn giờ bắt đầu Alarm": "Pilih waktu mulai Alarm",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "Anda tidak memiliki izin untuk mengubah jadwal Alarm rumah",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "Alarm tidak dapat diterapkan ke semua perangkat",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Anda sedang melihat jadwal Pemilik rumah. Pilih Hanya saya untuk mengatur jadwal alarm sendiri.",
+  "Chọn giờ kết thúc báo động": "Pilih waktu berakhir alarm",
+  "Chọn giờ bắt đầu báo động": "Pilih waktu mulai alarm",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Anda tidak memiliki izin untuk mengubah jadwal alarm rumah",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "alarm tidak dapat diterapkan ke semua perangkat",
   "Nhà chưa có thiết bị an ninh để áp dụng":
       "Rumah belum memiliki perangkat keamanan untuk diterapkan",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "Anda tidak memiliki izin untuk mengubah jadwal rumah. Pilih Hanya saya.",
-  "Không thể lưu chế độ Alarm": "Tidak dapat menyimpan mode Alarm",
-  "Thêm Reminder": "Menambahkan Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder akan mengingatkan Anda untuk memeriksa status keamanan rumah pada jam yang dipilih.",
-  "Thêm khung giờ Alarm": "Tambahkan kerangka waktu Alarm",
-  "Đang sử dụng Reminder riêng của bạn": "Menggunakan Reminder Anda sendiri",
-  "Đang sử dụng Reminder của chủ nhà": "Menggunakan Reminder pemilik rumah",
-  "Sửa giờ Reminder": "Ubah waktu Reminder",
-  "Sửa giờ kết thúc Alarm": "Ubah waktu selesai Alarm",
-  "Sửa giờ bắt đầu Alarm": "Ubah waktu mulai Alarm",
-  "Xoá Reminder": "Hapus Reminder",
+  "Không thể lưu chế độ báo động": "Tidak dapat menyimpan mode alarm",
+  "Thêm nhắc nhở": "Menambahkan pengingat",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "pengingat akan mengingatkan Anda untuk memeriksa status keamanan rumah pada jam yang dipilih.",
+  "Thêm khung giờ báo động": "Tambahkan kerangka waktu alarm",
+  "Đang sử dụng nhắc nhở riêng của bạn": "Menggunakan pengingat Anda sendiri",
+  "Đang sử dụng nhắc nhở của chủ nhà": "Menggunakan pengingat pemilik rumah",
+  "Sửa giờ nhắc nhở": "Ubah waktu pengingat",
+  "Sửa giờ kết thúc báo động": "Ubah waktu selesai alarm",
+  "Sửa giờ bắt đầu báo động": "Ubah waktu mulai alarm",
+  "Xoá nhắc nhở": "Hapus pengingat",
   "Mỗi 1 giờ": "Setiap 1 jam",
   "Mỗi 30 phút": "Setiap 30 menit",
   "Mỗi 15 phút": "Setiap 15 menit",
@@ -614,7 +612,7 @@ const Map<String, String> idStrings = {
       "Mode Perlindungan manual aktif - hanya dapat dimatikan dengan beralih ke Mode Normal",
   "Thời gian lặp": "Ulangi waktu",
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
-      "Pilih 0 agar Alarm hanya berbunyi sekali. Pengaturan ini berlaku untuk Mode Perlindungan manual dan otomatis saat keluar rumah.",
+      "Pilih 0 agar alarm hanya berbunyi sekali. Pengaturan ini berlaku untuk Mode Perlindungan manual dan otomatis saat keluar rumah.",
   "Lặp báo động khi sự cố vẫn còn": "Ulangi alarm ketika masalah berlanjut",
   "Đang được sử dụng": "Sedang digunakan",
   "Chuyển về sử dụng thông thường": "Beralih kembali ke penggunaan normal",
@@ -631,15 +629,16 @@ const Map<String, String> idStrings = {
   "Bảo vệ thủ công đang bật": "Mode Perlindungan manual aktif",
   "Bảo vệ tự động đang bật": "Mode Perlindungan otomatis aktif",
   "Bảo vệ đang tắt": "Mode Perlindungan tidak aktif",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "Anda baru-baru ini membuka aplikasi untuk memeriksa status.",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Anda harus membuka aplikasi secara berkala untuk memeriksa izin, kalender, dan peringatan yang belum dibaca.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "Setelah beberapa kali penggunaan, SafeHome akan mengevaluasi kebiasaan pemeriksaan aplikasi dengan lebih baik.",
-  "Tần suất vào app ổn": "Frekuensi mengakses aplikasi baik-baik saja",
-  "Đã lâu chưa vào app kiểm tra": "Sudah lama tidak memeriksa aplikasi",
-  "Đang ghi nhận tần suất vào app": "Mencatat frekuensi mengakses aplikasi",
+  "Tần suất vào ứng dụng ổn": "Frekuensi mengakses aplikasi baik-baik saja",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "Sudah lama tidak memeriksa aplikasi",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Mencatat frekuensi mengakses aplikasi",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "Izin lokasi selalu aktif dan kondisi latar belakang perlu diperiksa.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -656,19 +655,19 @@ const Map<String, String> idStrings = {
       "Sebaiknya menambahkan alarm asap, SOS atau perangkat darurat yang sesuai untuk rumah.",
   "Chưa có thiết bị khẩn cấp": "Peralatan darurat tidak tersedia",
   "Đã có thiết bị khẩn cấp": "Peralatan darurat tersedia",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "Alarm harus dijadwalkan untuk waktu tidur atau pergi.",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "Rumah sudah mempunyai jadwal Alarm atau jadwal alarm sesuai perangkat.",
-  "Chưa set lịch Alarm": "Belum dijadwalkan Alarm",
-  "Đã set lịch Alarm": "Jadwal Alarm telah diatur",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "Sebaiknya atur setidaknya satu Reminder agar Anda tidak lupa memeriksa rumah.",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "alarm harus dijadwalkan untuk waktu tidur atau pergi.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Rumah sudah mempunyai jadwal alarm atau jadwal alarm sesuai perangkat.",
+  "Chưa cài lịch báo động": "Belum dijadwalkan alarm",
+  "Đã cài lịch báo động": "Jadwal alarm telah diatur",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Sebaiknya atur setidaknya satu pengingat agar Anda tidak lupa memeriksa rumah.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
       "Aplikasi akan mengingatkan Anda untuk memeriksa rumah sesuai jadwal yang ditetapkan.",
-  "Chưa setup Reminder": "Belum diatur Reminder",
-  "Đã setup Reminder": "Reminder telah diatur",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Chưa cài đặt nhắc nhở": "Belum diatur pengingat",
+  "Đã cài đặt nhắc nhở": "pengingat telah diatur",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "Silakan buka kembali aplikasi atau masuk lagi jika perangkat tidak menerima peringatan.",
   "Thiết bị chưa đăng ký nhận cảnh báo":
       "Perangkat tidak terdaftar untuk menerima peringatan",
@@ -689,7 +688,7 @@ const Map<String, String> idStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "Ponsel cenderung tidak menunda alarm SafeHome.",
   "Chưa tắt tối ưu pin": "Pengoptimalan baterai belum dimatikan.",
-  "Tối ưu pin không chặn app":
+  "Tối ưu pin không chặn ứng dụng":
       "Pengoptimalan baterai tidak memblokir aplikasi.",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "Meninggalkan rumah secara otomatis memerlukan izin lokasi setiap saat agar dapat berjalan dengan stabil.",
@@ -701,7 +700,7 @@ const Map<String, String> idStrings = {
       "Izin ini hanya diperlukan saat menggunakan Otomatis untuk meninggalkan rumah.",
   "Chưa cấp vị trí luôn luôn": "Posisi belum diberikan",
   "Đã cấp vị trí luôn luôn": "Posisi selalu diberikan",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS tidak membuka layar penuh seperti Android; Aplikasi ini menggunakan notifikasi dan suara sistem.",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android menggunakan peringatan layar penuh; Jika perangkat Anda memblokirnya, berikan izin di pengaturan.",
@@ -715,9 +714,9 @@ const Map<String, String> idStrings = {
   "Đã bật thông báo": "Notifikasi diaktifkan",
   "Hệ thống: Sẵn sàng": "Sistem: Siap",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistem: Mungkin melewatkan peringatan",
-  "Cách bạn đang dùng app": "Bagaimana Anda menggunakan aplikasi",
+  "Cách bạn đang dùng ứng dụng": "Bagaimana Anda menggunakan aplikasi",
   "Thiết bị của bạn": "Perangkat Anda",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Periksa ponsel Anda dan cara Anda menggunakan aplikasi.",
   "Hệ thống SafeHome": "Sistem SafeHome",
   "Hệ thống: Đang kiểm tra...": "Sistem: Memeriksa...",
@@ -733,8 +732,8 @@ const Map<String, String> idStrings = {
       "Mode Perlindungan otomatis saat semua orang keluar telah diaktifkan",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "Mode Perlindungan otomatis saat semua orang keluar telah dinonaktifkan",
-  "Không thể thay đổi trạng thái Alarm": "Status Alarm tidak dapat diubah",
-  "Đã tắt toàn bộ Alarm của nhà": "Semua Alarm di rumah telah dinonaktifkan",
+  "Không thể thay đổi trạng thái báo động": "Status alarm tidak dapat diubah",
+  "Đã tắt toàn bộ báo động của nhà": "Semua alarm di rumah telah dinonaktifkan",
   "QR này không phải mã xin gia nhập Home":
       "QR ini bukan kode permintaan bergabung rumah",
   "Thêm Home": "Tambah rumah",
@@ -747,20 +746,20 @@ const Map<String, String> idStrings = {
   "Cho phép vị trí luôn luôn": "Selalu izinkan lokasi",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Rumah Anda akan dihapus.\nRumah bersama akan ditinggalkan.",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Tindakan ini akan mengubah jadwal Alarm rumah semua perangkat keamanan di rumah yang dipilih.\n\nAnggota yang menggunakan Alarm 'Menurut rumah' akan terpengaruh.\nAlarm pribadi dalam mode 'Hanya saya' tidak akan diubah.",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Tindakan ini akan menambahkan Reminder rumah ke rumah yang dipilih.\n\nAnggota yang menggunakan Reminder 'Menurut rumah' akan terpengaruh.\nReminder pribadi dalam mode 'Hanya saya' tidak akan diubah.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tindakan ini akan mengubah jadwal alarm rumah semua perangkat keamanan di rumah yang dipilih.\n\nAnggota yang menggunakan alarm 'Menurut rumah' akan terpengaruh.\nAlarm pribadi dalam mode 'Hanya saya' tidak akan diubah.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tindakan ini akan menambahkan pengingat rumah ke rumah yang dipilih.\n\nAnggota yang menggunakan pengingat 'Menurut rumah' akan terpengaruh.\nReminder pribadi dalam mode 'Hanya saya' tidak akan diubah.",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "Saat diaktifkan, perangkat keamanan akan segera dipantau.\n\nMode Perlindungan otomatis saat keluar rumah akan dijeda. Mode ini tidak mati secara otomatis ketika seseorang pulang dan hanya dapat dimatikan saat anggota yang berwenang beralih ke Mode Normal.",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
       "Tindakan ini akan mengubah waktu alarm beberapa perangkat hari ini...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "Tindakan ini akan menonaktifkan semua Alarm di rumah. Anda tidak akan lagi menerima peringatan bahaya di ponsel.",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm menggunakan mode Mengikuti rumah.\n\nAnda akan menerima peringatan sesuai jadwal Alarm bersama yang ditetapkan oleh Pemilik rumah atau Administrator.",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm menggunakan mode Saya sendiri.\n\nAnda akan menerima peringatan sesuai dengan jadwal individu Alarm yang diatur untuk akun ini.",
+      "Tindakan ini akan menonaktifkan semua alarm di rumah. Anda tidak akan lagi menerima peringatan bahaya di ponsel.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "alarm menggunakan mode Mengikuti rumah.\n\nAnda akan menerima peringatan sesuai jadwal alarm bersama yang ditetapkan oleh Pemilik rumah atau Administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "alarm menggunakan mode Saya sendiri.\n\nAnda akan menerima peringatan sesuai dengan jadwal individu alarm yang diatur untuk akun ini.",
   "Không thể đăng nhập bằng Google": "Tidak dapat masuk dengan Google",
   "Không đặt được mật khẩu": "Tidak dapat menyetel sandi",
   "Chấp nhận": "Terima",
@@ -795,7 +794,7 @@ const Map<String, String> idStrings = {
       "Silakan pilih izin lokasi Selalu izinkan di Instal aplikasi",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "Akun Google perlu membuat kata sandi tambahan untuk menggunakan fungsi keamanan.",
-  "Alarm": "Alarm",
+  "Báo động": "Alarm",
   "Bạn không có quyền thực hiện thao tác này。":
       "Anda tidak memiliki izin untuk melakukan operasi ini.",
   "Cài đặt": "Pengaturan",
@@ -811,7 +810,7 @@ const Map<String, String> idStrings = {
   "Đang kiểm tra kết nối Hub": "Memeriksa koneksi Hub",
   "Đang mở khi nhà ở chế độ Bảo vệ":
       "Terbuka saat rumah dalam Mode Perlindungan",
-  "Đang mở trong giờ Alarm": "Buka pada jam kerja Alarm",
+  "Đang mở trong giờ báo động": "Buka pada jam kerja alarm",
   "Đang tải...": "Memuat...",
   "Hồ sơ, yêu cầu và lời mời tham gia":
       "Profil, persyaratan, dan undangan untuk bergabung",
@@ -820,7 +819,7 @@ const Map<String, String> idStrings = {
   "Hub tín hiệu bình thường": "Hub sinyal normal",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "Kunci terbuka saat rumah dalam Mode Perlindungan",
-  "Khóa đang mở trong giờ Alarm": "Kunci aktif selama jam kerja Alarm",
+  "Khóa đang mở trong giờ báo động": "Kunci aktif selama jam kerja alarm",
   "Không có thông báo": "Tidak ada pemberitahuan",
   "Khu vực nguy hiểm": "Area berbahaya",
   "Kiểm tra thiết bị trong nhà này": "Periksa perangkat di rumah ini",
@@ -833,8 +832,8 @@ const Map<String, String> idStrings = {
   "Nhà đang hoạt động bình thường": "Rumah beroperasi normal",
   "Nhập email": "Masukkan email",
   "Phòng": "Kamar",
-  "Quản trị viên": "Administrator",
-  "Reminder": "Reminder",
+  "Quản trị viên": "Pengelola",
+  "Nhắc nhở": "Pengingat",
   "SafeHome": "SafeHome",
   "Sóng yếu": "Sinyal lemah",
   "SOS": "SOS",
@@ -865,16 +864,16 @@ const Map<String, String> idStrings = {
   "Xoá toàn bộ dữ liệu và thiết bị": "Hapus semua data dan perangkat",
   "TẮT CẢNH BÁO": "MATI PERINGATAN",
   "Đã tạo nhà": "Membuat rumah",
-  "Mode Bảo vệ thủ công đã bật": "Mode Perlindungan manual diaktifkan",
-  "Báo động không lặp lại.": "Alarm tidak berulang.",
+  "Chế độ Bảo vệ thủ công đã bật": "Mode Perlindungan manual diaktifkan",
+  "Báo động không lặp lại.": "alarm tidak berulang.",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "Alarm berulang setelah \$securityModeRepeatMinutes menit jika masalah terus berlanjut.",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "alarm berulang setelah \$securityModeRepeatMinutes menit jika masalah terus berlanjut.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName telah mengaktifkan Mode Perlindungan Manual untuk \"\$homeName\". Mode ini hanya dimatikan ketika anggota yang berwenang beralih kembali ke Mode Normal. \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "Anda telah mengaktifkan Alarm untuk rumah \"\$homeName\".",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "Semua Alarm di rumah \"\$homeName\" telah dinonaktifkan.",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Anda telah mengaktifkan alarm untuk rumah \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Semua alarm di rumah \"\$homeName\" telah dinonaktifkan.",
   "Thành viên mới": "Anggota baru",
   "Thành viên rời nhà": "Anggota meninggalkan rumah",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -905,10 +904,10 @@ const Map<String, String> idStrings = {
   "Tin nhắn HomeChat": "Pesan HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName mengirim pesan",
   "Bạn có tin nhắn mới": "Anda mendapat pesan baru",
-  "Mode Bảo vệ sẽ chỉ báo động một lần":
-      "Mode Perlindungan hanya akan membunyikan Alarm sekali",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
-      "Mode Perlindungan akan mengulangi Alarm setelah \$minutes menit",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Mode Perlindungan hanya akan membunyikan alarm sekali",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Mode Perlindungan akan mengulangi alarm setelah \$minutes menit",
   "Đã gửi yêu cầu gia nhập \$count nhà":
       "Permintaan bergabung untuk \$count rumah telah dikirim",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
@@ -937,8 +936,8 @@ const Map<String, String> idStrings = {
   "Đang ghép nối: \$seconds giây": "Pemasangan: \$seconds detik",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "Mode penambahan perangkat telah dibuka di rumah \"\$homeName\" selama \$seconds detik.",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "Interval waktu harus berada dalam frame Alarm (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Interval waktu harus berada dalam frame alarm (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total tes lulus\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
       "\$name belum memperbarui nomor teleponnya di profil.",
@@ -981,8 +980,8 @@ const Map<String, String> idStrings = {
       "Jika tidak ada yang mengonfirmasi, SafeHome akan beralih ke panggilan darurat.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Laporkan kembali ke \$time jika masalah belum teratasi.",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "Akan melaporkan kembali sesuai jadwal Alarm yang terpasang jika masalah belum teratasi.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Akan melaporkan kembali sesuai jadwal alarm yang terpasang jika masalah belum teratasi.",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "\"\$deviceName\" ditutup di \"\$resolvedHomeName\".",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -994,14 +993,14 @@ const Map<String, String> idStrings = {
   "✅ \$count nhà an toàn": "✅ Rumah aman \$count",
   "\$count nhà đang được theo dõi": "\$count rumah dipantau",
   "\$minutes phút": "\$minutes menit",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "Terpasang Reminder untuk rumah \$updatedHomes.",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Alarm telah diatur untuk \$updatedDevices perangkat di \$updatedHomes rumah.\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Terpasang pengingat untuk rumah \$updatedHomes.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "alarm telah diatur untuk \$updatedDevices perangkat di \$updatedHomes rumah.\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "Rumah yang boleh Anda bagikan telah dibagikan.\n\n\$skipped rumah dilewati karena Anda tidak memiliki izin untuk membagikannya.",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "Alarm diterapkan ke \$count perangkat keamanan",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "alarm diterapkan ke \$count perangkat keamanan",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "Terapkan jadwal yang sama ke \$count perangkat keamanan",
   "\$count phút trước": "\$count menit terakhir",
@@ -1032,16 +1031,16 @@ const Map<String, String> idStrings = {
       "Periksa pintu atau kunci yang terbuka sebelum mempertahankan rumah dalam Mode Perlindungan.",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "Mungkin masih ada orang di rumah; jika demikian, sebaiknya beralih ke Mode Normal.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "Ada anggota yang belum ditentukan lokasinya, harap ingatkan untuk membuka aplikasi atau memeriksa izin lokasi.",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "Perangkat kehilangan koneksi, periksa baterai, daya, atau lokasi perangkat.",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "Ada baterai lemah di perangkat, baterai harus diganti lebih awal untuk menghindari kehilangan peringatan.",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Anda belum menyetel Reminder, sebaiknya buat jadwal untuk mengingatkan Anda agar memeriksa rumah secara berkala.",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Anda belum menetapkan jadwal untuk Alarm, jadi sebaiknya aktifkan keamanan pada jam-jam biasanya Anda jauh dari rumah.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Anda belum menyetel pengingat, sebaiknya buat jadwal untuk mengingatkan Anda agar memeriksa rumah secara berkala.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Anda belum menetapkan jadwal untuk alarm, jadi sebaiknya aktifkan keamanan pada jam-jam biasanya Anda jauh dari rumah.",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "Tidak ada yang perlu segera dilakukan, Anda hanya perlu terus memantau status rumah.",
   "Lặp sau \$minutes phút": "Ulangi setelah \$minutes menit",
@@ -1079,7 +1078,7 @@ const Map<String, String> idStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Terbuka saat rumah dalam Mode Perlindungan",
   "An tâm hơn trong từng ngôi nhà": "Lebih tenang di setiap rumah",
-  "Báo động SafeHome": "Alarm SafeHome",
+  "Báo động SafeHome": "alarm SafeHome",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Terdapat alarm keamanan yang perlu segera diperiksa.",
   "Có cảnh báo cần kiểm tra": "Ada alarm yang perlu dicek",
@@ -1090,26 +1089,60 @@ const Map<String, String> idStrings = {
       "Waktu mulai dan selesai tidak boleh sama",
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "Waktu selesai harus setelah waktu saat ini",
-  "Khoảng tạm tắt không hợp lệ": "Rentang jeda Alarm tidak valid",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "Rentang jeda tidak bertepatan dengan jadwal Alarm aktif mana pun",
+  "Khoảng tạm tắt không hợp lệ": "Rentang jeda alarm tidak valid",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Rentang jeda tidak bertepatan dengan jadwal alarm aktif mana pun",
 
   // Device alarm policy
-  "Cấu hình báo động": "Pengaturan alarm",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Atur cara sensor ini memicu peringatan.",
+  "Cài đặt báo động": "Pengaturan alarm",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Atur cara sensor ini memicu peringatan.",
   "Tham gia báo động": "Ikut dalam alarm",
-  "Tắt để cảm biến không tạo Alarm.": "Matikan agar sensor ini tidak membuat Alarm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Matikan agar sensor ini tidak membuat alarm.",
   "Bật còi vật lý": "Aktifkan sirene fisik",
   "Cho phép kích hoạt còi trong nhà.": "Izinkan sirene di dalam rumah aktif.",
   "Đánh thức màn hình": "Nyalakan layar",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Tampilkan peringatan layar penuh di ponsel.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Tampilkan peringatan layar penuh di ponsel.",
   "Độ trễ kích hoạt": "Jeda pemicu",
   "Chỉ áp dụng cho cảm biến an ninh.": "Hanya berlaku untuk sensor keamanan.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Sensor darurat selalu terpicu seketika.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Sensor darurat selalu terpicu seketika.",
   "Ngay lập tức": "Seketika",
   "giây": "detik",
   "Đã lưu cấu hình báo động": "Pengaturan alarm disimpan",
   "Không thể lưu cấu hình báo động": "Tidak dapat menyimpan pengaturan alarm",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Hanya pemilik rumah dan administrator yang dapat mengubah pengaturan ini.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Hanya pemilik rumah dan administrator yang dapat mengubah pengaturan ini.",
   "Thông tin chi tiết": "Detail perangkat",
+  "Thông báo báo động": "Notifikasi alarm",
+  "Cài đặt nhắc nhở": "Pengaturan pengingat",
+  "Nhắc nhở theo lịch": "Pengingat terjadwal",
+  "Danh sách thông báo": "Notifikasi",
+  "Cài đặt thông báo": "Pengaturan notifikasi",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Gunakan jadwal alarm yang telah diatur",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Hanya kirim notifikasi, jangan aktifkan alarm",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Semua alarm rumah dinonaktifkan; sistem hanya akan mengirim notifikasi.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Hanya pemilik rumah yang dapat mengaktifkan mode ini.",
+  "Bật Không bảo vệ?": "Aktifkan mode Tanpa perlindungan?",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "Sensor baru saja mendeteksi peristiwa.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Hanya pemilik rumah yang dapat mengaktifkan mode Tanpa perlindungan",
+  "Đã chuyển nhà sang Không bảo vệ": "Rumah beralih ke mode Tanpa perlindungan",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Beralih ke mode Tanpa perlindungan, tetapi notifikasi tidak dapat dikirim",
+  "Giám sát toàn diện": "Pemantauan penuh",
+  "Không bảo vệ": "Tanpa perlindungan",
+  "Không bảo vệ đang bật": "Mode Tanpa perlindungan aktif",
+  "Nhà đã chuyển sang Không bảo vệ": "Rumah beralih ke mode Tanpa perlindungan",
+  "Thông báo cảm biến": "Notifikasi sensor",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Notifikasi biasa saat sensor mendeteksi peristiwa.",
+  "Tôi hiểu, tiếp tục": "Saya mengerti, lanjutkan",
 };

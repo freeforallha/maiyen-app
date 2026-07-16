@@ -105,12 +105,13 @@ const Map<String, String> myStrings = {
       "အသေးစိတ်ခွဲခြမ်းရန် လတ်တလောလှုပ်ရှားမှု အချက်အလက် မလုံလောက်သေးပါ။",
   "Hub kết nối bình thường": "Hub ချိတ်ဆက်ထားသည်",
   "Cài đặt cảnh báo cho nhà hiện tại": "ဤအိမ်အတွက် သတိပေးချက်ဆက်တင်များ",
-  "Nhận cảnh báo Alarm": "Alarm သတိပေးချက်များ လက်ခံရန်",
+  "Nhận cảnh báo báo động": "အရေးပေါ်အချက်ပေးသံ သတိပေးချက်များ လက်ခံရန်",
   "Đang bật cho tài khoản này": "ဤအကောင့်အတွက် ဖွင့်ထားသည်",
   "Đang tắt cho tài khoản này": "ဤအကောင့်အတွက် ပိတ်ထားသည်",
-  "Hẹn giờ Reminder": "Reminder အချိန်ဇယား",
-  "Nhắc kiểm tra nhà theo thời gian": "အိမ်စစ်ဆေးရန် Reminder အချိန်သတ်မှတ်ပါ",
-  "Hẹn giờ Alarm": "Alarm အချိန်သတ်မှတ်ရန်",
+  "Hẹn giờ nhắc nhở": "သတိပေးချက် အချိန်ဇယား",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "အိမ်စစ်ဆေးရန် သတိပေးချက် အချိန်သတ်မှတ်ပါ",
+  "Hẹn giờ báo động": "အရေးပေါ်အချက်ပေးသံ အချိန်သတ်မှတ်ရန်",
   "Chưa thiết lập": "မသတ်မှတ်ရသေးပါ",
   "Chưa thiết lập thời gian": "အချိန်ဇယား မသတ်မှတ်ရသေးပါ",
   "Tổng hợp trạng thái nhà": "အိမ်အခြေအနေ အကျဉ်းချုပ်",
@@ -147,13 +148,13 @@ const Map<String, String> myStrings = {
   "Đóng tìm kiếm": "ရှာဖွေမှု ပိတ်ရန်",
   "Giờ": "နာရီ",
   "Phút": "မိနစ်",
-  "Đặt Home Reminder": "အိမ်အတွက် Reminder သတ်မှတ်ရန်",
-  "Đặt Home Alarm": "အိမ်အတွက် Alarm သတ်မှတ်ရန်",
+  "Đặt nhắc nhở cho nhà": "အိမ်အတွက် သတိပေးချက် သတ်မှတ်ရန်",
+  "Đặt báo động cho nhà": "အိမ်အတွက် အရေးပေါ်အချက်ပေးသံ သတ်မှတ်ရန်",
   "Xác nhận thay đổi": "ပြောင်းလဲမှုများ အတည်ပြုရန်",
   "Tiếp tục": "ဆက်လုပ်ရန်",
-  "Giờ Reminder": "Reminder အချိန်",
-  "Giờ bắt đầu Alarm": "Alarm စတင်ချိန်",
-  "Giờ kết thúc Alarm": "Alarm ပြီးဆုံးချိန်",
+  "Giờ nhắc nhở": "သတိပေးချက် အချိန်",
+  "Giờ bắt đầu báo động": "အရေးပေါ်အချက်ပေးသံ စတင်ချိန်",
+  "Giờ kết thúc báo động": "အရေးပေါ်အချက်ပေးသံ ပြီးဆုံးချိန်",
   "Không có nhà nào đủ điều kiện để cài": "သတ်မှတ်နိုင်သောအိမ် မတွေ့ပါ",
   "Cài đặt hoàn tất": "သတ်မှတ်မှု ပြီးပါပြီ",
   "Xác nhận rời nhà": "အိမ်မှထွက်ခြင်း အတည်ပြုရန်",
@@ -170,8 +171,8 @@ const Map<String, String> myStrings = {
       "အိမ်တည်နေရာ သတ်မှတ်ပြီး အလိုအလျောက်ကာကွယ်မှု ဖွင့်ရန်",
   "Chuyển quyền chủ nhà hoặc xoá nhà":
       "အိမ်ပိုင်ရှင်အခွင့်အရေး လွှဲပြောင်းရန် သို့မဟုတ် အိမ်ဖျက်ရန်",
-  "Đặt Reminder / Alarm nhà đã chọn":
-      "ရွေးထားသောအိမ်များအတွက် Reminder / Alarm သတ်မှတ်ရန်",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "ရွေးထားသောအိမ်များအတွက် သတိပေးချက် / အရေးပေါ်အချက်ပေးသံ သတ်မှတ်ရန်",
   "Chia sẻ nhà đã chọn": "ရွေးထားသောအိမ်များ မျှဝေရန်",
   "Mở danh sách chia sẻ nhà": "အိမ်မျှဝေမှုစာရင်း ဖွင့်ရန်",
   "Xoá các nhà đã chọn?": "ရွေးထားသောအိမ်များကို ဖျက်မလား?",
@@ -202,13 +203,13 @@ const Map<String, String> myStrings = {
   "Chỉ chủ nhà mới được xoá nhà": "အိမ်ကို အိမ်ပိုင်ရှင်သာ ဖျက်နိုင်သည်",
   "Chỉ chủ nhà mới được chuyển quyền":
       "အိမ်ပိုင်ရှင်သာ ပိုင်ဆိုင်မှုလွှဲပြောင်းနိုင်သည်",
-  "Lưu ý khi bật Alarm": "Alarm အသိပေးချက်",
-  "Alarm đã được bật": "Alarm ဖွင့်ပြီးပါပြီ",
+  "Lưu ý khi bật báo động": "အရေးပေါ်အချက်ပေးသံ အသိပေးချက်",
+  "Báo động đã được bật": "အရေးပေါ်အချက်ပေးသံ ဖွင့်ပြီးပါပြီ",
   "Đã hiểu": "နားလည်ပါပြီ",
-  "Lưu ý tạm tắt Alarm": "Alarm ခေတ္တရပ်ရန် မှတ်ချက်",
-  "Đã bật Alarm": "Alarm ဖွင့်ပြီးပါပြီ",
-  "Đã tắt Alarm": "Alarm ပိတ်ပြီးပါပြီ",
-  "Tắt Alarm": "Alarm ပိတ်ရန်",
+  "Lưu ý tạm tắt báo động": "အရေးပေါ်အချက်ပေးသံ ခေတ္တရပ်ရန် မှတ်ချက်",
+  "Đã bật báo động": "အရေးပေါ်အချက်ပေးသံ ဖွင့်ပြီးပါပြီ",
+  "Đã tắt báo động": "အရေးပေါ်အချက်ပေးသံ ပိတ်ပြီးပါပြီ",
+  "Tắt báo động": "အရေးပေါ်အချက်ပေးကို ရပ်ရန်",
   "Cả ngày": "တစ်နေ့လုံး",
   "Bạn không có quyền thực hiện thao tác này.":
       "ဤလုပ်ဆောင်ချက်ကို ပြုလုပ်ခွင့် မရှိပါ။",
@@ -289,7 +290,7 @@ const Map<String, String> myStrings = {
   "Về muộn": "နောက်ကျမှပြန်မည်",
   "Ra ngoài": "အပြင်သွားမည်",
   "Khác": "အခြား",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ ယနေ့ Alarm ကို ခေတ္တရပ်ရန်",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ ယနေ့ အရေးပေါ်အချက်ပေးသံ ကို ခေတ္တရပ်ရန်",
   "Chọn giờ bắt đầu tạm tắt": "ခေတ္တရပ်မည့် စတင်ချိန် ရွေးပါ",
   "Từ": "မှ",
   "Từ giờ": "စတင်ချိန်",
@@ -305,8 +306,9 @@ const Map<String, String> myStrings = {
   "Xem lời mời chia sẻ và xin gia nhập":
       "မျှဝေဖိတ်ကြားချက်များနှင့် ဝင်ခွင့်တောင်းဆိုမှုများ ကြည့်ရန်",
   "Cài đặt bảo mật": "လုံခြုံရေးဆက်တင်များ",
-  "Quyền báo động toàn màn hình": "မျက်နှာပြင်အပြည့် Alarm ခွင့်ပြုချက်",
-  "Báo động toàn màn hình": "မျက်နှာပြင်အပြည့် Alarm",
+  "Quyền báo động toàn màn hình":
+      "မျက်နှာပြင်အပြည့် အရေးပေါ်အချက်ပေးသံ ခွင့်ပြုချက်",
+  "Báo động toàn màn hình": "မျက်နှာပြင်အပြည့် အရေးပေါ်အချက်ပေးသံ",
   "Đã được cấp quyền": "ခွင့်ပြုပြီးပါပြီ",
   "Chưa được cấp quyền": "ခွင့်မပြုရသေးပါ",
   "Mở cài đặt hệ thống": "စနစ်ဆက်တင်များ ဖွင့်ရန်",
@@ -373,8 +375,6 @@ const Map<String, String> myStrings = {
   "Battery low": "ဘက်ထရီအားနည်းသည်",
   "Device offline": "စက်ပစ္စည်း အော့ဖ်လိုင်းဖြစ်နေသည်",
   "Device online": "စက်ပစ္စည်း အွန်လိုင်းဖြစ်နေသည်",
-  "Alarm triggered": "Alarm ဖြစ်ပေါ်နေသည်",
-  "Alarm cleared": "Alarm ပြီးဆုံးပြီ",
   "Cửa mở": "တံခါး ဖွင့်ထားသည်",
   "Cửa đóng": "တံခါး ပိတ်ထားသည်",
   "Chưa đặt vị trí nhà": "အိမ်တည်နေရာ မသတ်မှတ်ရသေးပါ",
@@ -382,7 +382,7 @@ const Map<String, String> myStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "အလိုအလျောက်ကာကွယ်မှု မဖွင့်မီ အိမ်တည်နေရာ သတ်မှတ်ပါ",
   "Bán kính bảo vệ mặc định: 150 m": "မူလကာကွယ်မှုအချင်းဝက် - 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "အက်ပ် နောက်ခံတွင်လည်ပတ်နေချိန် အိမ်ထွက်/အိမ်ရောက်အခြေအနေ အလုပ်လုပ်နိုင်ရန် အဖွဲ့ဝင်တိုင်းက တည်နေရာကို အမြဲခွင့်ပြုရန် လိုသည်။",
   "Lưu cài đặt": "ဆက်တင်များ သိမ်းရန်",
   "Đã đặt vị trí nhà": "အိမ်တည်နေရာ သတ်မှတ်ပြီးပါပြီ",
@@ -441,7 +441,7 @@ const Map<String, String> myStrings = {
   "Chưa có tài khoản? Đăng ký": "အကောင့်မရှိသေးပါသလား? စာရင်းသွင်းပါ",
   "Đã có tài khoản? Đăng nhập": "အကောင့်ရှိပြီးသားလား? အကောင့်ဝင်ပါ",
   "Tính năng đang được phát triển": "ဤလုပ်ဆောင်ချက်ကို ဖန်တီးနေဆဲဖြစ်သည်",
-  "Thông báo": "အကြောင်းကြားချက်များ",
+  "Thông báo": "အသိပေးချက်",
   "Chat trong nhà": "အိမ်အတွင်း စကားပြောခန်း",
   "Tìm kiếm tin nhắn": "စာတိုများ ရှာရန်",
   "Xem thành viên": "အဖွဲ့ဝင်များ ကြည့်ရန်",
@@ -457,7 +457,7 @@ const Map<String, String> myStrings = {
   "Huỷ trả lời": "ပြန်စာ ပယ်ဖျက်ရန်",
   "Nhắn gì đó...": "စာတို ရိုက်ပါ...",
   "Gọi điện": "ဖုန်းခေါ်ရန်",
-  "Alarm thiết bị": "စက်ပစ္စည်း Alarm",
+  "Báo động thiết bị": "စက်ပစ္စည်း အရေးပေါ်အချက်ပေးသံ",
   "Chế độ áp dụng": "အသုံးပြုမည့်မုဒ်",
   "Theo nhà": "အိမ်အချိန်ဇယား",
   "Riêng tôi": "မိမိအတွက်သာ",
@@ -465,7 +465,7 @@ const Map<String, String> myStrings = {
       "အိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူ သတ်မှတ်ထားသော မျှဝေအချိန်ဇယားကို အသုံးပြုရန်",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "သင့်အကောင့်အတွက်သာ သက်ရောက်သော ကိုယ်ပိုင်အချိန်ဇယားကို အသုံးပြုရန်",
-  "Thiết lập nhanh Alarm": "Alarm အမြန်သတ်မှတ်ရန်",
+  "Thiết lập nhanh báo động": "အရေးပေါ်အချက်ပေးသံ အမြန်သတ်မှတ်ရန်",
   "Thiết lập nhanh toàn bộ thiết bị": "စက်ပစ္စည်းအားလုံးကို အမြန်သတ်မှတ်ရန်",
   "Áp dụng cho toàn bộ thiết bị": "စက်ပစ္စည်းအားလုံးအတွက် အသုံးပြုရန်",
   "Bắt đầu": "စတင်ချိန်",
@@ -495,9 +495,9 @@ const Map<String, String> myStrings = {
   "Thiết bị mới": "စက်ပစ္စည်းအသစ်",
   "Thiết bị offline": "စက်ပစ္စည်း အော့ဖ်လိုင်းဖြစ်နေသည်",
   "Thiết bị online": "စက်ပစ္စည်း အွန်လိုင်းဖြစ်နေသည်",
-  "Báo động kích hoạt": "Alarm ဖြစ်ပေါ်နေသည်",
-  "Báo động đã tắt": "Alarm ပြီးဆုံးပြီ",
-  "Tạm tắt Alarm hôm nay": "ယနေ့ Alarm ကို ခေတ္တရပ်ရန်",
+  "Báo động kích hoạt": "အရေးပေါ်အချက်ပေးသံ ဖြစ်ပေါ်နေသည်",
+  "Báo động đã tắt": "အရေးပေါ်အချက်ပေးသံ ပြီးဆုံးပြီ",
+  "Tạm tắt báo động hôm nay": "ယနေ့ အရေးပေါ်အချက်ပေးသံ ကို ခေတ္တရပ်ရန်",
   "Độ ẩm cao": "စိုထိုင်းဆ မြင့်နေသည်",
   "Thử lại": "ထပ်မံကြိုးစားရန်",
   "Không thể tải dữ liệu tài khoản": "အကောင့်အချက်အလက်ကို ဖော်ပြ၍မရပါ",
@@ -508,14 +508,15 @@ const Map<String, String> myStrings = {
   "Bạn sẽ rời khỏi các nhà được chia sẻ.":
       "မျှဝေထားသောအိမ်များမှ သင်ထွက်ပါမည်။",
   "Các nhà của bạn sẽ bị xoá.\n": "သင်ပိုင်သောအိမ်များကို ဖျက်ပါမည်။\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များရှိ လုံခြုံရေးစက်ပစ္စည်းအားလုံး၏ အိမ် Alarm အချိန်ဇယားကို ပြောင်းလဲပါမည်။\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များအတွက် အိမ် Reminder ထည့်ပါမည်။\n\n",
-  "Xác nhận thay đổi Alarm": "Alarm ပြောင်းလဲမှုများ အတည်ပြုရန်",
-  "Xác nhận thay đổi Reminder": "Reminder ပြောင်းလဲမှုများ အတည်ပြုရန်",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များရှိ လုံခြုံရေးစက်ပစ္စည်းအားလုံး၏ အိမ် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားကို ပြောင်းလဲပါမည်။\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များအတွက် အိမ် သတိပေးချက် ထည့်ပါမည်။\n\n",
+  "Xác nhận thay đổi báo động":
+      "အရေးပေါ်အချက်ပေးသံ ပြောင်းလဲမှုများ အတည်ပြုရန်",
+  "Xác nhận thay đổi nhắc nhở": "သတိပေးချက် ပြောင်းလဲမှုများ အတည်ပြုရန်",
   "Lặp lại khi sự cố vẫn còn": "ပြဿနာမဖြေရှင်းရသေးလျှင် ထပ်မံသတိပေးရန်",
-  "Thời gian lặp lại Alarm": "Alarm ထပ်မံသတိပေးမည့်ကာလ",
+  "Thời gian lặp lại báo động": "အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးမည့်ကာလ",
   "VD: Mr Chung": "ဥပမာ - ဦးချမ်း",
   "🏡 Chưa có nhà nào": "🏡 အိမ် မရှိသေးပါ",
   "Vẫn chuyển về Bình thường": "ပုံမှန်မုဒ်သို့ ပြောင်းရန်",
@@ -526,12 +527,14 @@ const Map<String, String> myStrings = {
       "ဖွင့်လိုက်သည်နှင့် လုံခြုံရေးစက်ပစ္စည်းများကို ချက်ချင်းစောင့်ကြည့်ပါမည်။\n\n",
   "Bật Bảo vệ thủ công?": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်မလား?",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ Alarm အချိန်ကို ပြောင်းလဲပါမည်...",
+      "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ အရေးပေါ်အချက်ပေးသံ အချိန်ကို ပြောင်းလဲပါမည်...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "ဤလုပ်ဆောင်ချက်က ဤအိမ်၏ Alarm အားလုံးကို ပိတ်ပါမည်",
-  "Tắt toàn bộ Alarm?": "Alarm အားလုံးကို ပိတ်မလား?",
-  "Không xoá được lịch tạm tắt Alarm": "Alarm ခေတ္တရပ်အချိန်ဇယားကို ဖျက်၍မရပါ",
-  "Không lưu được tạm tắt Alarm": "Alarm ခေတ္တရပ်မှုကို သိမ်း၍မရပါ",
+      "ဤလုပ်ဆောင်ချက်က ဤအိမ်၏ အရေးပေါ်အချက်ပေးသံ အားလုံးကို ပိတ်ပါမည်",
+  "Tắt toàn bộ báo động?": "အရေးပေါ်အချက်ပေးသံ အားလုံးကို ပိတ်မလား?",
+  "Không xoá được lịch tạm tắt báo động":
+      "အရေးပေါ်အချက်ပေးသံ ခေတ္တရပ်အချိန်ဇယားကို ဖျက်၍မရပါ",
+  "Không lưu được tạm tắt báo động":
+      "အရေးပေါ်အချက်ပေးသံ ခေတ္တရပ်မှုကို သိမ်း၍မရပါ",
   "Không gửi được yêu cầu xoá": "ဖျက်ရန်တောင်းဆိုမှု ပို့၍မရပါ",
   "Không lưu được cài đặt": "ဆက်တင်ကို သိမ်း၍မရပါ",
   "Không lấy được vị trí hiện tại": "လက်ရှိတည်နေရာကို ရယူ၍မရပါ",
@@ -539,45 +542,45 @@ const Map<String, String> myStrings = {
   "Mật khẩu không đúng": "စကားဝှက် မှားနေသည်",
   "Không thể xác nhận mật khẩu": "စကားဝှက်ကို အတည်ပြု၍မရပါ",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "အိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူသာ Alarm ထပ်မံသတိပေးမှုကို ပြောင်းလဲနိုင်သည်",
+      "အိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူသာ အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးမှုကို ပြောင်းလဲနိုင်သည်",
   "Không lưu được thời gian lặp báo động":
-      "Alarm ထပ်မံသတိပေးမည့်အချိန်ကို သိမ်း၍မရပါ",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+      "အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးမည့်အချိန်ကို သိမ်း၍မရပါ",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "အိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူသာ ကာကွယ်ရေးမုဒ်ကို ပြောင်းလဲနိုင်သည်",
   "Không thể thay đổi chế độ nhà": "အိမ်မုဒ်ကို ပြောင်းလဲ၍မရပါ",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "ကာကွယ်ရေးမုဒ် ဖွင့်ထားသော်လည်း အကြောင်းကြားချက် ပို့၍မရပါ",
-  "Đã bật Mode Bảo vệ thủ công": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ပြီးပါပြီ",
+  "Đã bật Chế độ Bảo vệ thủ công": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ပြီးပါပြီ",
   "Đã chuyển nhà về Bình thường":
       "အိမ်ကို ပုံမှန်မုဒ်သို့ ပြန်ပြောင်းပြီးပါပြီ",
   "60 phút": "60 မိနစ်",
   "30 phút": "30 မိနစ်",
   "15 phút": "15 မိနစ်",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "အိမ်ပိုင်ရှင်၏အချိန်ဇယားကို သင်ကြည့်နေသည်။ ကိုယ်ပိုင် Alarm အချိန်ဇယား သတ်မှတ်ရန် မိမိအတွက်သာ ကို ရွေးပါ။",
-  "Chọn giờ kết thúc Alarm": "Alarm ပြီးဆုံးချိန် ရွေးပါ",
-  "Chọn giờ bắt đầu Alarm": "Alarm စတင်ချိန် ရွေးပါ",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "ဤအိမ်၏ Alarm အချိန်ဇယားကို ပြင်ဆင်ခွင့် မရှိပါ",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "စက်ပစ္စည်းအားလုံးအတွက် Alarm အသုံးပြု၍မရပါ",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "အိမ်ပိုင်ရှင်၏အချိန်ဇယားကို သင်ကြည့်နေသည်။ ကိုယ်ပိုင် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား သတ်မှတ်ရန် မိမိအတွက်သာ ကို ရွေးပါ။",
+  "Chọn giờ kết thúc báo động": "အရေးပေါ်အချက်ပေးသံ ပြီးဆုံးချိန် ရွေးပါ",
+  "Chọn giờ bắt đầu báo động": "အရေးပေါ်အချက်ပေးသံ စတင်ချိန် ရွေးပါ",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "ဤအိမ်၏ အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားကို ပြင်ဆင်ခွင့် မရှိပါ",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "စက်ပစ္စည်းအားလုံးအတွက် အရေးပေါ်အချက်ပေးသံ အသုံးပြု၍မရပါ",
   "Nhà chưa có thiết bị an ninh để áp dụng":
       "ဤအိမ်တွင် အသုံးပြုနိုင်သော လုံခြုံရေးစက်ပစ္စည်း မရှိပါ",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "အိမ်အချိန်ဇယားကို ပြင်ဆင်ခွင့် မရှိပါ။ မိမိအတွက်သာ ကို ရွေးပါ။",
-  "Không thể lưu chế độ Alarm": "Alarm မုဒ်ကို သိမ်း၍မရပါ",
-  "Thêm Reminder": "Reminder ထည့်ရန်",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "ရွေးထားသောအချိန်တွင် အိမ်၏လုံခြုံရေးအခြေအနေကို စစ်ဆေးရန် Reminder က သတိပေးပါမည်။",
-  "Thêm khung giờ Alarm": "Alarm အချိန်ကာလ ထည့်ရန်",
-  "Đang sử dụng Reminder riêng của bạn":
-      "သင့်ကိုယ်ပိုင် Reminder ဆက်တင်ကို အသုံးပြုနေသည်",
-  "Đang sử dụng Reminder của chủ nhà":
-      "အိမ်ပိုင်ရှင်၏ Reminder ဆက်တင်ကို အသုံးပြုနေသည်",
-  "Sửa giờ Reminder": "Reminder အချိန် ပြင်ဆင်ရန်",
-  "Sửa giờ kết thúc Alarm": "Alarm ပြီးဆုံးချိန် ပြင်ဆင်ရန်",
-  "Sửa giờ bắt đầu Alarm": "Alarm စတင်ချိန် ပြင်ဆင်ရန်",
-  "Xoá Reminder": "Reminder ဖျက်ရန်",
+  "Không thể lưu chế độ báo động": "အရေးပေါ်အချက်ပေးသံ မုဒ်ကို သိမ်း၍မရပါ",
+  "Thêm nhắc nhở": "သတိပေးချက် ထည့်ရန်",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "ရွေးထားသောအချိန်တွင် အိမ်၏လုံခြုံရေးအခြေအနေကို စစ်ဆေးရန် သတိပေးချက် က သတိပေးပါမည်။",
+  "Thêm khung giờ báo động": "အရေးပေါ်အချက်ပေးသံ အချိန်ကာလ ထည့်ရန်",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "သင့်ကိုယ်ပိုင် သတိပေးချက် ဆက်တင်ကို အသုံးပြုနေသည်",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "အိမ်ပိုင်ရှင်၏ သတိပေးချက် ဆက်တင်ကို အသုံးပြုနေသည်",
+  "Sửa giờ nhắc nhở": "သတိပေးချက် အချိန် ပြင်ဆင်ရန်",
+  "Sửa giờ kết thúc báo động": "အရေးပေါ်အချက်ပေးသံ ပြီးဆုံးချိန် ပြင်ဆင်ရန်",
+  "Sửa giờ bắt đầu báo động": "အရေးပေါ်အချက်ပေးသံ စတင်ချိန် ပြင်ဆင်ရန်",
+  "Xoá nhắc nhở": "သတိပေးချက် ဖျက်ရန်",
   "Mỗi 1 giờ": "1 နာရီတိုင်း",
   "Mỗi 30 phút": "30 မိနစ်တိုင်း",
   "Mỗi 15 phút": "15 မိနစ်တိုင်း",
@@ -607,7 +610,8 @@ const Map<String, String> myStrings = {
   "Thời gian lặp": "ထပ်မံသတိပေးမည့်ကာလ",
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
       "တစ်ကြိမ်သာသတိပေးရန် 0 ကို ရွေးပါ။ ဤဆက်တင်သည် ကိုယ်တိုင် ကာကွယ်ရေးမုဒ်နှင့် အပြင်ထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု နှစ်ခုလုံးအတွက် သက်ရောက်သည်။",
-  "Lặp báo động khi sự cố vẫn còn": "ပြဿနာရှိနေသေးလျှင် Alarm ထပ်မံသတိပေးရန်",
+  "Lặp báo động khi sự cố vẫn còn":
+      "ပြဿနာရှိနေသေးလျှင် အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးရန်",
   "Đang được sử dụng": "လက်ရှိအသုံးပြုနေသည်",
   "Chuyển về sử dụng thông thường": "ပုံမှန်အသုံးပြုမှုသို့ ပြန်ပြောင်းရန်",
   "Chế độ nhà": "အိမ်မုဒ်",
@@ -624,15 +628,15 @@ const Map<String, String> myStrings = {
   "Bảo vệ thủ công đang bật": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ထားသည်",
   "Bảo vệ tự động đang bật": "အလိုအလျောက် ကာကွယ်ရေးမုဒ် ဖွင့်ထားသည်",
   "Bảo vệ đang tắt": "ကာကွယ်ရေးမုဒ် ပိတ်ထားသည်",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "အခြေအနေစစ်ဆေးရန် မကြာသေးမီက အက်ပ်ကို ဖွင့်ထားသည်။",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "ခွင့်ပြုချက်များ၊ အချိန်ဇယားများနှင့် မဖတ်ရသေးသောသတိပေးချက်များကို စစ်ဆေးရန် အက်ပ်ကို ပုံမှန်ဖွင့်ပါ။",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "အကြိမ်အနည်းငယ် အသုံးပြုပြီးနောက် SafeHome က အက်ပ်စစ်ဆေးသည့်အလေ့အထကို ပိုမိုကောင်းမွန်စွာ အကဲဖြတ်နိုင်မည်။",
-  "Tần suất vào app ổn": "အက်ပ်စစ်ဆေးသည့်အကြိမ်ရေ ကောင်းမွန်သည်",
-  "Đã lâu chưa vào app kiểm tra": "အက်ပ်ကို မစစ်ဆေးသည်မှာ အချိန်ကြာပြီ",
-  "Đang ghi nhận tần suất vào app":
+  "Tần suất vào ứng dụng ổn": "အက်ပ်စစ်ဆေးသည့်အကြိမ်ရေ ကောင်းမွန်သည်",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "အက်ပ်ကို မစစ်ဆေးသည်မှာ အချိန်ကြာပြီ",
+  "Đang ghi nhận tần suất vào ứng dụng":
       "အက်ပ်စစ်ဆေးသည့်အကြိမ်ရေကို မှတ်တမ်းတင်နေသည်",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "တည်နေရာကို အမြဲခွင့်ပြုထားမှုနှင့် နောက်ခံလည်ပတ်မှုကို စစ်ဆေးပါ။",
@@ -650,19 +654,19 @@ const Map<String, String> myStrings = {
       "သင့်အိမ်နှင့်ကိုက်ညီသော မီးခိုးအာရုံခံကိရိယာ၊ SOS သို့မဟုတ် အရေးပေါ်စက်ပစ္စည်း ထည့်ပါ။",
   "Chưa có thiết bị khẩn cấp": "အရေးပေါ်စက်ပစ္စည်း မရှိသေးပါ",
   "Đã có thiết bị khẩn cấp": "အရေးပေါ်စက်ပစ္စည်းများ ထည့်ပြီးပါပြီ",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "အိပ်ချိန် သို့မဟုတ် အိမ်တွင်မရှိချိန်အတွက် Alarm အချိန်ဇယား သတ်မှတ်ပါ။",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "ဤအိမ်တွင် Alarm အချိန်ဇယား သို့မဟုတ် စက်ပစ္စည်းအလိုက် သတိပေးအချိန်ဇယား ရှိသည်။",
-  "Chưa set lịch Alarm": "Alarm အချိန်ဇယား မသတ်မှတ်ရသေးပါ",
-  "Đã set lịch Alarm": "Alarm အချိန်ဇယား သတ်မှတ်ပြီးပါပြီ",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "အိမ်စစ်ဆေးရန် မမေ့စေရန် အနည်းဆုံး Reminder တစ်ခု သတ်မှတ်ပါ။",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "အိပ်ချိန် သို့မဟုတ် အိမ်တွင်မရှိချိန်အတွက် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား သတ်မှတ်ပါ။",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "ဤအိမ်တွင် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား သို့မဟုတ် စက်ပစ္စည်းအလိုက် သတိပေးအချိန်ဇယား ရှိသည်။",
+  "Chưa cài lịch báo động": "အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား မသတ်မှတ်ရသေးပါ",
+  "Đã cài lịch báo động": "အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား သတ်မှတ်ပြီးပါပြီ",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "အိမ်စစ်ဆေးရန် မမေ့စေရန် အနည်းဆုံး သတိပေးချက် တစ်ခု သတ်မှတ်ပါ။",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
       "သတ်မှတ်ထားသောအချိန်ဇယားအတိုင်း အိမ်စစ်ဆေးရန် အက်ပ်က သတိပေးပါမည်။",
-  "Chưa setup Reminder": "Reminder မသတ်မှတ်ရသေးပါ",
-  "Đã setup Reminder": "Reminder သတ်မှတ်ပြီးပါပြီ",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Chưa cài đặt nhắc nhở": "သတိပေးချက် မသတ်မှတ်ရသေးပါ",
+  "Đã cài đặt nhắc nhở": "သတိပေးချက် သတ်မှတ်ပြီးပါပြီ",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "ဤစက်ပစ္စည်းက သတိပေးချက်များ မရရှိပါက အက်ပ်ကို ပြန်ဖွင့်ပါ သို့မဟုတ် အကောင့်ပြန်ဝင်ပါ။",
   "Thiết bị chưa đăng ký nhận cảnh báo":
       "ဤစက်ပစ္စည်းကို သတိပေးချက်လက်ခံရန် မှတ်ပုံမတင်ရသေးပါ",
@@ -683,7 +687,7 @@ const Map<String, String> myStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "ဤဖုန်းတွင် SafeHome သတိပေးချက်များ နှောင့်နှေးနိုင်ခြေ နည်းသည်။",
   "Chưa tắt tối ưu pin": "ဘက်ထရီချွေတာမှု ဖွင့်ထားဆဲဖြစ်သည်",
-  "Tối ưu pin không chặn app": "ဘက်ထရီချွေတာမှုက အက်ပ်ကို မပိတ်ဆို့ပါ",
+  "Tối ưu pin không chặn ứng dụng": "ဘက်ထရီချွေတာမှုက အက်ပ်ကို မပိတ်ဆို့ပါ",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "အိမ်မှထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု တည်ငြိမ်စွာအလုပ်လုပ်ရန် တည်နေရာကို အမြဲခွင့်ပြုထားရမည်။",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
@@ -694,7 +698,7 @@ const Map<String, String> myStrings = {
       "အိမ်မှထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု သုံးသည့်အခါသာ ဤခွင့်ပြုချက် လိုအပ်သည်။",
   "Chưa cấp vị trí luôn luôn": "တည်နေရာကို အမြဲခွင့်ပြုမထားပါ",
   "Đã cấp vị trí luôn luôn": "တည်နေရာကို အမြဲခွင့်ပြုထားသည်",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS သည် Android ကဲ့သို့ မျက်နှာပြင်အပြည့် မဖွင့်ပါ။ အက်ပ်က စနစ်အကြောင်းကြားချက်နှင့် အသံကို အသုံးပြုသည်။",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android သည် မျက်နှာပြင်အပြည့်သတိပေးချက်ကို အသုံးပြုသည်။ ဖုန်းက ပိတ်ဆို့ထားပါက ဆက်တင်များတွင် ခွင့်ပြုပါ။",
@@ -708,9 +712,9 @@ const Map<String, String> myStrings = {
   "Đã bật thông báo": "အကြောင်းကြားချက်များ ဖွင့်ထားသည်",
   "Hệ thống: Sẵn sàng": "စနစ် - အသင့်ဖြစ်သည်",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "စနစ် - သတိပေးချက်များ လွတ်သွားနိုင်သည်",
-  "Cách bạn đang dùng app": "အက်ပ်အသုံးပြုပုံ",
+  "Cách bạn đang dùng ứng dụng": "အက်ပ်အသုံးပြုပုံ",
   "Thiết bị của bạn": "သင့်စက်ပစ္စည်း",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "သင့်ဖုန်းနှင့် အက်ပ်အသုံးပြုပုံကို စစ်ဆေးသည်။",
   "Hệ thống SafeHome": "SafeHome စနစ်",
   "Hệ thống: Đang kiểm tra...": "စနစ် - စစ်ဆေးနေသည်...",
@@ -724,8 +728,10 @@ const Map<String, String> myStrings = {
       "လူအားလုံး အိမ်မှထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု ဖွင့်ထားသည်",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "လူအားလုံး အိမ်မှထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု ပိတ်ထားသည်",
-  "Không thể thay đổi trạng thái Alarm": "Alarm အခြေအနေကို ပြောင်းလဲ၍မရပါ",
-  "Đã tắt toàn bộ Alarm của nhà": "အိမ်၏ Alarm အားလုံးကို ပိတ်ပြီးပါပြီ",
+  "Không thể thay đổi trạng thái báo động":
+      "အရေးပေါ်အချက်ပေးသံ အခြေအနေကို ပြောင်းလဲ၍မရပါ",
+  "Đã tắt toàn bộ báo động của nhà":
+      "အိမ်၏ အရေးပေါ်အချက်ပေးသံ အားလုံးကို ပိတ်ပြီးပါပြီ",
   "QR này không phải mã xin gia nhập Home":
       "ဤ QR ကုဒ်သည် အိမ်ဝင်ရန်ကုဒ် မဟုတ်ပါ",
   "Thêm Home": "အိမ်ထည့်ရန်",
@@ -738,20 +744,20 @@ const Map<String, String> myStrings = {
   "Cho phép vị trí luôn luôn": "တည်နေရာကို အမြဲခွင့်ပြုရန်",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "သင်ပိုင်သောအိမ်များကို ဖျက်ပါမည်။\nမျှဝေထားသောအိမ်များမှ သင်ထွက်ပါမည်။",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များရှိ လုံခြုံရေးစက်ပစ္စည်းအားလုံး၏ အိမ် Alarm အချိန်ဇယားကို ပြောင်းလဲပါမည်။\n\nအိမ် Alarm ဆက်တင်ကို သုံးနေသောအဖွဲ့ဝင်များအပေါ် သက်ရောက်ပါမည်။\nကိုယ်ပိုင် Alarm ဆက်တင်များကို မပြောင်းလဲပါ။",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များအတွက် အိမ် Reminder ထည့်ပါမည်။\n\nအိမ် Reminder ဆက်တင်ကို သုံးနေသောအဖွဲ့ဝင်များအပေါ် သက်ရောက်ပါမည်။\nကိုယ်ပိုင် Reminder ဆက်တင်များကို မပြောင်းလဲပါ။",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များရှိ လုံခြုံရေးစက်ပစ္စည်းအားလုံး၏ အိမ် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားကို ပြောင်းလဲပါမည်။\n\nအိမ် အရေးပေါ်အချက်ပေးသံ ဆက်တင်ကို သုံးနေသောအဖွဲ့ဝင်များအပေါ် သက်ရောက်ပါမည်။\nကိုယ်ပိုင် အရေးပေါ်အချက်ပေးသံ ဆက်တင်များကို မပြောင်းလဲပါ။",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "ဤလုပ်ဆောင်ချက်က ရွေးထားသောအိမ်များအတွက် အိမ် သတိပေးချက် ထည့်ပါမည်။\n\nအိမ် သတိပေးချက် ဆက်တင်ကို သုံးနေသောအဖွဲ့ဝင်များအပေါ် သက်ရောက်ပါမည်။\nကိုယ်ပိုင် သတိပေးချက် ဆက်တင်များကို မပြောင်းလဲပါ။",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "ဖွင့်လိုက်သည်နှင့် လုံခြုံရေးစက်ပစ္စည်းများကို ချက်ချင်းစောင့်ကြည့်ပါမည်။\n\nအပြင်ထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု ခေတ္တရပ်ပါမည်။ လူတစ်ဦးအိမ်ပြန်ရောက်ချိန်တွင် ဤမုဒ်သည် အလိုအလျောက်မပိတ်ဘဲ ခွင့်ပြုထားသောအဖွဲ့ဝင်တစ်ဦးက ပုံမှန်မုဒ်သို့ ပြန်ပြောင်းမှသာ ပိတ်မည်။",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ Alarm အချိန်ကို ပြောင်းလဲပါမည်...",
+      "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ အရေးပေါ်အချက်ပေးသံ အချိန်ကို ပြောင်းလဲပါမည်...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "ဤလုပ်ဆောင်ချက်က ဤအိမ်၏ Alarm အားလုံးကို ပိတ်ပါမည်။ ဤဖုန်းတွင် အန္တရာယ်သတိပေးချက်များ ထပ်မံရရှိတော့မည် မဟုတ်ပါ။",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm သည် အိမ်ဆက်တင်ကို အသုံးပြုနေသည်။\n\nအိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူ သတ်မှတ်ထားသော မျှဝေ Alarm အချိန်ဇယားအတိုင်း သတိပေးချက်များ ရရှိပါမည်။",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm သည် ကျွန်ုပ်၏ဆက်တင်ကို အသုံးပြုနေသည်။\n\nဤအကောင့်အတွက် သတ်မှတ်ထားသော ကိုယ်ပိုင် Alarm အချိန်ဇယားအတိုင်း သတိပေးချက်များ ရရှိပါမည်။",
+      "ဤလုပ်ဆောင်ချက်က ဤအိမ်၏ အရေးပေါ်အချက်ပေးသံ အားလုံးကို ပိတ်ပါမည်။ ဤဖုန်းတွင် အန္တရာယ်သတိပေးချက်များ ထပ်မံရရှိတော့မည် မဟုတ်ပါ။",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "အရေးပေါ်အချက်ပေးသံ သည် အိမ်ဆက်တင်ကို အသုံးပြုနေသည်။\n\nအိမ်ပိုင်ရှင် သို့မဟုတ် စီမံခန့်ခွဲသူ သတ်မှတ်ထားသော မျှဝေ အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားအတိုင်း သတိပေးချက်များ ရရှိပါမည်။",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "အရေးပေါ်အချက်ပေးသံ သည် ကျွန်ုပ်၏ဆက်တင်ကို အသုံးပြုနေသည်။\n\nဤအကောင့်အတွက် သတ်မှတ်ထားသော ကိုယ်ပိုင် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားအတိုင်း သတိပေးချက်များ ရရှိပါမည်။",
   "Không thể đăng nhập bằng Google": "Google ဖြင့် အကောင့်ဝင်၍မရပါ",
   "Không đặt được mật khẩu": "စကားဝှက် သတ်မှတ်၍မရပါ",
   "Chấp nhận": "လက်ခံရန်",
@@ -774,18 +780,18 @@ const Map<String, String> myStrings = {
   "Tạo mật khẩu": "စကားဝှက် ဖန်တီးရန်",
   "Mật khẩu mới": "စကားဝှက်အသစ်",
   "Nhập lại mật khẩu": "စကားဝှက် ပြန်ရိုက်ပါ",
-  "Xác nhận tắt cảnh báo": "Alarm ပိတ်ခြင်း အတည်ပြုရန်",
+  "Xác nhận tắt cảnh báo": "အရေးပေါ်အချက်ပေးသံ ပိတ်ခြင်း အတည်ပြုရန်",
   "HỦY": "ပယ်ဖျက်ရန်",
   "XÁC NHẬN": "အတည်ပြုရန်",
   "CẦN KIỂM TRA": "စစ်ဆေးရန်လိုသည်",
   "KIỂM TRA NHÀ": "အိမ်ကို စစ်ဆေးရန်",
-  "ĐÓNG NHẮC NHỞ": "Reminder ပိတ်ရန်",
+  "ĐÓNG NHẮC NHỞ": "သတိပေးချက် ပိတ်ရန်",
   "SafeHome Security Alert": "SafeHome လုံခြုံရေးသတိပေးချက်",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "App ဆက်တင်များတွင် တည်နေရာကို အမြဲခွင့်ပြုရန် ရွေးပါ",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "လုံခြုံရေးလုပ်ဆောင်ချက်များ အသုံးပြုရန် Google အကောင့်တွင် နောက်ထပ်စကားဝှက်တစ်ခု ဖန်တီးရမည်။",
-  "Alarm": "Alarm",
+  "Báo động": "အရေးပေါ်အချက်ပေး",
   "Bạn không có quyền thực hiện thao tác này。":
       "ဤလုပ်ဆောင်ချက်ကို ပြုလုပ်ခွင့် မရှိပါ။",
   "Cài đặt": "ဆက်တင်များ",
@@ -802,7 +808,7 @@ const Map<String, String> myStrings = {
   "Đang kiểm tra kết nối Hub": "Hub ချိတ်ဆက်မှု စစ်ဆေးနေသည်",
   "Đang mở khi nhà ở chế độ Bảo vệ":
       "အိမ်က ကာကွယ်ရေးမုဒ်တွင်ရှိချိန် ဖွင့်ထားသည်",
-  "Đang mở trong giờ Alarm": "Alarm အချိန်အတွင်း ဖွင့်ထားသည်",
+  "Đang mở trong giờ báo động": "အရေးပေါ်အချက်ပေးသံ အချိန်အတွင်း ဖွင့်ထားသည်",
   "Đang tải...": "ဖော်ပြနေသည်...",
   "Hồ sơ, yêu cầu và lời mời tham gia":
       "ကိုယ်ရေးအချက်အလက်၊ တောင်းဆိုမှုများနှင့် ဖိတ်ကြားချက်များ",
@@ -811,7 +817,8 @@ const Map<String, String> myStrings = {
   "Hub tín hiệu bình thường": "Hub ချိတ်ဆက်ထားသည်",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "အိမ်က ကာကွယ်ရေးမုဒ်တွင်ရှိချိန် သော့ဖွင့်ထားသည်",
-  "Khóa đang mở trong giờ Alarm": "Alarm အချိန်အတွင်း သော့ဖွင့်ထားသည်",
+  "Khóa đang mở trong giờ báo động":
+      "အရေးပေါ်အချက်ပေးသံ အချိန်အတွင်း သော့ဖွင့်ထားသည်",
   "Không có thông báo": "အကြောင်းကြားချက် မရှိပါ",
   "Khu vực nguy hiểm": "အန္တရာယ်ရှိသောနေရာ",
   "Kiểm tra thiết bị trong nhà này": "ဤအိမ်ရှိ စက်ပစ္စည်းများကို စစ်ဆေးရန်",
@@ -825,7 +832,7 @@ const Map<String, String> myStrings = {
   "Nhập email": "အီးမေးလ် ရိုက်ထည့်ပါ",
   "Phòng": "အခန်း",
   "Quản trị viên": "စီမံခန့်ခွဲသူ",
-  "Reminder": "Reminder",
+  "Nhắc nhở": "သတိပေးချက်",
   "SafeHome": "SafeHome",
   "Sóng yếu": "အချက်ပြလှိုင်း အားနည်းသည်",
   "SOS": "SOS",
@@ -855,16 +862,16 @@ const Map<String, String> myStrings = {
   "Xoá toàn bộ dữ liệu và thiết bị": "အချက်အလက်နှင့် စက်ပစ္စည်းအားလုံး ဖျက်ရန်",
   "TẮT CẢNH BÁO": "သတိပေးချက် ပိတ်ရန်",
   "Đã tạo nhà": "အိမ်ဖန်တီးပြီးပါပြီ",
-  "Mode Bảo vệ thủ công đã bật": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ပြီးပါပြီ",
-  "Báo động không lặp lại.": "Alarm ကို ထပ်မံသတိပေးမည် မဟုတ်ပါ။",
+  "Chế độ Bảo vệ thủ công đã bật": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ပြီးပါပြီ",
+  "Báo động không lặp lại.": "အရေးပေါ်အချက်ပေးသံ ကို ထပ်မံသတိပေးမည် မဟုတ်ပါ။",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "ပြဿနာရှိနေသေးပါက \$securityModeRepeatMinutes မိနစ်အကြာတွင် Alarm ထပ်မံသတိပေးပါမည်။",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "ပြဿနာရှိနေသေးပါက \$securityModeRepeatMinutes မိနစ်အကြာတွင် အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးပါမည်။",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName က \"\$homeName\" အတွက် ကိုယ်တိုင် ကာကွယ်ရေးမုဒ်ကို ဖွင့်ထားသည်။ ခွင့်ပြုထားသောအဖွဲ့ဝင်တစ်ဦးက ပုံမှန်မုဒ်သို့ ပြန်ပြောင်းမှသာ ဤမုဒ် ပိတ်မည်။ \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "\"\$homeName\" အတွက် Alarm ကို သင်ဖွင့်ထားသည်။",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "\"\$homeName\" ၏ Alarm အားလုံးကို သင်ပိတ်ထားသည်။",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "\"\$homeName\" အတွက် အရေးပေါ်အချက်ပေးသံ ကို သင်ဖွင့်ထားသည်။",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "\"\$homeName\" ၏ အရေးပေါ်အချက်ပေးသံ အားလုံးကို သင်ပိတ်ထားသည်။",
   "Thành viên mới": "အဖွဲ့ဝင်အသစ်",
   "Thành viên rời nhà": "အဖွဲ့ဝင် အိမ်မှထွက်သွားသည်",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -895,8 +902,9 @@ const Map<String, String> myStrings = {
   "Tin nhắn HomeChat": "HomeChat စာတို",
   "\$senderName đã gửi một tin nhắn": "\$senderName က စာတိုတစ်စောင် ပို့ခဲ့သည်",
   "Bạn có tin nhắn mới": "သင့်တွင် စာတိုအသစ်ရှိသည်",
-  "Mode Bảo vệ sẽ chỉ báo động một lần": "ကာကွယ်ရေးမုဒ်က တစ်ကြိမ်သာ သတိပေးမည်",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "ကာကွယ်ရေးမုဒ်က တစ်ကြိမ်သာ သတိပေးမည်",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
       "ကာကွယ်ရေးမုဒ်က \$minutes မိနစ်အကြာတွင် ထပ်မံသတိပေးမည်",
   "Đã gửi yêu cầu gia nhập \$count nhà":
       "အိမ် \$count လုံးအတွက် ဝင်ခွင့်တောင်းဆိုမှု ပို့ပြီးပါပြီ",
@@ -925,8 +933,8 @@ const Map<String, String> myStrings = {
   "Đang ghép nối: \$seconds giây": "ချိတ်ဆက်နေသည် - \$seconds စက္ကန့်",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "\"\$homeName\" တွင် စက်ပစ္စည်းချိတ်ဆက်မုဒ်ကို \$seconds စက္ကန့်ကြာ ဖွင့်ထားသည်။",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "ခေတ္တရပ်မည့်ကာလသည် Alarm အချိန်ဇယားအတွင်း ဖြစ်ရမည် (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "ခေတ္တရပ်မည့်ကာလသည် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားအတွင်း ဖြစ်ရမည် (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n":
       "စမ်းသပ်မှု \$passCount/\$total ခု အောင်မြင်သည်\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
@@ -970,8 +978,8 @@ const Map<String, String> myStrings = {
       "မည်သူမျှ အတည်မပြုပါက SafeHome က အရေးပေါ်ဖုန်းခေါ်ဆိုမှု စတင်မည်။",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "ပြဿနာ မဖြေရှင်းရသေးပါက \$time တွင် ထပ်မံသတိပေးမည်။",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "ပြဿနာ မဖြေရှင်းရသေးပါက သတ်မှတ်ထားသော Alarm အချိန်ဇယားအတိုင်း ထပ်မံသတိပေးမည်။",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "ပြဿနာ မဖြေရှင်းရသေးပါက သတ်မှတ်ထားသော အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားအတိုင်း ထပ်မံသတိပေးမည်။",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "\"\$resolvedHomeName\" တွင် \"\$deviceName\" ပိတ်သွားသည်။",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -984,14 +992,14 @@ const Map<String, String> myStrings = {
   "✅ \$count nhà an toàn": "✅ လုံခြုံသောအိမ် \$count လုံး",
   "\$count nhà đang được theo dõi": "အိမ် \$count လုံးကို စောင့်ကြည့်နေသည်",
   "\$minutes phút": "\$minutes မိနစ်",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "အိမ် \$updatedHomes လုံးအတွက် Reminder သတ်မှတ်ပြီးပါပြီ။",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "အိမ် \$updatedHomes လုံးရှိ စက်ပစ္စည်း \$updatedDevices ခုအတွက် Alarm သတ်မှတ်ပြီးပါပြီ။\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "အိမ် \$updatedHomes လုံးအတွက် သတိပေးချက် သတ်မှတ်ပြီးပါပြီ။",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "အိမ် \$updatedHomes လုံးရှိ စက်ပစ္စည်း \$updatedDevices ခုအတွက် အရေးပေါ်အချက်ပေးသံ သတ်မှတ်ပြီးပါပြီ။\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "သင်စီမံခန့်ခွဲသောအိမ်များကို မျှဝေပြီးပါပြီ။\n\nမျှဝေခွင့်မရှိသောကြောင့် အိမ် \$skipped လုံးကို ကျော်ခဲ့သည်။",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "လုံခြုံရေးစက်ပစ္စည်း \$count ခုအတွက် Alarm အသုံးပြုပြီးပါပြီ",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "လုံခြုံရေးစက်ပစ္စည်း \$count ခုအတွက် အရေးပေါ်အချက်ပေးသံ အသုံးပြုပြီးပါပြီ",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "လုံခြုံရေးစက်ပစ္စည်း \$count ခုအတွက် တူညီသောအချိန်ဇယား အသုံးပြုရန်",
   "\$count phút trước": "\$count မိနစ်အကြာက",
@@ -1023,16 +1031,16 @@ const Map<String, String> myStrings = {
       "အိမ်ကို ကာကွယ်ရေးမုဒ်တွင် ဆက်ထားမီ ဖွင့်နေသောတံခါး သို့မဟုတ် သော့ကို စစ်ဆေးပါ။",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "အိမ်တွင် တစ်ယောက်ယောက် ရှိနေနိုင်သည်။ ရှိနေပါက ပုံမှန်မုဒ်သို့ ပြန်ပြောင်းပါ။",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "အဖွဲ့ဝင်အချို့၏တည်နေရာ မသိရပါ။ အက်ပ်ဖွင့်ရန် သို့မဟုတ် တည်နေရာခွင့်ပြုချက် စစ်ဆေးရန် သူတို့ကို ပြောပါ။",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "စက်ပစ္စည်းတစ်ခု ချိတ်ဆက်မှု ပြတ်တောက်နေသည်။ ဘက်ထရီ၊ လျှပ်စစ်အား သို့မဟုတ် ထားရှိသည့်နေရာကို စစ်ဆေးပါ။",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "စက်ပစ္စည်းတစ်ခု၏ဘက်ထရီအားနည်းနေသည်။ သတိပေးချက်လွတ်မသွားစေရန် မကြာမီ လဲလှယ်ပါ။",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Reminder မသတ်မှတ်ရသေးပါ။ အိမ်ကို ပုံမှန်စစ်ဆေးရန် အချိန်ဇယားတစ်ခု ဖန်တီးပါ။",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Alarm အချိန်ဇယား မသတ်မှတ်ရသေးပါ။ အိမ်တွင် မရှိတတ်သောအချိန်များအတွက် ကာကွယ်မှု ဖွင့်ပါ။",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "သတိပေးချက် မသတ်မှတ်ရသေးပါ။ အိမ်ကို ပုံမှန်စစ်ဆေးရန် အချိန်ဇယားတစ်ခု ဖန်တီးပါ။",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "အရေးပေါ်အချက်ပေးသံ အချိန်ဇယား မသတ်မှတ်ရသေးပါ။ အိမ်တွင် မရှိတတ်သောအချိန်များအတွက် ကာကွယ်မှု ဖွင့်ပါ။",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "ချက်ချင်းလုပ်ဆောင်ရန် မလိုပါ။ ဤအိမ်ကို ဆက်လက်စောင့်ကြည့်ပါ။",
   "Lặp sau \$minutes phút": "\$minutes မိနစ်အကြာတွင် ထပ်မံသတိပေးရန်",
@@ -1072,7 +1080,7 @@ const Map<String, String> myStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name - အိမ်က ကာကွယ်ရေးမုဒ်တွင်ရှိချိန် ဖွင့်ထားသည်",
   "An tâm hơn trong từng ngôi nhà": "အိမ်တိုင်းအတွက် စိတ်ချမ်းသာမှု",
-  "Báo động SafeHome": "SafeHome Alarm သတိပေးချက်",
+  "Báo động SafeHome": "SafeHome အရေးပေါ်အချက်ပေးသံ သတိပေးချက်",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "လုံခြုံရေးသတိပေးချက်တစ်ခုကို ချက်ချင်းစစ်ဆေးရန်လိုသည်။",
   "Có cảnh báo cần kiểm tra": "စစ်ဆေးရန်လိုသော သတိပေးချက်ရှိသည်",
@@ -1083,26 +1091,63 @@ const Map<String, String> myStrings = {
       "စတင်ချိန်နှင့် ပြီးဆုံးချိန် တူ၍မရပါ",
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "ပြီးဆုံးချိန်သည် လက်ရှိအချိန်နောက်ပိုင်း ဖြစ်ရမည်",
-  "Khoảng tạm tắt không hợp lệ": "Alarm ခေတ္တရပ်ကာလ မမှန်ကန်ပါ",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "ခေတ္တရပ်ကာလသည် ဖွင့်ထားသော Alarm အချိန်ဇယားတစ်ခုနှင့်မျှ မတိုက်ဆိုင်ပါ",
+  "Khoảng tạm tắt không hợp lệ": "အရေးပေါ်အချက်ပေးသံ ခေတ္တရပ်ကာလ မမှန်ကန်ပါ",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "ခေတ္တရပ်ကာလသည် ဖွင့်ထားသော အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားတစ်ခုနှင့်မျှ မတိုက်ဆိုင်ပါ",
 
-  // Device alarm policy
-  "Cấu hình báo động": "အချက်ပေးစနစ် ဆက်တင်များ",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "ဤအာရုံခံကိရိယာက သတိပေးချက်ကို မည်သို့စတင်မည်ကို သတ်မှတ်ပါ။",
+  // Device အရေးပေါ်အချက်ပေးသံ policy
+  "Cài đặt báo động": "အချက်ပေးစနစ် ဆက်တင်များ",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "ဤအာရုံခံကိရိယာက သတိပေးချက်ကို မည်သို့စတင်မည်ကို သတ်မှတ်ပါ။",
   "Tham gia báo động": "အချက်ပေးစနစ်တွင် ပါဝင်ရန်",
-  "Tắt để cảm biến không tạo Alarm.": "ဤအာရုံခံကိရိယာက Alarm မဖန်တီးစေရန် ပိတ်ပါ။",
+  "Tắt để cảm biến không tạo báo động.":
+      "ဤအာရုံခံကိရိယာက အရေးပေါ်အချက်ပေးသံ မဖန်တီးစေရန် ပိတ်ပါ။",
   "Bật còi vật lý": "အိမ်တွင်းဆိုင်ရန် ဖွင့်ရန်",
   "Cho phép kích hoạt còi trong nhà.": "အိမ်တွင်းဆိုင်ရန်ကို ဖွင့်ခွင့်ပြုပါ။",
   "Đánh thức màn hình": "မျက်နှာပြင်ကို ဖွင့်ရန်",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "ဖုန်းပေါ်တွင် မျက်နှာပြင်အပြည့် သတိပေးချက် ပြပါ။",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "ဖုန်းပေါ်တွင် မျက်နှာပြင်အပြည့် သတိပေးချက် ပြပါ။",
   "Độ trễ kích hoạt": "စတင်ရန် နှောင့်နှေးချိန်",
-  "Chỉ áp dụng cho cảm biến an ninh.": "လုံခြုံရေးအာရုံခံကိရိယာများအတွက်သာ အသုံးပြုသည်။",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "အရေးပေါ်အာရုံခံကိရိယာများသည် အမြဲချက်ချင်း စတင်သည်။",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "လုံခြုံရေးအာရုံခံကိရိယာများအတွက်သာ အသုံးပြုသည်။",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "အရေးပေါ်အာရုံခံကိရိယာများသည် အမြဲချက်ချင်း စတင်သည်။",
   "Ngay lập tức": "ချက်ချင်း",
   "giây": "စက္ကန့်",
   "Đã lưu cấu hình báo động": "အချက်ပေးစနစ် ဆက်တင်များကို သိမ်းပြီးပါပြီ",
   "Không thể lưu cấu hình báo động": "အချက်ပေးစနစ် ဆက်တင်များကို မသိမ်းနိုင်ပါ",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "အိမ်ပိုင်ရှင်နှင့် စီမံခန့်ခွဲသူများသာ ဤဆက်တင်ကို ပြောင်းနိုင်သည်။",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "အိမ်ပိုင်ရှင်နှင့် စီမံခန့်ခွဲသူများသာ ဤဆက်တင်ကို ပြောင်းနိုင်သည်။",
   "Thông tin chi tiết": "စက်ပစ္စည်းအသေးစိတ်",
+  "Thông báo báo động": "အရေးပေါ်အချက်ပေး အသိပေးချက်",
+  "Cài đặt nhắc nhở": "သတိပေးချက် ဆက်တင်များ",
+  "Nhắc nhở theo lịch": "အချိန်ဇယားဖြင့် သတိပေးချက်",
+  "Danh sách thông báo": "အသိပေးချက်များ",
+  "Cài đặt thông báo": "အသိပေးချက် ဆက်တင်များ",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "သတ်မှတ်ထားသော အရေးပေါ်အချက်ပေး အချိန်ဇယားကို အသုံးပြုရန်",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "အသိပေးချက်များသာ ပို့ပြီး အရေးပေါ်အချက်ပေးကို မဖွင့်ပါ",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "အိမ်၏ အရေးပေါ်အချက်ပေးအားလုံး ပိတ်ထားပြီး စနစ်က အသိပေးချက်များသာ ပို့ပါမည်။",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "အိမ်ပိုင်ရှင်သာ ဤမုဒ်ကို ဖွင့်နိုင်သည်။",
+  "Bật Không bảo vệ?": "အကာအကွယ်မဲ့ မုဒ်ကို ဖွင့်မလား?",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "အာရုံခံကိရိယာက ဖြစ်ရပ်တစ်ခုကို ယခုလေးတင် တွေ့ရှိခဲ့သည်။",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "အိမ်ပိုင်ရှင်သာ အကာအကွယ်မဲ့ မုဒ်ကို ဖွင့်နိုင်သည်",
+  "Đã chuyển nhà sang Không bảo vệ":
+      "အိမ်ကို အကာအကွယ်မဲ့ မုဒ်သို့ ပြောင်းပြီးပါပြီ",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "အကာအကွယ်မဲ့ မုဒ်သို့ ပြောင်းပြီးသော်လည်း အသိပေးချက်ကို မပို့နိုင်ပါ",
+  "Giám sát toàn diện": "အပြည့်အဝ စောင့်ကြည့်မှု",
+  "Không bảo vệ": "အကာအကွယ်မဲ့",
+  "Không bảo vệ đang bật": "အကာအကွယ်မဲ့ မုဒ် ဖွင့်ထားသည်",
+  "Nhà đã chuyển sang Không bảo vệ":
+      "အိမ်ကို အကာအကွယ်မဲ့ မုဒ်သို့ ပြောင်းပြီးပါပြီ",
+  "Thông báo cảm biến": "အာရုံခံကိရိယာ အသိပေးချက်များ",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "အာရုံခံကိရိယာက ဖြစ်ရပ်တစ်ခုကို တွေ့ရှိသောအခါ ပို့သည့် ပုံမှန်အသိပေးချက်များ။",
+  "Tôi hiểu, tiếp tục": "နားလည်ပါပြီ၊ ဆက်လုပ်မည်",
 };

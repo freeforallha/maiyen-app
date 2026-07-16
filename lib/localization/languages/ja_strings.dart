@@ -76,14 +76,14 @@ const Map<String, String> jaStrings = {
   "Lần kích hoạt cuối": "最終作動",
   "Chưa cập nhật": "まだ更新がありません",
   "Tính năng đang được phát triển": "この機能は開発中です",
-  "Alarm": "Alarm",
-  "Reminder": "Reminder",
-  "Hẹn giờ Alarm": "Alarm 予約",
-  "Hẹn giờ Reminder": "Reminder 予約",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder は、選択した時刻に家の安全状態を確認するよう通知します。",
-  "Thêm Reminder": "Reminder を追加",
-  "Alarm thiết bị": "デバイス Alarm",
+  "Báo động": "警報",
+  "Nhắc nhở": "リマインダー",
+  "Hẹn giờ báo động": "警報 予約",
+  "Hẹn giờ nhắc nhở": "リマインダー 予約",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "リマインダー は、選択した時刻に家の安全状態を確認するよう通知します。",
+  "Thêm nhắc nhở": "リマインダー を追加",
+  "Báo động thiết bị": "デバイス 警報",
   "Chế độ áp dụng": "適用モード",
   "Theo nhà": "家の設定",
   "Riêng tôi": "自分のみ",
@@ -99,8 +99,8 @@ const Map<String, String> jaStrings = {
   "Không lặp lại": "繰り返しなし",
   "Chưa thiết lập": "未設定",
   "Đã thiết lập": "設定済み",
-  "Tạm tắt Alarm hôm nay": "今日の Alarm を一時停止",
-  "Lưu ý tạm tắt Alarm": "Alarm 一時停止の注意",
+  "Tạm tắt báo động hôm nay": "今日の 警報 を一時停止",
+  "Lưu ý tạm tắt báo động": "警報 一時停止の注意",
   "Từ": "開始",
   "Từ giờ": "開始",
   "Đến": "終了",
@@ -172,7 +172,7 @@ const Map<String, String> jaStrings = {
   "Tìm nhà": "家を検索",
   "Tìm home...": "家を検索...",
   "Tìm nhà...": "家を検索...",
-  "Đặt Reminder / Alarm nhà đã chọn": "選択した家の Reminder / Alarm を設定",
+  "Đặt nhắc nhở / báo động nhà đã chọn": "選択した家の リマインダー / 警報 を設定",
   "Chia sẻ nhà đã chọn": "選択した家を共有",
   "Mở danh sách chia sẻ nhà": "家の共有リストを開く",
   "Xoá các nhà đã chọn?": "選択した家を削除しますか？",
@@ -187,7 +187,7 @@ const Map<String, String> jaStrings = {
   "Đã đặt vị trí nhà": "家の位置が設定されています",
   "Đặt vị trí nhà tại đây": "現在地を家の位置に設定",
   "Bán kính bảo vệ mặc định: 150 m": "デフォルトの保護半径: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "外出/帰宅状態をバックグラウンドで動作させるには、各メンバーが位置情報を「常に許可」にする必要があります。",
   "Lưu cài đặt": "設定を保存",
   "Bạn không có quyền thực hiện thao tác này。": "この操作を実行する権限がありません。",
@@ -195,9 +195,9 @@ const Map<String, String> jaStrings = {
   "Không thể hoàn tất thao tác. Vui lòng thử lại.": "エラーが発生しました。もう一度お試しください。",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "エラーが発生しました。もう一度お試しください。",
   "Đang mở khi nhà ở chế độ Bảo vệ": "家が警戒モードのときに開いています",
-  "Đang mở trong giờ Alarm": "Alarm 時間中に開いています",
+  "Đang mở trong giờ báo động": "警報 時間中に開いています",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ": "警戒モード中にロックが解除されています",
-  "Khóa đang mở trong giờ Alarm": "Alarm 時間中にロックが解除されています",
+  "Khóa đang mở trong giờ báo động": "警報 時間中にロックが解除されています",
   "Khóa đang mở": "ロック解除中",
   "Bị tháo": "取り外し検知",
   "Mất kết nối": "接続が切断されました",
@@ -224,11 +224,11 @@ const Map<String, String> jaStrings = {
   "Giờ không hợp lệ": "時刻が無効です",
   "Giờ": "時",
   "Phút": "分",
-  "Đặt Home Reminder": "家の Reminder を設定",
-  "Đặt Home Alarm": "家の Alarm を設定",
-  "Giờ Reminder": "Reminder 時刻",
-  "Giờ bắt đầu Alarm": "Alarm 開始時刻",
-  "Giờ kết thúc Alarm": "Alarm 終了時刻",
+  "Đặt nhắc nhở cho nhà": "家の リマインダー を設定",
+  "Đặt báo động cho nhà": "家の 警報 を設定",
+  "Giờ nhắc nhở": "リマインダー 時刻",
+  "Giờ bắt đầu báo động": "警報 開始時刻",
+  "Giờ kết thúc báo động": "警報 終了時刻",
   "Không có nhà nào đủ điều kiện để cài": "設定可能な家がありません",
   "Cài đặt hoàn tất": "設定が完了しました",
   "Xác nhận rời nhà": "家からの退出を確認",
@@ -261,8 +261,8 @@ const Map<String, String> jaStrings = {
       "自動警戒を有効にする前に家の位置を設定してください",
   "Đang lấy vị trí...": "位置情報を取得中...",
   "Đang lưu...": "保存中...",
-  "Alarm đã được bật": "Alarm が有効になりました",
-  "Tắt Alarm": "Alarm をオフにする",
+  "Báo động đã được bật": "警報 が有効になりました",
+  "Tắt báo động": "警報を停止",
   "Đổi tên hiển thị": "表示名を変更",
   "Cập nhật thông tin nhà": "家の情報を更新",
   "Nhập địa chỉ của nhà": "家の住所を入力",
@@ -281,8 +281,8 @@ const Map<String, String> jaStrings = {
   "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "アプリ設定で位置情報の権限を許可してください",
   "Đã bật tự động Bảo vệ khi mọi người rời nhà": "全員が外出したときの自動警戒を有効にしました",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "全員が外出したときの自動警戒を無効にしました",
-  "Không thể thay đổi trạng thái Alarm": "Alarm の状態を変更できません",
-  "Đã tắt toàn bộ Alarm của nhà": "家のすべての Alarm をオフにしました",
+  "Không thể thay đổi trạng thái báo động": "警報 の状態を変更できません",
+  "Đã tắt toàn bộ báo động của nhà": "家のすべての 警報 をオフにしました",
   "Cập nhật thiết bị": "デバイスを更新",
   "QR gia nhập nhiều nhà không hợp lệ": "複数の家への参加 QR が無効です",
   "Bạn đang là chủ các nhà này": "あなたはこれらの家の所有者です",
@@ -333,8 +333,8 @@ const Map<String, String> jaStrings = {
   "Thiết bị bị tháo": "デバイスが取り外されました",
   "Nhiệt độ cao": "高温",
   "Độ ẩm cao": "高湿度",
-  "Đã bật Alarm": "Alarm を有効にしました",
-  "Đã tắt Alarm": "Alarm を無効にしました",
+  "Đã bật báo động": "警報 を有効にしました",
+  "Đã tắt báo động": "警報 を無効にしました",
   "Một người dùng": "ユーザー",
   "Yêu cầu gia nhập nhà": "家への参加リクエスト",
   "Đã mở chế độ thêm thiết bị": "デバイス追加モードを有効にしました",
@@ -347,7 +347,7 @@ const Map<String, String> jaStrings = {
   "Chia sẻ và quyền truy cập": "共有とアクセス権",
   "Toàn bộ dữ liệu liên quan": "関連するすべてのデータ",
   "Mật khẩu xác nhận": "確認用パスワード",
-  "Thiết lập nhanh Alarm": "Alarm クイック設定",
+  "Thiết lập nhanh báo động": "警報 クイック設定",
   "Đang áp dụng...": "適用中...",
   "Áp dụng cho toàn bộ thiết bị": "すべてのデバイスに適用",
   "Thiết bị không còn tồn tại": "デバイスは存在しません",
@@ -428,26 +428,26 @@ const Map<String, String> jaStrings = {
   "Đã rời khỏi nhà": "家から退出しました",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "共有された家から退出します。",
   "Các nhà của bạn sẽ bị xoá.\n": "自分の家は削除されます。\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "選択した家のすべてのセキュリティデバイスの Alarm スケジュールを変更します。\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "選択した家に家の Reminder を追加します。\n\n",
-  "Xác nhận thay đổi Alarm": "Alarm の変更を確認",
-  "Xác nhận thay đổi Reminder": "Reminder の変更を確認",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "選択した家のすべてのセキュリティデバイスの 警報 スケジュールを変更します。\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "選択した家に家の リマインダー を追加します。\n\n",
+  "Xác nhận thay đổi báo động": "警報 の変更を確認",
+  "Xác nhận thay đổi nhắc nhở": "リマインダー の変更を確認",
   "Lặp lại khi sự cố vẫn còn": "問題が続く間は繰り返す",
-  "Thời gian lặp lại Alarm": "Alarm の繰り返し時間",
+  "Thời gian lặp lại báo động": "警報 の繰り返し時間",
   "VD: Mr Chung": "例: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 まだ家がありません",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
       "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n",
   "Bật Bảo vệ thủ công?": "手動保護モードをオンにしますか？",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "この操作により、本日の一部デバイスの Alarm 時刻が変更されます...",
+      "この操作により、本日の一部デバイスの 警報 時刻が変更されます...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "この操作により、この家のすべての Alarm がオフになります。",
-  "Tắt toàn bộ Alarm?": "すべての Alarm をオフにしますか？",
-  "Không xoá được lịch tạm tắt Alarm": "Alarm の一時停止スケジュールを削除できません",
-  "Không lưu được tạm tắt Alarm": "Alarm の一時停止を保存できません",
+      "この操作により、この家のすべての 警報 がオフになります。",
+  "Tắt toàn bộ báo động?": "すべての 警報 をオフにしますか？",
+  "Không xoá được lịch tạm tắt báo động": "警報 の一時停止スケジュールを削除できません",
+  "Không lưu được tạm tắt báo động": "警報 の一時停止を保存できません",
   "Không gửi được yêu cầu xoá": "削除リクエストを送信できません",
   "Không lưu được cài đặt": "設定を保存できません",
   "Không lấy được vị trí hiện tại": "現在地を取得できません",
@@ -457,32 +457,32 @@ const Map<String, String> jaStrings = {
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
       "所有者または管理者のみが警報の繰り返し設定を変更できます",
   "Không lưu được thời gian lặp báo động": "警報の繰り返し時間を保存できませんでした",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "所有者または管理者のみが保護モードを変更できます",
   "Không thể thay đổi chế độ nhà": "家のモードを変更できませんでした",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "保護モードはオンですが、通知を送信できませんでした",
-  "Đã bật Mode Bảo vệ thủ công": "手動保護モードがオンになりました",
+  "Đã bật Chế độ Bảo vệ thủ công": "手動保護モードがオンになりました",
   "Đã chuyển nhà về Bình thường": "家を通常モードに戻しました",
   "60 phút": "60 分",
   "30 phút": "30 分",
   "15 phút": "15 分",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "所有者のスケジュールを表示しています。自分の Alarm スケジュールを設定するには「自分のみ」を選択してください。",
-  "Chọn giờ kết thúc Alarm": "Alarm の終了時刻を選択",
-  "Chọn giờ bắt đầu Alarm": "Alarm の開始時刻を選択",
-  "Bạn không có quyền sửa lịch Alarm của nhà": "この家の Alarm スケジュールを編集する権限がありません",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị": "すべてのデバイスに Alarm を適用できません",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "所有者のスケジュールを表示しています。自分の 警報 スケジュールを設定するには「自分のみ」を選択してください。",
+  "Chọn giờ kết thúc báo động": "警報 の終了時刻を選択",
+  "Chọn giờ bắt đầu báo động": "警報 の開始時刻を選択",
+  "Bạn không có quyền sửa lịch báo động của nhà": "この家の 警報 スケジュールを編集する権限がありません",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị": "すべてのデバイスに 警報 を適用できません",
   "Nhà chưa có thiết bị an ninh để áp dụng": "この家には適用できるセキュリティデバイスがありません",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "家の設定を編集する権限がありません。「自分のみ」を選択してください。",
-  "Không thể lưu chế độ Alarm": "Alarm モードを保存できません",
-  "Thêm khung giờ Alarm": "Alarm 時間帯を追加",
-  "Đang sử dụng Reminder riêng của bạn": "自分の Reminder 設定を使用中",
-  "Đang sử dụng Reminder của chủ nhà": "所有者の Reminder 設定を使用中",
-  "Sửa giờ Reminder": "Reminder 時刻を編集",
-  "Sửa giờ kết thúc Alarm": "Alarm の終了時刻を編集",
-  "Sửa giờ bắt đầu Alarm": "Alarm の開始時刻を編集",
-  "Xoá Reminder": "Reminder を削除",
+  "Không thể lưu chế độ báo động": "警報 モードを保存できません",
+  "Thêm khung giờ báo động": "警報 時間帯を追加",
+  "Đang sử dụng nhắc nhở riêng của bạn": "自分の リマインダー 設定を使用中",
+  "Đang sử dụng nhắc nhở của chủ nhà": "所有者の リマインダー 設定を使用中",
+  "Sửa giờ nhắc nhở": "リマインダー 時刻を編集",
+  "Sửa giờ kết thúc báo động": "警報 の終了時刻を編集",
+  "Sửa giờ bắt đầu báo động": "警報 の開始時刻を編集",
+  "Xoá nhắc nhở": "リマインダー を削除",
   "Mỗi 1 giờ": "1 時間ごと",
   "Mỗi 30 phút": "30 分ごと",
   "Mỗi 15 phút": "15 分ごと",
@@ -510,7 +510,7 @@ const Map<String, String> jaStrings = {
       "手動警戒モードがオンです - オフにするには通常モードに切り替えてください",
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
       "0 を選ぶと 1 回だけ通知します。この設定は手動保護モードと外出時の自動保護の両方に適用されます。",
-  "Lặp báo động khi sự cố vẫn còn": "問題が続く間 Alarm を繰り返す",
+  "Lặp báo động khi sự cố vẫn còn": "問題が続く間 警報 を繰り返す",
   "Đang được sử dụng": "現在有効です",
   "Chuyển về sử dụng thông thường": "通常の使用に戻す",
   "Chế độ nhà": "家のモード",
@@ -523,14 +523,14 @@ const Map<String, String> jaStrings = {
   "Bảo vệ thủ công đang bật": "手動警戒がオンです",
   "Bảo vệ tự động đang bật": "自動警戒がオンです",
   "Bảo vệ đang tắt": "警戒モードはオフです",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.": "最近アプリを開いて状態を確認しています。",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "最近アプリを開いて状態を確認しています。",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "権限、スケジュール、未読警報を確認するため定期的にアプリを開いてください。",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "数回使用すると、SafeHome がアプリ確認習慣をより正確に評価できます。",
-  "Tần suất vào app ổn": "アプリ確認頻度は良好です",
-  "Đã lâu chưa vào app kiểm tra": "アプリ確認から時間が経っています",
-  "Đang ghi nhận tần suất vào app": "アプリ確認頻度を記録中",
+  "Tần suất vào ứng dụng ổn": "アプリ確認頻度は良好です",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "アプリ確認から時間が経っています",
+  "Đang ghi nhận tần suất vào ứng dụng": "アプリ確認頻度を記録中",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "常に位置情報の許可とバックグラウンド条件を確認してください。",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -544,18 +544,19 @@ const Map<String, String> jaStrings = {
       "煙センサー、SOS、または家に合った緊急デバイスを追加してください。",
   "Chưa có thiết bị khẩn cấp": "緊急デバイスがありません",
   "Đã có thiết bị khẩn cấp": "緊急デバイスが追加されています",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "就寝中や外出時のために Alarm スケジュールを設定してください。",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "この家には Alarm スケジュールまたはデバイス別警報スケジュールがあります。",
-  "Chưa set lịch Alarm": "Alarm スケジュールが未設定です",
-  "Đã set lịch Alarm": "Alarm スケジュール設定済み",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "家の確認を忘れないように少なくとも 1 つ Reminder を設定してください。",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "アプリが設定したスケジュールで家の確認を促します。",
-  "Chưa setup Reminder": "Reminder が未設定です",
-  "Đã setup Reminder": "Reminder 設定済み",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "就寝中や外出時のために 警報 スケジュールを設定してください。",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "この家には 警報 スケジュールまたはデバイス別警報スケジュールがあります。",
+  "Chưa cài lịch báo động": "警報 スケジュールが未設定です",
+  "Đã cài lịch báo động": "警報 スケジュール設定済み",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "家の確認を忘れないように少なくとも 1 つ リマインダー を設定してください。",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "アプリが設定したスケジュールで家の確認を促します。",
+  "Chưa cài đặt nhắc nhở": "リマインダー が未設定です",
+  "Đã cài đặt nhắc nhở": "リマインダー 設定済み",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "このデバイスが警報を受信しない場合は、アプリを開き直すか再ログインしてください。",
   "Thiết bị chưa đăng ký nhận cảnh báo": "このデバイスは警報受信に登録されていません",
   "Thiết bị nhận cảnh báo bình thường": "このデバイスは警報を受信できます",
@@ -573,7 +574,7 @@ const Map<String, String> jaStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "端末が SafeHome の警報を遅らせる可能性は低いです。",
   "Chưa tắt tối ưu pin": "バッテリー最適化がまだ有効です",
-  "Tối ưu pin không chặn app": "バッテリー最適化はアプリを妨げていません",
+  "Tối ưu pin không chặn ứng dụng": "バッテリー最適化はアプリを妨げていません",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "自動外出を安定して動かすには常に位置情報が必要です。",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "自動外出には位置情報の許可が必要です。",
@@ -582,7 +583,7 @@ const Map<String, String> jaStrings = {
   "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "自動外出を使う場合のみ必要です。",
   "Chưa cấp vị trí luôn luôn": "常に位置情報が許可されていません",
   "Đã cấp vị trí luôn luôn": "常に位置情報が許可されています",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS は Android のように全画面表示せず、システム通知と音を使います。",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android は全画面警報を使います。端末がブロックする場合は設定で許可してください。",
@@ -595,9 +596,10 @@ const Map<String, String> jaStrings = {
   "Đã bật thông báo": "通知が有効です",
   "Hệ thống: Sẵn sàng": "システム: 準備完了",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "システム: 警報を見逃す可能性",
-  "Cách bạn đang dùng app": "アプリの使い方",
+  "Cách bạn đang dùng ứng dụng": "アプリの使い方",
   "Thiết bị của bạn": "あなたのデバイス",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.": "スマートフォンとアプリの使い方を確認します。",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "スマートフォンとアプリの使い方を確認します。",
   "Hệ thống SafeHome": "SafeHome システム",
   "Hệ thống: Đang kiểm tra...": "システム: 確認中...",
   "Mở cài đặt": "設定を開く",
@@ -609,20 +611,20 @@ const Map<String, String> jaStrings = {
   "Cho phép vị trí luôn luôn": "位置情報を常に許可",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "自分の家は削除されます。\n共有された家からは退出します。",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "選択した家のすべてのセキュリティデバイスの Alarm スケジュールを変更します。\n\n家の Alarm 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 Alarm は変更されません。",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "選択した家に家の Reminder を追加します。\n\n家の Reminder 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 Reminder は変更されません。",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "選択した家のすべてのセキュリティデバイスの 警報 スケジュールを変更します。\n\n家の 警報 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 警報 は変更されません。",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "選択した家に家の リマインダー を追加します。\n\n家の リマインダー 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 リマインダー は変更されません。",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n外出時の自動保護は一時停止します。このモードは誰かが帰宅しても自動ではオフにならず、権限のあるメンバーが手動で通常モードに戻す必要があります。",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "この操作により、本日の一部デバイスの Alarm 時刻が変更されます...",
+      "この操作により、本日の一部デバイスの 警報 時刻が変更されます...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "この操作により、この家のすべての Alarm がオフになります。この端末で危険通知を受け取れなくなります。",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm は「家の設定」モードを使用しています。\n\n所有者または管理者が設定した共有スケジュールに従って通知を受け取ります。",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm は「自分のみ」モードを使用しています。\n\nこのアカウントに設定された個人用 Alarm スケジュールに従って通知を受け取ります。",
+      "この操作により、この家のすべての 警報 がオフになります。この端末で危険通知を受け取れなくなります。",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "警報 は「家の設定」モードを使用しています。\n\n所有者または管理者が設定した共有スケジュールに従って通知を受け取ります。",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "警報 は「自分のみ」モードを使用しています。\n\nこのアカウントに設定された個人用 警報 スケジュールに従って通知を受け取ります。",
   "Không đặt được mật khẩu": "パスワードを設定できません",
   "Chấp nhận": "承認",
   "Cho phép": "許可",
@@ -679,9 +681,7 @@ const Map<String, String> jaStrings = {
   "Thông báo": "通知",
   "Tìm nội dung hoặc tên người gửi": "内容または送信者名を検索",
   "Xem lời mời chia sẻ và xin gia nhập": "共有招待と参加リクエストを表示",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ 今日のAlarmを一時停止",
-  "Alarm cleared": "アラーム解除",
-  "Alarm triggered": "アラーム発生",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ 今日の警報を一時停止",
   "Bấm vào để xem chi tiết": "タップして詳細を表示",
   "Bàn phím an ninh": "セキュリティキーパッド",
   "Báo gas": "ガス警報",
@@ -739,7 +739,7 @@ const Map<String, String> jaStrings = {
   "Kiểm tra thiết bị trong nhà này": "この家のデバイスを確認",
   "Kính vỡ": "ガラス破損",
   "Loại thiết bị": "デバイス種別",
-  "Lưu ý khi bật Alarm": "Alarm有効時の注意",
+  "Lưu ý khi bật báo động": "警報有効時の注意",
   "Mất điện lưới": "主電源が切断されました",
   "Mở List chia sẻ nhà": "家の共有リストを開く",
   "Mời người khác tham gia nhà này": "他の人をこの家に招待",
@@ -753,7 +753,7 @@ const Map<String, String> jaStrings = {
       "家に確認が必要な兆候があります。下の状態を確認してください。",
   "Nhà đang hoạt động bình thường": "家は正常に動作しています",
   "Nhắc kiểm tra nhà theo thời gian": "指定時刻に家の確認を通知",
-  "Nhận cảnh báo Alarm": "Alarmアラートを受信",
+  "Nhận cảnh báo báo động": "警報アラートを受信",
   "Nhập email": "メールアドレスを入力",
   "Nhiệt độ": "温度",
   "Nhiệt độ/Độ ẩm": "温度・湿度",
@@ -792,15 +792,15 @@ const Map<String, String> jaStrings = {
   "TẮT CẢNH BÁO": "警報を停止",
   "Đã tạo nhà": "家を作成しました",
 
-  "Mode Bảo vệ thủ công đã bật": "手動保護モードが有効です",
+  "Chế độ Bảo vệ thủ công đã bật": "手動保護モードが有効です",
   "Báo động không lặp lại.": "アラームは繰り返されません。",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
       "問題が残っている場合、\$securityModeRepeatMinutes 分後にアラームが繰り返されます。",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName が「\$homeName」の手動保護モードをオンにしました。このモードは、権限のあるメンバーが通常モードに戻したときだけオフになります。\$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".": "「\$homeName」のAlarmをオンにしました。",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "「\$homeName」のすべてのAlarmをオフにしました。",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".": "「\$homeName」の警報をオンにしました。",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "「\$homeName」のすべての警報をオフにしました。",
   "Thành viên mới": "新しいメンバー",
   "Thành viên rời nhà": "メンバーが家を出ました",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -830,8 +830,8 @@ const Map<String, String> jaStrings = {
   "Tin nhắn HomeChat": "HomeChatメッセージ",
   "\$senderName đã gửi một tin nhắn": "\$senderName がメッセージを送信しました",
   "Bạn có tin nhắn mới": "新着メッセージがあります",
-  "Mode Bảo vệ sẽ chỉ báo động một lần": "保護モードは一度だけアラートします",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "保護モードは一度だけアラートします",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
       "保護モードは \$minutes 分後にアラートを繰り返します",
   "Đã gửi yêu cầu gia nhập \$count nhà": "\$count 件の家に参加リクエストを送信しました",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
@@ -859,8 +859,8 @@ const Map<String, String> jaStrings = {
   "Đang ghép nối: \$seconds giây": "ペアリング中: \$seconds 秒",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "「\$homeName」でデバイス追加モードが \$seconds 秒間有効になりました。",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "一時停止時間はAlarmスケジュール内（\$start → \$end）である必要があります",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "一時停止時間は警報スケジュール内（\$start → \$end）である必要があります",
   "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total 件のテストに合格\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
       "\$name はプロフィールに電話番号を追加していません。",
@@ -897,8 +897,8 @@ const Map<String, String> jaStrings = {
   "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
       "誰も確認しない場合、SafeHomeは緊急通話に切り替えます。",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "問題が未対応の場合、\$time に再通知します。",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "問題が未対応の場合、Alarmスケジュールに従って再通知します。",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "問題が未対応の場合、警報スケジュールに従って再通知します。",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "「\$resolvedHomeName」の「\$deviceName」が閉じました。",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -909,14 +909,14 @@ const Map<String, String> jaStrings = {
   "✅ \$count nhà an toàn": "✅ 安全な家 \$count 件",
   "\$count nhà đang được theo dõi": "\$count 件の家を監視中",
   "\$minutes phút": "\$minutes分",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "\$updatedHomes 件の家にReminderを設定しました。",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "\$updatedHomes 件の家にある \$updatedDevices 台のデバイスにAlarmを設定しました。\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "\$updatedHomes 件の家にリマインダーを設定しました。",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "\$updatedHomes 件の家にある \$updatedDevices 台のデバイスに警報を設定しました。\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "管理している家を共有しました。\n\n共有権限がないため、\$skipped 件の家をスキップしました。",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "\$count 台のセキュリティデバイスにAlarmを適用しました",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "\$count 台のセキュリティデバイスに警報を適用しました",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "\$count 台のセキュリティデバイスに同じスケジュールを適用",
   "\$count phút trước": "\$count分前",
@@ -946,16 +946,16 @@ const Map<String, String> jaStrings = {
       "この家を保護モードのままにする前に、開いているドアまたはロックを確認してください。",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "まだ家に人がいる可能性があります。その場合は通常モードに戻してください。",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "位置不明のメンバーがいます。アプリを開くか位置権限を確認するよう伝えてください。",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "デバイスが切断されています。バッテリー、電源、設置場所を確認してください。",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "バッテリー残量が少ないデバイスがあります。アラートを逃さないよう早めに交換してください。",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Reminderが未設定です。家を定期的に確認するスケジュールを作成してください。",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Alarmスケジュールが未設定です。普段不在にする時間帯に保護を有効にしてください。",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "リマインダーが未設定です。家を定期的に確認するスケジュールを作成してください。",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "警報スケジュールが未設定です。普段不在にする時間帯に保護を有効にしてください。",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "今すぐ対応する必要はありません。この家の監視を続けてください。",
   "Lặp sau \$minutes phút": "\$minutes 分後に繰り返し",
@@ -994,15 +994,16 @@ const Map<String, String> jaStrings = {
   "Hoặc": "または",
   "Giờ bắt đầu và kết thúc không được trùng nhau": "開始時刻と終了時刻を同じにすることはできません",
   "Giờ kết thúc phải sau thời điểm hiện tại": "終了時刻は現在時刻より後に設定してください",
-  "Khoảng tạm tắt không hợp lệ": "Alarm の一時停止期間が無効です",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "一時停止期間は有効な Alarm スケジュールと重なっていません",
+  "Khoảng tạm tắt không hợp lệ": "警報 の一時停止期間が無効です",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "一時停止期間は有効な 警報 スケジュールと重なっていません",
 
-  // Device alarm policy
-  "Cấu hình báo động": "アラーム設定",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "このセンサーが警報を作動させる方法を設定します。",
+  // Device 警報 policy
+  "Cài đặt báo động": "警報設定",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "このセンサーが警報を作動させる方法を設定します。",
   "Tham gia báo động": "アラームに参加",
-  "Tắt để cảm biến không tạo Alarm.": "オフにすると、このセンサーはAlarmを作成しません。",
+  "Tắt để cảm biến không tạo báo động.": "オフにすると、このセンサーは警報を作成しません。",
   "Bật còi vật lý": "屋内サイレンを有効化",
   "Cho phép kích hoạt còi trong nhà.": "屋内サイレンの作動を許可します。",
   "Đánh thức màn hình": "画面を起動",
@@ -1014,6 +1015,31 @@ const Map<String, String> jaStrings = {
   "giây": "秒",
   "Đã lưu cấu hình báo động": "アラーム設定を保存しました",
   "Không thể lưu cấu hình báo động": "アラーム設定を保存できません",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "家の所有者と管理者のみがこの設定を変更できます。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "家の所有者と管理者のみがこの設定を変更できます。",
   "Thông tin chi tiết": "デバイス詳細",
+  "Thông báo báo động": "警報通知",
+  "Cài đặt nhắc nhở": "リマインダー設定",
+  "Nhắc nhở theo lịch": "予定されたリマインダー",
+  "Danh sách thông báo": "通知",
+  "Cài đặt thông báo": "通知設定",
+  "Sử dụng báo động theo lịch đã thiết lập": "設定済みの警報スケジュールを使用",
+  "Chỉ gửi thông báo, không kích hoạt báo động": "通知のみ送信し、警報は作動させない",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "家のすべての警報はオフです。システムは通知のみ送信します。",
+  "Chỉ Chủ nhà có thể bật chế độ này.": "このモードを有効にできるのは所有者のみです。",
+  "Bật Không bảo vệ?": "無保護モードを有効にしますか？",
+  "Cảm biến vừa phát hiện một sự kiện.": "センサーがイベントを検知しました。",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "無保護モードを有効にできるのは所有者のみです",
+  "Đã chuyển nhà sang Không bảo vệ": "家を無保護モードに切り替えました",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "無保護モードに切り替えましたが、通知を送信できませんでした",
+  "Giám sát toàn diện": "完全監視",
+  "Không bảo vệ": "無保護",
+  "Không bảo vệ đang bật": "無保護モードが有効です",
+  "Nhà đã chuyển sang Không bảo vệ": "家が無保護モードに切り替わりました",
+  "Thông báo cảm biến": "センサー通知",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "センサーがイベントを検知したときの通常の通知です。",
+  "Tôi hiểu, tiếp tục": "理解して続行",
 };

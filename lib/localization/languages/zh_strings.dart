@@ -101,12 +101,12 @@ const Map<String, String> zhStrings = {
   "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "暂无足够的新活动用于深入分析。",
   "Hub kết nối bình thường": "Hub 连接正常",
   "Cài đặt cảnh báo cho nhà hiện tại": "当前家庭的提醒设置",
-  "Nhận cảnh báo Alarm": "接收 Alarm 提醒",
+  "Nhận cảnh báo báo động": "接收 警报 提醒",
   "Đang bật cho tài khoản này": "此账户已开启",
   "Đang tắt cho tài khoản này": "此账户已关闭",
-  "Hẹn giờ Reminder": "Reminder 计划",
+  "Hẹn giờ nhắc nhở": "提醒 计划",
   "Nhắc kiểm tra nhà theo thời gian": "按时间提醒检查家庭",
-  "Hẹn giờ Alarm": "设置 Alarm",
+  "Hẹn giờ báo động": "设置 警报",
   "Chưa thiết lập": "未设置",
   "Chưa thiết lập thời gian": "未设置时间",
   "Tổng hợp trạng thái nhà": "家庭状态汇总",
@@ -143,13 +143,13 @@ const Map<String, String> zhStrings = {
   "Đóng tìm kiếm": "关闭搜索",
   "Giờ": "小时",
   "Phút": "分钟",
-  "Đặt Home Reminder": "设置家庭 Reminder",
-  "Đặt Home Alarm": "设置家庭 Alarm",
+  "Đặt nhắc nhở cho nhà": "设置家庭 提醒",
+  "Đặt báo động cho nhà": "设置家庭 警报",
   "Xác nhận thay đổi": "确认更改",
   "Tiếp tục": "继续",
-  "Giờ Reminder": "Reminder 时间",
-  "Giờ bắt đầu Alarm": "Alarm 开始时间",
-  "Giờ kết thúc Alarm": "Alarm 结束时间",
+  "Giờ nhắc nhở": "提醒 时间",
+  "Giờ bắt đầu báo động": "警报 开始时间",
+  "Giờ kết thúc báo động": "警报 结束时间",
   "Không có nhà nào đủ điều kiện để cài": "没有符合条件的家庭可设置",
   "Cài đặt hoàn tất": "设置完成",
   "Xác nhận rời nhà": "确认离开家庭",
@@ -164,7 +164,7 @@ const Map<String, String> zhStrings = {
   "Tìm home...": "搜索家庭...",
   "Đặt vị trí nhà và bật bảo vệ tự động": "设置家庭位置并开启自动保护",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "转移家庭所有权或删除家庭",
-  "Đặt Reminder / Alarm nhà đã chọn": "为所选家庭设置 Reminder / Alarm",
+  "Đặt nhắc nhở / báo động nhà đã chọn": "为所选家庭设置 提醒 / 警报",
   "Chia sẻ nhà đã chọn": "共享所选家庭",
   "Chia sẻ": "共享",
   "Email người nhận": "收件人邮箱",
@@ -189,12 +189,12 @@ const Map<String, String> zhStrings = {
   "Không có thiết bị": "没有设备",
   "Chỉ chủ nhà mới được xoá nhà": "只有屋主可以删除家庭",
   "Chỉ chủ nhà mới được chuyển quyền": "只有屋主可以转移所有权",
-  "Lưu ý khi bật Alarm": "开启 Alarm 提示",
-  "Alarm đã được bật": "Alarm 已开启",
+  "Lưu ý khi bật báo động": "开启 警报 提示",
+  "Báo động đã được bật": "警报 已开启",
   "Đã hiểu": "知道了",
-  "Đã bật Alarm": "Alarm 已开启",
-  "Đã tắt Alarm": "Alarm 已关闭",
-  "Tắt Alarm": "关闭 Alarm",
+  "Đã bật báo động": "警报 已开启",
+  "Đã tắt báo động": "警报 已关闭",
+  "Tắt báo động": "停止警报",
   "Cả ngày": "全天",
   "Bạn không có quyền thực hiện thao tác này.": "你没有权限执行此操作。",
   "Không thể hoàn tất thao tác. Vui lòng thử lại.": "无法完成此操作。请重试。",
@@ -255,8 +255,8 @@ const Map<String, String> zhStrings = {
   "Về muộn": "晚回家",
   "Ra ngoài": "外出",
   "Khác": "其他",
-  "Lưu ý tạm tắt Alarm": "Alarm 暂停说明",
-  "Tạm tắt Alarm hôm nay": "今天暂停 Alarm",
+  "Lưu ý tạm tắt báo động": "警报 暂停说明",
+  "Tạm tắt báo động hôm nay": "今天暂停 警报",
   "Chọn giờ bắt đầu tạm tắt": "选择暂停开始时间",
   "Từ": "从",
   "Từ giờ": "从",
@@ -337,15 +337,13 @@ const Map<String, String> zhStrings = {
   "Battery low": "电量低",
   "Device offline": "设备离线",
   "Device online": "设备在线",
-  "Alarm triggered": "警报已触发",
-  "Alarm cleared": "警报已解除",
   "Cửa mở": "门已打开",
   "Cửa đóng": "门已关闭",
   "Chưa đặt vị trí nhà": "尚未设置家庭位置",
   "Đặt vị trí nhà tại đây": "将当前位置设为家庭位置",
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "开启离家自动布防前，请先设置家庭位置",
   "Bán kính bảo vệ mặc định: 150 m": "默认保护半径：150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "每位成员都需要授予“始终允许”位置权限，离家/到家状态才能在后台工作。",
   "Lưu cài đặt": "保存设置",
   "Đã đặt vị trí nhà": "已设置家庭位置",
@@ -408,13 +406,13 @@ const Map<String, String> zhStrings = {
   "Huỷ trả lời": "取消回复",
   "Nhắn gì đó...": "输入消息...",
   "Gọi điện": "拨打电话",
-  "Alarm thiết bị": "设备 Alarm",
+  "Báo động thiết bị": "设备 警报",
   "Chế độ áp dụng": "应用模式",
   "Theo nhà": "按家庭",
   "Riêng tôi": "仅自己",
   "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "使用房主或管理员设置的共享日程",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "使用仅适用于你账号的个人日程",
-  "Thiết lập nhanh Alarm": "快速设置 Alarm",
+  "Thiết lập nhanh báo động": "快速设置 警报",
   "Thiết lập nhanh toàn bộ thiết bị": "快速设置全部设备",
   "Áp dụng cho toàn bộ thiết bị": "应用到所有设备",
   "Bắt đầu": "开始",
@@ -446,14 +444,14 @@ const Map<String, String> zhStrings = {
   "Đã rời khỏi nhà": "已离开家庭",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "你将离开共享家庭。",
   "Các nhà của bạn sẽ bị xoá.\n": "你的家庭将被删除。\n你将离开共享家庭。",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "此操作会更改所选家庭中所有安全设备的家庭 Alarm 计划。\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "此操作会为所选家庭添加家庭 Reminder。\n\n",
-  "Xác nhận thay đổi Alarm": "确认更改 Alarm",
-  "Xác nhận thay đổi Reminder": "确认更改 Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "此操作会更改所选家庭中所有安全设备的家庭 警报 计划。\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "此操作会为所选家庭添加家庭 提醒。\n\n",
+  "Xác nhận thay đổi báo động": "确认更改 警报",
+  "Xác nhận thay đổi nhắc nhở": "确认更改 提醒",
   "Lặp lại khi sự cố vẫn còn": "问题仍存在时重复",
-  "Thời gian lặp lại Alarm": "Alarm 重复时间",
+  "Thời gian lặp lại báo động": "警报 重复时间",
   "VD: Mr Chung": "例如：Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 暂无家庭",
   "Vẫn chuyển về Bình thường": "仍然切换到普通模式",
@@ -466,10 +464,10 @@ const Map<String, String> zhStrings = {
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
       "此操作将更改今天部分设备的报警时间……",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "此操作将关闭此家庭的所有 Alarm。你将不再在此手机上收到危险警报。",
-  "Tắt toàn bộ Alarm?": "关闭全部 Alarm？",
-  "Không xoá được lịch tạm tắt Alarm": "无法删除 Alarm 暂停计划",
-  "Không lưu được tạm tắt Alarm": "无法保存 Alarm 暂停",
+      "此操作将关闭此家庭的所有 警报。你将不再在此手机上收到危险警报。",
+  "Tắt toàn bộ báo động?": "关闭全部 警报？",
+  "Không xoá được lịch tạm tắt báo động": "无法删除 警报 暂停计划",
+  "Không lưu được tạm tắt báo động": "无法保存 警报 暂停",
   "Không gửi được yêu cầu xoá": "无法发送删除请求",
   "Không lưu được cài đặt": "无法保存设置",
   "Không lấy được vị trí hiện tại": "无法获取当前位置",
@@ -479,35 +477,35 @@ const Map<String, String> zhStrings = {
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
       "只有屋主或管理员可以更改警报重复设置",
   "Không lưu được thời gian lặp báo động": "无法保存警报重复时间",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "只有屋主或管理员可以更改布防模式",
   "Không thể thay đổi chế độ nhà": "无法更改家庭模式",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "布防模式已开启，但无法发送通知",
-  "Đã bật Mode Bảo vệ thủ công": "手动布防模式已开启",
+  "Đã bật Chế độ Bảo vệ thủ công": "手动布防模式已开启",
   "Đã chuyển nhà về Bình thường": "家庭已切换回普通模式",
   "60 phút": "60 分钟",
   "30 phút": "30 分钟",
   "15 phút": "15 分钟",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "你正在查看屋主的计划。选择仅自己即可设置个人 Alarm 计划。",
-  "Chọn giờ kết thúc Alarm": "选择 Alarm 结束时间",
-  "Chọn giờ bắt đầu Alarm": "选择 Alarm 开始时间",
-  "Bạn không có quyền sửa lịch Alarm của nhà": "你没有权限编辑此家庭的 Alarm 计划",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị": "无法将 Alarm 应用到所有设备",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "你正在查看屋主的计划。选择仅自己即可设置个人 警报 计划。",
+  "Chọn giờ kết thúc báo động": "选择 警报 结束时间",
+  "Chọn giờ bắt đầu báo động": "选择 警报 开始时间",
+  "Bạn không có quyền sửa lịch báo động của nhà": "你没有权限编辑此家庭的 警报 计划",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị": "无法将 警报 应用到所有设备",
   "Nhà chưa có thiết bị an ninh để áp dụng": "此家庭暂无可应用的安全设备",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "你没有权限编辑按家庭设置。请选择仅自己。",
-  "Không thể lưu chế độ Alarm": "无法保存 Alarm 模式",
-  "Thêm Reminder": "添加 Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder 会在所选时间提醒你检查家庭安全状态。",
-  "Thêm khung giờ Alarm": "添加 Alarm 时间段",
-  "Đang sử dụng Reminder riêng của bạn": "正在使用你的个人 Reminder 设置",
-  "Đang sử dụng Reminder của chủ nhà": "正在使用屋主的 Reminder 设置",
-  "Sửa giờ Reminder": "编辑 Reminder 时间",
-  "Sửa giờ kết thúc Alarm": "编辑 Alarm 结束时间",
-  "Sửa giờ bắt đầu Alarm": "编辑 Alarm 开始时间",
-  "Xoá Reminder": "删除 Reminder",
+  "Không thể lưu chế độ báo động": "无法保存 警报 模式",
+  "Thêm nhắc nhở": "添加 提醒",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "提醒 会在所选时间提醒你检查家庭安全状态。",
+  "Thêm khung giờ báo động": "添加 警报 时间段",
+  "Đang sử dụng nhắc nhở riêng của bạn": "正在使用你的个人 提醒 设置",
+  "Đang sử dụng nhắc nhở của chủ nhà": "正在使用屋主的 提醒 设置",
+  "Sửa giờ nhắc nhở": "编辑 提醒 时间",
+  "Sửa giờ kết thúc báo động": "编辑 警报 结束时间",
+  "Sửa giờ bắt đầu báo động": "编辑 警报 开始时间",
+  "Xoá nhắc nhở": "删除 提醒",
   "Mỗi 1 giờ": "每 1 小时",
   "Mỗi 30 phút": "每 30 分钟",
   "Mỗi 15 phút": "每 15 分钟",
@@ -537,7 +535,7 @@ const Map<String, String> zhStrings = {
   "Thời gian lặp": "重复间隔",
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
       "选择 0 表示只提醒一次。此设置同时用于手动布防和离家自动布防。",
-  "Lặp báo động khi sự cố vẫn còn": "问题仍存在时重复 Alarm",
+  "Lặp báo động khi sự cố vẫn còn": "问题仍存在时重复 警报",
   "Đang được sử dụng": "当前使用中",
   "Chuyển về sử dụng thông thường": "切换回普通模式",
   "Chế độ nhà": "家庭模式",
@@ -549,14 +547,14 @@ const Map<String, String> zhStrings = {
   "Bảo vệ thủ công đang bật": "手动布防已开启",
   "Bảo vệ tự động đang bật": "自动布防已开启",
   "Bảo vệ đang tắt": "布防已关闭",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.": "你最近已打开应用检查状态。",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "你最近已打开应用检查状态。",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "建议定期打开应用检查权限、时间表和未读警报。",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "使用几次后，SafeHome 可以更好地评估你的应用检查习惯。",
-  "Tần suất vào app ổn": "应用检查频率良好",
-  "Đã lâu chưa vào app kiểm tra": "距离上次打开应用检查已有一段时间",
-  "Đang ghi nhận tần suất vào app": "正在记录应用检查频率",
+  "Tần suất vào ứng dụng ổn": "应用检查频率良好",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "距离上次打开应用检查已有一段时间",
+  "Đang ghi nhận tần suất vào ứng dụng": "正在记录应用检查频率",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "请检查始终定位权限和后台条件。",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "此设备满足自动离家的运行条件。",
@@ -569,18 +567,18 @@ const Map<String, String> zhStrings = {
       "建议添加烟雾传感器、SOS 或适合家庭的紧急设备。",
   "Chưa có thiết bị khẩn cấp": "尚无紧急设备",
   "Đã có thiết bị khẩn cấp": "已添加紧急设备",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "建议为睡眠时间或外出时设置 Alarm 时间表。",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "此家庭已有 Alarm 时间表或设备级警报时间表。",
-  "Chưa set lịch Alarm": "尚未设置 Alarm 时间表",
-  "Đã set lịch Alarm": "已设置 Alarm 时间表",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "建议至少设置一个 Reminder，避免忘记检查家庭。",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "应用会按计划提醒你检查家庭。",
-  "Chưa setup Reminder": "尚未设置 Reminder",
-  "Đã setup Reminder": "已设置 Reminder",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "建议为睡眠时间或外出时设置 警报 时间表。",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "此家庭已有 警报 时间表或设备级警报时间表。",
+  "Chưa cài lịch báo động": "尚未设置 警报 时间表",
+  "Đã cài lịch báo động": "已设置 警报 时间表",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "建议至少设置一个 提醒，避免忘记检查家庭。",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "应用会按计划提醒你检查家庭。",
+  "Chưa cài đặt nhắc nhở": "尚未设置 提醒",
+  "Đã cài đặt nhắc nhở": "已设置 提醒",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "如果此设备收不到警报，请重新打开应用或重新登录。",
   "Thiết bị chưa đăng ký nhận cảnh báo": "此设备尚未注册接收警报",
   "Thiết bị nhận cảnh báo bình thường": "此设备可以接收警报",
@@ -597,7 +595,7 @@ const Map<String, String> zhStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "手机较少可能延迟 SafeHome 警报。",
   "Chưa tắt tối ưu pin": "尚未关闭电池优化",
-  "Tối ưu pin không chặn app": "电池优化未阻止应用",
+  "Tối ưu pin không chặn ứng dụng": "电池优化未阻止应用",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "自动离家需要始终定位才能稳定运行。",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "自动离家需要定位权限。",
@@ -606,7 +604,7 @@ const Map<String, String> zhStrings = {
   "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "只有使用自动离家时才需要此权限。",
   "Chưa cấp vị trí luôn luôn": "尚未允许始终定位",
   "Đã cấp vị trí luôn luôn": "已允许始终定位",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS 不像 Android 那样全屏打开；应用使用系统通知和声音。",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android 使用全屏警报；如果手机阻止，请在设置中允许。",
@@ -618,9 +616,9 @@ const Map<String, String> zhStrings = {
   "Đã bật thông báo": "已开启通知",
   "Hệ thống: Sẵn sàng": "系统：已就绪",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "系统：可能会错过警报",
-  "Cách bạn đang dùng app": "你使用应用的方式",
+  "Cách bạn đang dùng ứng dụng": "你使用应用的方式",
   "Thiết bị của bạn": "你的设备",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.": "检查你的手机以及你使用应用的方式。",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "检查你的手机以及你使用应用的方式。",
   "Hệ thống SafeHome": "SafeHome 系统",
   "Hệ thống: Đang kiểm tra...": "系统：正在检查...",
   "Đổi tên nhóm": "重命名分组",
@@ -633,8 +631,8 @@ const Map<String, String> zhStrings = {
   "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "请在应用设置中授予位置权限",
   "Đã bật tự động Bảo vệ khi mọi người rời nhà": "已开启所有人离家时自动布防",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "已关闭所有人离家时自动布防",
-  "Không thể thay đổi trạng thái Alarm": "无法更改 Alarm 状态",
-  "Đã tắt toàn bộ Alarm của nhà": "已关闭家庭的所有 Alarm",
+  "Không thể thay đổi trạng thái báo động": "无法更改 警报 状态",
+  "Đã tắt toàn bộ báo động của nhà": "已关闭家庭的所有 警报",
   "QR gia nhập nhiều nhà không hợp lệ": "无效的多家庭加入二维码",
   "Bạn đang là chủ các nhà này": "你已经是这些家庭的屋主",
   "QR gia nhập không hợp lệ": "无效的加入二维码",
@@ -663,20 +661,20 @@ const Map<String, String> zhStrings = {
   "Cho phép vị trí luôn luôn": "始终允许位置",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "你的家庭将被删除。\n你将离开共享家庭。",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "此操作会更改所选家庭中所有安全设备的家庭 Alarm 计划。\n\n正在使用按家庭 Alarm 设置的成员会受到影响。\n处于仅自己模式的个人 Alarm 不会改变。",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "此操作会为所选家庭添加家庭 Reminder。\n\n正在使用按家庭 Reminder 设置的成员会受到影响。\n处于仅自己模式的个人 Reminder 不会改变。",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "此操作会更改所选家庭中所有安全设备的家庭 警报 计划。\n\n正在使用按家庭 警报 设置的成员会受到影响。\n处于仅自己模式的个人 警报 不会改变。",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "此操作会为所选家庭添加家庭 提醒。\n\n正在使用按家庭 提醒 设置的成员会受到影响。\n处于仅自己模式的个人 提醒 不会改变。",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "开启后，安全设备会立即开始监测。\n\n离家自动布防将暂停。有人回家时此模式不会自动关闭，只能由有权限的成员手动切换回普通模式。",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
       "此操作将更改今天部分设备的报警时间……",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "此操作将关闭此家庭的所有 Alarm。你将不再在此手机上收到危险警报。",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm 正在使用家庭设置。\n\n你将根据屋主或管理员设置的共享 Alarm 日程接收警报。",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm 正在使用个人设置。\n\n你将根据此账户设置的个人 Alarm 日程接收警报。",
+      "此操作将关闭此家庭的所有 警报。你将不再在此手机上收到危险警报。",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "警报 正在使用家庭设置。\n\n你将根据屋主或管理员设置的共享 警报 日程接收警报。",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "警报 正在使用个人设置。\n\n你将根据此账户设置的个人 警报 日程接收警报。",
   "Không thể đăng nhập bằng Google": "无法使用 Google 登录",
   "Không đặt được mật khẩu": "无法设置密码",
   "Chấp nhận": "接受",
@@ -714,8 +712,8 @@ const Map<String, String> zhStrings = {
   "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "此名称只会显示在你的账号中。",
   "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
       "名称和地址将更新给家庭中的所有成员。",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ 今日暂停 Alarm",
-  "Alarm": "Alarm",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ 今日暂停 警报",
+  "Báo động": "警报",
   "Bạn không có quyền thực hiện thao tác này。": "你没有权限执行此操作。",
   "Cài đặt": "设置",
   "Cập nhật": "更新",
@@ -727,14 +725,14 @@ const Map<String, String> zhStrings = {
   "Đã xảy ra lỗi. Vui lòng thử lại.": "发生错误。请重试。",
   "Đang kiểm tra kết nối Hub": "正在检查 Hub 连接",
   "Đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时仍打开",
-  "Đang mở trong giờ Alarm": "Alarm 时段内被打开",
+  "Đang mở trong giờ báo động": "警报 时段内被打开",
   "Đang tải...": "正在加载...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "个人资料、请求和邀请",
   "Hub chưa gửi trạng thái": "Hub 状态不可用",
   "Hub mất kết nối": "Hub 已断开",
   "Hub tín hiệu bình thường": "Hub 连接正常",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时门锁未锁",
-  "Khóa đang mở trong giờ Alarm": "Alarm 时段内门锁未锁",
+  "Khóa đang mở trong giờ báo động": "警报 时段内门锁未锁",
   "Không có thông báo": "没有通知",
   "Khu vực nguy hiểm": "危险区域",
   "Kiểm tra thiết bị trong nhà này": "查看此家庭中的设备",
@@ -748,7 +746,7 @@ const Map<String, String> zhStrings = {
   "Nhập email": "输入邮箱",
   "Phòng": "房间",
   "Quản trị viên": "管理员",
-  "Reminder": "提醒",
+  "Nhắc nhở": "提醒",
   "SafeHome": "SafeHome",
   "Sóng yếu": "信号弱",
   "SOS": "SOS",
@@ -778,15 +776,15 @@ const Map<String, String> zhStrings = {
   "TẮT CẢNH BÁO": "关闭警报",
   "Đã tạo nhà": "家庭已创建",
 
-  "Mode Bảo vệ thủ công đã bật": "手动布防模式已开启",
+  "Chế độ Bảo vệ thủ công đã bật": "手动布防模式已开启",
   "Báo động không lặp lại.": "警报不会重复。",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
       "如果问题仍然存在，警报将在 \$securityModeRepeatMinutes 分钟后重复。",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName 已为 \"\$homeName\" 开启手动布防模式。只有有权限的成员切回普通模式时，此模式才会关闭。\$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".": "你已为 \"\$homeName\" 开启 Alarm。",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "你已关闭 \"\$homeName\" 的所有 Alarm。",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".": "你已为 \"\$homeName\" 开启 警报。",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "你已关闭 \"\$homeName\" 的所有 警报。",
   "Thành viên mới": "新成员",
   "Thành viên rời nhà": "成员已离家",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -816,8 +814,9 @@ const Map<String, String> zhStrings = {
   "Tin nhắn HomeChat": "HomeChat 消息",
   "\$senderName đã gửi một tin nhắn": "\$senderName 发送了一条消息",
   "Bạn có tin nhắn mới": "你有一条新消息",
-  "Mode Bảo vệ sẽ chỉ báo động một lần": "布防模式只会报警一次",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút": "布防模式将在 \$minutes 分钟后重复报警",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "布防模式只会报警一次",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "布防模式将在 \$minutes 分钟后重复报警",
   "Đã gửi yêu cầu gia nhập \$count nhà": "已向 \$count 个家庭发送加入请求",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
       "\$requesterName 请求加入 \"\$homeName\"。",
@@ -844,8 +843,8 @@ const Map<String, String> zhStrings = {
   "Đang ghép nối: \$seconds giây": "正在配对：\$seconds 秒",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "\"\$homeName\" 已开启设备配对 \$seconds 秒。",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "暂停时间必须在 Alarm 日程范围内（\$start → \$end）",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "暂停时间必须在 警报 日程范围内（\$start → \$end）",
   "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total 项测试通过\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name 尚未在个人资料中添加电话号码。",
   "Tin nhắn mới trong \$homeName": "\$homeName 中有新消息",
@@ -883,8 +882,8 @@ const Map<String, String> zhStrings = {
   "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
       "如果无人确认，SafeHome 将转为紧急呼叫。",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "如果问题尚未处理，将在 \$time 再次提醒。",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "如果问题尚未处理，将按 Alarm 日程再次提醒。",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "如果问题尚未处理，将按 警报 日程再次提醒。",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "\"\$deviceName\" 已在 \"\$resolvedHomeName\" 中关闭。",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -895,13 +894,12 @@ const Map<String, String> zhStrings = {
   "✅ \$count nhà an toàn": "✅ \$count 个家庭安全",
   "\$count nhà đang được theo dõi": "正在监测 \$count 个家庭",
   "\$minutes phút": "\$minutes 分钟",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "已为 \$updatedHomes 个家庭设置 Reminder。",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "已为 \$updatedHomes 个家庭中的 \$updatedDevices 台设备设置 Alarm。\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "已为 \$updatedHomes 个家庭设置 提醒。",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "已为 \$updatedHomes 个家庭中的 \$updatedDevices 台设备设置 警报。\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "已分享你管理的家庭。\n\n由于你没有分享权限，已跳过 \$skipped 个家庭。",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh": "Alarm 已应用到 \$count 台安全设备",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh": "警报 已应用到 \$count 台安全设备",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "将相同日程应用到 \$count 台安全设备",
   "\$count phút trước": "\$count 分钟前",
@@ -930,16 +928,16 @@ const Map<String, String> zhStrings = {
       "在让这个家保持布防模式前，请先检查打开的门或锁。",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "可能仍有人在家；如果是这样，请切回普通模式。",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "有成员位置未知。请提醒他们打开 app 或检查位置权限。",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "有设备断开连接。请检查电池、电源或安装位置。",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "有设备电量低。请尽快更换电池，避免漏掉警报。",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "尚未设置 Reminder。请创建定期检查家庭的日程。",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "尚未设置 Alarm 日程。请在通常无人时段启用保护。",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "尚未设置 提醒。请创建定期检查家庭的日程。",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "尚未设置 警报 日程。请在通常无人时段启用保护。",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "暂时无需立即处理。继续监测这个家即可。",
   "Lặp sau \$minutes phút": "\$minutes 分钟后重复",
@@ -978,15 +976,15 @@ const Map<String, String> zhStrings = {
   "Hoặc": "或者",
   "Giờ bắt đầu và kết thúc không được trùng nhau": "开始和结束时间不能相同",
   "Giờ kết thúc phải sau thời điểm hiện tại": "结束时间必须晚于当前时间",
-  "Khoảng tạm tắt không hợp lệ": "Alarm 暂停时间范围无效",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "暂停时间范围与任何已启用的 Alarm 计划均不重叠",
+  "Khoảng tạm tắt không hợp lệ": "警报 暂停时间范围无效",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "暂停时间范围与任何已启用的 警报 计划均不重叠",
 
-  // Device alarm policy
-  "Cấu hình báo động": "报警设置",
+  // Device 警报 policy
+  "Cài đặt báo động": "警报设置",
   "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "控制此传感器触发警报的方式。",
   "Tham gia báo động": "参与报警",
-  "Tắt để cảm biến không tạo Alarm.": "关闭后，此传感器将不会触发 Alarm。",
+  "Tắt để cảm biến không tạo báo động.": "关闭后，此传感器将不会触发 警报。",
   "Bật còi vật lý": "启用实体警号",
   "Cho phép kích hoạt còi trong nhà.": "允许启动室内警号。",
   "Đánh thức màn hình": "唤醒屏幕",
@@ -998,6 +996,30 @@ const Map<String, String> zhStrings = {
   "giây": "秒",
   "Đã lưu cấu hình báo động": "报警设置已保存",
   "Không thể lưu cấu hình báo động": "无法保存报警设置",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "只有屋主和管理员可以更改此设置。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "只有屋主和管理员可以更改此设置。",
   "Thông tin chi tiết": "设备详情",
+  "Thông báo báo động": "警报通知",
+  "Cài đặt nhắc nhở": "提醒设置",
+  "Nhắc nhở theo lịch": "定时提醒",
+  "Danh sách thông báo": "通知",
+  "Cài đặt thông báo": "通知设置",
+  "Sử dụng báo động theo lịch đã thiết lập": "使用已设置的警报计划",
+  "Chỉ gửi thông báo, không kích hoạt báo động": "仅发送通知，不触发警报",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "家中的所有警报均已关闭；系统只会发送通知。",
+  "Chỉ Chủ nhà có thể bật chế độ này.": "只有房主可以启用此模式。",
+  "Bật Không bảo vệ?": "启用「无保护」模式？",
+  "Cảm biến vừa phát hiện một sự kiện.": "传感器刚刚检测到一个事件。",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "只有房主可以启用「无保护」模式",
+  "Đã chuyển nhà sang Không bảo vệ": "家庭已切换到「无保护」模式",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "已切换到「无保护」模式，但通知发送失败",
+  "Giám sát toàn diện": "全面监控",
+  "Không bảo vệ": "无保护",
+  "Không bảo vệ đang bật": "「无保护」模式已启用",
+  "Nhà đã chuyển sang Không bảo vệ": "家庭已切换到「无保护」模式",
+  "Thông báo cảm biến": "传感器通知",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "传感器检测到事件时发送的普通通知。",
+  "Tôi hiểu, tiếp tục": "我明白，继续",
 };

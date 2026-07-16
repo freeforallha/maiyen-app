@@ -14,14 +14,14 @@ import 'platform/android/android_notification_config.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 class NotificationService {
   static AppStrings get _strings =>
       AppStrings.fromLocale(appLanguageController.locale);
 
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
-  ValueNotifier<Map<String, String>?>(null);
+      ValueNotifier<Map<String, String>?>(null);
 
   static String localizedExactTextOrRaw(String raw, AppStrings strings) {
     final clean = raw.trim();
@@ -108,7 +108,7 @@ class NotificationService {
   static const int alarmNotificationId = 999999;
 
   static final Map<String, Map<String, String>> _activeAlarmIncidentContexts =
-  {};
+      {};
 
   static final ValueNotifier<int> alarmResolvedRevision = ValueNotifier<int>(0);
 
@@ -119,9 +119,9 @@ class NotificationService {
       _activeAlarmIncidentContexts.isNotEmpty;
 
   static Map<String, dynamic>? _decodeAlarmPayload(
-      String payload,
-      String prefix,
-      ) {
+    String payload,
+    String prefix,
+  ) {
     if (!payload.startsWith('$prefix::')) {
       return null;
     }
@@ -171,8 +171,8 @@ class NotificationService {
   }
 
   static List<Map<String, dynamic>> _alarmItemsFromData(
-      Map<String, dynamic> data,
-      ) {
+    Map<String, dynamic> data,
+  ) {
     final directItems = _alarmItemsFromValue(data['alarmItems']);
 
     if (directItems.isNotEmpty) {
@@ -183,15 +183,15 @@ class NotificationService {
   }
 
   static String localizedAlarmBodyForData(
-      Map<String, dynamic> data,
-      AppStrings strings,
-      ) {
+    Map<String, dynamic> data,
+    AppStrings strings,
+  ) {
     final items = _alarmItemsFromData(data);
     final lines = <String>[];
 
     for (final item in items) {
       final deviceName =
-      item['deviceName']?.toString().trim().isNotEmpty == true
+          item['deviceName']?.toString().trim().isNotEmpty == true
           ? item['deviceName'].toString().trim()
           : item['name']?.toString().trim() ?? '';
       final reason = item['reason']?.toString().trim() ?? '';
@@ -201,9 +201,9 @@ class NotificationService {
 
       if (deviceName.isNotEmpty && translatedReason.isNotEmpty) {
         line =
-        translatedReason.toLowerCase().startsWith(
-          '${deviceName.toLowerCase()}:',
-        )
+            translatedReason.toLowerCase().startsWith(
+              '${deviceName.toLowerCase()}:',
+            )
             ? translatedReason
             : '$deviceName: $translatedReason';
       } else if (translatedReason.isNotEmpty) {
@@ -231,10 +231,10 @@ class NotificationService {
   }
 
   static String localizedNotificationTitle(
-      String rawTitle,
-      AppStrings strings,
-      String fallback,
-      ) {
+    String rawTitle,
+    AppStrings strings,
+    String fallback,
+  ) {
     final cleanTitle = rawTitle.trim();
 
     if (cleanTitle.isEmpty) {
@@ -261,12 +261,12 @@ class NotificationService {
     return strings.t(cleanTitle);
   }
 
-  static String normalizedIncidentEventCategory(
-    Map<String, dynamic> data,
-  ) {
+  static String normalizedIncidentEventCategory(Map<String, dynamic> data) {
     final direct = data['eventCategory']?.toString().trim().toLowerCase() ?? '';
 
-    if (direct == 'emergency' || direct == 'security' || direct == 'system_warning') {
+    if (direct == 'emergency' ||
+        direct == 'security' ||
+        direct == 'system_warning') {
       return direct;
     }
 
@@ -285,9 +285,7 @@ class NotificationService {
     return 'security';
   }
 
-  static String normalizedIncidentAlarmLevel(
-    Map<String, dynamic> data,
-  ) {
+  static String normalizedIncidentAlarmLevel(Map<String, dynamic> data) {
     final direct = data['alarmLevel']?.toString().trim().toLowerCase() ?? '';
 
     if ({'info', 'warning', 'alarm', 'emergency'}.contains(direct)) {
@@ -304,9 +302,7 @@ class NotificationService {
     return 'alarm';
   }
 
-  static String normalizedIncidentStatus(
-    Map<String, dynamic> data,
-  ) {
+  static String normalizedIncidentStatus(Map<String, dynamic> data) {
     final status =
         data['incidentStatus']?.toString().trim().toLowerCase() ??
         data['status']?.toString().trim().toLowerCase() ??
@@ -359,17 +355,16 @@ class NotificationService {
 
     final receiverUid =
         data['receiverUid']?.toString().trim().isNotEmpty == true
-            ? data['receiverUid'].toString().trim()
-            : currentUid;
+        ? data['receiverUid'].toString().trim()
+        : currentUid;
 
     final ownerUid = data['ownerUid']?.toString().trim() ?? '';
     final homeId = data['homeId']?.toString().trim() ?? '';
     final eventCategory = normalizedIncidentEventCategory(data);
     final alarmLevel = normalizedIncidentAlarmLevel(data);
-    final flowType =
-        data['alarmFlowType']?.toString().trim().isNotEmpty == true
-            ? data['alarmFlowType'].toString().trim()
-            : eventCategory;
+    final flowType = data['alarmFlowType']?.toString().trim().isNotEmpty == true
+        ? data['alarmFlowType'].toString().trim()
+        : eventCategory;
 
     // Mỗi người chỉ giữ incident mới nhất của cùng một nhà
     // và cùng nhóm sự kiện. Incident cũ đã superseded
@@ -455,8 +450,6 @@ class NotificationService {
       return false;
     }
   }
-
-
 
   static bool _isValidHubId(String value) {
     return RegExp(r'^dev_[a-f0-9]{16}$').hasMatch(value);
@@ -609,7 +602,7 @@ class NotificationService {
     } else {
       targets.addAll(
         _activeAlarmIncidentContexts.values.map(
-              (item) => Map<String, String>.from(item),
+          (item) => Map<String, String>.from(item),
         ),
       );
     }
@@ -642,9 +635,7 @@ class NotificationService {
     return true;
   }
 
-  static Future<bool> muteActiveHomeSirens({
-    String incidentId = '',
-  }) async {
+  static Future<bool> muteActiveHomeSirens({String incidentId = ''}) async {
     final targets = <Map<String, String>>[];
 
     if (incidentId.trim().isNotEmpty) {
@@ -660,7 +651,7 @@ class NotificationService {
     } else {
       targets.addAll(
         _activeAlarmIncidentContexts.values.map(
-              (item) => Map<String, String>.from(item),
+          (item) => Map<String, String>.from(item),
         ),
       );
     }
@@ -744,8 +735,8 @@ class NotificationService {
   }
 
   static Future<void> handlePriorityAlarmOpened(
-      Map<String, dynamic> data,
-      ) async {
+    Map<String, dynamic> data,
+  ) async {
     rememberAlarmIncident(data);
     await stopEmergencyNotification();
 
@@ -759,15 +750,14 @@ class NotificationService {
     final incidentId = data['incidentId']?.toString().trim() ?? '';
     final action =
         data['resolutionAction']?.toString().trim().isNotEmpty == true
-            ? data['resolutionAction'].toString().trim()
-            : data['action']?.toString().trim() ?? 'resolved';
+        ? data['resolutionAction'].toString().trim()
+        : data['action']?.toString().trim() ?? 'resolved';
     final resolvedMessage = _strings.alarmIncidentResolvedMessage(action);
 
     if (incidentId.isNotEmpty) {
       _activeAlarmIncidentContexts.remove(incidentId);
       activeAlarmItems.removeWhere(
-        (item) =>
-            item['incidentId']?.toString().trim() == incidentId,
+        (item) => item['incidentId']?.toString().trim() == incidentId,
       );
     } else {
       _activeAlarmIncidentContexts.clear();
@@ -812,9 +802,7 @@ class NotificationService {
       return _activeAlarmIncidentContexts.isNotEmpty;
     }
 
-    final incidentIds = List<String>.from(
-      _activeAlarmIncidentContexts.keys,
-    );
+    final incidentIds = List<String>.from(_activeAlarmIncidentContexts.keys);
     var removedAny = false;
 
     for (final incidentId in incidentIds) {
@@ -885,7 +873,7 @@ class NotificationService {
       ),
       body: localizedAlarmBodyForData(data, strings),
       alarmItemsJson:
-      data['alarmItems']?.toString() ??
+          data['alarmItems']?.toString() ??
           data['alarmItemsJson']?.toString() ??
           '',
       incidentId: data['incidentId']?.toString() ?? '',
@@ -968,7 +956,7 @@ class NotificationService {
         ? localizedExactTextOrRaw(rawTitle, strings)
         : unreadCount > 1
         ? "${homeName.isNotEmpty ? homeName : "HomeChat"} · "
-        "${strings.homeChatNewMessages(unreadCount)}"
+              "${strings.homeChatNewMessages(unreadCount)}"
         : homeName.isNotEmpty
         ? homeName
         : strings.homeChatTitle();
@@ -1090,10 +1078,10 @@ class NotificationService {
         "reasons": isSafe
             ? <String>[]
             : <String>[
-          translatedCleanBody.isEmpty
-              ? strings.defaultUnsafeReminderReason()
-              : translatedCleanBody,
-        ],
+                translatedCleanBody.isEmpty
+                    ? strings.defaultUnsafeReminderReason()
+                    : translatedCleanBody,
+              ],
       });
     }
 
@@ -1124,7 +1112,7 @@ class NotificationService {
 
       final current = merged.putIfAbsent(
         key,
-            () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
+        () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
       );
 
       final currentReasons = List<String>.from(current["reasons"] as List);
@@ -1150,7 +1138,7 @@ class NotificationService {
 
     lastScheduleTitle = mergedItems.length == 1
         ? mergedItems.first["homeName"]?.toString() ?? strings.defaultHomeName()
-        : "SafeHome Reminder";
+        : strings.scheduledReminder;
 
     if (!hasUnsafe) {
       lastScheduleBody = strings.safetyReminderBody(isSafe: true);
@@ -1171,7 +1159,7 @@ class NotificationService {
     }
 
     lastScheduleBody =
-    "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
+        "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
   }
 
   static void openOrMergeReminderPage({
@@ -1201,16 +1189,16 @@ class NotificationService {
 
     navigator
         .push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: reminderRouteName),
-        builder: (_) => FullscreenAlarmPage(
-          title: lastScheduleTitle,
-          body: lastScheduleBody,
-          silentMode: true,
-          reminderItemsJson: lastReminderItemsJson,
-        ),
-      ),
-    )
+          MaterialPageRoute(
+            settings: const RouteSettings(name: reminderRouteName),
+            builder: (_) => FullscreenAlarmPage(
+              title: lastScheduleTitle,
+              body: lastScheduleBody,
+              silentMode: true,
+              reminderItemsJson: lastReminderItemsJson,
+            ),
+          ),
+        )
         .whenComplete(markReminderPageClosed);
   }
 
@@ -1226,10 +1214,10 @@ class NotificationService {
     // Android không bị ảnh hưởng bởi tuỳ chọn này.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: false,
-      badge: false,
-      sound: false,
-    );
+          alert: false,
+          badge: false,
+          sound: false,
+        );
 
     const ios = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -1481,17 +1469,17 @@ class NotificationService {
 
     navigator
         .push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: alarmRouteName),
-        builder: (_) => FullscreenAlarmPage(
-          title: title,
-          body: lastAlarmBody,
-          alarmItemsJson: lastAlarmItemsJson,
-          eventCategory: eventCategory,
-          alarmLevel: alarmLevel,
-        ),
-      ),
-    )
+          MaterialPageRoute(
+            settings: const RouteSettings(name: alarmRouteName),
+            builder: (_) => FullscreenAlarmPage(
+              title: title,
+              body: lastAlarmBody,
+              alarmItemsJson: lastAlarmItemsJson,
+              eventCategory: eventCategory,
+              alarmLevel: alarmLevel,
+            ),
+          ),
+        )
         .whenComplete(markAlarmPageClosed);
   }
 

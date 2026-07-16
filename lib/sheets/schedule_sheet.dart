@@ -72,8 +72,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
     if (data is Map) {
       final map = Map<String, dynamic>.from(data);
-      savedMode =
-          map["reminderMode"]?.toString() ?? map["mode"]?.toString();
+      savedMode = map["reminderMode"]?.toString() ?? map["mode"]?.toString();
     }
 
     if (savedMode == "custom" || savedMode == "home") {
@@ -120,16 +119,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   Future<void> saveSchedules() async {
     final isCustomReminder =
         widget.type == "notification" &&
-            isSharedUser &&
-            reminderMode == "custom";
+        isSharedUser &&
+        reminderMode == "custom";
 
     if (!isCustomReminder && !widget.canManageHome) {
       if (mounted) {
         showTopToast(
           context,
-          AppStrings.of(context).t(
-            "Bạn không có quyền sửa lịch chung của nhà",
-          ),
+          AppStrings.of(context).t("Bạn không có quyền sửa lịch chung của nhà"),
           color: Colors.red,
           icon: Icons.lock_rounded,
         );
@@ -193,28 +190,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
             }
 
             return AlertDialog(
-              title: Text(
-                strings.t("Báo lại khi vẫn chưa an toàn"),
-              ),
+              title: Text(strings.t("Báo lại khi vẫn chưa an toàn")),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  option(
-                    value: 0,
-                    title: strings.t("Không báo lại"),
-                  ),
-                  option(
-                    value: 15,
-                    title: strings.t("Mỗi 15 phút"),
-                  ),
-                  option(
-                    value: 30,
-                    title: strings.t("Mỗi 30 phút"),
-                  ),
-                  option(
-                    value: 60,
-                    title: strings.t("Mỗi 1 giờ"),
-                  ),
+                  option(value: 0, title: strings.t("Không báo lại")),
+                  option(value: 15, title: strings.t("Mỗi 15 phút")),
+                  option(value: 30, title: strings.t("Mỗi 30 phút")),
+                  option(value: 60, title: strings.t("Mỗi 1 giờ")),
                 ],
               ),
               actions: [
@@ -360,11 +343,17 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   Column(
                     children: [
                       Row(
-                        children: suggestions.take(3).map(suggestionChip).toList(),
+                        children: suggestions
+                            .take(3)
+                            .map(suggestionChip)
+                            .toList(),
                       ),
                       const SizedBox(height: 8),
                       Row(
-                        children: suggestions.skip(3).map(suggestionChip).toList(),
+                        children: suggestions
+                            .skip(3)
+                            .map(suggestionChip)
+                            .toList(),
                       ),
                     ],
                   ),
@@ -375,10 +364,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   onPressed: () => Navigator.pop(dialogContext),
                   child: Text(strings.t("Huỷ")),
                 ),
-                ElevatedButton(
-                  onPressed: submit,
-                  child: Text(strings.t("OK")),
-                ),
+                ElevatedButton(onPressed: submit, child: Text(strings.t("OK"))),
               ],
             );
           },
@@ -390,14 +376,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   Future<void> addAlarm() async {
     final strings = AppStrings.of(context);
     final start = await openTimeInput(
-      title: strings.t("Giờ bắt đầu Alarm"),
+      title: strings.t("Giờ bắt đầu báo động"),
       initial: "23:00",
     );
 
     if (start == null) return;
 
     final end = await openTimeInput(
-      title: strings.t("Giờ kết thúc Alarm"),
+      title: strings.t("Giờ kết thúc báo động"),
       initial: "06:00",
     );
 
@@ -436,9 +422,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.edit_rounded),
-                  title: Text(
-                    AppStrings.of(context).t("Sửa giờ Reminder"),
-                  ),
+                  title: Text(AppStrings.of(context).t("Sửa giờ nhắc nhở")),
                   onTap: () => Navigator.pop(context, "edit"),
                 ),
                 ListTile(
@@ -447,7 +431,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                     color: Colors.red,
                   ),
                   title: Text(
-                    AppStrings.of(context).t("Xoá Reminder"),
+                    AppStrings.of(context).t("Xoá nhắc nhở"),
                     style: const TextStyle(color: Colors.red),
                   ),
                   onTap: () => Navigator.pop(context, "delete"),
@@ -478,14 +462,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     final current = alarms[index];
 
     final start = await openTimeInput(
-      title: strings.t("Sửa giờ bắt đầu Alarm"),
+      title: strings.t("Sửa giờ bắt đầu báo động"),
       initial: current["start"]?.toString() ?? "23:00",
     );
 
     if (start == null) return;
 
     final end = await openTimeInput(
-      title: strings.t("Sửa giờ kết thúc Alarm"),
+      title: strings.t("Sửa giờ kết thúc báo động"),
       initial: current["end"]?.toString() ?? "06:00",
     );
 
@@ -508,7 +492,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
   Future<void> addNotification() async {
     final time = await openTimeInput(
-      title: AppStrings.of(context).t("Giờ Reminder"),
+      title: AppStrings.of(context).t("Giờ nhắc nhở"),
       initial: "22:30",
     );
 
@@ -525,7 +509,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
     final current = notifications[index];
 
     final time = await openTimeInput(
-      title: AppStrings.of(context).t("Sửa giờ Reminder"),
+      title: AppStrings.of(context).t("Sửa giờ nhắc nhở"),
       initial: current["time"]?.toString() ?? "22:30",
     );
 
@@ -582,8 +566,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
               Text(
                 isAlarm
-                    ? strings.t("Hẹn giờ Alarm")
-                    : strings.t("Hẹn giờ Reminder"),
+                    ? strings.t("Hẹn giờ báo động")
+                    : strings.t("Hẹn giờ nhắc nhở"),
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
@@ -611,8 +595,8 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                     await FirebaseDatabase.instance
                         .ref(
-                      "accounts/$currentUid/customRules/${widget.homeId}/reminderMode",
-                    )
+                          "accounts/$currentUid/customRules/${widget.homeId}/reminderMode",
+                        )
                         .set(nextMode);
 
                     setState(() {
@@ -630,14 +614,14 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
 
                 Text(
                   reminderMode == "home"
-                      ? strings.t("Đang sử dụng Reminder của chủ nhà")
-                      : strings.t("Đang sử dụng Reminder riêng của bạn"),
+                      ? strings.t("Đang sử dụng nhắc nhở của chủ nhà")
+                      : strings.t("Đang sử dụng nhắc nhở riêng của bạn"),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
               ],
               if (isAlarm) ...[
-                sectionTitle("Alarm"),
+                sectionTitle(strings.alarm),
 
                 ...alarms.asMap().entries.map((e) {
                   final i = e.key;
@@ -713,12 +697,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                             icon: const Icon(Icons.delete_outline),
                             onPressed: canEditAlarm
                                 ? () async {
-                              setState(() {
-                                alarms.removeAt(i);
-                              });
+                                    setState(() {
+                                      alarms.removeAt(i);
+                                    });
 
-                              saveSchedules();
-                            }
+                                    saveSchedules();
+                                  }
                                 : null,
                           ),
                         ],
@@ -732,15 +716,13 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: canEditAlarm ? addAlarm : null,
                     icon: const Icon(Icons.add),
-                    label: Text(
-                      strings.t("Thêm khung giờ Alarm"),
-                    ),
+                    label: Text(strings.t("Thêm khung giờ báo động")),
                   ),
                 ),
               ],
 
               if (!isAlarm) ...[
-                sectionTitle("Reminder"),
+                sectionTitle(strings.reminder),
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(bottom: 14),
@@ -758,7 +740,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          strings.t("Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn."),
+                          strings.t(
+                            "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
+                          ),
                         ),
                       ),
                     ],
@@ -788,12 +772,12 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                         value: item["enabled"] == true,
                         onChanged: canEditCurrentReminder
                             ? (v) async {
-                          setState(() {
-                            notifications[i]["enabled"] = v;
-                          });
+                                setState(() {
+                                  notifications[i]["enabled"] = v;
+                                });
 
-                          saveSchedules();
-                        }
+                                saveSchedules();
+                              }
                             : null,
                       ),
                       title: GestureDetector(
@@ -838,9 +822,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
                   child: ElevatedButton.icon(
                     onPressed: canEditCurrentReminder ? addNotification : null,
                     icon: const Icon(Icons.add),
-                    label: Text(
-                      strings.t("Thêm Reminder"),
-                    ),
+                    label: Text(strings.t("Thêm nhắc nhở")),
                   ),
                 ),
               ],

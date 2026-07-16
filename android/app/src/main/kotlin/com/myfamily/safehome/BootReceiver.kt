@@ -96,7 +96,7 @@ class BootReceiver : BroadcastReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                "SafeHome Boot",
+                bootChannelName(),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description =
@@ -122,6 +122,27 @@ class BootReceiver : BroadcastReceiver() {
         manager.notify(999001, notification)
     }
 
+    private fun bootChannelName(): String {
+        return when (Locale.getDefault().language) {
+            "vi" -> "Khởi động SafeHome"
+            "zh" -> "SafeHome 启动"
+            "ko" -> "SafeHome 시작"
+            "ja" -> "SafeHome 起動"
+            "de" -> "SafeHome-Start"
+            "ru" -> "Запуск SafeHome"
+            "fr" -> "Démarrage de SafeHome"
+            "es" -> "Inicio de SafeHome"
+            "id" -> "Mulai SafeHome"
+            "th" -> "การเริ่ม SafeHome"
+            "ms" -> "Permulaan SafeHome"
+            "fil" -> "Pagsisimula ng SafeHome"
+            "km" -> "ការចាប់ផ្ដើម SafeHome"
+            "my" -> "SafeHome စတင်ခြင်း"
+            "lo" -> "ການເລີ່ມ SafeHome"
+            else -> "SafeHome startup"
+        }
+    }
+
     private fun bootChannelDescription(): String {
         return when (Locale.getDefault().language) {
             "vi" -> "Thông báo SafeHome đã tự khởi chạy"
@@ -134,7 +155,13 @@ class BootReceiver : BroadcastReceiver() {
             "fr" -> "Notification de démarrage automatique SafeHome"
             "es" -> "Notificación de inicio automático de SafeHome"
             "id" -> "Notifikasi mulai otomatis SafeHome"
-            else -> "Thông báo SafeHome đã tự khởi chạy"
+            "th" -> "การแจ้งเตือนการเริ่มอัตโนมัติของ SafeHome"
+            "ms" -> "Pemberitahuan mula automatik SafeHome"
+            "fil" -> "Notipikasyon ng awtomatikong pagsisimula ng SafeHome"
+            "km" -> "សេចក្តីជូនដំណឹងអំពីការចាប់ផ្ដើមស្វ័យប្រវត្តិរបស់ SafeHome"
+            "my" -> "SafeHome အလိုအလျောက်စတင်မှု အသိပေးချက်"
+            "lo" -> "ແຈ້ງເຕືອນການເລີ່ມອັດຕະໂນມັດ SafeHome"
+            else -> "SafeHome auto-start notification"
         }
     }
 
@@ -150,7 +177,13 @@ class BootReceiver : BroadcastReceiver() {
             "fr" -> "Prêt à surveiller la protection automatique"
             "es" -> "Listo para supervisar la protección automática"
             "id" -> "Siap memantau perlindungan otomatis"
-            else -> "Đã sẵn sàng theo dõi bảo vệ tự động"
+            "th" -> "พร้อมติดตามการป้องกันอัตโนมัติ"
+            "ms" -> "Sedia memantau perlindungan automatik"
+            "fil" -> "Handang subaybayan ang awtomatikong proteksiyon"
+            "km" -> "រួចរាល់ដើម្បីតាមដានការការពារស្វ័យប្រវត្តិ"
+            "my" -> "အလိုအလျောက်ကာကွယ်မှုကို စောင့်ကြည့်ရန် အသင့်ဖြစ်ပါပြီ"
+            "lo" -> "ພ້ອມຕິດຕາມການປ້ອງກັນອັດຕະໂນມັດ"
+            else -> "Ready to monitor automatic protection"
         }
     }
 }

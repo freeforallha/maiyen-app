@@ -1149,6 +1149,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Senin",
             th: "วันจันทร์",
             ms: "Isnin",
+            lo: "ວັນຈັນ",
           ),
         ),
         (
@@ -1169,6 +1170,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Selasa",
             th: "วันอังคาร",
             ms: "Selasa",
+            lo: "ວັນອັງຄານ",
           ),
         ),
         (
@@ -1189,6 +1191,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Rabu",
             th: "วันพุธ",
             ms: "Rabu",
+            lo: "ວັນພຸດ",
           ),
         ),
         (
@@ -1209,6 +1212,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Kamis",
             th: "วันพฤหัสบดี",
             ms: "Khamis",
+            lo: "ວັນພະຫັດ",
           ),
         ),
         (
@@ -1229,6 +1233,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Jumat",
             th: "วันศุกร์",
             ms: "Jumaat",
+            lo: "ວັນສຸກ",
           ),
         ),
         (
@@ -1249,6 +1254,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Sabtu",
             th: "วันเสาร์",
             ms: "Sabtu",
+            lo: "ວັນເສົາ",
           ),
         ),
         (
@@ -1269,6 +1275,7 @@ class _AllHomePageState extends State<AllHomePage> {
             id: "Minggu",
             th: "วันอาทิตย์",
             ms: "Ahad",
+            lo: "ວັນອາທິດ",
           ),
         ),
       ];
@@ -1283,8 +1290,8 @@ class _AllHomePageState extends State<AllHomePage> {
               Future<void> chooseTime(bool isStart) async {
                 final picked = await inputTime(
                   isStart
-                      ? _strings.t("Giờ bắt đầu Alarm")
-                      : _strings.t("Giờ kết thúc Alarm"),
+                      ? _strings.t("Giờ bắt đầu báo động")
+                      : _strings.t("Giờ kết thúc báo động"),
                   isStart ? start : end,
                 );
 
@@ -1466,7 +1473,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      _strings.t("Đặt Home Alarm"),
+                                      _strings.t("Đặt báo động cho nhà"),
                                       style: const TextStyle(
                                         color: SafeHomeColors.textPrimary,
                                         fontSize: 17,
@@ -1689,7 +1696,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     Icons.notifications_active_rounded,
                     color: Colors.orange,
                   ),
-                  title: Text(_strings.t("Đặt Home Reminder")),
+                  title: Text(_strings.t("Đặt nhắc nhở cho nhà")),
                   subtitle: Text(selectedHomeCountText()),
                   onTap: () => Navigator.pop(actionSheetContext, "reminder"),
                 ),
@@ -1698,7 +1705,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     Icons.shield_moon_rounded,
                     color: Colors.red,
                   ),
-                  title: Text(_strings.t("Đặt Home Alarm")),
+                  title: Text(_strings.t("Đặt báo động cho nhà")),
                   subtitle: Text(selectedHomeCountText()),
                   onTap: () => Navigator.pop(actionSheetContext, "alarm"),
                 ),
@@ -1723,16 +1730,16 @@ class _AllHomePageState extends State<AllHomePage> {
       builder: (confirmDialogContext) => AlertDialog(
         title: Text(
           isReminderAction
-              ? _strings.t("Xác nhận thay đổi Reminder")
-              : _strings.t("Xác nhận thay đổi Alarm"),
+              ? _strings.t("Xác nhận thay đổi nhắc nhở")
+              : _strings.t("Xác nhận thay đổi báo động"),
         ),
         content: Text(
           isReminderAction
               ? _strings.t(
-                  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+                  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
                 )
               : _strings.t(
-                  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+                  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
                 ),
         ),
         actions: [
@@ -1769,7 +1776,7 @@ class _AllHomePageState extends State<AllHomePage> {
     int selectedAlarmRepeatMinutes = 30;
 
     if (action == "reminder") {
-      final time = await inputTime(_strings.t("Giờ Reminder"), "22:30");
+      final time = await inputTime(_strings.t("Giờ nhắc nhở"), "22:30");
       if (time == null) return;
 
       for (final homeId in selectedHomes) {
@@ -2413,7 +2420,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           ),
                         ),
                         title: Text(
-                          _strings.t("Đặt Reminder / Alarm nhà đã chọn"),
+                          _strings.t("Đặt nhắc nhở / báo động nhà đã chọn"),
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text(selectedHomeCountText()),

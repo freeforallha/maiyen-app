@@ -38,9 +38,15 @@ String _languageSubtitle(String code) {
       return "Khmer";
     case "my":
       return "Burmese • Myanmar 🇲🇲";
+    case "lo":
+      return appLanguageController.languageCode == "vi" ? "Tiếng Lào" : "Lao";
     default:
       return code;
   }
+}
+
+String _languageSearchAliases(String code) {
+  return code == "lo" ? "lao tiếng lào ລາວ" : "";
 }
 
 String _languageBadge(String code) {
@@ -75,6 +81,8 @@ String _languageBadge(String code) {
       return "KM";
     case "my":
       return "🇲🇲";
+    case "lo":
+      return "LO";
     default:
       return code.toUpperCase();
   }
@@ -194,6 +202,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
           ) {
             final title = AppLanguageController.languageLabels[code] ?? code;
             final subtitle = _languageSubtitle(code);
+            final aliases = _languageSearchAliases(code);
 
             if (q.isEmpty) {
               return true;
@@ -201,7 +210,8 @@ Future<void> _showLanguageSheet(BuildContext context) async {
 
             return code.toLowerCase().contains(q) ||
                 title.toLowerCase().contains(q) ||
-                subtitle.toLowerCase().contains(q);
+                subtitle.toLowerCase().contains(q) ||
+                aliases.contains(q);
           }).toList();
           final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
           final screenHeight = MediaQuery.sizeOf(sheetContext).height;

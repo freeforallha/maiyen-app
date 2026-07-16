@@ -145,27 +145,26 @@ class _DeviceListState extends State<DeviceList> {
     }
 
     _sirenAlertPulseDanger = false;
-    _sirenAlertPulseTimer = Timer.periodic(
-      const Duration(milliseconds: 650),
-      (_) {
-        if (!mounted) {
-          return;
-        }
+    _sirenAlertPulseTimer = Timer.periodic(const Duration(milliseconds: 650), (
+      _,
+    ) {
+      if (!mounted) {
+        return;
+      }
 
-        if (!_hasActiveSiren()) {
-          _sirenAlertPulseTimer?.cancel();
-          _sirenAlertPulseTimer = null;
-          setState(() {
-            _sirenAlertPulseDanger = false;
-          });
-          return;
-        }
-
+      if (!_hasActiveSiren()) {
+        _sirenAlertPulseTimer?.cancel();
+        _sirenAlertPulseTimer = null;
         setState(() {
-          _sirenAlertPulseDanger = !_sirenAlertPulseDanger;
+          _sirenAlertPulseDanger = false;
         });
-      },
-    );
+        return;
+      }
+
+      setState(() {
+        _sirenAlertPulseDanger = !_sirenAlertPulseDanger;
+      });
+    });
   }
 
   void _startDeviceOrderListener() {
@@ -193,43 +192,42 @@ class _DeviceListState extends State<DeviceList> {
         .ref("accounts/$uid/$_deviceOrderRoot/$homeId")
         .onValue
         .listen((event) {
-      final raw = event.snapshot.value;
-      final orderMap = <String, Map<String, int>>{};
+          final raw = event.snapshot.value;
+          final orderMap = <String, Map<String, int>>{};
 
-      if (raw is Map) {
-        raw.forEach((sectionKey, sectionValue) {
-          if (sectionValue is! Map) {
-            return;
+          if (raw is Map) {
+            raw.forEach((sectionKey, sectionValue) {
+              if (sectionValue is! Map) {
+                return;
+              }
+
+              final sectionOrders = <String, int>{};
+
+              sectionValue.forEach((deviceId, value) {
+                final order = int.tryParse(value?.toString() ?? "");
+
+                if (order != null) {
+                  sectionOrders[deviceId.toString()] = order;
+                }
+              });
+
+              orderMap[sectionKey.toString()] = sectionOrders;
+            });
           }
 
-          final sectionOrders = <String, int>{};
+          if (!mounted) return;
 
-          sectionValue.forEach((deviceId, value) {
-            final order = int.tryParse(value?.toString() ?? "");
+          setState(() {
+            _deviceOrderMap = orderMap;
+            _optimisticDeviceOrderMap.removeWhere((sectionKey, sectionOrders) {
+              final syncedOrders = orderMap[sectionKey];
 
-            if (order != null) {
-              sectionOrders[deviceId.toString()] = order;
-            }
+              return syncedOrders != null &&
+                  _sameDeviceOrder(syncedOrders, sectionOrders);
+            });
           });
-
-          orderMap[sectionKey.toString()] = sectionOrders;
         });
-      }
-
-      if (!mounted) return;
-
-      setState(() {
-        _deviceOrderMap = orderMap;
-        _optimisticDeviceOrderMap.removeWhere((sectionKey, sectionOrders) {
-          final syncedOrders = orderMap[sectionKey];
-
-          return syncedOrders != null &&
-              _sameDeviceOrder(syncedOrders, sectionOrders);
-        });
-      });
-    });
   }
-
 
   String _localOrderPrefsKey({required String uid, required String homeId}) {
     return "safehome_device_order_${uid}_$homeId";
@@ -355,10 +353,10 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   String getConnectionDescription(
-      Map<String, dynamic> d,
-      String status,
-      AppStrings strings,
-      ) {
+    Map<String, dynamic> d,
+    String status,
+    AppStrings strings,
+  ) {
     if (status == "off") {
       return strings.t("Thiết bị đang Offline");
     }
@@ -575,8 +573,8 @@ class _DeviceListState extends State<DeviceList> {
       case "heat":
         final active =
             isActiveDeviceSignal(d["heat"]) ||
-                isActiveDeviceSignal(d["heat_alarm"]) ||
-                isActiveDeviceSignal(d["high_temperature_alarm"]);
+            isActiveDeviceSignal(d["heat_alarm"]) ||
+            isActiveDeviceSignal(d["high_temperature_alarm"]);
 
         return active
             ? strings.t("Nhiệt độ nguy hiểm")
@@ -585,7 +583,7 @@ class _DeviceListState extends State<DeviceList> {
       case "carbon_monoxide":
         final active =
             isActiveDeviceSignal(d["carbon_monoxide"]) ||
-                isActiveDeviceSignal(d["co_alarm"]);
+            isActiveDeviceSignal(d["co_alarm"]);
 
         return active
             ? strings.t("Phát hiện khí CO")
@@ -599,7 +597,7 @@ class _DeviceListState extends State<DeviceList> {
       case "gas":
         final active =
             isActiveDeviceSignal(d["gas"]) ||
-                isActiveDeviceSignal(d["gas_alarm"]);
+            isActiveDeviceSignal(d["gas_alarm"]);
 
         return active ? strings.t("Rò rỉ gas") : strings.t("Bình thường");
 
@@ -607,8 +605,8 @@ class _DeviceListState extends State<DeviceList> {
       case "flood":
         final active =
             isActiveDeviceSignal(d["water_leak"]) ||
-                isActiveDeviceSignal(d["leak"]) ||
-                isActiveDeviceSignal(d["water"]);
+            isActiveDeviceSignal(d["leak"]) ||
+            isActiveDeviceSignal(d["water"]);
 
         return active
             ? strings.t("Phát hiện ngập nước")
@@ -617,7 +615,7 @@ class _DeviceListState extends State<DeviceList> {
       case "motion":
         final active =
             isActiveDeviceSignal(d["occupancy"]) ||
-                isActiveDeviceSignal(d["motion"]);
+            isActiveDeviceSignal(d["motion"]);
 
         return active
             ? strings.t("Phát hiện chuyển động")
@@ -626,7 +624,7 @@ class _DeviceListState extends State<DeviceList> {
       case "presence":
         final active =
             isActiveDeviceSignal(d["presence"]) ||
-                isActiveDeviceSignal(d["occupancy"]);
+            isActiveDeviceSignal(d["occupancy"]);
 
         return active
             ? strings.t("Phát hiện hiện diện")
@@ -642,8 +640,8 @@ class _DeviceListState extends State<DeviceList> {
       case "glass_break":
         final active =
             isActiveDeviceSignal(d["glass_break"]) ||
-                isActiveDeviceSignal(d["broken_glass"]) ||
-                isRecentDeviceEvent(d);
+            isActiveDeviceSignal(d["broken_glass"]) ||
+            isRecentDeviceEvent(d);
 
         return active
             ? strings.t("Phát hiện kính vỡ")
@@ -687,9 +685,7 @@ class _DeviceListState extends State<DeviceList> {
             isActiveDeviceSignal(d["alarm"]) ||
             normalizeDeviceSwitchState(d) == "on";
 
-        return active
-            ? strings.t("Còi đang bật")
-            : strings.t("Còi sẵn sàng");
+        return active ? strings.t("Còi đang bật") : strings.t("Còi sẵn sàng");
 
       case "smart_valve":
         return normalizeDeviceSwitchState(d) == "on"
@@ -738,10 +734,10 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   Map<String, Map<String, int>> _copyDeviceOrderMap(
-      Map<String, Map<String, int>> source,
-      ) {
+    Map<String, Map<String, int>> source,
+  ) {
     return source.map(
-          (sectionKey, sectionOrders) =>
+      (sectionKey, sectionOrders) =>
           MapEntry(sectionKey, Map<String, int>.from(sectionOrders)),
     );
   }
@@ -796,9 +792,9 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   void _sortDeviceEntries(
-      String sectionKey,
-      List<MapEntry<String, dynamic>> entries,
-      ) {
+    String sectionKey,
+    List<MapEntry<String, dynamic>> entries,
+  ) {
     final fallbackIndexes = <String, int>{};
     final sectionOrders = _effectiveSectionOrders(sectionKey);
 
@@ -812,13 +808,13 @@ class _DeviceListState extends State<DeviceList> {
 
       if (aOrder != null || bOrder != null) {
         final orderCompare =
-        _deviceOrderOf(
-          sectionKey,
-          a.key,
-          fallbackIndexes[a.key] ?? 0,
-        ).compareTo(
-          _deviceOrderOf(sectionKey, b.key, fallbackIndexes[b.key] ?? 0),
-        );
+            _deviceOrderOf(
+              sectionKey,
+              a.key,
+              fallbackIndexes[a.key] ?? 0,
+            ).compareTo(
+              _deviceOrderOf(sectionKey, b.key, fallbackIndexes[b.key] ?? 0),
+            );
 
         if (orderCompare != 0) {
           return orderCompare;
@@ -844,7 +840,7 @@ class _DeviceListState extends State<DeviceList> {
   GlobalKey _sectionGridKey(String sectionKey) {
     return _sectionGridKeys.putIfAbsent(
       sectionKey,
-          () => GlobalKey(debugLabel: "device_grid_$sectionKey"),
+      () => GlobalKey(debugLabel: "device_grid_$sectionKey"),
     );
   }
 
@@ -928,18 +924,16 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   List<MapEntry<String, dynamic>> _dragPreviewEntries(
-      String sectionKey,
-      List<MapEntry<String, dynamic>> entries,
-      ) {
+    String sectionKey,
+    List<MapEntry<String, dynamic>> entries,
+  ) {
     final dragOrder = _draggingSectionOrder;
 
     if (_draggingSectionKey != sectionKey || dragOrder == null) {
       return entries;
     }
 
-    final byId = {
-      for (final entry in entries) entry.key: entry,
-    };
+    final byId = {for (final entry in entries) entry.key: entry};
 
     final ordered = <MapEntry<String, dynamic>>[];
 
@@ -1064,11 +1058,11 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   Future<void> _finishDeviceDrag(
-      String sectionKey, {
-        required double itemWidth,
-        required double itemHeight,
-        required double spacing,
-      }) async {
+    String sectionKey, {
+    required double itemWidth,
+    required double itemHeight,
+    required double spacing,
+  }) async {
     final finalOrder = _draggingSectionOrder;
     final draggingDeviceId = _draggingDeviceId;
     final draggingSectionKey = _draggingSectionKey;
@@ -1087,13 +1081,15 @@ class _DeviceListState extends State<DeviceList> {
     final finalOffset = finalIndex < 0
         ? _draggingCardOffset
         : _deviceGridOffsetForIndex(
-      index: finalIndex,
-      itemWidth: itemWidth,
-      itemHeight: itemHeight,
-      spacing: spacing,
-    );
+            index: finalIndex,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+            spacing: spacing,
+          );
 
-    final updatedOptimisticOrder = _copyDeviceOrderMap(_optimisticDeviceOrderMap);
+    final updatedOptimisticOrder = _copyDeviceOrderMap(
+      _optimisticDeviceOrderMap,
+    );
     final updatedLocalOrder = _copyDeviceOrderMap(_localDeviceOrderMap);
     final sectionOrder = Map<String, int>.from(
       _effectiveSectionOrders(sectionKey),
@@ -1330,6 +1326,7 @@ class _DeviceListState extends State<DeviceList> {
       fil: "PATAYIN ANG ALARM SIREN",
       km: "បិទស៊ីរ៉ែនរោទិ៍",
       my: "အချက်ပေးဥဩ ပိတ်ရန်",
+      lo: "ຢຸດສຽງໄຊເຣນສັນຍານເຕືອນໄພ",
     );
   }
 
@@ -1351,7 +1348,7 @@ class _DeviceListState extends State<DeviceList> {
     final accentColor = getAccentColor(d);
 
     final cardStatusColor =
-    accentColor == SafeHomeColors.danger || connectionStatus == "off"
+        accentColor == SafeHomeColors.danger || connectionStatus == "off"
         ? SafeHomeColors.danger
         : connectionStatus == "warn"
         ? SafeHomeColors.warning
@@ -1475,10 +1472,7 @@ class _DeviceListState extends State<DeviceList> {
               ),
               if (sirenIsOn) ...[
                 const SizedBox(height: 6),
-                _sirenStopAction(
-                  compact: compact,
-                  strings: strings,
-                ),
+                _sirenStopAction(compact: compact, strings: strings),
               ],
             ],
           ),
@@ -1494,10 +1488,7 @@ class _DeviceListState extends State<DeviceList> {
       return true;
     }
 
-    final evaluation = evaluateDeviceStatus(
-      device,
-      securityMode: securityMode,
-    );
+    final evaluation = evaluateDeviceStatus(device, securityMode: securityMode);
 
     return evaluation["level"]?.toString() == "warning" ||
         evaluation["level"]?.toString() == "danger";
@@ -1585,14 +1576,13 @@ class _DeviceListState extends State<DeviceList> {
           fil: "Iba pang device",
           km: "ឧបករណ៍ផ្សេងទៀត",
           my: "အခြားစက်များ",
+          lo: "ອຸປະກອນອື່ນ",
         );
     }
   }
 
   List<MapEntry<String, List<MapEntry<String, dynamic>>>>
-  _groupInfrastructureEntriesByType(
-    List<MapEntry<String, dynamic>> entries,
-  ) {
+  _groupInfrastructureEntriesByType(List<MapEntry<String, dynamic>> entries) {
     final groups = <String, List<MapEntry<String, dynamic>>>{};
 
     for (final entry in entries) {
@@ -1632,9 +1622,7 @@ class _DeviceListState extends State<DeviceList> {
     return result;
   }
 
-  String _infrastructureSignalGrade(
-    List<MapEntry<String, dynamic>> entries,
-  ) {
+  String _infrastructureSignalGrade(List<MapEntry<String, dynamic>> entries) {
     int? weakest;
 
     for (final entry in entries) {
@@ -1668,64 +1656,65 @@ class _DeviceListState extends State<DeviceList> {
 
     final text = switch (grade) {
       "good" => strings.choose(
-          vi: "Tín hiệu tốt",
-          en: "Good signal",
-          zh: "信号良好",
-          ko: "신호 좋음",
-          ja: "信号良好",
-          de: "Gutes Signal",
-          ru: "Хороший сигнал",
-          fr: "Bon signal",
-          es: "Señal buena",
-          id: "Sinyal baik",
-          th: "สัญญาณดี",
-          ms: "Isyarat baik",
-          fil: "Magandang signal",
-          km: "សញ្ញាល្អ",
-          my: "အချက်ပြကောင်း",
-        ),
+        vi: "Tín hiệu tốt",
+        en: "Good signal",
+        zh: "信号良好",
+        ko: "신호 좋음",
+        ja: "信号良好",
+        de: "Gutes Signal",
+        ru: "Хороший сигнал",
+        fr: "Bon signal",
+        es: "Señal buena",
+        id: "Sinyal baik",
+        th: "สัญญาณดี",
+        ms: "Isyarat baik",
+        fil: "Magandang signal",
+        km: "សញ្ញាល្អ",
+        my: "အချက်ပြကောင်း",
+        lo: "ສັນຍານດີ",
+      ),
       "weak" => strings.choose(
-          vi: "Tín hiệu yếu",
-          en: "Weak signal",
-          zh: "信号较弱",
-          ko: "신호 약함",
-          ja: "信号が弱い",
-          de: "Schwaches Signal",
-          ru: "Слабый сигнал",
-          fr: "Signal faible",
-          es: "Señal débil",
-          id: "Sinyal lemah",
-          th: "สัญญาณอ่อน",
-          ms: "Isyarat lemah",
-          fil: "Mahinang signal",
-          km: "សញ្ញាខ្សោយ",
-          my: "အချက်ပြအားနည်း",
-        ),
+        vi: "Tín hiệu yếu",
+        en: "Weak signal",
+        zh: "信号较弱",
+        ko: "신호 약함",
+        ja: "信号が弱い",
+        de: "Schwaches Signal",
+        ru: "Слабый сигнал",
+        fr: "Signal faible",
+        es: "Señal débil",
+        id: "Sinyal lemah",
+        th: "สัญญาณอ่อน",
+        ms: "Isyarat lemah",
+        fil: "Mahinang signal",
+        km: "សញ្ញាខ្សោយ",
+        my: "အချက်ပြအားနည်း",
+        lo: "ສັນຍານອ່ອນ",
+      ),
       _ => strings.choose(
-          vi: "Tín hiệu trung bình",
-          en: "Average signal",
-          zh: "信号一般",
-          ko: "신호 보통",
-          ja: "信号は普通",
-          de: "Mittleres Signal",
-          ru: "Средний сигнал",
-          fr: "Signal moyen",
-          es: "Señal media",
-          id: "Sinyal sedang",
-          th: "สัญญาณปานกลาง",
-          ms: "Isyarat sederhana",
-          fil: "Katamtamang signal",
-          km: "សញ្ញាមធ្យម",
-          my: "အချက်ပြအသင့်အတင့်",
-        ),
+        vi: "Tín hiệu trung bình",
+        en: "Average signal",
+        zh: "信号一般",
+        ko: "신호 보통",
+        ja: "信号は普通",
+        de: "Mittleres Signal",
+        ru: "Средний сигнал",
+        fr: "Signal moyen",
+        es: "Señal media",
+        id: "Sinyal sedang",
+        th: "สัญญาณปานกลาง",
+        ms: "Isyarat sederhana",
+        fil: "Katamtamang signal",
+        km: "សញ្ញាមធ្យម",
+        my: "အချက်ပြအသင့်အတင့်",
+        lo: "ສັນຍານປານກາງ",
+      ),
     };
 
     return "$text ($count)";
   }
 
-  Color _infrastructureSignalColor(
-    List<MapEntry<String, dynamic>> entries,
-  ) {
+  Color _infrastructureSignalColor(List<MapEntry<String, dynamic>> entries) {
     switch (_infrastructureSignalGrade(entries)) {
       case "good":
         return SafeHomeColors.safe;
@@ -1758,6 +1747,7 @@ class _DeviceListState extends State<DeviceList> {
             fil: "Kailangang suriin ang sirena",
             km: "ត្រូវពិនិត្យស៊ីរ៉ែន",
             my: "ဆိုင်ရင်ကို စစ်ဆေးရန်လိုသည်",
+            lo: "ສຽງໄຊເຣນຕ້ອງການກວດສອບ",
           )
         : strings.choose(
             vi: "Còi đang sẵn sàng",
@@ -1775,15 +1765,13 @@ class _DeviceListState extends State<DeviceList> {
             fil: "Handa ang sirena",
             km: "ស៊ីរ៉ែនរួចរាល់",
             my: "ဆိုင်ရင် အသင့်ဖြစ်နေသည်",
+            lo: "ສຽງໄຊເຣນພ້ອມໃຊ້ງານ",
           );
 
     return "$text ($count)";
   }
 
-  String _sirenOperatingStatusText(
-    bool sirenIsOn,
-    AppStrings strings,
-  ) {
+  String _sirenOperatingStatusText(bool sirenIsOn, AppStrings strings) {
     if (sirenIsOn) {
       return _sirenAlertStatusText(strings);
     }
@@ -1804,6 +1792,7 @@ class _DeviceListState extends State<DeviceList> {
       fil: "Naka-off ang sirena",
       km: "ស៊ីរ៉ែនបានបិទ",
       my: "ဆိုင်ရင် ပိတ်ထားသည်",
+      lo: "ສຽງໄຊເຣນປິດຢູ່",
     );
   }
 
@@ -1815,27 +1804,27 @@ class _DeviceListState extends State<DeviceList> {
     required AppStrings strings,
   }) {
     final isSirenGroup = type == "siren";
-    final sirenIsOn = isSirenGroup && entries.any(
-      (entry) => _isSirenActive(safeMap(entry.value)),
-    );
+    final sirenIsOn =
+        isSirenGroup &&
+        entries.any((entry) => _isSirenActive(safeMap(entry.value)));
     final hasAttention = entries.any(
       (entry) => _infrastructureDeviceNeedsAttention(safeMap(entry.value)),
     );
-    final sirenHasReadinessIssue = isSirenGroup && entries.any(
-      (entry) => getConnectionStatus(safeMap(entry.value)) != "on",
-    );
+    final sirenHasReadinessIssue =
+        isSirenGroup &&
+        entries.any(
+          (entry) => getConnectionStatus(safeMap(entry.value)) != "on",
+        );
     final pulseColor = _sirenAlertPulseDanger
         ? SafeHomeColors.danger
         : SafeHomeColors.warning;
     final accentColor = sirenIsOn
         ? pulseColor
         : hasAttention
-            ? SafeHomeColors.warning
-            : SafeHomeColors.safe;
+        ? SafeHomeColors.warning
+        : SafeHomeColors.safe;
     final cardColor = sirenIsOn
-        ? pulseColor.withValues(
-            alpha: _sirenAlertPulseDanger ? 0.20 : 0.15,
-          )
+        ? pulseColor.withValues(alpha: _sirenAlertPulseDanger ? 0.20 : 0.15)
         : SafeHomeColors.surface;
     final firstDevice = safeMap(entries.first.value);
     final primaryStatusText = isSirenGroup
@@ -1850,8 +1839,8 @@ class _DeviceListState extends State<DeviceList> {
         : _infrastructureSignalText(entries, strings);
     final secondaryStatusColor = isSirenGroup
         ? sirenIsOn
-            ? accentColor
-            : SafeHomeColors.textSecondary
+              ? accentColor
+              : SafeHomeColors.textSecondary
         : _infrastructureSignalColor(entries);
 
     void openGroup() {
@@ -1886,16 +1875,12 @@ class _DeviceListState extends State<DeviceList> {
             color: cardColor,
             borderRadius: BorderRadius.circular(17),
             border: Border.all(
-              color: accentColor.withValues(
-                alpha: sirenIsOn ? 0.95 : 0.62,
-              ),
+              color: accentColor.withValues(alpha: sirenIsOn ? 0.95 : 0.62),
               width: sirenIsOn ? 1.5 : 1.15,
             ),
             boxShadow: [
               BoxShadow(
-                color: accentColor.withValues(
-                  alpha: sirenIsOn ? 0.20 : 0.055,
-                ),
+                color: accentColor.withValues(alpha: sirenIsOn ? 0.20 : 0.055),
                 blurRadius: sirenIsOn ? 16 : 10,
                 offset: const Offset(0, 4),
               ),
@@ -1975,10 +1960,7 @@ class _DeviceListState extends State<DeviceList> {
               SizedBox(
                 height: compact ? 18 : 20,
                 child: sirenIsOn
-                    ? _sirenStopAction(
-                        compact: compact,
-                        strings: strings,
-                      )
+                    ? _sirenStopAction(compact: compact, strings: strings)
                     : Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -2047,10 +2029,7 @@ class _DeviceListState extends State<DeviceList> {
       }
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: rows,
-    );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: rows);
   }
 
   String _sirenAlertStatusText(AppStrings strings) {
@@ -2070,6 +2049,7 @@ class _DeviceListState extends State<DeviceList> {
       fil: "Aktibo ang alarma",
       km: "សំឡេងរោទិ៍កំពុងដំណើរការ",
       my: "အချက်ပေးသံ လုပ်ဆောင်နေသည်",
+      lo: "ສັນຍານເຕືອນໄພກຳລັງເຮັດວຽກ",
     );
   }
 
@@ -2111,11 +2091,11 @@ class _DeviceListState extends State<DeviceList> {
     final targetOffset = isDragging
         ? _draggingCardOffset
         : _deviceGridOffsetForIndex(
-      index: safeIndex,
-      itemWidth: itemWidth,
-      itemHeight: itemHeight,
-      spacing: spacing,
-    );
+            index: safeIndex,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+            spacing: spacing,
+          );
 
     final card = SizedBox(
       width: itemWidth,
@@ -2131,24 +2111,24 @@ class _DeviceListState extends State<DeviceList> {
 
     final wrappedCard = isDragging
         ? Transform.scale(
-      scale: _draggingDeviceDropping ? 1.0 : 1.012,
-      child: Material(
-        color: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        elevation: _draggingDeviceDropping ? 0 : 7,
-        shadowColor: Colors.black.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(17),
-        child: card,
-      ),
-    )
+            scale: _draggingDeviceDropping ? 1.0 : 1.012,
+            child: Material(
+              color: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: _draggingDeviceDropping ? 0 : 7,
+              shadowColor: Colors.black.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(17),
+              child: card,
+            ),
+          )
         : card;
 
     return AnimatedPositioned(
       key: ValueKey("device_positioned_${sectionKey}_$deviceId"),
       duration: isDragging
           ? (_draggingDeviceDropping
-          ? const Duration(milliseconds: 340)
-          : Duration.zero)
+                ? const Duration(milliseconds: 340)
+                : Duration.zero)
           : isSectionDragging
           ? const Duration(milliseconds: 270)
           : Duration.zero,
@@ -2162,17 +2142,17 @@ class _DeviceListState extends State<DeviceList> {
         onLongPressStart: isDragging
             ? null
             : (details) {
-          _startDeviceDrag(
-            sectionKey: sectionKey,
-            entries: sourceEntries,
-            deviceId: deviceId,
-            index: index,
-            itemWidth: itemWidth,
-            itemHeight: itemHeight,
-            spacing: spacing,
-            details: details,
-          );
-        },
+                _startDeviceDrag(
+                  sectionKey: sectionKey,
+                  entries: sourceEntries,
+                  deviceId: deviceId,
+                  index: index,
+                  itemWidth: itemWidth,
+                  itemHeight: itemHeight,
+                  spacing: spacing,
+                  details: details,
+                );
+              },
         onLongPressMoveUpdate: (details) {
           _updateDeviceDrag(
             sectionKey: sectionKey,
@@ -2261,8 +2241,9 @@ class _DeviceListState extends State<DeviceList> {
       );
     }
 
-    final activeDraggingDeviceId =
-    _draggingSectionKey == sectionKey ? _draggingDeviceId : null;
+    final activeDraggingDeviceId = _draggingSectionKey == sectionKey
+        ? _draggingDeviceId
+        : null;
     final paintEntries = <MapEntry<String, dynamic>>[
       ...visibleEntries.where((entry) => entry.key != activeDraggingDeviceId),
       if (activeDraggingDeviceId != null)
@@ -2283,7 +2264,7 @@ class _DeviceListState extends State<DeviceList> {
               sectionKey: sectionKey,
               entry: entry,
               index: visibleEntries.indexWhere(
-                    (visibleEntry) => visibleEntry.key == entry.key,
+                (visibleEntry) => visibleEntry.key == entry.key,
               ),
               itemWidth: itemWidth,
               itemHeight: itemHeight,
@@ -2387,8 +2368,9 @@ class _DeviceListState extends State<DeviceList> {
     final securityEntries = _groupEntries("An ninh ra/vào");
     final emergencyEntries = _groupEntries("Nguy hiểm khẩn cấp");
     final infrastructureEntries = _groupEntries("Điều khiển & hạ tầng");
-    final infrastructureTypeGroups =
-        _groupInfrastructureEntriesByType(infrastructureEntries);
+    final infrastructureTypeGroups = _groupInfrastructureEntriesByType(
+      infrastructureEntries,
+    );
 
     return Column(
       children: [

@@ -261,7 +261,7 @@ Future<void> showHomeAutoAwaySheet({
                   const SizedBox(height: 10),
                   Text(
                     strings.t(
-                      "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.",
+                      "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.",
                     ),
                     textAlign: TextAlign.center,
                     style: const TextStyle(

@@ -80,7 +80,7 @@ Future<void> showHomeAlarmPauseSheet({
                     ),
                   ),
                   Text(
-                    sheetStrings.t("Tạm tắt Alarm hôm nay"),
+                    sheetStrings.t("Tạm tắt báo động hôm nay"),
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,

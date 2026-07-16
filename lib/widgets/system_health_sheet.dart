@@ -184,7 +184,7 @@ Future<void> showSystemHealthSheet({
                     alignment: Alignment.centerLeft,
                     child: Text(
                       strings.t(
-                        "Kiểm tra điện thoại và cách bạn đang dùng app.",
+                        "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.",
                       ),
                       style: const TextStyle(
                         fontSize: 12.5,
@@ -212,7 +212,7 @@ Future<void> showSystemHealthSheet({
                           ),
                           const SizedBox(height: 12),
                           _SystemHealthSection(
-                            title: strings.t("Cách bạn đang dùng app"),
+                            title: strings.t("Cách bạn đang dùng ứng dụng"),
                             icon: Icons.fact_check_rounded,
                             items: data.usageItems,
                           ),
@@ -411,12 +411,12 @@ class _SystemHealthSnapshot {
     final notificationOk =
         notificationSettings.authorizationStatus ==
             AuthorizationStatus.authorized ||
-            notificationSettings.authorizationStatus ==
-                AuthorizationStatus.provisional;
+        notificationSettings.authorizationStatus ==
+            AuthorizationStatus.provisional;
     final locationAlways = locationPermission == LocationPermission.always;
     final locationDenied =
         locationPermission == LocationPermission.denied ||
-            locationPermission == LocationPermission.deniedForever;
+        locationPermission == LocationPermission.deniedForever;
     final batteryUnrestricted = presence['batteryUnrestricted'] != false;
     final backgroundRestricted = presence['backgroundRestricted'] == true;
     final autoStartConfirmed = presence['autoStartConfirmed'] != false;
@@ -445,11 +445,11 @@ class _SystemHealthSnapshot {
             : strings.t("Cảnh báo trên iOS"),
         message: isAndroid
             ? strings.t(
-          "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.",
-        )
+                "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.",
+              )
             : strings.t(
-          "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.",
-        ),
+                "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.",
+              ),
       ),
       _SystemHealthItem(
         level: !autoAwayEnabled
@@ -465,13 +465,13 @@ class _SystemHealthSnapshot {
             ? strings.t("Chỉ cần quyền này khi dùng Auto rời khỏi nhà.")
             : !locationServiceEnabled
             ? strings.t(
-          "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.",
-        )
+                "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.",
+              )
             : locationDenied
             ? strings.t("Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.")
             : strings.t(
-          "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.",
-        ),
+                "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.",
+              ),
       ),
       if (isAndroid)
         _SystemHealthItem(
@@ -480,15 +480,15 @@ class _SystemHealthSnapshot {
               : _SystemHealthLevel.warning,
           icon: Icons.battery_saver_rounded,
           title: batteryUnrestricted
-              ? strings.t("Tối ưu pin không chặn app")
+              ? strings.t("Tối ưu pin không chặn ứng dụng")
               : strings.t("Chưa tắt tối ưu pin"),
           message: batteryUnrestricted
               ? strings.t(
-            "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
-          )
+                  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
+                )
               : strings.t(
-            "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
-          ),
+                  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
+                ),
         ),
       if (isAndroid)
         _SystemHealthItem(
@@ -501,11 +501,11 @@ class _SystemHealthSnapshot {
               : strings.t("Cần kiểm tra chạy nền / tự khởi động"),
           message: !backgroundRestricted && autoStartConfirmed
               ? strings.t(
-            "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.",
-          )
+                  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.",
+                )
               : strings.t(
-            "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.",
-          ),
+                  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.",
+                ),
         ),
       if (isIos)
         _SystemHealthItem(
@@ -526,12 +526,12 @@ class _SystemHealthSnapshot {
             : strings.t("Thiết bị chưa đăng ký nhận cảnh báo"),
         message: fcmToken.isNotEmpty
             ? strings.fcmTokenReadyText(
-          monitoringEligible: monitoringEligible,
-          autoAwayEnabled: autoAwayEnabled,
-        )
+                monitoringEligible: monitoringEligible,
+                autoAwayEnabled: autoAwayEnabled,
+              )
             : strings.t(
-          "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
-        ),
+                "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
+              ),
       ),
     ];
   }
@@ -549,8 +549,7 @@ class _SystemHealthSnapshot {
     final schedules = safeMap(home['schedules']);
     final devices = safeMap(home['devices']);
     final legacyMode = customRules['mode']?.toString();
-    final reminderMode =
-        customRules['reminderMode']?.toString() ?? legacyMode;
+    final reminderMode = customRules['reminderMode']?.toString() ?? legacyMode;
     final alarmMode = customRules['alarmMode']?.toString() ?? legacyMode;
     final reminderCustomMode = reminderMode == 'custom';
     final alarmCustomMode = alarmMode == 'custom';
@@ -565,10 +564,10 @@ class _SystemHealthSnapshot {
         : _hasEnabledSchedule(schedules['notifications']);
     final homeAlarmScheduleEnabled =
         _hasEnabledSchedule(schedules['alarms']) ||
-            _hasEnabledDeviceAlarm(devices);
+        _hasEnabledDeviceAlarm(devices);
     final customAlarmScheduleEnabled =
         _hasEnabledCustomDeviceAlarm(customDevices) ||
-            _hasEnabledDeviceAlarm(devices);
+        _hasEnabledDeviceAlarm(devices);
     final alarmScheduleEnabled = alarmCustomMode
         ? customAlarmScheduleEnabled
         : homeAlarmScheduleEnabled;
@@ -577,7 +576,7 @@ class _SystemHealthSnapshot {
     final hasSos = (emergencyCounts['sos'] ?? 0) > 0;
     final emergencyTotal = emergencyCounts.values.fold<int>(
       0,
-          (sum, value) => sum + value,
+      (sum, value) => sum + value,
     );
     final now = DateTime.now().millisecondsSinceEpoch;
     final daysSincePreviousOpen = previousOpenAt > 0
@@ -591,13 +590,13 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.warning,
         icon: Icons.notifications_active_rounded,
         title: reminderEnabled
-            ? strings.t("Đã setup Reminder")
-            : strings.t("Chưa setup Reminder"),
+            ? strings.t("Đã cài đặt nhắc nhở")
+            : strings.t("Chưa cài đặt nhắc nhở"),
         message: reminderEnabled
-            ? strings.t("App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.")
+            ? strings.t("Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.")
             : strings.t(
-          "Nên có ít nhất một Reminder để không quên kiểm tra nhà.",
-        ),
+                "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.",
+              ),
       ),
       _SystemHealthItem(
         level: alarmScheduleEnabled
@@ -605,19 +604,21 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.warning,
         icon: Icons.crisis_alert_rounded,
         title: alarmScheduleEnabled
-            ? strings.t("Đã set lịch Alarm")
-            : strings.t("Chưa set lịch Alarm"),
+            ? strings.t("Đã cài lịch báo động")
+            : strings.t("Chưa cài lịch báo động"),
         message: alarmScheduleEnabled
             ? strings.t(
-          "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.",
-        )
-            : strings.t("Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà."),
+                "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.",
+              )
+            : strings.t(
+                "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.",
+              ),
       ),
       _SystemHealthItem(
         level: emergencyTotal > 0
             ? hasSmoke && hasSos
-            ? _SystemHealthLevel.ok
-            : _SystemHealthLevel.info
+                  ? _SystemHealthLevel.ok
+                  : _SystemHealthLevel.info
             : _SystemHealthLevel.warning,
         icon: Icons.emergency_rounded,
         title: emergencyTotal > 0
@@ -626,14 +627,14 @@ class _SystemHealthSnapshot {
         message: emergencyTotal > 0
             ? strings.emergencyDeviceRecommendationText(emergencyTotal)
             : strings.t(
-          "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.",
-        ),
+                "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.",
+              ),
       ),
       _SystemHealthItem(
         level: !autoAwayEnabled
             ? _SystemHealthLevel.info
             : monitoringEligible &&
-            locationPermission == LocationPermission.always
+                  locationPermission == LocationPermission.always
             ? _SystemHealthLevel.ok
             : _SystemHealthLevel.danger,
         icon: Icons.directions_walk_rounded,
@@ -644,13 +645,13 @@ class _SystemHealthSnapshot {
             : strings.t("Auto rời khỏi nhà chưa ổn"),
         message: !autoAwayEnabled
             ? strings.t(
-          "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.",
-        )
+                "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.",
+              )
             : monitoringEligible
             ? strings.t("Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.")
             : strings.t(
-          "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.",
-        ),
+                "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.",
+              ),
       ),
       _SystemHealthItem(
         level: securityMode == 'armed'
@@ -680,19 +681,19 @@ class _SystemHealthSnapshot {
             : _SystemHealthLevel.ok,
         icon: Icons.event_available_rounded,
         title: previousOpenAt <= 0
-            ? strings.t("Đang ghi nhận tần suất vào app")
+            ? strings.t("Đang ghi nhận tần suất vào ứng dụng")
             : daysSincePreviousOpen >= 3
-            ? strings.t("Đã lâu chưa vào app kiểm tra")
-            : strings.t("Tần suất vào app ổn"),
+            ? strings.t("Đã lâu chưa vào ứng dụng kiểm tra")
+            : strings.t("Tần suất vào ứng dụng ổn"),
         message: previousOpenAt <= 0
             ? strings.t(
-          "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.",
-        )
+                "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
+              )
             : daysSincePreviousOpen >= 3
             ? strings.t(
-          "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
-        )
-            : strings.t("Bạn đã mở app gần đây để kiểm tra trạng thái."),
+                "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
+              )
+            : strings.t("Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái."),
       ),
     ];
   }
@@ -786,7 +787,7 @@ class _SystemHealthSnapshot {
   }) {
     if (securityMode == 'unprotected') {
       return strings.t(
-        "Toàn bộ Alarm của nhà đang tắt; hệ thống chỉ gửi notification.",
+        "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.",
       );
     }
 

@@ -1,5 +1,7 @@
 import 'dart:ui' as ui;
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +23,7 @@ class AppLanguageController extends ChangeNotifier {
     "fil",
     "km",
     "my",
+    "lo",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -38,6 +41,7 @@ class AppLanguageController extends ChangeNotifier {
     Locale("fil", "PH"),
     Locale("km", "KH"),
     Locale("my", "MM"),
+    Locale("lo"),
   ];
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
@@ -55,6 +59,7 @@ class AppLanguageController extends ChangeNotifier {
     "fil": "Filipino",
     "km": "ភាសាខ្មែរ",
     "my": "မြန်မာဘာသာ",
+    "lo": "ລາວ",
   };
 
   Locale _locale = const Locale("vi");
@@ -76,6 +81,7 @@ class AppLanguageController extends ChangeNotifier {
   bool get isFilipino => languageCode == "fil";
   bool get isKhmer => languageCode == "km";
   bool get isBurmese => languageCode == "my";
+  bool get isLao => languageCode == "lo";
 
   String _normalizeLanguageCode(String code) {
     final cleanCode = code.trim().toLowerCase();
@@ -92,6 +98,10 @@ class AppLanguageController extends ChangeNotifier {
 
     if (normalizedCode == "my") {
       return const Locale("my", "MM");
+    }
+
+    if (normalizedCode == "lo") {
+      return const Locale("lo");
     }
 
     if (code == "zh") {
@@ -145,6 +155,22 @@ class AppLanguageController extends ChangeNotifier {
     return Locale(code);
   }
 
+  Future<void> _syncLanguageToFirebase(String code) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final normalizedCode = _normalizeLanguageCode(code);
+      if (!supportedCodes.contains(normalizedCode)) return;
+
+      await FirebaseDatabase.instance
+          .ref("accounts/${user.uid}/languageCode")
+          .set(normalizedCode);
+    } catch (_) {
+      // Không chặn đổi ngôn ngữ cục bộ khi Firebase tạm thời không khả dụng.
+    }
+  }
+
   String _systemSupportedLanguageCode() {
     final systemCode = _normalizeLanguageCode(
       ui.PlatformDispatcher.instance.locale.languageCode,
@@ -186,14 +212,12 @@ class AppLanguageController extends ChangeNotifier {
         notifyListeners();
       }
     }
+
+    await _syncLanguageToFirebase(languageCode);
   }
 
   Future<void> setLanguageCode(String code) async {
-    final cleanCode = code.trim().toLowerCase();
-    final normalizedCode =
-        cleanCode == "my" || cleanCode == "my_mm" || cleanCode == "my-mm"
-        ? "my"
-        : code;
+    final normalizedCode = _normalizeLanguageCode(code);
 
     if (!supportedCodes.contains(normalizedCode) ||
         normalizedCode == languageCode) {
@@ -209,6 +233,8 @@ class AppLanguageController extends ChangeNotifier {
     } catch (_) {
       // Ngôn ngữ vẫn đổi trong phiên hiện tại.
     }
+
+    await _syncLanguageToFirebase(normalizedCode);
   }
 }
 

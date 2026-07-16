@@ -105,12 +105,12 @@ const Map<String, String> ruStrings = {
       "Недостаточно новых действий для подробного анализа.",
   "Hub kết nối bình thường": "Hub подключен нормально",
   "Cài đặt cảnh báo cho nhà hiện tại": "Настройки тревог для текущего дома",
-  "Nhận cảnh báo Alarm": "Получать тревоги Alarm",
+  "Nhận cảnh báo báo động": "Получать тревоги тревога",
   "Đang bật cho tài khoản này": "Включено для этого аккаунта",
   "Đang tắt cho tài khoản này": "Выключено для этого аккаунта",
-  "Hẹn giờ Reminder": "Расписание Reminder",
+  "Hẹn giờ nhắc nhở": "Расписание напоминание",
   "Nhắc kiểm tra nhà theo thời gian": "Напоминать проверять дом по расписанию",
-  "Hẹn giờ Alarm": "Расписание Alarm",
+  "Hẹn giờ báo động": "Расписание тревога",
   "Chưa thiết lập": "Не настроено",
   "Chưa thiết lập thời gian": "Время не настроено",
   "Tổng hợp trạng thái nhà": "Сводка состояния дома",
@@ -147,13 +147,13 @@ const Map<String, String> ruStrings = {
   "Đóng tìm kiếm": "Закрыть поиск",
   "Giờ": "Час",
   "Phút": "Минуты",
-  "Đặt Home Reminder": "Настроить Reminder для дома",
-  "Đặt Home Alarm": "Настроить Alarm для дома",
+  "Đặt nhắc nhở cho nhà": "Настроить напоминание для дома",
+  "Đặt báo động cho nhà": "Настроить тревога для дома",
   "Xác nhận thay đổi": "Подтвердить изменения",
   "Tiếp tục": "Продолжить",
-  "Giờ Reminder": "Время Reminder",
-  "Giờ bắt đầu Alarm": "Время начала Alarm",
-  "Giờ kết thúc Alarm": "Время окончания Alarm",
+  "Giờ nhắc nhở": "Время напоминание",
+  "Giờ bắt đầu báo động": "Время начала тревога",
+  "Giờ kết thúc báo động": "Время окончания тревога",
   "Không có nhà nào đủ điều kiện để cài": "Подходящие дома не найдены",
   "Cài đặt hoàn tất": "Настройка завершена",
   "Xác nhận rời nhà": "Подтвердить выход из дома",
@@ -170,8 +170,8 @@ const Map<String, String> ruStrings = {
       "Задать местоположение дома и включить автоматическую охрану",
   "Chuyển quyền chủ nhà hoặc xoá nhà":
       "Передать право владельца или удалить дом",
-  "Đặt Reminder / Alarm nhà đã chọn":
-      "Настроить Reminder / Alarm для выбранных домов",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Настроить напоминание / тревога для выбранных домов",
   "Chia sẻ nhà đã chọn": "Поделиться выбранными домами",
   "Mở danh sách chia sẻ nhà": "Открыть список доступа к домам",
   "Xoá các nhà đã chọn?": "Удалить выбранные дома?",
@@ -200,13 +200,13 @@ const Map<String, String> ruStrings = {
   "Không có thiết bị": "Нет устройств",
   "Chỉ chủ nhà mới được xoá nhà": "Только владелец может удалить этот дом",
   "Chỉ chủ nhà mới được chuyển quyền": "Только владелец может передать права",
-  "Lưu ý khi bật Alarm": "Примечание при включении Alarm",
-  "Alarm đã được bật": "Alarm включена",
+  "Lưu ý khi bật báo động": "Примечание при включении тревога",
+  "Báo động đã được bật": "тревога включена",
   "Đã hiểu": "Понятно",
-  "Lưu ý tạm tắt Alarm": "Примечание паузы Alarm",
-  "Đã bật Alarm": "Alarm включена",
-  "Đã tắt Alarm": "Alarm отключена",
-  "Tắt Alarm": "Отключить Alarm",
+  "Lưu ý tạm tắt báo động": "Примечание паузы тревога",
+  "Đã bật báo động": "тревога включена",
+  "Đã tắt báo động": "тревога отключена",
+  "Tắt báo động": "Остановить тревогу",
   "Cả ngày": "Весь день",
   "Bạn không có quyền thực hiện thao tác này.":
       "У вас нет разрешения выполнить это действие.",
@@ -291,7 +291,7 @@ const Map<String, String> ruStrings = {
   "Về muộn": "Вернуться позже",
   "Ra ngoài": "Выхожу",
   "Khác": "Другое",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ Приостановить Alarm сегодня",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Приостановить тревога сегодня",
   "Chọn giờ bắt đầu tạm tắt": "Выберите время начала паузы",
   "Từ": "С",
   "Từ giờ": "С",
@@ -374,8 +374,6 @@ const Map<String, String> ruStrings = {
   "Battery low": "Низкий заряд батареи",
   "Device offline": "Устройство не в сети",
   "Device online": "Устройство в сети",
-  "Alarm triggered": "Сработал Alarm",
-  "Alarm cleared": "Alarm снят",
   "Cửa mở": "Дверь открыта",
   "Cửa đóng": "Дверь закрыта",
   "Chưa đặt vị trí nhà": "Местоположение дома не задано",
@@ -383,7 +381,7 @@ const Map<String, String> ruStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "Задайте местоположение дома перед включением автоматической охраны",
   "Bán kính bảo vệ mặc định: 150 m": "Радиус охраны по умолчанию: 150 м",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "Каждый участник должен разрешить постоянный доступ к местоположению, чтобы статус ухода/возвращения домой работал в фоне.",
   "Lưu cài đặt": "Сохранить настройки",
   "Đã đặt vị trí nhà": "Местоположение дома задано",
@@ -443,7 +441,7 @@ const Map<String, String> ruStrings = {
   "Chưa có tài khoản? Đăng ký": "Нет учетной записи? Зарегистрироваться",
   "Đã có tài khoản? Đăng nhập": "Уже есть учетная запись? Войти",
   "Tính năng đang được phát triển": "Эта функция находится в разработке",
-  "Thông báo": "Уведомления",
+  "Thông báo": "Уведомление",
   "Chat trong nhà": "Чат дома",
   "Tìm kiếm tin nhắn": "Поиск сообщений",
   "Xem thành viên": "Просмотреть участников",
@@ -460,7 +458,7 @@ const Map<String, String> ruStrings = {
   "Huỷ trả lời": "Отменить ответ",
   "Nhắn gì đó...": "Введите сообщение...",
   "Gọi điện": "Позвонить",
-  "Alarm thiết bị": "Устройство Alarm",
+  "Báo động thiết bị": "Устройство тревога",
   "Chế độ áp dụng": "Режим применения",
   "Theo nhà": "Дом расписание",
   "Riêng tôi": "Только я",
@@ -468,7 +466,7 @@ const Map<String, String> ruStrings = {
       "Использовать общий график, заданный владельцем или администратором",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Использовать личный график только для вашей учетной записи",
-  "Thiết lập nhanh Alarm": "Быстрая настройка Alarm",
+  "Thiết lập nhanh báo động": "Быстрая настройка тревога",
   "Thiết lập nhanh toàn bộ thiết bị": "Быстро настроить все устройства",
   "Áp dụng cho toàn bộ thiết bị": "Применить ко всем устройствам",
   "Bắt đầu": "Начало",
@@ -495,9 +493,9 @@ const Map<String, String> ruStrings = {
   "Thiết bị mới": "Новое устройство",
   "Thiết bị offline": "Устройство офлайн",
   "Thiết bị online": "Устройство онлайн",
-  "Báo động kích hoạt": "Сработал Alarm",
-  "Báo động đã tắt": "Alarm снят",
-  "Tạm tắt Alarm hôm nay": "Приостановить Alarm сегодня",
+  "Báo động kích hoạt": "Сработал тревога",
+  "Báo động đã tắt": "тревога снят",
+  "Tạm tắt báo động hôm nay": "Приостановить тревога сегодня",
   "Độ ẩm cao": "Высокая влажность",
   "Thử lại": "Повторить",
   "Không thể tải dữ liệu tài khoản":
@@ -508,14 +506,14 @@ const Map<String, String> ruStrings = {
   "Đã rời khỏi nhà": "Вы покинули дом",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Вы покинете общие дома.",
   "Các nhà của bạn sẽ bị xoá.\n": "Ваши дома будут удалены.\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "Это изменит графики Alarm для дома для всех охранных устройств в выбранных домах.\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "Это добавит Reminder для дома для выбранных домов.\n\n",
-  "Xác nhận thay đổi Alarm": "Подтвердить изменения Alarm",
-  "Xác nhận thay đổi Reminder": "Подтвердить изменения Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Это изменит графики тревога для дома для всех охранных устройств в выбранных домах.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Это добавит напоминание для дома для выбранных домов.\n\n",
+  "Xác nhận thay đổi báo động": "Подтвердить изменения тревога",
+  "Xác nhận thay đổi nhắc nhở": "Подтвердить изменения напоминание",
   "Lặp lại khi sự cố vẫn còn": "Повторять, пока проблема сохраняется",
-  "Thời gian lặp lại Alarm": "Время повторения Alarm",
+  "Thời gian lặp lại báo động": "Время повторения тревога",
   "VD: Mr Chung": "Напр.: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 Домов пока нет",
   "Vẫn chuyển về Bình thường": "Все равно перейти в обычный режим",
@@ -526,12 +524,13 @@ const Map<String, String> ruStrings = {
       "Охранные устройства сразу будут поставлены под наблюдение.\n\n",
   "Bật Bảo vệ thủ công?": "Включить ручной режим охраны?",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "Это действие изменит время Alarm для некоторых устройств сегодня...",
+      "Это действие изменит время тревога для некоторых устройств сегодня...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
       "Это действие отключит все тревоги дома ",
-  "Tắt toàn bộ Alarm?": "Отключить все Alarm?",
-  "Không xoá được lịch tạm tắt Alarm": "Не удалось удалить график паузы Alarm",
-  "Không lưu được tạm tắt Alarm": "Не удалось сохранить паузу Alarm",
+  "Tắt toàn bộ báo động?": "Отключить все тревога?",
+  "Không xoá được lịch tạm tắt báo động":
+      "Не удалось удалить график паузы тревога",
+  "Không lưu được tạm tắt báo động": "Не удалось сохранить паузу тревога",
   "Không gửi được yêu cầu xoá": "Не удалось отправить запрос на удаление",
   "Không lưu được cài đặt": "Не удалось сохранить настройку",
   "Không lấy được vị trí hiện tại":
@@ -541,44 +540,44 @@ const Map<String, String> ruStrings = {
   "Mật khẩu không đúng": "Неверный пароль",
   "Không thể xác nhận mật khẩu": "Не удалось подтвердить пароль",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "Только владелец или администратор может изменить повтор Alarm",
+      "Только владелец или администратор может изменить повтор тревога",
   "Không lưu được thời gian lặp báo động":
-      "Не удалось сохранить время повторения Alarm",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+      "Не удалось сохранить время повторения тревога",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "Только владелец или администратор может изменить режим охраны",
   "Không thể thay đổi chế độ nhà": "Не удалось изменить режим дома",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "Режим охраны включен, но уведомление не отправлено",
-  "Đã bật Mode Bảo vệ thủ công": "Ручной режим охраны включен",
+  "Đã bật Chế độ Bảo vệ thủ công": "Ручной режим охраны включен",
   "Đã chuyển nhà về Bình thường": "Дом переведен в обычный режим",
   "60 phút": "60 минут",
   "30 phút": "30 минут",
   "15 phút": "15 минут",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "Вы просматриваете график владельца. Выберите «Только я», чтобы задать собственный график Alarm.",
-  "Chọn giờ kết thúc Alarm": "Выберите время окончания Alarm",
-  "Chọn giờ bắt đầu Alarm": "Выберите время начала Alarm",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "У вас нет разрешения редактировать график Alarm этого дома",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "Не удалось применить Alarm ко всем устройствам",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Вы просматриваете график владельца. Выберите «Только я», чтобы задать собственный график тревога.",
+  "Chọn giờ kết thúc báo động": "Выберите время окончания тревога",
+  "Chọn giờ bắt đầu báo động": "Выберите время начала тревога",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "У вас нет разрешения редактировать график тревога этого дома",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Не удалось применить тревога ко всем устройствам",
   "Nhà chưa có thiết bị an ninh để áp dụng":
       "В этом доме нет охранных устройств для применения",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "У вас нет разрешения редактировать настройки дома. Выберите «Только я».",
-  "Không thể lưu chế độ Alarm": "Не удалось сохранить режим Alarm",
-  "Thêm Reminder": "Добавить Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder напомнит вам проверить состояние безопасности дома в выбранное время.",
-  "Thêm khung giờ Alarm": "Добавить временное окно Alarm",
-  "Đang sử dụng Reminder riêng của bạn":
-      "Используются ваши личные настройки Reminder",
-  "Đang sử dụng Reminder của chủ nhà":
-      "Используются настройки Reminder владельца",
-  "Sửa giờ Reminder": "Изменить время Reminder",
-  "Sửa giờ kết thúc Alarm": "Изменить время окончания Alarm",
-  "Sửa giờ bắt đầu Alarm": "Изменить время начала Alarm",
-  "Xoá Reminder": "Удалить Reminder",
+  "Không thể lưu chế độ báo động": "Не удалось сохранить режим тревога",
+  "Thêm nhắc nhở": "Добавить напоминание",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "напоминание напомнит вам проверить состояние безопасности дома в выбранное время.",
+  "Thêm khung giờ báo động": "Добавить временное окно тревога",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Используются ваши личные настройки напоминание",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Используются настройки напоминание владельца",
+  "Sửa giờ nhắc nhở": "Изменить время напоминание",
+  "Sửa giờ kết thúc báo động": "Изменить время окончания тревога",
+  "Sửa giờ bắt đầu báo động": "Изменить время начала тревога",
+  "Xoá nhắc nhở": "Удалить напоминание",
   "Mỗi 1 giờ": "Каждый час",
   "Mỗi 30 phút": "Каждые 30 минут",
   "Mỗi 15 phút": "Каждые 15 минут",
@@ -610,7 +609,7 @@ const Map<String, String> ruStrings = {
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
       "Выберите 0, чтобы предупредить один раз. Эта настройка применяется к ручному режиму охраны и автоматической охране при уходе.",
   "Lặp báo động khi sự cố vẫn còn":
-      "Повторять Alarm, пока проблема сохраняется",
+      "Повторять тревога, пока проблема сохраняется",
   "Đang được sử dụng": "Сейчас используется",
   "Chuyển về sử dụng thông thường": "Вернуться к обычному использованию",
   "Chế độ nhà": "Режим дома",
@@ -626,15 +625,17 @@ const Map<String, String> ruStrings = {
   "Bảo vệ thủ công đang bật": "Ручной режим охраны включен",
   "Bảo vệ tự động đang bật": "Автоматическая охрана включена",
   "Bảo vệ đang tắt": "Режим охраны выключен",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "Вы недавно открывали приложение для проверки статуса.",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Регулярно открывайте приложение, чтобы проверять разрешения, графики и непрочитанные тревоги.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "После нескольких сеансов SafeHome сможет лучше оценить вашу привычку проверять приложение.",
-  "Tần suất vào app ổn": "Частота входа в приложение нормальная",
-  "Đã lâu chưa vào app kiểm tra": "Проверка приложения давно не выполнялась",
-  "Đang ghi nhận tần suất vào app": "Частота входа в приложение записывается",
+  "Tần suất vào ứng dụng ổn": "Частота входа в приложение нормальная",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Проверка приложения давно не выполнялась",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Частота входа в приложение записывается",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "Проверьте постоянное разрешение на местоположение и условия фоновой работы.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -648,19 +649,19 @@ const Map<String, String> ruStrings = {
       "Добавьте датчик дыма, SOS или подходящее аварийное устройство для дома.",
   "Chưa có thiết bị khẩn cấp": "Аварийное устройство еще не добавлено",
   "Đã có thiết bị khẩn cấp": "Аварийные устройства добавлены",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "Задайте график Alarm на время сна или отсутствия дома.",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "В этом доме есть график Alarm или график тревог для отдельных устройств.",
-  "Chưa set lịch Alarm": "График Alarm не задан",
-  "Đã set lịch Alarm": "График Alarm задан",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "Задайте хотя бы один Reminder, чтобы не забывать проверять дом.",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Задайте график тревога на время сна или отсутствия дома.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "В этом доме есть график тревога или график тревог для отдельных устройств.",
+  "Chưa cài lịch báo động": "График тревога не задан",
+  "Đã cài lịch báo động": "График тревога задан",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Задайте хотя бы один напоминание, чтобы не забывать проверять дом.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
       "Приложение напомнит проверить дом по заданному графику.",
-  "Chưa setup Reminder": "Reminder не настроен",
-  "Đã setup Reminder": "Reminder настроен",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Chưa cài đặt nhắc nhở": "напоминание не настроен",
+  "Đã cài đặt nhắc nhở": "напоминание настроен",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "Откройте приложение снова или войдите повторно, если это устройство не получает тревоги.",
   "Thiết bị chưa đăng ký nhận cảnh báo":
       "Это устройство не зарегистрировано для получения тревог",
@@ -679,7 +680,8 @@ const Map<String, String> ruStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "Этот телефон с меньшей вероятностью задержит тревоги SafeHome.",
   "Chưa tắt tối ưu pin": "Оптимизация батареи все еще включена",
-  "Tối ưu pin không chặn app": "Оптимизация батареи не блокирует приложение",
+  "Tối ưu pin không chặn ứng dụng":
+      "Оптимизация батареи не блокирует приложение",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "Автоматическому уходу из дома нужен постоянный доступ к местоположению для стабильной работы.",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
@@ -690,7 +692,7 @@ const Map<String, String> ruStrings = {
       "Это разрешение нужно только для автоматического ухода из дома.",
   "Chưa cấp vị trí luôn luôn": "Постоянное местоположение не разрешено",
   "Đã cấp vị trí luôn luôn": "Постоянное местоположение разрешено",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS не открывает полноэкранную тревогу как Android; приложение использует системные уведомления и звук.",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android использует полноэкранные тревоги; разрешите их в настройках, если телефон блокирует их.",
@@ -704,9 +706,9 @@ const Map<String, String> ruStrings = {
   "Đã bật thông báo": "Уведомления включены",
   "Hệ thống: Sẵn sàng": "Система: готова",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Система: тревоги могут быть пропущены",
-  "Cách bạn đang dùng app": "Как вы используете приложение",
+  "Cách bạn đang dùng ứng dụng": "Как вы используете приложение",
   "Thiết bị của bạn": "Ваше устройство",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Проверяет телефон и использование приложения.",
   "Hệ thống SafeHome": "Система SafeHome",
   "Hệ thống: Đang kiểm tra...": "Система: проверка...",
@@ -722,8 +724,9 @@ const Map<String, String> ruStrings = {
       "Автоматическая охрана при уходе всех из дома включена",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "Автоматическая охрана при уходе всех из дома отключена",
-  "Không thể thay đổi trạng thái Alarm": "Не удалось изменить статус Alarm",
-  "Đã tắt toàn bộ Alarm của nhà": "Все Alarm этого дома отключены",
+  "Không thể thay đổi trạng thái báo động":
+      "Не удалось изменить статус тревога",
+  "Đã tắt toàn bộ báo động của nhà": "Все тревога этого дома отключены",
   "QR này không phải mã xin gia nhập Home":
       "Этот QR-код не является кодом запроса на присоединение к дому",
   "Thêm Home": "Добавить дом",
@@ -736,20 +739,20 @@ const Map<String, String> ruStrings = {
   "Cho phép vị trí luôn luôn": "Всегда разрешать местоположение",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Ваши дома будут удалены.\nВы покинете общие дома.",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Это изменит графики Alarm для дома для всех охранных устройств в выбранных домах.\n\nУчастники, использующие настройки Alarm «По дому», будут затронуты.\nЛичные настройки Alarm в режиме «Только я» не изменятся.",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Это добавит Reminder для дома для выбранных домов.\n\nУчастники, использующие настройки Reminder «По дому», будут затронуты.\nЛичные настройки Reminder в режиме «Только я» не изменятся.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Это изменит графики тревога для дома для всех охранных устройств в выбранных домах.\n\nУчастники, использующие настройки тревога «По дому», будут затронуты.\nЛичные настройки тревога в режиме «Только я» не изменятся.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Это добавит напоминание для дома для выбранных домов.\n\nУчастники, использующие настройки напоминание «По дому», будут затронуты.\nЛичные настройки напоминание в режиме «Только я» не изменятся.",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "Охранные устройства сразу будут поставлены под наблюдение.\n\nАвтоматическая охрана при уходе будет приостановлена. Этот режим не выключается автоматически, когда кто-то возвращается домой, и может быть вручную переведен в обычный режим только участником с разрешением.",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "Это действие изменит время Alarm для некоторых устройств сегодня...",
+      "Это действие изменит время тревога для некоторых устройств сегодня...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "Это действие отключит все Alarm для этого дома. Вы больше не будете получать тревоги об опасности на телефон.",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm использует настройки дома.\n\nВы будете получать тревоги по общему графику Alarm, заданному владельцем или администратором.",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm использует личные настройки.\n\nВы будете получать тревоги по личному графику Alarm для этой учетной записи.",
+      "Это действие отключит все тревога для этого дома. Вы больше не будете получать тревоги об опасности на телефон.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "тревога использует настройки дома.\n\nВы будете получать тревоги по общему графику тревога, заданному владельцем или администратором.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "тревога использует личные настройки.\n\nВы будете получать тревоги по личному графику тревога для этой учетной записи.",
   "Không thể đăng nhập bằng Google": "Не удалось войти через Google",
   "Không đặt được mật khẩu": "Не удалось задать пароль",
   "Chấp nhận": "Принять",
@@ -777,13 +780,13 @@ const Map<String, String> ruStrings = {
   "XÁC NHẬN": "ПОДТВЕРДИТЬ",
   "CẦN KIỂM TRA": "НУЖНА ПРОВЕРКА",
   "KIỂM TRA NHÀ": "ПРОВЕРИТЬ ДОМ",
-  "ĐÓNG NHẮC NHỞ": "ЗАКРЫТЬ Reminder",
+  "ĐÓNG NHẮC NHỞ": "ЗАКРЫТЬ напоминание",
   "SafeHome Security Alert": "Оповещение безопасности SafeHome",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Выберите «Разрешать всегда» для местоположения в настройках приложения",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "Для учетной записи Google нужно создать дополнительный пароль, чтобы использовать функции безопасности.",
-  "Alarm": "Alarm",
+  "Báo động": "Тревога",
   "Bạn không có quyền thực hiện thao tác này。":
       "У вас нет разрешения выполнить это действие.",
   "Cài đặt": "Настройки",
@@ -797,7 +800,7 @@ const Map<String, String> ruStrings = {
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Произошла ошибка. Повторите попытку.",
   "Đang kiểm tra kết nối Hub": "Проверка соединения Hub",
   "Đang mở khi nhà ở chế độ Bảo vệ": "Открыто, когда дом в режиме охраны",
-  "Đang mở trong giờ Alarm": "Открыто во время Alarm",
+  "Đang mở trong giờ báo động": "Открыто во время тревога",
   "Đang tải...": "Загрузка...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Профиль, запросы и приглашения",
   "Hub chưa gửi trạng thái": "Статус Hub недоступен",
@@ -805,7 +808,7 @@ const Map<String, String> ruStrings = {
   "Hub tín hiệu bình thường": "Hub подключен",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "Замок открыт, когда дом в режиме охраны",
-  "Khóa đang mở trong giờ Alarm": "Замок открыт во время Alarm",
+  "Khóa đang mở trong giờ báo động": "Замок открыт во время тревога",
   "Không có thông báo": "Нет уведомлений",
   "Khu vực nguy hiểm": "Опасная зона",
   "Kiểm tra thiết bị trong nhà này": "Проверить устройства в этом доме",
@@ -820,7 +823,7 @@ const Map<String, String> ruStrings = {
   "Nhập email": "Введите email",
   "Phòng": "Комната",
   "Quản trị viên": "Администратор",
-  "Reminder": "Reminder",
+  "Nhắc nhở": "Напоминание",
   "SafeHome": "SafeHome",
   "Sóng yếu": "Слабый сигнал",
   "SOS": "SOS",
@@ -851,16 +854,16 @@ const Map<String, String> ruStrings = {
   "TẮT CẢNH BÁO": "ОСТАНОВИТЬ ТРЕВОГУ",
   "Đã tạo nhà": "Дом создан",
 
-  "Mode Bảo vệ thủ công đã bật": "Ручной режим охраны включён",
+  "Chế độ Bảo vệ thủ công đã bật": "Ручной режим охраны включён",
   "Báo động không lặp lại.": "Тревога не будет повторяться.",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
       "Тревога повторится через \$securityModeRepeatMinutes мин., если проблема останется.",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName включил ручной режим охраны для «\$homeName». Этот режим отключается только когда участник с правами переключит дом обратно в обычный режим. \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "Вы включили Alarm для «\$homeName».",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "Вы отключили все Alarm для «\$homeName».",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Вы включили тревога для «\$homeName».",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Вы отключили все тревога для «\$homeName».",
   "Thành viên mới": "Новый участник",
   "Thành viên rời nhà": "Участник покинул дом",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -891,9 +894,9 @@ const Map<String, String> ruStrings = {
   "Tin nhắn HomeChat": "Сообщение HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName отправил сообщение",
   "Bạn có tin nhắn mới": "У вас новое сообщение",
-  "Mode Bảo vệ sẽ chỉ báo động một lần":
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
       "Режим охраны подаст тревогу только один раз",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
       "Режим охраны повторит тревогу через \$minutes минут",
   "Đã gửi yêu cầu gia nhập \$count nhà":
       "Запросы на присоединение отправлены для \$count домов",
@@ -922,8 +925,8 @@ const Map<String, String> ruStrings = {
   "Đang ghép nối: \$seconds giây": "Сопряжение: \$seconds с",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "Режим добавления устройств открыт в «\$homeName» на \$seconds секунд.",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "Период паузы должен быть в расписании Alarm (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Период паузы должен быть в расписании тревога (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n":
       "\$passCount/\$total тестов пройдено\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
@@ -967,8 +970,8 @@ const Map<String, String> ruStrings = {
       "Если никто не подтвердит, SafeHome перейдёт к экстренному звонку.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Повторить напоминание в \$time, если проблема не будет устранена.",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "Повторная тревога сработает по настроенному расписанию Alarm, если проблема не решена.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Повторная тревога сработает по настроенному расписанию тревога, если проблема не решена.",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "«\$deviceName» закрыт в «\$resolvedHomeName».",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -980,14 +983,14 @@ const Map<String, String> ruStrings = {
   "✅ \$count nhà an toàn": "✅ Безопасных домов: \$count",
   "\$count nhà đang được theo dõi": "Домов под наблюдением: \$count",
   "\$minutes phút": "\$minutes мин.",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "Reminder установлен для \$updatedHomes домов.",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Alarm настроен для \$updatedDevices устройств в \$updatedHomes домах.\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "напоминание установлен для \$updatedHomes домов.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "тревога настроен для \$updatedDevices устройств в \$updatedHomes домах.\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "Дома, которыми вы можете делиться, были отправлены.\n\n\$skipped домов пропущено, потому что у вас нет разрешения делиться ими.",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "Alarm применён к \$count устройствам безопасности",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "тревога применён к \$count устройствам безопасности",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "Применить то же расписание к \$count устройствам безопасности",
   "\$count phút trước": "\$count мин. назад",
@@ -1019,16 +1022,16 @@ const Map<String, String> ruStrings = {
       "Проверьте открытую дверь или замок, прежде чем оставлять дом в режиме охраны.",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "Возможно, кто-то всё ещё дома. Если это так, переключите в обычный режим.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "У некоторых участников неизвестно местоположение. Попросите их открыть приложение или проверить разрешение на местоположение.",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "Устройство отключено. Проверьте батарею, питание или место установки.",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "У устройства низкий заряд батареи. Замените батарею заранее, чтобы не пропустить тревоги.",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Reminder не настроен. Создайте расписание для регулярной проверки дома.",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Расписание Alarm не настроено. Включите охрану на время, когда вас обычно нет дома.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "напоминание не настроен. Создайте расписание для регулярной проверки дома.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Расписание тревога не настроено. Включите охрану на время, когда вас обычно нет дома.",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "Срочных действий не требуется. Продолжайте наблюдать за состоянием дома.",
   "Lặp sau \$minutes phút": "Повтор через \$minutes мин.",
@@ -1077,26 +1080,60 @@ const Map<String, String> ruStrings = {
       "Время начала и окончания не должно совпадать",
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "Время окончания должно быть позже текущего времени",
-  "Khoảng tạm tắt không hợp lệ": "Недопустимый интервал приостановки Alarm",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "Интервал приостановки не совпадает ни с одним активным расписанием Alarm",
+  "Khoảng tạm tắt không hợp lệ": "Недопустимый интервал приостановки тревога",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Интервал приостановки не совпадает ни с одним активным расписанием тревога",
 
-  // Device alarm policy
-  "Cấu hình báo động": "Настройки тревоги",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Настройте, как этот датчик запускает оповещения.",
+  // Device тревога policy
+  "Cài đặt báo động": "Настройки тревоги",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Настройте, как этот датчик запускает оповещения.",
   "Tham gia báo động": "Участвовать в тревоге",
-  "Tắt để cảm biến không tạo Alarm.": "Отключите, чтобы датчик не создавал Alarm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Отключите, чтобы датчик не создавал тревога.",
   "Bật còi vật lý": "Включить домашнюю сирену",
   "Cho phép kích hoạt còi trong nhà.": "Разрешает включение сирены в доме.",
   "Đánh thức màn hình": "Включать экран",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Показывать полноэкранное оповещение на телефоне.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Показывать полноэкранное оповещение на телефоне.",
   "Độ trễ kích hoạt": "Задержка срабатывания",
-  "Chỉ áp dụng cho cảm biến an ninh.": "Применяется только к охранным датчикам.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Аварийные датчики всегда срабатывают немедленно.",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "Применяется только к охранным датчикам.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Аварийные датчики всегда срабатывают немедленно.",
   "Ngay lập tức": "Немедленно",
   "giây": "секунд",
   "Đã lưu cấu hình báo động": "Настройки тревоги сохранены",
   "Không thể lưu cấu hình báo động": "Не удалось сохранить настройки тревоги",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Только владелец дома и администраторы могут изменить эту настройку.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Только владелец дома и администраторы могут изменить эту настройку.",
   "Thông tin chi tiết": "Сведения об устройстве",
+  "Thông báo báo động": "Уведомление о тревоге",
+  "Cài đặt nhắc nhở": "Настройки напоминаний",
+  "Nhắc nhở theo lịch": "Запланированное напоминание",
+  "Danh sách thông báo": "Уведомления",
+  "Cài đặt thông báo": "Настройки уведомлений",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Использовать настроенное расписание тревоги",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Только отправлять уведомления, не запускать тревогу",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Все тревоги дома отключены; система будет только отправлять уведомления.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Только владелец может включить этот режим.",
+  "Bật Không bảo vệ?": "Включить режим «Без защиты»?",
+  "Cảm biến vừa phát hiện một sự kiện.": "Датчик только что обнаружил событие.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Только владелец может включить режим «Без защиты»",
+  "Đã chuyển nhà sang Không bảo vệ": "Дом переведён в режим «Без защиты»",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Режим «Без защиты» включён, но уведомление отправить не удалось",
+  "Giám sát toàn diện": "Полный мониторинг",
+  "Không bảo vệ": "Без защиты",
+  "Không bảo vệ đang bật": "Режим «Без защиты» включён",
+  "Nhà đã chuyển sang Không bảo vệ": "Дом переведён в режим «Без защиты»",
+  "Thông báo cảm biến": "Уведомления датчиков",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Обычные уведомления при обнаружении события датчиком.",
+  "Tôi hiểu, tiếp tục": "Понятно, продолжить",
 };

@@ -48,8 +48,8 @@ const Map<String, String> viStrings = {
   "Hub trung tâm": "Hub trung tâm",
   "Đo điện năng": "Đo điện năng",
   "Nguồn dự phòng UPS": "Nguồn dự phòng UPS",
-  "Thiết bị đang Offline": "Thiết bị đang Offline",
-  "Thiết bị đang Online": "Thiết bị đang Online",
+  "Thiết bị đang Offline": "Thiết bị đang mất kết nối",
+  "Thiết bị đang Online": "Thiết bị đang kết nối",
   "lâu không phản hồi": "lâu không phản hồi",
   "Kết nối cần kiểm tra": "Kết nối cần kiểm tra",
   "Vừa xong": "Vừa xong",
@@ -105,12 +105,12 @@ const Map<String, String> viStrings = {
       "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
   "Hub kết nối bình thường": "Hub kết nối bình thường",
   "Cài đặt cảnh báo cho nhà hiện tại": "Cài đặt cảnh báo cho nhà hiện tại",
-  "Nhận cảnh báo Alarm": "Nhận cảnh báo Alarm",
+  "Nhận cảnh báo báo động": "Nhận cảnh báo báo động",
   "Đang bật cho tài khoản này": "Đang bật cho tài khoản này",
   "Đang tắt cho tài khoản này": "Đang tắt cho tài khoản này",
-  "Hẹn giờ Reminder": "Hẹn giờ Reminder",
+  "Hẹn giờ nhắc nhở": "Hẹn giờ nhắc nhở",
   "Nhắc kiểm tra nhà theo thời gian": "Nhắc kiểm tra nhà theo thời gian",
-  "Hẹn giờ Alarm": "Hẹn giờ Alarm",
+  "Hẹn giờ báo động": "Hẹn giờ báo động",
   "Chưa thiết lập": "Chưa thiết lập",
   "Chưa thiết lập thời gian": "Chưa thiết lập thời gian",
   "Tổng hợp trạng thái nhà": "Tổng hợp trạng thái nhà",
@@ -147,13 +147,13 @@ const Map<String, String> viStrings = {
   "Đóng tìm kiếm": "Đóng tìm kiếm",
   "Giờ": "Giờ",
   "Phút": "Phút",
-  "Đặt Home Reminder": "Thiết lập Reminder cho nhà",
-  "Đặt Home Alarm": "Thiết lập Alarm cho nhà",
+  "Đặt nhắc nhở cho nhà": "Thiết lập nhắc nhở cho nhà",
+  "Đặt báo động cho nhà": "Thiết lập báo động cho nhà",
   "Xác nhận thay đổi": "Xác nhận thay đổi",
   "Tiếp tục": "Tiếp tục",
-  "Giờ Reminder": "Giờ Reminder",
-  "Giờ bắt đầu Alarm": "Giờ bắt đầu Alarm",
-  "Giờ kết thúc Alarm": "Giờ kết thúc Alarm",
+  "Giờ nhắc nhở": "Giờ nhắc nhở",
+  "Giờ bắt đầu báo động": "Giờ bắt đầu báo động",
+  "Giờ kết thúc báo động": "Giờ kết thúc báo động",
   "Không có nhà nào đủ điều kiện để cài":
       "Không có nhà nào đủ điều kiện để cài",
   "Cài đặt hoàn tất": "Cài đặt hoàn tất",
@@ -170,7 +170,7 @@ const Map<String, String> viStrings = {
   "Đặt vị trí nhà và bật bảo vệ tự động":
       "Đặt vị trí nhà và bật bảo vệ tự động",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Chuyển quyền chủ nhà hoặc xoá nhà",
-  "Đặt Reminder / Alarm nhà đã chọn": "Đặt Reminder / Alarm nhà đã chọn",
+  "Đặt nhắc nhở / báo động nhà đã chọn": "Đặt nhắc nhở / báo động nhà đã chọn",
   "Chia sẻ nhà đã chọn": "Chia sẻ nhà đã chọn",
   "Mở danh sách chia sẻ nhà": "Mở danh sách chia sẻ nhà",
   "Xoá các nhà đã chọn?": "Xoá các nhà đã chọn?",
@@ -199,13 +199,13 @@ const Map<String, String> viStrings = {
   "Không có thiết bị": "Không có thiết bị",
   "Chỉ chủ nhà mới được xoá nhà": "Chỉ chủ nhà mới được xoá nhà",
   "Chỉ chủ nhà mới được chuyển quyền": "Chỉ chủ nhà mới được chuyển quyền",
-  "Lưu ý khi bật Alarm": "Lưu ý khi bật Alarm",
-  "Alarm đã được bật": "Alarm đã được bật",
+  "Lưu ý khi bật báo động": "Lưu ý khi bật báo động",
+  "Báo động đã được bật": "Báo động đã được bật",
   "Đã hiểu": "Đã hiểu",
-  "Lưu ý tạm tắt Alarm": "Lưu ý tạm tắt Alarm",
-  "Đã bật Alarm": "Đã bật Alarm",
-  "Đã tắt Alarm": "Đã tắt Alarm",
-  "Tắt Alarm": "Tắt Alarm",
+  "Lưu ý tạm tắt báo động": "Lưu ý tạm tắt báo động",
+  "Đã bật báo động": "Đã bật báo động",
+  "Đã tắt báo động": "Đã tắt báo động",
+  "Tắt báo động": "Tắt báo động",
   "Cả ngày": "Cả ngày",
   "Bạn không có quyền thực hiện thao tác này.":
       "Bạn không có quyền thực hiện thao tác này.",
@@ -285,7 +285,7 @@ const Map<String, String> viStrings = {
   "Về muộn": "Về muộn",
   "Ra ngoài": "Ra ngoài",
   "Khác": "Khác",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ Tạm tắt Alarm hôm nay",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Tạm tắt báo động hôm nay",
   "Chọn giờ bắt đầu tạm tắt": "Chọn giờ bắt đầu tạm tắt",
   "Từ": "Từ",
   "Từ giờ": "Từ giờ",
@@ -329,8 +329,8 @@ const Map<String, String> viStrings = {
   "Lần kích hoạt cuối": "Lần kích hoạt cuối",
   "Thiết bị không còn tồn tại": "Thiết bị không còn tồn tại",
   "Mất kết nối": "Mất kết nối",
-  "Online": "Online",
-  "Offline": "Offline",
+  "Online": "Trực tuyến",
+  "Offline": "Ngoại tuyến",
   "Loại thiết bị": "Loại thiết bị",
   "Nhiệt độ": "Nhiệt độ",
   "Độ ẩm": "Độ ẩm",
@@ -359,16 +359,14 @@ const Map<String, String> viStrings = {
   "Phòng mặc định": "Phòng mặc định",
   "Phát hiện bất thường": "Phát hiện bất thường",
   "Phát hiện cạy phá": "Phát hiện cạy phá",
-  "Tamper detected": "Tamper detected",
-  "Tamper cleared": "Tamper cleared",
-  "Door opened": "Door opened",
-  "Door closed": "Door closed",
-  "Motion detected": "Motion detected",
-  "Battery low": "Battery low",
+  "Tamper detected": "Phát hiện cạy phá",
+  "Tamper cleared": "Đã hết cảnh báo cạy phá",
+  "Door opened": "Cửa mở",
+  "Door closed": "Cửa đóng",
+  "Motion detected": "Phát hiện chuyển động",
+  "Battery low": "Pin yếu",
   "Device offline": "Thiết bị mất kết nối",
   "Device online": "Thiết bị đã kết nối",
-  "Alarm triggered": "Alarm triggered",
-  "Alarm cleared": "Alarm cleared",
   "Cửa mở": "Cửa mở",
   "Cửa đóng": "Cửa đóng",
   "Chưa đặt vị trí nhà": "Chưa đặt vị trí nhà",
@@ -376,8 +374,8 @@ const Map<String, String> viStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ",
   "Bán kính bảo vệ mặc định: 150 m": "Bán kính bảo vệ mặc định: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
-      "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.",
   "Lưu cài đặt": "Lưu cài đặt",
   "Đã đặt vị trí nhà": "Đã đặt vị trí nhà",
   "Đang lấy vị trí...": "Đang lấy vị trí...",
@@ -396,7 +394,7 @@ const Map<String, String> viStrings = {
   "Đã đổi tên thiết bị": "Đã đổi tên thiết bị",
   "Chưa chọn nhà để kiểm tra": "Chưa chọn nhà để kiểm tra",
   "Hãy thực hiện kiểm tra bằng tài khoản Owner":
-      "Hãy thực hiện kiểm tra bằng tài khoản Owner",
+      "Hãy thực hiện kiểm tra bằng tài khoản Chủ nhà",
   "Không đọc được dữ liệu nhà": "Không đọc được dữ liệu nhà",
   "Nhà cần có ít nhất một thiết bị để test":
       "Nhà cần có ít nhất một thiết bị để test",
@@ -451,7 +449,7 @@ const Map<String, String> viStrings = {
   "Huỷ trả lời": "Huỷ trả lời",
   "Nhắn gì đó...": "Nhắn gì đó...",
   "Gọi điện": "Gọi điện",
-  "Alarm thiết bị": "Alarm thiết bị",
+  "Báo động thiết bị": "Báo động thiết bị",
   "Chế độ áp dụng": "Chế độ áp dụng",
   "Theo nhà": "Theo nhà",
   "Riêng tôi": "Riêng tôi",
@@ -459,7 +457,7 @@ const Map<String, String> viStrings = {
       "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
-  "Thiết lập nhanh Alarm": "Thiết lập nhanh Alarm",
+  "Thiết lập nhanh báo động": "Thiết lập nhanh báo động",
   "Thiết lập nhanh toàn bộ thiết bị": "Thiết lập nhanh toàn bộ thiết bị",
   "Áp dụng cho toàn bộ thiết bị": "Áp dụng cho toàn bộ thiết bị",
   "Bắt đầu": "Bắt đầu",
@@ -486,11 +484,11 @@ const Map<String, String> viStrings = {
   "Tamper bình thường": "Tamper bình thường",
   "Thiết bị bị tháo": "Thiết bị bị tháo",
   "Thiết bị mới": "Thiết bị mới",
-  "Thiết bị offline": "Thiết bị offline",
-  "Thiết bị online": "Thiết bị online",
+  "Thiết bị offline": "Thiết bị mất kết nối",
+  "Thiết bị online": "Thiết bị đã kết nối",
   "Báo động kích hoạt": "Báo động kích hoạt",
   "Báo động đã tắt": "Báo động đã tắt",
-  "Tạm tắt Alarm hôm nay": "Tạm tắt Alarm hôm nay",
+  "Tạm tắt báo động hôm nay": "Tạm tắt báo động hôm nay",
   "Độ ẩm cao": "Độ ẩm cao",
   "Thử lại": "Thử lại",
   "Không thể tải dữ liệu tài khoản": "Không thể tải dữ liệu tài khoản",
@@ -501,14 +499,14 @@ const Map<String, String> viStrings = {
   "Bạn sẽ rời khỏi các nhà được chia sẻ.":
       "Bạn sẽ rời khỏi các nhà được chia sẻ.",
   "Các nhà của bạn sẽ bị xoá.\n": "Các nhà của bạn sẽ bị xoá.\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "Thao tác này sẽ thay đổi lịch Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "Thao tác này sẽ thêm Reminder cho các nhà đã chọn.\n\n",
-  "Xác nhận thay đổi Alarm": "Xác nhận thay đổi Alarm",
-  "Xác nhận thay đổi Reminder": "Xác nhận thay đổi Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n",
+  "Xác nhận thay đổi báo động": "Xác nhận thay đổi báo động",
+  "Xác nhận thay đổi nhắc nhở": "Xác nhận thay đổi nhắc nhở",
   "Lặp lại khi sự cố vẫn còn": "Lặp lại khi sự cố vẫn còn",
-  "Thời gian lặp lại Alarm": "Thời gian lặp lại Alarm",
+  "Thời gian lặp lại báo động": "Thời gian lặp lại báo động",
   "VD: Mr Chung": "VD: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 Chưa có nhà nào",
   "Vẫn chuyển về Bình thường": "Vẫn chuyển về Bình thường",
@@ -522,9 +520,10 @@ const Map<String, String> viStrings = {
       "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
       "Hành động này sẽ tắt toàn bộ báo động của nhà ",
-  "Tắt toàn bộ Alarm?": "Tắt toàn bộ Alarm?",
-  "Không xoá được lịch tạm tắt Alarm": "Không xoá được lịch tạm tắt Alarm",
-  "Không lưu được tạm tắt Alarm": "Không lưu được tạm tắt Alarm",
+  "Tắt toàn bộ báo động?": "Tắt toàn bộ báo động?",
+  "Không xoá được lịch tạm tắt báo động":
+      "Không xoá được lịch tạm tắt báo động",
+  "Không lưu được tạm tắt báo động": "Không lưu được tạm tắt báo động",
   "Không gửi được yêu cầu xoá": "Không gửi được yêu cầu xoá",
   "Không lưu được cài đặt": "Không lưu được cài đặt",
   "Không lấy được vị trí hiện tại": "Không lấy được vị trí hiện tại",
@@ -536,39 +535,39 @@ const Map<String, String> viStrings = {
       "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
   "Không lưu được thời gian lặp báo động":
       "Không lưu được thời gian lặp báo động",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
-      "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ",
   "Không thể thay đổi chế độ nhà": "Không thể thay đổi chế độ nhà",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
-  "Đã bật Mode Bảo vệ thủ công": "Đã bật Mode Bảo vệ thủ công",
+  "Đã bật Chế độ Bảo vệ thủ công": "Đã bật Chế độ Bảo vệ thủ công",
   "Đã chuyển nhà về Bình thường": "Đã chuyển nhà về Bình thường",
   "60 phút": "60 phút",
   "30 phút": "30 phút",
   "15 phút": "15 phút",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.",
-  "Chọn giờ kết thúc Alarm": "Chọn giờ kết thúc Alarm",
-  "Chọn giờ bắt đầu Alarm": "Chọn giờ bắt đầu Alarm",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "Bạn không có quyền sửa lịch Alarm của nhà",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "Không thể áp dụng Alarm cho toàn bộ thiết bị",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.",
+  "Chọn giờ kết thúc báo động": "Chọn giờ kết thúc báo động",
+  "Chọn giờ bắt đầu báo động": "Chọn giờ bắt đầu báo động",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Bạn không có quyền sửa lịch báo động của nhà",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Không thể áp dụng báo động cho toàn bộ thiết bị",
   "Nhà chưa có thiết bị an ninh để áp dụng":
       "Nhà chưa có thiết bị an ninh để áp dụng",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
-  "Không thể lưu chế độ Alarm": "Không thể lưu chế độ Alarm",
-  "Thêm Reminder": "Thêm Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
-  "Thêm khung giờ Alarm": "Thêm khung giờ Alarm",
-  "Đang sử dụng Reminder riêng của bạn": "Đang sử dụng Reminder riêng của bạn",
-  "Đang sử dụng Reminder của chủ nhà": "Đang sử dụng Reminder của chủ nhà",
-  "Sửa giờ Reminder": "Sửa giờ Reminder",
-  "Sửa giờ kết thúc Alarm": "Sửa giờ kết thúc Alarm",
-  "Sửa giờ bắt đầu Alarm": "Sửa giờ bắt đầu Alarm",
-  "Xoá Reminder": "Xoá Reminder",
+  "Không thể lưu chế độ báo động": "Không thể lưu chế độ báo động",
+  "Thêm nhắc nhở": "Thêm nhắc nhở",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
+  "Thêm khung giờ báo động": "Thêm khung giờ báo động",
+  "Đang sử dụng nhắc nhở riêng của bạn": "Đang sử dụng nhắc nhở riêng của bạn",
+  "Đang sử dụng nhắc nhở của chủ nhà": "Đang sử dụng nhắc nhở của chủ nhà",
+  "Sửa giờ nhắc nhở": "Sửa giờ nhắc nhở",
+  "Sửa giờ kết thúc báo động": "Sửa giờ kết thúc báo động",
+  "Sửa giờ bắt đầu báo động": "Sửa giờ bắt đầu báo động",
+  "Xoá nhắc nhở": "Xoá nhắc nhở",
   "Mỗi 1 giờ": "Mỗi 1 giờ",
   "Mỗi 30 phút": "Mỗi 30 phút",
   "Mỗi 15 phút": "Mỗi 15 phút",
@@ -616,15 +615,15 @@ const Map<String, String> viStrings = {
   "Bảo vệ thủ công đang bật": "Bảo vệ thủ công đang bật",
   "Bảo vệ tự động đang bật": "Bảo vệ tự động đang bật",
   "Bảo vệ đang tắt": "Bảo vệ đang tắt",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
-      "Bạn đã mở app gần đây để kiểm tra trạng thái.",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
-      "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
-      "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.",
-  "Tần suất vào app ổn": "Tần suất vào app ổn",
-  "Đã lâu chưa vào app kiểm tra": "Đã lâu chưa vào app kiểm tra",
-  "Đang ghi nhận tần suất vào app": "Đang ghi nhận tần suất vào app",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
+  "Tần suất vào ứng dụng ổn": "Tần suất vào ứng dụng ổn",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "Đã lâu chưa vào ứng dụng kiểm tra",
+  "Đang ghi nhận tần suất vào ứng dụng": "Đang ghi nhận tần suất vào ứng dụng",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -638,20 +637,20 @@ const Map<String, String> viStrings = {
       "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.",
   "Chưa có thiết bị khẩn cấp": "Chưa có thiết bị khẩn cấp",
   "Đã có thiết bị khẩn cấp": "Đã có thiết bị khẩn cấp",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.",
-  "Chưa set lịch Alarm": "Chưa thiết lập lịch Alarm",
-  "Đã set lịch Alarm": "Đã thiết lập lịch Alarm",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "Nên có ít nhất một Reminder để không quên kiểm tra nhà.",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
-      "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.",
-  "Chưa setup Reminder": "Chưa thiết lập Reminder",
-  "Đã setup Reminder": "Đã thiết lập Reminder",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
-      "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.",
+  "Chưa cài lịch báo động": "Chưa thiết lập lịch báo động",
+  "Đã cài lịch báo động": "Đã thiết lập lịch báo động",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.",
+  "Chưa cài đặt nhắc nhở": "Chưa thiết lập nhắc nhở",
+  "Đã cài đặt nhắc nhở": "Đã thiết lập nhắc nhở",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
   "Thiết bị chưa đăng ký nhận cảnh báo": "Thiết bị chưa đăng ký nhận cảnh báo",
   "Thiết bị nhận cảnh báo bình thường": "Thiết bị nhận cảnh báo bình thường",
   "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
@@ -669,7 +668,7 @@ const Map<String, String> viStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
   "Chưa tắt tối ưu pin": "Chưa tắt tối ưu pin",
-  "Tối ưu pin không chặn app": "Tối ưu pin không chặn app",
+  "Tối ưu pin không chặn ứng dụng": "Tối ưu pin không chặn ứng dụng",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "Tính năng tự động Bảo vệ khi rời nhà cần quyền vị trí Luôn cho phép để hoạt động ổn định.",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
@@ -680,8 +679,8 @@ const Map<String, String> viStrings = {
       "Chỉ cần quyền này khi dùng tính năng tự động Bảo vệ khi rời nhà.",
   "Chưa cấp vị trí luôn luôn": "Chưa cấp vị trí luôn luôn",
   "Đã cấp vị trí luôn luôn": "Đã cấp vị trí luôn luôn",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
-      "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.",
   "Cảnh báo trên iOS": "Cảnh báo trên iOS",
@@ -694,10 +693,10 @@ const Map<String, String> viStrings = {
   "Đã bật thông báo": "Đã bật thông báo",
   "Hệ thống: Sẵn sàng": "Hệ thống: Sẵn sàng",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Hệ thống: Có thể bỏ lỡ cảnh báo",
-  "Cách bạn đang dùng app": "Cách bạn đang dùng app",
+  "Cách bạn đang dùng ứng dụng": "Cách bạn đang dùng ứng dụng",
   "Thiết bị của bạn": "Thiết bị của bạn",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
-      "Kiểm tra điện thoại và cách bạn đang dùng app.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.",
   "Hệ thống SafeHome": "Hệ thống SafeHome",
   "Hệ thống: Đang kiểm tra...": "Hệ thống: Đang kiểm tra...",
   "Tên": "Tên",
@@ -711,8 +710,9 @@ const Map<String, String> viStrings = {
       "Đã bật tự động Bảo vệ khi mọi người rời nhà",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
-  "Không thể thay đổi trạng thái Alarm": "Không thể thay đổi trạng thái Alarm",
-  "Đã tắt toàn bộ Alarm của nhà": "Đã tắt toàn bộ Alarm của nhà",
+  "Không thể thay đổi trạng thái báo động":
+      "Không thể thay đổi trạng thái báo động",
+  "Đã tắt toàn bộ báo động của nhà": "Đã tắt toàn bộ báo động của nhà",
   "QR này không phải mã xin gia nhập Home":
       "QR này không phải mã xin gia nhập nhà",
   "Thêm Home": "Thêm nhà",
@@ -725,20 +725,20 @@ const Map<String, String> viStrings = {
   "Cho phép vị trí luôn luôn": "Cho phép vị trí luôn luôn",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Thao tác này sẽ thay đổi lịch Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Thao tác này sẽ thêm Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
       "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
       "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.",
   "Không thể đăng nhập bằng Google": "Không thể đăng nhập bằng Google",
   "Không đặt được mật khẩu": "Không đặt được mật khẩu",
   "Chấp nhận": "Chấp nhận",
@@ -755,7 +755,7 @@ const Map<String, String> viStrings = {
   "Lời xin vào nhà": "Lời xin vào nhà",
   "Nhập HUB ID": "Nhập HUB ID",
   "VD: HUB_001": "VD: HUB_001",
-  "Pair": "Pair",
+  "Pair": "Ghép nối",
   "Mật khẩu tối thiểu 6 ký tự": "Mật khẩu tối thiểu 6 ký tự",
   "Mật khẩu nhập lại không khớp": "Mật khẩu nhập lại không khớp",
   "Tạo mật khẩu": "Tạo mật khẩu",
@@ -767,12 +767,12 @@ const Map<String, String> viStrings = {
   "CẦN KIỂM TRA": "CẦN KIỂM TRA",
   "KIỂM TRA NHÀ": "KIỂM TRA NHÀ",
   "ĐÓNG NHẮC NHỞ": "ĐÓNG NHẮC NHỞ",
-  "SafeHome Security Alert": "SafeHome Security Alert",
+  "SafeHome Security Alert": "Cảnh báo an ninh SafeHome",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.",
-  "Alarm": "Alarm",
+  "Báo động": "Báo động",
   "Bạn không có quyền thực hiện thao tác này。":
       "Bạn không có quyền thực hiện thao tác này。",
   "Cài đặt": "Cài đặt",
@@ -787,7 +787,7 @@ const Map<String, String> viStrings = {
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Đã xảy ra lỗi. Vui lòng thử lại.",
   "Đang kiểm tra kết nối Hub": "Đang kiểm tra kết nối Hub",
   "Đang mở khi nhà ở chế độ Bảo vệ": "Đang mở khi nhà ở chế độ Bảo vệ",
-  "Đang mở trong giờ Alarm": "Đang mở trong giờ Alarm",
+  "Đang mở trong giờ báo động": "Đang mở trong giờ báo động",
   "Đang tải...": "Đang tải...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Hồ sơ, yêu cầu và lời mời tham gia",
   "Hub chưa gửi trạng thái": "Hub chưa gửi trạng thái",
@@ -795,7 +795,7 @@ const Map<String, String> viStrings = {
   "Hub tín hiệu bình thường": "Hub tín hiệu bình thường",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "Khóa đang mở khi nhà ở chế độ Bảo vệ",
-  "Khóa đang mở trong giờ Alarm": "Khóa đang mở trong giờ Alarm",
+  "Khóa đang mở trong giờ báo động": "Khóa đang mở trong giờ báo động",
   "Không có thông báo": "Không có thông báo",
   "Khu vực nguy hiểm": "Khu vực nguy hiểm",
   "Kiểm tra thiết bị trong nhà này": "Kiểm tra thiết bị trong nhà này",
@@ -809,7 +809,7 @@ const Map<String, String> viStrings = {
   "Nhập email": "Nhập email",
   "Phòng": "Phòng",
   "Quản trị viên": "Quản trị viên",
-  "Reminder": "Reminder",
+  "Nhắc nhở": "Nhắc nhở",
   "SafeHome": "SafeHome",
   "Sóng yếu": "Sóng yếu",
   "SOS": "SOS",
@@ -838,16 +838,16 @@ const Map<String, String> viStrings = {
   "Xoá toàn bộ dữ liệu và thiết bị": "Xoá toàn bộ dữ liệu và thiết bị",
   "TẮT CẢNH BÁO": "TẮT CẢNH BÁO",
   "Đã tạo nhà": "Đã tạo nhà",
-  "Mode Bảo vệ thủ công đã bật": "Mode Bảo vệ thủ công đã bật",
+  "Chế độ Bảo vệ thủ công đã bật": "Chế độ Bảo vệ thủ công đã bật",
   "Báo động không lặp lại.": "Báo động không lặp lại.",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
       "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
-      "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "Bạn đã bật Alarm cho nhà \"\$homeName\".",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Bạn đã bật báo động cho nhà \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".",
   "Thành viên mới": "Thành viên mới",
   "Thành viên rời nhà": "Thành viên rời nhà",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -878,9 +878,10 @@ const Map<String, String> viStrings = {
   "Tin nhắn HomeChat": "Tin nhắn HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName đã gửi một tin nhắn",
   "Bạn có tin nhắn mới": "Bạn có tin nhắn mới",
-  "Mode Bảo vệ sẽ chỉ báo động một lần": "Mode Bảo vệ sẽ chỉ báo động một lần",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
-      "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Chế độ Bảo vệ sẽ chỉ báo động một lần",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút",
   "Đã gửi yêu cầu gia nhập \$count nhà": "Đã gửi yêu cầu gia nhập \$count nhà",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
       "\$requesterName đang xin gia nhập nhà \"\$homeName\".",
@@ -907,8 +908,8 @@ const Map<String, String> viStrings = {
   "Đang ghép nối: \$seconds giây": "Đang ghép nối: \$seconds giây",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n":
       "\$passCount/\$total bài test đạt\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
@@ -952,8 +953,8 @@ const Map<String, String> viStrings = {
       "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Báo lại lúc \$time nếu vấn đề chưa được xử lý.",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -965,14 +966,14 @@ const Map<String, String> viStrings = {
   "✅ \$count nhà an toàn": "✅ \$count nhà an toàn",
   "\$count nhà đang được theo dõi": "\$count nhà đang được theo dõi",
   "\$minutes phút": "\$minutes phút",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "Đã cài Reminder cho \$updatedHomes nhà.",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Đã cài nhắc nhở cho \$updatedHomes nhà.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "Đã áp dụng Alarm cho \$count thiết bị an ninh",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Đã áp dụng báo động cho \$count thiết bị an ninh",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "Áp dụng cùng một lịch cho \$count thiết bị an ninh",
   "\$count phút trước": "\$count phút trước",
@@ -1003,16 +1004,16 @@ const Map<String, String> viStrings = {
       "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
-      "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.",
   "Lặp sau \$minutes phút": "Lặp sau \$minutes phút",
@@ -1062,25 +1063,56 @@ const Map<String, String> viStrings = {
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "Giờ kết thúc phải sau thời điểm hiện tại",
   "Khoảng tạm tắt không hợp lệ": "Khoảng tạm tắt không hợp lệ",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Khoảng tạm tắt không trùng với lịch báo động nào đang bật",
 
-  // Device alarm policy
-  "Cấu hình báo động": "Cấu hình báo động",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Điều khiển cách cảm biến này kích hoạt cảnh báo.",
+  // Device báo động policy
+  "Cài đặt báo động": "Cài đặt báo động",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Điều khiển cách cảm biến này kích hoạt cảnh báo.",
   "Tham gia báo động": "Tham gia báo động",
-  "Tắt để cảm biến không tạo Alarm.": "Tắt để cảm biến không tạo Alarm.",
+  "Tắt để cảm biến không tạo báo động.": "Tắt để cảm biến không tạo báo động.",
   "Bật còi vật lý": "Bật còi vật lý",
   "Cho phép kích hoạt còi trong nhà.": "Cho phép kích hoạt còi trong nhà.",
   "Đánh thức màn hình": "Đánh thức màn hình",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Hiển thị cảnh báo toàn màn hình trên điện thoại.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Hiển thị cảnh báo toàn màn hình trên điện thoại.",
   "Độ trễ kích hoạt": "Độ trễ kích hoạt",
   "Chỉ áp dụng cho cảm biến an ninh.": "Chỉ áp dụng cho cảm biến an ninh.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.",
   "Ngay lập tức": "Ngay lập tức",
   "giây": "giây",
   "Đã lưu cấu hình báo động": "Đã lưu cấu hình báo động",
   "Không thể lưu cấu hình báo động": "Không thể lưu cấu hình báo động",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
   "Thông tin chi tiết": "Thông tin chi tiết",
+  "Thông báo báo động": "Thông báo báo động",
+  "Cài đặt nhắc nhở": "Cài đặt nhắc nhở",
+  "Nhắc nhở theo lịch": "Nhắc nhở theo lịch",
+  "Danh sách thông báo": "Thông báo",
+  "Cài đặt thông báo": "Cài đặt thông báo",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Sử dụng báo động theo lịch đã thiết lập",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Chỉ gửi thông báo, không kích hoạt báo động",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.",
+  "Chỉ Chủ nhà có thể bật chế độ này.": "Chỉ Chủ nhà có thể bật chế độ này.",
+  "Bật Không bảo vệ?": "Bật Không bảo vệ?",
+  "Cảm biến vừa phát hiện một sự kiện.": "Cảm biến vừa phát hiện một sự kiện.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ",
+  "Đã chuyển nhà sang Không bảo vệ": "Đã chuyển nhà sang Không bảo vệ",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo",
+  "Giám sát toàn diện": "Giám sát toàn diện",
+  "Không bảo vệ": "Không bảo vệ",
+  "Không bảo vệ đang bật": "Không bảo vệ đang bật",
+  "Nhà đã chuyển sang Không bảo vệ": "Nhà đã chuyển sang Không bảo vệ",
+  "Thông báo cảm biến": "Thông báo cảm biến",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Thông báo thông thường khi cảm biến phát hiện sự kiện.",
+  "Tôi hiểu, tiếp tục": "Tôi hiểu, tiếp tục",
 };

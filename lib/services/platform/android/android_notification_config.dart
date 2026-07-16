@@ -14,8 +14,7 @@ class AndroidNotificationConfig {
       'safehome_schedule_fullscreen_channel_v2';
   static const reminderPriorityChannelId = 'safehome_reminder_priority_v3';
   static const chatChannelId = 'safehome_chat_channel_v2';
-  static const sensorNotificationChannelId =
-      'safehome_sensor_notification_v1';
+  static const sensorNotificationChannelId = 'safehome_sensor_notification_v1';
 
   static const initializationSettings = AndroidInitializationSettings(
     'ic_stat_safehome',
@@ -55,7 +54,7 @@ class AndroidNotificationConfig {
 
     final legacyAlarmChannel = AndroidNotificationChannel(
       legacyAlarmChannelId,
-      'Alarm Channel Silent V3',
+      strings.alarmNotification,
       description: strings.androidLegacyAlarmChannelDescription(),
       importance: Importance.max,
       playSound: false,

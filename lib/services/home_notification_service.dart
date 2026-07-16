@@ -21,50 +21,38 @@ class HomeNotificationService {
     String? homeName,
     Map<String, dynamic>? data,
   }) async {
-    final currentUid =
-        FirebaseAuth.instance.currentUser?.uid;
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid == null || currentUid.isEmpty) {
-      throw StateError(
-        "Không có tài khoản Firebase Auth đang đăng nhập",
-      );
+      throw StateError("Không có tài khoản Firebase Auth đang đăng nhập");
     }
 
     final cleanTargetUid = uid.trim();
     final cleanHomeId = homeId.trim();
 
     if (cleanTargetUid.isEmpty || cleanHomeId.isEmpty) {
-      throw ArgumentError(
-        "Thông báo thiếu uid hoặc homeId",
-      );
+      throw ArgumentError("Thông báo thiếu uid hoặc homeId");
     }
 
     if (senderUid != null &&
         senderUid.trim().isNotEmpty &&
         senderUid.trim() != currentUid) {
-      throw StateError(
-        "senderUid không khớp tài khoản đang đăng nhập",
-      );
+      throw StateError("senderUid không khớp tài khoản đang đăng nhập");
     }
 
     if (actorUid != null &&
         actorUid.trim().isNotEmpty &&
         actorUid.trim() != currentUid) {
-      throw StateError(
-        "actorUid không khớp tài khoản đang đăng nhập",
-      );
+      throw StateError("actorUid không khớp tài khoản đang đăng nhập");
     }
 
     // Mọi thông báo gửi sang tài khoản khác đều đi qua backend.
     if (cleanTargetUid != currentUid) {
-      var resolvedOwnerUid =
-          ownerUid?.trim() ?? "";
+      var resolvedOwnerUid = ownerUid?.trim() ?? "";
 
       if (resolvedOwnerUid.isEmpty) {
         final ownHomeSnap = await FirebaseDatabase.instance
-            .ref(
-          "accounts/$currentUid/homes/$cleanHomeId",
-        )
+            .ref("accounts/$currentUid/homes/$cleanHomeId")
             .get();
 
         if (ownHomeSnap.exists) {
@@ -73,16 +61,11 @@ class HomeNotificationService {
       }
 
       if (resolvedOwnerUid.isEmpty) {
-        final sharedOwnerSnap =
-        await FirebaseDatabase.instance
-            .ref(
-          "accounts/$currentUid/sharedHomes/$cleanHomeId/ownerUid",
-        )
+        final sharedOwnerSnap = await FirebaseDatabase.instance
+            .ref("accounts/$currentUid/sharedHomes/$cleanHomeId/ownerUid")
             .get();
 
-        resolvedOwnerUid =
-            sharedOwnerSnap.value?.toString().trim() ??
-                "";
+        resolvedOwnerUid = sharedOwnerSnap.value?.toString().trim() ?? "";
       }
 
       if (resolvedOwnerUid.isEmpty) {
@@ -120,8 +103,7 @@ class HomeNotificationService {
       providedHomeName: homeName,
     );
 
-    final now =
-        DateTime.now().millisecondsSinceEpoch;
+    final now = DateTime.now().millisecondsSinceEpoch;
 
     final listRef = FirebaseDatabase.instance.ref(
       "accounts/$currentUid/notifications",
@@ -145,10 +127,7 @@ class HomeNotificationService {
         "actorUid": currentUid,
         "entityType": entityType,
         "entityId": entityId ?? deviceId,
-        "data": _withHomeName(
-          data,
-          resolvedHomeName,
-        ),
+        "data": _withHomeName(data, resolvedHomeName),
         "time": now,
         "read": false,
       }),
@@ -188,27 +167,20 @@ class HomeNotificationService {
       return;
     }
 
-    final currentUid =
-        FirebaseAuth.instance.currentUser?.uid;
+    final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid == null || currentUid.isEmpty) {
-      throw StateError(
-        "Không có tài khoản Firebase Auth đang đăng nhập",
-      );
+      throw StateError("Không có tài khoản Firebase Auth đang đăng nhập");
     }
 
     if (senderUid != null &&
         senderUid.trim().isNotEmpty &&
         senderUid.trim() != currentUid) {
-      throw StateError(
-        "senderUid không khớp tài khoản đang đăng nhập",
-      );
+      throw StateError("senderUid không khớp tài khoản đang đăng nhập");
     }
 
     if (recipientUids != null) {
-      throw StateError(
-        "Kênh backend chỉ hỗ trợ một recipientUid",
-      );
+      throw StateError("Kênh backend chỉ hỗ trợ một recipientUid");
     }
 
     if (cleanType.isEmpty ||
@@ -226,11 +198,9 @@ class HomeNotificationService {
       return clean.isEmpty ? null : clean;
     }
 
-    final cleanRecipientUid =
-    cleanOptional(recipientUid);
+    final cleanRecipientUid = cleanOptional(recipientUid);
 
-    final isTargeted =
-        cleanRecipientUid != null;
+    final isTargeted = cleanRecipientUid != null;
 
     final resolvedHomeName = await resolveHomeName(
       homeId: cleanHomeId,
@@ -238,8 +208,7 @@ class HomeNotificationService {
       providedHomeName: homeName,
     );
 
-    final now =
-        DateTime.now().millisecondsSinceEpoch;
+    final now = DateTime.now().millisecondsSinceEpoch;
 
     final requestRef = FirebaseDatabase.instance
         .ref("home_notification_requests")
@@ -260,17 +229,10 @@ class HomeNotificationService {
         "homeName": resolvedHomeName,
         "deviceId": cleanOptional(deviceId),
         "entityType": cleanOptional(entityType),
-        "entityId": cleanOptional(
-          entityId ?? deviceId,
-        ),
-        "data": _withHomeName(
-          data,
-          resolvedHomeName,
-        ),
-        "includeActor":
-        isTargeted ? false : includeActor,
-        "writeHomeTimeline":
-        isTargeted ? false : writeHomeTimeline,
+        "entityId": cleanOptional(entityId ?? deviceId),
+        "data": _withHomeName(data, resolvedHomeName),
+        "includeActor": isTargeted ? false : includeActor,
+        "writeHomeTimeline": isTargeted ? false : writeHomeTimeline,
         "time": now,
       }),
     );
@@ -382,8 +344,7 @@ class HomeNotificationService {
         return;
       }
 
-      final removeCount =
-          orderedItems.length - maxNotifications;
+      final removeCount = orderedItems.length - maxNotifications;
       final updates = <String, Object?>{};
 
       for (final item in orderedItems.take(removeCount)) {
@@ -422,9 +383,9 @@ class HomeNotificationService {
   }
 
   static Map<String, dynamic> _withHomeName(
-      Map<String, dynamic>? data,
-      String homeName,
-      ) {
+    Map<String, dynamic>? data,
+    String homeName,
+  ) {
     final result = _compact(data ?? <String, dynamic>{});
     final existingHomeName = _cleanHomeName(result["homeName"]?.toString());
 
@@ -438,10 +399,8 @@ class HomeNotificationService {
   static String _cleanTitle(String title) {
     final cleanTitle = title.trim();
 
-    return cleanTitle.isNotEmpty ? cleanTitle : "Thông báo";
+    return cleanTitle.isNotEmpty ? cleanTitle : "SafeHome";
   }
-
-
 
   static String _cleanHomeName(String? value) {
     final name = value?.trim() ?? "";

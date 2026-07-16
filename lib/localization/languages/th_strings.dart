@@ -105,12 +105,12 @@ const Map<String, String> thStrings = {
       "ยังไม่มีกิจกรรมใหม่เพียงพอสำหรับการวิเคราะห์เพิ่มเติม",
   "Hub kết nối bình thường": "Hub เชื่อมต่อตามปกติ",
   "Cài đặt cảnh báo cho nhà hiện tại": "ตั้งค่าการแจ้งเตือนสำหรับบ้านปัจจุบัน",
-  "Nhận cảnh báo Alarm": "รับการแจ้งเตือน Alarm",
+  "Nhận cảnh báo báo động": "รับการแจ้งเตือน สัญญาณเตือน",
   "Đang bật cho tài khoản này": "เปิดใช้งานสำหรับบัญชีนี้",
   "Đang tắt cho tài khoản này": "ปิดอยู่สำหรับบัญชีนี้",
-  "Hẹn giờ Reminder": "ตั้งเวลา Reminder",
+  "Hẹn giờ nhắc nhở": "ตั้งเวลา การเตือนความจำ",
   "Nhắc kiểm tra nhà theo thời gian": "เตือนให้ตรวจสอบบ้านตามกำหนดเวลา",
-  "Hẹn giờ Alarm": "ตั้งเวลา Alarm",
+  "Hẹn giờ báo động": "ตั้งเวลา สัญญาณเตือน",
   "Chưa thiết lập": "ยังไม่ได้ตั้งค่า",
   "Chưa thiết lập thời gian": "ยังไม่กำหนดเวลา",
   "Tổng hợp trạng thái nhà": "สรุปสถานะบ้าน",
@@ -147,13 +147,13 @@ const Map<String, String> thStrings = {
   "Đóng tìm kiếm": "ปิดการค้นหา",
   "Giờ": "ชั่วโมง",
   "Phút": "นาที",
-  "Đặt Home Reminder": "ตั้ง Reminder ของบ้าน",
-  "Đặt Home Alarm": "ตั้ง Alarm ของบ้าน",
+  "Đặt nhắc nhở cho nhà": "ตั้ง การเตือนความจำ ของบ้าน",
+  "Đặt báo động cho nhà": "ตั้ง สัญญาณเตือน ของบ้าน",
   "Xác nhận thay đổi": "ยืนยันการเปลี่ยนแปลง",
   "Tiếp tục": "ดำเนินการต่อ",
-  "Giờ Reminder": "เวลา Reminder",
-  "Giờ bắt đầu Alarm": "เวลาเริ่มต้น Alarm",
-  "Giờ kết thúc Alarm": "เวลาสิ้นสุด Alarm",
+  "Giờ nhắc nhở": "เวลา การเตือนความจำ",
+  "Giờ bắt đầu báo động": "เวลาเริ่มต้น สัญญาณเตือน",
+  "Giờ kết thúc báo động": "เวลาสิ้นสุด สัญญาณเตือน",
   "Không có nhà nào đủ điều kiện để cài": "ไม่พบบ้านที่เข้าเงื่อนไข",
   "Cài đặt hoàn tất": "ตั้งค่าเสร็จแล้ว",
   "Xác nhận rời nhà": "ยืนยันการออกจากบ้าน",
@@ -169,7 +169,8 @@ const Map<String, String> thStrings = {
   "Đặt vị trí nhà và bật bảo vệ tự động":
       "ตั้งค่าตำแหน่งบ้านและเปิดการป้องกันอัตโนมัติ",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "โอนสิทธิ์เจ้าของบ้านหรือลบบ้าน",
-  "Đặt Reminder / Alarm nhà đã chọn": "ตั้งค่า Reminder / Alarm บ้านที่เลือก",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "ตั้งค่า การเตือนความจำ / สัญญาณเตือน บ้านที่เลือก",
   "Chia sẻ nhà đã chọn": "แบ่งปันบ้านที่เลือก",
   "Mở danh sách chia sẻ nhà": "เปิดรายการแบ่งปันบ้าน",
   "Xoá các nhà đã chọn?": "ลบบ้านที่เลือกหรือไม่",
@@ -197,13 +198,13 @@ const Map<String, String> thStrings = {
   "Chỉ chủ nhà mới được xoá nhà": "เฉพาะเจ้าของบ้านเท่านั้นที่ลบบ้านได้",
   "Chỉ chủ nhà mới được chuyển quyền":
       "เฉพาะเจ้าของบ้านเท่านั้นที่โอนสิทธิ์เจ้าของบ้านได้",
-  "Lưu ý khi bật Alarm": "ข้อควรทราบเมื่อเปิด Alarm",
-  "Alarm đã được bật": "Alarm เปิดอยู่",
+  "Lưu ý khi bật báo động": "ข้อควรทราบเมื่อเปิด สัญญาณเตือน",
+  "Báo động đã được bật": "สัญญาณเตือน เปิดอยู่",
   "Đã hiểu": "เข้าใจแล้ว",
-  "Lưu ý tạm tắt Alarm": "ข้อควรทราบเกี่ยวกับการหยุด Alarm ชั่วคราว",
-  "Đã bật Alarm": "เปิด Alarm แล้ว",
-  "Đã tắt Alarm": "ปิด Alarm แล้ว",
-  "Tắt Alarm": "ปิด Alarm",
+  "Lưu ý tạm tắt báo động": "ข้อควรทราบเกี่ยวกับการหยุด สัญญาณเตือน ชั่วคราว",
+  "Đã bật báo động": "เปิด สัญญาณเตือน แล้ว",
+  "Đã tắt báo động": "ปิด สัญญาณเตือน แล้ว",
+  "Tắt báo động": "หยุดสัญญาณเตือนภัย",
   "Cả ngày": "ทั้งวัน",
   "Bạn không có quyền thực hiện thao tác này.": "คุณไม่มีสิทธิ์ดำเนินการนี้",
   "Không thể hoàn tất thao tác. Vui lòng thử lại.":
@@ -280,15 +281,15 @@ const Map<String, String> thStrings = {
   "Về muộn": "กลับบ้านดึก",
   "Ra ngoài": "ออกไป",
   "Khác": "อื่น ๆ",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ หยุด Alarm ชั่วคราววันนี้",
-  "Chọn giờ bắt đầu tạm tắt": "เลือกเวลาเริ่มหยุด Alarm ชั่วคราว",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ หยุด สัญญาณเตือน ชั่วคราววันนี้",
+  "Chọn giờ bắt đầu tạm tắt": "เลือกเวลาเริ่มหยุด สัญญาณเตือน ชั่วคราว",
   "Từ": "ตั้งแต่",
   "Từ giờ": "ตั้งแต่ตอนนี้",
-  "Chọn giờ kết thúc tạm tắt": "เลือกเวลาสิ้นสุดการหยุด Alarm ชั่วคราว",
+  "Chọn giờ kết thúc tạm tắt": "เลือกเวลาสิ้นสุดการหยุด สัญญาณเตือน ชั่วคราว",
   "Đến": "ถึง",
   "Đến giờ": "จนถึงเวลา",
-  "Xoá lịch tạm tắt": "ลบกำหนดการหยุด Alarm ชั่วคราว",
-  "Xóa lịch tạm tắt": "ลบกำหนดการหยุด Alarm ชั่วคราว",
+  "Xoá lịch tạm tắt": "ลบกำหนดการหยุด สัญญาณเตือน ชั่วคราว",
+  "Xóa lịch tạm tắt": "ลบกำหนดการหยุด สัญญาณเตือน ชั่วคราว",
   "Giới tính": "เพศ",
   "SĐT": "หมายเลขโทรศัพท์",
   "Ngày sinh": "วันเกิด",
@@ -361,8 +362,6 @@ const Map<String, String> thStrings = {
   "Battery low": "แบตเตอรี่เหลือน้อย",
   "Device offline": "อุปกรณ์ออฟไลน์",
   "Device online": "อุปกรณ์ออนไลน์",
-  "Alarm triggered": "Alarm ทำงานแล้ว",
-  "Alarm cleared": "Alarm สิ้นสุดแล้ว",
   "Cửa mở": "ประตูเปิดอยู่",
   "Cửa đóng": "ประตูปิดแล้ว",
   "Chưa đặt vị trí nhà": "ยังไม่ได้กำหนดตำแหน่งบ้าน",
@@ -370,7 +369,7 @@ const Map<String, String> thStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "โปรดตั้งค่าตำแหน่งบ้านก่อนเปิดการป้องกันอัตโนมัติ",
   "Bán kính bảo vệ mặc định: 150 m": "รัศมีป้องกันเริ่มต้น: 150 ม.",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "สมาชิกแต่ละคนต้องอนุญาตตำแหน่งเป็น \"อนุญาตเสมอ\" เพื่อให้ตรวจจับการออกจากและกลับถึงบ้านได้ขณะแอปทำงานเบื้องหลัง",
   "Lưu cài đặt": "บันทึกการตั้งค่า",
   "Đã đặt vị trí nhà": "ตั้งค่าตำแหน่งบ้านแล้ว",
@@ -445,7 +444,7 @@ const Map<String, String> thStrings = {
   "Huỷ trả lời": "ยกเลิกการตอบ",
   "Nhắn gì đó...": "พิมพ์ข้อความ...",
   "Gọi điện": "โทร",
-  "Alarm thiết bị": "Alarm ของอุปกรณ์",
+  "Báo động thiết bị": "สัญญาณเตือน ของอุปกรณ์",
   "Chế độ áp dụng": "โหมดการใช้งาน",
   "Theo nhà": "ตามบ้าน",
   "Riêng tôi": "เฉพาะฉัน",
@@ -453,7 +452,7 @@ const Map<String, String> thStrings = {
       "ใช้กำหนดเวลาส่วนกลางที่เจ้าของบ้านหรือผู้ดูแลระบบตั้งไว้",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "ใช้กำหนดเวลาส่วนตัวสำหรับบัญชีของคุณเท่านั้น",
-  "Thiết lập nhanh Alarm": "ตั้งค่า Alarm แบบด่วน",
+  "Thiết lập nhanh báo động": "ตั้งค่า สัญญาณเตือน แบบด่วน",
   "Thiết lập nhanh toàn bộ thiết bị": "ตั้งค่าอุปกรณ์ทั้งหมดแบบด่วน",
   "Áp dụng cho toàn bộ thiết bị": "ใช้กับอุปกรณ์ทั้งหมด",
   "Bắt đầu": "เริ่ม",
@@ -481,9 +480,9 @@ const Map<String, String> thStrings = {
   "Thiết bị mới": "อุปกรณ์ใหม่",
   "Thiết bị offline": "อุปกรณ์ออฟไลน์",
   "Thiết bị online": "อุปกรณ์ออนไลน์",
-  "Báo động kích hoạt": "Alarm ทำงานแล้ว",
-  "Báo động đã tắt": "Alarm ปิดแล้ว",
-  "Tạm tắt Alarm hôm nay": "หยุด Alarm ชั่วคราววันนี้",
+  "Báo động kích hoạt": "สัญญาณเตือน ทำงานแล้ว",
+  "Báo động đã tắt": "สัญญาณเตือน ปิดแล้ว",
+  "Tạm tắt báo động hôm nay": "หยุด สัญญาณเตือน ชั่วคราววันนี้",
   "Độ ẩm cao": "ความชื้นสูง",
   "Thử lại": "ลองอีกครั้ง",
   "Không thể tải dữ liệu tài khoản": "ไม่สามารถโหลดข้อมูลบัญชีได้",
@@ -493,14 +492,14 @@ const Map<String, String> thStrings = {
   "Đã rời khỏi nhà": "ออกจากบ้านแล้ว",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "คุณจะออกจากบ้านที่แชร์กับคุณ",
   "Các nhà của bạn sẽ bị xoá.\n": "บ้านของคุณจะถูกลบ\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "การดำเนินการนี้จะเปลี่ยนกำหนดเวลา Alarm ของบ้านสำหรับอุปกรณ์รักษาความปลอดภัยทั้งหมดในบ้านที่เลือก\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "การดำเนินการนี้จะเพิ่ม Reminder ของบ้านให้บ้านที่เลือก\n\n",
-  "Xác nhận thay đổi Alarm": "ยืนยันการเปลี่ยนแปลง Alarm",
-  "Xác nhận thay đổi Reminder": "ยืนยันการเปลี่ยนแปลง Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "การดำเนินการนี้จะเปลี่ยนกำหนดเวลา สัญญาณเตือน ของบ้านสำหรับอุปกรณ์รักษาความปลอดภัยทั้งหมดในบ้านที่เลือก\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "การดำเนินการนี้จะเพิ่ม การเตือนความจำ ของบ้านให้บ้านที่เลือก\n\n",
+  "Xác nhận thay đổi báo động": "ยืนยันการเปลี่ยนแปลง สัญญาณเตือน",
+  "Xác nhận thay đổi nhắc nhở": "ยืนยันการเปลี่ยนแปลง การเตือนความจำ",
   "Lặp lại khi sự cố vẫn còn": "ทำซ้ำหากยังมีปัญหาอยู่",
-  "Thời gian lặp lại Alarm": "ช่วงเวลาทำซ้ำ Alarm",
+  "Thời gian lặp lại báo động": "ช่วงเวลาทำซ้ำ สัญญาณเตือน",
   "VD: Mr Chung": "ตัวอย่าง: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 ยังไม่มีบ้าน",
   "Vẫn chuyển về Bình thường": "ยังคงเปลี่ยนเป็นโหมดปกติ",
@@ -511,12 +510,14 @@ const Map<String, String> thStrings = {
       "เมื่อเปิดใช้งาน อุปกรณ์รักษาความปลอดภัยจะถูกตรวจสอบทันที\n\n",
   "Bật Bảo vệ thủ công?": "เปิดโหมดป้องกันด้วยตนเองหรือไม่",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "การดำเนินการนี้จะเปลี่ยนเวลา Alarm ของอุปกรณ์บางเครื่อง",
+      "การดำเนินการนี้จะเปลี่ยนเวลา สัญญาณเตือน ของอุปกรณ์บางเครื่อง",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "การดำเนินการนี้จะปิด Alarm ทั้งหมดของบ้าน",
-  "Tắt toàn bộ Alarm?": "ปิด Alarm ทั้งหมดหรือไม่",
-  "Không xoá được lịch tạm tắt Alarm": "ไม่สามารถลบช่วงหยุด Alarm ชั่วคราวได้",
-  "Không lưu được tạm tắt Alarm": "ไม่สามารถบันทึกช่วงหยุด Alarm ชั่วคราวได้",
+      "การดำเนินการนี้จะปิด สัญญาณเตือน ทั้งหมดของบ้าน",
+  "Tắt toàn bộ báo động?": "ปิด สัญญาณเตือน ทั้งหมดหรือไม่",
+  "Không xoá được lịch tạm tắt báo động":
+      "ไม่สามารถลบช่วงหยุด สัญญาณเตือน ชั่วคราวได้",
+  "Không lưu được tạm tắt báo động":
+      "ไม่สามารถบันทึกช่วงหยุด สัญญาณเตือน ชั่วคราวได้",
   "Không gửi được yêu cầu xoá": "ไม่สามารถส่งคำขอลบได้",
   "Không lưu được cài đặt": "ไม่สามารถบันทึกการตั้งค่าได้",
   "Không lấy được vị trí hiện tại": "ไม่สามารถรับตำแหน่งปัจจุบันได้",
@@ -524,42 +525,43 @@ const Map<String, String> thStrings = {
   "Mật khẩu không đúng": "รหัสผ่านไม่ถูกต้อง",
   "Không thể xác nhận mật khẩu": "ไม่สามารถยืนยันรหัสผ่านได้",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "เฉพาะเจ้าของบ้านหรือผู้ดูแลระบบเท่านั้นที่เปลี่ยนการทำซ้ำของ Alarm ได้",
+      "เฉพาะเจ้าของบ้านหรือผู้ดูแลระบบเท่านั้นที่เปลี่ยนการทำซ้ำของ สัญญาณเตือน ได้",
   "Không lưu được thời gian lặp báo động":
-      "ไม่สามารถบันทึกช่วงเวลาทำซ้ำของ Alarm ได้",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+      "ไม่สามารถบันทึกช่วงเวลาทำซ้ำของ สัญญาณเตือน ได้",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "เฉพาะเจ้าของบ้านหรือผู้ดูแลระบบเท่านั้นที่เปลี่ยนโหมดป้องกันได้",
   "Không thể thay đổi chế độ nhà": "ไม่สามารถเปลี่ยนโหมดบ้านได้",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "เปิดโหมดป้องกันแล้ว แต่ยังส่งการแจ้งเตือนไม่สำเร็จ",
-  "Đã bật Mode Bảo vệ thủ công": "เปิดโหมดป้องกันด้วยตนเองแล้ว",
+  "Đã bật Chế độ Bảo vệ thủ công": "เปิดโหมดป้องกันด้วยตนเองแล้ว",
   "Đã chuyển nhà về Bình thường": "เปลี่ยนบ้านเป็นโหมดปกติแล้ว",
   "60 phút": "60 นาที",
   "30 phút": "30 นาที",
   "15 phút": "15 นาที",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "คุณกำลังดูกำหนดเวลาของเจ้าของบ้าน เลือก \"เฉพาะฉัน\" เพื่อตั้งกำหนดเวลา Alarm ของคุณเอง",
-  "Chọn giờ kết thúc Alarm": "เลือกเวลาสิ้นสุด Alarm",
-  "Chọn giờ bắt đầu Alarm": "เลือกเวลาเริ่มต้น Alarm",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "คุณไม่มีสิทธิ์แก้ไขกำหนดเวลา Alarm ของบ้าน",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "ไม่สามารถใช้ Alarm กับอุปกรณ์ทั้งหมดได้",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "คุณกำลังดูกำหนดเวลาของเจ้าของบ้าน เลือก \"เฉพาะฉัน\" เพื่อตั้งกำหนดเวลา สัญญาณเตือน ของคุณเอง",
+  "Chọn giờ kết thúc báo động": "เลือกเวลาสิ้นสุด สัญญาณเตือน",
+  "Chọn giờ bắt đầu báo động": "เลือกเวลาเริ่มต้น สัญญาณเตือน",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "คุณไม่มีสิทธิ์แก้ไขกำหนดเวลา สัญญาณเตือน ของบ้าน",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "ไม่สามารถใช้ สัญญาณเตือน กับอุปกรณ์ทั้งหมดได้",
   "Nhà chưa có thiết bị an ninh để áp dụng":
       "บ้านยังไม่มีอุปกรณ์รักษาความปลอดภัยที่ใช้ได้",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "คุณไม่มีสิทธิ์แก้ไขกำหนดเวลาแบบตามบ้าน โปรดเลือก \"เฉพาะฉัน\"",
-  "Không thể lưu chế độ Alarm": "ไม่สามารถบันทึกโหมด Alarm ได้",
-  "Thêm Reminder": "เพิ่ม Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder จะเตือนให้คุณตรวจสอบสถานะความปลอดภัยภายในบ้านตามเวลาที่เลือก",
-  "Thêm khung giờ Alarm": "เพิ่มช่วงเวลา Alarm",
-  "Đang sử dụng Reminder riêng của bạn": "กำลังใช้ Reminder ส่วนตัวของคุณ",
-  "Đang sử dụng Reminder của chủ nhà": "กำลังใช้ Reminder ของเจ้าของบ้าน",
-  "Sửa giờ Reminder": "แก้ไขเวลา Reminder",
-  "Sửa giờ kết thúc Alarm": "แก้ไขเวลาสิ้นสุด Alarm",
-  "Sửa giờ bắt đầu Alarm": "แก้ไขเวลาเริ่มต้น Alarm",
-  "Xoá Reminder": "ลบ Reminder",
+  "Không thể lưu chế độ báo động": "ไม่สามารถบันทึกโหมด สัญญาณเตือน ได้",
+  "Thêm nhắc nhở": "เพิ่ม การเตือนความจำ",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "การเตือนความจำ จะเตือนให้คุณตรวจสอบสถานะความปลอดภัยภายในบ้านตามเวลาที่เลือก",
+  "Thêm khung giờ báo động": "เพิ่มช่วงเวลา สัญญาณเตือน",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "กำลังใช้ การเตือนความจำ ส่วนตัวของคุณ",
+  "Đang sử dụng nhắc nhở của chủ nhà": "กำลังใช้ การเตือนความจำ ของเจ้าของบ้าน",
+  "Sửa giờ nhắc nhở": "แก้ไขเวลา การเตือนความจำ",
+  "Sửa giờ kết thúc báo động": "แก้ไขเวลาสิ้นสุด สัญญาณเตือน",
+  "Sửa giờ bắt đầu báo động": "แก้ไขเวลาเริ่มต้น สัญญาณเตือน",
+  "Xoá nhắc nhở": "ลบ การเตือนความจำ",
   "Mỗi 1 giờ": "ทุก 1 ชั่วโมง",
   "Mỗi 30 phút": "ทุก 30 นาที",
   "Mỗi 15 phút": "ทุก 15 นาที",
@@ -604,15 +606,15 @@ const Map<String, String> thStrings = {
   "Bảo vệ thủ công đang bật": "เปิดโหมดป้องกันด้วยตนเองอยู่",
   "Bảo vệ tự động đang bật": "เปิดโหมดป้องกันอัตโนมัติอยู่",
   "Bảo vệ đang tắt": "โหมดป้องกันปิดอยู่",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "คุณเพิ่งเปิดแอปเพื่อตรวจสอบสถานะ",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "คุณควรเปิดแอปเป็นระยะเพื่อตรวจสอบสิทธิ์ กำหนดเวลา และการแจ้งเตือนที่ยังไม่ได้อ่าน",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "หลังใช้งานไปสักระยะ SafeHome จะประเมินพฤติกรรมการตรวจสอบแอปได้แม่นยำขึ้น",
-  "Tần suất vào app ổn": "เข้าใช้งานแอปสม่ำเสมอ",
-  "Đã lâu chưa vào app kiểm tra": "ไม่ได้เปิดแอปตรวจสอบมาระยะหนึ่งแล้ว",
-  "Đang ghi nhận tần suất vào app": "กำลังบันทึกความถี่การเข้าใช้งานแอป",
+  "Tần suất vào ứng dụng ổn": "เข้าใช้งานแอปสม่ำเสมอ",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "ไม่ได้เปิดแอปตรวจสอบมาระยะหนึ่งแล้ว",
+  "Đang ghi nhận tần suất vào ứng dụng": "กำลังบันทึกความถี่การเข้าใช้งานแอป",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "ต้องตรวจสอบสิทธิ์ตำแหน่งแบบอนุญาตเสมอและเงื่อนไขการทำงานเบื้องหลัง",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -628,19 +630,19 @@ const Map<String, String> thStrings = {
       "ควรเพิ่มเครื่องตรวจจับควัน SOS หรืออุปกรณ์ฉุกเฉินที่เหมาะกับบ้าน",
   "Chưa có thiết bị khẩn cấp": "ไม่มีอุปกรณ์ฉุกเฉิน",
   "Đã có thiết bị khẩn cấp": "มีอุปกรณ์ฉุกเฉินแล้ว",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "ควรกำหนดเวลา Alarm ในช่วงนอนหลับหรือไม่มีคนอยู่บ้าน",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "บ้านมีกำหนดเวลา Alarm หรือกำหนดการแจ้งเตือนตามอุปกรณ์แล้ว",
-  "Chưa set lịch Alarm": "ยังไม่ได้ตั้งกำหนดเวลา Alarm",
-  "Đã set lịch Alarm": "ตั้งกำหนดเวลา Alarm แล้ว",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "ควรมี Reminder อย่างน้อยหนึ่งรายการเพื่อไม่ให้ลืมตรวจสอบบ้าน",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "ควรกำหนดเวลา สัญญาณเตือน ในช่วงนอนหลับหรือไม่มีคนอยู่บ้าน",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "บ้านมีกำหนดเวลา สัญญาณเตือน หรือกำหนดการแจ้งเตือนตามอุปกรณ์แล้ว",
+  "Chưa cài lịch báo động": "ยังไม่ได้ตั้งกำหนดเวลา สัญญาณเตือน",
+  "Đã cài lịch báo động": "ตั้งกำหนดเวลา สัญญาณเตือน แล้ว",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "ควรมี การเตือนความจำ อย่างน้อยหนึ่งรายการเพื่อไม่ให้ลืมตรวจสอบบ้าน",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
       "แอปจะเตือนให้คุณตรวจสอบบ้านตามกำหนดเวลาที่ตั้งไว้",
-  "Chưa setup Reminder": "ยังไม่ได้ตั้งค่า Reminder",
-  "Đã setup Reminder": "ตั้งค่า Reminder แล้ว",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Chưa cài đặt nhắc nhở": "ยังไม่ได้ตั้งค่า การเตือนความจำ",
+  "Đã cài đặt nhắc nhở": "ตั้งค่า การเตือนความจำ แล้ว",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "โปรดเปิดแอปหรือเข้าสู่ระบบอีกครั้งหากอุปกรณ์ไม่ได้รับการแจ้งเตือน",
   "Thiết bị chưa đăng ký nhận cảnh báo":
       "อุปกรณ์ยังไม่ได้ลงทะเบียนรับการแจ้งเตือน",
@@ -660,7 +662,7 @@ const Map<String, String> thStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "โทรศัพท์มีโอกาสทำให้การแจ้งเตือน SafeHome ล่าช้าน้อยลง",
   "Chưa tắt tối ưu pin": "ยังไม่ได้ปิดการเพิ่มประสิทธิภาพแบตเตอรี่",
-  "Tối ưu pin không chặn app": "การเพิ่มประสิทธิภาพแบตเตอรี่ไม่บล็อกแอป",
+  "Tối ưu pin không chặn ứng dụng": "การเพิ่มประสิทธิภาพแบตเตอรี่ไม่บล็อกแอป",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "การป้องกันอัตโนมัติเมื่อออกจากบ้านต้องใช้สิทธิ์ตำแหน่งแบบ \"อนุญาตเสมอ\" เพื่อทำงานอย่างเสถียร",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
@@ -671,7 +673,7 @@ const Map<String, String> thStrings = {
       "ต้องใช้สิทธิ์นี้เมื่อใช้การป้องกันอัตโนมัติเมื่อออกจากบ้านเท่านั้น",
   "Chưa cấp vị trí luôn luôn": "ยังไม่ได้อนุญาตตำแหน่งเสมอ",
   "Đã cấp vị trí luôn luôn": "อนุญาตตำแหน่งเสมอแล้ว",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
       "iOS ไม่เปิดแบบเต็มหน้าจอเหมือน Android แอปจึงใช้การแจ้งเตือนและเสียงของระบบ",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Android ใช้การแจ้งเตือนแบบเต็มหน้าจอ หากอุปกรณ์บล็อกไว้ โปรดให้สิทธิ์ในการตั้งค่า",
@@ -685,9 +687,9 @@ const Map<String, String> thStrings = {
   "Đã bật thông báo": "เปิดใช้งานการแจ้งเตือนแล้ว",
   "Hệ thống: Sẵn sàng": "ระบบ: พร้อม",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "ระบบ: อาจพลาดการแจ้งเตือน",
-  "Cách bạn đang dùng app": "คุณใช้งานแอปอย่างไร",
+  "Cách bạn đang dùng ứng dụng": "คุณใช้งานแอปอย่างไร",
   "Thiết bị của bạn": "อุปกรณ์ของคุณ",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "ตรวจสอบโทรศัพท์และวิธีที่คุณใช้งานแอป",
   "Hệ thống SafeHome": "ระบบ SafeHome",
   "Hệ thống: Đang kiểm tra...": "ระบบ: กำลังตรวจสอบ...",
@@ -701,8 +703,9 @@ const Map<String, String> thStrings = {
       "เปิดการป้องกันอัตโนมัติเมื่อทุกคนออกจากบ้านแล้ว",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "ปิดการป้องกันอัตโนมัติเมื่อทุกคนออกจากบ้านแล้ว",
-  "Không thể thay đổi trạng thái Alarm": "ไม่สามารถเปลี่ยนสถานะ Alarm ได้",
-  "Đã tắt toàn bộ Alarm của nhà": "ปิด Alarm ทั้งหมดของบ้านแล้ว",
+  "Không thể thay đổi trạng thái báo động":
+      "ไม่สามารถเปลี่ยนสถานะ สัญญาณเตือน ได้",
+  "Đã tắt toàn bộ báo động của nhà": "ปิด สัญญาณเตือน ทั้งหมดของบ้านแล้ว",
   "QR này không phải mã xin gia nhập Home":
       "QR นี้ไม่ใช่รหัสสำหรับขอเข้าร่วมบ้าน",
   "Thêm Home": "เพิ่มบ้าน",
@@ -715,20 +718,20 @@ const Map<String, String> thStrings = {
   "Cho phép vị trí luôn luôn": "อนุญาตตำแหน่งเสมอ",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "บ้านของคุณจะถูกลบ\nคุณจะออกจากบ้านที่แชร์กับคุณ",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "การดำเนินการนี้จะเปลี่ยนกำหนดเวลา Alarm ของบ้านสำหรับอุปกรณ์รักษาความปลอดภัยทั้งหมดในบ้านที่เลือก\n\nสมาชิกที่ใช้ Alarm แบบ 'ตามบ้าน' จะได้รับผลกระทบ\nAlarm ส่วนตัวในโหมด 'เฉพาะฉัน' จะไม่เปลี่ยนแปลง",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "การดำเนินการนี้จะเพิ่ม Reminder ของบ้านให้บ้านที่เลือก\n\nสมาชิกที่ใช้ Reminder แบบ 'ตามบ้าน' จะได้รับผลกระทบ\nReminder ส่วนตัวในโหมด 'เฉพาะฉัน' จะไม่เปลี่ยนแปลง",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "การดำเนินการนี้จะเปลี่ยนกำหนดเวลา สัญญาณเตือน ของบ้านสำหรับอุปกรณ์รักษาความปลอดภัยทั้งหมดในบ้านที่เลือก\n\nสมาชิกที่ใช้ สัญญาณเตือน แบบ 'ตามบ้าน' จะได้รับผลกระทบ\nAlarm ส่วนตัวในโหมด 'เฉพาะฉัน' จะไม่เปลี่ยนแปลง",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "การดำเนินการนี้จะเพิ่ม การเตือนความจำ ของบ้านให้บ้านที่เลือก\n\nสมาชิกที่ใช้ การเตือนความจำ แบบ 'ตามบ้าน' จะได้รับผลกระทบ\nReminder ส่วนตัวในโหมด 'เฉพาะฉัน' จะไม่เปลี่ยนแปลง",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "เมื่อเปิด อุปกรณ์รักษาความปลอดภัยจะถูกตรวจสอบทันที\n\nการป้องกันอัตโนมัติเมื่อออกจากบ้านจะหยุดชั่วคราว โหมดนี้จะไม่ปิดเองเมื่อมีคนกลับบ้าน และจะปิดเมื่อสมาชิกที่ได้รับอนุญาตเปลี่ยนเป็นโหมดปกติเท่านั้น",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "การดำเนินการนี้จะเปลี่ยนเวลา Alarm ของอุปกรณ์บางเครื่องในวันนี้...",
+      "การดำเนินการนี้จะเปลี่ยนเวลา สัญญาณเตือน ของอุปกรณ์บางเครื่องในวันนี้...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "การดำเนินการนี้จะปิด Alarm ทุกประเภทของบ้าน คุณจะไม่ได้รับการแจ้งเตือนบนโทรศัพท์เมื่อเกิดอันตรายอีกต่อไป",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm กำลังใช้โหมดตามบ้าน\n\nคุณจะได้รับการแจ้งเตือนตามกำหนดเวลา Alarm ส่วนกลางที่เจ้าของบ้านหรือผู้ดูแลระบบตั้งไว้",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Alarm กำลังใช้โหมดเฉพาะฉัน\n\nคุณจะได้รับการแจ้งเตือนตามกำหนดเวลา Alarm ส่วนตัวที่ตั้งไว้สำหรับบัญชีนี้",
+      "การดำเนินการนี้จะปิด สัญญาณเตือน ทุกประเภทของบ้าน คุณจะไม่ได้รับการแจ้งเตือนบนโทรศัพท์เมื่อเกิดอันตรายอีกต่อไป",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "สัญญาณเตือน กำลังใช้โหมดตามบ้าน\n\nคุณจะได้รับการแจ้งเตือนตามกำหนดเวลา สัญญาณเตือน ส่วนกลางที่เจ้าของบ้านหรือผู้ดูแลระบบตั้งไว้",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "สัญญาณเตือน กำลังใช้โหมดเฉพาะฉัน\n\nคุณจะได้รับการแจ้งเตือนตามกำหนดเวลา สัญญาณเตือน ส่วนตัวที่ตั้งไว้สำหรับบัญชีนี้",
   "Không thể đăng nhập bằng Google": "ไม่สามารถลงชื่อเข้าใช้ด้วย Google ได้",
   "Không đặt được mật khẩu": "ไม่สามารถตั้งรหัสผ่านได้",
   "Chấp nhận": "ยอมรับ",
@@ -756,13 +759,13 @@ const Map<String, String> thStrings = {
   "XÁC NHẬN": "ยืนยัน",
   "CẦN KIỂM TRA": "ต้องตรวจสอบ",
   "KIỂM TRA NHÀ": "ตรวจสอบบ้าน",
-  "ĐÓNG NHẮC NHỞ": "ปิด Reminder",
+  "ĐÓNG NHẮC NHỞ": "ปิด การเตือนความจำ",
   "SafeHome Security Alert": "การแจ้งเตือนความปลอดภัย SafeHome",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "โปรดเลือกสิทธิ์ตำแหน่ง \"อนุญาตเสมอ\" ในการตั้งค่าแอป",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "บัญชี Google จำเป็นต้องสร้างรหัสผ่านเพิ่มเติมเพื่อใช้ฟังก์ชันความปลอดภัย",
-  "Alarm": "Alarm",
+  "Báo động": "สัญญาณเตือนภัย",
   "Bạn không có quyền thực hiện thao tác này。": "คุณไม่มีสิทธิ์ดำเนินการนี้",
   "Cài đặt": "การตั้งค่า",
   "Cập nhật": "อัปเดต",
@@ -776,7 +779,7 @@ const Map<String, String> thStrings = {
   "Đã xảy ra lỗi. Vui lòng thử lại.": "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
   "Đang kiểm tra kết nối Hub": "กำลังตรวจสอบการเชื่อมต่อ Hub",
   "Đang mở khi nhà ở chế độ Bảo vệ": "เปิดอยู่เมื่อบ้านอยู่ในโหมดป้องกัน",
-  "Đang mở trong giờ Alarm": "เปิดอยู่ในช่วงเวลา Alarm",
+  "Đang mở trong giờ báo động": "เปิดอยู่ในช่วงเวลา สัญญาณเตือน",
   "Đang tải...": "กำลังโหลด...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "โปรไฟล์ คำขอ และคำเชิญเข้าร่วม",
   "Hub chưa gửi trạng thái": "Hub ยังไม่ได้ส่งสถานะ",
@@ -784,7 +787,7 @@ const Map<String, String> thStrings = {
   "Hub tín hiệu bình thường": "สัญญาณ Hub ปกติ",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "ล็อกเปิดอยู่เมื่อบ้านอยู่ในโหมดป้องกัน",
-  "Khóa đang mở trong giờ Alarm": "ล็อกเปิดอยู่ในช่วงเวลา Alarm",
+  "Khóa đang mở trong giờ báo động": "ล็อกเปิดอยู่ในช่วงเวลา สัญญาณเตือน",
   "Không có thông báo": "ไม่มีการแจ้งเตือน",
   "Khu vực nguy hiểm": "พื้นที่อันตราย",
   "Kiểm tra thiết bị trong nhà này": "ตรวจสอบอุปกรณ์ในบ้านหลังนี้",
@@ -798,7 +801,7 @@ const Map<String, String> thStrings = {
   "Nhập email": "ป้อนอีเมล",
   "Phòng": "ห้อง",
   "Quản trị viên": "ผู้ดูแลระบบ",
-  "Reminder": "Reminder",
+  "Nhắc nhở": "การเตือนความจำ",
   "SafeHome": "SafeHome",
   "Sóng yếu": "สัญญาณอ่อน",
   "SOS": "SOS",
@@ -827,16 +830,16 @@ const Map<String, String> thStrings = {
   "Xoá toàn bộ dữ liệu và thiết bị": "ลบข้อมูลและอุปกรณ์ทั้งหมด",
   "TẮT CẢNH BÁO": "ปิดการแจ้งเตือน",
   "Đã tạo nhà": "สร้างบ้านแล้ว",
-  "Mode Bảo vệ thủ công đã bật": "เปิดโหมดป้องกันด้วยตนเองแล้ว",
-  "Báo động không lặp lại.": "Alarm จะไม่ทำซ้ำ",
+  "Chế độ Bảo vệ thủ công đã bật": "เปิดโหมดป้องกันด้วยตนเองแล้ว",
+  "Báo động không lặp lại.": "สัญญาณเตือน จะไม่ทำซ้ำ",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "Alarm จะทำซ้ำหลัง \$securityModeRepeatMinutes นาที หากยังมีปัญหาอยู่",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "สัญญาณเตือน จะทำซ้ำหลัง \$securityModeRepeatMinutes นาที หากยังมีปัญหาอยู่",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "\$actorName เปิดโหมดป้องกันด้วยตนเองสำหรับ \"\$homeName\" โหมดนี้จะปิดเมื่อสมาชิกที่ได้รับอนุญาตเปลี่ยนกลับเป็นโหมดปกติเท่านั้น \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "คุณเปิด Alarm สำหรับบ้าน \"\$homeName\" แล้ว",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "คุณได้ปิด Alarm ทั้งหมดของบ้าน \"\$homeName\" แล้ว",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "คุณเปิด สัญญาณเตือน สำหรับบ้าน \"\$homeName\" แล้ว",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "คุณได้ปิด สัญญาณเตือน ทั้งหมดของบ้าน \"\$homeName\" แล้ว",
   "Thành viên mới": "สมาชิกใหม่",
   "Thành viên rời nhà": "สมาชิกออกจากบ้าน",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -867,9 +870,9 @@ const Map<String, String> thStrings = {
   "Tin nhắn HomeChat": "ข้อความ HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName ส่งข้อความ",
   "Bạn có tin nhắn mới": "คุณมีข้อความใหม่",
-  "Mode Bảo vệ sẽ chỉ báo động một lần":
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
       "โหมดป้องกันจะแจ้งเตือนเพียงครั้งเดียว",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
       "โหมดป้องกันจะแจ้งเตือนซ้ำหลัง \$minutes นาที",
   "Đã gửi yêu cầu gia nhập \$count nhà": "ส่งคำขอเข้าร่วมบ้าน \$count หลังแล้ว",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
@@ -897,8 +900,8 @@ const Map<String, String> thStrings = {
   "Đang ghép nối: \$seconds giây": "กำลังจับคู่: \$seconds วินาที",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "เปิดโหมดเพิ่มอุปกรณ์ในบ้าน \"\$homeName\" เป็นเวลา \$seconds วินาที",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "ช่วงเวลาหยุดชั่วคราวต้องอยู่ภายในกำหนดเวลา Alarm (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "ช่วงเวลาหยุดชั่วคราวต้องอยู่ภายในกำหนดเวลา สัญญาณเตือน (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n":
       "ผ่านการทดสอบ \$passCount/\$total รายการ\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
@@ -941,8 +944,8 @@ const Map<String, String> thStrings = {
       "หากไม่มีใครยืนยัน SafeHome จะเปลี่ยนไปใช้การโทรฉุกเฉิน",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "จะแจ้งเตือนอีกครั้งเวลา \$time หากยังไม่ได้แก้ไขปัญหา",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "จะแจ้งเตือนซ้ำตามกำหนดเวลา Alarm ที่ตั้งไว้ หากยังไม่ได้แก้ไขปัญหา",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "จะแจ้งเตือนซ้ำตามกำหนดเวลา สัญญาณเตือน ที่ตั้งไว้ หากยังไม่ได้แก้ไขปัญหา",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "\"\$deviceName\" ปิดแล้วใน \"\$resolvedHomeName\"",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -955,14 +958,14 @@ const Map<String, String> thStrings = {
   "✅ \$count nhà an toàn": "✅ บ้านที่ปลอดภัย \$count หลัง",
   "\$count nhà đang được theo dõi": "กำลังตรวจสอบบ้าน \$count หลัง",
   "\$minutes phút": "\$minutes นาที",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "ตั้ง Reminder ให้บ้าน \$updatedHomes หลังแล้ว",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "ตั้งค่า Alarm ให้กับอุปกรณ์ \$updatedDevices เครื่องในบ้าน \$updatedHomes หลังแล้ว\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "ตั้ง การเตือนความจำ ให้บ้าน \$updatedHomes หลังแล้ว",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "ตั้งค่า สัญญาณเตือน ให้กับอุปกรณ์ \$updatedDevices เครื่องในบ้าน \$updatedHomes หลังแล้ว\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "แชร์บ้านที่คุณมีสิทธิ์แล้ว\n\nข้ามบ้าน \$skipped หลังเนื่องจากคุณไม่มีสิทธิ์แชร์",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "ใช้ Alarm กับอุปกรณ์รักษาความปลอดภัย \$count เครื่องแล้ว",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "ใช้ สัญญาณเตือน กับอุปกรณ์รักษาความปลอดภัย \$count เครื่องแล้ว",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "ใช้กำหนดเวลาเดียวกันกับอุปกรณ์รักษาความปลอดภัย \$count เครื่อง",
   "\$count phút trước": "\$count นาทีที่แล้ว",
@@ -993,16 +996,16 @@ const Map<String, String> thStrings = {
       "ตรวจสอบประตูหรือล็อกที่เปิดอยู่ก่อนเปิดโหมดป้องกันให้บ้าน",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "อาจยังมีคนอยู่บ้าน หากใช่ ควรเปลี่ยนเป็นโหมดปกติ",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "มีสมาชิกที่ยังไม่ทราบตำแหน่ง โปรดแจ้งให้เปิดแอปหรือตรวจสอบสิทธิ์ตำแหน่ง",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "มีอุปกรณ์ขาดการเชื่อมต่อ โปรดตรวจสอบแบตเตอรี่ แหล่งจ่ายไฟ หรือตำแหน่งอุปกรณ์",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "มีอุปกรณ์แบตเตอรี่ใกล้หมด ควรเปลี่ยนแบตเตอรี่เร็ว ๆ นี้เพื่อไม่ให้พลาดการแจ้งเตือน",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "คุณยังไม่ได้ตั้ง Reminder ควรสร้างกำหนดการ Reminder เพื่อตรวจสอบบ้านเป็นระยะ",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "คุณยังไม่ได้ตั้งกำหนดเวลา Alarm ควรเปิดโหมดป้องกันตามช่วงเวลาที่มักไม่มีคนอยู่บ้าน",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "คุณยังไม่ได้ตั้ง การเตือนความจำ ควรสร้างกำหนดการ การเตือนความจำ เพื่อตรวจสอบบ้านเป็นระยะ",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "คุณยังไม่ได้ตั้งกำหนดเวลา สัญญาณเตือน ควรเปิดโหมดป้องกันตามช่วงเวลาที่มักไม่มีคนอยู่บ้าน",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "ไม่มีสิ่งที่ต้องจัดการทันที โปรดติดตามสถานะบ้านต่อไป",
   "Lặp sau \$minutes phút": "แจ้งเตือนซ้ำหลัง \$minutes นาที",
@@ -1040,7 +1043,7 @@ const Map<String, String> thStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: เปิดอยู่เมื่อบ้านอยู่ในโหมดป้องกัน",
   "An tâm hơn trong từng ngôi nhà": "อุ่นใจมากขึ้นในทุกบ้าน",
-  "Báo động SafeHome": "Alarm ของ SafeHome",
+  "Báo động SafeHome": "สัญญาณเตือน ของ SafeHome",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "มีการแจ้งเตือนด้านความปลอดภัยที่ต้องตรวจสอบทันที",
   "Có cảnh báo cần kiểm tra": "มีสัญญาณเตือนที่ต้องตรวจสอบ",
@@ -1051,26 +1054,59 @@ const Map<String, String> thStrings = {
       "เวลาเริ่มต้นและเวลาสิ้นสุดต้องไม่ตรงกัน",
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "เวลาสิ้นสุดต้องอยู่หลังเวลาปัจจุบัน",
-  "Khoảng tạm tắt không hợp lệ": "ช่วงเวลาหยุด Alarm ชั่วคราวไม่ถูกต้อง",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "ช่วงหยุด Alarm ชั่วคราวไม่ทับซ้อนกับกำหนดเวลา Alarm ที่เปิดใช้งานอยู่",
+  "Khoảng tạm tắt không hợp lệ": "ช่วงเวลาหยุด สัญญาณเตือน ชั่วคราวไม่ถูกต้อง",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "ช่วงหยุด สัญญาณเตือน ชั่วคราวไม่ทับซ้อนกับกำหนดเวลา สัญญาณเตือน ที่เปิดใช้งานอยู่",
 
-  // Device alarm policy
-  "Cấu hình báo động": "การตั้งค่าสัญญาณเตือน",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "กำหนดวิธีที่เซ็นเซอร์นี้เรียกใช้การแจ้งเตือน",
+  // Device สัญญาณเตือน policy
+  "Cài đặt báo động": "การตั้งค่าสัญญาณเตือนภัย",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "กำหนดวิธีที่เซ็นเซอร์นี้เรียกใช้การแจ้งเตือน",
   "Tham gia báo động": "เข้าร่วมระบบเตือนภัย",
-  "Tắt để cảm biến không tạo Alarm.": "ปิดเพื่อไม่ให้เซ็นเซอร์นี้สร้าง Alarm",
+  "Tắt để cảm biến không tạo báo động.":
+      "ปิดเพื่อไม่ให้เซ็นเซอร์นี้สร้าง สัญญาณเตือน",
   "Bật còi vật lý": "เปิดไซเรนภายในบ้าน",
   "Cho phép kích hoạt còi trong nhà.": "อนุญาตให้เปิดไซเรนภายในบ้าน",
   "Đánh thức màn hình": "ปลุกหน้าจอ",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "แสดงการแจ้งเตือนแบบเต็มหน้าจอบนโทรศัพท์",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "แสดงการแจ้งเตือนแบบเต็มหน้าจอบนโทรศัพท์",
   "Độ trễ kích hoạt": "เวลาหน่วงก่อนทำงาน",
   "Chỉ áp dụng cho cảm biến an ninh.": "ใช้กับเซ็นเซอร์ความปลอดภัยเท่านั้น",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "เซ็นเซอร์ฉุกเฉินจะทำงานทันทีเสมอ",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "เซ็นเซอร์ฉุกเฉินจะทำงานทันทีเสมอ",
   "Ngay lập tức": "ทันที",
   "giây": "วินาที",
   "Đã lưu cấu hình báo động": "บันทึกการตั้งค่าสัญญาณเตือนแล้ว",
   "Không thể lưu cấu hình báo động": "ไม่สามารถบันทึกการตั้งค่าสัญญาณเตือนได้",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "เฉพาะเจ้าของบ้านและผู้ดูแลระบบเท่านั้นที่เปลี่ยนการตั้งค่านี้ได้",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "เฉพาะเจ้าของบ้านและผู้ดูแลระบบเท่านั้นที่เปลี่ยนการตั้งค่านี้ได้",
   "Thông tin chi tiết": "รายละเอียดอุปกรณ์",
+  "Thông báo báo động": "การแจ้งเตือนสัญญาณเตือนภัย",
+  "Cài đặt nhắc nhở": "การตั้งค่าการเตือนความจำ",
+  "Nhắc nhở theo lịch": "การเตือนความจำตามกำหนดเวลา",
+  "Danh sách thông báo": "การแจ้งเตือน",
+  "Cài đặt thông báo": "การตั้งค่าการแจ้งเตือน",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "ใช้กำหนดเวลาสัญญาณเตือนภัยที่ตั้งไว้",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "ส่งเฉพาะการแจ้งเตือน ไม่เปิดสัญญาณเตือนภัย",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "สัญญาณเตือนภัยทั้งหมดของบ้านถูกปิด ระบบจะส่งเฉพาะการแจ้งเตือน",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "เฉพาะเจ้าของบ้านเท่านั้นที่เปิดโหมดนี้ได้",
+  "Bật Không bảo vệ?": "เปิดโหมดไม่ป้องกันหรือไม่",
+  "Cảm biến vừa phát hiện một sự kiện.": "เซ็นเซอร์เพิ่งตรวจพบเหตุการณ์",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "เฉพาะเจ้าของบ้านเท่านั้นที่เปิดโหมดไม่ป้องกันได้",
+  "Đã chuyển nhà sang Không bảo vệ": "บ้านเปลี่ยนเป็นโหมดไม่ป้องกันแล้ว",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "เปลี่ยนเป็นโหมดไม่ป้องกันแล้ว แต่ส่งการแจ้งเตือนไม่สำเร็จ",
+  "Giám sát toàn diện": "การติดตามแบบเต็มรูปแบบ",
+  "Không bảo vệ": "ไม่ป้องกัน",
+  "Không bảo vệ đang bật": "โหมดไม่ป้องกันกำลังทำงาน",
+  "Nhà đã chuyển sang Không bảo vệ": "บ้านเปลี่ยนเป็นโหมดไม่ป้องกันแล้ว",
+  "Thông báo cảm biến": "การแจ้งเตือนเซ็นเซอร์",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "การแจ้งเตือนทั่วไปเมื่อเซ็นเซอร์ตรวจพบเหตุการณ์",
+  "Tôi hiểu, tiếp tục": "ฉันเข้าใจ ดำเนินการต่อ",
 };

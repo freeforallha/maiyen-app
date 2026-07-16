@@ -13,7 +13,7 @@ const Map<String, String> filStrings = {
   "Chưa cập nhật": "Hindi pa na-update",
   "Chủ nhà": "May-ari",
   "Nhà được chia sẻ": "Ibinahaging bahay",
-  "Địa chỉ": "Address",
+  "Địa chỉ": "Tirahan",
   "An ninh ra/vào": "Seguridad sa pasukan",
   "Nguy hiểm khẩn cấp": "Mga agarang panganib",
   "Điều khiển & hạ tầng": "Kontrol at imprastraktura",
@@ -23,28 +23,28 @@ const Map<String, String> filStrings = {
   "Cửa": "Pinto",
   "Cửa sổ": "Bintana",
   "Cổng": "Tarangkahan",
-  "Khóa thông minh": "Smart lock",
+  "Khóa thông minh": "Matalinong kandado",
   "Chuyển động": "Galaw",
   "Hiện diện": "Presensya",
   "Rung/chấn động": "Panginginig",
   "Kính vỡ": "Pagkabasag ng salamin",
-  "Báo khói": "Alarm sa usok",
-  "Báo nhiệt": "Alarm sa init",
-  "Khí CO": "Carbon monoxide",
-  "Báo gas": "Alarm sa gas",
-  "Báo ngập/rò nước": "Alarm sa tagas ng tubig",
+  "Báo khói": "alarma sa usok",
+  "Báo nhiệt": "alarma sa init",
+  "Khí CO": "Karbon monoksido",
+  "Báo gas": "alarma sa gas",
+  "Báo ngập/rò nước": "alarma sa tagas ng tubig",
   "Nút SOS": "Pindutan ng SOS",
   "Nhiệt độ/Độ ẩm": "Temperatura/Halumigmig",
   "Bụi mịn PM2.5": "Pinong alikabok na PM2.5",
   "CO₂": "CO₂",
   "Chất lượng không khí": "Kalidad ng hangin",
-  "Ổ điện thông minh": "Smart plug",
+  "Ổ điện thông minh": "Matalinong saksakan",
   "Còi báo động": "Sirena",
-  "Van thông minh": "Smart valve",
-  "Camera": "Camera",
+  "Van thông minh": "Matalinong balbula",
+  "Camera": "Kamera",
   "Chuông cửa": "Kampanilya ng pinto",
   "Bàn phím an ninh": "Keypad ng seguridad",
-  "Bộ mở rộng sóng": "Repeater",
+  "Bộ mở rộng sóng": "Pampalakas ng senyas",
   "Hub trung tâm": "Pangunahing Hub",
   "Đo điện năng": "Monitor ng konsumo ng kuryente",
   "Nguồn dự phòng UPS": "Backup na kuryente mula sa UPS",
@@ -55,7 +55,7 @@ const Map<String, String> filStrings = {
   "Vừa xong": "Ngayon lang",
   "Bị tháo": "Natukoy ang pakikialam",
   "Có khói": "Natukoy ang usok",
-  "Bình thường": "Normal",
+  "Bình thường": "Karaniwan",
   "Bảo vệ": "Proteksyon",
   "Chế độ Bảo vệ": "Mode ng Proteksyon",
   "Tự động Bảo vệ khi rời nhà": "Awtomatikong Proteksyon kapag wala sa bahay",
@@ -106,13 +106,13 @@ const Map<String, String> filStrings = {
   "Hub kết nối bình thường": "Nakakonekta ang Hub",
   "Cài đặt cảnh báo cho nhà hiện tại":
       "Mga setting ng alerto para sa bahay na ito",
-  "Nhận cảnh báo Alarm": "Tumanggap ng mga alerto ng Alarm",
+  "Nhận cảnh báo báo động": "Tumanggap ng mga alerto ng alarma",
   "Đang bật cho tài khoản này": "Naka-enable para sa account na ito",
   "Đang tắt cho tài khoản này": "Naka-disable para sa account na ito",
-  "Hẹn giờ Reminder": "Iskedyul ng Reminder",
+  "Hẹn giờ nhắc nhở": "Iskedyul ng paalala",
   "Nhắc kiểm tra nhà theo thời gian":
-      "Magtakda ng mga Reminder para suriin ang bahay",
-  "Hẹn giờ Alarm": "Iskedyul ng Alarm",
+      "Magtakda ng mga paalala para suriin ang bahay",
+  "Hẹn giờ báo động": "Iskedyul ng alarma",
   "Chưa thiết lập": "Hindi pa nakatakda",
   "Chưa thiết lập thời gian": "Walang nakatakdang iskedyul",
   "Tổng hợp trạng thái nhà": "Buod ng status ng bahay",
@@ -149,13 +149,13 @@ const Map<String, String> filStrings = {
   "Đóng tìm kiếm": "Isara ang paghahanap",
   "Giờ": "Oras",
   "Phút": "Minuto",
-  "Đặt Home Reminder": "Itakda ang Reminder ng bahay",
-  "Đặt Home Alarm": "Itakda ang Alarm ng bahay",
+  "Đặt nhắc nhở cho nhà": "Itakda ang paalala ng bahay",
+  "Đặt báo động cho nhà": "Itakda ang alarma ng bahay",
   "Xác nhận thay đổi": "Kumpirmahin ang mga pagbabago",
   "Tiếp tục": "Magpatuloy",
-  "Giờ Reminder": "Oras ng Reminder",
-  "Giờ bắt đầu Alarm": "Oras ng pagsisimula ng Alarm",
-  "Giờ kết thúc Alarm": "Oras ng pagtatapos ng Alarm",
+  "Giờ nhắc nhở": "Oras ng paalala",
+  "Giờ bắt đầu báo động": "Oras ng pagsisimula ng alarma",
+  "Giờ kết thúc báo động": "Oras ng pagtatapos ng alarma",
   "Không có nhà nào đủ điều kiện để cài": "Walang nakitang kwalipikadong bahay",
   "Cài đặt hoàn tất": "Kumpleto na ang pag-setup",
   "Xác nhận rời nhà": "Kumpirmahin ang pag-alis sa bahay",
@@ -172,8 +172,8 @@ const Map<String, String> filStrings = {
       "Itakda ang lokasyon ng bahay at i-enable ang awtomatikong proteksyon",
   "Chuyển quyền chủ nhà hoặc xoá nhà":
       "Ilipat ang pagmamay-ari o tanggalin ang bahay",
-  "Đặt Reminder / Alarm nhà đã chọn":
-      "Itakda ang Reminder / Alarm para sa mga napiling bahay",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Itakda ang paalala / alarma para sa mga napiling bahay",
   "Chia sẻ nhà đã chọn": "Ibahagi ang mga napiling bahay",
   "Mở danh sách chia sẻ nhà": "Buksan ang listahan ng pagbabahagi ng bahay",
   "Xoá các nhà đã chọn?": "Tanggalin ang mga napiling bahay?",
@@ -191,27 +191,27 @@ const Map<String, String> filStrings = {
   "Chưa share cho ai": "Hindi pa ibinabahagi kaninuman",
   "Tìm nhà": "Maghanap ng mga bahay",
   "Xoá các nhà đã chọn ?": "Tanggalin ang mga napiling bahay?",
-  "Thông báo Home": "Mga notification ng bahay",
-  "Thông báo nhà": "Mga notification ng bahay",
+  "Thông báo Home": "Mga notipikasyon ng bahay",
+  "Thông báo nhà": "Mga notipikasyon ng bahay",
   "Vai trò thành viên đã thay đổi": "Nabago ang tungkulin ng miyembro",
-  "Xoá tất cả thông báo?": "Burahin ang lahat ng notification?",
+  "Xoá tất cả thông báo?": "Burahin ang lahat ng notipikasyon?",
   "Toàn bộ thông báo nhà sẽ bị xoá.":
-      "Buburahin ang lahat ng notification ng bahay.",
-  "Chưa có thông báo nào": "Wala pang notification",
-  "Chưa có thông báo": "Wala pang notification",
+      "Buburahin ang lahat ng notipikasyon ng bahay.",
+  "Chưa có thông báo nào": "Wala pang notipikasyon",
+  "Chưa có thông báo": "Wala pang notipikasyon",
   "Vuốt lên để tải thêm": "Mag-swipe pataas para mag-load pa",
   "Không có thiết bị": "Walang aparato",
   "Chỉ chủ nhà mới được xoá nhà":
       "May-ari lang ang maaaring magtanggal ng bahay na ito",
   "Chỉ chủ nhà mới được chuyển quyền":
       "May-ari lang ang maaaring maglipat ng pagmamay-ari",
-  "Lưu ý khi bật Alarm": "Paalala tungkol sa Alarm",
-  "Alarm đã được bật": "Naka-enable ang Alarm",
+  "Lưu ý khi bật báo động": "Paalala tungkol sa alarma",
+  "Báo động đã được bật": "Naka-enable ang alarma",
   "Đã hiểu": "Nauunawaan ko",
-  "Lưu ý tạm tắt Alarm": "Paalala sa pag-pause ng Alarm",
-  "Đã bật Alarm": "Naka-enable ang Alarm",
-  "Đã tắt Alarm": "Naka-disable ang Alarm",
-  "Tắt Alarm": "I-off ang Alarm",
+  "Lưu ý tạm tắt báo động": "Paalala sa pag-pause ng alarma",
+  "Đã bật báo động": "Naka-enable ang alarma",
+  "Đã tắt báo động": "Naka-disable ang alarma",
+  "Tắt báo động": "Ihinto ang alarma",
   "Cả ngày": "Buong araw",
   "Bạn không có quyền thực hiện thao tác này.":
       "Wala kang pahintulot na gawin ito.",
@@ -301,7 +301,7 @@ const Map<String, String> filStrings = {
   "Về muộn": "Gabi nang uuwi",
   "Ra ngoài": "Lalabas",
   "Khác": "Iba pa",
-  "⏸️ Tạm tắt Alarm hôm nay": "⏸️ I-pause ang Alarm ngayong araw",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ I-pause ang alarma ngayong araw",
   "Chọn giờ bắt đầu tạm tắt": "Piliin ang oras ng pagsisimula ng pag-pause",
   "Từ": "Mula",
   "Từ giờ": "Mula",
@@ -317,8 +317,8 @@ const Map<String, String> filStrings = {
   "Xem lời mời chia sẻ và xin gia nhập":
       "Tingnan ang mga imbitasyon sa pagbabahagi at kahilingang sumali",
   "Cài đặt bảo mật": "Mga setting ng seguridad",
-  "Quyền báo động toàn màn hình": "Pahintulot para sa full-screen na Alarm",
-  "Báo động toàn màn hình": "Full-screen na Alarm",
+  "Quyền báo động toàn màn hình": "Pahintulot para sa full-screen na alarma",
+  "Báo động toàn màn hình": "Full-screen na alarma",
   "Đã được cấp quyền": "Naibigay ang pahintulot",
   "Chưa được cấp quyền": "Hindi pa naibibigay ang pahintulot",
   "Mở cài đặt hệ thống": "Buksan ang mga setting ng system",
@@ -334,10 +334,10 @@ const Map<String, String> filStrings = {
   "Đã xoá tài khoản": "Natanggal na ang account",
   "Xoá thất bại": "Hindi natanggal",
   "Lỗi xoá tài khoản": "Hindi matanggal ang account",
-  "Tình trạng": "Status",
+  "Tình trạng": "Katayuan",
   "Tháo/Lắp": "Pakikialam",
   "Pin": "Baterya",
-  "Tín hiệu": "Signal",
+  "Tín hiệu": "Senyas",
   "Chưa liên kết": "Hindi pa naka-link",
   "Liên lạc cuối": "Huling pakikipag-ugnayan",
   "Event cuối": "Huling event",
@@ -345,12 +345,12 @@ const Map<String, String> filStrings = {
   "Lần kích hoạt cuối": "Huling pag-trigger",
   "Thiết bị không còn tồn tại": "Wala na ang aparato",
   "Mất kết nối": "Nakadiskonekta",
-  "Online": "Online",
-  "Offline": "Offline",
+  "Online": "Konektado",
+  "Offline": "Hindi konektado",
   "Loại thiết bị": "Uri ng aparato",
   "Nhiệt độ": "Temperatura",
   "Độ ẩm": "Halumigmig",
-  "Công suất": "Power",
+  "Công suất": "Lakas",
   "Điện áp": "Boltahe",
   "Dòng điện": "Daloy ng kuryente",
   "Điện năng": "Enerhiya",
@@ -384,8 +384,6 @@ const Map<String, String> filStrings = {
   "Battery low": "Mahina ang baterya",
   "Device offline": "Offline ang aparato",
   "Device online": "Online ang aparato",
-  "Alarm triggered": "Na-trigger ang Alarm",
-  "Alarm cleared": "Natapos na ang Alarm",
   "Cửa mở": "Bukas ang pinto",
   "Cửa đóng": "Sarado ang pinto",
   "Chưa đặt vị trí nhà": "Hindi pa nakatakda ang lokasyon ng bahay",
@@ -393,7 +391,7 @@ const Map<String, String> filStrings = {
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
       "Itakda muna ang lokasyon ng bahay bago i-on ang Awtomatikong Proteksyon",
   "Bán kính bảo vệ mặc định: 150 m": "Default na radius ng proteksyon: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi app chạy nền.":
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "Kailangang itakda ng bawat miyembro ang pahintulot sa lokasyon sa Palaging Payagan upang gumana ang status ng pag-alis/pagdating sa bahay habang tumatakbo ang app sa background.",
   "Lưu cài đặt": "I-save ang mga setting",
   "Đã đặt vị trí nhà": "Nakatakda na ang lokasyon ng bahay",
@@ -445,8 +443,8 @@ const Map<String, String> filStrings = {
   "Mật khẩu quá yếu": "Masyadong mahina ang password",
   "Sai email hoặc mật khẩu": "Maling email o password",
   "Lỗi đăng nhập": "Error sa pag-sign in",
-  "Email": "Email",
-  "Mật khẩu": "Password",
+  "Email": "Sulatroniko",
+  "Mật khẩu": "Lihim na salita",
   "Ghi nhớ tài khoản": "Tandaan ang account",
   "Đăng nhập": "Mag-log in",
   "Đăng ký mới": "Gumawa ng account",
@@ -454,7 +452,7 @@ const Map<String, String> filStrings = {
   "Chưa có tài khoản? Đăng ký": "Wala ka pang account? Mag-sign up",
   "Đã có tài khoản? Đăng nhập": "May account ka na? Mag-log in",
   "Tính năng đang được phát triển": "Ginagawa pa ang feature na ito",
-  "Thông báo": "Mga notification",
+  "Thông báo": "Notipikasyon",
   "Chat trong nhà": "Chat sa bahay",
   "Tìm kiếm tin nhắn": "Maghanap ng mga mensahe",
   "Xem thành viên": "Tingnan ang mga miyembro",
@@ -471,7 +469,7 @@ const Map<String, String> filStrings = {
   "Huỷ trả lời": "Kanselahin ang tugon",
   "Nhắn gì đó...": "Mag-type ng mensahe...",
   "Gọi điện": "Tumawag",
-  "Alarm thiết bị": "Alarm ng aparato",
+  "Báo động thiết bị": "alarma ng aparato",
   "Chế độ áp dụng": "Mode na ilalapat",
   "Theo nhà": "Iskedyul ng bahay",
   "Riêng tôi": "Para sa akin lang",
@@ -479,7 +477,7 @@ const Map<String, String> filStrings = {
       "Gamitin ang ibinahaging iskedyul na itinakda ng may-ari o admin",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Gumamit ng personal na iskedyul na para lang sa iyong account",
-  "Thiết lập nhanh Alarm": "Mabilisang pag-setup ng Alarm",
+  "Thiết lập nhanh báo động": "Mabilisang pag-setup ng alarma",
   "Thiết lập nhanh toàn bộ thiết bị": "Mabilisang itakda ang lahat ng aparato",
   "Áp dụng cho toàn bộ thiết bị": "Ilapat sa lahat ng aparato",
   "Bắt đầu": "Magsimula",
@@ -495,7 +493,7 @@ const Map<String, String> filStrings = {
       "May naitalang alerto sa usok ngayong araw",
   "Khói đã an toàn": "Wala nang usok",
   "Không tìm thấy nhà của thông báo này":
-      "Hindi natagpuan ang bahay para sa notification na ito",
+      "Hindi natagpuan ang bahay para sa notipikasyon na ito",
   "Không tìm thấy thiết bị trong nhà này":
       "Hindi natagpuan ang aparato sa bahay na ito",
   "Một chủ nhà": "Isang may-ari ng bahay",
@@ -510,9 +508,9 @@ const Map<String, String> filStrings = {
   "Thiết bị mới": "Bagong aparato",
   "Thiết bị offline": "Offline ang aparato",
   "Thiết bị online": "Online ang aparato",
-  "Báo động kích hoạt": "Na-trigger ang Alarm",
-  "Báo động đã tắt": "Natapos na ang Alarm",
-  "Tạm tắt Alarm hôm nay": "I-pause ang Alarm ngayong araw",
+  "Báo động kích hoạt": "Na-trigger ang alarma",
+  "Báo động đã tắt": "Natapos na ang alarma",
+  "Tạm tắt báo động hôm nay": "I-pause ang alarma ngayong araw",
   "Độ ẩm cao": "Mataas na halumigmig",
   "Thử lại": "Subukan muli",
   "Không thể tải dữ liệu tài khoản": "Hindi ma-load ang datos ng account",
@@ -522,14 +520,14 @@ const Map<String, String> filStrings = {
   "Đã rời khỏi nhà": "Umalis na sa bahay",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Aalis ka sa mga ibinahaging bahay.",
   "Các nhà của bạn sẽ bị xoá.\n": "Tatanggalin ang mga bahay mo.\n",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "Babaguhin nito ang mga iskedyul ng Alarm ng bahay para sa lahat ng aparatong panseguridad sa mga napiling bahay.\n\n",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\n":
-      "Magdaragdag ito ng Reminder ng bahay sa mga napiling bahay.\n\n",
-  "Xác nhận thay đổi Alarm": "Kumpirmahin ang mga pagbabago sa Alarm",
-  "Xác nhận thay đổi Reminder": "Kumpirmahin ang mga pagbabago sa Reminder",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Babaguhin nito ang mga iskedyul ng alarma ng bahay para sa lahat ng aparatong panseguridad sa mga napiling bahay.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Magdaragdag ito ng paalala ng bahay sa mga napiling bahay.\n\n",
+  "Xác nhận thay đổi báo động": "Kumpirmahin ang mga pagbabago sa alarma",
+  "Xác nhận thay đổi nhắc nhở": "Kumpirmahin ang mga pagbabago sa paalala",
   "Lặp lại khi sự cố vẫn còn": "Ulitin habang nagpapatuloy ang problema",
-  "Thời gian lặp lại Alarm": "Oras ng pag-uulit ng Alarm",
+  "Thời gian lặp lại báo động": "Oras ng pag-uulit ng alarma",
   "VD: Mr Chung": "Hal. G. Chung",
   "🏡 Chưa có nhà nào": "🏡 Wala pang bahay",
   "Vẫn chuyển về Bình thường": "Lumipat pa rin sa Normal",
@@ -540,13 +538,13 @@ const Map<String, String> filStrings = {
       "Agad na susubaybayan ang mga aparatong panseguridad.\n\n",
   "Bật Bảo vệ thủ công?": "Manu-manong i-on ang Mode ng Proteksyon?",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "Babaguhin ng aksyong ito ang oras ng Alarm para sa ilang aparato ngayong araw...",
+      "Babaguhin ng aksyong ito ang oras ng alarma para sa ilang aparato ngayong araw...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "I-o-off ng aksyong ito ang lahat ng Alarm para sa ",
-  "Tắt toàn bộ Alarm?": "I-off ang lahat ng Alarm?",
-  "Không xoá được lịch tạm tắt Alarm":
-      "Hindi matanggal ang iskedyul ng pag-pause ng Alarm",
-  "Không lưu được tạm tắt Alarm": "Hindi mai-save ang pag-pause ng Alarm",
+      "I-o-off ng aksyong ito ang lahat ng alarma para sa ",
+  "Tắt toàn bộ báo động?": "I-off ang lahat ng alarma?",
+  "Không xoá được lịch tạm tắt báo động":
+      "Hindi matanggal ang iskedyul ng pag-pause ng alarma",
+  "Không lưu được tạm tắt báo động": "Hindi mai-save ang pag-pause ng alarma",
   "Không gửi được yêu cầu xoá": "Hindi maipadala ang kahilingan sa pagtanggal",
   "Không lưu được cài đặt": "Hindi mai-save ang setting",
   "Không lấy được vị trí hiện tại": "Hindi makuha ang kasalukuyang lokasyon",
@@ -555,45 +553,45 @@ const Map<String, String> filStrings = {
   "Mật khẩu không đúng": "Maling password",
   "Không thể xác nhận mật khẩu": "Hindi ma-verify ang password",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "May-ari o Admin lang ang maaaring magbago ng setting ng pag-uulit ng Alarm",
+      "May-ari o Admin lang ang maaaring magbago ng setting ng pag-uulit ng alarma",
   "Không lưu được thời gian lặp báo động":
-      "Hindi mai-save ang oras ng pag-uulit ng Alarm",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Mode Bảo vệ":
+      "Hindi mai-save ang oras ng pag-uulit ng alarma",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
       "May-ari o Admin lang ang maaaring magbago ng Mode ng Proteksyon",
   "Không thể thay đổi chế độ nhà": "Hindi mabago ang mode ng bahay",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
-      "Naka-on ang Mode ng Proteksyon, pero hindi naipadala ang notification",
-  "Đã bật Mode Bảo vệ thủ công":
+      "Naka-on ang Mode ng Proteksyon, pero hindi naipadala ang notipikasyon",
+  "Đã bật Chế độ Bảo vệ thủ công":
       "Naka-enable ang manu-manong Mode ng Proteksyon",
   "Đã chuyển nhà về Bình thường": "Naibalik sa Normal ang bahay",
   "60 phút": "60 minuto",
   "30 phút": "30 minuto",
   "15 phút": "15 minuto",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch Alarm.":
-      "Tinitingnan mo ang iskedyul ng may-ari. Piliin ang Para sa akin lang para magtakda ng sarili mong iskedyul ng Alarm.",
-  "Chọn giờ kết thúc Alarm": "Piliin ang oras ng pagtatapos ng Alarm",
-  "Chọn giờ bắt đầu Alarm": "Piliin ang oras ng pagsisimula ng Alarm",
-  "Bạn không có quyền sửa lịch Alarm của nhà":
-      "Wala kang pahintulot na baguhin ang iskedyul ng Alarm ng bahay na ito",
-  "Không thể áp dụng Alarm cho toàn bộ thiết bị":
-      "Hindi mailapat ang Alarm sa lahat ng aparato",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Tinitingnan mo ang iskedyul ng may-ari. Piliin ang Para sa akin lang para magtakda ng sarili mong iskedyul ng alarma.",
+  "Chọn giờ kết thúc báo động": "Piliin ang oras ng pagtatapos ng alarma",
+  "Chọn giờ bắt đầu báo động": "Piliin ang oras ng pagsisimula ng alarma",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Wala kang pahintulot na baguhin ang iskedyul ng alarma ng bahay na ito",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Hindi mailapat ang alarma sa lahat ng aparato",
   "Nhà chưa có thiết bị an ninh để áp dụng":
-      "Walang aparatong panseguridad sa bahay na ito na maaaring lagyan ng Alarm",
+      "Walang aparatong panseguridad sa bahay na ito na maaaring lagyan ng alarma",
   "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
       "Wala kang pahintulot na baguhin ang iskedyul ng bahay. Piliin ang Para sa akin lang.",
-  "Không thể lưu chế độ Alarm": "Hindi mai-save ang mode ng Alarm",
-  "Thêm Reminder": "Magdagdag ng Reminder",
-  "Reminder sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Paalalahanan ka ng Reminder na tingnan ang status ng seguridad ng iyong bahay sa napiling oras.",
-  "Thêm khung giờ Alarm": "Magdagdag ng saklaw ng oras ng Alarm",
-  "Đang sử dụng Reminder riêng của bạn":
-      "Ginagamit ang sarili mong mga setting ng Reminder",
-  "Đang sử dụng Reminder của chủ nhà":
-      "Ginagamit ang mga setting ng Reminder ng may-ari",
-  "Sửa giờ Reminder": "Baguhin ang oras ng Reminder",
-  "Sửa giờ kết thúc Alarm": "Baguhin ang oras ng pagtatapos ng Alarm",
-  "Sửa giờ bắt đầu Alarm": "Baguhin ang oras ng pagsisimula ng Alarm",
-  "Xoá Reminder": "Tanggalin ang Reminder",
+  "Không thể lưu chế độ báo động": "Hindi mai-save ang mode ng alarma",
+  "Thêm nhắc nhở": "Magdagdag ng paalala",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Paalalahanan ka ng paalala na tingnan ang status ng seguridad ng iyong bahay sa napiling oras.",
+  "Thêm khung giờ báo động": "Magdagdag ng saklaw ng oras ng alarma",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Ginagamit ang sarili mong mga setting ng paalala",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Ginagamit ang mga setting ng paalala ng may-ari",
+  "Sửa giờ nhắc nhở": "Baguhin ang oras ng paalala",
+  "Sửa giờ kết thúc báo động": "Baguhin ang oras ng pagtatapos ng alarma",
+  "Sửa giờ bắt đầu báo động": "Baguhin ang oras ng pagsisimula ng alarma",
+  "Xoá nhắc nhở": "Tanggalin ang paalala",
   "Mỗi 1 giờ": "Bawat 1 oras",
   "Mỗi 30 phút": "Bawat 30 minuto",
   "Mỗi 15 phút": "Bawat 15 minuto",
@@ -626,7 +624,7 @@ const Map<String, String> filStrings = {
   "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
       "Piliin ang 0 para isang beses lang mag-alerto. Nalalapat ang setting na ito sa manu-manong Mode ng Proteksyon at Awtomatikong Proteksyon kapag wala sa bahay.",
   "Lặp báo động khi sự cố vẫn còn":
-      "Ulitin ang Alarm habang nagpapatuloy ang problema",
+      "Ulitin ang alarma habang nagpapatuloy ang problema",
   "Đang được sử dụng": "Kasalukuyang aktibo",
   "Chuyển về sử dụng thông thường": "Bumalik sa normal na paggamit",
   "Chế độ nhà": "Mode ng bahay",
@@ -643,16 +641,17 @@ const Map<String, String> filStrings = {
   "Bảo vệ thủ công đang bật": "Naka-on ang manu-manong Mode ng Proteksyon",
   "Bảo vệ tự động đang bật": "Naka-on ang awtomatikong Mode ng Proteksyon",
   "Bảo vệ đang tắt": "Naka-off ang Mode ng Proteksyon",
-  "Bạn đã mở app gần đây để kiểm tra trạng thái.":
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "Binuksan mo kamakailan ang app para tingnan ang status.",
-  "Bạn nên mở app định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Buksan nang regular ang app para tingnan ang mga pahintulot, iskedyul, at hindi pa nababasang alerto.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra app tốt hơn.":
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
       "Pagkatapos ng ilang paggamit, mas mahusay nang masusuri ng SafeHome ang nakasanayan mong pagtingin sa app.",
-  "Tần suất vào app ổn": "Maayos ang dalas ng pagtingin sa app",
-  "Đã lâu chưa vào app kiểm tra":
+  "Tần suất vào ứng dụng ổn": "Maayos ang dalas ng pagtingin sa app",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
       "Matagal mo nang hindi binubuksan ang app para tingnan ang status",
-  "Đang ghi nhận tần suất vào app": "Itinatala ang dalas ng pagbukas sa app",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Itinatala ang dalas ng pagbukas sa app",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
       "Suriin ang pahintulot sa lokasyon na Palaging Payagan at ang mga kondisyon sa background.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
@@ -669,26 +668,26 @@ const Map<String, String> filStrings = {
       "Magdagdag ng sensor ng usok, SOS, o aparatong pang-emergency na angkop sa iyong bahay.",
   "Chưa có thiết bị khẩn cấp": "Wala pang aparatong pang-emergency",
   "Đã có thiết bị khẩn cấp": "May mga aparatong pang-emergency na",
-  "Nên đặt lịch Alarm cho thời gian ngủ hoặc vắng nhà.":
-      "Magtakda ng iskedyul ng Alarm para sa oras ng pagtulog o kapag wala ka sa bahay.",
-  "Nhà đã có lịch Alarm hoặc lịch cảnh báo theo thiết bị.":
-      "May iskedyul ng Alarm o alerto kada aparato ang bahay na ito.",
-  "Chưa set lịch Alarm": "Hindi pa nakatakda ang iskedyul ng Alarm",
-  "Đã set lịch Alarm": "Nakatakda na ang iskedyul ng Alarm",
-  "Nên có ít nhất một Reminder để không quên kiểm tra nhà.":
-      "Magtakda ng kahit isang Reminder para hindi mo makalimutang tingnan ang iyong bahay.",
-  "App sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Magtakda ng iskedyul ng alarma para sa oras ng pagtulog o kapag wala ka sa bahay.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "May iskedyul ng alarma o alerto kada aparato ang bahay na ito.",
+  "Chưa cài lịch báo động": "Hindi pa nakatakda ang iskedyul ng alarma",
+  "Đã cài lịch báo động": "Nakatakda na ang iskedyul ng alarma",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Magtakda ng kahit isang paalala para hindi mo makalimutang tingnan ang iyong bahay.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
       "Paalalahanan ka ng app na tingnan ang bahay ayon sa itinakdang iskedyul.",
-  "Chưa setup Reminder": "Hindi pa naka-setup ang Reminder",
-  "Đã setup Reminder": "Naka-setup na ang Reminder",
-  "Hãy mở lại app hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+  "Chưa cài đặt nhắc nhở": "Hindi pa naka-setup ang paalala",
+  "Đã cài đặt nhắc nhở": "Naka-setup na ang paalala",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
       "Buksan muli ang app o mag-sign in ulit kung hindi nakakatanggap ng mga alerto ang aparatong ito.",
   "Thiết bị chưa đăng ký nhận cảnh báo":
       "Hindi nakarehistro ang aparatong ito para sa mga alerto",
   "Thiết bị nhận cảnh báo bình thường":
       "Nakakatanggap nang maayos ng mga alerto ang aparatong ito",
   "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
-      "Mas mahigpit ang iOS sa paggamit sa background kaysa Android; panatilihing naka-on ang mga notification at Palaging Payagan ang lokasyon kung gumagamit ng Awtomatikong Proteksyon kapag wala sa bahay.",
+      "Mas mahigpit ang iOS sa paggamit sa background kaysa Android; panatilihing naka-on ang mga notipikasyon at Palaging Payagan ang lokasyon kung gumagamit ng Awtomatikong Proteksyon kapag wala sa bahay.",
   "Cơ chế iOS": "Pagpapatakbo ng iOS",
   "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
       "Suriin ang pahintulot sa background at awtomatikong pagsisimula para hindi maantala ang mga alerto.",
@@ -702,7 +701,7 @@ const Map<String, String> filStrings = {
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
       "Mas maliit ang posibilidad na maantala ng telepono ang mga alerto ng SafeHome.",
   "Chưa tắt tối ưu pin": "Naka-enable pa rin ang pag-optimize ng baterya",
-  "Tối ưu pin không chặn app":
+  "Tối ưu pin không chặn ứng dụng":
       "Hindi hinaharangan ng pag-optimize ng baterya ang app",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
       "Kailangan ng pahintulot sa lokasyon na Palaging Payagan upang gumana nang maaasahan ang Awtomatikong Proteksyon kapag wala sa bahay.",
@@ -715,24 +714,24 @@ const Map<String, String> filStrings = {
   "Chưa cấp vị trí luôn luôn":
       "Hindi pinapayagan ang lokasyon sa lahat ng oras",
   "Đã cấp vị trí luôn luôn": "Pinapayagan ang lokasyon sa lahat ng oras",
-  "iOS không mở toàn màn hình như Android; app dùng notification và âm thanh hệ thống.":
-      "Hindi nagbubukas ng full-screen ang iOS tulad ng Android; gumagamit ang app ng mga notification at tunog ng system.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "Hindi nagbubukas ng full-screen ang iOS tulad ng Android; gumagamit ang app ng mga notipikasyon at tunog ng system.",
   "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
       "Gumagamit ang Android ng mga full-screen na alerto; payagan ito sa mga setting kung hinaharangan ng telepono.",
   "Cảnh báo trên iOS": "Mga alerto sa iOS",
   "Cảnh báo toàn màn hình": "Mga full-screen na alerto",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
-      "Maaaring hindi lumabas ang mga alerto kung naka-disable ang mga notification.",
+      "Maaaring hindi lumabas ang mga alerto kung naka-disable ang mga notipikasyon.",
   "Điện thoại có thể nhận thông báo SafeHome.":
-      "Makakatanggap ang teleponong ito ng mga notification ng SafeHome.",
-  "Chưa bật thông báo": "Hindi naka-enable ang mga notification",
-  "Đã bật thông báo": "Naka-enable ang mga notification",
+      "Makakatanggap ang teleponong ito ng mga notipikasyon ng SafeHome.",
+  "Chưa bật thông báo": "Hindi naka-enable ang mga notipikasyon",
+  "Đã bật thông báo": "Naka-enable ang mga notipikasyon",
   "Hệ thống: Sẵn sàng": "System: Handa",
   "Hệ thống: Có thể bỏ lỡ cảnh báo":
       "System: Maaaring hindi matanggap ang ilang alerto",
-  "Cách bạn đang dùng app": "Paano mo ginagamit ang app",
+  "Cách bạn đang dùng ứng dụng": "Paano mo ginagamit ang app",
   "Thiết bị của bạn": "Ang iyong aparato",
-  "Kiểm tra điện thoại và cách bạn đang dùng app.":
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Sinusuri ang iyong telepono at kung paano mo ginagamit ang app.",
   "Hệ thống SafeHome": "System ng SafeHome",
   "Hệ thống: Đang kiểm tra...": "System: Sinusuri...",
@@ -748,8 +747,8 @@ const Map<String, String> filStrings = {
       "Naka-enable ang Awtomatikong Proteksyon kapag umalis ang lahat sa bahay",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
       "Naka-disable ang Awtomatikong Proteksyon kapag umalis ang lahat sa bahay",
-  "Không thể thay đổi trạng thái Alarm": "Hindi mabago ang status ng Alarm",
-  "Đã tắt toàn bộ Alarm của nhà": "Na-off na ang lahat ng Alarm ng bahay",
+  "Không thể thay đổi trạng thái báo động": "Hindi mabago ang status ng alarma",
+  "Đã tắt toàn bộ báo động của nhà": "Na-off na ang lahat ng alarma ng bahay",
   "QR này không phải mã xin gia nhập Home":
       "Ang QR code na ito ay hindi code para sumali sa bahay",
   "Thêm Home": "Magdagdag ng bahay",
@@ -762,20 +761,20 @@ const Map<String, String> filStrings = {
   "Cho phép vị trí luôn luôn": "Palaging payagan ang access sa lokasyon",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Tatanggalin ang mga bahay mo.\nAalis ka sa mga ibinahaging bahay.",
-  "Thao tác này sẽ thay đổi lịch Home Alarm của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng Alarm 'Theo nhà' sẽ bị ảnh hưởng.\nAlarm cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Babaguhin nito ang mga iskedyul ng Alarm ng bahay para sa lahat ng aparatong panseguridad sa mga napiling bahay.\n\nMaaapektuhan ang mga miyembrong gumagamit ng mga setting ng Alarm ng bahay.\nHindi mababago ang mga personal na setting ng Alarm.",
-  "Thao tác này sẽ thêm Home Reminder cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng Reminder 'Theo nhà' sẽ bị ảnh hưởng.\nReminder cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Magdaragdag ito ng Reminder ng bahay sa mga napiling bahay.\n\nMaaapektuhan ang mga miyembrong gumagamit ng mga setting ng Reminder ng bahay.\nHindi mababago ang mga personal na setting ng Reminder.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Babaguhin nito ang mga iskedyul ng alarma ng bahay para sa lahat ng aparatong panseguridad sa mga napiling bahay.\n\nMaaapektuhan ang mga miyembrong gumagamit ng mga setting ng alarma ng bahay.\nHindi mababago ang mga personal na setting ng alarma.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Magdaragdag ito ng paalala ng bahay sa mga napiling bahay.\n\nMaaapektuhan ang mga miyembrong gumagamit ng mga setting ng paalala ng bahay.\nHindi mababago ang mga personal na setting ng paalala.",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
       "Agad na susubaybayan ang mga aparatong panseguridad.\n\nIpo-pause ang Awtomatikong Proteksyon kapag wala sa bahay. Hindi awtomatikong nag-o-off ang mode na ito kapag may umuwi at maaari lang itong ibalik sa Normal ng miyembrong may pahintulot.",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "Babaguhin ng aksyong ito ang oras ng Alarm para sa ilang aparato ngayong araw...",
+      "Babaguhin ng aksyong ito ang oras ng alarma para sa ilang aparato ngayong araw...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "I-o-off ng aksyong ito ang lahat ng Alarm para sa bahay na ito. Hindi ka na makakatanggap ng mga alerto sa panganib sa teleponong ito.",
-  "Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Ginagamit ng Alarm ang mga setting ng bahay.\n\nMakakatanggap ka ng mga alerto ayon sa ibinahaging iskedyul na itinakda ng may-ari o administrator.",
-  "Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.":
-      "Ginagamit ng Alarm ang mga setting na Para sa akin lang.\n\nMakakatanggap ka ng mga alerto ayon sa personal na iskedyul ng Alarm para sa account na ito.",
+      "I-o-off ng aksyong ito ang lahat ng alarma para sa bahay na ito. Hindi ka na makakatanggap ng mga alerto sa panganib sa teleponong ito.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Ginagamit ng alarma ang mga setting ng bahay.\n\nMakakatanggap ka ng mga alerto ayon sa ibinahaging iskedyul na itinakda ng may-ari o administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Ginagamit ng alarma ang mga setting na Para sa akin lang.\n\nMakakatanggap ka ng mga alerto ayon sa personal na iskedyul ng alarma para sa account na ito.",
   "Không thể đăng nhập bằng Google": "Hindi makapag-sign in gamit ang Google",
   "Không đặt được mật khẩu": "Hindi maitakda ang password",
   "Chấp nhận": "Tanggapin",
@@ -799,18 +798,18 @@ const Map<String, String> filStrings = {
   "Tạo mật khẩu": "Gumawa ng password",
   "Mật khẩu mới": "Bagong password",
   "Nhập lại mật khẩu": "Ilagay muli ang password",
-  "Xác nhận tắt cảnh báo": "Kumpirmahin ang paghinto ng Alarm",
+  "Xác nhận tắt cảnh báo": "Kumpirmahin ang paghinto ng alarma",
   "HỦY": "KANSELAHIN",
   "XÁC NHẬN": "KUMPIRMAHIN",
   "CẦN KIỂM TRA": "KAILANGANG SURIIN",
   "KIỂM TRA NHÀ": "SURIIN ANG BAHAY",
-  "ĐÓNG NHẮC NHỞ": "ISARA ANG REMINDER",
+  "ĐÓNG NHẮC NHỞ": "ISARA ANG paalala",
   "SafeHome Security Alert": "Alerto sa Seguridad ng SafeHome",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Piliin ang pahintulot sa lokasyon na Palaging Payagan sa mga setting ng app",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
       "Kailangan ng karagdagang password ang iyong Google account para magamit ang mga feature ng seguridad.",
-  "Alarm": "Alarm",
+  "Báo động": "Alarma",
   "Bạn không có quyền thực hiện thao tác này。":
       "Wala kang pahintulot na gawin ang aksyong ito.",
   "Cài đặt": "Mga setting",
@@ -826,7 +825,7 @@ const Map<String, String> filStrings = {
   "Đang kiểm tra kết nối Hub": "Sinusuri ang koneksyon ng Hub",
   "Đang mở khi nhà ở chế độ Bảo vệ":
       "Bukas habang nasa Mode ng Proteksyon ang bahay",
-  "Đang mở trong giờ Alarm": "Bukas sa oras ng Alarm",
+  "Đang mở trong giờ báo động": "Bukas sa oras ng alarma",
   "Đang tải...": "Naglo-load...",
   "Hồ sơ, yêu cầu và lời mời tham gia":
       "Profile, mga kahilingan, at imbitasyon",
@@ -835,8 +834,8 @@ const Map<String, String> filStrings = {
   "Hub tín hiệu bình thường": "Nakakonekta ang Hub",
   "Khóa đang mở khi nhà ở chế độ Bảo vệ":
       "Naka-unlock habang nasa Mode ng Proteksyon ang bahay",
-  "Khóa đang mở trong giờ Alarm": "Naka-unlock sa oras ng Alarm",
-  "Không có thông báo": "Walang notification",
+  "Khóa đang mở trong giờ báo động": "Naka-unlock sa oras ng alarma",
+  "Không có thông báo": "Walang notipikasyon",
   "Khu vực nguy hiểm": "Mapanganib na lugar",
   "Kiểm tra thiết bị trong nhà này": "Suriin ang mga aparato sa bahay na ito",
   "Mất điện lưới": "Nawala ang pangunahing suplay ng kuryente",
@@ -849,8 +848,8 @@ const Map<String, String> filStrings = {
   "Nhà đang hoạt động bình thường": "Normal ang pagpapatakbo ng bahay",
   "Nhập email": "Ilagay ang email",
   "Phòng": "Kuwarto",
-  "Quản trị viên": "Administrator",
-  "Reminder": "Reminder",
+  "Quản trị viên": "Tagapangasiwa",
+  "Nhắc nhở": "Paalala",
   "SafeHome": "SafeHome",
   "Sóng yếu": "Mahina ang signal",
   "SOS": "SOS",
@@ -883,17 +882,17 @@ const Map<String, String> filStrings = {
   "TẮT CẢNH BÁO": "I-OFF ANG ALERTO",
   "Đã tạo nhà": "Nagawa na ang bahay",
 
-  "Mode Bảo vệ thủ công đã bật":
+  "Chế độ Bảo vệ thủ công đã bật":
       "Naka-enable ang manu-manong Mode ng Proteksyon",
-  "Báo động không lặp lại.": "Hindi uulit ang Alarm.",
+  "Báo động không lặp lại.": "Hindi uulit ang alarma.",
   "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "Uulit ang Alarm pagkalipas ng \$securityModeRepeatMinutes minuto kung magpapatuloy ang problema.",
-  "\$actorName đã bật Mode Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "Uulit ang alarma pagkalipas ng \$securityModeRepeatMinutes minuto kung magpapatuloy ang problema.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
       "Manu-manong in-on ni \$actorName ang Mode ng Proteksyon para sa \"\$homeName\". Mananatiling naka-on ang mode na ito hanggang ibalik ito sa Normal ng miyembrong may pahintulot. \$repeatMessage",
-  "Bạn đã bật Alarm cho nhà \"\$homeName\".":
-      "In-enable mo ang Alarm para sa bahay na \"\$homeName\".",
-  "Bạn đã tắt toàn bộ Alarm của nhà \"\$homeName\".":
-      "In-off mo ang lahat ng Alarm ng bahay na \"\$homeName\".",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "In-enable mo ang alarma para sa bahay na \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "In-off mo ang lahat ng alarma ng bahay na \"\$homeName\".",
   "Thành viên mới": "Bagong miyembro",
   "Thành viên rời nhà": "Umalis ang miyembro sa bahay",
   "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
@@ -925,9 +924,9 @@ const Map<String, String> filStrings = {
   "Tin nhắn HomeChat": "Mensahe sa HomeChat",
   "\$senderName đã gửi một tin nhắn": "Nagpadala ng mensahe si \$senderName",
   "Bạn có tin nhắn mới": "May bago kang mensahe",
-  "Mode Bảo vệ sẽ chỉ báo động một lần":
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
       "Isang beses lang mag-aalerto ang Mode ng Proteksyon",
-  "Mode Bảo vệ sẽ lặp báo động sau \$minutes phút":
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
       "Uulit ang alerto ng Mode ng Proteksyon pagkalipas ng \$minutes minuto",
   "Đã gửi yêu cầu gia nhập \$count nhà":
       "Naipadala ang mga kahilingang sumali sa \$count bahay",
@@ -956,8 +955,8 @@ const Map<String, String> filStrings = {
   "Đang ghép nối: \$seconds giây": "Ipinapares: \$seconds segundo",
   "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
       "Naka-enable ang pagpapares ng aparato sa bahay na \"\$homeName\" sa loob ng \$seconds segundo.",
-  "Khoảng thời gian phải nằm trong khung Alarm (\$start → \$end)":
-      "Dapat nasa loob ng iskedyul ng Alarm ang panahon ng pag-pause (\$start → \$end)",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Dapat nasa loob ng iskedyul ng alarma ang panahon ng pag-pause (\$start → \$end)",
   "\$passCount/\$total bài test đạt\n\n":
       "\$passCount/\$total pagsusuri ang pumasa\n\n",
   "\$name chưa cập nhật số điện thoại trong hồ sơ.":
@@ -1001,8 +1000,8 @@ const Map<String, String> filStrings = {
       "Kung walang magkumpirma, magsasagawa ang SafeHome ng emergency call.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Mag-aalerto muli sa \$time kung hindi pa nalulutas ang problema.",
-  "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.":
-      "Mag-aalerto muli ayon sa iskedyul ng Alarm kung hindi pa nalulutas ang problema.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Mag-aalerto muli ayon sa iskedyul ng alarma kung hindi pa nalulutas ang problema.",
   "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
       "Nagsara ang \"\$deviceName\" sa bahay na \"\$resolvedHomeName\".",
   "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
@@ -1015,14 +1014,14 @@ const Map<String, String> filStrings = {
   "✅ \$count nhà an toàn": "✅ \$count ligtas na bahay",
   "\$count nhà đang được theo dõi": "\$count bahay ang sinusubaybayan",
   "\$minutes phút": "\$minutes minuto",
-  "Đã cài Reminder cho \$updatedHomes nhà.":
-      "Naitakda ang Reminder para sa \$updatedHomes bahay.",
-  "Đã cài Alarm cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Naitakda ang Alarm para sa \$updatedDevices aparato sa \$updatedHomes bahay.\n",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Naitakda ang paalala para sa \$updatedHomes bahay.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Naitakda ang alarma para sa \$updatedDevices aparato sa \$updatedHomes bahay.\n",
   "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
       "Naibahagi ang mga bahay na pinamamahalaan mo.\n\nNilaktawan ang \$skipped bahay dahil wala kang pahintulot na ibahagi ang mga ito.",
-  "Đã áp dụng Alarm cho \$count thiết bị an ninh":
-      "Inilapat ang Alarm sa \$count aparatong panseguridad",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Inilapat ang alarma sa \$count aparatong panseguridad",
   "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
       "Ilapat ang parehong iskedyul sa \$count aparatong panseguridad",
   "\$count phút trước": "\$count minuto ang nakalipas",
@@ -1055,16 +1054,16 @@ const Map<String, String> filStrings = {
       "Suriin ang bukas na pinto o lock bago panatilihin ang bahay na ito sa Mode ng Proteksyon.",
   "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
       "Maaaring may tao pa sa bahay. Kung gayon, ibalik ang bahay sa Normal.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.":
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
       "Hindi matukoy ang lokasyon ng ilang miyembro. Hilingin sa kanila na buksan ang app o suriin ang pahintulot sa lokasyon.",
   "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
       "May aparatong nadiskonekta. Tingnan ang baterya, kuryente, o puwesto nito.",
   "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
       "May aparatong mahina ang baterya. Palitan ito agad upang hindi mapalampas ang mga alerto.",
-  "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Hindi pa nakatakda ang Reminder. Gumawa ng iskedyul upang regular na suriin ang iyong bahay.",
-  "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Hindi pa nakatakda ang iskedyul ng Alarm. I-enable ang proteksyon sa mga oras na karaniwan kang wala.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Hindi pa nakatakda ang paalala. Gumawa ng iskedyul upang regular na suriin ang iyong bahay.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Hindi pa nakatakda ang iskedyul ng alarma. I-enable ang proteksyon sa mga oras na karaniwan kang wala.",
   "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
       "Walang kailangang aksyunan agad. Patuloy lang na subaybayan ang bahay na ito.",
   "Lặp sau \$minutes phút": "Ulitin pagkalipas ng \$minutes minuto",
@@ -1104,7 +1103,7 @@ const Map<String, String> filStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Bukas habang nasa Mode ng Proteksyon ang bahay",
   "An tâm hơn trong từng ngôi nhà": "Panatag sa bawat bahay",
-  "Báo động SafeHome": "Alarm ng SafeHome",
+  "Báo động SafeHome": "alarma ng SafeHome",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "May alerto sa seguridad na kailangang suriin agad.",
   "Có cảnh báo cần kiểm tra": "May alertong kailangang suriin",
@@ -1115,26 +1114,62 @@ const Map<String, String> filStrings = {
       "Hindi maaaring magkapareho ang oras ng pagsisimula at pagtatapos",
   "Giờ kết thúc phải sau thời điểm hiện tại":
       "Dapat mas huli sa kasalukuyang oras ang oras ng pagtatapos",
-  "Khoảng tạm tắt không hợp lệ": "Di-wastong saklaw ng pag-pause ng Alarm",
-  "Khoảng tạm tắt không trùng với lịch Alarm nào đang bật":
-      "Hindi nag-o-overlap ang saklaw ng pag-pause sa anumang aktibong iskedyul ng Alarm",
+  "Khoảng tạm tắt không hợp lệ": "Di-wastong saklaw ng pag-pause ng alarma",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Hindi nag-o-overlap ang saklaw ng pag-pause sa anumang aktibong iskedyul ng alarma",
 
-  // Device alarm policy
-  "Cấu hình báo động": "Mga setting ng alarm",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Itakda kung paano nagpapagana ng alerto ang sensor na ito.",
-  "Tham gia báo động": "Isama sa alarm",
-  "Tắt để cảm biến không tạo Alarm.": "I-off para hindi gumawa ng Alarm ang sensor na ito.",
+  // Device alarma policy
+  "Cài đặt báo động": "Mga setting ng alarma",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Itakda kung paano nagpapagana ng alerto ang sensor na ito.",
+  "Tham gia báo động": "Isama sa alarma",
+  "Tắt để cảm biến không tạo báo động.":
+      "I-off para hindi gumawa ng alarma ang sensor na ito.",
   "Bật còi vật lý": "I-enable ang pisikal na sirena",
-  "Cho phép kích hoạt còi trong nhà.": "Payagang gumana ang sirena sa loob ng bahay.",
+  "Cho phép kích hoạt còi trong nhà.":
+      "Payagang gumana ang sirena sa loob ng bahay.",
   "Đánh thức màn hình": "Gisingin ang screen",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Magpakita ng full-screen na alerto sa telepono.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Magpakita ng full-screen na alerto sa telepono.",
   "Độ trễ kích hoạt": "Antala bago mag-trigger",
   "Chỉ áp dụng cho cảm biến an ninh.": "Para lamang sa mga security sensor.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Palaging agad na nagti-trigger ang mga emergency sensor.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Palaging agad na nagti-trigger ang mga emergency sensor.",
   "Ngay lập tức": "Agad",
   "giây": "segundo",
-  "Đã lưu cấu hình báo động": "Nai-save ang mga setting ng alarm",
-  "Không thể lưu cấu hình báo động": "Hindi ma-save ang mga setting ng alarm",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Tanging ang may-ari ng bahay at mga administrator ang maaaring magbago ng setting na ito.",
+  "Đã lưu cấu hình báo động": "Nai-save ang mga setting ng alarma",
+  "Không thể lưu cấu hình báo động": "Hindi ma-save ang mga setting ng alarma",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Tanging ang may-ari ng bahay at mga administrator ang maaaring magbago ng setting na ito.",
   "Thông tin chi tiết": "Mga detalye ng device",
+  "Thông báo báo động": "Notipikasyon ng alarma",
+  "Cài đặt nhắc nhở": "Mga setting ng paalala",
+  "Nhắc nhở theo lịch": "Naka-iskedyul na paalala",
+  "Danh sách thông báo": "Mga notipikasyon",
+  "Cài đặt thông báo": "Mga setting ng notipikasyon",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Gamitin ang naka-set na iskedyul ng alarma",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Magpadala lamang ng mga notipikasyon, huwag paganahin ang alarma",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Naka-off ang lahat ng alarma sa bahay; mga notipikasyon lamang ang ipapadala ng system.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Ang may-ari lamang ang maaaring mag-enable ng mode na ito.",
+  "Bật Không bảo vệ?": "I-enable ang mode na Walang proteksiyon?",
+  "Cảm biến vừa phát hiện một sự kiện.": "May natukoy na kaganapan ang sensor.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Ang may-ari lamang ang maaaring mag-enable ng mode na Walang proteksiyon",
+  "Đã chuyển nhà sang Không bảo vệ":
+      "Lumipat ang bahay sa mode na Walang proteksiyon",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Lumipat sa mode na Walang proteksiyon, ngunit hindi naipadala ang notipikasyon",
+  "Giám sát toàn diện": "Buong pagsubaybay",
+  "Không bảo vệ": "Walang proteksiyon",
+  "Không bảo vệ đang bật": "Aktibo ang mode na Walang proteksiyon",
+  "Nhà đã chuyển sang Không bảo vệ":
+      "Lumipat ang bahay sa mode na Walang proteksiyon",
+  "Thông báo cảm biến": "Mga notipikasyon ng sensor",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Mga karaniwang notipikasyon kapag may natukoy na kaganapan ang sensor.",
+  "Tôi hiểu, tiếp tục": "Nauunawaan ko, magpatuloy",
 };

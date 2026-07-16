@@ -265,8 +265,8 @@ class _StatusPanelState extends State<StatusPanel> {
     final hasArmedOpenIssue = containsAny(rawDangerText, const [
       "đang mở khi nhà ở chế độ bảo vệ",
       "khóa đang mở khi nhà ở chế độ bảo vệ",
-      "đang mở trong giờ alarm",
-      "khóa đang mở trong giờ alarm",
+      "đang mở trong giờ báo động",
+      "khóa đang mở trong giờ báo động",
     ]);
 
     final hasUnknownMemberLocation = containsAny(rawWarningText, const [
@@ -299,8 +299,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final hasAlarmSchedule =
         homeAlarm["enabled"] == true ||
-            hasEnabledScheduleValue(schedules["alarms"]) ||
-            hasEnabledDeviceAlarm(devices);
+        hasEnabledScheduleValue(schedules["alarms"]) ||
+        hasEnabledDeviceAlarm(devices);
 
     if (hasEmergencyIssue) {
       addSuggestion(strings.statusEmergencyActionSuggestion());
@@ -452,37 +452,37 @@ class _StatusPanelState extends State<StatusPanel> {
                                       .toList(),
                                   onChanged:
                                       widget.onSecurityModeRepeatChanged ==
-                                                  null ||
-                                              repeatSaving
-                                          ? null
-                                          : (minutes) async {
-                                              if (minutes == null ||
-                                                  minutes ==
-                                                      localRepeatMinutes) {
-                                                return;
-                                              }
+                                              null ||
+                                          repeatSaving
+                                      ? null
+                                      : (minutes) async {
+                                          if (minutes == null ||
+                                              minutes == localRepeatMinutes) {
+                                            return;
+                                          }
 
-                                              setSheetState(() {
-                                                repeatSaving = true;
-                                              });
+                                          setSheetState(() {
+                                            repeatSaving = true;
+                                          });
 
-                                              final saved = await widget
+                                          final saved =
+                                              await widget
                                                   .onSecurityModeRepeatChanged!(
-                                                    minutes,
-                                                  );
+                                                minutes,
+                                              );
 
-                                              if (!stateContext.mounted) {
-                                                return;
-                                              }
+                                          if (!stateContext.mounted) {
+                                            return;
+                                          }
 
-                                              setSheetState(() {
-                                                if (saved) {
-                                                  localRepeatMinutes = minutes;
-                                                }
+                                          setSheetState(() {
+                                            if (saved) {
+                                              localRepeatMinutes = minutes;
+                                            }
 
-                                                repeatSaving = false;
-                                              });
-                                            },
+                                            repeatSaving = false;
+                                          });
+                                        },
                                 ),
                               ),
                             ),
@@ -500,7 +500,9 @@ class _StatusPanelState extends State<StatusPanel> {
                       title: _strings.t('Bình thường'),
                       subtitle: currentMode == 'normal'
                           ? _strings.t('Đang được sử dụng')
-                          : _strings.t('Sử dụng Alarm theo lịch đã thiết lập'),
+                          : _strings.t(
+                              'Sử dụng báo động theo lịch đã thiết lập',
+                            ),
                       color: SafeHomeColors.safe,
                       selected: currentMode == 'normal',
                       onTap: () {
@@ -513,7 +515,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       icon: Icons.shield_outlined,
                       title: _strings.t('Không bảo vệ'),
                       subtitle: _strings.t(
-                        'Chỉ gửi notification, không kích hoạt Alarm',
+                        'Chỉ gửi thông báo, không kích hoạt báo động',
                       ),
                       color: SafeHomeColors.textSecondary,
                       selected: currentMode == 'unprotected',
@@ -606,10 +608,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   ],
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 10),
-                trailing,
-              ],
+              if (trailing != null) ...[const SizedBox(width: 10), trailing],
             ],
           ),
         ),
@@ -805,9 +804,9 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   Widget _buildStatusSummarySections(
-      Map<String, dynamic> liveHome,
-      AppStrings strings,
-      ) {
+    Map<String, dynamic> liveHome,
+    AppStrings strings,
+  ) {
     final liveOverall = getHomeOverallStatus(liveHome);
 
     final rawDangerIssues = List<String>.from(
@@ -842,10 +841,7 @@ class _StatusPanelState extends State<StatusPanel> {
       liveHome: liveHome,
       overall: liveOverall,
       rawDangerIssues: rawDangerIssues,
-      rawWarningIssues: [
-        ...rawWarningIssues,
-        ...rawPresenceWarnings,
-      ],
+      rawWarningIssues: [...rawWarningIssues, ...rawPresenceWarnings],
       rawSafeSummary: rawSafeSummary,
     );
 
@@ -1040,7 +1036,7 @@ class _StatusPanelState extends State<StatusPanel> {
       "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
     );
     final unprotectedModeText = _strings.t(
-      "Không bảo vệ đang bật - hệ thống chỉ gửi notification",
+      "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.",
     );
 
     final normalFirstLine = allLines.isNotEmpty
@@ -1069,7 +1065,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final displayFirstLine = _strings.statusText(firstLine);
     final displaySecondLine = _strings.statusText(secondLine);
     final displaySecondLineWithHint =
-    displaySecondLine.endsWith("...") || displaySecondLine.endsWith("…")
+        displaySecondLine.endsWith("...") || displaySecondLine.endsWith("…")
         ? "$displaySecondLine →"
         : "$displaySecondLine... →";
 
@@ -1092,8 +1088,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final alarmPauseSet =
         alarmPauseText.isNotEmpty &&
-            alarmPauseText != _strings.t("Tắt") &&
-            alarmPauseText != _strings.t("Chưa thiết lập");
+        alarmPauseText != _strings.t("Tắt") &&
+        alarmPauseText != _strings.t("Chưa thiết lập");
 
     final recentEvents = _sortedRecentEvents();
     final eventCounts = _eventCounts(recentEvents);
@@ -1122,9 +1118,9 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final environment = widget.overall["hasEnvironmentDevice"] == true
         ? widget.environmentText
-        .replaceAll("/", " | ")
-        .replaceAll("  ", " ")
-        .trim()
+              .replaceAll("/", " | ")
+              .replaceAll("  ", " ")
+              .trim()
         : "";
 
     return Padding(

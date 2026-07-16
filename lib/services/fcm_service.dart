@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../helpers/firebase_paths.dart';
+import '../localization/app_language_controller.dart';
 import 'installation_id_service.dart';
 import 'notification_service.dart';
 import 'single_device_session_service.dart';
@@ -65,6 +66,14 @@ class FCMService {
       'platform': _platformName(),
       'updatedAt': now,
     });
+
+    try {
+      await FirebaseDatabase.instance
+          .ref('accounts/$cleanUid/languageCode')
+          .set(appLanguageController.languageCode);
+    } catch (_) {
+      // Token vẫn hợp lệ; ngôn ngữ sẽ được đồng bộ lại khi người dùng đổi.
+    }
   }
 
   static Future<void> setupFCM({

@@ -130,11 +130,17 @@ Future<String?> showHomeTimeTextInputDialog({
                 Column(
                   children: [
                     Row(
-                      children: suggestions.take(3).map(suggestionChip).toList(),
+                      children: suggestions
+                          .take(3)
+                          .map(suggestionChip)
+                          .toList(),
                     ),
                     const SizedBox(height: 8),
                     Row(
-                      children: suggestions.skip(3).map(suggestionChip).toList(),
+                      children: suggestions
+                          .skip(3)
+                          .map(suggestionChip)
+                          .toList(),
                     ),
                   ],
                 ),
@@ -145,10 +151,7 @@ Future<String?> showHomeTimeTextInputDialog({
                 onPressed: () => Navigator.pop(dialogContext),
                 child: Text(strings.t("Huỷ")),
               ),
-              ElevatedButton(
-                onPressed: submit,
-                child: Text(strings.t("OK")),
-              ),
+              ElevatedButton(onPressed: submit, child: Text(strings.t("OK"))),
             ],
           );
         },
@@ -166,10 +169,8 @@ Future<void> showAlarmPauseReminderDialog({
     builder: (dialogContext) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(strings.t("Lưu ý tạm tắt Alarm")),
-        content: Text(
-          strings.alarmPauseReminderText(),
-        ),
+        title: Text(strings.t("Lưu ý tạm tắt báo động")),
+        content: Text(strings.alarmPauseReminderText()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -197,15 +198,13 @@ Future<bool> showConfirmManualSecurityModeDialog({
               color: SafeHomeColors.warning,
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                strings.t("Bật Bảo vệ thủ công?"),
-              ),
-            ),
+            Expanded(child: Text(strings.t("Bật Bảo vệ thủ công?"))),
           ],
         ),
         content: Text(
-          strings.t("Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường."),
+          strings.t(
+            "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.",
+          ),
         ),
         actions: [
           TextButton(
@@ -229,7 +228,6 @@ Future<bool> showConfirmManualSecurityModeDialog({
   return confirmed == true;
 }
 
-
 Future<bool> showConfirmUnprotectedModeDialog({
   required BuildContext context,
   required AppStrings strings,
@@ -242,22 +240,13 @@ Future<bool> showConfirmUnprotectedModeDialog({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
-            const Icon(
-              Icons.shield_outlined,
-              color: SafeHomeColors.danger,
-            ),
+            const Icon(Icons.shield_outlined, color: SafeHomeColors.danger),
             const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                strings.t("Bật Không bảo vệ?"),
-              ),
-            ),
+            Expanded(child: Text(strings.t("Bật Không bảo vệ?"))),
           ],
         ),
         content: Text(
-          strings.t(
-            "Toàn bộ Alarm của nhà sẽ bị tắt, bao gồm Hẹn giờ Alarm, Mode Bảo vệ và cảnh báo khẩn cấp.\n\nSafeHome vẫn ghi nhận sự kiện và gửi notification, nhưng sẽ không mở cảnh báo toàn màn hình hoặc kích hoạt còi.\n\nChỉ Chủ nhà có thể bật chế độ này.",
-          ),
+          "${strings.t("Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.")}\n\n${strings.t("Chỉ Chủ nhà có thể bật chế độ này.")}",
         ),
         actions: [
           TextButton(
@@ -300,32 +289,26 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
               color: SafeHomeColors.warning,
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                strings.t("Chuyển về Bình thường?"),
-              ),
-            ),
+            Expanded(child: Text(strings.t("Chuyển về Bình thường?"))),
           ],
         ),
         content: Text(
-          strings.t("Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút."),
+          strings.t(
+            "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext, false);
             },
-            child: Text(
-              strings.t("Huỷ"),
-            ),
+            child: Text(strings.t("Huỷ")),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(dialogContext, true);
             },
-            child: Text(
-              strings.t("Vẫn chuyển về Bình thường"),
-            ),
+            child: Text(strings.t("Vẫn chuyển về Bình thường")),
           ),
         ],
       );

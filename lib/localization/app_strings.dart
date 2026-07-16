@@ -15,6 +15,7 @@ import 'languages/ms_strings.dart';
 import 'languages/fil_strings.dart';
 import 'languages/km_strings.dart';
 import 'languages/my_strings.dart';
+import 'languages/lo_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -31,6 +32,7 @@ class AppStrings {
   final bool isFilipino;
   final bool isKhmer;
   final bool isBurmese;
+  final bool isLao;
 
   const AppStrings._({
     required this.isEnglish,
@@ -47,6 +49,7 @@ class AppStrings {
     required this.isFilipino,
     required this.isKhmer,
     required this.isBurmese,
+    required this.isLao,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -65,6 +68,7 @@ class AppStrings {
       isFilipino: locale.languageCode == "fil",
       isKhmer: locale.languageCode == "km",
       isBurmese: locale.languageCode == "my",
+      isLao: locale.languageCode == "lo",
     );
   }
 
@@ -88,62 +92,71 @@ class AppStrings {
     String? fil,
     String? km,
     String? my,
+    String? lo,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
     if (isThai) {
-      return th ?? _translationFromMap(_thai, key) ?? en;
+      return _translationFromMap(_thai, key) ?? th ?? en;
     }
 
     if (isMalay) {
-      return ms ?? _translationFromMap(_malay, key) ?? en;
+      return _translationFromMap(_malay, key) ?? ms ?? en;
     }
 
     if (isFilipino) {
-      return fil ?? _translationFromMap(_filipino, key) ?? en;
+      return _translationFromMap(_filipino, key) ?? fil ?? en;
     }
 
     if (isKhmer) {
-      return km ?? _translationFromMap(_khmer, key) ?? en;
+      return _translationFromMap(_khmer, key) ?? km ?? en;
     }
 
     if (isBurmese) {
-      return my ?? _translationFromMap(_burmese, key) ?? en;
+      return _translationFromMap(_burmese, key) ?? my ?? en;
+    }
+
+    if (isLao) {
+      return _translationFromMap(_lao, key) ?? lo ?? en;
     }
 
     if (isIndonesian) {
-      return id ?? _translationFromMap(_indonesian, key) ?? en;
+      return _translationFromMap(_indonesian, key) ?? id ?? en;
     }
 
     if (isSpanish) {
-      return es ?? _spanish[key] ?? vi;
+      return _translationFromMap(_spanish, key) ?? es ?? en;
     }
 
     if (isFrench) {
-      return fr ?? _french[key] ?? en;
+      return _translationFromMap(_french, key) ?? fr ?? en;
     }
 
     if (isRussian) {
-      return ru ?? _russian[key] ?? en;
+      return _translationFromMap(_russian, key) ?? ru ?? en;
     }
 
     if (isGerman) {
-      return de ?? _german[key] ?? en;
+      return _translationFromMap(_german, key) ?? de ?? en;
     }
 
     if (isJapanese) {
-      return ja ?? _japanese[key] ?? vi;
+      return _translationFromMap(_japanese, key) ?? ja ?? en;
     }
 
     if (isKorean) {
-      return ko ?? _korean[key] ?? vi;
+      return _translationFromMap(_korean, key) ?? ko ?? en;
     }
 
     if (isChinese) {
-      return zh ?? _chinese[key] ?? vi;
+      return _translationFromMap(_chinese, key) ?? zh ?? en;
     }
 
-    return isEnglish ? en : vi;
+    if (isEnglish) {
+      return _translationFromMap(_english, key) ?? en;
+    }
+
+    return _translationFromMap(_vietnameseDisplayOverrides, key) ?? vi;
   }
 
   String? _translationFromMap(Map<String, String> translations, String text) {
@@ -220,7 +233,7 @@ class AppStrings {
       final minutes = RegExp(r"after (.+) minutes").firstMatch(en)?.group(1);
       return minutes == null
           ? null
-          : "L'Alarm se répète après $minutes minutes si le problème persiste.";
+          : "L’alarme se répète après $minutes minutes si le problème persiste.";
     }
 
     if (en.contains("turned on Manual Guard mode for") && firstQuote != null) {
@@ -229,11 +242,11 @@ class AppStrings {
     }
 
     if (en.startsWith("You enabled Alarm for") && firstQuote != null) {
-      return "Vous avez activé Alarm pour « $firstQuote ».";
+      return "Vous avez activé l’alarme pour « $firstQuote ».";
     }
 
     if (en.startsWith("You disabled every Alarm for") && firstQuote != null) {
-      return "Tous les Alarm de la maison « $firstQuote » ont été désactivés.";
+      return "Toutes les alarmes de la maison « $firstQuote » ont été désactivées.";
     }
 
     if (en.contains(" joined ") && firstQuote != null) {
@@ -358,7 +371,7 @@ class AppStrings {
     if (en.contains("pause period must be within")) {
       return en.replaceFirst(
         "The pause period must be within the Alarm schedule",
-        "La période de pause doit être dans le planning Alarm",
+        "La période de pause doit être dans le planning d’alarme",
       );
     }
 
@@ -494,7 +507,7 @@ class AppStrings {
 
     if (en.startsWith("Alarm applied to ")) {
       return en
-          .replaceFirst("Alarm applied to", "Alarm appliqué à")
+          .replaceFirst("Alarm applied to", "Alarme appliquée à")
           .replaceAll("security devices", "appareils de sécurité");
     }
 
@@ -838,7 +851,7 @@ class AppStrings {
   }
 
   String manualSecurityModeEnabledTitle() => choose(
-    vi: "Mode Bảo vệ thủ công đã bật",
+    vi: "Chế độ Bảo vệ thủ công đã bật",
     en: "Manual Guard mode enabled",
     zh: "手动布防模式已开启",
     ko: "수동 보호 모드가 켜졌습니다",
@@ -847,7 +860,10 @@ class AppStrings {
     ru: 'Ручной режим охраны включен',
 
     es: "Modo protección manual activado",
-    fr: _fr(vi: "Mode Bảo vệ thủ công đã bật", en: "Manual Guard mode enabled"),
+    fr: _fr(
+      vi: "Chế độ Bảo vệ thủ công đã bật",
+      en: "Manual Guard mode enabled",
+    ),
   );
 
   String manualSecurityModeEnabledMessage({
@@ -860,10 +876,10 @@ class AppStrings {
             vi: "Báo động không lặp lại.",
             en: "The alarm will not repeat.",
             zh: "警报不会重复。",
-            ko: "Alarm은 반복되지 않습니다.",
-            ja: "Alarm は繰り返されません。",
+            ko: "경보은 반복되지 않습니다.",
+            ja: "警報 は繰り返されません。",
             de: 'Der Alarm wird nicht wiederholt.',
-            ru: 'Alarm не будет повторяться.',
+            ru: 'Тревога не будет повторяться.',
 
             es: "La alarma no se repetirá.",
             fr: _fr(
@@ -874,14 +890,14 @@ class AppStrings {
         : choose(
             vi: "Báo động lặp sau $securityModeRepeatMinutes phút nếu sự cố vẫn còn.",
             fil:
-                "Uulit ang Alarm pagkalipas ng $securityModeRepeatMinutes minuto kung magpapatuloy ang problema.",
-            km: "Alarm នឹងកើតឡើងវិញបន្ទាប់ពី $securityModeRepeatMinutes នាទី ប្រសិនបើបញ្ហានៅតែមាន។",
+                "Uulit ang alarma pagkalipas ng $securityModeRepeatMinutes minuto kung magpapatuloy ang problema.",
+            km: "សំឡេងរោទិ៍ នឹងកើតឡើងវិញបន្ទាប់ពី $securityModeRepeatMinutes នាទី ប្រសិនបើបញ្ហានៅតែមាន។",
             en: "The alarm repeats after $securityModeRepeatMinutes minutes if the issue remains.",
             zh: "如果问题仍然存在，警报将在 $securityModeRepeatMinutes 分钟后重复。",
-            ko: "문제가 계속되면 $securityModeRepeatMinutes분 후 Alarm이 반복됩니다.",
-            ja: "問題が残っている場合、$securityModeRepeatMinutes 分後に Alarm が繰り返されます。",
+            ko: "문제가 계속되면 $securityModeRepeatMinutes분 후 경보이 반복됩니다.",
+            ja: "問題が残っている場合、$securityModeRepeatMinutes 分後に 警報 が繰り返されます。",
             de: 'Der Alarm wird nach $securityModeRepeatMinutes Minuten wiederholt, wenn das Problem weiter besteht.',
-            ru: 'Alarm повторится через $securityModeRepeatMinutes минут, если проблема останется.',
+            ru: 'Тревога повторится через $securityModeRepeatMinutes минут, если проблема останется.',
 
             es: "La alarma se repetirá después de $securityModeRepeatMinutes minutos si el problema continúa.",
             fr: _fr(
@@ -889,12 +905,14 @@ class AppStrings {
               en: "The alarm repeats after $securityModeRepeatMinutes minutes if the issue remains.",
             ),
             id: "Alarm berulang setelah $securityModeRepeatMinutes menit jika masalah masih ada.",
-            th: "Alarm จะทำซ้ำหลัง $securityModeRepeatMinutes นาที หากยังมีปัญหาอยู่",
-            ms: "Alarm akan berulang selepas $securityModeRepeatMinutes minit jika masalah berterusan.",
+            th: "สัญญาณเตือน จะทำซ้ำหลัง $securityModeRepeatMinutes นาที หากยังมีปัญหาอยู่",
+            ms: "Penggera akan berulang selepas $securityModeRepeatMinutes minit jika masalah berterusan.",
+            my: "ပြဿနာရှိနေသေးပါက $securityModeRepeatMinutes မိနစ်အကြာတွင် အရေးပေါ်အချက်ပေးသံ ထပ်မံသတိပေးပါမည်။",
+            lo: "ສັນຍານເຕືອນໄພຈະເຮັດຊ້ຳຫຼັງ $securityModeRepeatMinutes ນາທີ ຖ້າບັນຫາຍັງຄົງຢູ່",
           );
 
     return choose(
-      vi: "$actorName đã bật Mode Bảo vệ thủ công cho \"$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. $repeatMessage",
+      vi: "$actorName đã bật Chế độ Bảo vệ thủ công cho \"$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. $repeatMessage",
       fil:
           "Manu-manong in-on ni $actorName ang Mode ng Proteksyon para sa \"$homeName\". Mananatiling naka-on ang mode na ito hanggang ibalik ito sa Normal ng miyembrong may pahintulot. $repeatMessage",
       km: "$actorName បានបើកមុខងារការពារដោយដៃសម្រាប់ \"$homeName\"។ មុខងារនេះបិទបានតែនៅពេលសមាជិកដែលមានសិទ្ធិប្ដូរត្រឡប់ទៅធម្មតា។ $repeatMessage",
@@ -907,17 +925,19 @@ class AppStrings {
 
       es: "$actorName activó manualmente el modo protección para «$homeName». Este modo solo se desactiva cuando un miembro con permiso cambia al modo normal. $repeatMessage",
       fr: _fr(
-        vi: "$actorName đã bật Mode Bảo vệ thủ công cho \"$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. $repeatMessage",
+        vi: "$actorName đã bật Chế độ Bảo vệ thủ công cho \"$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. $repeatMessage",
         en: "$actorName turned on Manual Guard mode for \"$homeName\". This mode only turns off when a permitted member switches back to Normal. $repeatMessage",
       ),
       id: "$actorName menyalakan mode Perlindungan manual untuk \"$homeName\". Mode ini hanya mati ketika anggota yang berwenang kembali ke Normal. $repeatMessage",
       th: "$actorName เปิดโหมดป้องกันด้วยตนเองสำหรับ \"$homeName\" โหมดนี้จะปิดเมื่อสมาชิกที่ได้รับอนุญาตเปลี่ยนกลับเป็นโหมดปกติเท่านั้น $repeatMessage",
       ms: "$actorName telah menghidupkan Mod Perlindungan manual untuk \"$homeName\". Mod ini hanya dimatikan apabila ahli yang dibenarkan menukarnya kepada Mod Normal. $repeatMessage",
+      my: "$actorName က \"$homeName\" အတွက် ကိုယ်တိုင် ကာကွယ်ရေးမုဒ်ကို ဖွင့်ထားသည်။ ခွင့်ပြုထားသောအဖွဲ့ဝင်တစ်ဦးက ပုံမှန်မုဒ်သို့ ပြန်ပြောင်းမှသာ ဤမုဒ် ပိတ်မည်။ $repeatMessage",
+      lo: "$actorName ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງສຳລັບ \"$homeName\". ໂໝດນີ້ຈະປິດເມື່ອສະມາຊິກທີ່ມີສິດປ່ຽນກັບເປັນປົກກະຕິ. $repeatMessage",
     );
   }
 
   String alarmSettingChangedTitle(bool enabled) {
-    return enabled ? t("Đã bật Alarm") : t("Đã tắt Alarm");
+    return enabled ? t("Đã bật báo động") : t("Đã tắt báo động");
   }
 
   String alarmSettingChangedMessage({
@@ -926,44 +946,48 @@ class AppStrings {
   }) {
     return enabled
         ? choose(
-            vi: "Bạn đã bật Alarm cho nhà \"$homeName\".",
-            fil: "In-enable mo ang Alarm para sa bahay na \"$homeName\".",
-            km: "អ្នកបានបើក Alarm សម្រាប់ \"$homeName\"។",
+            vi: "Bạn đã bật báo động cho nhà \"$homeName\".",
+            fil: "In-enable mo ang alarma para sa bahay na \"$homeName\".",
+            km: "អ្នកបានបើក សំឡេងរោទិ៍ សម្រាប់ \"$homeName\"។",
             en: "You enabled Alarm for \"$homeName\".",
-            zh: "你已为“$homeName”开启 Alarm。",
-            ko: "\"$homeName\"의 Alarm을 켰습니다.",
-            ja: "「$homeName」の Alarm をオンにしました。",
+            zh: "你已为“$homeName”开启 警报。",
+            ko: "\"$homeName\"의 경보을 켰습니다.",
+            ja: "「$homeName」の 警報 をオンにしました。",
             de: 'Du hast Alarm für das Zuhause "$homeName" aktiviert.',
-            ru: 'Вы включили Alarm для дома "$homeName".',
+            ru: 'Вы включили тревога для дома "$homeName".',
 
-            es: "Activaste Alarm para \"$homeName\".",
+            es: "Activaste alarma para \"$homeName\".",
             fr: _fr(
-              vi: "Bạn đã bật Alarm cho nhà \"$homeName\".",
+              vi: "Bạn đã bật báo động cho nhà \"$homeName\".",
               en: "You enabled Alarm for \"$homeName\".",
             ),
-            id: "Anda mengaktifkan Alarm untuk rumah \"$homeName\".",
-            th: "คุณเปิด Alarm สำหรับบ้าน \"$homeName\" แล้ว",
-            ms: "Anda telah mendayakan Alarm untuk rumah \"$homeName\".",
+            id: "Anda mengaktifkan alarm untuk rumah \"$homeName\".",
+            th: "คุณเปิด สัญญาณเตือน สำหรับบ้าน \"$homeName\" แล้ว",
+            ms: "Anda telah mendayakan penggera untuk rumah \"$homeName\".",
+            my: "\"$homeName\" အတွက် အရေးပေါ်အချက်ပေးသံ ကို သင်ဖွင့်ထားသည်။",
+            lo: "ທ່ານເປີດສັນຍານເຕືອນໄພສຳລັບ \"$homeName\" ແລ້ວ",
           )
         : choose(
-            vi: "Bạn đã tắt toàn bộ Alarm của nhà \"$homeName\".",
-            fil: "In-off mo ang lahat ng Alarm ng bahay na \"$homeName\".",
-            km: "អ្នកបានបិទ Alarm ទាំងអស់សម្រាប់ \"$homeName\"។",
+            vi: "Bạn đã tắt toàn bộ báo động của nhà \"$homeName\".",
+            fil: "In-off mo ang lahat ng alarma ng bahay na \"$homeName\".",
+            km: "អ្នកបានបិទ សំឡេងរោទិ៍ ទាំងអស់សម្រាប់ \"$homeName\"។",
             en: "You disabled every Alarm for \"$homeName\".",
-            zh: "你已关闭“$homeName”的所有 Alarm。",
-            ko: "\"$homeName\"의 모든 Alarm을 껐습니다.",
-            ja: "「$homeName」のすべての Alarm をオフにしました。",
+            zh: "你已关闭“$homeName”的所有 警报。",
+            ko: "\"$homeName\"의 모든 경보을 껐습니다.",
+            ja: "「$homeName」のすべての 警報 をオフにしました。",
             de: 'Du hast alle Alarm-Einstellungen für das Zuhause "$homeName" deaktiviert.',
-            ru: 'Вы отключили все Alarm для дома "$homeName".',
+            ru: 'Вы отключили все тревога для дома "$homeName".',
 
-            es: "Desactivaste todos los Alarm de \"$homeName\".",
+            es: "Desactivaste todos los alarma de \"$homeName\".",
             fr: _fr(
-              vi: "Bạn đã tắt toàn bộ Alarm của nhà \"$homeName\".",
+              vi: "Bạn đã tắt toàn bộ báo động của nhà \"$homeName\".",
               en: "You disabled every Alarm for \"$homeName\".",
             ),
-            id: "Semua Alarm di rumah \"$homeName\" telah dinonaktifkan.",
-            th: "คุณได้ปิด Alarm ทั้งหมดของบ้าน \"$homeName\" แล้ว",
-            ms: "Anda telah melumpuhkan semua Alarm rumah \"$homeName\".",
+            id: "Semua alarm di rumah \"$homeName\" telah dinonaktifkan.",
+            th: "คุณได้ปิด สัญญาณเตือน ทั้งหมดของบ้าน \"$homeName\" แล้ว",
+            ms: "Anda telah melumpuhkan semua penggera rumah \"$homeName\".",
+            my: "\"$homeName\" ၏ အရေးပေါ်အချက်ပေးသံ အားလုံးကို သင်ပိတ်ထားသည်။",
+            lo: "ທ່ານປິດສັນຍານເຕືອນໄພທັງໝົດຂອງ \"$homeName\" ແລ້ວ",
           );
   }
 
@@ -1008,6 +1032,7 @@ class AppStrings {
       id: "$displayMemberName bergabung dengan \"$homeName\".",
       th: "$displayMemberName เข้าร่วมบ้าน \"$homeName\" แล้ว",
       ms: "$displayMemberName telah menyertai rumah \"$homeName\".",
+      lo: "$displayMemberName ເຂົ້າຮ່ວມເຮືອນ \"$homeName\" ແລ້ວ.",
     );
   }
 
@@ -1062,6 +1087,8 @@ class AppStrings {
       id: "$displayMemberName keluar dari \"$homeName\".",
       th: "$displayMemberName ออกจากบ้าน \"$homeName\" แล้ว",
       ms: "$displayMemberName meninggalkan rumah \"$homeName\".",
+      my: "$displayMemberName သည် \"$homeName\" မှ ထွက်သွားသည်။",
+      lo: "$displayMemberName ອອກຈາກ \"$homeName\" ແລ້ວ",
     );
   }
 
@@ -1108,6 +1135,8 @@ class AppStrings {
       id: "$actorName mengubah peran $memberName dari $oldRoleName menjadi $newRoleName di \"$homeName\".",
       th: "$actorName เปลี่ยนบทบาทของ $memberName จาก $oldRoleName เป็น $newRoleName ในบ้าน \"$homeName\" แล้ว",
       ms: "$actorName menukar peranan $memberName daripada $oldRoleName kepada $newRoleName dalam rumah \"$homeName\".",
+      my: "$actorName က \"$homeName\" တွင် $memberName ၏အခန်းကဏ္ဍကို $oldRoleName မှ $newRoleName သို့ ပြောင်းလဲခဲ့သည်။",
+      lo: "$actorName ປ່ຽນບົດບາດຂອງ $memberName ຈາກ $oldRoleName ເປັນ $newRoleName ໃນ \"$homeName\"",
     );
   }
 
@@ -1127,6 +1156,8 @@ class AppStrings {
     id: "$count pesan belum dibaca",
     th: "มีข้อความที่ยังไม่ได้อ่าน $count ข้อความ",
     ms: "Masih ada $count mesej belum dibaca",
+    my: "မဖတ်ရသေးသောစာတို $count စောင်ရှိသည်",
+    lo: "ມີ $count ຂໍ້ຄວາມທີ່ຍັງບໍ່ອ່ານ",
   );
 
   String safeStatusTitle() => choose(
@@ -1266,7 +1297,7 @@ class AppStrings {
           zh: "SOS 警报",
           ko: "SOS 경보",
           ja: "SOS アラート",
-          de: 'SOS-ALARM',
+          de: 'SOS-Alarm',
           ru: 'SOS-ТРЕВОГА',
 
           es: "ALERTA SOS",
@@ -1307,7 +1338,7 @@ class AppStrings {
           zh: "燃气泄漏警报",
           ko: "가스 누출 경보",
           ja: "ガス漏れアラート",
-          de: 'GASLECK-ALARM',
+          de: 'GASLECK-Alarm',
           ru: 'ТРЕВОГА УТЕЧКИ ГАЗА',
 
           es: "ALERTA DE FUGA DE GAS",
@@ -1323,7 +1354,7 @@ class AppStrings {
           zh: "门警报",
           ko: "문 경보",
           ja: "ドアアラート",
-          de: 'TÜR-ALARM',
+          de: 'TÜR-Alarm',
           ru: 'ТРЕВОГА ДВЕРИ',
 
           es: "ALERTA DE PUERTA",
@@ -1351,7 +1382,7 @@ class AppStrings {
     zh: "停止警报",
     ko: "경보 중지",
     ja: "アラートを停止",
-    de: 'ALARM STOPPEN',
+    de: 'Alarm STOPPEN',
     ru: 'ОСТАНОВИТЬ ТРЕВОГУ',
 
     es: "DETENER ALERTA",
@@ -1374,6 +1405,7 @@ class AppStrings {
     ms: "HENTIKAN SIREN",
     fil: "PATAYIN ANG SIRENA",
     km: "បិទស៊ីរ៉ែន",
+    lo: "ຢຸດສຽງໄຊເຣນ",
   );
 
   String confirmStopSirenTitle() => choose(
@@ -1390,8 +1422,9 @@ class AppStrings {
     id: "Matikan sirene alarm?",
     th: "ปิดไซเรนเตือนภัยหรือไม่",
     ms: "Hentikan siren penggera?",
-    fil: "Patayin ang alarm siren?",
+    fil: "Patayin ang alarma siren?",
     km: "បិទស៊ីរ៉ែនប្រកាសអាសន្ន?",
+    lo: "ຢຸດສຽງໄຊເຣນສັນຍານເຕືອນໄພບໍ?",
   );
 
   String confirmStopSirenBody() => choose(
@@ -1411,6 +1444,7 @@ class AppStrings {
     fil:
         "Hihinto ang pisikal na sirena, ngunit mananatiling aktibo ang alerto hanggang maresolba ang insidente.\n\nSigurado ka bang papatayin ang sirena?",
     km: "ស៊ីរ៉ែនផ្ទាល់នឹងឈប់ ប៉ុន្តែការជូនដំណឹងនៅតែសកម្មរហូតដល់ហេតុការណ៍ត្រូវបានដោះស្រាយ។\n\nតើអ្នកប្រាកដថាចង់បិទស៊ីរ៉ែនឬ?",
+    lo: "ສຽງໄຊເຣນຈະຢຸດ ແຕ່ການເຕືອນຈະຍັງດຳເນີນຕໍ່ຈົນກວ່າເຫດການຈະຖືກແກ້ໄຂ.\n\nທ່ານແນ່ໃຈບໍວ່າຈະຢຸດສຽງໄຊເຣນ?",
   );
 
   String sirenStoppedMessage() => choose(
@@ -1430,6 +1464,7 @@ class AppStrings {
     fil:
         "Naipadala ang utos na patayin ang sirena. Patuloy pa ring binabantayan ang alerto.",
     km: "បានផ្ញើពាក្យបញ្ជាបិទស៊ីរ៉ែន។ ការជូនដំណឹងនៅតែត្រូវបានតាមដាន។",
+    lo: "ສົ່ງຄຳສັ່ງຢຸດສຽງໄຊເຣນແລ້ວ. ການເຕືອນຍັງຖືກຕິດຕາມຢູ່.",
   );
 
   String sirenStopUnavailableMessage() => choose(
@@ -1449,6 +1484,7 @@ class AppStrings {
     fil:
         "Walang nakitang aktibong alerto o hindi maipadala ang utos na patayin ang sirena.",
     km: "រកមិនឃើញការជូនដំណឹងសកម្ម ឬមិនអាចផ្ញើពាក្យបញ្ជាបិទស៊ីរ៉ែនបាន។",
+    lo: "ບໍ່ພົບການເຕືອນທີ່ກຳລັງເຮັດວຽກ ຫຼື ຍັງສົ່ງຄຳສັ່ງຢຸດສຽງໄຊເຣນບໍ່ໄດ້.",
   );
 
   // Giữ tương thích với FullscreenAlarmPage từ commit local 7a47dac.
@@ -1469,6 +1505,7 @@ class AppStrings {
     ms: "SENYAPKAN SIREN RUMAH",
     fil: "PATAYIN ANG SIRENA SA BAHAY",
     km: "បិទសំឡេងស៊ីរ៉ែនក្នុងផ្ទះ",
+    lo: "ຢຸດສຽງໄຊເຣນໃນເຮືອນ",
   );
 
   String homeSirenMutedMessage() => choose(
@@ -1485,8 +1522,10 @@ class AppStrings {
     id: "Sirene rumah telah dimatikan. Peringatan tetap aktif sampai ditangani.",
     th: "ปิดเสียงไซเรนในบ้านแล้ว การแจ้งเตือนจะยังทำงานจนกว่าจะได้รับการจัดการ",
     ms: "Siren rumah telah disenyapkan. Amaran kekal aktif sehingga ditangani.",
-    fil: "Napatay na ang sirena sa bahay. Mananatiling aktibo ang alerto hanggang maresolba.",
+    fil:
+        "Napatay na ang sirena sa bahay. Mananatiling aktibo ang alerto hanggang maresolba.",
     km: "បានបិទសំឡេងស៊ីរ៉ែនក្នុងផ្ទះ។ ការជូនដំណឹងនៅតែសកម្មរហូតដល់បានដោះស្រាយ។",
+    lo: "ປິດສຽງໄຊເຣນໃນເຮືອນແລ້ວ. ການເຕືອນຍັງດຳເນີນຕໍ່ຈົນກວ່າຈະຖືກແກ້ໄຂ.",
   );
 
   String defaultHomeName() => choose(
@@ -1534,6 +1573,8 @@ class AppStrings {
       vi: "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?",
       en: "Only stop the alert after checking the home's condition.\n\nAre you sure you want to stop the alert?",
     ),
+    my: "အိမ်အခြေအနေကို စစ်ဆေးပြီးမှသာ သတိပေးချက်ကို ပိတ်ပါ။\n\nသတိပေးချက်ကို ပိတ်လိုသည်မှာ သေချာပါသလား?",
+    lo: "ປິດການເຕືອນຫຼັງຈາກກວດສະພາບໃນເຮືອນແລ້ວເທົ່ານັ້ນ.\n\nທ່ານແນ່ໃຈບໍວ່າຈະປິດການເຕືອນ?",
   );
 
   String priorityAlarmNotificationTitle() => choose(
@@ -1584,6 +1625,8 @@ class AppStrings {
     id: "$count pesan baru",
     th: "$count ข้อความใหม่",
     ms: "$count mesej baharu",
+    my: "စာတိုအသစ် $count စောင်",
+    lo: "$count ຂໍ້ຄວາມໃໝ່",
   );
 
   String homeChatTitle() => choose(
@@ -1614,6 +1657,8 @@ class AppStrings {
     id: "Pesan baru di $homeName",
     th: "ข้อความใหม่ใน $homeName",
     ms: "Mesej baharu dalam $homeName",
+    my: "$homeName တွင် စာတိုအသစ်ရှိသည်",
+    lo: "ຂໍ້ຄວາມໃໝ່ໃນ $homeName",
   );
 
   String homeChatSenderMessage(String senderName) => choose(
@@ -1635,6 +1680,8 @@ class AppStrings {
     id: "$senderName mengirim pesan",
     th: "$senderName ส่งข้อความ",
     ms: "$senderName menghantar mesej",
+    my: "$senderName က စာတိုတစ်စောင် ပို့ခဲ့သည်",
+    lo: "$senderName ສົ່ງຂໍ້ຄວາມ",
   );
 
   String homeChatNewMessage() => choose(
@@ -1666,6 +1713,7 @@ class AppStrings {
     id: "$name sedang mengetik...",
     th: "$name กำลังพิมพ์...",
     ms: "$name sedang menaip...",
+    lo: "$name ກຳລັງພິມ...",
   );
 
   String chatTypingTwo(String name1, String name2) => choose(
@@ -1684,6 +1732,7 @@ class AppStrings {
     id: "$name1 dan $name2 sedang mengetik...",
     th: "$name1 และ $name2 กำลังพิมพ์...",
     ms: "$name1 dan $name2 sedang menaip...",
+    lo: "$name1 ແລະ $name2 ກຳລັງພິມ...",
   );
 
   String chatTypingMany(String name, int otherCount) => choose(
@@ -1702,67 +1751,71 @@ class AppStrings {
     id: "$name dan $otherCount lainnya sedang mengetik...",
     th: "$name และคนอื่นอีก $otherCount คนกำลังพิมพ์...",
     ms: "$name dan $otherCount yang lain sedang menaip...",
+    lo: "$name ແລະອີກ $otherCount ຄົນກຳລັງພິມ...",
   );
 
   String androidLegacyAlarmChannelDescription() => choose(
-    vi: "Kênh Alarm cũ để giữ tương thích",
-    my: "ကိုက်ညီမှုရှိစေရန် ထားရှိသော Alarm ချန်နယ်အဟောင်း",
-    fil: "Lumang Alarm channel para mapanatili ang compatibility",
-    km: "ឆានែល Alarm ចាស់សម្រាប់រក្សាភាពត្រូវគ្នា",
+    vi: "Kênh báo động cũ để giữ tương thích",
+    my: "ကိုက်ညီမှုရှိစေရန် ထားရှိသော အရေးပေါ်အချက်ပေးသံ ချန်နယ်အဟောင်း",
+    fil: "Lumang alarma channel para mapanatili ang compatibility",
+    km: "ឆានែល សំឡេងរោទិ៍ ចាស់សម្រាប់រក្សាភាពត្រូវគ្នា",
     en: "Legacy Alarm channel kept for compatibility",
-    zh: "为保持兼容而保留的旧 Alarm 通道",
-    ko: "호환성을 위해 유지되는 기존 Alarm 채널",
-    ja: "互換性のために保持される旧 Alarm チャンネル",
+    zh: "为保持兼容而保留的旧 警报 通道",
+    ko: "호환성을 위해 유지되는 기존 경보 채널",
+    ja: "互換性のために保持される旧 警報 チャンネル",
     de: 'Alter Alarm-Kanal zur Kompatibilität',
-    ru: 'Устаревший канал Alarm для совместимости',
-    es: "Canal de Alarm antiguo conservado por compatibilidad",
+    ru: 'Устаревший канал тревога для совместимости',
+    es: "Canal de alarma antiguo conservado por compatibilidad",
     fr: _fr(
-      vi: "Kênh Alarm cũ để giữ tương thích",
+      vi: "Kênh báo động cũ để giữ tương thích",
       en: "Legacy Alarm channel kept for compatibility",
     ),
-    th: "ช่อง Alarm เดิมเพื่อรองรับความเข้ากันได้",
-    ms: "Saluran Alarm lama dikekalkan untuk keserasian",
+    th: "ช่อง สัญญาณเตือน เดิมเพื่อรองรับความเข้ากันได้",
+    ms: "Saluran penggera lama dikekalkan untuk keserasian",
+    lo: "ຊ່ອງສັນຍານເຕືອນໄພເກົ່າເພື່ອຮັກສາຄວາມເຂົ້າກັນໄດ້",
   );
 
   String androidAlarmFullscreenChannelName() => choose(
-    vi: "SafeHome Alarm toàn màn hình",
-    my: "SafeHome မျက်နှာပြင်အပြည့် Alarm",
-    fil: "Full-screen na Alarm ng SafeHome",
-    km: "SafeHome Alarm ពេញអេក្រង់",
+    vi: "SafeHome báo động toàn màn hình",
+    my: "SafeHome မျက်နှာပြင်အပြည့် အရေးပေါ်အချက်ပေးသံ",
+    fil: "Full-screen na alarma ng SafeHome",
+    km: "SafeHome សំឡេងរោទិ៍ ពេញអេក្រង់",
     en: "SafeHome Alarm Fullscreen",
-    zh: "SafeHome Alarm 全屏",
-    ko: "SafeHome Alarm 전체 화면",
-    ja: "SafeHome Alarm フルスクリーン",
+    zh: "SafeHome 警报 全屏",
+    ko: "SafeHome 경보 전체 화면",
+    ja: "SafeHome 警報 フルスクリーン",
     de: 'SafeHome Alarm Vollbild',
-    ru: 'SafeHome Alarm на весь экран',
-    es: "SafeHome Alarm pantalla completa",
+    ru: 'SafeHome тревога на весь экран',
+    es: "SafeHome alarma pantalla completa",
     fr: _fr(
-      vi: "SafeHome Alarm toàn màn hình",
+      vi: "SafeHome báo động toàn màn hình",
       en: "SafeHome Alarm Fullscreen",
     ),
-    th: "Alarm ของ SafeHome แบบเต็มหน้าจอ",
-    ms: "Alarm skrin penuh SafeHome",
+    th: "สัญญาณเตือน ของ SafeHome แบบเต็มหน้าจอ",
+    ms: "Penggera skrin penuh SafeHome",
+    lo: "ສັນຍານເຕືອນໄພ SafeHome ເຕັມຈໍ",
   );
 
   String androidAlarmFullscreenChannelDescription() => choose(
-    vi: "Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm",
-    my: "မျက်နှာပြင်အပြည့် သတိပေးချက်ဖွင့်ပြီး Alarm စာမျက်နှာမှ ဥဩသံ ဖွင့်သည်",
+    vi: "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động",
+    my: "မျက်နှာပြင်အပြည့် သတိပေးချက်ဖွင့်ပြီး အရေးပေါ်အချက်ပေးသံ စာမျက်နှာမှ ဥဩသံ ဖွင့်သည်",
     fil:
-        "Buksan ang full-screen alert; tutunog ang sirena mula sa pahina ng Alarm",
-    km: "បើកការជូនដំណឹងពេញអេក្រង់; ស៊ីរ៉ែនបន្លឺពីទំព័រ Alarm",
+        "Buksan ang full-screen alert; tutunog ang sirena mula sa pahina ng alarma",
+    km: "បើកការជូនដំណឹងពេញអេក្រង់; ស៊ីរ៉ែនបន្លឺពីទំព័រ សំឡេងរោទិ៍",
     en: "Opens fullscreen alarms; siren sound plays from the Alarm page",
-    zh: "打开全屏警报；警笛声由 Alarm 页面播放",
-    ko: "전체 화면 Alarm을 엽니다. 사이렌 소리는 Alarm 페이지에서 재생됩니다",
-    ja: "全画面アラームを開き、サイレン音は Alarm ページから再生されます",
+    zh: "打开全屏警报；警笛声由 警报 页面播放",
+    ko: "전체 화면 경보을 엽니다. 사이렌 소리는 경보 페이지에서 재생됩니다",
+    ja: "全画面アラームを開き、サイレン音は 警報 ページから再生されます",
     de: 'Öffnet Vollbild-Alarme; der Sirenenton wird auf der Alarm-Seite abgespielt',
-    ru: 'Открывает тревоги на весь экран; сирена воспроизводится со страницы Alarm',
-    es: "Abre alarmas a pantalla completa; la sirena se reproduce desde la página Alarm",
+    ru: 'Открывает тревоги на весь экран; сирена воспроизводится со страницы тревога',
+    es: "Abre alarmas a pantalla completa; la sirena se reproduce desde la página alarma",
     fr: _fr(
-      vi: "Mở cảnh báo toàn màn hình; âm còi phát từ trang Alarm",
+      vi: "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động",
       en: "Opens fullscreen alarms; siren sound plays from the Alarm page",
     ),
-    th: "เปิดการแจ้งเตือนแบบเต็มหน้าจอ เสียงไซเรนจะดังจากหน้า Alarm",
-    ms: "Membuka amaran skrin penuh; bunyi siren dimainkan dari halaman Alarm",
+    th: "เปิดการแจ้งเตือนแบบเต็มหน้าจอ เสียงไซเรนจะดังจากหน้า สัญญาณเตือน",
+    ms: "Membuka amaran skrin penuh; bunyi siren dimainkan dari halaman penggera",
+    lo: "ເປີດການເຕືອນເຕັມຈໍ; ສຽງໄຊເຣນຈະຫຼິ້ນຈາກໜ້າສັນຍານເຕືອນໄພ",
   );
 
   String androidEmergencyPriorityChannelName() => choose(
@@ -1783,6 +1836,7 @@ class AppStrings {
     ),
     th: "การแจ้งเตือนฉุกเฉินของ SafeHome",
     ms: "Amaran kecemasan SafeHome",
+    lo: "ການເຕືອນສຸກເສີນ SafeHome",
   );
 
   String androidEmergencyPriorityChannelDescription() => choose(
@@ -1804,87 +1858,92 @@ class AppStrings {
     ),
     th: "การแจ้งเตือนฉุกเฉินที่มีลำดับความสำคัญสูงก่อนเปิดแบบเต็มหน้าจอ",
     ms: "Amaran kecemasan keutamaan tinggi sebelum skrin penuh dibuka",
+    lo: "ການເຕືອນສຸກເສີນຄວາມສຳຄັນສູງກ່ອນເປີດເຕັມຈໍ",
   );
 
   String androidScheduleFullscreenChannelName() => choose(
-    vi: "SafeHome Reminder toàn màn hình",
-    my: "SafeHome မျက်နှာပြင်အပြည့် Reminder",
-    fil: "Full-screen na Reminder ng SafeHome",
-    km: "SafeHome Reminder ពេញអេក្រង់",
+    vi: "SafeHome nhắc nhở toàn màn hình",
+    my: "SafeHome မျက်နှာပြင်အပြည့် သတိပေးချက်",
+    fil: "Full-screen na paalala ng SafeHome",
+    km: "SafeHome ការរំលឹក ពេញអេក្រង់",
     en: "SafeHome Schedule Fullscreen",
-    zh: "SafeHome Reminder 全屏",
-    ko: "SafeHome Reminder 전체 화면",
-    ja: "SafeHome Reminder フルスクリーン",
-    de: 'SafeHome Reminder Vollbild',
-    ru: 'SafeHome Reminder на весь экран',
-    es: "SafeHome Reminder pantalla completa",
+    zh: "SafeHome 提醒 全屏",
+    ko: "SafeHome 리마인더 전체 화면",
+    ja: "SafeHome リマインダー フルスクリーン",
+    de: 'SafeHome Erinnerung Vollbild',
+    ru: 'SafeHome напоминание на весь экран',
+    es: "SafeHome recordatorio pantalla completa",
     fr: _fr(
-      vi: "SafeHome Reminder toàn màn hình",
+      vi: "SafeHome nhắc nhở toàn màn hình",
       en: "SafeHome Schedule Fullscreen",
     ),
-    th: "Reminder ของ SafeHome แบบเต็มหน้าจอ",
-    ms: "Reminder skrin penuh SafeHome",
+    th: "การเตือนความจำ ของ SafeHome แบบเต็มหน้าจอ",
+    ms: "Peringatan skrin penuh SafeHome",
+    lo: "ການເຕືອນຄວາມຈຳ SafeHome ເຕັມຈໍ",
   );
 
   String androidScheduleFullscreenChannelDescription() => choose(
     vi: "Nhắc nhở SafeHome toàn màn hình không âm thanh",
-    my: "အသံမပါသော SafeHome မျက်နှာပြင်အပြည့် Reminder",
-    fil: "Full-screen na Reminder ng SafeHome na walang tunog",
-    km: "Reminder ពេញអេក្រង់របស់ SafeHome ដោយគ្មានសំឡេង",
+    my: "အသံမပါသော SafeHome မျက်နှာပြင်အပြည့် သတိပေးချက်",
+    fil: "Full-screen na paalala ng SafeHome na walang tunog",
+    km: "ការរំលឹក ពេញអេក្រង់របស់ SafeHome ដោយគ្មានសំឡេង",
     en: "Silent fullscreen SafeHome Reminder",
-    zh: "无声音全屏 SafeHome Reminder",
-    ko: "무음 전체 화면 SafeHome Reminder",
-    ja: "音なしの全画面 SafeHome Reminder",
-    de: 'Stummer SafeHome Reminder im Vollbild',
-    ru: 'Беззвучный SafeHome Reminder на весь экран',
-    es: "Reminder de SafeHome a pantalla completa sin sonido",
+    zh: "无声音全屏 SafeHome 提醒",
+    ko: "무음 전체 화면 SafeHome 리마인더",
+    ja: "音なしの全画面 SafeHome リマインダー",
+    de: 'Stummer SafeHome Erinnerung im Vollbild',
+    ru: 'Беззвучный SafeHome напоминание на весь экран',
+    es: "Recordatorio de SafeHome a pantalla completa sin sonido",
     fr: _fr(
       vi: "Nhắc nhở SafeHome toàn màn hình không âm thanh",
       en: "Silent fullscreen SafeHome Reminder",
     ),
-    th: "Reminder ของ SafeHome แบบเต็มหน้าจอโดยไม่มีเสียง",
-    ms: "Reminder SafeHome skrin penuh tanpa bunyi",
+    th: "การเตือนความจำ ของ SafeHome แบบเต็มหน้าจอโดยไม่มีเสียง",
+    ms: "Peringatan SafeHome skrin penuh tanpa bunyi",
+    lo: "ການເຕືອນຄວາມຈຳ SafeHome ເຕັມຈໍແບບບໍ່ມີສຽງ",
   );
 
   String androidReminderPriorityChannelName() => choose(
-    vi: "SafeHome Reminder ưu tiên cao",
-    my: "SafeHome ဦးစားပေး Reminder",
-    fil: "Mataas na priyoridad na Reminder ng SafeHome",
-    km: "SafeHome Reminder អាទិភាពខ្ពស់",
+    vi: "SafeHome nhắc nhở ưu tiên cao",
+    my: "SafeHome ဦးစားပေး သတိပေးချက်",
+    fil: "Mataas na priyoridad na paalala ng SafeHome",
+    km: "SafeHome ការរំលឹក អាទិភាពខ្ពស់",
     en: "SafeHome Reminder Priority",
-    zh: "SafeHome Reminder 优先",
-    ko: "SafeHome Reminder 우선 알림",
-    ja: "SafeHome Reminder 優先通知",
-    de: 'SafeHome Reminder Priorität',
-    ru: 'SafeHome Reminder с приоритетом',
-    es: "SafeHome Reminder prioritario",
+    zh: "SafeHome 提醒 优先",
+    ko: "SafeHome 리마인더 우선 알림",
+    ja: "SafeHome リマインダー 優先通知",
+    de: 'SafeHome Erinnerung Priorität',
+    ru: 'SafeHome напоминание с приоритетом',
+    es: "SafeHome recordatorio prioritario",
     fr: _fr(
-      vi: "SafeHome Reminder ưu tiên cao",
+      vi: "SafeHome nhắc nhở ưu tiên cao",
       en: "SafeHome Reminder Priority",
     ),
-    th: "Reminder ของ SafeHome ลำดับความสำคัญสูง",
-    ms: "Reminder SafeHome keutamaan tinggi",
+    th: "การเตือนความจำ ของ SafeHome ลำดับความสำคัญสูง",
+    ms: "Peringatan SafeHome keutamaan tinggi",
+    lo: "ການເຕືອນຄວາມຈຳ SafeHome ຄວາມສຳຄັນສູງ",
   );
 
   String androidReminderPriorityChannelDescription() => choose(
     vi: "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình",
-    my: "မျက်နှာပြင်အပြည့် မဖွင့်သော SafeHome ဦးစားပေး Reminder",
+    my: "မျက်နှာပြင်အပြည့် မဖွင့်သော SafeHome ဦးစားပေး သတိပေးချက်",
     fil:
-        "Mataas na priyoridad na Reminder ng SafeHome na hindi nagbubukas ng full-screen",
-    km: "Reminder អាទិភាពខ្ពស់របស់ SafeHome ដែលមិនបើកពេញអេក្រង់",
+        "Mataas na priyoridad na paalala ng SafeHome na hindi nagbubukas ng full-screen",
+    km: "ការរំលឹក អាទិភាពខ្ពស់របស់ SafeHome ដែលមិនបើកពេញអេក្រង់",
     en: "High-priority SafeHome Reminder without fullscreen",
-    zh: "高优先级 SafeHome Reminder，不打开全屏",
-    ko: "전체 화면 없이 높은 우선순위 SafeHome Reminder",
-    ja: "全画面を開かない高優先度の SafeHome Reminder",
-    de: 'SafeHome Reminder mit hoher Priorität ohne Vollbild',
-    ru: 'SafeHome Reminder высокого приоритета без полноэкранного режима',
-    es: "Reminder de SafeHome de alta prioridad sin pantalla completa",
+    zh: "高优先级 SafeHome 提醒，不打开全屏",
+    ko: "전체 화면 없이 높은 우선순위 SafeHome 리마인더",
+    ja: "全画面を開かない高優先度の SafeHome リマインダー",
+    de: 'SafeHome Erinnerung mit hoher Priorität ohne Vollbild',
+    ru: 'SafeHome напоминание высокого приоритета без полноэкранного режима',
+    es: "Recordatorio de SafeHome de alta prioridad sin pantalla completa",
     fr: _fr(
       vi: "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình",
       en: "High-priority SafeHome Reminder without fullscreen",
     ),
-    th: "Reminder ของ SafeHome ลำดับความสำคัญสูงโดยไม่เปิดเต็มหน้าจอ",
-    ms: "Reminder SafeHome keutamaan tinggi tanpa skrin penuh",
+    th: "การเตือนความจำ ของ SafeHome ลำดับความสำคัญสูงโดยไม่เปิดเต็มหน้าจอ",
+    ms: "Peringatan SafeHome keutamaan tinggi tanpa skrin penuh",
+    lo: "ການເຕືອນຄວາມຈຳ SafeHome ຄວາມສຳຄັນສູງ ໂດຍບໍ່ເປີດເຕັມຈໍ",
   );
 
   String androidHomeChatChannelDescription() => choose(
@@ -1905,12 +1964,13 @@ class AppStrings {
     ),
     th: "ข้อความใหม่ในบ้าน SafeHome",
     ms: "Mesej baharu dalam rumah SafeHome",
+    lo: "ຂໍ້ຄວາມໃໝ່ໃນເຮືອນ SafeHome",
   );
 
   String homeSecurityRepeatToast(int minutes) {
     return minutes == 0
         ? choose(
-            vi: "Mode Bảo vệ sẽ chỉ báo động một lần",
+            vi: "Chế độ Bảo vệ sẽ chỉ báo động một lần",
             en: "Guard mode will alert only once",
             zh: "布防模式只会警报一次",
             ko: "보호 모드는 한 번만 경보를 보냅니다",
@@ -1920,12 +1980,12 @@ class AppStrings {
 
             es: "El modo protección alertará solo una vez",
             fr: _fr(
-              vi: "Mode Bảo vệ sẽ chỉ báo động một lần",
+              vi: "Chế độ Bảo vệ sẽ chỉ báo động một lần",
               en: "Guard mode will alert only once",
             ),
           )
         : choose(
-            vi: "Mode Bảo vệ sẽ lặp báo động sau $minutes phút",
+            vi: "Chế độ Bảo vệ sẽ lặp báo động sau $minutes phút",
             fil:
                 "Uulit ang alerto ng Mode ng Proteksyon pagkalipas ng $minutes minuto",
             km: "មុខងារការពារនឹងជូនដំណឹងម្ដងទៀតបន្ទាប់ពី $minutes នាទី",
@@ -1938,12 +1998,14 @@ class AppStrings {
 
             es: "El modo protección repetirá la alerta después de $minutes minutos",
             fr: _fr(
-              vi: "Mode Bảo vệ sẽ lặp báo động sau $minutes phút",
+              vi: "Chế độ Bảo vệ sẽ lặp báo động sau $minutes phút",
               en: "Guard mode will repeat the alert after $minutes minutes",
             ),
             id: "Mode Perlindungan akan mengulang peringatan setelah $minutes menit",
             th: "โหมดป้องกันจะแจ้งเตือนซ้ำหลัง $minutes นาที",
-            ms: "Mod Perlindungan akan mengulangi Alarm selepas $minutes minit",
+            ms: "Mod Perlindungan akan mengulangi penggera selepas $minutes minit",
+            my: "ကာကွယ်ရေးမုဒ်က $minutes မိနစ်အကြာတွင် ထပ်မံသတိပေးမည်",
+            lo: "ໂໝດປ້ອງກັນຈະເຮັດຊ້ຳການເຕືອນຫຼັງ $minutes ນາທີ",
           );
   }
 
@@ -1966,6 +2028,8 @@ class AppStrings {
     id: "Permintaan bergabung untuk $count rumah telah dikirim",
     th: "ส่งคำขอเข้าร่วมบ้าน $count หลังแล้ว",
     ms: "Permintaan untuk menyertai $count rumah telah dihantar",
+    my: "အိမ် $count လုံးအတွက် ဝင်ခွင့်တောင်းဆိုမှု ပို့ပြီးပါပြီ",
+    lo: "ສົ່ງຄຳຂໍເຂົ້າຮ່ວມ $count ເຮືອນແລ້ວ",
   );
 
   String joinRequestMessage({
@@ -1990,6 +2054,8 @@ class AppStrings {
     id: "$requesterName meminta bergabung ke \"$homeName\".",
     th: "$requesterName กำลังขอเข้าร่วมบ้าน \"$homeName\"",
     ms: "$requesterName memohon untuk menyertai rumah \"$homeName\".",
+    my: "$requesterName က \"$homeName\" သို့ ဝင်ခွင့်တောင်းထားသည်။",
+    lo: "$requesterName ກຳລັງຂໍເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String homeDeletedMessage(String homeName) => choose(
@@ -2011,6 +2077,8 @@ class AppStrings {
     id: "Anda menghapus \"$homeName\".",
     th: "คุณได้ลบบ้าน \"$homeName\" แล้ว",
     ms: "Anda telah memadamkan rumah \"$homeName\".",
+    my: "\"$homeName\" ကို သင်ဖျက်ပြီးပါပြီ။",
+    lo: "ທ່ານລຶບເຮືອນ \"$homeName\" ແລ້ວ",
   );
 
   String ownershipTransferRequestSentMessage({
@@ -2036,6 +2104,8 @@ class AppStrings {
     id: "Anda mengirim permintaan pengalihan kepemilikan \"$homeName\" ke $email.",
     th: "คุณได้ส่งคำขอโอนสิทธิ์เจ้าของบ้านของ \"$homeName\" ให้ $email แล้ว",
     ms: "Anda telah menghantar permintaan pemindahan hak pemilik rumah \"$homeName\" kepada $email.",
+    my: "\"$homeName\" ၏ပိုင်ဆိုင်မှုကို $email ထံ လွှဲပြောင်းရန် တောင်းဆိုမှု ပို့ပြီးပါပြီ။",
+    lo: "ທ່ານສົ່ງຄຳຂໍໂອນຄວາມເປັນເຈົ້າຂອງ \"$homeName\" ໃຫ້ $email ແລ້ວ",
   );
 
   String ownershipTransferRequestMessage({
@@ -2061,6 +2131,8 @@ class AppStrings {
     id: "$actorName ingin mengalihkan kepemilikan \"$homeName\" kepada Anda.",
     th: "$actorName ต้องการโอนสิทธิ์เจ้าของบ้านของ \"$homeName\" ให้คุณ",
     ms: "$actorName mahu memindahkan hak pemilik rumah \"$homeName\" kepada anda.",
+    my: "$actorName က \"$homeName\" ၏ပိုင်ဆိုင်မှုကို သင့်ထံ လွှဲပြောင်းလိုသည်။",
+    lo: "$actorName ຕ້ອງການໂອນຄວາມເປັນເຈົ້າຂອງ \"$homeName\" ໃຫ້ທ່ານ",
   );
 
   String shareInvitationMessage({
@@ -2085,6 +2157,8 @@ class AppStrings {
     id: "$actorName mengundang Anda bergabung ke \"$homeName\".",
     th: "$actorName ขอเชิญคุณเข้าร่วมบ้าน \"$homeName\"",
     ms: "$actorName telah menjemput anda untuk menyertai rumah \"$homeName\".",
+    my: "$actorName က \"$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်။",
+    lo: "$actorName ເຊີນທ່ານເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String deviceDeleteInProgressMessage({
@@ -2110,6 +2184,8 @@ class AppStrings {
     id: "SafeHome sedang menghapus \"$deviceName\" dari \"$homeName\".",
     th: "SafeHome กำลังลบอุปกรณ์ \"$deviceName\" ออกจากบ้าน \"$homeName\"",
     ms: "SafeHome sedang memadam peranti \"$deviceName\" daripada rumah \"$homeName\".",
+    my: "SafeHome က \"$homeName\" မှ \"$deviceName\" စက်ပစ္စည်းကို ဖယ်ရှားနေသည်။",
+    lo: "SafeHome ກຳລັງລຶບອຸປະກອນ \"$deviceName\" ອອກຈາກ \"$homeName\"",
   );
 
   String deviceAddedMessage({
@@ -2134,6 +2210,8 @@ class AppStrings {
     id: "Perangkat \"$deviceName\" ditambahkan ke \"$homeName\".",
     th: "เพิ่มอุปกรณ์ \"$deviceName\" ในบ้าน \"$homeName\" แล้ว",
     ms: "Peranti \"$deviceName\" telah ditambahkan pada \"$homeName\".",
+    my: "\"$deviceName\" စက်ပစ္စည်းကို \"$homeName\" သို့ ထည့်ပြီးပါပြီ။",
+    lo: "ເພີ່ມອຸປະກອນ \"$deviceName\" ເຂົ້າໃນ \"$homeName\" ແລ້ວ",
   );
 
   String homeCreatedMessage(String name) => choose(
@@ -2155,6 +2233,8 @@ class AppStrings {
     id: "Anda membuat rumah \"$name\".",
     th: "คุณสร้างบ้าน \"$name\" แล้ว",
     ms: "Anda telah mencipta rumah \"$name\".",
+    my: "\"$name\" အိမ်ကို သင်ဖန်တီးပြီးပါပြီ။",
+    lo: "ທ່ານສ້າງເຮືອນ \"$name\" ແລ້ວ",
   );
 
   String homeInfoUpdatedMessage({
@@ -2184,6 +2264,8 @@ class AppStrings {
         id: "$actorName memperbarui nama rumah menjadi \"$newName\" dan mengubah alamatnya.",
         th: "$actorName อัปเดตชื่อบ้านเป็น \"$newName\" และเปลี่ยนที่อยู่แล้ว",
         ms: "$actorName mengemas kini nama rumah kepada \"$newName\" dan menukar alamat.",
+        my: "$actorName က အိမ်အမည်ကို \"$newName\" ဟု မွမ်းမံပြီး လိပ်စာကို ပြောင်းလဲခဲ့သည်။",
+        lo: "$actorName ອັບເດດຊື່ເຮືອນເປັນ \"$newName\" ແລະ ປ່ຽນທີ່ຢູ່",
       );
     }
 
@@ -2207,6 +2289,8 @@ class AppStrings {
         id: "$actorName mengganti nama rumah menjadi \"$newName\".",
         th: "$actorName เปลี่ยนชื่อบ้านเป็น \"$newName\" แล้ว",
         ms: "$actorName telah menukar nama rumah kepada \"$newName\".",
+        my: "$actorName က အိမ်အမည်ကို \"$newName\" ဟု ပြောင်းလဲခဲ့သည်။",
+        lo: "$actorName ປ່ຽນຊື່ເຮືອນເປັນ \"$newName\"",
       );
     }
 
@@ -2229,6 +2313,8 @@ class AppStrings {
       id: "$actorName memperbarui alamat \"$newName\".",
       th: "$actorName อัปเดตที่อยู่ของบ้าน \"$newName\" แล้ว",
       ms: "$actorName mengemas kini alamat rumah \"$newName\".",
+      my: "$actorName က \"$newName\" ၏လိပ်စာကို မွမ်းမံခဲ့သည်။",
+      lo: "$actorName ອັບເດດທີ່ຢູ່ຂອງ \"$newName\"",
     );
   }
 
@@ -2257,6 +2343,8 @@ class AppStrings {
     id: "$actorName mengganti nama perangkat \"$oldDeviceName\" menjadi \"$newName\" di \"$homeName\".",
     th: "$actorName เปลี่ยนชื่ออุปกรณ์ \"$oldDeviceName\" เป็น \"$newName\" ในบ้าน \"$homeName\" แล้ว",
     ms: "$actorName menamakan semula peranti \"$oldDeviceName\" kepada \"$newName\" dalam rumah \"$homeName\".",
+    my: "$actorName က \"$homeName\" တွင် \"$oldDeviceName\" စက်ပစ္စည်းကို \"$newName\" ဟု အမည်ပြောင်းခဲ့သည်။",
+    lo: "$actorName ປ່ຽນຊື່ອຸປະກອນ \"$oldDeviceName\" ເປັນ \"$newName\" ໃນ \"$homeName\"",
   );
 
   String pairingCountdownText(int seconds) => choose(
@@ -2275,6 +2363,8 @@ class AppStrings {
     id: "Pemasangan: $seconds dtk",
     th: "กำลังจับคู่: $seconds วินาที",
     ms: "Sedang berpasangan: $seconds saat",
+    my: "ချိတ်ဆက်နေသည် - $seconds စက္ကန့်",
+    lo: "ກຳລັງຈັບຄູ່: $seconds ວິນາທີ",
   );
 
   String pairingEnabledMessage({
@@ -2300,31 +2390,35 @@ class AppStrings {
     id: "Mode pemasangan perangkat diaktifkan di \"$homeName\" selama $seconds detik.",
     th: "เปิดโหมดเพิ่มอุปกรณ์ในบ้าน \"$homeName\" เป็นเวลา $seconds วินาที",
     ms: "Mod tambah peranti telah dibuka di rumah \"$homeName\" selama $seconds saat.",
+    my: "\"$homeName\" တွင် စက်ပစ္စည်းချိတ်ဆက်မုဒ်ကို $seconds စက္ကန့်ကြာ ဖွင့်ထားသည်။",
+    lo: "ເປີດການຈັບຄູ່ອຸປະກອນໃນ \"$homeName\" ເປັນເວລາ $seconds ວິນາທີ",
   );
 
   String alarmPauseWithinScheduleMessage({
     required String start,
     required String end,
   }) => choose(
-    vi: "Khoảng thời gian phải nằm trong khung Alarm ($start → $end)",
+    vi: "Khoảng thời gian phải nằm trong khung báo động ($start → $end)",
     fil:
-        "Dapat nasa loob ng iskedyul ng Alarm ang panahon ng pag-pause ($start → $end)",
-    km: "រយៈពេលផ្អាកត្រូវស្ថិតក្នុងកាលវិភាគ Alarm ($start → $end)",
+        "Dapat nasa loob ng iskedyul ng alarma ang panahon ng pag-pause ($start → $end)",
+    km: "រយៈពេលផ្អាកត្រូវស្ថិតក្នុងកាលវិភាគ សំឡេងរោទិ៍ ($start → $end)",
     en: "The pause period must be within the Alarm schedule ($start → $end)",
-    zh: "暂停时间必须在 Alarm 计划内 ($start → $end)",
-    ko: "일시 중지 시간은 Alarm 일정($start → $end) 안에 있어야 합니다",
-    ja: "一時停止期間は Alarm スケジュール（$start → $end）内である必要があります",
+    zh: "暂停时间必须在 警报 计划内 ($start → $end)",
+    ko: "일시 중지 시간은 경보 일정($start → $end) 안에 있어야 합니다",
+    ja: "一時停止期間は 警報 スケジュール（$start → $end）内である必要があります",
     de: 'Der Pausenzeitraum muss innerhalb des Alarm-Zeitplans liegen ($start → $end)',
-    ru: 'Период паузы должен быть в рамках расписания Alarm ($start → $end)',
+    ru: 'Период паузы должен быть в рамках расписания тревога ($start → $end)',
 
-    es: "El período de pausa debe estar dentro del horario de Alarm ($start → $end)",
+    es: "El período de pausa debe estar dentro del horario de alarma ($start → $end)",
     fr: _fr(
-      vi: "Khoảng thời gian phải nằm trong khung Alarm ($start → $end)",
+      vi: "Khoảng thời gian phải nằm trong khung báo động ($start → $end)",
       en: "The pause period must be within the Alarm schedule ($start → $end)",
     ),
-    id: "Periode jeda harus berada dalam jadwal Alarm ($start → $end)",
-    th: "ช่วงเวลาหยุดชั่วคราวต้องอยู่ภายในกำหนดเวลา Alarm ($start → $end)",
-    ms: "Tempoh Jeda Alarm mesti berada dalam Jadual Alarm ($start → $end)",
+    id: "Periode jeda harus berada dalam jadwal alarm ($start → $end)",
+    th: "ช่วงเวลาหยุดชั่วคราวต้องอยู่ภายในกำหนดเวลา สัญญาณเตือน ($start → $end)",
+    ms: "Tempoh Jeda penggera mesti berada dalam Jadual penggera ($start → $end)",
+    my: "ခေတ္တရပ်မည့်ကာလသည် အရေးပေါ်အချက်ပေးသံ အချိန်ဇယားအတွင်း ဖြစ်ရမည် ($start → $end)",
+    lo: "ຊ່ວງເວລາຢຸດຕ້ອງຢູ່ໃນຕາຕະລາງສັນຍານເຕືອນໄພ ($start → $end)",
   );
 
   String alarmPauseReminderText() => choose(
@@ -2332,37 +2426,38 @@ class AppStrings {
         'Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n'
         'Báo động của các thiết bị thuộc trường "Nguy hiểm khẩn cấp" và báo động ở chế độ "Bảo vệ" sẽ không bị ảnh hưởng bởi chức năng này.',
     my:
-        "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ Alarm အချိန်ကို ပြောင်းလဲပါမည်။\n\n"
-        "\"အရေးပေါ်အန္တရာယ်များ\" အမျိုးအစားရှိ စက်ပစ္စည်း Alarm များနှင့် \"ကာကွယ်ရေး\" မုဒ်ရှိ Alarm များကို ဤလုပ်ဆောင်ချက်က မသက်ရောက်ပါ။",
+        "ဤလုပ်ဆောင်ချက်က ယနေ့ စက်ပစ္စည်းအချို့၏ အရေးပေါ်အချက်ပေးသံ အချိန်ကို ပြောင်းလဲပါမည်။\n\n"
+        "\"အရေးပေါ်အန္တရာယ်များ\" အမျိုးအစားရှိ စက်ပစ္စည်း အရေးပေါ်အချက်ပေးသံ များနှင့် \"ကာကွယ်ရေး\" မုဒ်ရှိ အရေးပေါ်အချက်ပေးသံ များကို ဤလုပ်ဆောင်ချက်က မသက်ရောက်ပါ။",
     fil:
-        "Babaguhin ng aksyong ito ang oras ng Alarm para sa ilang aparato ngayong araw.\n\nHindi maaapektuhan ng feature na ito ang mga Alarm ng mga aparatong nasa kategoryang \"Mga agarang panganib\" at ang mga Alarm sa Mode ng Proteksyon.",
-    km: "សកម្មភាពនេះនឹងផ្លាស់ប្ដូរពេលវេលា Alarm របស់ឧបករណ៍មួយចំនួននៅថ្ងៃនេះ។\n\nAlarm របស់ឧបករណ៍ក្នុងក្រុម \"គ្រោះថ្នាក់បន្ទាន់\" និង Alarm ក្នុងមុខងារ \"ការពារ\" នឹងមិនទទួលរងឥទ្ធិពលពីមុខងារនេះទេ។",
+        "Babaguhin ng aksyong ito ang oras ng alarma para sa ilang aparato ngayong araw.\n\nHindi maaapektuhan ng feature na ito ang mga alarma ng mga aparatong nasa kategoryang \"Mga agarang panganib\" at ang mga alarma sa Mode ng Proteksyon.",
+    km: "សកម្មភាពនេះនឹងផ្លាស់ប្ដូរពេលវេលា សំឡេងរោទិ៍ របស់ឧបករណ៍មួយចំនួននៅថ្ងៃនេះ។\n\nAlarm របស់ឧបករណ៍ក្នុងក្រុម \"គ្រោះថ្នាក់បន្ទាន់\" និង សំឡេងរោទិ៍ ក្នុងមុខងារ \"ការពារ\" នឹងមិនទទួលរងឥទ្ធិពលពីមុខងារនេះទេ។",
     en:
         'This action will change today\'s Alarm time for some devices.\n\n'
         'Alarms from devices in the "Emergency danger" category and alarms in "Guard" mode will not be affected by this feature.',
     zh:
-        '此操作将更改部分设备今天的 Alarm 时间。\n\n'
+        '此操作将更改部分设备今天的 警报 时间。\n\n'
         '“紧急危险”类别中的设备警报，以及“警戒”模式下的警报，不受此功能影响。',
     ko:
-        '이 작업은 일부 기기의 오늘 Alarm 시간을 변경합니다.\n\n'
+        '이 작업은 일부 기기의 오늘 경보 시간을 변경합니다.\n\n'
         '"긴급 위험" 항목에 속한 기기의 경보와 "보호" 모드의 경보는 이 기능의 영향을 받지 않습니다.',
     ja:
-        'この操作により、一部のデバイスの本日の Alarm 時間が変更されます。\n\n'
+        'この操作により、一部のデバイスの本日の 警報 時間が変更されます。\n\n'
         '「緊急の危険」カテゴリに属するデバイスの警報と「警戒」モードの警報は、この機能の影響を受けません。',
     de:
         'Diese Aktion ändert die heutige Alarm-Zeit für einige Geräte.\n\n'
         'Alarme von Geräten in der Kategorie „Akute Gefahr“ sowie Alarme im Modus „Schutz“ werden von dieser Funktion nicht beeinflusst.',
     ru:
-        'Это действие изменит время Alarm сегодня для некоторых устройств.\n\n'
+        'Это действие изменит время тревога сегодня для некоторых устройств.\n\n'
         'Сигналы устройств из категории «Экстренная опасность» и сигналы в режиме «Охрана» не будут затронуты этой функцией.',
     fr:
-        'Cette action modifiera aujourd\'hui l\'heure de l\'Alarm pour certains appareils.\n\n'
+        'Cette action modifiera aujourd\'hui l\'heure de l\'alarme pour certains appareils.\n\n'
         'Les alarmes des appareils de la catégorie « Danger urgent » et les alarmes en mode « Protection » ne seront pas affectées par cette fonction.',
     es:
-        'Esta acción cambiará hoy la hora de Alarm de algunos dispositivos.\n\n'
+        'Esta acción cambiará hoy la hora de alarma de algunos dispositivos.\n\n'
         'Las alarmas de los dispositivos de la categoría «Peligro de emergencia» y las alarmas en modo «Protección» no se verán afectadas por esta función.',
-    th: "การดำเนินการนี้จะเปลี่ยนเวลา Alarm ของอุปกรณ์บางเครื่องในวันนี้\n\nAlarm ของอุปกรณ์ในหมวด \"อันตรายฉุกเฉิน\" และ Alarm ที่ใช้ \"โหมดป้องกัน\" จะไม่ได้รับผลกระทบจากฟังก์ชันนี้",
-    ms: "Tindakan ini akan mengubah masa Alarm bagi sesetengah peranti pada hari ini.\n\nAlarm untuk peranti dalam kategori \"Bahaya kecemasan\" dan Alarm dalam mod \"Perlindungan\" tidak akan terjejas oleh fungsi ini.",
+    th: "การดำเนินการนี้จะเปลี่ยนเวลา สัญญาณเตือน ของอุปกรณ์บางเครื่องในวันนี้\n\nAlarm ของอุปกรณ์ในหมวด \"อันตรายฉุกเฉิน\" และ สัญญาณเตือน ที่ใช้ \"โหมดป้องกัน\" จะไม่ได้รับผลกระทบจากฟังก์ชันนี้",
+    ms: "Tindakan ini akan mengubah masa penggera bagi sesetengah peranti pada hari ini.\n\nAlarm untuk peranti dalam kategori \"Bahaya kecemasan\" dan penggera dalam mod \"Perlindungan\" tidak akan terjejas oleh fungsi ini.",
+    lo: "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງອຸປະກອນບາງອັນໃນມື້ນີ້.\n\n",
   );
 
   String firebaseRulesPassedSummary({
@@ -2387,6 +2482,8 @@ class AppStrings {
     id: "$passCount/$total tes lulus\\n\\n",
     th: "ผ่านการทดสอบ $passCount/$total รายการ\n\n",
     ms: "$passCount/$total ujian lulus\n\n",
+    my: "စမ်းသပ်မှု $passCount/$total ခု အောင်မြင်သည်\n\n",
+    lo: "ຜ່ານ $passCount/$total ການທົດສອບ\n\n",
   );
 
   String memberPhoneMissingProfileMessage(String name) => choose(
@@ -2408,6 +2505,8 @@ class AppStrings {
     id: "$name belum menambahkan nomor telepon ke profilnya.",
     th: "$name ยังไม่ได้อัปเดตหมายเลขโทรศัพท์ในโปรไฟล์",
     ms: "$name belum mengemas kini nombor telefon dalam profilnya.",
+    my: "$name သည် ကိုယ်ရေးအချက်အလက်တွင် ဖုန်းနံပါတ် မထည့်ရသေးပါ။",
+    lo: "$name ຍັງບໍ່ໄດ້ເພີ່ມເບີໂທລະສັບໃນໂປຣໄຟລ໌",
   );
 
   String newChatInHomeTitle(String homeName) => choose(
@@ -2426,6 +2525,8 @@ class AppStrings {
     id: "Pesan baru di $homeName",
     th: "ข้อความใหม่ใน $homeName",
     ms: "Mesej baharu dalam $homeName",
+    my: "$homeName တွင် စာတိုအသစ်ရှိသည်",
+    lo: "ຂໍ້ຄວາມໃໝ່ໃນ $homeName",
   );
 
   String searchResultCountText({required int current, required int total}) =>
@@ -2445,6 +2546,8 @@ class AppStrings {
         id: "$current/$total hasil",
         th: "$current/$total ผลลัพธ์",
         ms: "$current/$total hasil",
+        my: "ရလဒ် $current/$total",
+        lo: "$current/$total ຜົນລັບ",
       );
 
   String replyingToText(String name) => choose(
@@ -2463,6 +2566,8 @@ class AppStrings {
     id: "Membalas $name",
     th: "กำลังตอบกลับ $name",
     ms: "Membalas $name",
+    my: "$name ထံ ပြန်စာရေးနေသည်",
+    lo: "ກຳລັງຕອບ $name",
   );
 
   String deviceSmokeDetectedMessage({
@@ -2487,6 +2592,8 @@ class AppStrings {
     id: "\"$name\" mendeteksi asap di \"$homeName\".",
     th: "\"$name\" ตรวจพบควันใน \"$homeName\"",
     ms: "\"$name\" mengesan asap di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" က မီးခိုးတွေ့ရှိသည်။",
+    lo: "\"$name\" ກວດພົບຄວັນໃນ \"$homeName\"",
   );
 
   String deviceReturnedNormalMessage(String name) => choose(
@@ -2508,6 +2615,8 @@ class AppStrings {
     id: "\"$name\" kembali normal.",
     th: "\"$name\" กลับสู่สถานะปกติแล้ว",
     ms: "\"$name\" telah kembali ke status normal.",
+    my: "\"$name\" သည် ပုံမှန်အခြေအနေသို့ ပြန်ရောက်ပြီ။",
+    lo: "\"$name\" ກັບຄືນເປັນປົກກະຕິແລ້ວ",
   );
 
   String deviceSosTriggeredMessage({
@@ -2532,6 +2641,8 @@ class AppStrings {
     id: "\"$name\" memicu SOS di \"$homeName\".",
     th: "\"$name\" เปิดใช้งาน SOS ใน \"$homeName\"",
     ms: "\"$name\" baru sahaja mengaktifkan SOS di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" က SOS ဖွင့်ခဲ့သည်။",
+    lo: "\"$name\" ກະຕຸ້ນ SOS ໃນ \"$homeName\"",
   );
 
   String deviceSosClearedMessage(String name) => choose(
@@ -2553,6 +2664,8 @@ class AppStrings {
     id: "Status SOS \"$name\" telah berakhir.",
     th: "\"$name\" สิ้นสุดสถานะ SOS แล้ว",
     ms: "Status SOS untuk \"$name\" telah tamat.",
+    my: "\"$name\" ၏ SOS အခြေအနေ ပြီးဆုံးပြီ။",
+    lo: "\"$name\" ສິ້ນສຸດສະຖານະ SOS ແລ້ວ",
   );
 
   String deviceTamperDetectedMessage({
@@ -2577,6 +2690,8 @@ class AppStrings {
     id: "\"$name\" melaporkan perangkat dilepas/dicungkil di \"$homeName\".",
     th: "\"$name\" ถูกงัดแงะใน \"$homeName\"",
     ms: "\"$name\" mengesan gangguan di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" က ဖြုတ်/ဖောက်ဝင်မှု တွေ့ရှိသည်။",
+    lo: "\"$name\" ລາຍງານການຖອດງັດໃນ \"$homeName\"",
   );
 
   String deviceTamperClearedMessage(String name) => choose(
@@ -2598,6 +2713,8 @@ class AppStrings {
     id: "Peringatan lepas/cungkil pada \"$name\" sudah selesai.",
     th: "การแจ้งเตือนการงัดแงะของ \"$name\" สิ้นสุดแล้ว",
     ms: "Amaran gangguan untuk \"$name\" telah tamat.",
+    my: "\"$name\" ၏ ဖြုတ်/ဖောက်ဝင်မှု သတိပေးချက် ပြီးဆုံးပြီ။",
+    lo: "ການເຕືອນຖອດງັດຂອງ \"$name\" ສິ້ນສຸດແລ້ວ",
   );
 
   String deviceDoorClosedMessage({
@@ -2622,6 +2739,8 @@ class AppStrings {
     id: "\"$name\" tertutup di \"$homeName\".",
     th: "\"$name\" ปิดแล้วใน \"$homeName\"",
     ms: "\"$name\" telah ditutup di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" ပိတ်သွားသည်။",
+    lo: "\"$name\" ປິດແລ້ວໃນ \"$homeName\"",
   );
 
   String deviceDoorOpenMessage({
@@ -2646,6 +2765,8 @@ class AppStrings {
     id: "\"$name\" terbuka di \"$homeName\".",
     th: "\"$name\" เปิดอยู่ใน \"$homeName\"",
     ms: "\"$name\" sedang terbuka di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" ဖွင့်ထားသည်။",
+    lo: "\"$name\" ເປີດຢູ່ໃນ \"$homeName\"",
   );
 
   String deviceLowBatteryMessage({
@@ -2670,6 +2791,8 @@ class AppStrings {
     id: "Baterai \"$name\" di \"$homeName\" lemah.",
     th: "\"$name\" ใน \"$homeName\" มีแบตเตอรี่ใกล้หมด",
     ms: "Bateri \"$name\" di \"$homeName\" lemah.",
+    my: "\"$homeName\" ရှိ \"$name\" ၏ဘက်ထရီအားနည်းနေသည်။",
+    lo: "\"$name\" ໃນ \"$homeName\" ມີແບັດເຕີຣີຕ່ຳ",
   );
 
   String deviceOfflineMessage({
@@ -2694,6 +2817,8 @@ class AppStrings {
     id: "\"$name\" di \"$homeName\" kehilangan koneksi.",
     th: "\"$name\" ใน \"$homeName\" ออฟไลน์แล้ว",
     ms: "\"$name\" di \"$homeName\" telah terputus sambungan.",
+    my: "\"$homeName\" ရှိ \"$name\" ချိတ်ဆက်မှု ပြတ်တောက်သွားသည်။",
+    lo: "\"$name\" ໃນ \"$homeName\" ອອບລາຍ",
   );
 
   String deviceOnlineMessage({
@@ -2718,6 +2843,8 @@ class AppStrings {
     id: "\"$name\" di \"$homeName\" kembali online.",
     th: "\"$name\" ใน \"$homeName\" กลับมาออนไลน์แล้ว",
     ms: "\"$name\" di \"$homeName\" telah disambungkan semula.",
+    my: "\"$homeName\" ရှိ \"$name\" ပြန်လည်ချိတ်ဆက်ပြီ။",
+    lo: "\"$name\" ໃນ \"$homeName\" ກັບມາອອນລາຍແລ້ວ",
   );
 
   String deviceHighTemperatureMessage({
@@ -2743,6 +2870,8 @@ class AppStrings {
     id: "\"$name\" mencatat suhu tinggi di \"$homeName\".",
     th: "\"$name\" ตรวจพบอุณหภูมิสูงใน \"$homeName\"",
     ms: "\"$name\" mengesan suhu tinggi di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" က အပူချိန်မြင့်မားမှု မှတ်တမ်းတင်ခဲ့သည်။",
+    lo: "\"$name\" ບັນທຶກອຸນຫະພູມສູງໃນ \"$homeName\"",
   );
 
   String deviceHighHumidityMessage({
@@ -2768,6 +2897,8 @@ class AppStrings {
     id: "\"$name\" mencatat kelembapan tinggi di \"$homeName\".",
     th: "\"$name\" ตรวจพบความชื้นสูงใน \"$homeName\"",
     ms: "\"$name\" mengesan kelembapan tinggi di \"$homeName\".",
+    my: "\"$homeName\" တွင် \"$name\" က စိုထိုင်းဆမြင့်မားမှု မှတ်တမ်းတင်ခဲ့သည်။",
+    lo: "\"$name\" ບັນທຶກຄວາມຊຸ່ມສູງໃນ \"$homeName\"",
   );
 
   String alarmFallbackReason(String category) {
@@ -2905,20 +3036,22 @@ class AppStrings {
     id: "Akan memperingatkan lagi pada $time jika masalah belum ditangani.",
     th: "จะแจ้งเตือนอีกครั้งเวลา $time หากยังไม่ได้แก้ไขปัญหา",
     ms: "Amaran akan diulang pada $time jika masalah belum diselesaikan.",
+    my: "ပြဿနာ မဖြေရှင်းရသေးပါက $time တွင် ထပ်မံသတိပေးမည်။",
+    lo: "ຈະເຕືອນອີກຄັ້ງເວລາ $time ຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
   );
 
   String alarmRepeatByScheduleText() => choose(
-    vi: "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.",
+    vi: "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.",
     en: "Alerts again according to the Alarm schedule if the issue has not been handled.",
-    zh: "如果问题尚未处理，将按已设置的 Alarm 计划再次提醒。",
-    ko: "문제가 처리되지 않으면 설정된 Alarm 일정에 따라 다시 알립니다.",
-    ja: "問題が解決されていない場合、設定済みの Alarm スケジュールに従って再度通知します。",
+    zh: "如果问题尚未处理，将按已设置的 警报 计划再次提醒。",
+    ko: "문제가 처리되지 않으면 설정된 경보 일정에 따라 다시 알립니다.",
+    ja: "問題が解決されていない場合、設定済みの 警報 スケジュールに従って再度通知します。",
     de: 'Alarmiert erneut gemäß dem eingestellten Alarm-Zeitplan, wenn das Problem nicht behoben wurde.',
-    ru: 'Повторит тревогу по расписанию Alarm, если проблема не решена.',
+    ru: 'Повторит тревогу по расписанию тревога, если проблема не решена.',
 
-    es: "Volverá a avisar según la programación de Alarm si el problema no se ha resuelto.",
+    es: "Volverá a avisar según la programación de alarma si el problema no se ha resuelto.",
     fr: _fr(
-      vi: "Sẽ báo lại theo lịch Alarm đã cài nếu vấn đề chưa được xử lý.",
+      vi: "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.",
       en: "Alerts again according to the Alarm schedule if the issue has not been handled.",
     ),
   );
@@ -3042,7 +3175,7 @@ class AppStrings {
 
     final title = systemNotificationText(rawTitle, type: type);
 
-    return title.isNotEmpty ? title : t("Thông báo");
+    return title.isNotEmpty ? title : notification;
   }
 
   String notificationMessage(
@@ -3237,6 +3370,8 @@ class AppStrings {
                 id: "\"$deviceName\" tertutup di \"$resolvedHomeName\".",
                 th: "\"$deviceName\" ปิดแล้วใน \"$resolvedHomeName\"",
                 ms: "\"$deviceName\" telah ditutup di \"$resolvedHomeName\".",
+                my: "\"$resolvedHomeName\" တွင် \"$deviceName\" ပိတ်သွားသည်။",
+                lo: "\"$deviceName\" ປິດແລ້ວໃນ \"$resolvedHomeName\"",
               )
             : choose(
                 vi: "\"$deviceName\" đang mở trong \"$resolvedHomeName\".",
@@ -3258,6 +3393,8 @@ class AppStrings {
                 id: "\"$deviceName\" terbuka di \"$resolvedHomeName\".",
                 th: "\"$deviceName\" เปิดอยู่ใน \"$resolvedHomeName\"",
                 ms: "\"$deviceName\" sedang terbuka di \"$resolvedHomeName\".",
+                my: "\"$resolvedHomeName\" တွင် \"$deviceName\" ဖွင့်ထားသည်။",
+                lo: "\"$deviceName\" ເປີດຢູ່ໃນ \"$resolvedHomeName\"",
               );
       }
 
@@ -3774,6 +3911,8 @@ class AppStrings {
 
   static const Map<String, String> _burmese = myStrings;
 
+  static const Map<String, String> _lao = loStrings;
+
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -3795,6 +3934,10 @@ class AppStrings {
 
     if (isBurmese) {
       return _translationFromMap(_burmese, key) ?? vi;
+    }
+
+    if (isLao) {
+      return _translationFromMap(_lao, key) ?? vi;
     }
 
     if (isIndonesian) {
@@ -3836,6 +3979,17 @@ class AppStrings {
     return _english[key] ?? vi;
   }
 
+  String get alarm => t("Báo động");
+  String get alarmSettings => t("Cài đặt báo động");
+  String get alarmNotification => t("Thông báo báo động");
+  String get stopAlarm => t("Tắt báo động");
+  String get reminder => t("Nhắc nhở");
+  String get reminderSettings => t("Cài đặt nhắc nhở");
+  String get scheduledReminder => t("Nhắc nhở theo lịch");
+  String get notification => t("Thông báo");
+  String get notifications => t("Danh sách thông báo");
+  String get notificationSettings => t("Cài đặt thông báo");
+
   String selectedHomesCountText(int count) => choose(
     vi: "$count nhà đã chọn",
     fil: "$count bahay ang napili",
@@ -3852,6 +4006,8 @@ class AppStrings {
     id: "$count rumah dipilih",
     th: "เลือกบ้าน $count หลัง",
     ms: "$count rumah terpilih",
+    my: "အိမ် $count လုံး ရွေးထားသည်",
+    lo: "ເລືອກ $count ເຮືອນ",
   );
 
   String allHomeDangerCountText(int count, {String reason = ""}) {
@@ -3875,6 +4031,8 @@ class AppStrings {
       id: "🚨 $count rumah tidak aman$suffix",
       th: "🚨 บ้านที่ไม่ปลอดภัย $count หลัง$suffix",
       ms: "🚨 $count rumah tidak selamat$suffix",
+      my: "🚨 မလုံခြုံသောအိမ် $count လုံး$suffix",
+      lo: "🚨 $count ເຮືອນບໍ່ປອດໄພ$suffix",
     );
   }
 
@@ -3899,6 +4057,8 @@ class AppStrings {
       id: "⚠️ $count rumah perlu perhatian$suffix",
       th: "⚠️ บ้านที่ต้องตรวจสอบ $count หลัง$suffix",
       ms: "⚠️ $count rumah memerlukan perhatian$suffix",
+      my: "⚠️ စစ်ဆေးရန်လိုသောအိမ် $count လုံး$suffix",
+      lo: "⚠️ $count ເຮືອນຕ້ອງໃສ່ໃຈ$suffix",
     );
   }
 
@@ -3918,6 +4078,8 @@ class AppStrings {
     id: "✅ $count rumah aman",
     th: "✅ บ้านที่ปลอดภัย $count หลัง",
     ms: "✅ $count rumah selamat",
+    my: "✅ လုံခြုံသောအိမ် $count လုံး",
+    lo: "✅ $count ເຮືອນປອດໄພ",
   );
 
   String monitoredHomesCountText(int count) => choose(
@@ -3936,6 +4098,8 @@ class AppStrings {
     id: "$count rumah dipantau",
     th: "กำลังตรวจสอบบ้าน $count หลัง",
     ms: "$count rumah sedang dipantau",
+    my: "အိမ် $count လုံးကို စောင့်ကြည့်နေသည်",
+    lo: "ກຳລັງຕິດຕາມ $count ເຮືອນ",
   );
 
   String minuteText(int minutes) => choose(
@@ -3954,6 +4118,8 @@ class AppStrings {
     id: "$minutes menit",
     th: "$minutes นาที",
     ms: "$minutes minit",
+    my: "$minutes မိနစ်",
+    lo: "$minutes ນາທີ",
   );
 
   String allHomeReminderAppliedText(
@@ -3961,48 +4127,54 @@ class AppStrings {
     int skippedHomes,
   ) => choose(
     vi:
-        "Đã cài Reminder cho $updatedHomes nhà."
+        "Đã cài nhắc nhở cho $updatedHomes nhà."
         "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
     fil:
-        "Naitakda ang Reminder para sa $updatedHomes bahay."
+        "Naitakda ang paalala para sa $updatedHomes bahay."
         "${skippedHomes > 0 ? "\n\nNilaktawan ang $skippedHomes bahay dahil wala kang pahintulot." : ""}",
     km:
-        "បានកំណត់ Reminder សម្រាប់ផ្ទះចំនួន $updatedHomes។"
+        "បានកំណត់ ការរំលឹក សម្រាប់ផ្ទះចំនួន $updatedHomes។"
         "${skippedHomes > 0 ? "\n\nផ្ទះចំនួន $skippedHomes ត្រូវបានរំលង ព្រោះអ្នកមិនមានសិទ្ធិ។" : ""}",
     en:
         "Reminder was set for $updatedHomes homes."
         "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
     zh:
-        "已为 $updatedHomes 个家庭设置 Reminder。"
+        "已为 $updatedHomes 个家庭设置 提醒。"
         "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
     ko:
-        "$updatedHomes개 집에 Reminder를 설정했습니다."
+        "$updatedHomes개 집에 리마인더를 설정했습니다."
         "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
     ja:
-        "$updatedHomes 件の家に Reminder を設定しました。"
+        "$updatedHomes 件の家に リマインダー を設定しました。"
         "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
     de:
-        'Reminder wurde für $updatedHomes Zuhause eingerichtet.'
+        'Erinnerung wurde für $updatedHomes Zuhause eingerichtet.'
         '${skippedHomes > 0 ? "\n\n$skippedHomes Zuhause wurden übersprungen, weil du keine Berechtigung hast." : ""}',
     ru:
-        'Reminder установлен для $updatedHomes домов.'
+        'Напоминание установлен для $updatedHomes домов.'
         '${skippedHomes > 0 ? "\n\n$skippedHomes домов пропущено, потому что у вас нет разрешения." : ""}',
 
     es:
-        "Reminder configurado para $updatedHomes casas."
+        "Recordatorio configurado para $updatedHomes casas."
         "${skippedHomes > 0 ? "\n\nSe omitieron $skippedHomes casas porque no tienes permiso." : ""}",
     fr:
-        "Reminder configuré pour $updatedHomes maisons."
+        "Rappel configuré pour $updatedHomes maisons."
         "${skippedHomes > 0 ? "\n\n$skippedHomes maisons ont été ignorées car vous n'avez pas l'autorisation." : ""}",
     id:
-        "Reminder telah diatur untuk $updatedHomes rumah."
+        "Pengingat telah diatur untuk $updatedHomes rumah."
         "${skippedHomes > 0 ? "\n\n$skippedHomes rumah dilewati karena Anda tidak memiliki izin." : ""}",
     th:
-        "ตั้งค่า Reminder ให้บ้าน $updatedHomes หลังแล้ว"
+        "ตั้งค่า การเตือนความจำ ให้บ้าน $updatedHomes หลังแล้ว"
         "${skippedHomes > 0 ? "\n\nข้ามบ้าน $skippedHomes หลังเนื่องจากคุณไม่มีสิทธิ์" : ""}",
     ms:
-        "Reminder telah ditetapkan untuk $updatedHomes rumah."
+        "Peringatan telah ditetapkan untuk $updatedHomes rumah."
         "${skippedHomes > 0 ? "\n\n$skippedHomes rumah dilangkau kerana anda tiada kebenaran." : ""}",
+    my:
+        "$updatedHomes အိမ်အတွက် သတိပေးချက် သတ်မှတ်ပြီးပါပြီ။"
+        "${skippedHomes > 0 ? "\n\nခွင့်ပြုချက်မရှိသောကြောင့် အိမ် $skippedHomes လုံးကို ကျော်ခဲ့သည်။" : ""}",
+    lo:
+        "ຕັ້ງການເຕືອນຄວາມຈຳໃຫ້ $updatedHomes ເຮືອນແລ້ວ."
+        "${skippedHomes > 0 ? "\n\nຂ້າມ $skippedHomes ເຮືອນເພາະທ່ານບໍ່ມີສິດ." : ""}",
   );
 
   String allHomeAlarmAppliedText({
@@ -4012,15 +4184,15 @@ class AppStrings {
     required int skippedHomes,
   }) => choose(
     vi:
-        "Đã cài Alarm cho $updatedDevices thiết bị trong $updatedHomes nhà.\n"
+        "Đã cài báo động cho $updatedDevices thiết bị trong $updatedHomes nhà.\n"
         "Thời gian lặp lại: $repeatLabel."
         "${skippedHomes > 0 ? "\n\n$skippedHomes nhà bị bỏ qua vì bạn không có quyền." : ""}",
     fil:
-        "Naitakda ang Alarm para sa $updatedDevices aparato sa $updatedHomes bahay.\n"
+        "Naitakda ang alarma para sa $updatedDevices aparato sa $updatedHomes bahay.\n"
         "Oras ng pag-uulit: $repeatLabel."
         "${skippedHomes > 0 ? "\n\nNilaktawan ang $skippedHomes bahay dahil wala kang pahintulot." : ""}",
     km:
-        "បានកំណត់ Alarm សម្រាប់ឧបករណ៍ $updatedDevices នៅក្នុងផ្ទះចំនួន $updatedHomes។\n"
+        "បានកំណត់ សំឡេងរោទិ៍ សម្រាប់ឧបករណ៍ $updatedDevices នៅក្នុងផ្ទះចំនួន $updatedHomes។\n"
         "ចន្លោះពេលកើតឡើងវិញ៖ $repeatLabel។"
         "${skippedHomes > 0 ? "\n\nផ្ទះចំនួន $skippedHomes ត្រូវបានរំលង ព្រោះអ្នកមិនមានសិទ្ធិ។" : ""}",
     en:
@@ -4028,15 +4200,15 @@ class AppStrings {
         "Repeat time: $repeatLabel."
         "${skippedHomes > 0 ? "\n\n$skippedHomes homes were skipped because you do not have permission." : ""}",
     zh:
-        "已为 $updatedHomes 个家庭中的 $updatedDevices 台设备设置 Alarm。\n"
+        "已为 $updatedHomes 个家庭中的 $updatedDevices 台设备设置 警报。\n"
         "重复时间：$repeatLabel。"
         "${skippedHomes > 0 ? "\n\n$skippedHomes 个家庭因没有权限而被跳过。" : ""}",
     ko:
-        "$updatedHomes개 집의 기기 $updatedDevices대에 Alarm을 설정했습니다.\n"
+        "$updatedHomes개 집의 기기 $updatedDevices대에 경보을 설정했습니다.\n"
         "반복 시간: $repeatLabel."
         "${skippedHomes > 0 ? "\n\n권한이 없어 $skippedHomes개 집을 건너뛰었습니다." : ""}",
     ja:
-        "$updatedHomes 件の家にある $updatedDevices 台のデバイスに Alarm を設定しました。\n"
+        "$updatedHomes 件の家にある $updatedDevices 台のデバイスに 警報 を設定しました。\n"
         "繰り返し時間: $repeatLabel。"
         "${skippedHomes > 0 ? "\n\n権限がないため $skippedHomes 件の家をスキップしました。" : ""}",
     de:
@@ -4044,16 +4216,16 @@ class AppStrings {
         'Wiederholungszeit: $repeatLabel.'
         '${skippedHomes > 0 ? "\n\n$skippedHomes Zuhause wurden übersprungen, weil du keine Berechtigung hast." : ""}',
     ru:
-        'Alarm установлен для $updatedDevices устройств в $updatedHomes домах.\n'
+        'Тревога установлен для $updatedDevices устройств в $updatedHomes домах.\n'
         'Время повтора: $repeatLabel.'
         '${skippedHomes > 0 ? "\n\n$skippedHomes домов пропущено, потому что у вас нет разрешения." : ""}',
 
     es:
-        "Alarm configurado para $updatedDevices dispositivos en $updatedHomes casas.\n"
+        "Alarma configurado para $updatedDevices dispositivos en $updatedHomes casas.\n"
         "Tiempo de repetición: $repeatLabel."
         "${skippedHomes > 0 ? "\n\nSe omitieron $skippedHomes casas porque no tienes permiso." : ""}",
     fr:
-        "Alarm configuré pour $updatedDevices appareils dans $updatedHomes maisons.\n"
+        "Alarme configuré pour $updatedDevices appareils dans $updatedHomes maisons.\n"
         "Délai de répétition : $repeatLabel."
         "${skippedHomes > 0 ? "\n\n$skippedHomes maisons ont été ignorées car vous n'avez pas l'autorisation." : ""}",
     id:
@@ -4061,13 +4233,21 @@ class AppStrings {
         "Waktu ulang: $repeatLabel."
         "${skippedHomes > 0 ? "\n\n$skippedHomes rumah dilewati karena Anda tidak memiliki izin." : ""}",
     th:
-        "ตั้งค่า Alarm ให้กับอุปกรณ์ $updatedDevices เครื่องในบ้าน $updatedHomes หลังแล้ว\n"
+        "ตั้งค่า สัญญาณเตือน ให้กับอุปกรณ์ $updatedDevices เครื่องในบ้าน $updatedHomes หลังแล้ว\n"
         "เวลาทำซ้ำ: $repeatLabel"
         "${skippedHomes > 0 ? "\n\nข้ามบ้าน $skippedHomes หลังเนื่องจากคุณไม่มีสิทธิ์" : ""}",
     ms:
-        "Alarm telah ditetapkan untuk $updatedDevices peranti di $updatedHomes rumah.\n"
+        "Penggera telah ditetapkan untuk $updatedDevices peranti di $updatedHomes rumah.\n"
         "Masa ulangan: $repeatLabel."
         "${skippedHomes > 0 ? "\n\n$skippedHomes rumah dilangkau kerana anda tiada kebenaran." : ""}",
+    my:
+        "$updatedHomes အိမ်ရှိ စက်ပစ္စည်း $updatedDevices ခုအတွက် အရေးပေါ်အချက်ပေး သတ်မှတ်ပြီးပါပြီ။\n"
+        "ထပ်မံသတိပေးချိန်: $repeatLabel။"
+        "${skippedHomes > 0 ? "\n\nခွင့်ပြုချက်မရှိသောကြောင့် အိမ် $skippedHomes လုံးကို ကျော်ခဲ့သည်။" : ""}",
+    lo:
+        "ຕັ້ງສັນຍານເຕືອນໄພໃຫ້ $updatedDevices ອຸປະກອນໃນ $updatedHomes ເຮືອນແລ້ວ.\n"
+        "ເວລາເຮັດຊ້ຳ: $repeatLabel."
+        "${skippedHomes > 0 ? "\n\nຂ້າມ $skippedHomes ເຮືອນເພາະທ່ານບໍ່ມີສິດ." : ""}",
   );
 
   String allHomeShareResultText(int skipped) {
@@ -4092,28 +4272,32 @@ class AppStrings {
       id: "Rumah yang dapat Anda kelola telah dibagikan.\\n\\n$skipped rumah dilewati karena Anda tidak memiliki izin berbagi.",
       th: "แชร์บ้านที่คุณมีสิทธิ์แล้ว\n\nข้ามบ้าน $skipped หลังเนื่องจากคุณไม่มีสิทธิ์แชร์",
       ms: "Rumah yang anda urus telah dikongsi.\n\n$skipped rumah dilangkau kerana anda tiada kebenaran untuk berkongsi.",
+      my: "သင်စီမံခန့်ခွဲသောအိမ်များကို မျှဝေပြီးပါပြီ။\n\nမျှဝေခွင့်မရှိသောကြောင့် အိမ် $skipped လုံးကို ကျော်ခဲ့သည်။",
+      lo: "ແບ່ງປັນເຮືອນທີ່ທ່ານຈັດການແລ້ວ.\n\nຂ້າມ $skipped ເຮືອນເພາະທ່ານບໍ່ມີສິດແບ່ງປັນ",
     );
   }
 
   String alarmAppliedToSecurityDevicesText(int count) => choose(
-    vi: "Đã áp dụng Alarm cho $count thiết bị an ninh",
-    fil: "Inilapat ang Alarm sa $count aparatong panseguridad",
-    km: "បានអនុវត្ត Alarm លើឧបករណ៍សន្តិសុខចំនួន $count",
+    vi: "Đã áp dụng báo động cho $count thiết bị an ninh",
+    fil: "Inilapat ang alarma sa $count aparatong panseguridad",
+    km: "បានអនុវត្ត សំឡេងរោទិ៍ លើឧបករណ៍សន្តិសុខចំនួន $count",
     en: "Alarm applied to $count security devices",
-    zh: "Alarm 已应用到 $count 个安全设备",
-    ko: "보안 기기 $count대에 Alarm을 적용했습니다",
-    ja: "$count 台のセキュリティデバイスに Alarm を適用しました",
+    zh: "警报 已应用到 $count 个安全设备",
+    ko: "보안 기기 $count대에 경보을 적용했습니다",
+    ja: "$count 台のセキュリティデバイスに 警報 を適用しました",
     de: 'Alarm auf $count Sicherheitsgeräte angewendet',
-    ru: 'Alarm применен к $count устройствам безопасности',
+    ru: 'Тревога применен к $count устройствам безопасности',
 
-    es: "Alarm aplicado a $count dispositivos de seguridad",
+    es: "Alarma aplicado a $count dispositivos de seguridad",
     fr: _fr(
-      vi: "Đã áp dụng Alarm cho $count thiết bị an ninh",
+      vi: "Đã áp dụng báo động cho $count thiết bị an ninh",
       en: "Alarm applied to $count security devices",
     ),
     id: "Alarm diterapkan ke $count perangkat keamanan",
-    th: "ใช้ Alarm กับอุปกรณ์รักษาความปลอดภัย $count เครื่องแล้ว",
-    ms: "Alarm telah digunakan pada $count peranti keselamatan",
+    th: "ใช้ สัญญาณเตือน กับอุปกรณ์รักษาความปลอดภัย $count เครื่องแล้ว",
+    ms: "Penggera telah digunakan pada $count peranti keselamatan",
+    my: "လုံခြုံရေးစက်ပစ္စည်း $count ခုအတွက် အရေးပေါ်အချက်ပေးသံ အသုံးပြုပြီးပါပြီ",
+    lo: "ນຳໃຊ້ສັນຍານເຕືອນໄພກັບ $count ອຸປະກອນຄວາມປອດໄພແລ້ວ",
   );
 
   String applySameAlarmScheduleToSecurityDevicesText(int count) => choose(
@@ -4135,6 +4319,8 @@ class AppStrings {
     id: "Terapkan jadwal yang sama ke $count perangkat keamanan",
     th: "ใช้กำหนดเวลาเดียวกันกับอุปกรณ์รักษาความปลอดภัย $count เครื่อง",
     ms: "Gunakan jadual yang sama pada $count peranti keselamatan",
+    my: "လုံခြုံရေးစက်ပစ္စည်း $count ခုအတွက် တူညီသောအချိန်ဇယား အသုံးပြုရန်",
+    lo: "ນຳໃຊ້ຕາຕະລາງດຽວກັນກັບ $count ອຸປະກອນຄວາມປອດໄພ",
   );
 
   String minutesAgo(int count) => choose(
@@ -4153,6 +4339,8 @@ class AppStrings {
     id: "$count menit lalu",
     th: "$count นาทีที่แล้ว",
     ms: "$count minit yang lalu",
+    my: "$count မိနစ်အကြာက",
+    lo: "$count ນາທີກ່ອນ",
   );
 
   String hoursAgo(int count) => choose(
@@ -4171,6 +4359,8 @@ class AppStrings {
     id: "$count jam lalu",
     th: "$count ชั่วโมงที่แล้ว",
     ms: "$count jam yang lalu",
+    my: "$count နာရီအကြာက",
+    lo: "$count ຊົ່ວໂມງກ່ອນ",
   );
 
   String hoursAgoShort(int count) => choose(
@@ -4189,6 +4379,8 @@ class AppStrings {
     id: "${count}j lalu",
     th: "${count} ชั่วโมงที่แล้ว",
     ms: "${count} jam lalu",
+    my: "${count} နာရီအကြာက",
+    lo: "${count} ຊົ່ວໂມງກ່ອນ",
   );
 
   String hoursMinutesAgoShort(int hours, int minutes) => choose(
@@ -4207,6 +4399,8 @@ class AppStrings {
     id: "${hours}j ${minutes}m lalu",
     th: "${hours} ชม. $minutes นาทีที่แล้ว",
     ms: "${hours} jam $minutes minit lalu",
+    my: "${hours} နာရီ ${minutes} မိနစ်အကြာက",
+    lo: "${hours} ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
   );
 
   String daysAgo(int count) => choose(
@@ -4225,6 +4419,8 @@ class AppStrings {
     id: "$count hari lalu",
     th: "$count วันที่แล้ว",
     ms: "$count hari yang lalu",
+    my: "$count ရက်အကြာက",
+    lo: "$count ມື້ກ່ອນ",
   );
 
   String monthsAgo(int count) => choose(
@@ -4243,6 +4439,8 @@ class AppStrings {
     id: "$count bulan lalu",
     th: "$count เดือนที่แล้ว",
     ms: "$count bulan lalu",
+    my: "$count လအကြာက",
+    lo: "$count ເດືອນກ່ອນ",
   );
 
   String confirmRemoveMemberFromHomeText(String name) => choose(
@@ -4264,6 +4462,8 @@ class AppStrings {
     id: "Yakin ingin menghapus $name dari rumah ini?",
     th: "คุณแน่ใจหรือไม่ว่าต้องการลบ $name ออกจากบ้านหลังนี้",
     ms: "Adakah anda pasti mahu mengalih keluar $name daripada rumah ini?",
+    my: "$name ကို ဤအိမ်မှ ဖယ်ရှားလိုသည်မှာ သေချာပါသလား?",
+    lo: "ທ່ານແນ່ໃຈບໍວ່າຈະລຶບ $name ອອກຈາກເຮືອນນີ້?",
   );
 
   String joinHomeRequestTitle(String targetEmail, String homeName) => choose(
@@ -4285,6 +4485,8 @@ class AppStrings {
     id: "$targetEmail\\nMeminta bergabung ke \"$homeName\"",
     th: "$targetEmail\nขอเข้าร่วม \"$homeName\"",
     ms: "$targetEmail\nMemohon untuk menyertai \"$homeName\"",
+    my: "$targetEmail\n\"$homeName\" သို့ ဝင်ခွင့်တောင်းထားသည်",
+    lo: "$targetEmail\nຂໍເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String joinHomeRequestSubtitle(String homeName) => choose(
@@ -4306,6 +4508,8 @@ class AppStrings {
     id: "Meminta bergabung ke \"$homeName\"",
     th: "ขอเข้าร่วม \"$homeName\"",
     ms: "Memohon untuk menyertai \"$homeName\"",
+    my: "\"$homeName\" သို့ ဝင်ခွင့်တောင်းထားသည်",
+    lo: "ຂໍເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String ownershipInviteTitle(String homeName) => choose(
@@ -4328,6 +4532,8 @@ class AppStrings {
     id: "Anda diundang untuk menerima kepemilikan \"$homeName\"",
     th: "คุณได้รับเชิญให้รับสิทธิ์เจ้าของบ้านของ \"$homeName\"",
     ms: "Anda dijemput untuk menerima hak pemilik rumah bagi \"$homeName\"",
+    my: "\"$homeName\" ၏ပိုင်ဆိုင်မှုကို လက်ခံရန် သင့်ကို ဖိတ်ထားသည်",
+    lo: "ທ່ານຖືກເຊີນໃຫ້ຮັບຄວາມເປັນເຈົ້າຂອງ \"$homeName\"",
   );
 
   String homeInviteTitle(String ownerEmail, String homeName) => choose(
@@ -4349,6 +4555,8 @@ class AppStrings {
     id: "$ownerEmail\\nMengundang Anda bergabung ke \"$homeName\"",
     th: "$ownerEmail\nคุณได้รับเชิญให้เข้าร่วม \"$homeName\"",
     ms: "$ownerEmail\nMenjemput anda untuk menyertai \"$homeName\"",
+    my: "$ownerEmail\n\"$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်",
+    lo: "$ownerEmail\nເຊີນທ່ານເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String homeInviteSubtitle(String homeName) => choose(
@@ -4370,6 +4578,8 @@ class AppStrings {
     id: "Mengundang Anda bergabung ke \"$homeName\"",
     th: "คุณได้รับเชิญให้เข้าร่วม \"$homeName\"",
     ms: "Anda dijemput untuk menyertai \"$homeName\"",
+    my: "\"$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်",
+    lo: "ເຊີນທ່ານເຂົ້າຮ່ວມ \"$homeName\"",
   );
 
   String deviceWarningsText(List<String> warnings) {
@@ -4390,6 +4600,8 @@ class AppStrings {
       id: "Perlu diperiksa: $joined",
       th: "ต้องตรวจสอบ: $joined",
       ms: "Perlu diperiksa: $joined",
+      my: "စစ်ဆေးရန်လိုသည် - $joined",
+      lo: "ຕ້ອງກວດ: $joined",
     );
   }
 
@@ -4409,6 +4621,8 @@ class AppStrings {
     id: "Diperbarui $value",
     th: "อัปเดต $value",
     ms: "Dikemas kini $value",
+    my: "$value တွင် မွမ်းမံထားသည်",
+    lo: "ອັບເດດ $value",
   );
 
   String statusAddFirstDeviceSuggestion() => choose(
@@ -4492,7 +4706,7 @@ class AppStrings {
   );
 
   String statusUnknownLocationSuggestion() => choose(
-    vi: "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.",
+    vi: "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.",
     en: "Some members have unknown location. Ask them to open the app or check location permission.",
     zh: "有成员位置未知，请提醒他们打开应用或检查定位权限。",
     ko: "위치를 알 수 없는 구성원이 있습니다. 앱을 열거나 위치 권한을 확인하도록 알려주세요.",
@@ -4502,7 +4716,7 @@ class AppStrings {
 
     es: "Hay miembros con ubicación desconocida; pídeles que abran la app o revisen el permiso de ubicación.",
     fr: _fr(
-      vi: "Có thành viên chưa xác định vị trí, hãy nhắc họ mở app hoặc kiểm tra quyền vị trí.",
+      vi: "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.",
       en: "Some members have unknown location. Ask them to open the app or check location permission.",
     ),
   );
@@ -4540,33 +4754,33 @@ class AppStrings {
   );
 
   String statusReminderMissingSuggestion() => choose(
-    vi: "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
+    vi: "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
     en: "Reminder is not set. Create a schedule to check your home regularly.",
     zh: "尚未设置提醒，建议创建定期检查家庭的提醒。",
     ko: "리마인더가 설정되어 있지 않습니다. 집을 정기적으로 확인할 일정을 만들어 보세요.",
     ja: "リマインダーが未設定です。定期的に家を確認する予定を作成してください。",
-    de: 'Reminder ist nicht eingerichtet. Erstelle einen Zeitplan, um dein Zuhause regelmäßig zu prüfen.',
-    ru: 'Reminder не настроен. Создайте расписание для регулярной проверки дома.',
+    de: 'Erinnerung ist nicht eingerichtet. Erstelle einen Zeitplan, um dein Zuhause regelmäßig zu prüfen.',
+    ru: 'Напоминание не настроен. Создайте расписание для регулярной проверки дома.',
 
-    es: "Aún no has configurado Reminder. Crea una programación para revisar la casa periódicamente.",
+    es: "Aún no has configurado recordatorio. Crea una programación para revisar la casa periódicamente.",
     fr: _fr(
-      vi: "Bạn chưa đặt Reminder, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
+      vi: "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
       en: "Reminder is not set. Create a schedule to check your home regularly.",
     ),
   );
 
   String statusAlarmMissingSuggestion() => choose(
-    vi: "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.",
+    vi: "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.",
     en: "Alarm schedule is not set. Enable protection for times you are usually away.",
     zh: "尚未设置警报时间，建议在经常不在家的时段启用防护。",
     ko: "알람 일정이 설정되어 있지 않습니다. 자주 집을 비우는 시간대에 보호를 켜세요.",
     ja: "アラーム予定が未設定です。普段不在の時間帯に保護を有効にしてください。",
     de: 'Der Alarm-Zeitplan ist nicht eingerichtet. Aktiviere Schutz für Zeiten, in denen normalerweise niemand zuhause ist.',
-    ru: 'Расписание Alarm не настроено. Включите защиту на время, когда дома обычно никого нет.',
+    ru: 'Расписание тревога не настроено. Включите защиту на время, когда дома обычно никого нет.',
 
-    es: "No has configurado una programación de Alarm; conviene activar la protección en los horarios en los que normalmente no hay nadie en casa.",
+    es: "No has configurado una programación de alarma; conviene activar la protección en los horarios en los que normalmente no hay nadie en casa.",
     fr: _fr(
-      vi: "Bạn chưa đặt lịch Alarm, nên bật bảo vệ theo khung giờ thường vắng nhà.",
+      vi: "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.",
       en: "Alarm schedule is not set. Enable protection for times you are usually away.",
     ),
   );
@@ -4608,6 +4822,8 @@ class AppStrings {
       id: "Ulangi setelah $minutes menit",
       th: "แจ้งเตือนซ้ำหลัง $minutes นาที",
       ms: "Ulang selepas $minutes minit",
+      my: "$minutes မိနစ်အကြာတွင် ထပ်မံသတိပေးရန်",
+      lo: "ເຮັດຊ້ຳຫຼັງ $minutes ນາທີ",
     );
   }
 
@@ -4627,6 +4843,8 @@ class AppStrings {
     id: "Aktif • $repeatText",
     th: "ใช้งานอยู่ • $repeatText",
     ms: "Sedang menggunakan • $repeatText",
+    my: "အသုံးပြုနေသည် • $repeatText",
+    lo: "ກຳລັງໃຊ້ • $repeatText",
   );
 
   String securityModeMonitoringText(String repeatText) => choose(
@@ -4648,6 +4866,8 @@ class AppStrings {
     id: "Pemantauan keamanan • $repeatText",
     th: "การตรวจสอบความปลอดภัย • $repeatText",
     ms: "Pemantauan keselamatan • $repeatText",
+    my: "လုံခြုံရေးစောင့်ကြည့်မှု • $repeatText",
+    lo: "ຕິດຕາມຄວາມປອດໄພ • $repeatText",
   );
 
   String familyModeText(String mode) => choose(
@@ -4666,6 +4886,8 @@ class AppStrings {
     id: "Mode rumah: $mode",
     th: "โหมดบ้าน: $mode",
     ms: "Mod rumah: $mode",
+    my: "အိမ်မုဒ် - $mode",
+    lo: "ໂໝດເຮືອນ: $mode",
   );
 
   String actionSuggestionTitle() => choose(
@@ -4700,6 +4922,8 @@ class AppStrings {
     id: "$count masalah perlu ditangani",
     th: "พบปัญหาที่ต้องแก้ไข $count รายการ",
     ms: "Dikesan $count masalah yang perlu ditangani",
+    my: "ဖြေရှင်းရန်လိုသောပြဿနာ $count ခု တွေ့ရှိသည်",
+    lo: "ພົບ $count ບັນຫາທີ່ຕ້ອງຈັດການ",
   );
 
   String doorsUsedTodayText(int count) => choose(
@@ -4721,6 +4945,8 @@ class AppStrings {
     id: "Pintu digunakan $count kali hari ini",
     th: "วันนี้มีการใช้งานประตู $count ครั้ง",
     ms: "Hari ini pintu telah digunakan $count kali",
+    my: "ယနေ့ တံခါးများကို $count ကြိမ် အသုံးပြုခဲ့သည်",
+    lo: "ມື້ນີ້ປະຕູຖືກໃຊ້ $count ຄັ້ງ",
   );
 
   String recentActivitiesCountText(int count) => choose(
@@ -4742,6 +4968,8 @@ class AppStrings {
     id: "$count aktivitas terbaru tercatat",
     th: "บันทึกกิจกรรมล่าสุด $count รายการแล้ว",
     ms: "$count aktiviti terkini telah direkodkan",
+    my: "လတ်တလောလှုပ်ရှားမှု $count ခု မှတ်တမ်းတင်ထားသည်",
+    lo: "ບັນທຶກ $count ກິດຈະກຳຫຼ້າສຸດ",
   );
 
   String systemNeedCheckText(int issueCount) => choose(
@@ -4763,6 +4991,8 @@ class AppStrings {
     id: "Sistem: $issueCount item perlu diperiksa",
     th: "ระบบ: ต้องตรวจสอบ $issueCount รายการ",
     ms: "Sistem: $issueCount perkara perlu diperiksa",
+    my: "စနစ် - အချက် $issueCount ခု စစ်ဆေးရန်လိုသည်",
+    lo: "ລະບົບ: ຕ້ອງກວດ $issueCount ລາຍການ",
   );
 
   String fcmTokenReadyText({
@@ -4805,6 +5035,7 @@ class AppStrings {
               vi: "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.",
               en: "The FCM token is ready, but Auto Away is missing a requirement.",
             ),
+            lo: "FCM token ພ້ອມແລ້ວ ແຕ່ການປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກຈາກເຮືອນຍັງຂາດເງື່ອນໄຂໜຶ່ງ.",
           );
   }
 
@@ -4828,6 +5059,8 @@ class AppStrings {
     id: "Ditemukan $emergencyTotal perangkat darurat. Rekomendasi minimum: sensor asap dan SOS.",
     th: "ขณะนี้มีอุปกรณ์ฉุกเฉิน $emergencyTotal เครื่อง คำแนะนำขั้นต่ำ: เครื่องตรวจจับควันและ SOS",
     ms: "$emergencyTotal peranti kecemasan tersedia. Cadangan minimum: pengesan asap dan SOS.",
+    my: "အရေးပေါ်စက်ပစ္စည်း $emergencyTotal ခု ရှိသည်။ အနည်းဆုံး မီးခိုးအာရုံခံကိရိယာနှင့် SOS ထားရန် အကြံပြုသည်။",
+    lo: "ພົບ $emergencyTotal ອຸປະກອນສຸກເສີນ. ແນະນຳຢ່າງນ້ອຍ: ເຊັນເຊີຄວັນ ແລະ SOS",
   );
 
   String confirmTransferOwnerText(String targetEmail) => choose(
@@ -4849,6 +5082,8 @@ class AppStrings {
     id: "Alihkan kepemilikan rumah ke:\\n$targetEmail?",
     th: "คุณแน่ใจหรือไม่ว่าต้องการโอนสิทธิ์เจ้าของบ้านให้บุคคลต่อไปนี้:\n$targetEmail?",
     ms: "Adakah anda pasti mahu memindahkan hak pemilik rumah kepada:\n$targetEmail?",
+    my: "အိမ်ပိုင်ဆိုင်မှုကို အောက်ပါသူထံ လွှဲပြောင်းမလား?\n$targetEmail",
+    lo: "ໂອນຄວາມເປັນເຈົ້າຂອງເຮືອນໃຫ້:\n$targetEmail ບໍ?",
   );
 
   Map<String, String>? get _activeTranslations => isMalay
@@ -4859,6 +5094,8 @@ class AppStrings {
       ? _khmer
       : isBurmese
       ? _burmese
+      : isLao
+      ? _lao
       : isThai
       ? _thai
       : isIndonesian
@@ -4917,6 +5154,8 @@ class AppStrings {
         id: "$count pintu tertutup aman",
         th: "ประตู $count บานปิดอย่างปลอดภัยแล้ว",
         ms: "$count pintu telah ditutup dengan selamat",
+        my: "တံခါး $count ချပ် လုံခြုံစွာပိတ်ထားသည်",
+        lo: "$count ປະຕູປິດຢ່າງປອດໄພ",
       );
     }
 
@@ -4945,6 +5184,8 @@ class AppStrings {
         id: "$count pintu dan kunci aman",
         th: "ประตูและล็อก $count รายการปลอดภัยแล้ว",
         ms: "$count pintu dan kunci selamat",
+        my: "တံခါးနှင့်သော့ $count ခု လုံခြုံသည်",
+        lo: "$count ປະຕູ ແລະ ກະແຈປອດໄພ",
       );
     }
 
@@ -4972,6 +5213,8 @@ class AppStrings {
         id: "$count perangkat dipantau",
         th: "กำลังตรวจสอบอุปกรณ์ $count เครื่อง",
         ms: "$count peranti sedang dipantau",
+        my: "စက်ပစ္စည်း $count ခုကို စောင့်ကြည့်နေသည်",
+        lo: "ກຳລັງຕິດຕາມ $count ອຸປະກອນ",
       );
     }
 
@@ -4999,6 +5242,8 @@ class AppStrings {
         id: "Pintu digunakan $count kali hari ini",
         th: "วันนี้มีการใช้งานประตู $count ครั้ง",
         ms: "Hari ini pintu telah digunakan $count kali",
+        my: "ယနေ့ တံခါးများကို $count ကြိမ် အသုံးပြုခဲ့သည်",
+        lo: "ມື້ນີ້ປະຕູຖືກໃຊ້ $count ຄັ້ງ",
       );
     }
 
@@ -5021,6 +5266,8 @@ class AppStrings {
         id: "Diperbarui $timeText",
         th: "อัปเดต $timeText",
         ms: "Dikemas kini $timeText",
+        my: "$timeText တွင် မွမ်းမံထားသည်",
+        lo: "ອັບເດດ $timeText",
       );
     }
 
@@ -5048,6 +5295,8 @@ class AppStrings {
         id: "Data terbaru diperbarui $count menit lalu",
         th: "อัปเดตข้อมูลล่าสุดเมื่อ $count นาทีที่แล้ว",
         ms: "Data terkini dikemas kini $count minit lalu",
+        my: "နောက်ဆုံးအချက်အလက်ကို $count မိနစ်အကြာက မွမ်းမံထားသည်",
+        lo: "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ $count ນາທີກ່ອນ",
       );
     }
 
@@ -5075,6 +5324,8 @@ class AppStrings {
         id: "Data terbaru diperbarui $count jam lalu",
         th: "อัปเดตข้อมูลล่าสุดเมื่อ $count ชั่วโมงที่แล้ว",
         ms: "Data terkini dikemas kini $count jam lalu",
+        my: "နောက်ဆုံးအချက်အလက်ကို $count နာရီအကြာက မွမ်းမံထားသည်",
+        lo: "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ $count ຊົ່ວໂມງກ່ອນ",
       );
     }
 
@@ -5135,6 +5386,8 @@ class AppStrings {
         id: "Lingkungan saat ini: $environment",
         th: "สภาพแวดล้อมปัจจุบัน: $environment",
         ms: "Persekitaran semasa: $environment",
+        my: "လက်ရှိပတ်ဝန်းကျင် - $environment",
+        lo: "ສິ່ງແວດລ້ອມປັດຈຸບັນ: $environment",
       );
     }
 
@@ -5142,6 +5395,7 @@ class AppStrings {
         !isFilipino &&
         !isKhmer &&
         !isBurmese &&
+        !isLao &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -5187,6 +5441,8 @@ class AppStrings {
           id: "$name: Terbuka saat rumah dalam mode Perlindungan",
           th: "$name: เปิดอยู่เมื่อบ้านอยู่ในโหมดป้องกัน",
           ms: "$name: Terbuka ketika rumah dalam Mod Perlindungan",
+          my: "$name - အိမ်က ကာကွယ်ရေးမုဒ်တွင်ရှိချိန် ဖွင့်ထားသည်",
+          lo: "$name: ເປີດຢູ່ຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
         );
       }
 
@@ -5232,6 +5488,8 @@ class AppStrings {
         id: "$count menit lalu",
         th: "$count นาทีที่แล้ว",
         ms: "$count minit yang lalu",
+        my: "$count မိနစ်အကြာက",
+        lo: "$count ນາທີກ່ອນ",
       );
     }
 
@@ -5258,6 +5516,8 @@ class AppStrings {
         id: "${hours}j ${minutes}m lalu",
         th: "${hours} ชม. $minutes นาทีที่แล้ว",
         ms: "${hours} jam $minutes minit lalu",
+        my: "${hours} နာရီ ${minutes} မိနစ်အကြာက",
+        lo: "${hours} ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
       );
     }
 
@@ -5280,6 +5540,8 @@ class AppStrings {
         id: "${count}j lalu",
         th: "${count} ชั่วโมงที่แล้ว",
         ms: "${count} jam lalu",
+        my: "${count} နာရီအကြာက",
+        lo: "${count} ຊົ່ວໂມງກ່ອນ",
       );
     }
 
@@ -5302,6 +5564,8 @@ class AppStrings {
         id: "$count hari lalu",
         th: "$count วันที่แล้ว",
         ms: "$count hari yang lalu",
+        my: "$count ရက်အကြာက",
+        lo: "$count ມື້ກ່ອນ",
       );
     }
 
@@ -5324,6 +5588,8 @@ class AppStrings {
         id: "$count bulan lalu",
         th: "$count เดือนที่แล้ว",
         ms: "$count bulan lalu",
+        my: "$count လအကြာက",
+        lo: "$count ເດືອນກ່ອນ",
       );
     }
 
@@ -5428,6 +5694,7 @@ class AppStrings {
           fr: _fr(vi: "Đã kích hoạt SOS", en: "SOS activated"),
           th: "เปิดใช้งาน SOS แล้ว",
           ms: "SOS telah diaktifkan",
+          lo: "ເປີດໃຊ້ SOS ແລ້ວ",
         );
       case "rò rỉ gas":
         return choose(
@@ -5600,6 +5867,19 @@ class AppStrings {
       return text;
     }
 
+    if (isLao) {
+      final exact = _translationFromMap(
+        _lao,
+        _translationAliases[text] ?? text,
+      );
+
+      if (exact != null) {
+        return exact;
+      }
+
+      return text;
+    }
+
     if (isIndonesian) {
       final exact = _translationFromMap(
         _indonesian,
@@ -5666,7 +5946,7 @@ class AppStrings {
         "Có khói": "煙を検知",
         "SOS": "SOS",
         "Đang mở khi nhà ở chế độ Bảo vệ": "家が警戒モードのときに開いています",
-        "Đang mở trong giờ Alarm": "Alarm 時間中に開いています",
+        "Đang mở trong giờ báo động": "警報時間中に開いています",
         "Đang mở": "開いています",
         "Phát hiện chuyển động": "動きを検知",
         "Phát hiện hiện diện": "在室を検知",
@@ -5675,7 +5955,7 @@ class AppStrings {
         "Nhiệt độ nguy hiểm": "危険な高温を検知",
         "Phát hiện khí CO": "一酸化炭素を検知",
         "Khóa đang mở khi nhà ở chế độ Bảo vệ": "警戒モード中にロックが解除されています",
-        "Khóa đang mở trong giờ Alarm": "Alarm 時間中にロックが解除されています",
+        "Khóa đang mở trong giờ báo động": "警報時間中にロックが解除されています",
         "Khóa đang mở": "ロック解除中",
         "Mất điện lưới": "主電源が切断されました",
         "Rò rỉ gas": "ガス漏れを検知",
@@ -5708,7 +5988,7 @@ class AppStrings {
         "Có khói": "연기 감지",
         "SOS": "SOS",
         "Đang mở khi nhà ở chế độ Bảo vệ": "집이 보호 모드일 때 열려 있음",
-        "Đang mở trong giờ Alarm": "Alarm 시간 중 열림",
+        "Đang mở trong giờ báo động": "경보 시간 중 열림",
         "Đang mở": "열림",
         "Phát hiện chuyển động": "움직임 감지",
         "Phát hiện hiện diện": "재실 감지",
@@ -5717,7 +5997,7 @@ class AppStrings {
         "Nhiệt độ nguy hiểm": "위험 온도 감지",
         "Phát hiện khí CO": "일산화탄소 감지",
         "Khóa đang mở khi nhà ở chế độ Bảo vệ": "보호 모드에서 잠금 해제됨",
-        "Khóa đang mở trong giờ Alarm": "Alarm 시간 중 잠금 해제됨",
+        "Khóa đang mở trong giờ báo động": "경보 시간 중 잠금 해제됨",
         "Khóa đang mở": "잠금 해제됨",
         "Mất điện lưới": "전원 끊김",
         "Rò rỉ gas": "가스 누출 감지",
@@ -5750,7 +6030,7 @@ class AppStrings {
         "Có khói": "检测到烟雾",
         "SOS": "SOS",
         "Đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时仍打开",
-        "Đang mở trong giờ Alarm": "Alarm 时段内被打开",
+        "Đang mở trong giờ báo động": "警报时段内被打开",
         "Đang mở": "已打开",
         "Phát hiện chuyển động": "检测到移动",
         "Phát hiện hiện diện": "检测到有人",
@@ -5759,7 +6039,7 @@ class AppStrings {
         "Nhiệt độ nguy hiểm": "危险高温",
         "Phát hiện khí CO": "检测到一氧化碳",
         "Khóa đang mở khi nhà ở chế độ Bảo vệ": "家庭处于布防模式时门锁未锁",
-        "Khóa đang mở trong giờ Alarm": "Alarm 时段内门锁未锁",
+        "Khóa đang mở trong giờ báo động": "警报时段内门锁未锁",
         "Khóa đang mở": "未上锁",
         "Mất điện lưới": "市电断开",
         "Rò rỉ gas": "检测到燃气泄漏",
@@ -5789,7 +6069,7 @@ class AppStrings {
       "Có khói": "Smoke detected",
       "SOS": "SOS",
       "Đang mở khi nhà ở chế độ Bảo vệ": "Open while Home is in Guard mode",
-      "Đang mở trong giờ Alarm": "Open during Alarm hours",
+      "Đang mở trong giờ báo động": "Open during Alarm hours",
       "Đang mở": "Open",
       "Phát hiện chuyển động": "Motion detected",
       "Phát hiện hiện diện": "Presence detected",
@@ -5799,7 +6079,7 @@ class AppStrings {
       "Phát hiện khí CO": "Carbon monoxide detected",
       "Khóa đang mở khi nhà ở chế độ Bảo vệ":
           "Unlocked while Home is in Guard mode",
-      "Khóa đang mở trong giờ Alarm": "Unlocked during Alarm hours",
+      "Khóa đang mở trong giờ báo động": "Unlocked during Alarm hours",
       "Khóa đang mở": "Unlocked",
       "Mất điện lưới": "Mains power lost",
       "Rò rỉ gas": "Gas leak detected",
@@ -5839,13 +6119,13 @@ class AppStrings {
   String get alarmTitle => choose(
     vi: "Báo động SafeHome",
     en: "SafeHome Alarm",
-    zh: "SafeHome Alarm",
-    ko: "SafeHome Alarm",
-    ja: "SafeHome Alarm",
+    zh: "SafeHome 警报",
+    ko: "SafeHome 경보",
+    ja: "SafeHome 警報",
     de: 'SafeHome Alarm',
-    ru: 'SafeHome Alarm',
+    ru: 'SafeHome тревога',
 
-    es: "Alarm SafeHome",
+    es: "Alarma SafeHome",
     fr: _fr(vi: "Báo động SafeHome", en: "SafeHome Alarm"),
   );
 
@@ -5897,6 +6177,8 @@ class AppStrings {
     id: "Tutup otomatis dalam $time",
     th: "ปิดอัตโนมัติหลัง $time",
     ms: "Ditutup secara automatik dalam $time",
+    my: "$time အကြာတွင် အလိုအလျောက်ပိတ်မည်",
+    lo: "ປິດເອງຫຼັງ $time",
   );
 
   String get owner => t("Chủ nhà");
@@ -6182,6 +6464,7 @@ class AppStrings {
     ms: "Akaun sedang digunakan",
     fil: "Ginagamit ang account",
     km: "គណនីកំពុងត្រូវបានប្រើ",
+    lo: "ບັນຊີກຳລັງຖືກໃຊ້",
   );
   String get accountInUseMessage => choose(
     vi: "Hiện tại tài khoản này đang đăng nhập trên một thiết bị khác. Nếu tiếp tục, tài khoản trên thiết bị đó sẽ tự đăng xuất.",
@@ -6200,6 +6483,7 @@ class AppStrings {
     fil:
         "Kasalukuyang naka-sign in ang account na ito sa ibang device. Kung magpapatuloy ka, awtomatikong masa-sign out ang account sa device na iyon.",
     km: "បច្ចុប្បន្ន គណនីនេះកំពុងចូលនៅលើឧបករណ៍ផ្សេង។ ប្រសិនបើអ្នកបន្ត គណនីនៅលើឧបករណ៍នោះនឹងត្រូវចាកចេញដោយស្វ័យប្រវត្តិ។",
+    lo: "ບັນຊີນີ້ກຳລັງເຂົ້າລະບົບຢູ່ໃນອຸປະກອນອື່ນ. ຖ້າສືບຕໍ່ ບັນຊີໃນອຸປະກອນນັ້ນຈະຖືກອອກຈາກລະບົບ.",
   );
   String get continueSignInLabel => choose(
     vi: "Tiếp tục đăng nhập",
@@ -6217,6 +6501,7 @@ class AppStrings {
     ms: "Teruskan log masuk",
     fil: "Magpatuloy sa pag-sign in",
     km: "បន្តចូល",
+    lo: "ສືບຕໍ່ເຂົ້າລະບົບ",
   );
   String get forcedRemoteSessionLogoutMessage => choose(
     vi: "Tài khoản đã được đăng nhập trên một thiết bị khác.",
@@ -6234,6 +6519,7 @@ class AppStrings {
     ms: "Akaun ini telah dilog masuk pada peranti lain.",
     fil: "Na-sign in ang account na ito sa ibang device.",
     km: "គណនីនេះបានចូលនៅលើឧបករណ៍ផ្សេង។",
+    lo: "ບັນຊີນີ້ເຂົ້າລະບົບຢູ່ໃນອຸປະກອນອື່ນ.",
   );
   String get vietnamese => choose(
     vi: "Tiếng Việt",
@@ -6312,6 +6598,10 @@ class AppStrings {
       return "မြန်မာဘာသာ";
     }
 
+    if (isLao) {
+      return "ລາວ";
+    }
+
     if (isThai) {
       return "ภาษาไทย";
     }
@@ -6381,6 +6671,7 @@ class AppStrings {
           fil: "EMERGENCY",
           km: "បន្ទាន់",
           my: "အရေးပေါ်",
+          lo: "ສຸກເສີນ",
         );
       case "warning":
         return choose(
@@ -6399,6 +6690,7 @@ class AppStrings {
           fil: "BABALA",
           km: "ការព្រមាន",
           my: "သတိပေးချက်",
+          lo: "ຄຳເຕືອນ",
         );
       case "info":
         return choose(
@@ -6417,6 +6709,7 @@ class AppStrings {
           fil: "IMPORMASYON",
           km: "ព័ត៌មាន",
           my: "အချက်အလက်",
+          lo: "ຂໍ້ມູນ",
         );
       case "alarm":
       default:
@@ -6426,16 +6719,17 @@ class AppStrings {
           zh: "警报",
           ko: "경보",
           ja: "警報",
-          de: "ALARM",
+          de: "Alarm",
           ru: "ТРЕВОГА",
           fr: "ALARME",
           es: "ALARMA",
-          id: "ALARM",
+          id: "Alarm",
           th: "สัญญาณเตือน",
           ms: "PENGGERA",
-          fil: "ALARM",
+          fil: "Alarma",
           km: "សំឡេងរោទិ៍",
           my: "အချက်ပေးသံ",
+          lo: "ສັນຍານເຕືອນໄພ",
         );
     }
   }
@@ -6480,6 +6774,7 @@ class AppStrings {
         fil: "Bumalik na sa ligtas na estado ang sensor.",
         km: "ឧបករណ៍ចាប់សញ្ញាបានត្រឡប់ទៅស្ថានភាពសុវត្ថិភាព។",
         my: "အာရုံခံကိရိယာသည် လုံခြုံသောအခြေအနေသို့ ပြန်ရောက်ပါပြီ။",
+        lo: "ເຊັນເຊີກັບຄືນສູ່ສະຖານະປອດໄພແລ້ວ.",
       );
     }
 
@@ -6500,6 +6795,7 @@ class AppStrings {
         fil: "Itinigil ng user ang alerto.",
         km: "អ្នកប្រើបានបញ្ឈប់ការជូនដំណឹង។",
         my: "အသုံးပြုသူက သတိပေးချက်ကို ရပ်လိုက်ပါသည်။",
+        lo: "ຜູ້ໃຊ້ຢຸດການເຕືອນແລ້ວ.",
       );
     }
 
@@ -6520,6 +6816,7 @@ class AppStrings {
         fil: "Natapos na ang iskedyul ng proteksiyon.",
         km: "កាលវិភាគការពារបានបញ្ចប់។",
         my: "ကာကွယ်ရေးအချိန်ဇယား ပြီးဆုံးသွားပါပြီ။",
+        lo: "ຊ່ວງເວລາປ້ອງກັນສິ້ນສຸດແລ້ວ.",
       );
     }
 
@@ -6540,6 +6837,7 @@ class AppStrings {
         fil: "In-off ang Protection mode.",
         km: "របៀបការពារត្រូវបានបិទ។",
         my: "ကာကွယ်မှုမုဒ်ကို ပိတ်လိုက်ပါပြီ။",
+        lo: "ປິດໂໝດປ້ອງກັນແລ້ວ.",
       );
     }
 
@@ -6560,6 +6858,7 @@ class AppStrings {
         fil: "Awtomatikong natapos ang pansamantalang alerto.",
         km: "ការជូនដំណឹងបណ្តោះអាសន្នបានបញ្ចប់ដោយស្វ័យប្រវត្តិ។",
         my: "ယာယီသတိပေးချက်သည် အလိုအလျောက် ပြီးဆုံးသွားပါပြီ။",
+        lo: "ການເຕືອນທັນທີສິ້ນສຸດອັດຕະໂນມັດແລ້ວ.",
       );
     }
 
@@ -6579,6 +6878,7 @@ class AppStrings {
       fil: "Hindi na aktibo ang kondisyon ng alerto.",
       km: "លក្ខខណ្ឌការជូនដំណឹងលែងសកម្ម។",
       my: "သတိပေးချက်အခြေအနေသည် မလုပ်ဆောင်တော့ပါ။",
+      lo: "ເງື່ອນໄຂການເຕືອນບໍ່ເຮັດວຽກແລ້ວ.",
     );
   }
 
@@ -6601,6 +6901,7 @@ class AppStrings {
       fil: "Natapos ang alerto: $reason",
       km: "ការជូនដំណឹងបានបញ្ចប់៖ $reason",
       my: "သတိပေးချက်ပြီးဆုံးပါပြီ: $reason",
+      lo: "ການເຕືອນສິ້ນສຸດແລ້ວ: $reason",
     );
   }
 

@@ -67,7 +67,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
           }
 
           return reasons.every(
-                (reason) => reason?.toString().trim().isEmpty ?? true,
+            (reason) => reason?.toString().trim().isEmpty ?? true,
           );
         });
       }
@@ -333,7 +333,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
             final data = Map<String, dynamic>.from(item);
 
             final homeName =
-            data["homeName"]?.toString().trim().isNotEmpty == true
+                data["homeName"]?.toString().trim().isNotEmpty == true
                 ? data["homeName"].toString().trim()
                 : strings.defaultHomeName();
 
@@ -507,9 +507,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   }
 
   Map<String, List<String>> buildAlarmIssueMap(
-      String type,
-      AppStrings strings,
-      ) {
+    String type,
+    AppStrings strings,
+  ) {
     final items = alarmItems();
     final Map<String, List<String>> result = {};
 
@@ -684,8 +684,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     return Expanded(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final centeredMinHeight =
-          constraints.maxHeight > totalVerticalPadding
+          final centeredMinHeight = constraints.maxHeight > totalVerticalPadding
               ? constraints.maxHeight - totalVerticalPadding
               : 0.0;
 
@@ -709,10 +708,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
               padding: scrollPadding,
               child: ConstrainedBox(
                 constraints: BoxConstraints(minHeight: centeredMinHeight),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: child,
-                ),
+                child: Align(alignment: Alignment.center, child: child),
               ),
             ),
           );
@@ -725,7 +721,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final strings = AppStrings.of(context);
     final safe = isSafeReminder;
     final issueMap = buildReminderIssueMap(strings);
-    const reminderSubtitle = "SafeHome Security Reminder";
+    final reminderSubtitle = strings.scheduledReminder;
 
     final Color accent = safe ? Colors.green : Colors.orange;
     final Color bg1 = safe ? const Color(0xFF0E2B1A) : const Color(0xFF3A2508);
@@ -832,7 +828,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         entry.key,
@@ -844,7 +840,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                       ),
                                       const SizedBox(height: 8),
                                       ...entry.value.map(
-                                            (item) => Padding(
+                                        (item) => Padding(
                                           padding: const EdgeInsets.only(
                                             bottom: 6,
                                           ),
@@ -1060,7 +1056,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
                                 child: Container(
                                   width: 4,
                                   height: 4,
@@ -1112,13 +1110,13 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                                     ),
                                     const SizedBox(height: 8),
                                     ...entry.value.map(
-                                          (reason) => Padding(
+                                      (reason) => Padding(
                                         padding: const EdgeInsets.only(
                                           bottom: 6,
                                         ),
                                         child: Row(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Icon(
                                               Icons.warning_amber_rounded,
@@ -1219,8 +1217,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      disabledForegroundColor:
-                      Colors.white.withValues(alpha: 0.65),
+                      disabledForegroundColor: Colors.white.withValues(
+                        alpha: 0.65,
+                      ),
                       side: BorderSide(
                         color: Colors.white.withValues(alpha: 0.45),
                       ),
@@ -1230,17 +1229,14 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                     ),
                     icon: _isMutingHomeSiren
                         ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                        : const Icon(
-                      Icons.notifications_off_rounded,
-                      size: 20,
-                    ),
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.notifications_off_rounded, size: 20),
                     label: Text(
                       strings.muteHomeSirenLabel(),
                       style: const TextStyle(
@@ -1248,8 +1244,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
                         fontWeight: FontWeight.w900,
                       ),
                     ),
-                    onPressed:
-                    _isMutingHomeSiren ? null : muteHomeSiren,
+                    onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
                   ),
                 ),
 

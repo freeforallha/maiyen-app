@@ -50,7 +50,7 @@ Future<void> showHomeAlarmMenuSheet({
                       : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
-                  strings.t('Hẹn giờ Alarm'),
+                  strings.t('Hẹn giờ báo động'),
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
                     color: SafeHomeColors.textPrimary,
@@ -85,7 +85,7 @@ Future<void> showHomeAlarmMenuSheet({
                       : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
-                  strings.t('Tạm tắt Alarm hôm nay'),
+                  strings.t('Tạm tắt báo động hôm nay'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: alarmPauseToday.isNotEmpty
@@ -97,7 +97,7 @@ Future<void> showHomeAlarmMenuSheet({
                   alarmPauseToday.isEmpty
                       ? strings.t('Chưa thiết lập')
                       : '${alarmPauseToday['start'] ?? '--:--'} → ${alarmPauseToday['end'] ?? '--:--'}'
-                          '${(alarmPauseToday['reason'] ?? '').toString().isNotEmpty ? ' • ${strings.t(alarmPauseToday['reason'].toString())}' : ''}',
+                            '${(alarmPauseToday['reason'] ?? '').toString().isNotEmpty ? ' • ${strings.t(alarmPauseToday['reason'].toString())}' : ''}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -120,7 +120,7 @@ Future<void> showHomeAlarmMenuSheet({
                       : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
-                  strings.t('Hẹn giờ Reminder'),
+                  strings.t('Hẹn giờ nhắc nhở'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: reminderEnabled

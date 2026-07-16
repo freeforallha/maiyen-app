@@ -289,7 +289,7 @@ class HomeAlarmSecurityService {
         severity: 'warning',
         title: strings.t('Nhà đã chuyển sang Không bảo vệ'),
         message: strings.t(
-          'Chủ nhà đã tắt toàn bộ Alarm. SafeHome sẽ chỉ gửi notification khi cảm biến phát hiện sự cố.',
+          'Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.',
         ),
         actorUid: actorUid,
         entityType: 'home',

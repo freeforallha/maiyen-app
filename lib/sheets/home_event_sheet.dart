@@ -256,7 +256,7 @@ void showHomeEventSheet({
                   children: [
                     const Spacer(),
                     Text(
-                      strings.t("Thông báo nhà"),
+                      strings.notifications,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
