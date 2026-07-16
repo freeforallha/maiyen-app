@@ -1136,4 +1136,5 @@ const Map<String, String> filStrings = {
   "Đã lưu cấu hình báo động": "Nai-save ang mga setting ng alarm",
   "Không thể lưu cấu hình báo động": "Hindi ma-save ang mga setting ng alarm",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Tanging ang may-ari ng bahay at mga administrator ang maaaring magbago ng setting na ito.",
+  "Thông tin chi tiết": "Mga detalye ng device",
 };

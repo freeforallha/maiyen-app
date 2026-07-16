@@ -22,10 +22,11 @@ class HomeUiCoordinator {
     required Map<String, dynamic> device,
     required String ownerUid,
     required String homeId,
-    required VoidCallback? onRename,
-    required VoidCallback? onDelete,
-    required VoidCallback onNotification,
+    required void Function(String deviceId)? onRename,
+    required void Function(String deviceId)? onDelete,
+    required void Function(String deviceId) onNotification,
     required bool canManageAlarmPolicy,
+    Map<String, dynamic>? selectableDevices,
   }) {
     showDeviceDetail(
       context: context,
@@ -37,6 +38,7 @@ class HomeUiCoordinator {
       onDelete: onDelete,
       onNotification: onNotification,
       canManageAlarmPolicy: canManageAlarmPolicy,
+      selectableDevices: selectableDevices,
     );
   }
 

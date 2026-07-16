@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
+import '../helpers/top_toast.dart';
 import 'device_alarm_policy_sheet.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
@@ -13,23 +14,45 @@ void showDeviceDetail({
   required Map<String, dynamic> d,
   required String ownerUid,
   required String homeId,
-  VoidCallback? onRename,
-  VoidCallback? onDelete,
-  required VoidCallback onNotification,
+  void Function(String deviceId)? onRename,
+  void Function(String deviceId)? onDelete,
+  required void Function(String deviceId) onNotification,
   required bool canManageAlarmPolicy,
+  Map<String, dynamic>? selectableDevices,
 }) {
-  final deviceRef = FirebaseDatabase.instance.ref(
-    "accounts/$ownerUid/homes/$homeId/devices/$id",
-  );
+  final deviceChoices = <String, Map<String, dynamic>>{};
+
+  for (final entry in (selectableDevices ?? const <String, dynamic>{}).entries) {
+    final value = entry.value;
+
+    if (value is Map) {
+      deviceChoices[entry.key] = Map<String, dynamic>.from(value);
+    }
+  }
+
+  deviceChoices.putIfAbsent(id, () => Map<String, dynamic>.from(d));
+
+  final showDeviceSelector = selectableDevices != null && deviceChoices.isNotEmpty;
+  var selectedDeviceId = id;
 
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     builder: (sheetContext) {
-      return StreamBuilder<DatabaseEvent>(
-        stream: deviceRef.onValue,
-        builder: (context, snapshot) {
+      return StatefulBuilder(
+        builder: (context, setSheetState) {
+          final currentDeviceId = selectedDeviceId;
+          final fallbackDevice =
+              deviceChoices[currentDeviceId] ?? Map<String, dynamic>.from(d);
+          final deviceRef = FirebaseDatabase.instance.ref(
+            "accounts/$ownerUid/homes/$homeId/devices/$currentDeviceId",
+          );
+
+          return StreamBuilder<DatabaseEvent>(
+            key: ValueKey("device_detail_$currentDeviceId"),
+            stream: deviceRef.onValue,
+            builder: (context, snapshot) {
           final strings = AppStrings.of(context);
           final raw = snapshot.data?.snapshot.value;
 
@@ -38,7 +61,7 @@ void showDeviceDetail({
           if (raw is Map) {
             device = Map<String, dynamic>.from(raw);
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            device = Map<String, dynamic>.from(d);
+            device = Map<String, dynamic>.from(fallbackDevice);
           } else {
             return Container(
               padding: const EdgeInsets.all(24),
@@ -101,6 +124,31 @@ void showDeviceDetail({
             device: device,
             deviceType: deviceType,
           );
+
+          Future<void> saveAlarmPolicy(
+            DeviceAlarmPolicySettings nextSettings,
+          ) async {
+            if (!canManageAlarmPolicy) {
+              return;
+            }
+
+            try {
+              await deviceRef
+                  .child("alarmPolicy")
+                  .set(nextSettings.toFirebaseMap());
+            } catch (_) {
+              if (!context.mounted) {
+                return;
+              }
+
+              showTopToast(
+                context,
+                strings.t("Không thể lưu cấu hình báo động"),
+                color: SafeHomeColors.danger,
+                icon: Icons.error_rounded,
+              );
+            }
+          }
 
           final hasBattery =
               device["battery"] != null ||
@@ -265,118 +313,168 @@ void showDeviceDetail({
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            deviceName.isNotEmpty ? deviceName : id,
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: SafeHomeColors.textPrimary,
-                            ),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  deviceName.isNotEmpty
+                                      ? deviceName
+                                      : currentDeviceId,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: SafeHomeColors.textPrimary,
+                                  ),
+                                ),
+                              ),
+                              if (showDeviceSelector) ...[
+                                const SizedBox(width: 8),
+                                _deviceCountButton(
+                                  count: deviceChoices.length,
+                                  onTap: () async {
+                                    final selectedId = await _showDeviceSelector(
+                                      context: context,
+                                      devices: deviceChoices,
+                                      selectedDeviceId: currentDeviceId,
+                                      strings: strings,
+                                    );
+
+                                    if (selectedId == null ||
+                                        selectedId == currentDeviceId) {
+                                      return;
+                                    }
+
+                                    setSheetState(() {
+                                      selectedDeviceId = selectedId;
+                                    });
+                                  },
+                                ),
+                              ],
+                              if (onRename != null) ...[
+                                const SizedBox(width: 8),
+                                _compactIconButton(
+                                  icon: Icons.edit_rounded,
+                                  color: SafeHomeColors.primary,
+                                  onTap: () => onRename(currentDeviceId),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
+                        const SizedBox(width: 12),
                         _iconButton(
                           icon: Icons.notifications_active_rounded,
                           color: SafeHomeColors.warning,
-                          onTap: onNotification,
+                          onTap: () => onNotification(currentDeviceId),
                         ),
-                        const SizedBox(width: 8),
-                        if (onRename != null)
-                          _iconButton(
-                            icon: Icons.edit_rounded,
-                            color: SafeHomeColors.primary,
-                            onTap: onRename,
-                          ),
                       ],
                     ),
-                    const SizedBox(height: 18),
-                    _infoRow(
-                      icon: health.icon,
-                      color: health.color,
-                      title: strings.t("Tình trạng"),
-                      value: strings.statusText(health.text),
-                      valueColor: health.color,
-                    ),
-                    _infoRow(
-                      icon: displayStatus.icon,
-                      color: displayStatus.color,
-                      title: strings.t(displayStatus.title),
-                      value: strings.statusText(displayStatus.value),
-                      valueColor: displayStatus.color,
-                    ),
-                    if (showTamper)
-                      _infoRow(
-                        icon: Icons.warning_amber_rounded,
-                        color: tamper
-                            ? SafeHomeColors.danger
-                            : SafeHomeColors.warning,
-                        title: strings.t("Tháo/Lắp"),
-                        value: strings.statusText(
-                          tamper ? "Bị tháo" : "Bình thường",
-                        ),
-                        valueColor: tamper
-                            ? SafeHomeColors.danger
-                            : SafeHomeColors.textPrimary,
-                      ),
-                    ...metricRows,
-                    if (hasBattery)
-                      _infoRow(
-                        icon: Icons.battery_full_rounded,
-                        color: battery != null && battery < 20
-                            ? SafeHomeColors.danger
-                            : SafeHomeColors.safe,
-                        title: strings.t("Pin"),
-                        value: strings.statusText(getBatteryText(device)),
-                      ),
-                    if (linkquality != null)
-                      _infoRow(
-                        icon: Icons.network_cell_rounded,
-                        color: linkquality < 50
-                            ? SafeHomeColors.danger
-                            : SafeHomeColors.primary,
-                        title: strings.t("Tín hiệu"),
-                        value: "$linkquality",
-                      ),
-                    _infoRow(
-                      icon: Icons.access_time_rounded,
-                      color: SafeHomeColors.primary,
-                      title: strings.t("Liên lạc cuối"),
-                      value: formatFullDate(lastSeen),
-                    ),
-                    if (deviceType == "sos")
-                      _infoRow(
-                        icon: Icons.history_rounded,
-                        color: SafeHomeColors.warning,
-                        title: strings.t("Lần kích hoạt cuối"),
-                        value: formatFullDate(lastTriggered),
-                      )
-                    else if (deviceType != "temperature" &&
-                        deviceType != "repeater")
-                      _infoRow(
-                        icon: Icons.history_rounded,
-                        color: SafeHomeColors.warning,
-                        title: strings.t("Sự kiện cuối"),
-                        value: formatFullDate(lastEvent),
-                      ),
                     if (supportsAlarmPolicy) ...[
-                      const SizedBox(height: 8),
-                      _alarmPolicyCard(
+                      const SizedBox(height: 22),
+                      _sectionHeading(
+                        icon: Icons.notifications_active_rounded,
+                        color: SafeHomeColors.danger,
+                        title: strings.t("Cấu hình báo động"),
+                      ),
+                      const SizedBox(height: 10),
+                      _alarmPolicySection(
                         strings: strings,
                         settings: alarmPolicy,
                         isEmergency: isEmergencyAlarmPolicyDevice(deviceType),
-                        onTap: () {
-                          showDeviceAlarmPolicySheet(
-                            context: context,
-                            ownerUid: ownerUid,
-                            homeId: homeId,
-                            deviceId: id,
-                            deviceName: deviceName.isNotEmpty ? deviceName : id,
-                            deviceType: deviceType,
-                            device: device,
-                            canEdit: canManageAlarmPolicy,
-                          );
-                        },
+                        canEdit: canManageAlarmPolicy,
+                        onChanged: saveAlarmPolicy,
                       ),
                     ],
+                    const SizedBox(height: 22),
+                    _sectionHeading(
+                      icon: Icons.info_outline_rounded,
+                      color: SafeHomeColors.primary,
+                      title: strings.t("Thông tin chi tiết"),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                      decoration: BoxDecoration(
+                        color: SafeHomeColors.surface,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: SafeHomeColors.border),
+                      ),
+                      child: Column(
+                        children: [
+                          _infoRow(
+                            icon: health.icon,
+                            color: health.color,
+                            title: strings.t("Tình trạng"),
+                            value: strings.statusText(health.text),
+                            valueColor: health.color,
+                          ),
+                          _infoRow(
+                            icon: displayStatus.icon,
+                            color: displayStatus.color,
+                            title: strings.t(displayStatus.title),
+                            value: strings.statusText(displayStatus.value),
+                            valueColor: displayStatus.color,
+                          ),
+                          if (showTamper)
+                            _infoRow(
+                              icon: Icons.warning_amber_rounded,
+                              color: tamper
+                                  ? SafeHomeColors.danger
+                                  : SafeHomeColors.warning,
+                              title: strings.t("Tháo/Lắp"),
+                              value: strings.statusText(
+                                tamper ? "Bị tháo" : "Bình thường",
+                              ),
+                              valueColor: tamper
+                                  ? SafeHomeColors.danger
+                                  : SafeHomeColors.textPrimary,
+                            ),
+                          ...metricRows,
+                          if (hasBattery)
+                            _infoRow(
+                              icon: Icons.battery_full_rounded,
+                              color: battery != null && battery < 20
+                                  ? SafeHomeColors.danger
+                                  : SafeHomeColors.safe,
+                              title: strings.t("Pin"),
+                              value: strings.statusText(getBatteryText(device)),
+                            ),
+                          if (linkquality != null)
+                            _infoRow(
+                              icon: Icons.network_cell_rounded,
+                              color: linkquality < 50
+                                  ? SafeHomeColors.danger
+                                  : SafeHomeColors.primary,
+                              title: strings.t("Tín hiệu"),
+                              value: "$linkquality",
+                            ),
+                          _infoRow(
+                            icon: Icons.access_time_rounded,
+                            color: SafeHomeColors.primary,
+                            title: strings.t("Liên lạc cuối"),
+                            value: formatFullDate(lastSeen),
+                          ),
+                          if (deviceType == "sos")
+                            _infoRow(
+                              icon: Icons.history_rounded,
+                              color: SafeHomeColors.warning,
+                              title: strings.t("Lần kích hoạt cuối"),
+                              value: formatFullDate(lastTriggered),
+                            )
+                          else if (deviceType != "temperature" &&
+                              deviceType != "repeater")
+                            _infoRow(
+                              icon: Icons.history_rounded,
+                              color: SafeHomeColors.warning,
+                              title: strings.t("Sự kiện cuối"),
+                              value: formatFullDate(lastEvent),
+                            ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 22),
                     if (onDelete != null)
                       Center(
@@ -384,13 +482,15 @@ void showDeviceDetail({
                           icon: Icons.delete_forever_rounded,
                           color: SafeHomeColors.danger,
                           size: 26,
-                          onTap: onDelete,
+                          onTap: () => onDelete(currentDeviceId),
                         ),
                       ),
                   ],
                 ),
               ),
             ),
+          );
+            },
           );
         },
       );
@@ -746,77 +846,480 @@ _DeviceHealth _getDeviceHealth({
   );
 }
 
-Widget _alarmPolicyCard({
+Widget _sectionHeading({
+  required IconData icon,
+  required Color color,
+  required String title,
+}) {
+  return Row(
+    children: [
+      Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: color, size: 18),
+      ),
+      const SizedBox(width: 10),
+      Expanded(
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: SafeHomeColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _alarmPolicySection({
   required AppStrings strings,
   required DeviceAlarmPolicySettings settings,
   required bool isEmergency,
-  required VoidCallback onTap,
+  required bool canEdit,
+  required Future<void> Function(DeviceAlarmPolicySettings settings) onChanged,
 }) {
-  final statusColor = settings.enabled
-      ? SafeHomeColors.safe
-      : SafeHomeColors.textSecondary;
-  final delayText = isEmergency || settings.triggerDelaySeconds == 0
-      ? strings.t("Ngay lập tức")
-      : "${settings.triggerDelaySeconds} ${strings.t("giây")}";
+  const delayOptions = <int>[0, 5, 10, 15, 30, 60, 90, 120];
+  final dependentControlsEnabled = canEdit && (isEmergency || settings.enabled);
+  final selectedDelay = isEmergency ? 0 : settings.triggerDelaySeconds;
+  final availableDelayOptions = <int>{
+    ...delayOptions,
+    selectedDelay,
+  }.where((value) => value >= 0 && value <= 120).toList()
+    ..sort();
 
-  return InkWell(
-    onTap: onTap,
-    borderRadius: BorderRadius.circular(16),
-    child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SafeHomeColors.border),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: SafeHomeColors.danger.withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.notifications_active_rounded,
-              color: SafeHomeColors.danger,
-              size: 21,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  strings.t("Cấu hình báo động"),
+  DeviceAlarmPolicySettings copyWith({
+    bool? enabled,
+    bool? physicalSirenEnabled,
+    bool? fullscreenEnabled,
+    int? triggerDelaySeconds,
+  }) {
+    return DeviceAlarmPolicySettings(
+      enabled: isEmergency ? true : enabled ?? settings.enabled,
+      physicalSirenEnabled:
+          physicalSirenEnabled ?? settings.physicalSirenEnabled,
+      fullscreenEnabled: fullscreenEnabled ?? settings.fullscreenEnabled,
+      triggerDelaySeconds:
+          isEmergency ? 0 : triggerDelaySeconds ?? settings.triggerDelaySeconds,
+    );
+  }
+
+  return Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: SafeHomeColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: SafeHomeColors.border),
+    ),
+    child: Column(
+      children: [
+        _alarmPolicySwitchRow(
+          icon: Icons.shield_rounded,
+          title: strings.t("Tham gia báo động"),
+          value: isEmergency ? true : settings.enabled,
+          enabled: canEdit && !isEmergency,
+          onChanged: (value) => onChanged(copyWith(enabled: value)),
+        ),
+        const Divider(height: 1, indent: 52),
+        _alarmPolicySwitchRow(
+          icon: Icons.campaign_rounded,
+          title: strings.t("Bật còi vật lý"),
+          value: settings.physicalSirenEnabled,
+          enabled: dependentControlsEnabled,
+          onChanged: (value) =>
+              onChanged(copyWith(physicalSirenEnabled: value)),
+        ),
+        const Divider(height: 1, indent: 52),
+        _alarmPolicySwitchRow(
+          icon: Icons.phone_android_rounded,
+          title: strings.t("Đánh thức màn hình"),
+          value: settings.fullscreenEnabled,
+          enabled: dependentControlsEnabled,
+          onChanged: (value) => onChanged(copyWith(fullscreenEnabled: value)),
+        ),
+        const Divider(height: 1, indent: 52),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 32,
+                height: 32,
+                child: Icon(
+                  Icons.timer_outlined,
+                  color: SafeHomeColors.warning,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  strings.t("Độ trễ kích hoạt"),
                   style: const TextStyle(
                     color: SafeHomeColors.textPrimary,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  settings.enabled
-                      ? "${strings.t("Đang bật")} • $delayText"
-                      : strings.t("Đang tắt"),
-                  style: TextStyle(
-                    color: statusColor,
-                    fontSize: 12.5,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-              ],
+              ),
+              const SizedBox(width: 8),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: selectedDelay,
+                  isDense: true,
+                  items: availableDelayOptions
+                      .map(
+                        (seconds) => DropdownMenuItem<int>(
+                          value: seconds,
+                          child: Text(
+                            seconds == 0
+                                ? strings.t("Ngay lập tức")
+                                : "$seconds ${strings.t("giây")}",
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: dependentControlsEnabled && !isEmergency
+                      ? (value) {
+                          if (value != null) {
+                            onChanged(copyWith(triggerDelaySeconds: value));
+                          }
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _alarmPolicySwitchRow({
+  required IconData icon,
+  required String title,
+  required bool value,
+  required bool enabled,
+  required ValueChanged<bool> onChanged,
+}) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(14, 4, 8, 4),
+    child: Row(
+      children: [
+        SizedBox(
+          width: 32,
+          height: 32,
+          child: Icon(
+            icon,
+            color: enabled
+                ? SafeHomeColors.primary
+                : SafeHomeColors.textSecondary,
+            size: 20,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              color: SafeHomeColors.textPrimary,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: SafeHomeColors.textSecondary,
-          ),
-        ],
+        ),
+        Switch.adaptive(
+          value: value,
+          onChanged: enabled ? onChanged : null,
+        ),
+      ],
+    ),
+  );
+}
+
+bool _deviceNeedsAttention(Map<String, dynamic> device) {
+  final availability =
+      device["availability"]?.toString().trim().toLowerCase() ?? "unknown";
+  final battery = _toInt(device["battery"]);
+  final linkquality = _toInt(device["linkquality"]);
+  final batteryLow = parseDeviceBool(device["battery_low"]) == true ||
+      device["battery_status"]?.toString().trim().toLowerCase() == "low";
+  final health = _getDeviceHealth(
+    availability: availability,
+    battery: battery,
+    linkquality: linkquality,
+    lastSeen: device["last_seen"],
+  );
+  final status = _getDeviceDisplayStatus(device);
+
+  return batteryLow ||
+      health.color == SafeHomeColors.warning ||
+      health.color == SafeHomeColors.danger ||
+      status.color == SafeHomeColors.warning ||
+      status.color == SafeHomeColors.danger;
+}
+
+Widget _deviceCountButton({
+  required int count,
+  required VoidCallback onTap,
+}) {
+  return Material(
+    color: SafeHomeColors.primarySoft,
+    borderRadius: BorderRadius.circular(10),
+    child: InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 7),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.devices_other_rounded,
+              size: 16,
+              color: SafeHomeColors.primary,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              "$count",
+              style: const TextStyle(
+                color: SafeHomeColors.primary,
+                fontSize: 12.5,
+                height: 1,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
+        ),
       ),
+    ),
+  );
+}
+
+Future<String?> _showDeviceSelector({
+  required BuildContext context,
+  required Map<String, Map<String, dynamic>> devices,
+  required String selectedDeviceId,
+  required AppStrings strings,
+}) {
+  final entries = devices.entries.toList()
+    ..sort((first, second) {
+      final firstAttention = _deviceNeedsAttention(first.value);
+      final secondAttention = _deviceNeedsAttention(second.value);
+
+      if (firstAttention != secondAttention) {
+        return firstAttention ? -1 : 1;
+      }
+
+      final firstName =
+          first.value["name"]?.toString().trim().toLowerCase() ?? first.key;
+      final secondName =
+          second.value["name"]?.toString().trim().toLowerCase() ?? second.key;
+
+      return firstName.compareTo(secondName);
+    });
+
+  return showModalBottomSheet<String>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    builder: (selectorContext) {
+      return Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(selectorContext).size.height * 0.72,
+        ),
+        decoration: const BoxDecoration(
+          color: SafeHomeColors.background,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              Center(
+                child: Container(
+                  width: 42,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: SafeHomeColors.border,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.hub_rounded,
+                      color: SafeHomeColors.primary,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        strings.t("Điều khiển & hạ tầng"),
+                        style: const TextStyle(
+                          color: SafeHomeColors.textPrimary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "${entries.length}",
+                      style: const TextStyle(
+                        color: SafeHomeColors.textSecondary,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(14, 4, 14, 20),
+                  itemCount: entries.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final entry = entries[index];
+                    final device = entry.value;
+                    final name = device["name"]?.toString().trim();
+                    final displayName =
+                        name == null || name.isEmpty ? entry.key : name;
+                    final status = _getDeviceDisplayStatus(device);
+                    final needsAttention = _deviceNeedsAttention(device);
+                    final selected = entry.key == selectedDeviceId;
+                    final textColor = needsAttention
+                        ? SafeHomeColors.warning
+                        : SafeHomeColors.textPrimary;
+
+                    return Material(
+                      color: selected
+                          ? SafeHomeColors.primarySoft
+                          : SafeHomeColors.surface,
+                      borderRadius: BorderRadius.circular(15),
+                      child: InkWell(
+                        onTap: () => Navigator.pop(selectorContext, entry.key),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 11,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: selected
+                                  ? SafeHomeColors.primary.withValues(alpha: 0.42)
+                                  : needsAttention
+                                  ? SafeHomeColors.warning.withValues(alpha: 0.42)
+                                  : SafeHomeColors.border,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 38,
+                                height: 38,
+                                decoration: BoxDecoration(
+                                  color: (needsAttention
+                                          ? SafeHomeColors.warning
+                                          : status.color)
+                                      .withValues(alpha: 0.11),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(
+                                  status.icon,
+                                  size: 20,
+                                  color: needsAttention
+                                      ? SafeHomeColors.warning
+                                      : status.color,
+                                ),
+                              ),
+                              const SizedBox(width: 11),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      displayName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: 14.5,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      strings.statusText(status.value),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: needsAttention
+                                            ? SafeHomeColors.warning
+                                            : SafeHomeColors.textSecondary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              if (selected)
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Icon(
+                                    Icons.check_circle_rounded,
+                                    color: SafeHomeColors.primary,
+                                    size: 20,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _compactIconButton({
+  required IconData icon,
+  required Color color,
+  required VoidCallback onTap,
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(10),
+    child: Container(
+      width: 34,
+      height: 34,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(icon, color: color, size: 18),
     ),
   );
 }

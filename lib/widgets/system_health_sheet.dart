@@ -655,8 +655,12 @@ class _SystemHealthSnapshot {
       _SystemHealthItem(
         level: securityMode == 'armed'
             ? _SystemHealthLevel.ok
+            : securityMode == 'unprotected'
+            ? _SystemHealthLevel.warning
             : _SystemHealthLevel.info,
-        icon: Icons.shield_rounded,
+        icon: securityMode == 'unprotected'
+            ? Icons.shield_outlined
+            : Icons.shield_rounded,
         title: _securityModeTitle(
           strings: strings,
           securityMode: securityMode,
@@ -760,6 +764,10 @@ class _SystemHealthSnapshot {
     required String securityMode,
     required String securityModeSource,
   }) {
+    if (securityMode == 'unprotected') {
+      return strings.t("Không bảo vệ đang bật");
+    }
+
     if (securityMode != 'armed') {
       return strings.t("Bảo vệ đang tắt");
     }
@@ -776,6 +784,12 @@ class _SystemHealthSnapshot {
     required String securityMode,
     required String securityModeSource,
   }) {
+    if (securityMode == 'unprotected') {
+      return strings.t(
+        "Toàn bộ Alarm của nhà đang tắt; hệ thống chỉ gửi notification.",
+      );
+    }
+
     if (securityMode != 'armed') {
       return strings.t("Nhà đang ở chế độ dùng bình thường.");
     }

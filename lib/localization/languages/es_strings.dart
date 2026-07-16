@@ -1122,4 +1122,5 @@ const Map<String, String> esStrings = {
   "Đã lưu cấu hình báo động": "Configuración de alarma guardada",
   "Không thể lưu cấu hình báo động": "No se pudo guardar la configuración de alarma",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Solo el propietario de la casa y los administradores pueden cambiar este ajuste.",
+  "Thông tin chi tiết": "Detalles del dispositivo",
 };

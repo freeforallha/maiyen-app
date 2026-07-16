@@ -22,9 +22,11 @@ class HomeSecurityRepeatResult {
 enum HomeSecurityModePlanStatus {
   ready,
   requiresManualConfirmation,
+  requiresUnprotectedConfirmation,
   unchanged,
   homeUnavailable,
   noPermission,
+  ownerRequired,
 }
 
 class HomeSecurityModePlan {
@@ -67,31 +69,23 @@ class HomeSecurityReauthResult {
   final HomeSecurityReauthStatus status;
 }
 
-enum HomeAlarmTogglePlanStatus {
-  ready,
-  requiresDisableConfirmation,
-  unchanged,
-  homeUnavailable,
-}
-
-class HomeAlarmTogglePlan {
-  const HomeAlarmTogglePlan({required this.status, required this.enabled});
-
-  final HomeAlarmTogglePlanStatus status;
-  final bool enabled;
-}
-
-enum HomeAlarmToggleSaveStatus { saved, failed }
-
-class HomeAlarmToggleSaveResult {
-  const HomeAlarmToggleSaveResult(this.status);
-
-  final HomeAlarmToggleSaveStatus status;
-}
-
 class HomeAlarmSecurityService {
+  static const String normalMode = 'normal';
+  static const String armedMode = 'armed';
+  static const String unprotectedMode = 'unprotected';
+
+  String normalizeSecurityMode(dynamic value) {
+    final mode = value?.toString().trim().toLowerCase() ?? '';
+
+    if (mode == armedMode || mode == unprotectedMode) {
+      return mode;
+    }
+
+    return normalMode;
+  }
+
   int normalizeSecurityModeRepeatMinutes(dynamic value) {
-    final minutes = int.tryParse(value?.toString() ?? "") ?? 0;
+    final minutes = int.tryParse(value?.toString() ?? '') ?? 0;
 
     return const <int>[0, 15, 30, 60].contains(minutes) ? minutes : 0;
   }
@@ -120,7 +114,7 @@ class HomeAlarmSecurityService {
 
     try {
       await FirebaseDatabase.instance
-          .ref("accounts/$ownerUid/homes/$homeId/securityModeRepeatMinutes")
+          .ref('accounts/$ownerUid/homes/$homeId/securityModeRepeatMinutes')
           .set(normalized);
 
       return HomeSecurityRepeatResult(
@@ -128,7 +122,7 @@ class HomeAlarmSecurityService {
         normalizedMinutes: normalized,
       );
     } catch (error) {
-      safeDebugPrint("SET_SECURITY_MODE_REPEAT_ERROR: $error");
+      safeDebugPrint('SET_SECURITY_MODE_REPEAT_ERROR: $error');
 
       return HomeSecurityRepeatResult(
         status: HomeSecurityRepeatStatus.failed,
@@ -140,10 +134,11 @@ class HomeAlarmSecurityService {
   HomeSecurityModePlan planSecurityModeChange({
     required String homeId,
     required bool canManageHome,
+    required bool isOwner,
     required String mode,
     required Map<String, dynamic> currentHome,
   }) {
-    final nextMode = mode == "armed" ? "armed" : "normal";
+    final nextMode = normalizeSecurityMode(mode);
 
     if (homeId.isEmpty) {
       return HomeSecurityModePlan(
@@ -161,17 +156,23 @@ class HomeAlarmSecurityService {
       );
     }
 
-    final currentMode = currentHome["securityMode"]?.toString() == "armed"
-        ? "armed"
-        : "normal";
+    if (nextMode == unprotectedMode && !isOwner) {
+      return HomeSecurityModePlan(
+        status: HomeSecurityModePlanStatus.ownerRequired,
+        nextMode: nextMode,
+        repeatMinutes: 0,
+      );
+    }
+
+    final currentMode = normalizeSecurityMode(currentHome['securityMode']);
     final currentSource =
-        currentHome["securityModeSource"]?.toString().trim() ?? "";
+        currentHome['securityModeSource']?.toString().trim() ?? '';
     final repeatMinutes = normalizeSecurityModeRepeatMinutes(
-      currentHome["securityModeRepeatMinutes"],
+      currentHome['securityModeRepeatMinutes'],
     );
 
     if (currentMode == nextMode) {
-      if (nextMode == "normal" || currentSource == "manual") {
+      if (nextMode != armedMode || currentSource == 'manual') {
         return HomeSecurityModePlan(
           status: HomeSecurityModePlanStatus.unchanged,
           nextMode: nextMode,
@@ -180,10 +181,15 @@ class HomeAlarmSecurityService {
       }
     }
 
+    final status = switch (nextMode) {
+      armedMode => HomeSecurityModePlanStatus.requiresManualConfirmation,
+      unprotectedMode =>
+        HomeSecurityModePlanStatus.requiresUnprotectedConfirmation,
+      _ => HomeSecurityModePlanStatus.ready,
+    };
+
     return HomeSecurityModePlan(
-      status: nextMode == "armed"
-          ? HomeSecurityModePlanStatus.requiresManualConfirmation
-          : HomeSecurityModePlanStatus.ready,
+      status: status,
       nextMode: nextMode,
       repeatMinutes: repeatMinutes,
     );
@@ -194,25 +200,25 @@ class HomeAlarmSecurityService {
     required String homeId,
     required String nextMode,
   }) async {
+    final normalizedMode = normalizeSecurityMode(nextMode);
+
     try {
       await FirebaseDatabase.instance.ref().update({
-        "accounts/$ownerUid/homes/$homeId/securityMode": nextMode,
-
-        // Chuyển về normal phải xoá nguồn manual.
-        "accounts/$ownerUid/homes/$homeId/securityModeSource":
-            nextMode == "armed" ? "manual" : null,
+        'accounts/$ownerUid/homes/$homeId/securityMode': normalizedMode,
+        'accounts/$ownerUid/homes/$homeId/securityModeSource':
+            normalizedMode == normalMode ? null : 'manual',
       });
 
       return HomeSecurityModeSaveResult(
         status: HomeSecurityModeSaveStatus.saved,
-        nextMode: nextMode,
+        nextMode: normalizedMode,
       );
     } catch (error) {
-      safeDebugPrint("SET_SECURITY_MODE_ERROR: $error");
+      safeDebugPrint('SET_SECURITY_MODE_ERROR: $error');
 
       return HomeSecurityModeSaveResult(
         status: HomeSecurityModeSaveStatus.failed,
-        nextMode: nextMode,
+        nextMode: normalizedMode,
       );
     }
   }
@@ -232,9 +238,9 @@ class HomeAlarmSecurityService {
         ownerUid: ownerUid,
         homeId: homeId,
         homeName: homeName,
-        type: "manual_security_mode_enabled",
-        category: "home",
-        severity: "warning",
+        type: 'manual_security_mode_enabled',
+        category: 'home',
+        severity: 'warning',
         title: strings.manualSecurityModeEnabledTitle(),
         message: strings.manualSecurityModeEnabledMessage(
           actorName: actorName,
@@ -242,23 +248,66 @@ class HomeAlarmSecurityService {
           securityModeRepeatMinutes: securityModeRepeatMinutes,
         ),
         actorUid: actorUid,
-        entityType: "home",
+        entityType: 'home',
         entityId: homeId,
         includeActor: true,
         writeHomeTimeline: true,
         data: {
-          "type": "manual_security_mode_enabled",
-          "actorName": actorName,
-          "homeName": homeName,
-          "securityMode": "armed",
-          "securityModeSource": "manual",
-          "securityModeRepeatMinutes": securityModeRepeatMinutes,
+          'type': 'manual_security_mode_enabled',
+          'actorName': actorName,
+          'homeName': homeName,
+          'securityMode': armedMode,
+          'securityModeSource': 'manual',
+          'securityModeRepeatMinutes': securityModeRepeatMinutes,
         },
       );
 
       return HomeSecurityNotificationStatus.sent;
     } catch (error) {
-      safeDebugPrint("MANUAL_SECURITY_NOTIFICATION_ERROR: $error");
+      safeDebugPrint('MANUAL_SECURITY_NOTIFICATION_ERROR: $error');
+
+      return HomeSecurityNotificationStatus.failed;
+    }
+  }
+
+  Future<HomeSecurityNotificationStatus> notifyUnprotectedModeEnabled({
+    required String ownerUid,
+    required String homeId,
+    required String homeName,
+    required String actorUid,
+    required String actorName,
+  }) async {
+    try {
+      final strings = AppStrings.fromLocale(appLanguageController.locale);
+
+      await HomeNotificationService.notifyHome(
+        ownerUid: ownerUid,
+        homeId: homeId,
+        homeName: homeName,
+        type: 'home_unprotected_mode_enabled',
+        category: 'home',
+        severity: 'warning',
+        title: strings.t('Nhà đã chuyển sang Không bảo vệ'),
+        message: strings.t(
+          'Chủ nhà đã tắt toàn bộ Alarm. SafeHome sẽ chỉ gửi notification khi cảm biến phát hiện sự cố.',
+        ),
+        actorUid: actorUid,
+        entityType: 'home',
+        entityId: homeId,
+        includeActor: true,
+        writeHomeTimeline: true,
+        data: {
+          'type': 'home_unprotected_mode_enabled',
+          'actorName': actorName,
+          'homeName': homeName,
+          'securityMode': unprotectedMode,
+          'securityModeSource': 'manual',
+        },
+      );
+
+      return HomeSecurityNotificationStatus.sent;
+    } catch (error) {
+      safeDebugPrint('UNPROTECTED_MODE_NOTIFICATION_ERROR: $error');
 
       return HomeSecurityNotificationStatus.failed;
     }
@@ -272,7 +321,7 @@ class HomeAlarmSecurityService {
     }
 
     final user = FirebaseAuth.instance.currentUser;
-    final email = user?.email?.trim() ?? "";
+    final email = user?.email?.trim() ?? '';
 
     if (user == null || email.isEmpty) {
       return const HomeSecurityReauthResult(
@@ -290,9 +339,9 @@ class HomeAlarmSecurityService {
       return const HomeSecurityReauthResult(HomeSecurityReauthStatus.success);
     } on FirebaseAuthException catch (error) {
       final wrongPassword =
-          error.code == "wrong-password" ||
-          error.code == "invalid-credential" ||
-          error.code == "invalid-login-credentials";
+          error.code == 'wrong-password' ||
+          error.code == 'invalid-credential' ||
+          error.code == 'invalid-login-credentials';
 
       return HomeSecurityReauthResult(
         wrongPassword
@@ -300,82 +349,9 @@ class HomeAlarmSecurityService {
             : HomeSecurityReauthStatus.failed,
       );
     } catch (error) {
-      safeDebugPrint("MANUAL_SECURITY_REAUTH_ERROR: $error");
+      safeDebugPrint('MANUAL_SECURITY_REAUTH_ERROR: $error');
 
       return const HomeSecurityReauthResult(HomeSecurityReauthStatus.failed);
     }
-  }
-
-  HomeAlarmTogglePlan planAlarmEnabled({
-    required String homeId,
-    required bool currentEnabled,
-    required bool nextEnabled,
-  }) {
-    if (homeId.isEmpty) {
-      return HomeAlarmTogglePlan(
-        status: HomeAlarmTogglePlanStatus.homeUnavailable,
-        enabled: nextEnabled,
-      );
-    }
-
-    if (currentEnabled == nextEnabled) {
-      return HomeAlarmTogglePlan(
-        status: HomeAlarmTogglePlanStatus.unchanged,
-        enabled: nextEnabled,
-      );
-    }
-
-    return HomeAlarmTogglePlan(
-      status: nextEnabled
-          ? HomeAlarmTogglePlanStatus.ready
-          : HomeAlarmTogglePlanStatus.requiresDisableConfirmation,
-      enabled: nextEnabled,
-    );
-  }
-
-  Future<HomeAlarmToggleSaveResult> setAlarmEnabled({
-    required String uid,
-    required String homeId,
-    required bool enabled,
-  }) async {
-    try {
-      await FirebaseDatabase.instance
-          .ref(
-            "accounts/$uid/alarmSettings/"
-            "$homeId/enabled",
-          )
-          .set(enabled);
-
-      return const HomeAlarmToggleSaveResult(HomeAlarmToggleSaveStatus.saved);
-    } catch (error) {
-      safeDebugPrint("SET_ALARM_ENABLED_ERROR: $error");
-
-      return const HomeAlarmToggleSaveResult(HomeAlarmToggleSaveStatus.failed);
-    }
-  }
-
-  Future<void> recordAlarmEnabledNotification({
-    required String uid,
-    required String homeId,
-    required String homeName,
-    required bool enabled,
-    required AppStrings strings,
-  }) async {
-    await HomeNotificationService.addNotification(
-      uid: uid,
-      type: "alarm_setting_changed",
-      title: strings.alarmSettingChangedTitle(enabled),
-      message: strings.alarmSettingChangedMessage(
-        enabled: enabled,
-        homeName: homeName,
-      ),
-      homeId: homeId,
-      homeName: homeName,
-      data: {
-        "type": "alarm_setting_changed",
-        "alarmEnabled": enabled,
-        "homeName": homeName,
-      },
-    );
   }
 }

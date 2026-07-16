@@ -898,6 +898,54 @@ class NotificationService {
     );
   }
 
+  static Future<void> showSensorNotification({
+    required Map<String, dynamic> data,
+  }) async {
+    final strings = _strings;
+    final homeId = data['homeId']?.toString().trim() ?? '';
+    final deviceId = data['deviceId']?.toString().trim() ?? '';
+    final rawTitle = data['title']?.toString().trim() ?? '';
+    final rawBody = data['body']?.toString().trim() ?? '';
+    final title = rawTitle.isNotEmpty
+        ? localizedExactTextOrRaw(rawTitle, strings)
+        : strings.t('Thông báo cảm biến');
+    final body = rawBody.isNotEmpty
+        ? localizedExactTextOrRaw(rawBody, strings)
+        : strings.t('Cảm biến vừa phát hiện một sự kiện.');
+    final identity = '$homeId|$deviceId';
+
+    final androidDetails = AndroidNotificationConfig.sensorNotificationDetails(
+      title: title,
+      body: body,
+      strings: strings,
+      tag: 'safehome_sensor_${homeId}_$deviceId',
+    );
+
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    await localNotif.show(
+      _sensorNotificationId(identity),
+      title,
+      body,
+      NotificationDetails(android: androidDetails, iOS: iosDetails),
+      payload: 'sensor_notification::$homeId',
+    );
+  }
+
+  static int _sensorNotificationId(String identity) {
+    var hash = 0;
+
+    for (final codeUnit in identity.codeUnits) {
+      hash = ((hash * 31) + codeUnit) & 0x7fffffff;
+    }
+
+    return 1200000 + (hash % 700000);
+  }
+
   static Future<void> showChatNotification({
     required Map<String, dynamic> data,
   }) async {

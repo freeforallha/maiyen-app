@@ -8,6 +8,45 @@ import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
+IconData _alarmDeviceIcon(Object? rawType) {
+  final type = rawType?.toString().trim().toLowerCase() ?? "unknown";
+
+  switch (type) {
+    case "door":
+      return Icons.sensor_door_rounded;
+    case "window":
+      return Icons.window_rounded;
+    case "gate":
+      return Icons.garage_rounded;
+    case "lock":
+    case "door_lock":
+      return Icons.lock_rounded;
+    case "motion":
+      return Icons.directions_walk_rounded;
+    case "presence":
+      return Icons.sensors_rounded;
+    case "vibration":
+      return Icons.vibration_rounded;
+    case "glass_break":
+      return Icons.broken_image_rounded;
+    case "smoke":
+      return Icons.local_fire_department_rounded;
+    case "heat":
+      return Icons.thermostat_rounded;
+    case "carbon_monoxide":
+      return Icons.dangerous_rounded;
+    case "gas":
+      return Icons.gas_meter_rounded;
+    case "water_leak":
+    case "flood":
+      return Icons.water_damage_rounded;
+    case "sos":
+      return Icons.sos_rounded;
+    default:
+      return Icons.sensors_rounded;
+  }
+}
+
 int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   final value = rawValue is num
       ? rawValue.toInt()
@@ -1339,12 +1378,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       children: [
                         Row(
                           children: [
-                            const Icon(
-                              Icons.shield_moon_rounded,
-                              color: SafeHomeColors.primary,
-                            ),
-                            const SizedBox(width: 10),
-
                             Expanded(
                               child: InkWell(
                                 onTap: () {
@@ -1352,31 +1385,68 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     expandedDeviceId = expanded ? "" : deviceId;
                                   });
                                 },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      device["name"]?.toString() ?? deviceId,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15,
+                                borderRadius: BorderRadius.circular(14),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 38,
+                                        height: 38,
+                                        decoration: BoxDecoration(
+                                          color: SafeHomeColors.primary
+                                              .withValues(alpha: 0.10),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          _alarmDeviceIcon(device["type"]),
+                                          size: 21,
+                                          color: SafeHomeColors.primary,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 3),
-                                    Text(
-                                      "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmDaysLabel(alarm["days"], strings)} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade600,
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              device["name"]?.toString() ??
+                                                  deviceId,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: SafeHomeColors
+                                                    .textPrimary,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 3),
+                                            Text(
+                                              "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmDaysLabel(alarm["days"], strings)} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                color: SafeHomeColors
+                                                    .textSecondary,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-
+                            const SizedBox(width: 8),
                             Switch(
                               value: alarm["enabled"] == true,
                               onChanged: readOnly
@@ -1389,18 +1459,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     },
                             ),
 
-                            IconButton(
-                              icon: Icon(
-                                expanded
-                                    ? Icons.expand_less_rounded
-                                    : Icons.expand_more_rounded,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  expandedDeviceId = expanded ? "" : deviceId;
-                                });
-                              },
-                            ),
                           ],
                         ),
 

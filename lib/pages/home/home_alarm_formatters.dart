@@ -53,12 +53,11 @@ class HomeAlarmFormatters {
   }
 
   static String formatAlarmSchedules({
-    required bool alarmEnabled,
     required String selectedHome,
     required Map<String, dynamic> devices,
     required Map<String, dynamic> customRulesByHome,
   }) {
-    if (!alarmEnabled || selectedHome.isEmpty) {
+    if (selectedHome.isEmpty) {
       return "Tắt";
     }
 

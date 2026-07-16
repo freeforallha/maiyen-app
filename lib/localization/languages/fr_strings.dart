@@ -1132,4 +1132,5 @@ const Map<String, String> frStrings = {
   "Đã lưu cấu hình báo động": "Paramètres d’alarme enregistrés",
   "Không thể lưu cấu hình báo động": "Impossible d’enregistrer les paramètres d’alarme",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Seuls le propriétaire de la maison et les administrateurs peuvent modifier ce réglage.",
+  "Thông tin chi tiết": "Détails de l’appareil",
 };

@@ -1098,4 +1098,5 @@ const Map<String, String> ruStrings = {
   "Đã lưu cấu hình báo động": "Настройки тревоги сохранены",
   "Không thể lưu cấu hình báo động": "Не удалось сохранить настройки тревоги",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Только владелец дома и администраторы могут изменить эту настройку.",
+  "Thông tin chi tiết": "Сведения об устройстве",
 };

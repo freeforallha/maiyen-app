@@ -1121,4 +1121,5 @@ const Map<String, String> deStrings = {
   "Đã lưu cấu hình báo động": "Alarmeinstellungen gespeichert",
   "Không thể lưu cấu hình báo động": "Alarmeinstellungen konnten nicht gespeichert werden",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Nur der Hauseigentümer und Administratoren können diese Einstellung ändern.",
+  "Thông tin chi tiết": "Gerätedetails",
 };

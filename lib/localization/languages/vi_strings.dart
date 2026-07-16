@@ -1082,4 +1082,5 @@ const Map<String, String> viStrings = {
   "Đã lưu cấu hình báo động": "Đã lưu cấu hình báo động",
   "Không thể lưu cấu hình báo động": "Không thể lưu cấu hình báo động",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
+  "Thông tin chi tiết": "Thông tin chi tiết",
 };

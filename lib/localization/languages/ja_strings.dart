@@ -1015,4 +1015,5 @@ const Map<String, String> jaStrings = {
   "Đã lưu cấu hình báo động": "アラーム設定を保存しました",
   "Không thể lưu cấu hình báo động": "アラーム設定を保存できません",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "家の所有者と管理者のみがこの設定を変更できます。",
+  "Thông tin chi tiết": "デバイス詳細",
 };

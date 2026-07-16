@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void openDeviceDetailSheet({
     required String deviceId,
     required Map<String, dynamic> device,
+    Map<String, dynamic>? selectableDevices,
   }) {
     HomeUiCoordinator.openDeviceDetail(
       context: context,
@@ -85,10 +86,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       device: device,
       ownerUid: getHomeOwnerUid(),
       homeId: selectedHome,
-      onRename: canManageHome() ? () => renameDevice(deviceId) : null,
-      onDelete: canManageHome() ? () => deleteDevice(deviceId) : null,
-      onNotification: () => openNotificationList(deviceId),
+      onRename: canManageHome() ? renameDevice : null,
+      onDelete: canManageHome() ? deleteDevice : null,
+      onNotification: openNotificationList,
       canManageAlarmPolicy: canManageHome(),
+      selectableDevices: selectableDevices,
     );
   }
 
@@ -96,6 +98,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     openDeviceDetailSheet(
       deviceId: deviceId,
       device: safeMap(getDevices()[deviceId]),
+    );
+  }
+
+  void openInfrastructureDeviceDetail(
+    Map<String, dynamic> infrastructureDevices,
+  ) {
+    if (infrastructureDevices.isEmpty) {
+      return;
+    }
+
+    final firstEntry = infrastructureDevices.entries.first;
+
+    openDeviceDetailSheet(
+      deviceId: firstEntry.key,
+      device: safeMap(firstEntry.value),
+      selectableDevices: infrastructureDevices,
     );
   }
 
@@ -153,9 +171,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     setState(() {
       selectedHome = homeId;
 
-      securityMode = currentHome["securityMode"]?.toString() == "armed"
-          ? "armed"
-          : "normal";
+      securityMode = _homeAlarmSecurityService.normalizeSecurityMode(
+        currentHome["securityMode"],
+      );
 
       alarmEnabled = safeMap(alarmSettings[homeId])["enabled"] != false;
 
@@ -374,41 +392,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Future<void> showAlarmReceiveReminder() async {
-    final cachedRules = safeMap(customRulesByHome[selectedHome]);
-    final cachedAlarmMode =
-        cachedRules["alarmMode"]?.toString() ??
-            cachedRules["mode"]?.toString();
-    var useCustomMode = cachedAlarmMode == "custom";
-
-    try {
-      final rulesSnapshot = await FirebaseDatabase.instance
-          .ref("accounts/$uid/customRules/$selectedHome")
-          .get();
-      final rules = safeMap(rulesSnapshot.value);
-      final alarmMode =
-          rules["alarmMode"]?.toString() ?? rules["mode"]?.toString();
-
-      useCustomMode = alarmMode == "custom";
-    } catch (error) {
-      safeDebugPrint("READ_ALARM_MODE_FOR_REMINDER_ERROR: $error");
-    }
-
-    if (!mounted) {
-      return;
-    }
-
-    await showAlarmReceiveReminderDialog(
-      context: context,
-      strings: _strings,
-      useCustomMode: useCustomMode,
-    );
-  }
-
-  Future<bool> confirmDisableAlarm() async {
-    return showConfirmDisableAlarmDialog(context: context, strings: _strings);
-  }
-
   Future<void> showAlarmPauseReminder() async {
     await showAlarmPauseReminderDialog(context: context, strings: _strings);
   }
@@ -427,6 +410,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool alarmEnabled = false;
   Future<bool> _confirmManualSecurityMode() async {
     return showConfirmManualSecurityModeDialog(
+      context: context,
+      strings: _strings,
+    );
+  }
+
+  Future<bool> _confirmUnprotectedMode() async {
+    return showConfirmUnprotectedModeDialog(
       context: context,
       strings: _strings,
     );
@@ -617,6 +607,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final plan = _homeAlarmSecurityService.planSecurityModeChange(
       homeId: homeId,
       canManageHome: canManageHome(),
+      isOwner: uid == getHomeOwnerUid(),
       mode: mode,
       currentHome: currentHome,
     );
@@ -635,6 +626,35 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           icon: Icons.lock_outline_rounded,
         );
         return;
+      case HomeSecurityModePlanStatus.ownerRequired:
+        showTopToast(
+          context,
+          _strings.t(
+            "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ",
+          ),
+          color: Colors.orange,
+          icon: Icons.lock_outline_rounded,
+        );
+        return;
+      case HomeSecurityModePlanStatus.requiresUnprotectedConfirmation:
+        final confirmed = await _confirmUnprotectedMode();
+
+        if (!confirmed || !mounted) {
+          return;
+        }
+
+        await WidgetsBinding.instance.endOfFrame;
+
+        if (!mounted) {
+          return;
+        }
+
+        final passwordConfirmed = await _reauthenticateForManualSecurityMode();
+
+        if (!passwordConfirmed || !mounted) {
+          return;
+        }
+        break;
       case HomeSecurityModePlanStatus.requiresManualConfirmation:
         final confirmed = await _confirmManualSecurityMode();
 
@@ -678,7 +698,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final actorName = userName.trim().isNotEmpty
         ? userName.trim()
         : FirebaseAuth.instance.currentUser?.email?.trim() ??
-        _strings.t("Một thành viên");
+              _strings.t("Một thành viên");
 
     final saveResult = await _homeAlarmSecurityService.setSecurityMode(
       ownerUid: ownerUid,
@@ -706,10 +726,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       final cachedHome = safeMap(homes[homeId]);
       cachedHome["securityMode"] = nextMode;
 
-      if (nextMode == "armed") {
-        cachedHome["securityModeSource"] = "manual";
-      } else {
+      if (nextMode == "normal") {
         cachedHome.remove("securityModeSource");
+      } else {
+        cachedHome["securityModeSource"] = "manual";
       }
 
       homes[homeId] = cachedHome;
@@ -748,6 +768,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         );
       }
 
+      return;
+    }
+
+    if (nextMode == "unprotected") {
+      final notificationStatus = await _homeAlarmSecurityService
+          .notifyUnprotectedModeEnabled(
+        ownerUid: ownerUid,
+        homeId: homeId,
+        homeName: homeName,
+        actorUid: uid,
+        actorName: actorName,
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      showTopToast(
+        context,
+        notificationStatus == HomeSecurityNotificationStatus.failed
+            ? _strings.t(
+                "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo",
+              )
+            : _strings.t("Đã chuyển nhà sang Không bảo vệ"),
+        color: SafeHomeColors.warning,
+        icon: Icons.shield_outlined,
+      );
       return;
     }
 
@@ -891,7 +938,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       onSave: (data) async {
         if (data.enabled) {
           final hasBackgroundPermission =
-          await AutoAwayService.ensureBackgroundPermission();
+              await AutoAwayService.ensureBackgroundPermission();
 
           if (!hasBackgroundPermission) {
             if (!mounted) {
@@ -986,91 +1033,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         }
       },
     );
-  }
-
-  Future<bool> setAlarmEnabled(bool enabled) async {
-    final homeId = selectedHome;
-    final plan = _homeAlarmSecurityService.planAlarmEnabled(
-      homeId: homeId,
-      currentEnabled: alarmEnabled,
-      nextEnabled: enabled,
-    );
-
-    switch (plan.status) {
-      case HomeAlarmTogglePlanStatus.homeUnavailable:
-        return false;
-      case HomeAlarmTogglePlanStatus.unchanged:
-        return true;
-      case HomeAlarmTogglePlanStatus.requiresDisableConfirmation:
-        final confirmed = await confirmDisableAlarm();
-
-        if (!confirmed || !mounted) {
-          return false;
-        }
-        break;
-      case HomeAlarmTogglePlanStatus.ready:
-        break;
-    }
-
-    final homeName = getHomeDisplayName(homeId);
-    final result = await _homeAlarmSecurityService.setAlarmEnabled(
-      uid: uid,
-      homeId: homeId,
-      enabled: enabled,
-    );
-
-    if (!mounted) {
-      return result.status == HomeAlarmToggleSaveStatus.saved;
-    }
-
-    if (result.status == HomeAlarmToggleSaveStatus.failed) {
-      if (mounted) {
-        showTopToast(
-          context,
-          _strings.t("Không thể thay đổi trạng thái Alarm"),
-          color: Colors.red,
-          icon: Icons.error_outline_rounded,
-        );
-      }
-
-      return false;
-    }
-
-    if (!mounted) {
-      return true;
-    }
-
-    setState(() {
-      alarmEnabled = enabled;
-      alarmSettings[homeId] = {"enabled": enabled};
-    });
-
-    unawaited(
-      _homeAlarmSecurityService
-          .recordAlarmEnabledNotification(
-        uid: uid,
-        homeId: homeId,
-        homeName: homeName,
-        enabled: enabled,
-        strings: _strings,
-      )
-          .catchError((Object error) {
-        safeDebugPrint("ALARM_SETTING_NOTIFICATION_ERROR: $error");
-      }),
-    );
-
-    if (enabled) {
-      await showAlarmReceiveReminder();
-    } else if (mounted) {
-      showTopToast(
-        context,
-        _strings.t("Đã tắt toàn bộ Alarm của nhà"),
-        color: SafeHomeColors.warning,
-        icon: Icons.notifications_off_rounded,
-      );
-    }
-
-    return true;
   }
 
   int pairingCountdown = 0;
@@ -1326,7 +1288,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   String formatAlarmSchedules() {
     final text = HomeAlarmFormatters.formatAlarmSchedules(
-      alarmEnabled: alarmEnabled,
       selectedHome: selectedHome,
       devices: getDevices(),
       customRulesByHome: customRulesByHome,
@@ -3481,7 +3442,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewSecurityModeSource =
         overviewHome["securityModeSource"]?.toString().trim() ?? "";
     final overviewSecurityModeRepeatMinutes =
-    _normalizeSecurityModeRepeatMinutes(
+        _normalizeSecurityModeRepeatMinutes(
       overviewHome["securityModeRepeatMinutes"],
     );
     final overviewAlarmScheduleText = formatAlarmSchedules();
@@ -3547,10 +3508,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       setState(() {
                         selectedHome = selected;
 
-                        securityMode =
-                        currentHome["securityMode"]?.toString() == "armed"
-                            ? "armed"
-                            : "normal";
+                        securityMode = _homeAlarmSecurityService
+                            .normalizeSecurityMode(
+                          currentHome["securityMode"],
+                        );
 
                         alarmEnabled =
                             safeMap(alarmSettings[selected])["enabled"] !=
@@ -3626,11 +3587,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           setState(() {
                             selectedHome = h;
 
-                            securityMode =
-                            currentHome["securityMode"]?.toString() ==
-                                "armed"
-                                ? "armed"
-                                : "normal";
+                            securityMode = _homeAlarmSecurityService
+                                .normalizeSecurityMode(
+                              currentHome["securityMode"],
+                            );
 
                             alarmEnabled =
                                 safeMap(alarmSettings[h])["enabled"] != false;
@@ -3694,10 +3654,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                   ? setSecurityModeRepeatMinutes
                                   : null,
                               onSecurityModeChanged: setSecurityMode,
-                              alarmEnabled: alarmEnabled,
-                              onAlarmEnabledChanged: canManageSelectedHome
-                                  ? setAlarmEnabled
-                                  : null,
                               onScheduleNotification:
                               openScheduleNotificationSheet,
                               onScheduleAlarm: openAlarmDeviceSheet,
@@ -3793,6 +3749,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               }
                             },
                             onTapDevice: openSelectedDeviceDetail,
+                            onTapInfrastructureGroup:
+                            openInfrastructureDeviceDetail,
                           ),
                         ),
                       ],
@@ -3809,7 +3767,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 addHomeTooltip: _strings.t("Thêm Home"),
                 unreadChatCount: unreadChatByHome[selectedHome] ?? 0,
                 inviteCount: shareRequests.length,
-                alarmEnabled: alarmEnabled,
                 onAddHome: showAddHomeOptions,
                 onOpenChat: openSelectedHomeChat,
                 onOpenAlarm: () async {
@@ -3818,18 +3775,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   if (!context.mounted) return;
 
                   final alarmScheduleText =
-                  formatAlarmSchedules().trim().isEmpty
-                      ? _strings.t("Chưa thiết lập thời gian")
-                      : formatAlarmSchedules();
+                      formatAlarmSchedules().trim().isEmpty
+                          ? _strings.t("Chưa thiết lập thời gian")
+                          : formatAlarmSchedules();
 
                   await showHomeAlarmMenuSheet(
                     context: context,
                     strings: _strings,
-                    alarmEnabled: alarmEnabled,
                     reminderEnabled: reminderEnabled,
                     alarmScheduleText: alarmScheduleText,
                     alarmPauseToday: alarmPauseToday,
-                    onAlarmEnabledChanged: setAlarmEnabled,
                     onOpenAlarmSchedule: openAlarmDeviceSheet,
                     onOpenAlarmPause: () async {
                       await Future<void>.delayed(

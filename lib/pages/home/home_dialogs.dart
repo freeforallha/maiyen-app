@@ -157,96 +157,6 @@ Future<String?> showHomeTimeTextInputDialog({
   );
 }
 
-Future<void> showAlarmReceiveReminderDialog({
-  required BuildContext context,
-  required AppStrings strings,
-  required bool useCustomMode,
-}) async {
-  await showDialog<void>(
-    context: context,
-    builder: (dialogContext) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Icon(
-              useCustomMode ? Icons.person_rounded : Icons.home_rounded,
-              color: SafeHomeColors.primary,
-            ),
-            const SizedBox(width: 10),
-            Expanded(child: Text(strings.t("Alarm đã được bật"))),
-          ],
-        ),
-        content: Text(
-          useCustomMode
-              ? strings.t("Alarm đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm riêng đã thiết lập cho tài khoản này.")
-              : strings.t("Alarm đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch Alarm chung do Chủ nhà hoặc Quản trị viên thiết lập."),
-        ),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-            },
-            child: Text(strings.t("Đã hiểu")),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-Future<bool> showConfirmDisableAlarmDialog({
-  required BuildContext context,
-  required AppStrings strings,
-}) async {
-  final confirmed = await showDialog<bool>(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            const Icon(
-              Icons.warning_amber_rounded,
-              color: SafeHomeColors.danger,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                strings.t("Tắt toàn bộ Alarm?"),
-              ),
-            ),
-          ],
-        ),
-        content: Text(
-          strings.t("Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa."),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop(false);
-            },
-            child: Text(strings.t("Huỷ")),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: SafeHomeColors.danger,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(dialogContext).pop(true);
-            },
-            child: Text(strings.t("Tắt Alarm")),
-          ),
-        ],
-      );
-    },
-  );
-
-  return confirmed == true;
-}
-
 Future<void> showAlarmPauseReminderDialog({
   required BuildContext context,
   required AppStrings strings,
@@ -310,6 +220,61 @@ Future<bool> showConfirmManualSecurityModeDialog({
             },
             icon: const Icon(Icons.shield_rounded),
             label: Text(strings.t("Xác nhận")),
+          ),
+        ],
+      );
+    },
+  );
+
+  return confirmed == true;
+}
+
+
+Future<bool> showConfirmUnprotectedModeDialog({
+  required BuildContext context,
+  required AppStrings strings,
+}) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.shield_outlined,
+              color: SafeHomeColors.danger,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                strings.t("Bật Không bảo vệ?"),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          strings.t(
+            "Toàn bộ Alarm của nhà sẽ bị tắt, bao gồm Hẹn giờ Alarm, Mode Bảo vệ và cảnh báo khẩn cấp.\n\nSafeHome vẫn ghi nhận sự kiện và gửi notification, nhưng sẽ không mở cảnh báo toàn màn hình hoặc kích hoạt còi.\n\nChỉ Chủ nhà có thể bật chế độ này.",
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext, false);
+            },
+            child: Text(strings.t("Huỷ")),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: SafeHomeColors.danger,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(dialogContext, true);
+            },
+            child: Text(strings.t("Tôi hiểu, tiếp tục")),
           ),
         ],
       );

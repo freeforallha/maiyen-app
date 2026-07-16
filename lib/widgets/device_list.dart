@@ -26,6 +26,7 @@ class DeviceList extends StatefulWidget {
   final Function(String) onRename;
   final Function(String) onDelete;
   final Function(String) onTapDevice;
+  final void Function(Map<String, dynamic> devices)? onTapInfrastructureGroup;
   final VoidCallback onPairSensor;
 
   const DeviceList({
@@ -39,6 +40,7 @@ class DeviceList extends StatefulWidget {
     required this.onRename,
     required this.onDelete,
     required this.onTapDevice,
+    this.onTapInfrastructureGroup,
     required this.onPairSensor,
     required this.selectedRoomId,
     this.securityMode = "normal",
@@ -59,7 +61,9 @@ class _DeviceListState extends State<DeviceList> {
   Offset _draggingPointerOffset = Offset.zero;
   bool _draggingDeviceDropping = false;
   bool _mutingHomeSiren = false;
+  bool _sirenAlertPulseDanger = false;
   Timer? _deviceDropTimer;
+  Timer? _sirenAlertPulseTimer;
   Map<String, Map<String, int>> _deviceOrderMap = {};
   Map<String, Map<String, int>> _localDeviceOrderMap = {};
   Map<String, Map<String, int>> _optimisticDeviceOrderMap = {};
@@ -82,6 +86,7 @@ class _DeviceListState extends State<DeviceList> {
   void initState() {
     super.initState();
     _startDeviceOrderListener();
+    _syncSirenAlertPulse();
   }
 
   @override
@@ -95,13 +100,72 @@ class _DeviceListState extends State<DeviceList> {
       _clearDeviceDragState();
       _startDeviceOrderListener();
     }
+
+    _syncSirenAlertPulse();
   }
 
   @override
   void dispose() {
     _deviceOrderSubscription?.cancel();
     _deviceDropTimer?.cancel();
+    _sirenAlertPulseTimer?.cancel();
     super.dispose();
+  }
+
+  bool _isSirenActive(Map<String, dynamic> device) {
+    return isActiveDeviceSignal(device["alarm"]) ||
+        normalizeDeviceSwitchState(device) == "on";
+  }
+
+  bool _hasActiveSiren() {
+    for (final value in devices.values) {
+      final device = safeMap(value);
+      final type = device["type"]?.toString().trim().toLowerCase() ?? "";
+
+      if (type == "siren" && _isSirenActive(device)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void _syncSirenAlertPulse() {
+    final hasActiveSiren = _hasActiveSiren();
+
+    if (!hasActiveSiren) {
+      _sirenAlertPulseTimer?.cancel();
+      _sirenAlertPulseTimer = null;
+      _sirenAlertPulseDanger = false;
+      return;
+    }
+
+    if (_sirenAlertPulseTimer != null) {
+      return;
+    }
+
+    _sirenAlertPulseDanger = false;
+    _sirenAlertPulseTimer = Timer.periodic(
+      const Duration(milliseconds: 650),
+      (_) {
+        if (!mounted) {
+          return;
+        }
+
+        if (!_hasActiveSiren()) {
+          _sirenAlertPulseTimer?.cancel();
+          _sirenAlertPulseTimer = null;
+          setState(() {
+            _sirenAlertPulseDanger = false;
+          });
+          return;
+        }
+
+        setState(() {
+          _sirenAlertPulseDanger = !_sirenAlertPulseDanger;
+        });
+      },
+    );
   }
 
   void _startDeviceOrderListener() {
@@ -1185,59 +1249,87 @@ class _DeviceListState extends State<DeviceList> {
     required bool compact,
     required AppStrings strings,
   }) {
+    final label = _sirenStopButtonText(strings);
+
     return Tooltip(
-      message: strings.stopSirenLabel(),
+      message: label,
       child: Semantics(
         button: true,
-        label: strings.stopSirenLabel(),
+        label: label,
         child: Material(
           color: SafeHomeColors.danger.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(11),
+          borderRadius: BorderRadius.circular(8),
           child: InkWell(
             onTap: _mutingHomeSiren
                 ? null
                 : () => _confirmMuteHomeSiren(strings),
-            borderRadius: BorderRadius.circular(11),
+            borderRadius: BorderRadius.circular(8),
             child: SizedBox(
               width: double.infinity,
-              height: compact ? 30 : 32,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_mutingHomeSiren)
-                    SizedBox(
-                      width: compact ? 14 : 15,
-                      height: compact ? 14 : 15,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                      ),
-                    )
-                  else
-                    Icon(
-                      Icons.volume_off_rounded,
-                      size: compact ? 16 : 17,
-                      color: SafeHomeColors.danger,
-                    ),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      strings.stopSirenLabel(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: compact ? 11.2 : 11.8,
-                        height: 1,
-                        fontWeight: FontWeight.w900,
+              height: compact ? 18 : 20,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_mutingHomeSiren)
+                      SizedBox(
+                        width: compact ? 11 : 12,
+                        height: compact ? 11 : 12,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 1.7,
+                        ),
+                      )
+                    else
+                      Icon(
+                        Icons.volume_off_rounded,
+                        size: compact ? 12 : 13,
                         color: SafeHomeColors.danger,
                       ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.center,
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: compact ? 9.0 : 9.5,
+                            height: 1,
+                            fontWeight: FontWeight.w900,
+                            color: SafeHomeColors.danger,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  String _sirenStopButtonText(AppStrings strings) {
+    return strings.choose(
+      vi: "TẮT CÒI BÁO ĐỘNG",
+      en: "STOP ALARM SIREN",
+      zh: "关闭警报器",
+      ko: "경보 사이렌 끄기",
+      ja: "警報サイレン停止",
+      de: "ALARMSIRENE STOPPEN",
+      ru: "ВЫКЛЮЧИТЬ СИРЕНУ",
+      fr: "ARRÊTER LA SIRÈNE",
+      es: "DETENER LA SIRENA",
+      id: "MATIKAN SIRENE ALARM",
+      th: "ปิดไซเรนเตือนภัย",
+      ms: "HENTIKAN SIREN PENGGERA",
+      fil: "PATAYIN ANG ALARM SIREN",
+      km: "បិទស៊ីរ៉ែនរោទិ៍",
+      my: "အချက်ပေးဥဩ ပိတ်ရန်",
     );
   }
 
@@ -1248,10 +1340,7 @@ class _DeviceListState extends State<DeviceList> {
     required AppStrings strings,
   }) {
     final type = d["type"]?.toString() ?? "door";
-    final sirenIsOn =
-        type == "siren" &&
-        (isActiveDeviceSignal(d["alarm"]) ||
-            normalizeDeviceSwitchState(d) == "on");
+    final sirenIsOn = type == "siren" && _isSirenActive(d);
     final connectionStatus = getConnectionStatus(d);
     final connectionColor = getConnectionColor(connectionStatus);
     final connectionDescription = getConnectionDescription(
@@ -1395,6 +1484,592 @@ class _DeviceListState extends State<DeviceList> {
           ),
         ),
       ),
+    );
+  }
+
+  bool _infrastructureDeviceNeedsAttention(Map<String, dynamic> device) {
+    final connectionStatus = getConnectionStatus(device);
+
+    if (connectionStatus != "on") {
+      return true;
+    }
+
+    final evaluation = evaluateDeviceStatus(
+      device,
+      securityMode: securityMode,
+    );
+
+    return evaluation["level"]?.toString() == "warning" ||
+        evaluation["level"]?.toString() == "danger";
+  }
+
+  String _infrastructureStatusSummary(
+    List<MapEntry<String, dynamic>> entries,
+    AppStrings strings,
+  ) {
+    final statuses = <String>[];
+
+    for (final entry in entries) {
+      final status = getMainStatus(safeMap(entry.value), strings).trim();
+
+      if (status.isNotEmpty && !statuses.contains(status)) {
+        statuses.add(status);
+      }
+    }
+
+    final visibleStatuses = statuses.take(2).toList();
+    var summary = visibleStatuses.isEmpty
+        ? strings.t("Đang hoạt động")
+        : visibleStatuses.join(" • ");
+
+    if (statuses.length > visibleStatuses.length) {
+      summary = "$summary • …";
+    }
+
+    return "$summary (${entries.length})";
+  }
+
+  String _infrastructureTypeKey(Map<String, dynamic> device) {
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
+
+    switch (type) {
+      case "smart_plug":
+      case "power_monitor":
+      case "ups":
+      case "siren":
+      case "smart_valve":
+      case "doorbell":
+      case "keypad":
+      case "repeater":
+      case "hub":
+        return type;
+      default:
+        return "unknown";
+    }
+  }
+
+  String _infrastructureTypeTitle(String type, AppStrings strings) {
+    switch (type) {
+      case "smart_plug":
+        return strings.t("Ổ điện thông minh");
+      case "power_monitor":
+        return strings.t("Đo điện năng");
+      case "ups":
+        return strings.t("Nguồn dự phòng UPS");
+      case "siren":
+        return strings.t("Còi báo động");
+      case "smart_valve":
+        return strings.t("Van thông minh");
+      case "doorbell":
+        return strings.t("Chuông cửa");
+      case "keypad":
+        return strings.t("Bàn phím an ninh");
+      case "repeater":
+        return strings.t("Bộ mở rộng sóng");
+      case "hub":
+        return strings.t("Hub trung tâm");
+      default:
+        return strings.choose(
+          vi: "Thiết bị khác",
+          en: "Other devices",
+          zh: "其他设备",
+          ko: "기타 기기",
+          ja: "その他のデバイス",
+          de: "Andere Geräte",
+          ru: "Другие устройства",
+          fr: "Autres appareils",
+          es: "Otros dispositivos",
+          id: "Perangkat lainnya",
+          th: "อุปกรณ์อื่นๆ",
+          ms: "Peranti lain",
+          fil: "Iba pang device",
+          km: "ឧបករណ៍ផ្សេងទៀត",
+          my: "အခြားစက်များ",
+        );
+    }
+  }
+
+  List<MapEntry<String, List<MapEntry<String, dynamic>>>>
+  _groupInfrastructureEntriesByType(
+    List<MapEntry<String, dynamic>> entries,
+  ) {
+    final groups = <String, List<MapEntry<String, dynamic>>>{};
+
+    for (final entry in entries) {
+      final type = _infrastructureTypeKey(safeMap(entry.value));
+      groups.putIfAbsent(type, () => <MapEntry<String, dynamic>>[]).add(entry);
+    }
+
+    const preferredOrder = <String>[
+      "repeater",
+      "siren",
+      "hub",
+      "ups",
+      "smart_plug",
+      "power_monitor",
+      "smart_valve",
+      "doorbell",
+      "keypad",
+      "unknown",
+    ];
+
+    final result = <MapEntry<String, List<MapEntry<String, dynamic>>>>[];
+
+    for (final type in preferredOrder) {
+      final typeEntries = groups.remove(type);
+
+      if (typeEntries != null && typeEntries.isNotEmpty) {
+        result.add(MapEntry(type, typeEntries));
+      }
+    }
+
+    for (final entry in groups.entries) {
+      if (entry.value.isNotEmpty) {
+        result.add(entry);
+      }
+    }
+
+    return result;
+  }
+
+  String _infrastructureSignalGrade(
+    List<MapEntry<String, dynamic>> entries,
+  ) {
+    int? weakest;
+
+    for (final entry in entries) {
+      final device = safeMap(entry.value);
+      final value = int.tryParse(device["linkquality"]?.toString() ?? "");
+
+      if (value == null || value <= 0) {
+        continue;
+      }
+
+      weakest = weakest == null || value < weakest ? value : weakest;
+    }
+
+    if (weakest != null && weakest < 40) {
+      return "weak";
+    }
+
+    if (weakest != null && weakest >= 100) {
+      return "good";
+    }
+
+    return "normal";
+  }
+
+  String _infrastructureSignalText(
+    List<MapEntry<String, dynamic>> entries,
+    AppStrings strings,
+  ) {
+    final grade = _infrastructureSignalGrade(entries);
+    final count = entries.length;
+
+    final text = switch (grade) {
+      "good" => strings.choose(
+          vi: "Tín hiệu tốt",
+          en: "Good signal",
+          zh: "信号良好",
+          ko: "신호 좋음",
+          ja: "信号良好",
+          de: "Gutes Signal",
+          ru: "Хороший сигнал",
+          fr: "Bon signal",
+          es: "Señal buena",
+          id: "Sinyal baik",
+          th: "สัญญาณดี",
+          ms: "Isyarat baik",
+          fil: "Magandang signal",
+          km: "សញ្ញាល្អ",
+          my: "အချက်ပြကောင်း",
+        ),
+      "weak" => strings.choose(
+          vi: "Tín hiệu yếu",
+          en: "Weak signal",
+          zh: "信号较弱",
+          ko: "신호 약함",
+          ja: "信号が弱い",
+          de: "Schwaches Signal",
+          ru: "Слабый сигнал",
+          fr: "Signal faible",
+          es: "Señal débil",
+          id: "Sinyal lemah",
+          th: "สัญญาณอ่อน",
+          ms: "Isyarat lemah",
+          fil: "Mahinang signal",
+          km: "សញ្ញាខ្សោយ",
+          my: "အချက်ပြအားနည်း",
+        ),
+      _ => strings.choose(
+          vi: "Tín hiệu trung bình",
+          en: "Average signal",
+          zh: "信号一般",
+          ko: "신호 보통",
+          ja: "信号は普通",
+          de: "Mittleres Signal",
+          ru: "Средний сигнал",
+          fr: "Signal moyen",
+          es: "Señal media",
+          id: "Sinyal sedang",
+          th: "สัญญาณปานกลาง",
+          ms: "Isyarat sederhana",
+          fil: "Katamtamang signal",
+          km: "សញ្ញាមធ្យម",
+          my: "အချက်ပြအသင့်အတင့်",
+        ),
+    };
+
+    return "$text ($count)";
+  }
+
+  Color _infrastructureSignalColor(
+    List<MapEntry<String, dynamic>> entries,
+  ) {
+    switch (_infrastructureSignalGrade(entries)) {
+      case "good":
+        return SafeHomeColors.safe;
+      case "weak":
+        return SafeHomeColors.warning;
+      default:
+        return SafeHomeColors.textSecondary;
+    }
+  }
+
+  String _sirenReadinessText({
+    required bool hasAttention,
+    required int count,
+    required AppStrings strings,
+  }) {
+    final text = hasAttention
+        ? strings.choose(
+            vi: "Còi cần kiểm tra",
+            en: "Siren needs attention",
+            zh: "警报器需要检查",
+            ko: "사이렌 점검 필요",
+            ja: "サイレンの確認が必要",
+            de: "Sirene prüfen",
+            ru: "Сирена требует проверки",
+            fr: "Sirène à vérifier",
+            es: "Sirena por revisar",
+            id: "Sirene perlu diperiksa",
+            th: "ควรตรวจสอบไซเรน",
+            ms: "Siren perlu diperiksa",
+            fil: "Kailangang suriin ang sirena",
+            km: "ត្រូវពិនិត្យស៊ីរ៉ែន",
+            my: "ဆိုင်ရင်ကို စစ်ဆေးရန်လိုသည်",
+          )
+        : strings.choose(
+            vi: "Còi đang sẵn sàng",
+            en: "Siren ready",
+            zh: "警报器已就绪",
+            ko: "사이렌 준비됨",
+            ja: "サイレン準備完了",
+            de: "Sirene bereit",
+            ru: "Сирена готова",
+            fr: "Sirène prête",
+            es: "Sirena lista",
+            id: "Sirene siap",
+            th: "ไซเรนพร้อมใช้งาน",
+            ms: "Siren sedia",
+            fil: "Handa ang sirena",
+            km: "ស៊ីរ៉ែនរួចរាល់",
+            my: "ဆိုင်ရင် အသင့်ဖြစ်နေသည်",
+          );
+
+    return "$text ($count)";
+  }
+
+  String _sirenOperatingStatusText(
+    bool sirenIsOn,
+    AppStrings strings,
+  ) {
+    if (sirenIsOn) {
+      return _sirenAlertStatusText(strings);
+    }
+
+    return strings.choose(
+      vi: "Còi đang tắt",
+      en: "Siren off",
+      zh: "警报器已关闭",
+      ko: "사이렌 꺼짐",
+      ja: "サイレン停止中",
+      de: "Sirene aus",
+      ru: "Сирена выключена",
+      fr: "Sirène arrêtée",
+      es: "Sirena apagada",
+      id: "Sirene mati",
+      th: "ไซเรนปิดอยู่",
+      ms: "Siren dimatikan",
+      fil: "Naka-off ang sirena",
+      km: "ស៊ីរ៉ែនបានបិទ",
+      my: "ဆိုင်ရင် ပိတ်ထားသည်",
+    );
+  }
+
+  Widget _infrastructureTypeGroupCard({
+    required String type,
+    required List<MapEntry<String, dynamic>> entries,
+    required double itemWidth,
+    required bool compact,
+    required AppStrings strings,
+  }) {
+    final isSirenGroup = type == "siren";
+    final sirenIsOn = isSirenGroup && entries.any(
+      (entry) => _isSirenActive(safeMap(entry.value)),
+    );
+    final hasAttention = entries.any(
+      (entry) => _infrastructureDeviceNeedsAttention(safeMap(entry.value)),
+    );
+    final sirenHasReadinessIssue = isSirenGroup && entries.any(
+      (entry) => getConnectionStatus(safeMap(entry.value)) != "on",
+    );
+    final pulseColor = _sirenAlertPulseDanger
+        ? SafeHomeColors.danger
+        : SafeHomeColors.warning;
+    final accentColor = sirenIsOn
+        ? pulseColor
+        : hasAttention
+            ? SafeHomeColors.warning
+            : SafeHomeColors.safe;
+    final cardColor = sirenIsOn
+        ? pulseColor.withValues(
+            alpha: _sirenAlertPulseDanger ? 0.20 : 0.15,
+          )
+        : SafeHomeColors.surface;
+    final firstDevice = safeMap(entries.first.value);
+    final primaryStatusText = isSirenGroup
+        ? _sirenReadinessText(
+            hasAttention: sirenHasReadinessIssue,
+            count: entries.length,
+            strings: strings,
+          )
+        : _infrastructureStatusSummary(entries, strings);
+    final secondaryStatusText = isSirenGroup
+        ? _sirenOperatingStatusText(sirenIsOn, strings)
+        : _infrastructureSignalText(entries, strings);
+    final secondaryStatusColor = isSirenGroup
+        ? sirenIsOn
+            ? accentColor
+            : SafeHomeColors.textSecondary
+        : _infrastructureSignalColor(entries);
+
+    void openGroup() {
+      final groupDevices = <String, dynamic>{
+        for (final entry in entries) entry.key: entry.value,
+      };
+
+      if (widget.onTapInfrastructureGroup != null) {
+        widget.onTapInfrastructureGroup!(groupDevices);
+        return;
+      }
+
+      onTapDevice(entries.first.key);
+    }
+
+    return SizedBox(
+      width: itemWidth,
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(17),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 420),
+          curve: Curves.easeInOut,
+          height: compact ? 76 : 81,
+          padding: EdgeInsets.fromLTRB(
+            compact ? 9 : 10,
+            compact ? 8 : 9,
+            compact ? 9 : 10,
+            compact ? 8 : 9,
+          ),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(
+              color: accentColor.withValues(
+                alpha: sirenIsOn ? 0.95 : 0.62,
+              ),
+              width: sirenIsOn ? 1.5 : 1.15,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: accentColor.withValues(
+                  alpha: sirenIsOn ? 0.20 : 0.055,
+                ),
+                blurRadius: sirenIsOn ? 16 : 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: openGroup,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 420),
+                        curve: Curves.easeInOut,
+                        width: compact ? 34 : 36,
+                        height: compact ? 34 : 36,
+                        decoration: BoxDecoration(
+                          color: accentColor.withValues(
+                            alpha: sirenIsOn ? 0.20 : 0.11,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          getDeviceIcon(
+                            type == "unknown"
+                                ? _infrastructureTypeKey(firstDevice)
+                                : type,
+                          ),
+                          size: compact ? 18 : 19,
+                          color: accentColor,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _infrastructureTypeTitle(type, strings),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: compact ? 13.8 : 14.5,
+                                height: 1.05,
+                                fontWeight: FontWeight.w900,
+                                color: sirenIsOn
+                                    ? accentColor
+                                    : SafeHomeColors.textPrimary,
+                                letterSpacing: -0.1,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              primaryStatusText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: compact ? 11.2 : 11.8,
+                                height: 1.05,
+                                fontWeight: FontWeight.w900,
+                                color: accentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 7),
+              SizedBox(
+                height: compact ? 18 : 20,
+                child: sirenIsOn
+                    ? _sirenStopAction(
+                        compact: compact,
+                        strings: strings,
+                      )
+                    : Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          secondaryStatusText,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: compact ? 9.8 : 10.4,
+                            height: 1,
+                            fontWeight: FontWeight.w600,
+                            color: secondaryStatusColor,
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _infrastructureTypeGrid({
+    required List<MapEntry<String, List<MapEntry<String, dynamic>>>> groups,
+    required double spacing,
+    required double itemWidth,
+    required bool compact,
+    required AppStrings strings,
+  }) {
+    final rows = <Widget>[];
+
+    for (var index = 0; index < groups.length; index += 2) {
+      final firstGroup = groups[index];
+      final hasSecondGroup = index + 1 < groups.length;
+      final secondGroup = hasSecondGroup ? groups[index + 1] : null;
+
+      rows.add(
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _infrastructureTypeGroupCard(
+                type: firstGroup.key,
+                entries: firstGroup.value,
+                itemWidth: itemWidth,
+                compact: compact,
+                strings: strings,
+              ),
+              if (hasSecondGroup) ...[
+                SizedBox(width: spacing),
+                _infrastructureTypeGroupCard(
+                  type: secondGroup!.key,
+                  entries: secondGroup.value,
+                  itemWidth: itemWidth,
+                  compact: compact,
+                  strings: strings,
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
+
+      if (index + 2 < groups.length) {
+        rows.add(SizedBox(height: spacing));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: rows,
+    );
+  }
+
+  String _sirenAlertStatusText(AppStrings strings) {
+    return strings.choose(
+      vi: "Đang báo động",
+      en: "Alarm active",
+      zh: "警报正在响起",
+      ko: "경보 작동 중",
+      ja: "警報作動中",
+      de: "Alarm aktiv",
+      ru: "Тревога активна",
+      fr: "Alarme active",
+      es: "Alarma activa",
+      id: "Alarm aktif",
+      th: "สัญญาณเตือนทำงาน",
+      ms: "Penggera aktif",
+      fil: "Aktibo ang alarma",
+      km: "សំឡេងរោទិ៍កំពុងដំណើរការ",
+      my: "အချက်ပေးသံ လုပ်ဆောင်နေသည်",
     );
   }
 
@@ -1712,6 +2387,8 @@ class _DeviceListState extends State<DeviceList> {
     final securityEntries = _groupEntries("An ninh ra/vào");
     final emergencyEntries = _groupEntries("Nguy hiểm khẩn cấp");
     final infrastructureEntries = _groupEntries("Điều khiển & hạ tầng");
+    final infrastructureTypeGroups =
+        _groupInfrastructureEntriesByType(infrastructureEntries);
 
     return Column(
       children: [
@@ -1777,9 +2454,8 @@ class _DeviceListState extends State<DeviceList> {
                         count: infrastructureEntries.length,
                         showAddButton: false,
                       ),
-                      _reorderableDeviceSection(
-                        groupName: "Điều khiển & hạ tầng",
-                        entries: infrastructureEntries,
+                      _infrastructureTypeGrid(
+                        groups: infrastructureTypeGroups,
                         spacing: spacing,
                         itemWidth: itemWidth,
                         compact: compact,

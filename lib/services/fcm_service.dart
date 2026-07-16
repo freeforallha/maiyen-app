@@ -190,6 +190,13 @@ class FCMService {
         return;
       }
 
+      if (type == 'sensor_notification') {
+        await NotificationService.showSensorNotification(
+          data: message.data,
+        );
+        return;
+      }
+
       if (type == 'alarm_resolved') {
         await NotificationService.handleAlarmResolved(
           message.data,

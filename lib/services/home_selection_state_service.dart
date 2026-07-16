@@ -123,9 +123,7 @@ class HomeSelectionStateService {
       homeOrder: homeOrder,
       selectedHome: nextSelectedHome,
       selectedRoomId: nextSelectedRoomId,
-      securityMode: currentHome['securityMode']?.toString() == 'armed'
-          ? 'armed'
-          : 'normal',
+      securityMode: normalizeSecurityMode(currentHome['securityMode']),
       alarmPauseToday: safeMap(currentHome['alarmPauseToday']),
       alarmEnabled:
           safeMap(alarmSettings[nextSelectedHome])['enabled'] != false,

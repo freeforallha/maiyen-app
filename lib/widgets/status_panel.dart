@@ -25,8 +25,6 @@ class StatusPanel extends StatefulWidget {
   final String securityModeSource;
   final int securityModeRepeatMinutes;
   final Future<bool> Function(int minutes)? onSecurityModeRepeatChanged;
-  final bool alarmEnabled;
-  final ValueChanged<bool>? onAlarmEnabledChanged;
 
   final VoidCallback? onAlarmPauseToday;
 
@@ -51,8 +49,6 @@ class StatusPanel extends StatefulWidget {
     this.securityModeRepeatMinutes = 0,
     this.onSecurityModeChanged,
     this.onSecurityModeRepeatChanged,
-    this.alarmEnabled = true,
-    this.onAlarmEnabledChanged,
     this.onAlarmPauseToday,
     this.onScheduleNotification,
     this.onScheduleAlarm,
@@ -350,17 +346,13 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   void _showSecurityModeOptions(BuildContext context) {
-    final isArmed = widget.securityMode == "armed";
+    final currentMode = normalizeSecurityMode(widget.securityMode);
     final allowedRepeatMinutes = <int>[0, 15, 30, 60];
     var localRepeatMinutes =
-    allowedRepeatMinutes.contains(widget.securityModeRepeatMinutes)
+        allowedRepeatMinutes.contains(widget.securityModeRepeatMinutes)
         ? widget.securityModeRepeatMinutes
         : 0;
     var repeatSaving = false;
-
-    String repeatText(int minutes) {
-      return _strings.alarmRepeatAfterText(minutes);
-    }
 
     showModalBottomSheet<void>(
       context: context,
@@ -388,7 +380,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       ),
                     ),
                     Text(
-                      _strings.t("Chế độ nhà"),
+                      _strings.t('Chế độ nhà'),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -398,181 +390,137 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 14),
                     _actionTile(
                       icon: Icons.shield_rounded,
-                      title: _strings.t("Bình thường"),
-                      subtitle: isArmed
-                          ? _strings.t("Chuyển về sử dụng thông thường")
-                          : _strings.t("Đang được sử dụng"),
-                      color: SafeHomeColors.safe,
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        widget.onSecurityModeChanged?.call("normal");
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    _actionTile(
-                      icon: Icons.shield_rounded,
-                      title: _strings.t("Bảo vệ"),
-                      subtitle: isArmed
-                          ? _strings.securityModeActiveText(
-                        repeatText(localRepeatMinutes),
-                      )
-                          : _strings.securityModeMonitoringText(
-                        repeatText(localRepeatMinutes),
-                      ),
+                      title: _strings.t('Bảo vệ'),
+                      subtitle: _strings.t('Giám sát toàn diện'),
                       color: SafeHomeColors.danger,
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        widget.onSecurityModeChanged?.call("armed");
-                      },
-                    ),
-                    const SizedBox(height: 14),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.surfaceSoft,
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(color: SafeHomeColors.border),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.repeat_rounded,
-                                size: 19,
-                                color: SafeHomeColors.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  _strings.t("Lặp báo động khi sự cố vẫn còn"),
-                                  style: const TextStyle(
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.w900,
-                                    color: SafeHomeColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            _strings.t(
-                              "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
-                            ),
-                            style: const TextStyle(
-                              fontSize: 11.5,
-                              height: 1.35,
-                              color: SafeHomeColors.textSecondary,
+                      selected: currentMode == 'armed',
+                      trailing: Container(
+                        width: 124,
+                        height: 40,
+                        padding: const EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          color: SafeHomeColors.surface,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: SafeHomeColors.primary.withValues(
+                              alpha: 0.28,
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          DropdownButtonFormField<int>(
-                            key: ValueKey<int>(localRepeatMinutes),
-                            initialValue: localRepeatMinutes,
-                            isExpanded: true,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: SafeHomeColors.primary,
-                            ),
-                            decoration: InputDecoration(
-                              labelText: _strings.t("Thời gian lặp"),
-                              labelStyle: const TextStyle(
-                                color: SafeHomeColors.textSecondary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                              prefixIcon: const Icon(
-                                Icons.schedule_rounded,
-                                color: SafeHomeColors.primary,
-                              ),
-                              suffixIcon: repeatSaving
-                                  ? const Padding(
-                                padding: EdgeInsets.all(14),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (repeatSaving)
+                              const Padding(
+                                padding: EdgeInsets.only(right: 6),
                                 child: SizedBox.square(
-                                  dimension: 18,
+                                  dimension: 14,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
                                   ),
                                 ),
-                              )
-                                  : null,
-                              filled: true,
-                              fillColor: SafeHomeColors.surface,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 14,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(14),
-                                borderSide: const BorderSide(
-                                  color: SafeHomeColors.border,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(14),
-                                borderSide: const BorderSide(
-                                  color: SafeHomeColors.primary,
-                                  width: 1.5,
-                                ),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(14),
-                                borderSide: const BorderSide(
-                                  color: SafeHomeColors.border,
+                            Expanded(
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<int>(
+                                  value: localRepeatMinutes,
+                                  isExpanded: true,
+                                  isDense: true,
+                                  borderRadius: BorderRadius.circular(14),
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: SafeHomeColors.primary,
+                                  ),
+                                  items: allowedRepeatMinutes
+                                      .map(
+                                        (minutes) => DropdownMenuItem<int>(
+                                          value: minutes,
+                                          child: Text(
+                                            minutes == 0
+                                                ? _strings.t('Không lặp lại')
+                                                : _strings.minuteText(minutes),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700,
+                                              color: SafeHomeColors.textPrimary,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged:
+                                      widget.onSecurityModeRepeatChanged ==
+                                                  null ||
+                                              repeatSaving
+                                          ? null
+                                          : (minutes) async {
+                                              if (minutes == null ||
+                                                  minutes ==
+                                                      localRepeatMinutes) {
+                                                return;
+                                              }
+
+                                              setSheetState(() {
+                                                repeatSaving = true;
+                                              });
+
+                                              final saved = await widget
+                                                  .onSecurityModeRepeatChanged!(
+                                                    minutes,
+                                                  );
+
+                                              if (!stateContext.mounted) {
+                                                return;
+                                              }
+
+                                              setSheetState(() {
+                                                if (saved) {
+                                                  localRepeatMinutes = minutes;
+                                                }
+
+                                                repeatSaving = false;
+                                              });
+                                            },
                                 ),
                               ),
                             ),
-                            items: allowedRepeatMinutes
-                                .map(
-                                  (minutes) => DropdownMenuItem<int>(
-                                value: minutes,
-                                child: Text(
-                                  minutes == 0
-                                      ? _strings.t("Không lặp lại")
-                                      : _strings.minuteText(minutes),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: SafeHomeColors.textPrimary,
-                                  ),
-                                ),
-                              ),
-                            )
-                                .toList(),
-                            onChanged:
-                            widget.onSecurityModeRepeatChanged == null ||
-                                repeatSaving
-                                ? null
-                                : (minutes) async {
-                              if (minutes == null ||
-                                  minutes == localRepeatMinutes) {
-                                return;
-                              }
-
-                              setSheetState(() {
-                                repeatSaving = true;
-                              });
-
-                              final saved = await widget
-                                  .onSecurityModeRepeatChanged!(minutes);
-
-                              if (!stateContext.mounted) {
-                                return;
-                              }
-
-                              setSheetState(() {
-                                if (saved) {
-                                  localRepeatMinutes = minutes;
-                                }
-
-                                repeatSaving = false;
-                              });
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onSecurityModeChanged?.call('armed');
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _actionTile(
+                      icon: Icons.home_rounded,
+                      title: _strings.t('Bình thường'),
+                      subtitle: currentMode == 'normal'
+                          ? _strings.t('Đang được sử dụng')
+                          : _strings.t('Sử dụng Alarm theo lịch đã thiết lập'),
+                      color: SafeHomeColors.safe,
+                      selected: currentMode == 'normal',
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onSecurityModeChanged?.call('normal');
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _actionTile(
+                      icon: Icons.shield_outlined,
+                      title: _strings.t('Không bảo vệ'),
+                      subtitle: _strings.t(
+                        'Chỉ gửi notification, không kích hoạt Alarm',
+                      ),
+                      color: SafeHomeColors.textSecondary,
+                      selected: currentMode == 'unprotected',
+                      onTap: () {
+                        Navigator.pop(sheetContext);
+                        widget.onSecurityModeChanged?.call('unprotected');
+                      },
                     ),
                   ],
                 ),
@@ -589,10 +537,14 @@ class _StatusPanelState extends State<StatusPanel> {
     required String title,
     required String subtitle,
     required Color color,
+    required bool selected,
     required VoidCallback onTap,
+    Widget? trailing,
   }) {
     return Material(
-      color: SafeHomeColors.surface,
+      color: selected
+          ? SafeHomeColors.primary.withValues(alpha: 0.08)
+          : SafeHomeColors.surface,
       borderRadius: BorderRadius.circular(18),
       child: InkWell(
         onTap: onTap,
@@ -601,7 +553,12 @@ class _StatusPanelState extends State<StatusPanel> {
           padding: const EdgeInsets.all(13),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: SafeHomeColors.border),
+            border: Border.all(
+              color: selected
+                  ? SafeHomeColors.primary.withValues(alpha: 0.42)
+                  : SafeHomeColors.border,
+              width: selected ? 1.2 : 1,
+            ),
           ),
           child: Row(
             children: [
@@ -609,18 +566,27 @@ class _StatusPanelState extends State<StatusPanel> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.11),
+                  color: selected
+                      ? SafeHomeColors.primary.withValues(alpha: 0.14)
+                      : color.withValues(alpha: 0.11),
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: Icon(icon, color: color, size: 21),
+                child: Icon(
+                  icon,
+                  color: selected ? SafeHomeColors.primary : color,
+                  size: 21,
+                ),
               ),
               const SizedBox(width: 11),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
@@ -640,10 +606,10 @@ class _StatusPanelState extends State<StatusPanel> {
                   ],
                 ),
               ),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: SafeHomeColors.textSecondary,
-              ),
+              if (trailing != null) ...[
+                const SizedBox(width: 10),
+                trailing,
+              ],
             ],
           ),
         ),
@@ -883,9 +849,13 @@ class _StatusPanelState extends State<StatusPanel> {
       rawSafeSummary: rawSafeSummary,
     );
 
-    final liveSecurityMode =
-    normalizeSecurityMode(liveHome["securityMode"]) == "armed"
+    final normalizedLiveSecurityMode = normalizeSecurityMode(
+      liveHome["securityMode"],
+    );
+    final liveSecurityMode = normalizedLiveSecurityMode == "armed"
         ? strings.t("Bảo vệ")
+        : normalizedLiveSecurityMode == "unprotected"
+        ? strings.t("Không bảo vệ")
         : strings.t("Bình thường");
 
     final devices = safeMap(liveHome["devices"]);
@@ -1060,11 +1030,17 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final allLines = issues.isNotEmpty ? issues : safeSummary;
 
+    final normalizedSecurityMode = normalizeSecurityMode(widget.securityMode);
     final manualSecurityMode =
-        widget.securityMode == "armed" && widget.securityModeSource == "manual";
+        normalizedSecurityMode == "armed" &&
+        widget.securityModeSource == "manual";
+    final unprotectedMode = normalizedSecurityMode == "unprotected";
 
     final manualSecurityModeText = _strings.t(
       "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
+    );
+    final unprotectedModeText = _strings.t(
+      "Không bảo vệ đang bật - hệ thống chỉ gửi notification",
     );
 
     final normalFirstLine = allLines.isNotEmpty
@@ -1073,13 +1049,15 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final firstLine = noData
         ? _strings.t("Chưa đủ dữ liệu để đánh giá")
+        : unprotectedMode
+        ? unprotectedModeText
         : manualSecurityMode
         ? manualSecurityModeText
         : normalFirstLine;
 
     final rotatingLines = noData
         ? <String>[]
-        : manualSecurityMode
+        : unprotectedMode || manualSecurityMode
         ? allLines
         : allLines.length > 1
         ? allLines.skip(1).toList()
@@ -1100,9 +1078,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final statusText = _statusText(level);
 
     final rawAlarmScheduleText =
-    widget.alarmEnabled &&
-        widget.alarmStart.trim().isNotEmpty &&
-        widget.alarmStart != "Tắt"
+        widget.alarmStart.trim().isNotEmpty && widget.alarmStart != "Tắt"
         ? widget.alarmStart.trim()
         : "";
 
@@ -1295,12 +1271,18 @@ class _StatusPanelState extends State<StatusPanel> {
                   children: [
                     Expanded(
                       child: _alarmStatusItem(
-                        icon: Icons.shield_rounded,
-                        value: widget.securityMode == "armed"
+                        icon: normalizedSecurityMode == "unprotected"
+                            ? Icons.shield_outlined
+                            : Icons.shield_rounded,
+                        value: normalizedSecurityMode == "armed"
                             ? _strings.t("Bảo vệ")
+                            : normalizedSecurityMode == "unprotected"
+                            ? _strings.t("Không bảo vệ")
                             : _strings.t("Bình thường"),
-                        active: widget.securityMode == "armed",
-                        activeColor: SafeHomeColors.danger,
+                        active: normalizedSecurityMode != "normal",
+                        activeColor: normalizedSecurityMode == "unprotected"
+                            ? SafeHomeColors.warning
+                            : SafeHomeColors.danger,
                         onTap: () => _showSecurityModeOptions(context),
                       ),
                     ),

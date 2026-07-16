@@ -1085,4 +1085,5 @@ const Map<String, String> enStrings = {
   "Đã lưu cấu hình báo động": "Alarm settings saved",
   "Không thể lưu cấu hình báo động": "Could not save alarm settings",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Only the home owner and administrators can change this setting.",
+  "Thông tin chi tiết": "Device details",
 };

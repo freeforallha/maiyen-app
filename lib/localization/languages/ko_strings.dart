@@ -1021,4 +1021,5 @@ const Map<String, String> koStrings = {
   "Đã lưu cấu hình báo động": "알람 설정을 저장했습니다",
   "Không thể lưu cấu hình báo động": "알람 설정을 저장할 수 없습니다",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "집 소유자와 관리자만 이 설정을 변경할 수 있습니다.",
+  "Thông tin chi tiết": "기기 상세 정보",
 };

@@ -8,7 +8,6 @@ class HomeBottomBar extends StatelessWidget {
     required this.addHomeTooltip,
     required this.unreadChatCount,
     required this.inviteCount,
-    required this.alarmEnabled,
     required this.onAddHome,
     required this.onOpenChat,
     required this.onOpenAlarm,
@@ -18,7 +17,6 @@ class HomeBottomBar extends StatelessWidget {
   final String addHomeTooltip;
   final int unreadChatCount;
   final int inviteCount;
-  final bool alarmEnabled;
   final VoidCallback onAddHome;
   final VoidCallback onOpenChat;
   final VoidCallback onOpenAlarm;
@@ -106,11 +104,9 @@ class HomeBottomBar extends StatelessWidget {
                 ],
               ),
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.crisis_alert_rounded,
-                  color: alarmEnabled
-                      ? SafeHomeColors.danger
-                      : SafeHomeColors.textSecondary,
+                  color: SafeHomeColors.danger,
                 ),
                 onPressed: onOpenAlarm,
               ),

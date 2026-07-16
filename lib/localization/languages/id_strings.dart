@@ -1111,4 +1111,5 @@ const Map<String, String> idStrings = {
   "Đã lưu cấu hình báo động": "Pengaturan alarm disimpan",
   "Không thể lưu cấu hình báo động": "Tidak dapat menyimpan pengaturan alarm",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Hanya pemilik rumah dan administrator yang dapat mengubah pengaturan ini.",
+  "Thông tin chi tiết": "Detail perangkat",
 };

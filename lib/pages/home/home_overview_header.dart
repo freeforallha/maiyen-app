@@ -20,8 +20,6 @@ class HomeOverviewHeader extends StatelessWidget {
     required this.securityModeRepeatMinutes,
     required this.onSecurityModeRepeatChanged,
     required this.onSecurityModeChanged,
-    required this.alarmEnabled,
-    required this.onAlarmEnabledChanged,
     required this.onScheduleNotification,
     required this.onScheduleAlarm,
     required this.alarmStart,
@@ -49,8 +47,6 @@ class HomeOverviewHeader extends StatelessWidget {
   final int securityModeRepeatMinutes;
   final Future<bool> Function(int minutes)? onSecurityModeRepeatChanged;
   final ValueChanged<String> onSecurityModeChanged;
-  final bool alarmEnabled;
-  final ValueChanged<bool>? onAlarmEnabledChanged;
   final VoidCallback onScheduleNotification;
   final VoidCallback onScheduleAlarm;
   final String alarmStart;
@@ -105,8 +101,6 @@ class HomeOverviewHeader extends StatelessWidget {
           // setSecurityMode sẽ tự kiểm tra quyền
           // và báo rõ cho member.
           onSecurityModeChanged: onSecurityModeChanged,
-          alarmEnabled: alarmEnabled,
-          onAlarmEnabledChanged: onAlarmEnabledChanged,
           onPair: null,
           onQR: null,
           onScheduleNotification: onScheduleNotification,

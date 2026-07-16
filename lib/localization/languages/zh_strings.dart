@@ -999,4 +999,5 @@ const Map<String, String> zhStrings = {
   "Đã lưu cấu hình báo động": "报警设置已保存",
   "Không thể lưu cấu hình báo động": "无法保存报警设置",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "只有屋主和管理员可以更改此设置。",
+  "Thông tin chi tiết": "设备详情",
 };

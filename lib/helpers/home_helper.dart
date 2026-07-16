@@ -282,7 +282,13 @@ String normalizeAvailability(dynamic value) {
 }
 
 String normalizeSecurityMode(dynamic value) {
-  return value?.toString().trim().toLowerCase() == "armed" ? "armed" : "normal";
+  final mode = value?.toString().trim().toLowerCase() ?? "";
+
+  if (mode == "armed" || mode == "unprotected") {
+    return mode;
+  }
+
+  return "normal";
 }
 
 bool isSosActive(Map<String, dynamic> d) {

@@ -14,6 +14,8 @@ class AndroidNotificationConfig {
       'safehome_schedule_fullscreen_channel_v2';
   static const reminderPriorityChannelId = 'safehome_reminder_priority_v3';
   static const chatChannelId = 'safehome_chat_channel_v2';
+  static const sensorNotificationChannelId =
+      'safehome_sensor_notification_v1';
 
   static const initializationSettings = AndroidInitializationSettings(
     'ic_stat_safehome',
@@ -104,12 +106,24 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    final sensorNotificationChannel = AndroidNotificationChannel(
+      sensorNotificationChannelId,
+      strings.t('Thông báo cảm biến'),
+      description: strings.t(
+        'Thông báo thông thường khi cảm biến phát hiện sự kiện.',
+      ),
+      importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
     await androidPlugin?.createNotificationChannel(legacyAlarmChannel);
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
+    await androidPlugin?.createNotificationChannel(sensorNotificationChannel);
   }
 
   static Future<void> createBackgroundChannels(
@@ -157,10 +171,22 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    final sensorNotificationChannel = AndroidNotificationChannel(
+      sensorNotificationChannelId,
+      strings.t('Thông báo cảm biến'),
+      description: strings.t(
+        'Thông báo thông thường khi cảm biến phát hiện sự kiện.',
+      ),
+      importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
     await androidPlugin?.createNotificationChannel(reminderPriorityChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
+    await androidPlugin?.createNotificationChannel(sensorNotificationChannel);
   }
 
   static AndroidNotificationDetails priorityAlarmDetails({
@@ -230,6 +256,29 @@ class AndroidNotificationConfig {
       category: AndroidNotificationCategory.message,
       playSound: true,
       enableVibration: true,
+      tag: tag,
+      styleInformation: BigTextStyleInformation(body, contentTitle: title),
+    );
+  }
+
+  static AndroidNotificationDetails sensorNotificationDetails({
+    required String title,
+    required String body,
+    required AppStrings strings,
+    String? tag,
+  }) {
+    return AndroidNotificationDetails(
+      sensorNotificationChannelId,
+      strings.t('Thông báo cảm biến'),
+      channelDescription: strings.t(
+        'Thông báo thông thường khi cảm biến phát hiện sự kiện.',
+      ),
+      importance: Importance.high,
+      priority: Priority.high,
+      category: AndroidNotificationCategory.status,
+      playSound: true,
+      enableVibration: true,
+      autoCancel: true,
       tag: tag,
       styleInformation: BigTextStyleInformation(body, contentTitle: title),
     );

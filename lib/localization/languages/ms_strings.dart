@@ -1115,4 +1115,5 @@ const Map<String, String> msStrings = {
   "Đã lưu cấu hình báo động": "Tetapan penggera telah disimpan",
   "Không thể lưu cấu hình báo động": "Tidak dapat menyimpan tetapan penggera",
   "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Hanya pemilik rumah dan pentadbir boleh mengubah tetapan ini.",
+  "Thông tin chi tiết": "Butiran peranti",
 };
