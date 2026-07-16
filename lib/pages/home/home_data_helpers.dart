@@ -104,6 +104,10 @@ class HomeDataHelpers {
     final level = overall["level"]?.toString() ?? "safe";
     final selected = homeId == selectedHome;
 
+    if (level == "emergency") {
+      return SafeHomeColors.emergency;
+    }
+
     if (level == "danger") {
       return SafeHomeColors.danger;
     }

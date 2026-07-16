@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
 import '../pages/home/home_data_helpers.dart';
+import '../helpers/emergency_pulse_ticker.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
@@ -61,6 +62,7 @@ class StatusPanel extends StatefulWidget {
 
 class _StatusPanelState extends State<StatusPanel> {
   Timer? _timer;
+  bool _emergencyPulseDanger = false;
   AppStrings get _strings => AppStrings.of(context);
   int _broadcastIndex = 0;
 
@@ -75,10 +77,46 @@ class _StatusPanelState extends State<StatusPanel> {
         _broadcastIndex++;
       });
     });
+
+    EmergencyPulseTicker.ensureStarted();
+    _emergencyPulseDanger = EmergencyPulseTicker.phase.value;
+    EmergencyPulseTicker.phase.addListener(_handleSharedEmergencyPulse);
+    _syncEmergencyPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant StatusPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncEmergencyPulse();
+  }
+
+  bool get _hasEmergencyStatus =>
+      widget.overall["level"]?.toString() == "emergency";
+
+  void _handleSharedEmergencyPulse() {
+    if (!mounted || !_hasEmergencyStatus) {
+      return;
+    }
+
+    final next = EmergencyPulseTicker.phase.value;
+    if (_emergencyPulseDanger == next) {
+      return;
+    }
+
+    setState(() {
+      _emergencyPulseDanger = next;
+    });
+  }
+
+  void _syncEmergencyPulse() {
+    _emergencyPulseDanger = _hasEmergencyStatus
+        ? EmergencyPulseTicker.phase.value
+        : false;
   }
 
   @override
   void dispose() {
+    EmergencyPulseTicker.phase.removeListener(_handleSharedEmergencyPulse);
     _timer?.cancel();
     super.dispose();
   }
@@ -86,6 +124,10 @@ class _StatusPanelState extends State<StatusPanel> {
   Color _statusColor(String level) {
     if (level == "no_data") {
       return SafeHomeColors.textSecondary;
+    }
+
+    if (level == "emergency") {
+      return SafeHomeColors.emergency;
     }
 
     if (level == "danger") {
@@ -104,6 +146,10 @@ class _StatusPanelState extends State<StatusPanel> {
       return Icons.remove_circle_outline_rounded;
     }
 
+    if (level == "emergency") {
+      return Icons.crisis_alert_rounded;
+    }
+
     if (level == "danger") {
       return Icons.warning_amber_rounded;
     }
@@ -118,6 +164,10 @@ class _StatusPanelState extends State<StatusPanel> {
   String _statusText(String level) {
     if (level == "no_data") {
       return "-------";
+    }
+
+    if (level == "emergency") {
+      return _strings.emergencyStatusTitle();
     }
 
     if (level == "danger") {
@@ -176,6 +226,7 @@ class _StatusPanelState extends State<StatusPanel> {
     required AppStrings strings,
     required Map<String, dynamic> liveHome,
     required Map<String, dynamic> overall,
+    required List<String> rawEmergencyIssues,
     required List<String> rawDangerIssues,
     required List<String> rawWarningIssues,
     required List<String> rawSafeSummary,
@@ -243,18 +294,24 @@ class _StatusPanelState extends State<StatusPanel> {
       return false;
     }
 
+    final rawEmergencyText = rawEmergencyIssues.join("\n").toLowerCase();
     final rawDangerText = rawDangerIssues.join("\n").toLowerCase();
     final rawWarningText = rawWarningIssues.join("\n").toLowerCase();
     final rawSafeText = rawSafeSummary.join("\n").toLowerCase();
-    final allRawText = "$rawDangerText\n$rawWarningText\n$rawSafeText";
+    final allRawText =
+        "$rawEmergencyText\n$rawDangerText\n$rawWarningText\n$rawSafeText";
 
-    final hasEmergencyIssue = containsAny(rawDangerText, const [
+    final hasEmergencyIssue = containsAny(rawEmergencyText, const [
       "sos",
       "có khói",
       "rò rỉ gas",
       "phát hiện khí co",
       "phát hiện ngập nước",
       "nhiệt độ nguy hiểm",
+      "phát hiện chập điện",
+      "phát hiện quá dòng",
+      "phát hiện quá áp",
+      "thiết bị điện quá nhiệt",
     ]);
 
     final hasOpenIssue = containsAny("$rawDangerText\n$rawWarningText", const [
@@ -809,6 +866,10 @@ class _StatusPanelState extends State<StatusPanel> {
   ) {
     final liveOverall = getHomeOverallStatus(liveHome);
 
+    final rawEmergencyIssues = List<String>.from(
+      liveOverall["emergencyIssues"] ?? const [],
+    );
+
     final rawDangerIssues = List<String>.from(
       liveOverall["dangerIssues"] ?? const [],
     );
@@ -820,6 +881,10 @@ class _StatusPanelState extends State<StatusPanel> {
     final rawPresenceWarnings = List<String>.from(
       liveOverall["presenceWarnings"] ?? const [],
     );
+
+    final emergencyIssues = rawEmergencyIssues
+        .map(strings.statusText)
+        .toList();
 
     final dangerIssues = rawDangerIssues.map(strings.statusText).toList();
 
@@ -840,6 +905,7 @@ class _StatusPanelState extends State<StatusPanel> {
       strings: strings,
       liveHome: liveHome,
       overall: liveOverall,
+      rawEmergencyIssues: rawEmergencyIssues,
       rawDangerIssues: rawDangerIssues,
       rawWarningIssues: [...rawWarningIssues, ...rawPresenceWarnings],
       rawSafeSummary: rawSafeSummary,
@@ -869,6 +935,15 @@ class _StatusPanelState extends State<StatusPanel> {
     return ListView(
       shrinkWrap: true,
       children: [
+        if (emergencyIssues.isNotEmpty) ...[
+          _summarySection(
+            title: strings.emergencySectionTitle(),
+            icon: Icons.crisis_alert_rounded,
+            color: SafeHomeColors.emergency,
+            items: emergencyIssues,
+          ),
+          const SizedBox(height: 12),
+        ],
         if (dangerIssues.isNotEmpty) ...[
           _summarySection(
             title: strings.t("Cần xử lý ngay"),
@@ -1017,6 +1092,7 @@ class _StatusPanelState extends State<StatusPanel> {
     final hasDevices = widget.overall["hasDevices"] == true;
 
     final noData = level == "no_data" || !hasDevices;
+    final emergencyStatus = level == "emergency";
 
     final issues = List<String>.from(widget.overall["issues"] ?? const []);
 
@@ -1045,6 +1121,8 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final firstLine = noData
         ? _strings.t("Chưa đủ dữ liệu để đánh giá")
+        : emergencyStatus
+        ? normalFirstLine
         : unprotectedMode
         ? unprotectedModeText
         : manualSecurityMode
@@ -1053,6 +1131,10 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final rotatingLines = noData
         ? <String>[]
+        : emergencyStatus
+        ? allLines.length > 1
+              ? allLines.skip(1).toList()
+              : <String>[]
         : unprotectedMode || manualSecurityMode
         ? allLines
         : allLines.length > 1
@@ -1069,7 +1151,17 @@ class _StatusPanelState extends State<StatusPanel> {
         ? "$displaySecondLine →"
         : "$displaySecondLine... →";
 
-    final statusColor = _statusColor(level);
+    final emergencyPulseColor = _emergencyPulseDanger
+        ? SafeHomeColors.danger
+        : SafeHomeColors.warning;
+    final statusColor = emergencyStatus
+        ? emergencyPulseColor
+        : _statusColor(level);
+    final panelColor = emergencyStatus
+        ? emergencyPulseColor.withValues(
+            alpha: _emergencyPulseDanger ? 0.20 : 0.15,
+          )
+        : SafeHomeColors.surface;
     final statusIcon = _statusIcon(level);
     final statusText = _statusText(level);
 
@@ -1130,16 +1222,25 @@ class _StatusPanelState extends State<StatusPanel> {
         child: InkWell(
           onTap: () => _showStatusSummary(context),
           borderRadius: BorderRadius.circular(22),
-          child: Container(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 420),
+            curve: Curves.easeInOut,
             padding: const EdgeInsets.fromLTRB(14, 11, 14, 10),
             decoration: BoxDecoration(
-              color: SafeHomeColors.surface,
+              color: panelColor,
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: statusColor.withValues(alpha: 0.11)),
+              border: Border.all(
+                color: statusColor.withValues(
+                  alpha: emergencyStatus ? 0.95 : 0.11,
+                ),
+                width: emergencyStatus ? 1.5 : 1,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.035),
-                  blurRadius: 12,
+                  color: emergencyStatus
+                      ? statusColor.withValues(alpha: 0.20)
+                      : Colors.black.withValues(alpha: 0.035),
+                  blurRadius: emergencyStatus ? 16 : 12,
                   offset: const Offset(0, 4),
                 ),
               ],
@@ -1216,7 +1317,9 @@ class _StatusPanelState extends State<StatusPanel> {
                 const SizedBox(height: 5),
                 _statusLine(
                   text: displayFirstLine,
-                  color: manualSecurityMode
+                  color: emergencyStatus
+                      ? statusColor
+                      : manualSecurityMode
                       ? SafeHomeColors.danger
                       : issues.isNotEmpty
                       ? statusColor
@@ -1275,6 +1378,11 @@ class _StatusPanelState extends State<StatusPanel> {
                             : normalizedSecurityMode == "unprotected"
                             ? _strings.t("Không bảo vệ")
                             : _strings.t("Bình thường"),
+                        secondaryValue: normalizedSecurityMode == "armed"
+                            ? _strings.armedSecurityModeSourceDetailLabel(
+                                widget.securityModeSource,
+                              )
+                            : null,
                         active: normalizedSecurityMode != "normal",
                         activeColor: normalizedSecurityMode == "unprotected"
                             ? SafeHomeColors.warning
@@ -1325,11 +1433,19 @@ class _StatusPanelState extends State<StatusPanel> {
   Widget _alarmStatusItem({
     required IconData icon,
     required String value,
+    String? secondaryValue,
     required bool active,
     required Color activeColor,
     VoidCallback? onTap,
   }) {
     final color = active ? activeColor : SafeHomeColors.textSecondary;
+    final cleanSecondaryValue = secondaryValue?.trim() ?? "";
+    final hasSecondaryValue = cleanSecondaryValue.isNotEmpty;
+    const textStyle = TextStyle(
+      fontSize: 10.9,
+      height: 1.15,
+      fontWeight: FontWeight.w800,
+    );
 
     return InkWell(
       onTap: onTap,
@@ -1337,25 +1453,89 @@ class _StatusPanelState extends State<StatusPanel> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
         child: Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 17, color: color),
-                const SizedBox(width: 4),
-                Text(
-                  value,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 10.9,
-                    height: 1.15,
-                    fontWeight: FontWeight.w800,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              if (!hasSecondaryValue) {
+                return FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icon, size: 17, color: color),
+                      const SizedBox(width: 4),
+                      Text(
+                        value,
+                        maxLines: 1,
+                        style: textStyle.copyWith(color: color),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
+                );
+              }
+
+              final combinedValue = "$value - $cleanSecondaryValue";
+              final painter = TextPainter(
+                text: TextSpan(text: combinedValue, style: textStyle),
+                maxLines: 1,
+                textDirection: Directionality.of(context),
+                textScaler: MediaQuery.textScalerOf(context),
+              )..layout();
+              final fitsOnOneLine =
+                  painter.width + 17 + 4 <= constraints.maxWidth;
+
+              if (fitsOnOneLine) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 17, color: color),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        combinedValue,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: textStyle.copyWith(color: color),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 17, color: color),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          value,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: textStyle.copyWith(color: color),
+                        ),
+                        Text(
+                          cleanSecondaryValue,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: textStyle.copyWith(
+                            color: color,
+                            fontSize: 9.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

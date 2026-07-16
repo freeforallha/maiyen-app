@@ -36,6 +36,8 @@ class _AllHomePageState extends State<AllHomePage> {
   bool isSearching = false;
   int summaryIndex = 0;
   Timer? summaryTimer;
+  Timer? _emergencyPulseTimer;
+  bool _emergencyPulseDanger = false;
 
   String selectedHomeCountText([int? count]) {
     final value = count ?? selectedHomes.length;
@@ -47,7 +49,9 @@ class _AllHomePageState extends State<AllHomePage> {
     int safeCount = 0;
     int warningCount = 0;
     int dangerCount = 0;
+    int emergencyCount = 0;
 
+    final emergencyReasons = <String>{};
     final dangerReasons = <String>{};
     final warningReasons = <String>{};
 
@@ -55,7 +59,13 @@ class _AllHomePageState extends State<AllHomePage> {
       final status = getHomeOverallStatus(home);
       final level = status["level"]?.toString() ?? "safe";
 
-      if (level == "danger") {
+      if (level == "emergency") {
+        emergencyCount++;
+
+        for (final item in (status["emergencyIssues"] as List? ?? [])) {
+          emergencyReasons.add(_strings.statusText(item.toString()));
+        }
+      } else if (level == "danger") {
         dangerCount++;
 
         for (final item in (status["dangerIssues"] as List? ?? [])) {
@@ -73,6 +83,15 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     final summaries = <String>[];
+
+    if (emergencyCount > 0) {
+      summaries.add(
+        _strings.allHomeEmergencyCountText(
+          emergencyCount,
+          reason: emergencyReasons.isNotEmpty ? emergencyReasons.first : "",
+        ),
+      );
+    }
 
     if (dangerCount > 0) {
       summaries.add(
@@ -122,6 +141,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 final safeHomes = <Map<String, dynamic>>[];
                 final warningHomes = <Map<String, dynamic>>[];
                 final dangerHomes = <Map<String, dynamic>>[];
+                final emergencyHomes = <Map<String, dynamic>>[];
 
                 for (final entry in homes.entries) {
                   final homeId = entry.key;
@@ -130,7 +150,9 @@ class _AllHomePageState extends State<AllHomePage> {
                   final status = getHomeOverallStatus(home);
                   final level = status["level"]?.toString() ?? "safe";
 
-                  final issues = level == "danger"
+                  final issues = level == "emergency"
+                      ? (status["emergencyIssues"] as List? ?? [])
+                      : level == "danger"
                       ? (status["dangerIssues"] as List? ?? [])
                       : level == "warning"
                       ? (status["warningIssues"] as List? ?? [])
@@ -142,7 +164,9 @@ class _AllHomePageState extends State<AllHomePage> {
                     "issues": issues.map((e) => e.toString()).toList(),
                   };
 
-                  if (level == "danger") {
+                  if (level == "emergency") {
+                    emergencyHomes.add(item);
+                  } else if (level == "danger") {
                     dangerHomes.add(item);
                   } else if (level == "warning") {
                     warningHomes.add(item);
@@ -305,6 +329,13 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         const SizedBox(height: 20),
                         section(
+                          title: _strings.emergencyStatusTitle(),
+                          icon: Icons.crisis_alert_rounded,
+                          color: SafeHomeColors.emergency,
+                          items: emergencyHomes,
+                          compact: true,
+                        ),
+                        section(
                           title: _strings.t("Không an toàn"),
                           icon: Icons.warning_amber_rounded,
                           color: Colors.red,
@@ -347,10 +378,54 @@ class _AllHomePageState extends State<AllHomePage> {
   final Map<String, StreamSubscription<DatabaseEvent>> sharedHomeSubscriptions =
       {};
 
+  bool _hasEmergencyHome() {
+    return homes.values.any((home) {
+      return getHomeOverallStatus(safeMap(home))["level"]?.toString() ==
+          "emergency";
+    });
+  }
+
+  void _syncEmergencyPulse() {
+    if (!_hasEmergencyHome()) {
+      _emergencyPulseTimer?.cancel();
+      _emergencyPulseTimer = null;
+      _emergencyPulseDanger = false;
+      return;
+    }
+
+    if (_emergencyPulseTimer != null) {
+      return;
+    }
+
+    _emergencyPulseDanger = false;
+    _emergencyPulseTimer = Timer.periodic(
+      const Duration(milliseconds: 650),
+      (_) {
+        if (!mounted) {
+          return;
+        }
+
+        if (!_hasEmergencyHome()) {
+          _emergencyPulseTimer?.cancel();
+          _emergencyPulseTimer = null;
+          setState(() {
+            _emergencyPulseDanger = false;
+          });
+          return;
+        }
+
+        setState(() {
+          _emergencyPulseDanger = !_emergencyPulseDanger;
+        });
+      },
+    );
+  }
+
   void notifyHomesChanged() {
     if (!mounted) return;
     homesRevision.value = homesRevision.value + 1;
     syncChatUnreadCounts();
+    _syncEmergencyPulse();
   }
 
   void syncChatUnreadCounts() {
@@ -875,11 +950,22 @@ class _AllHomePageState extends State<AllHomePage> {
     final level = status["level"]?.toString() ?? "safe";
     final selected = selectedHomes.contains(homeId);
 
-    final statusColor = level == "danger"
+    final emergencyStatus = level == "emergency";
+    final emergencyPulseColor = _emergencyPulseDanger
+        ? SafeHomeColors.danger
+        : SafeHomeColors.warning;
+    final statusColor = emergencyStatus
+        ? emergencyPulseColor
+        : level == "danger"
         ? SafeHomeColors.danger
         : level == "warning"
         ? SafeHomeColors.warning
         : SafeHomeColors.safe;
+    final cardColor = emergencyStatus
+        ? emergencyPulseColor.withValues(
+            alpha: _emergencyPulseDanger ? 0.20 : 0.15,
+          )
+        : SafeHomeColors.surface;
 
     final rawName = data["_customName"] ?? data["name"] ?? homeId;
 
@@ -910,21 +996,26 @@ class _AllHomePageState extends State<AllHomePage> {
       },
       borderRadius: BorderRadius.circular(14),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
+        duration: Duration(milliseconds: emergencyStatus ? 420 : 180),
+        curve: Curves.easeInOut,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: selected ? SafeHomeColors.primarySoft : SafeHomeColors.surface,
+          color: selected ? SafeHomeColors.primarySoft : cardColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected
                 ? SafeHomeColors.primary
-                : statusColor.withValues(alpha: 0.68),
-            width: selected ? 2.4 : 1.25,
+                : statusColor.withValues(
+                    alpha: emergencyStatus ? 0.95 : 0.68,
+                  ),
+            width: selected ? 2.4 : emergencyStatus ? 1.5 : 1.25,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.035),
-              blurRadius: 7,
+              color: emergencyStatus
+                  ? statusColor.withValues(alpha: 0.20)
+                  : Colors.black.withValues(alpha: 0.035),
+              blurRadius: emergencyStatus ? 12 : 7,
               offset: const Offset(0, 3),
             ),
           ],
@@ -3002,6 +3093,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     sharedHomeSubscriptions.clear();
     summaryTimer?.cancel();
+    _emergencyPulseTimer?.cancel();
     searchController.dispose();
 
     homesRevision.dispose();

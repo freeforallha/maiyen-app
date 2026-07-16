@@ -289,7 +289,28 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
               color: SafeHomeColors.warning,
             ),
             const SizedBox(width: 10),
-            Expanded(child: Text(strings.t("Chuyển về Bình thường?"))),
+            Expanded(
+              child: Text(
+                strings.choose(
+                  vi: "Chuyển về chế độ bình thường",
+                  en: "Switch to normal mode",
+                  zh: "切换到普通模式",
+                  ko: "일반 모드로 전환",
+                  ja: "通常モードに切り替える",
+                  de: "Zum Normalmodus wechseln",
+                  ru: "Перейти в обычный режим",
+                  fr: "Passer en mode normal",
+                  es: "Cambiar al modo normal",
+                  id: "Beralih ke Mode Normal",
+                  th: "เปลี่ยนเป็นโหมดปกติ",
+                  ms: "Tukar kepada Mod Normal",
+                  fil: "Lumipat sa Normal na Mode",
+                  km: "ប្ដូរទៅរបៀបធម្មតា",
+                  my: "ပုံမှန်မုဒ်သို့ ပြောင်းရန်",
+                  lo: "ປ່ຽນເປັນໂໝດປົກກະຕິ",
+                ),
+              ),
+            ),
           ],
         ),
         content: Text(
@@ -297,18 +318,37 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
             "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
           ),
         ),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(dialogContext, false);
-            },
-            child: Text(strings.t("Huỷ")),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(dialogContext, true);
-            },
-            child: Text(strings.t("Vẫn chuyển về Bình thường")),
+          SizedBox(
+            width: double.infinity,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext, false);
+                    },
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(strings.t("Huỷ")),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(dialogContext, true);
+                    },
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(strings.t("Đồng ý")),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       );

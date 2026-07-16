@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
 
@@ -108,6 +109,40 @@ Future<void> showHomeAlarmMenuSheet({
                 ),
                 onTap: () async {
                   Navigator.pop(sheetContext);
+
+                  if (!alarmScheduleConfigured) {
+                    await Future<void>.delayed(
+                      const Duration(milliseconds: 120),
+                    );
+
+                    if (!context.mounted) return;
+
+                    showTopToast(
+                      context,
+                      strings.choose(
+                        vi: 'Chưa cài đặt báo động nào',
+                        en: 'No alarm has been set',
+                        zh: '尚未设置任何警报',
+                        ko: '설정된 경보가 없습니다',
+                        ja: '警報は設定されていません',
+                        de: 'Es ist kein Alarm eingerichtet',
+                        ru: 'Ни одна тревога не настроена',
+                        fr: 'Aucune alarme n’est configurée',
+                        es: 'No hay ninguna alarma configurada',
+                        id: 'Belum ada alarm yang diatur',
+                        th: 'ยังไม่ได้ตั้งค่าสัญญาณเตือน',
+                        ms: 'Tiada penggera ditetapkan',
+                        fil: 'Wala pang nakatakdang alarma',
+                        km: 'មិនទាន់បានកំណត់សំឡេងរោទិ៍ទេ',
+                        my: 'အချက်ပေးစနစ် မသတ်မှတ်ရသေးပါ',
+                        lo: 'ຍັງບໍ່ໄດ້ຕັ້ງຄ່າສັນຍານເຕືອນໄພ',
+                      ),
+                      color: SafeHomeColors.warning,
+                      icon: Icons.schedule_rounded,
+                    );
+                    return;
+                  }
+
                   await onOpenAlarmPause();
                 },
               ),

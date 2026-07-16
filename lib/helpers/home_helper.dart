@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 Map<String, dynamic> safeMap(dynamic data) {
   if (data == null) return {};
 
@@ -14,6 +16,111 @@ Map<String, dynamic> safeMap(dynamic data) {
 
 const double environmentWarningTemperatureC = 40;
 const double environmentWarningHumidityPercent = 90;
+
+const int emergencyStatusHoldMs = 5 * 60 * 1000;
+
+const Set<String> emergencyStatusDeviceTypes = {
+  "smoke",
+  "heat",
+  "temperature",
+  "carbon_monoxide",
+  "gas",
+  "water_leak",
+  "flood",
+  "sos",
+  "smart_plug",
+  "power_monitor",
+  "ups",
+  "electrical_fault",
+  "short_circuit",
+};
+
+bool isEmergencyStatusDeviceType(dynamic rawType) {
+  final type = rawType?.toString().trim().toLowerCase() ?? "";
+  return emergencyStatusDeviceTypes.contains(type);
+}
+
+int emergencyStatusTriggeredAt(Map<String, dynamic> device) {
+  final genericTriggeredAt =
+      int.tryParse(device["emergency_triggered_at"]?.toString() ?? "") ?? 0;
+
+  if (genericTriggeredAt > 0) {
+    return genericTriggeredAt;
+  }
+
+  final type = device["type"]?.toString().trim().toLowerCase() ?? "";
+
+  if (type != "sos") {
+    return 0;
+  }
+
+  return int.tryParse(device["last_triggered"]?.toString() ?? "") ?? 0;
+}
+
+int emergencyStatusActiveUntil(Map<String, dynamic> device) {
+  final genericActiveUntil =
+      int.tryParse(device["emergency_active_until"]?.toString() ?? "") ?? 0;
+
+  if (genericActiveUntil > 0) {
+    return genericActiveUntil;
+  }
+
+  final type = device["type"]?.toString().trim().toLowerCase() ?? "";
+
+  if (type != "sos") {
+    return 0;
+  }
+
+  return int.tryParse(device["sos_active_until"]?.toString() ?? "") ?? 0;
+}
+
+int emergencyAcknowledgedTriggerForCurrentUser(
+  Map<String, dynamic> device,
+) {
+  final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+  if (uid.isEmpty) {
+    return 0;
+  }
+
+  final acknowledgements = safeMap(device["emergencyAcknowledgements"]);
+  final sosAcknowledgements = safeMap(device["sosAcknowledgements"]);
+  final genericValue =
+      int.tryParse(acknowledgements[uid]?.toString() ?? "") ?? 0;
+  final sosValue =
+      int.tryParse(sosAcknowledgements[uid]?.toString() ?? "") ?? 0;
+
+  return genericValue > sosValue ? genericValue : sosValue;
+}
+
+bool isEmergencyStatusAcknowledgedByCurrentUser(
+  Map<String, dynamic> device,
+) {
+  final triggeredAt = emergencyStatusTriggeredAt(device);
+
+  return triggeredAt > 0 &&
+      emergencyAcknowledgedTriggerForCurrentUser(device) >= triggeredAt;
+}
+
+bool isEmergencyStatusActiveForCurrentUser(
+  Map<String, dynamic> device, {
+  bool legacyActive = false,
+}) {
+  final triggeredAt = emergencyStatusTriggeredAt(device);
+
+  // Dữ liệu mới luôn dùng mốc giữ trạng thái 5 phút và xác nhận theo tài khoản.
+  if (triggeredAt > 0) {
+    if (isEmergencyStatusAcknowledgedByCurrentUser(device)) {
+      return false;
+    }
+
+    return emergencyStatusActiveUntil(device) >
+        DateTime.now().millisecondsSinceEpoch;
+  }
+
+  // Tương thích thiết bị/backend cũ chưa có trường emergency_* .
+  return legacyActive;
+}
 
 const Set<String> securityDeviceTypes = {
   "door",
@@ -285,11 +392,13 @@ String normalizeSecurityMode(dynamic value) {
 
 bool isSosActive(Map<String, dynamic> d) {
   final status = d["status"]?.toString().trim().toLowerCase();
-  final activeUntil =
-      int.tryParse(d["sos_active_until"]?.toString() ?? "") ?? 0;
 
-  return status == "triggered" ||
-      activeUntil > DateTime.now().millisecondsSinceEpoch;
+  return isEmergencyStatusActiveForCurrentUser(
+    d,
+    legacyActive: status == "triggered" ||
+        emergencyStatusActiveUntil(d) >
+            DateTime.now().millisecondsSinceEpoch,
+  );
 }
 
 bool isNowInAlarmTime(Map<String, dynamic> d) {
@@ -333,6 +442,7 @@ bool _hasTrueFlag(Map<String, dynamic> device, List<String> keys) {
 /// Nguồn rule duy nhất cho trạng thái của một thiết bị.
 ///
 /// level:
+/// - emergency: Nguy hiểm
 /// - danger: Chưa an toàn
 /// - warning: Cần chú ý
 /// - safe: Đã an toàn
@@ -353,6 +463,7 @@ Map<String, dynamic> evaluateDeviceStatus(
   final battery = int.tryParse(device["battery"]?.toString() ?? "");
   final linkquality = int.tryParse(device["linkquality"]?.toString() ?? "");
 
+  final emergencyIssues = <String>[];
   final dangerIssues = <String>[];
   final warningIssues = <String>[];
 
@@ -380,8 +491,26 @@ Map<String, dynamic> evaluateDeviceStatus(
       device["temperature"]?.toString() ?? "",
     );
     final humidity = double.tryParse(device["humidity"]?.toString() ?? "");
+    final hasExplicitDangerousTemperatureAlarm = _hasTrueFlag(
+      device,
+      const [
+        "temperature_alarm",
+        "high_temperature_alarm",
+        "over_temperature_alarm",
+      ],
+    );
 
-    if (temperature != null && temperature > environmentWarningTemperatureC) {
+    if (
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive: hasExplicitDangerousTemperatureAlarm,
+      )
+    ) {
+      emergencyIssues.add("Nhiệt độ nguy hiểm");
+    } else if (
+      temperature != null &&
+      temperature > environmentWarningTemperatureC
+    ) {
       warningIssues.add("Nhiệt độ cao");
     }
 
@@ -391,39 +520,126 @@ Map<String, dynamic> evaluateDeviceStatus(
   }
 
   if (type == "sos" && isSosActive(device)) {
-    dangerIssues.add("SOS");
+    emergencyIssues.add("SOS");
   }
 
-  if (type == "smoke" &&
-      (isActiveDeviceSignal(device["smoke"]) || status == "alarm")) {
-    dangerIssues.add("Có khói");
+  if (
+    type == "smoke" &&
+    isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          isActiveDeviceSignal(device["smoke"]) || status == "alarm",
+    )
+  ) {
+    emergencyIssues.add("Có khói");
   }
 
-  if (type == "heat" &&
-      (_hasTrueFlag(device, const [
+  if (
+    type == "heat" &&
+    isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          _hasTrueFlag(device, const [
             "heat",
             "heat_alarm",
             "high_temperature_alarm",
           ]) ||
-          status == "alarm")) {
-    dangerIssues.add("Nhiệt độ nguy hiểm");
+          status == "alarm",
+    )
+  ) {
+    emergencyIssues.add("Nhiệt độ nguy hiểm");
   }
 
-  if (type == "carbon_monoxide" &&
-      (_hasTrueFlag(device, const ["carbon_monoxide", "co_alarm"]) ||
-          status == "alarm")) {
-    dangerIssues.add("Phát hiện khí CO");
+  if (
+    type == "carbon_monoxide" &&
+    isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          _hasTrueFlag(device, const ["carbon_monoxide", "co_alarm"]) ||
+          status == "alarm",
+    )
+  ) {
+    emergencyIssues.add("Phát hiện khí CO");
   }
 
-  if (type == "gas" &&
-      (_hasTrueFlag(device, const ["gas", "gas_alarm"]) || status == "alarm")) {
-    dangerIssues.add("Rò rỉ gas");
+  if (
+    type == "gas" &&
+    isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          _hasTrueFlag(device, const ["gas", "gas_alarm"]) ||
+          status == "alarm",
+    )
+  ) {
+    emergencyIssues.add("Rò rỉ gas");
   }
 
-  if ((type == "water_leak" || type == "flood") &&
-      (_hasTrueFlag(device, const ["water_leak", "leak", "water"]) ||
-          status == "alarm")) {
-    dangerIssues.add("Phát hiện ngập nước");
+  if (
+    (type == "water_leak" || type == "flood") &&
+    isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          _hasTrueFlag(device, const ["water_leak", "leak", "water"]) ||
+          status == "alarm",
+    )
+  ) {
+    emergencyIssues.add("Phát hiện ngập nước");
+  }
+
+  // Chỉ nâng sự cố điện lên Nguy hiểm khi thiết bị gửi cờ Alarm rõ ràng.
+  // Không suy đoán từ điện áp/dòng điện thông thường để tránh báo động giả.
+  final supportsElectricalSafety = const {
+    "smart_plug",
+    "power_monitor",
+    "ups",
+    "electrical_fault",
+    "short_circuit",
+  }.contains(type);
+
+  if (supportsElectricalSafety) {
+    final shortCircuitActive = _hasTrueFlag(device, const [
+      "short_circuit",
+      "short_circuit_alarm",
+      "electrical_fault",
+    ]);
+    final overCurrentActive = _hasTrueFlag(device, const [
+      "over_current",
+      "overcurrent",
+      "over_current_alarm",
+    ]);
+    final overVoltageActive = _hasTrueFlag(device, const [
+      "over_voltage",
+      "overvoltage",
+      "over_voltage_alarm",
+    ]);
+    final electricalOverheatActive = _hasTrueFlag(device, const [
+      "over_temperature",
+      "overtemperature",
+      "device_overheat",
+      "electrical_overheat",
+    ]);
+    final electricalEmergencyVisible =
+        isEmergencyStatusActiveForCurrentUser(
+          device,
+          legacyActive: shortCircuitActive ||
+              overCurrentActive ||
+              overVoltageActive ||
+              electricalOverheatActive,
+        );
+
+    if (electricalEmergencyVisible) {
+      if (shortCircuitActive) {
+        emergencyIssues.add("Phát hiện chập điện");
+      } else if (overCurrentActive) {
+        emergencyIssues.add("Phát hiện quá dòng");
+      } else if (overVoltageActive) {
+        emergencyIssues.add("Phát hiện quá áp");
+      } else if (electricalOverheatActive) {
+        emergencyIssues.add("Thiết bị điện quá nhiệt");
+      } else {
+        emergencyIssues.add("Sự cố điện nguy hiểm");
+      }
+    }
   }
 
   final motionActive =
@@ -510,7 +726,9 @@ Map<String, dynamic> evaluateDeviceStatus(
     warningIssues.add("Mất kết nối");
   }
 
-  final level = dangerIssues.isNotEmpty
+  final level = emergencyIssues.isNotEmpty
+      ? "emergency"
+      : dangerIssues.isNotEmpty
       ? "danger"
       : warningIssues.isNotEmpty
       ? "warning"
@@ -519,9 +737,10 @@ Map<String, dynamic> evaluateDeviceStatus(
   return {
     "safe": level == "safe",
     "level": level,
+    "emergencyIssues": emergencyIssues,
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
-    "issues": [...dangerIssues, ...warningIssues],
+    "issues": [...emergencyIssues, ...dangerIssues, ...warningIssues],
     "isContactDevice": isContactDevice,
     "isClosed": isClosed,
     "isOpen": isOpen,
@@ -630,6 +849,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       ...overall,
       "safe": false,
       "level": "no_data",
+      "emergencyIssues": <String>[],
       "dangerIssues": <String>[],
       "warningIssues": <String>[],
       "presenceWarnings": <String>[],
@@ -641,6 +861,10 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       "hubIssue": "",
     };
   }
+  final emergencyIssues = List<String>.from(
+    overall["emergencyIssues"] ?? const <String>[],
+  );
+
   final dangerIssues = List<String>.from(
     overall["dangerIssues"] ?? const <String>[],
   );
@@ -732,7 +956,9 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     }
   }
 
-  final level = dangerIssues.isNotEmpty
+  final level = emergencyIssues.isNotEmpty
+      ? "emergency"
+      : dangerIssues.isNotEmpty
       ? "danger"
       : warningIssues.isNotEmpty
       ? "warning"
@@ -742,10 +968,11 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     ...overall,
     "safe": level == "safe",
     "level": level,
+    "emergencyIssues": emergencyIssues,
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
     "presenceWarnings": presenceWarnings,
-    "issues": [...dangerIssues, ...warningIssues],
+    "issues": [...emergencyIssues, ...dangerIssues, ...warningIssues],
     "safeSummary": safeSummary,
     "hubTracked": hubTracked,
     "hubOnline": hubOnline,
@@ -758,6 +985,7 @@ Map<String, dynamic> getOverallStatus(
   Map<String, dynamic> devices, {
   String securityMode = "normal",
 }) {
+  final emergencyIssues = <String>[];
   final dangerIssues = <String>[];
   final warningIssues = <String>[];
   final safeSummary = <String>[];
@@ -826,12 +1054,19 @@ Map<String, dynamic> getOverallStatus(
       }
     }
 
+    final deviceEmergencyIssues = List<String>.from(
+      evaluation["emergencyIssues"] ?? const <String>[],
+    );
     final deviceDangerIssues = List<String>.from(
       evaluation["dangerIssues"] ?? const <String>[],
     );
     final deviceWarningIssues = List<String>.from(
       evaluation["warningIssues"] ?? const <String>[],
     );
+
+    if (deviceEmergencyIssues.isNotEmpty) {
+      emergencyIssues.add("$name: ${deviceEmergencyIssues.join(" & ")}");
+    }
 
     if (deviceDangerIssues.isNotEmpty) {
       dangerIssues.add("$name: ${deviceDangerIssues.join(" & ")}");
@@ -845,6 +1080,7 @@ Map<String, dynamic> getOverallStatus(
     return {
       "safe": false,
       "level": "no_data",
+      "emergencyIssues": <String>[],
       "dangerIssues": <String>[],
       "warningIssues": <String>[],
       "issues": <String>[],
@@ -873,11 +1109,17 @@ Map<String, dynamic> getOverallStatus(
     const {
       "smoke",
       "heat",
+      "temperature",
       "carbon_monoxide",
       "gas",
       "water_leak",
       "flood",
       "sos",
+      "smart_plug",
+      "power_monitor",
+      "ups",
+      "electrical_fault",
+      "short_circuit",
     }.contains,
   );
 
@@ -930,7 +1172,9 @@ Map<String, dynamic> getOverallStatus(
     safeSummary.add("Chưa có dữ liệu thiết bị để đánh giá");
   }
 
-  final level = dangerIssues.isNotEmpty
+  final level = emergencyIssues.isNotEmpty
+      ? "emergency"
+      : dangerIssues.isNotEmpty
       ? "danger"
       : warningIssues.isNotEmpty
       ? "warning"
@@ -939,9 +1183,10 @@ Map<String, dynamic> getOverallStatus(
   return {
     "safe": level == "safe",
     "level": level,
+    "emergencyIssues": emergencyIssues,
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
-    "issues": [...dangerIssues, ...warningIssues],
+    "issues": [...emergencyIssues, ...dangerIssues, ...warningIssues],
     "safeSummary": safeSummary,
 
     // Thông tin này giúp Status Panel chỉ mô tả

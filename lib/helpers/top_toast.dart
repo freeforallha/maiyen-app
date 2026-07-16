@@ -65,7 +65,7 @@ class _TopToastWidgetState extends State<_TopToastWidget>
 
     controller.forward();
 
-    Future.delayed(const Duration(seconds: 2), () async {
+    Future.delayed(const Duration(seconds: 4), () async {
       if (!mounted) return;
 
       await controller.reverse();

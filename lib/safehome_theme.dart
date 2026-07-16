@@ -19,6 +19,8 @@ class SafeHomeColors {
   static const Color success = safe;
   static const Color warning = Color(0xFFE99822);
   static const Color danger = Color(0xFFD94A4A);
+  // Cấp cao nhất, chỉ dùng cho sự cố Nguy hiểm & Khẩn cấp đang hoạt động.
+  static const Color emergency = Color(0xFFB42318);
   static const Color info = Color(0xFF3B82D0);
 }
 

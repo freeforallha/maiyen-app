@@ -397,6 +397,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> openAlarmPauseSheetWithReminder() async {
+    final alarmScheduleText = formatAlarmSchedules().trim();
+    final alarmScheduleConfigured =
+        alarmScheduleText.isNotEmpty &&
+        alarmScheduleText != _strings.t("Tắt") &&
+        alarmScheduleText != _strings.t("Chưa thiết lập thời gian");
+
+    if (!alarmScheduleConfigured) {
+      showTopToast(
+        context,
+        _strings.choose(
+          vi: "Chưa cài đặt báo động nào",
+          en: "No alarm has been set",
+          zh: "尚未设置任何警报",
+          ko: "설정된 경보가 없습니다",
+          ja: "警報は設定されていません",
+          de: "Es ist kein Alarm eingerichtet",
+          ru: "Ни одна тревога не настроена",
+          fr: "Aucune alarme n’est configurée",
+          es: "No hay ninguna alarma configurada",
+          id: "Belum ada alarm yang diatur",
+          th: "ยังไม่ได้ตั้งค่าสัญญาณเตือน",
+          ms: "Tiada penggera ditetapkan",
+          fil: "Wala pang nakatakdang alarma",
+          km: "មិនទាន់បានកំណត់សំឡេងរោទិ៍ទេ",
+          my: "အချက်ပေးစနစ် မသတ်မှတ်ရသေးပါ",
+          lo: "ຍັງບໍ່ໄດ້ຕັ້ງຄ່າສັນຍານເຕືອນໄພ",
+        ),
+        color: SafeHomeColors.warning,
+        icon: Icons.schedule_rounded,
+      );
+      return;
+    }
+
     await showAlarmPauseReminder();
 
     if (!mounted) return;
@@ -3615,6 +3648,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           animationKey: selectedHome,
                           child: DeviceList(
                             homeId: selectedHome,
+                            ownerUid: overviewOwnerUid,
                             hubId:
                                 homes[selectedHome]?["hubId"]?.toString() ?? "",
                             devices: devices,

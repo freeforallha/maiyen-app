@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../helpers/emergency_pulse_ticker.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 
-class HomeTabs extends StatelessWidget {
+class HomeTabs extends StatefulWidget {
   final Map<String, dynamic> homes;
   final List<String> homeOrder;
   final String selectedHome;
@@ -31,6 +32,102 @@ class HomeTabs extends StatelessWidget {
     required this.currentUserName,
     required this.currentUserEmail,
   });
+
+  @override
+  State<HomeTabs> createState() => _HomeTabsState();
+}
+
+class _HomeTabsState extends State<HomeTabs> {
+  bool _emergencyPulseDanger = false;
+
+  Map<String, dynamic> get homes => widget.homes;
+  List<String> get homeOrder => widget.homeOrder;
+  String get selectedHome => widget.selectedHome;
+  bool get singleHomeIdentityEnabled => widget.singleHomeIdentityEnabled;
+  Function(String) get onSelect => widget.onSelect;
+  Future<void> Function(List<String>) get onReorder => widget.onReorder;
+  Color Function(String) get getHomeColor => widget.getHomeColor;
+  ScrollController get controller => widget.controller;
+  Map<String, int> get unreadChatByHome => widget.unreadChatByHome;
+  String get currentUserName => widget.currentUserName;
+  String get currentUserEmail => widget.currentUserEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    EmergencyPulseTicker.ensureStarted();
+    _emergencyPulseDanger = EmergencyPulseTicker.phase.value;
+    EmergencyPulseTicker.phase.addListener(_handleSharedEmergencyPulse);
+    _syncEmergencyPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncEmergencyPulse();
+  }
+
+  @override
+  void dispose() {
+    EmergencyPulseTicker.phase.removeListener(_handleSharedEmergencyPulse);
+    super.dispose();
+  }
+
+  bool _hasEmergencyHome() {
+    for (final homeId in homeOrder) {
+      if (homes.containsKey(homeId) &&
+          getHomeColor(homeId) == SafeHomeColors.emergency) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void _handleSharedEmergencyPulse() {
+    if (!mounted || !_hasEmergencyHome()) {
+      return;
+    }
+
+    final next = EmergencyPulseTicker.phase.value;
+    if (_emergencyPulseDanger == next) {
+      return;
+    }
+
+    setState(() {
+      _emergencyPulseDanger = next;
+    });
+  }
+
+  void _syncEmergencyPulse() {
+    _emergencyPulseDanger = _hasEmergencyHome()
+        ? EmergencyPulseTicker.phase.value
+        : false;
+  }
+
+  bool _isEmergencyHome(String homeId) {
+    return getHomeColor(homeId) == SafeHomeColors.emergency;
+  }
+
+  Color _displayHomeColor(String homeId) {
+    if (!_isEmergencyHome(homeId)) {
+      return getHomeColor(homeId);
+    }
+
+    return _emergencyPulseDanger
+        ? SafeHomeColors.danger
+        : SafeHomeColors.warning;
+  }
+
+  Color _homeCardBackground(String homeId) {
+    if (!_isEmergencyHome(homeId)) {
+      return SafeHomeColors.surface;
+    }
+
+    return _displayHomeColor(homeId).withValues(
+      alpha: _emergencyPulseDanger ? 0.20 : 0.15,
+    );
+  }
 
   Future<void> _showSelectedHomeInfo({
     required BuildContext context,
@@ -287,7 +384,7 @@ class HomeTabs extends StatelessWidget {
 
       final address = home["address"]?.toString().trim() ?? "";
       final isShared = home["_shared"] == true;
-      final statusColor = getHomeColor(homeId);
+      final statusColor = _displayHomeColor(homeId);
       final unread = unreadChatByHome[homeId] ?? 0;
 
       final totalMemberCount = _presenceCount(home, "totalMemberCount");
@@ -296,7 +393,7 @@ class HomeTabs extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.fromLTRB(12, 3, 12, 3),
         child: Material(
-          color: SafeHomeColors.surface,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           child: InkWell(
             borderRadius: BorderRadius.circular(20),
@@ -309,10 +406,13 @@ class HomeTabs extends StatelessWidget {
                 isShared: isShared,
               );
             },
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 420),
+              curve: Curves.easeInOut,
               height: 58,
               padding: const EdgeInsets.fromLTRB(13, 7, 13, 7),
               decoration: BoxDecoration(
+                color: _homeCardBackground(homeId),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: statusColor.withValues(alpha: 0.46),
@@ -320,8 +420,10 @@ class HomeTabs extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.045),
-                    blurRadius: 12,
+                    color: _isEmergencyHome(homeId)
+                        ? statusColor.withValues(alpha: 0.20)
+                        : Colors.black.withValues(alpha: 0.045),
+                    blurRadius: _isEmergencyHome(homeId) ? 16 : 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
@@ -502,7 +604,7 @@ class HomeTabs extends StatelessWidget {
             );
 
             final unread = unreadChatByHome[homeId] ?? 0;
-            final statusColor = getHomeColor(homeId);
+            final statusColor = _displayHomeColor(homeId);
 
             final rawName = home["_customName"] ?? home["name"] ?? homeId;
 
@@ -553,7 +655,7 @@ class HomeTabs extends StatelessWidget {
                           4,
                         ),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
+                          color: _homeCardBackground(homeId),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                             color: statusColor.withValues(
@@ -563,10 +665,16 @@ class HomeTabs extends StatelessWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(
-                                alpha: isSelected ? 0.065 : 0.025,
-                              ),
-                              blurRadius: isSelected ? 13 : 7,
+                              color: _isEmergencyHome(homeId)
+                                  ? statusColor.withValues(alpha: 0.20)
+                                  : Colors.black.withValues(
+                                      alpha: isSelected ? 0.065 : 0.025,
+                                    ),
+                              blurRadius: _isEmergencyHome(homeId)
+                                  ? 16
+                                  : isSelected
+                                  ? 13
+                                  : 7,
                               offset: const Offset(0, 4),
                             ),
                           ],

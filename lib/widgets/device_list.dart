@@ -6,14 +6,17 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../helpers/emergency_pulse_ticker.dart';
 import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import '../services/notification_service.dart';
+import '../sheets/device_alarm_policy_sheet.dart';
 
 class DeviceList extends StatefulWidget {
   final String homeId;
+  final String ownerUid;
   final String hubId;
   final Map<String, dynamic> devices;
   final String selectedRoomId;
@@ -33,6 +36,7 @@ class DeviceList extends StatefulWidget {
     this.header,
     super.key,
     required this.homeId,
+    required this.ownerUid,
     required this.hubId,
     required this.devices,
     required this.isShared,
@@ -63,7 +67,9 @@ class _DeviceListState extends State<DeviceList> {
   bool _mutingHomeSiren = false;
   bool _sirenAlertPulseDanger = false;
   Timer? _deviceDropTimer;
-  Timer? _sirenAlertPulseTimer;
+  Timer? _emergencyExpiryTimer;
+  final Set<String> _acknowledgingEmergencyDeviceIds = <String>{};
+  final Set<String> _locallyAcknowledgedEmergencyTriggers = <String>{};
   Map<String, Map<String, int>> _deviceOrderMap = {};
   Map<String, Map<String, int>> _localDeviceOrderMap = {};
   Map<String, Map<String, int>> _optimisticDeviceOrderMap = {};
@@ -78,6 +84,7 @@ class _DeviceListState extends State<DeviceList> {
 
   String get _currentUid => FirebaseAuth.instance.currentUser?.uid ?? "";
   String get _homeId => widget.homeId.trim();
+  String get _ownerUid => widget.ownerUid.trim();
   String get _hubId => widget.hubId.trim();
 
   static const String _deviceOrderRoot = "deviceOrder";
@@ -85,30 +92,41 @@ class _DeviceListState extends State<DeviceList> {
   @override
   void initState() {
     super.initState();
+    EmergencyPulseTicker.ensureStarted();
+    _sirenAlertPulseDanger = EmergencyPulseTicker.phase.value;
+    EmergencyPulseTicker.phase.addListener(_handleSharedEmergencyPulse);
     _startDeviceOrderListener();
     _syncSirenAlertPulse();
+    _syncEmergencyExpiryTimer();
   }
 
   @override
   void didUpdateWidget(covariant DeviceList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.homeId != widget.homeId) {
+    if (
+      oldWidget.homeId != widget.homeId ||
+      oldWidget.ownerUid != widget.ownerUid
+    ) {
       _deviceOrderMap = {};
       _localDeviceOrderMap = {};
       _optimisticDeviceOrderMap = {};
+      _acknowledgingEmergencyDeviceIds.clear();
+      _locallyAcknowledgedEmergencyTriggers.clear();
       _clearDeviceDragState();
       _startDeviceOrderListener();
     }
 
     _syncSirenAlertPulse();
+    _syncEmergencyExpiryTimer();
   }
 
   @override
   void dispose() {
+    EmergencyPulseTicker.phase.removeListener(_handleSharedEmergencyPulse);
     _deviceOrderSubscription?.cancel();
     _deviceDropTimer?.cancel();
-    _sirenAlertPulseTimer?.cancel();
+    _emergencyExpiryTimer?.cancel();
     super.dispose();
   }
 
@@ -130,41 +148,66 @@ class _DeviceListState extends State<DeviceList> {
     return false;
   }
 
-  void _syncSirenAlertPulse() {
-    final hasActiveSiren = _hasActiveSiren();
+  bool _isEmergencyDeviceActiveForUi(
+    String deviceId,
+    Map<String, dynamic> device,
+  ) {
+    final type =
+        device["type"]?.toString().trim().toLowerCase() ?? "";
 
-    if (!hasActiveSiren) {
-      _sirenAlertPulseTimer?.cancel();
-      _sirenAlertPulseTimer = null;
-      _sirenAlertPulseDanger = false;
+    if (!isEmergencyStatusDeviceType(type)) {
+      return false;
+    }
+
+    final triggeredAt = _emergencyTriggeredAt(device);
+
+    if (triggeredAt > 0) {
+      return emergencyStatusActiveUntil(device) >
+              DateTime.now().millisecondsSinceEpoch &&
+          !_isEmergencyAcknowledgedByCurrentUser(deviceId, device);
+    }
+
+    final evaluation = evaluateDeviceStatus(
+      device,
+      securityMode: securityMode,
+    );
+
+    return evaluation["level"]?.toString() == "emergency";
+  }
+
+  bool _hasActiveEmergencyDevice() {
+    for (final entry in devices.entries) {
+      if (_isEmergencyDeviceActiveForUi(entry.key, safeMap(entry.value))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool _hasActiveAlertPulseTarget() {
+    return _hasActiveSiren() || _hasActiveEmergencyDevice();
+  }
+
+  void _handleSharedEmergencyPulse() {
+    if (!mounted || !_hasActiveAlertPulseTarget()) {
       return;
     }
 
-    if (_sirenAlertPulseTimer != null) {
+    final next = EmergencyPulseTicker.phase.value;
+    if (_sirenAlertPulseDanger == next) {
       return;
     }
 
-    _sirenAlertPulseDanger = false;
-    _sirenAlertPulseTimer = Timer.periodic(const Duration(milliseconds: 650), (
-      _,
-    ) {
-      if (!mounted) {
-        return;
-      }
-
-      if (!_hasActiveSiren()) {
-        _sirenAlertPulseTimer?.cancel();
-        _sirenAlertPulseTimer = null;
-        setState(() {
-          _sirenAlertPulseDanger = false;
-        });
-        return;
-      }
-
-      setState(() {
-        _sirenAlertPulseDanger = !_sirenAlertPulseDanger;
-      });
+    setState(() {
+      _sirenAlertPulseDanger = next;
     });
+  }
+
+  void _syncSirenAlertPulse() {
+    _sirenAlertPulseDanger = _hasActiveAlertPulseTarget()
+        ? EmergencyPulseTicker.phase.value
+        : false;
   }
 
   void _startDeviceOrderListener() {
@@ -448,19 +491,291 @@ class _DeviceListState extends State<DeviceList> {
     return strings.monthsAgo(months);
   }
 
-  bool isSosActive(Map<String, dynamic> d) {
-    final activeUntil =
-        int.tryParse(d["sos_active_until"]?.toString() ?? "0") ?? 0;
-
-    if (activeUntil <= 0) return false;
-
-    return DateTime.now().millisecondsSinceEpoch < activeUntil;
+  int _emergencyTriggeredAt(Map<String, dynamic> device) {
+    return emergencyStatusTriggeredAt(device);
   }
 
-  bool isDeviceUnsafe(Map<String, dynamic> d) {
-    final evaluation = evaluateDeviceStatus(d, securityMode: securityMode);
+  String _emergencyAcknowledgementKey(
+    String deviceId,
+    int triggeredAt,
+  ) {
+    return "$deviceId|$triggeredAt";
+  }
 
-    return evaluation["level"] != "safe";
+  bool _isEmergencyAcknowledgedByCurrentUser(
+    String deviceId,
+    Map<String, dynamic> device,
+  ) {
+    final uid = _currentUid;
+    final triggeredAt = _emergencyTriggeredAt(device);
+
+    if (uid.isEmpty || triggeredAt <= 0) {
+      return false;
+    }
+
+    if (
+      _locallyAcknowledgedEmergencyTriggers.contains(
+        _emergencyAcknowledgementKey(deviceId, triggeredAt),
+      )
+    ) {
+      return true;
+    }
+
+    final acknowledgements = safeMap(
+      device["emergencyAcknowledgements"],
+    );
+    final oldSosAcknowledgements = safeMap(
+      device["sosAcknowledgements"],
+    );
+    final acknowledgedTrigger = int.tryParse(
+          acknowledgements[uid]?.toString() ?? "0",
+        ) ??
+        0;
+    final oldSosAcknowledgedTrigger = int.tryParse(
+          oldSosAcknowledgements[uid]?.toString() ?? "0",
+        ) ??
+        0;
+
+    return acknowledgedTrigger >= triggeredAt ||
+        oldSosAcknowledgedTrigger >= triggeredAt;
+  }
+
+  bool _isEmergencyAwaitingAcknowledgement(
+    String deviceId,
+    Map<String, dynamic> device,
+  ) {
+    final type =
+        device["type"]?.toString().trim().toLowerCase() ?? "";
+    final triggeredAt = _emergencyTriggeredAt(device);
+
+    return isEmergencyStatusDeviceType(type) &&
+        triggeredAt > 0 &&
+        emergencyStatusActiveUntil(device) >
+            DateTime.now().millisecondsSinceEpoch &&
+        !_isEmergencyAcknowledgedByCurrentUser(deviceId, device);
+  }
+
+  void _syncEmergencyExpiryTimer() {
+    _emergencyExpiryTimer?.cancel();
+    _emergencyExpiryTimer = null;
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    int? nearestExpiry;
+
+    for (final entry in devices.entries) {
+      final deviceId = entry.key;
+      final device = safeMap(entry.value);
+      final type =
+          device["type"]?.toString().trim().toLowerCase() ?? "";
+
+      if (
+        !isEmergencyStatusDeviceType(type) ||
+        _isEmergencyAcknowledgedByCurrentUser(deviceId, device)
+      ) {
+        continue;
+      }
+
+      final activeUntil = emergencyStatusActiveUntil(device);
+
+      if (activeUntil <= now) {
+        continue;
+      }
+
+      if (nearestExpiry == null || activeUntil < nearestExpiry) {
+        nearestExpiry = activeUntil;
+      }
+    }
+
+    if (nearestExpiry == null) {
+      return;
+    }
+
+    final delayMs = (nearestExpiry - now + 120)
+        .clamp(120, emergencyStatusHoldMs)
+        .toInt();
+
+    _emergencyExpiryTimer = Timer(Duration(milliseconds: delayMs), () {
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {});
+      _syncEmergencyExpiryTimer();
+    });
+  }
+
+  String _emergencyAcknowledgeLabel(AppStrings strings) {
+    return strings.choose(
+      vi: "XÁC NHẬN",
+      en: "ACKNOWLEDGE",
+      zh: "确认",
+      ko: "확인",
+      ja: "確認",
+      de: "BESTÄTIGEN",
+      ru: "ПОДТВЕРДИТЬ",
+      fr: "CONFIRMER",
+      es: "CONFIRMAR",
+      id: "KONFIRMASI",
+      th: "ยืนยัน",
+      ms: "SAHKAN",
+      fil: "KUMPIRMAHIN",
+      km: "បញ្ជាក់",
+      my: "အတည်ပြုရန်",
+      lo: "ຢືນຢັນ",
+    );
+  }
+
+  String _emergencyAcknowledgeErrorText(AppStrings strings) {
+    return strings.choose(
+      vi: "Không thể xác nhận cảnh báo",
+      en: "Could not acknowledge the alert",
+      zh: "无法确认警报",
+      ko: "경고를 확인할 수 없습니다",
+      ja: "警報を確認できませんでした",
+      de: "Warnung konnte nicht bestätigt werden",
+      ru: "Не удалось подтвердить тревогу",
+      fr: "Impossible de confirmer l’alerte",
+      es: "No se pudo confirmar la alerta",
+      id: "Peringatan tidak dapat dikonfirmasi",
+      th: "ไม่สามารถยืนยันการแจ้งเตือนได้",
+      ms: "Amaran tidak dapat disahkan",
+      fil: "Hindi makumpirma ang alerto",
+      km: "មិនអាចបញ្ជាក់ការជូនដំណឹងបានទេ",
+      my: "သတိပေးချက်ကို အတည်မပြုနိုင်ပါ",
+      lo: "ບໍ່ສາມາດຢືນຢັນການເຕືອນໄດ້",
+    );
+  }
+
+  Future<void> _acknowledgeEmergency(
+    String deviceId,
+    Map<String, dynamic> device,
+    AppStrings strings,
+  ) async {
+    final uid = _currentUid;
+    final ownerUid = _ownerUid;
+    final homeId = _homeId;
+    final triggeredAt = _emergencyTriggeredAt(device);
+
+    if (
+      uid.isEmpty ||
+      ownerUid.isEmpty ||
+      homeId.isEmpty ||
+      triggeredAt <= 0 ||
+      !_isEmergencyAwaitingAcknowledgement(deviceId, device) ||
+      _acknowledgingEmergencyDeviceIds.contains(deviceId)
+    ) {
+      return;
+    }
+
+    setState(() {
+      _acknowledgingEmergencyDeviceIds.add(deviceId);
+    });
+
+    try {
+      await FirebaseDatabase.instance
+          .ref(
+            "accounts/$ownerUid/homes/$homeId/devices/$deviceId/"
+            "emergencyAcknowledgements/$uid",
+          )
+          .set(triggeredAt);
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _locallyAcknowledgedEmergencyTriggers.add(
+          _emergencyAcknowledgementKey(deviceId, triggeredAt),
+        );
+      });
+      _syncSirenAlertPulse();
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      showTopToast(
+        context,
+        _emergencyAcknowledgeErrorText(strings),
+        color: SafeHomeColors.danger,
+        icon: Icons.error_outline_rounded,
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _acknowledgingEmergencyDeviceIds.remove(deviceId);
+        });
+      }
+    }
+  }
+
+  Widget _emergencyAcknowledgeAction({
+    required String deviceId,
+    required Map<String, dynamic> device,
+    required bool compact,
+    required AppStrings strings,
+    required Color pulseColor,
+  }) {
+    final loading =
+        _acknowledgingEmergencyDeviceIds.contains(deviceId);
+    final label = _emergencyAcknowledgeLabel(strings);
+
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        label: label,
+        child: Material(
+          color: pulseColor.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(8),
+          child: InkWell(
+            onTap: loading
+                ? null
+                : () => _acknowledgeEmergency(
+                    deviceId,
+                    device,
+                    strings,
+                  ),
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              width: double.infinity,
+              height: compact ? 14 : 16,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: loading
+                    ? Center(
+                        child: SizedBox(
+                          width: compact ? 11 : 12,
+                          height: compact ? 11 : 12,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1.7,
+                            color: pulseColor,
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.center,
+                          child: Text(
+                            label,
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: compact ? 9.0 : 9.5,
+                              height: 1,
+                              fontWeight: FontWeight.w900,
+                              color: pulseColor,
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   String getDeviceGroup(String type) {
@@ -566,24 +881,35 @@ class _DeviceListState extends State<DeviceList> {
 
     switch (type) {
       case "smoke":
-        return isActiveDeviceSignal(d["smoke"])
+        final active = isEmergencyStatusActiveForCurrentUser(
+          d,
+          legacyActive: isActiveDeviceSignal(d["smoke"]),
+        );
+
+        return active
             ? strings.t("Có khói")
             : strings.t("Bình thường");
 
       case "heat":
-        final active =
-            isActiveDeviceSignal(d["heat"]) ||
-            isActiveDeviceSignal(d["heat_alarm"]) ||
-            isActiveDeviceSignal(d["high_temperature_alarm"]);
+        final active = isEmergencyStatusActiveForCurrentUser(
+          d,
+          legacyActive:
+              isActiveDeviceSignal(d["heat"]) ||
+              isActiveDeviceSignal(d["heat_alarm"]) ||
+              isActiveDeviceSignal(d["high_temperature_alarm"]),
+        );
 
         return active
             ? strings.t("Nhiệt độ nguy hiểm")
             : strings.t("Bình thường");
 
       case "carbon_monoxide":
-        final active =
-            isActiveDeviceSignal(d["carbon_monoxide"]) ||
-            isActiveDeviceSignal(d["co_alarm"]);
+        final active = isEmergencyStatusActiveForCurrentUser(
+          d,
+          legacyActive:
+              isActiveDeviceSignal(d["carbon_monoxide"]) ||
+              isActiveDeviceSignal(d["co_alarm"]),
+        );
 
         return active
             ? strings.t("Phát hiện khí CO")
@@ -595,18 +921,24 @@ class _DeviceListState extends State<DeviceList> {
             : strings.t("Sẵn sàng");
 
       case "gas":
-        final active =
-            isActiveDeviceSignal(d["gas"]) ||
-            isActiveDeviceSignal(d["gas_alarm"]);
+        final active = isEmergencyStatusActiveForCurrentUser(
+          d,
+          legacyActive:
+              isActiveDeviceSignal(d["gas"]) ||
+              isActiveDeviceSignal(d["gas_alarm"]),
+        );
 
         return active ? strings.t("Rò rỉ gas") : strings.t("Bình thường");
 
       case "water_leak":
       case "flood":
-        final active =
-            isActiveDeviceSignal(d["water_leak"]) ||
-            isActiveDeviceSignal(d["leak"]) ||
-            isActiveDeviceSignal(d["water"]);
+        final active = isEmergencyStatusActiveForCurrentUser(
+          d,
+          legacyActive:
+              isActiveDeviceSignal(d["water_leak"]) ||
+              isActiveDeviceSignal(d["leak"]) ||
+              isActiveDeviceSignal(d["water"]),
+        );
 
         return active
             ? strings.t("Phát hiện ngập nước")
@@ -717,6 +1049,10 @@ class _DeviceListState extends State<DeviceList> {
     final evaluation = evaluateDeviceStatus(d, securityMode: securityMode);
 
     final level = evaluation["level"]?.toString() ?? "safe";
+
+    if (level == "emergency") {
+      return SafeHomeColors.emergency;
+    }
 
     if (level == "danger") {
       return SafeHomeColors.danger;
@@ -858,7 +1194,12 @@ class _DeviceListState extends State<DeviceList> {
   double _deviceGridItemHeight(
     bool compact,
     List<MapEntry<String, dynamic>> entries,
+    AppStrings strings,
   ) {
+    // Font Myanmar có phần glyph cao hơn một chút. Chừa riêng 1 px để
+    // tránh RenderFlex overflow 0.x px mà không làm thay đổi UI ngôn ngữ khác.
+    final localeHeightExtra = strings.isBurmese ? 1.0 : 0.0;
+
     final hasActiveSiren = entries.any((entry) {
       final device = safeMap(entry.value);
       final type = device["type"]?.toString() ?? "";
@@ -867,14 +1208,15 @@ class _DeviceListState extends State<DeviceList> {
           (isActiveDeviceSignal(device["alarm"]) ||
               normalizeDeviceSwitchState(device) == "on");
     });
-
     if (hasActiveSiren) {
-      return compact ? 106.0 : 114.0;
+      return (compact ? 106.0 : 114.0) + localeHeightExtra;
     }
 
+    // Nút xác nhận thay thế đúng vùng trạng thái phía dưới, không được
+    // làm thay đổi chiều cao của ô thiết bị khi xuất hiện hoặc biến mất.
     // Giữ card gọn như layout cũ nhưng chừa dư rất nhẹ
     // để Column bên trong không bị overflow 0.x pixels.
-    return compact ? 70.0 : 75.0;
+    return (compact ? 70.0 : 75.0) + localeHeightExtra;
   }
 
   Offset _deviceGridOffsetForIndex({
@@ -1330,6 +1672,97 @@ class _DeviceListState extends State<DeviceList> {
     );
   }
 
+  Widget _crossedAlarmPolicyIcon({
+    required IconData icon,
+    required double size,
+    required Color color,
+  }) {
+    return SizedBox(
+      width: size + 3,
+      height: size + 3,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(icon, size: size, color: color),
+          Transform.rotate(
+            angle: -0.78,
+            child: Container(
+              width: size + 2,
+              height: 1.8,
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(2),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.white,
+                    blurRadius: 0.6,
+                    spreadRadius: 0.3,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget? _deviceAlarmPolicyIndicator({
+    required Map<String, dynamic> device,
+    required bool compact,
+  }) {
+    final deviceType =
+        device["type"]?.toString().trim().toLowerCase() ?? "unknown";
+
+    if (!supportsDeviceAlarmPolicy(deviceType)) {
+      return null;
+    }
+
+    final settings = DeviceAlarmPolicySettings.fromDevice(
+      device: device,
+      deviceType: deviceType,
+    );
+    final iconSize = compact ? 15.0 : 16.0;
+
+    if (!settings.enabled) {
+      return Icon(
+        Icons.shield_rounded,
+        size: iconSize,
+        color: SafeHomeColors.textSecondary.withValues(alpha: 0.72),
+      );
+    }
+
+    if (settings.physicalSirenEnabled && settings.fullscreenEnabled) {
+      return Icon(
+        Icons.shield_rounded,
+        size: iconSize,
+        color: SafeHomeColors.safe,
+      );
+    }
+
+    if (!settings.physicalSirenEnabled && !settings.fullscreenEnabled) {
+      return Icon(
+        Icons.notifications_rounded,
+        size: iconSize,
+        color: SafeHomeColors.info,
+      );
+    }
+
+    if (!settings.physicalSirenEnabled) {
+      return _crossedAlarmPolicyIcon(
+        icon: Icons.campaign_rounded,
+        size: iconSize,
+        color: SafeHomeColors.warning,
+      );
+    }
+
+    return _crossedAlarmPolicyIcon(
+      icon: Icons.smartphone_rounded,
+      size: iconSize,
+      color: SafeHomeColors.warning,
+    );
+  }
+
   Widget _deviceCard({
     required String id,
     required Map<String, dynamic> d,
@@ -1346,59 +1779,95 @@ class _DeviceListState extends State<DeviceList> {
       strings,
     );
     final accentColor = getAccentColor(d);
+    final alarmPolicyIndicator = _deviceAlarmPolicyIndicator(
+      device: d,
+      compact: compact,
+    );
+    final trailingIndicatorColumnWidth = compact ? 18.0 : 20.0;
+    final showEmergencyAcknowledge =
+        _isEmergencyAwaitingAcknowledgement(id, d);
+    final emergencyIsActive = _isEmergencyDeviceActiveForUi(id, d);
+    final emergencyPulseColor = _sirenAlertPulseDanger
+        ? SafeHomeColors.danger
+        : SafeHomeColors.warning;
 
-    final cardStatusColor =
+    final baseCardStatusColor =
         accentColor == SafeHomeColors.danger || connectionStatus == "off"
         ? SafeHomeColors.danger
         : connectionStatus == "warn"
         ? SafeHomeColors.warning
         : accentColor;
+    final cardStatusColor = emergencyIsActive
+        ? emergencyPulseColor
+        : baseCardStatusColor;
+    final effectiveAccentColor = emergencyIsActive
+        ? emergencyPulseColor
+        : accentColor;
+    final cardBackgroundColor = emergencyIsActive
+        ? emergencyPulseColor.withValues(
+            alpha: _sirenAlertPulseDanger ? 0.20 : 0.15,
+          )
+        : SafeHomeColors.surface;
 
     return Material(
-      color: SafeHomeColors.surface,
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(17),
       child: InkWell(
         onTap: () => onTapDevice(id),
         borderRadius: BorderRadius.circular(17),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 420),
+          curve: Curves.easeInOut,
           padding: EdgeInsets.fromLTRB(
             compact ? 9 : 10,
             compact ? 8 : 9,
             compact ? 9 : 10,
             compact ? 8 : 9,
           ),
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: SafeHomeColors.surface,
+            color: cardBackgroundColor,
             borderRadius: BorderRadius.circular(17),
             border: Border.all(
-              color: cardStatusColor.withValues(alpha: 0.62),
-              width: 1.15,
+              color: cardStatusColor.withValues(
+                alpha: emergencyIsActive ? 0.95 : 0.62,
+              ),
+              width: emergencyIsActive ? 1.5 : 1.15,
             ),
             boxShadow: [
               BoxShadow(
-                color: cardStatusColor.withValues(alpha: 0.055),
-                blurRadius: 10,
+                color: cardStatusColor.withValues(
+                  alpha: emergencyIsActive ? 0.20 : 0.055,
+                ),
+                blurRadius: emergencyIsActive ? 16 : 10,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 420),
+                    curve: Curves.easeInOut,
                     width: compact ? 34 : 36,
                     height: compact ? 34 : 36,
                     decoration: BoxDecoration(
-                      color: getIconBackground(d),
+                      color: emergencyIsActive
+                          ? effectiveAccentColor.withValues(alpha: 0.20)
+                          : getIconBackground(d),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
                       getDeviceIcon(type),
                       size: compact ? 18 : 19,
-                      color: accentColor,
+                      color: effectiveAccentColor,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -1415,7 +1884,9 @@ class _DeviceListState extends State<DeviceList> {
                             fontSize: compact ? 13.8 : 14.5,
                             height: 1.05,
                             fontWeight: FontWeight.w900,
-                            color: SafeHomeColors.textPrimary,
+                            color: emergencyIsActive
+                                ? effectiveAccentColor
+                                : SafeHomeColors.textPrimary,
                             letterSpacing: -0.1,
                           ),
                         ),
@@ -1428,47 +1899,125 @@ class _DeviceListState extends State<DeviceList> {
                             fontSize: compact ? 11.6 : 12.3,
                             height: 1.05,
                             fontWeight: FontWeight.w800,
-                            color: accentColor,
+                            color: effectiveAccentColor,
                           ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 7),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Text(
-                      getTimeText(d, strings),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: compact ? 9.8 : 10.4,
-                        height: 1,
-                        fontWeight: FontWeight.w500,
-                        color: SafeHomeColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 7),
-                  Tooltip(
-                    message: connectionDescription,
-                    child: Semantics(
-                      label: connectionDescription,
-                      child: Container(
-                        width: compact ? 8 : 9,
-                        height: compact ? 8 : 9,
-                        decoration: BoxDecoration(
-                          color: connectionColor,
-                          shape: BoxShape.circle,
+                  if (alarmPolicyIndicator != null) ...[
+                    const SizedBox(width: 4),
+                    SizedBox(
+                      width: trailingIndicatorColumnWidth,
+                      height: compact ? 34 : 36,
+                      child: Transform.translate(
+                        offset: const Offset(2, 0),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: alarmPolicyIndicator,
                         ),
                       ),
                     ),
+                  ],
+                    ],
                   ),
-                ],
+                ),
+              ),
+              // Giữ nguyên tổng chiều cao của card: giảm khoảng cách 1 px và
+              // chuyển 1 px đó cho dòng cuối để font tiếng Việt/Myanmar không
+              // bị cắt chân chữ.
+              SizedBox(height: compact ? 3 : 4),
+              SizedBox(
+                height: compact ? 15 : 17,
+                child: ClipRect(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 280),
+                    reverseDuration: const Duration(milliseconds: 240),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder: (child, animation) {
+                      final curved = CurvedAnimation(
+                        parent: animation,
+                        curve: Curves.easeOutCubic,
+                        reverseCurve: Curves.easeInCubic,
+                      );
+
+                      return FadeTransition(
+                        opacity: curved,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, 0.18),
+                            end: Offset.zero,
+                          ).animate(curved),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: showEmergencyAcknowledge
+                        ? KeyedSubtree(
+                            key: ValueKey<String>(
+                              "emergency-ack-$id-${_emergencyTriggeredAt(d)}",
+                            ),
+                            child: _emergencyAcknowledgeAction(
+                              deviceId: id,
+                              device: d,
+                              compact: compact,
+                              strings: strings,
+                              pulseColor: emergencyPulseColor,
+                            ),
+                          )
+                        : Center(
+                            key: ValueKey<String>("device-time-$id"),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    getTimeText(d, strings),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    textHeightBehavior: const TextHeightBehavior(
+                                      applyHeightToFirstAscent: true,
+                                      applyHeightToLastDescent: true,
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: compact ? 9.8 : 10.4,
+                                      height: 1.10,
+                                      fontWeight: FontWeight.w500,
+                                      color: SafeHomeColors.textSecondary,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                SizedBox(
+                                  width: trailingIndicatorColumnWidth,
+                                  child: Transform.translate(
+                                    offset: const Offset(2, 0),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Tooltip(
+                                        message: connectionDescription,
+                                        child: Semantics(
+                                          label: connectionDescription,
+                                          child: Container(
+                                            width: compact ? 8 : 9,
+                                            height: compact ? 8 : 9,
+                                            decoration: BoxDecoration(
+                                              color: connectionColor,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+                ),
               ),
               if (sirenIsOn) ...[
                 const SizedBox(height: 6),
@@ -1771,12 +2320,16 @@ class _DeviceListState extends State<DeviceList> {
     return "$text ($count)";
   }
 
-  String _sirenOperatingStatusText(bool sirenIsOn, AppStrings strings) {
+  String _sirenOperatingStatusText(
+    bool sirenIsOn,
+    int sirenCount,
+    AppStrings strings,
+  ) {
     if (sirenIsOn) {
       return _sirenAlertStatusText(strings);
     }
 
-    return strings.choose(
+    final text = strings.choose(
       vi: "Còi đang tắt",
       en: "Siren off",
       zh: "警报器已关闭",
@@ -1794,6 +2347,8 @@ class _DeviceListState extends State<DeviceList> {
       my: "ဆိုင်ရင် ပိတ်ထားသည်",
       lo: "ສຽງໄຊເຣນປິດຢູ່",
     );
+
+    return "$text ($sirenCount)";
   }
 
   Widget _infrastructureTypeGroupCard({
@@ -1835,7 +2390,11 @@ class _DeviceListState extends State<DeviceList> {
           )
         : _infrastructureStatusSummary(entries, strings);
     final secondaryStatusText = isSirenGroup
-        ? _sirenOperatingStatusText(sirenIsOn, strings)
+        ? _sirenOperatingStatusText(
+            sirenIsOn,
+            entries.length,
+            strings,
+          )
         : _infrastructureSignalText(entries, strings);
     final secondaryStatusColor = isSirenGroup
         ? sirenIsOn
@@ -1864,7 +2423,7 @@ class _DeviceListState extends State<DeviceList> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 420),
           curve: Curves.easeInOut,
-          height: compact ? 76 : 81,
+          height: compact ? 77 : 82,
           padding: EdgeInsets.fromLTRB(
             compact ? 9 : 10,
             compact ? 8 : 9,
@@ -1944,7 +2503,7 @@ class _DeviceListState extends State<DeviceList> {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: compact ? 11.2 : 11.8,
-                                height: 1.05,
+                                height: 1.18,
                                 fontWeight: FontWeight.w900,
                                 color: accentColor,
                               ),
@@ -2189,7 +2748,7 @@ class _DeviceListState extends State<DeviceList> {
   }) {
     final sectionKey = _sectionKeyForGroup(groupName);
     final canReorder = _canReorderDevices && entries.length > 1;
-    final itemHeight = _deviceGridItemHeight(compact, entries);
+    final itemHeight = _deviceGridItemHeight(compact, entries, strings);
     final visibleEntries = canReorder
         ? _dragPreviewEntries(sectionKey, entries)
         : entries;

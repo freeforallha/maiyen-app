@@ -850,6 +850,98 @@ class AppStrings {
     return role;
   }
 
+  String armedSecurityModeSourceLabel(String source) {
+    final normalizedSource = source.trim().toLowerCase();
+    final automatic =
+        normalizedSource == "auto_away" || normalizedSource == "schedule";
+
+    if (automatic) {
+      return choose(
+        vi: "Bảo vệ - Tự động",
+        en: "Guard - Auto",
+        zh: "布防 - 自动",
+        ko: "보호 - 자동",
+        ja: "警戒 - 自動",
+        de: "Schutzmodus - Automatisch",
+        ru: "Режим охраны - Автоматически",
+        fr: "Protection - Automatique",
+        es: "Protección - Automática",
+        id: "Perlindungan - Otomatis",
+        th: "ป้องกัน - อัตโนมัติ",
+        ms: "Perlindungan - Automatik",
+        fil: "Proteksyon - Awtomatiko",
+        km: "ការពារ - ស្វ័យប្រវត្តិ",
+        my: "ကာကွယ်မှု - အလိုအလျောက်",
+        lo: "ປ້ອງກັນ - ອັດຕະໂນມັດ",
+      );
+    }
+
+    return choose(
+      vi: "Bảo vệ - Thủ công",
+      en: "Guard - Manual",
+      zh: "布防 - 手动",
+      ko: "보호 - 수동",
+      ja: "警戒 - 手動",
+      de: "Schutzmodus - Manuell",
+      ru: "Режим охраны - Вручную",
+      fr: "Protection - Par l’utilisateur",
+      es: "Protección - Por el usuario",
+      id: "Perlindungan - Oleh pengguna",
+      th: "ป้องกัน - ด้วยตนเอง",
+      ms: "Perlindungan - Oleh pengguna",
+      fil: "Proteksyon - Manu-mano",
+      km: "ការពារ - ដោយដៃ",
+      my: "ကာကွယ်မှု - ကိုယ်တိုင်",
+      lo: "ປ້ອງກັນ - ດ້ວຍຕົນເອງ",
+    );
+  }
+
+  String armedSecurityModeSourceDetailLabel(String source) {
+    final normalizedSource = source.trim().toLowerCase();
+    final automatic =
+        normalizedSource == "auto_away" || normalizedSource == "schedule";
+
+    if (automatic) {
+      return choose(
+        vi: "Tự động",
+        en: "Auto",
+        zh: "自动",
+        ko: "자동",
+        ja: "自動",
+        de: "Automatisch",
+        ru: "Автоматически",
+        fr: "Automatique",
+        es: "Automático",
+        id: "Otomatis",
+        th: "อัตโนมัติ",
+        ms: "Automatik",
+        fil: "Awtomatiko",
+        km: "ស្វ័យប្រវត្តិ",
+        my: "အလိုအလျောက်",
+        lo: "ອັດຕະໂນມັດ",
+      );
+    }
+
+    return choose(
+      vi: "Thủ công",
+      en: "Manual",
+      zh: "手动",
+      ko: "수동",
+      ja: "手動",
+      de: "Manuell",
+      ru: "Вручную",
+      fr: "Par l’utilisateur",
+      es: "Por el usuario",
+      id: "Oleh pengguna",
+      th: "ด้วยตนเอง",
+      ms: "Oleh pengguna",
+      fil: "Manu-mano",
+      km: "ដោយដៃ",
+      my: "ကိုယ်တိုင်",
+      lo: "ດ້ວຍຕົນເອງ",
+    );
+  }
+
   String manualSecurityModeEnabledTitle() => choose(
     vi: "Chế độ Bảo vệ thủ công đã bật",
     en: "Manual Guard mode enabled",
@@ -1171,6 +1263,44 @@ class AppStrings {
 
     es: "SEGURO",
     fr: _fr(vi: "ĐÃ AN TOÀN", en: "SAFE"),
+  );
+
+  String emergencyStatusTitle() => choose(
+    vi: "NGUY HIỂM",
+    fil: "MAPANGANIB",
+    km: "គ្រោះថ្នាក់",
+    en: "DANGER",
+    zh: "危险",
+    ko: "위험",
+    ja: "危険",
+    de: "GEFAHR",
+    ru: "ОПАСНО",
+    fr: "DANGER",
+    es: "PELIGRO",
+    id: "BAHAYA",
+    th: "อันตราย",
+    ms: "BAHAYA",
+    my: "အန္တရာယ်",
+    lo: "ອັນຕະລາຍ",
+  );
+
+  String emergencySectionTitle() => choose(
+    vi: "Nguy hiểm & Khẩn cấp",
+    fil: "Panganib at Emergency",
+    km: "គ្រោះថ្នាក់ និងបន្ទាន់",
+    en: "Danger & Emergency",
+    zh: "危险与紧急情况",
+    ko: "위험 및 긴급 상황",
+    ja: "危険・緊急",
+    de: "Gefahr & Notfall",
+    ru: "Опасность и экстренная ситуация",
+    fr: "Danger et urgence",
+    es: "Peligro y emergencia",
+    id: "Bahaya & Darurat",
+    th: "อันตรายและฉุกเฉิน",
+    ms: "Bahaya & Kecemasan",
+    my: "အန္တရာယ်နှင့် အရေးပေါ်",
+    lo: "ອັນຕະລາຍ ແລະ ສຸກເສີນ",
   );
 
   String unsafeStatusTitle() => choose(
@@ -4010,6 +4140,28 @@ class AppStrings {
     lo: "ເລືອກ $count ເຮືອນ",
   );
 
+  String allHomeEmergencyCountText(int count, {String reason = ""}) {
+    final suffix = reason.trim().isNotEmpty ? " • ${reason.trim()}" : "";
+    return choose(
+      vi: "🆘 $count nhà nguy hiểm$suffix",
+      fil: "🆘 $count bahay ang nasa panganib$suffix",
+      km: "🆘 ផ្ទះគ្រោះថ្នាក់ចំនួន $count$suffix",
+      en: "🆘 $count homes in danger$suffix",
+      zh: "🆘 $count 个家庭处于危险中$suffix",
+      ko: "🆘 위험 상태인 집 $count개$suffix",
+      ja: "🆘 危険状態の家 $count 件$suffix",
+      de: "🆘 $count Zuhause in Gefahr$suffix",
+      ru: "🆘 $count домов в опасности$suffix",
+      fr: "🆘 $count maisons en danger$suffix",
+      es: "🆘 $count casas en peligro$suffix",
+      id: "🆘 $count rumah dalam bahaya$suffix",
+      th: "🆘 บ้านที่อยู่ในอันตราย $count หลัง$suffix",
+      ms: "🆘 $count rumah dalam bahaya$suffix",
+      my: "🆘 အန္တရာယ်ရှိသောအိမ် $count လုံး$suffix",
+      lo: "🆘 $count ເຮືອນຢູ່ໃນອັນຕະລາຍ$suffix",
+    );
+  }
+
   String allHomeDangerCountText(int count, {String reason = ""}) {
     final suffix = reason.trim().isNotEmpty ? " • ${reason.trim()}" : "";
     return choose(
@@ -5719,6 +5871,82 @@ class AppStrings {
           ru: "Обнаружена протечка воды",
           es: "Inundación detectada",
           fr: _fr(vi: "Phát hiện ngập nước", en: "Water leak detected"),
+        );
+      case "phát hiện chập điện":
+        return choose(
+          vi: "Phát hiện chập điện",
+          fil: "Natukoy ang short circuit",
+          km: "រកឃើញសៀគ្វីខ្លី",
+          en: "Short circuit detected",
+          zh: "检测到短路",
+          ko: "단락 감지",
+          ja: "短絡を検知",
+          de: "Kurzschluss erkannt",
+          ru: "Обнаружено короткое замыкание",
+          fr: "Court-circuit détecté",
+          es: "Cortocircuito detectado",
+          id: "Korsleting terdeteksi",
+          th: "ตรวจพบไฟฟ้าลัดวงจร",
+          ms: "Litar pintas dikesan",
+          my: "လျှပ်စစ်ရှော့ခ် တွေ့ရှိသည်",
+          lo: "ກວດພົບໄຟຟ້າລັດວົງຈອນ",
+        );
+      case "phát hiện quá dòng":
+        return choose(
+          vi: "Phát hiện quá dòng",
+          fil: "Natukoy ang sobrang kuryente",
+          km: "រកឃើញចរន្តលើស",
+          en: "Overcurrent detected",
+          zh: "检测到过流",
+          ko: "과전류 감지",
+          ja: "過電流を検知",
+          de: "Überstrom erkannt",
+          ru: "Обнаружен сверхток",
+          fr: "Surintensité détectée",
+          es: "Sobrecorriente detectada",
+          id: "Arus berlebih terdeteksi",
+          th: "ตรวจพบกระแสไฟเกิน",
+          ms: "Arus berlebihan dikesan",
+          my: "လျှပ်စီးအားလွန်ကဲမှု တွေ့ရှိသည်",
+          lo: "ກວດພົບກະແສໄຟເກີນ",
+        );
+      case "phát hiện quá áp":
+        return choose(
+          vi: "Phát hiện quá áp",
+          fil: "Natukoy ang sobrang boltahe",
+          km: "រកឃើញវ៉ុលលើស",
+          en: "Overvoltage detected",
+          zh: "检测到过压",
+          ko: "과전압 감지",
+          ja: "過電圧を検知",
+          de: "Überspannung erkannt",
+          ru: "Обнаружено перенапряжение",
+          fr: "Surtension détectée",
+          es: "Sobretensión detectada",
+          id: "Tegangan berlebih terdeteksi",
+          th: "ตรวจพบแรงดันไฟเกิน",
+          ms: "Voltan berlebihan dikesan",
+          my: "ဗို့အားလွန်ကဲမှု တွေ့ရှိသည်",
+          lo: "ກວດພົບແຮງດັນໄຟເກີນ",
+        );
+      case "thiết bị điện quá nhiệt":
+        return choose(
+          vi: "Thiết bị điện quá nhiệt",
+          fil: "Sobrang init ng de-kuryenteng aparato",
+          km: "ឧបករណ៍អគ្គិសនីឡើងកម្ដៅខ្លាំង",
+          en: "Electrical device overheating",
+          zh: "电气设备过热",
+          ko: "전기 장치 과열",
+          ja: "電気機器の過熱",
+          de: "Elektrisches Gerät überhitzt",
+          ru: "Перегрев электрического устройства",
+          fr: "Surchauffe d’un appareil électrique",
+          es: "Sobrecalentamiento del dispositivo eléctrico",
+          id: "Perangkat listrik terlalu panas",
+          th: "อุปกรณ์ไฟฟ้าร้อนเกินไป",
+          ms: "Peranti elektrik terlalu panas",
+          my: "လျှပ်စစ်ကိရိယာ အပူလွန်ကဲနေသည်",
+          lo: "ອຸປະກອນໄຟຟ້າຮ້ອນເກີນໄປ",
         );
       case "khóa đang mở":
         return choose(
