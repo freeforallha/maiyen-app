@@ -829,12 +829,27 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return;
     }
 
+    final notificationStatus = await _homeAlarmSecurityService
+        .notifyNormalModeEnabled(
+          ownerUid: ownerUid,
+          homeId: homeId,
+          homeName: homeName,
+          actorUid: uid,
+          actorName: actorName,
+        );
+
     if (mounted) {
       showTopToast(
         context,
-        _strings.t("Đã chuyển nhà về Bình thường"),
-        color: SafeHomeColors.safe,
-        icon: Icons.home_rounded,
+        notificationStatus == HomeSecurityNotificationStatus.failed
+            ? _strings.t(
+                "Đã chuyển về Bình thường nhưng chưa gửi được thông báo",
+              )
+            : _strings.t("Đã chuyển nhà về Bình thường"),
+        color: notificationStatus == HomeSecurityNotificationStatus.failed
+            ? Colors.orange
+            : SafeHomeColors.safe,
+        icon: Icons.shield_rounded,
       );
     }
   }
@@ -1253,10 +1268,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     required String deviceName,
     required Map<String, String> event,
   }) {
+    final eventType = event["type"] ?? "device_event";
+
+    // Các trạng thái này do backend ghi để vẫn đầy đủ khi app đóng.
+    // Không ghi thêm từ listener Flutter, tránh một sự kiện xuất hiện hai lần.
+    if (const <String>{
+      "device_added",
+      "device_battery_low",
+      "device_connection",
+    }.contains(eventType)) {
+      return;
+    }
+
     unawaited(
       HomeNotificationService.addNotification(
         uid: uid,
-        type: event["type"] ?? "device_event",
+        type: eventType,
         category: "device",
         severity: event["severity"] ?? "info",
         title: event["title"] ?? _strings.t("Cập nhật thiết bị"),
@@ -3654,6 +3681,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             devices: devices,
                             selectedRoomId: selectedRoomId,
                             securityMode: securityMode,
+                            personalAlarmRules: safeMap(
+                              customRulesByHome[selectedHome],
+                            ),
                             bottomPadding: deviceListBottomPadding,
                             header: HomeOverviewHeader(
                               ownerUid: overviewOwnerUid,

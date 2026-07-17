@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
@@ -128,31 +129,6 @@ void showDeviceDetail({
                 device: device,
                 deviceType: deviceType,
               );
-
-              Future<void> saveAlarmPolicy(
-                DeviceAlarmPolicySettings nextSettings,
-              ) async {
-                if (!canManageAlarmPolicy) {
-                  return;
-                }
-
-                try {
-                  await deviceRef
-                      .child("alarmPolicy")
-                      .set(nextSettings.toFirebaseMap());
-                } catch (_) {
-                  if (!context.mounted) {
-                    return;
-                  }
-
-                  showTopToast(
-                    context,
-                    strings.t("Không thể lưu cấu hình báo động"),
-                    color: SafeHomeColors.danger,
-                    icon: Icons.error_rounded,
-                  );
-                }
-              }
 
               final hasBattery =
                   device["battery"] != null ||
@@ -384,14 +360,74 @@ void showDeviceDetail({
                             title: strings.alarmSettings,
                           ),
                           const SizedBox(height: 10),
-                          _alarmPolicySection(
-                            strings: strings,
-                            settings: alarmPolicy,
-                            isEmergency: isEmergencyAlarmPolicyDevice(
-                              deviceType,
-                            ),
-                            canEdit: canManageAlarmPolicy,
-                            onChanged: saveAlarmPolicy,
+                          StreamBuilder<DatabaseEvent>(
+                            stream: FirebaseDatabase.instance
+                                .ref(
+                                  "accounts/${FirebaseAuth.instance.currentUser?.uid ?? ownerUid}/customRules/$homeId",
+                                )
+                                .onValue,
+                            builder: (context, personalSnapshot) {
+                              final rawPersonalHome =
+                                  personalSnapshot.data?.snapshot.value;
+                              final personalHome = rawPersonalHome is Map
+                                  ? Map<String, dynamic>.from(rawPersonalHome)
+                                  : const <String, dynamic>{};
+                              final rawPersonalDevices = personalHome["devices"];
+                              final personalDevices = rawPersonalDevices is Map
+                                  ? Map<String, dynamic>.from(rawPersonalDevices)
+                                  : const <String, dynamic>{};
+                              final rawPersonalDevice =
+                                  personalDevices[currentDeviceId];
+                              final personalDevice = rawPersonalDevice is Map
+                                  ? Map<String, dynamic>.from(rawPersonalDevice)
+                                  : const <String, dynamic>{};
+                              final legacyAlarmMode = (personalHome["alarmMode"] ??
+                                    personalHome["mode"] ??
+                                    "home").toString();
+                              final commonAlarm = normalizeDeviceAlarmSchedule(
+                                device["alarm"],
+                              );
+                              final personalAlarm =
+                                  normalizeEffectivePersonalAlarmSchedule(
+                                    customDevice: personalDevice,
+                                    legacyAlarmMode: legacyAlarmMode,
+                                  );
+
+                              final personalPreferences =
+                                  DevicePersonalAlarmPreferences.fromCustomDevice(
+                                    customDevice: personalDevice,
+                                    legacyFullscreenEnabled:
+                                        alarmPolicy.fullscreenEnabled,
+                                  );
+
+                              return _alarmSettingsSummary(
+                                strings: strings,
+                                settings: alarmPolicy,
+                                isEmergency: isEmergencyAlarmPolicyDevice(
+                                  deviceType,
+                                ),
+                                personalFullscreenEnabled:
+                                    personalPreferences.fullscreenEnabled,
+                                commonAlarmEnabled:
+                                    commonAlarm["enabled"] == true,
+                                personalAlarmEnabled:
+                                    personalAlarm["enabled"] == true,
+                                onTap: () async {
+                                  await showDeviceAlarmPolicySheet(
+                                    context: context,
+                                    ownerUid: ownerUid,
+                                    homeId: homeId,
+                                    deviceId: currentDeviceId,
+                                    deviceName: deviceName.isEmpty
+                                        ? currentDeviceId
+                                        : deviceName,
+                                    deviceType: deviceType,
+                                    device: device,
+                                    canEdit: canManageAlarmPolicy,
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ],
                         const SizedBox(height: 22),
@@ -883,6 +919,141 @@ Widget _sectionHeading({
         ),
       ),
     ],
+  );
+}
+
+Widget _alarmSettingsSummary({
+  required AppStrings strings,
+  required DeviceAlarmPolicySettings settings,
+  required bool isEmergency,
+  required bool personalFullscreenEnabled,
+  required bool commonAlarmEnabled,
+  required bool personalAlarmEnabled,
+  required VoidCallback onTap,
+}) {
+  Widget row({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        children: [
+          Icon(icon, size: 19, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: SafeHomeColors.textPrimary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.fromLTRB(14, 7, 14, 12),
+    decoration: BoxDecoration(
+      color: SafeHomeColors.surface,
+      borderRadius: BorderRadius.circular(18),
+      border: Border.all(color: SafeHomeColors.border),
+    ),
+    child: Column(
+      children: [
+        row(
+          icon: settings.enabled
+              ? Icons.shield_rounded
+              : Icons.shield_outlined,
+          title: strings.t("Tham gia hệ thống báo động"),
+          value: strings.t(settings.enabled ? "Bật" : "Tắt"),
+          color: settings.enabled
+              ? SafeHomeColors.safe
+              : SafeHomeColors.textSecondary,
+        ),
+        const Divider(height: 1),
+        if (isEmergency) ...[
+          row(
+            icon: Icons.campaign_rounded,
+            title: strings.t("Bật còi vật lý"),
+            value: strings.t(
+              settings.physicalSirenEnabled ? "Bật" : "Tắt",
+            ),
+            color: settings.physicalSirenEnabled
+                ? SafeHomeColors.primary
+                : SafeHomeColors.textSecondary,
+          ),
+          const Divider(height: 1),
+          row(
+            icon: Icons.phone_android_rounded,
+            title: strings.t("Đánh thức màn hình"),
+            value: strings.t(personalFullscreenEnabled ? "Bật" : "Tắt"),
+            color: personalFullscreenEnabled
+                ? SafeHomeColors.primary
+                : SafeHomeColors.textSecondary,
+          ),
+        ] else ...[
+          row(
+            icon: Icons.home_rounded,
+            title: strings.t("Báo động chung"),
+            value: strings.t(
+              commonAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
+            ),
+            color: commonAlarmEnabled
+                ? SafeHomeColors.primary
+                : SafeHomeColors.textSecondary,
+          ),
+          const Divider(height: 1),
+          row(
+            icon: Icons.person_rounded,
+            title: strings.t("Báo động cá nhân"),
+            value: strings.t(
+              personalAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
+            ),
+            color: personalAlarmEnabled
+                ? SafeHomeColors.primary
+                : SafeHomeColors.textSecondary,
+          ),
+        ],
+        const SizedBox(height: 9),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: onTap,
+            icon: const Icon(Icons.tune_rounded, size: 19),
+            label: Text(strings.t("Cài đặt báo động")),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: SafeHomeColors.primary,
+              side: BorderSide(
+                color: SafeHomeColors.primary.withValues(alpha: 0.30),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }
 

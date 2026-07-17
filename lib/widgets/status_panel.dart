@@ -447,7 +447,11 @@ class _StatusPanelState extends State<StatusPanel> {
                     const SizedBox(height: 14),
                     _actionTile(
                       icon: Icons.shield_rounded,
-                      title: _strings.t('Bảo vệ'),
+                      title: currentMode == 'armed'
+                          ? _strings.armedSecurityModeSourceLabel(
+                              widget.securityModeSource,
+                            )
+                          : _strings.t('Bảo vệ'),
                       subtitle: _strings.t('Giám sát toàn diện'),
                       color: SafeHomeColors.danger,
                       selected: currentMode == 'armed',
@@ -553,14 +557,15 @@ class _StatusPanelState extends State<StatusPanel> {
                     ),
                     const SizedBox(height: 8),
                     _actionTile(
-                      icon: Icons.home_rounded,
+                      icon: Icons.shield_rounded,
                       title: _strings.t('Bình thường'),
                       subtitle: currentMode == 'normal'
                           ? _strings.t('Đang được sử dụng')
                           : _strings.t(
                               'Sử dụng báo động theo lịch đã thiết lập',
                             ),
-                      color: SafeHomeColors.safe,
+                      color: SafeHomeColors.textSecondary,
+                      selectedColor: SafeHomeColors.textSecondary,
                       selected: currentMode == 'normal',
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -596,6 +601,7 @@ class _StatusPanelState extends State<StatusPanel> {
     required String title,
     required String subtitle,
     required Color color,
+    Color? selectedColor,
     required bool selected,
     required VoidCallback onTap,
     Widget? trailing,
@@ -632,7 +638,9 @@ class _StatusPanelState extends State<StatusPanel> {
                 ),
                 child: Icon(
                   icon,
-                  color: selected ? SafeHomeColors.primary : color,
+                  color: selected
+                      ? (selectedColor ?? SafeHomeColors.primary)
+                      : color,
                   size: 21,
                 ),
               ),
@@ -1440,103 +1448,36 @@ class _StatusPanelState extends State<StatusPanel> {
   }) {
     final color = active ? activeColor : SafeHomeColors.textSecondary;
     final cleanSecondaryValue = secondaryValue?.trim() ?? "";
-    final hasSecondaryValue = cleanSecondaryValue.isNotEmpty;
-    const textStyle = TextStyle(
-      fontSize: 10.9,
-      height: 1.15,
-      fontWeight: FontWeight.w800,
-    );
+    final displayValue = cleanSecondaryValue.isEmpty
+        ? value
+        : "$value - $cleanSecondaryValue";
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
-        child: Center(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              if (!hasSecondaryValue) {
-                return FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(icon, size: 17, color: color),
-                      const SizedBox(width: 4),
-                      Text(
-                        value,
-                        maxLines: 1,
-                        style: textStyle.copyWith(color: color),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              final combinedValue = "$value - $cleanSecondaryValue";
-              final painter = TextPainter(
-                text: TextSpan(text: combinedValue, style: textStyle),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 17, color: color),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                displayValue,
                 maxLines: 1,
-                textDirection: Directionality.of(context),
-                textScaler: MediaQuery.textScalerOf(context),
-              )..layout();
-              final fitsOnOneLine =
-                  painter.width + 17 + 4 <= constraints.maxWidth;
-
-              if (fitsOnOneLine) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(icon, size: 17, color: color),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        combinedValue,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: textStyle.copyWith(color: color),
-                      ),
-                    ),
-                  ],
-                );
-              }
-
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(icon, size: 17, color: color),
-                  const SizedBox(width: 4),
-                  Flexible(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          value,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          style: textStyle.copyWith(color: color),
-                        ),
-                        Text(
-                          cleanSecondaryValue,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          style: textStyle.copyWith(
-                            color: color,
-                            fontSize: 9.8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10.9,
+                  height: 1.15,
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

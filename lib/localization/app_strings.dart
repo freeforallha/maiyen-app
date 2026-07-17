@@ -3218,6 +3218,11 @@ class AppStrings {
     final type = _notificationString(item, "type").toLowerCase();
     final rawTitle = _notificationString(item, "title");
 
+    final lifecycleTitle = _homeLifecycleNotificationTitle(type);
+    if (lifecycleTitle != null) {
+      return lifecycleTitle;
+    }
+
     if (_isManualSecurityModeNotification(type)) {
       return manualSecurityModeEnabledTitle();
     }
@@ -3316,6 +3321,15 @@ class AppStrings {
     final resolvedHomeName = homeName.trim().isNotEmpty
         ? homeName.trim()
         : _firstNotificationString(item, const ["homeName"]);
+
+    final lifecycleMessage = _homeLifecycleNotificationMessage(
+      item,
+      type,
+      resolvedHomeName,
+    );
+    if (lifecycleMessage != null) {
+      return lifecycleMessage;
+    }
 
     if (_isManualSecurityModeNotification(type)) {
       final actorName = _firstNotificationString(item, const ["actorName"]);
@@ -3541,6 +3555,109 @@ class AppStrings {
     final message = systemNotificationText(rawMessage, type: type);
 
     return statusText(message);
+  }
+
+  String? _homeLifecycleNotificationTitle(String type) {
+    return switch (type) {
+      "alarm_resolved" => t("Cảnh báo an ninh đã kết thúc"),
+      "emergency_resolved" => t("Sự cố nguy hiểm đã kết thúc"),
+      "alarm_pause_ended" => t("Báo động đã hoạt động trở lại"),
+      "system_hub_offline" => t("Hub mất kết nối"),
+      "system_hub_online" => t("Hub đã kết nối trở lại"),
+      "system_mqtt_offline" => t("MQTT mất kết nối"),
+      "system_mqtt_online" => t("MQTT đã kết nối trở lại"),
+      "system_device_offline" => t("Thiết bị offline"),
+      "system_device_online" => t("Thiết bị online"),
+      "system_device_low_battery" => t("Pin yếu"),
+      "system_device_battery_ok" => t("Pin thiết bị đã ổn định"),
+      "physical_siren_muted" => t("Còi báo động đã được tắt"),
+      "security_mode_normal" => t("Đã chuyển nhà về Bình thường"),
+      "auto_away_armed" => t("Bảo vệ tự động đã bật"),
+      "auto_away_normal" => t("Bảo vệ tự động đã tắt"),
+      "device_added" => t("Thiết bị mới"),
+      "device_delete_succeeded" => t("Thiết bị đã được xoá"),
+      "device_delete_failed" => t("Không thể xoá thiết bị"),
+      _ => null,
+    };
+  }
+
+  String? _homeLifecycleNotificationMessage(
+    Map<String, dynamic> item,
+    String type,
+    String homeName,
+  ) {
+    final deviceName = _notificationDeviceName(item);
+    final actorName = _firstNotificationString(item, const ["actorName"]);
+
+    switch (type) {
+      case "alarm_resolved":
+      case "emergency_resolved":
+        final hasRemaining = _notificationBool(
+              _firstNotificationValue(
+                item,
+                const ["hasRemainingActiveIncidents"],
+              ),
+            ) ==
+            true;
+        return hasRemaining
+            ? t("Vẫn còn cảnh báo khác đang hoạt động.")
+            : t("Cảnh báo đã được kết thúc.");
+      case "alarm_pause_ended":
+        return t("Thời gian tạm dừng báo động đã kết thúc.");
+      case "system_hub_offline":
+        return t("Hub mất kết nối");
+      case "system_hub_online":
+        return t("Hub đã kết nối trở lại");
+      case "system_mqtt_offline":
+        return t("MQTT mất kết nối");
+      case "system_mqtt_online":
+        return t("MQTT đã kết nối trở lại");
+      case "system_device_offline":
+        return deviceName.isNotEmpty && homeName.isNotEmpty
+            ? deviceOfflineMessage(name: deviceName, homeName: homeName)
+            : null;
+      case "system_device_online":
+        return deviceName.isNotEmpty && homeName.isNotEmpty
+            ? deviceOnlineMessage(name: deviceName, homeName: homeName)
+            : null;
+      case "system_device_low_battery":
+        return deviceName.isNotEmpty && homeName.isNotEmpty
+            ? deviceLowBatteryMessage(name: deviceName, homeName: homeName)
+            : null;
+      case "system_device_battery_ok":
+        return deviceName.isNotEmpty
+            ? deviceReturnedNormalMessage(deviceName)
+            : t("Pin thiết bị đã ổn định");
+      case "physical_siren_muted":
+        final actor = actorName.isNotEmpty ? actorName : t("Một thành viên");
+        return "$actor: ${t("Còi báo động đã được tắt")}. "
+            "${t("Sự cố vẫn đang được theo dõi.")}";
+      case "security_mode_normal":
+        final actor = actorName.isNotEmpty ? actorName : t("Một thành viên");
+        return "$actor: ${t("Chế độ Bảo vệ đã được tắt.")} "
+            "${t("Nhà đang ở chế độ Bình thường.")}";
+      case "auto_away_armed":
+        return t("Toàn bộ thành viên đã rời khỏi nhà.");
+      case "auto_away_normal":
+        final reason = _firstNotificationString(item, const ["reason"]);
+        return reason == "member_returned"
+            ? t("Có thành viên đã trở về nhà.")
+            : t("Nhà đang ở chế độ Bình thường.");
+      case "device_added":
+        return deviceName.isNotEmpty && homeName.isNotEmpty
+            ? deviceAddedMessage(deviceName: deviceName, homeName: homeName)
+            : null;
+      case "device_delete_succeeded":
+        return deviceName.isNotEmpty
+            ? "$deviceName: ${t("Thiết bị đã được xoá")}"
+            : t("Thiết bị đã được xoá");
+      case "device_delete_failed":
+        return deviceName.isNotEmpty
+            ? "$deviceName: ${t("Hãy thử lại thao tác xoá thiết bị.")}"
+            : t("Hãy thử lại thao tác xoá thiết bị.");
+    }
+
+    return null;
   }
 
   String _doorStatusTitle(bool closed) {

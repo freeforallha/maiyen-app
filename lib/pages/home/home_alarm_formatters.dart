@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/home_helper.dart';
+import '../../sheets/device_alarm_policy_sheet.dart';
 
 class HomeAlarmFormatters {
   static Map<String, String> getHomeAlarmReminderInfo({
@@ -11,38 +12,39 @@ class HomeAlarmFormatters {
     required TimeOfDay end,
   }) {
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
-
-    final alarmMode =
-        selectedRules["alarmMode"]?.toString() ??
-            selectedRules["mode"]?.toString();
-    final useCustomMode = alarmMode == "custom";
-
     final customDevices = safeMap(selectedRules["devices"]);
+    final legacyAlarmMode = (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home").toString();
 
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
       final homeAlarm = safeMap(device["alarm"]);
       final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = safeMap(customDevice["alarm"]);
+      final customAlarm = normalizeEffectivePersonalAlarmSchedule(
+        customDevice: customDevice,
+        legacyAlarmMode: legacyAlarmMode,
+      );
 
-      final alarm = useCustomMode && customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] == true) {
+      if (homeAlarm["enabled"] == true) {
         return {
-          "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
-          "start": alarm["start"]?.toString() ?? "23:00",
-          "end": alarm["end"]?.toString() ?? "06:00",
+          "mode": "Theo nhà",
+          "start": homeAlarm["start"]?.toString() ?? "23:00",
+          "end": homeAlarm["end"]?.toString() ?? "06:00",
+        };
+      }
+
+      if (customAlarm["enabled"] == true) {
+        return {
+          "mode": "Riêng tôi",
+          "start": customAlarm["start"]?.toString() ?? "23:00",
+          "end": customAlarm["end"]?.toString() ?? "06:00",
         };
       }
     }
 
     return {
-      "mode": useCustomMode ? "Riêng tôi" : "Theo nhà",
+      "mode": "Theo nhà / Riêng tôi",
       "start": _formatTimeOfDay(start),
       "end": _formatTimeOfDay(end),
     };
@@ -62,44 +64,37 @@ class HomeAlarmFormatters {
     }
 
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
-
-    final alarmMode =
-        selectedRules["alarmMode"]?.toString() ??
-            selectedRules["mode"]?.toString();
-    final useCustomMode = alarmMode == "custom";
-
     final customDevices = safeMap(selectedRules["devices"]);
-
+    final legacyAlarmMode = (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home").toString();
     final intervals = <Map<String, int>>[];
+
+    void addAlarm(Map<String, dynamic> alarm) {
+      if (alarm["enabled"] != true) {
+        return;
+      }
+
+      final startMinutes = _parseClock(alarm["start"]);
+      final endMinutes = _parseClock(alarm["end"]);
+      if (startMinutes == null || endMinutes == null) {
+        return;
+      }
+      intervals.add({"start": startMinutes, "end": endMinutes});
+    }
 
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
       final homeAlarm = safeMap(device["alarm"]);
       final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = safeMap(customDevice["alarm"]);
+      final customAlarm = normalizeEffectivePersonalAlarmSchedule(
+        customDevice: customDevice,
+        legacyAlarmMode: legacyAlarmMode,
+      );
 
-      // Giống AlarmDeviceSheet:
-      // mode Riêng tôi dùng custom nếu có,
-      // nếu chưa có thì kế thừa lịch Theo nhà.
-      final alarm = useCustomMode && customAlarm.isNotEmpty
-          ? customAlarm
-          : homeAlarm;
-
-      if (alarm["enabled"] != true) {
-        continue;
-      }
-
-      final startMinutes = _parseClock(alarm["start"]);
-      final endMinutes = _parseClock(alarm["end"]);
-
-      if (startMinutes == null || endMinutes == null) {
-        continue;
-      }
-
-      intervals.add({"start": startMinutes, "end": endMinutes});
+      // Lịch chung và lịch cá nhân hoạt động song song.
+      addAlarm(homeAlarm);
+      addAlarm(customAlarm);
     }
 
     if (intervals.isEmpty) {

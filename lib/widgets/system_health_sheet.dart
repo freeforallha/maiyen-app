@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
+import '../sheets/device_alarm_policy_sheet.dart';
 import '../services/system_usage_service.dart';
 
 class SystemHealthStatusLine extends StatelessWidget {
@@ -549,10 +550,9 @@ class _SystemHealthSnapshot {
     final schedules = safeMap(home['schedules']);
     final devices = safeMap(home['devices']);
     final legacyMode = customRules['mode']?.toString();
+    final alarmLegacyMode = (customRules['alarmMode'] ?? customRules['mode'] ?? 'home').toString();
     final reminderMode = customRules['reminderMode']?.toString() ?? legacyMode;
-    final alarmMode = customRules['alarmMode']?.toString() ?? legacyMode;
     final reminderCustomMode = reminderMode == 'custom';
-    final alarmCustomMode = alarmMode == 'custom';
     final customNotifications = safeMap(customRules['notifications']);
     final customDevices = safeMap(customRules['devices']);
     final autoAway = safeMap(home['autoAway']);
@@ -566,11 +566,12 @@ class _SystemHealthSnapshot {
         _hasEnabledSchedule(schedules['alarms']) ||
         _hasEnabledDeviceAlarm(devices);
     final customAlarmScheduleEnabled =
-        _hasEnabledCustomDeviceAlarm(customDevices) ||
-        _hasEnabledDeviceAlarm(devices);
-    final alarmScheduleEnabled = alarmCustomMode
-        ? customAlarmScheduleEnabled
-        : homeAlarmScheduleEnabled;
+        _hasEnabledCustomDeviceAlarm(
+          customDevices,
+          legacyAlarmMode: alarmLegacyMode,
+        );
+    final alarmScheduleEnabled =
+        homeAlarmScheduleEnabled || customAlarmScheduleEnabled;
     final emergencyCounts = _emergencyDeviceCounts(devices);
     final hasSmoke = (emergencyCounts['smoke'] ?? 0) > 0;
     final hasSos = (emergencyCounts['sos'] ?? 0) > 0;
@@ -722,9 +723,16 @@ class _SystemHealthSnapshot {
     return false;
   }
 
-  static bool _hasEnabledCustomDeviceAlarm(Map<String, dynamic> customDevices) {
+  static bool _hasEnabledCustomDeviceAlarm(
+    Map<String, dynamic> customDevices, {
+    required String legacyAlarmMode,
+  }) {
     for (final rawDevice in customDevices.values) {
-      final alarm = safeMap(safeMap(rawDevice)['alarm']);
+      final customDevice = safeMap(rawDevice);
+      final alarm = normalizeEffectivePersonalAlarmSchedule(
+        customDevice: customDevice,
+        legacyAlarmMode: legacyAlarmMode,
+      );
 
       if (alarm['enabled'] == true) {
         return true;

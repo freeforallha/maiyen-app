@@ -6,6 +6,7 @@ import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
+import 'device_alarm_policy_sheet.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 IconData _alarmDeviceIcon(Object? rawType) {
@@ -399,6 +400,7 @@ class AlarmDeviceSheet extends StatefulWidget {
   final String homeId;
   final Map<String, dynamic> devices;
   final bool canManageHome;
+
   const AlarmDeviceSheet({
     super.key,
     required this.ownerUid,
@@ -413,1148 +415,613 @@ class AlarmDeviceSheet extends StatefulWidget {
 
 class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   Map<String, dynamic> devices = {};
-  Map<String, dynamic> homeAlarms = {};
-  Map<String, dynamic> customAlarms = {};
-
-  String mode = "home";
-  String expandedDeviceId = "";
-  bool savingMode = false;
+  Map<String, dynamic> customDevices = {};
+  String legacyAlarmMode = 'home';
+  bool loading = true;
   bool applyingAll = false;
 
   String get currentUid =>
       FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
 
-  bool get isSharedUser => currentUid != widget.ownerUid;
-
   @override
   void initState() {
     super.initState();
-
     devices = Map<String, dynamic>.from(widget.devices);
-
-    for (final entry in devices.entries) {
-      final deviceId = entry.key.toString();
-      final rawDevice = entry.value;
-
-      if (rawDevice is! Map) {
-        continue;
-      }
-
-      final device = Map<String, dynamic>.from(rawDevice);
-
-      homeAlarms[deviceId] = _readAlarmMap(device["alarm"]);
-    }
-
-    FirebaseDatabase.instance
-        .ref("accounts/$currentUid/customRules/${widget.homeId}")
-        .get()
-        .then((snap) {
-          if (!mounted) return;
-
-          final data = snap.value;
-
-          if (data is Map) {
-            final map = Map<String, dynamic>.from(data);
-            final savedMode =
-                map["alarmMode"]?.toString() ?? map["mode"]?.toString();
-            final customDevices = map["devices"];
-
-            if (customDevices is Map) {
-              for (final entry in customDevices.entries) {
-                final deviceId = entry.key.toString();
-                final rawDeviceData = entry.value;
-
-                if (rawDeviceData is! Map) {
-                  continue;
-                }
-
-                final deviceData = Map<String, dynamic>.from(rawDeviceData);
-
-                if (deviceData.containsKey("alarm")) {
-                  customAlarms[deviceId] = _readAlarmMap(deviceData["alarm"]);
-                }
-              }
-            }
-
-            setState(() {
-              if (savedMode == "custom" || savedMode == "home") {
-                mode = savedMode == "custom" ? "custom" : "home";
-              }
-            });
-          }
-        });
+    _reload();
   }
 
-  Map<String, dynamic> _defaultAlarm() {
-    return {
-      "enabled": false,
-      "start": "23:00",
-      "end": "06:00",
-      "repeatMinutes": 30,
-      "days": const [1, 2, 3, 4, 5, 6, 7],
-    };
-  }
-
-  Map<String, dynamic> _readAlarmMap(Object? rawValue) {
-    final alarm = Map<String, dynamic>.from(_defaultAlarm());
-
-    if (rawValue is Map) {
-      alarm.addAll(Map<String, dynamic>.from(rawValue));
-    } else if (rawValue is bool) {
-      // Tương thích dữ liệu cũ từng lưu alarm dưới dạng true/false.
-      alarm["enabled"] = rawValue;
-    }
-
-    alarm["repeatMinutes"] = _normalizeAlarmRepeatMinutes(
-      alarm["repeatMinutes"],
-    );
-
-    alarm["days"] = _normalizeAlarmDays(alarm["days"]);
-
-    return alarm;
-  }
-
-  bool isSecurityDevice(Map d) {
-    return isSecurityDeviceType(d["type"]);
-  }
-
-  Map<String, dynamic> alarmOf(String deviceId) {
-    final source = mode == "custom"
-        ? customAlarms[deviceId] ?? homeAlarms[deviceId]
-        : homeAlarms[deviceId];
-
-    return _readAlarmMap(source);
-  }
-
-  Future<void> saveMode(String nextMode) async {
-    if (savingMode || nextMode == mode) {
-      return;
-    }
-
-    setState(() {
-      savingMode = true;
-    });
-
-    final rulesRef = FirebaseDatabase.instance.ref(
-      "accounts/$currentUid/customRules/${widget.homeId}",
-    );
-
+  Future<void> _reload() async {
     try {
-      if (nextMode == "custom") {
-        final updates = <String, Object?>{"alarmMode": "custom"};
+      final results = await Future.wait<DataSnapshot>([
+        FirebaseDatabase.instance
+            .ref('accounts/${widget.ownerUid}/homes/${widget.homeId}/devices')
+            .get(),
+        FirebaseDatabase.instance
+            .ref('accounts/$currentUid/customRules/${widget.homeId}')
+            .get(),
+      ]);
 
-        final nextCustomAlarms = <String, dynamic>{};
+      if (!mounted) return;
 
-        for (final entry in devices.entries) {
-          final deviceId = entry.key.toString();
-          final rawDevice = entry.value;
-
-          if (rawDevice is! Map) {
-            continue;
-          }
-
-          final device = Map<String, dynamic>.from(rawDevice);
-
-          if (!isSecurityDevice(device)) {
-            continue;
-          }
-
-          final rawRealDeviceId = device["_deviceId"]?.toString().trim() ?? "";
-
-          final realDeviceId = rawRealDeviceId.isNotEmpty
-              ? rawRealDeviceId
-              : deviceId;
-
-          final rawAlarm =
-              customAlarms[deviceId] ??
-              customAlarms[realDeviceId] ??
-              homeAlarms[deviceId] ??
-              homeAlarms[realDeviceId];
-
-          final alarm = rawAlarm is Map
-              ? Map<String, dynamic>.from(rawAlarm)
-              : _defaultAlarm();
-
-          nextCustomAlarms[deviceId] = Map<String, dynamic>.from(alarm);
-
-          updates["devices/$realDeviceId/alarm"] = Map<String, dynamic>.from(
-            alarm,
-          );
-        }
-
-        await rulesRef.update(updates);
-
-        if (!mounted) {
-          return;
-        }
-
-        setState(() {
-          customAlarms = nextCustomAlarms;
-          mode = "custom";
-          expandedDeviceId = "";
-        });
-
-        return;
-      }
-
-      await rulesRef.child("alarmMode").set("home");
-
-      if (!mounted) {
-        return;
-      }
-
+      final rawDevices = results[0].value;
+      final rawCustomHome = results[1].value;
+      final customHome = rawCustomHome is Map
+          ? Map<String, dynamic>.from(rawCustomHome)
+          : const <String, dynamic>{};
+      final rawCustomDevices = customHome['devices'];
       setState(() {
-        mode = "home";
-        expandedDeviceId = "";
+        if (rawDevices is Map) {
+          devices = Map<String, dynamic>.from(rawDevices);
+        }
+        customDevices = rawCustomDevices is Map
+            ? Map<String, dynamic>.from(rawCustomDevices)
+            : {};
+        legacyAlarmMode = (customHome['alarmMode'] ?? customHome['mode'] ?? 'home').toString();
+        loading = false;
       });
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-
-      showTopToast(
-        context,
-        AppStrings.of(context).t("Không thể lưu chế độ báo động"),
-        color: SafeHomeColors.danger,
-        icon: Icons.error_rounded,
-      );
-
-      safeDebugPrint("SAVE_ALARM_MODE_ERROR: $error");
-    } finally {
-      if (mounted) {
-        setState(() {
-          savingMode = false;
-        });
-      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => loading = false);
     }
   }
 
-  Map<String, dynamic> normalizeAlarmForSave(Map<String, dynamic> alarm) {
-    final nextAlarm = Map<String, dynamic>.from(alarm);
-
-    nextAlarm["days"] = _normalizeAlarmDays(nextAlarm["days"]);
-    nextAlarm["repeatMinutes"] = _normalizeAlarmRepeatMinutes(
-      nextAlarm["repeatMinutes"],
-    );
-
-    nextAlarm["start"] =
-        (nextAlarm["start"]?.toString().trim().isNotEmpty == true)
-        ? nextAlarm["start"].toString().trim()
-        : "23:00";
-
-    nextAlarm["end"] = (nextAlarm["end"]?.toString().trim().isNotEmpty == true)
-        ? nextAlarm["end"].toString().trim()
-        : "06:00";
-
-    return nextAlarm;
-  }
-
-  Future<void> saveAlarmForAllSecurityDevices(
-    Map<String, dynamic> alarm,
-  ) async {
-    if (applyingAll) {
-      return;
-    }
-
-    if (mode == "home" && !widget.canManageHome) {
-      if (mounted) {
-        showTopToast(
-          context,
-          AppStrings.of(
-            context,
-          ).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
-          color: SafeHomeColors.danger,
-          icon: Icons.lock_rounded,
-        );
-      }
-      return;
-    }
-
-    final securityEntries = devices.entries.where((entry) {
-      final rawDevice = entry.value;
-      return rawDevice is Map && isSecurityDevice(rawDevice);
+  List<MapEntry<String, dynamic>> get securityDevices {
+    return devices.entries.where((entry) {
+      final value = entry.value;
+      if (value is! Map) return false;
+      return isSecurityDeviceType(value['type']);
     }).toList();
-
-    if (securityEntries.isEmpty) {
-      if (mounted) {
-        showTopToast(
-          context,
-          AppStrings.of(context).t("Nhà chưa có thiết bị an ninh để áp dụng"),
-          color: Colors.orange,
-          icon: Icons.sensors_off_rounded,
-        );
-      }
-      return;
-    }
-
-    setState(() {
-      applyingAll = true;
-    });
-
-    try {
-      final updates = <String, Object?>{};
-
-      for (final entry in securityEntries) {
-        final deviceId = entry.key.toString();
-        final device = Map<String, dynamic>.from(entry.value as Map);
-        final homeId = device["_homeId"]?.toString().trim().isNotEmpty == true
-            ? device["_homeId"].toString().trim()
-            : widget.homeId;
-        final realDeviceId =
-            device["_deviceId"]?.toString().trim().isNotEmpty == true
-            ? device["_deviceId"].toString().trim()
-            : deviceId;
-
-        final path = mode == "custom"
-            ? "accounts/$currentUid/customRules/$homeId/devices/$realDeviceId/alarm"
-            : "accounts/${widget.ownerUid}/homes/$homeId/devices/$realDeviceId/alarm";
-
-        updates[path] = normalizeAlarmForSave(alarm);
-      }
-
-      await FirebaseDatabase.instance.ref().update(updates);
-
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {
-        for (final entry in securityEntries) {
-          final deviceId = entry.key.toString();
-          final copiedAlarm = normalizeAlarmForSave(alarm);
-
-          if (mode == "custom") {
-            customAlarms[deviceId] = copiedAlarm;
-          } else {
-            homeAlarms[deviceId] = copiedAlarm;
-          }
-        }
-      });
-    } finally {
-      if (mounted) {
-        setState(() {
-          applyingAll = false;
-        });
-      }
-    }
   }
 
-  Future<void> showQuickAlarmForAllSheet() async {
+  String _realDeviceId(String key, Map<String, dynamic> device) {
+    final value = device['_deviceId']?.toString().trim() ?? '';
+    return value.isEmpty ? key : value;
+  }
+
+  Map<String, dynamic> _commonAlarm(
+    String key,
+    Map<String, dynamic> device,
+  ) {
+    return normalizeDeviceAlarmSchedule(device['alarm']);
+  }
+
+  Map<String, dynamic> _personalAlarm(
+    String key,
+    Map<String, dynamic> device,
+  ) {
+    final realId = _realDeviceId(key, device);
+    final raw = customDevices[realId] ?? customDevices[key];
+    final customDevice = raw is Map
+        ? Map<String, dynamic>.from(raw)
+        : const <String, dynamic>{};
+    return normalizeEffectivePersonalAlarmSchedule(
+      customDevice: customDevice,
+      legacyAlarmMode: legacyAlarmMode,
+    );
+  }
+
+  Future<void> _openDeviceSettings(
+    String key,
+    Map<String, dynamic> device,
+  ) async {
+    final realId = _realDeviceId(key, device);
+    await showDeviceAlarmPolicySheet(
+      context: context,
+      ownerUid: widget.ownerUid,
+      homeId: widget.homeId,
+      deviceId: realId,
+      deviceName: device['name']?.toString().trim().isNotEmpty == true
+          ? device['name'].toString().trim()
+          : key,
+      deviceType: device['type']?.toString() ?? 'door',
+      device: device,
+      canEdit: widget.canManageHome);
+    await _reload();
+  }
+
+  Future<void> _showQuickSetup({required bool personal}) async {
     final strings = AppStrings.of(context);
 
-    if (mode == "home" && !widget.canManageHome) {
+    if (!personal && !widget.canManageHome) {
       showTopToast(
         context,
-        AppStrings.of(
-          context,
-        ).t("Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi."),
+        strings.t('Bạn không có quyền sửa lịch báo động của nhà'),
         color: SafeHomeColors.danger,
         icon: Icons.lock_rounded,
       );
       return;
     }
 
-    final securityEntries = devices.entries.where((entry) {
-      final rawDevice = entry.value;
-      return rawDevice is Map && isSecurityDevice(rawDevice);
-    }).toList();
-
-    if (securityEntries.isEmpty) {
+    final entries = securityDevices;
+    if (entries.isEmpty) {
       showTopToast(
         context,
-        AppStrings.of(context).t("Nhà chưa có thiết bị an ninh để áp dụng"),
-        color: Colors.orange,
+        strings.t('Nhà chưa có thiết bị an ninh để áp dụng'),
+        color: SafeHomeColors.warning,
         icon: Icons.sensors_off_rounded,
       );
       return;
     }
 
-    final draft = Map<String, dynamic>.from(
-      alarmOf(securityEntries.first.key.toString()),
-    );
+    final draft = normalizeDeviceAlarmSchedule(null);
+    var saving = false;
 
     await showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
-        var saving = false;
-
         return StatefulBuilder(
-          builder: (innerContext, setSheetState) {
+          builder: (context, setSheetState) {
             Future<void> chooseTime(String field) async {
-              final picked = await openTimeTextInput(
-                title: field == "start"
-                    ? strings.t("Chọn giờ bắt đầu báo động")
-                    : strings.t("Chọn giờ kết thúc báo động"),
-                initial:
-                    draft[field]?.toString() ??
-                    (field == "start" ? "23:00" : "06:00"),
+              final raw = draft[field]?.toString() ??
+                  (field == 'start' ? '23:00' : '06:00').toString();
+              final parts = raw.split(':');
+              final selected = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay(
+                  hour: int.tryParse(parts.first) ?? 23,
+                  minute: parts.length > 1 ? int.tryParse(parts[1]) ?? 0 : 0,
+                ),
               );
-
-              if (picked == null || !sheetContext.mounted) {
-                return;
-              }
-
+              if (selected == null) return;
               setSheetState(() {
-                draft[field] = picked;
+                draft[field] =
+                    '${selected.hour.toString().padLeft(2, '0')}:${selected.minute.toString().padLeft(2, '0')}';
               });
             }
 
-            Future<void> applyToAll() async {
-              if (saving) {
-                return;
-              }
-
-              setSheetState(() {
-                saving = true;
-              });
+            Future<void> apply() async {
+              if (saving) return;
+              setSheetState(() => saving = true);
 
               try {
-                await saveAlarmForAllSecurityDevices(draft);
+                final updates = <String, Object?>{};
+                final normalized = normalizeDeviceAlarmSchedule(draft);
 
-                if (!sheetContext.mounted) {
-                  return;
+                for (final entry in entries) {
+                  final key = entry.key;
+                  final device = Map<String, dynamic>.from(entry.value as Map);
+                  final realId = _realDeviceId(key, device);
+                  final path = personal
+                      ? 'accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarm'
+                      : 'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarm';
+                  updates[path] = Map<String, dynamic>.from(normalized);
+                  if (personal) {
+                    final rawCustomDevice =
+                        customDevices[realId] ?? customDevices[key];
+                    final customDevice = rawCustomDevice is Map
+                        ? Map<String, dynamic>.from(rawCustomDevice)
+                        : const <String, dynamic>{};
+                    final policy = DeviceAlarmPolicySettings.fromDevice(
+                      device: device,
+                      deviceType: device['type']?.toString() ?? 'door');
+                    final preferences =
+                        DevicePersonalAlarmPreferences.fromCustomDevice(
+                          customDevice: customDevice,
+                          legacyFullscreenEnabled: policy.fullscreenEnabled,
+                        );
+                    updates[
+                      'accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'
+                    ] = DevicePersonalAlarmPreferences(
+                      fullscreenEnabled: preferences.fullscreenEnabled,
+                      followHomeSchedule: preferences.followHomeSchedule,
+                    ).toFirebaseMap();
+                  }
                 }
 
-                Navigator.of(sheetContext).pop();
-
-                if (mounted) {
-                  showTopToast(
-                    context,
-                    strings.alarmAppliedToSecurityDevicesText(
-                      securityEntries.length,
-                    ),
-                    color: SafeHomeColors.success,
-                    icon: Icons.check_circle_rounded,
-                  );
-                }
-              } catch (error) {
-                if (!sheetContext.mounted) {
-                  return;
-                }
-
-                setSheetState(() {
-                  saving = false;
-                });
-
+                await FirebaseDatabase.instance.ref().update(updates);
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
                 showTopToast(
-                  sheetContext,
-                  strings.t("Không thể áp dụng báo động cho toàn bộ thiết bị"),
+                  this.context,
+                  strings.t('Đã áp dụng lịch báo động'),
+                  color: SafeHomeColors.safe,
+                  icon: Icons.check_circle_rounded,
+                );
+                await _reload();
+              } catch (_) {
+                if (!context.mounted) return;
+                setSheetState(() => saving = false);
+                showTopToast(
+                  context,
+                  strings.t('Không thể lưu lịch báo động'),
                   color: SafeHomeColors.danger,
                   icon: Icons.error_rounded,
                 );
-
-                safeDebugPrint("SAVE_ALL_SECURITY_ALARMS_ERROR: $error");
               }
             }
 
-            return SafeArea(
-              child: Container(
-                padding: EdgeInsets.only(
-                  left: 18,
-                  right: 18,
-                  top: 12,
-                  bottom: MediaQuery.of(innerContext).viewInsets.bottom + 18,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 5,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.primary.withValues(
-                              alpha: 0.10,
-                            ),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Icon(
-                            Icons.security_rounded,
-                            color: SafeHomeColors.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                strings.t("Đặt báo động cho nhà"),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textPrimary,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                strings
-                                    .applySameAlarmScheduleToSecurityDevicesText(
-                                      securityEntries.length,
-                                    ),
-                                style: const TextStyle(
-                                  color: SafeHomeColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Switch.adaptive(
-                          value: draft["enabled"] == true,
-                          onChanged: saving
-                              ? null
-                              : (value) {
-                                  setSheetState(() {
-                                    draft["enabled"] = value;
-                                  });
-                                },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _AlarmMiniButton(
-                            label: strings.t("Bắt đầu"),
-                            value: draft["start"]?.toString() ?? "23:00",
-                            enabled: !saving,
-                            onTap: () {
-                              chooseTime("start");
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _AlarmMiniButton(
-                            label: strings.t("Kết thúc"),
-                            value: draft["end"]?.toString() ?? "06:00",
-                            enabled: !saving,
-                            onTap: () {
-                              chooseTime("end");
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    _AlarmRepeatDropdown(
-                      value: _normalizeAlarmRepeatMinutes(
-                        draft["repeatMinutes"],
-                      ),
-                      enabled: !saving,
-                      onChanged: (minute) {
-                        setSheetState(() {
-                          draft["repeatMinutes"] = minute;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    _AlarmWeekdaySelector(
-                      days: _normalizeAlarmDays(draft["days"]),
-                      enabled: !saving,
-                      onChanged: (days) {
-                        setSheetState(() {
-                          draft["days"] = days;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 18),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: SafeHomeColors.primary,
-                          foregroundColor: Colors.white,
-                        ),
-                        onPressed: saving ? null : applyToAll,
-                        icon: saving
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : const Icon(Icons.done_all_rounded),
-                        label: Text(
-                          saving
-                              ? strings.t("Đang áp dụng...")
-                              : strings.t("Xác nhận"),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            return Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.sizeOf(context).height * 0.9,
               ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<void> saveAlarm(String deviceId, Map<String, dynamic> alarm) async {
-    if (mode == "home" && !widget.canManageHome) {
-      if (mounted) {
-        showTopToast(
-          context,
-          AppStrings.of(
-            context,
-          ).t("Bạn không có quyền sửa lịch báo động của nhà"),
-          color: SafeHomeColors.danger,
-          icon: Icons.lock_rounded,
-        );
-      }
-
-      return;
-    }
-
-    final device = Map<String, dynamic>.from(devices[deviceId] ?? {});
-    final homeId = device["_homeId"]?.toString() ?? widget.homeId;
-    final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-
-    final path = mode == "custom"
-        ? "accounts/$currentUid/customRules/$homeId/devices/$realDeviceId/alarm"
-        : "accounts/${widget.ownerUid}/homes/$homeId/devices/$realDeviceId/alarm";
-
-    final alarmToSave = normalizeAlarmForSave(alarm);
-
-    await FirebaseDatabase.instance.ref(path).set(alarmToSave);
-
-    setState(() {
-      if (mode == "custom") {
-        customAlarms[deviceId] = alarmToSave;
-      } else {
-        homeAlarms[deviceId] = alarmToSave;
-      }
-    });
-  }
-
-  TimeOfDay parseTime(String value) {
-    final parts = value.split(":");
-
-    return TimeOfDay(
-      hour: int.tryParse(parts[0]) ?? 23,
-      minute: int.tryParse(parts[1]) ?? 0,
-    );
-  }
-
-  String formatTime(TimeOfDay time) {
-    final h = time.hour.toString().padLeft(2, "0");
-    final m = time.minute.toString().padLeft(2, "0");
-    return "$h:$m";
-  }
-
-  bool isValidTime(String value) {
-    final reg = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
-    return reg.hasMatch(value.trim());
-  }
-
-  Future<String?> openTimeTextInput({
-    required String title,
-    required String initial,
-  }) async {
-    final strings = AppStrings.of(context);
-    final parts = initial.split(":");
-
-    String hourText = parts.isNotEmpty ? parts[0].padLeft(2, "0") : "23";
-    String minuteText = parts.length > 1 ? parts[1].padLeft(2, "0") : "00";
-
-    const suggestions = [
-      ["23", "00"],
-      ["00", "00"],
-      ["01", "00"],
-      ["04", "00"],
-      ["05", "00"],
-      ["06", "00"],
-    ];
-
-    return showDialog<String>(
-      context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            void submit() {
-              final value =
-                  "${hourText.trim().padLeft(2, '0')}:${minuteText.trim().padLeft(2, '0')}";
-
-              if (!isValidTime(value)) {
-                showTopToast(
-                  dialogContext,
-                  strings.t("Giờ không hợp lệ"),
-                  color: SafeHomeColors.danger,
-                  icon: Icons.schedule_rounded,
-                );
-                return;
-              }
-
-              Navigator.pop(dialogContext, value);
-            }
-
-            Widget suggestionChip(List<String> s) {
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ActionChip(
-                      label: Center(child: Text("${s[0]}:${s[1]}")),
-                      onPressed: () {
-                        setDialogState(() {
-                          hourText = s[0];
-                          minuteText = s[1];
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            return AlertDialog(
-              title: Text(title),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
+              decoration: const BoxDecoration(
+                color: SafeHomeColors.background,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(18, 14, 18, 22),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: TextFormField(
-                          key: ValueKey("alarm_hour_$hourText"),
-                          initialValue: hourText,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            labelText: strings.t("Giờ"),
-                            counterText: "",
-                            border: const OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            hourText = value.trim();
-                          },
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          ":",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                      Center(
+                        child: Container(
+                          width: 42,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.border,
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: TextFormField(
-                          key: ValueKey("alarm_minute_$minuteText"),
-                          initialValue: minuteText,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            labelText: strings.t("Phút"),
-                            counterText: "",
-                            border: const OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            minuteText = value.trim();
-                          },
-                          onFieldSubmitted: (_) => submit(),
+                      const SizedBox(height: 16),
+                      Text(
+                        personal
+                            ? strings.t('Thiết lập nhanh lịch cá nhân')
+                            : strings.t('Thiết lập nhanh lịch chung'),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: SafeHomeColors.textPrimary,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Column(
-                    children: [
-                      Row(
-                        children: suggestions
-                            .take(3)
-                            .map(suggestionChip)
-                            .toList(),
+                      const SizedBox(height: 4),
+                      Text(
+                        personal
+                            ? strings.t(
+                                'Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.',
+                              )
+                            : strings.t(
+                                'Lịch này áp dụng cho toàn bộ thành viên trong nhà.',
+                              ),
+                        style: const TextStyle(
+                          color: SafeHomeColors.textSecondary,
+                          height: 1.35,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      SwitchListTile.adaptive(
+                        value: draft['enabled'] == true,
+                        onChanged: saving
+                            ? null
+                            : (value) => setSheetState(
+                                  () => draft['enabled'] = value,
+                                ),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          personal
+                              ? strings.t('Lịch báo động cá nhân')
+                              : strings.t('Lịch báo động chung'),
+                          style: const TextStyle(fontWeight: FontWeight.w800),
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Row(
-                        children: suggestions
-                            .skip(3)
-                            .map(suggestionChip)
-                            .toList(),
+                        children: [
+                          Expanded(
+                            child: _AlarmMiniButton(
+                              label: strings.t('Bắt đầu'),
+                              value: draft['start']?.toString() ?? '23:00',
+                              enabled: !saving,
+                              onTap: () => chooseTime('start'),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _AlarmMiniButton(
+                              label: strings.t('Kết thúc'),
+                              value: draft['end']?.toString() ?? '06:00',
+                              enabled: !saving,
+                              onTap: () => chooseTime('end'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      _AlarmRepeatDropdown(
+                        value: _normalizeAlarmRepeatMinutes(
+                          draft['repeatMinutes'],
+                        ),
+                        enabled: !saving,
+                        onChanged: (value) => setSheetState(
+                          () => draft['repeatMinutes'] = value,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _AlarmWeekdaySelector(
+                        days: _normalizeAlarmDays(draft['days']),
+                        enabled: !saving,
+                        onChanged: (days) =>
+                            setSheetState(() => draft['days'] = days),
+                      ),
+                      const SizedBox(height: 18),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: saving ? null : apply,
+                          icon: saving
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.done_all_rounded),
+                          label: Text(
+                            saving
+                                ? strings.t('Đang áp dụng...')
+                                : strings.t('Xác nhận'),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: Text(strings.t("Huỷ")),
                 ),
-                ElevatedButton(onPressed: submit, child: Text(strings.t("OK"))),
-              ],
+              ),
             );
           },
         );
       },
     );
-  }
-
-  Future<void> pickTime({
-    required String deviceId,
-    required Map<String, dynamic> alarm,
-    required String field,
-  }) async {
-    final picked = await openTimeTextInput(
-      title: field == "start"
-          ? AppStrings.of(context).t("Chọn giờ bắt đầu báo động")
-          : AppStrings.of(context).t("Chọn giờ kết thúc báo động"),
-      initial: alarm[field]?.toString() ?? "23:00",
-    );
-
-    if (picked == null) return;
-
-    final nextAlarm = Map<String, dynamic>.from(alarm);
-    nextAlarm[field] = picked;
-
-    await saveAlarm(deviceId, nextAlarm);
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final securityDevices = devices.entries.where((e) {
-      return isSecurityDevice(Map<String, dynamic>.from(e.value));
-    }).toList();
+    final entries = securityDevices;
 
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.all(18),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.sizeOf(context).height * 0.9,
+        ),
+        padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: SafeHomeColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              strings.t("Báo động thiết bị"),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-            ),
-
-            const SizedBox(height: 14),
-
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                strings.t("Chế độ áp dụng"),
-                style: const TextStyle(
-                  color: SafeHomeColors.textPrimary,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
+            Center(
+              child: Container(
+                width: 42,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: SafeHomeColors.border,
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
             ),
-
-            const SizedBox(height: 10),
-
+            const SizedBox(height: 14),
+            Text(
+              strings.t('Báo động thiết bị'),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: SafeHomeColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              strings.t(
+                'Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.',
+              ),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 12.5,
+                height: 1.35,
+                color: SafeHomeColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 14),
             Row(
               children: [
                 Expanded(
-                  child: _AlarmModeCard(
-                    title: strings.t("Theo nhà"),
-                    subtitle: strings.t(
-                      "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
+                  child: OutlinedButton.icon(
+                    onPressed: applyingAll
+                        ? null
+                        : () => _showQuickSetup(personal: false),
+                    icon: const Icon(Icons.home_rounded, size: 19),
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(strings.t('Cài nhanh chung')),
                     ),
-                    icon: Icons.home_rounded,
-                    selected: mode == "home",
-                    enabled: !savingMode,
-                    onTap: () {
-                      saveMode("home");
-                    },
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: _AlarmModeCard(
-                    title: strings.t("Riêng tôi"),
-                    subtitle: strings.t(
-                      "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
+                  child: OutlinedButton.icon(
+                    onPressed: applyingAll
+                        ? null
+                        : () => _showQuickSetup(personal: true),
+                    icon: const Icon(Icons.person_rounded, size: 19),
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(strings.t('Cài nhanh cá nhân')),
                     ),
-                    icon: Icons.person_rounded,
-                    selected: mode == "custom",
-                    enabled: !savingMode,
-                    onTap: () {
-                      saveMode("custom");
-                    },
                   ),
                 ),
               ],
             ),
-
-            if (savingMode) ...[
-              const SizedBox(height: 10),
-              const LinearProgressIndicator(minHeight: 2),
-            ],
-
-            if (mode == "home" && isSharedUser) ...[
-              const SizedBox(height: 10),
-              Text(
-                strings.t(
-                  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.",
-                ),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  height: 1.35,
-                  color: Colors.grey.shade600,
-                ),
-              ),
-            ],
-
             const SizedBox(height: 14),
-
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: savingMode || applyingAll
-                    ? null
-                    : showQuickAlarmForAllSheet,
-                icon: applyingAll
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.tune_rounded),
-                label: Text(
-                  applyingAll
-                      ? strings.t("Đang áp dụng...")
-                      : strings.t("Thiết lập nhanh toàn bộ thiết bị"),
-                ),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(48),
-                  foregroundColor: SafeHomeColors.primary,
-                  side: BorderSide(
-                    color: SafeHomeColors.primary.withValues(alpha: 0.35),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 14),
-
             Flexible(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: securityDevices.length,
-                itemBuilder: (_, index) {
-                  final deviceId = securityDevices[index].key;
-                  final device = Map<String, dynamic>.from(
-                    securityDevices[index].value,
-                  );
-
-                  final alarm = alarmOf(deviceId);
-                  final readOnly =
-                      mode == "home" && isSharedUser && !widget.canManageHome;
-                  final expanded = expandedDeviceId == deviceId;
-
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: SafeHomeColors.primary.withValues(alpha: 0.07),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: SafeHomeColors.primary.withValues(alpha: 0.10),
+              child: loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : entries.isEmpty
+                  ? Center(
+                      child: Text(
+                        strings.t('Nhà chưa có thiết bị an ninh'),
+                        style: const TextStyle(
+                          color: SafeHomeColors.textSecondary,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    expandedDeviceId = expanded ? "" : deviceId;
-                                  });
-                                },
-                                borderRadius: BorderRadius.circular(14),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 2,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 38,
-                                        height: 38,
-                                        decoration: BoxDecoration(
-                                          color: SafeHomeColors.primary
-                                              .withValues(alpha: 0.10),
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          _alarmDeviceIcon(device["type"]),
-                                          size: 21,
-                                          color: SafeHomeColors.primary,
-                                        ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: entries.length,
+                      itemBuilder: (_, index) {
+                        final key = entries[index].key;
+                        final device = Map<String, dynamic>.from(
+                          entries[index].value as Map,
+                        );
+                        final policy = DeviceAlarmPolicySettings.fromDevice(
+                          device: device,
+                          deviceType: device['type']?.toString() ?? 'door');
+                        final common = _commonAlarm(key, device);
+                        final personal = _personalAlarm(key, device);
+                        final commonEnabled = common['enabled'] == true;
+                        final personalEnabled = personal['enabled'] == true;
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: SafeHomeColors.surface,
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: SafeHomeColors.border),
+                          ),
+                          child: InkWell(
+                            onTap: () => _openDeviceSettings(key, device),
+                            borderRadius: BorderRadius.circular(18),
+                            child: Padding(
+                              padding: const EdgeInsets.all(13),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 42,
+                                    height: 42,
+                                    decoration: BoxDecoration(
+                                      color: SafeHomeColors.primary.withValues(
+                                        alpha: 0.10,
                                       ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                      borderRadius: BorderRadius.circular(13),
+                                    ),
+                                    child: Icon(
+                                      _alarmDeviceIcon(device['type']),
+                                      size: 22,
+                                      color: SafeHomeColors.primary,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 11),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
                                           children: [
-                                            Text(
-                                              device["name"]?.toString() ??
-                                                  deviceId,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                color:
-                                                    SafeHomeColors.textPrimary,
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 15,
+                                            Expanded(
+                                              child: Text(
+                                                device['name']?.toString() ?? key,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w900,
+                                                  color:
+                                                      SafeHomeColors.textPrimary),
                                               ),
                                             ),
-                                            const SizedBox(height: 3),
-                                            Text(
-                                              "${alarm["start"] ?? "23:00"} → ${alarm["end"] ?? "06:00"} • ${_alarmDaysLabel(alarm["days"], strings)} • ${_alarmRepeatLabel(alarm["repeatMinutes"], strings)}",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                color: SafeHomeColors
-                                                    .textSecondary,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                            const SizedBox(width: 6),
+                                            Icon(
+                                              policy.enabled
+                                                  ? Icons.shield_rounded
+                                                  : Icons.shield_outlined,
+                                              size: 17,
+                                              color: policy.enabled
+                                                  ? SafeHomeColors.safe
+                                                  : SafeHomeColors.textSecondary,
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 5),
+                                        _scopeSummaryLine(
+                                          icon: Icons.home_rounded,
+                                          label: strings.t('Chung cho nhà'),
+                                          value: commonEnabled
+                                              ? '${common['start']} → ${common['end']}'
+                                              : strings.t('Chưa cài đặt'),
+                                          active: commonEnabled,
+                                        ),
+                                        const SizedBox(height: 3),
+                                        _scopeSummaryLine(
+                                          icon: Icons.person_rounded,
+                                          label: strings.t('Cá nhân'),
+                                          value: personalEnabled
+                                              ? '${personal['start']} → ${personal['end']}'
+                                              : strings.t('Chưa cài đặt'),
+                                          active: personalEnabled,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: SafeHomeColors.textSecondary,
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Switch(
-                              value: alarm["enabled"] == true,
-                              onChanged: readOnly
-                                  ? null
-                                  : (v) async {
-                                      final nextAlarm =
-                                          Map<String, dynamic>.from(alarm);
-                                      nextAlarm["enabled"] = v;
-                                      await saveAlarm(deviceId, nextAlarm);
-                                    },
-                            ),
-                          ],
-                        ),
-
-                        if (expanded) ...[
-                          const SizedBox(height: 10),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _AlarmMiniButton(
-                                  label: strings.t("Bắt đầu"),
-                                  value: alarm["start"]?.toString() ?? "23:00",
-                                  enabled: !readOnly,
-                                  onTap: () => pickTime(
-                                    deviceId: deviceId,
-                                    alarm: alarm,
-                                    field: "start",
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: _AlarmMiniButton(
-                                  label: strings.t("Kết thúc"),
-                                  value: alarm["end"]?.toString() ?? "06:00",
-                                  enabled: !readOnly,
-                                  onTap: () => pickTime(
-                                    deviceId: deviceId,
-                                    alarm: alarm,
-                                    field: "end",
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
-
-                          const SizedBox(height: 10),
-
-                          _AlarmRepeatDropdown(
-                            value: _normalizeAlarmRepeatMinutes(
-                              alarm["repeatMinutes"],
-                            ),
-                            enabled: !readOnly,
-                            onChanged: (minute) async {
-                              final nextAlarm = Map<String, dynamic>.from(
-                                alarm,
-                              );
-                              nextAlarm["repeatMinutes"] = minute;
-
-                              await saveAlarm(deviceId, nextAlarm);
-                            },
-                          ),
-
-                          const SizedBox(height: 10),
-
-                          _AlarmWeekdaySelector(
-                            days: _normalizeAlarmDays(alarm["days"]),
-                            enabled: !readOnly,
-                            onChanged: (days) async {
-                              final nextAlarm = Map<String, dynamic>.from(
-                                alarm,
-                              );
-                              nextAlarm["days"] = days;
-
-                              await saveAlarm(deviceId, nextAlarm);
-                            },
-                          ),
-                        ],
-                      ],
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget _scopeSummaryLine({
+    required IconData icon,
+    required String label,
+    required String value,
+    required bool active,
+  }) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 14,
+          color: active ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
+        ),
+        const SizedBox(width: 5),
+        Text(
+          '$label:',
+          style: const TextStyle(
+            fontSize: 11.5,
+            fontWeight: FontWeight.w700,
+            color: SafeHomeColors.textSecondary,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w700,
+              color: active
+                  ? SafeHomeColors.textPrimary
+                  : SafeHomeColors.textSecondary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
+
 
 class _AlarmWeekdaySelector extends StatelessWidget {
   final List<int> days;

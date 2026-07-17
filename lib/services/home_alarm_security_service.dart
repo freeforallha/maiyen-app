@@ -313,6 +313,49 @@ class HomeAlarmSecurityService {
     }
   }
 
+  Future<HomeSecurityNotificationStatus> notifyNormalModeEnabled({
+    required String ownerUid,
+    required String homeId,
+    required String homeName,
+    required String actorUid,
+    required String actorName,
+  }) async {
+    try {
+      final strings = AppStrings.fromLocale(appLanguageController.locale);
+
+      await HomeNotificationService.notifyHome(
+        ownerUid: ownerUid,
+        homeId: homeId,
+        homeName: homeName,
+        type: 'security_mode_normal',
+        category: 'home',
+        severity: 'success',
+        title: strings.t('Đã chuyển nhà về Bình thường'),
+        message:
+            '${strings.t('Chế độ Bảo vệ đã được tắt.')} '
+            '${strings.t('Nhà đang ở chế độ Bình thường.')}',
+        actorUid: actorUid,
+        entityType: 'home',
+        entityId: homeId,
+        includeActor: true,
+        writeHomeTimeline: true,
+        data: {
+          'type': 'security_mode_normal',
+          'actorName': actorName,
+          'homeName': homeName,
+          'securityMode': normalMode,
+          'securityModeSource': 'manual',
+        },
+      );
+
+      return HomeSecurityNotificationStatus.sent;
+    } catch (error) {
+      safeDebugPrint('NORMAL_MODE_NOTIFICATION_ERROR: $error');
+
+      return HomeSecurityNotificationStatus.failed;
+    }
+  }
+
   Future<HomeSecurityReauthResult> reauthenticateForManualSecurityMode({
     required String password,
   }) async {

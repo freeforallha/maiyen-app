@@ -129,6 +129,37 @@ void showHomeEventSheet({
       case "device_renamed":
       case "device_delete_requested":
         return Icons.sensors_rounded;
+      case "device_added":
+        return Icons.add_circle_rounded;
+      case "device_delete_succeeded":
+        return Icons.check_circle_rounded;
+      case "device_delete_failed":
+        return Icons.error_outline_rounded;
+      case "alarm_resolved":
+      case "emergency_resolved":
+        return Icons.verified_user_rounded;
+      case "alarm_pause_ended":
+        return Icons.play_circle_fill_rounded;
+      case "physical_siren_muted":
+        return Icons.volume_off_rounded;
+      case "security_mode_normal":
+      case "auto_away_armed":
+      case "auto_away_normal":
+        return Icons.shield_rounded;
+      case "system_hub_offline":
+      case "system_hub_online":
+        return Icons.router_rounded;
+      case "system_mqtt_offline":
+      case "system_mqtt_online":
+        return Icons.wifi_tethering_rounded;
+      case "system_device_offline":
+        return Icons.wifi_off_rounded;
+      case "system_device_online":
+        return Icons.wifi_rounded;
+      case "system_device_low_battery":
+        return Icons.battery_alert_rounded;
+      case "system_device_battery_ok":
+        return Icons.battery_full_rounded;
       case "device_contact":
         return Icons.sensor_door_rounded;
       case "device_smoke":
@@ -199,6 +230,26 @@ void showHomeEventSheet({
       case "device_renamed":
       case "device_delete_requested":
         return Colors.blueGrey;
+      case "device_added":
+      case "system_device_online":
+      case "system_device_battery_ok":
+      case "system_hub_online":
+      case "system_mqtt_online":
+      case "alarm_resolved":
+      case "emergency_resolved":
+      case "alarm_pause_ended":
+      case "security_mode_normal":
+      case "auto_away_armed":
+      case "auto_away_normal":
+      case "device_delete_succeeded":
+        return Colors.green;
+      case "system_device_offline":
+      case "system_device_low_battery":
+      case "system_hub_offline":
+      case "system_mqtt_offline":
+      case "physical_siren_muted":
+      case "device_delete_failed":
+        return Colors.orange;
       case "chat":
         return Colors.green;
       case "share_request":

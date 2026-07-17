@@ -21,6 +21,7 @@ class DeviceList extends StatefulWidget {
   final Map<String, dynamic> devices;
   final String selectedRoomId;
   final String securityMode;
+  final Map<String, dynamic> personalAlarmRules;
   final bool isShared;
   final String ownerEmail;
   final Widget? header;
@@ -48,6 +49,7 @@ class DeviceList extends StatefulWidget {
     required this.onPairSensor,
     required this.selectedRoomId,
     this.securityMode = "normal",
+    this.personalAlarmRules = const <String, dynamic>{},
     this.bottomPadding = 28,
   });
 
@@ -1708,6 +1710,7 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   Widget? _deviceAlarmPolicyIndicator({
+    required String deviceId,
     required Map<String, dynamic> device,
     required bool compact,
   }) {
@@ -1722,17 +1725,26 @@ class _DeviceListState extends State<DeviceList> {
       device: device,
       deviceType: deviceType,
     );
+    final realDeviceId =
+        device["_deviceId"]?.toString().trim().isNotEmpty == true
+        ? device["_deviceId"].toString().trim()
+        : deviceId;
+    final personalFullscreenEnabled = resolvePersonalFullscreenEnabled(
+      customRules: widget.personalAlarmRules,
+      deviceId: realDeviceId,
+      fallback: settings.fullscreenEnabled,
+    );
     final iconSize = compact ? 15.0 : 16.0;
 
     if (!settings.enabled) {
       return Icon(
-        Icons.shield_rounded,
+        Icons.shield_outlined,
         size: iconSize,
         color: SafeHomeColors.textSecondary.withValues(alpha: 0.72),
       );
     }
 
-    if (settings.physicalSirenEnabled && settings.fullscreenEnabled) {
+    if (settings.physicalSirenEnabled && personalFullscreenEnabled) {
       return Icon(
         Icons.shield_rounded,
         size: iconSize,
@@ -1740,9 +1752,11 @@ class _DeviceListState extends State<DeviceList> {
       );
     }
 
-    if (!settings.physicalSirenEnabled && !settings.fullscreenEnabled) {
+    if (!settings.physicalSirenEnabled && !personalFullscreenEnabled) {
+      // Chỉ còn cảnh báo thông thường trong ứng dụng: dùng biểu tượng
+      // thông báo dạng tin nhắn để không bị nhầm với còi vật lý.
       return Icon(
-        Icons.notifications_rounded,
+        Icons.sms_outlined,
         size: iconSize,
         color: SafeHomeColors.info,
       );
@@ -1780,6 +1794,7 @@ class _DeviceListState extends State<DeviceList> {
     );
     final accentColor = getAccentColor(d);
     final alarmPolicyIndicator = _deviceAlarmPolicyIndicator(
+      deviceId: id,
       device: d,
       compact: compact,
     );
