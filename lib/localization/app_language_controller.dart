@@ -24,6 +24,9 @@ class AppLanguageController extends ChangeNotifier {
     "km",
     "my",
     "lo",
+    "ta",
+    "pt",
+    "tet",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -42,6 +45,9 @@ class AppLanguageController extends ChangeNotifier {
     Locale("km", "KH"),
     Locale("my", "MM"),
     Locale("lo"),
+    Locale("ta", "SG"),
+    Locale("pt", "TL"),
+    Locale("tet", "TL"),
   ];
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
@@ -60,6 +66,9 @@ class AppLanguageController extends ChangeNotifier {
     "km": "ភាសាខ្មែរ",
     "my": "မြန်မာဘာသာ",
     "lo": "ລາວ",
+    "ta": "தமிழ்",
+    "pt": "Português",
+    "tet": "Tetun",
   };
 
   Locale _locale = const Locale("vi");
@@ -82,6 +91,9 @@ class AppLanguageController extends ChangeNotifier {
   bool get isKhmer => languageCode == "km";
   bool get isBurmese => languageCode == "my";
   bool get isLao => languageCode == "lo";
+  bool get isTamil => languageCode == "ta";
+  bool get isPortuguese => languageCode == "pt";
+  bool get isTetum => languageCode == "tet";
 
   String _normalizeLanguageCode(String code) {
     final cleanCode = code.trim().toLowerCase();
@@ -102,6 +114,18 @@ class AppLanguageController extends ChangeNotifier {
 
     if (normalizedCode == "lo") {
       return const Locale("lo");
+    }
+
+    if (normalizedCode == "ta") {
+      return const Locale("ta", "SG");
+    }
+
+    if (normalizedCode == "pt") {
+      return const Locale("pt", "TL");
+    }
+
+    if (normalizedCode == "tet") {
+      return const Locale("tet", "TL");
     }
 
     if (code == "zh") {

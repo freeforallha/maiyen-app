@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoLocalizations;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -20,6 +21,54 @@ import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
+class _TetumMaterialLocalizationsDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
+  const _TetumMaterialLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == "tet";
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) {
+    return GlobalMaterialLocalizations.delegate.load(const Locale("pt"));
+  }
+
+  @override
+  bool shouldReload(_TetumMaterialLocalizationsDelegate old) => false;
+}
+
+class _TetumWidgetsLocalizationsDelegate
+    extends LocalizationsDelegate<WidgetsLocalizations> {
+  const _TetumWidgetsLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == "tet";
+
+  @override
+  Future<WidgetsLocalizations> load(Locale locale) {
+    return GlobalWidgetsLocalizations.delegate.load(const Locale("pt"));
+  }
+
+  @override
+  bool shouldReload(_TetumWidgetsLocalizationsDelegate old) => false;
+}
+
+class _TetumCupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
+  const _TetumCupertinoLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == "tet";
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) {
+    return GlobalCupertinoLocalizations.delegate.load(const Locale("pt"));
+  }
+
+  @override
+  bool shouldReload(_TetumCupertinoLocalizationsDelegate old) => false;
+}
 
 bool _remoteSessionSignOutRunning = false;
 
@@ -54,7 +103,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
     appLanguageController.load();
 
     _authSessionSubscription = FirebaseAuth.instance.authStateChanges().listen(
-          (user) {
+      (user) {
         if (user == null) {
           unawaited(AccountSessionService.deactivateLocal());
           unawaited(SingleDeviceSessionService.stopActiveSessionListener());
@@ -143,6 +192,9 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
           locale: appLanguageController.locale,
           supportedLocales: AppLanguageController.supportedLocales,
           localizationsDelegates: const [
+            _TetumMaterialLocalizationsDelegate(),
+            _TetumWidgetsLocalizationsDelegate(),
+            _TetumCupertinoLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -589,11 +641,11 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
           content: Text(
             currentlyWhileUsing
                 ? strings.t(
-              "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
-            )
+                    "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+                  )
                 : strings.t(
-              "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
-            ),
+                    "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+                  ),
           ),
           actions: [
             TextButton(

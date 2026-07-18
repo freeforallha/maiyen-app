@@ -1028,7 +1028,7 @@ const Map<String, String> filStrings = {
   "\$count giờ trước": "\$count oras ang nakalipas",
   "\${count}h trước": "\${count} oras ang nakalipas",
   "\${hours}h\$minutes' trước":
-      "\${hours} oras at \${minutes} minuto ang nakalipas",
+      "\${hours} oras at \$minutes minuto ang nakalipas",
   "\$count ngày trước": "\$count araw ang nakalipas",
   "\$count tháng trước": "\$count buwan ang nakalipas",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
@@ -1182,7 +1182,8 @@ const Map<String, String> filStrings = {
   "Còi báo động đã được tắt": "Pinatay na ang pisikal na sirena",
   "Sự cố vẫn đang được theo dõi.": "Patuloy na minomonitor ang insidente.",
   "Bảo vệ tự động đã bật": "Naka-on ang awtomatikong proteksyon",
-  "Toàn bộ thành viên đã rời khỏi nhà.": "Umalis na sa bahay ang lahat ng miyembro.",
+  "Toàn bộ thành viên đã rời khỏi nhà.":
+      "Umalis na sa bahay ang lahat ng miyembro.",
   "Bảo vệ tự động đã tắt": "Naka-off ang awtomatikong proteksyon",
   "Có thành viên đã trở về nhà.": "May miyembrong bumalik sa bahay.",
   "Thiết bị đã được xoá": "Na-delete na ang device",
@@ -1192,34 +1193,47 @@ const Map<String, String> filStrings = {
   "Nhà đang ở chế độ Bình thường.": "Nasa Normal mode ang bahay.",
   "Pin thiết bị đã ổn định": "Matatag na ulit ang baterya ng device",
   "Hub đã kết nối trở lại": "Nakakonekta na ulit ang Hub",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Nailipat sa Normal mode ngunit hindi naipadala ang notification",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Nailipat sa Normal mode ngunit hindi naipadala ang notification",
   "Chung cho nhà": "Para sa buong bahay",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Nalalapat sa lahat ng miyembro at maaaring magpaandar ng pisikal na sirena.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Nalalapat sa lahat ng miyembro at maaaring magpaandar ng pisikal na sirena.",
   "Cá nhân": "Personal",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Hiwalay na gumagana ang personal na iskedyul at hindi nito pinapagana ang pisikal na sirena.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Sa account mo lang nalalapat ang setting na ito.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "May-ari at admin lang ang maaaring magbago ng mga setting para sa buong bahay.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Hiwalay na gumagana ang personal na iskedyul at hindi nito pinapagana ang pisikal na sirena.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Sa account mo lang nalalapat ang setting na ito.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "May-ari at admin lang ang maaaring magbago ng mga setting para sa buong bahay.",
   "Tham gia hệ thống báo động": "Sumali sa alarm system",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Palaging kasali sa alarm system ang mga emergency sensor.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "I-off para hindi gumawa ng anumang alarm ang device.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Palaging kasali sa alarm system ang mga emergency sensor.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "I-off para hindi gumawa ng anumang alarm ang device.",
   "Lịch báo động chung": "Iskedyul ng alarm para sa bahay",
   "Lịch báo động cá nhân": "Personal na iskedyul ng alarm",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Magpakita ng full-screen na babala sa iyong telepono.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Magpakita ng full-screen na babala sa iyong telepono.",
   "Lặp lại cảnh báo": "Ulitin ang babala",
   "Báo động chung": "Alarm para sa bahay",
   "Báo động cá nhân": "Personal na alarm",
   "Đã cài đặt": "Naka-set na",
   "Chưa cài đặt": "Hindi pa naka-set",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Sabay na gumagana ang iskedyul ng bahay at personal; hindi na kailangang pumili ng isa.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Sabay na gumagana ang iskedyul ng bahay at personal; hindi na kailangang pumili ng isa.",
   "Cài nhanh chung": "Mabilis na set para sa bahay",
   "Cài nhanh cá nhân": "Mabilis na personal na set",
   "Thiết lập nhanh lịch cá nhân": "Mabilis na set ng personal na iskedyul",
   "Thiết lập nhanh lịch chung": "Mabilis na set ng iskedyul ng bahay",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Sa iyo lang nalalapat ang iskedyul na ito at hindi nito pinapagana ang pisikal na sirena.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Nalalapat ang iskedyul na ito sa lahat ng miyembro ng bahay.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Sa iyo lang nalalapat ang iskedyul na ito at hindi nito pinapagana ang pisikal na sirena.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Nalalapat ang iskedyul na ito sa lahat ng miyembro ng bahay.",
   "Đã áp dụng lịch báo động": "Nailapat ang iskedyul ng alarm",
   "Không thể lưu lịch báo động": "Hindi ma-save ang iskedyul ng alarm",
   "Nhà chưa có thiết bị an ninh": "Walang security device ang bahay na ito",
-  "Nhận cảnh báo theo lịch chung của nhà": "Tumanggap ng alert mula sa nakabahaging iskedyul ng bahay",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "I-off para hindi makatanggap ng notification o full-screen alert mula sa nakabahaging iskedyul. Mananatiling gumagana ang sirena ng bahay.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Tumanggap ng alert mula sa nakabahaging iskedyul ng bahay",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "I-off para hindi makatanggap ng notification o full-screen alert mula sa nakabahaging iskedyul. Mananatiling gumagana ang sirena ng bahay.",
 };

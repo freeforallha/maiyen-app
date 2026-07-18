@@ -905,7 +905,7 @@ const Map<String, String> zhStrings = {
   "\$count phút trước": "\$count 分钟前",
   "\$count giờ trước": "\$count 小时前",
   "\${count}h trước": "\${count}小时前",
-  "\${hours}h\$minutes' trước": "\${hours}小时\${minutes}分钟前",
+  "\${hours}h\$minutes' trước": "\${hours}小时\$minutes分钟前",
   "\$count ngày trước": "\$count 天前",
   "\$count tháng trước": "\$count 个月前",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "确定要将 \$name 从这个家移除吗？",
@@ -1044,11 +1044,14 @@ const Map<String, String> zhStrings = {
   "Hub đã kết nối trở lại": "Hub 已重新连接",
   "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "已切换到正常模式，但通知发送失败",
   "Chung cho nhà": "全屋共用",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "适用于所有成员，并可启动实体警报器。",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "适用于所有成员，并可启动实体警报器。",
   "Cá nhân": "个人",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "个人计划独立运行，绝不会启动全屋实体警报器。",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "个人计划独立运行，绝不会启动全屋实体警报器。",
   "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "此设置仅适用于您的账户。",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "只有房主和管理员可以更改全屋共用设置。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "只有房主和管理员可以更改全屋共用设置。",
   "Tham gia hệ thống báo động": "加入警报系统",
   "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "紧急传感器始终加入警报系统。",
   "Tắt để thiết bị không tạo bất kỳ báo động nào.": "关闭后，此设备不会触发任何警报。",
@@ -1060,16 +1063,19 @@ const Map<String, String> zhStrings = {
   "Báo động cá nhân": "个人警报",
   "Đã cài đặt": "已设置",
   "Chưa cài đặt": "未设置",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "全屋计划和个人计划可同时运行，无需二选一。",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "全屋计划和个人计划可同时运行，无需二选一。",
   "Cài nhanh chung": "快速设置全屋",
   "Cài nhanh cá nhân": "快速设置个人",
   "Thiết lập nhanh lịch cá nhân": "快速设置个人计划",
   "Thiết lập nhanh lịch chung": "快速设置全屋计划",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "此计划仅适用于您，不会启动实体警报器。",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "此计划仅适用于您，不会启动实体警报器。",
   "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "此计划适用于屋内所有成员。",
   "Đã áp dụng lịch báo động": "已应用警报计划",
   "Không thể lưu lịch báo động": "无法保存警报计划",
   "Nhà chưa có thiết bị an ninh": "此房屋没有安防设备",
   "Nhận cảnh báo theo lịch chung của nhà": "接收全屋共用计划的警报",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "关闭后将不再接收共用计划的通知或全屏警报。家中的实体警报器仍会正常工作。",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "关闭后将不再接收共用计划的通知或全屏警报。家中的实体警报器仍会正常工作。",
 };

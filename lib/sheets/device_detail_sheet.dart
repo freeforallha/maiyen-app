@@ -991,27 +991,38 @@ Widget _alarmSettingsSummary({
               : SafeHomeColors.textSecondary,
         ),
         const Divider(height: 1),
-        if (isEmergency) ...[
-          row(
-            icon: Icons.campaign_rounded,
-            title: strings.t("Bật còi vật lý"),
-            value: strings.t(
-              settings.physicalSirenEnabled ? "Bật" : "Tắt",
-            ),
-            color: settings.physicalSirenEnabled
-                ? SafeHomeColors.primary
-                : SafeHomeColors.textSecondary,
+        row(
+          icon: Icons.campaign_rounded,
+          title: strings.t("Bật còi vật lý"),
+          value: strings.t(
+            settings.physicalSirenEnabled ? "Bật" : "Tắt",
           ),
+          color: settings.physicalSirenEnabled
+              ? SafeHomeColors.primary
+              : SafeHomeColors.textSecondary,
+        ),
+        const Divider(height: 1),
+        row(
+          icon: Icons.phone_android_rounded,
+          title: strings.t("Đánh thức màn hình"),
+          value: strings.t(personalFullscreenEnabled ? "Bật" : "Tắt"),
+          color: personalFullscreenEnabled
+              ? SafeHomeColors.primary
+              : SafeHomeColors.textSecondary,
+        ),
+        const Divider(height: 1),
+        row(
+          icon: Icons.timer_outlined,
+          title: strings.t("Độ trễ kích hoạt"),
+          value: isEmergency || settings.triggerDelaySeconds <= 0
+              ? strings.t("Ngay lập tức")
+              : "${settings.triggerDelaySeconds} ${strings.t('giây')}",
+          color: isEmergency || settings.triggerDelaySeconds <= 0
+              ? SafeHomeColors.safe
+              : SafeHomeColors.primary,
+        ),
+        if (!isEmergency) ...[
           const Divider(height: 1),
-          row(
-            icon: Icons.phone_android_rounded,
-            title: strings.t("Đánh thức màn hình"),
-            value: strings.t(personalFullscreenEnabled ? "Bật" : "Tắt"),
-            color: personalFullscreenEnabled
-                ? SafeHomeColors.primary
-                : SafeHomeColors.textSecondary,
-          ),
-        ] else ...[
           row(
             icon: Icons.home_rounded,
             title: strings.t("Báo động chung"),

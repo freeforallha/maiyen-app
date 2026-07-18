@@ -996,7 +996,7 @@ const Map<String, String> ruStrings = {
   "\$count phút trước": "\$count мин. назад",
   "\$count giờ trước": "\$count ч. назад",
   "\${count}h trước": "\${count} ч. назад",
-  "\${hours}h\$minutes' trước": "\${hours} ч. \${minutes} мин. назад",
+  "\${hours}h\$minutes' trước": "\${hours} ч. \$minutes мин. назад",
   "\$count ngày trước": "\$count дн. назад",
   "\$count tháng trước": "\$count мес. назад",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
@@ -1139,7 +1139,8 @@ const Map<String, String> ruStrings = {
   "Cảnh báo an ninh đã kết thúc": "Предупреждение безопасности завершено",
   "Sự cố nguy hiểm đã kết thúc": "Опасная ситуация завершена",
   "Cảnh báo đã được kết thúc.": "Предупреждение завершено.",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "Другое предупреждение всё ещё активно.",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "Другое предупреждение всё ещё активно.",
   "Báo động đã hoạt động trở lại": "Сигнализация снова активна",
   "Thời gian tạm dừng báo động đã kết thúc.": "Пауза сигнализации завершена.",
   "MQTT đã kết nối trở lại": "MQTT снова подключён",
@@ -1156,34 +1157,47 @@ const Map<String, String> ruStrings = {
   "Nhà đang ở chế độ Bình thường.": "Дом находится в обычном режиме.",
   "Pin thiết bị đã ổn định": "Батарея устройства снова в норме",
   "Hub đã kết nối trở lại": "Hub снова подключён",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Дом переведён в обычный режим, но уведомление не отправлено",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Дом переведён в обычный режим, но уведомление не отправлено",
   "Chung cho nhà": "Для всего дома",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Применяется ко всем участникам и может включать физическую сирену.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Применяется ко всем участникам и может включать физическую сирену.",
   "Cá nhân": "Личное",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Личное расписание работает независимо и не включает физическую сирену.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Эта настройка действует только для вашей учетной записи.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Только владелец и администраторы могут менять общие настройки дома.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Личное расписание работает независимо и не включает физическую сирену.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Эта настройка действует только для вашей учетной записи.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Только владелец и администраторы могут менять общие настройки дома.",
   "Tham gia hệ thống báo động": "Участвовать в системе тревоги",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Экстренные датчики всегда участвуют в системе тревоги.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Отключите, чтобы устройство не создавало тревоги.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Экстренные датчики всегда участвуют в системе тревоги.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Отключите, чтобы устройство не создавало тревоги.",
   "Lịch báo động chung": "Общее расписание тревоги",
   "Lịch báo động cá nhân": "Личное расписание тревоги",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Показывать полноэкранную тревогу на вашем телефоне.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Показывать полноэкранную тревогу на вашем телефоне.",
   "Lặp lại cảnh báo": "Повторять тревогу",
   "Báo động chung": "Общая тревога",
   "Báo động cá nhân": "Личная тревога",
   "Đã cài đặt": "Настроено",
   "Chưa cài đặt": "Не настроено",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Общее и личное расписания работают параллельно; выбирать одно больше не нужно.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Общее и личное расписания работают параллельно; выбирать одно больше не нужно.",
   "Cài nhanh chung": "Быстрая общая настройка",
   "Cài nhanh cá nhân": "Быстрая личная настройка",
   "Thiết lập nhanh lịch cá nhân": "Быстрая настройка личного расписания",
   "Thiết lập nhanh lịch chung": "Быстрая настройка общего расписания",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Это расписание действует только для вас и не включает физическую сирену.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Это расписание действует для всех участников дома.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Это расписание действует только для вас и не включает физическую сирену.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Это расписание действует для всех участников дома.",
   "Đã áp dụng lịch báo động": "Расписание тревоги применено",
   "Không thể lưu lịch báo động": "Не удалось сохранить расписание тревоги",
   "Nhà chưa có thiết bị an ninh": "В этом доме нет охранных устройств",
-  "Nhận cảnh báo theo lịch chung của nhà": "Получать тревоги по общему расписанию дома",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Отключите, чтобы не получать уведомления и полноэкранные тревоги по общему расписанию. Домашняя сирена продолжит работать.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Получать тревоги по общему расписанию дома",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Отключите, чтобы не получать уведомления и полноэкранные тревоги по общему расписанию. Домашняя сирена продолжит работать.",
 };

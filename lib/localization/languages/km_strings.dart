@@ -992,7 +992,7 @@ const Map<String, String> kmStrings = {
   "\$count phút trước": "\$count នាទីមុន",
   "\$count giờ trước": "\$count ម៉ោងមុន",
   "\${count}h trước": "\${count} ម៉ោងមុន",
-  "\${hours}h\$minutes' trước": "\${hours} ម៉ោង \${minutes} នាទីមុន",
+  "\${hours}h\$minutes' trước": "\${hours} ម៉ោង \$minutes នាទីមុន",
   "\$count ngày trước": "\$count ថ្ងៃមុន",
   "\$count tháng trước": "\$count ខែមុន",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
@@ -1136,7 +1136,8 @@ const Map<String, String> kmStrings = {
   "Cảnh báo an ninh đã kết thúc": "ការជូនដំណឹងសុវត្ថិភាពបានបញ្ចប់",
   "Sự cố nguy hiểm đã kết thúc": "ហេតុការណ៍គ្រោះថ្នាក់បានបញ្ចប់",
   "Cảnh báo đã được kết thúc.": "ការជូនដំណឹងបានបញ្ចប់។",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "នៅមានការជូនដំណឹងផ្សេងទៀតកំពុងដំណើរការ។",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "នៅមានការជូនដំណឹងផ្សេងទៀតកំពុងដំណើរការ។",
   "Báo động đã hoạt động trở lại": "សំឡេងរោទិ៍ដំណើរការឡើងវិញ",
   "Thời gian tạm dừng báo động đã kết thúc.": "រយៈពេលផ្អាកសំឡេងរោទិ៍បានបញ្ចប់។",
   "MQTT đã kết nối trở lại": "MQTT បានភ្ជាប់ឡើងវិញ",
@@ -1153,34 +1154,47 @@ const Map<String, String> kmStrings = {
   "Nhà đang ở chế độ Bình thường.": "ផ្ទះស្ថិតក្នុងមុខងារធម្មតា។",
   "Pin thiết bị đã ổn định": "ថ្មឧបករណ៍មានស្ថេរភាពវិញ",
   "Hub đã kết nối trở lại": "Hub បានភ្ជាប់ឡើងវិញ",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "បានប្ដូរទៅមុខងារធម្មតា ប៉ុន្តែមិនអាចផ្ញើការជូនដំណឹងបាន",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "បានប្ដូរទៅមុខងារធម្មតា ប៉ុន្តែមិនអាចផ្ញើការជូនដំណឹងបាន",
   "Chung cho nhà": "សម្រាប់ផ្ទះទាំងមូល",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "អនុវត្តចំពោះសមាជិកទាំងអស់ និងអាចបើកស៊ីរ៉ែនផ្ទាល់។",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "អនុវត្តចំពោះសមាជិកទាំងអស់ និងអាចបើកស៊ីរ៉ែនផ្ទាល់។",
   "Cá nhân": "ផ្ទាល់ខ្លួន",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "កាលវិភាគផ្ទាល់ខ្លួនដំណើរការដោយឯករាជ្យ និងមិនបើកស៊ីរ៉ែនផ្ទាល់ទេ។",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "ការកំណត់នេះអនុវត្តតែចំពោះគណនីរបស់អ្នក។",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "មានតែម្ចាស់ផ្ទះ និងអ្នកគ្រប់គ្រងប៉ុណ្ណោះដែលអាចកែការកំណត់រួម។",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "កាលវិភាគផ្ទាល់ខ្លួនដំណើរការដោយឯករាជ្យ និងមិនបើកស៊ីរ៉ែនផ្ទាល់ទេ។",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "ការកំណត់នេះអនុវត្តតែចំពោះគណនីរបស់អ្នក។",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "មានតែម្ចាស់ផ្ទះ និងអ្នកគ្រប់គ្រងប៉ុណ្ណោះដែលអាចកែការកំណត់រួម។",
   "Tham gia hệ thống báo động": "ចូលរួមប្រព័ន្ធសំឡេងរោទិ៍",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "ឧបករណ៍ចាប់សញ្ញាបន្ទាន់តែងតែចូលរួមប្រព័ន្ធសំឡេងរោទិ៍។",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "បិទដើម្បីកុំឱ្យឧបករណ៍បង្កើតសំឡេងរោទិ៍។",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "ឧបករណ៍ចាប់សញ្ញាបន្ទាន់តែងតែចូលរួមប្រព័ន្ធសំឡេងរោទិ៍។",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "បិទដើម្បីកុំឱ្យឧបករណ៍បង្កើតសំឡេងរោទិ៍។",
   "Lịch báo động chung": "កាលវិភាគសំឡេងរោទិ៍រួម",
   "Lịch báo động cá nhân": "កាលវិភាគសំឡេងរោទិ៍ផ្ទាល់ខ្លួន",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "បង្ហាញការព្រមានពេញអេក្រង់លើទូរស័ព្ទរបស់អ្នក។",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "បង្ហាញការព្រមានពេញអេក្រង់លើទូរស័ព្ទរបស់អ្នក។",
   "Lặp lại cảnh báo": "ធ្វើការព្រមានម្តងទៀត",
   "Báo động chung": "សំឡេងរោទិ៍រួម",
   "Báo động cá nhân": "សំឡេងរោទិ៍ផ្ទាល់ខ្លួន",
   "Đã cài đặt": "បានកំណត់",
   "Chưa cài đặt": "មិនទាន់កំណត់",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "កាលវិភាគរួម និងផ្ទាល់ខ្លួនដំណើរការព្រមគ្នា មិនចាំបាច់ជ្រើសមួយទៀតទេ។",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "កាលវិភាគរួម និងផ្ទាល់ខ្លួនដំណើរការព្រមគ្នា មិនចាំបាច់ជ្រើសមួយទៀតទេ។",
   "Cài nhanh chung": "កំណត់រួមរហ័ស",
   "Cài nhanh cá nhân": "កំណត់ផ្ទាល់ខ្លួនរហ័ស",
   "Thiết lập nhanh lịch cá nhân": "កំណត់កាលវិភាគផ្ទាល់ខ្លួនរហ័ស",
   "Thiết lập nhanh lịch chung": "កំណត់កាលវិភាគរួមរហ័ស",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "កាលវិភាគនេះអនុវត្តតែចំពោះអ្នក និងមិនបើកស៊ីរ៉ែនផ្ទាល់ទេ។",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "កាលវិភាគនេះអនុវត្តចំពោះសមាជិកទាំងអស់ក្នុងផ្ទះ។",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "កាលវិភាគនេះអនុវត្តតែចំពោះអ្នក និងមិនបើកស៊ីរ៉ែនផ្ទាល់ទេ។",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "កាលវិភាគនេះអនុវត្តចំពោះសមាជិកទាំងអស់ក្នុងផ្ទះ។",
   "Đã áp dụng lịch báo động": "បានអនុវត្តកាលវិភាគសំឡេងរោទិ៍",
   "Không thể lưu lịch báo động": "មិនអាចរក្សាទុកកាលវិភាគសំឡេងរោទិ៍",
   "Nhà chưa có thiết bị an ninh": "ផ្ទះនេះមិនមានឧបករណ៍សុវត្ថិភាពទេ",
-  "Nhận cảnh báo theo lịch chung của nhà": "ទទួលការជូនដំណឹងពីកាលវិភាគរួមរបស់ផ្ទះ",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "បិទ ដើម្បីមិនទទួលការជូនដំណឹង ឬការព្រមានពេញអេក្រង់ពីកាលវិភាគរួម។ ស៊ីរ៉ែនក្នុងផ្ទះនៅតែដំណើរការ។",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "ទទួលការជូនដំណឹងពីកាលវិភាគរួមរបស់ផ្ទះ",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "បិទ ដើម្បីមិនទទួលការជូនដំណឹង ឬការព្រមានពេញអេក្រង់ពីកាលវិភាគរួម។ ស៊ីរ៉ែនក្នុងផ្ទះនៅតែដំណើរការ។",
 };

@@ -922,7 +922,7 @@ const Map<String, String> koStrings = {
   "\$count phút trước": "\$count분 전",
   "\$count giờ trước": "\$count시간 전",
   "\${count}h trước": "\${count}시간 전",
-  "\${hours}h\$minutes' trước": "\${hours}시간 \${minutes}분 전",
+  "\${hours}h\$minutes' trước": "\${hours}시간 \$minutes분 전",
   "\$count ngày trước": "\$count일 전",
   "\$count tháng trước": "\$count개월 전",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "\$name님을 이 집에서 삭제하시겠습니까?",
@@ -1065,34 +1065,44 @@ const Map<String, String> koStrings = {
   "Nhà đang ở chế độ Bình thường.": "집이 일반 모드입니다.",
   "Pin thiết bị đã ổn định": "기기 배터리 상태가 안정됨",
   "Hub đã kết nối trở lại": "Hub가 다시 연결됨",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "일반 모드로 전환했지만 알림을 보내지 못했습니다",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "일반 모드로 전환했지만 알림을 보내지 못했습니다",
   "Chung cho nhà": "집 전체",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "모든 구성원에게 적용되며 실물 사이렌을 켤 수 있습니다.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "모든 구성원에게 적용되며 실물 사이렌을 켤 수 있습니다.",
   "Cá nhân": "개인",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "개인 일정은 독립적으로 작동하며 실물 사이렌을 켜지 않습니다.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "개인 일정은 독립적으로 작동하며 실물 사이렌을 켜지 않습니다.",
   "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "이 설정은 내 계정에만 적용됩니다.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "소유자와 관리자만 집 전체 설정을 변경할 수 있습니다.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "소유자와 관리자만 집 전체 설정을 변경할 수 있습니다.",
   "Tham gia hệ thống báo động": "경보 시스템 참여",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "긴급 센서는 항상 경보 시스템에 참여합니다.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "긴급 센서는 항상 경보 시스템에 참여합니다.",
   "Tắt để thiết bị không tạo bất kỳ báo động nào.": "끄면 이 기기에서 경보가 생성되지 않습니다.",
   "Lịch báo động chung": "집 전체 경보 일정",
   "Lịch báo động cá nhân": "개인 경보 일정",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "내 휴대전화에 전체 화면 경보를 표시합니다.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "내 휴대전화에 전체 화면 경보를 표시합니다.",
   "Lặp lại cảnh báo": "경보 반복",
   "Báo động chung": "집 전체 경보",
   "Báo động cá nhân": "개인 경보",
   "Đã cài đặt": "설정됨",
   "Chưa cài đặt": "설정되지 않음",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "집 전체 일정과 개인 일정이 동시에 작동하므로 하나를 선택할 필요가 없습니다.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "집 전체 일정과 개인 일정이 동시에 작동하므로 하나를 선택할 필요가 없습니다.",
   "Cài nhanh chung": "집 전체 빠른 설정",
   "Cài nhanh cá nhân": "개인 빠른 설정",
   "Thiết lập nhanh lịch cá nhân": "개인 일정 빠른 설정",
   "Thiết lập nhanh lịch chung": "집 전체 일정 빠른 설정",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "이 일정은 나에게만 적용되며 실물 사이렌을 켜지 않습니다.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "이 일정은 집의 모든 구성원에게 적용됩니다.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "이 일정은 나에게만 적용되며 실물 사이렌을 켜지 않습니다.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "이 일정은 집의 모든 구성원에게 적용됩니다.",
   "Đã áp dụng lịch báo động": "경보 일정 적용됨",
   "Không thể lưu lịch báo động": "경보 일정을 저장할 수 없습니다",
   "Nhà chưa có thiết bị an ninh": "이 집에는 보안 기기가 없습니다",
   "Nhận cảnh báo theo lịch chung của nhà": "집 공용 일정의 경고 받기",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "끄면 공용 일정의 알림과 전체 화면 경고를 받지 않습니다. 집의 실물 사이렌은 계속 작동합니다.",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "끄면 공용 일정의 알림과 전체 화면 경고를 받지 않습니다. 집의 실물 사이렌은 계속 작동합니다.",
 };

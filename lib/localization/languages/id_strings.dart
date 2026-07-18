@@ -1006,7 +1006,7 @@ const Map<String, String> idStrings = {
   "\$count phút trước": "\$count menit terakhir",
   "\$count giờ trước": "\$count jam yang lalu",
   "\${count}h trước": "\${count}h yang lalu",
-  "\${hours}h\$minutes' trước": "\${hours}j \${minutes}m yang lalu",
+  "\${hours}h\$minutes' trước": "\${hours} jam \$minutes menit yang lalu",
   "\$count ngày trước": "\$count hari yang lalu",
   "\$count tháng trước": "\$count bulan lalu",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
@@ -1155,7 +1155,8 @@ const Map<String, String> idStrings = {
   "Còi báo động đã được tắt": "Sirene fisik telah dimatikan",
   "Sự cố vẫn đang được theo dõi.": "Insiden masih dipantau.",
   "Bảo vệ tự động đã bật": "Perlindungan otomatis diaktifkan",
-  "Toàn bộ thành viên đã rời khỏi nhà.": "Semua anggota telah meninggalkan rumah.",
+  "Toàn bộ thành viên đã rời khỏi nhà.":
+      "Semua anggota telah meninggalkan rumah.",
   "Bảo vệ tự động đã tắt": "Perlindungan otomatis dinonaktifkan",
   "Có thành viên đã trở về nhà.": "Seorang anggota telah kembali ke rumah.",
   "Thiết bị đã được xoá": "Perangkat telah dihapus",
@@ -1165,34 +1166,47 @@ const Map<String, String> idStrings = {
   "Nhà đang ở chế độ Bình thường.": "Rumah berada dalam mode Normal.",
   "Pin thiết bị đã ổn định": "Baterai perangkat kembali stabil",
   "Hub đã kết nối trở lại": "Hub tersambung kembali",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Beralih ke mode Normal, tetapi notifikasi tidak dapat dikirim",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Beralih ke mode Normal, tetapi notifikasi tidak dapat dikirim",
   "Chung cho nhà": "Untuk seluruh rumah",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Berlaku untuk semua anggota dan dapat mengaktifkan sirene fisik.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Berlaku untuk semua anggota dan dapat mengaktifkan sirene fisik.",
   "Cá nhân": "Pribadi",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Jadwal pribadi bekerja mandiri dan tidak pernah mengaktifkan sirene fisik.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Pengaturan ini hanya berlaku untuk akun Anda.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Hanya pemilik dan admin yang dapat mengubah pengaturan bersama rumah.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Jadwal pribadi bekerja mandiri dan tidak pernah mengaktifkan sirene fisik.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Pengaturan ini hanya berlaku untuk akun Anda.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Hanya pemilik dan admin yang dapat mengubah pengaturan bersama rumah.",
   "Tham gia hệ thống báo động": "Ikut sistem alarm",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Sensor darurat selalu ikut dalam sistem alarm.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Matikan agar perangkat tidak membuat alarm apa pun.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Sensor darurat selalu ikut dalam sistem alarm.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Matikan agar perangkat tidak membuat alarm apa pun.",
   "Lịch báo động chung": "Jadwal alarm bersama",
   "Lịch báo động cá nhân": "Jadwal alarm pribadi",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Tampilkan peringatan layar penuh di ponsel Anda.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Tampilkan peringatan layar penuh di ponsel Anda.",
   "Lặp lại cảnh báo": "Ulangi alarm",
   "Báo động chung": "Alarm bersama",
   "Báo động cá nhân": "Alarm pribadi",
   "Đã cài đặt": "Sudah diatur",
   "Chưa cài đặt": "Belum diatur",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Jadwal bersama dan pribadi berjalan bersamaan; tidak perlu memilih salah satu.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Jadwal bersama dan pribadi berjalan bersamaan; tidak perlu memilih salah satu.",
   "Cài nhanh chung": "Atur cepat bersama",
   "Cài nhanh cá nhân": "Atur cepat pribadi",
   "Thiết lập nhanh lịch cá nhân": "Atur cepat jadwal pribadi",
   "Thiết lập nhanh lịch chung": "Atur cepat jadwal bersama",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Jadwal ini hanya berlaku untuk Anda dan tidak mengaktifkan sirene fisik.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Jadwal ini berlaku untuk semua anggota rumah.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Jadwal ini hanya berlaku untuk Anda dan tidak mengaktifkan sirene fisik.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Jadwal ini berlaku untuk semua anggota rumah.",
   "Đã áp dụng lịch báo động": "Jadwal alarm diterapkan",
   "Không thể lưu lịch báo động": "Tidak dapat menyimpan jadwal alarm",
   "Nhà chưa có thiết bị an ninh": "Rumah ini belum memiliki perangkat keamanan",
-  "Nhận cảnh báo theo lịch chung của nhà": "Terima peringatan dari jadwal bersama rumah",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Matikan untuk berhenti menerima notifikasi atau peringatan layar penuh dari jadwal bersama. Sirene rumah tetap berfungsi.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Terima peringatan dari jadwal bersama rumah",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Matikan untuk berhenti menerima notifikasi atau peringatan layar penuh dari jadwal bersama. Sirene rumah tetap berfungsi.",
 };

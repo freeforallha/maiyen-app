@@ -16,6 +16,12 @@ import 'languages/fil_strings.dart';
 import 'languages/km_strings.dart';
 import 'languages/my_strings.dart';
 import 'languages/lo_strings.dart';
+import 'languages/ta_strings.dart';
+import 'languages/pt_strings.dart';
+import 'languages/tet_strings.dart';
+import 'languages/ta_dynamic_strings.dart';
+import 'languages/pt_dynamic_strings.dart';
+import 'languages/tet_dynamic_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -33,6 +39,9 @@ class AppStrings {
   final bool isKhmer;
   final bool isBurmese;
   final bool isLao;
+  final bool isTamil;
+  final bool isPortuguese;
+  final bool isTetum;
 
   const AppStrings._({
     required this.isEnglish,
@@ -50,6 +59,9 @@ class AppStrings {
     required this.isKhmer,
     required this.isBurmese,
     required this.isLao,
+    required this.isTamil,
+    required this.isPortuguese,
+    required this.isTetum,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -69,6 +81,9 @@ class AppStrings {
       isKhmer: locale.languageCode == "km",
       isBurmese: locale.languageCode == "my",
       isLao: locale.languageCode == "lo",
+      isTamil: locale.languageCode == "ta",
+      isPortuguese: locale.languageCode == "pt",
+      isTetum: locale.languageCode == "tet",
     );
   }
 
@@ -93,6 +108,9 @@ class AppStrings {
     String? km,
     String? my,
     String? lo,
+    String? ta,
+    String? pt,
+    String? tet,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -118,6 +136,18 @@ class AppStrings {
 
     if (isLao) {
       return _translationFromMap(_lao, key) ?? lo ?? en;
+    }
+
+    if (isTamil) {
+      return _translationFromMap(_tamil, key) ?? ta ?? en;
+    }
+
+    if (isPortuguese) {
+      return _translationFromMap(_portuguese, key) ?? pt ?? en;
+    }
+
+    if (isTetum) {
+      return _translationFromMap(_tetum, key) ?? tet ?? en;
     }
 
     if (isIndonesian) {
@@ -3592,11 +3622,11 @@ class AppStrings {
     switch (type) {
       case "alarm_resolved":
       case "emergency_resolved":
-        final hasRemaining = _notificationBool(
-              _firstNotificationValue(
-                item,
-                const ["hasRemainingActiveIncidents"],
-              ),
+        final hasRemaining =
+            _notificationBool(
+              _firstNotificationValue(item, const [
+                "hasRemainingActiveIncidents",
+              ]),
             ) ==
             true;
         return hasRemaining
@@ -4160,6 +4190,18 @@ class AppStrings {
 
   static const Map<String, String> _lao = loStrings;
 
+  static const Map<String, String> _tamil = {...taStrings, ...taDynamicStrings};
+
+  static const Map<String, String> _portuguese = {
+    ...ptStrings,
+    ...ptDynamicStrings,
+  };
+
+  static const Map<String, String> _tetum = {
+    ...tetStrings,
+    ...tetDynamicStrings,
+  };
+
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -4185,6 +4227,18 @@ class AppStrings {
 
     if (isLao) {
       return _translationFromMap(_lao, key) ?? vi;
+    }
+
+    if (isTamil) {
+      return _translationFromMap(_tamil, key) ?? vi;
+    }
+
+    if (isPortuguese) {
+      return _translationFromMap(_portuguese, key) ?? vi;
+    }
+
+    if (isTetum) {
+      return _translationFromMap(_tetum, key) ?? vi;
     }
 
     if (isIndonesian) {
@@ -5365,6 +5419,12 @@ class AppStrings {
       ? _burmese
       : isLao
       ? _lao
+      : isTamil
+      ? _tamil
+      : isPortuguese
+      ? _portuguese
+      : isTetum
+      ? _tetum
       : isThai
       ? _thai
       : isIndonesian
@@ -5665,6 +5725,9 @@ class AppStrings {
         !isKhmer &&
         !isBurmese &&
         !isLao &&
+        !isTamil &&
+        !isPortuguese &&
+        !isTetum &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -6223,6 +6286,24 @@ class AppStrings {
       }
 
       return text;
+    }
+
+    if (isTamil) {
+      return _translationFromMap(_tamil, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isPortuguese) {
+      return _translationFromMap(
+            _portuguese,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isTetum) {
+      return _translationFromMap(_tetum, _translationAliases[text] ?? text) ??
+          text;
     }
 
     if (isIndonesian) {
@@ -6945,6 +7026,18 @@ class AppStrings {
 
     if (isLao) {
       return "ລາວ";
+    }
+
+    if (isTamil) {
+      return "தமிழ்";
+    }
+
+    if (isPortuguese) {
+      return "Português";
+    }
+
+    if (isTetum) {
+      return "Tetun";
     }
 
     if (isThai) {

@@ -922,7 +922,7 @@ const Map<String, String> jaStrings = {
   "\$count phút trước": "\$count分前",
   "\$count giờ trước": "\$count時間前",
   "\${count}h trước": "\${count}時間前",
-  "\${hours}h\$minutes' trước": "\${hours}時間\${minutes}分前",
+  "\${hours}h\$minutes' trước": "\${hours}時間\$minutes分前",
   "\$count ngày trước": "\$count日前",
   "\$count tháng trước": "\$countか月前",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "\$name をこの家から削除してもよろしいですか？",
@@ -1062,34 +1062,44 @@ const Map<String, String> jaStrings = {
   "Nhà đang ở chế độ Bình thường.": "家は通常モードです。",
   "Pin thiết bị đã ổn định": "デバイスの電池状態が安定しました",
   "Hub đã kết nối trở lại": "Hubが再接続されました",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "通常モードに切り替えましたが、通知を送信できませんでした",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "通常モードに切り替えましたが、通知を送信できませんでした",
   "Chung cho nhà": "家全体",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "全メンバーに適用され、物理サイレンを作動できます。",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "全メンバーに適用され、物理サイレンを作動できます。",
   "Cá nhân": "個人",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "個人スケジュールは独立して動作し、物理サイレンは作動しません。",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "個人スケジュールは独立して動作し、物理サイレンは作動しません。",
   "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "この設定はあなたのアカウントにのみ適用されます。",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "家全体の設定を変更できるのは所有者と管理者だけです。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "家全体の設定を変更できるのは所有者と管理者だけです。",
   "Tham gia hệ thống báo động": "警報システムに参加",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "緊急センサーは常に警報システムに参加します。",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "緊急センサーは常に警報システムに参加します。",
   "Tắt để thiết bị không tạo bất kỳ báo động nào.": "オフにすると、このデバイスは警報を作成しません。",
   "Lịch báo động chung": "家全体の警報スケジュール",
   "Lịch báo động cá nhân": "個人の警報スケジュール",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "スマートフォンに全画面警報を表示します。",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "スマートフォンに全画面警報を表示します。",
   "Lặp lại cảnh báo": "警報を繰り返す",
   "Báo động chung": "家全体の警報",
   "Báo động cá nhân": "個人警報",
   "Đã cài đặt": "設定済み",
   "Chưa cài đặt": "未設定",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "家全体と個人のスケジュールは同時に動作し、どちらかを選ぶ必要はありません。",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "家全体と個人のスケジュールは同時に動作し、どちらかを選ぶ必要はありません。",
   "Cài nhanh chung": "家全体を一括設定",
   "Cài nhanh cá nhân": "個人を一括設定",
   "Thiết lập nhanh lịch cá nhân": "個人スケジュールを一括設定",
   "Thiết lập nhanh lịch chung": "家全体のスケジュールを一括設定",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "このスケジュールはあなたにのみ適用され、物理サイレンは作動しません。",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "このスケジュールは家の全メンバーに適用されます。",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "このスケジュールはあなたにのみ適用され、物理サイレンは作動しません。",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "このスケジュールは家の全メンバーに適用されます。",
   "Đã áp dụng lịch báo động": "警報スケジュールを適用しました",
   "Không thể lưu lịch báo động": "警報スケジュールを保存できません",
   "Nhà chưa có thiết bị an ninh": "この家には防犯デバイスがありません",
   "Nhận cảnh báo theo lịch chung của nhà": "家の共通スケジュールの警報を受信",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "オフにすると共通スケジュールの通知と全画面警報を受信しません。家の物理サイレンは引き続き作動します。",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "オフにすると共通スケジュールの通知と全画面警報を受信しません。家の物理サイレンは引き続き作動します。",
 };

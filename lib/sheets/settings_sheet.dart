@@ -40,13 +40,25 @@ String _languageSubtitle(String code) {
       return "Burmese • Myanmar 🇲🇲";
     case "lo":
       return appLanguageController.languageCode == "vi" ? "Tiếng Lào" : "Lao";
+    case "ta":
+      return "Tamil • Singapore";
+    case "pt":
+      return "Portuguese • Timor-Leste";
+    case "tet":
+      return "Tetum • Timor-Leste";
     default:
       return code;
   }
 }
 
 String _languageSearchAliases(String code) {
-  return code == "lo" ? "lao tiếng lào ລາວ" : "";
+  return switch (code) {
+    "lo" => "lao tiếng lào ລາວ",
+    "ta" => "tamil tiếng tamil தமிழ் singapore",
+    "pt" => "portuguese tiếng bồ đào nha português timor leste",
+    "tet" => "tetum tiếng tetum tetun timor leste",
+    _ => "",
+  };
 }
 
 String _languageBadge(String code) {

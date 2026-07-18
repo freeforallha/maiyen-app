@@ -983,7 +983,7 @@ const Map<String, String> enStrings = {
   "\$count phút trước": "\$count minutes ago",
   "\$count giờ trước": "\$count hours ago",
   "\${count}h trước": "\${count}h ago",
-  "\${hours}h\$minutes' trước": "\${hours}h \${minutes}m ago",
+  "\${hours}h\$minutes' trước": "\${hours}h \$minutes min ago",
   "\$count ngày trước": "\$count days ago",
   "\$count tháng trước": "\$count months ago",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
@@ -1124,7 +1124,8 @@ const Map<String, String> enStrings = {
   "Cảnh báo đã được kết thúc.": "The alert has ended.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Another alert is still active.",
   "Báo động đã hoạt động trở lại": "Alarm is active again",
-  "Thời gian tạm dừng báo động đã kết thúc.": "The alarm pause period has ended.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "The alarm pause period has ended.",
   "MQTT đã kết nối trở lại": "MQTT reconnected",
   "Còi báo động đã được tắt": "Physical siren was turned off",
   "Sự cố vẫn đang được theo dõi.": "The incident is still being monitored.",
@@ -1139,34 +1140,47 @@ const Map<String, String> enStrings = {
   "Nhà đang ở chế độ Bình thường.": "The home is in Normal mode.",
   "Pin thiết bị đã ổn định": "Device battery is stable",
   "Hub đã kết nối trở lại": "Hub reconnected",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Switched to Normal, but the notification could not be sent",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Switched to Normal, but the notification could not be sent",
   "Chung cho nhà": "Shared home",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Applies to all members and may activate the physical siren.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Applies to all members and may activate the physical siren.",
   "Cá nhân": "Personal",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "The personal schedule works independently and never activates the physical siren.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "This setting only applies to your account.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Only the owner and administrators can change shared home settings.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "The personal schedule works independently and never activates the physical siren.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "This setting only applies to your account.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Only the owner and administrators can change shared home settings.",
   "Tham gia hệ thống báo động": "Participate in alarm system",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Emergency sensors always participate in the alarm system.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Turn off to prevent the device from creating any alarm.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Emergency sensors always participate in the alarm system.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Turn off to prevent the device from creating any alarm.",
   "Lịch báo động chung": "Shared alarm schedule",
   "Lịch báo động cá nhân": "Personal alarm schedule",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Show a full-screen alert on your phone.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Show a full-screen alert on your phone.",
   "Lặp lại cảnh báo": "Repeat alert",
   "Báo động chung": "Shared alarm",
   "Báo động cá nhân": "Personal alarm",
   "Đã cài đặt": "Configured",
   "Chưa cài đặt": "Not configured",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Shared and personal schedules work in parallel; you no longer need to choose one.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Shared and personal schedules work in parallel; you no longer need to choose one.",
   "Cài nhanh chung": "Quick shared setup",
   "Cài nhanh cá nhân": "Quick personal setup",
   "Thiết lập nhanh lịch cá nhân": "Quick personal schedule setup",
   "Thiết lập nhanh lịch chung": "Quick shared schedule setup",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "This schedule only applies to you and does not activate the physical siren.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "This schedule applies to all members in the home.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "This schedule only applies to you and does not activate the physical siren.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "This schedule applies to all members in the home.",
   "Đã áp dụng lịch báo động": "Alarm schedule applied",
   "Không thể lưu lịch báo động": "Unable to save alarm schedule",
   "Nhà chưa có thiết bị an ninh": "This home has no security devices",
-  "Nhận cảnh báo theo lịch chung của nhà": "Receive alerts from the shared home schedule",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Turn this off to stop notifications and fullscreen alerts from the shared schedule. The home siren will still operate.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Receive alerts from the shared home schedule",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Turn this off to stop notifications and fullscreen alerts from the shared schedule. The home siren will still operate.",
 };

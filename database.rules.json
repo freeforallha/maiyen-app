@@ -12,6 +12,10 @@
         "profile": {
           ".write": "auth != null && auth.uid == $uid"
         },
+        "languageCode": {
+          ".write": "auth != null && auth.uid == $uid",
+          ".validate": "newData.isString() && newData.val().matches(/^(vi|en|zh|ko|ja|de|ru|fr|es|id|th|ms|fil|km|my|lo|ta|pt|tet)$/)"
+        },
         "fcmToken": {
           ".write": "auth != null && auth.uid == $uid"
         },
