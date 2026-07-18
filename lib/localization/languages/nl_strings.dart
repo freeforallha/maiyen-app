@@ -78,6 +78,7 @@ const Map<String, String> nlStrings = {
   "Khóa đang mở": "Slot is open",
   "Khóa đang đóng": "Slot is gesloten",
   "Đang bật": "Ingeschakeld",
+  "Bật": "Ingeschakeld",
   "Đang tắt": "Uitgeschakeld",
   "Đang theo dõi điện năng": "Energieverbruik wordt bewaakt",
   "Đang dùng nguồn dự phòng": "Noodvoeding in gebruik",

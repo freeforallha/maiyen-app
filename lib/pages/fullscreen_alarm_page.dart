@@ -579,7 +579,11 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
       final nextAlarm = item["nextAlarm"]?.toString().trim();
 
       if (nextAlarm == null || nextAlarm.isEmpty) continue;
-      if (nextAlarm == "không lặp lại") continue;
+      final normalizedNextAlarm = nextAlarm.toLowerCase();
+      if (normalizedNextAlarm == "không lặp lại" ||
+          normalizedNextAlarm == "ngay lập tức") {
+        continue;
+      }
 
       final key = homeName == null || homeName.isEmpty ? "SafeHome" : homeName;
 

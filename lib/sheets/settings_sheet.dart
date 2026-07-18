@@ -37,7 +37,7 @@ String _languageSubtitle(String code) {
     case "km":
       return "Khmer";
     case "my":
-      return "Burmese • Myanmar 🇲🇲";
+      return "Burmese • Myanmar";
     case "lo":
       return appLanguageController.languageCode == "vi" ? "Tiếng Lào" : "Lao";
     case "ta":
@@ -82,6 +82,38 @@ String _languageSubtitle(String code) {
       return "Turkish • Türkiye";
     case "sv":
       return "Swedish • Sweden";
+    case "da":
+      return "Danish • Denmark";
+    case "nb":
+      return "Norwegian Bokmål • Norway";
+    case "fi":
+      return "Finnish • Finland";
+    case "is":
+      return "Icelandic • Iceland";
+    case "et":
+      return "Estonian • Estonia";
+    case "lv":
+      return "Latvian • Latvia";
+    case "lt":
+      return "Lithuanian • Lithuania";
+    case "ga":
+      return "Irish • Ireland";
+    case "mt":
+      return "Maltese • Malta";
+    case "be":
+      return "Belarusian • Belarus";
+    case "lb":
+      return "Luxembourgish • Luxembourg";
+    case "ca":
+      return "Catalan • Andorra";
+    case "cnr":
+      return "Montenegrin • Montenegro";
+    case "hy":
+      return "Armenian • Armenia";
+    case "ka":
+      return "Georgian • Georgia";
+    case "az":
+      return "Azerbaijani • Azerbaijan";
     default:
       return code;
   }
@@ -111,83 +143,28 @@ String _languageSearchAliases(String code) {
     "el" => "greek ελληνικά tiếng hy lạp greece ελλάδα",
     "tr" => "turkish türkçe tiếng thổ nhĩ kỳ türkiye",
     "sv" => "swedish svenska tiếng thụy điển sweden sverige",
+    "da" => "danish dansk tiếng đan mạch denmark danmark",
+    "nb" => "norwegian norsk bokmål tiếng na uy norway norge",
+    "fi" => "finnish suomi tiếng phần lan finland",
+    "is" => "icelandic íslenska tiếng iceland iceland",
+    "et" => "estonian eesti tiếng estonia estonia",
+    "lv" => "latvian latviešu tiếng latvia latvija",
+    "lt" => "lithuanian lietuvių tiếng litva lithuania lietuva",
+    "ga" => "irish gaeilge tiếng ireland éire",
+    "mt" => "maltese malti tiếng malta",
+    "be" => "belarusian беларуская tiếng belarus беларусь",
+    "lb" => "luxembourgish lëtzebuergesch tiếng luxembourg luxemburg",
+    "ca" => "catalan català tiếng catalan andorra catalunya",
+    "cnr" => "montenegrin crnogorski tiếng montenegro crna gora",
+    "hy" => "armenian հայերեն tiếng armenia hayastan",
+    "ka" => "georgian ქართული tiếng georgia sakartvelo",
+    "az" => "azerbaijani azərbaycan dili tiếng azerbaijan azərbaycan",
     _ => "",
   };
 }
 
-String _languageBadge(String code) {
-  switch (code) {
-    case "vi":
-      return "VI";
-    case "en":
-      return "EN";
-    case "zh":
-      return "中";
-    case "ko":
-      return "KO";
-    case "ja":
-      return "日";
-    case "de":
-      return "DE";
-    case "ru":
-      return "RU";
-    case "fr":
-      return "FR";
-    case "es":
-      return "ES";
-    case "id":
-      return "ID";
-    case "th":
-      return "TH";
-    case "ms":
-      return "MS";
-    case "fil":
-      return "FIL";
-    case "km":
-      return "KM";
-    case "my":
-      return "🇲🇲";
-    case "lo":
-      return "LO";
-    case "it":
-      return "🇮🇹";
-    case "pl":
-      return "🇵🇱";
-    case "nl":
-      return "🇳🇱";
-    case "cs":
-      return "🇨🇿";
-    case "sk":
-      return "🇸🇰";
-    case "uk":
-      return "🇺🇦";
-    case "ro":
-      return "🇷🇴";
-    case "hu":
-      return "🇭🇺";
-    case "bg":
-      return "🇧🇬";
-    case "hr":
-      return "🇭🇷";
-    case "sr":
-      return "🇷🇸";
-    case "bs":
-      return "🇧🇦";
-    case "sl":
-      return "🇸🇮";
-    case "mk":
-      return "🇲🇰";
-    case "sq":
-      return "🇦🇱";
-    case "el":
-      return "🇬🇷";
-    case "tr":
-      return "🇹🇷";
-    case "sv":
-      return "🇸🇪";
-    default:
-      return code.toUpperCase();
-  }
+String _languageFlag(String code) {
+  return AppLanguageController.languageFlags[code] ?? "🌐";
 }
 
 Future<void> _showLanguageSheet(BuildContext context) async {
@@ -242,13 +219,12 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
-                    _languageBadge(code),
+                    _languageFlag(code),
                     style: TextStyle(
                       color: selected
                           ? SafeHomeColors.primary
                           : SafeHomeColors.textSecondary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                      fontSize: 24,
                     ),
                   ),
                 ),
@@ -314,7 +290,10 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 title.toLowerCase().contains(q) ||
                 subtitle.toLowerCase().contains(q) ||
                 aliases.contains(q);
-          }).toList();
+          }).toList()
+            ..sort((a, b) => _languageSubtitle(a).toLowerCase().compareTo(
+                  _languageSubtitle(b).toLowerCase(),
+                ));
           final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
           final screenHeight = MediaQuery.sizeOf(sheetContext).height;
           final maxSheetHeight = screenHeight - bottomInset - 24;

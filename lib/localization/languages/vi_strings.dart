@@ -3,8 +3,7 @@ const Map<String, String> viStrings = {
   "Không đọc được số điện thoại": "Không đọc được số điện thoại",
   "Tin nhắn quá dài": "Tin nhắn quá dài",
   "Không gửi được tin nhắn": "Không gửi được tin nhắn",
-  "Bạn không có quyền sửa lịch chung của nhà":
-      "Bạn không có quyền sửa lịch chung của nhà",
+  "Bạn không có quyền sửa lịch chung của nhà": "Bạn không có quyền sửa lịch chung của nhà",
   "Nhà của bạn": "Nhà của bạn",
   "Tải tin cũ hơn": "Tải tin cũ hơn",
   "Nhà chưa đặt tên": "Nhà chưa đặt tên",
@@ -79,6 +78,7 @@ const Map<String, String> viStrings = {
   "Khóa đang mở": "Khóa đang mở",
   "Khóa đang đóng": "Khóa đang đóng",
   "Đang bật": "Đang bật",
+  "Bật": "Đang bật",
   "Đang tắt": "Đang tắt",
   "Đang theo dõi điện năng": "Đang theo dõi điện năng",
   "Đang dùng nguồn dự phòng": "Đang dùng nguồn dự phòng",
@@ -91,18 +91,13 @@ const Map<String, String> viStrings = {
   "Đang theo dõi": "Đang theo dõi",
   "Chưa nhận diện": "Chưa nhận diện",
   "Chưa có cập nhật": "Chưa có cập nhật",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
-      "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh",
   "CHƯA AN TOÀN": "CHƯA AN TOÀN",
   "ĐÃ AN TOÀN": "ĐÃ AN TOÀN",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
-      "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
-      "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.":
-      "Không có dấu hiệu khói hoặc SOS bất thường.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
-      "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Nhà đang hoạt động ổn định, bạn có thể yên tâm.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.": "Không có dấu hiệu khói hoặc SOS bất thường.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Chưa có nhiều hoạt động mới để phân tích sâu hơn.",
   "Hub kết nối bình thường": "Hub kết nối bình thường",
   "Cài đặt cảnh báo cho nhà hiện tại": "Cài đặt cảnh báo cho nhà hiện tại",
   "Nhận cảnh báo báo động": "Nhận cảnh báo báo động",
@@ -154,8 +149,7 @@ const Map<String, String> viStrings = {
   "Giờ nhắc nhở": "Giờ nhắc nhở",
   "Giờ bắt đầu báo động": "Giờ bắt đầu báo động",
   "Giờ kết thúc báo động": "Giờ kết thúc báo động",
-  "Không có nhà nào đủ điều kiện để cài":
-      "Không có nhà nào đủ điều kiện để cài",
+  "Không có nhà nào đủ điều kiện để cài": "Không có nhà nào đủ điều kiện để cài",
   "Cài đặt hoàn tất": "Cài đặt hoàn tất",
   "Xác nhận rời nhà": "Xác nhận rời nhà",
   "Xác nhận xoá nhà": "Xác nhận xoá nhà",
@@ -167,24 +161,20 @@ const Map<String, String> viStrings = {
   "Đã rời khỏi home": "Đã rời khỏi nhà",
   "Đã cập nhật": "Đã cập nhật",
   "Tìm home...": "Tìm nhà...",
-  "Đặt vị trí nhà và bật bảo vệ tự động":
-      "Đặt vị trí nhà và bật bảo vệ tự động",
+  "Đặt vị trí nhà và bật bảo vệ tự động": "Đặt vị trí nhà và bật bảo vệ tự động",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Chuyển quyền chủ nhà hoặc xoá nhà",
   "Đặt nhắc nhở / báo động nhà đã chọn": "Đặt nhắc nhở / báo động nhà đã chọn",
   "Chia sẻ nhà đã chọn": "Chia sẻ nhà đã chọn",
   "Mở danh sách chia sẻ nhà": "Mở danh sách chia sẻ nhà",
   "Xoá các nhà đã chọn?": "Xoá các nhà đã chọn?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
-      "Các nhà đã chọn sẽ bị xoá vĩnh viễn.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
-      "Hoặc quét QR để xin gia nhập các nhà đã chọn",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Các nhà đã chọn sẽ bị xoá vĩnh viễn.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Hoặc quét QR để xin gia nhập các nhà đã chọn",
   "Email người nhận": "Email người nhận",
   "Chia sẻ": "Chia sẻ",
   "Email chưa đăng ký": "Email chưa đăng ký",
   "Chia sẻ hoàn tất": "Chia sẻ hoàn tất",
   "Mở List chia sẻ nhà": "Mở List chia sẻ nhà",
-  "Không có nhà nào bạn có quyền quản lý":
-      "Không có nhà nào bạn có quyền quản lý",
+  "Không có nhà nào bạn có quyền quản lý": "Không có nhà nào bạn có quyền quản lý",
   "Chưa share cho ai": "Chưa chia sẻ cho ai",
   "Tìm nhà": "Tìm nhà",
   "Xoá các nhà đã chọn ?": "Xoá các nhà đã chọn ?",
@@ -204,13 +194,11 @@ const Map<String, String> viStrings = {
   "Đã hiểu": "Đã hiểu",
   "Lưu ý tạm tắt báo động": "Lưu ý tạm tắt báo động",
   "Đã bật báo động": "Đã bật báo động",
-  "Đã tắt báo động": "Đã tắt báo động",
+  "Đã tắt báo động": "Báo động đã tắt",
   "Tắt báo động": "Tắt báo động",
   "Cả ngày": "Cả ngày",
-  "Bạn không có quyền thực hiện thao tác này.":
-      "Bạn không có quyền thực hiện thao tác này.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
-      "Không thể hoàn tất thao tác. Vui lòng thử lại.",
+  "Bạn không có quyền thực hiện thao tác này.": "Bạn không có quyền thực hiện thao tác này.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Không thể hoàn tất thao tác. Vui lòng thử lại.",
   "QR gia nhập nhiều nhà không hợp lệ": "QR gia nhập nhiều nhà không hợp lệ",
   "Bạn đang là chủ các nhà này": "Bạn đang là chủ các nhà này",
   "Một người dùng": "Một người dùng",
@@ -218,22 +206,18 @@ const Map<String, String> viStrings = {
   "Đã gửi yêu cầu gia nhập nhà": "Đã gửi yêu cầu gia nhập nhà",
   "QR gia nhập không hợp lệ": "QR gia nhập không hợp lệ",
   "Bạn đang là chủ nhà này": "Bạn đang là chủ nhà này",
-  "QR này không phải mã xin gia nhập nhà":
-      "QR này không phải mã xin gia nhập nhà",
+  "QR này không phải mã xin gia nhập nhà": "QR này không phải mã xin gia nhập nhà",
   "Bạn không có quyền thêm thiết bị": "Bạn không có quyền thêm thiết bị",
   "Đã mở chế độ thêm thiết bị": "Đã mở chế độ thêm thiết bị",
   "Rời khỏi Home này?": "Rời khỏi nhà này?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
-      "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.",
   "Đã xoá nhà": "Đã xoá nhà",
   "QR của nhà này": "QR của nhà này",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
-      "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Người khác quét mã này để gửi yêu cầu gia nhập nhà.",
   "Chia sẻ nhà": "Chia sẻ nhà",
   "Quét QR để xin gia nhập nhà": "Quét QR để xin gia nhập nhà",
   "Quét QR xin gia nhập nhà": "Quét QR xin gia nhập nhà",
-  "Đưa mã QR chia sẻ nhà vào khung hình":
-      "Đưa mã QR chia sẻ nhà vào khung hình",
+  "Đưa mã QR chia sẻ nhà vào khung hình": "Đưa mã QR chia sẻ nhà vào khung hình",
   "Mã QR này do chủ nhà chia sẻ": "Mã QR này do chủ nhà chia sẻ",
   "Nhập mã mời": "Nhập mã mời",
   "Gửi yêu cầu gia nhập": "Gửi yêu cầu gia nhập",
@@ -245,8 +229,7 @@ const Map<String, String> viStrings = {
   "Lời mời chia sẻ nhà": "Lời mời chia sẻ nhà",
   "Đã share home": "Đã chia sẻ nhà",
   "Chuyển quyền chủ nhà": "Chuyển quyền chủ nhà",
-  "Không thể chuyển quyền cho chính bạn":
-      "Không thể chuyển quyền cho chính bạn",
+  "Không thể chuyển quyền cho chính bạn": "Không thể chuyển quyền cho chính bạn",
   "Không tìm thấy user": "Không tìm thấy user",
   "Không tìm thấy tài khoản": "Không tìm thấy tài khoản",
   "Xác nhận chuyển quyền": "Xác nhận chuyển quyền",
@@ -278,8 +261,7 @@ const Map<String, String> viStrings = {
   "Không thể lưu thông tin": "Không thể lưu thông tin",
   "Đã lưu thông tin": "Đã lưu thông tin",
   "Lỗi lưu profile": "Lỗi lưu profile",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
-      "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp",
   "Hoàn tất": "Hoàn tất",
   "Đã tạo nhà mới": "Đã tạo nhà mới",
   "Về muộn": "Về muộn",
@@ -309,8 +291,7 @@ const Map<String, String> viStrings = {
   "Thoát tài khoản khỏi thiết bị này": "Thoát tài khoản khỏi thiết bị này",
   "Không có yêu cầu hoặc lời mời nào": "Không có yêu cầu hoặc lời mời nào",
   "Xoá tài khoản": "Xoá tài khoản",
-  "Hành động này sẽ xoá toàn bộ dữ liệu:":
-      "Hành động này sẽ xoá toàn bộ dữ liệu:",
+  "Hành động này sẽ xoá toàn bộ dữ liệu:": "Hành động này sẽ xoá toàn bộ dữ liệu:",
   "Nhà và thiết bị": "Nhà và thiết bị",
   "Chia sẻ và quyền truy cập": "Chia sẻ và quyền truy cập",
   "Toàn bộ dữ liệu liên quan": "Toàn bộ dữ liệu liên quan",
@@ -349,8 +330,7 @@ const Map<String, String> viStrings = {
   "Đổi tên phòng": "Đổi tên phòng",
   "Tên phòng": "Tên phòng",
   "Xoá phòng": "Xoá phòng",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
-      "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.",
   "Thêm phòng": "Thêm phòng",
   "Ví dụ: Phòng khách": "Ví dụ: Phòng khách",
   "Phòng khách": "Phòng khách",
@@ -371,11 +351,9 @@ const Map<String, String> viStrings = {
   "Cửa đóng": "Cửa đóng",
   "Chưa đặt vị trí nhà": "Chưa đặt vị trí nhà",
   "Đặt vị trí nhà tại đây": "Đặt vị trí nhà tại đây",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
-      "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ",
   "Bán kính bảo vệ mặc định: 150 m": "Bán kính bảo vệ mặc định: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
-      "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.",
   "Lưu cài đặt": "Lưu cài đặt",
   "Đã đặt vị trí nhà": "Đã đặt vị trí nhà",
   "Đang lấy vị trí...": "Đang lấy vị trí...",
@@ -384,20 +362,16 @@ const Map<String, String> viStrings = {
   "Cập nhật thông tin nhà": "Cập nhật thông tin nhà",
   "Nhập địa chỉ của nhà": "Nhập địa chỉ của nhà",
   "Lưu thay đổi": "Lưu thay đổi",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
-      "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
-      "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
   "Một thành viên": "Một thành viên",
   "Đã cập nhật thông tin nhà": "Đã cập nhật thông tin nhà",
   "Thay tên": "Thay tên",
   "Đã đổi tên thiết bị": "Đã đổi tên thiết bị",
   "Chưa chọn nhà để kiểm tra": "Chưa chọn nhà để kiểm tra",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
-      "Hãy thực hiện kiểm tra bằng tài khoản Chủ nhà",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Hãy thực hiện kiểm tra bằng tài khoản Chủ nhà",
   "Không đọc được dữ liệu nhà": "Không đọc được dữ liệu nhà",
-  "Nhà cần có ít nhất một thiết bị để test":
-      "Nhà cần có ít nhất một thiết bị để test",
+  "Nhà cần có ít nhất một thiết bị để test": "Nhà cần có ít nhất một thiết bị để test",
   "Đóng": "Đóng",
   "Đã thiết lập": "Đã thiết lập",
   "Quét QR": "Quét QR",
@@ -453,10 +427,8 @@ const Map<String, String> viStrings = {
   "Chế độ áp dụng": "Chế độ áp dụng",
   "Theo nhà": "Theo nhà",
   "Riêng tôi": "Riêng tôi",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
-      "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
-      "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn",
   "Thiết lập nhanh báo động": "Thiết lập nhanh báo động",
   "Thiết lập nhanh toàn bộ thiết bị": "Thiết lập nhanh toàn bộ thiết bị",
   "Áp dụng cho toàn bộ thiết bị": "Áp dụng cho toàn bộ thiết bị",
@@ -470,10 +442,8 @@ const Map<String, String> viStrings = {
   "Hôm nay đã ghi nhận cảnh báo SOS": "Hôm nay đã ghi nhận cảnh báo SOS",
   "Hôm nay đã ghi nhận cảnh báo khói": "Hôm nay đã ghi nhận cảnh báo khói",
   "Khói đã an toàn": "Khói đã an toàn",
-  "Không tìm thấy nhà của thông báo này":
-      "Không tìm thấy nhà của thông báo này",
-  "Không tìm thấy thiết bị trong nhà này":
-      "Không tìm thấy thiết bị trong nhà này",
+  "Không tìm thấy nhà của thông báo này": "Không tìm thấy nhà của thông báo này",
+  "Không tìm thấy thiết bị trong nhà này": "Không tìm thấy thiết bị trong nhà này",
   "Một chủ nhà": "Một chủ nhà",
   "Ngôi nhà đang hoạt động ổn định": "Ngôi nhà đang hoạt động ổn định",
   "Nhiệt độ cao": "Nhiệt độ cao",
@@ -496,13 +466,10 @@ const Map<String, String> viStrings = {
   "Đã chia sẻ nhà thành công.": "Đã chia sẻ nhà thành công.",
   "Tìm nhà...": "Tìm nhà...",
   "Đã rời khỏi nhà": "Đã rời khỏi nhà",
-  "Bạn sẽ rời khỏi các nhà được chia sẻ.":
-      "Bạn sẽ rời khỏi các nhà được chia sẻ.",
+  "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Bạn sẽ rời khỏi các nhà được chia sẻ.",
   "Các nhà của bạn sẽ bị xoá.\n": "Các nhà của bạn sẽ bị xoá.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
-      "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n",
   "Xác nhận thay đổi báo động": "Xác nhận thay đổi báo động",
   "Xác nhận thay đổi nhắc nhở": "Xác nhận thay đổi nhắc nhở",
   "Lặp lại khi sự cố vẫn còn": "Lặp lại khi sự cố vẫn còn",
@@ -510,57 +477,41 @@ const Map<String, String> viStrings = {
   "VD: Mr Chung": "VD: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 Chưa có nhà nào",
   "Vẫn chuyển về Bình thường": "Vẫn chuyển về Bình thường",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
-      "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.",
   "Chuyển về Bình thường?": "Chuyển về Bình thường?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
-      "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n",
   "Bật Bảo vệ thủ công?": "Bật Bảo vệ thủ công?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "Hành động này sẽ tắt toàn bộ báo động của nhà ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Hành động này sẽ tắt toàn bộ báo động của nhà ",
   "Tắt toàn bộ báo động?": "Tắt toàn bộ báo động?",
-  "Không xoá được lịch tạm tắt báo động":
-      "Không xoá được lịch tạm tắt báo động",
+  "Không xoá được lịch tạm tắt báo động": "Không xoá được lịch tạm tắt báo động",
   "Không lưu được tạm tắt báo động": "Không lưu được tạm tắt báo động",
   "Không gửi được yêu cầu xoá": "Không gửi được yêu cầu xoá",
   "Không lưu được cài đặt": "Không lưu được cài đặt",
   "Không lấy được vị trí hiện tại": "Không lấy được vị trí hiện tại",
-  "Không thể xác nhận tài khoản hiện tại":
-      "Không thể xác nhận tài khoản hiện tại",
+  "Không thể xác nhận tài khoản hiện tại": "Không thể xác nhận tài khoản hiện tại",
   "Mật khẩu không đúng": "Mật khẩu không đúng",
   "Không thể xác nhận mật khẩu": "Không thể xác nhận mật khẩu",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
-  "Không lưu được thời gian lặp báo động":
-      "Không lưu được thời gian lặp báo động",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
-      "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động",
+  "Không lưu được thời gian lặp báo động": "Không lưu được thời gian lặp báo động",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ",
   "Không thể thay đổi chế độ nhà": "Không thể thay đổi chế độ nhà",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
-      "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Đã bật Bảo vệ nhưng chưa gửi được thông báo",
   "Đã bật Chế độ Bảo vệ thủ công": "Đã bật Chế độ Bảo vệ thủ công",
   "Đã chuyển nhà về Bình thường": "Đã chuyển nhà về Bình thường",
   "60 phút": "60 phút",
   "30 phút": "30 phút",
   "15 phút": "15 phút",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
-      "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.",
   "Chọn giờ kết thúc báo động": "Chọn giờ kết thúc báo động",
   "Chọn giờ bắt đầu báo động": "Chọn giờ bắt đầu báo động",
-  "Bạn không có quyền sửa lịch báo động của nhà":
-      "Bạn không có quyền sửa lịch báo động của nhà",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị":
-      "Không thể áp dụng báo động cho toàn bộ thiết bị",
-  "Nhà chưa có thiết bị an ninh để áp dụng":
-      "Nhà chưa có thiết bị an ninh để áp dụng",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
-      "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
+  "Bạn không có quyền sửa lịch báo động của nhà": "Bạn không có quyền sửa lịch báo động của nhà",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Không thể áp dụng báo động cho toàn bộ thiết bị",
+  "Nhà chưa có thiết bị an ninh để áp dụng": "Nhà chưa có thiết bị an ninh để áp dụng",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.",
   "Không thể lưu chế độ báo động": "Không thể lưu chế độ báo động",
   "Thêm nhắc nhở": "Thêm nhắc nhở",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.",
   "Thêm khung giờ báo động": "Thêm khung giờ báo động",
   "Đang sử dụng nhắc nhở riêng của bạn": "Đang sử dụng nhắc nhở riêng của bạn",
   "Đang sử dụng nhắc nhở của chủ nhà": "Đang sử dụng nhắc nhở của chủ nhà",
@@ -580,173 +531,118 @@ const Map<String, String> viStrings = {
   "Xoá thành viên": "Xoá thành viên",
   "Đã xoá thành viên": "Đã xoá thành viên",
   "Đồng ý": "Đồng ý",
-  "Bạn chắc chắn muốn rời khỏi nhà này?":
-      "Bạn chắc chắn muốn rời khỏi nhà này?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?": "Bạn chắc chắn muốn rời khỏi nhà này?",
   "Xoá thành viên?": "Xoá thành viên?",
   "Rời khỏi nhà?": "Rời khỏi nhà?",
-  "Chỉ chủ nhà mới được thay đổi vai trò":
-      "Chỉ chủ nhà mới được thay đổi vai trò",
-  "Bạn không có quyền xoá thành viên này":
-      "Bạn không có quyền xoá thành viên này",
+  "Chỉ chủ nhà mới được thay đổi vai trò": "Chỉ chủ nhà mới được thay đổi vai trò",
+  "Bạn không có quyền xoá thành viên này": "Bạn không có quyền xoá thành viên này",
   "Bạn": "Bạn",
   "Không có email": "Không có email",
   "Chưa có số điện thoại": "Chưa có số điện thoại",
   "Không mở được ứng dụng gọi điện": "Không mở được ứng dụng gọi điện",
-  "Thành viên chưa cập nhật số điện thoại":
-      "Thành viên chưa cập nhật số điện thoại",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
-      "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
+  "Thành viên chưa cập nhật số điện thoại": "Thành viên chưa cập nhật số điện thoại",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường",
   "Thời gian lặp": "Thời gian lặp",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
-      "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.",
   "Lặp báo động khi sự cố vẫn còn": "Lặp báo động khi sự cố vẫn còn",
   "Đang được sử dụng": "Đang được sử dụng",
   "Chuyển về sử dụng thông thường": "Chuyển về sử dụng thông thường",
   "Chế độ nhà": "Chế độ nhà",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.":
-      "Thiết bị SOS chưa ghi nhận cảnh báo.",
-  "Cảm biến khói chưa ghi nhận bất thường.":
-      "Cảm biến khói chưa ghi nhận bất thường.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
-      "Bạn hoặc thành viên đã chủ động bật Bảo vệ.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.": "Thiết bị SOS chưa ghi nhận cảnh báo.",
+  "Cảm biến khói chưa ghi nhận bất thường.": "Cảm biến khói chưa ghi nhận bất thường.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Bạn hoặc thành viên đã chủ động bật Bảo vệ.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.",
   "Nhà đang ở chế độ dùng bình thường.": "Nhà đang ở chế độ dùng bình thường.",
   "Bảo vệ thủ công đang bật": "Bảo vệ thủ công đang bật",
   "Bảo vệ tự động đang bật": "Bảo vệ tự động đang bật",
   "Bảo vệ đang tắt": "Bảo vệ đang tắt",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
-      "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
-      "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
   "Tần suất vào ứng dụng ổn": "Tần suất vào ứng dụng ổn",
   "Đã lâu chưa vào ứng dụng kiểm tra": "Đã lâu chưa vào ứng dụng kiểm tra",
   "Đang ghi nhận tần suất vào ứng dụng": "Đang ghi nhận tần suất vào ứng dụng",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
-      "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
-      "Thiết bị đáp ứng đủ điều kiện để tính năng tự động Bảo vệ khi rời nhà hoạt động.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
-      "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Thiết bị đáp ứng đủ điều kiện để tính năng tự động Bảo vệ khi rời nhà hoạt động.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.",
   "Auto rời khỏi nhà chưa ổn": "Tự động Bảo vệ khi rời nhà chưa ổn định",
   "Auto rời khỏi nhà đã sẵn sàng": "Tự động Bảo vệ khi rời nhà đã sẵn sàng",
   "Auto rời khỏi nhà chưa bật": "Tự động Bảo vệ khi rời nhà chưa bật",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
-      "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.",
   "Chưa có thiết bị khẩn cấp": "Chưa có thiết bị khẩn cấp",
   "Đã có thiết bị khẩn cấp": "Đã có thiết bị khẩn cấp",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
-      "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
-      "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.",
   "Chưa cài lịch báo động": "Chưa thiết lập lịch báo động",
   "Đã cài lịch báo động": "Đã thiết lập lịch báo động",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
-      "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
-      "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.",
   "Chưa cài đặt nhắc nhở": "Chưa thiết lập nhắc nhở",
   "Đã cài đặt nhắc nhở": "Đã thiết lập nhắc nhở",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
-      "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.",
   "Thiết bị chưa đăng ký nhận cảnh báo": "Thiết bị chưa đăng ký nhận cảnh báo",
   "Thiết bị nhận cảnh báo bình thường": "Thiết bị nhận cảnh báo bình thường",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
-      "iOS quản lý chạy nền chặt hơn Android; hãy duy trì thông báo và quyền vị trí Luôn cho phép nếu dùng tính năng tự động Bảo vệ khi rời nhà.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS quản lý chạy nền chặt hơn Android; hãy duy trì thông báo và quyền vị trí Luôn cho phép nếu dùng tính năng tự động Bảo vệ khi rời nhà.",
   "Cơ chế iOS": "Cơ chế iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
-      "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
-      "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.",
-  "Cần kiểm tra chạy nền / tự khởi động":
-      "Cần kiểm tra chạy nền / tự khởi động",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.",
+  "Cần kiểm tra chạy nền / tự khởi động": "Cần kiểm tra chạy nền / tự khởi động",
   "Chạy nền ổn định": "Chạy nền ổn định",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
-      "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
   "Chưa tắt tối ưu pin": "Chưa tắt tối ưu pin",
   "Tối ưu pin không chặn ứng dụng": "Tối ưu pin không chặn ứng dụng",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
-      "Tính năng tự động Bảo vệ khi rời nhà cần quyền vị trí Luôn cho phép để hoạt động ổn định.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
-      "Cần cấp quyền vị trí để tính năng tự động Bảo vệ khi rời nhà hoạt động.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
-      "Dịch vụ vị trí đang tắt nên tính năng tự động Bảo vệ khi rời nhà không ổn định.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
-      "Chỉ cần quyền này khi dùng tính năng tự động Bảo vệ khi rời nhà.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Tính năng tự động Bảo vệ khi rời nhà cần quyền vị trí Luôn cho phép để hoạt động ổn định.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Cần cấp quyền vị trí để tính năng tự động Bảo vệ khi rời nhà hoạt động.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Dịch vụ vị trí đang tắt nên tính năng tự động Bảo vệ khi rời nhà không ổn định.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Chỉ cần quyền này khi dùng tính năng tự động Bảo vệ khi rời nhà.",
   "Chưa cấp vị trí luôn luôn": "Chưa cấp vị trí luôn luôn",
   "Đã cấp vị trí luôn luôn": "Đã cấp vị trí luôn luôn",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
-      "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
-      "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.",
   "Cảnh báo trên iOS": "Cảnh báo trên iOS",
   "Cảnh báo toàn màn hình": "Cảnh báo toàn màn hình",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
-      "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Điện thoại có thể nhận thông báo SafeHome.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.",
+  "Điện thoại có thể nhận thông báo SafeHome.": "Điện thoại có thể nhận thông báo SafeHome.",
   "Chưa bật thông báo": "Chưa bật thông báo",
   "Đã bật thông báo": "Đã bật thông báo",
   "Hệ thống: Sẵn sàng": "Hệ thống: Sẵn sàng",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Hệ thống: Có thể bỏ lỡ cảnh báo",
   "Cách bạn đang dùng ứng dụng": "Cách bạn đang dùng ứng dụng",
   "Thiết bị của bạn": "Thiết bị của bạn",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
-      "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.",
   "Hệ thống SafeHome": "Hệ thống SafeHome",
   "Hệ thống: Đang kiểm tra...": "Hệ thống: Đang kiểm tra...",
   "Tên": "Tên",
-  "Bạn không có quyền thay đổi vị trí nhà":
-      "Bạn không có quyền thay đổi vị trí nhà",
+  "Bạn không có quyền thay đổi vị trí nhà": "Bạn không có quyền thay đổi vị trí nhà",
   "Hãy bật GPS để đặt vị trí nhà": "Hãy bật GPS để đặt vị trí nhà",
   "Bạn chưa cấp quyền vị trí": "Bạn chưa cấp quyền vị trí",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
-      "Hãy cấp quyền vị trí trong Cài đặt ứng dụng",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
-      "Đã bật tự động Bảo vệ khi mọi người rời nhà",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
-      "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
-  "Không thể thay đổi trạng thái báo động":
-      "Không thể thay đổi trạng thái báo động",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Hãy cấp quyền vị trí trong Cài đặt ứng dụng",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Đã bật tự động Bảo vệ khi mọi người rời nhà",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Đã tắt tự động Bảo vệ khi mọi người rời nhà",
+  "Không thể thay đổi trạng thái báo động": "Không thể thay đổi trạng thái báo động",
   "Đã tắt toàn bộ báo động của nhà": "Đã tắt toàn bộ báo động của nhà",
-  "QR này không phải mã xin gia nhập Home":
-      "QR này không phải mã xin gia nhập nhà",
+  "QR này không phải mã xin gia nhập Home": "QR này không phải mã xin gia nhập nhà",
   "Thêm Home": "Thêm nhà",
   "Mở cài đặt": "Mở cài đặt",
   "Để sau": "Để sau",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
   "Cho phép vị trí luôn luôn": "Cho phép vị trí luôn luôn",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
-      "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
-      "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
-      "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.",
   "Không thể đăng nhập bằng Google": "Không thể đăng nhập bằng Google",
   "Không đặt được mật khẩu": "Không đặt được mật khẩu",
   "Chấp nhận": "Chấp nhận",
   "Cho phép": "Cho phép",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
-      "Không thể chấp nhận lời mời. Vui lòng thử lại.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
-      "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
   "Từ chối": "Từ chối",
   "Lời mời từ chủ nhà": "Lời mời từ chủ nhà",
   "Nhận quyền chủ nhà": "Nhận quyền chủ nhà",
@@ -768,20 +664,15 @@ const Map<String, String> viStrings = {
   "KIỂM TRA NHÀ": "KIỂM TRA NHÀ",
   "ĐÓNG NHẮC NHỞ": "ĐÓNG NHẮC NHỞ",
   "SafeHome Security Alert": "Cảnh báo an ninh SafeHome",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
-      "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
-      "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.",
   "Báo động": "Báo động",
-  "Bạn không có quyền thực hiện thao tác này。":
-      "Bạn không có quyền thực hiện thao tác này。",
+  "Bạn không có quyền thực hiện thao tác này。": "Bạn không có quyền thực hiện thao tác này。",
   "Cài đặt": "Cài đặt",
   "Cập nhật": "Cập nhật",
   "Chọn ngôn ngữ": "Chọn ngôn ngữ",
-  "Chưa có dữ liệu thiết bị để đánh giá":
-      "Chưa có dữ liệu thiết bị để đánh giá",
-  "Chuyển quyền sở hữu cho thành viên khác":
-      "Chuyển quyền sở hữu cho thành viên khác",
+  "Chưa có dữ liệu thiết bị để đánh giá": "Chưa có dữ liệu thiết bị để đánh giá",
+  "Chuyển quyền sở hữu cho thành viên khác": "Chuyển quyền sở hữu cho thành viên khác",
   "Có": "Có",
   "Cửa đã đóng an toàn": "Cửa đã đóng an toàn",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Đã xảy ra lỗi. Vui lòng thử lại.",
@@ -793,8 +684,7 @@ const Map<String, String> viStrings = {
   "Hub chưa gửi trạng thái": "Hub chưa gửi trạng thái",
   "Hub mất kết nối": "Hub mất kết nối",
   "Hub tín hiệu bình thường": "Hub tín hiệu bình thường",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
-      "Khóa đang mở khi nhà ở chế độ Bảo vệ",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Khóa đang mở khi nhà ở chế độ Bảo vệ",
   "Khóa đang mở trong giờ báo động": "Khóa đang mở trong giờ báo động",
   "Không có thông báo": "Không có thông báo",
   "Khu vực nguy hiểm": "Khu vực nguy hiểm",
@@ -840,280 +730,189 @@ const Map<String, String> viStrings = {
   "Đã tạo nhà": "Đã tạo nhà",
   "Chế độ Bảo vệ thủ công đã bật": "Chế độ Bảo vệ thủ công đã bật",
   "Báo động không lặp lại.": "Báo động không lặp lại.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
-      "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".":
-      "Bạn đã bật báo động cho nhà \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
-      "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Bạn đã bật báo động cho nhà \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".",
   "Thành viên mới": "Thành viên mới",
   "Thành viên rời nhà": "Thành viên rời nhà",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
-      "\$displayMemberName đã rời khỏi nhà \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
-      "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName đã rời khỏi nhà \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "Còn \$count tin nhắn chưa đọc",
   "Hãy an tâm nghỉ ngơi.": "Hãy an tâm nghỉ ngơi.",
   "Có thiết bị chưa an toàn.": "Có thiết bị chưa an toàn.",
   "SafeHome đang cập nhật vị trí": "SafeHome đang cập nhật vị trí",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
-      "Đang theo dõi để tự động bật Chế độ Bảo vệ.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
-      "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Đang theo dõi để tự động bật Chế độ Bảo vệ.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.",
   "CẢNH BÁO SOS": "CẢNH BÁO SOS",
   "CẢNH BÁO KHÓI / CHÁY": "CẢNH BÁO KHÓI / CHÁY",
   "CẢNH BÁO NGẬP NƯỚC": "CẢNH BÁO NGẬP NƯỚC",
   "CẢNH BÁO RÒ KHÍ": "CẢNH BÁO RÒ KHÍ",
   "CẢNH BÁO CỬA": "CẢNH BÁO CỬA",
   "CẢNH BÁO AN NINH": "CẢNH BÁO AN NINH",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
-      "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome phát hiện cảnh báo",
   "Mở SafeHome để kiểm tra ngay.": "Mở SafeHome để kiểm tra ngay.",
   "\$count tin nhắn mới": "\$count tin nhắn mới",
   "Tin nhắn HomeChat": "Tin nhắn HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName đã gửi một tin nhắn",
   "Bạn có tin nhắn mới": "Bạn có tin nhắn mới",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
-      "Chế độ Bảo vệ sẽ chỉ báo động một lần",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
-      "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Chế độ Bảo vệ sẽ chỉ báo động một lần",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút",
   "Đã gửi yêu cầu gia nhập \$count nhà": "Đã gửi yêu cầu gia nhập \$count nhà",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
-      "\$requesterName đang xin gia nhập nhà \"\$homeName\".",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName đang xin gia nhập nhà \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "Bạn đã xoá nhà \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
-      "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
-      "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
-      "\$actorName đã mời bạn tham gia nhà \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
-      "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName đã mời bạn tham gia nhà \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Bạn đã tạo nhà \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
-      "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".":
-      "\$actorName đã đổi tên nhà thành \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
-      "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
-      "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName đã đổi tên nhà thành \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Đang ghép nối: \$seconds giây",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
-      "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
-      "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n":
-      "\$passCount/\$total bài test đạt\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
-      "\$name chưa cập nhật số điện thoại trong hồ sơ.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total bài test đạt\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name chưa cập nhật số điện thoại trong hồ sơ.",
   "Tin nhắn mới trong \$homeName": "Tin nhắn mới trong \$homeName",
   "\$current/\$total kết quả": "\$current/\$total kết quả",
   "Đang trả lời \$name": "Đang trả lời \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".":
-      "\"\$name\" phát hiện khói trong \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.":
-      "\"\$name\" đã trở lại trạng thái bình thường.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
-      "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" phát hiện khói trong \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" đã trở lại trạng thái bình thường.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" đã hết trạng thái SOS.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
-      "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.":
-      "\"\$name\" đã hết cảnh báo tháo/cạy.",
-  "\"\$name\" đã đóng trong \"\$homeName\".":
-      "\"\$name\" đã đóng trong \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".":
-      "\"\$name\" đang mở trong \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
-      "\"\$name\" trong \"\$homeName\" đang yếu pin.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
-      "\"\$name\" trong \"\$homeName\" đã mất kết nối.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
-      "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
-      "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
-      "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.": "\"\$name\" đã hết cảnh báo tháo/cạy.",
+  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" đã đóng trong \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" đang mở trong \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" trong \"\$homeName\" đang yếu pin.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" trong \"\$homeName\" đã mất kết nối.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "Có nút SOS vừa được kích hoạt",
   "Có dấu hiệu khói hoặc cháy": "Có dấu hiệu khói hoặc cháy",
   "Có dấu hiệu ngập nước": "Có dấu hiệu ngập nước",
   "Có dấu hiệu rò khí": "Có dấu hiệu rò khí",
-  "Có cửa đang mở hoặc thiết bị bị tháo":
-      "Có cửa đang mở hoặc thiết bị bị tháo",
+  "Có cửa đang mở hoặc thiết bị bị tháo": "Có cửa đang mở hoặc thiết bị bị tháo",
   "Có thiết bị đang cảnh báo": "Có thiết bị đang cảnh báo",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
-      "Báo lại lúc \$time nếu vấn đề chưa được xử lý.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
-      "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
-      "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
-      "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Báo lại lúc \$time nếu vấn đề chưa được xử lý.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count nhà đã chọn",
-  "🚨 \$count nhà không an toàn\$suffix":
-      "🚨 \$count nhà không an toàn\$suffix",
+  "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count nhà không an toàn\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count nhà cần chú ý\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count nhà an toàn",
   "\$count nhà đang được theo dõi": "\$count nhà đang được theo dõi",
   "\$minutes phút": "\$minutes phút",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
-      "Đã cài nhắc nhở cho \$updatedHomes nhà.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
-      "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh":
-      "Đã áp dụng báo động cho \$count thiết bị an ninh",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
-      "Áp dụng cùng một lịch cho \$count thiết bị an ninh",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Đã cài nhắc nhở cho \$updatedHomes nhà.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Đã áp dụng báo động cho \$count thiết bị an ninh",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Áp dụng cùng một lịch cho \$count thiết bị an ninh",
   "\$count phút trước": "\$count phút trước",
   "\$count giờ trước": "\$count giờ trước",
   "\${count}h trước": "\${count}h trước",
   "\${hours}h\$minutes' trước": "\${hours}h\$minutes' trước",
   "\$count ngày trước": "\$count ngày trước",
   "\$count tháng trước": "\$count tháng trước",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
-      "Bạn chắc chắn muốn xoá \$name khỏi nhà này?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"":
-      "\$targetEmail\nXin gia nhập \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Bạn chắc chắn muốn xoá \$name khỏi nhà này?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nXin gia nhập \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Xin gia nhập \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"":
-      "Bạn được mời nhận quyền nhà \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
-      "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Bạn được mời nhận quyền nhà \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"",
   "Mời bạn gia nhập \"\$homeName\"": "Mời bạn gia nhập \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Cần kiểm tra: \$joined",
   "Cập nhật \$value": "Cập nhật \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
-      "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
-      "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
-      "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
-      "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
-      "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
-      "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
-      "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
-      "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.",
   "Lặp sau \$minutes phút": "Lặp sau \$minutes phút",
   "Đang dùng • \$repeatText": "Đang dùng • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Giám sát an ninh • \$repeatText",
   "Gia đình: \$mode": "Gia đình: \$mode",
   "Gợi ý xử lý": "Gợi ý xử lý",
   "Phát hiện \$count vấn đề cần xử lý": "Phát hiện \$count vấn đề cần xử lý",
-  "Hôm nay các cửa đã được sử dụng \$count lần":
-      "Hôm nay các cửa đã được sử dụng \$count lần",
-  "Đã ghi nhận \$count hoạt động gần đây":
-      "Đã ghi nhận \$count hoạt động gần đây",
-  "Hệ thống: Cần kiểm tra \$issueCount mục":
-      "Hệ thống: Cần kiểm tra \$issueCount mục",
-  "FCM token đã sẵn sàng trên điện thoại này.":
-      "FCM token đã sẵn sàng trên điện thoại này.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
-      "FCM token đã sẵn sàng, nhưng tính năng tự động Bảo vệ khi rời nhà còn thiếu điều kiện.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
-      "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
-      "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần": "Hôm nay các cửa đã được sử dụng \$count lần",
+  "Đã ghi nhận \$count hoạt động gần đây": "Đã ghi nhận \$count hoạt động gần đây",
+  "Hệ thống: Cần kiểm tra \$issueCount mục": "Hệ thống: Cần kiểm tra \$issueCount mục",
+  "FCM token đã sẵn sàng trên điện thoại này.": "FCM token đã sẵn sàng trên điện thoại này.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM token đã sẵn sàng, nhưng tính năng tự động Bảo vệ khi rời nhà còn thiếu điều kiện.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count cửa đã đóng an toàn",
   "\$count cửa và khóa đã an toàn": "\$count cửa và khóa đã an toàn",
   "\$count thiết bị đang được theo dõi": "\$count thiết bị đang được theo dõi",
   "Cập nhật \$timeText": "Cập nhật \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước":
-      "Dữ liệu gần nhất cập nhật \$count phút trước",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước":
-      "Dữ liệu gần nhất cập nhật \$count giờ trước",
+  "Dữ liệu gần nhất cập nhật \$count phút trước": "Dữ liệu gần nhất cập nhật \$count phút trước",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Dữ liệu gần nhất cập nhật \$count giờ trước",
   "Thành viên trong nhà: \$count": "Thành viên trong nhà: \$count",
   "Thành viên bên ngoài: \$count": "Thành viên bên ngoài: \$count",
   "Chưa xác định vị trí: \$count": "Chưa xác định vị trí: \$count",
   "Môi trường hiện tại: \$environment": "Môi trường hiện tại: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
-      "\$name: Đang mở khi nhà ở chế độ Bảo vệ",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Đang mở khi nhà ở chế độ Bảo vệ",
   "An tâm hơn trong từng ngôi nhà": "An tâm hơn trong từng ngôi nhà",
   "Báo động SafeHome": "Báo động SafeHome",
-  "Có cảnh báo an ninh cần kiểm tra ngay.":
-      "Có cảnh báo an ninh cần kiểm tra ngay.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.": "Có cảnh báo an ninh cần kiểm tra ngay.",
   "Có cảnh báo cần kiểm tra": "Có cảnh báo cần kiểm tra",
   "Tự đóng sau \$time": "Tự đóng sau \$time",
   "Ngày trong tuần": "Ngày trong tuần",
   "Hoặc": "Hoặc",
-  "Giờ bắt đầu và kết thúc không được trùng nhau":
-      "Giờ bắt đầu và kết thúc không được trùng nhau",
-  "Giờ kết thúc phải sau thời điểm hiện tại":
-      "Giờ kết thúc phải sau thời điểm hiện tại",
+  "Giờ bắt đầu và kết thúc không được trùng nhau": "Giờ bắt đầu và kết thúc không được trùng nhau",
+  "Giờ kết thúc phải sau thời điểm hiện tại": "Giờ kết thúc phải sau thời điểm hiện tại",
   "Khoảng tạm tắt không hợp lệ": "Khoảng tạm tắt không hợp lệ",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
-      "Khoảng tạm tắt không trùng với lịch báo động nào đang bật",
-
-  // Device báo động policy
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Khoảng tạm tắt không trùng với lịch báo động nào đang bật",
   "Cài đặt báo động": "Cài đặt báo động",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
-      "Điều khiển cách cảm biến này kích hoạt cảnh báo.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Điều khiển cách cảm biến này kích hoạt cảnh báo.",
   "Tham gia báo động": "Tham gia báo động",
   "Tắt để cảm biến không tạo báo động.": "Tắt để cảm biến không tạo báo động.",
   "Bật còi vật lý": "Bật còi vật lý",
   "Cho phép kích hoạt còi trong nhà.": "Cho phép kích hoạt còi trong nhà.",
   "Đánh thức màn hình": "Đánh thức màn hình",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
-      "Hiển thị cảnh báo toàn màn hình trên điện thoại.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Hiển thị cảnh báo toàn màn hình trên điện thoại.",
   "Độ trễ kích hoạt": "Độ trễ kích hoạt",
   "Chỉ áp dụng cho cảm biến an ninh.": "Chỉ áp dụng cho cảm biến an ninh.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
-      "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.",
   "Ngay lập tức": "Ngay lập tức",
   "giây": "giây",
   "Đã lưu cấu hình báo động": "Đã lưu cấu hình báo động",
   "Không thể lưu cấu hình báo động": "Không thể lưu cấu hình báo động",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
-      "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.",
   "Thông tin chi tiết": "Thông tin chi tiết",
   "Thông báo báo động": "Thông báo báo động",
   "Cài đặt nhắc nhở": "Cài đặt nhắc nhở",
   "Nhắc nhở theo lịch": "Nhắc nhở theo lịch",
   "Danh sách thông báo": "Thông báo",
   "Cài đặt thông báo": "Cài đặt thông báo",
-  "Sử dụng báo động theo lịch đã thiết lập":
-      "Sử dụng báo động theo lịch đã thiết lập",
-  "Chỉ gửi thông báo, không kích hoạt báo động":
-      "Chỉ gửi thông báo, không kích hoạt báo động",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
-      "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.",
+  "Sử dụng báo động theo lịch đã thiết lập": "Sử dụng báo động theo lịch đã thiết lập",
+  "Chỉ gửi thông báo, không kích hoạt báo động": "Chỉ gửi thông báo, không kích hoạt báo động",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.",
   "Chỉ Chủ nhà có thể bật chế độ này.": "Chỉ Chủ nhà có thể bật chế độ này.",
   "Bật Không bảo vệ?": "Bật Không bảo vệ?",
   "Cảm biến vừa phát hiện một sự kiện.": "Cảm biến vừa phát hiện một sự kiện.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
-      "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ",
   "Đã chuyển nhà sang Không bảo vệ": "Đã chuyển nhà sang Không bảo vệ",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
-      "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo",
   "Giám sát toàn diện": "Giám sát toàn diện",
   "Không bảo vệ": "Không bảo vệ",
   "Không bảo vệ đang bật": "Không bảo vệ đang bật",
   "Nhà đã chuyển sang Không bảo vệ": "Nhà đã chuyển sang Không bảo vệ",
   "Thông báo cảm biến": "Thông báo cảm biến",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
-      "Thông báo thông thường khi cảm biến phát hiện sự kiện.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Thông báo thông thường khi cảm biến phát hiện sự kiện.",
   "Tôi hiểu, tiếp tục": "Tôi hiểu, tiếp tục",
   "Cảnh báo an ninh đã kết thúc": "Cảnh báo an ninh đã kết thúc",
   "Sự cố nguy hiểm đã kết thúc": "Sự cố nguy hiểm đã kết thúc",

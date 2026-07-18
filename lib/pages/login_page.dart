@@ -521,7 +521,7 @@ class _LoginPageState extends State<LoginPage> {
       case "km":
         return "Khmer";
       case "my":
-        return "Burmese • Myanmar 🇲🇲";
+        return "Burmese • Myanmar";
       case "lo":
         return appLanguageController.languageCode == "vi" ? "Tiếng Lào" : "Lao";
       case "ta":
@@ -566,6 +566,38 @@ class _LoginPageState extends State<LoginPage> {
         return "Turkish • Türkiye";
       case "sv":
         return "Swedish • Sweden";
+      case "da":
+        return "Danish • Denmark";
+      case "nb":
+        return "Norwegian Bokmål • Norway";
+      case "fi":
+        return "Finnish • Finland";
+      case "is":
+        return "Icelandic • Iceland";
+      case "et":
+        return "Estonian • Estonia";
+      case "lv":
+        return "Latvian • Latvia";
+      case "lt":
+        return "Lithuanian • Lithuania";
+      case "ga":
+        return "Irish • Ireland";
+      case "mt":
+        return "Maltese • Malta";
+      case "be":
+        return "Belarusian • Belarus";
+      case "lb":
+        return "Luxembourgish • Luxembourg";
+      case "ca":
+        return "Catalan • Andorra";
+      case "cnr":
+        return "Montenegrin • Montenegro";
+      case "hy":
+        return "Armenian • Armenia";
+      case "ka":
+        return "Georgian • Georgia";
+      case "az":
+        return "Azerbaijani • Azerbaijan";
       default:
         return code;
     }
@@ -595,8 +627,28 @@ class _LoginPageState extends State<LoginPage> {
       "el" => "greek ελληνικά tiếng hy lạp greece ελλάδα",
       "tr" => "turkish türkçe tiếng thổ nhĩ kỳ türkiye",
       "sv" => "swedish svenska tiếng thụy điển sweden sverige",
+      "da" => "danish dansk tiếng đan mạch denmark danmark",
+      "nb" => "norwegian norsk bokmål tiếng na uy norway norge",
+      "fi" => "finnish suomi tiếng phần lan finland",
+      "is" => "icelandic íslenska tiếng iceland iceland",
+      "et" => "estonian eesti tiếng estonia estonia",
+      "lv" => "latvian latviešu tiếng latvia latvija",
+      "lt" => "lithuanian lietuvių tiếng litva lithuania lietuva",
+      "ga" => "irish gaeilge tiếng ireland éire",
+      "mt" => "maltese malti tiếng malta",
+      "be" => "belarusian беларуская tiếng belarus беларусь",
+      "lb" => "luxembourgish lëtzebuergesch tiếng luxembourg luxemburg",
+      "ca" => "catalan català tiếng catalan andorra catalunya",
+      "cnr" => "montenegrin crnogorski tiếng montenegro crna gora",
+      "hy" => "armenian հայերեն tiếng armenia hayastan",
+      "ka" => "georgian ქართული tiếng georgia sakartvelo",
+      "az" => "azerbaijani azərbaycan dili tiếng azerbaijan azərbaycan",
       _ => "",
     };
+  }
+
+  String _languageFlag(String code) {
+    return AppLanguageController.languageFlags[code] ?? "🌐";
   }
 
   void _showLanguageSheet() {
@@ -618,14 +670,23 @@ class _LoginPageState extends State<LoginPage> {
           final selected = appLanguageController.languageCode == code;
 
           return ListTile(
-            leading: Icon(
-              selected ? Icons.check_circle_rounded : Icons.language_rounded,
-              color: selected
-                  ? SafeHomeColors.primary
-                  : SafeHomeColors.textSecondary,
+            leading: SizedBox(
+              width: 36,
+              child: Center(
+                child: Text(
+                  _languageFlag(code),
+                  style: const TextStyle(fontSize: 24),
+                ),
+              ),
             ),
             title: Text(title),
             subtitle: Text(subtitle),
+            trailing: selected
+                ? const Icon(
+                    Icons.check_circle_rounded,
+                    color: SafeHomeColors.primary,
+                  )
+                : null,
             onTap: () async {
               await appLanguageController.setLanguageCode(code);
               await PlatformAutoAwayTaskService.refreshNotificationLanguage();
@@ -655,7 +716,10 @@ class _LoginPageState extends State<LoginPage> {
                   title.toLowerCase().contains(q) ||
                   subtitle.toLowerCase().contains(q) ||
                   aliases.contains(q);
-            }).toList();
+            }).toList()
+              ..sort((a, b) => _languageSubtitle(a).toLowerCase().compareTo(
+                    _languageSubtitle(b).toLowerCase(),
+                  ));
             final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
             final screenHeight = MediaQuery.sizeOf(sheetContext).height;
             final maxSheetHeight = screenHeight - bottomInset - 24;

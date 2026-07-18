@@ -26,7 +26,7 @@ const Map<String, String> elDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Προτεραιότητα Υπενθύμισης SafeHome",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Υπενθύμιση SafeHome υψηλής προτεραιότητας χωρίς πλήρη οθόνη",
   "Tin nhắn mới trong các nhà SafeHome": "Νέα μηνύματα σε σπίτια SafeHome",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Αυτή η ενέργεια θα αλλάξει τη σημερινή ώρα Συναγερμού για ορισμένες συσκευές.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Αυτή η ενέργεια θα αλλάξει σήμερα την ώρα συναγερμού ορισμένων συσκευών.\n\nΟι συναγερμοί συσκευών στην κατηγορία «Κίνδυνος έκτακτης ανάγκης» και οι συναγερμοί στη λειτουργία «Προστασία» δεν θα επηρεαστούν από αυτή τη λειτουργία.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count σπίτια σε κίνδυνο\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "Το διακριτικό FCM είναι έτοιμο, αλλά λείπει μία απαίτηση για την Αυτόματη Απουσία.",
   "Đã kích hoạt SOS": "Το SOS ενεργοποιήθηκε",

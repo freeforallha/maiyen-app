@@ -26,7 +26,7 @@ const Map<String, String> skDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Pripomienka SafeHome s vysokou prioritou",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Pripomienka SafeHome s vysokou prioritou bez otvorenia na celú obrazovku",
   "Tin nhắn mới trong các nhà SafeHome": "Nové správy v domovoch SafeHome",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Táto akcia dnes zmení čas alarmu niektorých zariadení.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Táto akcia dnes zmení čas alarmu niektorých zariadení.\n\nAlarmy zariadení v kategórii „Núdzové nebezpečenstvo“ a alarmy v režime „Ochrana“ nebudú touto funkciou ovplyvnené.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count domovov v nebezpečenstve\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "Token FCM je pripravený, ale automatickej funkcii pri odchode stále chýbajú niektoré podmienky.",
   "Đã kích hoạt SOS": "SOS bolo aktivované",

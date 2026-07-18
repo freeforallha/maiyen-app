@@ -26,7 +26,7 @@ const Map<String, String> plDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Przypomnienie SafeHome o wysokim priorytecie",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Przypomnienie SafeHome o wysokim priorytecie bez otwierania pełnego ekranu",
   "Tin nhắn mới trong các nhà SafeHome": "Nowe wiadomości w domach SafeHome",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Ta czynność zmieni dziś czas alarmu niektórych urządzeń.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Ta czynność zmieni dziś godzinę alarmu niektórych urządzeń.\n\nAlarmy urządzeń z kategorii „Zagrożenie awaryjne” oraz alarmy w trybie „Ochrona” nie zostaną objęte tą funkcją.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count domów w niebezpieczeństwie\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "Token FCM jest gotowy, ale funkcja automatycznej ochrony po wyjściu z domu nie spełnia jeszcze jednego warunku.",
   "Đã kích hoạt SOS": "Aktywowano SOS",

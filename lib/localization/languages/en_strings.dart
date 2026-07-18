@@ -3,8 +3,7 @@ const Map<String, String> enStrings = {
   "Không đọc được số điện thoại": "Could not read phone number",
   "Tin nhắn quá dài": "Message is too long",
   "Không gửi được tin nhắn": "Could not send message",
-  "Bạn không có quyền sửa lịch chung của nhà":
-      "You do not have permission to edit the shared home schedule",
+  "Bạn không có quyền sửa lịch chung của nhà": "You do not have permission to edit the shared home schedule",
   "Nhà của bạn": "Your home",
   "Tải tin cũ hơn": "Load older messages",
   "Nhà chưa đặt tên": "Unnamed home",
@@ -79,6 +78,7 @@ const Map<String, String> enStrings = {
   "Khóa đang mở": "Unlocked",
   "Khóa đang đóng": "Locked",
   "Đang bật": "On",
+  "Bật": "On",
   "Đang tắt": "Off",
   "Đang theo dõi điện năng": "Monitoring power",
   "Đang dùng nguồn dự phòng": "Running on backup power",
@@ -91,18 +91,13 @@ const Map<String, String> enStrings = {
   "Đang theo dõi": "Monitoring",
   "Chưa nhận diện": "Unrecognized device",
   "Chưa có cập nhật": "No updates yet",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
-      "No devices yet. Tap + to add one and start protecting your home.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "No devices yet. Tap + to add one and start protecting your home.",
   "CHƯA AN TOÀN": "UNSAFE",
   "ĐÃ AN TOÀN": "SAFE",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
-      "Your home needs attention. Review the statuses below.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
-      "Your home is operating normally.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.":
-      "No unusual smoke or SOS activity detected.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
-      "There is not enough recent activity for a deeper analysis.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Your home needs attention. Review the statuses below.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Your home is operating normally.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.": "No unusual smoke or SOS activity detected.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "There is not enough recent activity for a deeper analysis.",
   "Hub kết nối bình thường": "Hub connected",
   "Cài đặt cảnh báo cho nhà hiện tại": "Alert settings for this home",
   "Nhận cảnh báo báo động": "Receive Alarm alerts",
@@ -166,25 +161,20 @@ const Map<String, String> enStrings = {
   "Đã rời khỏi home": "Left home",
   "Đã cập nhật": "Updated",
   "Tìm home...": "Search homes...",
-  "Đặt vị trí nhà và bật bảo vệ tự động":
-      "Set home location and enable automatic protection",
+  "Đặt vị trí nhà và bật bảo vệ tự động": "Set home location and enable automatic protection",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Transfer home ownership or delete home",
-  "Đặt nhắc nhở / báo động nhà đã chọn":
-      "Set Reminder / Alarm for selected homes",
+  "Đặt nhắc nhở / báo động nhà đã chọn": "Set Reminder / Alarm for selected homes",
   "Chia sẻ nhà đã chọn": "Share selected homes",
   "Mở danh sách chia sẻ nhà": "Open home sharing list",
   "Xoá các nhà đã chọn?": "Delete selected homes?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
-      "Selected homes will be permanently deleted.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
-      "Or scan a QR code to request access to selected homes",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Selected homes will be permanently deleted.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Or scan a QR code to request access to selected homes",
   "Email người nhận": "Recipient email",
   "Chia sẻ": "Share",
   "Email chưa đăng ký": "Email is not registered",
   "Chia sẻ hoàn tất": "Sharing complete",
   "Mở List chia sẻ nhà": "Open home sharing list",
-  "Không có nhà nào bạn có quyền quản lý":
-      "You do not manage any selected homes",
+  "Không có nhà nào bạn có quyền quản lý": "You do not manage any selected homes",
   "Chưa share cho ai": "Not shared with anyone yet",
   "Tìm nhà": "Search homes",
   "Xoá các nhà đã chọn ?": "Delete selected homes?",
@@ -204,13 +194,11 @@ const Map<String, String> enStrings = {
   "Đã hiểu": "Got it",
   "Lưu ý tạm tắt báo động": "Alarm pause note",
   "Đã bật báo động": "Alarm enabled",
-  "Đã tắt báo động": "Alarm disabled",
+  "Đã tắt báo động": "Alarm turned off",
   "Tắt báo động": "Stop alarm",
   "Cả ngày": "All day",
-  "Bạn không có quyền thực hiện thao tác này.":
-      "You don't have permission to perform this action.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
-      "Couldn't complete the action. Please try again.",
+  "Bạn không có quyền thực hiện thao tác này.": "You don't have permission to perform this action.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Couldn't complete the action. Please try again.",
   "QR gia nhập nhiều nhà không hợp lệ": "Invalid multi-home join QR code",
   "Bạn đang là chủ các nhà này": "You own these homes",
   "Một người dùng": "A user",
@@ -218,23 +206,18 @@ const Map<String, String> enStrings = {
   "Đã gửi yêu cầu gia nhập nhà": "Join request sent",
   "QR gia nhập không hợp lệ": "Invalid join QR code",
   "Bạn đang là chủ nhà này": "You already own this home",
-  "QR này không phải mã xin gia nhập nhà":
-      "This QR code is not a home join code",
-  "Bạn không có quyền thêm thiết bị":
-      "You do not have permission to add devices",
+  "QR này không phải mã xin gia nhập nhà": "This QR code is not a home join code",
+  "Bạn không có quyền thêm thiết bị": "You do not have permission to add devices",
   "Đã mở chế độ thêm thiết bị": "Device pairing enabled",
   "Rời khỏi Home này?": "Leave this home?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
-      "This home and all its devices will be permanently deleted.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "This home and all its devices will be permanently deleted.",
   "Đã xoá nhà": "Home deleted",
   "QR của nhà này": "Home QR code",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
-      "Others can scan this code to request access to the home.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Others can scan this code to request access to the home.",
   "Chia sẻ nhà": "Share home",
   "Quét QR để xin gia nhập nhà": "Scan QR to join a home",
   "Quét QR xin gia nhập nhà": "Scan QR to join home",
-  "Đưa mã QR chia sẻ nhà vào khung hình":
-      "Place the shared home QR code inside the frame",
+  "Đưa mã QR chia sẻ nhà vào khung hình": "Place the shared home QR code inside the frame",
   "Mã QR này do chủ nhà chia sẻ": "This QR code is shared by the home owner",
   "Nhập mã mời": "Enter invitation code",
   "Gửi yêu cầu gia nhập": "Send join request",
@@ -246,8 +229,7 @@ const Map<String, String> enStrings = {
   "Lời mời chia sẻ nhà": "Home sharing invitation",
   "Đã share home": "Home shared",
   "Chuyển quyền chủ nhà": "Transfer ownership",
-  "Không thể chuyển quyền cho chính bạn":
-      "You cannot transfer ownership to yourself",
+  "Không thể chuyển quyền cho chính bạn": "You cannot transfer ownership to yourself",
   "Không tìm thấy user": "User not found",
   "Không tìm thấy tài khoản": "Account not found",
   "Xác nhận chuyển quyền": "Confirm ownership transfer",
@@ -256,8 +238,7 @@ const Map<String, String> enStrings = {
   "Yêu cầu chuyển quyền chủ nhà": "Ownership transfer request",
   "Đã gửi yêu cầu chuyển quyền": "Transfer request sent",
   "Đã gửi yêu cầu chuyển quyền chủ nhà": "Ownership transfer request sent",
-  "Bạn không có quyền xoá thiết bị":
-      "You do not have permission to delete devices",
+  "Bạn không có quyền xoá thiết bị": "You do not have permission to delete devices",
   "Xóa Device?": "Delete this device?",
   "Đã gửi yêu cầu xoá thiết bị": "Device deletion request sent",
   "Đang xoá thiết bị": "Deleting device",
@@ -280,8 +261,7 @@ const Map<String, String> enStrings = {
   "Không thể lưu thông tin": "Could not save information",
   "Đã lưu thông tin": "Information saved",
   "Lỗi lưu profile": "Could not save profile",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
-      "Add a phone number for emergencies",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Add a phone number for emergencies",
   "Hoàn tất": "Done",
   "Đã tạo nhà mới": "Home created",
   "Về muộn": "Back late",
@@ -300,8 +280,7 @@ const Map<String, String> enStrings = {
   "SĐT": "Phone",
   "Ngày sinh": "Date of birth",
   "Yêu cầu & lời mời": "Requests & invitations",
-  "Xem lời mời chia sẻ và xin gia nhập":
-      "View sharing invitations and join requests",
+  "Xem lời mời chia sẻ và xin gia nhập": "View sharing invitations and join requests",
   "Cài đặt bảo mật": "Security settings",
   "Quyền báo động toàn màn hình": "Full-screen alarm permission",
   "Báo động toàn màn hình": "Full-screen alarm",
@@ -347,13 +326,11 @@ const Map<String, String> enStrings = {
   "Ngập/rò nước": "Water leak",
   "Phát hiện khói": "Smoke detected",
   "Quản lý phòng": "Room management",
-  "Bạn không có quyền quản lý phòng":
-      "You don't have permission to manage rooms",
+  "Bạn không có quyền quản lý phòng": "You don't have permission to manage rooms",
   "Đổi tên phòng": "Rename room",
   "Tên phòng": "Room name",
   "Xoá phòng": "Delete room",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
-      "Devices in this room will be moved to Unassigned.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Devices in this room will be moved to Unassigned.",
   "Thêm phòng": "Add room",
   "Ví dụ: Phòng khách": "Example: Living room",
   "Phòng khách": "Living room",
@@ -374,11 +351,9 @@ const Map<String, String> enStrings = {
   "Cửa đóng": "Door closed",
   "Chưa đặt vị trí nhà": "Home location not set",
   "Đặt vị trí nhà tại đây": "Set home location here",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
-      "Set the home location before turning on Auto Guard",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Set the home location before turning on Auto Guard",
   "Bán kính bảo vệ mặc định: 150 m": "Default protection radius: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
-      "Each member needs to allow Always location permission so away/home status can work in the background.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Each member needs to allow Always location permission so away/home status can work in the background.",
   "Lưu cài đặt": "Save settings",
   "Đã đặt vị trí nhà": "Home location set",
   "Đang lấy vị trí...": "Getting location...",
@@ -387,27 +362,22 @@ const Map<String, String> enStrings = {
   "Cập nhật thông tin nhà": "Update home information",
   "Nhập địa chỉ của nhà": "Enter the home address",
   "Lưu thay đổi": "Save changes",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
-      "This name is only shown on your account.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
-      "The name and address will be updated for all home members.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "This name is only shown on your account.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "The name and address will be updated for all home members.",
   "Một thành viên": "A member",
   "Đã cập nhật thông tin nhà": "Home information updated",
   "Thay tên": "Rename",
   "Đã đổi tên thiết bị": "Device renamed",
   "Chưa chọn nhà để kiểm tra": "Select a home to test",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
-      "Run this test using the owner account",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Run this test using the owner account",
   "Không đọc được dữ liệu nhà": "Unable to read home data",
-  "Nhà cần có ít nhất một thiết bị để test":
-      "The home needs at least one device for testing",
+  "Nhà cần có ít nhất một thiết bị để test": "The home needs at least one device for testing",
   "Đóng": "Close",
   "Đã thiết lập": "Set",
   "Quét QR": "Scan QR",
   "Quét QR để thêm thiết bị": "Scan QR to add a device",
   "Nhập HUB ID thủ công": "Enter HUB ID manually",
-  "Bạn không có quyền sắp xếp phòng":
-      "You do not have permission to reorder rooms",
+  "Bạn không có quyền sắp xếp phòng": "You do not have permission to reorder rooms",
   "Cảnh báo khói": "Smoke alert",
   "Cập nhật thiết bị": "Device update",
   "Cửa đang mở": "Door is open",
@@ -457,10 +427,8 @@ const Map<String, String> enStrings = {
   "Chế độ áp dụng": "Apply mode",
   "Theo nhà": "Home schedule",
   "Riêng tôi": "Personal",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
-      "Use the shared schedule set by the owner or admin",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
-      "Use a personal schedule that only applies to your account",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Use the shared schedule set by the owner or admin",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Use a personal schedule that only applies to your account",
   "Thiết lập nhanh báo động": "Quick Alarm setup",
   "Thiết lập nhanh toàn bộ thiết bị": "Quick set all devices",
   "Áp dụng cho toàn bộ thiết bị": "Apply to all devices",
@@ -474,10 +442,8 @@ const Map<String, String> enStrings = {
   "Hôm nay đã ghi nhận cảnh báo SOS": "An SOS alert was recorded today",
   "Hôm nay đã ghi nhận cảnh báo khói": "A smoke alert was recorded today",
   "Khói đã an toàn": "Smoke condition cleared",
-  "Không tìm thấy nhà của thông báo này":
-      "The home for this notification was not found",
-  "Không tìm thấy thiết bị trong nhà này":
-      "The device was not found in this home",
+  "Không tìm thấy nhà của thông báo này": "The home for this notification was not found",
+  "Không tìm thấy thiết bị trong nhà này": "The device was not found in this home",
   "Một chủ nhà": "A homeowner",
   "Ngôi nhà đang hoạt động ổn định": "The home is operating normally",
   "Nhiệt độ cao": "High temperature",
@@ -485,13 +451,13 @@ const Map<String, String> enStrings = {
   "Pin yếu": "Low battery",
   "SOS đã kết thúc": "SOS cleared",
   "SOS được kích hoạt": "SOS activated",
-  "Tamper bình thường": "Tamper cleared",
+  "Tamper bình thường": "No tampering detected",
   "Thiết bị bị tháo": "Tamper detected",
   "Thiết bị mới": "New device",
   "Thiết bị offline": "Device offline",
   "Thiết bị online": "Device online",
   "Báo động kích hoạt": "Alarm triggered",
-  "Báo động đã tắt": "Alarm cleared",
+  "Báo động đã tắt": "Alarm turned off",
   "Tạm tắt báo động hôm nay": "Pause Alarm today",
   "Độ ẩm cao": "High humidity",
   "Thử lại": "Try again",
@@ -502,10 +468,8 @@ const Map<String, String> enStrings = {
   "Đã rời khỏi nhà": "Left home",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "You will leave the shared homes.",
   "Các nhà của bạn sẽ bị xoá.\n": "Your homes will be deleted.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
-      "This will change Home Alarm schedules for all security devices in the selected homes.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
-      "This will add a Home Reminder to the selected homes.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "This will change Home Alarm schedules for all security devices in the selected homes.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "This will add a Home Reminder to the selected homes.\n\n",
   "Xác nhận thay đổi báo động": "Confirm Alarm changes",
   "Xác nhận thay đổi nhắc nhở": "Confirm Reminder changes",
   "Lặp lại khi sự cố vẫn còn": "Repeat while the issue remains",
@@ -513,57 +477,41 @@ const Map<String, String> enStrings = {
   "VD: Mr Chung": "E.g. Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 No homes yet",
   "Vẫn chuyển về Bình thường": "Still switch to Normal",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
-      "Auto Guard when away is still enabled. If all members are still away, the system may turn Guard mode back on after a few minutes.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Auto Guard when away is still enabled. If all members are still away, the system may turn Guard mode back on after a few minutes.",
   "Chuyển về Bình thường?": "Switch to Normal?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
-      "Security devices will be monitored immediately.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Security devices will be monitored immediately.\n\n",
   "Bật Bảo vệ thủ công?": "Turn on manual Guard mode?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
-      "This action will change the alarm timing for some devices today...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
-      "This action will disable every Alarm for this ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "This action will change the alarm timing for some devices today...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "This action will disable every Alarm for this ",
   "Tắt toàn bộ báo động?": "Turn off all Alarm?",
-  "Không xoá được lịch tạm tắt báo động":
-      "Unable to delete the Alarm pause schedule",
+  "Không xoá được lịch tạm tắt báo động": "Unable to delete the Alarm pause schedule",
   "Không lưu được tạm tắt báo động": "Unable to save the Alarm pause",
   "Không gửi được yêu cầu xoá": "Could not send deletion request",
   "Không lưu được cài đặt": "Could not save the setting",
   "Không lấy được vị trí hiện tại": "Could not get the current location",
-  "Không thể xác nhận tài khoản hiện tại":
-      "Could not verify the current account",
+  "Không thể xác nhận tài khoản hiện tại": "Could not verify the current account",
   "Mật khẩu không đúng": "Incorrect password",
   "Không thể xác nhận mật khẩu": "Could not verify the password",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
-      "Only the Owner or an Admin can change the alarm repeat setting",
-  "Không lưu được thời gian lặp báo động":
-      "Could not save the alarm repeat time",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
-      "Only the Owner or an Admin can change Guard mode",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Only the Owner or an Admin can change the alarm repeat setting",
+  "Không lưu được thời gian lặp báo động": "Could not save the alarm repeat time",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Only the Owner or an Admin can change Guard mode",
   "Không thể thay đổi chế độ nhà": "Could not change the home mode",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
-      "Guard mode is on, but the notification could not be sent",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Guard mode is on, but the notification could not be sent",
   "Đã bật Chế độ Bảo vệ thủ công": "Manual Guard mode enabled",
   "Đã chuyển nhà về Bình thường": "Home switched back to Normal",
   "60 phút": "60 minutes",
   "30 phút": "30 minutes",
   "15 phút": "15 minutes",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
-      "You are viewing the owner's schedule. Choose Only me to set your own Alarm schedule.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "You are viewing the owner's schedule. Choose Only me to set your own Alarm schedule.",
   "Chọn giờ kết thúc báo động": "Choose Alarm end time",
   "Chọn giờ bắt đầu báo động": "Choose Alarm start time",
-  "Bạn không có quyền sửa lịch báo động của nhà":
-      "You do not have permission to edit this home's Alarm schedule",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị":
-      "Could not apply Alarm to all devices",
-  "Nhà chưa có thiết bị an ninh để áp dụng":
-      "This home has no security devices to apply",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
-      "You do not have permission to edit Home settings. Choose Only me.",
+  "Bạn không có quyền sửa lịch báo động của nhà": "You do not have permission to edit this home's Alarm schedule",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Could not apply Alarm to all devices",
+  "Nhà chưa có thiết bị an ninh để áp dụng": "This home has no security devices to apply",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "You do not have permission to edit Home settings. Choose Only me.",
   "Không thể lưu chế độ báo động": "Could not save Alarm mode",
   "Thêm nhắc nhở": "Add Reminder",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
-      "Reminder will remind you to check your home's safety status at the selected time.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Reminder will remind you to check your home's safety status at the selected time.",
   "Thêm khung giờ báo động": "Add Alarm time window",
   "Đang sử dụng nhắc nhở riêng của bạn": "Using your own Reminder settings",
   "Đang sử dụng nhắc nhở của chủ nhà": "Using the owner's Reminder settings",
@@ -583,175 +531,118 @@ const Map<String, String> enStrings = {
   "Xoá thành viên": "Remove member",
   "Đã xoá thành viên": "Member removed",
   "Đồng ý": "OK",
-  "Bạn chắc chắn muốn rời khỏi nhà này?":
-      "Are you sure you want to leave this home?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?": "Are you sure you want to leave this home?",
   "Xoá thành viên?": "Remove member?",
   "Rời khỏi nhà?": "Leave this home?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Only the owner can change roles",
-  "Bạn không có quyền xoá thành viên này":
-      "You do not have permission to remove this member",
+  "Bạn không có quyền xoá thành viên này": "You do not have permission to remove this member",
   "Bạn": "You",
   "Không có email": "No email",
   "Chưa có số điện thoại": "No phone number",
   "Không mở được ứng dụng gọi điện": "Could not open the phone app",
-  "Thành viên chưa cập nhật số điện thoại":
-      "This member has not added a phone number",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
-      "Manual Guard mode is on - switch to Normal to turn it off",
+  "Thành viên chưa cập nhật số điện thoại": "This member has not added a phone number",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Manual Guard mode is on - switch to Normal to turn it off",
   "Thời gian lặp": "Repeat interval",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
-      "Choose 0 to alert once. This setting applies to manual Guard mode and Auto Guard when away.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Choose 0 to alert once. This setting applies to manual Guard mode and Auto Guard when away.",
   "Lặp báo động khi sự cố vẫn còn": "Repeat Alarm while the issue remains",
   "Đang được sử dụng": "Currently active",
   "Chuyển về sử dụng thông thường": "Switch back to normal use",
   "Chế độ nhà": "Home mode",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.":
-      "The SOS device has not recorded an alert.",
-  "Cảm biến khói chưa ghi nhận bất thường.":
-      "The smoke sensor has not detected an issue.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
-      "You or a member manually turned on Guard.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome turned on Guard automatically because you left home.",
-  "Nhà đang ở chế độ dùng bình thường.":
-      "This home is currently in normal use.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.": "The SOS device has not recorded an alert.",
+  "Cảm biến khói chưa ghi nhận bất thường.": "The smoke sensor has not detected an issue.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "You or a member manually turned on Guard.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome turned on Guard automatically because you left home.",
+  "Nhà đang ở chế độ dùng bình thường.": "This home is currently in normal use.",
   "Bảo vệ thủ công đang bật": "Manual Guard is on",
   "Bảo vệ tự động đang bật": "Auto Guard is on",
   "Bảo vệ đang tắt": "Guard mode is off",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
-      "You have opened the app recently to check status.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
-      "Open the app regularly to review permissions, schedules, and unread alerts.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "After a few sessions, SafeHome can evaluate your app-check habit better.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "You have opened the app recently to check status.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Open the app regularly to review permissions, schedules, and unread alerts.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "After a few sessions, SafeHome can evaluate your app-check habit better.",
   "Tần suất vào ứng dụng ổn": "App check frequency looks good",
-  "Đã lâu chưa vào ứng dụng kiểm tra":
-      "It has been a while since the last app check",
-  "Đang ghi nhận tần suất vào ứng dụng":
-      "App check frequency is being recorded",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
-      "Check Always location permission and background conditions.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
-      "This device meets the requirements for Auto Away.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
-      "Enable it if you want Guard mode to turn on automatically when you leave.",
+  "Đã lâu chưa vào ứng dụng kiểm tra": "It has been a while since the last app check",
+  "Đang ghi nhận tần suất vào ứng dụng": "App check frequency is being recorded",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Check Always location permission and background conditions.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "This device meets the requirements for Auto Away.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Enable it if you want Guard mode to turn on automatically when you leave.",
   "Auto rời khỏi nhà chưa ổn": "Auto Away is not ready",
   "Auto rời khỏi nhà đã sẵn sàng": "Auto Away is ready",
   "Auto rời khỏi nhà chưa bật": "Auto Away is not enabled",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
-      "Add a smoke sensor, SOS, or emergency device suitable for your home.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Add a smoke sensor, SOS, or emergency device suitable for your home.",
   "Chưa có thiết bị khẩn cấp": "No emergency device yet",
   "Đã có thiết bị khẩn cấp": "Emergency devices are added",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
-      "Set an Alarm schedule for sleeping time or when you are away.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
-      "This home has an Alarm schedule or device-level alert schedule.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Set an Alarm schedule for sleeping time or when you are away.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "This home has an Alarm schedule or device-level alert schedule.",
   "Chưa cài lịch báo động": "Alarm schedule is not set",
   "Đã cài lịch báo động": "Alarm schedule is set",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
-      "Set at least one Reminder so you do not forget to check your home.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
-      "The app will remind you to check your home on schedule.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Set at least one Reminder so you do not forget to check your home.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "The app will remind you to check your home on schedule.",
   "Chưa cài đặt nhắc nhở": "Reminder is not set up",
   "Đã cài đặt nhắc nhở": "Reminder is set up",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
-      "Reopen the app or sign in again if this device does not receive alerts.",
-  "Thiết bị chưa đăng ký nhận cảnh báo":
-      "This device is not registered for alerts",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Reopen the app or sign in again if this device does not receive alerts.",
+  "Thiết bị chưa đăng ký nhận cảnh báo": "This device is not registered for alerts",
   "Thiết bị nhận cảnh báo bình thường": "This device can receive alerts",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
-      "iOS controls background use more strictly than Android; keep notifications and Always location on if using Auto Away.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS controls background use more strictly than Android; keep notifications and Always location on if using Auto Away.",
   "Cơ chế iOS": "iOS behavior",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
-      "Check background permission and auto-start so alerts are not delayed.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
-      "The device has confirmed the important background conditions.",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Check background permission and auto-start so alerts are not delayed.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "The device has confirmed the important background conditions.",
   "Cần kiểm tra chạy nền / tự khởi động": "Check background use / auto-start",
   "Chạy nền ổn định": "Background use looks stable",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
-      "Some Android phones may delay alerts while battery optimization is on.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "The phone is less likely to delay SafeHome alerts.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Some Android phones may delay alerts while battery optimization is on.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "The phone is less likely to delay SafeHome alerts.",
   "Chưa tắt tối ưu pin": "Battery optimization is still enabled",
-  "Tối ưu pin không chặn ứng dụng":
-      "Battery optimization is not blocking the app",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
-      "Auto Away needs Always location to work reliably.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
-      "Location permission is required for Auto Away.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
-      "Location service is off, so Auto Away may not work reliably.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
-      "This is only required when using Auto Away.",
+  "Tối ưu pin không chặn ứng dụng": "Battery optimization is not blocking the app",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Auto Away needs Always location to work reliably.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Location permission is required for Auto Away.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Location service is off, so Auto Away may not work reliably.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "This is only required when using Auto Away.",
   "Chưa cấp vị trí luôn luôn": "Always location is not allowed",
   "Đã cấp vị trí luôn luôn": "Always location is allowed",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
-      "iOS does not open full-screen like Android; the app uses system notifications and sound.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
-      "Android uses full-screen alerts; allow it in settings if the phone blocks it.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS does not open full-screen like Android; the app uses system notifications and sound.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android uses full-screen alerts; allow it in settings if the phone blocks it.",
   "Cảnh báo trên iOS": "Alerts on iOS",
   "Cảnh báo toàn màn hình": "Full-screen alerts",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
-      "Alerts may not appear if notifications are disabled.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "This phone can receive SafeHome notifications.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Alerts may not appear if notifications are disabled.",
+  "Điện thoại có thể nhận thông báo SafeHome.": "This phone can receive SafeHome notifications.",
   "Chưa bật thông báo": "Notifications are not enabled",
   "Đã bật thông báo": "Notifications are enabled",
   "Hệ thống: Sẵn sàng": "System: Ready",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "System: Alerts may be missed",
   "Cách bạn đang dùng ứng dụng": "How you use the app",
   "Thiết bị của bạn": "Your device",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
-      "Checks your phone and how you use the app.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Checks your phone and how you use the app.",
   "Hệ thống SafeHome": "SafeHome System",
   "Hệ thống: Đang kiểm tra...": "System: Checking...",
   "Tên": "Name",
-  "Bạn không có quyền thay đổi vị trí nhà":
-      "You don't have permission to change the home location",
+  "Bạn không có quyền thay đổi vị trí nhà": "You don't have permission to change the home location",
   "Hãy bật GPS để đặt vị trí nhà": "Turn on GPS to set the home location",
   "Bạn chưa cấp quyền vị trí": "Location permission has not been granted",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
-      "Grant location permission in the app settings",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
-      "Auto Guard when everyone leaves home is enabled",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
-      "Auto Guard when everyone leaves home is disabled",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Grant location permission in the app settings",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Auto Guard when everyone leaves home is enabled",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Auto Guard when everyone leaves home is disabled",
   "Không thể thay đổi trạng thái báo động": "Could not change Alarm status",
   "Đã tắt toàn bộ báo động của nhà": "All home Alarms have been turned off",
-  "QR này không phải mã xin gia nhập Home":
-      "This QR code is not a Home join code",
+  "QR này không phải mã xin gia nhập Home": "This QR code is not a Home join code",
   "Thêm Home": "Add Home",
   "Mở cài đặt": "Open settings",
   "Để sau": "Later",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome needs always-on location permission to detect when you leave or return home, including while the app is in the background.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome can currently access location only while the app is in use.\n\nOpen Location permission and select \"Allow all the time\" so automatic protection continues working in the background.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome needs always-on location permission to detect when you leave or return home, including while the app is in the background.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome can currently access location only while the app is in use.\n\nOpen Location permission and select \"Allow all the time\" so automatic protection continues working in the background.",
   "Cho phép vị trí luôn luôn": "Always allow location",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
-      "Your homes will be deleted.\nYou will leave the shared homes.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "This will change Home Alarm schedules for all security devices in the selected homes.\n\nMembers using Home Alarm settings will be affected.\nPersonal Alarm settings will not be changed.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "This will add a Home Reminder to the selected homes.\n\nMembers using Home Reminder settings will be affected.\nPersonal Reminder settings will not be changed.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
-      "Security devices will be monitored immediately.\n\nAuto Guard when away will pause. This mode does not turn off automatically when someone comes home and must be switched back to Normal by a permitted member.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
-      "This action will change the alarm timing for some devices today...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
-      "This action will disable every Alarm for this home. You will no longer receive danger alerts on this phone.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarm is using Home settings.\n\nYou will receive alerts according to the shared schedules configured by the owner or an administrator.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
-      "Alarm is using My settings.\n\nYou will receive alerts according to the personal Alarm schedules for this account.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Your homes will be deleted.\nYou will leave the shared homes.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "This will change Home Alarm schedules for all security devices in the selected homes.\n\nMembers using Home Alarm settings will be affected.\nPersonal Alarm settings will not be changed.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "This will add a Home Reminder to the selected homes.\n\nMembers using Home Reminder settings will be affected.\nPersonal Reminder settings will not be changed.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Security devices will be monitored immediately.\n\nAuto Guard when away will pause. This mode does not turn off automatically when someone comes home and must be switched back to Normal by a permitted member.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "This action will change the alarm timing for some devices today...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "This action will disable every Alarm for this home. You will no longer receive danger alerts on this phone.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarm is using Home settings.\n\nYou will receive alerts according to the shared schedules configured by the owner or an administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarm is using My settings.\n\nYou will receive alerts according to the personal Alarm schedules for this account.",
   "Không thể đăng nhập bằng Google": "Could not sign in with Google",
   "Không đặt được mật khẩu": "Could not set password",
   "Chấp nhận": "Accept",
   "Cho phép": "Allow",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
-      "Could not accept the invitation. Please try again.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
-      "Could not accept the join request. Please try again.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Could not accept the invitation. Please try again.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Could not accept the join request. Please try again.",
   "Từ chối": "Decline",
   "Lời mời từ chủ nhà": "Invitation from the owner",
   "Nhận quyền chủ nhà": "Receive home ownership",
@@ -773,20 +664,15 @@ const Map<String, String> enStrings = {
   "KIỂM TRA NHÀ": "CHECK HOME",
   "ĐÓNG NHẮC NHỞ": "CLOSE REMINDER",
   "SafeHome Security Alert": "SafeHome Security Alert",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
-      "Choose Always Allow location permission in app settings",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
-      "Your Google account needs an additional password to use security features.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Choose Always Allow location permission in app settings",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Your Google account needs an additional password to use security features.",
   "Báo động": "Alarm",
-  "Bạn không có quyền thực hiện thao tác này。":
-      "You do not have permission to perform this action.",
+  "Bạn không có quyền thực hiện thao tác này。": "You do not have permission to perform this action.",
   "Cài đặt": "Settings",
   "Cập nhật": "Update",
   "Chọn ngôn ngữ": "Choose language",
-  "Chưa có dữ liệu thiết bị để đánh giá":
-      "No device data available for assessment",
-  "Chuyển quyền sở hữu cho thành viên khác":
-      "Transfer ownership to another member",
+  "Chưa có dữ liệu thiết bị để đánh giá": "No device data available for assessment",
+  "Chuyển quyền sở hữu cho thành viên khác": "Transfer ownership to another member",
   "Có": "Yes",
   "Cửa đã đóng an toàn": "Door safely closed",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "An error occurred. Please try again.",
@@ -798,8 +684,7 @@ const Map<String, String> enStrings = {
   "Hub chưa gửi trạng thái": "Hub status unavailable",
   "Hub mất kết nối": "Hub disconnected",
   "Hub tín hiệu bình thường": "Hub connected",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
-      "Unlocked while Home is in Guard mode",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Unlocked while Home is in Guard mode",
   "Khóa đang mở trong giờ báo động": "Unlocked during Alarm hours",
   "Không có thông báo": "No notifications",
   "Khu vực nguy hiểm": "Danger zone",
@@ -843,41 +728,30 @@ const Map<String, String> enStrings = {
   "Xoá toàn bộ dữ liệu và thiết bị": "Delete all data and devices",
   "TẮT CẢNH BÁO": "TURN OFF ALERT",
   "Đã tạo nhà": "Home created",
-
   "Chế độ Bảo vệ thủ công đã bật": "Manual Guard mode enabled",
   "Báo động không lặp lại.": "The alarm will not repeat.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
-      "The alarm repeats after \$securityModeRepeatMinutes minutes if the issue remains.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
-      "\$actorName turned on Manual Guard mode for \"\$homeName\". This mode only turns off when a permitted member switches back to Normal. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".":
-      "You enabled Alarm for \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
-      "You disabled every Alarm for \"\$homeName\".",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "The alarm repeats after \$securityModeRepeatMinutes minutes if the issue remains.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName turned on Manual Guard mode for \"\$homeName\". This mode only turns off when a permitted member switches back to Normal. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".": "You enabled Alarm for \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "You disabled every Alarm for \"\$homeName\".",
   "Thành viên mới": "New member",
   "Thành viên rời nhà": "Member left home",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
-      "\$displayMemberName left \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
-      "\$actorName changed \$memberName's role from \$oldRoleName to \$newRoleName in \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName left \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName changed \$memberName's role from \$oldRoleName to \$newRoleName in \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "\$count unread messages",
   "Hãy an tâm nghỉ ngơi.": "You can rest assured.",
   "Có thiết bị chưa an toàn.": "Some devices are not safe.",
   "SafeHome đang cập nhật vị trí": "SafeHome is updating location",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
-      "Monitoring to turn on Guard mode automatically.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
-      "Uses location to turn on Guard mode automatically when everyone leaves home.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Monitoring to turn on Guard mode automatically.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Uses location to turn on Guard mode automatically when everyone leaves home.",
   "CẢNH BÁO SOS": "SOS ALERT",
   "CẢNH BÁO KHÓI / CHÁY": "SMOKE / FIRE ALERT",
   "CẢNH BÁO NGẬP NƯỚC": "FLOOD ALERT",
   "CẢNH BÁO RÒ KHÍ": "GAS LEAK ALERT",
   "CẢNH BÁO CỬA": "DOOR ALERT",
   "CẢNH BÁO AN NINH": "SECURITY ALERT",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Could not confirm with SafeHome. Check your connection and try again.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
-      "Only stop the alert after checking the home's condition.\n\nAre you sure you want to stop the alert?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Could not confirm with SafeHome. Check your connection and try again.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Only stop the alert after checking the home's condition.\n\nAre you sure you want to stop the alert?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome detected an alert",
   "Mở SafeHome để kiểm tra ngay.": "Open SafeHome to check now.",
   "\$count tin nhắn mới": "\$count new messages",
@@ -885,247 +759,167 @@ const Map<String, String> enStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName sent a message",
   "Bạn có tin nhắn mới": "You have a new message",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Guard mode will alert only once",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
-      "Guard mode will repeat the alert after \$minutes minutes",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Guard mode will repeat the alert after \$minutes minutes",
   "Đã gửi yêu cầu gia nhập \$count nhà": "Join requests sent for \$count homes",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
-      "\$requesterName requested to join \"\$homeName\".",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName requested to join \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "You deleted \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
-      "You sent an ownership transfer request for \"\$homeName\" to \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
-      "\$actorName wants to transfer ownership of \"\$homeName\" to you.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
-      "\$actorName invited you to join \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome is removing \"\$deviceName\" from \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
-      "Device \"\$deviceName\" was added to \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "You sent an ownership transfer request for \"\$homeName\" to \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName wants to transfer ownership of \"\$homeName\" to you.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName invited you to join \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome is removing \"\$deviceName\" from \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Device \"\$deviceName\" was added to \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "You created the home \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
-      "\$actorName updated the home name to \"\$newName\" and changed its address.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".":
-      "\$actorName renamed the home to \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
-      "\$actorName updated the address of \"\$newName\".",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
-      "\$actorName renamed device \"\$oldDeviceName\" to \"\$newName\" in \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName updated the home name to \"\$newName\" and changed its address.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName renamed the home to \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName updated the address of \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName renamed device \"\$oldDeviceName\" to \"\$newName\" in \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Pairing: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
-      "Device pairing was enabled in \"\$homeName\" for \$seconds seconds.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
-      "The pause period must be within the Alarm schedule (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n":
-      "\$passCount/\$total tests passed\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
-      "\$name has not added a phone number to their profile.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Device pairing was enabled in \"\$homeName\" for \$seconds seconds.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "The pause period must be within the Alarm schedule (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total tests passed\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name has not added a phone number to their profile.",
   "Tin nhắn mới trong \$homeName": "New message in \$homeName",
   "\$current/\$total kết quả": "\$current/\$total results",
   "Đang trả lời \$name": "Replying to \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".":
-      "\"\$name\" detected smoke in \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.":
-      "\"\$name\" has returned to normal.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
-      "\"\$name\" triggered SOS in \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" detected smoke in \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" has returned to normal.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" triggered SOS in \"\$homeName\".",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" is no longer in SOS state.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
-      "\"\$name\" reported tampering in \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.":
-      "\"\$name\" tamper alert has cleared.",
-  "\"\$name\" đã đóng trong \"\$homeName\".":
-      "\"\$name\" closed in \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".":
-      "\"\$name\" is open in \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
-      "\"\$name\" in \"\$homeName\" has a low battery.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
-      "\"\$name\" in \"\$homeName\" went offline.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
-      "\"\$name\" in \"\$homeName\" is back online.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
-      "\"\$name\" recorded a high temperature in \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
-      "\"\$name\" recorded high humidity in \"\$homeName\".",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" reported tampering in \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.": "\"\$name\" tamper alert has cleared.",
+  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" closed in \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" is open in \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" in \"\$homeName\" has a low battery.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" in \"\$homeName\" went offline.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" in \"\$homeName\" is back online.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" recorded a high temperature in \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" recorded high humidity in \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "An SOS button was triggered",
   "Có dấu hiệu khói hoặc cháy": "Smoke or fire was detected",
   "Có dấu hiệu ngập nước": "Water flooding was detected",
   "Có dấu hiệu rò khí": "A gas leak was detected",
-  "Có cửa đang mở hoặc thiết bị bị tháo":
-      "A door is open or a device was tampered with",
+  "Có cửa đang mở hoặc thiết bị bị tháo": "A door is open or a device was tampered with",
   "Có thiết bị đang cảnh báo": "A device is alerting",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "If no one confirms, SafeHome will initiate an emergency call.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
-      "Alerts again at \$time if the issue has not been handled.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
-      "Alerts again according to the Alarm schedule if the issue has not been handled.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
-      "\"\$deviceName\" closed in \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
-      "\"\$deviceName\" is open in \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "If no one confirms, SafeHome will initiate an emergency call.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Alerts again at \$time if the issue has not been handled.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Alerts again according to the Alarm schedule if the issue has not been handled.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" closed in \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" is open in \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count homes selected",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count unsafe homes\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count homes need attention\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count safe homes",
   "\$count nhà đang được theo dõi": "\$count homes monitored",
   "\$minutes phút": "\$minutes minutes",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
-      "Reminder was set for \$updatedHomes homes.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
-      "Alarm was set for \$updatedDevices devices across \$updatedHomes homes.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
-      "Homes you manage were shared.\n\n\$skipped homes were skipped because you do not have sharing permission.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh":
-      "Alarm applied to \$count security devices",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
-      "Apply the same schedule to \$count security devices",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Reminder was set for \$updatedHomes homes.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarm was set for \$updatedDevices devices across \$updatedHomes homes.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Homes you manage were shared.\n\n\$skipped homes were skipped because you do not have sharing permission.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarm applied to \$count security devices",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Apply the same schedule to \$count security devices",
   "\$count phút trước": "\$count minutes ago",
   "\$count giờ trước": "\$count hours ago",
   "\${count}h trước": "\${count}h ago",
   "\${hours}h\$minutes' trước": "\${hours}h \$minutes min ago",
   "\$count ngày trước": "\$count days ago",
   "\$count tháng trước": "\$count months ago",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
-      "Are you sure you want to remove \$name from this home?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"":
-      "\$targetEmail\nRequests to join \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Are you sure you want to remove \$name from this home?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nRequests to join \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Requests to join \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"":
-      "You were invited to receive ownership of \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
-      "\$ownerEmail\nInvites you to join \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"": "You were invited to receive ownership of \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nInvites you to join \"\$homeName\"",
   "Mời bạn gia nhập \"\$homeName\"": "Invites you to join \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Needs attention: \$joined",
   "Cập nhật \$value": "Updated \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Add your first SafeHome device to start monitoring this home.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
-      "Check emergency alerts first, then contact household members if needed.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
-      "No household member is home but a door or lock is open. Check it now.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
-      "Check the open door or lock before keeping this home in Guard mode.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
-      "Someone may still be home. If so, switch back to Normal mode.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
-      "Some members have unknown location. Ask them to open the app or check location permission.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
-      "A device is disconnected. Check its battery, power, or placement.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
-      "A device has low battery. Replace it soon to avoid missed alerts.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
-      "Reminder is not set. Create a schedule to check your home regularly.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
-      "Alarm schedule is not set. Enable protection for times you are usually away.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
-      "No immediate action is needed. Keep monitoring this home.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Add your first SafeHome device to start monitoring this home.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Check emergency alerts first, then contact household members if needed.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "No household member is home but a door or lock is open. Check it now.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Check the open door or lock before keeping this home in Guard mode.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Someone may still be home. If so, switch back to Normal mode.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Some members have unknown location. Ask them to open the app or check location permission.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "A device is disconnected. Check its battery, power, or placement.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "A device has low battery. Replace it soon to avoid missed alerts.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Reminder is not set. Create a schedule to check your home regularly.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Alarm schedule is not set. Enable protection for times you are usually away.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "No immediate action is needed. Keep monitoring this home.",
   "Lặp sau \$minutes phút": "Repeat after \$minutes minutes",
   "Đang dùng • \$repeatText": "Active • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Security monitoring • \$repeatText",
   "Gia đình: \$mode": "Home mode: \$mode",
   "Gợi ý xử lý": "Suggested actions",
   "Phát hiện \$count vấn đề cần xử lý": "\$count issues need attention",
-  "Hôm nay các cửa đã được sử dụng \$count lần":
-      "Doors were used \$count times today",
+  "Hôm nay các cửa đã được sử dụng \$count lần": "Doors were used \$count times today",
   "Đã ghi nhận \$count hoạt động gần đây": "\$count recent activities recorded",
-  "Hệ thống: Cần kiểm tra \$issueCount mục":
-      "System: \$issueCount items need checking",
-  "FCM token đã sẵn sàng trên điện thoại này.":
-      "The FCM token is ready on this phone.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
-      "The FCM token is ready, but Auto Away is missing a requirement.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
-      "\$emergencyTotal emergency devices found. Recommended minimum: smoke sensor and SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
-      "Transfer home ownership to:\n\$targetEmail?",
+  "Hệ thống: Cần kiểm tra \$issueCount mục": "System: \$issueCount items need checking",
+  "FCM token đã sẵn sàng trên điện thoại này.": "The FCM token is ready on this phone.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "The FCM token is ready, but Auto Away is missing a requirement.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "\$emergencyTotal emergency devices found. Recommended minimum: smoke sensor and SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Transfer home ownership to:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count doors safely closed",
   "\$count cửa và khóa đã an toàn": "\$count doors and locks secured",
   "\$count thiết bị đang được theo dõi": "\$count devices monitored",
   "Cập nhật \$timeText": "Updated \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước":
-      "Latest data updated \$count minutes ago",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước":
-      "Latest data updated \$count hours ago",
+  "Dữ liệu gần nhất cập nhật \$count phút trước": "Latest data updated \$count minutes ago",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Latest data updated \$count hours ago",
   "Thành viên trong nhà: \$count": "Members at home: \$count",
   "Thành viên bên ngoài: \$count": "Members away: \$count",
   "Chưa xác định vị trí: \$count": "Location unknown: \$count",
   "Môi trường hiện tại: \$environment": "Current environment: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
-      "\$name: Open while Home is in Guard mode",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Open while Home is in Guard mode",
   "An tâm hơn trong từng ngôi nhà": "Peace of mind in every home",
   "Báo động SafeHome": "SafeHome Alarm",
-  "Có cảnh báo an ninh cần kiểm tra ngay.":
-      "A security alert requires your attention.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.": "A security alert requires your attention.",
   "Có cảnh báo cần kiểm tra": "An alert requires your attention",
   "Tự đóng sau \$time": "Auto-closes in \$time",
   "Ngày trong tuần": "Days of the week",
   "Hoặc": "Or",
-  "Giờ bắt đầu và kết thúc không được trùng nhau":
-      "Start and end times cannot be the same",
-  "Giờ kết thúc phải sau thời điểm hiện tại":
-      "The end time must be after the current time",
+  "Giờ bắt đầu và kết thúc không được trùng nhau": "Start and end times cannot be the same",
+  "Giờ kết thúc phải sau thời điểm hiện tại": "The end time must be after the current time",
   "Khoảng tạm tắt không hợp lệ": "Invalid Alarm pause range",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
-      "The pause range does not overlap any active Alarm schedule",
-
-  // Device alarm policy
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "The pause range does not overlap any active Alarm schedule",
   "Cài đặt báo động": "Alarm settings",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
-      "Control how this sensor triggers alerts.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Control how this sensor triggers alerts.",
   "Tham gia báo động": "Participate in alarms",
-  "Tắt để cảm biến không tạo báo động.":
-      "Turn off to prevent this sensor from creating an Alarm.",
+  "Tắt để cảm biến không tạo báo động.": "Turn off to prevent this sensor from creating an Alarm.",
   "Bật còi vật lý": "Enable physical siren",
   "Cho phép kích hoạt còi trong nhà.": "Allow the indoor siren to activate.",
   "Đánh thức màn hình": "Wake screen",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
-      "Show a full-screen alert on the phone.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Show a full-screen alert on the phone.",
   "Độ trễ kích hoạt": "Trigger delay",
   "Chỉ áp dụng cho cảm biến an ninh.": "Only applies to security sensors.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
-      "Emergency sensors always trigger immediately.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Emergency sensors always trigger immediately.",
   "Ngay lập tức": "Immediately",
   "giây": "seconds",
   "Đã lưu cấu hình báo động": "Alarm settings saved",
   "Không thể lưu cấu hình báo động": "Could not save alarm settings",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
-      "Only the home owner and administrators can change this setting.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Only the home owner and administrators can change this setting.",
   "Thông tin chi tiết": "Device details",
   "Thông báo báo động": "Alarm notification",
   "Cài đặt nhắc nhở": "Reminder settings",
   "Nhắc nhở theo lịch": "Scheduled reminder",
   "Danh sách thông báo": "Notifications",
   "Cài đặt thông báo": "Notification settings",
-  "Sử dụng báo động theo lịch đã thiết lập":
-      "Use the configured alarm schedule",
-  "Chỉ gửi thông báo, không kích hoạt báo động":
-      "Send notifications only; do not trigger the alarm",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
-      "All home alarms are off; the system will only send notifications.",
+  "Sử dụng báo động theo lịch đã thiết lập": "Use the configured alarm schedule",
+  "Chỉ gửi thông báo, không kích hoạt báo động": "Send notifications only; do not trigger the alarm",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "All home alarms are off; the system will only send notifications.",
   "Chỉ Chủ nhà có thể bật chế độ này.": "Only the owner can enable this mode.",
   "Bật Không bảo vệ?": "Enable Unprotected mode?",
   "Cảm biến vừa phát hiện một sự kiện.": "A sensor just detected an event.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
-      "Only the owner can enable Unprotected mode",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Only the owner can enable Unprotected mode",
   "Đã chuyển nhà sang Không bảo vệ": "Home switched to Unprotected mode",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
-      "Switched to Unprotected mode, but the notification could not be sent",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Switched to Unprotected mode, but the notification could not be sent",
   "Giám sát toàn diện": "Full monitoring",
   "Không bảo vệ": "Unprotected",
   "Không bảo vệ đang bật": "Unprotected mode is active",
   "Nhà đã chuyển sang Không bảo vệ": "Home switched to Unprotected mode",
   "Thông báo cảm biến": "Sensor notifications",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
-      "Standard notifications when a sensor detects an event.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Standard notifications when a sensor detects an event.",
   "Tôi hiểu, tiếp tục": "I understand, continue",
   "Cảnh báo an ninh đã kết thúc": "Security alert ended",
   "Sự cố nguy hiểm đã kết thúc": "Emergency ended",
   "Cảnh báo đã được kết thúc.": "The alert has ended.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Another alert is still active.",
   "Báo động đã hoạt động trở lại": "Alarm is active again",
-  "Thời gian tạm dừng báo động đã kết thúc.":
-      "The alarm pause period has ended.",
+  "Thời gian tạm dừng báo động đã kết thúc.": "The alarm pause period has ended.",
   "MQTT đã kết nối trở lại": "MQTT reconnected",
   "Còi báo động đã được tắt": "Physical siren was turned off",
   "Sự cố vẫn đang được theo dõi.": "The incident is still being monitored.",
@@ -1140,47 +934,34 @@ const Map<String, String> enStrings = {
   "Nhà đang ở chế độ Bình thường.": "The home is in Normal mode.",
   "Pin thiết bị đã ổn định": "Device battery is stable",
   "Hub đã kết nối trở lại": "Hub reconnected",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
-      "Switched to Normal, but the notification could not be sent",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Switched to Normal, but the notification could not be sent",
   "Chung cho nhà": "Shared home",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
-      "Applies to all members and may activate the physical siren.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Applies to all members and may activate the physical siren.",
   "Cá nhân": "Personal",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
-      "The personal schedule works independently and never activates the physical siren.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
-      "This setting only applies to your account.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
-      "Only the owner and administrators can change shared home settings.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "The personal schedule works independently and never activates the physical siren.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "This setting only applies to your account.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Only the owner and administrators can change shared home settings.",
   "Tham gia hệ thống báo động": "Participate in alarm system",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
-      "Emergency sensors always participate in the alarm system.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
-      "Turn off to prevent the device from creating any alarm.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Emergency sensors always participate in the alarm system.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Turn off to prevent the device from creating any alarm.",
   "Lịch báo động chung": "Shared alarm schedule",
   "Lịch báo động cá nhân": "Personal alarm schedule",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
-      "Show a full-screen alert on your phone.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Show a full-screen alert on your phone.",
   "Lặp lại cảnh báo": "Repeat alert",
   "Báo động chung": "Shared alarm",
   "Báo động cá nhân": "Personal alarm",
   "Đã cài đặt": "Configured",
   "Chưa cài đặt": "Not configured",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
-      "Shared and personal schedules work in parallel; you no longer need to choose one.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Shared and personal schedules work in parallel; you no longer need to choose one.",
   "Cài nhanh chung": "Quick shared setup",
   "Cài nhanh cá nhân": "Quick personal setup",
   "Thiết lập nhanh lịch cá nhân": "Quick personal schedule setup",
   "Thiết lập nhanh lịch chung": "Quick shared schedule setup",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
-      "This schedule only applies to you and does not activate the physical siren.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
-      "This schedule applies to all members in the home.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "This schedule only applies to you and does not activate the physical siren.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "This schedule applies to all members in the home.",
   "Đã áp dụng lịch báo động": "Alarm schedule applied",
   "Không thể lưu lịch báo động": "Unable to save alarm schedule",
   "Nhà chưa có thiết bị an ninh": "This home has no security devices",
-  "Nhận cảnh báo theo lịch chung của nhà":
-      "Receive alerts from the shared home schedule",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
-      "Turn this off to stop notifications and fullscreen alerts from the shared schedule. The home siren will still operate.",
+  "Nhận cảnh báo theo lịch chung của nhà": "Receive alerts from the shared home schedule",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Turn this off to stop notifications and fullscreen alerts from the shared schedule. The home siren will still operate.",
 };

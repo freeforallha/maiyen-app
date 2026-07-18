@@ -26,7 +26,7 @@ const Map<String, String> trDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "SafeHome Hatırlatıcı Önceliği",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Tam ekran olmadan yüksek öncelikli SafeHome Hatırlatıcısı",
   "Tin nhắn mới trong các nhà SafeHome": "SafeHome evlerinde yeni mesajlar",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Bu işlem bazı cihazların bugünkü Alarm saatini değiştirecek.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Bu işlem bugün bazı cihazların alarm saatini değiştirecek.\n\n“Acil tehlike” kategorisindeki cihazların alarmları ve “Koruma” modundaki alarmlar bu özellikten etkilenmeyecektir.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count ev tehlikede\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "FCM belirteci hazır, ancak Otomatik Uzakta için bir gereksinim eksik.",
   "Đã kích hoạt SOS": "SOS etkinleştirildi",

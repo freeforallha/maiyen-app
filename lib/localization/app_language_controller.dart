@@ -45,6 +45,22 @@ class AppLanguageController extends ChangeNotifier {
     "el",
     "tr",
     "sv",
+    "da",
+    "nb",
+    "fi",
+    "is",
+    "et",
+    "lv",
+    "lt",
+    "ga",
+    "mt",
+    "be",
+    "lb",
+    "ca",
+    "cnr",
+    "hy",
+    "ka",
+    "az",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -84,7 +100,79 @@ class AppLanguageController extends ChangeNotifier {
     Locale("el", "GR"),
     Locale("tr", "TR"),
     Locale("sv", "SE"),
+    Locale("da", "DK"),
+    Locale("nb", "NO"),
+    Locale("fi", "FI"),
+    Locale("is", "IS"),
+    Locale("et", "EE"),
+    Locale("lv", "LV"),
+    Locale("lt", "LT"),
+    Locale("ga", "IE"),
+    Locale("mt", "MT"),
+    Locale("be", "BY"),
+    Locale("lb", "LU"),
+    Locale("ca", "AD"),
+    Locale("cnr", "ME"),
+    Locale("hy", "AM"),
+    Locale("ka", "GE"),
+    Locale("az", "AZ"),
   ];
+  static const Map<String, String> languageFlags = {
+    "vi": "🇻🇳",
+    "en": "🇬🇧",
+    "zh": "🇨🇳",
+    "ko": "🇰🇷",
+    "ja": "🇯🇵",
+    "de": "🇩🇪",
+    "ru": "🇷🇺",
+    "fr": "🇫🇷",
+    "es": "🇪🇸",
+    "id": "🇮🇩",
+    "th": "🇹🇭",
+    "ms": "🇲🇾",
+    "fil": "🇵🇭",
+    "km": "🇰🇭",
+    "my": "🇲🇲",
+    "lo": "🇱🇦",
+    "ta": "🇸🇬",
+    "pt": "🇹🇱",
+    "tet": "🇹🇱",
+    "it": "🇮🇹",
+    "pl": "🇵🇱",
+    "nl": "🇳🇱",
+    "cs": "🇨🇿",
+    "sk": "🇸🇰",
+    "uk": "🇺🇦",
+    "ro": "🇷🇴",
+    "hu": "🇭🇺",
+    "bg": "🇧🇬",
+    "hr": "🇭🇷",
+    "sr": "🇷🇸",
+    "bs": "🇧🇦",
+    "sl": "🇸🇮",
+    "mk": "🇲🇰",
+    "sq": "🇦🇱",
+    "el": "🇬🇷",
+    "tr": "🇹🇷",
+    "sv": "🇸🇪",
+    "da": "🇩🇰",
+    "nb": "🇳🇴",
+    "fi": "🇫🇮",
+    "is": "🇮🇸",
+    "et": "🇪🇪",
+    "lv": "🇱🇻",
+    "lt": "🇱🇹",
+    "ga": "🇮🇪",
+    "mt": "🇲🇹",
+    "be": "🇧🇾",
+    "lb": "🇱🇺",
+    "ca": "🇦🇩",
+    "cnr": "🇲🇪",
+    "hy": "🇦🇲",
+    "ka": "🇬🇪",
+    "az": "🇦🇿",
+  };
+
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
     "en": "English",
@@ -123,6 +211,22 @@ class AppLanguageController extends ChangeNotifier {
     "el": "Ελληνικά",
     "tr": "Türkçe",
     "sv": "Svenska",
+    "da": "Dansk",
+    "nb": "Norsk bokmål",
+    "fi": "Suomi",
+    "is": "Íslenska",
+    "et": "Eesti",
+    "lv": "Latviešu",
+    "lt": "Lietuvių",
+    "ga": "Gaeilge",
+    "mt": "Malti",
+    "be": "Беларуская",
+    "lb": "Lëtzebuergesch",
+    "ca": "Català",
+    "cnr": "Crnogorski",
+    "hy": "Հայերեն",
+    "ka": "ქართული",
+    "az": "Azərbaycan dili",
   };
 
   Locale _locale = const Locale("vi");
@@ -166,6 +270,22 @@ class AppLanguageController extends ChangeNotifier {
   bool get isGreek => languageCode == "el";
   bool get isTurkish => languageCode == "tr";
   bool get isSwedish => languageCode == "sv";
+  bool get isDanish => languageCode == "da";
+  bool get isNorwegianBokmal => languageCode == "nb";
+  bool get isFinnish => languageCode == "fi";
+  bool get isIcelandic => languageCode == "is";
+  bool get isEstonian => languageCode == "et";
+  bool get isLatvian => languageCode == "lv";
+  bool get isLithuanian => languageCode == "lt";
+  bool get isIrish => languageCode == "ga";
+  bool get isMaltese => languageCode == "mt";
+  bool get isBelarusian => languageCode == "be";
+  bool get isLuxembourgish => languageCode == "lb";
+  bool get isCatalan => languageCode == "ca";
+  bool get isMontenegrin => languageCode == "cnr";
+  bool get isArmenian => languageCode == "hy";
+  bool get isGeorgian => languageCode == "ka";
+  bool get isAzerbaijani => languageCode == "az";
 
   String _normalizeLanguageCode(String code) {
     final cleanCode = code.trim().toLowerCase();
@@ -270,6 +390,70 @@ class AppLanguageController extends ChangeNotifier {
 
     if (normalizedCode == "sv") {
       return const Locale("sv", "SE");
+    }
+
+    if (normalizedCode == "da") {
+      return const Locale("da", "DK");
+    }
+
+    if (normalizedCode == "nb") {
+      return const Locale("nb", "NO");
+    }
+
+    if (normalizedCode == "fi") {
+      return const Locale("fi", "FI");
+    }
+
+    if (normalizedCode == "is") {
+      return const Locale("is", "IS");
+    }
+
+    if (normalizedCode == "et") {
+      return const Locale("et", "EE");
+    }
+
+    if (normalizedCode == "lv") {
+      return const Locale("lv", "LV");
+    }
+
+    if (normalizedCode == "lt") {
+      return const Locale("lt", "LT");
+    }
+
+    if (normalizedCode == "ga") {
+      return const Locale("ga", "IE");
+    }
+
+    if (normalizedCode == "mt") {
+      return const Locale("mt", "MT");
+    }
+
+    if (normalizedCode == "be") {
+      return const Locale("be", "BY");
+    }
+
+    if (normalizedCode == "lb") {
+      return const Locale("lb", "LU");
+    }
+
+    if (normalizedCode == "ca") {
+      return const Locale("ca", "AD");
+    }
+
+    if (normalizedCode == "cnr") {
+      return const Locale("cnr", "ME");
+    }
+
+    if (normalizedCode == "hy") {
+      return const Locale("hy", "AM");
+    }
+
+    if (normalizedCode == "ka") {
+      return const Locale("ka", "GE");
+    }
+
+    if (normalizedCode == "az") {
+      return const Locale("az", "AZ");
     }
 
     if (code == "zh") {

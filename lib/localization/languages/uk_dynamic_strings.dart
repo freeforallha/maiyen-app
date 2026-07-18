@@ -26,7 +26,7 @@ const Map<String, String> ukDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Нагадування SafeHome високого пріоритету",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Нагадування SafeHome високого пріоритету без відкриття на весь екран",
   "Tin nhắn mới trong các nhà SafeHome": "Нові повідомлення в домах SafeHome",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Ця дія сьогодні змінить час тривоги для деяких пристроїв.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Ця дія змінить сьогодні час тривоги для деяких пристроїв.\n\nТривоги пристроїв у категорії «Надзвичайна небезпека» та тривоги в режимі «Захист» не зазнають впливу цієї функції.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count небезпечних домів\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "Токен FCM готовий, але для автоматичної функції при виході з дому ще не виконано всі умови.",
   "Đã kích hoạt SOS": "SOS активовано",

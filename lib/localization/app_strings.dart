@@ -10,8 +10,11 @@ import 'languages/ru_strings.dart';
 import 'languages/fr_strings.dart';
 import 'languages/es_strings.dart';
 import 'languages/id_strings.dart';
+import 'languages/id_dynamic_strings.dart';
 import 'languages/th_strings.dart';
+import 'languages/th_dynamic_strings.dart';
 import 'languages/ms_strings.dart';
+import 'languages/ms_dynamic_strings.dart';
 import 'languages/fil_strings.dart';
 import 'languages/km_strings.dart';
 import 'languages/my_strings.dart';
@@ -37,6 +40,22 @@ import 'languages/sq_strings.dart';
 import 'languages/el_strings.dart';
 import 'languages/tr_strings.dart';
 import 'languages/sv_strings.dart';
+import 'languages/da_strings.dart';
+import 'languages/nb_strings.dart';
+import 'languages/fi_strings.dart';
+import 'languages/is_strings.dart';
+import 'languages/et_strings.dart';
+import 'languages/lv_strings.dart';
+import 'languages/lt_strings.dart';
+import 'languages/ga_strings.dart';
+import 'languages/mt_strings.dart';
+import 'languages/be_strings.dart';
+import 'languages/lb_strings.dart';
+import 'languages/ca_strings.dart';
+import 'languages/cnr_strings.dart';
+import 'languages/hy_strings.dart';
+import 'languages/ka_strings.dart';
+import 'languages/az_strings.dart';
 import 'languages/ta_dynamic_strings.dart';
 import 'languages/pt_dynamic_strings.dart';
 import 'languages/tet_dynamic_strings.dart';
@@ -58,6 +77,22 @@ import 'languages/sq_dynamic_strings.dart';
 import 'languages/el_dynamic_strings.dart';
 import 'languages/tr_dynamic_strings.dart';
 import 'languages/sv_dynamic_strings.dart';
+import 'languages/da_dynamic_strings.dart';
+import 'languages/nb_dynamic_strings.dart';
+import 'languages/fi_dynamic_strings.dart';
+import 'languages/is_dynamic_strings.dart';
+import 'languages/et_dynamic_strings.dart';
+import 'languages/lv_dynamic_strings.dart';
+import 'languages/lt_dynamic_strings.dart';
+import 'languages/ga_dynamic_strings.dart';
+import 'languages/mt_dynamic_strings.dart';
+import 'languages/be_dynamic_strings.dart';
+import 'languages/lb_dynamic_strings.dart';
+import 'languages/ca_dynamic_strings.dart';
+import 'languages/cnr_dynamic_strings.dart';
+import 'languages/hy_dynamic_strings.dart';
+import 'languages/ka_dynamic_strings.dart';
+import 'languages/az_dynamic_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -96,6 +131,22 @@ class AppStrings {
   final bool isGreek;
   final bool isTurkish;
   final bool isSwedish;
+  final bool isDanish;
+  final bool isNorwegianBokmal;
+  final bool isFinnish;
+  final bool isIcelandic;
+  final bool isEstonian;
+  final bool isLatvian;
+  final bool isLithuanian;
+  final bool isIrish;
+  final bool isMaltese;
+  final bool isBelarusian;
+  final bool isLuxembourgish;
+  final bool isCatalan;
+  final bool isMontenegrin;
+  final bool isArmenian;
+  final bool isGeorgian;
+  final bool isAzerbaijani;
 
   const AppStrings._({
     required this.isEnglish,
@@ -134,6 +185,22 @@ class AppStrings {
     required this.isGreek,
     required this.isTurkish,
     required this.isSwedish,
+    required this.isDanish,
+    required this.isNorwegianBokmal,
+    required this.isFinnish,
+    required this.isIcelandic,
+    required this.isEstonian,
+    required this.isLatvian,
+    required this.isLithuanian,
+    required this.isIrish,
+    required this.isMaltese,
+    required this.isBelarusian,
+    required this.isLuxembourgish,
+    required this.isCatalan,
+    required this.isMontenegrin,
+    required this.isArmenian,
+    required this.isGeorgian,
+    required this.isAzerbaijani,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -174,6 +241,22 @@ class AppStrings {
       isGreek: locale.languageCode == "el",
       isTurkish: locale.languageCode == "tr",
       isSwedish: locale.languageCode == "sv",
+      isDanish: locale.languageCode == "da",
+      isNorwegianBokmal: locale.languageCode == "nb",
+      isFinnish: locale.languageCode == "fi",
+      isIcelandic: locale.languageCode == "is",
+      isEstonian: locale.languageCode == "et",
+      isLatvian: locale.languageCode == "lv",
+      isLithuanian: locale.languageCode == "lt",
+      isIrish: locale.languageCode == "ga",
+      isMaltese: locale.languageCode == "mt",
+      isBelarusian: locale.languageCode == "be",
+      isLuxembourgish: locale.languageCode == "lb",
+      isCatalan: locale.languageCode == "ca",
+      isMontenegrin: locale.languageCode == "cnr",
+      isArmenian: locale.languageCode == "hy",
+      isGeorgian: locale.languageCode == "ka",
+      isAzerbaijani: locale.languageCode == "az",
     );
   }
 
@@ -219,6 +302,22 @@ class AppStrings {
     String? el,
     String? tr,
     String? sv,
+    String? da,
+    String? nb,
+    String? fi,
+    String? isLang,
+    String? et,
+    String? lv,
+    String? lt,
+    String? ga,
+    String? mt,
+    String? be,
+    String? lb,
+    String? ca,
+    String? cnr,
+    String? hy,
+    String? ka,
+    String? az,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -328,6 +427,70 @@ class AppStrings {
 
     if (isSwedish) {
       return _translationFromMap(_swedish, key) ?? sv ?? en;
+    }
+
+    if (isDanish) {
+      return _translationFromMap(_danish, key) ?? da ?? en;
+    }
+
+    if (isNorwegianBokmal) {
+      return _translationFromMap(_norwegianBokmal, key) ?? nb ?? en;
+    }
+
+    if (isFinnish) {
+      return _translationFromMap(_finnish, key) ?? fi ?? en;
+    }
+
+    if (isIcelandic) {
+      return _translationFromMap(_icelandic, key) ?? isLang ?? en;
+    }
+
+    if (isEstonian) {
+      return _translationFromMap(_estonian, key) ?? et ?? en;
+    }
+
+    if (isLatvian) {
+      return _translationFromMap(_latvian, key) ?? lv ?? en;
+    }
+
+    if (isLithuanian) {
+      return _translationFromMap(_lithuanian, key) ?? lt ?? en;
+    }
+
+    if (isIrish) {
+      return _translationFromMap(_irish, key) ?? ga ?? en;
+    }
+
+    if (isMaltese) {
+      return _translationFromMap(_maltese, key) ?? mt ?? en;
+    }
+
+    if (isBelarusian) {
+      return _translationFromMap(_belarusian, key) ?? be ?? en;
+    }
+
+    if (isLuxembourgish) {
+      return _translationFromMap(_luxembourgish, key) ?? lb ?? en;
+    }
+
+    if (isCatalan) {
+      return _translationFromMap(_catalan, key) ?? ca ?? en;
+    }
+
+    if (isMontenegrin) {
+      return _translationFromMap(_montenegrin, key) ?? cnr ?? en;
+    }
+
+    if (isArmenian) {
+      return _translationFromMap(_armenian, key) ?? hy ?? en;
+    }
+
+    if (isGeorgian) {
+      return _translationFromMap(_georgian, key) ?? ka ?? en;
+    }
+
+    if (isAzerbaijani) {
+      return _translationFromMap(_azerbaijani, key) ?? az ?? en;
     }
 
     if (isIndonesian) {
@@ -2830,7 +2993,7 @@ class AppStrings {
       vi: "$passCount/$total bài test đạt\n\n",
       en: "$passCount/$total tests passed\n\n",
     ),
-    id: "$passCount/$total tes lulus\\n\\n",
+    id: "$passCount/$total tes lulus\n\n",
     th: "ผ่านการทดสอบ $passCount/$total รายการ\n\n",
     ms: "$passCount/$total ujian lulus\n\n",
     my: "စမ်းသပ်မှု $passCount/$total ခု အောင်မြင်သည်\n\n",
@@ -4341,12 +4504,28 @@ class AppStrings {
   }
 
   static const Map<String, String> _translationAliases = {
+    "Bạn không có quyền thực hiện thao tác này。":
+        "Bạn không có quyền thực hiện thao tác này.",
     "pin yếu": "Pin yếu",
     "sóng yếu": "Sóng yếu",
     "CẦN CHÚ Ý": "Cần chú ý",
     "Cần kiểm tra": "CẦN KIỂM TRA",
     "Hủy": "HỦY",
     "Xác nhận": "XÁC NHẬN",
+    "không lặp lại": "Không lặp lại",
+    "Còi báo động đang bật": "Còi đang bật",
+    "Còi báo động đã tắt": "Còi báo động đã được tắt",
+    "Khói đã trở lại bình thường": "Bình thường",
+    "Nút SOS đã được bấm": "Đã kích hoạt",
+    "Cập nhật cảnh báo nhiệt": "Đã cập nhật",
+    "Cập nhật cảm biến gas": "Đã cập nhật",
+    "Cập nhật cảm biến ngập nước": "Đã cập nhật",
+    "Cập nhật nhiệt độ / độ ẩm": "Đã cập nhật",
+    "Ổ điện thông minh đã cập nhật": "Đã cập nhật",
+    "Bộ mở rộng sóng đã cập nhật trạng thái": "Đã cập nhật",
+    "Thiết bị đã cập nhật trạng thái": "Đã cập nhật",
+    "Báo động đã được tạm dừng": "Tạm tắt báo động hôm nay",
+    "Thiết bị chưa nhận diện": "Chưa nhận diện",
   };
 
   static const Map<String, String> _vietnameseDisplayOverrides = viStrings;
@@ -4367,11 +4546,11 @@ class AppStrings {
 
   static const Map<String, String> _spanish = esStrings;
 
-  static const Map<String, String> _indonesian = idStrings;
+  static const Map<String, String> _indonesian = {...idStrings, ...idDynamicStrings};
 
-  static const Map<String, String> _thai = thStrings;
+  static const Map<String, String> _thai = {...thStrings, ...thDynamicStrings};
 
-  static const Map<String, String> _malay = msStrings;
+  static const Map<String, String> _malay = {...msStrings, ...msDynamicStrings};
 
   static const Map<String, String> _filipino = filStrings;
 
@@ -4393,7 +4572,7 @@ class AppStrings {
     ...tetDynamicStrings,
   };
 
-  static final Map<String, String> _italian = {
+  static const Map<String, String> _italian = {
     ...itStrings,
     ...itDynamicStrings,
   };
@@ -4483,154 +4662,110 @@ class AppStrings {
     ...svDynamicStrings,
   };
 
+  static const Map<String, String> _danish = {
+    ...daStrings,
+    ...daDynamicStrings,
+  };
+
+  static const Map<String, String> _norwegianBokmal = {
+    ...nbStrings,
+    ...nbDynamicStrings,
+  };
+
+  static const Map<String, String> _finnish = {
+    ...fiStrings,
+    ...fiDynamicStrings,
+  };
+
+  static const Map<String, String> _icelandic = {
+    ...isStrings,
+    ...isDynamicStrings,
+  };
+
+  static const Map<String, String> _estonian = {
+    ...etStrings,
+    ...etDynamicStrings,
+  };
+
+  static const Map<String, String> _latvian = {
+    ...lvStrings,
+    ...lvDynamicStrings,
+  };
+
+  static const Map<String, String> _lithuanian = {
+    ...ltStrings,
+    ...ltDynamicStrings,
+  };
+
+  static const Map<String, String> _irish = {
+    ...gaStrings,
+    ...gaDynamicStrings,
+  };
+
+  static const Map<String, String> _maltese = {
+    ...mtStrings,
+    ...mtDynamicStrings,
+  };
+
+  static const Map<String, String> _belarusian = {
+    ...beStrings,
+    ...beDynamicStrings,
+  };
+
+  static const Map<String, String> _luxembourgish = {
+    ...lbStrings,
+    ...lbDynamicStrings,
+  };
+
+  static const Map<String, String> _catalan = {
+    ...caStrings,
+    ...caDynamicStrings,
+  };
+
+  static const Map<String, String> _montenegrin = {
+    ...cnrStrings,
+    ...cnrDynamicStrings,
+  };
+
+  static const Map<String, String> _armenian = {
+    ...hyStrings,
+    ...hyDynamicStrings,
+  };
+
+  static const Map<String, String> _georgian = {
+    ...kaStrings,
+    ...kaDynamicStrings,
+  };
+
+  static const Map<String, String> _azerbaijani = {
+    ...azStrings,
+    ...azDynamicStrings,
+  };
+
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
+    final translations = _activeTranslations;
 
-    if (isThai) {
-      return _translationFromMap(_thai, key) ?? vi;
+    if (translations != null) {
+      final translated = _translationFromMap(translations, key);
+
+      if (translated != null) {
+        return translated;
+      }
+
+      // Never fall straight back to Vietnamese for a non-Vietnamese locale.
+      // English is the safe secondary language when a newly added key has not
+      // yet been translated for the selected locale.
+      if (!isEnglish) {
+        final english = _translationFromMap(_english, key);
+
+        if (english != null) {
+          return english;
+        }
+      }
     }
 
-    if (isMalay) {
-      return _translationFromMap(_malay, key) ?? vi;
-    }
-
-    if (isFilipino) {
-      return _translationFromMap(_filipino, key) ?? vi;
-    }
-
-    if (isKhmer) {
-      return _translationFromMap(_khmer, key) ?? vi;
-    }
-
-    if (isBurmese) {
-      return _translationFromMap(_burmese, key) ?? vi;
-    }
-
-    if (isLao) {
-      return _translationFromMap(_lao, key) ?? vi;
-    }
-
-    if (isTamil) {
-      return _translationFromMap(_tamil, key) ?? vi;
-    }
-
-    if (isPortuguese) {
-      return _translationFromMap(_portuguese, key) ?? vi;
-    }
-
-    if (isTetum) {
-      return _translationFromMap(_tetum, key) ?? vi;
-    }
-
-    if (isItalian) {
-      return _translationFromMap(_italian, key) ?? vi;
-    }
-
-    if (isPolish) {
-      return _translationFromMap(_polish, key) ?? vi;
-    }
-
-    if (isDutch) {
-      return _translationFromMap(_dutch, key) ?? vi;
-    }
-
-    if (isCzech) {
-      return _translationFromMap(_czech, key) ?? vi;
-    }
-
-    if (isSlovak) {
-      return _translationFromMap(_slovak, key) ?? vi;
-    }
-
-    if (isUkrainian) {
-      return _translationFromMap(_ukrainian, key) ?? vi;
-    }
-
-    if (isRomanian) {
-      return _translationFromMap(_romanian, key) ?? vi;
-    }
-
-    if (isHungarian) {
-      return _translationFromMap(_hungarian, key) ?? vi;
-    }
-
-    if (isBulgarian) {
-      return _translationFromMap(_bulgarian, key) ?? vi;
-    }
-
-    if (isCroatian) {
-      return _translationFromMap(_croatian, key) ?? vi;
-    }
-
-    if (isSerbian) {
-      return _translationFromMap(_serbian, key) ?? vi;
-    }
-
-    if (isBosnian) {
-      return _translationFromMap(_bosnian, key) ?? vi;
-    }
-
-    if (isSlovenian) {
-      return _translationFromMap(_slovenian, key) ?? vi;
-    }
-
-    if (isMacedonian) {
-      return _translationFromMap(_macedonian, key) ?? vi;
-    }
-
-    if (isAlbanian) {
-      return _translationFromMap(_albanian, key) ?? vi;
-    }
-
-    if (isGreek) {
-      return _translationFromMap(_greek, key) ?? vi;
-    }
-
-    if (isTurkish) {
-      return _translationFromMap(_turkish, key) ?? vi;
-    }
-
-    if (isSwedish) {
-      return _translationFromMap(_swedish, key) ?? vi;
-    }
-
-    if (isIndonesian) {
-      return _translationFromMap(_indonesian, key) ?? vi;
-    }
-
-    if (isSpanish) {
-      return _spanish[key] ?? vi;
-    }
-
-    if (isFrench) {
-      return _french[key] ?? vi;
-    }
-
-    if (isRussian) {
-      return _russian[key] ?? vi;
-    }
-
-    if (isGerman) {
-      return _german[key] ?? vi;
-    }
-
-    if (isJapanese) {
-      return _japanese[key] ?? vi;
-    }
-
-    if (isKorean) {
-      return _korean[key] ?? vi;
-    }
-
-    if (isChinese) {
-      return _chinese[key] ?? vi;
-    }
-
-    if (!isEnglish) {
-      return _vietnameseDisplayOverrides[vi] ?? vi;
-    }
-
-    return _english[key] ?? vi;
+    return _translationFromMap(_vietnameseDisplayOverrides, key) ?? vi;
   }
 
   String get alarm => t("Báo động");
@@ -4966,7 +5101,7 @@ class AppStrings {
 
       es: "Se compartieron las casas que administras.\n\nSe omitieron $skipped casas porque no tienes permiso para compartirlas.",
       fr: "Les maisons que vous gérez ont été partagées.\n\n$skipped maisons ont été ignorées car vous n'avez pas l'autorisation de les partager.",
-      id: "Rumah yang dapat Anda kelola telah dibagikan.\\n\\n$skipped rumah dilewati karena Anda tidak memiliki izin berbagi.",
+      id: "Rumah yang dapat Anda kelola telah dibagikan.\n\n$skipped rumah dilewati karena Anda tidak memiliki izin berbagi.",
       th: "แชร์บ้านที่คุณมีสิทธิ์แล้ว\n\nข้ามบ้าน $skipped หลังเนื่องจากคุณไม่มีสิทธิ์แชร์",
       ms: "Rumah yang anda urus telah dikongsi.\n\n$skipped rumah dilangkau kerana anda tiada kebenaran untuk berkongsi.",
       my: "သင်စီမံခန့်ခွဲသောအိမ်များကို မျှဝေပြီးပါပြီ။\n\nမျှဝေခွင့်မရှိသောကြောင့် အိမ် $skipped လုံးကို ကျော်ခဲ့သည်။",
@@ -5179,7 +5314,7 @@ class AppStrings {
       vi: "$targetEmail\nXin gia nhập \"$homeName\"",
       en: "$targetEmail\nRequests to join \"$homeName\"",
     ),
-    id: "$targetEmail\\nMeminta bergabung ke \"$homeName\"",
+    id: "$targetEmail\nMeminta bergabung ke \"$homeName\"",
     th: "$targetEmail\nขอเข้าร่วม \"$homeName\"",
     ms: "$targetEmail\nMemohon untuk menyertai \"$homeName\"",
     my: "$targetEmail\n\"$homeName\" သို့ ဝင်ခွင့်တောင်းထားသည်",
@@ -5249,7 +5384,7 @@ class AppStrings {
       vi: "$ownerEmail\nMời bạn gia nhập \"$homeName\"",
       en: "$ownerEmail\nInvites you to join \"$homeName\"",
     ),
-    id: "$ownerEmail\\nMengundang Anda bergabung ke \"$homeName\"",
+    id: "$ownerEmail\nMengundang Anda bergabung ke \"$homeName\"",
     th: "$ownerEmail\nคุณได้รับเชิญให้เข้าร่วม \"$homeName\"",
     ms: "$ownerEmail\nMenjemput anda untuk menyertai \"$homeName\"",
     my: "$ownerEmail\n\"$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်",
@@ -5776,7 +5911,7 @@ class AppStrings {
       vi: "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n$targetEmail?",
       en: "Transfer home ownership to:\n$targetEmail?",
     ),
-    id: "Alihkan kepemilikan rumah ke:\\n$targetEmail?",
+    id: "Alihkan kepemilikan rumah ke:\n$targetEmail?",
     th: "คุณแน่ใจหรือไม่ว่าต้องการโอนสิทธิ์เจ้าของบ้านให้บุคคลต่อไปนี้:\n$targetEmail?",
     ms: "Adakah anda pasti mahu memindahkan hak pemilik rumah kepada:\n$targetEmail?",
     my: "အိမ်ပိုင်ဆိုင်မှုကို အောက်ပါသူထံ လွှဲပြောင်းမလား?\n$targetEmail",
@@ -5835,6 +5970,38 @@ class AppStrings {
       ? _turkish
       : isSwedish
       ? _swedish
+      : isDanish
+      ? _danish
+      : isNorwegianBokmal
+      ? _norwegianBokmal
+      : isFinnish
+      ? _finnish
+      : isIcelandic
+      ? _icelandic
+      : isEstonian
+      ? _estonian
+      : isLatvian
+      ? _latvian
+      : isLithuanian
+      ? _lithuanian
+      : isIrish
+      ? _irish
+      : isMaltese
+      ? _maltese
+      : isBelarusian
+      ? _belarusian
+      : isLuxembourgish
+      ? _luxembourgish
+      : isCatalan
+      ? _catalan
+      : isMontenegrin
+      ? _montenegrin
+      : isArmenian
+      ? _armenian
+      : isGeorgian
+      ? _georgian
+      : isAzerbaijani
+      ? _azerbaijani
       : isThai
       ? _thai
       : isIndonesian
@@ -6156,6 +6323,22 @@ class AppStrings {
         !isGreek &&
         !isTurkish &&
         !isSwedish &&
+        !isDanish &&
+        !isNorwegianBokmal &&
+        !isFinnish &&
+        !isIcelandic &&
+        !isEstonian &&
+        !isLatvian &&
+        !isLithuanian &&
+        !isIrish &&
+        !isMaltese &&
+        !isBelarusian &&
+        !isLuxembourgish &&
+        !isCatalan &&
+        !isMontenegrin &&
+        !isArmenian &&
+        !isGeorgian &&
+        !isAzerbaijani &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -6827,6 +7010,104 @@ class AppStrings {
 
     if (isSwedish) {
       return _translationFromMap(_swedish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isDanish) {
+      return _translationFromMap(_danish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isNorwegianBokmal) {
+      return _translationFromMap(
+            _norwegianBokmal,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isFinnish) {
+      return _translationFromMap(_finnish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isIcelandic) {
+      return _translationFromMap(
+            _icelandic,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isEstonian) {
+      return _translationFromMap(_estonian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isLatvian) {
+      return _translationFromMap(_latvian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isLithuanian) {
+      return _translationFromMap(
+            _lithuanian,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isIrish) {
+      return _translationFromMap(_irish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isMaltese) {
+      return _translationFromMap(_maltese, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isBelarusian) {
+      return _translationFromMap(_belarusian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isLuxembourgish) {
+      return _translationFromMap(
+            _luxembourgish,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isCatalan) {
+      return _translationFromMap(_catalan, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isMontenegrin) {
+      return _translationFromMap(
+            _montenegrin,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isArmenian) {
+      return _translationFromMap(_armenian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isGeorgian) {
+      return _translationFromMap(_georgian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isAzerbaijani) {
+      return _translationFromMap(
+            _azerbaijani,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7634,6 +7915,70 @@ class AppStrings {
 
     if (isSwedish) {
       return "Svenska";
+    }
+
+    if (isDanish) {
+      return "Dansk";
+    }
+
+    if (isNorwegianBokmal) {
+      return "Norsk bokmål";
+    }
+
+    if (isFinnish) {
+      return "Suomi";
+    }
+
+    if (isIcelandic) {
+      return "Íslenska";
+    }
+
+    if (isEstonian) {
+      return "Eesti";
+    }
+
+    if (isLatvian) {
+      return "Latviešu";
+    }
+
+    if (isLithuanian) {
+      return "Lietuvių";
+    }
+
+    if (isIrish) {
+      return "Gaeilge";
+    }
+
+    if (isMaltese) {
+      return "Malti";
+    }
+
+    if (isBelarusian) {
+      return "Беларуская";
+    }
+
+    if (isLuxembourgish) {
+      return "Lëtzebuergesch";
+    }
+
+    if (isCatalan) {
+      return "Català";
+    }
+
+    if (isMontenegrin) {
+      return "Crnogorski";
+    }
+
+    if (isArmenian) {
+      return "Հայերեն";
+    }
+
+    if (isGeorgian) {
+      return "ქართული";
+    }
+
+    if (isAzerbaijani) {
+      return "Azərbaycan dili";
     }
 
     if (isThai) {

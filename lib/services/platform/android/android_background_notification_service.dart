@@ -50,6 +50,22 @@ const Set<String> _supportedLanguageCodes = {
   'el',
   'tr',
   'sv',
+  'da',
+  'nb',
+  'fi',
+  'is',
+  'et',
+  'lv',
+  'lt',
+  'ga',
+  'mt',
+  'be',
+  'lb',
+  'ca',
+  'cnr',
+  'hy',
+  'ka',
+  'az',
 };
 
 String? _supportedLanguageCode(String? code) {
@@ -137,6 +153,38 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('tr', 'TR');
     case 'sv':
       return const Locale('sv', 'SE');
+    case 'da':
+      return const Locale('da', 'DK');
+    case 'nb':
+      return const Locale('nb', 'NO');
+    case 'fi':
+      return const Locale('fi', 'FI');
+    case 'is':
+      return const Locale('is', 'IS');
+    case 'et':
+      return const Locale('et', 'EE');
+    case 'lv':
+      return const Locale('lv', 'LV');
+    case 'lt':
+      return const Locale('lt', 'LT');
+    case 'ga':
+      return const Locale('ga', 'IE');
+    case 'mt':
+      return const Locale('mt', 'MT');
+    case 'be':
+      return const Locale('be', 'BY');
+    case 'lb':
+      return const Locale('lb', 'LU');
+    case 'ca':
+      return const Locale('ca', 'AD');
+    case 'cnr':
+      return const Locale('cnr', 'ME');
+    case 'hy':
+      return const Locale('hy', 'AM');
+    case 'ka':
+      return const Locale('ka', 'GE');
+    case 'az':
+      return const Locale('az', 'AZ');
     case 'en':
       return const Locale('en');
     case 'vi':

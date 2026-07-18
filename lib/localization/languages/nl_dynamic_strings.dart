@@ -26,7 +26,7 @@ const Map<String, String> nlDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "SafeHome-herinnering met hoge prioriteit",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "SafeHome-herinnering met hoge prioriteit, zonder volledig scherm",
   "Tin nhắn mới trong các nhà SafeHome": "Nieuwe berichten in SafeHome-huizen",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Deze actie wijzigt vandaag de alarmtijd van sommige apparaten.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Deze actie wijzigt vandaag de alarmtijd van sommige apparaten.\n\nAlarmen van apparaten in de categorie “Noodgevaar” en alarmen in de modus “Beveiliging” worden niet door deze functie beïnvloed.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count huizen in gevaar\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "De FCM-token is gereed, maar voor de automatische functie bij vertrek ontbreken nog voorwaarden.",
   "Đã kích hoạt SOS": "SOS geactiveerd",

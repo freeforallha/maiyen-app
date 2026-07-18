@@ -26,7 +26,7 @@ const Map<String, String> svDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Prioritet för SafeHome-påminnelse",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Högprioriterad SafeHome-påminnelse utan helskärm",
   "Tin nhắn mới trong các nhà SafeHome": "Nya meddelanden i SafeHome-hem",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Den här åtgärden ändrar dagens larmtid för vissa enheter.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Den här åtgärden ändrar alarmtiden för vissa enheter i dag.\n\nLarm från enheter i kategorin ”Akut fara” och larm i läget ”Skydd” påverkas inte av den här funktionen.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count hem i fara\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "FCM-token är klart, men Automatiskt bortaläge saknar ett krav.",
   "Đã kích hoạt SOS": "SOS har aktiverats",

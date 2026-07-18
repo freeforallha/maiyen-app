@@ -78,6 +78,7 @@ const Map<String, String> plStrings = {
   "Khóa đang mở": "Odblokowany",
   "Khóa đang đóng": "Zablokowany",
   "Đang bật": "Włączone",
+  "Bật": "Włączone",
   "Đang tắt": "Wyłączone",
   "Đang theo dõi điện năng": "Monitorowanie zużycia energii",
   "Đang dùng nguồn dự phòng": "Zasilanie awaryjne w użyciu",

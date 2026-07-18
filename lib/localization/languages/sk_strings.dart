@@ -78,6 +78,7 @@ const Map<String, String> skStrings = {
   "Khóa đang mở": "Zámok je odomknutý",
   "Khóa đang đóng": "Zámok je zamknutý",
   "Đang bật": "Zapnuté",
+  "Bật": "Zapnuté",
   "Đang tắt": "Vypnuté",
   "Đang theo dõi điện năng": "Sledovanie spotreby energie",
   "Đang dùng nguồn dự phòng": "Používa sa záložné napájanie",

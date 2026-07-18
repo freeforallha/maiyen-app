@@ -26,7 +26,7 @@ const Map<String, String> sqDynamicStrings = {
   "SafeHome nhắc nhở ưu tiên cao": "Përparësi e Kujtesës SafeHome",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "Kujtesë SafeHome me përparësi të lartë pa ekran të plotë",
   "Tin nhắn mới trong các nhà SafeHome": "Mesazhe të reja në shtëpitë SafeHome",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n": "Ky veprim do të ndryshojë kohën e Alarmit të sotëm për disa pajisje.\n\n",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Ky veprim do të ndryshojë sot orën e alarmit për disa pajisje.\n\nAlarmet e pajisjeve në kategorinë “Rrezik emergjent” dhe alarmet në modalitetin “Mbrojtje” nuk do të ndikohen nga kjo veçori.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count shtëpi në rrezik\$suffix",
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "Tokeni FCM është gati, por Largimit automatik i mungon një kërkesë.",
   "Đã kích hoạt SOS": "SOS u aktivizua",

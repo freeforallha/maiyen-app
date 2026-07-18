@@ -78,6 +78,7 @@ const Map<String, String> itStrings = {
   "Khóa đang mở": "Sbloccata",
   "Khóa đang đóng": "Bloccata",
   "Đang bật": "Attivo",
+  "Bật": "Attivo",
   "Đang tắt": "Disattivato",
   "Đang theo dõi điện năng": "Monitoraggio dell’energia in corso",
   "Đang dùng nguồn dự phòng": "Alimentazione di emergenza in uso",

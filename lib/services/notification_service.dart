@@ -51,7 +51,7 @@ class NotificationService {
       }
     }
 
-    return clean;
+    return strings.statusText(clean);
   }
 
   static String? _activeHomeChatId;
