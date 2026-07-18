@@ -398,27 +398,26 @@ class _AllHomePageState extends State<AllHomePage> {
     }
 
     _emergencyPulseDanger = false;
-    _emergencyPulseTimer = Timer.periodic(
-      const Duration(milliseconds: 650),
-      (_) {
-        if (!mounted) {
-          return;
-        }
+    _emergencyPulseTimer = Timer.periodic(const Duration(milliseconds: 650), (
+      _,
+    ) {
+      if (!mounted) {
+        return;
+      }
 
-        if (!_hasEmergencyHome()) {
-          _emergencyPulseTimer?.cancel();
-          _emergencyPulseTimer = null;
-          setState(() {
-            _emergencyPulseDanger = false;
-          });
-          return;
-        }
-
+      if (!_hasEmergencyHome()) {
+        _emergencyPulseTimer?.cancel();
+        _emergencyPulseTimer = null;
         setState(() {
-          _emergencyPulseDanger = !_emergencyPulseDanger;
+          _emergencyPulseDanger = false;
         });
-      },
-    );
+        return;
+      }
+
+      setState(() {
+        _emergencyPulseDanger = !_emergencyPulseDanger;
+      });
+    });
   }
 
   void notifyHomesChanged() {
@@ -1005,10 +1004,12 @@ class _AllHomePageState extends State<AllHomePage> {
           border: Border.all(
             color: selected
                 ? SafeHomeColors.primary
-                : statusColor.withValues(
-                    alpha: emergencyStatus ? 0.95 : 0.68,
-                  ),
-            width: selected ? 2.4 : emergencyStatus ? 1.5 : 1.25,
+                : statusColor.withValues(alpha: emergencyStatus ? 0.95 : 0.68),
+            width: selected
+                ? 2.4
+                : emergencyStatus
+                ? 1.5
+                : 1.25,
           ),
           boxShadow: [
             BoxShadow(
@@ -1241,6 +1242,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันจันทร์",
             ms: "Isnin",
             lo: "ວັນຈັນ",
+            ta: "திங்கட்கிழமை",
+            pt: "segunda-feira",
+            tet: "Segunda-feira",
           ),
         ),
         (
@@ -1262,6 +1266,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันอังคาร",
             ms: "Selasa",
             lo: "ວັນອັງຄານ",
+            ta: "செவ்வாய்க்கிழமை",
+            pt: "terça-feira",
+            tet: "Tersa-feira",
           ),
         ),
         (
@@ -1283,6 +1290,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันพุธ",
             ms: "Rabu",
             lo: "ວັນພຸດ",
+            ta: "புதன்கிழமை",
+            pt: "quarta-feira",
+            tet: "Kuarta-feira",
           ),
         ),
         (
@@ -1304,6 +1314,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันพฤหัสบดี",
             ms: "Khamis",
             lo: "ວັນພະຫັດ",
+            ta: "வியாழக்கிழமை",
+            pt: "quinta-feira",
+            tet: "Kinta-feira",
           ),
         ),
         (
@@ -1325,6 +1338,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันศุกร์",
             ms: "Jumaat",
             lo: "ວັນສຸກ",
+            ta: "வெள்ளிக்கிழமை",
+            pt: "sexta-feira",
+            tet: "Sesta-feira",
           ),
         ),
         (
@@ -1346,6 +1362,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันเสาร์",
             ms: "Sabtu",
             lo: "ວັນເສົາ",
+            ta: "சனிக்கிழமை",
+            pt: "sábado",
+            tet: "Sábadu",
           ),
         ),
         (
@@ -1367,6 +1386,9 @@ class _AllHomePageState extends State<AllHomePage> {
             th: "วันอาทิตย์",
             ms: "Ahad",
             lo: "ວັນອາທິດ",
+            ta: "ஞாயிற்றுக்கிழமை",
+            pt: "domingo",
+            tet: "Domingu",
           ),
         ),
       ];

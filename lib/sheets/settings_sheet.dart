@@ -46,6 +46,42 @@ String _languageSubtitle(String code) {
       return "Portuguese • Timor-Leste";
     case "tet":
       return "Tetum • Timor-Leste";
+    case "it":
+      return "Italian • Italy";
+    case "pl":
+      return "Polish • Poland";
+    case "nl":
+      return "Dutch • Netherlands";
+    case "cs":
+      return "Czech • Czechia";
+    case "sk":
+      return "Slovak • Slovakia";
+    case "uk":
+      return "Ukrainian • Ukraine";
+    case "ro":
+      return "Romanian • Romania";
+    case "hu":
+      return "Hungarian • Hungary";
+    case "bg":
+      return "Bulgarian • Bulgaria";
+    case "hr":
+      return "Croatian • Croatia";
+    case "sr":
+      return "Serbian • Serbia";
+    case "bs":
+      return "Bosnian • Bosnia and Herzegovina";
+    case "sl":
+      return "Slovenian • Slovenia";
+    case "mk":
+      return "Macedonian • North Macedonia";
+    case "sq":
+      return "Albanian • Albania";
+    case "el":
+      return "Greek • Greece";
+    case "tr":
+      return "Turkish • Türkiye";
+    case "sv":
+      return "Swedish • Sweden";
     default:
       return code;
   }
@@ -57,6 +93,24 @@ String _languageSearchAliases(String code) {
     "ta" => "tamil tiếng tamil தமிழ் singapore",
     "pt" => "portuguese tiếng bồ đào nha português timor leste",
     "tet" => "tetum tiếng tetum tetun timor leste",
+    "it" => "italian italiano tiếng ý italy italia",
+    "pl" => "polish polski tiếng ba lan poland polska",
+    "nl" => "dutch nederlands tiếng hà lan netherlands nederland",
+    "cs" => "czech čeština tiếng séc czechia česko",
+    "sk" => "slovak slovenčina tiếng slovakia slovensko",
+    "uk" => "ukrainian українська tiếng ukraina ukraine україна",
+    "ro" => "romanian română tiếng rumani romania românia",
+    "hu" => "hungarian magyar tiếng hungary magyarország",
+    "bg" => "bulgarian български tiếng bulgaria българия",
+    "hr" => "croatian hrvatski tiếng croatia hrvatska",
+    "sr" => "serbian srpski tiếng serbia srbija",
+    "bs" => "bosnian bosanski tiếng bosnia bosna hercegovina",
+    "sl" => "slovenian slovenščina tiếng slovenia slovenija",
+    "mk" => "macedonian македонски tiếng bắc macedonia severna makedonija",
+    "sq" => "albanian shqip tiếng albania shqipëri",
+    "el" => "greek ελληνικά tiếng hy lạp greece ελλάδα",
+    "tr" => "turkish türkçe tiếng thổ nhĩ kỳ türkiye",
+    "sv" => "swedish svenska tiếng thụy điển sweden sverige",
     _ => "",
   };
 }
@@ -95,6 +149,42 @@ String _languageBadge(String code) {
       return "🇲🇲";
     case "lo":
       return "LO";
+    case "it":
+      return "🇮🇹";
+    case "pl":
+      return "🇵🇱";
+    case "nl":
+      return "🇳🇱";
+    case "cs":
+      return "🇨🇿";
+    case "sk":
+      return "🇸🇰";
+    case "uk":
+      return "🇺🇦";
+    case "ro":
+      return "🇷🇴";
+    case "hu":
+      return "🇭🇺";
+    case "bg":
+      return "🇧🇬";
+    case "hr":
+      return "🇭🇷";
+    case "sr":
+      return "🇷🇸";
+    case "bs":
+      return "🇧🇦";
+    case "sl":
+      return "🇸🇮";
+    case "mk":
+      return "🇲🇰";
+    case "sq":
+      return "🇦🇱";
+    case "el":
+      return "🇬🇷";
+    case "tr":
+      return "🇹🇷";
+    case "sv":
+      return "🇸🇪";
     default:
       return code.toUpperCase();
   }

@@ -6,7 +6,7 @@ const Map<String, String> ptStrings = {
   "Bạn không có quyền sửa lịch chung của nhà":
       "Você não tem o direito de alterar o horário geral da casa",
   "Nhà của bạn": "Sua casa",
-  "Tải tin cũ hơn": "Baixe notícias mais antigas",
+  "Tải tin cũ hơn": "Carregar mensagens mais antigas",
   "Nhà chưa đặt tên": "A casa ainda não foi nomeada",
   "Nhà": "Casa",
   "Chưa có thông tin": "Ainda não há informações",
@@ -25,14 +25,14 @@ const Map<String, String> ptStrings = {
   "Cổng": "Portão",
   "Khóa thông minh": "Bloqueio inteligente",
   "Chuyển động": "Movimento",
-  "Hiện diện": "Presente",
+  "Hiện diện": "Presença",
   "Rung/chấn động": "Vibração/choque",
   "Kính vỡ": "Vidro quebrado",
   "Báo khói": "Alarme de fumaça",
   "Báo nhiệt": "Alarme de calor",
   "Khí CO": "Gás CO",
   "Báo gas": "Alarme de gás",
-  "Báo ngập/rò nước": "Relatar inundações/vazamentos de água",
+  "Báo ngập/rò nước": "Alerta de inundação/vazamento de água",
   "Nút SOS": "Botão SOS",
   "Nhiệt độ/Độ ẩm": "Temperatura/Umidade",
   "Bụi mịn PM2.5": "Pó fino PM2.5",
@@ -48,21 +48,21 @@ const Map<String, String> ptStrings = {
   "Hub trung tâm": "Centro central",
   "Đo điện năng": "Medir eletricidade",
   "Nguồn dự phòng UPS": "Fonte de alimentação redundante UPS",
-  "Thiết bị đang Offline": "O dispositivo está perdendo conexão",
-  "Thiết bị đang Online": "O dispositivo está se conectando",
+  "Thiết bị đang Offline": "O dispositivo está off-line",
+  "Thiết bị đang Online": "O dispositivo está on-line",
   "lâu không phản hồi": "Muito tempo sem resposta",
   "Kết nối cần kiểm tra": "A conexão precisa ser verificada",
-  "Vừa xong": "Acabei de terminar",
+  "Vừa xong": "Agora mesmo",
   "Bị tháo": "Removido",
   "Có khói": "Há fumaça",
-  "Bình thường": "Normais",
+  "Bình thường": "Normal",
   "Bảo vệ": "Proteção",
   "Chế độ Bảo vệ": "Modo protegido",
   "Tự động Bảo vệ khi rời nhà": "Proteção automática ao sair de casa",
   "Đã kích hoạt": "Ativado",
   "Sẵn sàng": "Pronto",
   "Đang đóng": "Fechado",
-  "Đang mở": "Abrir",
+  "Đang mở": "Aberto",
   "Rò rỉ gas": "Vazamento de gás",
   "Phát hiện ngập nước": "Detecção de inundação",
   "Phát hiện chuyển động": "Detecção de movimento",
@@ -79,12 +79,12 @@ const Map<String, String> ptStrings = {
   "Khóa đang mở": "A fechadura está aberta",
   "Khóa đang đóng": "O bloqueio está fechado",
   "Đang bật": "Ligado",
-  "Đang tắt": "Desligando",
+  "Đang tắt": "Desligado",
   "Đang theo dõi điện năng": "Monitoramento de eletricidade",
   "Đang dùng nguồn dự phòng": "Usando energia reserva",
   "Nguồn điện bình thường": "Fonte de alimentação normal",
-  "Còi đang bật": "A campainha está ligada",
-  "Còi sẵn sàng": "Buzina pronta",
+  "Còi đang bật": "A sirene está ligada",
+  "Còi sẵn sàng": "Sirene pronta",
   "Van đang mở": "A válvula está aberta",
   "Van đã đóng": "A válvula está fechada",
   "Đang hoạt động": "Ativo",
@@ -104,14 +104,14 @@ const Map<String, String> ptStrings = {
   "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
       "Não há muitas atividades novas para uma análise mais profunda.",
   "Hub kết nối bình thường": "O hub se conecta normalmente",
-  "Cài đặt cảnh báo cho nhà hiện tại": "Instale alarmes para sua casa atual",
+  "Cài đặt cảnh báo cho nhà hiện tại": "Configure os alertas para a casa atual",
   "Nhận cảnh báo báo động": "Receba avisos de alarme",
   "Đang bật cho tài khoản này": "Ativado para esta conta",
   "Đang tắt cho tài khoản này": "Desativado para esta conta",
-  "Hẹn giờ nhắc nhở": "Lembrete de cronômetro",
+  "Hẹn giờ nhắc nhở": "Agendamento de lembrete",
   "Nhắc kiểm tra nhà theo thời gian":
       "Lembre-se de verificar a casa de vez em quando",
-  "Hẹn giờ báo động": "Despertador",
+  "Hẹn giờ báo động": "Agendamento de alarme",
   "Chưa thiết lập": "Ainda não configurado",
   "Chưa thiết lập thời gian": "Ainda não há horário definido",
   "Tổng hợp trạng thái nhà": "Resumo do status da casa",
@@ -153,7 +153,7 @@ const Map<String, String> ptStrings = {
   "Xác nhận thay đổi": "Confirmar alterações",
   "Tiếp tục": "Continuar",
   "Giờ nhắc nhở": "Hora do lembrete",
-  "Giờ bắt đầu báo động": "Agora o alarme começa",
+  "Giờ bắt đầu báo động": "Hora de início do alarme",
   "Giờ kết thúc báo động": "Hora de término do alarme",
   "Không có nhà nào đủ điều kiện để cài":
       "Não há casas elegíveis para instalação",
@@ -191,8 +191,8 @@ const Map<String, String> ptStrings = {
   "Chưa share cho ai": "Ainda não compartilhei com ninguém",
   "Tìm nhà": "Encontre uma casa",
   "Xoá các nhà đã chọn ?": "Excluir casas selecionadas?",
-  "Thông báo Home": "Anúncio da casa",
-  "Thông báo nhà": "Anúncio da casa",
+  "Thông báo Home": "Notificação da casa",
+  "Thông báo nhà": "Notificação da casa",
   "Vai trò thành viên đã thay đổi": "As funções dos membros mudaram",
   "Xoá tất cả thông báo?": "Excluir todas as notificações?",
   "Toàn bộ thông báo nhà sẽ bị xoá.":
@@ -216,7 +216,8 @@ const Map<String, String> ptStrings = {
       "Você não tem permissão para realizar esta operação.",
   "Không thể hoàn tất thao tác. Vui lòng thử lại.":
       "A operação não pode ser concluída. Por favor, tente novamente.",
-  "QR gia nhập nhiều nhà không hợp lệ": "QR junção multi-home inválida",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "QR inválido para entrar em várias casas",
   "Bạn đang là chủ các nhà này": "Você é o dono dessas casas",
   "Một người dùng": "Um usuário",
   "Yêu cầu gia nhập nhà": "Solicitação para ingressar na casa",
@@ -238,7 +239,7 @@ const Map<String, String> ptStrings = {
   "Chia sẻ nhà": "Compartilhamento de casa",
   "Quét QR để xin gia nhập nhà":
       "Digitalize QR para se inscrever para ingressar na casa",
-  "Quét QR xin gia nhập nhà": "Digitalize QR para se juntar à família",
+  "Quét QR xin gia nhập nhà": "Digitalize o QR para solicitar entrada na casa",
   "Đưa mã QR chia sẻ nhà vào khung hình":
       "Insira o código de compartilhamento doméstico QR no quadro",
   "Mã QR này do chủ nhà chia sẻ":
@@ -252,7 +253,7 @@ const Map<String, String> ptStrings = {
   "Không thể share cho chính bạn": "Não é possível compartilhar por si mesmo",
   "Lời mời chia sẻ nhà": "Convite para compartilhar em casa",
   "Đã share home": "Casa compartilhada",
-  "Chuyển quyền chủ nhà": "Transferência de casa própria",
+  "Chuyển quyền chủ nhà": "Transferir propriedade da casa",
   "Không thể chuyển quyền cho chính bạn":
       "Os direitos não podem ser transferidos para você mesmo",
   "Không tìm thấy user": "Usuário não encontrado",
@@ -264,7 +265,7 @@ const Map<String, String> ptStrings = {
       "Pedido de transferência dos direitos do senhorio",
   "Đã gửi yêu cầu chuyển quyền": "Solicitação de transferência enviada",
   "Đã gửi yêu cầu chuyển quyền chủ nhà":
-      "A solicitação para transferir direitos de host foi enviada",
+      "A solicitação para transferir a propriedade da casa foi enviada",
   "Bạn không có quyền xoá thiết bị":
       "Você não tem permissão para apagar o dispositivo",
   "Xóa Device?": "Apagar dispositivo?",
@@ -298,7 +299,7 @@ const Map<String, String> ptStrings = {
   "Về muộn": "Cheguei em casa tarde",
   "Ra ngoài": "Saia",
   "Khác": "Outro",
-  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Desligue temporariamente o alarme hoje",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Alarme temporariamente desativado hoje",
   "Chọn giờ bắt đầu tạm tắt": "Selecione a hora para iniciar o desligamento",
   "Từ": "De",
   "Từ giờ": "De agora em diante",
@@ -380,14 +381,14 @@ const Map<String, String> ptStrings = {
   "Door closed": "Porta fechada",
   "Motion detected": "Detecção de movimento",
   "Battery low": "Bateria fraca",
-  "Device offline": "Conexão perdida do dispositivo",
-  "Device online": "O dispositivo está conectado",
+  "Device offline": "Dispositivo off-line",
+  "Device online": "Dispositivo on-line",
   "Cửa mở": "A porta se abre",
   "Cửa đóng": "Porta fechada",
   "Chưa đặt vị trí nhà": "O local da casa não foi definido",
   "Đặt vị trí nhà tại đây": "Defina a localização da casa aqui",
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
-      "Defina o local da sua casa antes de ativar o Auto Guard",
+      "Defina a localização da casa antes de ativar a Proteção automática",
   "Bán kính bảo vệ mặc định: 150 m": "Raio de proteção padrão: 150 m",
   "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
       "Cada membro precisará conceder permissão de localização Sempre permitir para que o status de sair/chegar em casa funcione quando o aplicativo estiver em segundo plano.",
@@ -402,19 +403,19 @@ const Map<String, String> ptStrings = {
   "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
       "Este nome só é visível na sua conta.",
   "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
-      "Nomes e endereços serão atualizados para todos os membros da família.",
+      "Os nomes e endereços serão atualizados para todos os membros da casa.",
   "Một thành viên": "Um membro",
   "Đã cập nhật thông tin nhà": "As informações da casa foram atualizadas",
   "Thay tên": "Renomear",
   "Đã đổi tên thiết bị": "Nome do dispositivo alterado",
   "Chưa chọn nhà để kiểm tra": "Ainda não escolhi uma casa para verificar",
   "Hãy thực hiện kiểm tra bằng tài khoản Owner":
-      "Por favor, realize o teste usando a conta Host",
+      "Faça o teste usando a conta do proprietário da casa",
   "Không đọc được dữ liệu nhà": "Não é possível ler os dados da casa",
   "Nhà cần có ít nhất một thiết bị để test":
       "A casa precisa ter pelo menos um dispositivo para teste",
   "Đóng": "Fechar",
-  "Đã thiết lập": "Configurar",
+  "Đã thiết lập": "Configurado",
   "Quét QR": "Digitalizar QR",
   "Quét QR để thêm thiết bị": "Digitalize QR para adicionar dispositivo",
   "Nhập HUB ID thủ công": "Insira o ID do HUB manualmente",
@@ -471,7 +472,7 @@ const Map<String, String> ptStrings = {
   "Theo nhà": "De acordo com a casa",
   "Riêng tôi": "Só eu",
   "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
-      "Use um calendário compartilhado configurado pelo organizador ou administrador",
+      "Use o calendário compartilhado configurado pelo proprietário ou administrador",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Usar seu próprio calendário se aplica apenas à sua conta",
   "Thiết lập nhanh báo động": "Configure alarmes rapidamente",
@@ -500,14 +501,14 @@ const Map<String, String> ptStrings = {
   "Pin yếu": "Bateria fraca",
   "SOS đã kết thúc": "SOS está concluído",
   "SOS được kích hoạt": "SOS está ativado",
-  "Tamper bình thường": "Adulteração normal",
+  "Tamper bình thường": "Nenhuma violação detectada",
   "Thiết bị bị tháo": "O dispositivo foi removido",
   "Thiết bị mới": "Novo equipamento",
-  "Thiết bị offline": "Conexão perdida do dispositivo",
-  "Thiết bị online": "O dispositivo está conectado",
+  "Thiết bị offline": "Dispositivo off-line",
+  "Thiết bị online": "Dispositivo on-line",
   "Báo động kích hoạt": "Alarme ativado",
-  "Báo động đã tắt": "O alarme disparou",
-  "Tạm tắt báo động hôm nay": "Desligue o alarme hoje",
+  "Báo động đã tắt": "Alarme desativado",
+  "Tạm tắt báo động hôm nay": "Alarme temporariamente desativado hoje",
   "Độ ẩm cao": "Alta umidade",
   "Thử lại": "Tente novamente",
   "Không thể tải dữ liệu tài khoản":
@@ -559,17 +560,17 @@ const Map<String, String> ptStrings = {
   "Không lưu được thời gian lặp báo động":
       "Não foi possível salvar o tempo de repetição do alarme",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
-      "Somente o Host ou Administrador tem autoridade para alterar o Modo de Proteção",
-  "Không thể thay đổi chế độ nhà": "Não é possível alterar o modo inicial",
+      "Somente o proprietário ou administrador pode alterar o modo de proteção",
+  "Không thể thay đổi chế độ nhà": "Não é possível alterar o modo da casa",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "A proteção está ativada, mas as notificações não podem ser enviadas",
   "Đã bật Chế độ Bảo vệ thủ công": "Modo de proteção manual ativado",
-  "Đã chuyển nhà về Bình thường": "Mudou de casa para Normal",
+  "Đã chuyển nhà về Bình thường": "A casa voltou ao modo Normal",
   "60 phút": "60 minutos",
   "30 phút": "30 minutos",
   "15 phút": "15 minutos",
   "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
-      "Você está visualizando o calendário do anfitrião. Selecione Meu para definir sua própria programação de alarme.",
+      "Você está visualizando o calendário do proprietário. Selecione Só eu para definir sua própria programação de alarme.",
   "Chọn giờ kết thúc báo động": "Selecione o horário de término do alarme",
   "Chọn giờ bắt đầu báo động": "Selecione a hora de início do alarme",
   "Bạn không có quyền sửa lịch báo động của nhà":
@@ -586,7 +587,7 @@ const Map<String, String> ptStrings = {
       "O lembrete irá lembrá-lo de verificar o status de segurança da sua casa no horário selecionado.",
   "Thêm khung giờ báo động": "Adicionar período de alarme",
   "Đang sử dụng nhắc nhở riêng của bạn": "Usando seus próprios lembretes",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Usando lembretes do anfitrião",
+  "Đang sử dụng nhắc nhở của chủ nhà": "Usando os lembretes do proprietário",
   "Sửa giờ nhắc nhở": "Editar horário do lembrete",
   "Sửa giờ kết thúc báo động": "Editar horário de término do alarme",
   "Sửa giờ bắt đầu báo động": "Corrigir horário de início do alarme",
@@ -608,7 +609,7 @@ const Map<String, String> ptStrings = {
   "Xoá thành viên?": "Excluir membros?",
   "Rời khỏi nhà?": "Sair de casa?",
   "Chỉ chủ nhà mới được thay đổi vai trò":
-      "Somente o anfitrião pode alterar funções",
+      "Somente o proprietário pode alterar as funções",
   "Bạn không có quyền xoá thành viên này":
       "Você não tem o direito de excluir este membro",
   "Bạn": "Você",
@@ -645,13 +646,14 @@ const Map<String, String> ptStrings = {
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Você deve abrir o aplicativo periodicamente para verificar permissões, calendários e alertas não lidos.",
   "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Após vários usos, o SafeHome apreciará melhores hábitos de teste de aplicativos.",
+      "Após alguns usos, o SafeHome avaliará melhor o hábito de verificar o aplicativo.",
   "Tần suất vào ứng dụng ổn": "A frequência de entrada no aplicativo é boa",
   "Đã lâu chưa vào ứng dụng kiểm tra":
-      "Faz um tempo que não verifico o aplicativo",
-  "Đang ghi nhận tần suất vào ứng dụng": "Frequência de gravação no aplicativo",
+      "Já faz tempo que o aplicativo não é aberto para verificação",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Registrando a frequência de abertura do aplicativo",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
-      "Sempre verifique as permissões de localização e as condições de fundo.",
+      "É necessário verificar a permissão de localização \"Sempre\" e as condições de execução em segundo plano.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
       "O dispositivo atende aos requisitos de elegibilidade para que o recurso automático de proteção contra saída de casa funcione.",
   "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
@@ -720,7 +722,7 @@ const Map<String, String> ptStrings = {
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Os alertas podem não ser exibidos se as notificações estiverem desativadas.",
   "Điện thoại có thể nhận thông báo SafeHome.":
-      "O telefone pode receber a mensagem SafeHome.",
+      "O telefone pode receber notificações do SafeHome.",
   "Chưa bật thông báo": "As notificações não estão ativadas",
   "Đã bật thông báo": "Notificações ativadas",
   "Hệ thống: Sẵn sàng": "Sistema: Pronto",
@@ -742,7 +744,7 @@ const Map<String, String> ptStrings = {
   "Đã bật tự động Bảo vệ khi mọi người rời nhà":
       "Proteção automática ativada quando as pessoas saem de casa",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
-      "Desativada a proteção automática quando as pessoas saem de casa",
+      "A proteção automática foi desativada quando as pessoas saem de casa",
   "Không thể thay đổi trạng thái báo động":
       "O status do alarme não pode ser alterado",
   "Đã tắt toàn bộ báo động của nhà":
@@ -760,7 +762,7 @@ const Map<String, String> ptStrings = {
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Suas casas serão excluídas.\nAs casas compartilhadas serão deixadas.",
   "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
-      "Isso alterará a programação de alarme de todos os dispositivos de segurança nas residências selecionadas.\n\nOs membros que usam alarmes 'Follow Home' serão afetados.\nOs alarmes pessoais no modo 'Meus' não serão alterados.",
+      "Isso alterará a programação de alarme de todos os dispositivos de segurança nas casas selecionadas.\n\nOs membros que usam alarmes no modo 'Seguir a casa' serão afetados.\nOs alarmes pessoais no modo 'Só eu' não serão alterados.",
   "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
       "Isso adicionará lembretes às casas selecionadas.\n\nOs membros que usam lembretes 'Seguir casa' serão afetados.\nOs lembretes pessoais no modo 'Meus' não serão alterados.",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
@@ -770,7 +772,7 @@ const Map<String, String> ptStrings = {
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
       "Esta ação desligará todos os alarmes residenciais de qualquer tipo. Você não receberá mais alertas quando houver perigo em seu telefone.",
   "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "O alarme está usando o modo Follow-Home.\n\nVocê receberá alertas de acordo com a programação geral de alarmes definida pelo Host ou Administrador.",
+      "O alarme está usando o modo Seguir a casa.\n\nVocê receberá alertas de acordo com a programação geral de alarmes definida pelo proprietário ou administrador.",
   "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
       "O alarme está usando o modo My Own.\n\nVocê receberá alertas de acordo com a programação de alarmes separada configurada para esta conta.",
   "Không thể đăng nhập bằng Google": "Não consigo fazer login no Google",
@@ -782,7 +784,7 @@ const Map<String, String> ptStrings = {
   "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
       "Não é possível aceitar pedidos para entrar na casa. Por favor, tente novamente.",
   "Từ chối": "Recusar",
-  "Lời mời từ chủ nhà": "Convite do anfitrião",
+  "Lời mời từ chủ nhà": "Convite do proprietário",
   "Nhận quyền chủ nhà": "Obtenha direitos de proprietário",
   "Một người dùng SafeHome": "Um usuário SafeHome",
   "Lời mời gia nhập": "Convite para participar",
@@ -822,7 +824,7 @@ const Map<String, String> ptStrings = {
       "Ocorreu um erro. Por favor, tente novamente.",
   "Đang kiểm tra kết nối Hub": "Verificando a conexão do hub",
   "Đang mở khi nhà ở chế độ Bảo vệ":
-      "Abra quando a casa estiver no modo de proteção",
+      "Aberto quando a casa está no modo de proteção",
   "Đang mở trong giờ báo động": "Aberto durante o horário do alarme",
   "Đang tải...": "Carregando...",
   "Hồ sơ, yêu cầu và lời mời tham gia":
@@ -912,8 +914,8 @@ const Map<String, String> ptStrings = {
       "Não foi possível confirmar com SafeHome. Verifique sua conexão e tente novamente.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Desligue o alarme apenas depois de verificar as condições da sua casa.\n\nTem certeza de que deseja desativar o aviso?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome detecta avisos",
-  "Mở SafeHome để kiểm tra ngay.": "Abra SafeHome para testar agora.",
+  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome detectou um alerta",
+  "Mở SafeHome để kiểm tra ngay.": "Abra o SafeHome para verificar agora.",
   "\$count tin nhắn mới": "Nova mensagem \$count",
   "Tin nhắn HomeChat": "Mensagens do HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName enviou uma mensagem",
@@ -925,15 +927,14 @@ const Map<String, String> ptStrings = {
   "Đã gửi yêu cầu gia nhập \$count nhà":
       "A solicitação para ingressar na casa \$count foi enviada",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
-      "\$requesterName está se candidatando para ingressar na família \"\$homeName\".",
-  "Bạn đã xoá nhà \"\$homeName\".":
-      "Você excluiu a propriedade \"\$homeName\".",
+      "\$requesterName solicitou entrada na casa \"\$homeName\".",
+  "Bạn đã xoá nhà \"\$homeName\".": "Você excluiu a casa \"\$homeName\".",
   "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
-      "Você enviou uma solicitação para transferir o host \"\$homeName\" para \$email.",
+      "Você enviou uma solicitação para transferir a propriedade da casa \"\$homeName\" para \$email.",
   "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
-      "\$actorName deseja transferir os direitos de host \"\$homeName\" para você.",
+      "\$actorName deseja transferir a propriedade da casa \"\$homeName\" para você.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
-      "\$actorName convidou você para se juntar à família \"\$homeName\".",
+      "\$actorName convidou você para entrar na casa \"\$homeName\".",
   "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
       "SafeHome está removendo o dispositivo \"\$deviceName\" da casa \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
@@ -1093,7 +1094,7 @@ const Map<String, String> ptStrings = {
   "Chưa xác định vị trí: \$count": "Local desconhecido: \$count",
   "Môi trường hiện tại: \$environment": "Ambiente atual: \$environment",
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
-      "\$name: Abra quando a casa estiver no modo de proteção",
+      "\$name: Aberto quando a casa está no modo de proteção",
   "An tâm hơn trong từng ngôi nhà": "Mais tranquilidade em cada casa",
   "Báo động SafeHome": "Alarme SafeHome",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
@@ -1112,20 +1113,20 @@ const Map<String, String> ptStrings = {
   "Cài đặt báo động": "Configurações de alarme",
   "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
       "Controla como este sensor aciona alarmes.",
-  "Tham gia báo động": "Junte-se ao alarme",
+  "Tham gia báo động": "Participação no alarme",
   "Tắt để cảm biến không tạo báo động.":
       "Desligue para que o sensor não gere alarme.",
   "Bật còi vật lý": "Ativar sirene física",
   "Cho phép kích hoạt còi trong nhà.":
       "Permite acionar a sirene em ambientes internos.",
-  "Đánh thức màn hình": "Despertar a tela",
+  "Đánh thức màn hình": "Ativar a tela",
   "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
       "Mostrar alerta em tela cheia no telefone.",
   "Độ trễ kích hoạt": "Atraso de disparo",
   "Chỉ áp dụng cho cảm biến an ninh.":
       "Aplica-se apenas a sensores de segurança.",
   "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
-      "O sensor de emergência sempre é ativado imediatamente.",
+      "O sensor de emergência sempre aciona o alarme imediatamente.",
   "Ngay lập tức": "Imediatamente",
   "giây": "segundos",
   "Đã lưu cấu hình báo động": "Configuração de alarme salva",
@@ -1220,7 +1221,7 @@ const Map<String, String> ptStrings = {
   "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
       "Esta agenda se aplica somente a você e não ativa a sirene física.",
   "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
-      "Este cronograma se aplica a todos os membros da família.",
+      "Este cronograma se aplica a todos os membros da casa.",
   "Đã áp dụng lịch báo động": "Programação de alarme aplicada",
   "Không thể lưu lịch báo động":
       "Não foi possível salvar a programação do alarme",
@@ -1228,5 +1229,5 @@ const Map<String, String> ptStrings = {
   "Nhận cảnh báo theo lịch chung của nhà":
       "Receba alertas de acordo com o calendário geral da sua casa",
   "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
-      "Desligue para não receber notificações ou alertas em tela cheia do calendário global. A buzina física da casa ainda funciona.",
+      "Desative para não receber notificações ou alertas em tela cheia da programação compartilhada. A sirene física da casa continua funcionando.",
 };

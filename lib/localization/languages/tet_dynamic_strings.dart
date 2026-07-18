@@ -24,7 +24,7 @@ const Map<String, String> tetDynamicStrings = {
   "\$name và \$otherCount người khác đang chuẩn bị gửi tin...":
       "\$name no ema seluk \$otherCount hela hakerek mensajen...",
   "Kênh báo động cũ để giữ tương thích":
-      "Kanal alarme antigu atu mantém kompatibilidade",
+      "Kanal alarme antigu atu halo kompatível",
   "SafeHome báo động toàn màn hình": "Alarme SafeHome iha ekran tomak",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Loke alerta ekran tomak; lian sirene sei toca iha pájina alarme",
@@ -36,7 +36,7 @@ const Map<String, String> tetDynamicStrings = {
       "Lembransa SafeHome silenciosu iha ekran tomak",
   "SafeHome nhắc nhở ưu tiên cao": "Lembransa SafeHome prioridade aas",
   "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Lembransa SafeHome prioridade aas la loke ekran tomak",
+      "Lembransa SafeHome prioridade aas ne'ebé la loke ekran tomak",
   "Tin nhắn mới trong các nhà SafeHome": "Mensajen foun iha uma SafeHome sira",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\n":
       "Asaun ida-ne'e sei muda oras alarme ba dispozitivu balun ohin.\n\n",
@@ -44,9 +44,9 @@ const Map<String, String> tetDynamicStrings = {
   "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.":
       "Token FCM prontu ona, maibé protesaun automátika bainhira husik uma seidauk kompletu kondisaun ida.",
   "Đã kích hoạt SOS": "SOS ativa ona",
-  "Phát hiện chập điện": "Deteta kurto-sirkuitu",
-  "Phát hiện quá dòng": "Deteta korente liu",
-  "Phát hiện quá áp": "Deteta voltažen liu",
+  "Phát hiện chập điện": "Kurto-sirkuitu detetadu",
+  "Phát hiện quá dòng": "Korente liu detetadu",
+  "Phát hiện quá áp": "Voltažen liu detetadu",
   "Thiết bị điện quá nhiệt": "Dispozitivu elétriku manas liu",
   "Tài khoản đang được sử dụng": "Konta hela uza",
   "Hiện tại tài khoản này đang đăng nhập trên một thiết bị khác. Nếu tiếp tục, tài khoản trên thiết bị đó sẽ tự đăng xuất.":
@@ -62,7 +62,7 @@ const Map<String, String> tetDynamicStrings = {
       "Sensor fila ona ba estadu seguru.",
   "Người dùng đã tắt cảnh báo.": "Uzuáriu ida mate alerta.",
   "Khung giờ bảo vệ đã kết thúc.": "Períodu protesaun remata ona.",
-  "Cảnh báo tức thời đã tự kết thúc.": "Alerta temporáriu remata rasik ona.",
+  "Cảnh báo tức thời đã tự kết thúc.": "Alerta imediatu remata rasik ona.",
   "Điều kiện cảnh báo không còn hoạt động.": "Kondisaun alerta la ativu tan.",
   "Cảnh báo đã kết thúc: \$reason": "Alerta remata ona: \$reason",
 };

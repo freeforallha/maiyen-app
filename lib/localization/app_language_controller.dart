@@ -27,6 +27,24 @@ class AppLanguageController extends ChangeNotifier {
     "ta",
     "pt",
     "tet",
+    "it",
+    "pl",
+    "nl",
+    "cs",
+    "sk",
+    "uk",
+    "ro",
+    "hu",
+    "bg",
+    "hr",
+    "sr",
+    "bs",
+    "sl",
+    "mk",
+    "sq",
+    "el",
+    "tr",
+    "sv",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -48,6 +66,24 @@ class AppLanguageController extends ChangeNotifier {
     Locale("ta", "SG"),
     Locale("pt", "TL"),
     Locale("tet", "TL"),
+    Locale("it", "IT"),
+    Locale("pl", "PL"),
+    Locale("nl", "NL"),
+    Locale("cs", "CZ"),
+    Locale("sk", "SK"),
+    Locale("uk", "UA"),
+    Locale("ro", "RO"),
+    Locale("hu", "HU"),
+    Locale("bg", "BG"),
+    Locale("hr", "HR"),
+    Locale("sr", "RS"),
+    Locale("bs", "BA"),
+    Locale("sl", "SI"),
+    Locale("mk", "MK"),
+    Locale("sq", "AL"),
+    Locale("el", "GR"),
+    Locale("tr", "TR"),
+    Locale("sv", "SE"),
   ];
   static const Map<String, String> languageLabels = {
     "vi": "Tiếng Việt",
@@ -69,6 +105,24 @@ class AppLanguageController extends ChangeNotifier {
     "ta": "தமிழ்",
     "pt": "Português",
     "tet": "Tetun",
+    "it": "Italiano",
+    "pl": "Polski",
+    "nl": "Nederlands",
+    "cs": "Čeština",
+    "sk": "Slovenčina",
+    "uk": "Українська",
+    "ro": "Română",
+    "hu": "Magyar",
+    "bg": "Български",
+    "hr": "Hrvatski",
+    "sr": "Srpski",
+    "bs": "Bosanski",
+    "sl": "Slovenščina",
+    "mk": "Македонски",
+    "sq": "Shqip",
+    "el": "Ελληνικά",
+    "tr": "Türkçe",
+    "sv": "Svenska",
   };
 
   Locale _locale = const Locale("vi");
@@ -94,6 +148,24 @@ class AppLanguageController extends ChangeNotifier {
   bool get isTamil => languageCode == "ta";
   bool get isPortuguese => languageCode == "pt";
   bool get isTetum => languageCode == "tet";
+  bool get isItalian => languageCode == "it";
+  bool get isPolish => languageCode == "pl";
+  bool get isDutch => languageCode == "nl";
+  bool get isCzech => languageCode == "cs";
+  bool get isSlovak => languageCode == "sk";
+  bool get isUkrainian => languageCode == "uk";
+  bool get isRomanian => languageCode == "ro";
+  bool get isHungarian => languageCode == "hu";
+  bool get isBulgarian => languageCode == "bg";
+  bool get isCroatian => languageCode == "hr";
+  bool get isSerbian => languageCode == "sr";
+  bool get isBosnian => languageCode == "bs";
+  bool get isSlovenian => languageCode == "sl";
+  bool get isMacedonian => languageCode == "mk";
+  bool get isAlbanian => languageCode == "sq";
+  bool get isGreek => languageCode == "el";
+  bool get isTurkish => languageCode == "tr";
+  bool get isSwedish => languageCode == "sv";
 
   String _normalizeLanguageCode(String code) {
     final cleanCode = code.trim().toLowerCase();
@@ -126,6 +198,78 @@ class AppLanguageController extends ChangeNotifier {
 
     if (normalizedCode == "tet") {
       return const Locale("tet", "TL");
+    }
+
+    if (normalizedCode == "it") {
+      return const Locale("it", "IT");
+    }
+
+    if (normalizedCode == "pl") {
+      return const Locale("pl", "PL");
+    }
+
+    if (normalizedCode == "nl") {
+      return const Locale("nl", "NL");
+    }
+
+    if (normalizedCode == "cs") {
+      return const Locale("cs", "CZ");
+    }
+
+    if (normalizedCode == "sk") {
+      return const Locale("sk", "SK");
+    }
+
+    if (normalizedCode == "uk") {
+      return const Locale("uk", "UA");
+    }
+
+    if (normalizedCode == "ro") {
+      return const Locale("ro", "RO");
+    }
+
+    if (normalizedCode == "hu") {
+      return const Locale("hu", "HU");
+    }
+
+    if (normalizedCode == "bg") {
+      return const Locale("bg", "BG");
+    }
+
+    if (normalizedCode == "hr") {
+      return const Locale("hr", "HR");
+    }
+
+    if (normalizedCode == "sr") {
+      return const Locale("sr", "RS");
+    }
+
+    if (normalizedCode == "bs") {
+      return const Locale("bs", "BA");
+    }
+
+    if (normalizedCode == "sl") {
+      return const Locale("sl", "SI");
+    }
+
+    if (normalizedCode == "mk") {
+      return const Locale("mk", "MK");
+    }
+
+    if (normalizedCode == "sq") {
+      return const Locale("sq", "AL");
+    }
+
+    if (normalizedCode == "el") {
+      return const Locale("el", "GR");
+    }
+
+    if (normalizedCode == "tr") {
+      return const Locale("tr", "TR");
+    }
+
+    if (normalizedCode == "sv") {
+      return const Locale("sv", "SE");
     }
 
     if (code == "zh") {

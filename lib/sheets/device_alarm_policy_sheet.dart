@@ -116,14 +116,12 @@ class DevicePersonalAlarmPreferences {
         : int.tryParse(rawVersion?.toString() ?? '');
 
     return DevicePersonalAlarmPreferences(
-      fullscreenEnabled:
-          preferences['fullscreenEnabled'] is bool
-              ? preferences['fullscreenEnabled'] == true
-              : legacyFullscreenEnabled,
-      followHomeSchedule:
-          preferences['followHomeSchedule'] is bool
-              ? preferences['followHomeSchedule'] == true
-              : true,
+      fullscreenEnabled: preferences['fullscreenEnabled'] is bool
+          ? preferences['fullscreenEnabled'] == true
+          : legacyFullscreenEnabled,
+      followHomeSchedule: preferences['followHomeSchedule'] is bool
+          ? preferences['followHomeSchedule'] == true
+          : true,
       scheduleModelVersion: parsedVersion ?? 1,
     );
   }
@@ -157,7 +155,6 @@ bool resolvePersonalFullscreenEnabled({
   ).fullscreenEnabled;
 }
 
-
 Map<String, dynamic> normalizeEffectivePersonalAlarmSchedule({
   required Map<String, dynamic> customDevice,
   required String legacyAlarmMode,
@@ -170,7 +167,8 @@ Map<String, dynamic> normalizeEffectivePersonalAlarmSchedule({
 
   // Ở dữ liệu cũ, lịch cá nhân chỉ có hiệu lực khi người dùng chọn
   // chế độ Riêng tôi. Không tự bật lại một lịch từng bị ẩn khi nâng cấp.
-  if (!preferences.usesUnifiedSchedules && legacyAlarmMode.trim().toLowerCase() != 'custom') {
+  if (!preferences.usesUnifiedSchedules &&
+      legacyAlarmMode.trim().toLowerCase() != 'custom') {
     alarm['enabled'] = false;
   }
 
@@ -308,9 +306,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             )
             .get(),
         FirebaseDatabase.instance
-            .ref(
-              'accounts/$_currentUid/customRules/${widget.homeId}',
-            )
+            .ref('accounts/$_currentUid/customRules/${widget.homeId}')
             .get(),
       ]);
 
@@ -336,7 +332,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       final customDevice = rawCustomDevice is Map
           ? Map<String, dynamic>.from(rawCustomDevice)
           : const <String, dynamic>{};
-      final legacyAlarmMode = (customHome['alarmMode'] ?? customHome['mode'] ?? 'home').toString();
+      final legacyAlarmMode =
+          (customHome['alarmMode'] ?? customHome['mode'] ?? 'home').toString();
       final personalPreferences =
           DevicePersonalAlarmPreferences.fromCustomDevice(
             customDevice: customDevice,
@@ -388,14 +385,16 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         ).toFirebaseMap();
 
         if (_isSecurity) {
-          updates['$baseDevicePath/alarm'] =
-              normalizeDeviceAlarmSchedule(_commonAlarm);
+          updates['$baseDevicePath/alarm'] = normalizeDeviceAlarmSchedule(
+            _commonAlarm,
+          );
         }
       }
 
       if (_isSecurity) {
-        updates['$personalPath/alarm'] =
-            normalizeDeviceAlarmSchedule(_personalAlarm);
+        updates['$personalPath/alarm'] = normalizeDeviceAlarmSchedule(
+          _personalAlarm,
+        );
       }
 
       updates['$personalPath/alarmPreferences'] =
@@ -431,14 +430,20 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     required String field,
     required bool personal,
   }) async {
-    final raw = alarm[field]?.toString() ?? (field == 'start' ? '23:00' : '06:00').toString();
+    final raw =
+        alarm[field]?.toString() ??
+        (field == 'start' ? '23:00' : '06:00').toString();
     final parts = raw.split(':');
     final initial = TimeOfDay(
-      hour: int.tryParse(parts.firstOrNull ?? '') ?? (field == 'start' ? 23 : 6),
+      hour:
+          int.tryParse(parts.firstOrNull ?? '') ?? (field == 'start' ? 23 : 6),
       minute: int.tryParse(parts.length > 1 ? parts[1] : '') ?? 0,
     );
 
-    final selected = await showTimePicker(context: context, initialTime: initial);
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: initial,
+    );
     if (selected == null || !mounted) return;
 
     final value =
@@ -566,7 +571,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                               style: FilledButton.styleFrom(
                                 backgroundColor: SafeHomeColors.primary,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(14),
                                 ),
@@ -662,13 +669,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           subtitle: strings.t('Cho phép kích hoạt còi trong nhà.'),
           value: _physicalSirenEnabled,
           enabled: widget.canEditCommon,
-          onChanged: (value) =>
-              setState(() => _physicalSirenEnabled = value),
+          onChanged: (value) => setState(() => _physicalSirenEnabled = value),
         ),
-        if (_isSecurity) ...[
-          const SizedBox(height: 10),
-          _delayCard(strings),
-        ],
+        if (_isSecurity) ...[const SizedBox(height: 10), _delayCard(strings)],
       ],
     );
   }
@@ -685,8 +688,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             ),
             value: _followHomeSchedule,
             enabled: true,
-            onChanged: (value) =>
-                setState(() => _followHomeSchedule = value),
+            onChanged: (value) => setState(() => _followHomeSchedule = value),
           ),
           const SizedBox(height: 10),
         ],
@@ -993,9 +995,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
-                    color: active
-                        ? Colors.white
-                        : SafeHomeColors.textSecondary,
+                    color: active ? Colors.white : SafeHomeColors.textSecondary,
                   ),
                 ),
               ),
@@ -1073,7 +1073,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         onChanged: enabled ? onChanged : null,
         secondary: Icon(
           icon,
-          color: enabled ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
+          color: enabled
+              ? SafeHomeColors.primary
+              : SafeHomeColors.textSecondary,
         ),
         title: Text(
           title,
@@ -1095,7 +1097,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   }
 
   Widget _delayCard(AppStrings strings) {
-    final options = <int>{..._delayOptions, _triggerDelaySeconds}.toList()..sort();
+    final options = <int>{..._delayOptions, _triggerDelaySeconds}.toList()
+      ..sort();
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
@@ -1223,45 +1226,157 @@ String _shortDay(int day, AppStrings strings) {
   switch (day) {
     case 1:
       return strings.choose(
-        vi: 'T2', en: 'Mon', zh: '周一', ko: '월', ja: '月', de: 'Mo',
-        ru: 'Пн', fr: 'Lun', es: 'Lun', id: 'Sen', th: 'จ.', ms: 'Isn',
-        fil: 'Lun', km: 'ច.', my: 'တနင်္လာ', lo: 'ຈ.',
+        vi: 'T2',
+        en: 'Mon',
+        zh: '周一',
+        ko: '월',
+        ja: '月',
+        de: 'Mo',
+        ru: 'Пн',
+        fr: 'Lun',
+        es: 'Lun',
+        id: 'Sen',
+        th: 'จ.',
+        ms: 'Isn',
+        fil: 'Lun',
+        km: 'ច.',
+        my: 'တနင်္လာ',
+        lo: 'ຈ.',
+        ta: 'திங்.',
+        pt: 'seg.',
+        tet: 'Seg.',
       );
     case 2:
       return strings.choose(
-        vi: 'T3', en: 'Tue', zh: '周二', ko: '화', ja: '火', de: 'Di',
-        ru: 'Вт', fr: 'Mar', es: 'Mar', id: 'Sel', th: 'อ.', ms: 'Sel',
-        fil: 'Mar', km: 'អ.', my: 'အင်္ဂါ', lo: 'ອ.',
+        vi: 'T3',
+        en: 'Tue',
+        zh: '周二',
+        ko: '화',
+        ja: '火',
+        de: 'Di',
+        ru: 'Вт',
+        fr: 'Mar',
+        es: 'Mar',
+        id: 'Sel',
+        th: 'อ.',
+        ms: 'Sel',
+        fil: 'Mar',
+        km: 'អ.',
+        my: 'အင်္ဂါ',
+        lo: 'ອ.',
+        ta: 'செவ்.',
+        pt: 'ter.',
+        tet: 'Ter.',
       );
     case 3:
       return strings.choose(
-        vi: 'T4', en: 'Wed', zh: '周三', ko: '수', ja: '水', de: 'Mi',
-        ru: 'Ср', fr: 'Mer', es: 'Mié', id: 'Rab', th: 'พ.', ms: 'Rab',
-        fil: 'Miy', km: 'ព.', my: 'ဗုဒ္ဓဟူး', lo: 'ພ.',
+        vi: 'T4',
+        en: 'Wed',
+        zh: '周三',
+        ko: '수',
+        ja: '水',
+        de: 'Mi',
+        ru: 'Ср',
+        fr: 'Mer',
+        es: 'Mié',
+        id: 'Rab',
+        th: 'พ.',
+        ms: 'Rab',
+        fil: 'Miy',
+        km: 'ព.',
+        my: 'ဗုဒ္ဓဟူး',
+        lo: 'ພ.',
+        ta: 'புத.',
+        pt: 'qua.',
+        tet: 'Kua.',
       );
     case 4:
       return strings.choose(
-        vi: 'T5', en: 'Thu', zh: '周四', ko: '목', ja: '木', de: 'Do',
-        ru: 'Чт', fr: 'Jeu', es: 'Jue', id: 'Kam', th: 'พฤ.', ms: 'Kha',
-        fil: 'Huw', km: 'ព្រ.', my: 'ကြာသပတေး', lo: 'ພຫ.',
+        vi: 'T5',
+        en: 'Thu',
+        zh: '周四',
+        ko: '목',
+        ja: '木',
+        de: 'Do',
+        ru: 'Чт',
+        fr: 'Jeu',
+        es: 'Jue',
+        id: 'Kam',
+        th: 'พฤ.',
+        ms: 'Kha',
+        fil: 'Huw',
+        km: 'ព្រ.',
+        my: 'ကြာသပတေး',
+        lo: 'ພຫ.',
+        ta: 'வியா.',
+        pt: 'qui.',
+        tet: 'Kin.',
       );
     case 5:
       return strings.choose(
-        vi: 'T6', en: 'Fri', zh: '周五', ko: '금', ja: '金', de: 'Fr',
-        ru: 'Пт', fr: 'Ven', es: 'Vie', id: 'Jum', th: 'ศ.', ms: 'Jum',
-        fil: 'Biy', km: 'សុ.', my: 'သောကြာ', lo: 'ສຸ.',
+        vi: 'T6',
+        en: 'Fri',
+        zh: '周五',
+        ko: '금',
+        ja: '金',
+        de: 'Fr',
+        ru: 'Пт',
+        fr: 'Ven',
+        es: 'Vie',
+        id: 'Jum',
+        th: 'ศ.',
+        ms: 'Jum',
+        fil: 'Biy',
+        km: 'សុ.',
+        my: 'သောကြာ',
+        lo: 'ສຸ.',
+        ta: 'வெள்.',
+        pt: 'sex.',
+        tet: 'Ses.',
       );
     case 6:
       return strings.choose(
-        vi: 'T7', en: 'Sat', zh: '周六', ko: '토', ja: '土', de: 'Sa',
-        ru: 'Сб', fr: 'Sam', es: 'Sáb', id: 'Sab', th: 'ส.', ms: 'Sab',
-        fil: 'Sab', km: 'សៅ.', my: 'စနေ', lo: 'ສ.',
+        vi: 'T7',
+        en: 'Sat',
+        zh: '周六',
+        ko: '토',
+        ja: '土',
+        de: 'Sa',
+        ru: 'Сб',
+        fr: 'Sam',
+        es: 'Sáb',
+        id: 'Sab',
+        th: 'ส.',
+        ms: 'Sab',
+        fil: 'Sab',
+        km: 'សៅ.',
+        my: 'စနေ',
+        lo: 'ສ.',
+        ta: 'சனி.',
+        pt: 'sáb.',
+        tet: 'Sáb.',
       );
     default:
       return strings.choose(
-        vi: 'CN', en: 'Sun', zh: '周日', ko: '일', ja: '日', de: 'So',
-        ru: 'Вс', fr: 'Dim', es: 'Dom', id: 'Min', th: 'อา.', ms: 'Ahd',
-        fil: 'Lin', km: 'អា.', my: 'တနင်္ဂနွေ', lo: 'ອາ.',
+        vi: 'CN',
+        en: 'Sun',
+        zh: '周日',
+        ko: '일',
+        ja: '日',
+        de: 'So',
+        ru: 'Вс',
+        fr: 'Dim',
+        es: 'Dom',
+        id: 'Min',
+        th: 'อา.',
+        ms: 'Ahd',
+        fil: 'Lin',
+        km: 'អា.',
+        my: 'တနင်္ဂနွေ',
+        lo: 'ອາ.',
+        ta: 'ஞாயி.',
+        pt: 'dom.',
+        tet: 'Dom.',
       );
   }
 }

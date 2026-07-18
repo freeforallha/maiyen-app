@@ -19,9 +19,45 @@ import 'languages/lo_strings.dart';
 import 'languages/ta_strings.dart';
 import 'languages/pt_strings.dart';
 import 'languages/tet_strings.dart';
+import 'languages/it_strings.dart';
+import 'languages/pl_strings.dart';
+import 'languages/nl_strings.dart';
+import 'languages/cs_strings.dart';
+import 'languages/sk_strings.dart';
+import 'languages/uk_strings.dart';
+import 'languages/ro_strings.dart';
+import 'languages/hu_strings.dart';
+import 'languages/bg_strings.dart';
+import 'languages/hr_strings.dart';
+import 'languages/sr_strings.dart';
+import 'languages/bs_strings.dart';
+import 'languages/sl_strings.dart';
+import 'languages/mk_strings.dart';
+import 'languages/sq_strings.dart';
+import 'languages/el_strings.dart';
+import 'languages/tr_strings.dart';
+import 'languages/sv_strings.dart';
 import 'languages/ta_dynamic_strings.dart';
 import 'languages/pt_dynamic_strings.dart';
 import 'languages/tet_dynamic_strings.dart';
+import 'languages/it_dynamic_strings.dart';
+import 'languages/pl_dynamic_strings.dart';
+import 'languages/nl_dynamic_strings.dart';
+import 'languages/cs_dynamic_strings.dart';
+import 'languages/sk_dynamic_strings.dart';
+import 'languages/uk_dynamic_strings.dart';
+import 'languages/ro_dynamic_strings.dart';
+import 'languages/hu_dynamic_strings.dart';
+import 'languages/bg_dynamic_strings.dart';
+import 'languages/hr_dynamic_strings.dart';
+import 'languages/sr_dynamic_strings.dart';
+import 'languages/bs_dynamic_strings.dart';
+import 'languages/sl_dynamic_strings.dart';
+import 'languages/mk_dynamic_strings.dart';
+import 'languages/sq_dynamic_strings.dart';
+import 'languages/el_dynamic_strings.dart';
+import 'languages/tr_dynamic_strings.dart';
+import 'languages/sv_dynamic_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -42,6 +78,24 @@ class AppStrings {
   final bool isTamil;
   final bool isPortuguese;
   final bool isTetum;
+  final bool isItalian;
+  final bool isPolish;
+  final bool isDutch;
+  final bool isCzech;
+  final bool isSlovak;
+  final bool isUkrainian;
+  final bool isRomanian;
+  final bool isHungarian;
+  final bool isBulgarian;
+  final bool isCroatian;
+  final bool isSerbian;
+  final bool isBosnian;
+  final bool isSlovenian;
+  final bool isMacedonian;
+  final bool isAlbanian;
+  final bool isGreek;
+  final bool isTurkish;
+  final bool isSwedish;
 
   const AppStrings._({
     required this.isEnglish,
@@ -62,6 +116,24 @@ class AppStrings {
     required this.isTamil,
     required this.isPortuguese,
     required this.isTetum,
+    required this.isItalian,
+    required this.isPolish,
+    required this.isDutch,
+    required this.isCzech,
+    required this.isSlovak,
+    required this.isUkrainian,
+    required this.isRomanian,
+    required this.isHungarian,
+    required this.isBulgarian,
+    required this.isCroatian,
+    required this.isSerbian,
+    required this.isBosnian,
+    required this.isSlovenian,
+    required this.isMacedonian,
+    required this.isAlbanian,
+    required this.isGreek,
+    required this.isTurkish,
+    required this.isSwedish,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -84,6 +156,24 @@ class AppStrings {
       isTamil: locale.languageCode == "ta",
       isPortuguese: locale.languageCode == "pt",
       isTetum: locale.languageCode == "tet",
+      isItalian: locale.languageCode == "it",
+      isPolish: locale.languageCode == "pl",
+      isDutch: locale.languageCode == "nl",
+      isCzech: locale.languageCode == "cs",
+      isSlovak: locale.languageCode == "sk",
+      isUkrainian: locale.languageCode == "uk",
+      isRomanian: locale.languageCode == "ro",
+      isHungarian: locale.languageCode == "hu",
+      isBulgarian: locale.languageCode == "bg",
+      isCroatian: locale.languageCode == "hr",
+      isSerbian: locale.languageCode == "sr",
+      isBosnian: locale.languageCode == "bs",
+      isSlovenian: locale.languageCode == "sl",
+      isMacedonian: locale.languageCode == "mk",
+      isAlbanian: locale.languageCode == "sq",
+      isGreek: locale.languageCode == "el",
+      isTurkish: locale.languageCode == "tr",
+      isSwedish: locale.languageCode == "sv",
     );
   }
 
@@ -111,6 +201,24 @@ class AppStrings {
     String? ta,
     String? pt,
     String? tet,
+    String? it,
+    String? pl,
+    String? nl,
+    String? cs,
+    String? sk,
+    String? uk,
+    String? ro,
+    String? hu,
+    String? bg,
+    String? hr,
+    String? sr,
+    String? bs,
+    String? sl,
+    String? mk,
+    String? sq,
+    String? el,
+    String? tr,
+    String? sv,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -148,6 +256,78 @@ class AppStrings {
 
     if (isTetum) {
       return _translationFromMap(_tetum, key) ?? tet ?? en;
+    }
+
+    if (isItalian) {
+      return _translationFromMap(_italian, key) ?? it ?? en;
+    }
+
+    if (isPolish) {
+      return _translationFromMap(_polish, key) ?? pl ?? en;
+    }
+
+    if (isDutch) {
+      return _translationFromMap(_dutch, key) ?? nl ?? en;
+    }
+
+    if (isCzech) {
+      return _translationFromMap(_czech, key) ?? cs ?? en;
+    }
+
+    if (isSlovak) {
+      return _translationFromMap(_slovak, key) ?? sk ?? en;
+    }
+
+    if (isUkrainian) {
+      return _translationFromMap(_ukrainian, key) ?? uk ?? en;
+    }
+
+    if (isRomanian) {
+      return _translationFromMap(_romanian, key) ?? ro ?? en;
+    }
+
+    if (isHungarian) {
+      return _translationFromMap(_hungarian, key) ?? hu ?? en;
+    }
+
+    if (isBulgarian) {
+      return _translationFromMap(_bulgarian, key) ?? bg ?? en;
+    }
+
+    if (isCroatian) {
+      return _translationFromMap(_croatian, key) ?? hr ?? en;
+    }
+
+    if (isSerbian) {
+      return _translationFromMap(_serbian, key) ?? sr ?? en;
+    }
+
+    if (isBosnian) {
+      return _translationFromMap(_bosnian, key) ?? bs ?? en;
+    }
+
+    if (isSlovenian) {
+      return _translationFromMap(_slovenian, key) ?? sl ?? en;
+    }
+
+    if (isMacedonian) {
+      return _translationFromMap(_macedonian, key) ?? mk ?? en;
+    }
+
+    if (isAlbanian) {
+      return _translationFromMap(_albanian, key) ?? sq ?? en;
+    }
+
+    if (isGreek) {
+      return _translationFromMap(_greek, key) ?? el ?? en;
+    }
+
+    if (isTurkish) {
+      return _translationFromMap(_turkish, key) ?? tr ?? en;
+    }
+
+    if (isSwedish) {
+      return _translationFromMap(_swedish, key) ?? sv ?? en;
     }
 
     if (isIndonesian) {
@@ -2617,7 +2797,18 @@ class AppStrings {
         'Las alarmas de los dispositivos de la categoría «Peligro de emergencia» y las alarmas en modo «Protección» no se verán afectadas por esta función.',
     th: "การดำเนินการนี้จะเปลี่ยนเวลา สัญญาณเตือน ของอุปกรณ์บางเครื่องในวันนี้\n\nAlarm ของอุปกรณ์ในหมวด \"อันตรายฉุกเฉิน\" และ สัญญาณเตือน ที่ใช้ \"โหมดป้องกัน\" จะไม่ได้รับผลกระทบจากฟังก์ชันนี้",
     ms: "Tindakan ini akan mengubah masa penggera bagi sesetengah peranti pada hari ini.\n\nAlarm untuk peranti dalam kategori \"Bahaya kecemasan\" dan penggera dalam mod \"Perlindungan\" tidak akan terjejas oleh fungsi ini.",
-    lo: "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງອຸປະກອນບາງອັນໃນມື້ນີ້.\n\n",
+    lo:
+        "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງອຸປະກອນບາງອັນໃນມື້ນີ້.\n\n"
+        "ສັນຍານເຕືອນໄພຂອງອຸປະກອນໃນໝວດ \"ອັນຕະລາຍສຸກເສີນ\" ແລະສັນຍານເຕືອນໄພໃນໂໝດ \"ປ້ອງກັນ\" ຈະບໍ່ຖືກກະທົບຈາກຟັງຊັນນີ້.",
+    ta:
+        "இந்தச் செயல் இன்று சில சாதனங்களின் அலாரம் நேரத்தை மாற்றும்.\n\n"
+        "\"அவசர ஆபத்துகள்\" பிரிவில் உள்ள சாதனங்களின் அலாரங்களும் \"பாதுகாப்பு\" பயன்முறையிலுள்ள அலாரங்களும் இந்த அம்சத்தால் பாதிக்கப்படாது.",
+    pt:
+        "Esta ação alterará hoje o horário do alarme de alguns dispositivos.\n\n"
+        "Os alarmes dos dispositivos na categoria \"Perigos urgentes\" e os alarmes no modo \"Proteção\" não serão afetados por este recurso.",
+    tet:
+        "Atuasaun ne'e sei muda oras alarme ba dispozitivu balun ohin.\n\n"
+        "Alarme ba dispozitivu iha kategoria \"Perigu emerjénsia\" no alarme iha modu \"Protesaun\" sei la afetadu hosi funsaun ne'e.",
   );
 
   String firebaseRulesPassedSummary({
@@ -4202,6 +4393,96 @@ class AppStrings {
     ...tetDynamicStrings,
   };
 
+  static final Map<String, String> _italian = {
+    ...itStrings,
+    ...itDynamicStrings,
+  };
+
+  static const Map<String, String> _polish = {
+    ...plStrings,
+    ...plDynamicStrings,
+  };
+
+  static const Map<String, String> _dutch = {
+    ...nlStrings,
+    ...nlDynamicStrings,
+  };
+
+  static const Map<String, String> _czech = {
+    ...csStrings,
+    ...csDynamicStrings,
+  };
+
+  static const Map<String, String> _slovak = {
+    ...skStrings,
+    ...skDynamicStrings,
+  };
+
+  static const Map<String, String> _ukrainian = {
+    ...ukStrings,
+    ...ukDynamicStrings,
+  };
+
+  static const Map<String, String> _romanian = {
+    ...roStrings,
+    ...roDynamicStrings,
+  };
+
+  static const Map<String, String> _hungarian = {
+    ...huStrings,
+    ...huDynamicStrings,
+  };
+
+  static const Map<String, String> _bulgarian = {
+    ...bgStrings,
+    ...bgDynamicStrings,
+  };
+
+  static const Map<String, String> _croatian = {
+    ...hrStrings,
+    ...hrDynamicStrings,
+  };
+
+  static const Map<String, String> _serbian = {
+    ...srStrings,
+    ...srDynamicStrings,
+  };
+
+  static const Map<String, String> _bosnian = {
+    ...bsStrings,
+    ...bsDynamicStrings,
+  };
+
+  static const Map<String, String> _slovenian = {
+    ...slStrings,
+    ...slDynamicStrings,
+  };
+
+  static const Map<String, String> _macedonian = {
+    ...mkStrings,
+    ...mkDynamicStrings,
+  };
+
+  static const Map<String, String> _albanian = {
+    ...sqStrings,
+    ...sqDynamicStrings,
+  };
+
+  static const Map<String, String> _greek = {
+    ...elStrings,
+    ...elDynamicStrings,
+  };
+
+  static const Map<String, String> _turkish = {
+    ...trStrings,
+    ...trDynamicStrings,
+  };
+
+  static const Map<String, String> _swedish = {
+    ...svStrings,
+    ...svDynamicStrings,
+  };
+
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -4239,6 +4520,78 @@ class AppStrings {
 
     if (isTetum) {
       return _translationFromMap(_tetum, key) ?? vi;
+    }
+
+    if (isItalian) {
+      return _translationFromMap(_italian, key) ?? vi;
+    }
+
+    if (isPolish) {
+      return _translationFromMap(_polish, key) ?? vi;
+    }
+
+    if (isDutch) {
+      return _translationFromMap(_dutch, key) ?? vi;
+    }
+
+    if (isCzech) {
+      return _translationFromMap(_czech, key) ?? vi;
+    }
+
+    if (isSlovak) {
+      return _translationFromMap(_slovak, key) ?? vi;
+    }
+
+    if (isUkrainian) {
+      return _translationFromMap(_ukrainian, key) ?? vi;
+    }
+
+    if (isRomanian) {
+      return _translationFromMap(_romanian, key) ?? vi;
+    }
+
+    if (isHungarian) {
+      return _translationFromMap(_hungarian, key) ?? vi;
+    }
+
+    if (isBulgarian) {
+      return _translationFromMap(_bulgarian, key) ?? vi;
+    }
+
+    if (isCroatian) {
+      return _translationFromMap(_croatian, key) ?? vi;
+    }
+
+    if (isSerbian) {
+      return _translationFromMap(_serbian, key) ?? vi;
+    }
+
+    if (isBosnian) {
+      return _translationFromMap(_bosnian, key) ?? vi;
+    }
+
+    if (isSlovenian) {
+      return _translationFromMap(_slovenian, key) ?? vi;
+    }
+
+    if (isMacedonian) {
+      return _translationFromMap(_macedonian, key) ?? vi;
+    }
+
+    if (isAlbanian) {
+      return _translationFromMap(_albanian, key) ?? vi;
+    }
+
+    if (isGreek) {
+      return _translationFromMap(_greek, key) ?? vi;
+    }
+
+    if (isTurkish) {
+      return _translationFromMap(_turkish, key) ?? vi;
+    }
+
+    if (isSwedish) {
+      return _translationFromMap(_swedish, key) ?? vi;
     }
 
     if (isIndonesian) {
@@ -4498,6 +4851,15 @@ class AppStrings {
     lo:
         "ຕັ້ງການເຕືອນຄວາມຈຳໃຫ້ $updatedHomes ເຮືອນແລ້ວ."
         "${skippedHomes > 0 ? "\n\nຂ້າມ $skippedHomes ເຮືອນເພາະທ່ານບໍ່ມີສິດ." : ""}",
+    ta:
+        "$updatedHomes வீடுகளுக்கு நினைவூட்டல் அமைக்கப்பட்டது."
+        "${skippedHomes > 0 ? "\n\nஅனுமதி இல்லாததால் $skippedHomes வீடுகள் தவிர்க்கப்பட்டன." : ""}",
+    pt:
+        "Lembrete configurado para $updatedHomes casas."
+        "${skippedHomes > 0 ? "\n\n$skippedHomes casas foram ignoradas porque você não tem permissão." : ""}",
+    tet:
+        "Lembransa tau ona ba uma $updatedHomes."
+        "${skippedHomes > 0 ? "\n\nUma $skippedHomes liu tanba ita-boot laiha lisensa." : ""}",
   );
 
   String allHomeAlarmAppliedText({
@@ -4571,6 +4933,18 @@ class AppStrings {
         "ຕັ້ງສັນຍານເຕືອນໄພໃຫ້ $updatedDevices ອຸປະກອນໃນ $updatedHomes ເຮືອນແລ້ວ.\n"
         "ເວລາເຮັດຊ້ຳ: $repeatLabel."
         "${skippedHomes > 0 ? "\n\nຂ້າມ $skippedHomes ເຮືອນເພາະທ່ານບໍ່ມີສິດ." : ""}",
+    ta:
+        "$updatedHomes வீடுகளில் உள்ள $updatedDevices பாதுகாப்புச் சாதனங்களுக்கு அலாரம் அமைக்கப்பட்டது.\n"
+        "மீண்டும் ஒலிக்கும் நேரம்: $repeatLabel."
+        "${skippedHomes > 0 ? "\n\nஅனுமதி இல்லாததால் $skippedHomes வீடுகள் தவிர்க்கப்பட்டன." : ""}",
+    pt:
+        "Alarme configurado para $updatedDevices dispositivos em $updatedHomes casas.\n"
+        "Intervalo de repetição: $repeatLabel."
+        "${skippedHomes > 0 ? "\n\n$skippedHomes casas foram ignoradas porque você não tem permissão." : ""}",
+    tet:
+        "Alarme tau ona ba dispozitivu seguransa $updatedDevices iha uma $updatedHomes.\n"
+        "Tempu repetisaun: $repeatLabel."
+        "${skippedHomes > 0 ? "\n\nUma $skippedHomes liu tanba ita-boot laiha lisensa." : ""}",
   );
 
   String allHomeShareResultText(int skipped) {
@@ -5425,6 +5799,42 @@ class AppStrings {
       ? _portuguese
       : isTetum
       ? _tetum
+      : isItalian
+      ? _italian
+      : isPolish
+      ? _polish
+      : isDutch
+      ? _dutch
+      : isCzech
+      ? _czech
+      : isSlovak
+      ? _slovak
+      : isUkrainian
+      ? _ukrainian
+      : isRomanian
+      ? _romanian
+      : isHungarian
+      ? _hungarian
+      : isBulgarian
+      ? _bulgarian
+      : isCroatian
+      ? _croatian
+      : isSerbian
+      ? _serbian
+      : isBosnian
+      ? _bosnian
+      : isSlovenian
+      ? _slovenian
+      : isMacedonian
+      ? _macedonian
+      : isAlbanian
+      ? _albanian
+      : isGreek
+      ? _greek
+      : isTurkish
+      ? _turkish
+      : isSwedish
+      ? _swedish
       : isThai
       ? _thai
       : isIndonesian
@@ -5728,6 +6138,24 @@ class AppStrings {
         !isTamil &&
         !isPortuguese &&
         !isTetum &&
+        !isItalian &&
+        !isPolish &&
+        !isDutch &&
+        !isCzech &&
+        !isSlovak &&
+        !isUkrainian &&
+        !isRomanian &&
+        !isHungarian &&
+        !isBulgarian &&
+        !isCroatian &&
+        !isSerbian &&
+        !isBosnian &&
+        !isSlovenian &&
+        !isMacedonian &&
+        !isAlbanian &&
+        !isGreek &&
+        !isTurkish &&
+        !isSwedish &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -6303,6 +6731,102 @@ class AppStrings {
 
     if (isTetum) {
       return _translationFromMap(_tetum, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isItalian) {
+      return _translationFromMap(_italian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isPolish) {
+      return _translationFromMap(_polish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isDutch) {
+      return _translationFromMap(_dutch, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isCzech) {
+      return _translationFromMap(_czech, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isSlovak) {
+      return _translationFromMap(_slovak, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isUkrainian) {
+      return _translationFromMap(
+            _ukrainian,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isRomanian) {
+      return _translationFromMap(_romanian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isHungarian) {
+      return _translationFromMap(_hungarian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isBulgarian) {
+      return _translationFromMap(_bulgarian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isCroatian) {
+      return _translationFromMap(_croatian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isSerbian) {
+      return _translationFromMap(_serbian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isBosnian) {
+      return _translationFromMap(_bosnian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isSlovenian) {
+      return _translationFromMap(_slovenian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isMacedonian) {
+      return _translationFromMap(
+            _macedonian,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isAlbanian) {
+      return _translationFromMap(_albanian, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isGreek) {
+      return _translationFromMap(_greek, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isTurkish) {
+      return _translationFromMap(_turkish, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isSwedish) {
+      return _translationFromMap(_swedish, _translationAliases[text] ?? text) ??
           text;
     }
 
@@ -7038,6 +7562,78 @@ class AppStrings {
 
     if (isTetum) {
       return "Tetun";
+    }
+
+    if (isItalian) {
+      return "Italiano";
+    }
+
+    if (isPolish) {
+      return "Polski";
+    }
+
+    if (isDutch) {
+      return "Nederlands";
+    }
+
+    if (isCzech) {
+      return "Čeština";
+    }
+
+    if (isSlovak) {
+      return "Slovenčina";
+    }
+
+    if (isUkrainian) {
+      return "Українська";
+    }
+
+    if (isRomanian) {
+      return "Română";
+    }
+
+    if (isHungarian) {
+      return "Magyar";
+    }
+
+    if (isBulgarian) {
+      return "Български";
+    }
+
+    if (isCroatian) {
+      return "Hrvatski";
+    }
+
+    if (isSerbian) {
+      return "Srpski";
+    }
+
+    if (isBosnian) {
+      return "Bosanski";
+    }
+
+    if (isSlovenian) {
+      return "Slovenščina";
+    }
+
+    if (isMacedonian) {
+      return "Македонски";
+    }
+
+    if (isAlbanian) {
+      return "Shqip";
+    }
+
+    if (isGreek) {
+      return "Ελληνικά";
+    }
+
+    if (isTurkish) {
+      return "Türkçe";
+    }
+
+    if (isSwedish) {
+      return "Svenska";
     }
 
     if (isThai) {

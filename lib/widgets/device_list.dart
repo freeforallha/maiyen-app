@@ -106,10 +106,8 @@ class _DeviceListState extends State<DeviceList> {
   void didUpdateWidget(covariant DeviceList oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (
-      oldWidget.homeId != widget.homeId ||
-      oldWidget.ownerUid != widget.ownerUid
-    ) {
+    if (oldWidget.homeId != widget.homeId ||
+        oldWidget.ownerUid != widget.ownerUid) {
       _deviceOrderMap = {};
       _localDeviceOrderMap = {};
       _optimisticDeviceOrderMap = {};
@@ -154,8 +152,7 @@ class _DeviceListState extends State<DeviceList> {
     String deviceId,
     Map<String, dynamic> device,
   ) {
-    final type =
-        device["type"]?.toString().trim().toLowerCase() ?? "";
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "";
 
     if (!isEmergencyStatusDeviceType(type)) {
       return false;
@@ -169,10 +166,7 @@ class _DeviceListState extends State<DeviceList> {
           !_isEmergencyAcknowledgedByCurrentUser(deviceId, device);
     }
 
-    final evaluation = evaluateDeviceStatus(
-      device,
-      securityMode: securityMode,
-    );
+    final evaluation = evaluateDeviceStatus(device, securityMode: securityMode);
 
     return evaluation["level"]?.toString() == "emergency";
   }
@@ -497,10 +491,7 @@ class _DeviceListState extends State<DeviceList> {
     return emergencyStatusTriggeredAt(device);
   }
 
-  String _emergencyAcknowledgementKey(
-    String deviceId,
-    int triggeredAt,
-  ) {
+  String _emergencyAcknowledgementKey(String deviceId, int triggeredAt) {
     return "$deviceId|$triggeredAt";
   }
 
@@ -515,28 +506,18 @@ class _DeviceListState extends State<DeviceList> {
       return false;
     }
 
-    if (
-      _locallyAcknowledgedEmergencyTriggers.contains(
-        _emergencyAcknowledgementKey(deviceId, triggeredAt),
-      )
-    ) {
+    if (_locallyAcknowledgedEmergencyTriggers.contains(
+      _emergencyAcknowledgementKey(deviceId, triggeredAt),
+    )) {
       return true;
     }
 
-    final acknowledgements = safeMap(
-      device["emergencyAcknowledgements"],
-    );
-    final oldSosAcknowledgements = safeMap(
-      device["sosAcknowledgements"],
-    );
-    final acknowledgedTrigger = int.tryParse(
-          acknowledgements[uid]?.toString() ?? "0",
-        ) ??
-        0;
-    final oldSosAcknowledgedTrigger = int.tryParse(
-          oldSosAcknowledgements[uid]?.toString() ?? "0",
-        ) ??
-        0;
+    final acknowledgements = safeMap(device["emergencyAcknowledgements"]);
+    final oldSosAcknowledgements = safeMap(device["sosAcknowledgements"]);
+    final acknowledgedTrigger =
+        int.tryParse(acknowledgements[uid]?.toString() ?? "0") ?? 0;
+    final oldSosAcknowledgedTrigger =
+        int.tryParse(oldSosAcknowledgements[uid]?.toString() ?? "0") ?? 0;
 
     return acknowledgedTrigger >= triggeredAt ||
         oldSosAcknowledgedTrigger >= triggeredAt;
@@ -546,8 +527,7 @@ class _DeviceListState extends State<DeviceList> {
     String deviceId,
     Map<String, dynamic> device,
   ) {
-    final type =
-        device["type"]?.toString().trim().toLowerCase() ?? "";
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "";
     final triggeredAt = _emergencyTriggeredAt(device);
 
     return isEmergencyStatusDeviceType(type) &&
@@ -567,13 +547,10 @@ class _DeviceListState extends State<DeviceList> {
     for (final entry in devices.entries) {
       final deviceId = entry.key;
       final device = safeMap(entry.value);
-      final type =
-          device["type"]?.toString().trim().toLowerCase() ?? "";
+      final type = device["type"]?.toString().trim().toLowerCase() ?? "";
 
-      if (
-        !isEmergencyStatusDeviceType(type) ||
-        _isEmergencyAcknowledgedByCurrentUser(deviceId, device)
-      ) {
+      if (!isEmergencyStatusDeviceType(type) ||
+          _isEmergencyAcknowledgedByCurrentUser(deviceId, device)) {
         continue;
       }
 
@@ -645,6 +622,9 @@ class _DeviceListState extends State<DeviceList> {
       km: "មិនអាចបញ្ជាក់ការជូនដំណឹងបានទេ",
       my: "သတိပေးချက်ကို အတည်မပြုနိုင်ပါ",
       lo: "ບໍ່ສາມາດຢືນຢັນການເຕືອນໄດ້",
+      ta: "எச்சரிக்கையை உறுதிப்படுத்த முடியவில்லை",
+      pt: "Não foi possível confirmar o alerta",
+      tet: "La bele konfirma alerta",
     );
   }
 
@@ -658,14 +638,12 @@ class _DeviceListState extends State<DeviceList> {
     final homeId = _homeId;
     final triggeredAt = _emergencyTriggeredAt(device);
 
-    if (
-      uid.isEmpty ||
-      ownerUid.isEmpty ||
-      homeId.isEmpty ||
-      triggeredAt <= 0 ||
-      !_isEmergencyAwaitingAcknowledgement(deviceId, device) ||
-      _acknowledgingEmergencyDeviceIds.contains(deviceId)
-    ) {
+    if (uid.isEmpty ||
+        ownerUid.isEmpty ||
+        homeId.isEmpty ||
+        triggeredAt <= 0 ||
+        !_isEmergencyAwaitingAcknowledgement(deviceId, device) ||
+        _acknowledgingEmergencyDeviceIds.contains(deviceId)) {
       return;
     }
 
@@ -718,8 +696,7 @@ class _DeviceListState extends State<DeviceList> {
     required AppStrings strings,
     required Color pulseColor,
   }) {
-    final loading =
-        _acknowledgingEmergencyDeviceIds.contains(deviceId);
+    final loading = _acknowledgingEmergencyDeviceIds.contains(deviceId);
     final label = _emergencyAcknowledgeLabel(strings);
 
     return Tooltip(
@@ -733,11 +710,7 @@ class _DeviceListState extends State<DeviceList> {
           child: InkWell(
             onTap: loading
                 ? null
-                : () => _acknowledgeEmergency(
-                    deviceId,
-                    device,
-                    strings,
-                  ),
+                : () => _acknowledgeEmergency(deviceId, device, strings),
             borderRadius: BorderRadius.circular(8),
             child: SizedBox(
               width: double.infinity,
@@ -888,9 +861,7 @@ class _DeviceListState extends State<DeviceList> {
           legacyActive: isActiveDeviceSignal(d["smoke"]),
         );
 
-        return active
-            ? strings.t("Có khói")
-            : strings.t("Bình thường");
+        return active ? strings.t("Có khói") : strings.t("Bình thường");
 
       case "heat":
         final active = isEmergencyStatusActiveForCurrentUser(
@@ -1671,6 +1642,9 @@ class _DeviceListState extends State<DeviceList> {
       km: "បិទស៊ីរ៉ែនរោទិ៍",
       my: "အချက်ပေးဥဩ ပိတ်ရန်",
       lo: "ຢຸດສຽງໄຊເຣນສັນຍານເຕືອນໄພ",
+      ta: "அலாரம் சைரனை நிறுத்து",
+      pt: "PARAR SIRENE DO ALARME",
+      tet: "PARA SIRENE ALARME",
     );
   }
 
@@ -1799,8 +1773,7 @@ class _DeviceListState extends State<DeviceList> {
       compact: compact,
     );
     final trailingIndicatorColumnWidth = compact ? 18.0 : 20.0;
-    final showEmergencyAcknowledge =
-        _isEmergencyAwaitingAcknowledgement(id, d);
+    final showEmergencyAcknowledge = _isEmergencyAwaitingAcknowledgement(id, d);
     final emergencyIsActive = _isEmergencyDeviceActiveForUi(id, d);
     final emergencyPulseColor = _sirenAlertPulseDanger
         ? SafeHomeColors.danger
@@ -1868,72 +1841,72 @@ class _DeviceListState extends State<DeviceList> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 420),
-                    curve: Curves.easeInOut,
-                    width: compact ? 34 : 36,
-                    height: compact ? 34 : 36,
-                    decoration: BoxDecoration(
-                      color: emergencyIsActive
-                          ? effectiveAccentColor.withValues(alpha: 0.20)
-                          : getIconBackground(d),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      getDeviceIcon(type),
-                      size: compact ? 18 : 19,
-                      color: effectiveAccentColor,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          d["name"]?.toString() ?? id,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: compact ? 13.8 : 14.5,
-                            height: 1.05,
-                            fontWeight: FontWeight.w900,
-                            color: emergencyIsActive
-                                ? effectiveAccentColor
-                                : SafeHomeColors.textPrimary,
-                            letterSpacing: -0.1,
-                          ),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 420),
+                        curve: Curves.easeInOut,
+                        width: compact ? 34 : 36,
+                        height: compact ? 34 : 36,
+                        decoration: BoxDecoration(
+                          color: emergencyIsActive
+                              ? effectiveAccentColor.withValues(alpha: 0.20)
+                              : getIconBackground(d),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        const SizedBox(height: 3),
-                        Text(
-                          getMainStatus(d, strings),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: compact ? 11.6 : 12.3,
-                            height: 1.05,
-                            fontWeight: FontWeight.w800,
-                            color: effectiveAccentColor,
+                        child: Icon(
+                          getDeviceIcon(type),
+                          size: compact ? 18 : 19,
+                          color: effectiveAccentColor,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              d["name"]?.toString() ?? id,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: compact ? 13.8 : 14.5,
+                                height: 1.05,
+                                fontWeight: FontWeight.w900,
+                                color: emergencyIsActive
+                                    ? effectiveAccentColor
+                                    : SafeHomeColors.textPrimary,
+                                letterSpacing: -0.1,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              getMainStatus(d, strings),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: compact ? 11.6 : 12.3,
+                                height: 1.05,
+                                fontWeight: FontWeight.w800,
+                                color: effectiveAccentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (alarmPolicyIndicator != null) ...[
+                        const SizedBox(width: 4),
+                        SizedBox(
+                          width: trailingIndicatorColumnWidth,
+                          height: compact ? 34 : 36,
+                          child: Transform.translate(
+                            offset: const Offset(2, 0),
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: alarmPolicyIndicator,
+                            ),
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  if (alarmPolicyIndicator != null) ...[
-                    const SizedBox(width: 4),
-                    SizedBox(
-                      width: trailingIndicatorColumnWidth,
-                      height: compact ? 34 : 36,
-                      child: Transform.translate(
-                        offset: const Offset(2, 0),
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: alarmPolicyIndicator,
-                        ),
-                      ),
-                    ),
-                  ],
                     ],
                   ),
                 ),
@@ -1992,10 +1965,11 @@ class _DeviceListState extends State<DeviceList> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: false,
-                                    textHeightBehavior: const TextHeightBehavior(
-                                      applyHeightToFirstAscent: true,
-                                      applyHeightToLastDescent: true,
-                                    ),
+                                    textHeightBehavior:
+                                        const TextHeightBehavior(
+                                          applyHeightToFirstAscent: true,
+                                          applyHeightToLastDescent: true,
+                                        ),
                                     style: TextStyle(
                                       fontSize: compact ? 9.8 : 10.4,
                                       height: 1.10,
@@ -2141,6 +2115,9 @@ class _DeviceListState extends State<DeviceList> {
           km: "ឧបករណ៍ផ្សេងទៀត",
           my: "အခြားစက်များ",
           lo: "ອຸປະກອນອື່ນ",
+          ta: "மற்ற சாதனங்கள்",
+          pt: "Outros dispositivos",
+          tet: "Dispozitivu seluk",
         );
     }
   }
@@ -2236,6 +2213,9 @@ class _DeviceListState extends State<DeviceList> {
         km: "សញ្ញាល្អ",
         my: "အချက်ပြကောင်း",
         lo: "ສັນຍານດີ",
+        ta: "சிக்னல் நன்றாக உள்ளது",
+        pt: "Sinal bom",
+        tet: "Sinal di'ak",
       ),
       "weak" => strings.choose(
         vi: "Tín hiệu yếu",
@@ -2254,6 +2234,9 @@ class _DeviceListState extends State<DeviceList> {
         km: "សញ្ញាខ្សោយ",
         my: "အချက်ပြအားနည်း",
         lo: "ສັນຍານອ່ອນ",
+        ta: "சிக்னல் பலவீனமாக உள்ளது",
+        pt: "Sinal fraco",
+        tet: "Sinal fraku",
       ),
       _ => strings.choose(
         vi: "Tín hiệu trung bình",
@@ -2272,6 +2255,9 @@ class _DeviceListState extends State<DeviceList> {
         km: "សញ្ញាមធ្យម",
         my: "အချက်ပြအသင့်အတင့်",
         lo: "ສັນຍານປານກາງ",
+        ta: "சிக்னல் நடுத்தரமாக உள்ளது",
+        pt: "Sinal médio",
+        tet: "Sinal moderadu",
       ),
     };
 
@@ -2312,6 +2298,9 @@ class _DeviceListState extends State<DeviceList> {
             km: "ត្រូវពិនិត្យស៊ីរ៉ែន",
             my: "ဆိုင်ရင်ကို စစ်ဆေးရန်လိုသည်",
             lo: "ສຽງໄຊເຣນຕ້ອງການກວດສອບ",
+            ta: "சைரன் சரிபார்க்கப்பட வேண்டும்",
+            pt: "A sirene precisa ser verificada",
+            tet: "Sirene presiza verifikasaun",
           )
         : strings.choose(
             vi: "Còi đang sẵn sàng",
@@ -2330,6 +2319,9 @@ class _DeviceListState extends State<DeviceList> {
             km: "ស៊ីរ៉ែនរួចរាល់",
             my: "ဆိုင်ရင် အသင့်ဖြစ်နေသည်",
             lo: "ສຽງໄຊເຣນພ້ອມໃຊ້ງານ",
+            ta: "சைரன் தயாராக உள்ளது",
+            pt: "Sirene pronta",
+            tet: "Sirene prontu",
           );
 
     return "$text ($count)";
@@ -2361,6 +2353,9 @@ class _DeviceListState extends State<DeviceList> {
       km: "ស៊ីរ៉ែនបានបិទ",
       my: "ဆိုင်ရင် ပိတ်ထားသည်",
       lo: "ສຽງໄຊເຣນປິດຢູ່",
+      ta: "சைரன் அணைக்கப்பட்டுள்ளது",
+      pt: "Sirene desligada",
+      tet: "Sirene mate",
     );
 
     return "$text ($sirenCount)";
@@ -2405,11 +2400,7 @@ class _DeviceListState extends State<DeviceList> {
           )
         : _infrastructureStatusSummary(entries, strings);
     final secondaryStatusText = isSirenGroup
-        ? _sirenOperatingStatusText(
-            sirenIsOn,
-            entries.length,
-            strings,
-          )
+        ? _sirenOperatingStatusText(sirenIsOn, entries.length, strings)
         : _infrastructureSignalText(entries, strings);
     final secondaryStatusColor = isSirenGroup
         ? sirenIsOn
@@ -2624,6 +2615,9 @@ class _DeviceListState extends State<DeviceList> {
       km: "សំឡេងរោទិ៍កំពុងដំណើរការ",
       my: "အချက်ပေးသံ လုပ်ဆောင်နေသည်",
       lo: "ສັນຍານເຕືອນໄພກຳລັງເຮັດວຽກ",
+      ta: "அலாரம் செயல்பாட்டில் உள்ளது",
+      pt: "Alarme ativo",
+      tet: "Alarme ativu",
     );
   }
 

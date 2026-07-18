@@ -29,6 +29,27 @@ const Set<String> _supportedLanguageCodes = {
   'km',
   'my',
   'lo',
+  'ta',
+  'pt',
+  'tet',
+  'it',
+  'pl',
+  'nl',
+  'cs',
+  'sk',
+  'uk',
+  'ro',
+  'hu',
+  'bg',
+  'hr',
+  'sr',
+  'bs',
+  'sl',
+  'mk',
+  'sq',
+  'el',
+  'tr',
+  'sv',
 };
 
 String? _supportedLanguageCode(String? code) {
@@ -74,6 +95,48 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('my', 'MM');
     case 'lo':
       return const Locale('lo');
+    case 'ta':
+      return const Locale('ta', 'SG');
+    case 'pt':
+      return const Locale('pt', 'TL');
+    case 'tet':
+      return const Locale('tet', 'TL');
+    case 'it':
+      return const Locale('it', 'IT');
+    case 'pl':
+      return const Locale('pl', 'PL');
+    case 'nl':
+      return const Locale('nl', 'NL');
+    case 'cs':
+      return const Locale('cs', 'CZ');
+    case 'sk':
+      return const Locale('sk', 'SK');
+    case 'uk':
+      return const Locale('uk', 'UA');
+    case 'ro':
+      return const Locale('ro', 'RO');
+    case 'hu':
+      return const Locale('hu', 'HU');
+    case 'bg':
+      return const Locale('bg', 'BG');
+    case 'hr':
+      return const Locale('hr', 'HR');
+    case 'sr':
+      return const Locale('sr', 'RS');
+    case 'bs':
+      return const Locale('bs', 'BA');
+    case 'sl':
+      return const Locale('sl', 'SI');
+    case 'mk':
+      return const Locale('mk', 'MK');
+    case 'sq':
+      return const Locale('sq', 'AL');
+    case 'el':
+      return const Locale('el', 'GR');
+    case 'tr':
+      return const Locale('tr', 'TR');
+    case 'sv':
+      return const Locale('sv', 'SE');
     case 'en':
       return const Locale('en');
     case 'vi':

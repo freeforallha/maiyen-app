@@ -105,6 +105,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันจันทร์",
         ms: "Isnin",
         lo: "ວັນຈັນ",
+        ta: "திங்கட்கிழமை",
+        pt: "segunda-feira",
+        tet: "Segunda-feira",
       );
     case 2:
       return strings.choose(
@@ -124,6 +127,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันอังคาร",
         ms: "Selasa",
         lo: "ວັນອັງຄານ",
+        ta: "செவ்வாய்க்கிழமை",
+        pt: "terça-feira",
+        tet: "Tersa-feira",
       );
     case 3:
       return strings.choose(
@@ -143,6 +149,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันพุธ",
         ms: "Rabu",
         lo: "ວັນພຸດ",
+        ta: "புதன்கிழமை",
+        pt: "quarta-feira",
+        tet: "Kuarta-feira",
       );
     case 4:
       return strings.choose(
@@ -162,6 +171,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันพฤหัสบดี",
         ms: "Khamis",
         lo: "ວັນພະຫັດ",
+        ta: "வியாழக்கிழமை",
+        pt: "quinta-feira",
+        tet: "Kinta-feira",
       );
     case 5:
       return strings.choose(
@@ -181,6 +193,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันศุกร์",
         ms: "Jumaat",
         lo: "ວັນສຸກ",
+        ta: "வெள்ளிக்கிழமை",
+        pt: "sexta-feira",
+        tet: "Sesta-feira",
       );
     case 6:
       return strings.choose(
@@ -200,6 +215,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันเสาร์",
         ms: "Sabtu",
         lo: "ວັນເສົາ",
+        ta: "சனிக்கிழமை",
+        pt: "sábado",
+        tet: "Sábadu",
       );
     case 7:
       return strings.choose(
@@ -219,6 +237,9 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
         th: "วันอาทิตย์",
         ms: "Ahad",
         lo: "ວັນອາທິດ",
+        ta: "ஞாயிற்றுக்கிழமை",
+        pt: "domingo",
+        tet: "Domingu",
       );
     default:
       return "";
@@ -245,6 +266,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "จ.",
         ms: "Isn",
         lo: "ຈ.",
+        ta: "திங்.",
+        pt: "seg.",
+        tet: "Seg.",
       );
     case 2:
       return strings.choose(
@@ -264,6 +288,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "อ.",
         ms: "Sel",
         lo: "ອ.",
+        ta: "செவ்.",
+        pt: "ter.",
+        tet: "Ter.",
       );
     case 3:
       return strings.choose(
@@ -283,6 +310,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "พ.",
         ms: "Rab",
         lo: "ພ.",
+        ta: "புத.",
+        pt: "qua.",
+        tet: "Kua.",
       );
     case 4:
       return strings.choose(
@@ -302,6 +332,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "พฤ.",
         ms: "Kha",
         lo: "ພຫ.",
+        ta: "வியா.",
+        pt: "qui.",
+        tet: "Kin.",
       );
     case 5:
       return strings.choose(
@@ -321,6 +354,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "ศ.",
         ms: "Jum",
         lo: "ສຸ.",
+        ta: "வெள்.",
+        pt: "sex.",
+        tet: "Ses.",
       );
     case 6:
       return strings.choose(
@@ -340,6 +376,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "ส.",
         ms: "Sab",
         lo: "ສ.",
+        ta: "சனி.",
+        pt: "sáb.",
+        tet: "Sáb.",
       );
     case 7:
       return strings.choose(
@@ -359,6 +398,9 @@ String _alarmWeekdayShortLabel(int day, AppStrings strings) {
         th: "อา.",
         ms: "Ahd",
         lo: "ອາ.",
+        ta: "ஞாயி.",
+        pt: "dom.",
+        tet: "Dom.",
       );
     default:
       return "";
@@ -386,6 +428,9 @@ String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
       th: "ทุกวัน",
       ms: "Setiap hari",
       lo: "ທຸກມື້",
+      ta: "தினமும்",
+      pt: "Todos os dias",
+      tet: "Loron-loron",
     );
   }
 
@@ -456,7 +501,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         customDevices = rawCustomDevices is Map
             ? Map<String, dynamic>.from(rawCustomDevices)
             : {};
-        legacyAlarmMode = (customHome['alarmMode'] ?? customHome['mode'] ?? 'home').toString();
+        legacyAlarmMode =
+            (customHome['alarmMode'] ?? customHome['mode'] ?? 'home')
+                .toString();
         loading = false;
       });
     } catch (_) {
@@ -478,17 +525,11 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     return value.isEmpty ? key : value;
   }
 
-  Map<String, dynamic> _commonAlarm(
-    String key,
-    Map<String, dynamic> device,
-  ) {
+  Map<String, dynamic> _commonAlarm(String key, Map<String, dynamic> device) {
     return normalizeDeviceAlarmSchedule(device['alarm']);
   }
 
-  Map<String, dynamic> _personalAlarm(
-    String key,
-    Map<String, dynamic> device,
-  ) {
+  Map<String, dynamic> _personalAlarm(String key, Map<String, dynamic> device) {
     final realId = _realDeviceId(key, device);
     final raw = customDevices[realId] ?? customDevices[key];
     final customDevice = raw is Map
@@ -515,7 +556,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           : key,
       deviceType: device['type']?.toString() ?? 'door',
       device: device,
-      canEdit: widget.canManageHome);
+      canEdit: widget.canManageHome,
+    );
     await _reload();
   }
 
@@ -555,7 +597,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         return StatefulBuilder(
           builder: (context, setSheetState) {
             Future<void> chooseTime(String field) async {
-              final raw = draft[field]?.toString() ??
+              final raw =
+                  draft[field]?.toString() ??
                   (field == 'start' ? '23:00' : '06:00').toString();
               final parts = raw.split(':');
               final selected = await showTimePicker(
@@ -596,18 +639,18 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         : const <String, dynamic>{};
                     final policy = DeviceAlarmPolicySettings.fromDevice(
                       device: device,
-                      deviceType: device['type']?.toString() ?? 'door');
+                      deviceType: device['type']?.toString() ?? 'door',
+                    );
                     final preferences =
                         DevicePersonalAlarmPreferences.fromCustomDevice(
                           customDevice: customDevice,
                           legacyFullscreenEnabled: policy.fullscreenEnabled,
                         );
-                    updates[
-                      'accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'
-                    ] = DevicePersonalAlarmPreferences(
-                      fullscreenEnabled: preferences.fullscreenEnabled,
-                      followHomeSchedule: preferences.followHomeSchedule,
-                    ).toFirebaseMap();
+                    updates['accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'] =
+                        DevicePersonalAlarmPreferences(
+                          fullscreenEnabled: preferences.fullscreenEnabled,
+                          followHomeSchedule: preferences.followHomeSchedule,
+                        ).toFirebaseMap();
                   }
                 }
 
@@ -689,9 +732,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         value: draft['enabled'] == true,
                         onChanged: saving
                             ? null
-                            : (value) => setSheetState(
-                                  () => draft['enabled'] = value,
-                                ),
+                            : (value) =>
+                                  setSheetState(() => draft['enabled'] = value),
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           personal
@@ -728,9 +770,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           draft['repeatMinutes'],
                         ),
                         enabled: !saving,
-                        onChanged: (value) => setSheetState(
-                          () => draft['repeatMinutes'] = value,
-                        ),
+                        onChanged: (value) =>
+                            setSheetState(() => draft['repeatMinutes'] = value),
                       ),
                       const SizedBox(height: 12),
                       _AlarmWeekdaySelector(
@@ -873,7 +914,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         );
                         final policy = DeviceAlarmPolicySettings.fromDevice(
                           device: device,
-                          deviceType: device['type']?.toString() ?? 'door');
+                          deviceType: device['type']?.toString() ?? 'door',
+                        );
                         final common = _commonAlarm(key, device);
                         final personal = _personalAlarm(key, device);
                         final commonEnabled = common['enabled'] == true;
@@ -918,14 +960,16 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                device['name']?.toString() ?? key,
+                                                device['name']?.toString() ??
+                                                    key,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w900,
-                                                  color:
-                                                      SafeHomeColors.textPrimary),
+                                                  color: SafeHomeColors
+                                                      .textPrimary,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(width: 6),
@@ -936,7 +980,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                               size: 17,
                                               color: policy.enabled
                                                   ? SafeHomeColors.safe
-                                                  : SafeHomeColors.textSecondary,
+                                                  : SafeHomeColors
+                                                        .textSecondary,
                                             ),
                                           ],
                                         ),
@@ -1021,7 +1066,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     );
   }
 }
-
 
 class _AlarmWeekdaySelector extends StatelessWidget {
   final List<int> days;

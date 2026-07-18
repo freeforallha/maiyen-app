@@ -27,7 +27,7 @@ const Map<String, String> ptDynamicStrings = {
       "Canal de alarme legado para compatibilidade",
   "SafeHome báo động toàn màn hình": "Alarme SafeHome em tela cheia",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
-      "Abre o alerta em tela cheia; o som da sirene é reproduzido na tela do alarme",
+      "Abrir o alerta em tela cheia; o som da sirene é reproduzido na tela do alarme",
   "SafeHome cảnh báo khẩn cấp": "Alerta de emergência SafeHome",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alerta de emergência de alta prioridade antes de abrir a tela cheia",
@@ -51,7 +51,7 @@ const Map<String, String> ptDynamicStrings = {
   "Tài khoản đang được sử dụng": "Conta em uso",
   "Hiện tại tài khoản này đang đăng nhập trên một thiết bị khác. Nếu tiếp tục, tài khoản trên thiết bị đó sẽ tự đăng xuất.":
       "Esta conta está conectada em outro dispositivo. Se continuar, a conta naquele dispositivo será desconectada automaticamente.",
-  "Tiếp tục đăng nhập": "Continuar a entrar",
+  "Tiếp tục đăng nhập": "Continuar o login",
   "Tài khoản đã được đăng nhập trên một thiết bị khác.":
       "Esta conta foi conectada em outro dispositivo.",
   "KHẨN CẤP": "EMERGÊNCIA",
@@ -63,7 +63,7 @@ const Map<String, String> ptDynamicStrings = {
   "Người dùng đã tắt cảnh báo.": "Um usuário desativou o alerta.",
   "Khung giờ bảo vệ đã kết thúc.": "O período de proteção terminou.",
   "Cảnh báo tức thời đã tự kết thúc.":
-      "O alerta temporário terminou automaticamente.",
+      "O alerta imediato terminou automaticamente.",
   "Điều kiện cảnh báo không còn hoạt động.":
       "A condição do alerta não está mais ativa.",
   "Cảnh báo đã kết thúc: \$reason": "Alerta encerrado: \$reason",

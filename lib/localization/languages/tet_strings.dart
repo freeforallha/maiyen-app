@@ -6,7 +6,7 @@ const Map<String, String> tetStrings = {
   "Bạn không có quyền sửa lịch chung của nhà":
       "Ita-boot la iha direitu atu muda uma nia oráriu jerál",
   "Nhà của bạn": "Ita-boot nia uma",
-  "Tải tin cũ hơn": "Download notísia tuan sira",
+  "Tải tin cũ hơn": "Karega mensajen tuan liu",
   "Nhà chưa đặt tên": "Uma ne'e seidauk tau naran",
   "Nhà": "Uma",
   "Chưa có thông tin": "Seidauk iha informasaun",
@@ -25,14 +25,14 @@ const Map<String, String> tetStrings = {
   "Cổng": "Portaun",
   "Khóa thông minh": "Xave intelijente",
   "Chuyển động": "Movimentu",
-  "Hiện diện": "Prezente",
+  "Hiện diện": "Prezensa",
   "Rung/chấn động": "Vibrasaun/xoke",
   "Kính vỡ": "Vidru rahun",
   "Báo khói": "Alarme ba suar",
   "Báo nhiệt": "Alarme manas",
   "Khí CO": "Gás CO",
   "Báo gas": "Alarme gás",
-  "Báo ngập/rò nước": "Relata inundasaun/bee-sa'e",
+  "Báo ngập/rò nước": "Alerta inundasaun/vazamentu bee",
   "Nút SOS": "Butaun SOS",
   "Nhiệt độ/Độ ẩm": "Temperatura/Umidade",
   "Bụi mịn PM2.5": "Rai-rahun ki'ik PM2.5",
@@ -52,7 +52,7 @@ const Map<String, String> tetStrings = {
   "Thiết bị đang Online": "Dispozitivu liga hela",
   "lâu không phản hồi": "Tempu naruk laiha resposta",
   "Kết nối cần kiểm tra": "Ligasaun presiza verifika",
-  "Vừa xong": "Foin remata",
+  "Vừa xong": "Foin daudaun",
   "Bị tháo": "Hasai tiha ona",
   "Có khói": "Iha suar",
   "Bình thường": "Normál",
@@ -61,8 +61,8 @@ const Map<String, String> tetStrings = {
   "Tự động Bảo vệ khi rời nhà": "Protesaun Automátika bainhira sai husi uma",
   "Đã kích hoạt": "Ativadu",
   "Sẵn sàng": "Prontu",
-  "Đang đóng": "Taka",
-  "Đang mở": "Loke",
+  "Đang đóng": "Taka ona",
+  "Đang mở": "Nakloke hela",
   "Rò rỉ gas": "Fuga gás",
   "Phát hiện ngập nước": "Deteksaun inundasaun",
   "Phát hiện chuyển động": "Deteksaun movimentu",
@@ -78,13 +78,13 @@ const Map<String, String> tetStrings = {
   "Không phát hiện khí CO": "Laiha gás CO ne'ebé detekta",
   "Khóa đang mở": "Xave nakloke hela",
   "Khóa đang đóng": "Xave taka ona",
-  "Đang bật": "Iha",
-  "Đang tắt": "Desliga",
+  "Đang bật": "Ativadu",
+  "Đang tắt": "Dezativadu",
   "Đang theo dõi điện năng": "Monitorizasaun ba eletrisidade",
   "Đang dùng nguồn dự phòng": "Uza enerjia backup",
   "Nguồn điện bình thường": "Fornesimentu enerjia normál",
-  "Còi đang bật": "Timbre lakan hela",
-  "Còi sẵn sàng": "Dikur prontu",
+  "Còi đang bật": "Sirene lakan hela",
+  "Còi sẵn sàng": "Sirene prontu",
   "Van đang mở": "Válvula nakloke",
   "Van đã đóng": "Válvula taka",
   "Đang hoạt động": "Ativu",
@@ -103,12 +103,11 @@ const Map<String, String> tetStrings = {
       "Laiha sinál sira suar nian ka SOS ne'ebé la normál.",
   "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
       "Laiha atividade foun barak ba análize klean liu.",
-  "Hub kết nối bình thường": "Hub liga ho normál",
-  "Cài đặt cảnh báo cho nhà hiện tại":
-      "Instala alarme sira ba ita-boot nia uma atuál",
+  "Hub kết nối bình thường": "Hub ligadu ho normál",
+  "Cài đặt cảnh báo cho nhà hiện tại": "Konfigura alerta sira ba uma atuál",
   "Nhận cảnh báo báo động": "Simu avizu alarme nian",
   "Đang bật cho tài khoản này": "Ativadu ba konta ida-ne'e",
-  "Đang tắt cho tài khoản này": "Mate ba konta ida-ne'e",
+  "Đang tắt cho tài khoản này": "Dezativadu ba konta ida-ne'e",
   "Hẹn giờ nhắc nhở": "Lembransa ba tempu",
   "Nhắc kiểm tra nhà theo thời gian":
       "Fó hanoin atu verifika uma husi tempu ba tempu",
@@ -161,11 +160,11 @@ const Map<String, String> tetStrings = {
   "Cài đặt hoàn tất": "Instalasaun kompletu ona",
   "Xác nhận rời nhà": "Konfirmasaun sai husi uma",
   "Xác nhận xoá nhà": "Konfirma eliminasaun ba uma",
-  "Nhập mật khẩu": "Hatama senha",
-  "Mật khẩu tài khoản": "Senha konta nian",
+  "Nhập mật khẩu": "Hatama liafuan-sekretu",
+  "Mật khẩu tài khoản": "Liafuan-sekretu konta nian",
   "Rời khỏi nhà": "Sai husi uma",
   "Xoá nhà": "Apaga uma",
-  "Sai mật khẩu": "Senha ne'ebé sala",
+  "Sai mật khẩu": "Liafuan-sekretu sala",
   "Đã rời khỏi home": "Husik hela uma",
   "Đã cập nhật": "Atualizadu",
   "Tìm home...": "Buka uma...",
@@ -192,8 +191,8 @@ const Map<String, String> tetStrings = {
   "Chưa share cho ai": "Seidauk fahe ho ema ida",
   "Tìm nhà": "Buka uma ida",
   "Xoá các nhà đã chọn ?": "Apaga uma sira ne'ebé maka hili ona?",
-  "Thông báo Home": "Anúnsiu hosi Uma Fukun",
-  "Thông báo nhà": "Anúnsiu hosi Uma Fukun",
+  "Thông báo Home": "Notifikasaun uma nian",
+  "Thông báo nhà": "Notifikasaun uma nian",
   "Vai trò thành viên đã thay đổi": "Papél membru sira nian muda ona",
   "Xoá tất cả thông báo?": "Apaga notifikasaun hotu-hotu?",
   "Toàn bộ thông báo nhà sẽ bị xoá.": "Avizu uma nian hotu-hotu sei hamoos.",
@@ -209,21 +208,23 @@ const Map<String, String> tetStrings = {
   "Đã hiểu": "Komprende ona",
   "Lưu ý tạm tắt báo động": "Nota: Hamate alarme temporariamente",
   "Đã bật báo động": "Alarme ativadu",
-  "Đã tắt báo động": "Alarme mate",
+  "Đã tắt báo động": "Alarme hamate ona",
   "Tắt báo động": "Hamate alarme",
   "Cả ngày": "Loron tomak",
   "Bạn không có quyền thực hiện thao tác này.":
       "Ita-boot laiha lisensa atu hala'o operasaun ida-ne'e.",
   "Không thể hoàn tất thao tác. Vui lòng thử lại.":
       "Operasaun ne'e labele hotu. Favor ida koko fali.",
-  "QR gia nhập nhiều nhà không hợp lệ": "QR multi-home join ne'ebé la válidu",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Kódigu QR atu tama iha uma barak la válidu",
   "Bạn đang là chủ các nhà này": "Ita-boot maka uma sira-ne'e nia na'in",
   "Một người dùng": "Utilizadór ida",
   "Yêu cầu gia nhập nhà": "Pedidu atu tama iha uma",
   "Đã gửi yêu cầu gia nhập nhà": "Pedidu atu tama iha uma haruka ona",
   "QR gia nhập không hợp lệ": "QR asesaun ne'ebé la válidu",
   "Bạn đang là chủ nhà này": "Ita-boot maka uma ne'e nia na'in",
-  "QR này không phải mã xin gia nhập nhà": "QR ne'e la'os kódigu atu join uma",
+  "QR này không phải mã xin gia nhập nhà":
+      "QR ne'e la'os kódigu atu aplika tama iha uma",
   "Bạn không có quyền thêm thiết bị":
       "Ita-boot laiha lisensa atu aumenta dispozitivu sira",
   "Đã mở chế độ thêm thiết bị": "Modu adisaun dispozitivu nian loke ona",
@@ -235,8 +236,8 @@ const Map<String, String> tetStrings = {
   "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
       "Ema seluk scan kódigu ida-ne'e hodi haruka pedidu ida atu tama iha uma.",
   "Chia sẻ nhà": "Fahe uma",
-  "Quét QR để xin gia nhập nhà": "Scan QR hodi aplika atu tama iha uma",
-  "Quét QR xin gia nhập nhà": "Scan QR hodi hamutuk ho família",
+  "Quét QR để xin gia nhập nhà": "Eskane QR hodi aplika atu tama iha uma",
+  "Quét QR xin gia nhập nhà": "Eskane QR hodi aplika atu tama iha uma",
   "Đưa mã QR chia sẻ nhà vào khung hình":
       "Hatama kódigu fahe uma nian QR iha kuadru",
   "Mã QR này do chủ nhà chia sẻ": "Kódigu ida-ne'e QR fahe hosi uma-na'in",
@@ -249,14 +250,14 @@ const Map<String, String> tetStrings = {
   "Không thể share cho chính bạn": "Labele fahe ba ita-nia an rasik",
   "Lời mời chia sẻ nhà": "Konvite ba uma fahe",
   "Đã share home": "Uma ne'ebé fahe",
-  "Chuyển quyền chủ nhà": "Transferénsia propriedade uma nian",
+  "Chuyển quyền chủ nhà": "Transfere direitu uma-na'in nian",
   "Không thể chuyển quyền cho chính bạn":
       "Direitu sira labele transfere ba ita-boot nia an rasik",
   "Không tìm thấy user": "La hetan utilizadór",
   "Không tìm thấy tài khoản": "La hetan konta",
   "Xác nhận chuyển quyền": "Konfirma transferénsia direitu sira",
   "Chuyển": "Transferénsia",
-  "Xác nhận mật khẩu": "Konfirma senha",
+  "Xác nhận mật khẩu": "Konfirma liafuan-sekretu",
   "Yêu cầu chuyển quyền chủ nhà": "Husu atu transfere direitu rai-na'in nian",
   "Đã gửi yêu cầu chuyển quyền": "Pedidu transferénsia haruka ona",
   "Đã gửi yêu cầu chuyển quyền chủ nhà":
@@ -294,7 +295,7 @@ const Map<String, String> tetStrings = {
   "Về muộn": "Mai uma tarde",
   "Ra ngoài": "Sai sai",
   "Khác": "Seluk",
-  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Hamate alarme temporariamente ohin",
+  "⏸️ Tạm tắt báo động hôm nay": "⏸️ Alarme temporariamente dezativadu ohin",
   "Chọn giờ bắt đầu tạm tắt": "Hili oras atu hahú taka",
   "Từ": "Husi",
   "Từ giờ": "Hahú agora ba oin",
@@ -325,7 +326,7 @@ const Map<String, String> tetStrings = {
   "Nhà và thiết bị": "Uma no ekipamentu",
   "Chia sẻ và quyền truy cập": "Fahe no asesu",
   "Toàn bộ dữ liệu liên quan": "Dadus relevante hotu-hotu",
-  "Mật khẩu xác nhận": "Konfirmasaun senha",
+  "Mật khẩu xác nhận": "Konfirmasaun liafuan-sekretu",
   "Đã xoá tài khoản": "Konta ne'ebé eliminadu",
   "Xoá thất bại": "Apaga falla",
   "Lỗi xoá tài khoản": "Erru bainhira hamoos konta",
@@ -340,8 +341,8 @@ const Map<String, String> tetStrings = {
   "Lần kích hoạt cuối": "Ativasaun ikus",
   "Thiết bị không còn tồn tại": "Dispozitivu ne'e la eziste ona",
   "Mất kết nối": "Lakon ligasaun",
-  "Online": "Online",
-  "Offline": "Offline",
+  "Online": "Iha ligasaun",
+  "Offline": "Laiha ligasaun",
   "Loại thiết bị": "Tipu dispozitivu",
   "Nhiệt độ": "Temperatura",
   "Độ ẩm": "Umidade",
@@ -383,10 +384,10 @@ const Map<String, String> tetStrings = {
   "Chưa đặt vị trí nhà": "Fatin uma nian seidauk determina",
   "Đặt vị trí nhà tại đây": "Hatur uma nia lokalizasaun iha ne'e",
   "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
-      "Favor ida, tau ita-boot nia uma nia lokalizasaun molok loke Auto Guard",
+      "Favor tau lokalizasaun uma nian molok ativa protesaun automátika",
   "Bán kính bảo vệ mặc định: 150 m": "Raiu protesaun padraun: 150 m",
   "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
-      "Membru ida-idak sei presiza fó lisensa ba lokalizasaun Sempre Permite ba estatutu sai/to'o iha uma atu funsiona bainhira aplikasaun iha background.",
+      "Membru ida-idak sei presiza fó lisensa lokalizasaun \"Permite nafatin\" atu estatutu sai no to'o iha uma bele funsiona bainhira aplikasaun hala'o iha kotuk.",
   "Lưu cài đặt": "Rai konfigurasaun sira",
   "Đã đặt vị trí nhà": "Fatin uma nian estabelese ona",
   "Đang lấy vị trí...": "Foti pozisaun...",
@@ -405,14 +406,14 @@ const Map<String, String> tetStrings = {
   "Đã đổi tên thiết bị": "Naran dispozitivu nian muda ona",
   "Chưa chọn nhà để kiểm tra": "Seidauk hili uma ida atu haree",
   "Hãy thực hiện kiểm tra bằng tài khoản Owner":
-      "Favor halo teste uza konta Host",
+      "Favor halo teste uza konta uma-na'in nian",
   "Không đọc được dữ liệu nhà": "Labele lee dadus uma nian",
   "Nhà cần có ít nhất một thiết bị để test":
       "Uma presiza iha pelumenus dispozitivu ida ba teste",
   "Đóng": "Taka",
-  "Đã thiết lập": "Konfigura",
-  "Quét QR": "Scan QR",
-  "Quét QR để thêm thiết bị": "Scan QR hodi aumenta dispozitivu",
+  "Đã thiết lập": "Konfiguradu ona",
+  "Quét QR": "Eskane QR",
+  "Quét QR để thêm thiết bị": "Eskane QR hodi aumenta dispozitivu",
   "Nhập HUB ID thủ công": "Hatama HUB ID manualmente",
   "Bạn không có quyền sắp xếp phòng":
       "Ita-boot laiha lisensa atu arranja kuartu sira",
@@ -423,25 +424,25 @@ const Map<String, String> tetStrings = {
   "Firebase Rules: CÓ LỖI": "Firebase Rules: ERROR",
   "Firebase Rules: ĐẠT": "Firebase Regra sira: PASS",
   "Giờ không hợp lệ": "Oras ne'ebé la válidu",
-  "Khôi phục mật khẩu": "Rekuperasaun ba senha",
+  "Khôi phục mật khẩu": "Hadia fali liafuan-sekretu",
   "Nhập email của bạn": "Hatama ita-boot nia email",
   "Gửi": "Haruka",
   "Đã gửi email khôi phục": "Email rekuperasaun nian haruka ona",
   "Không gửi được email": "Labele haruka email",
-  "Vui lòng nhập email và mật khẩu": "Favor hatama email no senha",
-  "Mật khẩu xác nhận không khớp": "Senha konfirmasaun la koresponde",
+  "Vui lòng nhập email và mật khẩu": "Favor hatama email no liafuan-sekretu",
+  "Mật khẩu xác nhận không khớp": "Konfirmasaun liafuan-sekretu la hanesan",
   "Không thể tạo tài khoản": "Labele kria konta",
   "Sai tài khoản": "Konta sala",
   "Email đã tồn tại": "Email iha ona",
-  "Mật khẩu quá yếu": "Password fraku liu",
-  "Sai email hoặc mật khẩu": "Email ka senha ne'ebé sala",
+  "Mật khẩu quá yếu": "Liafuan-sekretu fraku liu",
+  "Sai email hoặc mật khẩu": "Email ka liafuan-sekretu sala",
   "Lỗi đăng nhập": "Erru iha login",
   "Email": "Email",
   "Mật khẩu": "Liafuan-xave",
   "Ghi nhớ tài khoản": "Hanoin konta",
   "Đăng nhập": "Tama",
   "Đăng ký mới": "Rejistu foun",
-  "Quên mật khẩu?": "Haluha senha?",
+  "Quên mật khẩu?": "Haluha liafuan-sekretu?",
   "Chưa có tài khoản? Đăng ký": "Seidauk iha konta? Rejistu",
   "Đã có tài khoản? Đăng nhập": "Iha ona konta ida? Tama",
   "Tính năng đang được phát triển":
@@ -467,7 +468,7 @@ const Map<String, String> tetStrings = {
   "Theo nhà": "Tuir uma",
   "Riêng tôi": "Ha'u de'it",
   "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
-      "Uza kalendáriu fahe ne'ebé maka konfigura hosi Host ka Administradór",
+      "Uza kalendáriu fahe ne'ebé maka konfigura hosi uma-na'in ka administradór",
   "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
       "Uza ita-boot nia kalendáriu rasik aplika de'it ba ita-boot nia konta",
   "Thiết lập nhanh báo động": "Konfigura lalais alarme sira",
@@ -478,7 +479,7 @@ const Map<String, String> tetStrings = {
   "Kết thúc": "Remata",
   "Thời gian lặp lại": "Tempu repete",
   "Không lặp lại": "Laiha repetisaun",
-  "Quét QR HUB": "Scan QR HUB",
+  "Quét QR HUB": "Eskane QR HUB",
   "Đưa mã QR vào giữa khung": "Hatama kódigu QR iha kuadru nia klaran",
   "Đang áp dụng...": "Aplika hela...",
   "Hôm nay đã ghi nhận cảnh báo SOS": "Ohin alarme SOS hetan gravasaun",
@@ -494,14 +495,14 @@ const Map<String, String> tetStrings = {
   "Pin yếu": "Bateria menus",
   "SOS đã kết thúc": "SOS remata ona",
   "SOS được kích hoạt": "SOS ativadu ona",
-  "Tamper bình thường": "Manipulasaun normál",
+  "Tamper bình thường": "La deteta intervensaun la normál",
   "Thiết bị bị tháo": "Dispozitivu hasai tiha ona",
   "Thiết bị mới": "Ekipamentu foun",
   "Thiết bị offline": "Dispozitivu lakon ligasaun",
   "Thiết bị online": "Dispozitivu ligadu ona",
   "Báo động kích hoạt": "Alarme ativadu",
-  "Báo động đã tắt": "Alarme lian ona",
-  "Tạm tắt báo động hôm nay": "Hamate alarme ohin",
+  "Báo động đã tắt": "Alarme dezativadu ona",
+  "Tạm tắt báo động hôm nay": "Alarme temporariamente dezativadu ohin",
   "Độ ẩm cao": "Umidade aas",
   "Thử lại": "Koko fali",
   "Không thể tải dữ liệu tài khoản": "Labele download dadus konta nian",
@@ -528,7 +529,7 @@ const Map<String, String> tetStrings = {
   "Chuyển về Bình thường?": "Muda fali ba Normál?",
   "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
       "Bainhira loke, dispozitivu seguransa sira sei monitoriza kedas.",
-  "Bật Bảo vệ thủ công?": "Loke Protesaun Manuál?",
+  "Bật Bảo vệ thủ công?": "Ativa protesaun manuál?",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
       "Asaun ida-ne'e sei muda oras alarme nian husi dispozitivu balu",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ":
@@ -542,19 +543,19 @@ const Map<String, String> tetStrings = {
   "Không lưu được cài đặt": "Konfigurasaun sira labele rai",
   "Không lấy được vị trí hiện tại": "La konsege hetan lokalizasaun atuál",
   "Không thể xác nhận tài khoản hiện tại": "Labele konfirma konta atuál",
-  "Mật khẩu không đúng": "Password la loos",
-  "Không thể xác nhận mật khẩu": "Labele konfirma senha",
+  "Mật khẩu không đúng": "Liafuan-sekretu la loos",
+  "Không thể xác nhận mật khẩu": "Labele konfirma liafuan-sekretu",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
       "Uma-na'in ka Administradór de'it maka iha autoridade atu troka repetidór alarme nian",
   "Không lưu được thời gian lặp báo động":
       "Labele salva tempu repete alarme nian",
   "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
-      "Host ka Administradór de'it maka iha autoridade atu muda Modu Protesaun nian",
+      "Uma-na'in ka administradór de'it maka bele muda modu protesaun nian",
   "Không thể thay đổi chế độ nhà": "Labele muda modo uma nian",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
       "Protesaun ativa ona maibé notifikasaun sira labele haruka",
   "Đã bật Chế độ Bảo vệ thủ công": "Modu Protesaun Manuál ativadu",
-  "Đã chuyển nhà về Bình thường": "Muda ba uma ba Normal",
+  "Đã chuyển nhà về Bình thường": "Uma muda fila ba modu Normál",
   "60 phút": "minutu 60",
   "30 phút": "minutu 30",
   "15 phút": "minutu 15",
@@ -576,7 +577,7 @@ const Map<String, String> tetStrings = {
       "Lembransa sei fó hanoin ba ita-boot atu verifika estatutu seguransa ita-boot nia uma nian iha oras ne'ebé maka hili ona.",
   "Thêm khung giờ báo động": "Hatama tempu ba alarme",
   "Đang sử dụng nhắc nhở riêng của bạn": "Uza ita-boot nia lembransa rasik",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Uza lembransa host nian",
+  "Đang sử dụng nhắc nhở của chủ nhà": "Uza lembransa uma-na'in nian",
   "Sửa giờ nhắc nhở": "Edita tempu lembransa nian",
   "Sửa giờ kết thúc báo động": "Edita oras remata alarme nian",
   "Sửa giờ bắt đầu báo động": "Hadi'a oras hahú alarme nian",
@@ -627,24 +628,25 @@ const Map<String, String> tetStrings = {
       "SafeHome loke Protesaun automatikamente tanba ita-boot sai hosi uma.",
   "Nhà đang ở chế độ dùng bình thường.": "Uma ne'e iha modo uzu normál.",
   "Bảo vệ thủ công đang bật": "Protesaun manuál iha",
-  "Bảo vệ tự động đang bật": "Protesaun automátika iha",
-  "Bảo vệ đang tắt": "Protesaun mate",
+  "Bảo vệ tự động đang bật": "Protesaun automátika ativadu",
+  "Bảo vệ đang tắt": "Protesaun dezativadu",
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
       "Ita-boot loke aplikasaun foin lalais ne'e atu verifika estatutu.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Ita-boot tenke loke aplikasaun periodikamente hodi verifika lisensa sira, kalendáriu sira, no alerta sira ne'ebé seidauk lee.",
   "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Hafoin uza dala barak, SafeHome sei apresia ábitu sira teste aplikasaun nian ne'ebé di'ak liu.",
+      "Hafoin uza dala balun, SafeHome sei aprende no avalia di'ak liu ábitu atu verifika aplikasaun.",
   "Tần suất vào ứng dụng ổn": "Frekuénsia atu hatama aplikasaun ne'e di'ak",
   "Đã lâu chưa vào ứng dụng kiểm tra":
-      "La verifika aplikasaun ne'e iha tempu balun nia laran",
-  "Đang ghi nhận tần suất vào ứng dụng": "Frekuénsia gravasaun iha aplikasaun",
+      "Dala ikus verifika aplikasaun liu ona tempu naruk",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Hela rejista frekuénsia atu loke aplikasaun",
   "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
-      "Sempre verifika lisensa sira lokalizasaun nian no kondisaun sira background nian.",
+      "Presiza verifika lisensa lokalizasaun \"Permite nafatin\" no kondisaun aplikasaun hala'o iha kotuk.",
   "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
       "Dispozitivu ne'e prienxe rekizitu sira elejibilidade nian ba karakterístika Protesaun Sai-Uma automátika atu funsiona.",
   "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
-      "Ita-boot bele loke ida-ne'e bainhira ita-boot hakarak muda automatikamente ba Seguransa bainhira ita-boot sai hosi uma.",
+      "Ita-boot bele ativa ida-ne'e bainhira ita-boot hakarak muda automatikamente ba protesaun bainhira ita-boot sai hosi uma.",
   "Auto rời khỏi nhà chưa ổn":
       "Protesaun automátika bainhira sai husi uma la estavel",
   "Auto rời khỏi nhà đã sẵn sàng":
@@ -674,15 +676,15 @@ const Map<String, String> tetStrings = {
   "Thiết bị nhận cảnh báo bình thường":
       "Dispozitivu ne'e simu avizu sira ho normál",
   "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
-      "iOS jere background halai ho metin liu duké Android; rai notifikasaun sira no lisensa sira lokalizasaun nian Sempre permitidu se uza funsaun Protesaun automátika bainhira sai hosi uma.",
+      "iOS jere aplikasaun ne'ebé hala'o iha kotuk ho metin liu duké Android; rai notifikasaun no lisensa lokalizasaun \"Permite nafatin\" se uza protesaun automátika bainhira sai hosi uma.",
   "Cơ chế iOS": "mekanizmu iOS",
   "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
-      "Favor verifika lisensa sira background no autostart nian atu nune'e avizu sira labele atraza.",
+      "Favor verifika lisensa atu aplikasaun hala'o iha kotuk no hahú-an rasik atu notifikasaun sira la atraza.",
   "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
-      "Dispozitivu ne'e konfirma ona kondisaun sira fundo nian ne'ebé krítiku.",
+      "Dispozitivu ne'e konfirma ona kondisaun importante ba aplikasaun hala'o iha kotuk.",
   "Cần kiểm tra chạy nền / tự khởi động":
-      "Presiza verifika background running/autostart",
-  "Chạy nền ổn định": "Hala'o iha fundo ho estavel",
+      "Presiza verifika aplikasaun hala'o iha kotuk no hahú-an rasik",
+  "Chạy nền ổn định": "Hala'o iha kotuk ho estabilidade",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Dispozitivu Android balu bele atraza avizu sira se optimizasaun bateria nian ativadu.",
   "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
@@ -709,7 +711,7 @@ const Map<String, String> tetStrings = {
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Alerta sira bele la hatudu se notifikasaun sira dezativadu.",
   "Điện thoại có thể nhận thông báo SafeHome.":
-      "Telefone bele simu mensajen SafeHome.",
+      "Telefone bele simu notifikasaun hosi SafeHome.",
   "Chưa bật thông báo": "Notifikasaun sira la ativa",
   "Đã bật thông báo": "Notifikasaun sira ativadu",
   "Hệ thống: Sẵn sàng": "Sistema: Prontu",
@@ -731,18 +733,18 @@ const Map<String, String> tetStrings = {
   "Đã bật tự động Bảo vệ khi mọi người rời nhà":
       "Ativa Protesaun Automátika bainhira ema sai hosi uma",
   "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
-      "Desliga Protesaun automátika bainhira ema sai hosi uma",
+      "Protesaun automátika dezativadu ona bainhira ema sai hosi uma",
   "Không thể thay đổi trạng thái báo động": "Estadu alarme nian labele muda",
   "Đã tắt toàn bộ báo động của nhà": "Alarme uma nian hotu-hotu mate ona",
   "QR này không phải mã xin gia nhập Home":
-      "QR ida ne'e la'os kódigu atu aplika ba join uma",
+      "QR ida ne'e la'os kódigu atu aplika tama iha uma",
   "Thêm Home": "Hatama uma",
   "Mở cài đặt": "Loke konfigurasaun sira",
   "Để sau": "Tuir mai",
   "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome presiza lisensa lokalizasaun \"Sempre Permite\" atu rekoñese bainhira ita sai ka fila ba uma, maski bainhira aplikasaun hala'o iha background.",
+      "SafeHome presiza lisensa lokalizasaun \"Permite nafatin\" atu rekoñese bainhira ita sai ka fila ba uma, maski bainhira aplikasaun hala'o iha kotuk.",
   "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome agora daudaun asesu de'it ba lokalizasaun bainhira ita-boot uza hela aplikasaun.\n\nHili lisensa ba lokalizasaun no muda ba \"Permite nafatin\" atu nune'e Protesaun Sai-Uma automátika funsiona bainhira aplikasaun hala'o iha background.",
+      "SafeHome agora daudaun asesu de'it ba lokalizasaun bainhira ita-boot uza hela aplikasaun.\n\nHili lisensa lokalizasaun no muda ba \"Permite nafatin\" atu protesaun automátika bainhira sai hosi uma bele funsiona bainhira aplikasaun hala'o iha kotuk.",
   "Cho phép vị trí luôn luôn": "Permite lokalizasaun nafatin",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Ita-boot nia uma sira sei hamoos.\nUma sira ne'ebé fahe sei husik hela.",
@@ -757,11 +759,11 @@ const Map<String, String> tetStrings = {
   "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
       "Asaun ida-ne'e sei hamate alarme uma nian hotu-hotu ho tipu saida de'it. Ita-boot sei la simu tan alerta sira bainhira iha perigu iha ita-boot nia telefone.",
   "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
-      "Alarme uza hela modo Follow-Home.\n\nIta-boot sei simu alerta sira tuir oráriu jerál alarme nian ne'ebé maka estabelese hosi Host ka Administradór.",
+      "Alarme uza hela modu tuir oráriu uma nian.\n\nIta-boot sei simu alerta sira tuir oráriu jerál alarme nian ne'ebé estabelese hosi uma-na'in ka administradór.",
   "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
       "Alarme ne'e uza modo Ha'u nia Rasik.\n\nIta-boot sei simu alerta sira tuir oráriu alarme ketak ne'ebé maka estabelese ba konta ida-ne'e.",
   "Không thể đăng nhập bằng Google": "Labele tama ho Google",
-  "Không đặt được mật khẩu": "Labele tau senha",
+  "Không đặt được mật khẩu": "Labele tau liafuan-sekretu",
   "Chấp nhận": "Simu",
   "Cho phép": "Permitidu",
   "Không thể chấp nhận lời mời. Vui lòng thử lại.":
@@ -778,10 +780,11 @@ const Map<String, String> tetStrings = {
   "VD: HUB_001": "Porezemplu: HUB_001",
   "Pair": "Par",
   "Mật khẩu tối thiểu 6 ký tự": "Liafuan-xave mínimu karakter 6",
-  "Mật khẩu nhập lại không khớp": "Senha ne'ebé hatama filafali la hanesan",
-  "Tạo mật khẩu": "Kria senha ida",
-  "Mật khẩu mới": "Senha foun",
-  "Nhập lại mật khẩu": "Hatama fali senha",
+  "Mật khẩu nhập lại không khớp":
+      "Liafuan-sekretu ne'ebé hatama filafali la hanesan",
+  "Tạo mật khẩu": "Kria liafuan-sekretu",
+  "Mật khẩu mới": "Liafuan-sekretu foun",
+  "Nhập lại mật khẩu": "Hatama fali liafuan-sekretu",
   "Xác nhận tắt cảnh báo": "Konfirma avizu mate",
   "HỦY": "KANSELA",
   "XÁC NHẬN": "KONFIRMASAUN",
@@ -792,7 +795,7 @@ const Map<String, String> tetStrings = {
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Hili Sempre permite lisensa ba lokalizasaun iha Konfigurasaun Aplikasaun nian",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
-      "Konta Google sira presiza kria senha adisionál ida atu uza funsaun seguransa nian sira.",
+      "Konta Google sira presiza kria liafuan-sekretu adisionál ida atu uza funsaun seguransa nian sira.",
   "Báo động": "Alarme",
   "Bạn không có quyền thực hiện thao tác này。":
       "Ita-boot laiha lisensa atu hala'o operasaun ida-ne'e.",
@@ -802,14 +805,14 @@ const Map<String, String> tetStrings = {
   "Chưa có dữ liệu thiết bị để đánh giá":
       "Laiha dadus dispozitivu nian ne'ebé disponivel ba avaliasaun",
   "Chuyển quyền sở hữu cho thành viên khác":
-      "Transfere propriedade ba membru seluk",
+      "Transfere direitu uma-na'in nian ba membru seluk",
   "Có": "Sim",
   "Cửa đã đóng an toàn": "Odamatan taka metin",
   "Đã xảy ra lỗi. Vui lòng thử lại.":
       "Erru ida akontese ona. Favor ida koko fali.",
-  "Đang kiểm tra kết nối Hub": "Verifika ligasaun Hub",
-  "Đang mở khi nhà ở chế độ Bảo vệ": "Loke bainhira uma iha modo Protesaun",
-  "Đang mở trong giờ báo động": "Loke durante oras alarme nian",
+  "Đang kiểm tra kết nối Hub": "Hela verifika ligasaun Hub",
+  "Đang mở khi nhà ở chế độ Bảo vệ": "Nakloke bainhira uma iha modu protesaun",
+  "Đang mở trong giờ báo động": "Nakloke durante oras alarme nian",
   "Đang tải...": "Karrega hela...",
   "Hồ sơ, yêu cầu và lời mời tham gia":
       "Perfil, ezijénsia no konvite sira atu partisipa",
@@ -898,7 +901,7 @@ const Map<String, String> tetStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Hamate de'it alarme bainhira ita-boot verifika ona kondisaun iha ita-boot nia uma.\n\nIta-boot iha serteza katak ita-boot hakarak hamate avizu?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome detekta avizu sira",
-  "Mở SafeHome để kiểm tra ngay.": "Loke SafeHome hodi koko agora.",
+  "Mở SafeHome để kiểm tra ngay.": "Loke SafeHome hodi verifika agora.",
   "\$count tin nhắn mới": "\$count mensajen foun",
   "Tin nhắn HomeChat": "Mensajen sira HomeChat nian",
   "\$senderName đã gửi một tin nhắn": "\$senderName haruka mensajen ida",
@@ -911,12 +914,11 @@ const Map<String, String> tetStrings = {
       "Pedidu atu tama iha uma \$count haruka ona",
   "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
       "\$requesterName aplika atu tama iha família \"\$homeName\".",
-  "Bạn đã xoá nhà \"\$homeName\".":
-      "Ita-boot hamoos ona propriedade \"\$homeName\".",
+  "Bạn đã xoá nhà \"\$homeName\".": "Ita-boot hamoos ona uma \"\$homeName\".",
   "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
-      "Ita-boot haruka ona pedidu ida atu transfere host \"\$homeName\" ba \$email.",
+      "Ita-boot haruka ona pedidu ida atu transfere direitu uma-na'in nian ba \"\$homeName\" ba \$email.",
   "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
-      "\$actorName hakarak transfere direitu sira host nian \"\$homeName\" ba ita-boot.",
+      "\$actorName hakarak transfere direitu uma-na'in nian ba \"\$homeName\" ba ita-boot.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName konvida ona ita-boot sira atu hamutuk ho família \"\$homeName\".",
   "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
@@ -1062,7 +1064,7 @@ const Map<String, String> tetStrings = {
   "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
       "Ekipamentu emerjénsia \$emergencyTotal disponivel. Rekomendasaun mínimu: alarme ba suar no SOS.",
   "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
-      "Ita-boot hakarak duni atu transfere propriedade uma nian ba:\n\$targetEmail?",
+      "Ita-boot hakarak duni atu transfere direitu uma-na'in nian ba:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "Odamatan \$count taka metin",
   "\$count cửa và khóa đã an toàn": "Odamatan no xave \$count seguru",
   "\$count thiết bị đang được theo dõi":
@@ -1077,7 +1079,7 @@ const Map<String, String> tetStrings = {
   "Chưa xác định vị trí: \$count": "Fatin deskoñesidu: \$count",
   "Môi trường hiện tại: \$environment": "Ambiente atuál: \$environment",
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
-      "\$name: Loke bainhira uma iha modo Protesaun",
+      "\$name: Nakloke bainhira uma iha modu protesaun",
   "An tâm hơn trong từng ngôi nhà": "Hakmatek liután iha uma ida-idak",
   "Báo động SafeHome": "Alarme SafeHome",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
@@ -1096,7 +1098,7 @@ const Map<String, String> tetStrings = {
   "Cài đặt báo động": "Konfigurasaun alarme nian",
   "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
       "Kontrola oinsá sensor ida-ne'e hamosu alarme sira.",
-  "Tham gia báo động": "Hamutuk ho alarme",
+  "Tham gia báo động": "Partisipasaun iha alarme",
   "Tắt để cảm biến không tạo báo động.":
       "Mate atu nune'e sensor labele hamosu alarme.",
   "Bật còi vật lý": "Ativa sirene fízika",
@@ -1108,7 +1110,7 @@ const Map<String, String> tetStrings = {
   "Độ trễ kích hoạt": "Atrazu ativasaun",
   "Chỉ áp dụng cho cảm biến an ninh.": "Aplika de'it ba sensor seguransa nian.",
   "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
-      "Sensor emerjénsia nian sempre ativa kedas.",
+      "Sensor emerjénsia sempre hamosu alarme kedas.",
   "Ngay lập tức": "Kedas",
   "giây": "segundu",
   "Đã lưu cấu hình báo động": "Konfigurasaun alarme nian salva ona",
@@ -1207,5 +1209,5 @@ const Map<String, String> tetStrings = {
   "Nhận cảnh báo theo lịch chung của nhà":
       "Simu alerta sira tuir Ita-boot nia uma nia kalendáriu jerál",
   "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
-      "Desliga atu la simu notifikasaun ka alerta sira iha ekran tomak hosi kalendáriu globál. Uma nia klaxon fíziku funsiona nafatin.",
+      "Desliga atu la simu notifikasaun ka alerta iha ekran tomak hosi oráriu partilladu. Sirene fízika uma nian sei funsiona nafatin.",
 };
