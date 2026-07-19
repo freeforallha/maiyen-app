@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import '../services/share_service.dart';
 import '../services/home_notification_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
@@ -61,10 +62,9 @@ Future<bool?> showShareRequestSheet({
     return false;
   }
 
-  return showModalBottomSheet<bool>(
+  return SafeHomeNavigation.pushChildPage<bool>(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    routeName: "share_requests",
     builder: (sheetContext) {
       Future<void> removeRequestFromAllApprovers({
         required String requestKey,

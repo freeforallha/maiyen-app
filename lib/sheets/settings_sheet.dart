@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import '../services/platform/platform_auto_away_task_service.dart';
 
 String _languageSubtitle(String code) {
@@ -266,11 +267,9 @@ Future<void> _showLanguageSheet(BuildContext context) async {
     );
   }
 
-  await showModalBottomSheet<void>(
+  await SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    backgroundColor: Colors.transparent,
-    isScrollControlled: true,
-    useSafeArea: true,
+    routeName: "language",
     builder: (sheetContext) {
       return StatefulBuilder(
         builder: (context, setSheetState) {
@@ -528,12 +527,8 @@ void showSettingsSheet({
     });
   }
 
-  void closeThen(BuildContext sheetContext, VoidCallback action) {
-    Navigator.of(sheetContext).pop();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      action();
-    });
+  void openChild(VoidCallback action) {
+    action();
   }
 
   IconData roleIcon() {
@@ -733,18 +728,10 @@ void showSettingsSheet({
   }
 
   void showHomeManagementSheet(BuildContext settingsSheetContext) {
-    Navigator.of(settingsSheetContext).pop();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) {
-        return;
-      }
-
-      showModalBottomSheet<void>(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (managementContext) {
+    SafeHomeNavigation.pushChildPage<void>(
+      context: settingsSheetContext,
+      routeName: "home_management",
+      builder: (managementContext) {
           return SafeArea(
             child: Container(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
@@ -791,7 +778,7 @@ void showSettingsSheet({
                     subtitle: strings.transferOwnershipSubtitle,
                     color: const Color(0xFF7656C8),
                     onTap: () {
-                      closeThen(managementContext, onTransferOwner);
+                      openChild(onTransferOwner);
                     },
                   ),
 
@@ -802,19 +789,18 @@ void showSettingsSheet({
                     color: SafeHomeColors.danger,
                     destructive: true,
                     onTap: () {
-                      closeThen(managementContext, onDeleteHome);
+                      openChild(onDeleteHome);
                     },
                   ),
                 ],
               ),
             ),
           );
-        },
-      );
-    });
+      },
+    );
   }
 
-  showModalBottomSheet(
+  SafeHomeNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -898,10 +884,7 @@ void showSettingsSheet({
                                             shape: const CircleBorder(),
                                             child: InkWell(
                                               onTap: () {
-                                                closeThen(
-                                                  sheetContext,
-                                                  onRenameHome,
-                                                );
+                                                openChild(onRenameHome);
                                               },
                                               customBorder:
                                                   const CircleBorder(),
@@ -1005,7 +988,7 @@ void showSettingsSheet({
                           subtitle: strings.shareHomeSubtitle,
                           color: SafeHomeColors.info,
                           onTap: () {
-                            closeThen(sheetContext, onShare);
+                            openChild(onShare);
                           },
                         ),
 
@@ -1015,7 +998,7 @@ void showSettingsSheet({
                         subtitle: strings.homeMembersSubtitle,
                         color: SafeHomeColors.safe,
                         onTap: () {
-                          closeThen(sheetContext, onShareList);
+                          openChild(onShareList);
                         },
                       ),
 
@@ -1028,7 +1011,7 @@ void showSettingsSheet({
                           ),
                           color: const Color(0xFF2F8F6B),
                           onTap: () {
-                            closeThen(sheetContext, onAutoAway);
+                            openChild(onAutoAway);
                           },
                         ),
 
@@ -1039,7 +1022,7 @@ void showSettingsSheet({
                           subtitle: strings.manageRoomsSubtitle,
                           color: SafeHomeColors.warning,
                           onTap: () {
-                            closeThen(sheetContext, onRooms);
+                            openChild(onRooms);
                           },
                         ),
 
@@ -1049,7 +1032,7 @@ void showSettingsSheet({
                         subtitle: strings.allDevicesSubtitle,
                         color: const Color(0xFF576FD0),
                         onTap: () {
-                          closeThen(sheetContext, onAllDevices);
+                          openChild(onAllDevices);
                         },
                       ),
 
@@ -1114,7 +1097,7 @@ void showSettingsSheet({
                           },
                         ),
                         onTap: () {
-                          closeThen(sheetContext, onAccount);
+                          openChild(onAccount);
                         },
                       ),
 
@@ -1126,13 +1109,7 @@ void showSettingsSheet({
                             "${strings.currentLanguageName}",
                         color: SafeHomeColors.primary,
                         onTap: () {
-                          Navigator.of(sheetContext).pop();
-
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            if (context.mounted) {
-                              _showLanguageSheet(context);
-                            }
-                          });
+                          _showLanguageSheet(sheetContext);
                         },
                       ),
                     ],

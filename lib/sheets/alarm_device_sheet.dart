@@ -8,6 +8,7 @@ import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import 'device_alarm_policy_sheet.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+import '../navigation/safehome_navigation.dart';
 
 IconData _alarmDeviceIcon(Object? rawType) {
   final type = rawType?.toString().trim().toLowerCase() ?? "unknown";
@@ -588,7 +589,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final draft = normalizeDeviceAlarmSchedule(null);
     var saving = false;
 
-    await showModalBottomSheet<void>(
+    await SafeHomeNavigation.showModalSheet<void>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../localization/app_strings.dart';
+import '../../navigation/safehome_navigation.dart';
 import '../../safehome_theme.dart';
 
 Future<Map<String, String>?> showRenameHomeSheet({
@@ -14,7 +15,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
   String inputName = currentName.trim();
   String inputAddress = currentAddress.trim();
 
-  return showModalBottomSheet<Map<String, String>>(
+  return SafeHomeNavigation.showModalSheet<Map<String, String>>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -216,60 +217,36 @@ Future<String?> showShareHomeSheet({
 }) async {
   String inputEmail = "";
   FocusManager.instance.primaryFocus?.unfocus();
-  return showModalBottomSheet<String>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (sheetContext) {
-      return StatefulBuilder(
-        builder: (context, setSheetState) {
-          final email = inputEmail.trim().toLowerCase();
 
+  return SafeHomeNavigation.pushChildPage<String>(
+    context: context,
+    routeName: "share_home",
+    builder: (pageContext) {
+      return StatefulBuilder(
+        builder: (context, setPageState) {
+          final email = inputEmail.trim().toLowerCase();
           final emailOk = RegExp(
             r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
           ).hasMatch(email);
 
           void submit() {
             if (!emailOk) return;
-            Navigator.pop(sheetContext, email);
+            Navigator.pop(pageContext, email);
           }
 
-          final bottomInset = MediaQuery.of(sheetContext).viewInsets.bottom;
+          final bottomInset = MediaQuery.viewInsetsOf(pageContext).bottom;
           final keyboardOpen = bottomInset > 0;
           final qrSize = keyboardOpen ? 130.0 : 180.0;
 
-          return SafeArea(
-            child: AnimatedPadding(
-              duration: const Duration(milliseconds: 160),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.only(bottom: bottomInset),
-              child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
-                ),
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(26),
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 42,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      const SizedBox(height: 18),
-
+          return ColoredBox(
+            color: Colors.white,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                child: Column(
+                  children: [
                       Text(
                         strings.t("Chia sẻ nhà"),
                         textAlign: TextAlign.center,
@@ -279,7 +256,6 @@ Future<String?> showShareHomeSheet({
                         ),
                       ),
                       const SizedBox(height: 14),
-
                       Text(
                         strings.t("Mời thành viên bằng mã QR"),
                         textAlign: TextAlign.center,
@@ -288,14 +264,12 @@ Future<String?> showShareHomeSheet({
                         ),
                       ),
                       const SizedBox(height: 12),
-
                       QrImageView(
                         data: qrData,
                         version: QrVersions.auto,
                         size: qrSize,
                       ),
                       const SizedBox(height: 18),
-
                       Row(
                         children: [
                           const Expanded(child: Divider()),
@@ -313,19 +287,16 @@ Future<String?> showShareHomeSheet({
                         ],
                       ),
                       const SizedBox(height: 18),
-
                       TextFormField(
                         autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
                         onChanged: (value) {
                           inputEmail = value;
-                          setSheetState(() {});
+                          setPageState(() {});
                         },
                         onFieldSubmitted: (_) {
-                          if (emailOk) {
-                            submit();
-                          }
+                          if (emailOk) submit();
                         },
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.email_rounded),
@@ -339,7 +310,6 @@ Future<String?> showShareHomeSheet({
                         ),
                       ),
                       const SizedBox(height: 18),
-
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
@@ -348,9 +318,7 @@ Future<String?> showShareHomeSheet({
                           label: Text(strings.t("Chia sẻ")),
                         ),
                       ),
-                      const SizedBox(height: 4),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -366,7 +334,7 @@ void showJoinHomeQrSheet({
   required AppStrings strings,
   required String qrData,
 }) {
-  showModalBottomSheet(
+  SafeHomeNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (_) {

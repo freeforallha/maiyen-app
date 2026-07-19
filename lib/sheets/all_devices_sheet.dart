@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 
 void showAllDevicesSheet({
   required BuildContext context,
   required Map<String, dynamic> devices,
   required void Function(String deviceId) onTapDevice,
 }) {
-  showModalBottomSheet(
+  SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    backgroundColor: Colors.transparent,
-    isScrollControlled: true,
+    routeName: "all_devices",
     builder: (_) {
       final strings = AppStrings.of(context);
 
@@ -386,7 +386,7 @@ void _showDevicePicker({
   required List<MapEntry<String, dynamic>> devices,
   required void Function(String deviceId) onTapDevice,
 }) {
-  showModalBottomSheet(
+  SafeHomeNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (_) {

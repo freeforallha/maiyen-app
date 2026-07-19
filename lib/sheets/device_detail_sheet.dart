@@ -7,6 +7,7 @@ import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import 'device_alarm_policy_sheet.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import '../safehome_theme.dart';
 
 void showDeviceDetail({
@@ -38,10 +39,9 @@ void showDeviceDetail({
       selectableDevices != null && deviceChoices.isNotEmpty;
   var selectedDeviceId = id;
 
-  showModalBottomSheet(
+  SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    backgroundColor: Colors.transparent,
-    isScrollControlled: true,
+    routeName: "device_detail",
     builder: (sheetContext) {
       return StatefulBuilder(
         builder: (context, setSheetState) {
@@ -1313,7 +1313,7 @@ Future<String?> _showDeviceSelector({
       return firstName.compareTo(secondName);
     });
 
-  return showModalBottomSheet<String>(
+  return SafeHomeNavigation.showModalSheet<String>(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,

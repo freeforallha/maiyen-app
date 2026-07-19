@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../helpers/emergency_pulse_ticker.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 
 class HomeTabs extends StatefulWidget {
   final Map<String, dynamic> homes;
@@ -208,7 +209,7 @@ class _HomeTabsState extends State<HomeTabs> {
         ? ownerEmail
         : strings.t("Chưa có thông tin");
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.showModalSheet<void>(
       context: context,
       showDragHandle: false,
       backgroundColor: Colors.transparent,

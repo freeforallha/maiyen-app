@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import '../safehome_theme.dart';
 import '../services/platform/platform_alarm_permission_service.dart';
 
@@ -73,7 +74,7 @@ class AccountAvatarSheet {
   }
 
   static Future<void> _showDeleteConfirmDialog(BuildContext context) async {
-    final password = await showModalBottomSheet<String>(
+    final password = await SafeHomeNavigation.showModalSheet<String>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -353,9 +354,9 @@ class AccountAvatarSheet {
 
     if (!context.mounted) return;
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.pushChildPage<void>(
       context: context,
-      backgroundColor: Colors.transparent,
+      routeName: "account_security",
       builder: (securityContext) {
         final strings = AppStrings.of(securityContext);
 
@@ -531,10 +532,9 @@ class AccountAvatarSheet {
       await _showDeleteConfirmDialog(sheetContext);
     }
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.pushChildPage<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      routeName: "account",
       builder: (sheetContext) {
         final strings = AppStrings.of(sheetContext);
 
@@ -627,10 +627,7 @@ class AccountAvatarSheet {
                                               color: SafeHomeColors.primary,
                                               shape: const CircleBorder(),
                                               child: InkWell(
-                                                onTap: () {
-                                                  Navigator.pop(sheetContext);
-                                                  onEditProfile();
-                                                },
+                                                onTap: onEditProfile,
                                                 customBorder:
                                                     const CircleBorder(),
                                                 child: const SizedBox(
@@ -778,10 +775,7 @@ class AccountAvatarSheet {
                               );
                             },
                           ),
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            onShareRequests();
-                          },
+                          onTap: onShareRequests,
                         ),
 
                         if (PlatformAlarmPermissionService.isSupported)
@@ -791,15 +785,7 @@ class AccountAvatarSheet {
                             subtitle: strings.t("Quyền báo động toàn màn hình"),
                             color: SafeHomeColors.info,
                             onTap: () async {
-                              Navigator.of(sheetContext).pop();
-
-                              await Future<void>.delayed(Duration.zero);
-
-                              if (!context.mounted) {
-                                return;
-                              }
-
-                              await _showSecuritySheet(context);
+                              await _showSecuritySheet(sheetContext);
                             },
                           ),
 
@@ -812,10 +798,7 @@ class AccountAvatarSheet {
                             "Thoát tài khoản khỏi thiết bị này",
                           ),
                           color: SafeHomeColors.warning,
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            logout();
-                          },
+                          onTap: logout,
                         ),
                       ],
                     ),

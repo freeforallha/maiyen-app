@@ -9,6 +9,7 @@ import '../pages/home/home_data_helpers.dart';
 import '../helpers/emergency_pulse_ticker.dart';
 import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 
 class StatusPanel extends StatefulWidget {
   final String ownerUid;
@@ -411,7 +412,7 @@ class _StatusPanelState extends State<StatusPanel> {
         : 0;
     var repeatSaving = false;
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.showModalSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
@@ -688,7 +689,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final strings = AppStrings.of(context);
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.showModalSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

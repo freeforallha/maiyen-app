@@ -104,7 +104,7 @@ class _NotificationListSheetState extends State<NotificationListSheet> {
     final query = _ref.orderByChild("time").limitToLast(_limit + 1);
 
     return Container(
-      height: 500,
+      height: double.infinity,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [

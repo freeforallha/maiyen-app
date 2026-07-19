@@ -10,6 +10,7 @@ import '../services/home_notification_service.dart';
 import '../services/notification_service.dart';
 import '../helpers/firebase_paths.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../helpers/top_toast.dart';
 import '../safehome_theme.dart';
@@ -351,7 +352,7 @@ void showHomeChatSheet({
 
     if (!sheetContext.mounted) return;
 
-    showModalBottomSheet(
+    SafeHomeNavigation.showModalSheet(
       context: sheetContext,
       useRootNavigator: true,
       backgroundColor: Colors.transparent,
@@ -578,10 +579,9 @@ void showHomeChatSheet({
 
   NotificationService.markHomeChatOpened(homeId);
 
-  showModalBottomSheet(
+  SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    routeName: "home_chat",
     builder: (ctx) {
       return StatefulBuilder(
         builder: (context, setState) {
@@ -909,17 +909,6 @@ void showHomeChatSheet({
             focusNode.requestFocus();
           }
 
-          final mediaQuery = MediaQuery.of(context);
-          final screenSize = mediaQuery.size;
-          final keyboardVisible = mediaQuery.viewInsets.bottom > 0;
-
-          final sheetHeight =
-              screenSize.height *
-              (keyboardVisible
-                  ? 0.96
-                  : showEmoji
-                  ? 0.86
-                  : 0.72);
           final normalizedMentionQuery = mentionQuery.trim().toLowerCase();
 
           final filteredMentionMembers = mentionMembers
@@ -944,36 +933,14 @@ void showHomeChatSheet({
 
               closeSearch();
             },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOutCubic,
-              height: sheetHeight,
-              child: Scaffold(
-                resizeToAvoidBottomInset: true,
-                backgroundColor: Colors.transparent,
-                body: SafeArea(
-                  top: false,
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(26),
-                      ),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-
-                        const SizedBox(height: 14),
+            child: Scaffold(
+              resizeToAvoidBottomInset: true,
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+                  child: Column(
+                    children: [
 
                         Row(
                           children: [
@@ -1557,8 +1524,9 @@ void showHomeChatSheet({
                                                         constraints:
                                                             BoxConstraints(
                                                               maxWidth:
-                                                                  screenSize
-                                                                      .width *
+                                                                  MediaQuery.of(
+                                                                    ctx,
+                                                                  ).size.width *
                                                                   0.68,
                                                             ),
                                                         padding:
@@ -2074,8 +2042,7 @@ void showHomeChatSheet({
                               },
                             ),
                           ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),

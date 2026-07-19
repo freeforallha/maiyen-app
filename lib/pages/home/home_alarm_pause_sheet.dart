@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
+import '../../navigation/safehome_navigation.dart';
 
 class HomeAlarmPauseFormData {
   const HomeAlarmPauseFormData({
@@ -50,7 +51,7 @@ Future<void> showHomeAlarmPauseSheet({
     );
   }
 
-  await showModalBottomSheet(
+  await SafeHomeNavigation.showModalSheet(
     context: context,
     isScrollControlled: true,
     showDragHandle: false,

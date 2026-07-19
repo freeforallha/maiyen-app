@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
+import '../../navigation/safehome_navigation.dart';
 
 Future<void> showHomeAlarmMenuSheet({
   required BuildContext context,
@@ -14,7 +15,7 @@ Future<void> showHomeAlarmMenuSheet({
   required Future<void> Function() onOpenAlarmPause,
   required VoidCallback onOpenReminderSchedule,
 }) async {
-  await showModalBottomSheet(
+  await SafeHomeNavigation.showModalSheet(
     context: context,
     showDragHandle: false,
     backgroundColor: Colors.transparent,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 import '../services/home_notification_service.dart';
 import '../safehome_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -240,34 +241,17 @@ Future<bool?> showShareListSheet({
 
   if (!context.mounted) return null;
 
-  return showModalBottomSheet<bool>(
+  return SafeHomeNavigation.pushChildPage<bool>(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    routeName: "home_members",
     builder: (sheetContext) {
-      return Container(
-        padding: const EdgeInsets.all(18),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        ),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.8,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 46,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-
-              const SizedBox(height: 18),
+      return ColoredBox(
+        color: Colors.white,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              children: [
 
               Row(
                 children: [
@@ -739,7 +723,8 @@ Future<bool?> showShareListSheet({
                   );
                 },
               ),
-            ],
+              ],
+            ),
           ),
         ),
       );

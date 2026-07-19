@@ -4,6 +4,7 @@ import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 
 class ScheduleSheet extends StatefulWidget {
   final String ownerUid;
@@ -406,7 +407,7 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
   }
 
   Future<void> openReminderOptionSheet(int index) async {
-    final action = await showModalBottomSheet<String>(
+    final action = await SafeHomeNavigation.showModalSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (_) {

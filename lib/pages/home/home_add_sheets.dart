@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
+import '../../navigation/safehome_navigation.dart';
 
 Future<String?> showAddHomeOptionsSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  return showModalBottomSheet<String>(
+  return SafeHomeNavigation.showModalSheet<String>(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {

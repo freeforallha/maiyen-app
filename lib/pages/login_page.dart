@@ -11,6 +11,7 @@ import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+import '../navigation/safehome_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -656,7 +657,7 @@ class _LoginPageState extends State<LoginPage> {
     bool isSearching = false;
     String query = "";
 
-    showModalBottomSheet<void>(
+    SafeHomeNavigation.showModalSheet<void>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,

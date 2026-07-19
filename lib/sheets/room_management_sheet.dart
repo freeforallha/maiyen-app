@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
+import '../navigation/safehome_navigation.dart';
 
 Future<void> showRoomManagementSheet({
   required BuildContext context,
@@ -52,23 +53,16 @@ Future<void> showRoomManagementSheet({
 
   final roomsRef = homeRef.child("rooms");
 
-  await showModalBottomSheet<void>(
+  await SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    isScrollControlled: true,
-    enableDrag: false,
-    backgroundColor: Colors.transparent,
+    routeName: "room_management",
     builder: (sheetContext) {
-      return SafeArea(
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(sheetContext).size.height * 0.78,
-          ),
-          padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-          ),
-          child: StreamBuilder<DatabaseEvent>(
+      return ColoredBox(
+        color: Colors.white,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: StreamBuilder<DatabaseEvent>(
             stream: roomsRef.onValue,
             builder: (context, snapshot) {
               final raw = snapshot.data?.snapshot.value;
@@ -264,18 +258,7 @@ Future<void> showRoomManagementSheet({
               }
 
               return Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 42,
-                    height: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-
-                  const SizedBox(height: 18),
 
                   Row(
                     children: [
@@ -390,6 +373,7 @@ Future<void> showRoomManagementSheet({
             },
           ),
         ),
+      ),
       );
     },
   );

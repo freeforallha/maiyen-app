@@ -10,6 +10,7 @@ import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
 import '../services/system_usage_service.dart';
+import '../navigation/safehome_navigation.dart';
 
 class SystemHealthStatusLine extends StatelessWidget {
   const SystemHealthStatusLine({
@@ -124,7 +125,7 @@ Future<void> showSystemHealthSheet({
 }) async {
   final strings = AppStrings.of(context);
 
-  await showModalBottomSheet<void>(
+  await SafeHomeNavigation.showModalSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,

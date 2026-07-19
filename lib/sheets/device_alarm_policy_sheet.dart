@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
+import '../navigation/safehome_navigation.dart';
 
 const Set<String> _emergencyAlarmDeviceTypes = {
   'smoke',
@@ -213,11 +214,9 @@ Future<void> showDeviceAlarmPolicySheet({
   required Map<String, dynamic> device,
   required bool canEdit,
 }) {
-  return showModalBottomSheet<void>(
+  return SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    useRootNavigator: true,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    routeName: "device_alarm_policy",
     builder: (_) {
       return _DeviceAlarmPolicySheet(
         ownerUid: ownerUid,

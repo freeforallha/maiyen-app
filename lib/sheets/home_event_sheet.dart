@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
 import '../services/home_notification_service.dart';
+import '../navigation/safehome_navigation.dart';
 
 void showHomeEventSheet({
   required BuildContext context,
@@ -277,7 +278,7 @@ void showHomeEventSheet({
     }
   }
 
-  showModalBottomSheet(
+  SafeHomeNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.white,
     isScrollControlled: true,
@@ -449,10 +450,6 @@ void showHomeEventSheet({
                               }
 
                               if (onTapNotification == null) return;
-
-                              if (context.mounted) {
-                                Navigator.pop(context);
-                              }
 
                               await onTapNotification(item);
                             },

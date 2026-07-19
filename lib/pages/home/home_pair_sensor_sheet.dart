@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
+import '../../navigation/safehome_navigation.dart';
 
 enum HomePairSensorMethod { scanQr, manualHubId }
 
@@ -8,7 +9,7 @@ Future<HomePairSensorMethod?> showHomePairSensorSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  return showModalBottomSheet<HomePairSensorMethod>(
+  return SafeHomeNavigation.showModalSheet<HomePairSensorMethod>(
     context: context,
     isScrollControlled: true,
     builder: (sheetContext) {

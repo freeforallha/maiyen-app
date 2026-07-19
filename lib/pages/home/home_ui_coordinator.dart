@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/home_helper.dart';
+import '../../navigation/safehome_navigation.dart';
 import '../../sheets/account_avatar_sheet.dart';
 import '../../sheets/alarm_device_sheet.dart';
 import '../../sheets/all_devices_sheet.dart';
@@ -57,8 +58,6 @@ class HomeUiCoordinator {
     if (devices.length == 1) {
       final entry = devices.entries.first;
 
-      Navigator.pop(context);
-
       onOpenDevice(entry.key.toString(), safeMap(entry.value));
       return;
     }
@@ -100,9 +99,9 @@ class HomeUiCoordinator {
     required String homeId,
     required String deviceId,
   }) {
-    showModalBottomSheet(
+    SafeHomeNavigation.pushChildPage<void>(
       context: context,
-      isScrollControlled: true,
+      routeName: "device_notifications",
       builder: (_) {
         return notif_sheet.NotificationListSheet(
           ownerUid: ownerUid,
@@ -136,7 +135,7 @@ class HomeUiCoordinator {
     required String type,
     required bool canManageHome,
   }) {
-    showModalBottomSheet(
+    SafeHomeNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -157,7 +156,7 @@ class HomeUiCoordinator {
     required Map<String, dynamic> devices,
     required bool canManageHome,
   }) {
-    showModalBottomSheet(
+    SafeHomeNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

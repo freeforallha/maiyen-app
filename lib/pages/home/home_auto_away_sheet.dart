@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
+import '../../navigation/safehome_navigation.dart';
 
 class HomeAutoAwayLocation {
   const HomeAutoAwayLocation({required this.latitude, required this.longitude});
@@ -41,10 +42,9 @@ Future<void> showHomeAutoAwaySheet({
   var locating = false;
   var saving = false;
 
-  await showModalBottomSheet<void>(
+  await SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
+    routeName: "home_auto_away",
     builder: (sheetContext) {
       return StatefulBuilder(
         builder: (innerContext, setSheetState) {

@@ -9,6 +9,7 @@ import '../safehome_theme.dart';
 import '../localization/app_strings.dart';
 import '../services/home_realtime_coordinator.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+import '../navigation/safehome_navigation.dart';
 
 class AllHomePage extends StatefulWidget {
   final List<String> homeOrder;
@@ -122,7 +123,7 @@ class _AllHomePageState extends State<AllHomePage> {
     int sheetIndex = summaryIndex;
     Timer? sheetTimer;
 
-    showModalBottomSheet(
+    SafeHomeNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -782,7 +783,7 @@ class _AllHomePageState extends State<AllHomePage> {
             onTap: () {
               final allSelected = ids.every(selectedHomes.contains);
 
-              showModalBottomSheet(
+              SafeHomeNavigation.showModalSheet(
                 context: context,
                 showDragHandle: false,
                 backgroundColor: Colors.transparent,
@@ -1393,7 +1394,7 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
       ];
 
-      return showModalBottomSheet<Map<String, dynamic>>(
+      return SafeHomeNavigation.showModalSheet<Map<String, dynamic>>(
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
@@ -1790,7 +1791,7 @@ class _AllHomePageState extends State<AllHomePage> {
       );
     }
 
-    final action = await showModalBottomSheet<String>(
+    final action = await SafeHomeNavigation.showModalSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (actionSheetContext) {
@@ -2042,7 +2043,7 @@ class _AllHomePageState extends State<AllHomePage> {
       message = _strings.t("Các nhà đã chọn sẽ bị xoá vĩnh viễn.");
     }
 
-    final confirmOk = await showModalBottomSheet<bool>(
+    final confirmOk = await SafeHomeNavigation.showModalSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
@@ -2121,7 +2122,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     String inputPassword = "";
 
-    final passwordOk = await showModalBottomSheet<bool>(
+    final passwordOk = await SafeHomeNavigation.showModalSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2572,7 +2573,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           final qrData =
                               "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
 
-                          final targetEmail = await showModalBottomSheet<String>(
+                          final targetEmail = await SafeHomeNavigation.showModalSheet<String>(
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
@@ -2912,7 +2913,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             return;
                           }
 
-                          showModalBottomSheet(
+                          SafeHomeNavigation.showModalSheet(
                             context: context,
                             isScrollControlled: true,
                             builder: (_) {
