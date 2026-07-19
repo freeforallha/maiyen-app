@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,15 @@ class FullscreenAlarmPage extends StatefulWidget {
   State<FullscreenAlarmPage> createState() => _FullscreenAlarmPageState();
 }
 
-class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
+class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
+    with SingleTickerProviderStateMixin {
   Timer? timer;
   int remainingSeconds = 600;
 
   final AudioPlayer alarmPlayer = AudioPlayer();
+
+  late final AnimationController _dangerPulseController;
+  late final Animation<double> _dangerPulse;
 
   late String currentReminderTitle;
   late String currentReminderBody;
@@ -91,6 +96,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   @override
   void initState() {
     super.initState();
+
+    _dangerPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1050),
+    );
+    if (!widget.silentMode && Platform.isAndroid) {
+      _dangerPulseController.repeat(reverse: true);
+    }
+    _dangerPulse = CurvedAnimation(
+      parent: _dangerPulseController,
+      curve: Curves.easeInOutCubic,
+    );
 
     currentReminderTitle = widget.title;
     currentReminderBody = widget.body;
@@ -304,6 +321,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     }
 
     timer?.cancel();
+    _dangerPulseController.dispose();
     alarmPlayer.stop();
     alarmPlayer.dispose();
 
@@ -562,12 +580,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
     final body = currentAlarmBody.trim();
     if (body.isNotEmpty && body.length < 160) {
       return {
-        "SafeHome": [strings.statusText(body)],
+        strings.defaultHomeName(): [strings.statusText(body)],
       };
     }
 
     return {
-      "SafeHome": [fallbackReason(type, strings)],
+      strings.defaultHomeName(): [fallbackReason(type, strings)],
     };
   }
 
@@ -918,6 +936,570 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
           ),
         ),
       ),
+    );
+  }
+
+  bool _isEmergencyAlarm(String type) {
+    final normalizedCategory = currentEventCategory.trim().toLowerCase();
+    final normalizedLevel = currentAlarmLevel.trim().toLowerCase();
+
+    return normalizedCategory == 'emergency' ||
+        normalizedLevel == 'emergency' ||
+        type == 'sos' ||
+        type == 'smoke' ||
+        type == 'flood' ||
+        type == 'gas';
+  }
+
+  String _compactAlarmHomeNames(
+    Iterable<String> rawNames,
+    AppStrings strings,
+  ) {
+    final names = rawNames
+        .map((name) => name.trim())
+        .where((name) => name.isNotEmpty)
+        .toSet()
+        .toList();
+
+    if (names.isEmpty) {
+      return strings.defaultHomeName();
+    }
+
+    if (names.length <= 2) {
+      return names.join('  •  ');
+    }
+
+    return '${names.take(2).join('  •  ')}  •  +${names.length - 2}';
+  }
+
+  Widget _buildAndroidAlarmUI(BuildContext context) {
+    final strings = AppStrings.of(context);
+    final type = alarmType();
+    final issueMap = buildAlarmIssueMap(type, strings);
+    final nextAlarmMap = buildNextAlarmMap();
+    final isEmergency = _isEmergencyAlarm(type);
+    final homeSummary = _compactAlarmHomeNames(issueMap.keys, strings);
+    final incidentCount = issueMap.values.fold<int>(
+      0,
+      (total, reasons) => total + reasons.length,
+    );
+
+    final repeatText = isEmergency
+        ? strings.alarmEmergencyEscalationText()
+        : nextAlarmMap.isNotEmpty
+        ? strings.alarmRepeatAtText(nextAlarmMap.values.first)
+        : strings.alarmRepeatByScheduleText();
+
+    final statusTitle = isEmergency
+        ? strings.emergencyStatusTitle()
+        : strings.unsafeStatusTitle();
+    final categoryTitle = alarmTitle(type, strings);
+
+    const unsafeAccent = Color(0xFFD62F3A);
+    const emergencyAccent = Color(0xFFB71C1C);
+    final accent = isEmergency ? emergencyAccent : unsafeAccent;
+
+    final content = PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final compact = constraints.maxHeight < 720;
+              final outerPadding = compact ? 14.0 : 18.0;
+
+              return Padding(
+                padding: EdgeInsets.fromLTRB(
+                  outerPadding,
+                  compact ? 10 : 16,
+                  outerPadding,
+                  compact ? 10 : 14,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ScaleTransition(
+                          scale: isEmergency
+                              ? Tween<double>(begin: 0.96, end: 1.04).animate(
+                                  _dangerPulse,
+                                )
+                              : const AlwaysStoppedAnimation<double>(1.0),
+                          child: Container(
+                            width: compact ? 58 : 68,
+                            height: compact ? 58 : 68,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.16),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.72),
+                                width: 1.6,
+                              ),
+                            ),
+                            child: Icon(
+                              alarmIcon(type),
+                              color: Colors.white,
+                              size: compact ? 34 : 40,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                alignment: Alignment.centerLeft,
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  statusTitle,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: compact ? 27 : 32,
+                                    height: 1,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.4,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 7),
+                              Text(
+                                categoryTitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                  fontSize: compact ? 13 : 14,
+                                  height: 1.18,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: compact ? 11 : 14),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: compact ? 10 : 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.32),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.home_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              homeSummary,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: compact ? 16 : 18,
+                                height: 1.15,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: compact ? 10 : 13),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFDFDFD),
+                          borderRadius: BorderRadius.circular(26),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.22),
+                              blurRadius: 24,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                18,
+                                compact ? 14 : 17,
+                                18,
+                                compact ? 10 : 12,
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: accent.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(999),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.radio_button_checked_rounded,
+                                          color: accent,
+                                          size: 14,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          strings.alarmIncidentActiveLabel(),
+                                          style: TextStyle(
+                                            color: accent,
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  if (incidentCount > 1)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        borderRadius: BorderRadius.circular(999),
+                                      ),
+                                      child: Text(
+                                        '$incidentCount',
+                                        style: TextStyle(
+                                          color: Colors.grey.shade700,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            Divider(height: 1, color: Colors.grey.shade200),
+                            Expanded(
+                              child: ShaderMask(
+                                blendMode: BlendMode.dstIn,
+                                shaderCallback: (bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black,
+                                      Colors.black,
+                                      Colors.transparent,
+                                    ],
+                                    stops: [0, 0.035, 0.965, 1],
+                                  ).createShader(bounds);
+                                },
+                                child: SingleChildScrollView(
+                                  physics: const BouncingScrollPhysics(),
+                                  padding: EdgeInsets.fromLTRB(
+                                    14,
+                                    compact ? 12 : 16,
+                                    14,
+                                    compact ? 12 : 16,
+                                  ),
+                                  child: Column(
+                                    children: issueMap.entries.map((entry) {
+                                      return Container(
+                                        width: double.infinity,
+                                        margin: const EdgeInsets.only(bottom: 12),
+                                        padding: EdgeInsets.all(
+                                          compact ? 13 : 15,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: accent.withValues(alpha: 0.055),
+                                          borderRadius: BorderRadius.circular(18),
+                                          border: Border.all(
+                                            color: accent.withValues(alpha: 0.16),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.home_outlined,
+                                                  color: accent,
+                                                  size: 19,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    entry.key,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      color: Colors.grey.shade900,
+                                                      fontSize: compact ? 15 : 16,
+                                                      fontWeight: FontWeight.w900,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            ...entry.value.map(
+                                              (reason) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                  bottom: 8,
+                                                ),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Icon(
+                                                      isEmergency
+                                                          ? Icons
+                                                                .warning_amber_rounded
+                                                          : Icons
+                                                                .shield_outlined,
+                                                      color: accent,
+                                                      size: 19,
+                                                    ),
+                                                    const SizedBox(width: 9),
+                                                    Expanded(
+                                                      child: Text(
+                                                        reason,
+                                                        style: TextStyle(
+                                                          color: Colors
+                                                              .grey.shade900,
+                                                          fontSize: compact
+                                                              ? 14
+                                                              : 15,
+                                                          height: 1.28,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.fromLTRB(
+                                16,
+                                compact ? 10 : 12,
+                                16,
+                                compact ? 11 : 13,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(26),
+                                ),
+                                border: Border(
+                                  top: BorderSide(color: Colors.grey.shade200),
+                                ),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    isEmergency
+                                        ? Icons.priority_high_rounded
+                                        : Icons.schedule_rounded,
+                                    color: Colors.grey.shade700,
+                                    size: 19,
+                                  ),
+                                  const SizedBox(width: 9),
+                                  Expanded(
+                                    child: Text(
+                                      repeatText,
+                                      maxLines: compact ? 2 : 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: 12,
+                                        height: 1.25,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: compact ? 10 : 13),
+                    SizedBox(
+                      width: double.infinity,
+                      height: compact ? 52 : 56,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: accent,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(17),
+                          ),
+                        ),
+                        icon: const Icon(Icons.home_rounded),
+                        label: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            strings.t('KIỂM TRA NHÀ'),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        onPressed: () => openHome(context),
+                      ),
+                    ),
+                    SizedBox(height: compact ? 8 : 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: compact ? 46 : 49,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          disabledForegroundColor: Colors.white.withValues(
+                            alpha: 0.62,
+                          ),
+                          side: BorderSide(
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        icon: _isMutingHomeSiren
+                            ? const SizedBox(
+                                width: 17,
+                                height: 17,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(Icons.volume_off_rounded, size: 20),
+                        label: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            strings.muteHomeSirenLabel(),
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
+                      ),
+                    ),
+                    SizedBox(height: compact ? 2 : 4),
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white.withValues(alpha: 0.86),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: compact ? 7 : 9,
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.check_circle_outline_rounded,
+                        size: 18,
+                      ),
+                      label: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          strings.stopAlarmLabel(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      onPressed: () => confirmStopAlarm(context),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    if (!isEmergency) {
+      return DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF570C14), Color(0xFF220509)],
+          ),
+        ),
+        child: content,
+      );
+    }
+
+    return AnimatedBuilder(
+      animation: _dangerPulse,
+      child: content,
+      builder: (context, child) {
+        final topColor = Color.lerp(
+          const Color(0xFF72070C),
+          const Color(0xFF8A5700),
+          _dangerPulse.value,
+        )!;
+        final bottomColor = Color.lerp(
+          const Color(0xFF230306),
+          const Color(0xFF3D2100),
+          _dangerPulse.value,
+        )!;
+
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [topColor, bottomColor],
+            ),
+          ),
+          child: child,
+        );
+      },
     );
   }
 
@@ -1284,6 +1866,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage> {
   Widget build(BuildContext context) {
     if (isReminder) {
       return _buildReminderUI(context);
+    }
+
+    if (Platform.isAndroid) {
+      return _buildAndroidAlarmUI(context);
     }
 
     return _buildAlarmUI(context);
