@@ -587,6 +587,29 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     }
 
     final draft = normalizeDeviceAlarmSchedule(null);
+    final isHomeOwner = currentUid == widget.ownerUid;
+    var followHomeSchedule = true;
+
+    if (personal && !isHomeOwner) {
+      followHomeSchedule = entries.every((entry) {
+        final key = entry.key;
+        final device = Map<String, dynamic>.from(entry.value as Map);
+        final realId = _realDeviceId(key, device);
+        final rawCustomDevice = customDevices[realId] ?? customDevices[key];
+        final customDevice = rawCustomDevice is Map
+            ? Map<String, dynamic>.from(rawCustomDevice)
+            : const <String, dynamic>{};
+        final policy = DeviceAlarmPolicySettings.fromDevice(
+          device: device,
+          deviceType: device['type']?.toString() ?? 'door',
+        );
+        return DevicePersonalAlarmPreferences.fromCustomDevice(
+          customDevice: customDevice,
+          legacyFullscreenEnabled: policy.fullscreenEnabled,
+        ).followHomeSchedule;
+      });
+    }
+
     var saving = false;
 
     await SafeHomeNavigation.showModalSheet<void>(
@@ -650,7 +673,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     updates['accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'] =
                         DevicePersonalAlarmPreferences(
                           fullscreenEnabled: preferences.fullscreenEnabled,
-                          followHomeSchedule: preferences.followHomeSchedule,
+                          followHomeSchedule: isHomeOwner
+                              ? true
+                              : followHomeSchedule,
                         ).toFirebaseMap();
                   }
                 }
@@ -728,6 +753,43 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           height: 1.35,
                         ),
                       ),
+                      if (personal) ...[
+                        const SizedBox(height: 14),
+                        SwitchListTile.adaptive(
+                          value: followHomeSchedule,
+                          onChanged: saving || isHomeOwner
+                              ? null
+                              : (value) => setSheetState(
+                                  () => followHomeSchedule = value,
+                                ),
+                          contentPadding: EdgeInsets.zero,
+                          secondary: const Icon(Icons.home_work_rounded),
+                          title: Text(
+                            strings.t(
+                              'Nhận cảnh báo theo lịch chung của nhà',
+                            ),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            strings.t(
+                              'Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          strings.t(
+                            'Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.',
+                          ),
+                          style: const TextStyle(
+                            color: SafeHomeColors.textSecondary,
+                            fontSize: 12.5,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 14),
                       SwitchListTile.adaptive(
                         value: draft['enabled'] == true,
