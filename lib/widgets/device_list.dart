@@ -831,7 +831,7 @@ class _DeviceListState extends State<DeviceList> {
       case "ups":
         return Icons.battery_charging_full_rounded;
       case "siren":
-        return Icons.notifications_active_rounded;
+        return Icons.campaign_rounded;
       case "smart_valve":
         return Icons.water_drop_rounded;
       case "doorbell":
@@ -1509,7 +1509,7 @@ class _DeviceListState extends State<DeviceList> {
             ),
             ElevatedButton.icon(
               onPressed: () => Navigator.pop(dialogContext, true),
-              icon: const Icon(Icons.volume_off_rounded),
+              icon: const Icon(Icons.campaign_rounded),
               label: Text(strings.stopSirenLabel()),
             ),
           ],
@@ -1543,7 +1543,7 @@ class _DeviceListState extends State<DeviceList> {
         context,
         strings.homeSirenMutedMessage(),
         color: SafeHomeColors.safe,
-        icon: Icons.volume_off_rounded,
+        icon: Icons.campaign_rounded,
       );
       return;
     }
@@ -1593,7 +1593,7 @@ class _DeviceListState extends State<DeviceList> {
                       )
                     else
                       Icon(
-                        Icons.volume_off_rounded,
+                        Icons.campaign_rounded,
                         size: compact ? 12 : 13,
                         color: SafeHomeColors.danger,
                       ),
@@ -1652,6 +1652,7 @@ class _DeviceListState extends State<DeviceList> {
     required IconData icon,
     required double size,
     required Color color,
+    double slashAngle = -0.78,
   }) {
     return SizedBox(
       width: size + 3,
@@ -1661,7 +1662,7 @@ class _DeviceListState extends State<DeviceList> {
         children: [
           Icon(icon, size: size, color: color),
           Transform.rotate(
-            angle: -0.78,
+            angle: slashAngle,
             child: Container(
               width: size + 2,
               height: 1.8,
@@ -1727,12 +1728,12 @@ class _DeviceListState extends State<DeviceList> {
     }
 
     if (!settings.physicalSirenEnabled && !personalFullscreenEnabled) {
-      // Chỉ còn cảnh báo thông thường trong ứng dụng: dùng biểu tượng
-      // thông báo dạng tin nhắn để không bị nhầm với còi vật lý.
-      return Icon(
-        Icons.sms_outlined,
+      // Cả còi vật lý và đánh thức màn hình đều đang tắt.
+      // Dùng cùng nét gạch tự vẽ để hướng gạch đồng bộ với loa và màn hình.
+      return _crossedAlarmPolicyIcon(
+        icon: Icons.notifications_rounded,
         size: iconSize,
-        color: SafeHomeColors.info,
+        color: SafeHomeColors.warning,
       );
     }
 

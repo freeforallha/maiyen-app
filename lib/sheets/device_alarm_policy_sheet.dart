@@ -471,17 +471,6 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 12),
-            Center(
-              child: Container(
-                width: 42,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
             Flexible(
               child: SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(18, 16, 18, 20 + bottomInset),

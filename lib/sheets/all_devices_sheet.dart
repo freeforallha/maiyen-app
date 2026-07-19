@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
 import '../navigation/safehome_navigation.dart';
+import '../safehome_theme.dart';
 
 void showAllDevicesSheet({
   required BuildContext context,
@@ -17,7 +18,7 @@ void showAllDevicesSheet({
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: SafeHomeColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
         child: SafeArea(
@@ -25,15 +26,6 @@ void showAllDevicesSheet({
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 42,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                const SizedBox(height: 16),
                 Text(
                   strings.t("Toàn bộ thiết bị SafeHome"),
                   style: const TextStyle(

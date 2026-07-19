@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import '../helpers/firebase_paths.dart';
+import '../helpers/emergency_pulse_ticker.dart';
 
 import '../helpers/home_helper.dart';
 import '../services/fcm_service.dart';
@@ -3509,6 +3510,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final overviewAlarmScheduleText = formatAlarmSchedules();
     final overviewEnvironmentText = getHomeEnvironmentText();
     final overviewOverall = getHomeOverallStatus(overviewHome);
+    final overviewLevel =
+        overviewOverall["level"]?.toString().trim() ?? "no_data";
+
+    if (overviewLevel == "emergency") {
+      EmergencyPulseTicker.ensureStarted();
+    }
     final overviewPairingCountdownText = _strings.pairingCountdownText(
       pairingCountdown,
     );
@@ -3527,19 +3534,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return Scaffold(
       extendBody: true,
       backgroundColor: SafeHomeColors.background,
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [0, 0.46, 1],
-            colors: [
-              Color(0xFFF3F8F5),
-              SafeHomeColors.background,
-              Color(0xFFFFFFFF),
-            ],
-          ),
-        ),
+      body: _HomeStatusBackground(
+        level: overviewLevel,
         child: Stack(
           children: [
             SafeArea(
@@ -3882,6 +3878,87 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     unawaited(_homeListenerService.dispose());
     homeTabController.dispose();
     super.dispose();
+  }
+}
+
+class _HomeStatusBackground extends StatelessWidget {
+  const _HomeStatusBackground({required this.level, required this.child});
+
+  static final ValueNotifier<bool> _steadyPhase = ValueNotifier<bool>(false);
+
+  final String level;
+  final Widget child;
+
+  List<Color> _gradientColors(bool emergencyPhase) {
+    switch (level) {
+      case "warning":
+        return const [
+          Color(0xFFFFF6D8),
+          Color(0xFFFFFAEC),
+          Color(0xFFFFFFFF),
+        ];
+      case "danger":
+        return const [
+          Color(0xFFFFECEA),
+          Color(0xFFFFF5F3),
+          Color(0xFFFFFFFF),
+        ];
+      case "emergency":
+        if (emergencyPhase) {
+          return const [
+            Color(0xFFFFEDBE),
+            Color(0xFFFFF7DF),
+            Color(0xFFFFFFFF),
+          ];
+        }
+
+        return const [
+          Color(0xFFFFE4E1),
+          Color(0xFFFFF0ED),
+          Color(0xFFFFFFFF),
+        ];
+      case "safe":
+        return const [
+          Color(0xFFF3F8F5),
+          SafeHomeColors.background,
+          Color(0xFFFFFFFF),
+        ];
+      default:
+        return const [
+          Color(0xFFF4F6F5),
+          Color(0xFFF7F8F7),
+          Color(0xFFFFFFFF),
+        ];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final phaseListenable = level == "emergency"
+        ? EmergencyPulseTicker.phase
+        : _steadyPhase;
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: phaseListenable,
+      child: child,
+      builder: (context, emergencyPhase, staticChild) {
+        return AnimatedContainer(
+          duration: Duration(
+            milliseconds: level == "emergency" ? 560 : 420,
+          ),
+          curve: Curves.easeInOut,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: const [0, 0.46, 1],
+              colors: _gradientColors(emergencyPhase),
+            ),
+          ),
+          child: staticChild,
+        );
+      },
+    );
   }
 }
 

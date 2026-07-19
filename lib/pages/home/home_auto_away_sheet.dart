@@ -147,15 +147,6 @@ Future<void> showHomeAutoAwaySheet({
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 44,
-                    height: 5,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: SafeHomeColors.border,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
                   Row(
                     children: [
                       Container(

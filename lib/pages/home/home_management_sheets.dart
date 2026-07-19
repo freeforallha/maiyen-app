@@ -239,7 +239,7 @@ Future<String?> showShareHomeSheet({
           final qrSize = keyboardOpen ? 130.0 : 180.0;
 
           return ColoredBox(
-            color: Colors.white,
+            color: SafeHomeColors.background,
             child: SafeArea(
               child: SingleChildScrollView(
                 keyboardDismissBehavior:

@@ -6,6 +6,7 @@ import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import '../navigation/safehome_navigation.dart';
 import '../services/platform/platform_auto_away_task_service.dart';
+import 'hub_info_sheet.dart';
 
 String _languageSubtitle(String code) {
   switch (code) {
@@ -320,15 +321,6 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          width: 44,
-                          height: 5,
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: SafeHomeColors.border,
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                        ),
                         Row(
                           children: [
                             const Icon(
@@ -742,15 +734,6 @@ void showSettingsSheet({
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 44,
-                    height: 5,
-                    margin: const EdgeInsets.only(bottom: 15),
-                    decoration: BoxDecoration(
-                      color: SafeHomeColors.border,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
                   Row(
                     children: [
                       const Icon(
@@ -771,6 +754,21 @@ void showSettingsSheet({
                     ],
                   ),
                   const SizedBox(height: 15),
+
+                  tile(
+                    icon: Icons.hub_rounded,
+                    title: "${strings.t('Hub trung tâm')} SafeHome (HUB)",
+                    subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
+                    color: SafeHomeColors.primaryDark,
+                    onTap: () {
+                      showHubInfoSheet(
+                        context: managementContext,
+                        ownerUid: ownerUid,
+                        homeId: homeId,
+                        homeName: homeName,
+                      );
+                    },
+                  ),
 
                   tile(
                     icon: Icons.swap_horiz_rounded,
@@ -800,35 +798,21 @@ void showSettingsSheet({
     );
   }
 
-  SafeHomeNavigation.showModalSheet(
+  SafeHomeNavigation.pushChildPage<void>(
     context: context,
-    backgroundColor: Colors.transparent,
-    isScrollControlled: true,
+    routeName: "settings",
     builder: (sheetContext) {
-      return SafeArea(
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(sheetContext).size.height * 0.92,
+      final bottomPadding = MediaQuery.paddingOf(sheetContext).bottom;
+
+      return ColoredBox(
+        color: SafeHomeColors.background,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            14,
+            16,
+            20 + bottomPadding,
           ),
-          decoration: const BoxDecoration(
-            color: SafeHomeColors.background,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 46,
-                height: 5,
-                margin: const EdgeInsets.only(top: 10),
-                decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -1113,10 +1097,6 @@ void showSettingsSheet({
                         },
                       ),
                     ],
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       );

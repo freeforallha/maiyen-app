@@ -246,7 +246,7 @@ Future<bool?> showShareListSheet({
     routeName: "home_members",
     builder: (sheetContext) {
       return ColoredBox(
-        color: Colors.white,
+        color: SafeHomeColors.background,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(18),

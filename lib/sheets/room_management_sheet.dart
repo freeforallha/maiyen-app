@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../navigation/safehome_navigation.dart';
+import '../safehome_theme.dart';
 
 Future<void> showRoomManagementSheet({
   required BuildContext context,
@@ -58,7 +59,7 @@ Future<void> showRoomManagementSheet({
     routeName: "room_management",
     builder: (sheetContext) {
       return ColoredBox(
-        color: Colors.white,
+        color: SafeHomeColors.background,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),

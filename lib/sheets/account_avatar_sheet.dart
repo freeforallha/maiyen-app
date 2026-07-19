@@ -371,15 +371,6 @@ class AccountAvatarSheet {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 46,
-                  height: 5,
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Container(
                   width: 58,
                   height: 58,
                   decoration: BoxDecoration(
@@ -550,15 +541,6 @@ class AccountAvatarSheet {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  width: 46,
-                  height: 5,
-                  margin: const EdgeInsets.only(top: 10),
-                  decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
                 Flexible(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
