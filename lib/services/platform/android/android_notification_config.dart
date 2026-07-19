@@ -8,7 +8,7 @@ class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
 
   static const legacyAlarmChannelId = 'alarm_channel_silent_v3';
-  static const alarmFullscreenChannelId = 'safehome_alarm_fullscreen_v5';
+  static const alarmFullscreenChannelId = 'safehome_alarm_fullscreen_sound_v6';
   static const emergencyPriorityChannelId = 'safehome_emergency_priority_v2';
   static const scheduleFullscreenChannelId =
       'safehome_schedule_fullscreen_channel_v2';
@@ -66,7 +66,7 @@ class AndroidNotificationConfig {
       strings.androidAlarmFullscreenChannelName(),
       description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
-      playSound: false,
+      playSound: true,
       enableVibration: true,
     );
 
@@ -139,7 +139,7 @@ class AndroidNotificationConfig {
       strings.androidAlarmFullscreenChannelName(),
       description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
-      playSound: false,
+      playSound: true,
       enableVibration: true,
     );
 
@@ -230,8 +230,9 @@ class AndroidNotificationConfig {
       autoCancel: false,
       ongoing: true,
       fullScreenIntent: true,
-      playSound: false,
+      playSound: true,
       enableVibration: true,
+      onlyAlertOnce: false,
       styleInformation: BigTextStyleInformation(
         body,
         contentTitle: title,

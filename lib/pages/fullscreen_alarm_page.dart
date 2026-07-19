@@ -126,6 +126,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       // Không xoá notification khi Reminder tự mở fullscreen.
       startSilentTimer();
     } else {
+      NotificationService.markAlarmPageOpened(
+        body: currentAlarmBody,
+        alarmItemsJson: currentAlarmItemsJson,
+        eventCategory: currentEventCategory,
+        alarmLevel: currentAlarmLevel,
+      );
       _loadLatestAlarmSession();
 
       NotificationService.alarmRevision.addListener(_onAlarmSessionChanged);
@@ -978,11 +984,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     final issueMap = buildAlarmIssueMap(type, strings);
     final nextAlarmMap = buildNextAlarmMap();
     final isEmergency = _isEmergencyAlarm(type);
-    final homeSummary = _compactAlarmHomeNames(issueMap.keys, strings);
-    final incidentCount = issueMap.values.fold<int>(
-      0,
-      (total, reasons) => total + reasons.length,
-    );
 
     final repeatText = isEmergency
         ? strings.alarmEmergencyEscalationText()
@@ -993,7 +994,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     final statusTitle = isEmergency
         ? strings.emergencyStatusTitle()
         : strings.unsafeStatusTitle();
-    final categoryTitle = alarmTitle(type, strings);
 
     const unsafeAccent = Color(0xFFD62F3A);
     const emergencyAccent = Color(0xFFB71C1C);
@@ -1028,8 +1028,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                                 )
                               : const AlwaysStoppedAnimation<double>(1.0),
                           child: Container(
-                            width: compact ? 58 : 68,
-                            height: compact ? 58 : 68,
+                            width: compact ? 56 : 64,
+                            height: compact ? 56 : 64,
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.16),
                               shape: BoxShape.circle,
@@ -1041,326 +1041,203 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                             child: Icon(
                               alarmIcon(type),
                               color: Colors.white,
-                              size: compact ? 34 : 40,
+                              size: compact ? 33 : 38,
                             ),
                           ),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              statusTitle,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: compact ? 28 : 33,
+                                height: 1,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: compact ? 12 : 16),
+                    Expanded(
+                      child: ShaderMask(
+                        blendMode: BlendMode.dstIn,
+                        shaderCallback: (bounds) {
+                          return const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black,
+                              Colors.black,
+                              Colors.transparent,
+                            ],
+                            stops: [0, 0.025, 0.975, 1],
+                          ).createShader(bounds);
+                        },
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(
+                            1,
+                            compact ? 8 : 10,
+                            1,
+                            compact ? 10 : 14,
+                          ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              FittedBox(
-                                alignment: Alignment.centerLeft,
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  statusTitle,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: compact ? 27 : 32,
-                                    height: 1,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 0.4,
+                              ...issueMap.entries.map((entry) {
+                                return Container(
+                                  width: double.infinity,
+                                  margin: const EdgeInsets.only(bottom: 12),
+                                  padding: EdgeInsets.fromLTRB(
+                                    compact ? 15 : 17,
+                                    compact ? 14 : 16,
+                                    compact ? 15 : 17,
+                                    compact ? 8 : 10,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFEFEFE),
+                                    borderRadius: BorderRadius.circular(22),
+                                    border: Border.all(
+                                      color: accent.withValues(alpha: 0.2),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.16,
+                                        ),
+                                        blurRadius: 18,
+                                        offset: const Offset(0, 9),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.home_rounded,
+                                            color: accent,
+                                            size: compact ? 20 : 22,
+                                          ),
+                                          const SizedBox(width: 9),
+                                          Expanded(
+                                            child: Text(
+                                              entry.key,
+                                              style: TextStyle(
+                                                color: Colors.grey.shade900,
+                                                fontSize: compact ? 17 : 19,
+                                                height: 1.18,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Divider(
+                                        height: 1,
+                                        color: accent.withValues(alpha: 0.13),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      ...entry.value.map(
+                                        (reason) => Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 7,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 7,
+                                                height: 7,
+                                                margin: const EdgeInsets.only(
+                                                  top: 6,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: accent,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: Text(
+                                                  reason,
+                                                  style: TextStyle(
+                                                    color: Colors.grey.shade900,
+                                                    fontSize: compact ? 14 : 15,
+                                                    height: 1.32,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                              Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: compact ? 11 : 13,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.13),
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.24),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 7),
-                              Text(
-                                categoryTitle,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.9),
-                                  fontSize: compact ? 13 : 14,
-                                  height: 1.18,
-                                  fontWeight: FontWeight.w800,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      isEmergency
+                                          ? Icons.priority_high_rounded
+                                          : Icons.schedule_rounded,
+                                      color: Colors.white.withValues(alpha: 0.88),
+                                      size: 19,
+                                    ),
+                                    const SizedBox(width: 9),
+                                    Expanded(
+                                      child: Text(
+                                        repeatText,
+                                        style: TextStyle(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.9,
+                                          ),
+                                          fontSize: 12,
+                                          height: 1.28,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: compact ? 11 : 14),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: compact ? 10 : 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.32),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.home_rounded,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              homeSummary,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: compact ? 16 : 18,
-                                height: 1.15,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                    SizedBox(height: compact ? 10 : 13),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFDFDFD),
-                          borderRadius: BorderRadius.circular(26),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.22),
-                              blurRadius: 24,
-                              offset: const Offset(0, 12),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                18,
-                                compact ? 14 : 17,
-                                18,
-                                compact ? 10 : 12,
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: accent.withValues(alpha: 0.1),
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.radio_button_checked_rounded,
-                                          color: accent,
-                                          size: 14,
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          strings.alarmIncidentActiveLabel(),
-                                          style: TextStyle(
-                                            color: accent,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  if (incidentCount > 1)
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 6,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(999),
-                                      ),
-                                      child: Text(
-                                        '$incidentCount',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade700,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            Divider(height: 1, color: Colors.grey.shade200),
-                            Expanded(
-                              child: ShaderMask(
-                                blendMode: BlendMode.dstIn,
-                                shaderCallback: (bounds) {
-                                  return const LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.transparent,
-                                      Colors.black,
-                                      Colors.black,
-                                      Colors.transparent,
-                                    ],
-                                    stops: [0, 0.035, 0.965, 1],
-                                  ).createShader(bounds);
-                                },
-                                child: SingleChildScrollView(
-                                  physics: const BouncingScrollPhysics(),
-                                  padding: EdgeInsets.fromLTRB(
-                                    14,
-                                    compact ? 12 : 16,
-                                    14,
-                                    compact ? 12 : 16,
-                                  ),
-                                  child: Column(
-                                    children: issueMap.entries.map((entry) {
-                                      return Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.only(bottom: 12),
-                                        padding: EdgeInsets.all(
-                                          compact ? 13 : 15,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: accent.withValues(alpha: 0.055),
-                                          borderRadius: BorderRadius.circular(18),
-                                          border: Border.all(
-                                            color: accent.withValues(alpha: 0.16),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.home_outlined,
-                                                  color: accent,
-                                                  size: 19,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Expanded(
-                                                  child: Text(
-                                                    entry.key,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      color: Colors.grey.shade900,
-                                                      fontSize: compact ? 15 : 16,
-                                                      fontWeight: FontWeight.w900,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            ...entry.value.map(
-                                              (reason) => Padding(
-                                                padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                ),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Icon(
-                                                      isEmergency
-                                                          ? Icons
-                                                                .warning_amber_rounded
-                                                          : Icons
-                                                                .shield_outlined,
-                                                      color: accent,
-                                                      size: 19,
-                                                    ),
-                                                    const SizedBox(width: 9),
-                                                    Expanded(
-                                                      child: Text(
-                                                        reason,
-                                                        style: TextStyle(
-                                                          color: Colors
-                                                              .grey.shade900,
-                                                          fontSize: compact
-                                                              ? 14
-                                                              : 15,
-                                                          height: 1.28,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.fromLTRB(
-                                16,
-                                compact ? 10 : 12,
-                                16,
-                                compact ? 11 : 13,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade50,
-                                borderRadius: const BorderRadius.vertical(
-                                  bottom: Radius.circular(26),
-                                ),
-                                border: Border(
-                                  top: BorderSide(color: Colors.grey.shade200),
-                                ),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Icon(
-                                    isEmergency
-                                        ? Icons.priority_high_rounded
-                                        : Icons.schedule_rounded,
-                                    color: Colors.grey.shade700,
-                                    size: 19,
-                                  ),
-                                  const SizedBox(width: 9),
-                                  Expanded(
-                                    child: Text(
-                                      repeatText,
-                                      maxLines: compact ? 2 : 3,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.grey.shade700,
-                                        fontSize: 12,
-                                        height: 1.25,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: compact ? 10 : 13),
+                    SizedBox(height: compact ? 9 : 12),
                     SizedBox(
                       width: double.infinity,
                       height: compact ? 52 : 56,

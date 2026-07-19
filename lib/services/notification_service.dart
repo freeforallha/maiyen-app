@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../app/safe_home_app.dart';
@@ -11,6 +12,7 @@ import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
+import 'platform/ios/ios_notification_config.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
@@ -179,7 +181,44 @@ class NotificationService {
       return directItems;
     }
 
-    return _alarmItemsFromValue(data['alarmItemsJson']);
+    final jsonItems = _alarmItemsFromValue(data['alarmItemsJson']);
+
+    if (jsonItems.isNotEmpty) {
+      return jsonItems;
+    }
+
+    final homeName = data['homeName']?.toString().trim() ?? '';
+    final deviceName =
+        data['deviceName']?.toString().trim().isNotEmpty == true
+        ? data['deviceName'].toString().trim()
+        : data['name']?.toString().trim() ?? '';
+    final reason = data['reason']?.toString().trim().isNotEmpty == true
+        ? data['reason'].toString().trim()
+        : data['body']?.toString().trim() ?? '';
+
+    if (homeName.isEmpty && deviceName.isEmpty && reason.isEmpty) {
+      return const [];
+    }
+
+    return [
+      {
+        'incidentId': data['incidentId']?.toString().trim() ?? '',
+        'homeId': data['homeId']?.toString().trim() ?? '',
+        'homeName': homeName,
+        'deviceId': data['deviceId']?.toString().trim() ?? '',
+        'deviceName': deviceName,
+        'type': data['deviceType']?.toString().trim().isNotEmpty == true
+            ? data['deviceType'].toString().trim()
+            : data['type']?.toString().trim() ?? '',
+        'reason': reason,
+        'nextAlarm': data['nextAlarm']?.toString().trim() ?? '',
+      },
+    ];
+  }
+
+  static String _alarmItemsJsonFromData(Map<String, dynamic> data) {
+    final items = _alarmItemsFromData(data);
+    return items.isEmpty ? '' : jsonEncode(items);
   }
 
   static String localizedAlarmBodyForData(
@@ -366,37 +405,9 @@ class NotificationService {
         ? data['alarmFlowType'].toString().trim()
         : eventCategory;
 
-    // Mỗi người chỉ giữ incident mới nhất của cùng một nhà
-    // và cùng nhóm sự kiện. Incident cũ đã superseded
-    // không được gửi xác nhận lại.
-    final supersededIncidentIds = <String>{};
-
-    if (homeId.isNotEmpty && eventCategory.isNotEmpty) {
-      _activeAlarmIncidentContexts.removeWhere((oldIncidentId, context) {
-        if (oldIncidentId == incidentId) {
-          return false;
-        }
-
-        final shouldRemove =
-            context['receiverUid'] == receiverUid &&
-            context['homeId'] == homeId &&
-            context['eventCategory'] == eventCategory;
-
-        if (shouldRemove) {
-          supersededIncidentIds.add(oldIncidentId);
-        }
-
-        return shouldRemove;
-      });
-    }
-
-    if (supersededIncidentIds.isNotEmpty) {
-      activeAlarmItems.removeWhere(
-        (item) => supersededIncidentIds.contains(
-          item['incidentId']?.toString().trim() ?? '',
-        ),
-      );
-    }
+    // Mỗi incident đang hoạt động phải được giữ độc lập.
+    // Không xoá incident khác chỉ vì cùng nhà hoặc cùng nhóm sự kiện:
+    // Fullscreen Alarm cần hiển thị đồng thời cửa, SOS, khói... của cùng nhà.
 
     _activeAlarmIncidentContexts[incidentId] = {
       'incidentId': incidentId,
@@ -698,7 +709,14 @@ class NotificationService {
   static Future<void> showPriorityAlarmNotification({
     required Map<String, dynamic> data,
   }) async {
-    rememberAlarmIncident(data);
+    if (_alarmPageOpen) {
+      // Một Fullscreen Alarm đang hiển thị: thêm sự cố mới ngay ở cấp
+      // notification đầu tiên, không chờ tới cấp còi/fullscreen tiếp theo.
+      openAlarmFromData(data);
+    } else {
+      rememberAlarmIncident(data);
+    }
+
     final strings = _strings;
 
     final title = localizedNotificationTitle(
@@ -717,10 +735,10 @@ class NotificationService {
       strings: strings,
     );
 
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
+    final iosDetails = IosNotificationConfig.alarmDetails(
+      data: data,
+      playSound:
+          data['alarmStage']?.toString().trim().toLowerCase() != 'detected',
     );
 
     await localNotif.cancel(emergencyNotificationId);
@@ -847,14 +865,23 @@ class NotificationService {
     final priorityData = _decodeAlarmPayload(payload, 'priority_alarm');
 
     if (priorityData != null) {
-      await handlePriorityAlarmOpened(priorityData);
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        await stopEmergencyNotification();
+        await openIosAlarmFromData(priorityData);
+      } else {
+        await handlePriorityAlarmOpened(priorityData);
+      }
       return true;
     }
 
     final sirenData = _decodeAlarmPayload(payload, 'alarm_siren');
 
     if (sirenData != null) {
-      openAlarmFromData(sirenData);
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        await openIosAlarmFromData(sirenData);
+      } else {
+        openAlarmFromData(sirenData);
+      }
       return true;
     }
 
@@ -872,10 +899,7 @@ class NotificationService {
         '🚨 SafeHome',
       ),
       body: localizedAlarmBodyForData(data, strings),
-      alarmItemsJson:
-          data['alarmItems']?.toString() ??
-          data['alarmItemsJson']?.toString() ??
-          '',
+      alarmItemsJson: _alarmItemsJsonFromData(data),
       incidentId: data['incidentId']?.toString() ?? '',
       receiverUid: data['receiverUid']?.toString() ?? '',
       ownerUid: data['ownerUid']?.toString() ?? '',
@@ -884,6 +908,132 @@ class NotificationService {
       eventCategory: normalizedIncidentEventCategory(data),
       alarmLevel: normalizedIncidentAlarmLevel(data),
     );
+  }
+
+
+  /// iOS chỉ đưa ứng dụng lên foreground sau khi người dùng chạm notification.
+  /// Mở ngay dữ liệu trong payload để phản hồi nhanh, sau đó đồng bộ toàn bộ
+  /// incident đang active của tài khoản để giữ đúng mô hình gom nhiều nhà và
+  /// nhiều Alarm giống Android.
+  static Future<void> openIosAlarmFromData(Map<String, dynamic> data) async {
+    openAlarmFromData(data);
+    await _hydrateIosActiveAlarmIncidents(
+      preserveIncidentId: data['incidentId']?.toString().trim() ?? '',
+    );
+  }
+
+  static Future<void> _hydrateIosActiveAlarmIncidents({
+    String preserveIncidentId = '',
+  }) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return;
+    }
+
+    final currentUid = FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
+
+    if (currentUid.isEmpty) {
+      return;
+    }
+
+    try {
+      final snapshot = await FirebaseDatabase.instance
+          .ref('accounts/$currentUid/alarmIncidents')
+          .get();
+      final rawIncidents = snapshot.value;
+
+      if (rawIncidents is! Map) {
+        return;
+      }
+
+      final activeIncidentIds = <String>{
+        if (preserveIncidentId.isNotEmpty) preserveIncidentId,
+      };
+      var mergedAny = false;
+
+      for (final entry in rawIncidents.entries) {
+        final incidentId = entry.key.toString().trim();
+        final rawIncident = entry.value;
+
+        if (incidentId.isEmpty || rawIncident is! Map) {
+          continue;
+        }
+
+        final incident = Map<String, dynamic>.from(rawIncident);
+        final status = incident['status']?.toString().trim().toLowerCase() ?? '';
+
+        if (status != 'active') {
+          continue;
+        }
+
+        activeIncidentIds.add(incidentId);
+
+        final flowType =
+            incident['flowType']?.toString().trim().isNotEmpty == true
+            ? incident['flowType'].toString().trim()
+            : 'security';
+        final eventCategory =
+            incident['eventCategory']?.toString().trim().isNotEmpty == true
+            ? incident['eventCategory'].toString().trim()
+            : flowType;
+        final alarmLevel =
+            incident['alarmLevel']?.toString().trim().isNotEmpty == true
+            ? incident['alarmLevel'].toString().trim()
+            : flowType == 'emergency'
+            ? 'emergency'
+            : 'alarm';
+        final items = _alarmItemsFromValue(incident['items']);
+
+        for (final item in items) {
+          item['incidentId'] = incidentId;
+          item['homeId'] ??= incident['homeId']?.toString() ?? '';
+          item['homeName'] ??= incident['homeName']?.toString() ?? '';
+          item['ownerUid'] ??= incident['ownerUid']?.toString() ?? '';
+          item['eventCategory'] ??= eventCategory;
+          item['alarmLevel'] ??= alarmLevel;
+        }
+
+        rememberAlarmIncident({
+          'incidentId': incidentId,
+          'receiverUid': currentUid,
+          'ownerUid': incident['ownerUid']?.toString() ?? '',
+          'homeId': incident['homeId']?.toString() ?? '',
+          'alarmFlowType': flowType,
+          'eventCategory': eventCategory,
+          'alarmLevel': alarmLevel,
+          'incidentStatus': 'active',
+        });
+
+        if (items.isNotEmpty) {
+          _addAlarmItems(jsonEncode(items), incidentId: incidentId);
+          mergedAny = true;
+        }
+      }
+
+      // Chỉ dọn những context có incidentId rõ ràng. Alarm legacy không có
+      // incidentId vẫn được giữ theo cơ chế cũ để tránh tắt nhầm cảnh báo.
+      final staleIncidentIds = _activeAlarmIncidentContexts.keys
+          .where((id) => !activeIncidentIds.contains(id))
+          .toList();
+
+      for (final incidentId in staleIncidentIds) {
+        _activeAlarmIncidentContexts.remove(incidentId);
+        activeAlarmItems.removeWhere(
+          (item) => item['incidentId']?.toString().trim() == incidentId,
+        );
+      }
+
+      if (mergedAny || staleIncidentIds.isNotEmpty) {
+        _syncAlarmPresentationFromActiveIncidents();
+        lastAlarmItemsJson = activeAlarmItems.isEmpty
+            ? ''
+            : jsonEncode(activeAlarmItems);
+        alarmRevision.value++;
+      }
+    } catch (error) {
+      // Fail-safe: payload vừa chạm vẫn đã mở Alarm. Không dọn dữ liệu cục bộ
+      // nếu iOS chưa cho đọc Firebase hoặc mạng đang gián đoạn.
+      safeDebugPrint('IOS ACTIVE ALARM HYDRATE ERROR: $error');
+    }
   }
 
   static Future<void> showSensorNotification({
@@ -909,11 +1059,7 @@ class NotificationService {
       tag: 'safehome_sensor_${homeId}_$deviceId',
     );
 
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
+    final iosDetails = IosNotificationConfig.sensorDetails(data: data);
 
     await localNotif.show(
       _sensorNotificationId(identity),
@@ -973,11 +1119,7 @@ class NotificationService {
       strings: strings,
     );
 
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
+    final iosDetails = IosNotificationConfig.chatDetails(homeId: homeId);
 
     final payload =
         "home_chat::${jsonEncode({"homeId": homeId, "homeName": homeName, "ownerUid": data["ownerUid"]?.toString() ?? "", "messageId": data["messageId"]?.toString() ?? ""})}";
@@ -1207,6 +1349,8 @@ class NotificationService {
       alert: true,
       badge: true,
       sound: true,
+      criticalAlert:
+          IosNotificationConfig.criticalAlertsEntitlementEnabled,
     );
 
     // [iOS] Tắt hiển thị APNs tự động khi app đang foreground.
@@ -1219,16 +1363,10 @@ class NotificationService {
           sound: false,
         );
 
-    const ios = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
     await localNotif.initialize(
       const InitializationSettings(
         android: AndroidNotificationConfig.initializationSettings,
-        iOS: ios,
+        iOS: IosNotificationConfig.initializationSettings,
       ),
       onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload ?? '';
@@ -1320,12 +1458,53 @@ class NotificationService {
 
   static final List<Map<String, dynamic>> activeAlarmItems = [];
 
+  static void markAlarmPageOpened({
+    String body = '',
+    String alarmItemsJson = '',
+    String eventCategory = '',
+    String alarmLevel = '',
+  }) {
+    _alarmPageOpen = true;
+
+    if (body.trim().isNotEmpty) {
+      lastAlarmBody = body.trim();
+    }
+
+    if (alarmItemsJson.trim().isNotEmpty) {
+      _addAlarmItems(alarmItemsJson);
+      lastAlarmItemsJson = activeAlarmItems.isEmpty
+          ? alarmItemsJson
+          : jsonEncode(activeAlarmItems);
+    }
+
+    if (eventCategory.trim().isNotEmpty) {
+      lastAlarmEventCategory = eventCategory.trim();
+    }
+
+    if (alarmLevel.trim().isNotEmpty) {
+      lastAlarmLevel = alarmLevel.trim();
+    }
+  }
+
   static void markAlarmPageClosed() {
     _alarmPageOpen = false;
   }
 
   static String _alarmKey(Map<String, dynamic> item) {
+    final incidentId = item['incidentId']?.toString().trim() ?? '';
+
+    if (incidentId.isNotEmpty) {
+      return [
+        'incident',
+        incidentId,
+        item['deviceId'] ?? '',
+        item['deviceName'] ?? item['name'] ?? '',
+        item['type'] ?? '',
+      ].join('|');
+    }
+
     return [
+      item['homeId'] ?? '',
       item['homeName'] ?? '',
       item['deviceId'] ?? '',
       item['deviceName'] ?? item['name'] ?? '',
@@ -1334,23 +1513,34 @@ class NotificationService {
     ].join('|');
   }
 
-  static void _addAlarmItems(String alarmItemsJson) {
+  static void _addAlarmItems(
+    String alarmItemsJson, {
+    String incidentId = '',
+  }) {
     try {
       final decoded = jsonDecode(alarmItemsJson);
 
       if (decoded is! List) return;
 
-      final existingKeys = activeAlarmItems.map(_alarmKey).toSet();
-
       for (final item in decoded) {
         if (item is! Map) continue;
 
         final map = Map<String, dynamic>.from(item);
-        final key = _alarmKey(map);
 
-        if (!existingKeys.contains(key)) {
+        if ((map['incidentId']?.toString().trim() ?? '').isEmpty &&
+            incidentId.trim().isNotEmpty) {
+          map['incidentId'] = incidentId.trim();
+        }
+
+        final key = _alarmKey(map);
+        final existingIndex = activeAlarmItems.indexWhere(
+          (existing) => _alarmKey(existing) == key,
+        );
+
+        if (existingIndex >= 0) {
+          activeAlarmItems[existingIndex] = map;
+        } else {
           activeAlarmItems.add(map);
-          existingKeys.add(key);
         }
       }
     } catch (_) {}
@@ -1427,9 +1617,15 @@ class NotificationService {
       'eventCategory': eventCategory,
       'alarmLevel': alarmLevel,
     };
-    lastAlarmEventCategory = normalizedIncidentEventCategory(incidentData);
-    lastAlarmLevel = normalizedIncidentAlarmLevel(incidentData);
-    _addAlarmItems(alarmItemsJson);
+
+    if (_activeAlarmIncidentContexts.isEmpty) {
+      lastAlarmEventCategory = normalizedIncidentEventCategory(incidentData);
+      lastAlarmLevel = normalizedIncidentAlarmLevel(incidentData);
+    } else {
+      _syncAlarmPresentationFromActiveIncidents();
+    }
+
+    _addAlarmItems(alarmItemsJson, incidentId: incidentId);
 
     lastAlarmItemsJson = activeAlarmItems.isEmpty
         ? alarmItemsJson
@@ -1543,11 +1739,7 @@ class NotificationService {
       strings: strings,
     );
 
-    const iosDetails = DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
+    const iosDetails = IosNotificationConfig.reminderDetails;
 
     // ID cố định: Reminder mới cập nhật Reminder cũ,
     // không sinh nhiều notification trùng nhau.

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -9,6 +10,7 @@ import '../safehome_theme.dart';
 import 'device_alarm_policy_sheet.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 import '../navigation/safehome_navigation.dart';
+import '../widgets/ios_alarm_platform_notice.dart';
 
 IconData _alarmDeviceIcon(Object? rawType) {
   final type = rawType?.toString().trim().toLowerCase() ?? "unknown";
@@ -589,9 +591,25 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final draft = normalizeDeviceAlarmSchedule(null);
     final isHomeOwner = currentUid == widget.ownerUid;
     var followHomeSchedule = true;
+    var fullscreenEnabled = true;
 
-    if (personal && !isHomeOwner) {
-      followHomeSchedule = entries.every((entry) {
+    final commonPolicies = entries.map((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device['type']?.toString() ?? 'door',
+      );
+    }).toList(growable: false);
+
+    var physicalSirenEnabled = commonPolicies.every(
+      (policy) => policy.physicalSirenEnabled,
+    );
+    var triggerDelaySeconds = commonPolicies
+        .map((policy) => policy.triggerDelaySeconds)
+        .reduce((first, second) => first < second ? first : second);
+
+    if (personal) {
+      final preferences = entries.map((entry) {
         final key = entry.key;
         final device = Map<String, dynamic>.from(entry.value as Map);
         final realId = _realDeviceId(key, device);
@@ -603,11 +621,22 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           device: device,
           deviceType: device['type']?.toString() ?? 'door',
         );
+
         return DevicePersonalAlarmPreferences.fromCustomDevice(
           customDevice: customDevice,
           legacyFullscreenEnabled: policy.fullscreenEnabled,
-        ).followHomeSchedule;
-      });
+        );
+      }).toList(growable: false);
+
+      fullscreenEnabled = preferences.every(
+        (preference) => preference.fullscreenEnabled,
+      );
+
+      if (!isHomeOwner) {
+        followHomeSchedule = preferences.every(
+          (preference) => preference.followHomeSchedule,
+        );
+      }
     }
 
     var saving = false;
@@ -656,26 +685,45 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       : 'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarm';
                   updates[path] = Map<String, dynamic>.from(normalized);
                   if (personal) {
-                    final rawCustomDevice =
-                        customDevices[realId] ?? customDevices[key];
-                    final customDevice = rawCustomDevice is Map
-                        ? Map<String, dynamic>.from(rawCustomDevice)
-                        : const <String, dynamic>{};
-                    final policy = DeviceAlarmPolicySettings.fromDevice(
-                      device: device,
-                      deviceType: device['type']?.toString() ?? 'door',
-                    );
-                    final preferences =
-                        DevicePersonalAlarmPreferences.fromCustomDevice(
-                          customDevice: customDevice,
-                          legacyFullscreenEnabled: policy.fullscreenEnabled,
-                        );
                     updates['accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'] =
                         DevicePersonalAlarmPreferences(
-                          fullscreenEnabled: preferences.fullscreenEnabled,
+                          fullscreenEnabled: fullscreenEnabled,
                           followHomeSchedule: isHomeOwner
                               ? true
                               : followHomeSchedule,
+                        ).toFirebaseMap();
+
+                    if (isHomeOwner) {
+                      final currentPolicy =
+                          DeviceAlarmPolicySettings.fromDevice(
+                            device: device,
+                            deviceType:
+                                device['type']?.toString() ?? 'door',
+                          );
+                      updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
+                          DeviceAlarmPolicySettings(
+                            enabled: currentPolicy.enabled,
+                            physicalSirenEnabled:
+                                currentPolicy.physicalSirenEnabled,
+                            fullscreenEnabled: fullscreenEnabled,
+                            triggerDelaySeconds:
+                                currentPolicy.triggerDelaySeconds,
+                          ).toFirebaseMap();
+                    }
+                  } else {
+                    final currentPolicy =
+                        DeviceAlarmPolicySettings.fromDevice(
+                          device: device,
+                          deviceType:
+                              device['type']?.toString() ?? 'door',
+                        );
+                    updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
+                        DeviceAlarmPolicySettings(
+                          enabled: currentPolicy.enabled,
+                          physicalSirenEnabled: physicalSirenEnabled,
+                          fullscreenEnabled:
+                              currentPolicy.fullscreenEnabled,
+                          triggerDelaySeconds: triggerDelaySeconds,
                         ).toFirebaseMap();
                   }
                 }
@@ -753,8 +801,100 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           height: 1.35,
                         ),
                       ),
+                      if (!personal) ...[
+                        const SizedBox(height: 14),
+                        SwitchListTile.adaptive(
+                          value: physicalSirenEnabled,
+                          onChanged: saving
+                              ? null
+                              : (value) => setSheetState(
+                                  () => physicalSirenEnabled = value,
+                                ),
+                          contentPadding: EdgeInsets.zero,
+                          secondary: const Icon(Icons.campaign_rounded),
+                          title: Text(
+                            strings.t('Bật còi vật lý'),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            strings.t(
+                              'Cho phép kích hoạt còi trong nhà.',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.timer_outlined,
+                                color: SafeHomeColors.warning,
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Text(
+                                  strings.t('Độ trễ kích hoạt'),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                              DropdownButtonHideUnderline(
+                                child: DropdownButton<int>(
+                                  value: triggerDelaySeconds,
+                                  isDense: true,
+                                  items: const [
+                                    0,
+                                    5,
+                                    10,
+                                    15,
+                                    30,
+                                    60,
+                                    90,
+                                    120,
+                                  ]
+                                      .map(
+                                        (seconds) =>
+                                            DropdownMenuItem<int>(
+                                              value: seconds,
+                                              child: Text(
+                                                seconds == 0
+                                                    ? strings.t(
+                                                        'Ngay lập tức',
+                                                      )
+                                                    : '$seconds ${strings.t('giây')}',
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight:
+                                                      FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
+                                      )
+                                      .toList(),
+                                  onChanged: saving
+                                      ? null
+                                      : (value) {
+                                          if (value == null) return;
+                                          setSheetState(
+                                            () => triggerDelaySeconds = value,
+                                          );
+                                        },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       if (personal) ...[
                         const SizedBox(height: 14),
+                        if (defaultTargetPlatform == TargetPlatform.iOS) ...[
+                          const IosAlarmPlatformNotice(),
+                          const SizedBox(height: 10),
+                        ],
                         SwitchListTile.adaptive(
                           value: followHomeSchedule,
                           onChanged: saving || isHomeOwner
@@ -775,6 +915,36 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           subtitle: Text(
                             strings.t(
                               'Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        SwitchListTile.adaptive(
+                          value: fullscreenEnabled,
+                          onChanged: saving
+                              ? null
+                              : (value) => setSheetState(
+                                  () => fullscreenEnabled = value,
+                                ),
+                          contentPadding: EdgeInsets.zero,
+                          secondary: Icon(
+                            defaultTargetPlatform == TargetPlatform.iOS
+                                ? Icons.phone_iphone_rounded
+                                : Icons.phone_android_rounded,
+                          ),
+                          title: Text(
+                            defaultTargetPlatform == TargetPlatform.iOS
+                                ? strings.t('Cảnh báo trên iOS')
+                                : strings.t('Đánh thức màn hình'),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          subtitle: Text(
+                            strings.t(
+                              defaultTargetPlatform == TargetPlatform.iOS
+                                  ? 'iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.'
+                                  : 'Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.',
                             ),
                           ),
                         ),

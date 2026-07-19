@@ -8,6 +8,7 @@ import '../helpers/firebase_paths.dart';
 import '../localization/app_language_controller.dart';
 import 'installation_id_service.dart';
 import 'notification_service.dart';
+import 'platform/ios/ios_notification_config.dart';
 import 'single_device_session_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 class FCMService {
@@ -95,6 +96,8 @@ class FCMService {
       alert: true,
       badge: true,
       sound: true,
+      criticalAlert:
+          IosNotificationConfig.criticalAlertsEntitlementEnabled,
     );
 
     if (kDebugMode) {
@@ -224,9 +227,15 @@ class FCMService {
       }
 
       if (type == 'alarm_siren') {
-        NotificationService.openAlarmFromData(
-          message.data,
-        );
+        if (defaultTargetPlatform == TargetPlatform.iOS) {
+          await NotificationService.openIosAlarmFromData(
+            message.data,
+          );
+        } else {
+          NotificationService.openAlarmFromData(
+            message.data,
+          );
+        }
         return;
       }
 
@@ -306,16 +315,28 @@ class FCMService {
     if (type == 'emergency_notification' ||
         type == 'alarm_detected' ||
         type == 'alarm') {
-      await NotificationService.handlePriorityAlarmOpened(
-        message.data,
-      );
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        await NotificationService.openIosAlarmFromData(
+          message.data,
+        );
+      } else {
+        await NotificationService.handlePriorityAlarmOpened(
+          message.data,
+        );
+      }
       return;
     }
 
     if (type == 'alarm_siren') {
-      NotificationService.openAlarmFromData(
-        message.data,
-      );
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        await NotificationService.openIosAlarmFromData(
+          message.data,
+        );
+      } else {
+        NotificationService.openAlarmFromData(
+          message.data,
+        );
+      }
     }
   }
 }

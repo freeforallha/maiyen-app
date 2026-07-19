@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import '../navigation/safehome_navigation.dart';
+import '../widgets/ios_alarm_platform_notice.dart';
 
 const Set<String> _emergencyAlarmDeviceTypes = {
   'smoke',
@@ -378,8 +380,11 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         updates['$baseDevicePath/alarmPolicy'] = DeviceAlarmPolicySettings(
           enabled: _isEmergency ? true : _enabled,
           physicalSirenEnabled: _physicalSirenEnabled,
-          // Giữ trường cũ làm mặc định cho tài khoản chưa mở bản app mới.
-          fullscreenEnabled: _legacyFullscreenEnabled,
+          // Owner dùng cùng một lựa chọn Fullscreen cho cả dữ liệu cá nhân
+          // mới và trường chung legacy để tránh hai nguồn bị lệch nhau.
+          fullscreenEnabled: _isHomeOwner
+              ? _personalFullscreenEnabled
+              : _legacyFullscreenEnabled,
           triggerDelaySeconds: _isEmergency ? 0 : _triggerDelaySeconds,
         ).toFirebaseMap();
 
@@ -665,8 +670,14 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   }
 
   Widget _personalSection(AppStrings strings) {
+    final isIos = defaultTargetPlatform == TargetPlatform.iOS;
+
     return Column(
       children: [
+        if (isIos) ...[
+          const IosAlarmPlatformNotice(),
+          const SizedBox(height: 10),
+        ],
         if (_isSecurity && !_isHomeOwner) ...[
           _switchCard(
             icon: Icons.home_work_rounded,
@@ -691,10 +702,16 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           const SizedBox(height: 10),
         ],
         _switchCard(
-          icon: Icons.phone_android_rounded,
-          title: strings.t('Đánh thức màn hình'),
+          icon: isIos
+              ? Icons.phone_iphone_rounded
+              : Icons.phone_android_rounded,
+          title: isIos
+              ? strings.t('Cảnh báo trên iOS')
+              : strings.t('Đánh thức màn hình'),
           subtitle: strings.t(
-            'Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.',
+            isIos
+                ? 'iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.'
+                : 'Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.',
           ),
           value: _personalFullscreenEnabled,
           enabled: true,

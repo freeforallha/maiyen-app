@@ -415,6 +415,15 @@ class _SystemHealthSnapshot {
             AuthorizationStatus.authorized ||
         notificationSettings.authorizationStatus ==
             AuthorizationStatus.provisional;
+    final iosSoundEnabled =
+        !isIos ||
+        notificationSettings.sound == AppleNotificationSetting.enabled;
+    final iosTimeSensitiveEnabled =
+        !isIos ||
+        notificationSettings.timeSensitive ==
+            AppleNotificationSetting.enabled ||
+        notificationSettings.timeSensitive ==
+            AppleNotificationSetting.notSupported;
     final locationAlways = locationPermission == LocationPermission.always;
     final locationDenied =
         locationPermission == LocationPermission.denied ||
@@ -440,6 +449,11 @@ class _SystemHealthSnapshot {
       _SystemHealthItem(
         level: isAndroid && notificationOk
             ? _SystemHealthLevel.ok
+            : isIos &&
+                  (!notificationOk ||
+                      !iosSoundEnabled ||
+                      !iosTimeSensitiveEnabled)
+            ? _SystemHealthLevel.warning
             : _SystemHealthLevel.info,
         icon: Icons.open_in_full_rounded,
         title: isAndroid
