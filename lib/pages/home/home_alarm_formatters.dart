@@ -21,35 +21,42 @@ class HomeAlarmFormatters {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-      final homeSchedules = normalizeDeviceAlarmSchedules(
+      final customDevice = safeMap(customDevices[realDeviceId]);
+      final policy = DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device["type"]?.toString() ?? "door",
+      );
+      final commonSchedules = normalizeDeviceAlarmSchedules(
         rawSchedules: device["alarmSchedules"],
         legacyAlarm: device["alarm"],
         personal: false,
+        legacyFullscreenEnabled: policy.fullscreenEnabled,
+        legacyPhysicalSirenEnabled: policy.physicalSirenEnabled,
       );
-      final customDevice = safeMap(customDevices[realDeviceId]);
-      final personalSchedules = normalizeEffectivePersonalAlarmSchedules(
+      final preferences = DevicePersonalAlarmPreferences.fromCustomDevice(
+        customDevice: customDevice,
+        legacyFullscreenEnabled: policy.fullscreenEnabled,
+      );
+      final effectiveSchedules = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
+        commonSchedules: commonSchedules,
+        legacyFullscreenEnabled: policy.fullscreenEnabled,
       );
-
-      for (final alarm in homeSchedules.values) {
-        if (alarm["enabled"] == true) {
-          return {
-            "mode": "Theo nhà",
-            "start": alarm["start"]?.toString() ?? "23:00",
-            "end": alarm["end"]?.toString() ?? "06:00",
-          };
+      Map<String, dynamic>? enabledSchedule;
+      for (final schedule in effectiveSchedules.values) {
+        if (schedule["enabled"] == true) {
+          enabledSchedule = schedule;
+          break;
         }
       }
 
-      for (final alarm in personalSchedules.values) {
-        if (alarm["enabled"] == true) {
-          return {
-            "mode": "Riêng tôi",
-            "start": alarm["start"]?.toString() ?? "23:00",
-            "end": alarm["end"]?.toString() ?? "06:00",
-          };
-        }
+      if (enabledSchedule != null) {
+        return {
+          "mode": preferences.followHomeSchedule ? "Theo nhà" : "Riêng tôi",
+          "start": enabledSchedule["start"]?.toString() ?? "23:00",
+          "end": enabledSchedule["end"]?.toString() ?? "06:00",
+        };
       }
     }
 
@@ -97,22 +104,26 @@ class HomeAlarmFormatters {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-      final homeSchedules = normalizeDeviceAlarmSchedules(
+      final customDevice = safeMap(customDevices[realDeviceId]);
+      final policy = DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device["type"]?.toString() ?? "door",
+      );
+      final commonSchedules = normalizeDeviceAlarmSchedules(
         rawSchedules: device["alarmSchedules"],
         legacyAlarm: device["alarm"],
         personal: false,
+        legacyFullscreenEnabled: policy.fullscreenEnabled,
+        legacyPhysicalSirenEnabled: policy.physicalSirenEnabled,
       );
-      final customDevice = safeMap(customDevices[realDeviceId]);
-      final personalSchedules = normalizeEffectivePersonalAlarmSchedules(
+      final effectiveSchedules = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
+        commonSchedules: commonSchedules,
+        legacyFullscreenEnabled: policy.fullscreenEnabled,
       );
 
-      // Tất cả lịch chung và lịch cá nhân hoạt động song song.
-      for (final alarm in homeSchedules.values) {
-        addAlarm(alarm);
-      }
-      for (final alarm in personalSchedules.values) {
+      for (final alarm in effectiveSchedules.values) {
         addAlarm(alarm);
       }
     }

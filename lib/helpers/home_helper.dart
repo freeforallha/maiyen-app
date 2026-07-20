@@ -397,32 +397,148 @@ bool isSosActive(Map<String, dynamic> d) {
   );
 }
 
-bool isNowInAlarmTime(Map<String, dynamic> d) {
-  final alarm = safeMap(d["alarm"]);
+int? _alarmClockToMinute(dynamic rawValue) {
+  final text = rawValue?.toString().trim() ?? "";
+  final match = RegExp(r"^([01]\d|2[0-3]):([0-5]\d)$").firstMatch(text);
 
-  if (alarm["enabled"] != true) return false;
-
-  final startText = alarm["start"]?.toString() ?? "23:00";
-  final endText = alarm["end"]?.toString() ?? "06:00";
-
-  int toMinute(String text) {
-    final parts = text.split(":");
-    final h = int.tryParse(parts.isNotEmpty ? parts[0] : "") ?? 0;
-    final m = int.tryParse(parts.length > 1 ? parts[1] : "") ?? 0;
-
-    return h * 60 + m;
+  if (match == null) {
+    return null;
   }
 
-  final now = DateTime.now();
-  final nowMin = now.hour * 60 + now.minute;
-  final startMin = toMinute(startText);
-  final endMin = toMinute(endText);
+  final hour = int.parse(match.group(1)!);
+  final minute = int.parse(match.group(2)!);
+  return hour * 60 + minute;
+}
 
-  if (startMin > endMin) {
-    return nowMin >= startMin || nowMin <= endMin;
+Set<int> _normalizeAlarmScheduleDays(dynamic rawDays) {
+  final days = <int>{};
+
+  void addDay(dynamic rawDay) {
+    final day = int.tryParse(rawDay?.toString() ?? "");
+
+    if (day != null && day >= DateTime.monday && day <= DateTime.sunday) {
+      days.add(day);
+    }
   }
 
-  return nowMin >= startMin && nowMin <= endMin;
+  if (rawDays is Iterable) {
+    for (final rawDay in rawDays) {
+      addDay(rawDay);
+    }
+  } else if (rawDays is Map) {
+    // Firebase có thể trả mảng dưới dạng Map nếu dữ liệu có index rỗng.
+    for (final rawDay in rawDays.values) {
+      addDay(rawDay);
+    }
+  }
+
+  // Dữ liệu cũ chưa có days được hiểu là chạy hằng ngày.
+  if (days.isEmpty) {
+    return {
+      DateTime.monday,
+      DateTime.tuesday,
+      DateTime.wednesday,
+      DateTime.thursday,
+      DateTime.friday,
+      DateTime.saturday,
+      DateTime.sunday,
+    };
+  }
+
+  return days;
+}
+
+bool _isAlarmScheduleActiveNow(
+  Map<String, dynamic> schedule,
+  DateTime now,
+) {
+  if (schedule["enabled"] != true) {
+    return false;
+  }
+
+  final startMinute = _alarmClockToMinute(schedule["start"]);
+  final endMinute = _alarmClockToMinute(schedule["end"]);
+
+  if (startMinute == null || endMinute == null || startMinute == endMinute) {
+    return false;
+  }
+
+  final nowMinute = now.hour * 60 + now.minute;
+  final crossesMidnight = startMinute > endMinute;
+  final inTimeRange = crossesMidnight
+      ? nowMinute >= startMinute || nowMinute < endMinute
+      : nowMinute >= startMinute && nowMinute < endMinute;
+
+  if (!inTimeRange) {
+    return false;
+  }
+
+  var scheduleWeekday = now.weekday;
+
+  // 01:00 thứ Ba vẫn thuộc lịch bắt đầu từ tối thứ Hai.
+  if (crossesMidnight && nowMinute < endMinute) {
+    scheduleWeekday = scheduleWeekday == DateTime.monday
+        ? DateTime.sunday
+        : scheduleWeekday - 1;
+  }
+
+  return _normalizeAlarmScheduleDays(
+    schedule["days"],
+  ).contains(scheduleWeekday);
+}
+
+List<Map<String, dynamic>> _deviceAlarmSchedules(
+  Map<String, dynamic> device,
+) {
+  final schedules = <Map<String, dynamic>>[];
+  final rawSchedules = device["alarmSchedules"];
+
+  if (rawSchedules is Map) {
+    for (final rawSchedule in rawSchedules.values) {
+      final schedule = safeMap(rawSchedule);
+
+      if (schedule.isNotEmpty) {
+        schedules.add(schedule);
+      }
+    }
+  } else if (rawSchedules is Iterable) {
+    for (final rawSchedule in rawSchedules) {
+      final schedule = safeMap(rawSchedule);
+
+      if (schedule.isNotEmpty) {
+        schedules.add(schedule);
+      }
+    }
+  }
+
+  // Chỉ dùng alarm cũ khi thiết bị chưa có collection alarmSchedules mới.
+  if (schedules.isEmpty) {
+    final legacyAlarm = safeMap(device["alarm"]);
+
+    if (legacyAlarm.isNotEmpty) {
+      schedules.add(legacyAlarm);
+    }
+  }
+
+  return schedules;
+}
+
+bool isNowInAlarmTime(
+  Map<String, dynamic> device, {
+  DateTime? now,
+}) {
+  final alarmPolicy = safeMap(device["alarmPolicy"]);
+
+  // Thiết bị đã rời hệ thống báo động thì cửa mở chỉ là trạng thái chú ý.
+  if (alarmPolicy["enabled"] == false) {
+    return false;
+  }
+
+  final currentTime = now ?? DateTime.now();
+
+  return _deviceAlarmSchedules(device).any(
+    (schedule) => _isAlarmScheduleActiveNow(schedule, currentTime),
+  );
 }
 
 bool _hasTrueFlag(Map<String, dynamic> device, List<String> keys) {

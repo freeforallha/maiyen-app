@@ -264,12 +264,39 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (type == 'emergency_notification' ||
       type == 'alarm_detected' ||
       type == 'alarm') {
-    await _showBackgroundPriorityAlarm(message.data);
+    final validatedData =
+        await NotificationService.validateIncomingAlarmData(
+          message.data,
+          updateLocalState: false,
+        );
+
+    if (validatedData == null) {
+      // Bỏ qua payload cũ. Không hủy notification khác vì tài khoản có thể
+      // vẫn còn một incident mới đang hoạt động với cùng notification ID.
+      return;
+    }
+
+    await _showBackgroundPriorityAlarm(validatedData);
     return;
   }
 
   if (type == 'alarm_siren') {
-    await _showBackgroundFullscreenAlarm(message.data, message.notification);
+    final validatedData =
+        await NotificationService.validateIncomingAlarmData(
+          message.data,
+          updateLocalState: false,
+        );
+
+    if (validatedData == null) {
+      // Bỏ qua payload cũ. Không hủy notification khác vì tài khoản có thể
+      // vẫn còn một incident mới đang hoạt động với cùng notification ID.
+      return;
+    }
+
+    await _showBackgroundFullscreenAlarm(
+      validatedData,
+      message.notification,
+    );
   }
 }
 

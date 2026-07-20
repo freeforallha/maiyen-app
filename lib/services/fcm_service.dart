@@ -252,7 +252,7 @@ class FCMService {
         if (defaultTargetPlatform == TargetPlatform.iOS) {
           await NotificationService.openIosAlarmFromData(message.data);
         } else {
-          NotificationService.openAlarmFromData(message.data);
+          await NotificationService.openAlarmFromData(message.data);
         }
         return;
       }
@@ -338,7 +338,7 @@ class FCMService {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         await NotificationService.openIosAlarmFromData(message.data);
       } else {
-        NotificationService.openAlarmFromData(message.data);
+        await NotificationService.openAlarmFromData(message.data);
       }
     }
   }

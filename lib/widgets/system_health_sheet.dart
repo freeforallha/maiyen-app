@@ -729,13 +729,8 @@ class _SystemHealthSnapshot {
   static bool _hasEnabledDeviceAlarm(Map<String, dynamic> devices) {
     for (final rawDevice in devices.values) {
       final device = safeMap(rawDevice);
-      final schedules = normalizeDeviceAlarmSchedules(
-        rawSchedules: device['alarmSchedules'],
-        legacyAlarm: device['alarm'],
-        personal: false,
-      );
-
-      if (hasEnabledDeviceAlarmSchedules(schedules)) {
+      if (_hasEnabledSchedule(device['alarmSchedules']) ||
+          safeMap(device['alarm'])['enabled'] == true) {
         return true;
       }
     }
@@ -749,12 +744,23 @@ class _SystemHealthSnapshot {
   }) {
     for (final rawDevice in customDevices.values) {
       final customDevice = safeMap(rawDevice);
-      final schedules = normalizeEffectivePersonalAlarmSchedules(
+      final preferences = DevicePersonalAlarmPreferences.fromCustomDevice(
+        customDevice: customDevice,
+        legacyFullscreenEnabled: true,
+      );
+
+      // Khi theo lịch chung, lịch đã được tính ở homeAlarmScheduleEnabled.
+      // Không đọc lịch cá nhân cũ để tránh báo trùng hoặc sai trạng thái.
+      if (preferences.followHomeSchedule) {
+        continue;
+      }
+
+      final alarms = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
       );
 
-      if (hasEnabledDeviceAlarmSchedules(schedules)) {
+      if (hasEnabledDeviceAlarmSchedules(alarms)) {
         return true;
       }
     }

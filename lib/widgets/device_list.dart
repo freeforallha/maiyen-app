@@ -1674,9 +1674,9 @@ class _DeviceListState extends State<DeviceList> {
       legacyFullscreenEnabled: settings.fullscreenEnabled,
     );
     final effectiveNotificationEnabled =
-        (settings.notificationEnabled &&
-            personalPreferences.followHomeSchedule) ||
-        personalPreferences.notificationEnabled;
+        personalPreferences.followHomeSchedule
+        ? settings.notificationEnabled
+        : personalPreferences.notificationEnabled;
     final iconSize = compact ? 9.5 : 10.5;
 
     if (!settings.enabled) {

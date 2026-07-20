@@ -142,7 +142,9 @@ class _ScheduleSheetState extends State<ScheduleSheet> {
       return;
     }
 
-    await ref.update({"alarms": alarms, "notifications": notifications});
+    // Sheet này hiện chỉ được mở cho Reminder. Chỉ cập nhật notifications
+    // để không ghi ngược dữ liệu schedules/alarms legacy lên Firebase.
+    await ref.update({"notifications": notifications});
   }
 
   String repeatLabel(dynamic value) {

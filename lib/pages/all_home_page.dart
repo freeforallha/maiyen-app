@@ -1971,8 +1971,29 @@ class _AllHomePageState extends State<AllHomePage> {
 
           if (!isSecurity) continue;
 
-          updates["accounts/$ownerUid/homes/$homeId/devices/$deviceId/alarm"] =
-              alarmData;
+          final devicePath =
+              "accounts/$ownerUid/homes/$homeId/devices/$deviceId";
+
+          final existingSchedules = safeMap(device["alarmSchedules"]);
+          final duplicateScheduleIds = existingSchedules.entries
+              .where((scheduleEntry) {
+                final schedule = safeMap(scheduleEntry.value);
+                return schedule["start"]?.toString() == alarmData["start"] &&
+                    schedule["end"]?.toString() == alarmData["end"];
+              })
+              .map((scheduleEntry) => scheduleEntry.key)
+              .toList(growable: false);
+          final targetScheduleId = duplicateScheduleIds.isEmpty
+              ? "quick_all_home"
+              : duplicateScheduleIds.first;
+
+          // Không tạo thêm node khi đã có lịch trùng hoàn toàn giờ. Nếu dữ
+          // liệu cũ từng có nhiều bản trùng, giữ một bản và dọn các bản còn lại.
+          updates["$devicePath/alarmSchedules/$targetScheduleId"] = alarmData;
+          for (final duplicateId in duplicateScheduleIds.skip(1)) {
+            updates["$devicePath/alarmSchedules/$duplicateId"] = null;
+          }
+          updates["$devicePath/alarm"] = null;
 
           updatedDevices++;
           homeUpdated = true;

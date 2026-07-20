@@ -135,6 +135,13 @@ class NotificationService {
 
   static Timer? _pendingAlarmOpenTimer;
   static Map<String, dynamic>? _pendingAlarmOpenData;
+  static final Map<String, Future<Map<String, dynamic>?>>
+  _alarmPayloadValidationInFlight = {};
+  static final Map<String, int> _presentedAlarmDeliveryAt = {};
+  static final Map<String, int> _locallySuppressedAlarmIncidentAt = {};
+  static const int _alarmDeliveryDedupeWindowMs = 24 * 60 * 60 * 1000;
+  static const int _localAlarmIncidentSuppressionMs = 30 * 60 * 1000;
+  static const int _alarmDeliveryDedupeMaxEntries = 300;
 
   static bool get hasActiveAlarmIncidents =>
       _activeAlarmIncidentContexts.isNotEmpty;
@@ -157,6 +164,320 @@ class NotificationService {
     } catch (_) {}
 
     return null;
+  }
+
+  static String _alarmDeliveryKey(Map<String, dynamic> data) {
+    final direct = data['alarmDeliveryId']?.toString().trim() ?? '';
+
+    if (direct.isNotEmpty) {
+      return direct;
+    }
+
+    final itemKeys = _alarmItemsFromData(data)
+        .map((item) {
+          return [
+            item['incidentId'] ?? data['incidentId'] ?? '',
+            item['homeId'] ?? data['homeId'] ?? '',
+            item['deviceId'] ?? '',
+            item['type'] ?? '',
+            item['reason'] ?? '',
+          ].join('|');
+        })
+        .toList()
+      ..sort();
+
+    return [
+      data['receiverUid'] ?? '',
+      data['incidentId'] ?? '',
+      data['alarmStage'] ?? '',
+      data['type'] ?? '',
+      ...itemKeys,
+    ].join('||');
+  }
+
+  static bool _markAlarmDeliveryPresented(Map<String, dynamic> data) {
+    final key = _alarmDeliveryKey(data).trim();
+
+    if (key.isEmpty) {
+      return true;
+    }
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    _presentedAlarmDeliveryAt.removeWhere(
+      (_, timestamp) => now - timestamp > _alarmDeliveryDedupeWindowMs,
+    );
+
+    final previous = _presentedAlarmDeliveryAt[key];
+
+    if (previous != null && now - previous <= _alarmDeliveryDedupeWindowMs) {
+      return false;
+    }
+
+    _presentedAlarmDeliveryAt[key] = now;
+
+    if (_presentedAlarmDeliveryAt.length > _alarmDeliveryDedupeMaxEntries) {
+      final oldestKeys = _presentedAlarmDeliveryAt.entries.toList()
+        ..sort((first, second) => first.value.compareTo(second.value));
+
+      for (final entry in oldestKeys.take(
+        _presentedAlarmDeliveryAt.length - _alarmDeliveryDedupeMaxEntries,
+      )) {
+        _presentedAlarmDeliveryAt.remove(entry.key);
+      }
+    }
+
+    return true;
+  }
+
+  static bool _dropAlarmIncidentLocally(String incidentId) {
+    final cleanIncidentId = incidentId.trim();
+
+    if (cleanIncidentId.isEmpty) {
+      return false;
+    }
+
+    final removedContext =
+        _activeAlarmIncidentContexts.remove(cleanIncidentId) != null;
+    final oldLength = activeAlarmItems.length;
+
+    activeAlarmItems.removeWhere(
+      (item) => item['incidentId']?.toString().trim() == cleanIncidentId,
+    );
+
+    final removedItems = activeAlarmItems.length != oldLength;
+
+    if (removedContext || removedItems) {
+      _syncAlarmPresentationFromActiveIncidents();
+      lastAlarmItemsJson = activeAlarmItems.isEmpty
+          ? ''
+          : jsonEncode(activeAlarmItems);
+    }
+
+    return removedContext || removedItems;
+  }
+
+  static Future<String> _restoredAlarmUserUid() async {
+    final immediateUid =
+        FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
+
+    if (immediateUid.isNotEmpty) {
+      return immediateUid;
+    }
+
+    try {
+      final restoredUser = await FirebaseAuth.instance
+          .authStateChanges()
+          .firstWhere((user) => user != null)
+          .timeout(
+            const Duration(seconds: 2),
+            onTimeout: () => null,
+          );
+
+      return restoredUser?.uid.trim() ?? '';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  static bool _isUnverifiedAlarmPayloadStale(
+    Map<String, dynamic> data,
+  ) {
+    final sentAt = int.tryParse(data['sentAt']?.toString() ?? '') ?? 0;
+
+    if (sentAt <= 0) {
+      return false;
+    }
+
+    return DateTime.now().millisecondsSinceEpoch - sentAt >
+        const Duration(minutes: 2).inMilliseconds;
+  }
+
+  static bool _isAlarmIncidentLocallySuppressed(String incidentId) {
+    final cleanIncidentId = incidentId.trim();
+
+    if (cleanIncidentId.isEmpty) {
+      return false;
+    }
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    _locallySuppressedAlarmIncidentAt.removeWhere(
+      (_, timestamp) => now - timestamp > _localAlarmIncidentSuppressionMs,
+    );
+
+    return _locallySuppressedAlarmIncidentAt.containsKey(cleanIncidentId);
+  }
+
+  static void _suppressAlarmIncidentLocally(String incidentId) {
+    final cleanIncidentId = incidentId.trim();
+
+    if (cleanIncidentId.isEmpty) {
+      return;
+    }
+
+    _locallySuppressedAlarmIncidentAt[cleanIncidentId] =
+        DateTime.now().millisecondsSinceEpoch;
+  }
+
+  static Future<Map<String, dynamic>?> validateIncomingAlarmData(
+    Map<String, dynamic> rawData, {
+    bool updateLocalState = true,
+  }) async {
+    final data = Map<String, dynamic>.from(rawData);
+    final incidentId = data['incidentId']?.toString().trim() ?? '';
+    final explicitStatus = normalizedIncidentStatus(data);
+
+    if (_isAlarmIncidentLocallySuppressed(incidentId)) {
+      if (updateLocalState && incidentId.isNotEmpty) {
+        _dropAlarmIncidentLocally(incidentId);
+      }
+      return null;
+    }
+
+    if (explicitStatus != 'active') {
+      if (updateLocalState && incidentId.isNotEmpty) {
+        _dropAlarmIncidentLocally(incidentId);
+      }
+      return null;
+    }
+
+    final currentUid = await _restoredAlarmUserUid();
+    final payloadReceiverUid =
+        data['receiverUid']?.toString().trim() ?? '';
+
+    if (
+      currentUid.isNotEmpty &&
+      payloadReceiverUid.isNotEmpty &&
+      payloadReceiverUid != currentUid
+    ) {
+      if (updateLocalState && incidentId.isNotEmpty) {
+        _dropAlarmIncidentLocally(incidentId);
+      }
+      return null;
+    }
+
+    if (incidentId.isEmpty) {
+      return data;
+    }
+
+    final receiverUid = payloadReceiverUid.isNotEmpty
+        ? payloadReceiverUid
+        : currentUid;
+
+    if (receiverUid.isEmpty) {
+      // Chỉ giữ fail-safe cho push vừa gửi. Payload nằm chờ lâu mà không xác
+      // định được tài khoản không được phép tự mở lại Fullscreen cũ.
+      return _isUnverifiedAlarmPayloadStale(data) ? null : data;
+    }
+
+    final validationKey =
+        '$receiverUid|$incidentId|${updateLocalState ? 'local' : 'background'}';
+    final inFlight = _alarmPayloadValidationInFlight[validationKey];
+
+    if (inFlight != null) {
+      return inFlight;
+    }
+
+    final validation = (() async {
+      try {
+        final snapshot = await FirebaseDatabase.instance
+            .ref('accounts/$receiverUid/alarmIncidents/$incidentId')
+            .get();
+        final rawIncident = snapshot.value;
+
+        if (rawIncident is! Map) {
+          if (updateLocalState) {
+            _dropAlarmIncidentLocally(incidentId);
+          }
+          return null;
+        }
+
+        final incident = Map<String, dynamic>.from(rawIncident);
+        final status =
+            incident['status']?.toString().trim().toLowerCase() ?? '';
+        final expireAt =
+            int.tryParse(incident['expireAt']?.toString() ?? '') ?? 0;
+        final isExpired =
+            expireAt > 0 && expireAt <= DateTime.now().millisecondsSinceEpoch;
+        final presentationSuppressedAt =
+            int.tryParse(
+              incident['presentationSuppressedAt']?.toString() ?? '',
+            ) ??
+            0;
+
+        if (status != 'active' || isExpired || presentationSuppressedAt > 0) {
+          if (updateLocalState) {
+            _dropAlarmIncidentLocally(incidentId);
+          }
+          return null;
+        }
+
+        final freshData = Map<String, dynamic>.from(data);
+        final freshItems = _alarmItemsFromValue(incident['items']);
+
+        for (final item in freshItems) {
+          item['incidentId'] = incidentId;
+          item['homeId'] ??= incident['homeId']?.toString() ?? '';
+          item['homeName'] ??= incident['homeName']?.toString() ?? '';
+          item['ownerUid'] ??= incident['ownerUid']?.toString() ?? '';
+        }
+
+        if (freshItems.isNotEmpty) {
+          freshData['alarmItems'] = jsonEncode(freshItems);
+          freshData['alarmItemsJson'] = jsonEncode(freshItems);
+        }
+
+        freshData['incidentId'] = incidentId;
+        freshData['receiverUid'] = receiverUid;
+        freshData['incidentStatus'] = 'active';
+        freshData['homeId'] =
+            incident['homeId']?.toString() ??
+            freshData['homeId']?.toString() ??
+            '';
+        freshData['ownerUid'] =
+            incident['ownerUid']?.toString() ??
+            freshData['ownerUid']?.toString() ??
+            '';
+        freshData['alarmFlowType'] =
+            incident['flowType']?.toString() ??
+            freshData['alarmFlowType']?.toString() ??
+            'security';
+        freshData['eventCategory'] =
+            incident['eventCategory']?.toString() ??
+            freshData['eventCategory']?.toString() ??
+            freshData['alarmFlowType']?.toString() ??
+            'security';
+        freshData['alarmLevel'] =
+            incident['alarmLevel']?.toString() ??
+            freshData['alarmLevel']?.toString() ??
+            (freshData['alarmFlowType'] == 'emergency'
+                ? 'emergency'
+                : 'alarm');
+        freshData['alarmStage'] =
+            incident['stage']?.toString() ??
+            freshData['alarmStage']?.toString() ??
+            '';
+
+        return freshData;
+      } catch (error) {
+        safeDebugPrint('ALARM PAYLOAD VALIDATION ERROR: $error');
+
+        // Khi chưa xác minh được Firebase, chỉ fail-safe với push vừa gửi.
+        // Payload đã nằm chờ quá lâu không được phép tự mở Fullscreen cũ.
+        if (_isUnverifiedAlarmPayloadStale(data)) {
+          if (updateLocalState) {
+            _dropAlarmIncidentLocally(incidentId);
+          }
+          return null;
+        }
+
+        return data;
+      } finally {
+        _alarmPayloadValidationInFlight.remove(validationKey);
+      }
+    })();
+
+    _alarmPayloadValidationInFlight[validationKey] = validation;
+    return validation;
   }
 
   static List<Map<String, dynamic>> _alarmItemsFromValue(dynamic value) {
@@ -404,7 +725,7 @@ class NotificationService {
     final status = normalizedIncidentStatus(data);
 
     if (status != 'active') {
-      _activeAlarmIncidentContexts.remove(incidentId);
+      _dropAlarmIncidentLocally(incidentId);
       return;
     }
 
@@ -657,7 +978,8 @@ class NotificationService {
       final id = target['incidentId'] ?? '';
 
       if (id.isNotEmpty) {
-        _activeAlarmIncidentContexts.remove(id);
+        _suppressAlarmIncidentLocally(id);
+        _dropAlarmIncidentLocally(id);
       }
     }
 
@@ -727,25 +1049,32 @@ class NotificationService {
   static Future<void> showPriorityAlarmNotification({
     required Map<String, dynamic> data,
   }) async {
+    final alarmData = await validateIncomingAlarmData(data);
+
+    if (alarmData == null) {
+      await stopAllAlarmNotifications();
+      return;
+    }
+
     if (_alarmPageOpen) {
       // Một Fullscreen Alarm đang hiển thị: thêm sự cố mới ngay ở cấp
       // notification đầu tiên, không chờ tới cấp còi/fullscreen tiếp theo.
-      openAlarmFromData(data);
+      await openAlarmFromData(alarmData, validate: false);
     } else {
-      rememberAlarmIncident(data);
+      rememberAlarmIncident(alarmData);
     }
 
     final strings = _strings;
 
     final title = localizedNotificationTitle(
-      data['title']?.toString() ?? '',
+      alarmData['title']?.toString() ?? '',
       strings,
       strings.priorityAlarmNotificationTitle(),
     );
 
-    final body = localizedAlarmBodyForData(data, strings);
+    final body = localizedAlarmBodyForData(alarmData, strings);
 
-    final payload = 'priority_alarm::${jsonEncode(data)}';
+    final payload = 'priority_alarm::${jsonEncode(alarmData)}';
 
     final androidDetails = AndroidNotificationConfig.priorityAlarmDetails(
       title: title,
@@ -754,9 +1083,9 @@ class NotificationService {
     );
 
     final iosDetails = IosNotificationConfig.alarmDetails(
-      data: data,
+      data: alarmData,
       playSound:
-          data['alarmStage']?.toString().trim().toLowerCase() != 'detected',
+          alarmData['alarmStage']?.toString().trim().toLowerCase() != 'detected',
     );
 
     await localNotif.cancel(emergencyNotificationId);
@@ -773,7 +1102,14 @@ class NotificationService {
   static Future<void> handlePriorityAlarmOpened(
     Map<String, dynamic> data,
   ) async {
-    rememberAlarmIncident(data);
+    final alarmData = await validateIncomingAlarmData(data);
+
+    if (alarmData == null) {
+      await stopAllAlarmNotifications();
+      return;
+    }
+
+    rememberAlarmIncident(alarmData);
     await stopEmergencyNotification();
 
     // Chạm vào notification chỉ mở ứng dụng để kiểm tra.
@@ -788,13 +1124,15 @@ class NotificationService {
         data['resolutionAction']?.toString().trim().isNotEmpty == true
         ? data['resolutionAction'].toString().trim()
         : data['action']?.toString().trim() ?? 'resolved';
+    final incidentStatus =
+        data['incidentStatus']?.toString().trim().toLowerCase() ?? '';
+    final isAcknowledged =
+        action == 'check_home' || incidentStatus == 'acknowledged';
     final resolvedMessage = _strings.alarmIncidentResolvedMessage(action);
 
     if (incidentId.isNotEmpty) {
-      _activeAlarmIncidentContexts.remove(incidentId);
-      activeAlarmItems.removeWhere(
-        (item) => item['incidentId']?.toString().trim() == incidentId,
-      );
+      _suppressAlarmIncidentLocally(incidentId);
+      _dropAlarmIncidentLocally(incidentId);
     } else {
       _activeAlarmIncidentContexts.clear();
       activeAlarmItems.clear();
@@ -815,21 +1153,23 @@ class NotificationService {
       alarmRevision.value++;
     }
 
-    unawaited(
-      Future<void>.delayed(const Duration(milliseconds: 350), () {
-        final context = appNavigatorKey.currentContext;
+    if (!isAcknowledged) {
+      unawaited(
+        Future<void>.delayed(const Duration(milliseconds: 350), () {
+          final context = appNavigatorKey.currentContext;
 
-        if (context == null) return;
-        if (!context.mounted) return;
+          if (context == null) return;
+          if (!context.mounted) return;
 
-        showTopToast(
-          context,
-          resolvedMessage,
-          color: Colors.green.shade700,
-          icon: Icons.check_circle_rounded,
-        );
-      }),
-    );
+          showTopToast(
+            context,
+            resolvedMessage,
+            color: Colors.green.shade700,
+            icon: Icons.check_circle_rounded,
+          );
+        }),
+      );
+    }
   }
 
   static Future<bool> reconcileActiveAlarmIncidents() async {
@@ -841,6 +1181,7 @@ class NotificationService {
 
     final incidentIds = List<String>.from(_activeAlarmIncidentContexts.keys);
     var removedAny = false;
+    var contentChanged = false;
 
     for (final incidentId in incidentIds) {
       final context = _activeAlarmIncidentContexts[incidentId];
@@ -849,21 +1190,81 @@ class NotificationService {
           : currentUid;
 
       if (receiverUid != currentUid) {
-        _activeAlarmIncidentContexts.remove(incidentId);
-        removedAny = true;
+        removedAny = _dropAlarmIncidentLocally(incidentId) || removedAny;
         continue;
       }
 
       try {
         final snapshot = await FirebaseDatabase.instance
-            .ref('accounts/$receiverUid/alarmIncidents/$incidentId/status')
+            .ref('accounts/$receiverUid/alarmIncidents/$incidentId')
             .get();
-        final status = snapshot.value?.toString().trim() ?? '';
+        final rawIncident = snapshot.value;
 
-        if (status != 'active') {
-          _activeAlarmIncidentContexts.remove(incidentId);
-          removedAny = true;
+        if (rawIncident is! Map) {
+          removedAny = _dropAlarmIncidentLocally(incidentId) || removedAny;
+          continue;
         }
+
+        final incident = Map<String, dynamic>.from(rawIncident);
+        final status =
+            incident['status']?.toString().trim().toLowerCase() ?? '';
+        final expireAt =
+            int.tryParse(incident['expireAt']?.toString() ?? '') ?? 0;
+        final isExpired =
+            expireAt > 0 && expireAt <= DateTime.now().millisecondsSinceEpoch;
+        final presentationSuppressedAt =
+            int.tryParse(
+              incident['presentationSuppressedAt']?.toString() ?? '',
+            ) ??
+            0;
+
+        if (status != 'active' || isExpired || presentationSuppressedAt > 0) {
+          removedAny = _dropAlarmIncidentLocally(incidentId) || removedAny;
+          continue;
+        }
+
+        final freshItems = _alarmItemsFromValue(incident['items']);
+
+        for (final item in freshItems) {
+          item['incidentId'] = incidentId;
+          item['homeId'] ??= incident['homeId']?.toString() ?? '';
+          item['homeName'] ??= incident['homeName']?.toString() ?? '';
+          item['ownerUid'] ??= incident['ownerUid']?.toString() ?? '';
+        }
+
+        final previousItemsJson = jsonEncode(
+          activeAlarmItems
+              .where(
+                (item) =>
+                    item['incidentId']?.toString().trim() == incidentId,
+              )
+              .toList(),
+        );
+        final freshItemsJson = jsonEncode(freshItems);
+
+        if (previousItemsJson != freshItemsJson) {
+          activeAlarmItems.removeWhere(
+            (item) => item['incidentId']?.toString().trim() == incidentId,
+          );
+
+          if (freshItems.isNotEmpty) {
+            _addAlarmItems(freshItemsJson, incidentId: incidentId);
+          }
+
+          contentChanged = true;
+        }
+
+        rememberAlarmIncident({
+          'incidentId': incidentId,
+          'receiverUid': receiverUid,
+          'ownerUid': incident['ownerUid']?.toString() ?? '',
+          'homeId': incident['homeId']?.toString() ?? '',
+          'alarmFlowType': incident['flowType']?.toString() ?? 'security',
+          'eventCategory':
+              incident['eventCategory']?.toString() ?? 'security',
+          'alarmLevel': incident['alarmLevel']?.toString() ?? 'alarm',
+          'incidentStatus': 'active',
+        });
       } catch (error) {
         // Fail-safe: khi chưa đọc được Firebase, giữ incident hiện tại
         // để không vô tình tắt Alarm thật.
@@ -871,10 +1272,20 @@ class NotificationService {
       }
     }
 
+    if (removedAny || contentChanged) {
+      lastAlarmItemsJson = activeAlarmItems.isEmpty
+          ? ''
+          : jsonEncode(activeAlarmItems);
+    }
+
     if (_activeAlarmIncidentContexts.isEmpty && removedAny) {
       await stopAllAlarmNotifications();
       clearActiveAlarms(clearIncidentContexts: false);
       alarmResolvedRevision.value++;
+    } else if (removedAny || contentChanged) {
+      // Còn incident khác: cập nhật ngay nội dung Fullscreen để loại bỏ
+      // event cũ hoặc chi tiết cảm biến đã được backend dọn khỏi incident.
+      alarmRevision.value++;
     }
 
     return _activeAlarmIncidentContexts.isNotEmpty;
@@ -899,7 +1310,7 @@ class NotificationService {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         await openIosAlarmFromData(sirenData);
       } else {
-        openAlarmFromData(sirenData);
+        await openAlarmFromData(sirenData);
       }
       return true;
     }
@@ -907,25 +1318,56 @@ class NotificationService {
     return false;
   }
 
-  static void openAlarmFromData(Map<String, dynamic> data) {
-    rememberAlarmIncident(data);
+  static Future<void> openAlarmFromData(
+    Map<String, dynamic> data, {
+    bool validate = true,
+  }) async {
+    final alarmData = validate
+        ? await validateIncomingAlarmData(data)
+        : Map<String, dynamic>.from(data);
+
+    if (alarmData == null) {
+      await stopAllAlarmNotifications();
+      return;
+    }
+
+    rememberAlarmIncident(alarmData);
+
+    final type = alarmData['type']?.toString().trim().toLowerCase() ?? '';
+    final stage =
+        alarmData['alarmStage']?.toString().trim().toLowerCase() ?? '';
+    final opensFullscreen =
+        type == 'alarm_siren' ||
+        stage == 'siren' ||
+        stage == 'fullscreen_siren';
+
+    if (opensFullscreen) {
+      final firstPresentation = _markAlarmDeliveryPresented(alarmData);
+
+      if (!firstPresentation && !_alarmPageOpen) {
+        // Cùng một delivery có thể đi qua background handler,
+        // getInitialMessage và local notification launch. Chỉ mở một lần.
+        return;
+      }
+    }
+
     final strings = _strings;
 
     openAlarmPage(
       title: localizedNotificationTitle(
-        data['title']?.toString() ?? '',
+        alarmData['title']?.toString() ?? '',
         strings,
         '🚨 SafeHome',
       ),
-      body: localizedAlarmBodyForData(data, strings),
-      alarmItemsJson: _alarmItemsJsonFromData(data),
-      incidentId: data['incidentId']?.toString() ?? '',
-      receiverUid: data['receiverUid']?.toString() ?? '',
-      ownerUid: data['ownerUid']?.toString() ?? '',
-      homeId: data['homeId']?.toString() ?? '',
-      flowType: data['alarmFlowType']?.toString() ?? '',
-      eventCategory: normalizedIncidentEventCategory(data),
-      alarmLevel: normalizedIncidentAlarmLevel(data),
+      body: localizedAlarmBodyForData(alarmData, strings),
+      alarmItemsJson: _alarmItemsJsonFromData(alarmData),
+      incidentId: alarmData['incidentId']?.toString() ?? '',
+      receiverUid: alarmData['receiverUid']?.toString() ?? '',
+      ownerUid: alarmData['ownerUid']?.toString() ?? '',
+      homeId: alarmData['homeId']?.toString() ?? '',
+      flowType: alarmData['alarmFlowType']?.toString() ?? '',
+      eventCategory: normalizedIncidentEventCategory(alarmData),
+      alarmLevel: normalizedIncidentAlarmLevel(alarmData),
     );
   }
 
@@ -934,9 +1376,17 @@ class NotificationService {
   /// incident đang active của tài khoản để giữ đúng mô hình gom nhiều nhà và
   /// nhiều Alarm giống Android.
   static Future<void> openIosAlarmFromData(Map<String, dynamic> data) async {
-    openAlarmFromData(data);
+    final alarmData = await validateIncomingAlarmData(data);
+
+    if (alarmData == null) {
+      await stopAllAlarmNotifications();
+      return;
+    }
+
+    await openAlarmFromData(alarmData, validate: false);
     await _hydrateIosActiveAlarmIncidents(
-      preserveIncidentId: data['incidentId']?.toString().trim() ?? '',
+      preserveIncidentId:
+          alarmData['incidentId']?.toString().trim() ?? '',
     );
   }
 
@@ -1654,6 +2104,16 @@ class NotificationService {
       lastAlarmLevel = normalizedIncidentAlarmLevel(incidentData);
     } else {
       _syncAlarmPresentationFromActiveIncidents();
+    }
+
+    if (incidentId.trim().isNotEmpty) {
+      // Payload đã được xác minh bằng incident hiện tại trên Firebase.
+      // Thay toàn bộ item của incident thay vì chỉ cộng dồn, nếu không một
+      // cửa đã xử lý có thể còn nằm trên máy Owner khi incident khác vẫn active.
+      activeAlarmItems.removeWhere(
+        (item) =>
+            item['incidentId']?.toString().trim() == incidentId.trim(),
+      );
     }
 
     _addAlarmItems(alarmItemsJson, incidentId: incidentId);

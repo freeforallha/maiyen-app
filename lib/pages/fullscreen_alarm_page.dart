@@ -627,8 +627,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     await stopAlarmSound();
 
     if (!widget.silentMode) {
-      // Chỉ tắt âm thanh/notification trên thiết bị hiện tại để người dùng
-      // vào app kiểm tra. Incident trên backend vẫn tiếp tục hoạt động.
+      final acknowledged =
+          await NotificationService.resolveActiveAlarmIncidents(
+            action: 'check_home',
+          );
+
+      if (!acknowledged) {
+        await startAlarmSound();
+        _showAlarmActionError();
+        return;
+      }
+
+      NotificationService.clearActiveAlarms();
       await NotificationService.stopAllAlarmNotifications();
     }
 

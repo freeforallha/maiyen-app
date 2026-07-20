@@ -33,7 +33,7 @@ const Set<String> _securityAlarmDeviceTypes = {
   'glass_break',
 };
 
-const int deviceAlarmScheduleModelVersion = 7;
+const int deviceAlarmScheduleModelVersion = 8;
 
 bool supportsDeviceAlarmPolicy(String deviceType) {
   final normalized = deviceType.trim().toLowerCase();
@@ -272,15 +272,31 @@ Map<String, Map<String, dynamic>> normalizeDeviceAlarmSchedules({
   return result;
 }
 
+Map<String, Map<String, dynamic>> cloneDeviceAlarmSchedules(
+  Map<String, Map<String, dynamic>> schedules,
+) => {
+  for (final entry in schedules.entries)
+    entry.key: Map<String, dynamic>.from(entry.value),
+};
+
 Map<String, Map<String, dynamic>> normalizeEffectivePersonalAlarmSchedules({
   required Map<String, dynamic> customDevice,
   required String legacyAlarmMode,
+  Map<String, Map<String, dynamic>>? commonSchedules,
   bool legacyFullscreenEnabled = true,
 }) {
   final preferences = DevicePersonalAlarmPreferences.fromCustomDevice(
     customDevice: customDevice,
     legacyFullscreenEnabled: legacyFullscreenEnabled,
   );
+
+  // Khi người dùng tham gia báo động chung, lịch cá nhân hiệu lực chính là
+  // bản sao chỉ đọc của lịch chung. Không đọc lịch cá nhân cũ để tránh hai
+  // luồng lịch chạy song song hoặc hiển thị sai trạng thái.
+  if (preferences.followHomeSchedule && commonSchedules != null) {
+    return cloneDeviceAlarmSchedules(commonSchedules);
+  }
+
   final schedules = normalizeDeviceAlarmSchedules(
     rawSchedules: customDevice['alarmSchedules'],
     legacyAlarm: customDevice['alarm'],
@@ -300,10 +316,12 @@ Map<String, Map<String, dynamic>> normalizeEffectivePersonalAlarmSchedules({
 Map<String, dynamic> normalizeEffectivePersonalAlarmSchedule({
   required Map<String, dynamic> customDevice,
   required String legacyAlarmMode,
+  Map<String, Map<String, dynamic>>? commonSchedules,
 }) {
   final schedules = normalizeEffectivePersonalAlarmSchedules(
     customDevice: customDevice,
     legacyAlarmMode: legacyAlarmMode,
+    commonSchedules: commonSchedules,
   );
   if (schedules.isEmpty) {
     return normalizeDeviceAlarmSchedule(null, personal: true);
@@ -480,14 +498,17 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           legacyFullscreenEnabled: policy.fullscreenEnabled,
           legacyPhysicalSirenEnabled: policy.physicalSirenEnabled,
         );
+        _followHomeSchedule = personalPreferences.followHomeSchedule;
         _personalSchedules = normalizeEffectivePersonalAlarmSchedules(
           customDevice: customDevice,
           legacyAlarmMode: legacyAlarmMode,
+          commonSchedules: _commonSchedules,
           legacyFullscreenEnabled: policy.fullscreenEnabled,
         );
-        _personalNotificationEnabled = personalPreferences.notificationEnabled;
+        _personalNotificationEnabled = _followHomeSchedule
+            ? policy.notificationEnabled
+            : personalPreferences.notificationEnabled;
         _personalFullscreenEnabled = personalPreferences.fullscreenEnabled;
-        _followHomeSchedule = personalPreferences.followHomeSchedule;
         _loading = false;
       });
     } catch (_) {
@@ -500,8 +521,27 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     VoidCallback action, {
     bool immediate = false,
   }) {
-    setState(action);
+    setState(() {
+      action();
+      _syncPersonalWithHomeIfNeeded();
+    });
     _queueAutoSave(immediate: immediate);
+  }
+
+  void _syncPersonalWithHomeIfNeeded() {
+    if (!_isSecurity || !_followHomeSchedule) return;
+    _personalSchedules = cloneDeviceAlarmSchedules(_commonSchedules);
+    _personalNotificationEnabled = _notificationEnabled;
+  }
+
+  void _setFollowHomeSchedule(bool value) {
+    _change(() {
+      _followHomeSchedule = value;
+      if (!value) {
+        // Lịch đang phản chiếu từ nhà không được biến thành lịch cá nhân độc lập.
+        _personalSchedules = <String, Map<String, dynamic>>{};
+      }
+    }, immediate: true);
   }
 
   void _queueAutoSave({bool immediate = false}) {
@@ -590,14 +630,20 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     }
 
     if (_isSecurity) {
-      updates['$personalPath/alarmSchedules'] = _firebaseScheduleMap(
-        _personalSchedules,
-        personal: true,
-      );
+      // Khi theo lịch chung, không lưu một bản sao lịch vào customRules.
+      // Backend luôn lấy lịch mới nhất từ nhà và tránh dữ liệu trùng/lỗi thời.
+      updates['$personalPath/alarmSchedules'] = _followHomeSchedule
+          ? null
+          : _firebaseScheduleMap(
+              _personalSchedules,
+              personal: true,
+            );
       updates['$personalPath/alarm'] = null;
       updates['$personalPath/alarmPreferences'] =
           DevicePersonalAlarmPreferences(
-            notificationEnabled: _personalNotificationEnabled,
+            notificationEnabled: _followHomeSchedule
+                ? _notificationEnabled
+                : _personalNotificationEnabled,
             fullscreenEnabled: _personalFullscreenEnabled,
             followHomeSchedule: _followHomeSchedule,
           ).toFirebaseMap();
@@ -629,13 +675,20 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     required bool personal,
   }) {
     if (schedules.isEmpty) return null;
-    return {
-      for (final entry in schedules.entries)
-        entry.key: deviceAlarmScheduleToFirebaseMap(
-          entry.value,
-          personal: personal,
-        ),
-    };
+
+    final seenTimeRanges = <String>{};
+    final result = <String, Object?>{};
+
+    for (final entry in schedules.entries) {
+      final timeKey = _scheduleTimeKey(entry.value);
+      if (!seenTimeRanges.add(timeKey)) continue;
+      result[entry.key] = deviceAlarmScheduleToFirebaseMap(
+        entry.value,
+        personal: personal,
+      );
+    }
+
+    return result.isEmpty ? null : result;
   }
 
   String _newScheduleId() =>
@@ -644,15 +697,75 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   String _scheduleUiKey(bool personal, String scheduleId) =>
       '${personal ? 'personal' : 'home'}:$scheduleId';
 
+  String _scheduleTimeKey(Map<String, dynamic> schedule) =>
+      '${schedule['start']?.toString() ?? ''}|${schedule['end']?.toString() ?? ''}';
+
+  String _formatAlarmMinute(int minute) {
+    final normalized = minute % (24 * 60);
+    final hour = normalized ~/ 60;
+    final value = normalized % 60;
+    return '${hour.toString().padLeft(2, '0')}:${value.toString().padLeft(2, '0')}';
+  }
+
+  bool _hasDuplicateScheduleTime({
+    required bool personal,
+    required String scheduleId,
+    required String start,
+    required String end,
+  }) {
+    final schedules = personal ? _personalSchedules : _commonSchedules;
+    return schedules.entries.any((entry) {
+      if (entry.key == scheduleId) return false;
+      return entry.value['start']?.toString() == start &&
+          entry.value['end']?.toString() == end;
+    });
+  }
+
+  Map<String, dynamic>? _nextAvailableDefaultSchedule({
+    required bool personal,
+  }) {
+    final schedules = personal ? _personalSchedules : _commonSchedules;
+    const startMinute = 23 * 60;
+    const durationMinutes = 7 * 60;
+
+    for (var step = 0; step < 48; step++) {
+      final candidate = defaultDeviceAlarmSchedule(personal: personal);
+      candidate['enabled'] = false;
+      candidate['start'] = _formatAlarmMinute(startMinute + step * 30);
+      candidate['end'] = _formatAlarmMinute(
+        startMinute + step * 30 + durationMinutes,
+      );
+      final candidateKey = _scheduleTimeKey(candidate);
+      final duplicate = schedules.values.any(
+        (schedule) => _scheduleTimeKey(schedule) == candidateKey,
+      );
+      if (!duplicate) return candidate;
+    }
+
+    return null;
+  }
+
+  void _showDuplicateScheduleToast() {
+    showTopToast(
+      context,
+      AppStrings.of(context).duplicateAlarmSchedule,
+      color: SafeHomeColors.warning,
+      icon: Icons.content_copy_rounded,
+    );
+  }
+
   void _addSchedule({required bool personal}) {
+    final schedule = _nextAvailableDefaultSchedule(personal: personal);
+    if (schedule == null) {
+      _showDuplicateScheduleToast();
+      return;
+    }
+
     final scheduleId = _newScheduleId();
     final uiKey = _scheduleUiKey(personal, scheduleId);
 
     _change(() {
       final schedules = personal ? _personalSchedules : _commonSchedules;
-      final schedule = defaultDeviceAlarmSchedule(personal: personal);
-      // Lịch mới phải được cấu hình xong rồi người dùng mới chủ động bật.
-      schedule['enabled'] = false;
       schedules[scheduleId] = schedule;
       _expandedScheduleKeys.add(uiKey);
       _deleteVisibleScheduleKeys.remove(uiKey);
@@ -673,6 +786,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   }
 
   Future<void> _pickTime({
+    required bool personal,
+    required String scheduleId,
     required Map<String, dynamic> schedule,
     required String field,
   }) async {
@@ -701,6 +816,23 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         color: SafeHomeColors.warning,
         icon: Icons.schedule_rounded,
       );
+      return;
+    }
+
+    final nextStart = field == 'start'
+        ? value
+        : schedule['start']?.toString() ?? '23:00';
+    final nextEnd = field == 'end'
+        ? value
+        : schedule['end']?.toString() ?? '06:00';
+
+    if (_hasDuplicateScheduleTime(
+      personal: personal,
+      scheduleId: scheduleId,
+      start: nextStart,
+      end: nextEnd,
+    )) {
+      _showDuplicateScheduleToast();
       return;
     }
 
@@ -763,8 +895,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                   strings: strings,
                                   title: strings.t('Lịch cho cá nhân tôi'),
                                   schedules: _personalSchedules,
-                                  enabled: true,
+                                  enabled: !_followHomeSchedule,
                                   personal: true,
+                                  lockedToHome: _followHomeSchedule,
                                 ),
                               ],
                             ),
@@ -996,18 +1129,18 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               title: strings.joinHomeSharedAlarm,
               value: _followHomeSchedule,
               enabled: true,
-              onChanged: (value) => _change(
-                () => _followHomeSchedule = value,
-                immediate: true,
-              ),
+              subtitle: strings.followHomeAlarmSyncNote,
+              onChanged: _setFollowHomeSchedule,
             ),
             const Divider(height: 1, indent: 12, endIndent: 12),
           ],
           channelSwitch(
             icon: Icons.notifications_active_outlined,
             title: strings.t('Thông báo báo động'),
-            value: _personalNotificationEnabled,
-            enabled: true,
+            value: _followHomeSchedule
+                ? _notificationEnabled
+                : _personalNotificationEnabled,
+            enabled: !_followHomeSchedule,
             onChanged: (value) => _change(
               () => _personalNotificationEnabled = value,
               immediate: true,
@@ -1040,6 +1173,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     required Map<String, Map<String, dynamic>> schedules,
     required bool enabled,
     required bool personal,
+    bool lockedToHome = false,
   }) {
     final entries = schedules.entries.toList(growable: false);
     return Container(
@@ -1072,21 +1206,35 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   ),
                 ),
               ),
-              IconButton.filledTonal(
-                tooltip: strings.t('Thêm'),
-                onPressed: enabled
-                    ? () => _addSchedule(personal: personal)
-                    : null,
-                icon: const Icon(Icons.add_rounded),
-                visualDensity: VisualDensity.compact,
-              ),
+              if (lockedToHome)
+                Tooltip(
+                  message: strings.followHomeAlarmSyncNote,
+                  child: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.lock_clock_rounded,
+                      color: SafeHomeColors.textSecondary,
+                    ),
+                  ),
+                )
+              else
+                IconButton.filledTonal(
+                  tooltip: strings.t('Thêm'),
+                  onPressed: enabled
+                      ? () => _addSchedule(personal: personal)
+                      : null,
+                  icon: const Icon(Icons.add_rounded),
+                  visualDensity: VisualDensity.compact,
+                ),
             ],
           ),
           if (entries.isEmpty)
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
               child: Text(
-                strings.t('Thêm'),
+                lockedToHome
+                    ? strings.t('Chưa cài đặt')
+                    : strings.t('Thêm'),
                 style: const TextStyle(
                   fontSize: 12.5,
                   color: SafeHomeColors.textSecondary,
@@ -1230,6 +1378,18 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                 );
                                 return;
                               }
+                              if (value &&
+                                  _hasDuplicateScheduleTime(
+                                    personal: personal,
+                                    scheduleId: scheduleId,
+                                    start: schedule['start']?.toString() ??
+                                        '23:00',
+                                    end: schedule['end']?.toString() ??
+                                        '06:00',
+                                  )) {
+                                _showDuplicateScheduleToast();
+                                return;
+                              }
                               _change(
                                 () => schedule['enabled'] = value,
                                 immediate: true,
@@ -1283,6 +1443,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                 value:
                                     schedule['start']?.toString() ?? '23:00',
                                 onTap: () => _pickTime(
+                                  personal: personal,
+                                  scheduleId: scheduleId,
                                   schedule: schedule,
                                   field: 'start',
                                 ),
@@ -1294,6 +1456,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                 label: strings.t('Giờ kết thúc'),
                                 value: schedule['end']?.toString() ?? '06:00',
                                 onTap: () => _pickTime(
+                                  personal: personal,
+                                  scheduleId: scheduleId,
                                   schedule: schedule,
                                   field: 'end',
                                 ),

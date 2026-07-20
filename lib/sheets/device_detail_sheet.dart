@@ -390,6 +390,7 @@ void showDeviceDetail({
                                   normalizeEffectivePersonalAlarmSchedules(
                                     customDevice: personalDevice,
                                     legacyAlarmMode: legacyAlarmMode,
+                                    commonSchedules: commonAlarms,
                                     legacyFullscreenEnabled:
                                         alarmPolicy.fullscreenEnabled,
                                   );
@@ -408,13 +409,12 @@ void showDeviceDetail({
                                   deviceType,
                                 ),
                                 personalNotificationEnabled:
-                                    personalPreferences.notificationEnabled,
-                                followsHomeAlarm:
-                                    personalPreferences.followHomeSchedule,
+                                    personalPreferences.followHomeSchedule
+                                        ? alarmPolicy.notificationEnabled
+                                        : personalPreferences.notificationEnabled,
                                 personalFullscreenEnabled:
                                     personalPreferences.fullscreenEnabled,
                                 commonAlarmEnabled:
-                                    personalPreferences.followHomeSchedule &&
                                     hasEnabledDeviceAlarmSchedules(commonAlarms),
                                 personalAlarmEnabled:
                                     hasEnabledDeviceAlarmSchedules(personalAlarms),
@@ -933,7 +933,6 @@ Widget _alarmSettingsSummary({
   required DeviceAlarmPolicySettings settings,
   required bool isEmergency,
   required bool personalNotificationEnabled,
-  required bool followsHomeAlarm,
   required bool personalFullscreenEnabled,
   required bool commonAlarmEnabled,
   required bool personalAlarmEnabled,
@@ -998,13 +997,9 @@ Widget _alarmSettingsSummary({
           icon: Icons.notifications_active_outlined,
           title: strings.t("Thông báo báo động"),
           value: strings.t(
-            (settings.notificationEnabled && followsHomeAlarm) ||
-                    personalNotificationEnabled
-                ? "Bật"
-                : "Tắt",
+            personalNotificationEnabled ? "Bật" : "Tắt",
           ),
-          color: (settings.notificationEnabled && followsHomeAlarm) ||
-                  personalNotificationEnabled
+          color: personalNotificationEnabled
               ? SafeHomeColors.primary
               : SafeHomeColors.textSecondary,
         ),

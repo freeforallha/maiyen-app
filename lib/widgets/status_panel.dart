@@ -290,7 +290,8 @@ class _StatusPanelState extends State<StatusPanel> {
           return true;
         }
 
-        if (hasEnabledScheduleValue(device["alarms"])) {
+        if (hasEnabledScheduleValue(device["alarmSchedules"]) ||
+            hasEnabledScheduleValue(device["alarms"])) {
           return true;
         }
       }

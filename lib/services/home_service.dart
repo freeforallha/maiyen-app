@@ -205,8 +205,9 @@ class HomeService {
         "unassigned": {"name": "Chưa phân phòng", "icon": "home", "order": 0},
         "living_room": {"name": "Phòng khách", "icon": "living", "order": 1},
       },
-      "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
-      "schedules": {"alarms": [], "notifications": []},
+      // Alarm thiết bị chỉ được tạo khi người dùng cấu hình từng thiết bị.
+      // Không tạo lại schema home/alarm hoặc schedules/alarms legacy.
+      "schedules": {"notifications": []},
     });
   }
 }
