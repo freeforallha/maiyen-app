@@ -1648,42 +1648,6 @@ class _DeviceListState extends State<DeviceList> {
     );
   }
 
-  Widget _crossedAlarmPolicyIcon({
-    required IconData icon,
-    required double size,
-    required Color color,
-    double slashAngle = -0.78,
-  }) {
-    return SizedBox(
-      width: size + 3,
-      height: size + 3,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Icon(icon, size: size, color: color),
-          Transform.rotate(
-            angle: slashAngle,
-            child: Container(
-              width: size + 2,
-              height: 1.8,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(2),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.white,
-                    blurRadius: 0.6,
-                    spreadRadius: 0.3,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget? _deviceAlarmPolicyIndicator({
     required String deviceId,
     required Map<String, dynamic> device,
@@ -1704,51 +1668,66 @@ class _DeviceListState extends State<DeviceList> {
         device["_deviceId"]?.toString().trim().isNotEmpty == true
         ? device["_deviceId"].toString().trim()
         : deviceId;
-    final personalFullscreenEnabled = resolvePersonalFullscreenEnabled(
+    final personalPreferences = resolveDevicePersonalAlarmPreferences(
       customRules: widget.personalAlarmRules,
       deviceId: realDeviceId,
-      fallback: settings.fullscreenEnabled,
+      legacyFullscreenEnabled: settings.fullscreenEnabled,
     );
-    final iconSize = compact ? 15.0 : 16.0;
+    final effectiveNotificationEnabled =
+        (settings.notificationEnabled &&
+            personalPreferences.followHomeSchedule) ||
+        personalPreferences.notificationEnabled;
+    final iconSize = compact ? 9.5 : 10.5;
 
     if (!settings.enabled) {
       return Icon(
         Icons.shield_outlined,
-        size: iconSize,
+        size: compact ? 15 : 16,
         color: SafeHomeColors.textSecondary.withValues(alpha: 0.72),
       );
     }
 
-    if (settings.physicalSirenEnabled && personalFullscreenEnabled) {
+    Widget channelIcon({
+      required bool enabled,
+      required IconData activeIcon,
+      required IconData inactiveIcon,
+    }) {
       return Icon(
-        Icons.shield_rounded,
+        enabled ? activeIcon : inactiveIcon,
         size: iconSize,
-        color: SafeHomeColors.safe,
+        color: enabled
+            ? SafeHomeColors.safe
+            : SafeHomeColors.textSecondary.withValues(alpha: 0.62),
       );
     }
 
-    if (!settings.physicalSirenEnabled && !personalFullscreenEnabled) {
-      // Cả còi vật lý và đánh thức màn hình đều đang tắt.
-      // Dùng cùng nét gạch tự vẽ để hướng gạch đồng bộ với loa và màn hình.
-      return _crossedAlarmPolicyIcon(
-        icon: Icons.notifications_rounded,
-        size: iconSize,
-        color: SafeHomeColors.warning,
-      );
-    }
+    final isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
-    if (!settings.physicalSirenEnabled) {
-      return _crossedAlarmPolicyIcon(
-        icon: Icons.campaign_rounded,
-        size: iconSize,
-        color: SafeHomeColors.warning,
-      );
-    }
-
-    return _crossedAlarmPolicyIcon(
-      icon: Icons.smartphone_rounded,
-      size: iconSize,
-      color: SafeHomeColors.warning,
+    return SizedBox(
+      width: compact ? 16 : 18,
+      height: compact ? 31 : 34,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          channelIcon(
+            enabled: effectiveNotificationEnabled,
+            activeIcon: Icons.notifications_active_rounded,
+            inactiveIcon: Icons.notifications_off_rounded,
+          ),
+          channelIcon(
+            enabled: settings.physicalSirenEnabled,
+            activeIcon: Icons.campaign_rounded,
+            inactiveIcon: Icons.volume_off_rounded,
+          ),
+          channelIcon(
+            enabled: personalPreferences.fullscreenEnabled,
+            activeIcon: isIos
+                ? Icons.phone_iphone_rounded
+                : Icons.phone_android_rounded,
+            inactiveIcon: Icons.phonelink_erase_rounded,
+          ),
+        ],
+      ),
     );
   }
 
@@ -2408,6 +2387,10 @@ class _DeviceListState extends State<DeviceList> {
               ? accentColor
               : SafeHomeColors.textSecondary
         : _infrastructureSignalColor(entries);
+    // Đồng bộ đúng chiều cao với card thiết bị thường. Riêng Myanmar chừa
+    // thêm 1 px giống _deviceGridItemHeight để tránh overflow phần glyph.
+    final cardHeight =
+        (compact ? 70.0 : 75.0) + (strings.isBurmese ? 1.0 : 0.0);
 
     void openGroup() {
       final groupDevices = <String, dynamic>{
@@ -2430,7 +2413,7 @@ class _DeviceListState extends State<DeviceList> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 420),
           curve: Curves.easeInOut,
-          height: compact ? 77 : 82,
+          height: cardHeight,
           padding: EdgeInsets.fromLTRB(
             compact ? 9 : 10,
             compact ? 8 : 9,
@@ -2522,9 +2505,9 @@ class _DeviceListState extends State<DeviceList> {
                   ),
                 ),
               ),
-              const SizedBox(height: 7),
+              SizedBox(height: compact ? 3 : 4),
               SizedBox(
-                height: compact ? 18 : 20,
+                height: compact ? 15 : 17,
                 child: sirenIsOn
                     ? _sirenStopAction(compact: compact, strings: strings)
                     : Align(

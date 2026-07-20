@@ -143,7 +143,7 @@ void main() {
           .map((file) => _baseName(file.path).replaceFirst('_strings.dart', ''))
           .toSet();
 
-      expect(supportedCodes, hasLength(57));
+      expect(supportedCodes, hasLength(53));
       expect(supportedCodes, languageFiles);
     });
 

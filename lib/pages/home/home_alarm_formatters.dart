@@ -21,27 +21,35 @@ class HomeAlarmFormatters {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-      final homeAlarm = safeMap(device["alarm"]);
+      final homeSchedules = normalizeDeviceAlarmSchedules(
+        rawSchedules: device["alarmSchedules"],
+        legacyAlarm: device["alarm"],
+        personal: false,
+      );
       final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = normalizeEffectivePersonalAlarmSchedule(
+      final personalSchedules = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
       );
 
-      if (homeAlarm["enabled"] == true) {
-        return {
-          "mode": "Theo nhà",
-          "start": homeAlarm["start"]?.toString() ?? "23:00",
-          "end": homeAlarm["end"]?.toString() ?? "06:00",
-        };
+      for (final alarm in homeSchedules.values) {
+        if (alarm["enabled"] == true) {
+          return {
+            "mode": "Theo nhà",
+            "start": alarm["start"]?.toString() ?? "23:00",
+            "end": alarm["end"]?.toString() ?? "06:00",
+          };
+        }
       }
 
-      if (customAlarm["enabled"] == true) {
-        return {
-          "mode": "Riêng tôi",
-          "start": customAlarm["start"]?.toString() ?? "23:00",
-          "end": customAlarm["end"]?.toString() ?? "06:00",
-        };
+      for (final alarm in personalSchedules.values) {
+        if (alarm["enabled"] == true) {
+          return {
+            "mode": "Riêng tôi",
+            "start": alarm["start"]?.toString() ?? "23:00",
+            "end": alarm["end"]?.toString() ?? "06:00",
+          };
+        }
       }
     }
 
@@ -89,16 +97,24 @@ class HomeAlarmFormatters {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
-      final homeAlarm = safeMap(device["alarm"]);
+      final homeSchedules = normalizeDeviceAlarmSchedules(
+        rawSchedules: device["alarmSchedules"],
+        legacyAlarm: device["alarm"],
+        personal: false,
+      );
       final customDevice = safeMap(customDevices[realDeviceId]);
-      final customAlarm = normalizeEffectivePersonalAlarmSchedule(
+      final personalSchedules = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
       );
 
-      // Lịch chung và lịch cá nhân hoạt động song song.
-      addAlarm(homeAlarm);
-      addAlarm(customAlarm);
+      // Tất cả lịch chung và lịch cá nhân hoạt động song song.
+      for (final alarm in homeSchedules.values) {
+        addAlarm(alarm);
+      }
+      for (final alarm in personalSchedules.values) {
+        addAlarm(alarm);
+      }
     }
 
     if (intervals.isEmpty) {

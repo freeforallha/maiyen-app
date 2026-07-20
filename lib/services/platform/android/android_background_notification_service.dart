@@ -66,10 +66,6 @@ const Set<String> _supportedLanguageCodes = {
   'hy',
   'ka',
   'az',
-  'gn',
-  'qu',
-  'ay',
-  'ht',
 };
 
 String? _supportedLanguageCode(String? code) {
@@ -189,14 +185,6 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('ka', 'GE');
     case 'az':
       return const Locale('az', 'AZ');
-    case 'gn':
-      return const Locale('gn', 'PY');
-    case 'qu':
-      return const Locale('qu', 'PE');
-    case 'ay':
-      return const Locale('ay', 'BO');
-    case 'ht':
-      return const Locale('ht', 'HT');
     case 'en':
       return const Locale('en');
     case 'vi':

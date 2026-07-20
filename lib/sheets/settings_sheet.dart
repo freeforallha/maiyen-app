@@ -116,14 +116,6 @@ String _languageSubtitle(String code) {
       return "Georgian • Georgia";
     case "az":
       return "Azerbaijani • Azerbaijan";
-    case "gn":
-      return "Guaraní • Paraguay";
-    case "qu":
-      return "Quechua • Peru";
-    case "ay":
-      return "Aymara • Bolivia";
-    case "ht":
-      return "Haitian Creole • Haiti";
     default:
       return code;
   }
@@ -169,10 +161,6 @@ String _languageSearchAliases(String code) {
     "hy" => "armenian հայերեն tiếng armenia hayastan",
     "ka" => "georgian ქართული tiếng georgia sakartvelo",
     "az" => "azerbaijani azərbaycan dili tiếng azerbaijan azərbaycan",
-    "gn" => "guarani guaraní paraguay paraguái tiếng guarani ava ñe'ẽ",
-    "qu" => "quechua runasimi runa simi peru perú tiếng quechua",
-    "ay" => "aymara bolivia tiếng aymara",
-    "ht" => "haitian creole kreyol kreyòl ayisyen haiti tiếng haiti",
     _ => "",
   };
 }

@@ -1,191 +1,358 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/localization/languages/ay_dynamic_strings.dart';
-import 'package:safehome_app/localization/languages/ay_strings.dart';
-import 'package:safehome_app/localization/languages/az_dynamic_strings.dart';
-import 'package:safehome_app/localization/languages/gn_dynamic_strings.dart';
-import 'package:safehome_app/localization/languages/gn_strings.dart';
-import 'package:safehome_app/localization/languages/ht_dynamic_strings.dart';
-import 'package:safehome_app/localization/languages/ht_strings.dart';
-import 'package:safehome_app/localization/languages/qu_dynamic_strings.dart';
-import 'package:safehome_app/localization/languages/qu_strings.dart';
-import 'package:safehome_app/localization/languages/vi_strings.dart';
+import 'package:safehome_app/localization/app_language_controller.dart';
+
+const _removedCodes = {'gn', 'qu', 'ay', 'ht'};
+const _removedLanguageNames = {
+  'Guaraní',
+  'Quechua',
+  'Aymara',
+  'Kreyòl ayisyen',
+  'Haitian Creole',
+};
+const _requiredKeys = {
+  'Báo động',
+  'Thông báo',
+  'Cài đặt',
+  'Báo động toàn màn hình',
+  'Thông báo báo động',
+  'Nhắc nhở',
+  'Không có kết quả',
+  'Đăng nhập',
+  'Đăng xuất',
+};
+
+final _placeholderPattern = RegExp(
+  r'\$\{[^}]+\}|\$[A-Za-z_][A-Za-z0-9_]*|\{[A-Za-z_][A-Za-z0-9_]*\}|%[sdif]',
+);
 
 void main() {
-  group('Latin America localization regression', () {
-    for (final spec in _specs) {
-      test('${spec.code} has complete base and dynamic translations', () {
-        final base = _baseMap(spec.code);
-        final dynamic = _dynamicMap(spec.code);
+  group('stable frontend localization regression', () {
+    test('frontend registers exactly 53 aligned unique locales', () {
+      final codes = AppLanguageController.supportedCodes;
+      final locales = AppLanguageController.supportedLocales;
+      final localeCodes = locales
+          .map((locale) => locale.languageCode)
+          .toList(growable: false);
+      final controllerSource = File(
+        'lib/localization/app_language_controller.dart',
+      ).readAsStringSync();
+      final declaredCodes = _extractDeclaredCodes(controllerSource);
 
-        expect(base.keys.toSet(), viStrings.keys.toSet());
-        expect(dynamic.keys.toSet(), azDynamicStrings.keys.toSet());
-        expect(base.values.every((value) => value.trim().isNotEmpty), isTrue);
+      expect(codes, hasLength(53));
+      expect(locales, hasLength(53));
+      expect(declaredCodes, hasLength(53));
+      expect(declaredCodes.toSet(), hasLength(declaredCodes.length));
+      expect(localeCodes.toSet(), hasLength(localeCodes.length));
+      expect(localeCodes, unorderedEquals(codes));
+      expect(AppLanguageController.languageFlags.keys, unorderedEquals(codes));
+      expect(AppLanguageController.languageLabels.keys, unorderedEquals(codes));
+      expect(
+        AppLanguageController.languageFlags.values,
+        everyElement(isNot(isEmpty)),
+      );
+      expect(
+        AppLanguageController.languageLabels.values,
+        everyElement(isNot(isEmpty)),
+      );
+      expect(codes.intersection(_removedCodes), isEmpty);
+    });
+
+    test('removed locale files and registrations stay absent', () {
+      for (final code in _removedCodes) {
         expect(
-          dynamic.values.every((value) => value.trim().isNotEmpty),
-          isTrue,
+          File('lib/localization/languages/${code}_strings.dart').existsSync(),
+          isFalse,
+        );
+        expect(
+          File(
+            'lib/localization/languages/${code}_dynamic_strings.dart',
+          ).existsSync(),
+          isFalse,
+        );
+      }
+
+      final surfaceSource = [
+        'lib/localization/app_language_controller.dart',
+        'lib/localization/app_strings.dart',
+        'lib/pages/login_page.dart',
+        'lib/sheets/settings_sheet.dart',
+        'lib/services/platform/android/android_background_notification_service.dart',
+      ].map((path) => File(path).readAsStringSync()).join('\n');
+
+      for (final code in _removedCodes) {
+        expect(surfaceSource, isNot(contains('"$code"')));
+        expect(surfaceSource, isNot(contains("'$code'")));
+        expect(surfaceSource, isNot(contains('/${code}_strings.dart')));
+        expect(surfaceSource, isNot(contains('/${code}_dynamic_strings.dart')));
+      }
+      for (final name in _removedLanguageNames) {
+        expect(surfaceSource, isNot(contains(name)));
+      }
+    });
+
+    test('all 53 base maps retain keys, placeholders, and required values', () {
+      final files = _translationFiles(dynamic: false);
+      final codes = files.map(_localeCodeForFile).toList(growable: false);
+      final reference = _parseMapFile(
+        File('lib/localization/languages/vi_strings.dart'),
+      );
+
+      expect(files, hasLength(53));
+      expect(codes, unorderedEquals(AppLanguageController.supportedCodes));
+      expect(reference.duplicates, isEmpty);
+
+      for (final file in files) {
+        final code = _localeCodeForFile(file);
+        final parsed = _parseMapFile(file);
+
+        expect(
+          parsed.duplicates,
+          isEmpty,
+          reason: '${file.path} contains duplicate keys',
+        );
+        expect(
+          parsed.values.keys,
+          unorderedEquals(reference.values.keys),
+          reason: '$code base key set differs from Vietnamese',
         );
 
-        for (final entry in base.entries) {
+        for (final key in reference.values.keys) {
           expect(
-            _placeholders(entry.value),
-            _placeholders(viStrings[entry.key] ?? entry.key),
-            reason: '${spec.code}: ${entry.key}',
+            _placeholders(parsed.values[key] ?? ''),
+            _placeholders(reference.values[key] ?? ''),
+            reason: '$code placeholder mismatch for "$key"',
           );
-          expect(entry.value, isNot(contains('SAFEHOME_PROTECTED')));
-          expect(entry.value, isNot(contains('§')));
         }
-
-        for (final entry in dynamic.entries) {
+        for (final key in _requiredKeys) {
           expect(
-            _placeholders(entry.value),
-            _placeholders(entry.key),
-            reason: '${spec.code} dynamic: ${entry.key}',
+            parsed.values[key]?.trim(),
+            isNot(isEmpty),
+            reason: '$code has an empty required value for "$key"',
           );
-          expect(entry.value, isNot(contains('SAFEHOME_PROTECTED')));
-          expect(entry.value, isNot(contains('§')));
         }
-      });
+      }
+    });
 
-      test('${spec.code} is registered in language surfaces', () {
-        final controllerSource = File(
-          'lib/localization/app_language_controller.dart',
-        ).readAsStringSync();
-        final appStringsSource = File(
-          'lib/localization/app_strings.dart',
-        ).readAsStringSync();
-        final loginSource = File(
-          'lib/pages/login_page.dart',
-        ).readAsStringSync();
-        final settingsSource = File(
-          'lib/sheets/settings_sheet.dart',
-        ).readAsStringSync();
-        final androidBackgroundSource = File(
-          'lib/services/platform/android/android_background_notification_service.dart',
-        ).readAsStringSync();
+    test('stable dynamic maps retain keys and placeholders', () {
+      final files = _translationFiles(dynamic: true);
+      final reference = _parseMapFile(
+        File('lib/localization/languages/az_dynamic_strings.dart'),
+      );
 
-        expect(controllerSource, contains('"${spec.code}"'));
+      expect(reference.duplicates, isEmpty);
+      for (final file in files) {
+        final code = _localeCodeForFile(file);
+        final parsed = _parseMapFile(file);
+
         expect(
-          controllerSource,
-          contains('Locale("${spec.code}", "${spec.region}")'),
-        );
-        expect(controllerSource, contains('"${spec.code}": "${spec.flag}"'));
-        expect(controllerSource, contains('"${spec.code}": "${spec.label}"'));
-        expect(controllerSource, contains('is${spec.boolName}'));
-        expect(appStringsSource, contains('is${spec.boolName}'));
-        expect(
-          appStringsSource,
-          contains("languages/${spec.code}_strings.dart"),
+          AppLanguageController.supportedCodes,
+          contains(code),
+          reason: '${file.path} has no supported locale',
         );
         expect(
-          appStringsSource,
-          contains("languages/${spec.code}_dynamic_strings.dart"),
+          parsed.duplicates,
+          isEmpty,
+          reason: '${file.path} contains duplicate keys',
         );
-        expect(appStringsSource, contains(spec.mapName));
-        expect(loginSource, contains(spec.subtitle));
-        expect(settingsSource, contains(spec.subtitle));
-        expect(loginSource, contains(spec.aliasNeedle));
-        expect(settingsSource, contains(spec.aliasNeedle));
-        expect(androidBackgroundSource, contains("'${spec.code}'"));
         expect(
-          androidBackgroundSource,
-          contains("Locale('${spec.code}', '${spec.region}')"),
+          parsed.values.keys,
+          everyElement(isIn(reference.values.keys)),
+          reason: '$code dynamic map contains an unknown key',
         );
-      });
-    }
+        expect(
+          parsed.values.values.map((value) => value.trim()),
+          everyElement(isNot(isEmpty)),
+          reason: '$code dynamic map contains an empty value',
+        );
+
+        for (final key in parsed.values.keys) {
+          expect(
+            _placeholders(parsed.values[key] ?? ''),
+            _placeholders(reference.values[key] ?? ''),
+            reason: '$code dynamic placeholder mismatch for "$key"',
+          );
+        }
+      }
+    });
   });
 }
 
-Map<String, String> _baseMap(String code) {
-  return switch (code) {
-    'gn' => gnStrings,
-    'qu' => quStrings,
-    'ay' => ayStrings,
-    'ht' => htStrings,
-    _ => throw ArgumentError.value(code, 'code'),
-  };
+List<String> _extractDeclaredCodes(String source) {
+  final block = RegExp(
+    r'supportedCodes\s*=\s*\{([\s\S]*?)\};',
+  ).firstMatch(source)?.group(1);
+  if (block == null) return const [];
+
+  return RegExp(
+    r'"([^"]+)"',
+  ).allMatches(block).map((match) => match.group(1)!).toList();
 }
 
-Map<String, String> _dynamicMap(String code) {
-  return switch (code) {
-    'gn' => gnDynamicStrings,
-    'qu' => quDynamicStrings,
-    'ay' => ayDynamicStrings,
-    'ht' => htDynamicStrings,
-    _ => throw ArgumentError.value(code, 'code'),
-  };
+List<File> _translationFiles({required bool dynamic}) {
+  final suffix = dynamic ? '_dynamic_strings.dart' : '_strings.dart';
+  final files = Directory('lib/localization/languages')
+      .listSync()
+      .whereType<File>()
+      .where((file) {
+        final name = _baseName(file.path);
+        return name.endsWith(suffix) &&
+            (dynamic || !name.endsWith('_dynamic_strings.dart'));
+      })
+      .toList(growable: false);
+  files.sort((left, right) => left.path.compareTo(right.path));
+  return files;
+}
+
+String _localeCodeForFile(File file) {
+  return _baseName(
+    file.path,
+  ).replaceFirst('_dynamic_strings.dart', '').replaceFirst('_strings.dart', '');
+}
+
+String _baseName(String path) {
+  return path.replaceAll('\\', '/').split('/').last;
+}
+
+_ParsedMap _parseMapFile(File file) {
+  final source = file.readAsStringSync();
+  final values = <String, String>{};
+  final duplicates = <String>[];
+  var index = 0;
+
+  while (index < source.length) {
+    final key = _readStringAt(source, index);
+    if (key == null) {
+      index++;
+      continue;
+    }
+
+    var cursor = _skipWhitespace(source, key.end);
+    if (cursor >= source.length || source[cursor] != ':') {
+      index = key.end;
+      continue;
+    }
+
+    cursor = _skipWhitespace(source, cursor + 1);
+    final value = _readConcatenatedString(source, cursor);
+    if (value == null) {
+      index = cursor;
+      continue;
+    }
+
+    if (values.containsKey(key.value)) {
+      duplicates.add(key.value);
+    }
+    values[key.value] = value.value;
+    index = value.end;
+  }
+
+  return _ParsedMap(values, duplicates);
+}
+
+_ReadString? _readConcatenatedString(String source, int start) {
+  var cursor = start;
+  final buffer = StringBuffer();
+  var readAny = false;
+
+  while (cursor < source.length) {
+    cursor = _skipWhitespace(source, cursor);
+    final value = _readStringAt(source, cursor);
+    if (value == null) break;
+
+    buffer.write(value.value);
+    cursor = value.end;
+    readAny = true;
+  }
+
+  return readAny ? _ReadString(buffer.toString(), cursor) : null;
+}
+
+_ReadString? _readStringAt(String source, int start) {
+  if (start >= source.length) return null;
+
+  final quote = source[start];
+  if (quote != '"' && quote != "'") return null;
+
+  final triple =
+      start + 2 < source.length &&
+      source[start + 1] == quote &&
+      source[start + 2] == quote;
+  final contentStart = triple ? start + 3 : start + 1;
+  final buffer = StringBuffer();
+  var escaped = false;
+
+  for (var index = contentStart; index < source.length; index++) {
+    final char = source[index];
+
+    if (escaped) {
+      buffer.write(switch (char) {
+        'n' => '\n',
+        'r' => '\r',
+        't' => '\t',
+        _ => char,
+      });
+      escaped = false;
+      continue;
+    }
+
+    if (char == '\\') {
+      escaped = true;
+      continue;
+    }
+
+    if (triple) {
+      if (index + 2 < source.length &&
+          char == quote &&
+          source[index + 1] == quote &&
+          source[index + 2] == quote) {
+        return _ReadString(buffer.toString(), index + 3);
+      }
+    } else if (char == quote) {
+      return _ReadString(buffer.toString(), index + 1);
+    }
+
+    buffer.write(char);
+  }
+
+  return null;
+}
+
+int _skipWhitespace(String source, int start) {
+  var cursor = start;
+  while (cursor < source.length) {
+    final codeUnit = source.codeUnitAt(cursor);
+    if (codeUnit != 0x20 &&
+        codeUnit != 0x09 &&
+        codeUnit != 0x0A &&
+        codeUnit != 0x0D) {
+      break;
+    }
+    cursor++;
+  }
+  return cursor;
 }
 
 List<String> _placeholders(String value) {
-  final placeholders = RegExp(
-    r'\$\{?[A-Za-z_][A-Za-z0-9_]*\}?',
-  ).allMatches(value).map((match) => match.group(0)!).toList();
+  final placeholders = _placeholderPattern
+      .allMatches(value)
+      .map((match) => match.group(0)!)
+      .toList();
   placeholders.sort();
   return placeholders;
 }
 
-class _LatamLocaleSpec {
-  const _LatamLocaleSpec({
-    required this.code,
-    required this.region,
-    required this.flag,
-    required this.label,
-    required this.boolName,
-    required this.mapName,
-    required this.subtitle,
-    required this.aliasNeedle,
-  });
+class _ParsedMap {
+  const _ParsedMap(this.values, this.duplicates);
 
-  final String code;
-  final String region;
-  final String flag;
-  final String label;
-  final String boolName;
-  final String mapName;
-  final String subtitle;
-  final String aliasNeedle;
+  final Map<String, String> values;
+  final List<String> duplicates;
 }
 
-const _specs = <_LatamLocaleSpec>[
-  _LatamLocaleSpec(
-    code: 'gn',
-    region: 'PY',
-    flag: '🇵🇾',
-    label: 'Guaraní',
-    boolName: 'Guarani',
-    mapName: '_guarani',
-    subtitle: 'Guaraní • Paraguay',
-    aliasNeedle: 'ava ñe',
-  ),
-  _LatamLocaleSpec(
-    code: 'qu',
-    region: 'PE',
-    flag: '🇵🇪',
-    label: 'Quechua',
-    boolName: 'Quechua',
-    mapName: '_quechua',
-    subtitle: 'Quechua • Peru',
-    aliasNeedle: 'runasimi',
-  ),
-  _LatamLocaleSpec(
-    code: 'ay',
-    region: 'BO',
-    flag: '🇧🇴',
-    label: 'Aymara',
-    boolName: 'Aymara',
-    mapName: '_aymara',
-    subtitle: 'Aymara • Bolivia',
-    aliasNeedle: 'aymara bolivia',
-  ),
-  _LatamLocaleSpec(
-    code: 'ht',
-    region: 'HT',
-    flag: '🇭🇹',
-    label: 'Kreyòl ayisyen',
-    boolName: 'HaitianCreole',
-    mapName: '_haitianCreole',
-    subtitle: 'Haitian Creole • Haiti',
-    aliasNeedle: 'haitian creole',
-  ),
-];
+class _ReadString {
+  const _ReadString(this.value, this.end);
+
+  final String value;
+  final int end;
+}

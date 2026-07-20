@@ -56,10 +56,6 @@ import 'languages/cnr_strings.dart';
 import 'languages/hy_strings.dart';
 import 'languages/ka_strings.dart';
 import 'languages/az_strings.dart';
-import 'languages/gn_strings.dart';
-import 'languages/qu_strings.dart';
-import 'languages/ay_strings.dart';
-import 'languages/ht_strings.dart';
 import 'languages/ta_dynamic_strings.dart';
 import 'languages/pt_dynamic_strings.dart';
 import 'languages/tet_dynamic_strings.dart';
@@ -97,10 +93,6 @@ import 'languages/cnr_dynamic_strings.dart';
 import 'languages/hy_dynamic_strings.dart';
 import 'languages/ka_dynamic_strings.dart';
 import 'languages/az_dynamic_strings.dart';
-import 'languages/gn_dynamic_strings.dart';
-import 'languages/qu_dynamic_strings.dart';
-import 'languages/ay_dynamic_strings.dart';
-import 'languages/ht_dynamic_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -155,10 +147,6 @@ class AppStrings {
   final bool isArmenian;
   final bool isGeorgian;
   final bool isAzerbaijani;
-  final bool isGuarani;
-  final bool isQuechua;
-  final bool isAymara;
-  final bool isHaitianCreole;
 
   const AppStrings._({
     required this.isEnglish,
@@ -213,10 +201,6 @@ class AppStrings {
     required this.isArmenian,
     required this.isGeorgian,
     required this.isAzerbaijani,
-    required this.isGuarani,
-    required this.isQuechua,
-    required this.isAymara,
-    required this.isHaitianCreole,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -273,10 +257,6 @@ class AppStrings {
       isArmenian: locale.languageCode == "hy",
       isGeorgian: locale.languageCode == "ka",
       isAzerbaijani: locale.languageCode == "az",
-      isGuarani: locale.languageCode == "gn",
-      isQuechua: locale.languageCode == "qu",
-      isAymara: locale.languageCode == "ay",
-      isHaitianCreole: locale.languageCode == "ht",
     );
   }
 
@@ -338,10 +318,6 @@ class AppStrings {
     String? hy,
     String? ka,
     String? az,
-    String? gn,
-    String? qu,
-    String? ay,
-    String? ht,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -515,22 +491,6 @@ class AppStrings {
 
     if (isAzerbaijani) {
       return _translationFromMap(_azerbaijani, key) ?? az ?? en;
-    }
-
-    if (isGuarani) {
-      return _translationFromMap(_guarani, key) ?? gn ?? en;
-    }
-
-    if (isQuechua) {
-      return _translationFromMap(_quechua, key) ?? qu ?? en;
-    }
-
-    if (isAymara) {
-      return _translationFromMap(_aymara, key) ?? ay ?? en;
-    }
-
-    if (isHaitianCreole) {
-      return _translationFromMap(_haitianCreole, key) ?? ht ?? en;
     }
 
     if (isIndonesian) {
@@ -4790,6 +4750,12 @@ class AppStrings {
     "Thiết bị đã cập nhật trạng thái": "Đã cập nhật",
     "Báo động đã được tạm dừng": "Tạm tắt báo động hôm nay",
     "Thiết bị chưa nhận diện": "Chưa nhận diện",
+    "Lịch chung cho nhà": "Lịch báo động chung",
+    "Lịch cho cá nhân tôi": "Lịch báo động cá nhân",
+    "Giờ bắt đầu": "Bắt đầu",
+    "Giờ kết thúc": "Kết thúc",
+    "Loại báo động": "Cài đặt báo động",
+    "Còi vật lý": "Bật còi vật lý",
   };
 
   static const Map<String, String> _vietnameseDisplayOverrides = viStrings;
@@ -4997,26 +4963,6 @@ class AppStrings {
     ...azDynamicStrings,
   };
 
-  static const Map<String, String> _guarani = {
-    ...gnStrings,
-    ...gnDynamicStrings,
-  };
-
-  static const Map<String, String> _quechua = {
-    ...quStrings,
-    ...quDynamicStrings,
-  };
-
-  static const Map<String, String> _aymara = {
-    ...ayStrings,
-    ...ayDynamicStrings,
-  };
-
-  static const Map<String, String> _haitianCreole = {
-    ...htStrings,
-    ...htDynamicStrings,
-  };
-
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
     final translations = _activeTranslations;
@@ -5043,6 +4989,174 @@ class AppStrings {
     return _translationFromMap(_vietnameseDisplayOverrides, key) ?? vi;
   }
 
+  String get joinHomeSharedAlarm => choose(
+    vi: "Tham gia báo động chung của nhà",
+    en: "Participate in the home's shared alarm",
+    zh: "参与家庭公共警报",
+    ko: "집 공용 경보에 참여",
+    ja: "家の共通アラームに参加",
+    de: "Am gemeinsamen Hausalarm teilnehmen",
+    ru: "Участвовать в общей домашней тревоге",
+    fr: "Participer à l’alarme commune du domicile",
+    es: "Participar en la alarma común del hogar",
+    id: "Ikut alarm bersama rumah",
+    th: "เข้าร่วมสัญญาณเตือนร่วมของบ้าน",
+    ms: "Sertai penggera bersama rumah",
+    fil: "Sumali sa shared alarm ng bahay",
+    km: "ចូលរួមសំឡេងរោទិ៍រួមរបស់ផ្ទះ",
+    my: "အိမ်၏ မျှဝေထားသော အချက်ပေးစနစ်တွင် ပါဝင်ရန်",
+    lo: "ເຂົ້າຮ່ວມສັນຍານເຕືອນຮ່ວມຂອງເຮືອນ",
+    ta: "வீட்டின் பொதுவான அலாரத்தில் பங்கேற்கவும்",
+    pt: "Participar do alarme compartilhado da casa",
+    tet: "Partisipa iha alarme komún uma nian",
+    it: "Partecipa all’allarme condiviso della casa",
+    pl: "Uczestnicz we wspólnym alarmie domu",
+    nl: "Deelnemen aan het gedeelde huisalarm",
+    cs: "Účastnit se společného domácího alarmu",
+    sk: "Zapojiť sa do spoločného domáceho alarmu",
+    uk: "Брати участь у спільній домашній тривозі",
+    ro: "Participă la alarma comună a locuinței",
+    hu: "Részvétel az otthon közös riasztásában",
+    bg: "Участие в общата домашна аларма",
+    hr: "Sudjeluj u zajedničkom kućnom alarmu",
+    sr: "Учествуј у заједничком кућном аларму",
+    bs: "Učestvuj u zajedničkom kućnom alarmu",
+    sl: "Sodeluj pri skupnem hišnem alarmu",
+    mk: "Учествувај во заедничкиот домашен аларм",
+    sq: "Merr pjesë në alarmin e përbashkët të shtëpisë",
+    el: "Συμμετοχή στον κοινό συναγερμό του σπιτιού",
+    tr: "Evin ortak alarmına katıl",
+    sv: "Delta i hemmets gemensamma larm",
+    da: "Deltag i hjemmets fælles alarm",
+    nb: "Delta i hjemmets felles alarm",
+    fi: "Osallistu kodin yhteiseen hälytykseen",
+    isLang: "Taka þátt í sameiginlegri viðvörun heimilisins",
+    et: "Osale kodu ühises häires",
+    lv: "Piedalīties mājas kopīgajā trauksmē",
+    lt: "Dalyvauti bendrame namų pavojaus signale",
+    ga: "Páirt a ghlacadh in aláram comhroinnte an tí",
+    mt: "Ipparteċipa fl-allarm kondiviż tad-dar",
+    be: "Удзельнічаць у агульнай хатняй трывозе",
+    lb: "Um gemeinsame Hausalarm deelhuelen",
+    ca: "Participa en l’alarma compartida de la llar",
+    cnr: "Učestvuj u zajedničkom kućnom alarmu",
+    hy: "Մասնակցել տան ընդհանուր ահազանգին",
+    ka: "სახლის საერთო განგაშში მონაწილეობა",
+    az: "Evin ümumi siqnalına qoşul",
+  );
+
+  String get physicalSirenSharedAlarmOnlyNote => choose(
+    vi: "Chỉ có tác dụng với báo động chung.",
+    en: "Only applies to shared alarms.",
+    zh: "仅适用于家庭公共警报。",
+    ko: "공용 경보에만 적용됩니다.",
+    ja: "共通アラームにのみ適用されます。",
+    de: "Gilt nur für gemeinsame Alarme.",
+    ru: "Действует только для общих тревог.",
+    fr: "S’applique uniquement aux alarmes communes.",
+    es: "Solo se aplica a las alarmas comunes.",
+    id: "Hanya berlaku untuk alarm bersama.",
+    th: "มีผลเฉพาะกับสัญญาณเตือนร่วมเท่านั้น",
+    ms: "Hanya berfungsi untuk penggera bersama.",
+    fil: "Para lang sa shared alarm.",
+    km: "អនុវត្តតែចំពោះសំឡេងរោទិ៍រួមប៉ុណ្ណោះ។",
+    my: "မျှဝေထားသော အချက်ပေးမှုများအတွက်သာ သက်ရောက်သည်။",
+    lo: "ໃຊ້ໄດ້ສະເພາະກັບສັນຍານເຕືອນຮ່ວມເທົ່ານັ້ນ.",
+    ta: "பொதுவான அலாரங்களுக்கு மட்டும் பொருந்தும்.",
+    pt: "Aplica-se apenas aos alarmes compartilhados.",
+    tet: "Aplika deit ba alarme komún.",
+    it: "Si applica solo agli allarmi condivisi.",
+    pl: "Dotyczy tylko alarmów wspólnych.",
+    nl: "Alleen van toepassing op gedeelde alarmen.",
+    cs: "Platí pouze pro společné alarmy.",
+    sk: "Platí iba pre spoločné alarmy.",
+    uk: "Застосовується лише до спільних тривог.",
+    ro: "Se aplică doar alarmelor comune.",
+    hu: "Csak a közös riasztásokra vonatkozik.",
+    bg: "Важи само за общите аларми.",
+    hr: "Primjenjuje se samo na zajedničke alarme.",
+    sr: "Важи само за заједничке аларме.",
+    bs: "Primjenjuje se samo na zajedničke alarme.",
+    sl: "Velja samo za skupne alarme.",
+    mk: "Важи само за заеднички аларми.",
+    sq: "Zbatohet vetëm për alarmet e përbashkëta.",
+    el: "Ισχύει μόνο για κοινούς συναγερμούς.",
+    tr: "Yalnızca ortak alarmlar için geçerlidir.",
+    sv: "Gäller endast gemensamma larm.",
+    da: "Gælder kun for fælles alarmer.",
+    nb: "Gjelder bare for felles alarmer.",
+    fi: "Koskee vain yhteisiä hälytyksiä.",
+    isLang: "Gildir aðeins um sameiginlegar viðvaranir.",
+    et: "Kehtib ainult ühiste häirete puhul.",
+    lv: "Attiecas tikai uz kopīgajiem trauksmes signāliem.",
+    lt: "Taikoma tik bendriems pavojaus signalams.",
+    ga: "Ní bhaineann sé ach le haláraim chomhroinnte.",
+    mt: "Japplika biss għall-allarmi kondiviżi.",
+    be: "Дзейнічае толькі для агульных трывог.",
+    lb: "Gëllt nëmme fir gemeinsam Alarmmeldungen.",
+    ca: "Només s’aplica a les alarmes compartides.",
+    cnr: "Primjenjuje se samo na zajedničke alarme.",
+    hy: "Կիրառվում է միայն ընդհանուր ահազանգերի համար։",
+    ka: "მოქმედებს მხოლოდ საერთო განგაშებზე.",
+    az: "Yalnız ümumi siqnallara aiddir.",
+  );
+
+  String get fullscreenPersonalAlarmOnlyNote => choose(
+    vi: "Chỉ có tác dụng với báo động cá nhân.",
+    en: "Only applies to personal alarms.",
+    zh: "仅适用于个人警报。",
+    ko: "개인 경보에만 적용됩니다.",
+    ja: "個人アラームにのみ適用されます。",
+    de: "Gilt nur für persönliche Alarme.",
+    ru: "Действует только для личных тревог.",
+    fr: "S’applique uniquement aux alarmes personnelles.",
+    es: "Solo se aplica a las alarmas personales.",
+    id: "Hanya berlaku untuk alarm pribadi.",
+    th: "มีผลเฉพาะกับสัญญาณเตือนส่วนบุคคลเท่านั้น",
+    ms: "Hanya berfungsi untuk penggera peribadi.",
+    fil: "Para lang sa personal alarm.",
+    km: "អនុវត្តតែចំពោះសំឡេងរោទិ៍ផ្ទាល់ខ្លួនប៉ុណ្ណោះ។",
+    my: "ကိုယ်ပိုင် အချက်ပေးမှုများအတွက်သာ သက်ရောက်သည်။",
+    lo: "ໃຊ້ໄດ້ສະເພາະກັບສັນຍານເຕືອນສ່ວນຕົວເທົ່ານັ້ນ.",
+    ta: "தனிப்பட்ட அலாரங்களுக்கு மட்டும் பொருந்தும்.",
+    pt: "Aplica-se apenas aos alarmes pessoais.",
+    tet: "Aplika deit ba alarme pesoál.",
+    it: "Si applica solo agli allarmi personali.",
+    pl: "Dotyczy tylko alarmów osobistych.",
+    nl: "Alleen van toepassing op persoonlijke alarmen.",
+    cs: "Platí pouze pro osobní alarmy.",
+    sk: "Platí iba pre osobné alarmy.",
+    uk: "Застосовується лише до особистих тривог.",
+    ro: "Se aplică doar alarmelor personale.",
+    hu: "Csak a személyes riasztásokra vonatkozik.",
+    bg: "Важи само за личните аларми.",
+    hr: "Primjenjuje se samo na osobne alarme.",
+    sr: "Важи само за личне аларме.",
+    bs: "Primjenjuje se samo na lične alarme.",
+    sl: "Velja samo za osebne alarme.",
+    mk: "Важи само за лични аларми.",
+    sq: "Zbatohet vetëm për alarmet personale.",
+    el: "Ισχύει μόνο για προσωπικούς συναγερμούς.",
+    tr: "Yalnızca kişisel alarmlar için geçerlidir.",
+    sv: "Gäller endast personliga larm.",
+    da: "Gælder kun for personlige alarmer.",
+    nb: "Gjelder bare for personlige alarmer.",
+    fi: "Koskee vain henkilökohtaisia hälytyksiä.",
+    isLang: "Gildir aðeins um persónulegar viðvaranir.",
+    et: "Kehtib ainult isiklike häirete puhul.",
+    lv: "Attiecas tikai uz personīgajiem trauksmes signāliem.",
+    lt: "Taikoma tik asmeniniams pavojaus signalams.",
+    ga: "Ní bhaineann sé ach le haláraim phearsanta.",
+    mt: "Japplika biss għall-allarmi personali.",
+    be: "Дзейнічае толькі для асабістых трывог.",
+    lb: "Gëllt nëmme fir perséinlech Alarmmeldungen.",
+    ca: "Només s’aplica a les alarmes personals.",
+    cnr: "Primjenjuje se samo na lične alarme.",
+    hy: "Կիրառվում է միայն անձնական ահազանգերի համար։",
+    ka: "მოქმედებს მხოლოდ პირად განგაშებზე.",
+    az: "Yalnız şəxsi siqnallara aiddir.",
+  );
+
   String get alarm => t("Báo động");
   String get alarmSettings => t("Cài đặt báo động");
   String get alarmNotification => t("Thông báo báo động");
@@ -5053,6 +5167,119 @@ class AppStrings {
   String get notification => t("Thông báo");
   String get notifications => t("Danh sách thông báo");
   String get notificationSettings => t("Cài đặt thông báo");
+
+
+  String get sosAcknowledgeConfirmationTitle => choose(
+    vi: "Xác nhận cảnh báo SOS?",
+    en: "Acknowledge the SOS alert?",
+    zh: "确认 SOS 警报？",
+    ko: "SOS 경보를 확인할까요?",
+    ja: "SOS警報を確認しますか？",
+    de: "SOS-Alarm bestätigen?",
+    ru: "Подтвердить сигнал SOS?",
+    fr: "Confirmer l’alerte SOS ?",
+    es: "¿Confirmar la alerta SOS?",
+    id: "Konfirmasi peringatan SOS?",
+    th: "ยืนยันการแจ้งเตือน SOS หรือไม่",
+    ms: "Sahkan amaran SOS?",
+    fil: "Kumpirmahin ang alertong SOS?",
+    km: "បញ្ជាក់ការជូនដំណឹង SOS?",
+    my: "SOS သတိပေးချက်ကို အတည်ပြုမလား?",
+    lo: "ຢືນຢັນການເຕືອນ SOS ບໍ?",
+    ta: "SOS எச்சரிக்கையை உறுதிப்படுத்தவா?",
+    pt: "Confirmar o alerta SOS?",
+    tet: "Konfirma alerta SOS?",
+    it: "Confermare l’allarme SOS?",
+    pl: "Potwierdzić alarm SOS?",
+    nl: "SOS-alarm bevestigen?",
+    cs: "Potvrdit upozornění SOS?",
+    sk: "Potvrdiť upozornenie SOS?",
+    uk: "Підтвердити сигнал SOS?",
+    ro: "Confirmați alerta SOS?",
+    hu: "Megerősíti az SOS-riasztást?",
+    bg: "Да се потвърди ли SOS сигналът?",
+    hr: "Potvrditi SOS upozorenje?",
+    sr: "Potvrditi SOS upozorenje?",
+    bs: "Potvrditi SOS upozorenje?",
+    sl: "Potrdim opozorilo SOS?",
+    mk: "Да се потврди SOS предупредувањето?",
+    sq: "Të konfirmohet alarmi SOS?",
+    el: "Επιβεβαίωση ειδοποίησης SOS;",
+    tr: "SOS uyarısı onaylansın mı?",
+    sv: "Bekräfta SOS-larmet?",
+    da: "Bekræft SOS-alarmen?",
+    nb: "Bekrefte SOS-varselet?",
+    fi: "Vahvistetaanko SOS-hälytys?",
+    isLang: "Staðfesta SOS-viðvörun?",
+    et: "Kas kinnitada SOS-häire?",
+    lv: "Apstiprināt SOS trauksmi?",
+    lt: "Patvirtinti SOS įspėjimą?",
+    ga: "An foláireamh SOS a dheimhniú?",
+    mt: "Tikkonferma t-twissija SOS?",
+    be: "Пацвердзіць сігнал SOS?",
+    lb: "SOS-Alarm bestätegen?",
+    ca: "Confirmar l’alerta SOS?",
+    cnr: "Potvrditi SOS upozorenje?",
+    hy: "Հաստատե՞լ SOS ազդանշանը։",
+    ka: "დადასტურდეს SOS გაფრთხილება?",
+    az: "SOS xəbərdarlığı təsdiqlənsin?",
+  );
+
+  String get sosAcknowledgeConfirmationMessage => choose(
+    vi: "Chỉ xác nhận sau khi đã kiểm tra tình trạng. Thao tác này chỉ áp dụng cho tài khoản của bạn.",
+    en: "Acknowledge only after checking the situation. This action applies only to your account.",
+    zh: "请仅在检查情况后确认。此操作仅适用于您的账户。",
+    ko: "상황을 확인한 후에만 승인하세요. 이 작업은 내 계정에만 적용됩니다.",
+    ja: "状況を確認してから承認してください。この操作はあなたのアカウントにのみ適用されます。",
+    de: "Bestätige erst, nachdem du die Situation geprüft hast. Diese Aktion gilt nur für dein Konto.",
+    ru: "Подтверждайте только после проверки ситуации. Это действие применяется только к вашей учетной записи.",
+    fr: "Confirmez uniquement après avoir vérifié la situation. Cette action s’applique uniquement à votre compte.",
+    es: "Confirma solo después de comprobar la situación. Esta acción se aplica únicamente a tu cuenta.",
+    id: "Konfirmasikan hanya setelah memeriksa situasi. Tindakan ini hanya berlaku untuk akun Anda.",
+    th: "ยืนยันหลังจากตรวจสอบสถานการณ์แล้วเท่านั้น การดำเนินการนี้มีผลเฉพาะกับบัญชีของคุณ",
+    ms: "Sahkan hanya selepas memeriksa keadaan. Tindakan ini hanya terpakai pada akaun anda.",
+    fil: "Kumpirmahin lamang matapos suriin ang sitwasyon. Nalalapat lamang ang kilos na ito sa iyong account.",
+    km: "បញ្ជាក់តែបន្ទាប់ពីបានពិនិត្យស្ថានការណ៍។ សកម្មភាពនេះអនុវត្តតែលើគណនីរបស់អ្នកប៉ុណ្ណោះ។",
+    my: "အခြေအနေကို စစ်ဆေးပြီးမှသာ အတည်ပြုပါ။ ဤလုပ်ဆောင်ချက်သည် သင့်အကောင့်အတွက်သာ သက်ရောက်သည်။",
+    lo: "ຢືນຢັນຫຼັງຈາກກວດສະຖານະການແລ້ວເທົ່ານັ້ນ. ການດຳເນີນການນີ້ມີຜົນສະເພາະກັບບັນຊີຂອງທ່ານ.",
+    ta: "நிலையைச் சரிபார்த்த பிறகே உறுதிப்படுத்தவும். இந்தச் செயல் உங்கள் கணக்கிற்கு மட்டும் பொருந்தும்.",
+    pt: "Confirme apenas depois de verificar a situação. Esta ação aplica-se apenas à sua conta.",
+    tet: "Konfirma deit depois haree situasaun. Asaun ida-ne’e aplika deit ba ita-nia konta.",
+    it: "Conferma solo dopo aver verificato la situazione. Questa azione si applica solo al tuo account.",
+    pl: "Potwierdź dopiero po sprawdzeniu sytuacji. Ta czynność dotyczy tylko Twojego konta.",
+    nl: "Bevestig pas nadat je de situatie hebt gecontroleerd. Deze actie geldt alleen voor jouw account.",
+    cs: "Potvrďte až po kontrole situace. Tato akce platí pouze pro váš účet.",
+    sk: "Potvrďte až po kontrole situácie. Táto akcia platí iba pre váš účet.",
+    uk: "Підтверджуйте лише після перевірки ситуації. Ця дія застосовується лише до вашого облікового запису.",
+    ro: "Confirmați numai după verificarea situației. Această acțiune se aplică doar contului dvs.",
+    hu: "Csak a helyzet ellenőrzése után erősítse meg. Ez a művelet csak az Ön fiókjára vonatkozik.",
+    bg: "Потвърдете само след проверка на ситуацията. Това действие се отнася само за вашия акаунт.",
+    hr: "Potvrdite tek nakon provjere situacije. Ova se radnja odnosi samo na vaš račun.",
+    sr: "Potvrdite tek nakon provere situacije. Ova radnja važi samo za vaš nalog.",
+    bs: "Potvrdite tek nakon provjere situacije. Ova radnja se odnosi samo na vaš račun.",
+    sl: "Potrdite šele po preverjanju stanja. To dejanje velja samo za vaš račun.",
+    mk: "Потврдете само по проверка на состојбата. Ова дејство важи само за вашата сметка.",
+    sq: "Konfirmoni vetëm pasi të keni kontrolluar situatën. Ky veprim zbatohet vetëm për llogarinë tuaj.",
+    el: "Επιβεβαιώστε μόνο αφού ελέγξετε την κατάσταση. Αυτή η ενέργεια ισχύει μόνο για τον λογαριασμό σας.",
+    tr: "Yalnızca durumu kontrol ettikten sonra onaylayın. Bu işlem yalnızca hesabınız için geçerlidir.",
+    sv: "Bekräfta först efter att du har kontrollerat situationen. Åtgärden gäller bara ditt konto.",
+    da: "Bekræft først, når du har kontrolleret situationen. Handlingen gælder kun for din konto.",
+    nb: "Bekreft først etter at du har kontrollert situasjonen. Handlingen gjelder bare kontoen din.",
+    fi: "Vahvista vasta tilanteen tarkistamisen jälkeen. Tämä toiminto koskee vain tiliäsi.",
+    isLang: "Staðfestu aðeins eftir að hafa kannað aðstæður. Aðgerðin gildir aðeins fyrir reikninginn þinn.",
+    et: "Kinnitage alles pärast olukorra kontrollimist. See toiming kehtib ainult teie kontole.",
+    lv: "Apstipriniet tikai pēc situācijas pārbaudes. Šī darbība attiecas tikai uz jūsu kontu.",
+    lt: "Patvirtinkite tik patikrinę situaciją. Šis veiksmas taikomas tik jūsų paskyrai.",
+    ga: "Ná deimhnigh ach tar éis an cás a sheiceáil. Ní bhaineann an gníomh seo ach le do chuntas.",
+    mt: "Ikkonferma biss wara li tiċċekkja s-sitwazzjoni. Din l-azzjoni tapplika biss għall-kont tiegħek.",
+    be: "Пацвярджайце толькі пасля праверкі сітуацыі. Гэта дзеянне прымяняецца толькі да вашага ўліковага запісу.",
+    lb: "Bestätegt eréischt nodeems Dir d'Situatioun iwwerpréift hutt. Dës Aktioun gëllt nëmme fir Äre Kont.",
+    ca: "Confirmeu només després de comprovar la situació. Aquesta acció només s’aplica al vostre compte.",
+    cnr: "Potvrdite tek nakon provjere situacije. Ova radnja važi samo za vaš nalog.",
+    hy: "Հաստատեք միայն իրավիճակը ստուգելուց հետո։ Այս գործողությունը կիրառվում է միայն ձեր հաշվի համար։",
+    ka: "დაადასტურეთ მხოლოდ სიტუაციის შემოწმების შემდეგ. ეს მოქმედება მხოლოდ თქვენს ანგარიშზე ვრცელდება.",
+    az: "Yalnız vəziyyəti yoxladıqdan sonra təsdiqləyin. Bu əməliyyat yalnız hesabınıza tətbiq olunur.",
+  );
 
   String selectedHomesCountText(int count) => choose(
     vi: "$count nhà đã chọn",
@@ -6277,14 +6504,6 @@ class AppStrings {
       ? _georgian
       : isAzerbaijani
       ? _azerbaijani
-      : isGuarani
-      ? _guarani
-      : isQuechua
-      ? _quechua
-      : isAymara
-      ? _aymara
-      : isHaitianCreole
-      ? _haitianCreole
       : isThai
       ? _thai
       : isIndonesian
@@ -6622,10 +6841,6 @@ class AppStrings {
         !isArmenian &&
         !isGeorgian &&
         !isAzerbaijani &&
-        !isGuarani &&
-        !isQuechua &&
-        !isAymara &&
-        !isHaitianCreole &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -7423,29 +7638,6 @@ class AppStrings {
     if (isAzerbaijani) {
       return _translationFromMap(
             _azerbaijani,
-            _translationAliases[text] ?? text,
-          ) ??
-          text;
-    }
-
-    if (isGuarani) {
-      return _translationFromMap(_guarani, _translationAliases[text] ?? text) ??
-          text;
-    }
-
-    if (isQuechua) {
-      return _translationFromMap(_quechua, _translationAliases[text] ?? text) ??
-          text;
-    }
-
-    if (isAymara) {
-      return _translationFromMap(_aymara, _translationAliases[text] ?? text) ??
-          text;
-    }
-
-    if (isHaitianCreole) {
-      return _translationFromMap(
-            _haitianCreole,
             _translationAliases[text] ?? text,
           ) ??
           text;
@@ -8319,22 +8511,6 @@ class AppStrings {
 
     if (isAzerbaijani) {
       return "Azərbaycan dili";
-    }
-
-    if (isGuarani) {
-      return "Guaraní";
-    }
-
-    if (isQuechua) {
-      return "Quechua";
-    }
-
-    if (isAymara) {
-      return "Aymara";
-    }
-
-    if (isHaitianCreole) {
-      return "Kreyòl ayisyen";
     }
 
     if (isThai) {

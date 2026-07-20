@@ -728,9 +728,14 @@ class _SystemHealthSnapshot {
 
   static bool _hasEnabledDeviceAlarm(Map<String, dynamic> devices) {
     for (final rawDevice in devices.values) {
-      final alarm = safeMap(safeMap(rawDevice)['alarm']);
+      final device = safeMap(rawDevice);
+      final schedules = normalizeDeviceAlarmSchedules(
+        rawSchedules: device['alarmSchedules'],
+        legacyAlarm: device['alarm'],
+        personal: false,
+      );
 
-      if (alarm['enabled'] == true) {
+      if (hasEnabledDeviceAlarmSchedules(schedules)) {
         return true;
       }
     }
@@ -744,12 +749,12 @@ class _SystemHealthSnapshot {
   }) {
     for (final rawDevice in customDevices.values) {
       final customDevice = safeMap(rawDevice);
-      final alarm = normalizeEffectivePersonalAlarmSchedule(
+      final schedules = normalizeEffectivePersonalAlarmSchedules(
         customDevice: customDevice,
         legacyAlarmMode: legacyAlarmMode,
       );
 
-      if (alarm['enabled'] == true) {
+      if (hasEnabledDeviceAlarmSchedules(schedules)) {
         return true;
       }
     }

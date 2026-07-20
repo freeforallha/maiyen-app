@@ -71,9 +71,9 @@ void _auditLocalization(List<String> errors, List<String> warnings) {
     errors: errors,
   );
 
-  if (supportedCodes.length != 57) {
+  if (supportedCodes.length != 53) {
     errors.add(
-      'Expected 57 supported locale codes, found ${supportedCodes.length}.',
+      'Expected 53 supported locale codes, found ${supportedCodes.length}.',
     );
   }
 
@@ -699,10 +699,6 @@ String _localeFlagName(String code) {
     'hy' => 'Armenian',
     'ka' => 'Georgian',
     'az' => 'Azerbaijani',
-    'gn' => 'Guarani',
-    'qu' => 'Quechua',
-    'ay' => 'Aymara',
-    'ht' => 'HaitianCreole',
     _ => '',
   };
 }

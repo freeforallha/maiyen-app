@@ -377,13 +377,21 @@ void showDeviceDetail({
                                           personalHome["mode"] ??
                                           "home")
                                       .toString();
-                              final commonAlarm = normalizeDeviceAlarmSchedule(
-                                device["alarm"],
+                              final commonAlarms = normalizeDeviceAlarmSchedules(
+                                rawSchedules: device["alarmSchedules"],
+                                legacyAlarm: device["alarm"],
+                                personal: false,
+                                legacyFullscreenEnabled:
+                                    alarmPolicy.fullscreenEnabled,
+                                legacyPhysicalSirenEnabled:
+                                    alarmPolicy.physicalSirenEnabled,
                               );
-                              final personalAlarm =
-                                  normalizeEffectivePersonalAlarmSchedule(
+                              final personalAlarms =
+                                  normalizeEffectivePersonalAlarmSchedules(
                                     customDevice: personalDevice,
                                     legacyAlarmMode: legacyAlarmMode,
+                                    legacyFullscreenEnabled:
+                                        alarmPolicy.fullscreenEnabled,
                                   );
 
                               final personalPreferences =
@@ -399,12 +407,17 @@ void showDeviceDetail({
                                 isEmergency: isEmergencyAlarmPolicyDevice(
                                   deviceType,
                                 ),
+                                personalNotificationEnabled:
+                                    personalPreferences.notificationEnabled,
+                                followsHomeAlarm:
+                                    personalPreferences.followHomeSchedule,
                                 personalFullscreenEnabled:
                                     personalPreferences.fullscreenEnabled,
                                 commonAlarmEnabled:
-                                    commonAlarm["enabled"] == true,
+                                    personalPreferences.followHomeSchedule &&
+                                    hasEnabledDeviceAlarmSchedules(commonAlarms),
                                 personalAlarmEnabled:
-                                    personalAlarm["enabled"] == true,
+                                    hasEnabledDeviceAlarmSchedules(personalAlarms),
                                 onTap: () async {
                                   await showDeviceAlarmPolicySheet(
                                     context: context,
@@ -919,6 +932,8 @@ Widget _alarmSettingsSummary({
   required AppStrings strings,
   required DeviceAlarmPolicySettings settings,
   required bool isEmergency,
+  required bool personalNotificationEnabled,
+  required bool followsHomeAlarm,
   required bool personalFullscreenEnabled,
   required bool commonAlarmEnabled,
   required bool personalAlarmEnabled,
@@ -980,6 +995,21 @@ Widget _alarmSettingsSummary({
         ),
         const Divider(height: 1),
         row(
+          icon: Icons.notifications_active_outlined,
+          title: strings.t("Thông báo báo động"),
+          value: strings.t(
+            (settings.notificationEnabled && followsHomeAlarm) ||
+                    personalNotificationEnabled
+                ? "Bật"
+                : "Tắt",
+          ),
+          color: (settings.notificationEnabled && followsHomeAlarm) ||
+                  personalNotificationEnabled
+              ? SafeHomeColors.primary
+              : SafeHomeColors.textSecondary,
+        ),
+        const Divider(height: 1),
+        row(
           icon: Icons.campaign_rounded,
           title: strings.t("Bật còi vật lý"),
           value: strings.t(settings.physicalSirenEnabled ? "Bật" : "Tắt"),
@@ -995,17 +1025,6 @@ Widget _alarmSettingsSummary({
           color: personalFullscreenEnabled
               ? SafeHomeColors.primary
               : SafeHomeColors.textSecondary,
-        ),
-        const Divider(height: 1),
-        row(
-          icon: Icons.timer_outlined,
-          title: strings.t("Độ trễ kích hoạt"),
-          value: isEmergency || settings.triggerDelaySeconds <= 0
-              ? strings.t("Ngay lập tức")
-              : "${settings.triggerDelaySeconds} ${strings.t('giây')}",
-          color: isEmergency || settings.triggerDelaySeconds <= 0
-              ? SafeHomeColors.safe
-              : SafeHomeColors.primary,
         ),
         if (!isEmergency) ...[
           const Divider(height: 1),

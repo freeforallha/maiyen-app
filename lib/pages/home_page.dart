@@ -23,6 +23,7 @@ import '../services/notification_service.dart';
 import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
 import '../widgets/system_health_sheet.dart';
+import '../sheets/device_alarm_policy_sheet.dart';
 import 'all_home_page.dart';
 import 'home/home_add_sheets.dart';
 import 'home/home_alarm_menu_sheet.dart';
@@ -345,6 +346,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Map<String, dynamic> homeEvents = {};
 
   Map<String, dynamic> alarmPauseToday = {};
+  Timer? _alarmPauseExpiryTimer;
   List<String> homeOrder = [];
 
   List<String> mergeVisibleHomeOrder(List<String> visibleOrder) {
@@ -1166,6 +1168,98 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  int? _resolveAlarmPauseEndAt(Map<String, dynamic> pause) {
+    final directEndAt = int.tryParse(pause["endAt"]?.toString() ?? "");
+    if (directEndAt != null && directEndAt > 0) {
+      return directEndAt;
+    }
+
+    final dateParts = (pause["date"]?.toString() ?? "").split("-");
+    final startParts = (pause["start"]?.toString() ?? "").split(":");
+    final endParts = (pause["end"]?.toString() ?? "").split(":");
+    if (dateParts.length != 3 ||
+        startParts.length != 2 ||
+        endParts.length != 2) {
+      return null;
+    }
+
+    final year = int.tryParse(dateParts[0]);
+    final month = int.tryParse(dateParts[1]);
+    final day = int.tryParse(dateParts[2]);
+    final startHour = int.tryParse(startParts[0]);
+    final startMinute = int.tryParse(startParts[1]);
+    final endHour = int.tryParse(endParts[0]);
+    final endMinute = int.tryParse(endParts[1]);
+    if (year == null ||
+        month == null ||
+        day == null ||
+        startHour == null ||
+        startMinute == null ||
+        endHour == null ||
+        endMinute == null ||
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31 ||
+        startHour < 0 ||
+        startHour > 23 ||
+        endHour < 0 ||
+        endHour > 23 ||
+        startMinute < 0 ||
+        startMinute > 59 ||
+        endMinute < 0 ||
+        endMinute > 59) {
+      return null;
+    }
+
+    final startAt = DateTime(year, month, day, startHour, startMinute);
+    var endAt = DateTime(year, month, day, endHour, endMinute);
+    if (!endAt.isAfter(startAt)) {
+      endAt = endAt.add(const Duration(days: 1));
+    }
+    return endAt.millisecondsSinceEpoch;
+  }
+
+  bool _isAlarmPauseStillValid(Map<String, dynamic> pause) {
+    if (pause.isEmpty) return false;
+    final endAt = _resolveAlarmPauseEndAt(pause);
+    return endAt != null && endAt > DateTime.now().millisecondsSinceEpoch;
+  }
+
+  void _clearAlarmPauseFromLocalState(String homeId) {
+    if (!mounted || homeId.isEmpty) return;
+
+    setState(() {
+      if (selectedHome == homeId) {
+        alarmPauseToday = {};
+      }
+
+      final cachedHome = safeMap(homes[homeId]);
+      cachedHome.remove("alarmPauseToday");
+      homes[homeId] = cachedHome;
+    });
+  }
+
+  void _syncAlarmPauseExpiryTimer() {
+    _alarmPauseExpiryTimer?.cancel();
+    _alarmPauseExpiryTimer = null;
+
+    final homeId = selectedHome;
+    final endAt = _resolveAlarmPauseEndAt(alarmPauseToday);
+    if (homeId.isEmpty || endAt == null || endAt <= 0) return;
+
+    final delayMs = endAt - DateTime.now().millisecondsSinceEpoch;
+    if (delayMs <= 0) {
+      _clearAlarmPauseFromLocalState(homeId);
+      return;
+    }
+
+    _alarmPauseExpiryTimer = Timer(
+      Duration(milliseconds: delayMs + 120),
+      () => _clearAlarmPauseFromLocalState(homeId),
+    );
+  }
+
   void startAlarmPauseListener() {
     final homeId = selectedHome;
 
@@ -1173,11 +1267,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ownerUid: homeId.isEmpty ? "" : getHomeOwnerUid(),
       homeId: homeId,
       onSelectedHomeCleared: () {
-        if (mounted && alarmPauseToday.isNotEmpty) {
-          setState(() {
-            alarmPauseToday = {};
-          });
-        }
+        _alarmPauseExpiryTimer?.cancel();
+        _alarmPauseExpiryTimer = null;
+        _clearAlarmPauseFromLocalState(homeId);
       },
       onAlarmPauseChanged: (update) {
         if (!mounted || selectedHome != update.homeId) {
@@ -1186,19 +1278,24 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
         final pause = update.alarmPauseToday;
 
+        final effectivePause = _isAlarmPauseStillValid(pause)
+            ? pause
+            : <String, dynamic>{};
+
         setState(() {
-          alarmPauseToday = pause;
+          alarmPauseToday = effectivePause;
 
           final cachedHome = safeMap(homes[update.homeId]);
 
-          if (pause.isEmpty) {
+          if (effectivePause.isEmpty) {
             cachedHome.remove("alarmPauseToday");
           } else {
-            cachedHome["alarmPauseToday"] = pause;
+            cachedHome["alarmPauseToday"] = effectivePause;
           }
 
           homes[update.homeId] = cachedHome;
         });
+        _syncAlarmPauseExpiryTimer();
       },
     );
   }
@@ -2607,15 +2704,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       for (final rawDevice in devices.values) {
         final device = safeMap(rawDevice);
-        final alarm = safeMap(device["alarm"]);
-        final startText = alarm["start"]?.toString() ?? "";
-        final endText = alarm["end"]?.toString() ?? "";
+        final schedules = normalizeDeviceAlarmSchedules(
+          rawSchedules: device["alarmSchedules"],
+          legacyAlarm: device["alarm"],
+          personal: false,
+        );
 
-        if (alarm["enabled"] == true &&
-            isValidHHMM(startText) &&
-            isValidHHMM(endText) &&
-            startText != endText) {
-          alarms.add(alarm);
+        for (final alarm in schedules.values) {
+          final startText = alarm["start"]?.toString() ?? "";
+          final endText = alarm["end"]?.toString() ?? "";
+
+          if (alarm["enabled"] == true &&
+              isValidHHMM(startText) &&
+              isValidHHMM(endText) &&
+              startText != endText) {
+            alarms.add(alarm);
+          }
         }
       }
 
@@ -2763,9 +2867,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       );
     }
 
-    final existingEndAt = int.tryParse(
-      alarmPauseToday["endAt"]?.toString() ?? "",
-    );
+    final existingEndAt = _resolveAlarmPauseEndAt(alarmPauseToday);
     final hasActiveOrFuturePause =
         alarmPauseToday.isNotEmpty &&
         existingEndAt != null &&
@@ -2929,6 +3031,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               "createdAt": createdAt,
             };
           });
+          _syncAlarmPauseExpiryTimer();
         }
 
         return true;
@@ -2967,6 +3070,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           setState(() {
             alarmPauseToday = {};
           });
+          _syncAlarmPauseExpiryTimer();
         }
 
         return true;
@@ -3488,7 +3592,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       final today =
           "${now.year}-${now.month.toString().padLeft(2, "0")}-${now.day.toString().padLeft(2, "0")}";
 
-      if (alarmPauseToday["date"] != today) {
+      if (alarmPauseToday["date"] != today ||
+          !_isAlarmPauseStillValid(alarmPauseToday)) {
         return _strings.t("Tắt");
       }
 
@@ -3872,6 +3977,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
+    _alarmPauseExpiryTimer?.cancel();
     _homeAutoAwayCoordinator.dispose();
     _homeAccountRealtimeCoordinator.dispose();
     _homeRealtimeCoordinator.dispose();

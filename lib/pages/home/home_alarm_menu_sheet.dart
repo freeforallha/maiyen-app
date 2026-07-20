@@ -5,6 +5,57 @@ import '../../localization/app_strings.dart';
 import '../../safehome_theme.dart';
 import '../../navigation/safehome_navigation.dart';
 
+
+int? _resolveAlarmPauseMenuEndAt(Map<String, dynamic> pause) {
+  final directEndAt = int.tryParse(pause['endAt']?.toString() ?? '');
+  if (directEndAt != null && directEndAt > 0) return directEndAt;
+
+  final dateParts = (pause['date']?.toString() ?? '').split('-');
+  final startParts = (pause['start']?.toString() ?? '').split(':');
+  final endParts = (pause['end']?.toString() ?? '').split(':');
+  if (dateParts.length != 3 ||
+      startParts.length != 2 ||
+      endParts.length != 2) {
+    return null;
+  }
+
+  final values = <int?>[
+    ...dateParts.map(int.tryParse),
+    ...startParts.map(int.tryParse),
+    ...endParts.map(int.tryParse),
+  ];
+  if (values.any((value) => value == null)) return null;
+
+  final year = values[0]!;
+  final month = values[1]!;
+  final day = values[2]!;
+  final startHour = values[3]!;
+  final startMinute = values[4]!;
+  final endHour = values[5]!;
+  final endMinute = values[6]!;
+  if (month < 1 ||
+      month > 12 ||
+      day < 1 ||
+      day > 31 ||
+      startHour < 0 ||
+      startHour > 23 ||
+      startMinute < 0 ||
+      startMinute > 59 ||
+      endHour < 0 ||
+      endHour > 23 ||
+      endMinute < 0 ||
+      endMinute > 59) {
+    return null;
+  }
+
+  final startAt = DateTime(year, month, day, startHour, startMinute);
+  var endAt = DateTime(year, month, day, endHour, endMinute);
+  if (!endAt.isAfter(startAt)) {
+    endAt = endAt.add(const Duration(days: 1));
+  }
+  return endAt.millisecondsSinceEpoch;
+}
+
 Future<void> showHomeAlarmMenuSheet({
   required BuildContext context,
   required AppStrings strings,
@@ -24,6 +75,10 @@ Future<void> showHomeAlarmMenuSheet({
           alarmScheduleText.trim().isNotEmpty &&
           alarmScheduleText != strings.t('Tắt') &&
           alarmScheduleText != strings.t('Chưa thiết lập thời gian');
+      final pauseEndAt = _resolveAlarmPauseMenuEndAt(alarmPauseToday);
+      final pauseActive = alarmPauseToday.isNotEmpty &&
+          (pauseEndAt == null ||
+              pauseEndAt > DateTime.now().millisecondsSinceEpoch);
 
       return SafeArea(
         child: Container(
@@ -82,7 +137,7 @@ Future<void> showHomeAlarmMenuSheet({
               ListTile(
                 leading: Icon(
                   Icons.pause_circle_filled_rounded,
-                  color: alarmPauseToday.isNotEmpty
+                  color: pauseActive
                       ? SafeHomeColors.warning
                       : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
                 ),
@@ -90,20 +145,20 @@ Future<void> showHomeAlarmMenuSheet({
                   strings.t('Tạm tắt báo động hôm nay'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    color: alarmPauseToday.isNotEmpty
+                    color: pauseActive
                         ? SafeHomeColors.textPrimary
                         : SafeHomeColors.textSecondary.withValues(alpha: 0.55),
                   ),
                 ),
                 subtitle: Text(
-                  alarmPauseToday.isEmpty
+                  !pauseActive
                       ? strings.t('Chưa thiết lập')
                       : '${alarmPauseToday['start'] ?? '--:--'} → ${alarmPauseToday['end'] ?? '--:--'}'
                             '${(alarmPauseToday['reason'] ?? '').toString().isNotEmpty ? ' • ${strings.t(alarmPauseToday['reason'].toString())}' : ''}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: alarmPauseToday.isNotEmpty
+                    color: pauseActive
                         ? SafeHomeColors.textSecondary
                         : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
                   ),

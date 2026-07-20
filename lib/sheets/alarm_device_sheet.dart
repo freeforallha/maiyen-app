@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -9,7 +8,6 @@ import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import 'device_alarm_policy_sheet.dart';
 import '../navigation/safehome_navigation.dart';
-import '../widgets/ios_alarm_platform_notice.dart';
 
 IconData _alarmDeviceIcon(Object? rawType) {
   final type = rawType?.toString().trim().toLowerCase() ?? "unknown";
@@ -328,20 +326,74 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     return value.isEmpty ? key : value;
   }
 
-  Map<String, dynamic> _commonAlarm(String key, Map<String, dynamic> device) {
-    return normalizeDeviceAlarmSchedule(device['alarm']);
+  Map<String, Map<String, dynamic>> _commonSchedules(
+    String key,
+    Map<String, dynamic> device,
+  ) {
+    final policy = DeviceAlarmPolicySettings.fromDevice(
+      device: device,
+      deviceType: device['type']?.toString() ?? 'door',
+    );
+    return normalizeDeviceAlarmSchedules(
+      rawSchedules: device['alarmSchedules'],
+      legacyAlarm: device['alarm'],
+      personal: false,
+      legacyFullscreenEnabled: policy.fullscreenEnabled,
+      legacyPhysicalSirenEnabled: policy.physicalSirenEnabled,
+    );
   }
 
-  Map<String, dynamic> _personalAlarm(String key, Map<String, dynamic> device) {
+  Map<String, Map<String, dynamic>> _personalSchedules(
+    String key,
+    Map<String, dynamic> device,
+  ) {
     final realId = _realDeviceId(key, device);
     final raw = customDevices[realId] ?? customDevices[key];
     final customDevice = raw is Map
         ? Map<String, dynamic>.from(raw)
         : const <String, dynamic>{};
-    return normalizeEffectivePersonalAlarmSchedule(
+    final policy = DeviceAlarmPolicySettings.fromDevice(
+      device: device,
+      deviceType: device['type']?.toString() ?? 'door',
+    );
+    return normalizeEffectivePersonalAlarmSchedules(
       customDevice: customDevice,
       legacyAlarmMode: legacyAlarmMode,
+      legacyFullscreenEnabled: policy.fullscreenEnabled,
     );
+  }
+
+  DevicePersonalAlarmPreferences _personalPreferences(
+    String key,
+    Map<String, dynamic> device,
+  ) {
+    final realId = _realDeviceId(key, device);
+    final raw = customDevices[realId] ?? customDevices[key];
+    final customDevice = raw is Map
+        ? Map<String, dynamic>.from(raw)
+        : const <String, dynamic>{};
+    final policy = DeviceAlarmPolicySettings.fromDevice(
+      device: device,
+      deviceType: device['type']?.toString() ?? 'door',
+    );
+
+    return DevicePersonalAlarmPreferences.fromCustomDevice(
+      customDevice: customDevice,
+      legacyFullscreenEnabled: policy.fullscreenEnabled,
+    );
+  }
+
+  String _scheduleSummary(
+    Map<String, Map<String, dynamic>> schedules,
+    AppStrings strings,
+  ) {
+    final enabled = schedules.values
+        .where((schedule) => schedule['enabled'] == true)
+        .toList(growable: false);
+    if (enabled.isEmpty) return strings.t('Chưa cài đặt');
+    final first = enabled.first;
+    final suffix = enabled.length > 1 ? ' (+${enabled.length - 1})' : '';
+    return '${first['start']} → ${first['end']}$suffix';
   }
 
   Future<void> _openDeviceSettings(
@@ -388,61 +440,40 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       return;
     }
 
-    final draft = normalizeDeviceAlarmSchedule(null);
-    final isHomeOwner = currentUid == widget.ownerUid;
-    var followHomeSchedule = true;
-    var fullscreenEnabled = true;
-
-    final commonPolicies = entries
-        .map((entry) {
-          final device = Map<String, dynamic>.from(entry.value as Map);
-          return DeviceAlarmPolicySettings.fromDevice(
-            device: device,
-            deviceType: device['type']?.toString() ?? 'door',
-          );
-        })
-        .toList(growable: false);
-
-    var physicalSirenEnabled = commonPolicies.every(
-      (policy) => policy.physicalSirenEnabled,
-    );
-    var triggerDelaySeconds = commonPolicies
-        .map((policy) => policy.triggerDelaySeconds)
-        .reduce((first, second) => first < second ? first : second);
-
-    if (personal) {
-      final preferences = entries
-          .map((entry) {
-            final key = entry.key;
-            final device = Map<String, dynamic>.from(entry.value as Map);
-            final realId = _realDeviceId(key, device);
-            final rawCustomDevice = customDevices[realId] ?? customDevices[key];
-            final customDevice = rawCustomDevice is Map
-                ? Map<String, dynamic>.from(rawCustomDevice)
-                : const <String, dynamic>{};
-            final policy = DeviceAlarmPolicySettings.fromDevice(
-              device: device,
-              deviceType: device['type']?.toString() ?? 'door',
-            );
-
-            return DevicePersonalAlarmPreferences.fromCustomDevice(
-              customDevice: customDevice,
-              legacyFullscreenEnabled: policy.fullscreenEnabled,
-            );
-          })
-          .toList(growable: false);
-
-      fullscreenEnabled = preferences.every(
-        (preference) => preference.fullscreenEnabled,
-      );
-
-      if (!isHomeOwner) {
-        followHomeSchedule = preferences.every(
-          (preference) => preference.followHomeSchedule,
-        );
-      }
-    }
-
+    final draft = defaultDeviceAlarmSchedule(personal: personal);
+    var commonParticipates = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device['type']?.toString() ?? 'door',
+      ).enabled;
+    });
+    var commonNotificationEnabled = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device['type']?.toString() ?? 'door',
+      ).notificationEnabled;
+    });
+    var commonPhysicalSirenEnabled = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return DeviceAlarmPolicySettings.fromDevice(
+        device: device,
+        deviceType: device['type']?.toString() ?? 'door',
+      ).physicalSirenEnabled;
+    });
+    var personalFollowsHomeAlarm = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return _personalPreferences(entry.key, device).followHomeSchedule;
+    });
+    var personalNotificationEnabled = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return _personalPreferences(entry.key, device).notificationEnabled;
+    });
+    var personalFullscreenEnabled = entries.every((entry) {
+      final device = Map<String, dynamic>.from(entry.value as Map);
+      return _personalPreferences(entry.key, device).fullscreenEnabled;
+    });
     var saving = false;
 
     await SafeHomeNavigation.showModalSheet<void>(
@@ -466,64 +497,91 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 ),
               );
               if (selected == null) return;
-              setSheetState(() {
-                draft[field] =
-                    '${selected.hour.toString().padLeft(2, '0')}:${selected.minute.toString().padLeft(2, '0')}';
-              });
+              final value =
+                  '${selected.hour.toString().padLeft(2, '0')}:${selected.minute.toString().padLeft(2, '0')}';
+              final otherField = field == 'start' ? 'end' : 'start';
+
+              if (value == draft[otherField]?.toString()) {
+                showTopToast(
+                  context,
+                  strings.t(
+                    'Giờ bắt đầu và kết thúc không được trùng nhau',
+                  ),
+                  color: SafeHomeColors.warning,
+                  icon: Icons.schedule_rounded,
+                );
+                return;
+              }
+
+              setSheetState(() => draft[field] = value);
             }
 
             Future<void> apply() async {
               if (saving) return;
+
+              if (draft['enabled'] == true &&
+                  draft['start']?.toString() == draft['end']?.toString()) {
+                showTopToast(
+                  context,
+                  strings.t('Giờ bắt đầu và kết thúc không được trùng nhau'),
+                  color: SafeHomeColors.warning,
+                  icon: Icons.schedule_rounded,
+                );
+                return;
+              }
+
               setSheetState(() => saving = true);
 
               try {
                 final updates = <String, Object?>{};
-                final normalized = normalizeDeviceAlarmSchedule(draft);
+                final normalized = normalizeDeviceAlarmSchedule(
+                  draft,
+                  personal: personal,
+                );
+                final scheduleId =
+                    'quick_${DateTime.now().microsecondsSinceEpoch}';
 
                 for (final entry in entries) {
                   final key = entry.key;
                   final device = Map<String, dynamic>.from(entry.value as Map);
                   final realId = _realDeviceId(key, device);
-                  final path = personal
-                      ? 'accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarm'
-                      : 'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarm';
-                  updates[path] = Map<String, dynamic>.from(normalized);
-                  if (personal) {
-                    updates['accounts/$currentUid/customRules/${widget.homeId}/devices/$realId/alarmPreferences'] =
-                        DevicePersonalAlarmPreferences(
-                          fullscreenEnabled: fullscreenEnabled,
-                          followHomeSchedule: isHomeOwner
-                              ? true
-                              : followHomeSchedule,
-                        ).toFirebaseMap();
+                  final existing = personal
+                      ? _personalSchedules(key, device)
+                      : _commonSchedules(key, device);
+                  existing[scheduleId] = Map<String, dynamic>.from(normalized);
+                  final basePath = personal
+                      ? 'accounts/$currentUid/customRules/${widget.homeId}/devices/$realId'
+                      : 'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId';
+                  updates['$basePath/alarmSchedules'] = {
+                    for (final schedule in existing.entries)
+                      schedule.key: deviceAlarmScheduleToFirebaseMap(
+                        schedule.value,
+                        personal: personal,
+                      ),
+                  };
+                  updates['$basePath/alarm'] = null;
 
-                    if (isHomeOwner) {
-                      final currentPolicy =
-                          DeviceAlarmPolicySettings.fromDevice(
-                            device: device,
-                            deviceType: device['type']?.toString() ?? 'door',
-                          );
-                      updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
-                          DeviceAlarmPolicySettings(
-                            enabled: currentPolicy.enabled,
-                            physicalSirenEnabled:
-                                currentPolicy.physicalSirenEnabled,
-                            fullscreenEnabled: fullscreenEnabled,
-                            triggerDelaySeconds:
-                                currentPolicy.triggerDelaySeconds,
-                          ).toFirebaseMap();
-                    }
+                  if (personal) {
+                    updates['$basePath/alarmPreferences'] =
+                        DevicePersonalAlarmPreferences(
+                          notificationEnabled: personalNotificationEnabled,
+                          fullscreenEnabled: personalFullscreenEnabled,
+                          followHomeSchedule: personalFollowsHomeAlarm,
+                        ).toFirebaseMap();
                   } else {
-                    final currentPolicy = DeviceAlarmPolicySettings.fromDevice(
+                    final policy = DeviceAlarmPolicySettings.fromDevice(
                       device: device,
                       deviceType: device['type']?.toString() ?? 'door',
                     );
-                    updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
+                    updates['$basePath/alarmPolicy'] =
                         DeviceAlarmPolicySettings(
-                          enabled: currentPolicy.enabled,
-                          physicalSirenEnabled: physicalSirenEnabled,
-                          fullscreenEnabled: currentPolicy.fullscreenEnabled,
-                          triggerDelaySeconds: triggerDelaySeconds,
+                          enabled: commonParticipates,
+                          notificationEnabled: commonNotificationEnabled,
+                          physicalSirenEnabled:
+                              commonPhysicalSirenEnabled,
+                          // Trường legacy chỉ được giữ nguyên. Fullscreen là
+                          // lựa chọn cá nhân và không thuộc thiết lập nhanh chung.
+                          fullscreenEnabled: policy.fullscreenEnabled,
                         ).toFirebaseMap();
                   }
                 }
@@ -551,6 +609,35 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   icon: Icons.error_rounded,
                 );
               }
+            }
+
+            Widget quickOptionSwitch({
+              required IconData icon,
+              required String title,
+              required bool value,
+              required ValueChanged<bool> onChanged,
+            }) {
+              return SwitchListTile.adaptive(
+                value: value,
+                onChanged: saving ? null : onChanged,
+                secondary: Icon(
+                  icon,
+                  color: value
+                      ? SafeHomeColors.primary
+                      : SafeHomeColors.textSecondary,
+                ),
+                title: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: SafeHomeColors.textPrimary,
+                  ),
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                visualDensity: VisualDensity.compact,
+              );
             }
 
             return Container(
@@ -604,143 +691,99 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           height: 1.35,
                         ),
                       ),
-                      if (!personal) ...[
-                        const SizedBox(height: 14),
-                        SwitchListTile.adaptive(
-                          value: physicalSirenEnabled,
-                          onChanged: saving
-                              ? null
-                              : (value) => setSheetState(
-                                  () => physicalSirenEnabled = value,
-                                ),
-                          contentPadding: EdgeInsets.zero,
-                          secondary: const Icon(Icons.campaign_rounded),
-                          title: Text(
-                            strings.t('Bật còi vật lý'),
-                            style: const TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          subtitle: Text(
-                            strings.t('Cho phép kích hoạt còi trong nhà.'),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.timer_outlined,
-                                color: SafeHomeColors.warning,
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Text(
-                                  strings.t('Độ trễ kích hoạt'),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton<int>(
-                                  value: triggerDelaySeconds,
-                                  isDense: true,
-                                  items: const [0, 5, 10, 15, 30, 60, 90, 120]
-                                      .map(
-                                        (seconds) => DropdownMenuItem<int>(
-                                          value: seconds,
-                                          child: Text(
-                                            seconds == 0
-                                                ? strings.t('Ngay lập tức')
-                                                : '$seconds ${strings.t('giây')}',
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: saving
-                                      ? null
-                                      : (value) {
-                                          if (value == null) return;
-                                          setSheetState(
-                                            () => triggerDelaySeconds = value,
-                                          );
-                                        },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (personal) ...[
-                        const SizedBox(height: 14),
-                        if (defaultTargetPlatform == TargetPlatform.iOS) ...[
-                          const IosAlarmPlatformNotice(),
-                          const SizedBox(height: 10),
-                        ],
-                        SwitchListTile.adaptive(
-                          value: followHomeSchedule,
-                          onChanged: saving || isHomeOwner
-                              ? null
-                              : (value) => setSheetState(
-                                  () => followHomeSchedule = value,
-                                ),
-                          contentPadding: EdgeInsets.zero,
-                          secondary: const Icon(Icons.home_work_rounded),
-                          title: Text(
-                            strings.t('Nhận cảnh báo theo lịch chung của nhà'),
-                            style: const TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          subtitle: Text(
-                            strings.t(
-                              'Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        SwitchListTile.adaptive(
-                          value: fullscreenEnabled,
-                          onChanged: saving
-                              ? null
-                              : (value) => setSheetState(
-                                  () => fullscreenEnabled = value,
-                                ),
-                          contentPadding: EdgeInsets.zero,
-                          secondary: Icon(
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? Icons.phone_iphone_rounded
-                                : Icons.phone_android_rounded,
-                          ),
-                          title: Text(
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? strings.t('Cảnh báo trên iOS')
-                                : strings.t('Đánh thức màn hình'),
-                            style: const TextStyle(fontWeight: FontWeight.w800),
-                          ),
-                          subtitle: Text(
-                            strings.t(
-                              defaultTargetPlatform == TargetPlatform.iOS
-                                  ? 'iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.'
-                                  : 'Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.',
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          strings.t(
-                            'Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.',
-                          ),
-                          style: const TextStyle(
-                            color: SafeHomeColors.textSecondary,
-                            fontSize: 12.5,
-                            height: 1.35,
-                          ),
-                        ),
-                      ],
                       const SizedBox(height: 14),
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: SafeHomeColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: SafeHomeColors.border),
+                        ),
+                        child: Column(
+                          children: personal
+                              ? [
+                                  quickOptionSwitch(
+                                    icon: Icons.home_work_outlined,
+                                    title: strings.joinHomeSharedAlarm,
+                                    value: personalFollowsHomeAlarm,
+                                    onChanged: (value) => setSheetState(
+                                      () => personalFollowsHomeAlarm = value,
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    indent: 10,
+                                    endIndent: 10,
+                                  ),
+                                  quickOptionSwitch(
+                                    icon: Icons.notifications_active_outlined,
+                                    title: strings.t('Thông báo báo động'),
+                                    value: personalNotificationEnabled,
+                                    onChanged: (value) => setSheetState(
+                                      () => personalNotificationEnabled = value,
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    indent: 10,
+                                    endIndent: 10,
+                                  ),
+                                  quickOptionSwitch(
+                                    icon: Theme.of(context).platform ==
+                                            TargetPlatform.iOS
+                                        ? Icons.phone_iphone_rounded
+                                        : Icons.phone_android_rounded,
+                                    title: Theme.of(context).platform ==
+                                            TargetPlatform.iOS
+                                        ? strings.t('Cảnh báo trên iOS')
+                                        : strings.t('Đánh thức màn hình'),
+                                    value: personalFullscreenEnabled,
+                                    onChanged: (value) => setSheetState(
+                                      () => personalFullscreenEnabled = value,
+                                    ),
+                                  ),
+                                ]
+                              : [
+                                  quickOptionSwitch(
+                                    icon: Icons.shield_rounded,
+                                    title: strings.t(
+                                      'Tham gia hệ thống báo động',
+                                    ),
+                                    value: commonParticipates,
+                                    onChanged: (value) => setSheetState(
+                                      () => commonParticipates = value,
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    indent: 10,
+                                    endIndent: 10,
+                                  ),
+                                  quickOptionSwitch(
+                                    icon: Icons.notifications_active_outlined,
+                                    title: strings.t('Thông báo báo động'),
+                                    value: commonNotificationEnabled,
+                                    onChanged: (value) => setSheetState(
+                                      () => commonNotificationEnabled = value,
+                                    ),
+                                  ),
+                                  const Divider(
+                                    height: 1,
+                                    indent: 10,
+                                    endIndent: 10,
+                                  ),
+                                  quickOptionSwitch(
+                                    icon: Icons.campaign_rounded,
+                                    title: strings.t('Bật còi vật lý'),
+                                    value: commonPhysicalSirenEnabled,
+                                    onChanged: (value) => setSheetState(
+                                      () => commonPhysicalSirenEnabled = value,
+                                    ),
+                                  ),
+                                ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       SwitchListTile.adaptive(
                         value: draft['enabled'] == true,
                         onChanged: saving
@@ -929,10 +972,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           device: device,
                           deviceType: device['type']?.toString() ?? 'door',
                         );
-                        final common = _commonAlarm(key, device);
-                        final personal = _personalAlarm(key, device);
-                        final commonEnabled = common['enabled'] == true;
-                        final personalEnabled = personal['enabled'] == true;
+                        final common = _commonSchedules(key, device);
+                        final personal = _personalSchedules(key, device);
+                        final commonEnabled = hasEnabledDeviceAlarmSchedules(common);
+                        final personalEnabled = hasEnabledDeviceAlarmSchedules(personal);
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10),
@@ -1002,18 +1045,14 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                         _scopeSummaryLine(
                                           icon: Icons.home_rounded,
                                           label: strings.t('Chung cho nhà'),
-                                          value: commonEnabled
-                                              ? '${common['start']} → ${common['end']}'
-                                              : strings.t('Chưa cài đặt'),
+                                          value: _scheduleSummary(common, strings),
                                           active: commonEnabled,
                                         ),
                                         const SizedBox(height: 3),
                                         _scopeSummaryLine(
                                           icon: Icons.person_rounded,
                                           label: strings.t('Cá nhân'),
-                                          value: personalEnabled
-                                              ? '${personal['start']} → ${personal['end']}'
-                                              : strings.t('Chưa cài đặt'),
+                                          value: _scheduleSummary(personal, strings),
                                           active: personalEnabled,
                                         ),
                                       ],

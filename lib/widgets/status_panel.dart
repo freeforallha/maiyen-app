@@ -1131,6 +1131,31 @@ class _StatusPanelState extends State<StatusPanel> {
       return;
     }
 
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(_strings.confirmStopSirenTitle()),
+          content: Text(_strings.confirmStopSirenBody()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(_strings.t("HỦY")),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              icon: const Icon(Icons.campaign_rounded),
+              label: Text(_strings.stopSirenLabel()),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true || !mounted) {
+      return;
+    }
+
     setState(() {
       _mutingHomeSiren = true;
     });
