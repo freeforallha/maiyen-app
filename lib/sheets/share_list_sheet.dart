@@ -252,417 +252,453 @@ Future<bool?> showShareListSheet({
             padding: const EdgeInsets.all(18),
             child: Column(
               children: [
-
-              Row(
-                children: [
-                  const Icon(Icons.people_alt_rounded),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      homeName.isNotEmpty ? homeName : strings.homeMembers,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 18),
-
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
+                Row(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.blue.withValues(alpha: 0.15),
-                      backgroundImage: ownerPhotoUrl.isNotEmpty
-                          ? NetworkImage(ownerPhotoUrl)
-                          : null,
-                      child: ownerPhotoUrl.isEmpty
-                          ? const Icon(Icons.home_rounded, color: Colors.blue)
-                          : null,
-                    ),
-
-                    const SizedBox(width: 12),
-
+                    const Icon(Icons.people_alt_rounded),
+                    const SizedBox(width: 10),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  ownerName.isNotEmpty ? ownerName : ownerEmail,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: roleColor("owner"),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              memberOnlineDot(ownerUid),
-                            ],
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            ownerEmail,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    if (ownerUid != myUid)
-                      callActionButton(
-                        callContext: sheetContext,
-                        phone: ownerPhone,
-                      ),
-
-                    Container(
-                      width: 72,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
                       child: Text(
-                        roleLabel("owner"),
+                        homeName.isNotEmpty ? homeName : strings.homeMembers,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
+                          fontSize: 20,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
 
-              StreamBuilder<DatabaseEvent>(
-                stream: db.ref(FirebasePaths.sharedByHome(homeId)).onValue,
-                builder: (context, snapshot) {
-                  final raw = snapshot.data?.snapshot.value;
-                  final users = raw is Map
-                      ? Map<String, dynamic>.from(raw)
-                      : <String, dynamic>{};
-                  users.remove(ownerUid);
-                  if (users.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
-                        strings.t("Chưa share cho ai"),
-                        style: TextStyle(color: Colors.grey.shade600),
+                const SizedBox(height: 18),
+
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.blue.withValues(alpha: 0.15),
+                        backgroundImage: ownerPhotoUrl.isNotEmpty
+                            ? NetworkImage(ownerPhotoUrl)
+                            : null,
+                        child: ownerPhotoUrl.isEmpty
+                            ? const Icon(Icons.home_rounded, color: Colors.blue)
+                            : null,
                       ),
-                    );
-                  }
 
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: users.entries.map((e) {
-                      final targetUid = e.key;
+                      const SizedBox(width: 12),
 
-                      return FutureBuilder<Map<String, dynamic>>(
-                        future: loadMember(targetUid, e.value),
-                        builder: (context, snapshot) {
-                          final rawMember = e.value is Map
-                              ? Map<String, dynamic>.from(e.value as Map)
-                              : <String, dynamic>{};
-
-                          final member = snapshot.data ?? rawMember;
-
-                          final email =
-                              member["email"]?.toString().trim().isNotEmpty ==
-                                  true
-                              ? member["email"].toString()
-                              : strings.t("Không có email");
-
-                          final name =
-                              member["name"]?.toString().trim().isNotEmpty ==
-                                  true
-                              ? member["name"].toString()
-                              : email;
-
-                          final photoUrl = member["photoUrl"]?.toString() ?? "";
-
-                          final role = member["role"]?.toString() ?? "member";
-
-                          final phone = member["phone"]?.toString() ?? "";
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            padding: const EdgeInsets.all(14),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade100,
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: Row(
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundImage: photoUrl.isNotEmpty
-                                      ? NetworkImage(photoUrl)
-                                      : null,
-                                  child: photoUrl.isEmpty
-                                      ? const Icon(Icons.person)
-                                      : null,
+                                Flexible(
+                                  child: Text(
+                                    ownerName.isNotEmpty
+                                        ? ownerName
+                                        : ownerEmail,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      color: roleColor("owner"),
+                                    ),
+                                  ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              targetUid == myUid
-                                                  ? "$name (${strings.t("Bạn")})"
-                                                  : name,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                                color: roleColor(role),
+                                const SizedBox(width: 6),
+                                memberOnlineDot(ownerUid),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              ownerEmail,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      if (ownerUid != myUid)
+                        callActionButton(
+                          callContext: sheetContext,
+                          phone: ownerPhone,
+                        ),
+
+                      Container(
+                        width: 72,
+                        height: 24,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          roleLabel("owner"),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                StreamBuilder<DatabaseEvent>(
+                  stream: db.ref(FirebasePaths.sharedByHome(homeId)).onValue,
+                  builder: (context, snapshot) {
+                    final raw = snapshot.data?.snapshot.value;
+                    final users = raw is Map
+                        ? Map<String, dynamic>.from(raw)
+                        : <String, dynamic>{};
+                    users.remove(ownerUid);
+                    if (users.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: Text(
+                          strings.t("Chưa share cho ai"),
+                          style: TextStyle(color: Colors.grey.shade600),
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: users.entries.map((e) {
+                        final targetUid = e.key;
+
+                        return FutureBuilder<Map<String, dynamic>>(
+                          future: loadMember(targetUid, e.value),
+                          builder: (context, snapshot) {
+                            final rawMember = e.value is Map
+                                ? Map<String, dynamic>.from(e.value as Map)
+                                : <String, dynamic>{};
+
+                            final member = snapshot.data ?? rawMember;
+
+                            final email =
+                                member["email"]?.toString().trim().isNotEmpty ==
+                                    true
+                                ? member["email"].toString()
+                                : strings.t("Không có email");
+
+                            final name =
+                                member["name"]?.toString().trim().isNotEmpty ==
+                                    true
+                                ? member["name"].toString()
+                                : email;
+
+                            final photoUrl =
+                                member["photoUrl"]?.toString() ?? "";
+
+                            final role = member["role"]?.toString() ?? "member";
+
+                            final phone = member["phone"]?.toString() ?? "";
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: photoUrl.isNotEmpty
+                                        ? NetworkImage(photoUrl)
+                                        : null,
+                                    child: photoUrl.isEmpty
+                                        ? const Icon(Icons.person)
+                                        : null,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                targetUid == myUid
+                                                    ? "$name (${strings.t("Bạn")})"
+                                                    : name,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w800,
+                                                  color: roleColor(role),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          memberOnlineDot(targetUid),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        email,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade700,
+                                            const SizedBox(width: 6),
+                                            memberOnlineDot(targetUid),
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          email,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                if (targetUid != myUid)
-                                  callActionButton(
-                                    callContext: sheetContext,
-                                    phone: phone,
-                                  ),
-                                if (targetUid == myUid ||
-                                    isOwner ||
-                                    (canManageMembers && role == "member"))
-                                  PopupMenuButton<String>(
-                                    onSelected: (value) async {
-                                      final canDeleteTarget =
-                                          targetUid == myUid ||
-                                          isOwner ||
-                                          (canManageMembers &&
-                                              role == "member");
+                                  if (targetUid != myUid)
+                                    callActionButton(
+                                      callContext: sheetContext,
+                                      phone: phone,
+                                    ),
+                                  if (targetUid == myUid ||
+                                      isOwner ||
+                                      (canManageMembers && role == "member"))
+                                    PopupMenuButton<String>(
+                                      onSelected: (value) async {
+                                        final canDeleteTarget =
+                                            targetUid == myUid ||
+                                            isOwner ||
+                                            (canManageMembers &&
+                                                role == "member");
 
-                                      if (value == "delete" &&
-                                          !canDeleteTarget) {
-                                        showTopToast(
-                                          sheetContext,
-                                          strings.t(
-                                            "Bạn không có quyền xoá thành viên này",
-                                          ),
-                                          color: Colors.orange,
-                                          icon: Icons.lock_rounded,
-                                        );
-                                        return;
-                                      }
-
-                                      if ((value == "member" ||
-                                              value == "admin") &&
-                                          !isOwner) {
-                                        showTopToast(
-                                          sheetContext,
-                                          strings.t(
-                                            "Chỉ chủ nhà mới được thay đổi vai trò",
-                                          ),
-                                          color: Colors.orange,
-                                          icon: Icons.lock_rounded,
-                                        );
-                                        return;
-                                      }
-                                      if (value == "delete") {
-                                        final ok = await showDialog<bool>(
-                                          context: sheetContext,
-                                          builder: (_) => AlertDialog(
-                                            title: Text(
-                                              targetUid == myUid
-                                                  ? strings.t("Rời khỏi nhà?")
-                                                  : strings.t(
-                                                      "Xoá thành viên?",
-                                                    ),
+                                        if (value == "delete" &&
+                                            !canDeleteTarget) {
+                                          showTopToast(
+                                            sheetContext,
+                                            strings.t(
+                                              "Bạn không có quyền xoá thành viên này",
                                             ),
-                                            content: Text(
-                                              targetUid == myUid
-                                                  ? strings.t(
-                                                      "Bạn chắc chắn muốn rời khỏi nhà này?",
-                                                    )
-                                                  : strings
-                                                        .confirmRemoveMemberFromHomeText(
-                                                          name,
-                                                        ),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                  context,
-                                                  false,
-                                                ),
-                                                child: Text(strings.t("Huỷ")),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () => Navigator.pop(
-                                                  context,
-                                                  true,
-                                                ),
-                                                child: Text(
-                                                  strings.t("Đồng ý"),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-
-                                        if (ok != true) return;
-
-                                        await db
-                                            .ref(
-                                              "homeMemberContacts/$homeId/$targetUid",
-                                            )
-                                            .remove();
-
-                                        await db
-                                            .ref(
-                                              FirebasePaths.sharedHome(
-                                                targetUid,
-                                                homeId,
-                                              ),
-                                            )
-                                            .remove();
-                                        await db
-                                            .ref(
-                                              FirebasePaths.sharedMember(
-                                                homeId,
-                                                targetUid,
-                                              ),
-                                            )
-                                            .remove();
-                                        await db
-                                            .ref(
-                                              "accounts/$ownerUid/shareList/$homeId/$targetUid",
-                                            )
-                                            .remove();
-
-                                        if (targetUid == myUid) {
-                                          if (!sheetContext.mounted) return;
-
-                                          Navigator.of(sheetContext).pop(true);
+                                            color: Colors.orange,
+                                            icon: Icons.lock_rounded,
+                                          );
                                           return;
                                         }
 
-                                        if (!sheetContext.mounted) return;
-
-                                        showTopToast(
-                                          sheetContext,
-                                          strings.t("Đã xoá thành viên"),
-                                          color: Colors.green,
-                                          icon: Icons.check_circle_rounded,
-                                        );
-
-                                        return;
-                                      }
-
-                                      if (!isOwner) return;
-
-                                      if (value == role) {
-                                        return;
-                                      }
-
-                                      final actorName =
-                                          ownerName.trim().isNotEmpty
-                                          ? ownerName.trim()
-                                          : ownerEmail.trim().isNotEmpty
-                                          ? ownerEmail.trim()
-                                          : strings.t("Chủ nhà");
-
-                                      await db.ref().update({
-                                        "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
-                                            value,
-                                        "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
-                                            value,
-                                      });
-
-                                      await HomeNotificationService.notifyHome(
-                                        ownerUid: ownerUid,
-                                        homeId: homeId,
-                                        type: "member_role_changed",
-                                        category: "member",
-                                        severity: "info",
-                                        title: strings.memberRoleChangedTitle(),
-                                        message: strings
-                                            .memberRoleChangedMessage(
-                                              actorName: actorName,
-                                              memberName: name,
-                                              oldRole: role,
-                                              newRole: value,
-                                              homeName: homeName,
+                                        if ((value == "member" ||
+                                                value == "admin") &&
+                                            !isOwner) {
+                                          showTopToast(
+                                            sheetContext,
+                                            strings.t(
+                                              "Chỉ chủ nhà mới được thay đổi vai trò",
                                             ),
-                                        entityType: "member",
-                                        entityId: targetUid,
-                                        homeName: homeName,
-                                        includeActor: true,
-                                        data: {
-                                          "type": "member_role_changed",
-                                          "actorName": actorName,
-                                          "memberName": name,
-                                          "memberUid": targetUid,
-                                          "oldRole": role,
-                                          "newRole": value,
-                                          "homeName": homeName,
-                                        },
-                                      );
-                                    },
-                                    itemBuilder: (_) => [
-                                      if (isOwner) ...[
+                                            color: Colors.orange,
+                                            icon: Icons.lock_rounded,
+                                          );
+                                          return;
+                                        }
+                                        if (value == "delete") {
+                                          final ok = await showDialog<bool>(
+                                            context: sheetContext,
+                                            builder: (_) => AlertDialog(
+                                              title: Text(
+                                                targetUid == myUid
+                                                    ? strings.t("Rời khỏi nhà?")
+                                                    : strings.t(
+                                                        "Xoá thành viên?",
+                                                      ),
+                                              ),
+                                              content: Text(
+                                                targetUid == myUid
+                                                    ? strings.t(
+                                                        "Bạn chắc chắn muốn rời khỏi nhà này?",
+                                                      )
+                                                    : strings
+                                                          .confirmRemoveMemberFromHomeText(
+                                                            name,
+                                                          ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                        context,
+                                                        false,
+                                                      ),
+                                                  child: Text(strings.t("Huỷ")),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                        context,
+                                                        true,
+                                                      ),
+                                                  child: Text(
+                                                    strings.t("Đồng ý"),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+
+                                          if (ok != true) return;
+
+                                          await db
+                                              .ref(
+                                                "homeMemberContacts/$homeId/$targetUid",
+                                              )
+                                              .remove();
+
+                                          await db
+                                              .ref(
+                                                FirebasePaths.sharedHome(
+                                                  targetUid,
+                                                  homeId,
+                                                ),
+                                              )
+                                              .remove();
+                                          await db
+                                              .ref(
+                                                FirebasePaths.sharedMember(
+                                                  homeId,
+                                                  targetUid,
+                                                ),
+                                              )
+                                              .remove();
+                                          await db
+                                              .ref(
+                                                "accounts/$ownerUid/shareList/$homeId/$targetUid",
+                                              )
+                                              .remove();
+
+                                          if (targetUid == myUid) {
+                                            if (!sheetContext.mounted) return;
+
+                                            Navigator.of(
+                                              sheetContext,
+                                            ).pop(true);
+                                            return;
+                                          }
+
+                                          if (!sheetContext.mounted) return;
+
+                                          showTopToast(
+                                            sheetContext,
+                                            strings.t("Đã xoá thành viên"),
+                                            color: Colors.green,
+                                            icon: Icons.check_circle_rounded,
+                                          );
+
+                                          return;
+                                        }
+
+                                        if (!isOwner) return;
+
+                                        if (value == role) {
+                                          return;
+                                        }
+
+                                        final actorName =
+                                            ownerName.trim().isNotEmpty
+                                            ? ownerName.trim()
+                                            : ownerEmail.trim().isNotEmpty
+                                            ? ownerEmail.trim()
+                                            : strings.t("Chủ nhà");
+
+                                        await db.ref().update({
+                                          "${FirebasePaths.sharedMember(homeId, targetUid)}/role":
+                                              value,
+                                          "${FirebasePaths.sharedHome(targetUid, homeId)}/role":
+                                              value,
+                                        });
+
+                                        await HomeNotificationService.notifyHome(
+                                          ownerUid: ownerUid,
+                                          homeId: homeId,
+                                          type: "member_role_changed",
+                                          category: "member",
+                                          severity: "info",
+                                          title: strings
+                                              .memberRoleChangedTitle(),
+                                          message: strings
+                                              .memberRoleChangedMessage(
+                                                actorName: actorName,
+                                                memberName: name,
+                                                oldRole: role,
+                                                newRole: value,
+                                                homeName: homeName,
+                                              ),
+                                          entityType: "member",
+                                          entityId: targetUid,
+                                          homeName: homeName,
+                                          includeActor: true,
+                                          data: {
+                                            "type": "member_role_changed",
+                                            "actorName": actorName,
+                                            "memberName": name,
+                                            "memberUid": targetUid,
+                                            "oldRole": role,
+                                            "newRole": value,
+                                            "homeName": homeName,
+                                          },
+                                        );
+                                      },
+                                      itemBuilder: (_) => [
+                                        if (isOwner) ...[
+                                          PopupMenuItem(
+                                            value: "member",
+                                            child: Text(strings.member),
+                                          ),
+                                          PopupMenuItem(
+                                            value: "admin",
+                                            child: Text(strings.admin),
+                                          ),
+                                        ],
                                         PopupMenuItem(
-                                          value: "member",
-                                          child: Text(strings.member),
-                                        ),
-                                        PopupMenuItem(
-                                          value: "admin",
-                                          child: Text(strings.admin),
+                                          value: "delete",
+                                          child: Text(
+                                            targetUid == myUid
+                                                ? strings.t("Rời khỏi nhà")
+                                                : strings.t("Xoá thành viên"),
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
                                         ),
                                       ],
-                                      PopupMenuItem(
-                                        value: "delete",
+                                      child: Container(
+                                        width: 72,
+                                        height: 24,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: role == "admin"
+                                              ? Colors.deepPurple.withValues(
+                                                  alpha: 0.12,
+                                                )
+                                              : Colors.blueGrey.withValues(
+                                                  alpha: 0.12,
+                                                ),
+                                          borderRadius: BorderRadius.circular(
+                                            14,
+                                          ),
+                                        ),
                                         child: Text(
-                                          targetUid == myUid
-                                              ? strings.t("Rời khỏi nhà")
-                                              : strings.t("Xoá thành viên"),
-                                          style: const TextStyle(
-                                            color: Colors.red,
+                                          roleLabel(role),
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w700,
+                                            color: role == "admin"
+                                                ? Colors.deepPurple
+                                                : Colors.blueGrey,
                                           ),
                                         ),
                                       ),
-                                    ],
-                                    child: Container(
+                                    )
+                                  else
+                                    Container(
                                       width: 72,
                                       height: 24,
                                       alignment: Alignment.center,
@@ -687,42 +723,15 @@ Future<bool?> showShareListSheet({
                                         ),
                                       ),
                                     ),
-                                  )
-                                else
-                                  Container(
-                                    width: 72,
-                                    height: 24,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: role == "admin"
-                                          ? Colors.deepPurple.withValues(
-                                              alpha: 0.12,
-                                            )
-                                          : Colors.blueGrey.withValues(
-                                              alpha: 0.12,
-                                            ),
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    child: Text(
-                                      roleLabel(role),
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w700,
-                                        color: role == "admin"
-                                            ? Colors.deepPurple
-                                            : Colors.blueGrey,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  );
-                },
-              ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
               ],
             ),
           ),

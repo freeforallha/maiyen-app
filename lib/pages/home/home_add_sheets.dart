@@ -169,10 +169,9 @@ Future<Map<String, String>?> showCreateHomeDialog({
           void submit() {
             if (!nameOk) return;
 
-            Navigator.of(dialogContext).pop({
-              "name": inputName.trim(),
-              "address": inputAddress.trim(),
-            });
+            Navigator.of(
+              dialogContext,
+            ).pop({"name": inputName.trim(), "address": inputAddress.trim()});
           }
 
           return AlertDialog(

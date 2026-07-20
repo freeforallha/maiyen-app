@@ -3,7 +3,8 @@ const Map<String, String> sqStrings = {
   "Không đọc được số điện thoại": "Numri i telefonit nuk mund të lexohej",
   "Tin nhắn quá dài": "Mesazhi është shumë i gjatë",
   "Không gửi được tin nhắn": "Mesazhi nuk mund të dërgohej",
-  "Bạn không có quyền sửa lịch chung của nhà": "Nuk keni leje të ndryshoni orarin e përbashkët të shtëpisë",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Nuk keni leje të ndryshoni orarin e përbashkët të shtëpisë",
   "Nhà của bạn": "Shtëpia juaj",
   "Tải tin cũ hơn": "Ngarko mesazhet më të vjetra",
   "Nhà chưa đặt tên": "Shtëpi pa emër",
@@ -91,20 +92,26 @@ const Map<String, String> sqStrings = {
   "Đang theo dõi": "Monitorim",
   "Chưa nhận diện": "Pajisje e panjohur",
   "Chưa có cập nhật": "Pa përditësime ende",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Nuk ka ende pajisje. Prekni + për të shtuar një dhe për të filluar mbrojtjen e shtëpisë.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Nuk ka ende pajisje. Prekni + për të shtuar një dhe për të filluar mbrojtjen e shtëpisë.",
   "CHƯA AN TOÀN": "E PASIGURT",
   "ĐÃ AN TOÀN": "E SIGURT",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Shtëpia juaj kërkon vëmendje. Kontrolloni gjendjet më poshtë.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Shtëpia juaj po funksionon normalisht.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Nuk u zbulua aktivitet i pazakontë i tymit ose SOS.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Nuk ka aktivitet të mjaftueshëm të fundit për një analizë më të thellë.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Shtëpia juaj kërkon vëmendje. Kontrolloni gjendjet më poshtë.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Shtëpia juaj po funksionon normalisht.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Nuk u zbulua aktivitet i pazakontë i tymit ose SOS.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Nuk ka aktivitet të mjaftueshëm të fundit për një analizë më të thellë.",
   "Hub kết nối bình thường": "Qendra është e lidhur",
   "Cài đặt cảnh báo cho nhà hiện tại": "Cilësimet e alarmeve për këtë shtëpi",
   "Nhận cảnh báo báo động": "Merr alarmet",
   "Đang bật cho tài khoản này": "Aktivizuar për këtë llogari",
   "Đang tắt cho tài khoản này": "Çaktivizuar për këtë llogari",
   "Hẹn giờ nhắc nhở": "Orari i kujtesave",
-  "Nhắc kiểm tra nhà theo thời gian": "Planifiko kujtesa për kontrollin e shtëpisë",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Planifiko kujtesa për kontrollin e shtëpisë",
   "Hẹn giờ báo động": "Planifiko alarmin",
   "Chưa thiết lập": "Nuk është caktuar",
   "Chưa thiết lập thời gian": "Nuk është konfiguruar orar",
@@ -161,20 +168,25 @@ const Map<String, String> sqStrings = {
   "Đã rời khỏi home": "U larguat nga shtëpia",
   "Đã cập nhật": "U përditësua",
   "Tìm home...": "Kërko shtëpi...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Cakto vendndodhjen e shtëpisë dhe aktivizo mbrojtjen automatike",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Cakto vendndodhjen e shtëpisë dhe aktivizo mbrojtjen automatike",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Transfero pronësinë ose fshi shtëpinë",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Cakto kujtesë/alarm për shtëpitë e zgjedhura",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Cakto kujtesë/alarm për shtëpitë e zgjedhura",
   "Chia sẻ nhà đã chọn": "Ndaj shtëpitë e zgjedhura",
   "Mở danh sách chia sẻ nhà": "Hap listën e ndarjes së shtëpisë",
   "Xoá các nhà đã chọn?": "Të fshihen shtëpitë e zgjedhura?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Shtëpitë e zgjedhura do të fshihen përgjithmonë.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Ose skanoni një kod QR për të kërkuar qasje në shtëpitë e zgjedhura",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Shtëpitë e zgjedhura do të fshihen përgjithmonë.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Ose skanoni një kod QR për të kërkuar qasje në shtëpitë e zgjedhura",
   "Email người nhận": "Email-i i marrësit",
   "Chia sẻ": "Ndaj",
   "Email chưa đăng ký": "Email-i nuk është i regjistruar",
   "Chia sẻ hoàn tất": "Ndarja përfundoi",
   "Mở List chia sẻ nhà": "Hap listën e ndarjes së shtëpisë",
-  "Không có nhà nào bạn có quyền quản lý": "Nuk menaxhoni asnjë nga shtëpitë e zgjedhura",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Nuk menaxhoni asnjë nga shtëpitë e zgjedhura",
   "Chưa share cho ai": "Nuk është ndarë ende me askënd",
   "Tìm nhà": "Kërko shtëpi",
   "Xoá các nhà đã chọn ?": "Të fshihen shtëpitë e zgjedhura?",
@@ -182,13 +194,15 @@ const Map<String, String> sqStrings = {
   "Thông báo nhà": "Njoftimet e shtëpisë",
   "Vai trò thành viên đã thay đổi": "Roli i anëtarit u ndryshua",
   "Xoá tất cả thông báo?": "Të fshihen të gjitha njoftimet?",
-  "Toàn bộ thông báo nhà sẽ bị xoá.": "Të gjitha njoftimet e shtëpisë do të fshihen.",
+  "Toàn bộ thông báo nhà sẽ bị xoá.":
+      "Të gjitha njoftimet e shtëpisë do të fshihen.",
   "Chưa có thông báo nào": "Nuk ka ende njoftime",
   "Chưa có thông báo": "Nuk ka njoftime",
   "Vuốt lên để tải thêm": "Rrëshqitni lart për të ngarkuar më shumë",
   "Không có thiết bị": "Nuk ka pajisje",
   "Chỉ chủ nhà mới được xoá nhà": "Vetëm pronari mund ta fshijë këtë shtëpi",
-  "Chỉ chủ nhà mới được chuyển quyền": "Vetëm pronari mund të transferojë pronësinë",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Vetëm pronari mund të transferojë pronësinë",
   "Lưu ý khi bật báo động": "Njoftim alarmi",
   "Báo động đã được bật": "Alarmi është aktivizuar",
   "Đã hiểu": "E kuptova",
@@ -197,27 +211,34 @@ const Map<String, String> sqStrings = {
   "Đã tắt báo động": "Alarmi u çaktivizua",
   "Tắt báo động": "Ndalo alarmin",
   "Cả ngày": "Gjatë gjithë ditës",
-  "Bạn không có quyền thực hiện thao tác này.": "Nuk keni leje për ta kryer këtë veprim.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Veprimi nuk mund të përfundonte. Ju lutemi provoni përsëri.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Kodi QR për t'u bashkuar me disa shtëpi është i pavlefshëm",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Nuk keni leje për ta kryer këtë veprim.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Veprimi nuk mund të përfundonte. Ju lutemi provoni përsëri.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Kodi QR për t'u bashkuar me disa shtëpi është i pavlefshëm",
   "Bạn đang là chủ các nhà này": "Ju zotëroni këto shtëpi",
   "Một người dùng": "Një përdorues",
   "Yêu cầu gia nhập nhà": "Kërkesë për t'u bashkuar me shtëpinë",
   "Đã gửi yêu cầu gia nhập nhà": "Kërkesa për t'u bashkuar u dërgua",
   "QR gia nhập không hợp lệ": "Kodi QR i bashkimit është i pavlefshëm",
   "Bạn đang là chủ nhà này": "Ju tashmë e zotëroni këtë shtëpi",
-  "QR này không phải mã xin gia nhập nhà": "Ky kod QR nuk është kod për t'u bashkuar me një shtëpi",
+  "QR này không phải mã xin gia nhập nhà":
+      "Ky kod QR nuk është kod për t'u bashkuar me një shtëpi",
   "Bạn không có quyền thêm thiết bị": "Nuk keni leje të shtoni pajisje",
   "Đã mở chế độ thêm thiết bị": "Çiftimi i pajisjeve është aktivizuar",
   "Rời khỏi Home này?": "Të largoheni nga kjo shtëpi?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Kjo shtëpi dhe të gjitha pajisjet e saj do të fshihen përgjithmonë.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Kjo shtëpi dhe të gjitha pajisjet e saj do të fshihen përgjithmonë.",
   "Đã xoá nhà": "Shtëpia u fshi",
   "QR của nhà này": "Kodi QR i shtëpisë",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Të tjerët mund ta skanojnë këtë kod për të kërkuar qasje në shtëpi.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Të tjerët mund ta skanojnë këtë kod për të kërkuar qasje në shtëpi.",
   "Chia sẻ nhà": "Ndaj shtëpinë",
   "Quét QR để xin gia nhập nhà": "Skano QR për t'u bashkuar me një shtëpi",
   "Quét QR xin gia nhập nhà": "Skano QR për t'u bashkuar me shtëpinë",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Vendosni kodin QR të shtëpisë së ndarë brenda kornizës",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Vendosni kodin QR të shtëpisë së ndarë brenda kornizës",
   "Mã QR này do chủ nhà chia sẻ": "Ky kod QR ndahet nga pronari i shtëpisë",
   "Nhập mã mời": "Fut kodin e ftesës",
   "Gửi yêu cầu gia nhập": "Dërgo kërkesë për t'u bashkuar",
@@ -229,7 +250,8 @@ const Map<String, String> sqStrings = {
   "Lời mời chia sẻ nhà": "Ftesë për ndarjen e shtëpisë",
   "Đã share home": "Shtëpia u nda",
   "Chuyển quyền chủ nhà": "Transfero pronësinë",
-  "Không thể chuyển quyền cho chính bạn": "Nuk mund ta transferoni pronësinë te vetja",
+  "Không thể chuyển quyền cho chính bạn":
+      "Nuk mund ta transferoni pronësinë te vetja",
   "Không tìm thấy user": "Përdoruesi nuk u gjet",
   "Không tìm thấy tài khoản": "Llogaria nuk u gjet",
   "Xác nhận chuyển quyền": "Konfirmo transferimin e pronësisë",
@@ -237,7 +259,8 @@ const Map<String, String> sqStrings = {
   "Xác nhận mật khẩu": "Konfirmo fjalëkalimin",
   "Yêu cầu chuyển quyền chủ nhà": "Kërkesë për transferimin e pronësisë",
   "Đã gửi yêu cầu chuyển quyền": "Kërkesa për transferim u dërgua",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Kërkesa për transferimin e pronësisë u dërgua",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Kërkesa për transferimin e pronësisë u dërgua",
   "Bạn không có quyền xoá thiết bị": "Nuk keni leje të fshini pajisje",
   "Xóa Device?": "Të fshihet kjo pajisje?",
   "Đã gửi yêu cầu xoá thiết bị": "Kërkesa për fshirjen e pajisjes u dërgua",
@@ -247,7 +270,8 @@ const Map<String, String> sqStrings = {
   "Thêm nhà mới": "Shto shtëpi të re",
   "Tạo nhà mới": "Krijo shtëpi të re",
   "Tạo một ngôi nhà mới của bạn": "Krijo një shtëpi të re",
-  "Quét mã QR được chủ nhà chia sẻ": "Skano kodin QR të ndarë nga pronari i shtëpisë",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Skano kodin QR të ndarë nga pronari i shtëpisë",
   "Tên nhà": "Emri i shtëpisë",
   "Số điện thoại": "Numri i telefonit",
   "Nam": "Mashkull",
@@ -257,11 +281,13 @@ const Map<String, String> sqStrings = {
   "Năm": "Viti",
   "Thông tin cá nhân": "Informacioni personal",
   "Thiết lập tài khoản": "Konfiguro llogarinë",
-  "Vui lòng nhập đủ thông tin": "Ju lutemi plotësoni të gjitha informacionet e kërkuara",
+  "Vui lòng nhập đủ thông tin":
+      "Ju lutemi plotësoni të gjitha informacionet e kërkuara",
   "Không thể lưu thông tin": "Informacioni nuk mund të ruhej",
   "Đã lưu thông tin": "Informacioni u ruajt",
   "Lỗi lưu profile": "Profili nuk mund të ruhej",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Shto një numër telefoni për raste emergjente",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Shto një numër telefoni për raste emergjente",
   "Hoàn tất": "U krye",
   "Đã tạo nhà mới": "Shtëpia u krijua",
   "Về muộn": "Kthehem vonë",
@@ -280,7 +306,8 @@ const Map<String, String> sqStrings = {
   "SĐT": "Telefoni",
   "Ngày sinh": "Data e lindjes",
   "Yêu cầu & lời mời": "Kërkesa dhe ftesa",
-  "Xem lời mời chia sẻ và xin gia nhập": "Shiko ftesat për ndarje dhe kërkesat për t'u bashkuar",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Shiko ftesat për ndarje dhe kërkesat për t'u bashkuar",
   "Cài đặt bảo mật": "Cilësimet e sigurisë",
   "Quyền báo động toàn màn hình": "Leja për alarm në ekran të plotë",
   "Báo động toàn màn hình": "Alarm në ekran të plotë",
@@ -291,7 +318,8 @@ const Map<String, String> sqStrings = {
   "Thoát tài khoản khỏi thiết bị này": "Dil nga kjo pajisje",
   "Không có yêu cầu hoặc lời mời nào": "Nuk ka kërkesa ose ftesa",
   "Xoá tài khoản": "Fshi llogarinë",
-  "Hành động này sẽ xoá toàn bộ dữ liệu:": "Kjo do të fshijë të gjitha të dhënat:",
+  "Hành động này sẽ xoá toàn bộ dữ liệu:":
+      "Kjo do të fshijë të gjitha të dhënat:",
   "Nhà và thiết bị": "Shtëpitë dhe pajisjet",
   "Chia sẻ và quyền truy cập": "Ndarja dhe qasja",
   "Toàn bộ dữ liệu liên quan": "Të gjitha të dhënat përkatëse",
@@ -330,7 +358,8 @@ const Map<String, String> sqStrings = {
   "Đổi tên phòng": "Riemërto dhomën",
   "Tên phòng": "Emri i dhomës",
   "Xoá phòng": "Fshi dhomën",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Pajisjet në këtë dhomë do të zhvendosen te Të pacaktuara.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Pajisjet në këtë dhomë do të zhvendosen te Të pacaktuara.",
   "Thêm phòng": "Shto dhomë",
   "Ví dụ: Phòng khách": "Shembull: Dhoma e ndenjjes",
   "Phòng khách": "Dhoma e ndenjjes",
@@ -351,9 +380,11 @@ const Map<String, String> sqStrings = {
   "Cửa đóng": "Dera u mbyll",
   "Chưa đặt vị trí nhà": "Vendndodhja e shtëpisë nuk është caktuar",
   "Đặt vị trí nhà tại đây": "Cakto vendndodhjen e shtëpisë këtu",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Cakto vendndodhjen e shtëpisë para se të aktivizosh Mbrojtjen automatike",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Cakto vendndodhjen e shtëpisë para se të aktivizosh Mbrojtjen automatike",
   "Bán kính bảo vệ mặc định: 150 m": "Rrezja e parazgjedhur e mbrojtjes: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Çdo anëtar duhet të lejojë gjithmonë qasjen në vendndodhje që gjendja larg/në shtëpi të funksionojë në sfond.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Çdo anëtar duhet të lejojë gjithmonë qasjen në vendndodhje që gjendja larg/në shtëpi të funksionojë në sfond.",
   "Lưu cài đặt": "Ruaj cilësimet",
   "Đã đặt vị trí nhà": "Vendndodhja e shtëpisë u caktua",
   "Đang lấy vị trí...": "Po merret vendndodhja...",
@@ -362,22 +393,27 @@ const Map<String, String> sqStrings = {
   "Cập nhật thông tin nhà": "Përditëso informacionin e shtëpisë",
   "Nhập địa chỉ của nhà": "Fut adresën e shtëpisë",
   "Lưu thay đổi": "Ruaj ndryshimet",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Ky emër shfaqet vetëm në llogarinë tuaj.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Emri dhe adresa do të përditësohen për të gjithë anëtarët e shtëpisë.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Ky emër shfaqet vetëm në llogarinë tuaj.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Emri dhe adresa do të përditësohen për të gjithë anëtarët e shtëpisë.",
   "Một thành viên": "Një anëtar",
   "Đã cập nhật thông tin nhà": "Informacioni i shtëpisë u përditësua",
   "Thay tên": "Riemërto",
   "Đã đổi tên thiết bị": "Pajisja u riemërtua",
   "Chưa chọn nhà để kiểm tra": "Zgjidh një shtëpi për testim",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Kryeje këtë test duke përdorur llogarinë e pronarit",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Kryeje këtë test duke përdorur llogarinë e pronarit",
   "Không đọc được dữ liệu nhà": "Të dhënat e shtëpisë nuk mund të lexoheshin",
-  "Nhà cần có ít nhất một thiết bị để test": "Shtëpia duhet të ketë të paktën një pajisje për testim",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Shtëpia duhet të ketë të paktën një pajisje për testim",
   "Đóng": "Mbyll",
   "Đã thiết lập": "Cakto",
   "Quét QR": "Skano QR",
   "Quét QR để thêm thiết bị": "Skano QR për të shtuar pajisje",
   "Nhập HUB ID thủ công": "Fut manualisht ID-në e HUB-it",
-  "Bạn không có quyền sắp xếp phòng": "Nuk keni leje të ndryshoni rendin e dhomave",
+  "Bạn không có quyền sắp xếp phòng":
+      "Nuk keni leje të ndryshoni rendin e dhomave",
   "Cảnh báo khói": "Alarm tymi",
   "Cập nhật thiết bị": "Përditësim i pajisjes",
   "Cửa đang mở": "Dera është e hapur",
@@ -427,8 +463,10 @@ const Map<String, String> sqStrings = {
   "Chế độ áp dụng": "Zbato modalitetin",
   "Theo nhà": "Orari i shtëpisë",
   "Riêng tôi": "Personal",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Përdor orarin e përbashkët të caktuar nga pronari ose administratori",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Përdor një orar personal që zbatohet vetëm për llogarinë tënde",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Përdor orarin e përbashkët të caktuar nga pronari ose administratori",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Përdor një orar personal që zbatohet vetëm për llogarinë tënde",
   "Thiết lập nhanh báo động": "Konfigurim i shpejtë i alarmit",
   "Thiết lập nhanh toàn bộ thiết bị": "Cakto shpejt të gjitha pajisjet",
   "Áp dụng cho toàn bộ thiết bị": "Zbato për të gjitha pajisjet",
@@ -461,15 +499,19 @@ const Map<String, String> sqStrings = {
   "Tạm tắt báo động hôm nay": "Ndalo përkohësisht alarmin sot",
   "Độ ẩm cao": "Lagështi e lartë",
   "Thử lại": "Provo përsëri",
-  "Không thể tải dữ liệu tài khoản": "Të dhënat e llogarisë nuk mund të ngarkoheshin",
+  "Không thể tải dữ liệu tài khoản":
+      "Të dhënat e llogarisë nuk mund të ngarkoheshin",
   "Không": "Jo",
   "Đã chia sẻ nhà thành công.": "Shtëpitë u ndanë me sukses.",
   "Tìm nhà...": "Kërko shtëpi...",
   "Đã rời khỏi nhà": "U larguat nga shtëpia",
-  "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Do të largoheni nga shtëpitë e përbashkëta.",
+  "Bạn sẽ rời khỏi các nhà được chia sẻ.":
+      "Do të largoheni nga shtëpitë e përbashkëta.",
   "Các nhà của bạn sẽ bị xoá.\n": "Shtëpitë tuaja do të fshihen.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Kjo do të ndryshojë oraret e Alarmit të Shtëpisë për të gjitha pajisjet e sigurisë në shtëpitë e zgjedhura.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Kjo do t'u shtojë një Kujtesë Shtëpie shtëpive të zgjedhura.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Kjo do të ndryshojë oraret e Alarmit të Shtëpisë për të gjitha pajisjet e sigurisë në shtëpitë e zgjedhura.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Kjo do t'u shtojë një Kujtesë Shtëpie shtëpive të zgjedhura.\n\n",
   "Xác nhận thay đổi báo động": "Konfirmo ndryshimet e alarmit",
   "Xác nhận thay đổi nhắc nhở": "Konfirmo ndryshimet e kujtesës",
   "Lặp lại khi sự cố vẫn còn": "Përsërit ndërsa problemi vazhdon",
@@ -477,44 +519,63 @@ const Map<String, String> sqStrings = {
   "VD: Mr Chung": "P.sh. Z. Chung",
   "🏡 Chưa có nhà nào": "🏡 Nuk ka ende shtëpi",
   "Vẫn chuyển về Bình thường": "Kalo gjithsesi në Normal",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Mbrojtja automatike kur jeni larg është ende e aktivizuar. Nëse të gjithë anëtarët janë ende larg, sistemi mund ta riaktivizojë modalitetin e mbrojtjes pas disa minutash.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Mbrojtja automatike kur jeni larg është ende e aktivizuar. Nëse të gjithë anëtarët janë ende larg, sistemi mund ta riaktivizojë modalitetin e mbrojtjes pas disa minutash.",
   "Chuyển về Bình thường?": "Të kaloni në Normal?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Pajisjet e sigurisë do të monitorohen menjëherë.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Pajisjet e sigurisë do të monitorohen menjëherë.\n\n",
   "Bật Bảo vệ thủ công?": "Të aktivizohet modaliteti manual i mbrojtjes?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Ky veprim do të ndryshojë orarin e alarmit për disa pajisje sot...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Ky veprim do të çaktivizojë çdo alarm për këtë ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Ky veprim do të ndryshojë orarin e alarmit për disa pajisje sot...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Ky veprim do të çaktivizojë çdo alarm për këtë ",
   "Tắt toàn bộ báo động?": "Të çaktivizohen të gjitha alarmet?",
-  "Không xoá được lịch tạm tắt báo động": "Orari i pauzës së alarmit nuk mund të fshihej",
+  "Không xoá được lịch tạm tắt báo động":
+      "Orari i pauzës së alarmit nuk mund të fshihej",
   "Không lưu được tạm tắt báo động": "Pauza e alarmit nuk mund të ruhej",
   "Không gửi được yêu cầu xoá": "Kërkesa për fshirje nuk mund të dërgohej",
   "Không lưu được cài đặt": "Cilësimi nuk mund të ruhej",
   "Không lấy được vị trí hiện tại": "Vendndodhja aktuale nuk mund të merrej",
-  "Không thể xác nhận tài khoản hiện tại": "Llogaria aktuale nuk mund të verifikohej",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Llogaria aktuale nuk mund të verifikohej",
   "Mật khẩu không đúng": "Fjalëkalim i pasaktë",
   "Không thể xác nhận mật khẩu": "Fjalëkalimi nuk mund të verifikohej",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Vetëm Pronari ose një Administrator mund të ndryshojë cilësimin e përsëritjes së alarmit",
-  "Không lưu được thời gian lặp báo động": "Koha e përsëritjes së alarmit nuk mund të ruhej",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Vetëm Pronari ose një Administrator mund të ndryshojë modalitetin e mbrojtjes",
-  "Không thể thay đổi chế độ nhà": "Modaliteti i shtëpisë nuk mund të ndryshohej",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Modaliteti i mbrojtjes është aktiv, por njoftimi nuk mund të dërgohej",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Vetëm Pronari ose një Administrator mund të ndryshojë cilësimin e përsëritjes së alarmit",
+  "Không lưu được thời gian lặp báo động":
+      "Koha e përsëritjes së alarmit nuk mund të ruhej",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Vetëm Pronari ose një Administrator mund të ndryshojë modalitetin e mbrojtjes",
+  "Không thể thay đổi chế độ nhà":
+      "Modaliteti i shtëpisë nuk mund të ndryshohej",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Modaliteti i mbrojtjes është aktiv, por njoftimi nuk mund të dërgohej",
   "Đã bật Chế độ Bảo vệ thủ công": "Modaliteti manual i mbrojtjes u aktivizua",
   "Đã chuyển nhà về Bình thường": "Shtëpia u kthye në modalitetin Normal",
   "60 phút": "60 minuta",
   "30 phút": "30 minuta",
   "15 phút": "15 minuta",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Po shihni orarin e pronarit. Zgjidhni Vetëm unë për të caktuar orarin tuaj të alarmit.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Po shihni orarin e pronarit. Zgjidhni Vetëm unë për të caktuar orarin tuaj të alarmit.",
   "Chọn giờ kết thúc báo động": "Zgjidh kohën e përfundimit të alarmit",
   "Chọn giờ bắt đầu báo động": "Zgjidh kohën e fillimit të alarmit",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Nuk keni leje të ndryshoni orarin e alarmit të kësaj shtëpie",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Alarmi nuk mund të zbatohej për të gjitha pajisjet",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Kjo shtëpi nuk ka pajisje sigurie ku mund të zbatohet",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Nuk keni leje të ndryshoni cilësimet e Shtëpisë. Zgjidhni Vetëm unë.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Nuk keni leje të ndryshoni orarin e alarmit të kësaj shtëpie",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Alarmi nuk mund të zbatohej për të gjitha pajisjet",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Kjo shtëpi nuk ka pajisje sigurie ku mund të zbatohet",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Nuk keni leje të ndryshoni cilësimet e Shtëpisë. Zgjidhni Vetëm unë.",
   "Không thể lưu chế độ báo động": "Modaliteti i alarmit nuk mund të ruhej",
   "Thêm nhắc nhở": "Shto kujtesë",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Kujtesa do t'ju kujtojë të kontrolloni gjendjen e sigurisë së shtëpisë në kohën e zgjedhur.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Kujtesa do t'ju kujtojë të kontrolloni gjendjen e sigurisë së shtëpisë në kohën e zgjedhur.",
   "Thêm khung giờ báo động": "Shto interval kohor alarmi",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Po përdoren cilësimet tuaja të kujtesës",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Po përdoren cilësimet e kujtesës së pronarit",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Po përdoren cilësimet tuaja të kujtesës",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Po përdoren cilësimet e kujtesës së pronarit",
   "Sửa giờ nhắc nhở": "Ndrysho kohën e kujtesës",
   "Sửa giờ kết thúc báo động": "Ndrysho kohën e përfundimit të alarmit",
   "Sửa giờ bắt đầu báo động": "Ndrysho kohën e fillimit të alarmit",
@@ -531,118 +592,181 @@ const Map<String, String> sqStrings = {
   "Xoá thành viên": "Hiq anëtarin",
   "Đã xoá thành viên": "Anëtari u hoq",
   "Đồng ý": "Në rregull",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Jeni të sigurt se doni të largoheni nga kjo shtëpi?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Jeni të sigurt se doni të largoheni nga kjo shtëpi?",
   "Xoá thành viên?": "Të hiqet anëtari?",
   "Rời khỏi nhà?": "Të largoheni nga kjo shtëpi?",
-  "Chỉ chủ nhà mới được thay đổi vai trò": "Vetëm pronari mund të ndryshojë rolet",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Vetëm pronari mund të ndryshojë rolet",
   "Bạn không có quyền xoá thành viên này": "Nuk keni leje ta hiqni këtë anëtar",
   "Bạn": "Ju",
   "Không có email": "Pa email",
   "Chưa có số điện thoại": "Pa numër telefoni",
-  "Không mở được ứng dụng gọi điện": "Aplikacioni i telefonit nuk mund të hapej",
-  "Thành viên chưa cập nhật số điện thoại": "Ky anëtar nuk ka shtuar numër telefoni",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Modaliteti manual i mbrojtjes është aktiv — kalo në Normal për ta çaktivizuar",
+  "Không mở được ứng dụng gọi điện":
+      "Aplikacioni i telefonit nuk mund të hapej",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Ky anëtar nuk ka shtuar numër telefoni",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Modaliteti manual i mbrojtjes është aktiv — kalo në Normal për ta çaktivizuar",
   "Thời gian lặp": "Intervali i përsëritjes",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Zgjidhni 0 për të marrë alarm vetëm një herë. Ky cilësim zbatohet për modalitetin manual të mbrojtjes dhe Mbrojtjen automatike kur jeni larg.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Zgjidhni 0 për të marrë alarm vetëm një herë. Ky cilësim zbatohet për modalitetin manual të mbrojtjes dhe Mbrojtjen automatike kur jeni larg.",
   "Lặp báo động khi sự cố vẫn còn": "Përsërit alarmin ndërsa problemi vazhdon",
   "Đang được sử dụng": "Aktualisht aktiv",
   "Chuyển về sử dụng thông thường": "Kthehu në përdorim normal",
   "Chế độ nhà": "Modaliteti i shtëpisë",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "Pajisja SOS nuk ka regjistruar alarm.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Sensori i tymit nuk ka zbuluar problem.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Ju ose një anëtar e aktivizuat manualisht Mbrojtjen.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome e aktivizoi Mbrojtjen automatikisht sepse u larguat nga shtëpia.",
-  "Nhà đang ở chế độ dùng bình thường.": "Kjo shtëpi është aktualisht në përdorim normal.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "Pajisja SOS nuk ka regjistruar alarm.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Sensori i tymit nuk ka zbuluar problem.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Ju ose një anëtar e aktivizuat manualisht Mbrojtjen.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome e aktivizoi Mbrojtjen automatikisht sepse u larguat nga shtëpia.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Kjo shtëpi është aktualisht në përdorim normal.",
   "Bảo vệ thủ công đang bật": "Mbrojtja manuale është aktive",
   "Bảo vệ tự động đang bật": "Mbrojtja automatike është aktive",
   "Bảo vệ đang tắt": "Modaliteti i mbrojtjes është çaktivizuar",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "E keni hapur së fundmi aplikacionin për të kontrolluar gjendjen.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Hapeni rregullisht aplikacionin për të kontrolluar lejet, oraret dhe alarmet e palexuara.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Pas disa përdorimeve, SafeHome mund ta vlerësojë më mirë zakonin tuaj të kontrollimit të aplikacionit.",
-  "Tần suất vào ứng dụng ổn": "Shpeshtësia e kontrollit të aplikacionit duket e mirë",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Ka kaluar kohë që nga kontrolli i fundit i aplikacionit",
-  "Đang ghi nhận tần suất vào ứng dụng": "Shpeshtësia e kontrollit të aplikacionit po regjistrohet",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Kontrolloni lejen e vendndodhjes Gjithmonë dhe kushtet e funksionimit në sfond.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Kjo pajisje plotëson kërkesat për Largim automatik.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Aktivizojeni nëse dëshironi që modaliteti i mbrojtjes të ndizet automatikisht kur largoheni.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "E keni hapur së fundmi aplikacionin për të kontrolluar gjendjen.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Hapeni rregullisht aplikacionin për të kontrolluar lejet, oraret dhe alarmet e palexuara.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pas disa përdorimeve, SafeHome mund ta vlerësojë më mirë zakonin tuaj të kontrollimit të aplikacionit.",
+  "Tần suất vào ứng dụng ổn":
+      "Shpeshtësia e kontrollit të aplikacionit duket e mirë",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Ka kaluar kohë që nga kontrolli i fundit i aplikacionit",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Shpeshtësia e kontrollit të aplikacionit po regjistrohet",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Kontrolloni lejen e vendndodhjes Gjithmonë dhe kushtet e funksionimit në sfond.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Kjo pajisje plotëson kërkesat për Largim automatik.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Aktivizojeni nëse dëshironi që modaliteti i mbrojtjes të ndizet automatikisht kur largoheni.",
   "Auto rời khỏi nhà chưa ổn": "Largimi automatik nuk është gati",
   "Auto rời khỏi nhà đã sẵn sàng": "Largimi automatik është gati",
   "Auto rời khỏi nhà chưa bật": "Largimi automatik nuk është aktivizuar",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Shtoni një sensor tymi, SOS ose pajisje emergjente të përshtatshme për shtëpinë tuaj.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Shtoni një sensor tymi, SOS ose pajisje emergjente të përshtatshme për shtëpinë tuaj.",
   "Chưa có thiết bị khẩn cấp": "Nuk ka ende pajisje emergjence",
   "Đã có thiết bị khẩn cấp": "Pajisjet e emergjencës janë shtuar",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Caktoni një orar alarmi për kohën e gjumit ose kur jeni larg.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Kjo shtëpi ka një orar alarmi ose një orar alarmesh në nivel pajisjeje.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Caktoni një orar alarmi për kohën e gjumit ose kur jeni larg.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Kjo shtëpi ka një orar alarmi ose një orar alarmesh në nivel pajisjeje.",
   "Chưa cài lịch báo động": "Orari i alarmit nuk është caktuar",
   "Đã cài lịch báo động": "Orari i alarmit është caktuar",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Caktoni të paktën një Kujtesë që të mos harroni të kontrolloni shtëpinë.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Aplikacioni do t'ju kujtojë të kontrolloni shtëpinë sipas orarit.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Caktoni të paktën një Kujtesë që të mos harroni të kontrolloni shtëpinë.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Aplikacioni do t'ju kujtojë të kontrolloni shtëpinë sipas orarit.",
   "Chưa cài đặt nhắc nhở": "Kujtesa nuk është konfiguruar",
   "Đã cài đặt nhắc nhở": "Kujtesa është konfiguruar",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Rihapni aplikacionin ose hyni përsëri nëse kjo pajisje nuk merr alarme.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Kjo pajisje nuk është regjistruar për alarme",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Rihapni aplikacionin ose hyni përsëri nëse kjo pajisje nuk merr alarme.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Kjo pajisje nuk është regjistruar për alarme",
   "Thiết bị nhận cảnh báo bình thường": "Kjo pajisje mund të marrë alarme",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS e kufizon përdorimin në sfond më shumë se Android; mbani të aktivizuara njoftimet dhe vendndodhjen Gjithmonë nëse përdorni Largimin automatik.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS e kufizon përdorimin në sfond më shumë se Android; mbani të aktivizuara njoftimet dhe vendndodhjen Gjithmonë nëse përdorni Largimin automatik.",
   "Cơ chế iOS": "Sjellja e iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Kontrolloni lejen e sfondit dhe nisjen automatike që alarmet të mos vonohen.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Pajisja ka konfirmuar kushtet e rëndësishme të funksionimit në sfond.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Kontrollo përdorimin në sfond / nisjen automatike",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Kontrolloni lejen e sfondit dhe nisjen automatike që alarmet të mos vonohen.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Pajisja ka konfirmuar kushtet e rëndësishme të funksionimit në sfond.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Kontrollo përdorimin në sfond / nisjen automatike",
   "Chạy nền ổn định": "Përdorimi në sfond duket i qëndrueshëm",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Disa telefona Android mund t'i vonojnë alarmet kur optimizimi i baterisë është aktiv.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Telefoni ka më pak gjasa t'i vonojë alarmet e SafeHome.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Disa telefona Android mund t'i vonojnë alarmet kur optimizimi i baterisë është aktiv.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefoni ka më pak gjasa t'i vonojë alarmet e SafeHome.",
   "Chưa tắt tối ưu pin": "Optimizimi i baterisë është ende aktiv",
-  "Tối ưu pin không chặn ứng dụng": "Optimizimi i baterisë nuk po e bllokon aplikacionin",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Largimi automatik kërkon vendndodhjen Gjithmonë për të funksionuar me besueshmëri.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Leja e vendndodhjes kërkohet për Largimin automatik.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Shërbimi i vendndodhjes është i fikur, ndaj Largimi automatik mund të mos funksionojë me besueshmëri.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Kjo kërkohet vetëm kur përdorni Largimin automatik.",
+  "Tối ưu pin không chặn ứng dụng":
+      "Optimizimi i baterisë nuk po e bllokon aplikacionin",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Largimi automatik kërkon vendndodhjen Gjithmonë për të funksionuar me besueshmëri.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Leja e vendndodhjes kërkohet për Largimin automatik.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Shërbimi i vendndodhjes është i fikur, ndaj Largimi automatik mund të mos funksionojë me besueshmëri.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Kjo kërkohet vetëm kur përdorni Largimin automatik.",
   "Chưa cấp vị trí luôn luôn": "Vendndodhja Gjithmonë nuk lejohet",
   "Đã cấp vị trí luôn luôn": "Vendndodhja Gjithmonë lejohet",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS nuk hap ekran të plotë si Android; aplikacioni përdor njoftimet dhe tingullin e sistemit.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android përdor alarme në ekran të plotë; lejojini në cilësime nëse telefoni i bllokon.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS nuk hap ekran të plotë si Android; aplikacioni përdor njoftimet dhe tingullin e sistemit.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android përdor alarme në ekran të plotë; lejojini në cilësime nëse telefoni i bllokon.",
   "Cảnh báo trên iOS": "Alarmet në iOS",
   "Cảnh báo toàn màn hình": "Alarmet në ekran të plotë",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Alarmet mund të mos shfaqen nëse njoftimet janë çaktivizuar.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Ky telefon mund të marrë njoftime nga SafeHome.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Alarmet mund të mos shfaqen nëse njoftimet janë çaktivizuar.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Ky telefon mund të marrë njoftime nga SafeHome.",
   "Chưa bật thông báo": "Njoftimet nuk janë aktivizuar",
   "Đã bật thông báo": "Njoftimet janë aktivizuar",
   "Hệ thống: Sẵn sàng": "Sistemi: Gati",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistemi: Alarmet mund të humbasin",
   "Cách bạn đang dùng ứng dụng": "Si e përdorni aplikacionin",
   "Thiết bị của bạn": "Pajisja juaj",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Kontrollon telefonin tuaj dhe mënyrën si e përdorni aplikacionin.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Kontrollon telefonin tuaj dhe mënyrën si e përdorni aplikacionin.",
   "Hệ thống SafeHome": "Sistemi SafeHome",
   "Hệ thống: Đang kiểm tra...": "Sistemi: Po kontrollon...",
   "Tên": "Emri",
-  "Bạn không có quyền thay đổi vị trí nhà": "Nuk keni leje të ndryshoni vendndodhjen e shtëpisë",
-  "Hãy bật GPS để đặt vị trí nhà": "Aktivizoni GPS-in për të caktuar vendndodhjen e shtëpisë",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Nuk keni leje të ndryshoni vendndodhjen e shtëpisë",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Aktivizoni GPS-in për të caktuar vendndodhjen e shtëpisë",
   "Bạn chưa cấp quyền vị trí": "Leja e vendndodhjes nuk është dhënë",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Jepni lejen e vendndodhjes në cilësimet e aplikacionit",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Mbrojtja automatike kur të gjithë largohen nga shtëpia është aktivizuar",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Mbrojtja automatike kur të gjithë largohen nga shtëpia është çaktivizuar",
-  "Không thể thay đổi trạng thái báo động": "Gjendja e alarmit nuk mund të ndryshohej",
-  "Đã tắt toàn bộ báo động của nhà": "Të gjitha alarmet e shtëpisë janë çaktivizuar",
-  "QR này không phải mã xin gia nhập Home": "Ky kod QR nuk është kod për t'u bashkuar me një Shtëpi",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Jepni lejen e vendndodhjes në cilësimet e aplikacionit",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Mbrojtja automatike kur të gjithë largohen nga shtëpia është aktivizuar",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Mbrojtja automatike kur të gjithë largohen nga shtëpia është çaktivizuar",
+  "Không thể thay đổi trạng thái báo động":
+      "Gjendja e alarmit nuk mund të ndryshohej",
+  "Đã tắt toàn bộ báo động của nhà":
+      "Të gjitha alarmet e shtëpisë janë çaktivizuar",
+  "QR này không phải mã xin gia nhập Home":
+      "Ky kod QR nuk është kod për t'u bashkuar me një Shtëpi",
   "Thêm Home": "Shto Shtëpi",
   "Mở cài đặt": "Hap cilësimet",
   "Để sau": "Më vonë",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome ka nevojë për leje të përhershme të vendndodhjes për të zbuluar kur largoheni ose ktheheni në shtëpi, edhe kur aplikacioni është në sfond.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome aktualisht mund të përdorë vendndodhjen vetëm kur aplikacioni është në përdorim.\n\nHapni lejen e vendndodhjes dhe zgjidhni \"Lejo gjithmonë\" që mbrojtja automatike të vazhdojë të funksionojë në sfond.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome ka nevojë për leje të përhershme të vendndodhjes për të zbuluar kur largoheni ose ktheheni në shtëpi, edhe kur aplikacioni është në sfond.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome aktualisht mund të përdorë vendndodhjen vetëm kur aplikacioni është në përdorim.\n\nHapni lejen e vendndodhjes dhe zgjidhni \"Lejo gjithmonë\" që mbrojtja automatike të vazhdojë të funksionojë në sfond.",
   "Cho phép vị trí luôn luôn": "Vendndodhja lejohet gjithmonë",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Shtëpitë tuaja do të fshihen.\nDo të largoheni nga shtëpitë e përbashkëta.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Kjo do të ndryshojë oraret e Alarmit të Shtëpisë për të gjitha pajisjet e sigurisë në shtëpitë e zgjedhura.\n\nAnëtarët që përdorin cilësimet e Alarmit të Shtëpisë do të ndikohen.\nCilësimet personale të alarmit nuk do të ndryshojnë.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Kjo do t'u shtojë një Kujtesë Shtëpie shtëpive të zgjedhura.\n\nAnëtarët që përdorin cilësimet e Kujtesës së Shtëpisë do të ndikohen.\nCilësimet personale të kujtesave nuk do të ndryshojnë.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Pajisjet e sigurisë do të monitorohen menjëherë.\n\nMbrojtja automatike kur jeni larg do të ndalet. Ky modalitet nuk çaktivizohet automatikisht kur dikush kthehet në shtëpi dhe duhet të rikthehet në Normal nga një anëtar me leje.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Ky veprim do të ndryshojë orarin e alarmit për disa pajisje sot...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Ky veprim do të çaktivizojë çdo alarm për këtë shtëpi. Nuk do të merrni më alarme rreziku në këtë telefon.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarmi po përdor cilësimet e Shtëpisë.\n\nDo të merrni alarme sipas orareve të përbashkëta të konfiguruara nga pronari ose një administrator.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarmi po përdor cilësimet e Mia.\n\nDo të merrni alarme sipas orareve personale të Alarmit për këtë llogari.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Shtëpitë tuaja do të fshihen.\nDo të largoheni nga shtëpitë e përbashkëta.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Kjo do të ndryshojë oraret e Alarmit të Shtëpisë për të gjitha pajisjet e sigurisë në shtëpitë e zgjedhura.\n\nAnëtarët që përdorin cilësimet e Alarmit të Shtëpisë do të ndikohen.\nCilësimet personale të alarmit nuk do të ndryshojnë.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Kjo do t'u shtojë një Kujtesë Shtëpie shtëpive të zgjedhura.\n\nAnëtarët që përdorin cilësimet e Kujtesës së Shtëpisë do të ndikohen.\nCilësimet personale të kujtesave nuk do të ndryshojnë.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Pajisjet e sigurisë do të monitorohen menjëherë.\n\nMbrojtja automatike kur jeni larg do të ndalet. Ky modalitet nuk çaktivizohet automatikisht kur dikush kthehet në shtëpi dhe duhet të rikthehet në Normal nga një anëtar me leje.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Ky veprim do të ndryshojë orarin e alarmit për disa pajisje sot...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Ky veprim do të çaktivizojë çdo alarm për këtë shtëpi. Nuk do të merrni më alarme rreziku në këtë telefon.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarmi po përdor cilësimet e Shtëpisë.\n\nDo të merrni alarme sipas orareve të përbashkëta të konfiguruara nga pronari ose një administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarmi po përdor cilësimet e Mia.\n\nDo të merrni alarme sipas orareve personale të Alarmit për këtë llogari.",
   "Không thể đăng nhập bằng Google": "Hyrja me Google dështoi",
   "Không đặt được mật khẩu": "Fjalëkalimi nuk mund të caktohej",
   "Chấp nhận": "Prano",
   "Cho phép": "Lejo",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Ftesa nuk mund të pranohej. Ju lutemi provoni përsëri.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Kërkesa për t'u bashkuar nuk mund të pranohej. Ju lutemi provoni përsëri.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Ftesa nuk mund të pranohej. Ju lutemi provoni përsëri.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Kërkesa për t'u bashkuar nuk mund të pranohej. Ju lutemi provoni përsëri.",
   "Từ chối": "Refuzo",
   "Lời mời từ chủ nhà": "Ftesë nga pronari",
   "Nhận quyền chủ nhà": "Merr pronësinë e shtëpisë",
@@ -652,7 +776,8 @@ const Map<String, String> sqStrings = {
   "Nhập HUB ID": "Fut ID-në e HUB-it",
   "VD: HUB_001": "Shembull: HUB_001",
   "Pair": "Çifto",
-  "Mật khẩu tối thiểu 6 ký tự": "Fjalëkalimi duhet të ketë të paktën 6 karaktere",
+  "Mật khẩu tối thiểu 6 ký tự":
+      "Fjalëkalimi duhet të ketë të paktën 6 karaktere",
   "Mật khẩu nhập lại không khớp": "Fjalëkalimet nuk përputhen",
   "Tạo mật khẩu": "Krijo fjalëkalim",
   "Mật khẩu mới": "Fjalëkalim i ri",
@@ -664,27 +789,35 @@ const Map<String, String> sqStrings = {
   "KIỂM TRA NHÀ": "KONTROLLO SHTËPINË",
   "ĐÓNG NHẮC NHỞ": "MBYLL KUJTESËN",
   "SafeHome Security Alert": "Alarm sigurie SafeHome",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Zgjidhni lejen e vendndodhjes Lejo gjithmonë në cilësimet e aplikacionit",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Llogaria juaj Google ka nevojë për një fjalëkalim shtesë për të përdorur veçoritë e sigurisë.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Zgjidhni lejen e vendndodhjes Lejo gjithmonë në cilësimet e aplikacionit",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Llogaria juaj Google ka nevojë për një fjalëkalim shtesë për të përdorur veçoritë e sigurisë.",
   "Báo động": "Alarmi",
-  "Bạn không có quyền thực hiện thao tác này。": "Nuk keni leje për ta kryer këtë veprim.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Nuk keni leje për ta kryer këtë veprim.",
   "Cài đặt": "Cilësimet",
   "Cập nhật": "Përditëso",
   "Chọn ngôn ngữ": "Zgjidh gjuhën",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Nuk ka të dhëna pajisjeje për vlerësim",
-  "Chuyển quyền sở hữu cho thành viên khác": "Transfero pronësinë te një anëtar tjetër",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Nuk ka të dhëna pajisjeje për vlerësim",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Transfero pronësinë te një anëtar tjetër",
   "Có": "Po",
   "Cửa đã đóng an toàn": "Dera është mbyllur në mënyrë të sigurt",
-  "Đã xảy ra lỗi. Vui lòng thử lại.": "Ndodhi një gabim. Ju lutemi provoni përsëri.",
+  "Đã xảy ra lỗi. Vui lòng thử lại.":
+      "Ndodhi një gabim. Ju lutemi provoni përsëri.",
   "Đang kiểm tra kết nối Hub": "Po kontrollohet lidhja e Hub-it",
-  "Đang mở khi nhà ở chế độ Bảo vệ": "E hapur ndërsa Shtëpia është në modalitetin e mbrojtjes",
+  "Đang mở khi nhà ở chế độ Bảo vệ":
+      "E hapur ndërsa Shtëpia është në modalitetin e mbrojtjes",
   "Đang mở trong giờ báo động": "E hapur gjatë orarit të alarmit",
   "Đang tải...": "Po ngarkohet...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Profili, kërkesat dhe ftesat",
   "Hub chưa gửi trạng thái": "Gjendja e Hub-it nuk është e disponueshme",
   "Hub mất kết nối": "Hub-i është i shkëputur",
   "Hub tín hiệu bình thường": "Hub-i është i lidhur",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "E zhbllokuar ndërsa Shtëpia është në modalitetin e mbrojtjes",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "E zhbllokuar ndërsa Shtëpia është në modalitetin e mbrojtjes",
   "Khóa đang mở trong giờ báo động": "E zhbllokuar gjatë orarit të alarmit",
   "Không có thông báo": "Nuk ka njoftime",
   "Khu vực nguy hiểm": "Zonë rreziku",
@@ -730,238 +863,350 @@ const Map<String, String> sqStrings = {
   "Đã tạo nhà": "Shtëpia u krijua",
   "Chế độ Bảo vệ thủ công đã bật": "Modaliteti manual i mbrojtjes u aktivizua",
   "Báo động không lặp lại.": "Alarmi nuk do të përsëritet.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Alarmi përsëritet pas \$securityModeRepeatMinutes minutash nëse problemi vazhdon.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName aktivizoi modalitetin manual të mbrojtjes për \"\$homeName\". Ky modalitet çaktivizohet vetëm kur një anëtar me leje kthehet në Normal. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Aktivizuat Alarmin për \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Çaktivizuat çdo Alarm për \"\$homeName\".",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Alarmi përsëritet pas \$securityModeRepeatMinutes minutash nëse problemi vazhdon.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName aktivizoi modalitetin manual të mbrojtjes për \"\$homeName\". Ky modalitet çaktivizohet vetëm kur një anëtar me leje kthehet në Normal. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Aktivizuat Alarmin për \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Çaktivizuat çdo Alarm për \"\$homeName\".",
   "Thành viên mới": "Anëtar i ri",
   "Thành viên rời nhà": "Anëtari u largua nga shtëpia",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName u largua nga \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName ndryshoi rolin e \$memberName nga \$oldRoleName në \$newRoleName te \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName u largua nga \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName ndryshoi rolin e \$memberName nga \$oldRoleName në \$newRoleName te \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "\$count mesazhe të palexuara",
   "Hãy an tâm nghỉ ngơi.": "Mund të jeni të qetë.",
   "Có thiết bị chưa an toàn.": "Disa pajisje nuk janë të sigurta.",
   "SafeHome đang cập nhật vị trí": "SafeHome po përditëson vendndodhjen",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Po monitoron për të aktivizuar automatikisht modalitetin e mbrojtjes.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Përdor vendndodhjen për të aktivizuar automatikisht modalitetin e mbrojtjes kur të gjithë largohen nga shtëpia.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Po monitoron për të aktivizuar automatikisht modalitetin e mbrojtjes.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Përdor vendndodhjen për të aktivizuar automatikisht modalitetin e mbrojtjes kur të gjithë largohen nga shtëpia.",
   "CẢNH BÁO SOS": "ALARM SOS",
   "CẢNH BÁO KHÓI / CHÁY": "ALARM TYMI / ZJARRI",
   "CẢNH BÁO NGẬP NƯỚC": "ALARM PËRMBYTJEJE",
   "CẢNH BÁO RÒ KHÍ": "ALARM RRJEDHJEJE GAZI",
   "CẢNH BÁO CỬA": "ALARM DERE",
   "CẢNH BÁO AN NINH": "ALARM SIGURIE",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Nuk mund të konfirmohej me SafeHome. Kontrolloni lidhjen dhe provoni përsëri.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Ndalo alarmin vetëm pasi të kesh kontrolluar gjendjen e shtëpisë.\n\nJeni të sigurt se doni ta ndaloni alarmin?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Nuk mund të konfirmohej me SafeHome. Kontrolloni lidhjen dhe provoni përsëri.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Ndalo alarmin vetëm pasi të kesh kontrolluar gjendjen e shtëpisë.\n\nJeni të sigurt se doni ta ndaloni alarmin?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome zbuloi një alarm",
   "Mở SafeHome để kiểm tra ngay.": "Hap SafeHome për ta kontrolluar tani.",
   "\$count tin nhắn mới": "\$count mesazhe të reja",
   "Tin nhắn HomeChat": "Mesazh në HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName dërgoi një mesazh",
   "Bạn có tin nhắn mới": "Ke një mesazh të ri",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Modaliteti i mbrojtjes do të alarmojë vetëm një herë",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Modaliteti i mbrojtjes do ta përsëritë alarmin pas \$minutes minutash",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Kërkesat për t'u bashkuar u dërguan për \$count shtëpi",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName kërkoi të bashkohet me \"\$homeName\".",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Modaliteti i mbrojtjes do të alarmojë vetëm një herë",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Modaliteti i mbrojtjes do ta përsëritë alarmin pas \$minutes minutash",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Kërkesat për t'u bashkuar u dërguan për \$count shtëpi",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName kërkoi të bashkohet me \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "Fshitë \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "I dërguat \$email një kërkesë për transferimin e pronësisë së \"\$homeName\".",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName dëshiron t'ju transferojë pronësinë e \"\$homeName\".",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName ju ftoi të bashkoheni me \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome po heq \"\$deviceName\" nga \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Pajisja \"\$deviceName\" u shtua te \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "I dërguat \$email një kërkesë për transferimin e pronësisë së \"\$homeName\".",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName dëshiron t'ju transferojë pronësinë e \"\$homeName\".",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName ju ftoi të bashkoheni me \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome po heq \"\$deviceName\" nga \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Pajisja \"\$deviceName\" u shtua te \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Krijuat shtëpinë \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName përditësoi emrin e shtëpisë në \"\$newName\" dhe ndryshoi adresën.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName e riemërtoi shtëpinë në \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName përditësoi adresën e \"\$newName\".",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName e riemërtoi pajisjen \"\$oldDeviceName\" në \"\$newName\" te \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName përditësoi emrin e shtëpisë në \"\$newName\" dhe ndryshoi adresën.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName e riemërtoi shtëpinë në \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName përditësoi adresën e \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName e riemërtoi pajisjen \"\$oldDeviceName\" në \"\$newName\" te \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Çiftimi: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Çiftimi i pajisjeve u aktivizua te \"\$homeName\" për \$seconds sekonda.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Periudha e pauzës duhet të jetë brenda orarit të Alarmit (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "Kaluan \$passCount/\$total teste\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name nuk ka shtuar numër telefoni në profil.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Çiftimi i pajisjeve u aktivizua te \"\$homeName\" për \$seconds sekonda.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Periudha e pauzës duhet të jetë brenda orarit të Alarmit (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "Kaluan \$passCount/\$total teste\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name nuk ka shtuar numër telefoni në profil.",
   "Tin nhắn mới trong \$homeName": "Mesazh i ri në \$homeName",
   "\$current/\$total kết quả": "\$current/\$total rezultate",
   "Đang trả lời \$name": "Po i përgjigjeni \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" zbuloi tym te \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" është kthyer në normalitet.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" aktivizoi SOS te \"\$homeName\".",
-  "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" nuk është më në gjendje SOS.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" raportoi ndërhyrje te \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Alarmi i ndërhyrjes për \"\$name\" u pastrua.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" u mbyll te \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" është i hapur te \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" te \"\$homeName\" ka bateri të ulët.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" te \"\$homeName\" doli jashtë linje.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" te \"\$homeName\" është përsëri në linjë.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" regjistroi temperaturë të lartë te \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" regjistroi lagështi të lartë te \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" zbuloi tym te \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" është kthyer në normalitet.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" aktivizoi SOS te \"\$homeName\".",
+  "\"\$name\" đã hết trạng thái SOS.":
+      "\"\$name\" nuk është më në gjendje SOS.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" raportoi ndërhyrje te \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Alarmi i ndërhyrjes për \"\$name\" u pastrua.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" u mbyll te \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" është i hapur te \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$name\" te \"\$homeName\" ka bateri të ulët.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$name\" te \"\$homeName\" doli jashtë linje.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$name\" te \"\$homeName\" është përsëri në linjë.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" regjistroi temperaturë të lartë te \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" regjistroi lagështi të lartë te \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "U aktivizua një buton SOS",
   "Có dấu hiệu khói hoặc cháy": "U zbulua tym ose zjarr",
   "Có dấu hiệu ngập nước": "U zbulua përmbytje",
   "Có dấu hiệu rò khí": "U zbulua rrjedhje gazi",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Një derë është e hapur ose një pajisje është ndërhyrë",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Një derë është e hapur ose një pajisje është ndërhyrë",
   "Có thiết bị đang cảnh báo": "Një pajisje po jep alarm",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Nëse askush nuk konfirmon, SafeHome do të nisë një telefonatë emergjente.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Alarmi përsëritet në \$time nëse problemi nuk është trajtuar.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Alarmi përsëritet sipas orarit të Alarmit nëse problemi nuk është trajtuar.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" u mbyll te \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" është i hapur te \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Nëse askush nuk konfirmon, SafeHome do të nisë një telefonatë emergjente.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Alarmi përsëritet në \$time nëse problemi nuk është trajtuar.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Alarmi përsëritet sipas orarit të Alarmit nëse problemi nuk është trajtuar.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" u mbyll te \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" është i hapur te \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count shtëpi të zgjedhura",
-  "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count shtëpi të pasigurta\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count shtëpi kërkojnë vëmendje\$suffix",
+  "🚨 \$count nhà không an toàn\$suffix":
+      "🚨 \$count shtëpi të pasigurta\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count shtëpi kërkojnë vëmendje\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count shtëpi të sigurta",
   "\$count nhà đang được theo dõi": "\$count shtëpi të monitoruara",
   "\$minutes phút": "\$minutes minuta",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Kujtesa u caktua për \$updatedHomes shtëpi.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarmi u caktua për \$updatedDevices pajisje në \$updatedHomes shtëpi.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Shtëpitë që menaxhoni u ndanë.\n\n\$skipped shtëpi u anashkaluan sepse nuk keni leje për t'i ndarë.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarmi u zbatua në \$count pajisje sigurie",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Zbato të njëjtin orar në \$count pajisje sigurie",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Kujtesa u caktua për \$updatedHomes shtëpi.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarmi u caktua për \$updatedDevices pajisje në \$updatedHomes shtëpi.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Shtëpitë që menaxhoni u ndanë.\n\n\$skipped shtëpi u anashkaluan sepse nuk keni leje për t'i ndarë.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarmi u zbatua në \$count pajisje sigurie",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Zbato të njëjtin orar në \$count pajisje sigurie",
   "\$count phút trước": "\$count minuta më parë",
   "\$count giờ trước": "\$count orë më parë",
   "\${count}h trước": "\${count} orë më parë",
   "\${hours}h\$minutes' trước": "\${hours} orë e \$minutes minuta më parë",
   "\$count ngày trước": "\$count ditë më parë",
   "\$count tháng trước": "\$count muaj më parë",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Jeni të sigurt se doni ta hiqni \$name nga kjo shtëpi?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nKërkon të bashkohet me \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Jeni të sigurt se doni ta hiqni \$name nga kjo shtëpi?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nKërkon të bashkohet me \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Kërkon të bashkohet me \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Jeni ftuar të merrni pronësinë e \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nJu fton të bashkoheni me \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Jeni ftuar të merrni pronësinë e \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nJu fton të bashkoheni me \"\$homeName\"",
   "Mời bạn gia nhập \"\$homeName\"": "Ju fton të bashkoheni me \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Kërkon vëmendje: \$joined",
   "Cập nhật \$value": "U përditësua \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Shto pajisjen e parë SafeHome për të filluar monitorimin e kësaj shtëpie.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Kontrollo fillimisht alarmet e emergjencës, pastaj kontakto anëtarët e familjes nëse nevojitet.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Asnjë anëtar i familjes nuk është në shtëpi, por një derë ose bravë është e hapur. Kontrollojeni tani.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Kontrollo derën ose bravën e hapur para se ta mbash këtë shtëpi në modalitetin e mbrojtjes.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Dikush mund të jetë ende në shtëpi. Nëse po, kalo përsëri në modalitetin Normal.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Disa anëtarë kanë vendndodhje të panjohur. Kërkoju të hapin aplikacionin ose kontrolloni lejen e vendndodhjes.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Një pajisje është shkëputur. Kontrollo baterinë, energjinë ose vendosjen e saj.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Një pajisje ka bateri të ulët. Zëvendësojeni së shpejti për të shmangur humbjen e alarmeve.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Kujtesa nuk është caktuar. Krijo një orar për ta kontrolluar rregullisht shtëpinë.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Orari i alarmit nuk është caktuar. Aktivizo mbrojtjen për kohët kur zakonisht jeni larg.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Nuk nevojitet veprim i menjëhershëm. Vazhdoni ta monitoroni këtë shtëpi.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Shto pajisjen e parë SafeHome për të filluar monitorimin e kësaj shtëpie.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Kontrollo fillimisht alarmet e emergjencës, pastaj kontakto anëtarët e familjes nëse nevojitet.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Asnjë anëtar i familjes nuk është në shtëpi, por një derë ose bravë është e hapur. Kontrollojeni tani.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Kontrollo derën ose bravën e hapur para se ta mbash këtë shtëpi në modalitetin e mbrojtjes.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Dikush mund të jetë ende në shtëpi. Nëse po, kalo përsëri në modalitetin Normal.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Disa anëtarë kanë vendndodhje të panjohur. Kërkoju të hapin aplikacionin ose kontrolloni lejen e vendndodhjes.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Një pajisje është shkëputur. Kontrollo baterinë, energjinë ose vendosjen e saj.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Një pajisje ka bateri të ulët. Zëvendësojeni së shpejti për të shmangur humbjen e alarmeve.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Kujtesa nuk është caktuar. Krijo një orar për ta kontrolluar rregullisht shtëpinë.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Orari i alarmit nuk është caktuar. Aktivizo mbrojtjen për kohët kur zakonisht jeni larg.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Nuk nevojitet veprim i menjëhershëm. Vazhdoni ta monitoroni këtë shtëpi.",
   "Lặp sau \$minutes phút": "Përsërit pas \$minutes minutash",
   "Đang dùng • \$repeatText": "Aktiv • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Monitorim sigurie • \$repeatText",
   "Gia đình: \$mode": "Modaliteti i shtëpisë: \$mode",
   "Gợi ý xử lý": "Veprimet e sugjeruara",
   "Phát hiện \$count vấn đề cần xử lý": "\$count probleme kërkojnë vëmendje",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Dyert u përdorën \$count herë sot",
-  "Đã ghi nhận \$count hoạt động gần đây": "U regjistruan \$count aktivitete të fundit",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistemi: \$issueCount elemente duhen kontrolluar",
-  "FCM token đã sẵn sàng trên điện thoại này.": "Tokeni FCM është gati në këtë telefon.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "Tokeni FCM është gati, por Largimit automatik i mungon një kërkesë.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "U gjetën \$emergencyTotal pajisje emergjence. Minimumi i rekomanduar: sensor tymi dhe SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Të transferohet pronësia e shtëpisë te:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Dyert u përdorën \$count herë sot",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "U regjistruan \$count aktivitete të fundit",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistemi: \$issueCount elemente duhen kontrolluar",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "Tokeni FCM është gati në këtë telefon.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "Tokeni FCM është gati, por Largimit automatik i mungon një kërkesë.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "U gjetën \$emergencyTotal pajisje emergjence. Minimumi i rekomanduar: sensor tymi dhe SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Të transferohet pronësia e shtëpisë te:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count dyer të mbyllura në mënyrë të sigurt",
   "\$count cửa và khóa đã an toàn": "\$count dyer dhe brava të siguruara",
   "\$count thiết bị đang được theo dõi": "\$count pajisje të monitoruara",
   "Cập nhật \$timeText": "U përditësua \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Të dhënat e fundit u përditësuan \$count minuta më parë",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Të dhënat e fundit u përditësuan \$count orë më parë",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Të dhënat e fundit u përditësuan \$count minuta më parë",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Të dhënat e fundit u përditësuan \$count orë më parë",
   "Thành viên trong nhà: \$count": "Anëtarë në shtëpi: \$count",
   "Thành viên bên ngoài: \$count": "Anëtarë larg: \$count",
   "Chưa xác định vị trí: \$count": "Vendndodhje e panjohur: \$count",
   "Môi trường hiện tại: \$environment": "Mjedisi aktual: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Hapur ndërsa Shtëpia është në modalitetin e mbrojtjes",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Hapur ndërsa Shtëpia është në modalitetin e mbrojtjes",
   "An tâm hơn trong từng ngôi nhà": "Qetësi në çdo shtëpi",
   "Báo động SafeHome": "Alarmi SafeHome",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Një alarm sigurie kërkon vëmendjen tuaj.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Një alarm sigurie kërkon vëmendjen tuaj.",
   "Có cảnh báo cần kiểm tra": "Një alarm kërkon vëmendjen tuaj",
   "Tự đóng sau \$time": "Mbyllet automatikisht pas \$time",
   "Ngày trong tuần": "Ditët e javës",
   "Hoặc": "Ose",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Koha e fillimit dhe përfundimit nuk mund të jetë e njëjtë",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Koha e përfundimit duhet të jetë pas kohës aktuale",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Koha e fillimit dhe përfundimit nuk mund të jetë e njëjtë",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Koha e përfundimit duhet të jetë pas kohës aktuale",
   "Khoảng tạm tắt không hợp lệ": "Interval i pavlefshëm për pauzën e Alarmit",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Intervali i pauzës nuk përputhet me asnjë orar aktiv Alarmi",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Intervali i pauzës nuk përputhet me asnjë orar aktiv Alarmi",
   "Cài đặt báo động": "Cilësimet e alarmit",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Kontrolloni si ky sensor aktivizon alarmet.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Kontrolloni si ky sensor aktivizon alarmet.",
   "Tham gia báo động": "Merr pjesë në alarme",
-  "Tắt để cảm biến không tạo báo động.": "Çaktivizojeni që ky sensor të mos krijojë Alarm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Çaktivizojeni që ky sensor të mos krijojë Alarm.",
   "Bật còi vật lý": "Aktivizo sirenën fizike",
-  "Cho phép kích hoạt còi trong nhà.": "Lejo që sirena e brendshme të aktivizohet.",
+  "Cho phép kích hoạt còi trong nhà.":
+      "Lejo që sirena e brendshme të aktivizohet.",
   "Đánh thức màn hình": "Zgjo ekranin",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Shfaq një alarm në ekran të plotë në telefon.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Shfaq një alarm në ekran të plotë në telefon.",
   "Độ trễ kích hoạt": "Vonesa e aktivizimit",
-  "Chỉ áp dụng cho cảm biến an ninh.": "Zbatohet vetëm për sensorët e sigurisë.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Sensorët e emergjencës aktivizohen gjithmonë menjëherë.",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "Zbatohet vetëm për sensorët e sigurisë.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Sensorët e emergjencës aktivizohen gjithmonë menjëherë.",
   "Ngay lập tức": "Menjëherë",
   "giây": "sekonda",
   "Đã lưu cấu hình báo động": "Cilësimet e alarmit u ruajtën",
   "Không thể lưu cấu hình báo động": "Cilësimet e alarmit nuk mund të ruheshin",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Vetëm pronari dhe administratorët e shtëpisë mund ta ndryshojnë këtë cilësim.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Vetëm pronari dhe administratorët e shtëpisë mund ta ndryshojnë këtë cilësim.",
   "Thông tin chi tiết": "Detajet e pajisjes",
   "Thông báo báo động": "Njoftimi i alarmit",
   "Cài đặt nhắc nhở": "Cilësimet e kujtesës",
   "Nhắc nhở theo lịch": "Kujtesë e planifikuar",
   "Danh sách thông báo": "Njoftimet",
   "Cài đặt thông báo": "Cilësimet e njoftimeve",
-  "Sử dụng báo động theo lịch đã thiết lập": "Përdor orarin e konfiguruar të alarmit",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Dërgo vetëm njoftime; mos aktivizo alarmin",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Të gjitha alarmet e shtëpisë janë të çaktivizuara; sistemi do të dërgojë vetëm njoftime.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Vetëm pronari mund ta aktivizojë këtë modalitet.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Përdor orarin e konfiguruar të alarmit",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Dërgo vetëm njoftime; mos aktivizo alarmin",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Të gjitha alarmet e shtëpisë janë të çaktivizuara; sistemi do të dërgojë vetëm njoftime.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Vetëm pronari mund ta aktivizojë këtë modalitet.",
   "Bật Không bảo vệ?": "Të aktivizohet modaliteti Pa mbrojtje?",
   "Cảm biến vừa phát hiện một sự kiện.": "Një sensor sapo zbuloi një ngjarje.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Vetëm pronari mund të aktivizojë modalitetin Pa mbrojtje",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Vetëm pronari mund të aktivizojë modalitetin Pa mbrojtje",
   "Đã chuyển nhà sang Không bảo vệ": "Shtëpia kaloi në modalitetin Pa mbrojtje",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "U kalua në modalitetin Pa mbrojtje, por njoftimi nuk mund të dërgohej",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "U kalua në modalitetin Pa mbrojtje, por njoftimi nuk mund të dërgohej",
   "Giám sát toàn diện": "Monitorim i plotë",
   "Không bảo vệ": "Pa mbrojtje",
   "Không bảo vệ đang bật": "Modaliteti Pa mbrojtje është aktiv",
   "Nhà đã chuyển sang Không bảo vệ": "Shtëpia kaloi në modalitetin Pa mbrojtje",
   "Thông báo cảm biến": "Njoftimet e sensorëve",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Njoftime standarde kur një sensor zbulon një ngjarje.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Njoftime standarde kur një sensor zbulon një ngjarje.",
   "Tôi hiểu, tiếp tục": "E kuptoj, vazhdo",
   "Cảnh báo an ninh đã kết thúc": "Alarmi i sigurisë përfundoi",
   "Sự cố nguy hiểm đã kết thúc": "Emergjenca përfundoi",
   "Cảnh báo đã được kết thúc.": "Alarmi ka përfunduar.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Një alarm tjetër është ende aktiv.",
   "Báo động đã hoạt động trở lại": "Alarmi është sërish aktiv",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Periudha e pauzës së alarmit ka përfunduar.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Periudha e pauzës së alarmit ka përfunduar.",
   "MQTT đã kết nối trở lại": "MQTT u rilidh",
   "Còi báo động đã được tắt": "Sirena fizike u çaktivizua",
   "Sự cố vẫn đang được theo dõi.": "Incidenti po monitorohet ende.",
   "Bảo vệ tự động đã bật": "Mbrojtja automatike u aktivizua",
-  "Toàn bộ thành viên đã rời khỏi nhà.": "Të gjithë anëtarët janë larguar nga shtëpia.",
+  "Toàn bộ thành viên đã rời khỏi nhà.":
+      "Të gjithë anëtarët janë larguar nga shtëpia.",
   "Bảo vệ tự động đã tắt": "Mbrojtja automatike u çaktivizua",
   "Có thành viên đã trở về nhà.": "Një anëtar është kthyer në shtëpi.",
   "Thiết bị đã được xoá": "Pajisja u hoq",
   "Không thể xoá thiết bị": "Pajisja nuk mund të hiqej",
-  "Hãy thử lại thao tác xoá thiết bị.": "Ju lutemi provoni ta hiqni përsëri pajisjen.",
+  "Hãy thử lại thao tác xoá thiết bị.":
+      "Ju lutemi provoni ta hiqni përsëri pajisjen.",
   "Chế độ Bảo vệ đã được tắt.": "Modaliteti i mbrojtjes u çaktivizua.",
   "Nhà đang ở chế độ Bình thường.": "Shtëpia është në modalitetin Normal.",
   "Pin thiết bị đã ổn định": "Bateria e pajisjes është e qëndrueshme",
   "Hub đã kết nối trở lại": "Hub-i u rilidh",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "U kalua në Normal, por njoftimi nuk mund të dërgohej",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "U kalua në Normal, por njoftimi nuk mund të dërgohej",
   "Chung cho nhà": "Shtëpi e përbashkët",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Zbatohet për të gjithë anëtarët dhe mund të aktivizojë sirenën fizike.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Zbatohet për të gjithë anëtarët dhe mund të aktivizojë sirenën fizike.",
   "Cá nhân": "Personal",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Orari personal funksionon në mënyrë të pavarur dhe nuk aktivizon kurrë sirenën fizike.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Ky cilësim zbatohet vetëm për llogarinë tuaj.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Vetëm pronari dhe administratorët mund të ndryshojnë cilësimet e përbashkëta të shtëpisë.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Orari personal funksionon në mënyrë të pavarur dhe nuk aktivizon kurrë sirenën fizike.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Ky cilësim zbatohet vetëm për llogarinë tuaj.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Vetëm pronari dhe administratorët mund të ndryshojnë cilësimet e përbashkëta të shtëpisë.",
   "Tham gia hệ thống báo động": "Merr pjesë në sistemin e alarmit",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Sensorët e emergjencës marrin gjithmonë pjesë në sistemin e alarmit.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Çaktivizojeni që pajisja të mos krijojë asnjë alarm.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Sensorët e emergjencës marrin gjithmonë pjesë në sistemin e alarmit.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Çaktivizojeni që pajisja të mos krijojë asnjë alarm.",
   "Lịch báo động chung": "Orari i përbashkët i alarmit",
   "Lịch báo động cá nhân": "Orari personal i alarmit",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Shfaq një alarm në ekran të plotë në telefonin tuaj.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Shfaq një alarm në ekran të plotë në telefonin tuaj.",
   "Lặp lại cảnh báo": "Përsërit alarmin",
   "Báo động chung": "Alarm i përbashkët",
   "Báo động cá nhân": "Alarm personal",
   "Đã cài đặt": "Konfiguruar",
   "Chưa cài đặt": "Nuk është konfiguruar",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Oraret e përbashkëta dhe personale funksionojnë paralelisht; nuk keni më nevojë të zgjidhni njërin.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Oraret e përbashkëta dhe personale funksionojnë paralelisht; nuk keni më nevojë të zgjidhni njërin.",
   "Cài nhanh chung": "Konfigurim i shpejtë i përbashkët",
   "Cài nhanh cá nhân": "Konfigurim i shpejtë personal",
   "Thiết lập nhanh lịch cá nhân": "Konfigurim i shpejtë i orarit personal",
   "Thiết lập nhanh lịch chung": "Konfigurim i shpejtë i orarit të përbashkët",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Ky orar zbatohet vetëm për ju dhe nuk aktivizon sirenën fizike.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Ky orar zbatohet për të gjithë anëtarët e shtëpisë.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Ky orar zbatohet vetëm për ju dhe nuk aktivizon sirenën fizike.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Ky orar zbatohet për të gjithë anëtarët e shtëpisë.",
   "Đã áp dụng lịch báo động": "Orari i alarmit u zbatua",
   "Không thể lưu lịch báo động": "Orari i alarmit nuk mund të ruhej",
   "Nhà chưa có thiết bị an ninh": "Kjo shtëpi nuk ka pajisje sigurie",
-  "Nhận cảnh báo theo lịch chung của nhà": "Merr alarme nga orari i përbashkët i shtëpisë",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Çaktivizojeni për të ndaluar njoftimet dhe alarmet në ekran të plotë nga orari i përbashkët. Sirena e shtëpisë do të vazhdojë të funksionojë.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Merr alarme nga orari i përbashkët i shtëpisë",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Çaktivizojeni për të ndaluar njoftimet dhe alarmet në ekran të plotë nga orari i përbashkët. Sirena e shtëpisë do të vazhdojë të funksionojë.",
 };

@@ -125,9 +125,9 @@ class _HomeTabsState extends State<HomeTabs> {
       return SafeHomeColors.surface;
     }
 
-    return _displayHomeColor(homeId).withValues(
-      alpha: _emergencyPulseDanger ? 0.20 : 0.15,
-    );
+    return _displayHomeColor(
+      homeId,
+    ).withValues(alpha: _emergencyPulseDanger ? 0.20 : 0.15);
   }
 
   Future<void> _showSelectedHomeInfo({
@@ -345,6 +345,7 @@ class _HomeTabsState extends State<HomeTabs> {
       ],
     );
   }
+
   int _presenceCount(Map<String, dynamic> home, String key) {
     final presenceSummary = home["presenceSummary"];
 
@@ -354,6 +355,7 @@ class _HomeTabsState extends State<HomeTabs> {
 
     return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
   }
+
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
@@ -434,7 +436,8 @@ class _HomeTabsState extends State<HomeTabs> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
-                      right: showMemberBadge || unread > 0 ? 52 : 0,                    ),
+                      right: showMemberBadge || unread > 0 ? 52 : 0,
+                    ),
                     child: Row(
                       children: [
                         Icon(

@@ -7,11 +7,13 @@ import '../helpers/home_helper.dart';
 import 'auto_away_service.dart';
 import 'platform/platform_auto_away_task_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 typedef HomeAutoAwayHomesProvider = Map<String, dynamic> Function();
 
 class HomeAutoAwayCoordinator {
-  static const Duration _androidForegroundConfirmInterval =
-      Duration(minutes: 2);
+  static const Duration _androidForegroundConfirmInterval = Duration(
+    minutes: 2,
+  );
 
   Timer? _presenceRefreshTimer;
   DateTime? _lastAndroidForegroundConfirmAt;
@@ -61,11 +63,7 @@ class HomeAutoAwayCoordinator {
     _presenceRefreshTimer?.cancel();
 
     // Kiểm tra ngay khi bắt đầu.
-    refreshPresenceNow(
-      uid: uid,
-      homes: homesProvider(),
-      event: immediateEvent,
-    );
+    refreshPresenceNow(uid: uid, homes: homesProvider(), event: immediateEvent);
 
     _presenceRefreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       refreshPresenceNow(uid: uid, homes: homesProvider());

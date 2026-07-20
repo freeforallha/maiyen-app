@@ -3,7 +3,8 @@ const Map<String, String> trStrings = {
   "Không đọc được số điện thoại": "Telefon numarası okunamadı",
   "Tin nhắn quá dài": "Mesaj çok uzun",
   "Không gửi được tin nhắn": "Mesaj gönderilemedi",
-  "Bạn không có quyền sửa lịch chung của nhà": "Ortak ev programını düzenleme izniniz yok",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Ortak ev programını düzenleme izniniz yok",
   "Nhà của bạn": "Eviniz",
   "Tải tin cũ hơn": "Eski mesajları yükle",
   "Nhà chưa đặt tên": "Adsız ev",
@@ -91,13 +92,17 @@ const Map<String, String> trStrings = {
   "Đang theo dõi": "İzleniyor",
   "Chưa nhận diện": "Tanınmayan cihaz",
   "Chưa có cập nhật": "Henüz güncelleme yok",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Henüz cihaz yok. Bir cihaz eklemek ve evinizi korumaya başlamak için + simgesine dokunun.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Henüz cihaz yok. Bir cihaz eklemek ve evinizi korumaya başlamak için + simgesine dokunun.",
   "CHƯA AN TOÀN": "GÜVENLİ DEĞİL",
   "ĐÃ AN TOÀN": "GÜVENLİ",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Evinizin kontrol edilmesi gerekiyor. Aşağıdaki durumları gözden geçirin.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Evinizin kontrol edilmesi gerekiyor. Aşağıdaki durumları gözden geçirin.",
   "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Eviniz normal çalışıyor.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Olağandışı duman veya SOS etkinliği algılanmadı.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Daha ayrıntılı analiz için yeterli yakın tarihli etkinlik yok.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Olağandışı duman veya SOS etkinliği algılanmadı.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Daha ayrıntılı analiz için yeterli yakın tarihli etkinlik yok.",
   "Hub kết nối bình thường": "Hub bağlı",
   "Cài đặt cảnh báo cho nhà hiện tại": "Bu ev için uyarı ayarları",
   "Nhận cảnh báo báo động": "Alarm uyarılarını al",
@@ -161,20 +166,25 @@ const Map<String, String> trStrings = {
   "Đã rời khỏi home": "Evden ayrıldınız",
   "Đã cập nhật": "Güncellendi",
   "Tìm home...": "Evlerde ara...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Ev konumunu ayarlayın ve otomatik korumayı etkinleştirin",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Ev konumunu ayarlayın ve otomatik korumayı etkinleştirin",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Ev sahipliğini devredin veya evi silin",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Seçili evler için hatırlatıcı/alarm ayarla",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Seçili evler için hatırlatıcı/alarm ayarla",
   "Chia sẻ nhà đã chọn": "Seçili evleri paylaş",
   "Mở danh sách chia sẻ nhà": "Ev paylaşım listesini aç",
   "Xoá các nhà đã chọn?": "Seçili evler silinsin mi?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Seçili evler kalıcı olarak silinecek.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Veya seçili evlere erişim istemek için bir QR kodu tarayın",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Seçili evler kalıcı olarak silinecek.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Veya seçili evlere erişim istemek için bir QR kodu tarayın",
   "Email người nhận": "Alıcının e-postası",
   "Chia sẻ": "Paylaş",
   "Email chưa đăng ký": "E-posta kayıtlı değil",
   "Chia sẻ hoàn tất": "Paylaşım tamamlandı",
   "Mở List chia sẻ nhà": "Ev paylaşım listesini aç",
-  "Không có nhà nào bạn có quyền quản lý": "Seçili evlerin hiçbirini yönetmiyorsunuz",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Seçili evlerin hiçbirini yönetmiyorsunuz",
   "Chưa share cho ai": "Henüz kimseyle paylaşılmadı",
   "Tìm nhà": "Evlerde ara",
   "Xoá các nhà đã chọn ?": "Seçili evler silinsin mi?",
@@ -188,7 +198,8 @@ const Map<String, String> trStrings = {
   "Vuốt lên để tải thêm": "Daha fazla yüklemek için yukarı kaydırın",
   "Không có thiết bị": "Cihaz yok",
   "Chỉ chủ nhà mới được xoá nhà": "Bu evi yalnızca ev sahibi silebilir",
-  "Chỉ chủ nhà mới được chuyển quyền": "Sahipliği yalnızca ev sahibi devredebilir",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Sahipliği yalnızca ev sahibi devredebilir",
   "Lưu ý khi bật báo động": "Alarm bildirimi",
   "Báo động đã được bật": "Alarm etkin",
   "Đã hiểu": "Anladım",
@@ -197,8 +208,10 @@ const Map<String, String> trStrings = {
   "Đã tắt báo động": "Alarm kapatıldı",
   "Tắt báo động": "Alarmı durdur",
   "Cả ngày": "Tüm gün",
-  "Bạn không có quyền thực hiện thao tác này.": "Bu işlemi gerçekleştirme izniniz yok.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Bu işlemi gerçekleştirme izniniz yok.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
   "QR gia nhập nhiều nhà không hợp lệ": "Çoklu eve katılım QR kodu geçersiz",
   "Bạn đang là chủ các nhà này": "Bu evlerin sahibisiniz",
   "Một người dùng": "Bir kullanıcı",
@@ -210,15 +223,19 @@ const Map<String, String> trStrings = {
   "Bạn không có quyền thêm thiết bị": "Cihaz ekleme izniniz yok",
   "Đã mở chế độ thêm thiết bị": "Cihaz eşleştirme etkinleştirildi",
   "Rời khỏi Home này?": "Bu evden ayrılmak istiyor musunuz?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Bu ev ve tüm cihazları kalıcı olarak silinecek.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Bu ev ve tüm cihazları kalıcı olarak silinecek.",
   "Đã xoá nhà": "Ev silindi",
   "QR của nhà này": "Ev QR kodu",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Başkaları eve erişim istemek için bu kodu tarayabilir.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Başkaları eve erişim istemek için bu kodu tarayabilir.",
   "Chia sẻ nhà": "Evi paylaş",
   "Quét QR để xin gia nhập nhà": "Bir eve katılmak için QR tara",
   "Quét QR xin gia nhập nhà": "Eve katılmak için QR tara",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Paylaşılan evin QR kodunu çerçevenin içine yerleştirin",
-  "Mã QR này do chủ nhà chia sẻ": "Bu QR kodu ev sahibi tarafından paylaşılmıştır",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Paylaşılan evin QR kodunu çerçevenin içine yerleştirin",
+  "Mã QR này do chủ nhà chia sẻ":
+      "Bu QR kodu ev sahibi tarafından paylaşılmıştır",
   "Nhập mã mời": "Davet kodunu girin",
   "Gửi yêu cầu gia nhập": "Katılma isteği gönder",
   "QR này không phải mã thiết bị": "Bu QR kodu bir cihaz kodu değil",
@@ -247,7 +264,8 @@ const Map<String, String> trStrings = {
   "Thêm nhà mới": "Yeni ev ekle",
   "Tạo nhà mới": "Yeni ev oluştur",
   "Tạo một ngôi nhà mới của bạn": "Yeni bir ev oluştur",
-  "Quét mã QR được chủ nhà chia sẻ": "Ev sahibinin paylaştığı QR kodunu tarayın",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Ev sahibinin paylaştığı QR kodunu tarayın",
   "Tên nhà": "Ev adı",
   "Số điện thoại": "Telefon numarası",
   "Nam": "Erkek",
@@ -261,7 +279,8 @@ const Map<String, String> trStrings = {
   "Không thể lưu thông tin": "Bilgiler kaydedilemedi",
   "Đã lưu thông tin": "Bilgiler kaydedildi",
   "Lỗi lưu profile": "Profil kaydedilemedi",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Acil durumlar için telefon numarası ekleyin",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Acil durumlar için telefon numarası ekleyin",
   "Hoàn tất": "Bitti",
   "Đã tạo nhà mới": "Ev oluşturuldu",
   "Về muộn": "Geç döneceğim",
@@ -280,7 +299,8 @@ const Map<String, String> trStrings = {
   "SĐT": "Telefon",
   "Ngày sinh": "Doğum tarihi",
   "Yêu cầu & lời mời": "İstekler ve davetler",
-  "Xem lời mời chia sẻ và xin gia nhập": "Paylaşım davetlerini ve katılma isteklerini görüntüleyin",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Paylaşım davetlerini ve katılma isteklerini görüntüleyin",
   "Cài đặt bảo mật": "Güvenlik ayarları",
   "Quyền báo động toàn màn hình": "Tam ekran alarm izni",
   "Báo động toàn màn hình": "Tam ekran alarm",
@@ -330,7 +350,8 @@ const Map<String, String> trStrings = {
   "Đổi tên phòng": "Odayı yeniden adlandır",
   "Tên phòng": "Oda adı",
   "Xoá phòng": "Odayı sil",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Bu odadaki cihazlar Atanmamış bölümüne taşınacak.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Bu odadaki cihazlar Atanmamış bölümüne taşınacak.",
   "Thêm phòng": "Oda ekle",
   "Ví dụ: Phòng khách": "Örnek: Oturma odası",
   "Phòng khách": "Oturma odası",
@@ -351,9 +372,11 @@ const Map<String, String> trStrings = {
   "Cửa đóng": "Kapı kapalı",
   "Chưa đặt vị trí nhà": "Ev konumu ayarlanmadı",
   "Đặt vị trí nhà tại đây": "Ev konumunu burada ayarlayın",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Otomatik Korumayı açmadan önce ev konumunu ayarlayın",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Otomatik Korumayı açmadan önce ev konumunu ayarlayın",
   "Bán kính bảo vệ mặc định: 150 m": "Varsayılan koruma yarıçapı: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Her üye, uzakta/evde durumunun arka planda çalışabilmesi için konum iznini Her Zaman olarak ayarlamalıdır.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Her üye, uzakta/evde durumunun arka planda çalışabilmesi için konum iznini Her Zaman olarak ayarlamalıdır.",
   "Lưu cài đặt": "Ayarları kaydet",
   "Đã đặt vị trí nhà": "Ev konumu ayarlandı",
   "Đang lấy vị trí...": "Konum alınıyor...",
@@ -362,16 +385,20 @@ const Map<String, String> trStrings = {
   "Cập nhật thông tin nhà": "Ev bilgilerini güncelle",
   "Nhập địa chỉ của nhà": "Ev adresini girin",
   "Lưu thay đổi": "Değişiklikleri kaydet",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Bu ad yalnızca hesabınızda gösterilir.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Ad ve adres tüm ev üyeleri için güncellenecek.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Bu ad yalnızca hesabınızda gösterilir.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Ad ve adres tüm ev üyeleri için güncellenecek.",
   "Một thành viên": "Bir üye",
   "Đã cập nhật thông tin nhà": "Ev bilgileri güncellendi",
   "Thay tên": "Yeniden adlandır",
   "Đã đổi tên thiết bị": "Cihaz yeniden adlandırıldı",
   "Chưa chọn nhà để kiểm tra": "Test etmek için bir ev seçin",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Bu testi ev sahibi hesabıyla çalıştırın",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Bu testi ev sahibi hesabıyla çalıştırın",
   "Không đọc được dữ liệu nhà": "Ev verileri okunamadı",
-  "Nhà cần có ít nhất một thiết bị để test": "Test için evde en az bir cihaz olmalıdır",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Test için evde en az bir cihaz olmalıdır",
   "Đóng": "Kapat",
   "Đã thiết lập": "Ayarla",
   "Quét QR": "QR tara",
@@ -427,8 +454,10 @@ const Map<String, String> trStrings = {
   "Chế độ áp dụng": "Modu uygula",
   "Theo nhà": "Ev programı",
   "Riêng tôi": "Kişisel",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Ev sahibi veya yöneticinin ayarladığı ortak programı kullan",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Yalnızca hesabınıza uygulanan kişisel bir program kullan",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Ev sahibi veya yöneticinin ayarladığı ortak programı kullan",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Yalnızca hesabınıza uygulanan kişisel bir program kullan",
   "Thiết lập nhanh báo động": "Hızlı alarm kurulumu",
   "Thiết lập nhanh toàn bộ thiết bị": "Tüm cihazları hızlıca ayarla",
   "Áp dụng cho toàn bộ thiết bị": "Tüm cihazlara uygula",
@@ -466,10 +495,13 @@ const Map<String, String> trStrings = {
   "Đã chia sẻ nhà thành công.": "Evler başarıyla paylaşıldı.",
   "Tìm nhà...": "Evlerde ara...",
   "Đã rời khỏi nhà": "Evden ayrıldınız",
-  "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Paylaşılan evlerden ayrılacaksınız.",
+  "Bạn sẽ rời khỏi các nhà được chia sẻ.":
+      "Paylaşılan evlerden ayrılacaksınız.",
   "Các nhà của bạn sẽ bị xoá.\n": "Evleriniz silinecek.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Bu işlem, seçili evlerdeki tüm güvenlik cihazlarının Ev Alarmı programlarını değiştirecek.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Bu işlem, seçili evlere bir Ev Hatırlatıcısı ekleyecek.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Bu işlem, seçili evlerdeki tüm güvenlik cihazlarının Ev Alarmı programlarını değiştirecek.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Bu işlem, seçili evlere bir Ev Hatırlatıcısı ekleyecek.\n\n",
   "Xác nhận thay đổi báo động": "Alarm değişikliklerini onayla",
   "Xác nhận thay đổi nhắc nhở": "Hatırlatıcı değişikliklerini onayla",
   "Lặp lại khi sự cố vẫn còn": "Sorun devam ederken tekrarla",
@@ -477,14 +509,19 @@ const Map<String, String> trStrings = {
   "VD: Mr Chung": "Örn. Bay Chung",
   "🏡 Chưa có nhà nào": "🏡 Henüz ev yok",
   "Vẫn chuyển về Bình thường": "Yine de Normal moda geç",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Uzaktayken Otomatik Koruma hâlâ etkin. Tüm üyeler hâlâ uzaktaysa sistem birkaç dakika sonra Koruma modunu yeniden açabilir.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Uzaktayken Otomatik Koruma hâlâ etkin. Tüm üyeler hâlâ uzaktaysa sistem birkaç dakika sonra Koruma modunu yeniden açabilir.",
   "Chuyển về Bình thường?": "Normal moda geçilsin mi?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Güvenlik cihazları hemen izlenmeye başlanacak.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Güvenlik cihazları hemen izlenmeye başlanacak.\n\n",
   "Bật Bảo vệ thủ công?": "Manuel Koruma modu açılsın mı?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Bu işlem bugün bazı cihazların alarm zamanını değiştirecek...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Bu işlem bu evdeki tüm alarmları devre dışı bırakacak ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Bu işlem bugün bazı cihazların alarm zamanını değiştirecek...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Bu işlem bu evdeki tüm alarmları devre dışı bırakacak ",
   "Tắt toàn bộ báo động?": "Tüm alarmlar kapatılsın mı?",
-  "Không xoá được lịch tạm tắt báo động": "Alarm duraklatma programı silinemedi",
+  "Không xoá được lịch tạm tắt báo động":
+      "Alarm duraklatma programı silinemedi",
   "Không lưu được tạm tắt báo động": "Alarm duraklatması kaydedilemedi",
   "Không gửi được yêu cầu xoá": "Silme isteği gönderilemedi",
   "Không lưu được cài đặt": "Ayar kaydedilemedi",
@@ -492,29 +529,40 @@ const Map<String, String> trStrings = {
   "Không thể xác nhận tài khoản hiện tại": "Mevcut hesap doğrulanamadı",
   "Mật khẩu không đúng": "Şifre yanlış",
   "Không thể xác nhận mật khẩu": "Şifre doğrulanamadı",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Alarm tekrar ayarını yalnızca Ev Sahibi veya Yönetici değiştirebilir",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Alarm tekrar ayarını yalnızca Ev Sahibi veya Yönetici değiştirebilir",
   "Không lưu được thời gian lặp báo động": "Alarm tekrar süresi kaydedilemedi",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Koruma modunu yalnızca Ev Sahibi veya Yönetici değiştirebilir",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Koruma modunu yalnızca Ev Sahibi veya Yönetici değiştirebilir",
   "Không thể thay đổi chế độ nhà": "Ev modu değiştirilemedi",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Koruma modu açık, ancak bildirim gönderilemedi",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Koruma modu açık, ancak bildirim gönderilemedi",
   "Đã bật Chế độ Bảo vệ thủ công": "Manuel Koruma modu etkinleştirildi",
   "Đã chuyển nhà về Bình thường": "Ev Normal moda döndü",
   "60 phút": "60 dakika",
   "30 phút": "30 dakika",
   "15 phút": "15 dakika",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Ev sahibinin programını görüntülüyorsunuz. Kendi Alarm programınızı ayarlamak için Yalnızca ben seçeneğini seçin.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Ev sahibinin programını görüntülüyorsunuz. Kendi Alarm programınızı ayarlamak için Yalnızca ben seçeneğini seçin.",
   "Chọn giờ kết thúc báo động": "Alarm bitiş saatini seçin",
   "Chọn giờ bắt đầu báo động": "Alarm başlangıç saatini seçin",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Bu evin Alarm programını düzenleme izniniz yok",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Alarm tüm cihazlara uygulanamadı",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Bu evde uygulanabilecek güvenlik cihazı yok",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Ev ayarlarını düzenleme izniniz yok. Yalnızca ben seçeneğini seçin.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Bu evin Alarm programını düzenleme izniniz yok",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Alarm tüm cihazlara uygulanamadı",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Bu evde uygulanabilecek güvenlik cihazı yok",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Ev ayarlarını düzenleme izniniz yok. Yalnızca ben seçeneğini seçin.",
   "Không thể lưu chế độ báo động": "Alarm modu kaydedilemedi",
   "Thêm nhắc nhở": "Hatırlatıcı ekle",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Hatırlatıcı, seçilen saatte evinizin güvenlik durumunu kontrol etmenizi hatırlatır.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Hatırlatıcı, seçilen saatte evinizin güvenlik durumunu kontrol etmenizi hatırlatır.",
   "Thêm khung giờ báo động": "Alarm zaman aralığı ekle",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Kendi Hatırlatıcı ayarlarınız kullanılıyor",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Ev sahibinin Hatırlatıcı ayarları kullanılıyor",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Kendi Hatırlatıcı ayarlarınız kullanılıyor",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Ev sahibinin Hatırlatıcı ayarları kullanılıyor",
   "Sửa giờ nhắc nhở": "Hatırlatıcı saatini düzenle",
   "Sửa giờ kết thúc báo động": "Alarm bitiş saatini düzenle",
   "Sửa giờ bắt đầu báo động": "Alarm başlangıç saatini düzenle",
@@ -531,118 +579,171 @@ const Map<String, String> trStrings = {
   "Xoá thành viên": "Üyeyi kaldır",
   "Đã xoá thành viên": "Üye kaldırıldı",
   "Đồng ý": "Tamam",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Bu evden ayrılmak istediğinizden emin misiniz?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Bu evden ayrılmak istediğinizden emin misiniz?",
   "Xoá thành viên?": "Üye kaldırılsın mı?",
   "Rời khỏi nhà?": "Bu evden ayrılmak istiyor musunuz?",
-  "Chỉ chủ nhà mới được thay đổi vai trò": "Rolleri yalnızca ev sahibi değiştirebilir",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Rolleri yalnızca ev sahibi değiştirebilir",
   "Bạn không có quyền xoá thành viên này": "Bu üyeyi kaldırma izniniz yok",
   "Bạn": "Siz",
   "Không có email": "E-posta yok",
   "Chưa có số điện thoại": "Telefon numarası yok",
   "Không mở được ứng dụng gọi điện": "Telefon uygulaması açılamadı",
   "Thành viên chưa cập nhật số điện thoại": "Bu üye telefon numarası eklememiş",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Manuel Koruma modu açık — kapatmak için Normal moda geçin",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Manuel Koruma modu açık — kapatmak için Normal moda geçin",
   "Thời gian lặp": "Tekrar aralığı",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Bir kez uyarı almak için 0'ı seçin. Bu ayar Manuel Koruma modu ve Uzaktayken Otomatik Koruma için geçerlidir.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Bir kez uyarı almak için 0'ı seçin. Bu ayar Manuel Koruma modu ve Uzaktayken Otomatik Koruma için geçerlidir.",
   "Lặp báo động khi sự cố vẫn còn": "Sorun devam ederken Alarmı tekrarla",
   "Đang được sử dụng": "Şu anda etkin",
   "Chuyển về sử dụng thông thường": "Normal kullanıma dön",
   "Chế độ nhà": "Ev modu",
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS cihazı bir uyarı kaydetmedi.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Duman sensörü bir sorun algılamadı.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Siz veya bir üye Koruma modunu manuel olarak açtı.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "Evden ayrıldığınız için SafeHome Koruma modunu otomatik olarak açtı.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Duman sensörü bir sorun algılamadı.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Siz veya bir üye Koruma modunu manuel olarak açtı.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "Evden ayrıldığınız için SafeHome Koruma modunu otomatik olarak açtı.",
   "Nhà đang ở chế độ dùng bình thường.": "Bu ev şu anda normal kullanımda.",
   "Bảo vệ thủ công đang bật": "Manuel Koruma açık",
   "Bảo vệ tự động đang bật": "Otomatik Koruma açık",
   "Bảo vệ đang tắt": "Koruma modu kapalı",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Durumu kontrol etmek için uygulamayı yakın zamanda açtınız.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "İzinleri, programları ve okunmamış uyarıları gözden geçirmek için uygulamayı düzenli olarak açın.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Birkaç kullanımdan sonra SafeHome, uygulamayı kontrol etme alışkanlığınızı daha iyi değerlendirebilir.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Durumu kontrol etmek için uygulamayı yakın zamanda açtınız.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "İzinleri, programları ve okunmamış uyarıları gözden geçirmek için uygulamayı düzenli olarak açın.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Birkaç kullanımdan sonra SafeHome, uygulamayı kontrol etme alışkanlığınızı daha iyi değerlendirebilir.",
   "Tần suất vào ứng dụng ổn": "Uygulamayı kontrol etme sıklığı iyi görünüyor",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Son uygulama kontrolünden bu yana uzun zaman geçti",
-  "Đang ghi nhận tần suất vào ứng dụng": "Uygulama kontrol sıklığı kaydediliyor",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Her Zaman konum iznini ve arka plan koşullarını kontrol edin.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Bu cihaz Otomatik Uzakta için gereksinimleri karşılıyor.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Ayrıldığınızda Koruma modunun otomatik olarak açılmasını istiyorsanız etkinleştirin.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Son uygulama kontrolünden bu yana uzun zaman geçti",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Uygulama kontrol sıklığı kaydediliyor",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Her Zaman konum iznini ve arka plan koşullarını kontrol edin.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Bu cihaz Otomatik Uzakta için gereksinimleri karşılıyor.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Ayrıldığınızda Koruma modunun otomatik olarak açılmasını istiyorsanız etkinleştirin.",
   "Auto rời khỏi nhà chưa ổn": "Otomatik Uzakta hazır değil",
   "Auto rời khỏi nhà đã sẵn sàng": "Otomatik Uzakta hazır",
   "Auto rời khỏi nhà chưa bật": "Otomatik Uzakta etkin değil",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Evinize uygun bir duman sensörü, SOS veya acil durum cihazı ekleyin.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Evinize uygun bir duman sensörü, SOS veya acil durum cihazı ekleyin.",
   "Chưa có thiết bị khẩn cấp": "Henüz acil durum cihazı yok",
   "Đã có thiết bị khẩn cấp": "Acil durum cihazları eklendi",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Uyku zamanı veya uzakta olduğunuz zaman için bir Alarm programı ayarlayın.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Bu evde bir Alarm programı veya cihaz düzeyinde uyarı programı var.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Uyku zamanı veya uzakta olduğunuz zaman için bir Alarm programı ayarlayın.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Bu evde bir Alarm programı veya cihaz düzeyinde uyarı programı var.",
   "Chưa cài lịch báo động": "Alarm programı ayarlanmadı",
   "Đã cài lịch báo động": "Alarm programı ayarlandı",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Evinizi kontrol etmeyi unutmamak için en az bir Hatırlatıcı ayarlayın.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Uygulama, programa göre evinizi kontrol etmenizi hatırlatır.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Evinizi kontrol etmeyi unutmamak için en az bir Hatırlatıcı ayarlayın.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Uygulama, programa göre evinizi kontrol etmenizi hatırlatır.",
   "Chưa cài đặt nhắc nhở": "Hatırlatıcı ayarlanmadı",
   "Đã cài đặt nhắc nhở": "Hatırlatıcı ayarlandı",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Bu cihaz uyarı almıyorsa uygulamayı yeniden açın veya tekrar giriş yapın.",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Bu cihaz uyarı almıyorsa uygulamayı yeniden açın veya tekrar giriş yapın.",
   "Thiết bị chưa đăng ký nhận cảnh báo": "Bu cihaz uyarılar için kayıtlı değil",
   "Thiết bị nhận cảnh báo bình thường": "Bu cihaz uyarı alabilir",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS, arka plan kullanımını Android'den daha sıkı denetler; Otomatik Uzakta kullanıyorsanız bildirimleri ve Her Zaman konumu açık tutun.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS, arka plan kullanımını Android'den daha sıkı denetler; Otomatik Uzakta kullanıyorsanız bildirimleri ve Her Zaman konumu açık tutun.",
   "Cơ chế iOS": "iOS davranışı",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Uyarıların gecikmemesi için arka plan iznini ve otomatik başlatmayı kontrol edin.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Cihaz önemli arka plan koşullarını doğruladı.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Arka plan kullanımını / otomatik başlatmayı kontrol et",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Uyarıların gecikmemesi için arka plan iznini ve otomatik başlatmayı kontrol edin.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Cihaz önemli arka plan koşullarını doğruladı.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Arka plan kullanımını / otomatik başlatmayı kontrol et",
   "Chạy nền ổn định": "Arka plan kullanımı kararlı görünüyor",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Bazı Android telefonlar pil optimizasyonu açıkken uyarıları geciktirebilir.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Telefonun SafeHome uyarılarını geciktirme olasılığı daha düşüktür.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Bazı Android telefonlar pil optimizasyonu açıkken uyarıları geciktirebilir.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefonun SafeHome uyarılarını geciktirme olasılığı daha düşüktür.",
   "Chưa tắt tối ưu pin": "Pil optimizasyonu hâlâ etkin",
   "Tối ưu pin không chặn ứng dụng": "Pil optimizasyonu uygulamayı engellemiyor",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Otomatik Uzakta'nın güvenilir çalışması için Her Zaman konum izni gerekir.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Otomatik Uzakta için konum izni gereklidir.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Konum hizmeti kapalı olduğu için Otomatik Uzakta güvenilir çalışmayabilir.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Bu yalnızca Otomatik Uzakta kullanılırken gereklidir.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Otomatik Uzakta'nın güvenilir çalışması için Her Zaman konum izni gerekir.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Otomatik Uzakta için konum izni gereklidir.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Konum hizmeti kapalı olduğu için Otomatik Uzakta güvenilir çalışmayabilir.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Bu yalnızca Otomatik Uzakta kullanılırken gereklidir.",
   "Chưa cấp vị trí luôn luôn": "Her Zaman konum izni verilmedi",
   "Đã cấp vị trí luôn luôn": "Her Zaman konum izni verildi",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS, Android gibi tam ekran açmaz; uygulama sistem bildirimlerini ve sesi kullanır.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android tam ekran uyarılar kullanır; telefon engelliyorsa ayarlardan izin verin.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS, Android gibi tam ekran açmaz; uygulama sistem bildirimlerini ve sesi kullanır.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android tam ekran uyarılar kullanır; telefon engelliyorsa ayarlardan izin verin.",
   "Cảnh báo trên iOS": "iOS uyarıları",
   "Cảnh báo toàn màn hình": "Tam ekran uyarılar",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Bildirimler kapalıysa uyarılar görünmeyebilir.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Bu telefon SafeHome bildirimlerini alabilir.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Bildirimler kapalıysa uyarılar görünmeyebilir.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Bu telefon SafeHome bildirimlerini alabilir.",
   "Chưa bật thông báo": "Bildirimler etkin değil",
   "Đã bật thông báo": "Bildirimler etkin",
   "Hệ thống: Sẵn sàng": "Sistem: Hazır",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistem: Uyarılar kaçırılabilir",
   "Cách bạn đang dùng ứng dụng": "Uygulamayı nasıl kullandığınız",
   "Thiết bị của bạn": "Cihazınız",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Telefonunuzu ve uygulamayı nasıl kullandığınızı kontrol eder.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Telefonunuzu ve uygulamayı nasıl kullandığınızı kontrol eder.",
   "Hệ thống SafeHome": "SafeHome Sistemi",
   "Hệ thống: Đang kiểm tra...": "Sistem: Kontrol ediliyor...",
   "Tên": "Ad",
-  "Bạn không có quyền thay đổi vị trí nhà": "Ev konumunu değiştirme izniniz yok",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Ev konumunu değiştirme izniniz yok",
   "Hãy bật GPS để đặt vị trí nhà": "Ev konumunu ayarlamak için GPS'i açın",
   "Bạn chưa cấp quyền vị trí": "Konum izni verilmedi",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Uygulama ayarlarından konum izni verin",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Herkes evden ayrıldığında Otomatik Koruma etkin",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Herkes evden ayrıldığında Otomatik Koruma devre dışı",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Uygulama ayarlarından konum izni verin",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Herkes evden ayrıldığında Otomatik Koruma etkin",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Herkes evden ayrıldığında Otomatik Koruma devre dışı",
   "Không thể thay đổi trạng thái báo động": "Alarm durumu değiştirilemedi",
   "Đã tắt toàn bộ báo động của nhà": "Tüm ev alarmları kapatıldı",
-  "QR này không phải mã xin gia nhập Home": "Bu QR kodu bir Eve katılım kodu değil",
+  "QR này không phải mã xin gia nhập Home":
+      "Bu QR kodu bir Eve katılım kodu değil",
   "Thêm Home": "Ev Ekle",
   "Mở cài đặt": "Ayarları aç",
   "Để sau": "Daha sonra",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome, uygulama arka plandayken bile evden ayrıldığınızı veya eve döndüğünüzü algılamak için sürekli konum iznine ihtiyaç duyar.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome şu anda konuma yalnızca uygulama kullanılırken erişebilir.\n\nKonum iznini açın ve otomatik korumanın arka planda çalışmaya devam etmesi için \"Her zaman izin ver\" seçeneğini seçin.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome, uygulama arka plandayken bile evden ayrıldığınızı veya eve döndüğünüzü algılamak için sürekli konum iznine ihtiyaç duyar.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome şu anda konuma yalnızca uygulama kullanılırken erişebilir.\n\nKonum iznini açın ve otomatik korumanın arka planda çalışmaya devam etmesi için \"Her zaman izin ver\" seçeneğini seçin.",
   "Cho phép vị trí luôn luôn": "Konuma her zaman izin ver",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Evleriniz silinecek.\nPaylaşılan evlerden ayrılacaksınız.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Bu işlem, seçili evlerdeki tüm güvenlik cihazlarının Ev Alarmı programlarını değiştirecek.\n\nEv Alarmı ayarlarını kullanan üyeler etkilenecek.\nKişisel Alarm ayarları değişmeyecek.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Bu işlem seçili evlere bir Ev Hatırlatıcısı ekleyecek.\n\nEv Hatırlatıcısı ayarlarını kullanan üyeler etkilenecek.\nKişisel Hatırlatıcı ayarları değişmeyecek.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Güvenlik cihazları hemen izlenmeye başlanacak.\n\nUzaktayken Otomatik Koruma duraklatılacak. Bu mod biri eve geldiğinde otomatik olarak kapanmaz ve yetkili bir üye tarafından Normal moda geri alınmalıdır.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Bu işlem bugün bazı cihazların alarm zamanını değiştirecek...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Bu işlem bu evdeki tüm Alarmları kapatacak. Artık bu telefonda tehlike uyarıları almayacaksınız.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarm Ev ayarlarını kullanıyor.\n\nEv sahibi veya bir yönetici tarafından yapılandırılan ortak programlara göre uyarılar alacaksınız.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarm Benim ayarlarımı kullanıyor.\n\nBu hesap için kişisel Alarm programlarına göre uyarılar alacaksınız.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Evleriniz silinecek.\nPaylaşılan evlerden ayrılacaksınız.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Bu işlem, seçili evlerdeki tüm güvenlik cihazlarının Ev Alarmı programlarını değiştirecek.\n\nEv Alarmı ayarlarını kullanan üyeler etkilenecek.\nKişisel Alarm ayarları değişmeyecek.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Bu işlem seçili evlere bir Ev Hatırlatıcısı ekleyecek.\n\nEv Hatırlatıcısı ayarlarını kullanan üyeler etkilenecek.\nKişisel Hatırlatıcı ayarları değişmeyecek.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Güvenlik cihazları hemen izlenmeye başlanacak.\n\nUzaktayken Otomatik Koruma duraklatılacak. Bu mod biri eve geldiğinde otomatik olarak kapanmaz ve yetkili bir üye tarafından Normal moda geri alınmalıdır.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Bu işlem bugün bazı cihazların alarm zamanını değiştirecek...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Bu işlem bu evdeki tüm Alarmları kapatacak. Artık bu telefonda tehlike uyarıları almayacaksınız.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarm Ev ayarlarını kullanıyor.\n\nEv sahibi veya bir yönetici tarafından yapılandırılan ortak programlara göre uyarılar alacaksınız.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarm Benim ayarlarımı kullanıyor.\n\nBu hesap için kişisel Alarm programlarına göre uyarılar alacaksınız.",
   "Không thể đăng nhập bằng Google": "Google ile giriş yapılamadı",
   "Không đặt được mật khẩu": "Şifre ayarlanamadı",
   "Chấp nhận": "Kabul et",
   "Cho phép": "İzin ver",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Davet kabul edilemedi. Lütfen tekrar deneyin.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Katılma isteği kabul edilemedi. Lütfen tekrar deneyin.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Davet kabul edilemedi. Lütfen tekrar deneyin.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Katılma isteği kabul edilemedi. Lütfen tekrar deneyin.",
   "Từ chối": "Reddet",
   "Lời mời từ chủ nhà": "Ev sahibinden davet",
   "Nhận quyền chủ nhà": "Ev sahipliğini devral",
@@ -664,10 +765,13 @@ const Map<String, String> trStrings = {
   "KIỂM TRA NHÀ": "EVİ KONTROL ET",
   "ĐÓNG NHẮC NHỞ": "HATIRLATICIYI KAPAT",
   "SafeHome Security Alert": "SafeHome Güvenlik Uyarısı",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Uygulama ayarlarında Her zaman izin ver konum iznini seçin",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google hesabınızın güvenlik özelliklerini kullanmak için ek bir şifreye ihtiyacı var.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Uygulama ayarlarında Her zaman izin ver konum iznini seçin",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google hesabınızın güvenlik özelliklerini kullanmak için ek bir şifreye ihtiyacı var.",
   "Báo động": "Alarm",
-  "Bạn không có quyền thực hiện thao tác này。": "Bu işlemi gerçekleştirme izniniz yok.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Bu işlemi gerçekleştirme izniniz yok.",
   "Cài đặt": "Ayarlar",
   "Cập nhật": "Güncelle",
   "Chọn ngôn ngữ": "Dil seç",
@@ -730,196 +834,292 @@ const Map<String, String> trStrings = {
   "Đã tạo nhà": "Ev oluşturuldu",
   "Chế độ Bảo vệ thủ công đã bật": "Manuel Koruma modu etkinleştirildi",
   "Báo động không lặp lại.": "Alarm tekrarlanmayacak.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Sorun devam ederse alarm \$securityModeRepeatMinutes dakika sonra tekrarlanır.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName, \"\$homeName\" için Manuel Koruma modunu açtı. Bu mod yalnızca yetkili bir üye Normal moda geçtiğinde kapanır. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "\"\$homeName\" için Alarmı etkinleştirdiniz.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "\"\$homeName\" için tüm Alarmları devre dışı bıraktınız.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Sorun devam ederse alarm \$securityModeRepeatMinutes dakika sonra tekrarlanır.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName, \"\$homeName\" için Manuel Koruma modunu açtı. Bu mod yalnızca yetkili bir üye Normal moda geçtiğinde kapanır. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "\"\$homeName\" için Alarmı etkinleştirdiniz.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "\"\$homeName\" için tüm Alarmları devre dışı bıraktınız.",
   "Thành viên mới": "Yeni üye",
   "Thành viên rời nhà": "Üye evden ayrıldı",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName, \"\$homeName\" evinden ayrıldı.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName, \"\$homeName\" içinde \$memberName adlı kullanıcının rolünü \$oldRoleName iken \$newRoleName olarak değiştirdi.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName, \"\$homeName\" evinden ayrıldı.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName, \"\$homeName\" içinde \$memberName adlı kullanıcının rolünü \$oldRoleName iken \$newRoleName olarak değiştirdi.",
   "Còn \$count tin nhắn chưa đọc": "\$count okunmamış mesaj",
   "Hãy an tâm nghỉ ngơi.": "İçiniz rahat olabilir.",
   "Có thiết bị chưa an toàn.": "Bazı cihazlar güvenli değil.",
   "SafeHome đang cập nhật vị trí": "SafeHome konumu güncelliyor",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Koruma modunu otomatik açmak için izleniyor.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Herkes evden ayrıldığında Koruma modunu otomatik açmak için konumu kullanır.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Koruma modunu otomatik açmak için izleniyor.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Herkes evden ayrıldığında Koruma modunu otomatik açmak için konumu kullanır.",
   "CẢNH BÁO SOS": "SOS UYARISI",
   "CẢNH BÁO KHÓI / CHÁY": "DUMAN / YANGIN UYARISI",
   "CẢNH BÁO NGẬP NƯỚC": "SU BASKINI UYARISI",
   "CẢNH BÁO RÒ KHÍ": "GAZ KAÇAĞI UYARISI",
   "CẢNH BÁO CỬA": "KAPI UYARISI",
   "CẢNH BÁO AN NINH": "GÜVENLİK UYARISI",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "SafeHome ile doğrulama yapılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Evin durumunu kontrol ettikten sonra uyarıyı durdurun.\n\nUyarıyı durdurmak istediğinizden emin misiniz?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "SafeHome ile doğrulama yapılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Evin durumunu kontrol ettikten sonra uyarıyı durdurun.\n\nUyarıyı durdurmak istediğinizden emin misiniz?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome bir uyarı algıladı",
   "Mở SafeHome để kiểm tra ngay.": "Şimdi kontrol etmek için SafeHome'u açın.",
   "\$count tin nhắn mới": "\$count yeni mesaj",
   "Tin nhắn HomeChat": "HomeChat mesajı",
   "\$senderName đã gửi một tin nhắn": "\$senderName bir mesaj gönderdi",
   "Bạn có tin nhắn mới": "Yeni bir mesajınız var",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Koruma modu yalnızca bir kez uyarı verir",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Koruma modu uyarıyı \$minutes dakika sonra tekrarlar",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "\$count ev için katılma isteği gönderildi",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName, \"\$homeName\" evine katılmak istedi.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Koruma modu yalnızca bir kez uyarı verir",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Koruma modu uyarıyı \$minutes dakika sonra tekrarlar",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "\$count ev için katılma isteği gönderildi",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName, \"\$homeName\" evine katılmak istedi.",
   "Bạn đã xoá nhà \"\$homeName\".": "\"\$homeName\" evini sildiniz.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "\"\$homeName\" sahipliğini devretmek için \$email adresine istek gönderdiniz.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName, \"\$homeName\" sahipliğini size devretmek istiyor.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName sizi \"\$homeName\" evine katılmaya davet etti.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome, \"\$deviceName\" cihazını \"\$homeName\" evinden kaldırıyor.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "\"\$deviceName\" cihazı \"\$homeName\" evine eklendi.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "\"\$homeName\" sahipliğini devretmek için \$email adresine istek gönderdiniz.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName, \"\$homeName\" sahipliğini size devretmek istiyor.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName sizi \"\$homeName\" evine katılmaya davet etti.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome, \"\$deviceName\" cihazını \"\$homeName\" evinden kaldırıyor.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "\"\$deviceName\" cihazı \"\$homeName\" evine eklendi.",
   "Bạn đã tạo nhà \"\$name\".": "\"\$name\" evini oluşturdunuz.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName evin adını \"\$newName\" olarak güncelledi ve adresini değiştirdi.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName evin adını \"\$newName\" olarak değiştirdi.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName, \"\$newName\" adresini güncelledi.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName, \"\$homeName\" evindeki \"\$oldDeviceName\" cihazının adını \"\$newName\" olarak değiştirdi.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName evin adını \"\$newName\" olarak güncelledi ve adresini değiştirdi.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName evin adını \"\$newName\" olarak değiştirdi.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName, \"\$newName\" adresini güncelledi.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName, \"\$homeName\" evindeki \"\$oldDeviceName\" cihazının adını \"\$newName\" olarak değiştirdi.",
   "Đang ghép nối: \$seconds giây": "Eşleştirme: \$seconds sn",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "\"\$homeName\" evinde cihaz eşleştirme \$seconds saniye boyunca etkinleştirildi.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Duraklatma süresi Alarm programı içinde olmalıdır (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total test başarılı\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name profiline telefon numarası eklememiş.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "\"\$homeName\" evinde cihaz eşleştirme \$seconds saniye boyunca etkinleştirildi.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Duraklatma süresi Alarm programı içinde olmalıdır (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total test başarılı\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name profiline telefon numarası eklememiş.",
   "Tin nhắn mới trong \$homeName": "\$homeName içinde yeni mesaj",
   "\$current/\$total kết quả": "\$current/\$total sonuç",
   "Đang trả lời \$name": "\$name adlı kullanıcıya yanıt veriliyor",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde duman algıladı.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde duman algıladı.",
   "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" normale döndü.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde SOS'u tetikledi.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde SOS'u tetikledi.",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" artık SOS durumunda değil.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde kurcalama bildirdi.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "\"\$name\" kurcalama uyarısı temizlendi.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde kapandı.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde açık.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$homeName\" evindeki \"\$name\" cihazının pili düşük.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$homeName\" evindeki \"\$name\" çevrimdışı oldu.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$homeName\" evindeki \"\$name\" tekrar çevrimiçi.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde yüksek sıcaklık kaydetti.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\", \"\$homeName\" evinde yüksek nem kaydetti.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde kurcalama bildirdi.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "\"\$name\" kurcalama uyarısı temizlendi.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde kapandı.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde açık.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$homeName\" evindeki \"\$name\" cihazının pili düşük.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$homeName\" evindeki \"\$name\" çevrimdışı oldu.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$homeName\" evindeki \"\$name\" tekrar çevrimiçi.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde yüksek sıcaklık kaydetti.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\", \"\$homeName\" evinde yüksek nem kaydetti.",
   "Có nút SOS vừa được kích hoạt": "Bir SOS düğmesi tetiklendi",
   "Có dấu hiệu khói hoặc cháy": "Duman veya yangın algılandı",
   "Có dấu hiệu ngập nước": "Su baskını algılandı",
   "Có dấu hiệu rò khí": "Gaz kaçağı algılandı",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Bir kapı açık veya bir cihaz kurcalandı",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Bir kapı açık veya bir cihaz kurcalandı",
   "Có thiết bị đang cảnh báo": "Bir cihaz uyarı veriyor",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Kimse onaylamazsa SafeHome acil durum araması başlatır.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Sorun giderilmediyse \$time saatinde tekrar uyarı verir.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Sorun giderilmediyse Alarm programına göre tekrar uyarı verir.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\", \"\$resolvedHomeName\" evinde kapandı.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\", \"\$resolvedHomeName\" evinde açık.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Kimse onaylamazsa SafeHome acil durum araması başlatır.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Sorun giderilmediyse \$time saatinde tekrar uyarı verir.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Sorun giderilmediyse Alarm programına göre tekrar uyarı verir.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\", \"\$resolvedHomeName\" evinde kapandı.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\", \"\$resolvedHomeName\" evinde açık.",
   "\$count nhà đã chọn": "\$count ev seçildi",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count güvensiz ev\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count ev dikkat gerektiriyor\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count ev dikkat gerektiriyor\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count güvenli ev",
   "\$count nhà đang được theo dõi": "\$count ev izleniyor",
   "\$minutes phút": "\$minutes dakika",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "\$updatedHomes ev için Hatırlatıcı ayarlandı.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "\$updatedHomes evdeki \$updatedDevices cihaz için Alarm ayarlandı.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Yönettiğiniz evler paylaşıldı.\n\nPaylaşım izniniz olmadığı için \$skipped ev atlandı.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarm \$count güvenlik cihazına uygulandı",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Aynı programı \$count güvenlik cihazına uygula",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "\$updatedHomes ev için Hatırlatıcı ayarlandı.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "\$updatedHomes evdeki \$updatedDevices cihaz için Alarm ayarlandı.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Yönettiğiniz evler paylaşıldı.\n\nPaylaşım izniniz olmadığı için \$skipped ev atlandı.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarm \$count güvenlik cihazına uygulandı",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Aynı programı \$count güvenlik cihazına uygula",
   "\$count phút trước": "\$count dakika önce",
   "\$count giờ trước": "\$count saat önce",
   "\${count}h trước": "\${count} saat önce",
   "\${hours}h\$minutes' trước": "\${hours} saat \$minutes dakika önce",
   "\$count ngày trước": "\$count gün önce",
   "\$count tháng trước": "\$count ay önce",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "\$name adlı üyeyi bu evden kaldırmak istediğinizden emin misiniz?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\n\"\$homeName\" evine katılmak istiyor",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "\$name adlı üyeyi bu evden kaldırmak istediğinizden emin misiniz?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\n\"\$homeName\" evine katılmak istiyor",
   "Xin gia nhập \"\$homeName\"": "\"\$homeName\" evine katılmak istiyor",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "\"\$homeName\" sahipliğini devralmaya davet edildiniz",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nSizi \"\$homeName\" evine katılmaya davet ediyor",
-  "Mời bạn gia nhập \"\$homeName\"": "Sizi \"\$homeName\" evine katılmaya davet ediyor",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "\"\$homeName\" sahipliğini devralmaya davet edildiniz",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nSizi \"\$homeName\" evine katılmaya davet ediyor",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Sizi \"\$homeName\" evine katılmaya davet ediyor",
   "Cần kiểm tra: \$joined": "Dikkat gerekiyor: \$joined",
   "Cập nhật \$value": "\$value güncellendi",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Bu evi izlemeye başlamak için ilk SafeHome cihazınızı ekleyin.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Önce acil durum uyarılarını kontrol edin, gerekirse ev üyeleriyle iletişim kurun.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Evde kimse yok, ancak bir kapı veya kilit açık. Hemen kontrol edin.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Bu evi Koruma modunda tutmadan önce açık kapıyı veya kilidi kontrol edin.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Birisi hâlâ evde olabilir. Öyleyse Normal moda geri dönün.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Bazı üyelerin konumu bilinmiyor. Uygulamayı açmalarını isteyin veya konum iznini kontrol edin.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Bir cihazın bağlantısı kesildi. Pilini, gücünü veya konumunu kontrol edin.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Bir cihazın pili düşük. Uyarıları kaçırmamak için yakında değiştirin.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Hatırlatıcı ayarlanmadı. Evinizi düzenli kontrol etmek için bir program oluşturun.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Alarm programı ayarlanmadı. Genellikle uzakta olduğunuz saatler için korumayı etkinleştirin.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Hemen işlem yapmanız gerekmiyor. Bu evi izlemeye devam edin.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Bu evi izlemeye başlamak için ilk SafeHome cihazınızı ekleyin.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Önce acil durum uyarılarını kontrol edin, gerekirse ev üyeleriyle iletişim kurun.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Evde kimse yok, ancak bir kapı veya kilit açık. Hemen kontrol edin.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Bu evi Koruma modunda tutmadan önce açık kapıyı veya kilidi kontrol edin.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Birisi hâlâ evde olabilir. Öyleyse Normal moda geri dönün.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Bazı üyelerin konumu bilinmiyor. Uygulamayı açmalarını isteyin veya konum iznini kontrol edin.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Bir cihazın bağlantısı kesildi. Pilini, gücünü veya konumunu kontrol edin.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Bir cihazın pili düşük. Uyarıları kaçırmamak için yakında değiştirin.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Hatırlatıcı ayarlanmadı. Evinizi düzenli kontrol etmek için bir program oluşturun.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Alarm programı ayarlanmadı. Genellikle uzakta olduğunuz saatler için korumayı etkinleştirin.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Hemen işlem yapmanız gerekmiyor. Bu evi izlemeye devam edin.",
   "Lặp sau \$minutes phút": "\$minutes dakika sonra tekrarla",
   "Đang dùng • \$repeatText": "Etkin • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Güvenlik izleme • \$repeatText",
   "Gia đình: \$mode": "Ev modu: \$mode",
   "Gợi ý xử lý": "Önerilen işlemler",
   "Phát hiện \$count vấn đề cần xử lý": "\$count sorun dikkat gerektiriyor",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Kapılar bugün \$count kez kullanıldı",
-  "Đã ghi nhận \$count hoạt động gần đây": "\$count yakın tarihli etkinlik kaydedildi",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistem: \$issueCount öğe kontrol edilmeli",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM belirteci bu telefonda hazır.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM belirteci hazır, ancak Otomatik Uzakta için bir gereksinim eksik.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "\$emergencyTotal acil durum cihazı bulundu. Önerilen minimum: duman sensörü ve SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Ev sahipliği şu kişiye devredilsin mi:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Kapılar bugün \$count kez kullanıldı",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "\$count yakın tarihli etkinlik kaydedildi",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistem: \$issueCount öğe kontrol edilmeli",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM belirteci bu telefonda hazır.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM belirteci hazır, ancak Otomatik Uzakta için bir gereksinim eksik.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "\$emergencyTotal acil durum cihazı bulundu. Önerilen minimum: duman sensörü ve SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Ev sahipliği şu kişiye devredilsin mi:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count kapı güvenli şekilde kapalı",
   "\$count cửa và khóa đã an toàn": "\$count kapı ve kilit güvenli",
   "\$count thiết bị đang được theo dõi": "\$count cihaz izleniyor",
   "Cập nhật \$timeText": "\$timeText güncellendi",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Son veriler \$count dakika önce güncellendi",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Son veriler \$count saat önce güncellendi",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Son veriler \$count dakika önce güncellendi",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Son veriler \$count saat önce güncellendi",
   "Thành viên trong nhà: \$count": "Evdeki üyeler: \$count",
   "Thành viên bên ngoài: \$count": "Uzaktaki üyeler: \$count",
   "Chưa xác định vị trí: \$count": "Konumu bilinmeyen: \$count",
   "Môi trường hiện tại: \$environment": "Mevcut ortam: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Ev Koruma modundayken açık",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Ev Koruma modundayken açık",
   "An tâm hơn trong từng ngôi nhà": "Her evde huzur",
   "Báo động SafeHome": "SafeHome Alarmı",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Bir güvenlik uyarısı dikkatinizi gerektiriyor.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Bir güvenlik uyarısı dikkatinizi gerektiriyor.",
   "Có cảnh báo cần kiểm tra": "Bir uyarı dikkatinizi gerektiriyor",
   "Tự đóng sau \$time": "\$time içinde otomatik kapanır",
   "Ngày trong tuần": "Haftanın günleri",
   "Hoặc": "Veya",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Başlangıç ve bitiş saatleri aynı olamaz",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Bitiş saati mevcut saatten sonra olmalıdır",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Başlangıç ve bitiş saatleri aynı olamaz",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Bitiş saati mevcut saatten sonra olmalıdır",
   "Khoảng tạm tắt không hợp lệ": "Geçersiz Alarm duraklatma aralığı",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Duraklatma aralığı etkin bir Alarm programıyla örtüşmüyor",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Duraklatma aralığı etkin bir Alarm programıyla örtüşmüyor",
   "Cài đặt báo động": "Alarm ayarları",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Bu sensörün uyarıları nasıl tetikleyeceğini kontrol edin.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Bu sensörün uyarıları nasıl tetikleyeceğini kontrol edin.",
   "Tham gia báo động": "Alarmlara katıl",
-  "Tắt để cảm biến không tạo báo động.": "Bu sensörün Alarm oluşturmasını önlemek için kapatın.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Bu sensörün Alarm oluşturmasını önlemek için kapatın.",
   "Bật còi vật lý": "Fiziksel sireni etkinleştir",
-  "Cho phép kích hoạt còi trong nhà.": "İç mekan sireninin etkinleşmesine izin verin.",
+  "Cho phép kích hoạt còi trong nhà.":
+      "İç mekan sireninin etkinleşmesine izin verin.",
   "Đánh thức màn hình": "Ekranı uyandır",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Telefonda tam ekran uyarı gösterin.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Telefonda tam ekran uyarı gösterin.",
   "Độ trễ kích hoạt": "Tetikleme gecikmesi",
-  "Chỉ áp dụng cho cảm biến an ninh.": "Yalnızca güvenlik sensörleri için geçerlidir.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Acil durum sensörleri her zaman hemen tetiklenir.",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "Yalnızca güvenlik sensörleri için geçerlidir.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Acil durum sensörleri her zaman hemen tetiklenir.",
   "Ngay lập tức": "Hemen",
   "giây": "saniye",
   "Đã lưu cấu hình báo động": "Alarm ayarları kaydedildi",
   "Không thể lưu cấu hình báo động": "Alarm ayarları kaydedilemedi",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Bu ayarı yalnızca ev sahibi ve yöneticiler değiştirebilir.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Bu ayarı yalnızca ev sahibi ve yöneticiler değiştirebilir.",
   "Thông tin chi tiết": "Cihaz ayrıntıları",
   "Thông báo báo động": "Alarm bildirimi",
   "Cài đặt nhắc nhở": "Hatırlatıcı ayarları",
   "Nhắc nhở theo lịch": "Planlanmış hatırlatıcı",
   "Danh sách thông báo": "Bildirimler",
   "Cài đặt thông báo": "Bildirim ayarları",
-  "Sử dụng báo động theo lịch đã thiết lập": "Yapılandırılmış alarm programını kullan",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Yalnızca bildirim gönder; alarmı tetikleme",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Tüm ev alarmları kapalı; sistem yalnızca bildirim gönderecek.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Bu modu yalnızca ev sahibi etkinleştirebilir.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Yapılandırılmış alarm programını kullan",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Yalnızca bildirim gönder; alarmı tetikleme",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Tüm ev alarmları kapalı; sistem yalnızca bildirim gönderecek.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Bu modu yalnızca ev sahibi etkinleştirebilir.",
   "Bật Không bảo vệ?": "Korumasız mod etkinleştirilsin mi?",
-  "Cảm biến vừa phát hiện một sự kiện.": "Bir sensör az önce bir olay algıladı.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Korumasız modu yalnızca ev sahibi etkinleştirebilir",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "Bir sensör az önce bir olay algıladı.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Korumasız modu yalnızca ev sahibi etkinleştirebilir",
   "Đã chuyển nhà sang Không bảo vệ": "Ev Korumasız moda geçti",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Korumasız moda geçildi, ancak bildirim gönderilemedi",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Korumasız moda geçildi, ancak bildirim gönderilemedi",
   "Giám sát toàn diện": "Tam izleme",
   "Không bảo vệ": "Korumasız",
   "Không bảo vệ đang bật": "Korumasız mod etkin",
   "Nhà đã chuyển sang Không bảo vệ": "Ev Korumasız moda geçti",
   "Thông báo cảm biến": "Sensör bildirimleri",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Bir sensör olay algıladığında standart bildirimler.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Bir sensör olay algıladığında standart bildirimler.",
   "Tôi hiểu, tiếp tục": "Anlıyorum, devam et",
   "Cảnh báo an ninh đã kết thúc": "Güvenlik uyarısı sona erdi",
   "Sự cố nguy hiểm đã kết thúc": "Acil durum sona erdi",
   "Cảnh báo đã được kết thúc.": "Uyarı sona erdi.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Başka bir uyarı hâlâ etkin.",
   "Báo động đã hoạt động trở lại": "Alarm yeniden etkin",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Alarm duraklatma süresi sona erdi.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Alarm duraklatma süresi sona erdi.",
   "MQTT đã kết nối trở lại": "MQTT yeniden bağlandı",
   "Còi báo động đã được tắt": "Fiziksel siren kapatıldı",
   "Sự cố vẫn đang được theo dõi.": "Olay hâlâ izleniyor.",
@@ -929,39 +1129,53 @@ const Map<String, String> trStrings = {
   "Có thành viên đã trở về nhà.": "Bir üye eve döndü.",
   "Thiết bị đã được xoá": "Cihaz kaldırıldı",
   "Không thể xoá thiết bị": "Cihaz kaldırılamadı",
-  "Hãy thử lại thao tác xoá thiết bị.": "Lütfen cihazı tekrar kaldırmayı deneyin.",
+  "Hãy thử lại thao tác xoá thiết bị.":
+      "Lütfen cihazı tekrar kaldırmayı deneyin.",
   "Chế độ Bảo vệ đã được tắt.": "Koruma modu kapatıldı.",
   "Nhà đang ở chế độ Bình thường.": "Ev Normal modda.",
   "Pin thiết bị đã ổn định": "Cihaz pili kararlı",
   "Hub đã kết nối trở lại": "Hub yeniden bağlandı",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Normal moda geçildi, ancak bildirim gönderilemedi",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Normal moda geçildi, ancak bildirim gönderilemedi",
   "Chung cho nhà": "Paylaşılan ev",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Tüm üyeler için geçerlidir ve fiziksel sireni etkinleştirebilir.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Tüm üyeler için geçerlidir ve fiziksel sireni etkinleştirebilir.",
   "Cá nhân": "Kişisel",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Kişisel program bağımsız çalışır ve fiziksel sireni hiçbir zaman etkinleştirmez.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Bu ayar yalnızca hesabınız için geçerlidir.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Paylaşılan ev ayarlarını yalnızca ev sahibi ve yöneticiler değiştirebilir.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Kişisel program bağımsız çalışır ve fiziksel sireni hiçbir zaman etkinleştirmez.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Bu ayar yalnızca hesabınız için geçerlidir.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Paylaşılan ev ayarlarını yalnızca ev sahibi ve yöneticiler değiştirebilir.",
   "Tham gia hệ thống báo động": "Alarm sistemine katıl",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Acil durum sensörleri her zaman alarm sistemine katılır.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Cihazın herhangi bir alarm oluşturmasını önlemek için kapatın.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Acil durum sensörleri her zaman alarm sistemine katılır.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Cihazın herhangi bir alarm oluşturmasını önlemek için kapatın.",
   "Lịch báo động chung": "Paylaşılan alarm programı",
   "Lịch báo động cá nhân": "Kişisel alarm programı",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Telefonunuzda tam ekran uyarı gösterin.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Telefonunuzda tam ekran uyarı gösterin.",
   "Lặp lại cảnh báo": "Uyarıyı tekrarla",
   "Báo động chung": "Paylaşılan alarm",
   "Báo động cá nhân": "Kişisel alarm",
   "Đã cài đặt": "Yapılandırıldı",
   "Chưa cài đặt": "Yapılandırılmadı",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Paylaşılan ve kişisel programlar paralel çalışır; artık birini seçmeniz gerekmez.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Paylaşılan ve kişisel programlar paralel çalışır; artık birini seçmeniz gerekmez.",
   "Cài nhanh chung": "Hızlı paylaşılan kurulum",
   "Cài nhanh cá nhân": "Hızlı kişisel kurulum",
   "Thiết lập nhanh lịch cá nhân": "Hızlı kişisel program kurulumu",
   "Thiết lập nhanh lịch chung": "Hızlı paylaşılan program kurulumu",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Bu program yalnızca sizin için geçerlidir ve fiziksel sireni etkinleştirmez.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Bu program evdeki tüm üyeler için geçerlidir.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Bu program yalnızca sizin için geçerlidir ve fiziksel sireni etkinleştirmez.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Bu program evdeki tüm üyeler için geçerlidir.",
   "Đã áp dụng lịch báo động": "Alarm programı uygulandı",
   "Không thể lưu lịch báo động": "Alarm programı kaydedilemedi",
   "Nhà chưa có thiết bị an ninh": "Bu evde güvenlik cihazı yok",
-  "Nhận cảnh báo theo lịch chung của nhà": "Paylaşılan ev programından uyarı al",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Paylaşılan programdan gelen bildirimleri ve tam ekran uyarıları durdurmak için bunu kapatın. Ev sireni çalışmaya devam eder.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Paylaşılan ev programından uyarı al",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Paylaşılan programdan gelen bildirimleri ve tam ekran uyarıları durdurmak için bunu kapatın. Ev sireni çalışmaya devam eder.",
 };

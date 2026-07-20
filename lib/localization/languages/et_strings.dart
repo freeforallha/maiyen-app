@@ -3,7 +3,8 @@ const Map<String, String> etStrings = {
   "Không đọc được số điện thoại": "Telefoninumbrit ei õnnestunud lugeda",
   "Tin nhắn quá dài": "Sõnum on liiga pikk",
   "Không gửi được tin nhắn": "Sõnumit ei õnnestunud saata",
-  "Bạn không có quyền sửa lịch chung của nhà": "Teil pole õigust kodu ühist ajakava muuta",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Teil pole õigust kodu ühist ajakava muuta",
   "Nhà của bạn": "Teie kodu",
   "Tải tin cũ hơn": "Laadi vanemad sõnumid",
   "Nhà chưa đặt tên": "Nimetu kodu",
@@ -91,20 +92,26 @@ const Map<String, String> etStrings = {
   "Đang theo dõi": "Jälgimine",
   "Chưa nhận diện": "Tundmatu seade",
   "Chưa có cập nhật": "Uuendusi pole veel",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Seadmeid pole veel. Puudutage +, et lisada seade ja alustada oma kodu kaitsmist.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Seadmeid pole veel. Puudutage +, et lisada seade ja alustada oma kodu kaitsmist.",
   "CHƯA AN TOÀN": "EBATURVALINE",
   "ĐÃ AN TOÀN": "TURVALINE",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Teie kodu vajab tähelepanu. Vaadake allolevad olekud üle.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Teie kodu töötab tavapäraselt.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Ebatavalist suitsu ega SOS-tegevust ei tuvastatud.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Põhjalikumaks analüüsiks pole piisavalt hiljutist tegevust.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Teie kodu vajab tähelepanu. Vaadake allolevad olekud üle.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Teie kodu töötab tavapäraselt.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Ebatavalist suitsu ega SOS-tegevust ei tuvastatud.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Põhjalikumaks analüüsiks pole piisavalt hiljutist tegevust.",
   "Hub kết nối bình thường": "Jaotur ühendatud",
   "Cài đặt cảnh báo cho nhà hiện tại": "Selle kodu hoiatuste seaded",
   "Nhận cảnh báo báo động": "Alarmteavituste vastuvõtmine",
   "Đang bật cho tài khoản này": "Selle konto jaoks lubatud",
   "Đang tắt cho tài khoản này": "Selle konto jaoks keelatud",
   "Hẹn giờ nhắc nhở": "Meeldetuletuste ajakava",
-  "Nhắc kiểm tra nhà theo thời gian": "Kodu kontrollimise meeldetuletuste ajastamine",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Kodu kontrollimise meeldetuletuste ajastamine",
   "Hẹn giờ báo động": "Alarmi ajastamine",
   "Chưa thiết lập": "Määramata",
   "Chưa thiết lập thời gian": "Ajakava pole seadistatud",
@@ -161,14 +168,19 @@ const Map<String, String> etStrings = {
   "Đã rời khỏi home": "Kodust lahkutud",
   "Đã cập nhật": "Uuendatud",
   "Tìm home...": "Otsi kodusid...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Määra kodu asukoht ja luba automaatne kaitse",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Anna kodu omandiõigus üle või kustuta kodu",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Määra valitud kodudele meeldetuletus/alarm",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Määra kodu asukoht ja luba automaatne kaitse",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Anna kodu omandiõigus üle või kustuta kodu",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Määra valitud kodudele meeldetuletus/alarm",
   "Chia sẻ nhà đã chọn": "Jaga valitud kodusid",
   "Mở danh sách chia sẻ nhà": "Ava kodu jagamise loend",
   "Xoá các nhà đã chọn?": "Kas kustutada valitud kodud?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Valitud kodud kustutatakse jäädavalt.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Või skannige QR-kood, et taotleda juurdepääsu valitud kodudele",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Valitud kodud kustutatakse jäädavalt.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Või skannige QR-kood, et taotleda juurdepääsu valitud kodudele",
   "Email người nhận": "Saaja e-post",
   "Chia sẻ": "Jaga",
   "Email chưa đăng ký": "E-post pole registreeritud",
@@ -188,7 +200,8 @@ const Map<String, String> etStrings = {
   "Vuốt lên để tải thêm": "Rohkema laadimiseks libistage üles",
   "Không có thiết bị": "Seadmeid pole",
   "Chỉ chủ nhà mới được xoá nhà": "Ainult omanik saab selle kodu kustutada",
-  "Chỉ chủ nhà mới được chuyển quyền": "Ainult omanik saab omandiõiguse üle anda",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Ainult omanik saab omandiõiguse üle anda",
   "Lưu ý khi bật báo động": "Alarmi teade",
   "Báo động đã được bật": "Alarm lubatud",
   "Đã hiểu": "Selge",
@@ -197,27 +210,34 @@ const Map<String, String> etStrings = {
   "Đã tắt báo động": "Alarm on välja lülitatud",
   "Tắt báo động": "Peata alarm",
   "Cả ngày": "Kogu päev",
-  "Bạn không có quyền thực hiện thao tác này.": "Teil pole selle toimingu tegemiseks õigust.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Toimingut ei õnnestunud lõpule viia. Proovige uuesti.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Mitme koduga liitumise QR-kood on vigane",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Teil pole selle toimingu tegemiseks õigust.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Toimingut ei õnnestunud lõpule viia. Proovige uuesti.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Mitme koduga liitumise QR-kood on vigane",
   "Bạn đang là chủ các nhà này": "Need kodud kuuluvad teile",
   "Một người dùng": "Kasutaja",
   "Yêu cầu gia nhập nhà": "Kodu liitumistaotlus",
   "Đã gửi yêu cầu gia nhập nhà": "Liitumistaotlus saadetud",
   "QR gia nhập không hợp lệ": "Vigane liitumise QR-kood",
   "Bạn đang là chủ nhà này": "Te olete juba selle kodu omanik",
-  "QR này không phải mã xin gia nhập nhà": "See QR-kood ei ole koduga liitumise kood",
+  "QR này không phải mã xin gia nhập nhà":
+      "See QR-kood ei ole koduga liitumise kood",
   "Bạn không có quyền thêm thiết bị": "Teil pole õigust seadmeid lisada",
   "Đã mở chế độ thêm thiết bị": "Seadmete sidumine on lubatud",
   "Rời khỏi Home này?": "Kas lahkuda sellest kodust?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "See kodu ja kõik selle seadmed kustutatakse jäädavalt.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "See kodu ja kõik selle seadmed kustutatakse jäädavalt.",
   "Đã xoá nhà": "Kodu kustutatud",
   "QR của nhà này": "Kodu QR-kood",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Teised saavad seda koodi skannida, et taotleda juurdepääsu kodule.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Teised saavad seda koodi skannida, et taotleda juurdepääsu kodule.",
   "Chia sẻ nhà": "Jaga kodu",
   "Quét QR để xin gia nhập nhà": "Skanni QR-kood, et koduga liituda",
   "Quét QR xin gia nhập nhà": "Skanni QR-kood koduga liitumiseks",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Asetage jagatud kodu QR-kood raami sisse",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Asetage jagatud kodu QR-kood raami sisse",
   "Mã QR này do chủ nhà chia sẻ": "Seda QR-koodi jagas kodu omanik",
   "Nhập mã mời": "Sisestage kutsekood",
   "Gửi yêu cầu gia nhập": "Saada liitumistaotlus",
@@ -229,7 +249,8 @@ const Map<String, String> etStrings = {
   "Lời mời chia sẻ nhà": "Kodu jagamise kutse",
   "Đã share home": "Kodu jagatud",
   "Chuyển quyền chủ nhà": "Anna omandiõigus üle",
-  "Không thể chuyển quyền cho chính bạn": "Te ei saa omandiõigust iseendale üle anda",
+  "Không thể chuyển quyền cho chính bạn":
+      "Te ei saa omandiõigust iseendale üle anda",
   "Không tìm thấy user": "Kasutajat ei leitud",
   "Không tìm thấy tài khoản": "Kontot ei leitud",
   "Xác nhận chuyển quyền": "Kinnita omandiõiguse üleandmine",
@@ -237,7 +258,8 @@ const Map<String, String> etStrings = {
   "Xác nhận mật khẩu": "Kinnita parool",
   "Yêu cầu chuyển quyền chủ nhà": "Omandiõiguse üleandmise taotlus",
   "Đã gửi yêu cầu chuyển quyền": "Üleandmistaotlus saadetud",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Omandiõiguse üleandmise taotlus saadetud",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Omandiõiguse üleandmise taotlus saadetud",
   "Bạn không có quyền xoá thiết bị": "Teil pole õigust seadmeid kustutada",
   "Xóa Device?": "Kas kustutada see seade?",
   "Đã gửi yêu cầu xoá thiết bị": "Seadme kustutamise taotlus saadetud",
@@ -261,7 +283,8 @@ const Map<String, String> etStrings = {
   "Không thể lưu thông tin": "Teavet ei õnnestunud salvestada",
   "Đã lưu thông tin": "Teave salvestatud",
   "Lỗi lưu profile": "Profiili ei õnnestunud salvestada",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Lisage hädaolukordadeks telefoninumber",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Lisage hädaolukordadeks telefoninumber",
   "Hoàn tất": "Valmis",
   "Đã tạo nhà mới": "Kodu loodud",
   "Về muộn": "Jään hiljaks",
@@ -280,7 +303,8 @@ const Map<String, String> etStrings = {
   "SĐT": "Telefon",
   "Ngày sinh": "Sünnikuupäev",
   "Yêu cầu & lời mời": "Taotlused ja kutsed",
-  "Xem lời mời chia sẻ và xin gia nhập": "Vaata jagamiskutseid ja liitumistaotlusi",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Vaata jagamiskutseid ja liitumistaotlusi",
   "Cài đặt bảo mật": "Turvaseaded",
   "Quyền báo động toàn màn hình": "Täisekraanialarmi luba",
   "Báo động toàn màn hình": "Täisekraanialarm",
@@ -330,7 +354,8 @@ const Map<String, String> etStrings = {
   "Đổi tên phòng": "Nimeta ruum ümber",
   "Tên phòng": "Ruumi nimi",
   "Xoá phòng": "Kustuta ruum",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Selles ruumis olevad seadmed teisaldatakse jaotisse Määramata.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Selles ruumis olevad seadmed teisaldatakse jaotisse Määramata.",
   "Thêm phòng": "Lisa ruum",
   "Ví dụ: Phòng khách": "Näide: Elutuba",
   "Phòng khách": "Elutuba",
@@ -351,9 +376,11 @@ const Map<String, String> etStrings = {
   "Cửa đóng": "Uks suletud",
   "Chưa đặt vị trí nhà": "Kodu asukoht pole määratud",
   "Đặt vị trí nhà tại đây": "Määra kodu asukoht siin",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Enne automaatse valve sisselülitamist määrake kodu asukoht",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Enne automaatse valve sisselülitamist määrake kodu asukoht",
   "Bán kính bảo vệ mặc định: 150 m": "Vaikimisi kaitseraadius: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Iga liige peab lubama asukohale alati juurdepääsu, et eemal/kodus olek saaks taustal töötada.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Iga liige peab lubama asukohale alati juurdepääsu, et eemal/kodus olek saaks taustal töötada.",
   "Lưu cài đặt": "Salvesta seaded",
   "Đã đặt vị trí nhà": "Kodu asukoht määratud",
   "Đang lấy vị trí...": "Asukoha hankimine...",
@@ -362,16 +389,20 @@ const Map<String, String> etStrings = {
   "Cập nhật thông tin nhà": "Uuenda kodu teavet",
   "Nhập địa chỉ của nhà": "Sisestage kodu aadress",
   "Lưu thay đổi": "Salvesta muudatused",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "See nimi kuvatakse ainult teie kontol.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Nimi ja aadress uuendatakse kõigi koduliikmete jaoks.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "See nimi kuvatakse ainult teie kontol.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Nimi ja aadress uuendatakse kõigi koduliikmete jaoks.",
   "Một thành viên": "Liige",
   "Đã cập nhật thông tin nhà": "Kodu teave uuendatud",
   "Thay tên": "Nimeta ümber",
   "Đã đổi tên thiết bị": "Seadme nimi muudetud",
   "Chưa chọn nhà để kiểm tra": "Valige testimiseks kodu",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Käivitage see test omaniku kontoga",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Käivitage see test omaniku kontoga",
   "Không đọc được dữ liệu nhà": "Kodu andmeid ei saa lugeda",
-  "Nhà cần có ít nhất một thiết bị để test": "Testimiseks peab kodus olema vähemalt üks seade",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Testimiseks peab kodus olema vähemalt üks seade",
   "Đóng": "Sulge",
   "Đã thiết lập": "Määra",
   "Quét QR": "Skanni QR-kood",
@@ -427,8 +458,10 @@ const Map<String, String> etStrings = {
   "Chế độ áp dụng": "Rakenda režiim",
   "Theo nhà": "Kodu ajakava",
   "Riêng tôi": "Isiklik",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Kasuta omaniku või administraatori määratud ühist ajakava",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Kasuta isiklikku ajakava, mis kehtib ainult sinu kontole",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Kasuta omaniku või administraatori määratud ühist ajakava",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Kasuta isiklikku ajakava, mis kehtib ainult sinu kontole",
   "Thiết lập nhanh báo động": "Alarmi kiirseadistus",
   "Thiết lập nhanh toàn bộ thiết bị": "Seadista kiiresti kõik seadmed",
   "Áp dụng cho toàn bộ thiết bị": "Rakenda kõigile seadmetele",
@@ -468,8 +501,10 @@ const Map<String, String> etStrings = {
   "Đã rời khỏi nhà": "Kodust lahkutud",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Lahkud jagatud kodudest.",
   "Các nhà của bạn sẽ bị xoá.\n": "Sinu kodud kustutatakse.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "See muudab valitud kodudes kõigi turvaseadmete kodualarmi ajakava.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "See lisab valitud kodudesse kodu meeldetuletuse.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "See muudab valitud kodudes kõigi turvaseadmete kodualarmi ajakava.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "See lisab valitud kodudesse kodu meeldetuletuse.\n\n",
   "Xác nhận thay đổi báo động": "Kinnita alarmi muudatused",
   "Xác nhận thay đổi nhắc nhở": "Kinnita meeldetuletuse muudatused",
   "Lặp lại khi sự cố vẫn còn": "Korda, kuni probleem püsib",
@@ -477,44 +512,63 @@ const Map<String, String> etStrings = {
   "VD: Mr Chung": "Nt hr Chung",
   "🏡 Chưa có nhà nào": "🏡 Kodusid pole veel",
   "Vẫn chuyển về Bình thường": "Lülita siiski tavarežiimile",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automaatne valverežiim eemalolekul on endiselt sisse lülitatud. Kui kõik liikmed on endiselt eemal, võib süsteem mõne minuti pärast valverežiimi uuesti sisse lülitada.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automaatne valverežiim eemalolekul on endiselt sisse lülitatud. Kui kõik liikmed on endiselt eemal, võib süsteem mõne minuti pärast valverežiimi uuesti sisse lülitada.",
   "Chuyển về Bình thường?": "Lülitada tavarežiimile?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Turvaseadmeid hakatakse kohe jälgima.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Turvaseadmeid hakatakse kohe jälgima.\n\n",
   "Bật Bảo vệ thủ công?": "Lülitada käsitsi valverežiim sisse?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "See toiming muudab täna mõne seadme alarmiaega...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "See toiming keelab kõik alarmid selles ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "See toiming muudab täna mõne seadme alarmiaega...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "See toiming keelab kõik alarmid selles ",
   "Tắt toàn bộ báo động?": "Lülitada kõik alarmid välja?",
-  "Không xoá được lịch tạm tắt báo động": "Alarmi peatamise ajakava ei õnnestunud kustutada",
-  "Không lưu được tạm tắt báo động": "Alarmi peatamist ei õnnestunud salvestada",
+  "Không xoá được lịch tạm tắt báo động":
+      "Alarmi peatamise ajakava ei õnnestunud kustutada",
+  "Không lưu được tạm tắt báo động":
+      "Alarmi peatamist ei õnnestunud salvestada",
   "Không gửi được yêu cầu xoá": "Kustutamistaotlust ei õnnestunud saata",
   "Không lưu được cài đặt": "Seadet ei õnnestunud salvestada",
   "Không lấy được vị trí hiện tại": "Praegust asukohta ei õnnestunud hankida",
-  "Không thể xác nhận tài khoản hiện tại": "Praegust kontot ei õnnestunud kinnitada",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Praegust kontot ei õnnestunud kinnitada",
   "Mật khẩu không đúng": "Vale parool",
   "Không thể xác nhận mật khẩu": "Parooli ei õnnestunud kinnitada",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Alarmi kordusseadet saab muuta ainult omanik või administraator",
-  "Không lưu được thời gian lặp báo động": "Alarmi kordusaega ei õnnestunud salvestada",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Valverežiimi saab muuta ainult omanik või administraator",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Alarmi kordusseadet saab muuta ainult omanik või administraator",
+  "Không lưu được thời gian lặp báo động":
+      "Alarmi kordusaega ei õnnestunud salvestada",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Valverežiimi saab muuta ainult omanik või administraator",
   "Không thể thay đổi chế độ nhà": "Kodu režiimi ei õnnestunud muuta",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Valverežiim on sisse lülitatud, kuid teavitust ei õnnestunud saata",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Valverežiim on sisse lülitatud, kuid teavitust ei õnnestunud saata",
   "Đã bật Chế độ Bảo vệ thủ công": "Käsitsi valverežiim on sisse lülitatud",
   "Đã chuyển nhà về Bình thường": "Kodu lülitati tagasi tavarežiimile",
   "60 phút": "60 minutit",
   "30 phút": "30 minutit",
   "15 phút": "15 minutit",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Vaatad omaniku ajakava. Oma alarmiajakava määramiseks vali Ainult mina.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Vaatad omaniku ajakava. Oma alarmiajakava määramiseks vali Ainult mina.",
   "Chọn giờ kết thúc báo động": "Vali alarmi lõpuaeg",
   "Chọn giờ bắt đầu báo động": "Vali alarmi algusaeg",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Sul pole õigust selle kodu alarmiajakava muuta",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Alarmi ei õnnestunud kõigile seadmetele rakendada",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Selles kodus pole turvaseadmeid, millele rakendada",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Sul pole õigust kodu seadeid muuta. Vali Ainult mina.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Sul pole õigust selle kodu alarmiajakava muuta",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Alarmi ei õnnestunud kõigile seadmetele rakendada",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Selles kodus pole turvaseadmeid, millele rakendada",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Sul pole õigust kodu seadeid muuta. Vali Ainult mina.",
   "Không thể lưu chế độ báo động": "Alarmirežiimi ei õnnestunud salvestada",
   "Thêm nhắc nhở": "Lisa meeldetuletus",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Meeldetuletus tuletab valitud ajal meelde kontrollida kodu turvaolekut.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Meeldetuletus tuletab valitud ajal meelde kontrollida kodu turvaolekut.",
   "Thêm khung giờ báo động": "Lisa alarmi ajavahemik",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Kasutatakse sinu enda meeldetuletuse seadeid",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Kasutatakse omaniku meeldetuletuse seadeid",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Kasutatakse sinu enda meeldetuletuse seadeid",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Kasutatakse omaniku meeldetuletuse seadeid",
   "Sửa giờ nhắc nhở": "Muuda meeldetuletuse aega",
   "Sửa giờ kết thúc báo động": "Muuda alarmi lõpuaega",
   "Sửa giờ bắt đầu báo động": "Muuda alarmi algusaega",
@@ -531,118 +585,176 @@ const Map<String, String> etStrings = {
   "Xoá thành viên": "Eemalda liige",
   "Đã xoá thành viên": "Liige eemaldatud",
   "Đồng ý": "Korras",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Kas oled kindel, et soovid sellest kodust lahkuda?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Kas oled kindel, et soovid sellest kodust lahkuda?",
   "Xoá thành viên?": "Eemaldada liige?",
   "Rời khỏi nhà?": "Lahkuda sellest kodust?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Ainult omanik saab rolle muuta",
-  "Bạn không có quyền xoá thành viên này": "Sul pole õigust seda liiget eemaldada",
+  "Bạn không có quyền xoá thành viên này":
+      "Sul pole õigust seda liiget eemaldada",
   "Bạn": "Sina",
   "Không có email": "E-posti pole",
   "Chưa có số điện thoại": "Telefoninumbrit pole",
   "Không mở được ứng dụng gọi điện": "Telefonirakendust ei õnnestunud avada",
-  "Thành viên chưa cập nhật số điện thoại": "See liige pole telefoninumbrit lisanud",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Käsitsi valverežiim on sisse lülitatud – väljalülitamiseks lülita tavarežiimile",
+  "Thành viên chưa cập nhật số điện thoại":
+      "See liige pole telefoninumbrit lisanud",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Käsitsi valverežiim on sisse lülitatud – väljalülitamiseks lülita tavarežiimile",
   "Thời gian lặp": "Kordusintervall",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Vali 0, et saada häire üks kord. See seade kehtib käsitsi valverežiimile ja automaatsele valverežiimile eemalolekul.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Vali 0, et saada häire üks kord. See seade kehtib käsitsi valverežiimile ja automaatsele valverežiimile eemalolekul.",
   "Lặp báo động khi sự cố vẫn còn": "Korda alarmi, kuni probleem püsib",
   "Đang được sử dụng": "Praegu aktiivne",
   "Chuyển về sử dụng thông thường": "Lülita tagasi tavakasutusele",
   "Chế độ nhà": "Kodu režiim",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS-seade pole häiret registreerinud.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Suitsuandur pole probleemi tuvastanud.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Sina või mõni liige lülitas valverežiimi käsitsi sisse.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome lülitas valverežiimi automaatselt sisse, sest lahkusid kodust.",
-  "Nhà đang ở chế độ dùng bình thường.": "Seda kodu kasutatakse praegu tavarežiimis.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS-seade pole häiret registreerinud.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Suitsuandur pole probleemi tuvastanud.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Sina või mõni liige lülitas valverežiimi käsitsi sisse.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome lülitas valverežiimi automaatselt sisse, sest lahkusid kodust.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Seda kodu kasutatakse praegu tavarežiimis.",
   "Bảo vệ thủ công đang bật": "Käsitsi valverežiim on sisse lülitatud",
   "Bảo vệ tự động đang bật": "Automaatne valverežiim on sisse lülitatud",
   "Bảo vệ đang tắt": "Valverežiim on välja lülitatud",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Oled hiljuti rakenduse avanud, et olekut kontrollida.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Ava rakendus regulaarselt, et vaadata üle õigused, ajakavad ja lugemata hoiatused.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Pärast mõnda kasutuskorda saab SafeHome sinu rakenduse kontrollimise harjumust paremini hinnata.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Oled hiljuti rakenduse avanud, et olekut kontrollida.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Ava rakendus regulaarselt, et vaadata üle õigused, ajakavad ja lugemata hoiatused.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pärast mõnda kasutuskorda saab SafeHome sinu rakenduse kontrollimise harjumust paremini hinnata.",
   "Tần suất vào ứng dụng ổn": "Rakenduse kontrollimise sagedus on hea",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Viimasest rakenduse kontrollimisest on palju aega möödas",
-  "Đang ghi nhận tần suất vào ứng dụng": "Rakenduse kontrollimise sagedust salvestatakse",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Kontrolli alati lubatud asukohaõigust ja taustal töötamise tingimusi.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "See seade vastab automaatse eemalolekurežiimi nõuetele.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Lülita see sisse, kui soovid, et valverežiim käivituks kodust lahkudes automaatselt.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Viimasest rakenduse kontrollimisest on palju aega möödas",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Rakenduse kontrollimise sagedust salvestatakse",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Kontrolli alati lubatud asukohaõigust ja taustal töötamise tingimusi.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "See seade vastab automaatse eemalolekurežiimi nõuetele.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Lülita see sisse, kui soovid, et valverežiim käivituks kodust lahkudes automaatselt.",
   "Auto rời khỏi nhà chưa ổn": "Automaatne eemalolekurežiim pole valmis",
   "Auto rời khỏi nhà đã sẵn sàng": "Automaatne eemalolekurežiim on valmis",
-  "Auto rời khỏi nhà chưa bật": "Automaatne eemalolekurežiim pole sisse lülitatud",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Lisa oma kodule sobiv suitsuandur, SOS- või hädaabiseade.",
+  "Auto rời khỏi nhà chưa bật":
+      "Automaatne eemalolekurežiim pole sisse lülitatud",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Lisa oma kodule sobiv suitsuandur, SOS- või hädaabiseade.",
   "Chưa có thiết bị khẩn cấp": "Hädaabiseadet pole veel",
   "Đã có thiết bị khẩn cấp": "Hädaabiseadmed on lisatud",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Määra alarmiajakava magamise ajaks või kodust eemalolekuks.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Sellel kodul on alarmiajakava või seadmetasemel hoiatusgraafik.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Määra alarmiajakava magamise ajaks või kodust eemalolekuks.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Sellel kodul on alarmiajakava või seadmetasemel hoiatusgraafik.",
   "Chưa cài lịch báo động": "Alarmiajakava pole määratud",
   "Đã cài lịch báo động": "Alarmiajakava on määratud",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Määra vähemalt üks meeldetuletus, et kodu kontrollimine ei ununeks.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Rakendus tuletab sulle ajakava järgi meelde kodu kontrollida.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Määra vähemalt üks meeldetuletus, et kodu kontrollimine ei ununeks.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Rakendus tuletab sulle ajakava järgi meelde kodu kontrollida.",
   "Chưa cài đặt nhắc nhở": "Meeldetuletus pole seadistatud",
   "Đã cài đặt nhắc nhở": "Meeldetuletus on seadistatud",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Ava rakendus uuesti või logi uuesti sisse, kui see seade hoiatusi ei saa.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "See seade pole hoiatuste saamiseks registreeritud",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Ava rakendus uuesti või logi uuesti sisse, kui see seade hoiatusi ei saa.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "See seade pole hoiatuste saamiseks registreeritud",
   "Thiết bị nhận cảnh báo bình thường": "See seade saab hoiatusi vastu võtta",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS piirab taustal töötamist rangemalt kui Android; automaatse eemalolekurežiimi kasutamisel hoia teavitused ja alati lubatud asukoht sisse lülitatuna.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS piirab taustal töötamist rangemalt kui Android; automaatse eemalolekurežiimi kasutamisel hoia teavitused ja alati lubatud asukoht sisse lülitatuna.",
   "Cơ chế iOS": "iOS-i käitumine",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Kontrolli taustal töötamise õigust ja automaatkäivitust, et hoiatused ei hilineks.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Seade on kinnitanud olulised taustal töötamise tingimused.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Kontrolli taustal töötamist / automaatkäivitust",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Kontrolli taustal töötamise õigust ja automaatkäivitust, et hoiatused ei hilineks.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Seade on kinnitanud olulised taustal töötamise tingimused.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Kontrolli taustal töötamist / automaatkäivitust",
   "Chạy nền ổn định": "Taustal töötamine näib stabiilne",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Mõni Androidi telefon võib aku optimeerimise ajal hoiatusi edasi lükata.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Telefon lükkab SafeHome'i hoiatusi väiksema tõenäosusega edasi.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Mõni Androidi telefon võib aku optimeerimise ajal hoiatusi edasi lükata.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefon lükkab SafeHome'i hoiatusi väiksema tõenäosusega edasi.",
   "Chưa tắt tối ưu pin": "Aku optimeerimine on endiselt sisse lülitatud",
   "Tối ưu pin không chặn ứng dụng": "Aku optimeerimine ei blokeeri rakendust",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Automaatne eemalolekurežiim vajab töökindluseks alati lubatud asukohta.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Automaatse eemalolekurežiimi jaoks on vaja asukohaõigust.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Asukohateenus on välja lülitatud, seega ei pruugi automaatne eemalolekurežiim töökindlalt toimida.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Seda on vaja ainult automaatse eemalolekurežiimi kasutamisel.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Automaatne eemalolekurežiim vajab töökindluseks alati lubatud asukohta.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Automaatse eemalolekurežiimi jaoks on vaja asukohaõigust.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Asukohateenus on välja lülitatud, seega ei pruugi automaatne eemalolekurežiim töökindlalt toimida.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Seda on vaja ainult automaatse eemalolekurežiimi kasutamisel.",
   "Chưa cấp vị trí luôn luôn": "Asukoht pole alati lubatud",
   "Đã cấp vị trí luôn luôn": "Asukoht on alati lubatud",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS ei ava täisekraani nagu Android; rakendus kasutab süsteemiteavitusi ja heli.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android kasutab täisekraanihoiatusi; luba need seadetes, kui telefon neid blokeerib.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS ei ava täisekraani nagu Android; rakendus kasutab süsteemiteavitusi ja heli.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android kasutab täisekraanihoiatusi; luba need seadetes, kui telefon neid blokeerib.",
   "Cảnh báo trên iOS": "Hoiatused iOS-is",
   "Cảnh báo toàn màn hình": "Täisekraanihoiatused",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Kui teavitused on keelatud, ei pruugi hoiatused ilmuda.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "See telefon saab SafeHome'i teavitusi vastu võtta.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Kui teavitused on keelatud, ei pruugi hoiatused ilmuda.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "See telefon saab SafeHome'i teavitusi vastu võtta.",
   "Chưa bật thông báo": "Teavitused pole lubatud",
   "Đã bật thông báo": "Teavitused on lubatud",
   "Hệ thống: Sẵn sàng": "Süsteem: valmis",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Süsteem: hoiatused võivad jääda saamata",
   "Cách bạn đang dùng ứng dụng": "Kuidas sa rakendust kasutad",
   "Thiết bị của bạn": "Sinu seade",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Kontrollib sinu telefoni ja rakenduse kasutust.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Kontrollib sinu telefoni ja rakenduse kasutust.",
   "Hệ thống SafeHome": "SafeHome'i süsteem",
   "Hệ thống: Đang kiểm tra...": "Süsteem: kontrollimine...",
   "Tên": "Nimi",
-  "Bạn không có quyền thay đổi vị trí nhà": "Sul pole õigust kodu asukohta muuta",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Sul pole õigust kodu asukohta muuta",
   "Hãy bật GPS để đặt vị trí nhà": "Kodu asukoha määramiseks lülita GPS sisse",
   "Bạn chưa cấp quyền vị trí": "Asukohaõigust pole antud",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Anna asukohaõigus rakenduse seadetes",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Automaatne valverežiim kõigi kodust lahkumisel on sisse lülitatud",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automaatne valverežiim kõigi kodust lahkumisel on välja lülitatud",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Anna asukohaõigus rakenduse seadetes",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Automaatne valverežiim kõigi kodust lahkumisel on sisse lülitatud",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automaatne valverežiim kõigi kodust lahkumisel on välja lülitatud",
   "Không thể thay đổi trạng thái báo động": "Alarmi olekut ei õnnestunud muuta",
   "Đã tắt toàn bộ báo động của nhà": "Kõik kodu alarmid on välja lülitatud",
-  "QR này không phải mã xin gia nhập Home": "See QR-kood ei ole koduga liitumise kood",
+  "QR này không phải mã xin gia nhập Home":
+      "See QR-kood ei ole koduga liitumise kood",
   "Thêm Home": "Lisa kodu",
   "Mở cài đặt": "Ava seaded",
   "Để sau": "Hiljem",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome vajab alati lubatud asukohaõigust, et tuvastada kodust lahkumine või naasmine ka siis, kui rakendus töötab taustal.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "Praegu saab SafeHome asukohale ligi ainult rakenduse kasutamise ajal.\n\nAva asukohaõigus ja vali „Luba kogu aeg“, et automaatne kaitse jätkaks taustal töötamist.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome vajab alati lubatud asukohaõigust, et tuvastada kodust lahkumine või naasmine ka siis, kui rakendus töötab taustal.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Praegu saab SafeHome asukohale ligi ainult rakenduse kasutamise ajal.\n\nAva asukohaõigus ja vali „Luba kogu aeg“, et automaatne kaitse jätkaks taustal töötamist.",
   "Cho phép vị trí luôn luôn": "Luba asukoht alati",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Sinu kodud kustutatakse.\nLahkud jagatud kodudest.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "See muudab valitud kodudes kõigi turvaseadmete kodualarmi ajakava.\n\nSee mõjutab liikmeid, kes kasutavad kodualarmi seadeid.\nIsiklikke alarmiseadeid ei muudeta.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "See lisab valitud kodudesse kodu meeldetuletuse.\n\nSee mõjutab liikmeid, kes kasutavad kodu meeldetuletuse seadeid.\nIsiklikke meeldetuletuse seadeid ei muudeta.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Turvaseadmeid hakatakse kohe jälgima.\n\nAutomaatne eemaloleku valverežiim peatatakse. See režiim ei lülitu kellegi koju saabudes automaatselt välja ning õigustega liige peab selle tagasi tavarežiimile lülitama.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "See toiming muudab täna mõne seadme alarmiaega...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "See toiming keelab kõik selle kodu alarmid. Sa ei saa selles telefonis enam ohuteavitusi.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarm kasutab kodu seadeid.\n\nSaad hoiatusi omaniku või administraatori seadistatud ühiste ajakavade järgi.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarm kasutab minu seadeid.\n\nSaad hoiatusi selle konto isiklike alarmiajakavade järgi.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Sinu kodud kustutatakse.\nLahkud jagatud kodudest.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "See muudab valitud kodudes kõigi turvaseadmete kodualarmi ajakava.\n\nSee mõjutab liikmeid, kes kasutavad kodualarmi seadeid.\nIsiklikke alarmiseadeid ei muudeta.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "See lisab valitud kodudesse kodu meeldetuletuse.\n\nSee mõjutab liikmeid, kes kasutavad kodu meeldetuletuse seadeid.\nIsiklikke meeldetuletuse seadeid ei muudeta.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Turvaseadmeid hakatakse kohe jälgima.\n\nAutomaatne eemaloleku valverežiim peatatakse. See režiim ei lülitu kellegi koju saabudes automaatselt välja ning õigustega liige peab selle tagasi tavarežiimile lülitama.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "See toiming muudab täna mõne seadme alarmiaega...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "See toiming keelab kõik selle kodu alarmid. Sa ei saa selles telefonis enam ohuteavitusi.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarm kasutab kodu seadeid.\n\nSaad hoiatusi omaniku või administraatori seadistatud ühiste ajakavade järgi.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarm kasutab minu seadeid.\n\nSaad hoiatusi selle konto isiklike alarmiajakavade järgi.",
   "Không thể đăng nhập bằng Google": "Google'iga sisselogimine ebaõnnestus",
   "Không đặt được mật khẩu": "Parooli ei õnnestunud määrata",
   "Chấp nhận": "Nõustu",
   "Cho phép": "Luba",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Kutset ei õnnestunud vastu võtta. Proovi uuesti.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Liitumistaotlust ei õnnestunud vastu võtta. Proovi uuesti.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Kutset ei õnnestunud vastu võtta. Proovi uuesti.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Liitumistaotlust ei õnnestunud vastu võtta. Proovi uuesti.",
   "Từ chối": "Keeldu",
   "Lời mời từ chủ nhà": "Kutse omanikult",
   "Nhận quyền chủ nhà": "Võta kodu omandiõigus vastu",
@@ -664,15 +776,20 @@ const Map<String, String> etStrings = {
   "KIỂM TRA NHÀ": "KONTROLLI KODU",
   "ĐÓNG NHẮC NHỞ": "SULGE MEELDETULETUS",
   "SafeHome Security Alert": "SafeHome'i turvahoiatus",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Vali rakenduse seadetes asukohaõigus Luba alati",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Sinu Google'i konto vajab turvafunktsioonide kasutamiseks lisaparooli.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Vali rakenduse seadetes asukohaõigus Luba alati",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Sinu Google'i konto vajab turvafunktsioonide kasutamiseks lisaparooli.",
   "Báo động": "Alarm",
-  "Bạn không có quyền thực hiện thao tác này。": "Sul pole õigust seda toimingut teha.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Sul pole õigust seda toimingut teha.",
   "Cài đặt": "Seaded",
   "Cập nhật": "Uuenda",
   "Chọn ngôn ngữ": "Vali keel",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Hindamiseks pole seadmeandmeid saadaval",
-  "Chuyển quyền sở hữu cho thành viên khác": "Anna omandiõigus üle teisele liikmele",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Hindamiseks pole seadmeandmeid saadaval",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Anna omandiõigus üle teisele liikmele",
   "Có": "Jah",
   "Cửa đã đóng an toàn": "Uks on turvaliselt suletud",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Ilmnes viga. Proovi uuesti.",
@@ -684,7 +801,8 @@ const Map<String, String> etStrings = {
   "Hub chưa gửi trạng thái": "Hubi olek pole saadaval",
   "Hub mất kết nối": "Hubi ühendus katkes",
   "Hub tín hiệu bình thường": "Hub on ühendatud",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Lukust lahti, kui kodu on valverežiimis",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Lukust lahti, kui kodu on valverežiimis",
   "Khóa đang mở trong giờ báo động": "Lukust lahti alarmiajal",
   "Không có thông báo": "Teavitusi pole",
   "Khu vực nguy hiểm": "Ohuala",
@@ -730,168 +848,252 @@ const Map<String, String> etStrings = {
   "Đã tạo nhà": "Kodu loodud",
   "Chế độ Bảo vệ thủ công đã bật": "Käsitsi valverežiim on sisse lülitatud",
   "Báo động không lặp lại.": "Alarmi ei korrata.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Kui probleem püsib, kordub alarm pärast \$securityModeRepeatMinutes minutit.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName lülitas kodus „\$homeName“ käsitsi valverežiimi sisse. See režiim lülitub välja ainult siis, kui õigustega liige lülitab tagasi tavarežiimile. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Lülitasid kodu „\$homeName“ alarmi sisse.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Lülitasid kodus „\$homeName“ kõik alarmid välja.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Kui probleem püsib, kordub alarm pärast \$securityModeRepeatMinutes minutit.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName lülitas kodus „\$homeName“ käsitsi valverežiimi sisse. See režiim lülitub välja ainult siis, kui õigustega liige lülitab tagasi tavarežiimile. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Lülitasid kodu „\$homeName“ alarmi sisse.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Lülitasid kodus „\$homeName“ kõik alarmid välja.",
   "Thành viên mới": "Uus liige",
   "Thành viên rời nhà": "Liige lahkus kodust",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName lahkus kodust „\$homeName“.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName muutis liikme \$memberName rolli kodus „\$homeName“: \$oldRoleName → \$newRoleName.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName lahkus kodust „\$homeName“.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName muutis liikme \$memberName rolli kodus „\$homeName“: \$oldRoleName → \$newRoleName.",
   "Còn \$count tin nhắn chưa đọc": "\$count lugemata sõnumit",
   "Hãy an tâm nghỉ ngơi.": "Võid olla rahulik.",
   "Có thiết bị chưa an toàn.": "Mõni seade pole ohutus seisundis.",
   "SafeHome đang cập nhật vị trí": "SafeHome uuendab asukohta",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Jälgimine valverežiimi automaatseks sisselülitamiseks.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Kasutab asukohta, et lülitada valverežiim automaatselt sisse, kui kõik kodust lahkuvad.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Jälgimine valverežiimi automaatseks sisselülitamiseks.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Kasutab asukohta, et lülitada valverežiim automaatselt sisse, kui kõik kodust lahkuvad.",
   "CẢNH BÁO SOS": "SOS-HÄIRE",
   "CẢNH BÁO KHÓI / CHÁY": "SUITSU-/TULEKAHJUHÄIRE",
   "CẢNH BÁO NGẬP NƯỚC": "ÜLEUJUTUSHÄIRE",
   "CẢNH BÁO RÒ KHÍ": "GAASILEKKE HÄIRE",
   "CẢNH BÁO CỬA": "UKSEHÄIRE",
   "CẢNH BÁO AN NINH": "TURVAHOIATUS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "SafeHome'iga ei õnnestunud kinnitada. Kontrolli ühendust ja proovi uuesti.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Peata hoiatus alles pärast kodu olukorra kontrollimist.\n\nKas oled kindel, et soovid hoiatuse peatada?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "SafeHome'iga ei õnnestunud kinnitada. Kontrolli ühendust ja proovi uuesti.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Peata hoiatus alles pärast kodu olukorra kontrollimist.\n\nKas oled kindel, et soovid hoiatuse peatada?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome tuvastas häire",
   "Mở SafeHome để kiểm tra ngay.": "Ava SafeHome ja kontrolli kohe.",
   "\$count tin nhắn mới": "\$count uut sõnumit",
   "Tin nhắn HomeChat": "HomeChati sõnum",
   "\$senderName đã gửi một tin nhắn": "\$senderName saatis sõnumi",
   "Bạn có tin nhắn mới": "Sul on uus sõnum",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Valverežiim annab hoiatuse ainult üks kord",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Valverežiim kordab hoiatust pärast \$minutes minutit",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Liitumistaotlused saadeti \$count kodule",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName taotles liitumist koduga „\$homeName“.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Valverežiim annab hoiatuse ainult üks kord",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Valverežiim kordab hoiatust pärast \$minutes minutit",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Liitumistaotlused saadeti \$count kodule",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName taotles liitumist koduga „\$homeName“.",
   "Bạn đã xoá nhà \"\$homeName\".": "Kustutasid kodu „\$homeName“.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Saatsid kodu „\$homeName“ omandiõiguse üleandmise taotluse aadressile \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName soovib anda kodu „\$homeName“ omandiõiguse sulle üle.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName kutsus sind liituma koduga „\$homeName“.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome eemaldab seadme „\$deviceName“ kodust „\$homeName“.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Seade „\$deviceName“ lisati koju „\$homeName“.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Saatsid kodu „\$homeName“ omandiõiguse üleandmise taotluse aadressile \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName soovib anda kodu „\$homeName“ omandiõiguse sulle üle.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName kutsus sind liituma koduga „\$homeName“.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome eemaldab seadme „\$deviceName“ kodust „\$homeName“.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Seade „\$deviceName“ lisati koju „\$homeName“.",
   "Bạn đã tạo nhà \"\$name\".": "Lõid kodu „\$name“.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName muutis kodu nimeks „\$newName“ ja uuendas selle aadressi.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName nimetas kodu ümber nimeks „\$newName“.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName uuendas kodu „\$newName“ aadressi.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName nimetas seadme „\$oldDeviceName“ kodus „\$homeName“ ümber nimeks „\$newName“.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName muutis kodu nimeks „\$newName“ ja uuendas selle aadressi.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName nimetas kodu ümber nimeks „\$newName“.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName uuendas kodu „\$newName“ aadressi.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName nimetas seadme „\$oldDeviceName“ kodus „\$homeName“ ümber nimeks „\$newName“.",
   "Đang ghép nối: \$seconds giây": "Sidumine: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Seadmete sidumine lubati kodus „\$homeName“ \$seconds sekundiks.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Peatamisperiood peab jääma alarmiajakava sisse (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total testi läbitud\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name pole oma profiilile telefoninumbrit lisanud.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Seadmete sidumine lubati kodus „\$homeName“ \$seconds sekundiks.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Peatamisperiood peab jääma alarmiajakava sisse (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total testi läbitud\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name pole oma profiilile telefoninumbrit lisanud.",
   "Tin nhắn mới trong \$homeName": "Uus sõnum kodus \$homeName",
   "\$current/\$total kết quả": "\$current/\$total tulemust",
   "Đang trả lời \$name": "Vastad kasutajale \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "„\$name“ tuvastas kodus „\$homeName“ suitsu.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "„\$name“ on naasnud tavaseisundisse.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "„\$name“ käivitas kodus „\$homeName“ SOS-i.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "„\$name“ tuvastas kodus „\$homeName“ suitsu.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "„\$name“ on naasnud tavaseisundisse.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "„\$name“ käivitas kodus „\$homeName“ SOS-i.",
   "\"\$name\" đã hết trạng thái SOS.": "„\$name“ pole enam SOS-olekus.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "„\$name“ teatas kodus „\$homeName“ rikkumisest.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Seadme „\$name“ rikkumishoiatus on lõppenud.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "„\$name“ sulgus kodus „\$homeName“.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "„\$name“ on kodus „\$homeName“ avatud.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "Seadme „\$name“ aku kodus „\$homeName“ on tühi.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "Seade „\$name“ kodus „\$homeName“ läks võrguühenduseta.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "Seade „\$name“ kodus „\$homeName“ on taas võrgus.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "„\$name“ registreeris kodus „\$homeName“ kõrge temperatuuri.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "„\$name“ registreeris kodus „\$homeName“ kõrge õhuniiskuse.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "„\$name“ teatas kodus „\$homeName“ rikkumisest.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Seadme „\$name“ rikkumishoiatus on lõppenud.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "„\$name“ sulgus kodus „\$homeName“.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "„\$name“ on kodus „\$homeName“ avatud.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "Seadme „\$name“ aku kodus „\$homeName“ on tühi.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "Seade „\$name“ kodus „\$homeName“ läks võrguühenduseta.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "Seade „\$name“ kodus „\$homeName“ on taas võrgus.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "„\$name“ registreeris kodus „\$homeName“ kõrge temperatuuri.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "„\$name“ registreeris kodus „\$homeName“ kõrge õhuniiskuse.",
   "Có nút SOS vừa được kích hoạt": "SOS-nupp käivitati",
   "Có dấu hiệu khói hoặc cháy": "Tuvastati suits või tulekahju",
   "Có dấu hiệu ngập nước": "Tuvastati vee üleujutus",
   "Có dấu hiệu rò khí": "Tuvastati gaasileke",
   "Có cửa đang mở hoặc thiết bị bị tháo": "Uks on avatud või seadet on rikutud",
   "Có thiết bị đang cảnh báo": "Seade annab häiret",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Kui keegi ei kinnita, algatab SafeHome hädaabikõne.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Kui probleemi pole lahendatud, annab uuesti häiret kell \$time.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Kui probleemi pole lahendatud, annab alarmiajakava järgi uuesti häiret.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "„\$deviceName“ sulgus kodus „\$resolvedHomeName“.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "„\$deviceName“ on kodus „\$resolvedHomeName“ avatud.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Kui keegi ei kinnita, algatab SafeHome hädaabikõne.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Kui probleemi pole lahendatud, annab uuesti häiret kell \$time.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Kui probleemi pole lahendatud, annab alarmiajakava järgi uuesti häiret.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ sulgus kodus „\$resolvedHomeName“.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ on kodus „\$resolvedHomeName“ avatud.",
   "\$count nhà đã chọn": "Valitud \$count kodu",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count ohtlikku kodu\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count kodu vajab tähelepanu\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count kodu vajab tähelepanu\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count turvalist kodu",
   "\$count nhà đang được theo dõi": "Jälgitakse \$count kodu",
   "\$minutes phút": "\$minutes minutit",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Meeldetuletus määrati \$updatedHomes kodule.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarm määrati \$updatedDevices seadmele \$updatedHomes kodus.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Sinu hallatavaid kodusid jagati.\n\n\$skipped kodu jäeti vahele, sest sul pole jagamisõigust.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarm rakendati \$count turvaseadmele",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Rakenda sama ajakava \$count turvaseadmele",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Meeldetuletus määrati \$updatedHomes kodule.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarm määrati \$updatedDevices seadmele \$updatedHomes kodus.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Sinu hallatavaid kodusid jagati.\n\n\$skipped kodu jäeti vahele, sest sul pole jagamisõigust.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarm rakendati \$count turvaseadmele",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Rakenda sama ajakava \$count turvaseadmele",
   "\$count phút trước": "\$count minutit tagasi",
   "\$count giờ trước": "\$count tundi tagasi",
   "\${count}h trước": "\${count} h tagasi",
   "\${hours}h\$minutes' trước": "\${hours} h \$minutes min tagasi",
   "\$count ngày trước": "\$count päeva tagasi",
   "\$count tháng trước": "\$count kuud tagasi",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Kas oled kindel, et soovid kasutaja \$name sellest kodust eemaldada?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nTaotleb liitumist koduga „\$homeName“",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Kas oled kindel, et soovid kasutaja \$name sellest kodust eemaldada?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nTaotleb liitumist koduga „\$homeName“",
   "Xin gia nhập \"\$homeName\"": "Taotleb liitumist koduga „\$homeName“",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Sind kutsuti vastu võtma kodu „\$homeName“ omandiõigust",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nKutsub sind liituma koduga „\$homeName“",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Sind kutsuti vastu võtma kodu „\$homeName“ omandiõigust",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nKutsub sind liituma koduga „\$homeName“",
   "Mời bạn gia nhập \"\$homeName\"": "Kutsub sind liituma koduga „\$homeName“",
   "Cần kiểm tra: \$joined": "Vajab tähelepanu: \$joined",
   "Cập nhật \$value": "Uuendatud \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Lisa oma esimene SafeHome'i seade, et alustada selle kodu jälgimist.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Kontrolli esmalt hädaolukorra hoiatusi ja võta vajaduse korral ühendust pereliikmetega.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Ükski pereliige pole kodus, kuid uks või lukk on avatud. Kontrolli kohe.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Kontrolli avatud ust või lukku, enne kui jätad selle kodu valverežiimi.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Keegi võib veel kodus olla. Kui nii, lülita tagasi tavarežiimile.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Mõne liikme asukoht on teadmata. Palu neil rakendus avada või asukohaõigust kontrollida.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Seadme ühendus on katkenud. Kontrolli selle akut, toidet või paigutust.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Seadme aku on tühi. Vaheta see varsti välja, et hoiatused saamata ei jääks.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Meeldetuletus pole määratud. Loo ajakava, et kodu regulaarselt kontrollida.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Alarmiajakava pole määratud. Lülita kaitse sisse ajaks, mil oled tavaliselt eemal.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Kohe pole vaja midagi teha. Jätka selle kodu jälgimist.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Lisa oma esimene SafeHome'i seade, et alustada selle kodu jälgimist.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Kontrolli esmalt hädaolukorra hoiatusi ja võta vajaduse korral ühendust pereliikmetega.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Ükski pereliige pole kodus, kuid uks või lukk on avatud. Kontrolli kohe.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Kontrolli avatud ust või lukku, enne kui jätad selle kodu valverežiimi.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Keegi võib veel kodus olla. Kui nii, lülita tagasi tavarežiimile.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Mõne liikme asukoht on teadmata. Palu neil rakendus avada või asukohaõigust kontrollida.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Seadme ühendus on katkenud. Kontrolli selle akut, toidet või paigutust.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Seadme aku on tühi. Vaheta see varsti välja, et hoiatused saamata ei jääks.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Meeldetuletus pole määratud. Loo ajakava, et kodu regulaarselt kontrollida.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Alarmiajakava pole määratud. Lülita kaitse sisse ajaks, mil oled tavaliselt eemal.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Kohe pole vaja midagi teha. Jätka selle kodu jälgimist.",
   "Lặp sau \$minutes phút": "Korda pärast \$minutes minutit",
   "Đang dùng • \$repeatText": "Aktiivne • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Turvajälgimine • \$repeatText",
   "Gia đình: \$mode": "Kodu režiim: \$mode",
   "Gợi ý xử lý": "Soovitatud toimingud",
   "Phát hiện \$count vấn đề cần xử lý": "\$count probleemi vajab tähelepanu",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Täna kasutati uksi \$count korda",
-  "Đã ghi nhận \$count hoạt động gần đây": "Registreeriti \$count hiljutist tegevust",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Süsteem: \$issueCount üksust vajab kontrollimist",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM-i tunnus on selles telefonis valmis.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM-i tunnus on valmis, kuid automaatse eemalolekurežiimi jaoks puudub üks nõue.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Leiti \$emergencyTotal hädaabiseadet. Soovitatav miinimum: suitsuandur ja SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Anda kodu omandiõigus üle aadressile:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Täna kasutati uksi \$count korda",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Registreeriti \$count hiljutist tegevust",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Süsteem: \$issueCount üksust vajab kontrollimist",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM-i tunnus on selles telefonis valmis.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM-i tunnus on valmis, kuid automaatse eemalolekurežiimi jaoks puudub üks nõue.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Leiti \$emergencyTotal hädaabiseadet. Soovitatav miinimum: suitsuandur ja SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Anda kodu omandiõigus üle aadressile:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count ust turvaliselt suletud",
   "\$count cửa và khóa đã an toàn": "\$count ust ja lukku turvatud",
   "\$count thiết bị đang được theo dõi": "Jälgitakse \$count seadet",
   "Cập nhật \$timeText": "Uuendatud \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Viimased andmed uuendati \$count minutit tagasi",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Viimased andmed uuendati \$count tundi tagasi",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Viimased andmed uuendati \$count minutit tagasi",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Viimased andmed uuendati \$count tundi tagasi",
   "Thành viên trong nhà: \$count": "Liikmeid kodus: \$count",
   "Thành viên bên ngoài: \$count": "Liikmeid eemal: \$count",
   "Chưa xác định vị trí: \$count": "Asukoht teadmata: \$count",
   "Môi trường hiện tại: \$environment": "Praegune keskkond: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: avatud, kui kodu on valverežiimis",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: avatud, kui kodu on valverežiimis",
   "An tâm hơn trong từng ngôi nhà": "Meelerahu igas kodus",
   "Báo động SafeHome": "SafeHome'i alarm",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Turvahoiatus vajab sinu tähelepanu.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Turvahoiatus vajab sinu tähelepanu.",
   "Có cảnh báo cần kiểm tra": "Hoiatus vajab sinu tähelepanu",
   "Tự đóng sau \$time": "Sulgeb automaatselt \$time pärast",
   "Ngày trong tuần": "Nädalapäevad",
   "Hoặc": "Või",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Algus- ja lõpuaeg ei tohi olla samad",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Lõpuaeg peab olema praegusest ajast hilisem",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Algus- ja lõpuaeg ei tohi olla samad",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Lõpuaeg peab olema praegusest ajast hilisem",
   "Khoảng tạm tắt không hợp lệ": "Vigane alarmi peatamise ajavahemik",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Peatamise ajavahemik ei kattu ühegi aktiivse alarmiajakavaga",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Peatamise ajavahemik ei kattu ühegi aktiivse alarmiajakavaga",
   "Cài đặt báo động": "Alarmi seaded",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Määra, kuidas see andur hoiatusi käivitab.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Määra, kuidas see andur hoiatusi käivitab.",
   "Tham gia báo động": "Osale alarmides",
-  "Tắt để cảm biến không tạo báo động.": "Lülita välja, et see andur ei saaks alarmi käivitada.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Lülita välja, et see andur ei saaks alarmi käivitada.",
   "Bật còi vật lý": "Luba füüsiline sireen",
   "Cho phép kích hoạt còi trong nhà.": "Luba sisesireenil käivituda.",
   "Đánh thức màn hình": "Ärata ekraan",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Kuva telefonis täisekraanihoiatus.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Kuva telefonis täisekraanihoiatus.",
   "Độ trễ kích hoạt": "Käivituse viivitus",
   "Chỉ áp dụng cho cảm biến an ninh.": "Kehtib ainult turvaanduritele.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Hädaabiandurid käivituvad alati kohe.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Hädaabiandurid käivituvad alati kohe.",
   "Ngay lập tức": "Kohe",
   "giây": "sekundit",
   "Đã lưu cấu hình báo động": "Alarmi seaded salvestatud",
   "Không thể lưu cấu hình báo động": "Alarmi seadeid ei õnnestunud salvestada",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Seda seadet saavad muuta ainult kodu omanik ja administraatorid.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Seda seadet saavad muuta ainult kodu omanik ja administraatorid.",
   "Thông tin chi tiết": "Seadme üksikasjad",
   "Thông báo báo động": "Alarmiteavitus",
   "Cài đặt nhắc nhở": "Meeldetuletuse seaded",
@@ -899,27 +1101,35 @@ const Map<String, String> etStrings = {
   "Danh sách thông báo": "Teavitused",
   "Cài đặt thông báo": "Teavituste seaded",
   "Sử dụng báo động theo lịch đã thiết lập": "Kasuta seadistatud alarmiajakava",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Saada ainult teavitusi; ära käivita alarmi",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Kõik kodu alarmid on välja lülitatud; süsteem saadab ainult teavitusi.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Selle režiimi saab sisse lülitada ainult omanik.",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Saada ainult teavitusi; ära käivita alarmi",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Kõik kodu alarmid on välja lülitatud; süsteem saadab ainult teavitusi.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Selle režiimi saab sisse lülitada ainult omanik.",
   "Bật Không bảo vệ?": "Lülitada kaitseta režiim sisse?",
   "Cảm biến vừa phát hiện một sự kiện.": "Andur tuvastas just sündmuse.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Kaitseta režiimi saab sisse lülitada ainult omanik",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Kaitseta režiimi saab sisse lülitada ainult omanik",
   "Đã chuyển nhà sang Không bảo vệ": "Kodu lülitati kaitseta režiimile",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Lülitati kaitseta režiimile, kuid teavitust ei õnnestunud saata",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Lülitati kaitseta režiimile, kuid teavitust ei õnnestunud saata",
   "Giám sát toàn diện": "Täielik jälgimine",
   "Không bảo vệ": "Kaitseta",
   "Không bảo vệ đang bật": "Kaitseta režiim on aktiivne",
   "Nhà đã chuyển sang Không bảo vệ": "Kodu lülitati kaitseta režiimile",
   "Thông báo cảm biến": "Anduri teavitused",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Tavalised teavitused, kui andur tuvastab sündmuse.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Tavalised teavitused, kui andur tuvastab sündmuse.",
   "Tôi hiểu, tiếp tục": "Saan aru, jätka",
   "Cảnh báo an ninh đã kết thúc": "Turvahoiatus lõppes",
   "Sự cố nguy hiểm đã kết thúc": "Hädaolukord lõppes",
   "Cảnh báo đã được kết thúc.": "Hoiatus on lõppenud.",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "Teine hoiatus on endiselt aktiivne.",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "Teine hoiatus on endiselt aktiivne.",
   "Báo động đã hoạt động trở lại": "Alarm on taas aktiivne",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Alarmi peatamisperiood on lõppenud.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Alarmi peatamisperiood on lõppenud.",
   "MQTT đã kết nối trở lại": "MQTT ühendus taastati",
   "Còi báo động đã được tắt": "Füüsiline sireen lülitati välja",
   "Sự cố vẫn đang được theo dõi.": "Juhtumit jälgitakse endiselt.",
@@ -934,34 +1144,47 @@ const Map<String, String> etStrings = {
   "Nhà đang ở chế độ Bình thường.": "Kodu on tavarežiimis.",
   "Pin thiết bị đã ổn định": "Seadme aku on stabiilne",
   "Hub đã kết nối trở lại": "Hubi ühendus taastati",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Lülitati tavarežiimile, kuid teavitust ei õnnestunud saata",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Lülitati tavarežiimile, kuid teavitust ei õnnestunud saata",
   "Chung cho nhà": "Jagatud kodu",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Kehtib kõigile liikmetele ja võib käivitada füüsilise sireeni.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Kehtib kõigile liikmetele ja võib käivitada füüsilise sireeni.",
   "Cá nhân": "Isiklik",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Isiklik ajakava töötab eraldi ega käivita kunagi füüsilist sireeni.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "See seade kehtib ainult sinu kontole.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Jagatud kodu seadeid saavad muuta ainult omanik ja administraatorid.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Isiklik ajakava töötab eraldi ega käivita kunagi füüsilist sireeni.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "See seade kehtib ainult sinu kontole.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Jagatud kodu seadeid saavad muuta ainult omanik ja administraatorid.",
   "Tham gia hệ thống báo động": "Osale alarmisüsteemis",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Hädaabiandurid osalevad alati alarmisüsteemis.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Lülita välja, et seade ei saaks ühtegi alarmi käivitada.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Hädaabiandurid osalevad alati alarmisüsteemis.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Lülita välja, et seade ei saaks ühtegi alarmi käivitada.",
   "Lịch báo động chung": "Jagatud alarmiajakava",
   "Lịch báo động cá nhân": "Isiklik alarmiajakava",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Kuva telefonis täisekraanihoiatus.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Kuva telefonis täisekraanihoiatus.",
   "Lặp lại cảnh báo": "Korda hoiatust",
   "Báo động chung": "Jagatud alarm",
   "Báo động cá nhân": "Isiklik alarm",
   "Đã cài đặt": "Seadistatud",
   "Chưa cài đặt": "Seadistamata",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Jagatud ja isiklikud ajakavad töötavad paralleelselt; enam pole vaja üht valida.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Jagatud ja isiklikud ajakavad töötavad paralleelselt; enam pole vaja üht valida.",
   "Cài nhanh chung": "Jagatud seadete kiirseadistus",
   "Cài nhanh cá nhân": "Isiklike seadete kiirseadistus",
   "Thiết lập nhanh lịch cá nhân": "Isikliku ajakava kiirseadistus",
   "Thiết lập nhanh lịch chung": "Jagatud ajakava kiirseadistus",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "See ajakava kehtib ainult sulle ega käivita füüsilist sireeni.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "See ajakava kehtib kõigile kodu liikmetele.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "See ajakava kehtib ainult sulle ega käivita füüsilist sireeni.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "See ajakava kehtib kõigile kodu liikmetele.",
   "Đã áp dụng lịch báo động": "Alarmiajakava rakendatud",
   "Không thể lưu lịch báo động": "Alarmiajakava ei õnnestunud salvestada",
   "Nhà chưa có thiết bị an ninh": "Selles kodus pole turvaseadmeid",
-  "Nhận cảnh báo theo lịch chung của nhà": "Võta vastu jagatud kodu ajakava hoiatusi",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Lülita see välja, et peatada jagatud ajakava teavitused ja täisekraanihoiatused. Kodu sireen töötab edasi.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Võta vastu jagatud kodu ajakava hoiatusi",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Lülita see välja, et peatada jagatud ajakava teavitused ja täisekraanihoiatused. Kodu sireen töötab edasi.",
 };

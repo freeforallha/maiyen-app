@@ -1758,7 +1758,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         safeDebugPrint("FCM_SETUP_ERROR: $error");
       }),
     );
-    FCMService.listenForeground(localNotif: localNotif);
+    FCMService.listenForeground();
 
     // Dữ liệu nhà chính vẫn cần chạy sớm để hiện UI.
     _startAccountPathListeners();
@@ -3892,17 +3892,9 @@ class _HomeStatusBackground extends StatelessWidget {
   List<Color> _gradientColors(bool emergencyPhase) {
     switch (level) {
       case "warning":
-        return const [
-          Color(0xFFFFF6D8),
-          Color(0xFFFFFAEC),
-          Color(0xFFFFFFFF),
-        ];
+        return const [Color(0xFFFFF6D8), Color(0xFFFFFAEC), Color(0xFFFFFFFF)];
       case "danger":
-        return const [
-          Color(0xFFFFECEA),
-          Color(0xFFFFF5F3),
-          Color(0xFFFFFFFF),
-        ];
+        return const [Color(0xFFFFECEA), Color(0xFFFFF5F3), Color(0xFFFFFFFF)];
       case "emergency":
         if (emergencyPhase) {
           return const [
@@ -3912,11 +3904,7 @@ class _HomeStatusBackground extends StatelessWidget {
           ];
         }
 
-        return const [
-          Color(0xFFFFE4E1),
-          Color(0xFFFFF0ED),
-          Color(0xFFFFFFFF),
-        ];
+        return const [Color(0xFFFFE4E1), Color(0xFFFFF0ED), Color(0xFFFFFFFF)];
       case "safe":
         return const [
           Color(0xFFF3F8F5),
@@ -3924,11 +3912,7 @@ class _HomeStatusBackground extends StatelessWidget {
           Color(0xFFFFFFFF),
         ];
       default:
-        return const [
-          Color(0xFFF4F6F5),
-          Color(0xFFF7F8F7),
-          Color(0xFFFFFFFF),
-        ];
+        return const [Color(0xFFF4F6F5), Color(0xFFF7F8F7), Color(0xFFFFFFFF)];
     }
   }
 
@@ -3943,9 +3927,7 @@ class _HomeStatusBackground extends StatelessWidget {
       child: child,
       builder: (context, emergencyPhase, staticChild) {
         return AnimatedContainer(
-          duration: Duration(
-            milliseconds: level == "emergency" ? 560 : 420,
-          ),
+          duration: Duration(milliseconds: level == "emergency" ? 560 : 420),
           curve: Curves.easeInOut,
           decoration: BoxDecoration(
             gradient: LinearGradient(

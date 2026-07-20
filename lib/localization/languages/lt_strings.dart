@@ -3,7 +3,8 @@ const Map<String, String> ltStrings = {
   "Không đọc được số điện thoại": "Nepavyko nuskaityti telefono numerio",
   "Tin nhắn quá dài": "Pranešimas per ilgas",
   "Không gửi được tin nhắn": "Nepavyko išsiųsti pranešimo",
-  "Bạn không có quyền sửa lịch chung của nhà": "Neturite teisės redaguoti bendro namų tvarkaraščio",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Neturite teisės redaguoti bendro namų tvarkaraščio",
   "Nhà của bạn": "Jūsų namai",
   "Tải tin cũ hơn": "Įkelti senesnius pranešimus",
   "Nhà chưa đặt tên": "Namai be pavadinimo",
@@ -91,13 +92,18 @@ const Map<String, String> ltStrings = {
   "Đang theo dõi": "Stebėjimas",
   "Chưa nhận diện": "Neatpažintas įrenginys",
   "Chưa có cập nhật": "Atnaujinimų dar nėra",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Įrenginių dar nėra. Palieskite +, kad pridėtumėte ir pradėtumėte saugoti namus.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Įrenginių dar nėra. Palieskite +, kad pridėtumėte ir pradėtumėte saugoti namus.",
   "CHƯA AN TOÀN": "NESAUGU",
   "ĐÃ AN TOÀN": "SAUGU",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Jūsų namams reikia dėmesio. Peržiūrėkite toliau pateiktas būsenas.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Jūsų namai veikia įprastai.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Neaptikta neįprasta dūmų ar SOS veikla.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Nepakanka naujausios veiklos išsamesnei analizei.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Jūsų namams reikia dėmesio. Peržiūrėkite toliau pateiktas būsenas.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Jūsų namai veikia įprastai.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Neaptikta neįprasta dūmų ar SOS veikla.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Nepakanka naujausios veiklos išsamesnei analizei.",
   "Hub kết nối bình thường": "Šakotuvas prijungtas",
   "Cài đặt cảnh báo cho nhà hiện tại": "Šių namų įspėjimų nustatymai",
   "Nhận cảnh báo báo động": "Gauti pavojaus pranešimus",
@@ -117,8 +123,10 @@ const Map<String, String> ltStrings = {
   "Chưa có dữ liệu trạng thái": "Būsenos duomenų dar nėra",
   "Chưa đủ dữ liệu để đánh giá": "Nepakanka duomenų įvertinti",
   "Chưa có dữ liệu để đánh giá": "Nepakanka duomenų įvertinti",
-  "Bấm vào để xem chi tiết": "Palieskite, kad peržiūrėtumėte išsamią informaciją",
-  "Nhấn để xem chi tiết...": "Palieskite, kad peržiūrėtumėte išsamią informaciją...",
+  "Bấm vào để xem chi tiết":
+      "Palieskite, kad peržiūrėtumėte išsamią informaciją",
+  "Nhấn để xem chi tiết...":
+      "Palieskite, kad peržiūrėtumėte išsamią informaciją...",
   "Tạm dừng": "Pristabdyta",
   "Tắt": "Išjungta",
   "Chi tiết": "Išsamiau",
@@ -161,14 +169,19 @@ const Map<String, String> ltStrings = {
   "Đã rời khỏi home": "Namai palikti",
   "Đã cập nhật": "Atnaujinta",
   "Tìm home...": "Ieškoti namų...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Nustatyti namų vietą ir įjungti automatinę apsaugą",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Perduoti namų nuosavybę arba ištrinti namus",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Nustatyti priminimą / pavojaus signalą pasirinktiems namams",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Nustatyti namų vietą ir įjungti automatinę apsaugą",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Perduoti namų nuosavybę arba ištrinti namus",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Nustatyti priminimą / pavojaus signalą pasirinktiems namams",
   "Chia sẻ nhà đã chọn": "Bendrinti pasirinktus namus",
   "Mở danh sách chia sẻ nhà": "Atidaryti namų bendrinimo sąrašą",
   "Xoá các nhà đã chọn?": "Ištrinti pasirinktus namus?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Pasirinkti namai bus visam laikui ištrinti.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Arba nuskaitykite QR kodą, kad paprašytumėte prieigos prie pasirinktų namų",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Pasirinkti namai bus visam laikui ištrinti.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Arba nuskaitykite QR kodą, kad paprašytumėte prieigos prie pasirinktų namų",
   "Email người nhận": "Gavėjo el. paštas",
   "Chia sẻ": "Bendrinti",
   "Email chưa đăng ký": "El. paštas neužregistruotas",
@@ -197,27 +210,36 @@ const Map<String, String> ltStrings = {
   "Đã tắt báo động": "Signalizacija išjungta",
   "Tắt báo động": "Sustabdyti pavojaus signalą",
   "Cả ngày": "Visą dieną",
-  "Bạn không có quyền thực hiện thao tác này.": "Neturite teisės atlikti šio veiksmo.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Nepavyko užbaigti veiksmo. Bandykite dar kartą.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Netinkamas kelių namų prisijungimo QR kodas",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Neturite teisės atlikti šio veiksmo.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Nepavyko užbaigti veiksmo. Bandykite dar kartą.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Netinkamas kelių namų prisijungimo QR kodas",
   "Bạn đang là chủ các nhà này": "Šie namai priklauso jums",
   "Một người dùng": "Naudotojas",
   "Yêu cầu gia nhập nhà": "Prašymas prisijungti prie namų",
   "Đã gửi yêu cầu gia nhập nhà": "Prašymas prisijungti išsiųstas",
   "QR gia nhập không hợp lệ": "Netinkamas prisijungimo QR kodas",
   "Bạn đang là chủ nhà này": "Jūs jau esate šių namų savininkas",
-  "QR này không phải mã xin gia nhập nhà": "Šis QR kodas nėra prisijungimo prie namų kodas",
+  "QR này không phải mã xin gia nhập nhà":
+      "Šis QR kodas nėra prisijungimo prie namų kodas",
   "Bạn không có quyền thêm thiết bị": "Neturite teisės pridėti įrenginių",
   "Đã mở chế độ thêm thiết bị": "Įrenginių susiejimas įjungtas",
   "Rời khỏi Home này?": "Palikti šiuos namus?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Šie namai ir visi jų įrenginiai bus visam laikui ištrinti.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Šie namai ir visi jų įrenginiai bus visam laikui ištrinti.",
   "Đã xoá nhà": "Namai ištrinti",
   "QR của nhà này": "Namų QR kodas",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Kiti gali nuskaityti šį kodą, kad paprašytų prieigos prie namų.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Kiti gali nuskaityti šį kodą, kad paprašytų prieigos prie namų.",
   "Chia sẻ nhà": "Bendrinti namus",
-  "Quét QR để xin gia nhập nhà": "Nuskaityti QR kodą, kad prisijungtumėte prie namų",
-  "Quét QR xin gia nhập nhà": "Nuskaitykite QR kodą, kad prisijungtumėte prie namų",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Įdėkite bendrinamų namų QR kodą į rėmelį",
+  "Quét QR để xin gia nhập nhà":
+      "Nuskaityti QR kodą, kad prisijungtumėte prie namų",
+  "Quét QR xin gia nhập nhà":
+      "Nuskaitykite QR kodą, kad prisijungtumėte prie namų",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Įdėkite bendrinamų namų QR kodą į rėmelį",
   "Mã QR này do chủ nhà chia sẻ": "Šį QR kodą bendrino namų savininkas",
   "Nhập mã mời": "Įveskite kvietimo kodą",
   "Gửi yêu cầu gia nhập": "Siųsti prašymą prisijungti",
@@ -237,7 +259,8 @@ const Map<String, String> ltStrings = {
   "Xác nhận mật khẩu": "Patvirtinti slaptažodį",
   "Yêu cầu chuyển quyền chủ nhà": "Nuosavybės perdavimo prašymas",
   "Đã gửi yêu cầu chuyển quyền": "Perdavimo prašymas išsiųstas",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Nuosavybės perdavimo prašymas išsiųstas",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Nuosavybės perdavimo prašymas išsiųstas",
   "Bạn không có quyền xoá thiết bị": "Neturite teisės ištrinti įrenginių",
   "Xóa Device?": "Ištrinti šį įrenginį?",
   "Đã gửi yêu cầu xoá thiết bị": "Įrenginio ištrynimo prašymas išsiųstas",
@@ -247,7 +270,8 @@ const Map<String, String> ltStrings = {
   "Thêm nhà mới": "Pridėti naujus namus",
   "Tạo nhà mới": "Sukurti naujus namus",
   "Tạo một ngôi nhà mới của bạn": "Sukurti naujus namus",
-  "Quét mã QR được chủ nhà chia sẻ": "Nuskaitykite namų savininko bendrintą QR kodą",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Nuskaitykite namų savininko bendrintą QR kodą",
   "Tên nhà": "Namų pavadinimas",
   "Số điện thoại": "Telefono numeris",
   "Nam": "Vyras",
@@ -261,7 +285,8 @@ const Map<String, String> ltStrings = {
   "Không thể lưu thông tin": "Nepavyko išsaugoti informacijos",
   "Đã lưu thông tin": "Informacija išsaugota",
   "Lỗi lưu profile": "Nepavyko išsaugoti profilio",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Pridėkite telefono numerį nenumatytiems atvejams",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Pridėkite telefono numerį nenumatytiems atvejams",
   "Hoàn tất": "Atlikta",
   "Đã tạo nhà mới": "Namai sukurti",
   "Về muộn": "Grįšiu vėlai",
@@ -280,7 +305,8 @@ const Map<String, String> ltStrings = {
   "SĐT": "Telefonas",
   "Ngày sinh": "Gimimo data",
   "Yêu cầu & lời mời": "Prašymai ir kvietimai",
-  "Xem lời mời chia sẻ và xin gia nhập": "Peržiūrėti bendrinimo kvietimus ir prisijungimo prašymus",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Peržiūrėti bendrinimo kvietimus ir prisijungimo prašymus",
   "Cài đặt bảo mật": "Saugos nustatymai",
   "Quyền báo động toàn màn hình": "Viso ekrano pavojaus signalo leidimas",
   "Báo động toàn màn hình": "Viso ekrano pavojaus signalas",
@@ -330,7 +356,8 @@ const Map<String, String> ltStrings = {
   "Đổi tên phòng": "Pervadinti kambarį",
   "Tên phòng": "Kambario pavadinimas",
   "Xoá phòng": "Ištrinti kambarį",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Šio kambario įrenginiai bus perkelti į skiltį Nepriskirta.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Šio kambario įrenginiai bus perkelti į skiltį Nepriskirta.",
   "Thêm phòng": "Pridėti kambarį",
   "Ví dụ: Phòng khách": "Pavyzdys: Svetainė",
   "Phòng khách": "Svetainė",
@@ -351,9 +378,11 @@ const Map<String, String> ltStrings = {
   "Cửa đóng": "Durys uždarytos",
   "Chưa đặt vị trí nhà": "Namų vieta nenustatyta",
   "Đặt vị trí nhà tại đây": "Nustatyti namų vietą čia",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Nustatykite namų vietą prieš įjungdami automatinę apsaugą",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Nustatykite namų vietą prieš įjungdami automatinę apsaugą",
   "Bán kính bảo vệ mặc định: 150 m": "Numatytasis apsaugos spindulys: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Kiekvienas narys turi leisti vietos prieigą „Visada“, kad išvykimo / buvimo namuose būsena veiktų fone.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Kiekvienas narys turi leisti vietos prieigą „Visada“, kad išvykimo / buvimo namuose būsena veiktų fone.",
   "Lưu cài đặt": "Išsaugoti nustatymus",
   "Đã đặt vị trí nhà": "Namų vieta nustatyta",
   "Đang lấy vị trí...": "Gaunama vieta...",
@@ -362,16 +391,20 @@ const Map<String, String> ltStrings = {
   "Cập nhật thông tin nhà": "Atnaujinti namų informaciją",
   "Nhập địa chỉ của nhà": "Įveskite namų adresą",
   "Lưu thay đổi": "Išsaugoti pakeitimus",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Šis vardas rodomas tik jūsų paskyroje.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Pavadinimas ir adresas bus atnaujinti visiems namų nariams.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Šis vardas rodomas tik jūsų paskyroje.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Pavadinimas ir adresas bus atnaujinti visiems namų nariams.",
   "Một thành viên": "Narys",
   "Đã cập nhật thông tin nhà": "Namų informacija atnaujinta",
   "Thay tên": "Pervadinti",
   "Đã đổi tên thiết bị": "Įrenginys pervadintas",
   "Chưa chọn nhà để kiểm tra": "Pasirinkite namus testavimui",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Vykdykite šį testą naudodami savininko paskyrą",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Vykdykite šį testą naudodami savininko paskyrą",
   "Không đọc được dữ liệu nhà": "Nepavyksta nuskaityti namų duomenų",
-  "Nhà cần có ít nhất một thiết bị để test": "Testavimui namuose turi būti bent vienas įrenginys",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Testavimui namuose turi būti bent vienas įrenginys",
   "Đóng": "Uždaryti",
   "Đã thiết lập": "Nustatyti",
   "Quét QR": "Nuskaityti QR kodą",
@@ -427,8 +460,10 @@ const Map<String, String> ltStrings = {
   "Chế độ áp dụng": "Taikyti režimą",
   "Theo nhà": "Namų tvarkaraštis",
   "Riêng tôi": "Asmeninis",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Naudoti savininko arba administratoriaus nustatytą bendrą tvarkaraštį",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Naudoti asmeninį tvarkaraštį, taikomą tik jūsų paskyrai",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Naudoti savininko arba administratoriaus nustatytą bendrą tvarkaraštį",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Naudoti asmeninį tvarkaraštį, taikomą tik jūsų paskyrai",
   "Thiết lập nhanh báo động": "Greitas signalizacijos nustatymas",
   "Thiết lập nhanh toàn bộ thiết bị": "Greitai nustatyti visus įrenginius",
   "Áp dụng cho toàn bộ thiết bị": "Taikyti visiems įrenginiams",
@@ -468,8 +503,10 @@ const Map<String, String> ltStrings = {
   "Đã rời khỏi nhà": "Iš namų pasitraukta",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Paliksite bendrinamus namus.",
   "Các nhà của bạn sẽ bị xoá.\n": "Jūsų namai bus ištrinti.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Tai pakeis namų signalizacijos tvarkaraščius visiems pasirinktų namų saugos įrenginiams.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Tai pridės namų priminimą pasirinktiems namams.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Tai pakeis namų signalizacijos tvarkaraščius visiems pasirinktų namų saugos įrenginiams.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Tai pridės namų priminimą pasirinktiems namams.\n\n",
   "Xác nhận thay đổi báo động": "Patvirtinti signalizacijos pakeitimus",
   "Xác nhận thay đổi nhắc nhở": "Patvirtinti priminimo pakeitimus",
   "Lặp lại khi sự cố vẫn còn": "Kartoti, kol problema išlieka",
@@ -477,44 +514,63 @@ const Map<String, String> ltStrings = {
   "VD: Mr Chung": "Pvz., ponas Chungas",
   "🏡 Chưa có nhà nào": "🏡 Namų dar nėra",
   "Vẫn chuyển về Bình thường": "Vis tiek perjungti į įprastą režimą",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automatinis apsaugos režimas išvykus vis dar įjungtas. Jei visi nariai tebėra išvykę, sistema po kelių minučių gali vėl įjungti apsaugos režimą.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automatinis apsaugos režimas išvykus vis dar įjungtas. Jei visi nariai tebėra išvykę, sistema po kelių minučių gali vėl įjungti apsaugos režimą.",
   "Chuyển về Bình thường?": "Perjungti į įprastą režimą?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Saugos įrenginiai bus stebimi nedelsiant.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Saugos įrenginiai bus stebimi nedelsiant.\n\n",
   "Bật Bảo vệ thủ công?": "Įjungti rankinį apsaugos režimą?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Šis veiksmas išjungs visas signalizacijas šiame ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Šis veiksmas išjungs visas signalizacijas šiame ",
   "Tắt toàn bộ báo động?": "Išjungti visas signalizacijas?",
-  "Không xoá được lịch tạm tắt báo động": "Nepavyko ištrinti signalizacijos pristabdymo tvarkaraščio",
-  "Không lưu được tạm tắt báo động": "Nepavyko išsaugoti signalizacijos pristabdymo",
+  "Không xoá được lịch tạm tắt báo động":
+      "Nepavyko ištrinti signalizacijos pristabdymo tvarkaraščio",
+  "Không lưu được tạm tắt báo động":
+      "Nepavyko išsaugoti signalizacijos pristabdymo",
   "Không gửi được yêu cầu xoá": "Nepavyko išsiųsti ištrynimo užklausos",
   "Không lưu được cài đặt": "Nepavyko išsaugoti nustatymo",
   "Không lấy được vị trí hiện tại": "Nepavyko gauti dabartinės vietos",
-  "Không thể xác nhận tài khoản hiện tại": "Nepavyko patvirtinti dabartinės paskyros",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Nepavyko patvirtinti dabartinės paskyros",
   "Mật khẩu không đúng": "Neteisingas slaptažodis",
   "Không thể xác nhận mật khẩu": "Nepavyko patvirtinti slaptažodžio",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Tik savininkas arba administratorius gali keisti signalizacijos kartojimo nustatymą",
-  "Không lưu được thời gian lặp báo động": "Nepavyko išsaugoti signalizacijos kartojimo laiko",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Tik savininkas arba administratorius gali keisti apsaugos režimą",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Tik savininkas arba administratorius gali keisti signalizacijos kartojimo nustatymą",
+  "Không lưu được thời gian lặp báo động":
+      "Nepavyko išsaugoti signalizacijos kartojimo laiko",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Tik savininkas arba administratorius gali keisti apsaugos režimą",
   "Không thể thay đổi chế độ nhà": "Nepavyko pakeisti namų režimo",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Apsaugos režimas įjungtas, bet pranešimo išsiųsti nepavyko",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Apsaugos režimas įjungtas, bet pranešimo išsiųsti nepavyko",
   "Đã bật Chế độ Bảo vệ thủ công": "Rankinis apsaugos režimas įjungtas",
   "Đã chuyển nhà về Bình thường": "Namai grąžinti į įprastą režimą",
   "60 phút": "60 minučių",
   "30 phút": "30 minučių",
   "15 phút": "15 minučių",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Peržiūrite savininko tvarkaraštį. Norėdami nustatyti savo signalizacijos tvarkaraštį, pasirinkite Tik aš.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Peržiūrite savininko tvarkaraštį. Norėdami nustatyti savo signalizacijos tvarkaraštį, pasirinkite Tik aš.",
   "Chọn giờ kết thúc báo động": "Pasirinkite signalizacijos pabaigos laiką",
   "Chọn giờ bắt đầu báo động": "Pasirinkite signalizacijos pradžios laiką",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Neturite teisės redaguoti šių namų signalizacijos tvarkaraščio",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Nepavyko pritaikyti signalizacijos visiems įrenginiams",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Šiuose namuose nėra saugos įrenginių, kuriems būtų galima taikyti",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Neturite teisės redaguoti namų nustatymų. Pasirinkite Tik aš.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Neturite teisės redaguoti šių namų signalizacijos tvarkaraščio",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Nepavyko pritaikyti signalizacijos visiems įrenginiams",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Šiuose namuose nėra saugos įrenginių, kuriems būtų galima taikyti",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Neturite teisės redaguoti namų nustatymų. Pasirinkite Tik aš.",
   "Không thể lưu chế độ báo động": "Nepavyko išsaugoti signalizacijos režimo",
   "Thêm nhắc nhở": "Pridėti priminimą",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Priminimas pasirinktu laiku primins patikrinti namų saugos būseną.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Priminimas pasirinktu laiku primins patikrinti namų saugos būseną.",
   "Thêm khung giờ báo động": "Pridėti signalizacijos laiko intervalą",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Naudojami jūsų asmeniniai priminimo nustatymai",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Naudojami savininko priminimo nustatymai",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Naudojami jūsų asmeniniai priminimo nustatymai",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Naudojami savininko priminimo nustatymai",
   "Sửa giờ nhắc nhở": "Redaguoti priminimo laiką",
   "Sửa giờ kết thúc báo động": "Redaguoti signalizacijos pabaigos laiką",
   "Sửa giờ bắt đầu báo động": "Redaguoti signalizacijos pradžios laiką",
@@ -531,118 +587,179 @@ const Map<String, String> ltStrings = {
   "Xoá thành viên": "Pašalinti narį",
   "Đã xoá thành viên": "Narys pašalintas",
   "Đồng ý": "Gerai",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Ar tikrai norite palikti šiuos namus?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Ar tikrai norite palikti šiuos namus?",
   "Xoá thành viên?": "Pašalinti narį?",
   "Rời khỏi nhà?": "Palikti šiuos namus?",
-  "Chỉ chủ nhà mới được thay đổi vai trò": "Tik savininkas gali keisti vaidmenis",
-  "Bạn không có quyền xoá thành viên này": "Neturite teisės pašalinti šio nario",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Tik savininkas gali keisti vaidmenis",
+  "Bạn không có quyền xoá thành viên này":
+      "Neturite teisės pašalinti šio nario",
   "Bạn": "Jūs",
   "Không có email": "El. pašto nėra",
   "Chưa có số điện thoại": "Telefono numerio nėra",
   "Không mở được ứng dụng gọi điện": "Nepavyko atidaryti telefono programėlės",
-  "Thành viên chưa cập nhật số điện thoại": "Šis narys nepridėjo telefono numerio",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Rankinis apsaugos režimas įjungtas – perjunkite į įprastą režimą, kad jį išjungtumėte",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Šis narys nepridėjo telefono numerio",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Rankinis apsaugos režimas įjungtas – perjunkite į įprastą režimą, kad jį išjungtumėte",
   "Thời gian lặp": "Kartojimo intervalas",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Pasirinkite 0, kad būtų įspėta vieną kartą. Šis nustatymas taikomas rankiniam apsaugos režimui ir automatiniam apsaugos režimui išvykus.",
-  "Lặp báo động khi sự cố vẫn còn": "Kartoti signalizaciją, kol problema išlieka",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Pasirinkite 0, kad būtų įspėta vieną kartą. Šis nustatymas taikomas rankiniam apsaugos režimui ir automatiniam apsaugos režimui išvykus.",
+  "Lặp báo động khi sự cố vẫn còn":
+      "Kartoti signalizaciją, kol problema išlieka",
   "Đang được sử dụng": "Šiuo metu aktyvu",
   "Chuyển về sử dụng thông thường": "Grįžti prie įprasto naudojimo",
   "Chế độ nhà": "Namų režimas",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS įrenginys neužfiksavo perspėjimo.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Dūmų jutiklis neaptiko problemos.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Jūs arba kitas narys rankiniu būdu įjungė apsaugos režimą.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome automatiškai įjungė apsaugos režimą, nes išvykote iš namų.",
-  "Nhà đang ở chế độ dùng bình thường.": "Šiuose namuose šiuo metu naudojamas įprastas režimas.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS įrenginys neužfiksavo perspėjimo.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Dūmų jutiklis neaptiko problemos.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Jūs arba kitas narys rankiniu būdu įjungė apsaugos režimą.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome automatiškai įjungė apsaugos režimą, nes išvykote iš namų.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Šiuose namuose šiuo metu naudojamas įprastas režimas.",
   "Bảo vệ thủ công đang bật": "Rankinis apsaugos režimas įjungtas",
   "Bảo vệ tự động đang bật": "Automatinis apsaugos režimas įjungtas",
   "Bảo vệ đang tắt": "Apsaugos režimas išjungtas",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Neseniai atidarėte programėlę būsenai patikrinti.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Reguliariai atidarykite programėlę, kad peržiūrėtumėte leidimus, tvarkaraščius ir neperskaitytus perspėjimus.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Po kelių naudojimo kartų SafeHome galės geriau įvertinti jūsų programėlės tikrinimo įprotį.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Neseniai atidarėte programėlę būsenai patikrinti.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Reguliariai atidarykite programėlę, kad peržiūrėtumėte leidimus, tvarkaraščius ir neperskaitytus perspėjimus.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Po kelių naudojimo kartų SafeHome galės geriau įvertinti jūsų programėlės tikrinimo įprotį.",
   "Tần suất vào ứng dụng ổn": "Programėlės tikrinimo dažnis yra geras",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Nuo paskutinio programėlės patikrinimo praėjo nemažai laiko",
-  "Đang ghi nhận tần suất vào ứng dụng": "Fiksuojamas programėlės tikrinimo dažnis",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Patikrinkite leidimą visada naudoti vietą ir veikimo fone sąlygas.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Šis įrenginys atitinka automatinės apsaugos išvykus reikalavimus.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Įjunkite, jei norite, kad apsaugos režimas automatiškai įsijungtų jums išvykus.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Nuo paskutinio programėlės patikrinimo praėjo nemažai laiko",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Fiksuojamas programėlės tikrinimo dažnis",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Patikrinkite leidimą visada naudoti vietą ir veikimo fone sąlygas.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Šis įrenginys atitinka automatinės apsaugos išvykus reikalavimus.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Įjunkite, jei norite, kad apsaugos režimas automatiškai įsijungtų jums išvykus.",
   "Auto rời khỏi nhà chưa ổn": "Automatinė apsauga išvykus neparuošta",
   "Auto rời khỏi nhà đã sẵn sàng": "Automatinė apsauga išvykus paruošta",
   "Auto rời khỏi nhà chưa bật": "Automatinė apsauga išvykus neįjungta",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Pridėkite jūsų namams tinkamą dūmų jutiklį, SOS ar avarinį įrenginį.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Pridėkite jūsų namams tinkamą dūmų jutiklį, SOS ar avarinį įrenginį.",
   "Chưa có thiết bị khẩn cấp": "Avarinio įrenginio dar nėra",
   "Đã có thiết bị khẩn cấp": "Avariniai įrenginiai pridėti",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Nustatykite signalizacijos tvarkaraštį miego laikui arba kai būsite išvykę.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Šie namai turi signalizacijos tvarkaraštį arba įrenginio lygio perspėjimų tvarkaraštį.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Nustatykite signalizacijos tvarkaraštį miego laikui arba kai būsite išvykę.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Šie namai turi signalizacijos tvarkaraštį arba įrenginio lygio perspėjimų tvarkaraštį.",
   "Chưa cài lịch báo động": "Signalizacijos tvarkaraštis nenustatytas",
   "Đã cài lịch báo động": "Signalizacijos tvarkaraštis nustatytas",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Nustatykite bent vieną priminimą, kad nepamirštumėte patikrinti namų.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Programėlė pagal tvarkaraštį primins patikrinti namus.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Nustatykite bent vieną priminimą, kad nepamirštumėte patikrinti namų.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Programėlė pagal tvarkaraštį primins patikrinti namus.",
   "Chưa cài đặt nhắc nhở": "Priminimas nenustatytas",
   "Đã cài đặt nhắc nhở": "Priminimas nustatytas",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Iš naujo atidarykite programėlę arba prisijunkite dar kartą, jei šis įrenginys negauna perspėjimų.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Šis įrenginys neužregistruotas perspėjimams gauti",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Iš naujo atidarykite programėlę arba prisijunkite dar kartą, jei šis įrenginys negauna perspėjimų.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Šis įrenginys neužregistruotas perspėjimams gauti",
   "Thiết bị nhận cảnh báo bình thường": "Šis įrenginys gali gauti perspėjimus",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS veikimą fone riboja griežčiau nei Android; naudodami automatinę apsaugą išvykus palikite įjungtus pranešimus ir leidimą visada naudoti vietą.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS veikimą fone riboja griežčiau nei Android; naudodami automatinę apsaugą išvykus palikite įjungtus pranešimus ir leidimą visada naudoti vietą.",
   "Cơ chế iOS": "iOS veikimas",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Patikrinkite veikimo fone leidimą ir automatinį paleidimą, kad perspėjimai nevėluotų.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Įrenginys patvirtino svarbias veikimo fone sąlygas.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Patikrinti veikimą fone / automatinį paleidimą",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Patikrinkite veikimo fone leidimą ir automatinį paleidimą, kad perspėjimai nevėluotų.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Įrenginys patvirtino svarbias veikimo fone sąlygas.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Patikrinti veikimą fone / automatinį paleidimą",
   "Chạy nền ổn định": "Veikimas fone atrodo stabilus",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Kai kurie Android telefonai gali vėlinti perspėjimus, kai įjungtas baterijos optimizavimas.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Telefonas rečiau vėlins SafeHome perspėjimus.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Kai kurie Android telefonai gali vėlinti perspėjimus, kai įjungtas baterijos optimizavimas.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefonas rečiau vėlins SafeHome perspėjimus.",
   "Chưa tắt tối ưu pin": "Baterijos optimizavimas vis dar įjungtas",
-  "Tối ưu pin không chặn ứng dụng": "Baterijos optimizavimas neblokuoja programėlės",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Kad automatinė apsauga išvykus veiktų patikimai, reikia leidimo visada naudoti vietą.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Automatinei apsaugai išvykus reikalingas vietos leidimas.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Vietos paslauga išjungta, todėl automatinė apsauga išvykus gali veikti nepatikimai.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "To reikia tik naudojant automatinę apsaugą išvykus.",
+  "Tối ưu pin không chặn ứng dụng":
+      "Baterijos optimizavimas neblokuoja programėlės",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Kad automatinė apsauga išvykus veiktų patikimai, reikia leidimo visada naudoti vietą.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Automatinei apsaugai išvykus reikalingas vietos leidimas.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Vietos paslauga išjungta, todėl automatinė apsauga išvykus gali veikti nepatikimai.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "To reikia tik naudojant automatinę apsaugą išvykus.",
   "Chưa cấp vị trí luôn luôn": "Neleista visada naudoti vietą",
   "Đã cấp vị trí luôn luôn": "Leista visada naudoti vietą",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS neatidaro viso ekrano kaip Android; programėlė naudoja sistemos pranešimus ir garsą.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android naudoja viso ekrano perspėjimus; leiskite juos nustatymuose, jei telefonas juos blokuoja.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS neatidaro viso ekrano kaip Android; programėlė naudoja sistemos pranešimus ir garsą.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android naudoja viso ekrano perspėjimus; leiskite juos nustatymuose, jei telefonas juos blokuoja.",
   "Cảnh báo trên iOS": "Perspėjimai iOS",
   "Cảnh báo toàn màn hình": "Viso ekrano perspėjimai",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Jei pranešimai išjungti, perspėjimai gali nepasirodyti.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Šis telefonas gali gauti SafeHome pranešimus.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Jei pranešimai išjungti, perspėjimai gali nepasirodyti.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Šis telefonas gali gauti SafeHome pranešimus.",
   "Chưa bật thông báo": "Pranešimai neįjungti",
   "Đã bật thông báo": "Pranešimai įjungti",
   "Hệ thống: Sẵn sàng": "Sistema: paruošta",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistema: perspėjimai gali būti praleisti",
   "Cách bạn đang dùng ứng dụng": "Kaip naudojate programėlę",
   "Thiết bị của bạn": "Jūsų įrenginys",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Tikrina jūsų telefoną ir programėlės naudojimą.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Tikrina jūsų telefoną ir programėlės naudojimą.",
   "Hệ thống SafeHome": "SafeHome sistema",
   "Hệ thống: Đang kiểm tra...": "Sistema: tikrinama...",
   "Tên": "Pavadinimas",
-  "Bạn không có quyền thay đổi vị trí nhà": "Neturite teisės keisti namų vietos",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Neturite teisės keisti namų vietos",
   "Hãy bật GPS để đặt vị trí nhà": "Įjunkite GPS, kad nustatytumėte namų vietą",
   "Bạn chưa cấp quyền vị trí": "Vietos leidimas nesuteiktas",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Suteikite vietos leidimą programėlės nustatymuose",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Automatinis apsaugos režimas visiems išvykus įjungtas",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automatinis apsaugos režimas visiems išvykus išjungtas",
-  "Không thể thay đổi trạng thái báo động": "Nepavyko pakeisti signalizacijos būsenos",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Suteikite vietos leidimą programėlės nustatymuose",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Automatinis apsaugos režimas visiems išvykus įjungtas",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automatinis apsaugos režimas visiems išvykus išjungtas",
+  "Không thể thay đổi trạng thái báo động":
+      "Nepavyko pakeisti signalizacijos būsenos",
   "Đã tắt toàn bộ báo động của nhà": "Visos namų signalizacijos išjungtos",
-  "QR này không phải mã xin gia nhập Home": "Šis QR kodas nėra prisijungimo prie namų kodas",
+  "QR này không phải mã xin gia nhập Home":
+      "Šis QR kodas nėra prisijungimo prie namų kodas",
   "Thêm Home": "Pridėti namus",
   "Mở cài đặt": "Atidaryti nustatymus",
   "Để sau": "Vėliau",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome reikia leidimo visada naudoti vietą, kad aptiktų, kada išvykstate ar grįžtate namo, net kai programėlė veikia fone.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "Šiuo metu SafeHome gali pasiekti vietą tik naudojant programėlę.\n\nAtidarykite vietos leidimą ir pasirinkite „Leisti visada“, kad automatinė apsauga toliau veiktų fone.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome reikia leidimo visada naudoti vietą, kad aptiktų, kada išvykstate ar grįžtate namo, net kai programėlė veikia fone.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Šiuo metu SafeHome gali pasiekti vietą tik naudojant programėlę.\n\nAtidarykite vietos leidimą ir pasirinkite „Leisti visada“, kad automatinė apsauga toliau veiktų fone.",
   "Cho phép vị trí luôn luôn": "Visada leisti naudoti vietą",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Jūsų namai bus ištrinti.\nPaliksite bendrinamus namus.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tai pakeis namų signalizacijos tvarkaraščius visiems pasirinktų namų saugos įrenginiams.\n\nTai paveiks narius, naudojančius namų signalizacijos nustatymus.\nAsmeniniai signalizacijos nustatymai nebus keičiami.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tai pridės namų priminimą pasirinktiems namams.\n\nTai paveiks narius, naudojančius namų priminimo nustatymus.\nAsmeniniai priminimo nustatymai nebus keičiami.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Saugos įrenginiai bus stebimi nedelsiant.\n\nAutomatinis apsaugos režimas išvykus bus pristabdytas. Šis režimas automatiškai neišsijungia kam nors grįžus namo ir įgaliotas narys turi jį perjungti į įprastą režimą.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Šis veiksmas išjungs visas šių namų signalizacijas. Šiame telefone daugiau negausite pavojaus perspėjimų.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Signalizacija naudoja namų nustatymus.\n\nPerspėjimus gausite pagal savininko arba administratoriaus nustatytus bendrus tvarkaraščius.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Signalizacija naudoja mano nustatymus.\n\nPerspėjimus gausite pagal šios paskyros asmeninius signalizacijos tvarkaraščius.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Jūsų namai bus ištrinti.\nPaliksite bendrinamus namus.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tai pakeis namų signalizacijos tvarkaraščius visiems pasirinktų namų saugos įrenginiams.\n\nTai paveiks narius, naudojančius namų signalizacijos nustatymus.\nAsmeniniai signalizacijos nustatymai nebus keičiami.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tai pridės namų priminimą pasirinktiems namams.\n\nTai paveiks narius, naudojančius namų priminimo nustatymus.\nAsmeniniai priminimo nustatymai nebus keičiami.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Saugos įrenginiai bus stebimi nedelsiant.\n\nAutomatinis apsaugos režimas išvykus bus pristabdytas. Šis režimas automatiškai neišsijungia kam nors grįžus namo ir įgaliotas narys turi jį perjungti į įprastą režimą.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Šis veiksmas išjungs visas šių namų signalizacijas. Šiame telefone daugiau negausite pavojaus perspėjimų.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Signalizacija naudoja namų nustatymus.\n\nPerspėjimus gausite pagal savininko arba administratoriaus nustatytus bendrus tvarkaraščius.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Signalizacija naudoja mano nustatymus.\n\nPerspėjimus gausite pagal šios paskyros asmeninius signalizacijos tvarkaraščius.",
   "Không thể đăng nhập bằng Google": "Nepavyko prisijungti naudojant Google",
   "Không đặt được mật khẩu": "Nepavyko nustatyti slaptažodžio",
   "Chấp nhận": "Priimti",
   "Cho phép": "Leisti",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Nepavyko priimti kvietimo. Bandykite dar kartą.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Nepavyko priimti prisijungimo prašymo. Bandykite dar kartą.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Nepavyko priimti kvietimo. Bandykite dar kartą.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Nepavyko priimti prisijungimo prašymo. Bandykite dar kartą.",
   "Từ chối": "Atmesti",
   "Lời mời từ chủ nhà": "Savininko kvietimas",
   "Nhận quyền chủ nhà": "Perimti namų nuosavybę",
@@ -664,10 +781,13 @@ const Map<String, String> ltStrings = {
   "KIỂM TRA NHÀ": "PATIKRINTI NAMUS",
   "ĐÓNG NHẮC NHỞ": "UŽDARYTI PRIMINIMĄ",
   "SafeHome Security Alert": "SafeHome saugos perspėjimas",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Programėlės nustatymuose pasirinkite vietos leidimą Leisti visada",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Jūsų Google paskyrai reikia papildomo slaptažodžio saugos funkcijoms naudoti.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Programėlės nustatymuose pasirinkite vietos leidimą Leisti visada",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Jūsų Google paskyrai reikia papildomo slaptažodžio saugos funkcijoms naudoti.",
   "Báo động": "Signalizacija",
-  "Bạn không có quyền thực hiện thao tác này。": "Neturite teisės atlikti šio veiksmo.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Neturite teisės atlikti šio veiksmo.",
   "Cài đặt": "Nustatymai",
   "Cập nhật": "Atnaujinti",
   "Chọn ngôn ngữ": "Pasirinkti kalbą",
@@ -677,20 +797,23 @@ const Map<String, String> ltStrings = {
   "Cửa đã đóng an toàn": "Durys saugiai uždarytos",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Įvyko klaida. Bandykite dar kartą.",
   "Đang kiểm tra kết nối Hub": "Tikrinamas Hub ryšys",
-  "Đang mở khi nhà ở chế độ Bảo vệ": "Atidaryta, kai namai veikia apsaugos režimu",
+  "Đang mở khi nhà ở chế độ Bảo vệ":
+      "Atidaryta, kai namai veikia apsaugos režimu",
   "Đang mở trong giờ báo động": "Atidaryta signalizacijos valandomis",
   "Đang tải...": "Įkeliama...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Profilis, prašymai ir kvietimai",
   "Hub chưa gửi trạng thái": "Hub būsena nepasiekiama",
   "Hub mất kết nối": "Hub atsijungęs",
   "Hub tín hiệu bình thường": "Hub prisijungęs",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Atrakinta, kai namai veikia apsaugos režimu",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Atrakinta, kai namai veikia apsaugos režimu",
   "Khóa đang mở trong giờ báo động": "Atrakinta signalizacijos valandomis",
   "Không có thông báo": "Pranešimų nėra",
   "Khu vực nguy hiểm": "Pavojaus zona",
   "Kiểm tra thiết bị trong nhà này": "Peržiūrėti šių namų įrenginius",
   "Mất điện lưới": "Dingo elektros tinklo maitinimas",
-  "Mời người khác tham gia nhà này": "Pakviesti ką nors prisijungti prie šių namų",
+  "Mời người khác tham gia nhà này":
+      "Pakviesti ką nors prisijungti prie šių namų",
   "Môi trường hiện tại": "Dabartinė aplinka",
   "MQTT mất kết nối": "MQTT atsijungęs",
   "Ngôn ngữ": "Kalba",
@@ -712,7 +835,8 @@ const Map<String, String> ltStrings = {
   "Thành viên đang ở ngoài": "Nariai, kurie šiuo metu yra išvykę",
   "Thành viên chưa xác định vị trí": "Nariai, kurių vieta nežinoma",
   "Thay đổi ngôn ngữ hiển thị": "Keisti rodymo kalbą",
-  "Thêm, đổi tên và sắp xếp phòng": "Pridėti, pervadinti ir pertvarkyti kambarius",
+  "Thêm, đổi tên và sắp xếp phòng":
+      "Pridėti, pervadinti ir pertvarkyti kambarius",
   "Thiết bị đang được giám sát": "Įrenginys stebimas",
   "Tiếng Anh": "Anglų",
   "Tiếng Hàn": "Korėjiečių",
@@ -730,196 +854,292 @@ const Map<String, String> ltStrings = {
   "Đã tạo nhà": "Namai sukurti",
   "Chế độ Bảo vệ thủ công đã bật": "Rankinis apsaugos režimas įjungtas",
   "Báo động không lặp lại.": "Signalizacija nebus kartojama.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Jei problema išlieka, signalizacija kartosis po \$securityModeRepeatMinutes minučių.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName įjungė rankinį apsaugos režimą namuose „\$homeName“. Šis režimas išsijungia tik tada, kai įgaliotas narys perjungia į įprastą režimą. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Įjungėte signalizaciją namams „\$homeName“.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Išjungėte visas signalizacijas namuose „\$homeName“.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Jei problema išlieka, signalizacija kartosis po \$securityModeRepeatMinutes minučių.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName įjungė rankinį apsaugos režimą namuose „\$homeName“. Šis režimas išsijungia tik tada, kai įgaliotas narys perjungia į įprastą režimą. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Įjungėte signalizaciją namams „\$homeName“.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Išjungėte visas signalizacijas namuose „\$homeName“.",
   "Thành viên mới": "Naujas narys",
   "Thành viên rời nhà": "Narys paliko namus",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName paliko namus „\$homeName“.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName pakeitė \$memberName vaidmenį namuose „\$homeName“ iš \$oldRoleName į \$newRoleName.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName paliko namus „\$homeName“.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName pakeitė \$memberName vaidmenį namuose „\$homeName“ iš \$oldRoleName į \$newRoleName.",
   "Còn \$count tin nhắn chưa đọc": "\$count neperskaitytų žinučių",
   "Hãy an tâm nghỉ ngơi.": "Galite būti ramūs.",
   "Có thiết bị chưa an toàn.": "Kai kurie įrenginiai nėra saugūs.",
   "SafeHome đang cập nhật vị trí": "SafeHome atnaujina vietą",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Stebima, kad apsaugos režimas būtų įjungtas automatiškai.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Naudoja vietą, kad automatiškai įjungtų apsaugos režimą visiems išvykus iš namų.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Stebima, kad apsaugos režimas būtų įjungtas automatiškai.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Naudoja vietą, kad automatiškai įjungtų apsaugos režimą visiems išvykus iš namų.",
   "CẢNH BÁO SOS": "SOS PERSPĖJIMAS",
   "CẢNH BÁO KHÓI / CHÁY": "DŪMŲ / GAISRO PERSPĖJIMAS",
   "CẢNH BÁO NGẬP NƯỚC": "UŽLIEJIMO PERSPĖJIMAS",
   "CẢNH BÁO RÒ KHÍ": "DUJŲ NUOTĖKIO PERSPĖJIMAS",
   "CẢNH BÁO CỬA": "DURŲ PERSPĖJIMAS",
   "CẢNH BÁO AN NINH": "SAUGOS PERSPĖJIMAS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Nepavyko patvirtinti su SafeHome. Patikrinkite ryšį ir bandykite dar kartą.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Sustabdykite perspėjimą tik patikrinę namų būklę.\n\nAr tikrai norite sustabdyti perspėjimą?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Nepavyko patvirtinti su SafeHome. Patikrinkite ryšį ir bandykite dar kartą.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Sustabdykite perspėjimą tik patikrinę namų būklę.\n\nAr tikrai norite sustabdyti perspėjimą?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome aptiko pavojų",
-  "Mở SafeHome để kiểm tra ngay.": "Atidarykite SafeHome ir patikrinkite dabar.",
+  "Mở SafeHome để kiểm tra ngay.":
+      "Atidarykite SafeHome ir patikrinkite dabar.",
   "\$count tin nhắn mới": "\$count naujų žinučių",
   "Tin nhắn HomeChat": "HomeChat žinutė",
   "\$senderName đã gửi một tin nhắn": "\$senderName išsiuntė žinutę",
   "Bạn có tin nhắn mới": "Turite naują žinutę",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Apsaugos režimas perspės tik vieną kartą",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Apsaugos režimas pakartos perspėjimą po \$minutes minučių",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Prisijungimo prašymai išsiųsti \$count namams",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName paprašė prisijungti prie namų „\$homeName“.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Apsaugos režimas perspės tik vieną kartą",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Apsaugos režimas pakartos perspėjimą po \$minutes minučių",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Prisijungimo prašymai išsiųsti \$count namams",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName paprašė prisijungti prie namų „\$homeName“.",
   "Bạn đã xoá nhà \"\$homeName\".": "Ištrynėte namus „\$homeName“.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Išsiuntėte namų „\$homeName“ nuosavybės perdavimo prašymą adresu \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName nori perduoti jums namų „\$homeName“ nuosavybę.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName pakvietė jus prisijungti prie namų „\$homeName“.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome šalina įrenginį „\$deviceName“ iš namų „\$homeName“.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Įrenginys „\$deviceName“ pridėtas prie namų „\$homeName“.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Išsiuntėte namų „\$homeName“ nuosavybės perdavimo prašymą adresu \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName nori perduoti jums namų „\$homeName“ nuosavybę.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName pakvietė jus prisijungti prie namų „\$homeName“.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome šalina įrenginį „\$deviceName“ iš namų „\$homeName“.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Įrenginys „\$deviceName“ pridėtas prie namų „\$homeName“.",
   "Bạn đã tạo nhà \"\$name\".": "Sukūrėte namus „\$name“.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName pakeitė namų pavadinimą į „\$newName“ ir atnaujino adresą.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName pervadino namus į „\$newName“.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName atnaujino namų „\$newName“ adresą.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName pervadino įrenginį „\$oldDeviceName“ į „\$newName“ namuose „\$homeName“.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName pakeitė namų pavadinimą į „\$newName“ ir atnaujino adresą.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName pervadino namus į „\$newName“.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName atnaujino namų „\$newName“ adresą.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName pervadino įrenginį „\$oldDeviceName“ į „\$newName“ namuose „\$homeName“.",
   "Đang ghép nối: \$seconds giây": "Sieja: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Įrenginių siejimas namuose „\$homeName“ įjungtas \$seconds sekundžių.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Pristabdymo laikotarpis turi patekti į signalizacijos tvarkaraštį (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "Išlaikyta \$passCount/\$total testų\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name nepridėjo telefono numerio prie savo profilio.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Įrenginių siejimas namuose „\$homeName“ įjungtas \$seconds sekundžių.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Pristabdymo laikotarpis turi patekti į signalizacijos tvarkaraštį (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "Išlaikyta \$passCount/\$total testų\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name nepridėjo telefono numerio prie savo profilio.",
   "Tin nhắn mới trong \$homeName": "Nauja žinutė namuose \$homeName",
   "\$current/\$total kết quả": "\$current/\$total rezultatų",
   "Đang trả lời \$name": "Atsakote \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "„\$name“ aptiko dūmus namuose „\$homeName“.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "„\$name“ grįžo į normalią būseną.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "„\$name“ suaktyvino SOS namuose „\$homeName“.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "„\$name“ aptiko dūmus namuose „\$homeName“.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "„\$name“ grįžo į normalią būseną.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "„\$name“ suaktyvino SOS namuose „\$homeName“.",
   "\"\$name\" đã hết trạng thái SOS.": "„\$name“ nebėra SOS būsenoje.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "„\$name“ pranešė apie pažeidimą namuose „\$homeName“.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Įrenginio „\$name“ pažeidimo perspėjimas panaikintas.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "„\$name“ užsidarė namuose „\$homeName“.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "„\$name“ atidarytas namuose „\$homeName“.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "Įrenginio „\$name“ baterija namuose „\$homeName“ senka.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "Įrenginys „\$name“ namuose „\$homeName“ atsijungė.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "Įrenginys „\$name“ namuose „\$homeName“ vėl prisijungęs.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "„\$name“ užfiksavo aukštą temperatūrą namuose „\$homeName“.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "„\$name“ užfiksavo didelę drėgmę namuose „\$homeName“.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "„\$name“ pranešė apie pažeidimą namuose „\$homeName“.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Įrenginio „\$name“ pažeidimo perspėjimas panaikintas.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "„\$name“ užsidarė namuose „\$homeName“.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "„\$name“ atidarytas namuose „\$homeName“.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "Įrenginio „\$name“ baterija namuose „\$homeName“ senka.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "Įrenginys „\$name“ namuose „\$homeName“ atsijungė.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "Įrenginys „\$name“ namuose „\$homeName“ vėl prisijungęs.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "„\$name“ užfiksavo aukštą temperatūrą namuose „\$homeName“.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "„\$name“ užfiksavo didelę drėgmę namuose „\$homeName“.",
   "Có nút SOS vừa được kích hoạt": "Suaktyvintas SOS mygtukas",
   "Có dấu hiệu khói hoặc cháy": "Aptikti dūmai arba gaisras",
   "Có dấu hiệu ngập nước": "Aptiktas vandens užliejimas",
   "Có dấu hiệu rò khí": "Aptiktas dujų nuotėkis",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Durys atidarytos arba įrenginys pažeistas",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Durys atidarytos arba įrenginys pažeistas",
   "Có thiết bị đang cảnh báo": "Įrenginys perspėja",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Jei niekas nepatvirtins, SafeHome pradės skubios pagalbos skambutį.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Jei problema neišspręsta, vėl perspės \$time.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Jei problema neišspręsta, vėl perspės pagal signalizacijos tvarkaraštį.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "„\$deviceName“ užsidarė namuose „\$resolvedHomeName“.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "„\$deviceName“ atidarytas namuose „\$resolvedHomeName“.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jei niekas nepatvirtins, SafeHome pradės skubios pagalbos skambutį.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Jei problema neišspręsta, vėl perspės \$time.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Jei problema neišspręsta, vėl perspės pagal signalizacijos tvarkaraštį.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ užsidarė namuose „\$resolvedHomeName“.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ atidarytas namuose „\$resolvedHomeName“.",
   "\$count nhà đã chọn": "Pasirinkta namų: \$count",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count nesaugių namų\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count namų reikia dėmesio\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count saugių namų",
   "\$count nhà đang được theo dõi": "Stebima namų: \$count",
   "\$minutes phút": "\$minutes minučių",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Priminimas nustatytas \$updatedHomes namams.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Signalizacija nustatyta \$updatedDevices įrenginiams \$updatedHomes namuose.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Jūsų valdomi namai bendrinami.\n\n\$skipped namų praleista, nes neturite bendrinimo teisės.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Signalizacija pritaikyta \$count saugos įrenginiams",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Taikyti tą patį tvarkaraštį \$count saugos įrenginiams",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Priminimas nustatytas \$updatedHomes namams.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Signalizacija nustatyta \$updatedDevices įrenginiams \$updatedHomes namuose.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Jūsų valdomi namai bendrinami.\n\n\$skipped namų praleista, nes neturite bendrinimo teisės.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Signalizacija pritaikyta \$count saugos įrenginiams",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Taikyti tą patį tvarkaraštį \$count saugos įrenginiams",
   "\$count phút trước": "Prieš \$count minučių",
   "\$count giờ trước": "Prieš \$count valandų",
   "\${count}h trước": "Prieš \${count} val.",
   "\${hours}h\$minutes' trước": "Prieš \${hours} val. \$minutes min.",
   "\$count ngày trước": "Prieš \$count dienų",
   "\$count tháng trước": "Prieš \$count mėnesių",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Ar tikrai norite pašalinti \$name iš šių namų?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nPrašo prisijungti prie namų „\$homeName“",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Ar tikrai norite pašalinti \$name iš šių namų?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nPrašo prisijungti prie namų „\$homeName“",
   "Xin gia nhập \"\$homeName\"": "Prašo prisijungti prie namų „\$homeName“",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Jus pakvietė perimti namų „\$homeName“ nuosavybę",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nKviečia jus prisijungti prie namų „\$homeName“",
-  "Mời bạn gia nhập \"\$homeName\"": "Kviečia jus prisijungti prie namų „\$homeName“",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Jus pakvietė perimti namų „\$homeName“ nuosavybę",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nKviečia jus prisijungti prie namų „\$homeName“",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Kviečia jus prisijungti prie namų „\$homeName“",
   "Cần kiểm tra: \$joined": "Reikia dėmesio: \$joined",
   "Cập nhật \$value": "Atnaujinta \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Pridėkite pirmąjį SafeHome įrenginį, kad pradėtumėte stebėti šiuos namus.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Pirmiausia patikrinkite avarinius perspėjimus, tada prireikus susisiekite su namiškiais.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Nė vieno namiškio nėra namuose, bet durys ar spyna atidaryta. Patikrinkite dabar.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Patikrinkite atidarytas duris ar spyną prieš palikdami šiuos namus apsaugos režimu.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Kažkas dar gali būti namuose. Jei taip, perjunkite į įprastą režimą.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Kai kurių narių vieta nežinoma. Paprašykite jų atidaryti programėlę arba patikrinti vietos leidimą.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Įrenginys atsijungęs. Patikrinkite jo bateriją, maitinimą arba vietą.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Įrenginio baterija senka. Netrukus ją pakeiskite, kad nepraleistumėte perspėjimų.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Priminimas nenustatytas. Sukurkite tvarkaraštį reguliariam namų tikrinimui.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Signalizacijos tvarkaraštis nenustatytas. Įjunkite apsaugą laikui, kai paprastai būnate išvykę.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Skubių veiksmų nereikia. Toliau stebėkite šiuos namus.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Pridėkite pirmąjį SafeHome įrenginį, kad pradėtumėte stebėti šiuos namus.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Pirmiausia patikrinkite avarinius perspėjimus, tada prireikus susisiekite su namiškiais.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Nė vieno namiškio nėra namuose, bet durys ar spyna atidaryta. Patikrinkite dabar.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Patikrinkite atidarytas duris ar spyną prieš palikdami šiuos namus apsaugos režimu.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Kažkas dar gali būti namuose. Jei taip, perjunkite į įprastą režimą.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Kai kurių narių vieta nežinoma. Paprašykite jų atidaryti programėlę arba patikrinti vietos leidimą.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Įrenginys atsijungęs. Patikrinkite jo bateriją, maitinimą arba vietą.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Įrenginio baterija senka. Netrukus ją pakeiskite, kad nepraleistumėte perspėjimų.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Priminimas nenustatytas. Sukurkite tvarkaraštį reguliariam namų tikrinimui.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Signalizacijos tvarkaraštis nenustatytas. Įjunkite apsaugą laikui, kai paprastai būnate išvykę.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Skubių veiksmų nereikia. Toliau stebėkite šiuos namus.",
   "Lặp sau \$minutes phút": "Kartoti po \$minutes minučių",
   "Đang dùng • \$repeatText": "Aktyvu • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Saugos stebėjimas • \$repeatText",
   "Gia đình: \$mode": "Namų režimas: \$mode",
   "Gợi ý xử lý": "Siūlomi veiksmai",
   "Phát hiện \$count vấn đề cần xử lý": "Reikia dėmesio: \$count problemų",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Šiandien durys naudotos \$count kartų",
-  "Đã ghi nhận \$count hoạt động gần đây": "Užfiksuota \$count naujausių veiklų",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistema: reikia patikrinti \$issueCount elementų",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM prieigos raktas šiame telefone paruoštas.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM prieigos raktas paruoštas, bet automatinei apsaugai išvykus trūksta vieno reikalavimo.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Rasta avarinių įrenginių: \$emergencyTotal. Rekomenduojamas minimumas: dūmų jutiklis ir SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Perduoti namų nuosavybę adresu:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Šiandien durys naudotos \$count kartų",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Užfiksuota \$count naujausių veiklų",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistema: reikia patikrinti \$issueCount elementų",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM prieigos raktas šiame telefone paruoštas.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM prieigos raktas paruoštas, bet automatinei apsaugai išvykus trūksta vieno reikalavimo.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Rasta avarinių įrenginių: \$emergencyTotal. Rekomenduojamas minimumas: dūmų jutiklis ir SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Perduoti namų nuosavybę adresu:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "Saugiai uždarytų durų: \$count",
   "\$count cửa và khóa đã an toàn": "Apsaugota durų ir spynų: \$count",
   "\$count thiết bị đang được theo dõi": "Stebima įrenginių: \$count",
   "Cập nhật \$timeText": "Atnaujinta \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Naujausi duomenys atnaujinti prieš \$count minučių",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Naujausi duomenys atnaujinti prieš \$count valandų",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Naujausi duomenys atnaujinti prieš \$count minučių",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Naujausi duomenys atnaujinti prieš \$count valandų",
   "Thành viên trong nhà: \$count": "Narių namuose: \$count",
   "Thành viên bên ngoài: \$count": "Narių išvykę: \$count",
   "Chưa xác định vị trí: \$count": "Vieta nežinoma: \$count",
   "Môi trường hiện tại: \$environment": "Dabartinė aplinka: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: atidaryta, kai namai veikia apsaugos režimu",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: atidaryta, kai namai veikia apsaugos režimu",
   "An tâm hơn trong từng ngôi nhà": "Ramybė kiekvienuose namuose",
   "Báo động SafeHome": "SafeHome signalizacija",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Saugos perspėjimui reikia jūsų dėmesio.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Saugos perspėjimui reikia jūsų dėmesio.",
   "Có cảnh báo cần kiểm tra": "Perspėjimui reikia jūsų dėmesio",
   "Tự đóng sau \$time": "Automatiškai užsidarys po \$time",
   "Ngày trong tuần": "Savaitės dienos",
   "Hoặc": "Arba",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Pradžios ir pabaigos laikas negali sutapti",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Pabaigos laikas turi būti vėlesnis už dabartinį laiką",
-  "Khoảng tạm tắt không hợp lệ": "Netinkamas signalizacijos pristabdymo intervalas",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Pristabdymo intervalas nepersidengia su jokiu aktyviu signalizacijos tvarkaraščiu",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Pradžios ir pabaigos laikas negali sutapti",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Pabaigos laikas turi būti vėlesnis už dabartinį laiką",
+  "Khoảng tạm tắt không hợp lệ":
+      "Netinkamas signalizacijos pristabdymo intervalas",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Pristabdymo intervalas nepersidengia su jokiu aktyviu signalizacijos tvarkaraščiu",
   "Cài đặt báo động": "Signalizacijos nustatymai",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Valdykite, kaip šis jutiklis suaktyvina perspėjimus.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Valdykite, kaip šis jutiklis suaktyvina perspėjimus.",
   "Tham gia báo động": "Dalyvauti signalizacijoje",
-  "Tắt để cảm biến không tạo báo động.": "Išjunkite, kad šis jutiklis nesukurtų signalizacijos įvykio.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Išjunkite, kad šis jutiklis nesukurtų signalizacijos įvykio.",
   "Bật còi vật lý": "Įjungti fizinę sireną",
   "Cho phép kích hoạt còi trong nhà.": "Leisti įsijungti vidaus sirenai.",
   "Đánh thức màn hình": "Pažadinti ekraną",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Rodyti viso ekrano perspėjimą telefone.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Rodyti viso ekrano perspėjimą telefone.",
   "Độ trễ kích hoạt": "Suveikimo delsa",
   "Chỉ áp dụng cho cảm biến an ninh.": "Taikoma tik saugos jutikliams.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Avariniai jutikliai visada suveikia iš karto.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Avariniai jutikliai visada suveikia iš karto.",
   "Ngay lập tức": "Iš karto",
   "giây": "sekundės",
   "Đã lưu cấu hình báo động": "Signalizacijos nustatymai išsaugoti",
-  "Không thể lưu cấu hình báo động": "Nepavyko išsaugoti signalizacijos nustatymų",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Šį nustatymą gali keisti tik namų savininkas ir administratoriai.",
+  "Không thể lưu cấu hình báo động":
+      "Nepavyko išsaugoti signalizacijos nustatymų",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Šį nustatymą gali keisti tik namų savininkas ir administratoriai.",
   "Thông tin chi tiết": "Įrenginio informacija",
   "Thông báo báo động": "Signalizacijos pranešimas",
   "Cài đặt nhắc nhở": "Priminimo nustatymai",
   "Nhắc nhở theo lịch": "Suplanuotas priminimas",
   "Danh sách thông báo": "Pranešimai",
   "Cài đặt thông báo": "Pranešimų nustatymai",
-  "Sử dụng báo động theo lịch đã thiết lập": "Naudoti nustatytą signalizacijos tvarkaraštį",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Siųsti tik pranešimus; neįjungti signalizacijos",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Visos namų signalizacijos išjungtos; sistema siųs tik pranešimus.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Šį režimą gali įjungti tik savininkas.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Naudoti nustatytą signalizacijos tvarkaraštį",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Siųsti tik pranešimus; neįjungti signalizacijos",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Visos namų signalizacijos išjungtos; sistema siųs tik pranešimus.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Šį režimą gali įjungti tik savininkas.",
   "Bật Không bảo vệ?": "Įjungti neapsaugotą režimą?",
   "Cảm biến vừa phát hiện một sự kiện.": "Jutiklis ką tik aptiko įvykį.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Tik savininkas gali įjungti neapsaugotą režimą",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Tik savininkas gali įjungti neapsaugotą režimą",
   "Đã chuyển nhà sang Không bảo vệ": "Namai perjungti į neapsaugotą režimą",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Perjungta į neapsaugotą režimą, bet pranešimo išsiųsti nepavyko",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Perjungta į neapsaugotą režimą, bet pranešimo išsiųsti nepavyko",
   "Giám sát toàn diện": "Visiškas stebėjimas",
   "Không bảo vệ": "Neapsaugota",
   "Không bảo vệ đang bật": "Neapsaugotas režimas aktyvus",
   "Nhà đã chuyển sang Không bảo vệ": "Namai perjungti į neapsaugotą režimą",
   "Thông báo cảm biến": "Jutiklio pranešimai",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Įprasti pranešimai, kai jutiklis aptinka įvykį.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Įprasti pranešimai, kai jutiklis aptinka įvykį.",
   "Tôi hiểu, tiếp tục": "Suprantu, tęsti",
   "Cảnh báo an ninh đã kết thúc": "Saugos perspėjimas baigėsi",
   "Sự cố nguy hiểm đã kết thúc": "Avarinė situacija baigėsi",
   "Cảnh báo đã được kết thúc.": "Perspėjimas baigėsi.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Kitas perspėjimas vis dar aktyvus.",
   "Báo động đã hoạt động trở lại": "Signalizacija vėl aktyvi",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Signalizacijos pristabdymo laikotarpis baigėsi.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Signalizacijos pristabdymo laikotarpis baigėsi.",
   "MQTT đã kết nối trở lại": "MQTT ryšys atkurtas",
   "Còi báo động đã được tắt": "Fizinė sirena išjungta",
   "Sự cố vẫn đang được theo dõi.": "Incidentas vis dar stebimas.",
@@ -929,39 +1149,54 @@ const Map<String, String> ltStrings = {
   "Có thành viên đã trở về nhà.": "Narys grįžo namo.",
   "Thiết bị đã được xoá": "Įrenginys pašalintas",
   "Không thể xoá thiết bị": "Nepavyko pašalinti įrenginio",
-  "Hãy thử lại thao tác xoá thiết bị.": "Bandykite pašalinti įrenginį dar kartą.",
+  "Hãy thử lại thao tác xoá thiết bị.":
+      "Bandykite pašalinti įrenginį dar kartą.",
   "Chế độ Bảo vệ đã được tắt.": "Apsaugos režimas išjungtas.",
   "Nhà đang ở chế độ Bình thường.": "Namai veikia įprastu režimu.",
   "Pin thiết bị đã ổn định": "Įrenginio baterija stabili",
   "Hub đã kết nối trở lại": "Hub ryšys atkurtas",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Perjungta į įprastą režimą, bet pranešimo išsiųsti nepavyko",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Perjungta į įprastą režimą, bet pranešimo išsiųsti nepavyko",
   "Chung cho nhà": "Bendrinami namai",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Taikoma visiems nariams ir gali įjungti fizinę sireną.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Taikoma visiems nariams ir gali įjungti fizinę sireną.",
   "Cá nhân": "Asmeninis",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Asmeninis tvarkaraštis veikia atskirai ir niekada neįjungia fizinės sirenos.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Šis nustatymas taikomas tik jūsų paskyrai.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Bendrinamų namų nustatymus gali keisti tik savininkas ir administratoriai.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Asmeninis tvarkaraštis veikia atskirai ir niekada neįjungia fizinės sirenos.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Šis nustatymas taikomas tik jūsų paskyrai.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Bendrinamų namų nustatymus gali keisti tik savininkas ir administratoriai.",
   "Tham gia hệ thống báo động": "Dalyvauti signalizacijos sistemoje",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Avariniai jutikliai visada dalyvauja signalizacijos sistemoje.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Išjunkite, kad įrenginys negalėtų sukurti jokios signalizacijos.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Avariniai jutikliai visada dalyvauja signalizacijos sistemoje.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Išjunkite, kad įrenginys negalėtų sukurti jokios signalizacijos.",
   "Lịch báo động chung": "Bendras signalizacijos tvarkaraštis",
   "Lịch báo động cá nhân": "Asmeninis signalizacijos tvarkaraštis",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Rodyti viso ekrano perspėjimą telefone.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Rodyti viso ekrano perspėjimą telefone.",
   "Lặp lại cảnh báo": "Kartoti perspėjimą",
   "Báo động chung": "Bendra signalizacija",
   "Báo động cá nhân": "Asmeninė signalizacija",
   "Đã cài đặt": "Sukonfigūruota",
   "Chưa cài đặt": "Nesukonfigūruota",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Bendri ir asmeniniai tvarkaraščiai veikia lygiagrečiai; nebereikia rinktis vieno.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Bendri ir asmeniniai tvarkaraščiai veikia lygiagrečiai; nebereikia rinktis vieno.",
   "Cài nhanh chung": "Greitas bendrų nustatymų nustatymas",
   "Cài nhanh cá nhân": "Greitas asmeninių nustatymų nustatymas",
   "Thiết lập nhanh lịch cá nhân": "Greitas asmeninio tvarkaraščio nustatymas",
   "Thiết lập nhanh lịch chung": "Greitas bendro tvarkaraščio nustatymas",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Šis tvarkaraštis taikomas tik jums ir neįjungia fizinės sirenos.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Šis tvarkaraštis taikomas visiems namų nariams.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Šis tvarkaraštis taikomas tik jums ir neįjungia fizinės sirenos.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Šis tvarkaraštis taikomas visiems namų nariams.",
   "Đã áp dụng lịch báo động": "Signalizacijos tvarkaraštis pritaikytas",
-  "Không thể lưu lịch báo động": "Nepavyko išsaugoti signalizacijos tvarkaraščio",
+  "Không thể lưu lịch báo động":
+      "Nepavyko išsaugoti signalizacijos tvarkaraščio",
   "Nhà chưa có thiết bị an ninh": "Šiuose namuose nėra saugos įrenginių",
-  "Nhận cảnh báo theo lịch chung của nhà": "Gauti perspėjimus iš bendro namų tvarkaraščio",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Išjunkite, kad nebegautumėte bendro tvarkaraščio pranešimų ir viso ekrano perspėjimų. Namų sirena ir toliau veiks.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Gauti perspėjimus iš bendro namų tvarkaraščio",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Išjunkite, kad nebegautumėte bendro tvarkaraščio pranešimų ir viso ekrano perspėjimų. Namų sirena ir toliau veiks.",
 };

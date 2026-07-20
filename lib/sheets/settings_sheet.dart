@@ -116,6 +116,14 @@ String _languageSubtitle(String code) {
       return "Georgian • Georgia";
     case "az":
       return "Azerbaijani • Azerbaijan";
+    case "gn":
+      return "Guaraní • Paraguay";
+    case "qu":
+      return "Quechua • Peru";
+    case "ay":
+      return "Aymara • Bolivia";
+    case "ht":
+      return "Haitian Creole • Haiti";
     default:
       return code;
   }
@@ -161,6 +169,10 @@ String _languageSearchAliases(String code) {
     "hy" => "armenian հայերեն tiếng armenia hayastan",
     "ka" => "georgian ქართული tiếng georgia sakartvelo",
     "az" => "azerbaijani azərbaycan dili tiếng azerbaijan azərbaycan",
+    "gn" => "guarani guaraní paraguay paraguái tiếng guarani ava ñe'ẽ",
+    "qu" => "quechua runasimi runa simi peru perú tiếng quechua",
+    "ay" => "aymara bolivia tiếng aymara",
+    "ht" => "haitian creole kreyol kreyòl ayisyen haiti tiếng haiti",
     _ => "",
   };
 }
@@ -275,25 +287,26 @@ Future<void> _showLanguageSheet(BuildContext context) async {
       return StatefulBuilder(
         builder: (context, setSheetState) {
           final q = query.trim().toLowerCase();
-          final visibleCodes = AppLanguageController.supportedCodes.where((
-            code,
-          ) {
-            final title = AppLanguageController.languageLabels[code] ?? code;
-            final subtitle = _languageSubtitle(code);
-            final aliases = _languageSearchAliases(code);
+          final visibleCodes =
+              AppLanguageController.supportedCodes.where((code) {
+                final title =
+                    AppLanguageController.languageLabels[code] ?? code;
+                final subtitle = _languageSubtitle(code);
+                final aliases = _languageSearchAliases(code);
 
-            if (q.isEmpty) {
-              return true;
-            }
+                if (q.isEmpty) {
+                  return true;
+                }
 
-            return code.toLowerCase().contains(q) ||
-                title.toLowerCase().contains(q) ||
-                subtitle.toLowerCase().contains(q) ||
-                aliases.contains(q);
-          }).toList()
-            ..sort((a, b) => _languageSubtitle(a).toLowerCase().compareTo(
-                  _languageSubtitle(b).toLowerCase(),
-                ));
+                return code.toLowerCase().contains(q) ||
+                    title.toLowerCase().contains(q) ||
+                    subtitle.toLowerCase().contains(q) ||
+                    aliases.contains(q);
+              }).toList()..sort(
+                (a, b) => _languageSubtitle(
+                  a,
+                ).toLowerCase().compareTo(_languageSubtitle(b).toLowerCase()),
+              );
           final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
           final screenHeight = MediaQuery.sizeOf(sheetContext).height;
           final maxSheetHeight = screenHeight - bottomInset - 24;
@@ -724,76 +737,76 @@ void showSettingsSheet({
       context: settingsSheetContext,
       routeName: "home_management",
       builder: (managementContext) {
-          return SafeArea(
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
-              decoration: const BoxDecoration(
-                color: SafeHomeColors.background,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.home_work_rounded,
-                        color: SafeHomeColors.primary,
-                      ),
-                      const SizedBox(width: 9),
-                      Expanded(
-                        child: Text(
-                          strings.t("Quản lý nhà"),
-                          style: const TextStyle(
-                            color: SafeHomeColors.textPrimary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w900,
-                          ),
+        return SafeArea(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
+            decoration: const BoxDecoration(
+              color: SafeHomeColors.background,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.home_work_rounded,
+                      color: SafeHomeColors.primary,
+                    ),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(
+                        strings.t("Quản lý nhà"),
+                        style: const TextStyle(
+                          color: SafeHomeColors.textPrimary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
 
-                  tile(
-                    icon: Icons.hub_rounded,
-                    title: "${strings.t('Hub trung tâm')} SafeHome (HUB)",
-                    subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
-                    color: SafeHomeColors.primaryDark,
-                    onTap: () {
-                      showHubInfoSheet(
-                        context: managementContext,
-                        ownerUid: ownerUid,
-                        homeId: homeId,
-                        homeName: homeName,
-                      );
-                    },
-                  ),
+                tile(
+                  icon: Icons.hub_rounded,
+                  title: "${strings.t('Hub trung tâm')} SafeHome (HUB)",
+                  subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
+                  color: SafeHomeColors.primaryDark,
+                  onTap: () {
+                    showHubInfoSheet(
+                      context: managementContext,
+                      ownerUid: ownerUid,
+                      homeId: homeId,
+                      homeName: homeName,
+                    );
+                  },
+                ),
 
-                  tile(
-                    icon: Icons.swap_horiz_rounded,
-                    title: strings.transferOwnership,
-                    subtitle: strings.transferOwnershipSubtitle,
-                    color: const Color(0xFF7656C8),
-                    onTap: () {
-                      openChild(onTransferOwner);
-                    },
-                  ),
+                tile(
+                  icon: Icons.swap_horiz_rounded,
+                  title: strings.transferOwnership,
+                  subtitle: strings.transferOwnershipSubtitle,
+                  color: const Color(0xFF7656C8),
+                  onTap: () {
+                    openChild(onTransferOwner);
+                  },
+                ),
 
-                  tile(
-                    icon: Icons.delete_forever_rounded,
-                    title: strings.deleteHome,
-                    subtitle: strings.deleteHomeSubtitle,
-                    color: SafeHomeColors.danger,
-                    destructive: true,
-                    onTap: () {
-                      openChild(onDeleteHome);
-                    },
-                  ),
-                ],
-              ),
+                tile(
+                  icon: Icons.delete_forever_rounded,
+                  title: strings.deleteHome,
+                  subtitle: strings.deleteHomeSubtitle,
+                  color: SafeHomeColors.danger,
+                  destructive: true,
+                  onTap: () {
+                    openChild(onDeleteHome);
+                  },
+                ),
+              ],
             ),
-          );
+          ),
+        );
       },
     );
   }
@@ -807,296 +820,287 @@ void showSettingsSheet({
       return ColoredBox(
         color: SafeHomeColors.background,
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            14,
-            16,
-            20 + bottomPadding,
-          ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+          padding: EdgeInsets.fromLTRB(16, 14, 16, 20 + bottomPadding),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: SafeHomeColors.surface,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: SafeHomeColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: SafeHomeColors.border),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.04),
-                              blurRadius: 16,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                        ),
-                        child: IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 108,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Stack(
-                                      clipBehavior: Clip.none,
-                                      children: [
-                                        Container(
-                                          width: 70,
-                                          height: 70,
-                                          decoration: BoxDecoration(
-                                            color: SafeHomeColors.primarySoft,
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: SafeHomeColors.primary
-                                                  .withValues(alpha: 0.18),
-                                            ),
-                                          ),
-                                          child: const Icon(
-                                            Icons.home_rounded,
-                                            color: SafeHomeColors.primary,
-                                            size: 36,
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: -2,
-                                          bottom: -2,
-                                          child: Material(
-                                            color: SafeHomeColors.primary,
-                                            shape: const CircleBorder(),
-                                            child: InkWell(
-                                              onTap: () {
-                                                openChild(onRenameHome);
-                                              },
-                                              customBorder:
-                                                  const CircleBorder(),
-                                              child: const SizedBox(
-                                                width: 28,
-                                                height: 28,
-                                                child: Icon(
-                                                  Icons.edit_rounded,
-                                                  size: 14,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 9),
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: () {
-                                        handleHiddenSecurityTap(sheetContext);
-                                      },
-                                      child: Text(
-                                        homeName.trim().isNotEmpty
-                                            ? homeName.trim()
-                                            : strings.unnamedHome,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: SafeHomeColors.textPrimary,
-                                          fontSize: 15,
-                                          height: 1.15,
-                                          fontWeight: FontWeight.w900,
-                                          letterSpacing: -0.2,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const VerticalDivider(
-                                width: 25,
-                                thickness: 1,
-                                color: SafeHomeColors.border,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    homeInfoRow(
-                                      icon: roleIcon(),
-                                      label: strings.role,
-                                      value: roleText(),
-                                      valueColor: roleColor(),
-                                    ),
-                                    homeInfoRow(
-                                      icon: Icons.location_on_outlined,
-                                      label: strings.address,
-                                      value: homeAddress,
-                                      maxLines: 2,
-                                    ),
-                                    FutureBuilder<int>(
-                                      future: memberCountFuture,
-                                      builder: (context, snapshot) {
-                                        final value =
-                                            snapshot.connectionState ==
-                                                ConnectionState.waiting
-                                            ? strings.loading
-                                            : "${snapshot.data ?? 0}";
-
-                                        return homeInfoRow(
-                                          icon: Icons.people_alt_rounded,
-                                          label: strings.members,
-                                          value: value,
-                                        );
-                                      },
-                                    ),
-                                    homeInfoRow(
-                                      icon: Icons.fingerprint_rounded,
-                                      label: "HomeID",
-                                      value: homeId,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-                      sectionTitle(strings.manageHome),
-
-                      if (role == "owner" || role == "admin")
-                        tile(
-                          icon: Icons.share_rounded,
-                          title: strings.shareHome,
-                          subtitle: strings.shareHomeSubtitle,
-                          color: SafeHomeColors.info,
-                          onTap: () {
-                            openChild(onShare);
-                          },
-                        ),
-
-                      tile(
-                        icon: Icons.people_alt_rounded,
-                        title: strings.homeMembers,
-                        subtitle: strings.homeMembersSubtitle,
-                        color: SafeHomeColors.safe,
-                        onTap: () {
-                          openChild(onShareList);
-                        },
-                      ),
-
-                      if (role == "owner" || role == "admin")
-                        tile(
-                          icon: Icons.location_on_rounded,
-                          title: strings.t("Tự động Bảo vệ khi rời nhà"),
-                          subtitle: strings.t(
-                            "Đặt vị trí nhà và bật bảo vệ tự động",
-                          ),
-                          color: const Color(0xFF2F8F6B),
-                          onTap: () {
-                            openChild(onAutoAway);
-                          },
-                        ),
-
-                      if (role == "owner" || role == "admin")
-                        tile(
-                          icon: Icons.meeting_room_rounded,
-                          title: strings.manageRooms,
-                          subtitle: strings.manageRoomsSubtitle,
-                          color: SafeHomeColors.warning,
-                          onTap: () {
-                            openChild(onRooms);
-                          },
-                        ),
-
-                      tile(
-                        icon: Icons.sensors_rounded,
-                        title: strings.allDevices,
-                        subtitle: strings.allDevicesSubtitle,
-                        color: const Color(0xFF576FD0),
-                        onTap: () {
-                          openChild(onAllDevices);
-                        },
-                      ),
-
-                      if (role == "owner")
-                        tile(
-                          icon: Icons.home_work_rounded,
-                          title: strings.t("Quản lý nhà"),
-                          subtitle: strings.t(
-                            "Chuyển quyền chủ nhà hoặc xoá nhà",
-                          ),
-                          color: const Color(0xFF7656C8),
-                          onTap: () {
-                            showHomeManagementSheet(sheetContext);
-                          },
-                        ),
-
-                      const SizedBox(height: 5),
-                      sectionTitle(strings.accountAndSystem),
-
-                      tile(
-                        icon: Icons.person_rounded,
-                        title: strings.personalAccount,
-                        subtitle: strings.personalAccountSubtitle,
-                        color: SafeHomeColors.primary,
-                        trailing: ValueListenableBuilder<int>(
-                          valueListenable: inviteCountNotifier,
-                          builder: (_, inviteCount, _) {
-                            return Row(
-                              mainAxisSize: MainAxisSize.min,
+                      SizedBox(
+                        width: 108,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Stack(
+                              clipBehavior: Clip.none,
                               children: [
-                                if (inviteCount > 0)
-                                  Container(
-                                    constraints: const BoxConstraints(
-                                      minWidth: 22,
-                                      minHeight: 22,
-                                    ),
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
-                                      vertical: 3,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: SafeHomeColors.danger,
-                                      borderRadius: BorderRadius.circular(999),
-                                    ),
-                                    child: Text(
-                                      inviteCount > 99 ? "99+" : "$inviteCount",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w900,
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: SafeHomeColors.primarySoft,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: SafeHomeColors.primary.withValues(
+                                        alpha: 0.18,
                                       ),
                                     ),
                                   ),
-                                if (inviteCount > 0) const SizedBox(width: 4),
-                                const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: SafeHomeColors.textSecondary,
+                                  child: const Icon(
+                                    Icons.home_rounded,
+                                    color: SafeHomeColors.primary,
+                                    size: 36,
+                                  ),
+                                ),
+                                Positioned(
+                                  right: -2,
+                                  bottom: -2,
+                                  child: Material(
+                                    color: SafeHomeColors.primary,
+                                    shape: const CircleBorder(),
+                                    child: InkWell(
+                                      onTap: () {
+                                        openChild(onRenameHome);
+                                      },
+                                      customBorder: const CircleBorder(),
+                                      child: const SizedBox(
+                                        width: 28,
+                                        height: 28,
+                                        child: Icon(
+                                          Icons.edit_rounded,
+                                          size: 14,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
-                            );
-                          },
+                            ),
+                            const SizedBox(height: 9),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                handleHiddenSecurityTap(sheetContext);
+                              },
+                              child: Text(
+                                homeName.trim().isNotEmpty
+                                    ? homeName.trim()
+                                    : strings.unnamedHome,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: SafeHomeColors.textPrimary,
+                                  fontSize: 15,
+                                  height: 1.15,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -0.2,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          openChild(onAccount);
-                        },
                       ),
+                      const VerticalDivider(
+                        width: 25,
+                        thickness: 1,
+                        color: SafeHomeColors.border,
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            homeInfoRow(
+                              icon: roleIcon(),
+                              label: strings.role,
+                              value: roleText(),
+                              valueColor: roleColor(),
+                            ),
+                            homeInfoRow(
+                              icon: Icons.location_on_outlined,
+                              label: strings.address,
+                              value: homeAddress,
+                              maxLines: 2,
+                            ),
+                            FutureBuilder<int>(
+                              future: memberCountFuture,
+                              builder: (context, snapshot) {
+                                final value =
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? strings.loading
+                                    : "${snapshot.data ?? 0}";
 
-                      tile(
-                        icon: Icons.language_rounded,
-                        title: strings.language,
-                        subtitle:
-                            "${strings.languageSubtitle} • "
-                            "${strings.currentLanguageName}",
-                        color: SafeHomeColors.primary,
-                        onTap: () {
-                          _showLanguageSheet(sheetContext);
-                        },
+                                return homeInfoRow(
+                                  icon: Icons.people_alt_rounded,
+                                  label: strings.members,
+                                  value: value,
+                                );
+                              },
+                            ),
+                            homeInfoRow(
+                              icon: Icons.fingerprint_rounded,
+                              label: "HomeID",
+                              value: homeId,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+              sectionTitle(strings.manageHome),
+
+              if (role == "owner" || role == "admin")
+                tile(
+                  icon: Icons.share_rounded,
+                  title: strings.shareHome,
+                  subtitle: strings.shareHomeSubtitle,
+                  color: SafeHomeColors.info,
+                  onTap: () {
+                    openChild(onShare);
+                  },
+                ),
+
+              tile(
+                icon: Icons.people_alt_rounded,
+                title: strings.homeMembers,
+                subtitle: strings.homeMembersSubtitle,
+                color: SafeHomeColors.safe,
+                onTap: () {
+                  openChild(onShareList);
+                },
+              ),
+
+              if (role == "owner" || role == "admin")
+                tile(
+                  icon: Icons.location_on_rounded,
+                  title: strings.t("Tự động Bảo vệ khi rời nhà"),
+                  subtitle: strings.t("Đặt vị trí nhà và bật bảo vệ tự động"),
+                  color: const Color(0xFF2F8F6B),
+                  onTap: () {
+                    openChild(onAutoAway);
+                  },
+                ),
+
+              if (role == "owner" || role == "admin")
+                tile(
+                  icon: Icons.meeting_room_rounded,
+                  title: strings.manageRooms,
+                  subtitle: strings.manageRoomsSubtitle,
+                  color: SafeHomeColors.warning,
+                  onTap: () {
+                    openChild(onRooms);
+                  },
+                ),
+
+              tile(
+                icon: Icons.sensors_rounded,
+                title: strings.allDevices,
+                subtitle: strings.allDevicesSubtitle,
+                color: const Color(0xFF576FD0),
+                onTap: () {
+                  openChild(onAllDevices);
+                },
+              ),
+
+              if (role == "owner")
+                tile(
+                  icon: Icons.home_work_rounded,
+                  title: strings.t("Quản lý nhà"),
+                  subtitle: strings.t("Chuyển quyền chủ nhà hoặc xoá nhà"),
+                  color: const Color(0xFF7656C8),
+                  onTap: () {
+                    showHomeManagementSheet(sheetContext);
+                  },
+                ),
+
+              const SizedBox(height: 5),
+              sectionTitle(strings.accountAndSystem),
+
+              tile(
+                icon: Icons.person_rounded,
+                title: strings.personalAccount,
+                subtitle: strings.personalAccountSubtitle,
+                color: SafeHomeColors.primary,
+                trailing: ValueListenableBuilder<int>(
+                  valueListenable: inviteCountNotifier,
+                  builder: (_, inviteCount, _) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (inviteCount > 0)
+                          Container(
+                            constraints: const BoxConstraints(
+                              minWidth: 22,
+                              minHeight: 22,
+                            ),
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: SafeHomeColors.danger,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              inviteCount > 99 ? "99+" : "$inviteCount",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                        if (inviteCount > 0) const SizedBox(width: 4),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: SafeHomeColors.textSecondary,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                onTap: () {
+                  openChild(onAccount);
+                },
+              ),
+
+              tile(
+                icon: Icons.language_rounded,
+                title: strings.language,
+                subtitle:
+                    "${strings.languageSubtitle} • "
+                    "${strings.currentLanguageName}",
+                color: SafeHomeColors.primary,
+                onTap: () {
+                  _showLanguageSheet(sheetContext);
+                },
+              ),
+            ],
           ),
         ),
       );

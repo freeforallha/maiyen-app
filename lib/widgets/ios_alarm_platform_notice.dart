@@ -23,9 +23,7 @@ class IosAlarmPlatformNotice extends StatelessWidget {
       decoration: BoxDecoration(
         color: SafeHomeColors.info.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: SafeHomeColors.info.withValues(alpha: 0.28),
-        ),
+        border: Border.all(color: SafeHomeColors.info.withValues(alpha: 0.28)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

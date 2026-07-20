@@ -66,7 +66,7 @@ class HomeHeaderBar extends StatelessWidget {
               child: InkWell(
                 onTap: onOpenSystemHealth,
                 borderRadius: BorderRadius.circular(12),
-                child:Padding(
+                child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: RichText(
                     text: TextSpan(
@@ -83,9 +83,7 @@ class HomeHeaderBar extends StatelessWidget {
                         ),
                         TextSpan(
                           text: "Home",
-                          style: TextStyle(
-                            color: SafeHomeColors.textPrimary,
-                          ),
+                          style: TextStyle(color: SafeHomeColors.textPrimary),
                         ),
                       ],
                     ),
@@ -108,15 +106,15 @@ class HomeHeaderBar extends StatelessWidget {
                     tooltip: notificationTooltip,
                     icon: const Icon(Icons.notifications_rounded, size: 21),
                     style:
-                    IconButton.styleFrom(
-                      foregroundColor: SafeHomeColors.info,
-                      backgroundColor: Colors.transparent,
-                      shape: const CircleBorder(),
-                    ).copyWith(
-                      overlayColor: WidgetStatePropertyAll(
-                        SafeHomeColors.info.withValues(alpha: 0.10),
-                      ),
-                    ),
+                        IconButton.styleFrom(
+                          foregroundColor: SafeHomeColors.info,
+                          backgroundColor: Colors.transparent,
+                          shape: const CircleBorder(),
+                        ).copyWith(
+                          overlayColor: WidgetStatePropertyAll(
+                            SafeHomeColors.info.withValues(alpha: 0.10),
+                          ),
+                        ),
                   ),
                   if (unreadHomeNotificationCount > 0)
                     Positioned(

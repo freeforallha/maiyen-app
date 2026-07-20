@@ -599,6 +599,14 @@ class _LoginPageState extends State<LoginPage> {
         return "Georgian • Georgia";
       case "az":
         return "Azerbaijani • Azerbaijan";
+      case "gn":
+        return "Guaraní • Paraguay";
+      case "qu":
+        return "Quechua • Peru";
+      case "ay":
+        return "Aymara • Bolivia";
+      case "ht":
+        return "Haitian Creole • Haiti";
       default:
         return code;
     }
@@ -644,6 +652,10 @@ class _LoginPageState extends State<LoginPage> {
       "hy" => "armenian հայերեն tiếng armenia hayastan",
       "ka" => "georgian ქართული tiếng georgia sakartvelo",
       "az" => "azerbaijani azərbaycan dili tiếng azerbaijan azərbaycan",
+      "gn" => "guarani guaraní paraguay paraguái tiếng guarani ava ñe'ẽ",
+      "qu" => "quechua runasimi runa simi peru perú tiếng quechua",
+      "ay" => "aymara bolivia tiếng aymara",
+      "ht" => "haitian creole kreyol kreyòl ayisyen haiti tiếng haiti",
       _ => "",
     };
   }
@@ -702,25 +714,26 @@ class _LoginPageState extends State<LoginPage> {
         return StatefulBuilder(
           builder: (context, setSheetState) {
             final q = query.trim().toLowerCase();
-            final visibleCodes = AppLanguageController.supportedCodes.where((
-              code,
-            ) {
-              final title = AppLanguageController.languageLabels[code] ?? code;
-              final subtitle = _languageSubtitle(code);
-              final aliases = _languageSearchAliases(code);
+            final visibleCodes =
+                AppLanguageController.supportedCodes.where((code) {
+                  final title =
+                      AppLanguageController.languageLabels[code] ?? code;
+                  final subtitle = _languageSubtitle(code);
+                  final aliases = _languageSearchAliases(code);
 
-              if (q.isEmpty) {
-                return true;
-              }
+                  if (q.isEmpty) {
+                    return true;
+                  }
 
-              return code.toLowerCase().contains(q) ||
-                  title.toLowerCase().contains(q) ||
-                  subtitle.toLowerCase().contains(q) ||
-                  aliases.contains(q);
-            }).toList()
-              ..sort((a, b) => _languageSubtitle(a).toLowerCase().compareTo(
-                    _languageSubtitle(b).toLowerCase(),
-                  ));
+                  return code.toLowerCase().contains(q) ||
+                      title.toLowerCase().contains(q) ||
+                      subtitle.toLowerCase().contains(q) ||
+                      aliases.contains(q);
+                }).toList()..sort(
+                  (a, b) => _languageSubtitle(
+                    a,
+                  ).toLowerCase().compareTo(_languageSubtitle(b).toLowerCase()),
+                );
             final bottomInset = MediaQuery.viewInsetsOf(sheetContext).bottom;
             final screenHeight = MediaQuery.sizeOf(sheetContext).height;
             final maxSheetHeight = screenHeight - bottomInset - 24;

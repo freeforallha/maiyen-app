@@ -215,7 +215,6 @@ class AlarmLaunchGate extends StatefulWidget {
 
 class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
   bool checked = false;
-  bool isAlarmScreenLaunch = false;
 
   String payload = "";
 

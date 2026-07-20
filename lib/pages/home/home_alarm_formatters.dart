@@ -13,7 +13,9 @@ class HomeAlarmFormatters {
   }) {
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
     final customDevices = safeMap(selectedRules["devices"]);
-    final legacyAlarmMode = (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home").toString();
+    final legacyAlarmMode =
+        (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home")
+            .toString();
 
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
@@ -65,7 +67,9 @@ class HomeAlarmFormatters {
 
     final selectedRules = safeMap(customRulesByHome[selectedHome]);
     final customDevices = safeMap(selectedRules["devices"]);
-    final legacyAlarmMode = (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home").toString();
+    final legacyAlarmMode =
+        (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home")
+            .toString();
     final intervals = <Map<String, int>>[];
 
     void addAlarm(Map<String, dynamic> alarm) {

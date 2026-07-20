@@ -61,6 +61,10 @@ class AppLanguageController extends ChangeNotifier {
     "hy",
     "ka",
     "az",
+    "gn",
+    "qu",
+    "ay",
+    "ht",
   };
   static const List<Locale> supportedLocales = [
     Locale("vi"),
@@ -116,6 +120,10 @@ class AppLanguageController extends ChangeNotifier {
     Locale("hy", "AM"),
     Locale("ka", "GE"),
     Locale("az", "AZ"),
+    Locale("gn", "PY"),
+    Locale("qu", "PE"),
+    Locale("ay", "BO"),
+    Locale("ht", "HT"),
   ];
   static const Map<String, String> languageFlags = {
     "vi": "🇻🇳",
@@ -171,6 +179,10 @@ class AppLanguageController extends ChangeNotifier {
     "hy": "🇦🇲",
     "ka": "🇬🇪",
     "az": "🇦🇿",
+    "gn": "🇵🇾",
+    "qu": "🇵🇪",
+    "ay": "🇧🇴",
+    "ht": "🇭🇹",
   };
 
   static const Map<String, String> languageLabels = {
@@ -227,6 +239,10 @@ class AppLanguageController extends ChangeNotifier {
     "hy": "Հայերեն",
     "ka": "ქართული",
     "az": "Azərbaycan dili",
+    "gn": "Guaraní",
+    "qu": "Quechua",
+    "ay": "Aymara",
+    "ht": "Kreyòl ayisyen",
   };
 
   Locale _locale = const Locale("vi");
@@ -286,6 +302,10 @@ class AppLanguageController extends ChangeNotifier {
   bool get isArmenian => languageCode == "hy";
   bool get isGeorgian => languageCode == "ka";
   bool get isAzerbaijani => languageCode == "az";
+  bool get isGuarani => languageCode == "gn";
+  bool get isQuechua => languageCode == "qu";
+  bool get isAymara => languageCode == "ay";
+  bool get isHaitianCreole => languageCode == "ht";
 
   String _normalizeLanguageCode(String code) {
     final cleanCode = code.trim().toLowerCase();
@@ -454,6 +474,22 @@ class AppLanguageController extends ChangeNotifier {
 
     if (normalizedCode == "az") {
       return const Locale("az", "AZ");
+    }
+
+    if (normalizedCode == "gn") {
+      return const Locale("gn", "PY");
+    }
+
+    if (normalizedCode == "qu") {
+      return const Locale("qu", "PE");
+    }
+
+    if (normalizedCode == "ay") {
+      return const Locale("ay", "BO");
+    }
+
+    if (normalizedCode == "ht") {
+      return const Locale("ht", "HT");
     }
 
     if (code == "zh") {

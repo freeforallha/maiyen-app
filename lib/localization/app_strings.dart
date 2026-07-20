@@ -56,6 +56,10 @@ import 'languages/cnr_strings.dart';
 import 'languages/hy_strings.dart';
 import 'languages/ka_strings.dart';
 import 'languages/az_strings.dart';
+import 'languages/gn_strings.dart';
+import 'languages/qu_strings.dart';
+import 'languages/ay_strings.dart';
+import 'languages/ht_strings.dart';
 import 'languages/ta_dynamic_strings.dart';
 import 'languages/pt_dynamic_strings.dart';
 import 'languages/tet_dynamic_strings.dart';
@@ -93,6 +97,10 @@ import 'languages/cnr_dynamic_strings.dart';
 import 'languages/hy_dynamic_strings.dart';
 import 'languages/ka_dynamic_strings.dart';
 import 'languages/az_dynamic_strings.dart';
+import 'languages/gn_dynamic_strings.dart';
+import 'languages/qu_dynamic_strings.dart';
+import 'languages/ay_dynamic_strings.dart';
+import 'languages/ht_dynamic_strings.dart';
 
 class AppStrings {
   final bool isEnglish;
@@ -147,6 +155,10 @@ class AppStrings {
   final bool isArmenian;
   final bool isGeorgian;
   final bool isAzerbaijani;
+  final bool isGuarani;
+  final bool isQuechua;
+  final bool isAymara;
+  final bool isHaitianCreole;
 
   const AppStrings._({
     required this.isEnglish,
@@ -201,6 +213,10 @@ class AppStrings {
     required this.isArmenian,
     required this.isGeorgian,
     required this.isAzerbaijani,
+    required this.isGuarani,
+    required this.isQuechua,
+    required this.isAymara,
+    required this.isHaitianCreole,
   });
 
   factory AppStrings.fromLocale(Locale locale) {
@@ -257,6 +273,10 @@ class AppStrings {
       isArmenian: locale.languageCode == "hy",
       isGeorgian: locale.languageCode == "ka",
       isAzerbaijani: locale.languageCode == "az",
+      isGuarani: locale.languageCode == "gn",
+      isQuechua: locale.languageCode == "qu",
+      isAymara: locale.languageCode == "ay",
+      isHaitianCreole: locale.languageCode == "ht",
     );
   }
 
@@ -318,6 +338,10 @@ class AppStrings {
     String? hy,
     String? ka,
     String? az,
+    String? gn,
+    String? qu,
+    String? ay,
+    String? ht,
   }) {
     final key = _translationAliases[vi] ?? vi;
 
@@ -491,6 +515,22 @@ class AppStrings {
 
     if (isAzerbaijani) {
       return _translationFromMap(_azerbaijani, key) ?? az ?? en;
+    }
+
+    if (isGuarani) {
+      return _translationFromMap(_guarani, key) ?? gn ?? en;
+    }
+
+    if (isQuechua) {
+      return _translationFromMap(_quechua, key) ?? qu ?? en;
+    }
+
+    if (isAymara) {
+      return _translationFromMap(_aymara, key) ?? ay ?? en;
+    }
+
+    if (isHaitianCreole) {
+      return _translationFromMap(_haitianCreole, key) ?? ht ?? en;
     }
 
     if (isIndonesian) {
@@ -4770,7 +4810,10 @@ class AppStrings {
 
   static const Map<String, String> _spanish = esStrings;
 
-  static const Map<String, String> _indonesian = {...idStrings, ...idDynamicStrings};
+  static const Map<String, String> _indonesian = {
+    ...idStrings,
+    ...idDynamicStrings,
+  };
 
   static const Map<String, String> _thai = {...thStrings, ...thDynamicStrings};
 
@@ -4806,15 +4849,9 @@ class AppStrings {
     ...plDynamicStrings,
   };
 
-  static const Map<String, String> _dutch = {
-    ...nlStrings,
-    ...nlDynamicStrings,
-  };
+  static const Map<String, String> _dutch = {...nlStrings, ...nlDynamicStrings};
 
-  static const Map<String, String> _czech = {
-    ...csStrings,
-    ...csDynamicStrings,
-  };
+  static const Map<String, String> _czech = {...csStrings, ...csDynamicStrings};
 
   static const Map<String, String> _slovak = {
     ...skStrings,
@@ -4871,10 +4908,7 @@ class AppStrings {
     ...sqDynamicStrings,
   };
 
-  static const Map<String, String> _greek = {
-    ...elStrings,
-    ...elDynamicStrings,
-  };
+  static const Map<String, String> _greek = {...elStrings, ...elDynamicStrings};
 
   static const Map<String, String> _turkish = {
     ...trStrings,
@@ -4921,10 +4955,7 @@ class AppStrings {
     ...ltDynamicStrings,
   };
 
-  static const Map<String, String> _irish = {
-    ...gaStrings,
-    ...gaDynamicStrings,
-  };
+  static const Map<String, String> _irish = {...gaStrings, ...gaDynamicStrings};
 
   static const Map<String, String> _maltese = {
     ...mtStrings,
@@ -4964,6 +4995,26 @@ class AppStrings {
   static const Map<String, String> _azerbaijani = {
     ...azStrings,
     ...azDynamicStrings,
+  };
+
+  static const Map<String, String> _guarani = {
+    ...gnStrings,
+    ...gnDynamicStrings,
+  };
+
+  static const Map<String, String> _quechua = {
+    ...quStrings,
+    ...quDynamicStrings,
+  };
+
+  static const Map<String, String> _aymara = {
+    ...ayStrings,
+    ...ayDynamicStrings,
+  };
+
+  static const Map<String, String> _haitianCreole = {
+    ...htStrings,
+    ...htDynamicStrings,
   };
 
   String t(String vi) {
@@ -5421,8 +5472,8 @@ class AppStrings {
 
   String hoursAgoShort(int count) => choose(
     vi: "${count}h trước",
-    fil: "${count} oras ang nakalipas",
-    km: "${count} ម៉ោងមុន",
+    fil: "$count oras ang nakalipas",
+    km: "$count ម៉ោងមុន",
     en: "${count}h ago",
     zh: "$count 小时前",
     ko: "$count시간 전",
@@ -5433,16 +5484,16 @@ class AppStrings {
     es: "hace ${count}h",
     fr: _fr(vi: "${count}h trước", en: "${count}h ago"),
     id: "${count}j lalu",
-    th: "${count} ชั่วโมงที่แล้ว",
-    ms: "${count} jam lalu",
-    my: "${count} နာရီအကြာက",
-    lo: "${count} ຊົ່ວໂມງກ່ອນ",
+    th: "$count ชั่วโมงที่แล้ว",
+    ms: "$count jam lalu",
+    my: "$count နာရီအကြာက",
+    lo: "$count ຊົ່ວໂມງກ່ອນ",
   );
 
   String hoursMinutesAgoShort(int hours, int minutes) => choose(
     vi: "${hours}h$minutes' trước",
-    fil: "${hours} oras at ${minutes} minuto ang nakalipas",
-    km: "${hours} ម៉ោង ${minutes} នាទីមុន",
+    fil: "$hours oras at $minutes minuto ang nakalipas",
+    km: "$hours ម៉ោង $minutes នាទីមុន",
     en: "${hours}h ${minutes}m ago",
     zh: "$hours 小时 $minutes 分钟前",
     ko: "$hours시간 $minutes분 전",
@@ -5453,10 +5504,10 @@ class AppStrings {
     es: "hace ${hours}h ${minutes}m",
     fr: _fr(vi: "${hours}h$minutes' trước", en: "${hours}h ${minutes}m ago"),
     id: "${hours}j ${minutes}m lalu",
-    th: "${hours} ชม. $minutes นาทีที่แล้ว",
-    ms: "${hours} jam $minutes minit lalu",
-    my: "${hours} နာရီ ${minutes} မိနစ်အကြာက",
-    lo: "${hours} ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
+    th: "$hours ชม. $minutes นาทีที่แล้ว",
+    ms: "$hours jam $minutes minit lalu",
+    my: "$hours နာရီ $minutes မိနစ်အကြာက",
+    lo: "$hours ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
   );
 
   String daysAgo(int count) => choose(
@@ -6226,6 +6277,14 @@ class AppStrings {
       ? _georgian
       : isAzerbaijani
       ? _azerbaijani
+      : isGuarani
+      ? _guarani
+      : isQuechua
+      ? _quechua
+      : isAymara
+      ? _aymara
+      : isHaitianCreole
+      ? _haitianCreole
       : isThai
       ? _thai
       : isIndonesian
@@ -6563,6 +6622,10 @@ class AppStrings {
         !isArmenian &&
         !isGeorgian &&
         !isAzerbaijani &&
+        !isGuarani &&
+        !isQuechua &&
+        !isAymara &&
+        !isHaitianCreole &&
         !isThai &&
         !isIndonesian &&
         !isSpanish &&
@@ -6666,8 +6729,8 @@ class AppStrings {
       final minutes = hourMinuteMatch.group(2)!;
       return choose(
         vi: "${hours}h$minutes' trước",
-        fil: "${hours} oras at ${minutes} minuto ang nakalipas",
-        km: "${hours} ម៉ោង ${minutes} នាទីមុន",
+        fil: "$hours oras at $minutes minuto ang nakalipas",
+        km: "$hours ម៉ោង $minutes នាទីមុន",
         en: "${hours}h ${minutes}m ago",
         zh: "$hours 小时 $minutes 分钟前",
         ko: "$hours시간 $minutes분 전",
@@ -6681,10 +6744,10 @@ class AppStrings {
           en: "${hours}h ${minutes}m ago",
         ),
         id: "${hours}j ${minutes}m lalu",
-        th: "${hours} ชม. $minutes นาทีที่แล้ว",
-        ms: "${hours} jam $minutes minit lalu",
-        my: "${hours} နာရီ ${minutes} မိနစ်အကြာက",
-        lo: "${hours} ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
+        th: "$hours ชม. $minutes นาทีที่แล้ว",
+        ms: "$hours jam $minutes minit lalu",
+        my: "$hours နာရီ $minutes မိနစ်အကြာက",
+        lo: "$hours ຊົ່ວໂມງ $minutes ນາທີກ່ອນ",
       );
     }
 
@@ -6693,8 +6756,8 @@ class AppStrings {
       final count = hourMatch.group(1)!;
       return choose(
         vi: "${count}h trước",
-        fil: "${count} oras ang nakalipas",
-        km: "${count} ម៉ោងមុន",
+        fil: "$count oras ang nakalipas",
+        km: "$count ម៉ោងមុន",
         en: "${count}h ago",
         zh: "$count 小时前",
         ko: "$count시간 전",
@@ -6705,10 +6768,10 @@ class AppStrings {
         es: "hace ${count}h",
         fr: _fr(vi: "${count}h trước", en: "${count}h ago"),
         id: "${count}j lalu",
-        th: "${count} ชั่วโมงที่แล้ว",
-        ms: "${count} jam lalu",
-        my: "${count} နာရီအကြာက",
-        lo: "${count} ຊົ່ວໂມງກ່ອນ",
+        th: "$count ชั่วโมงที่แล้ว",
+        ms: "$count jam lalu",
+        my: "$count နာရီအကြာက",
+        lo: "$count ຊົ່ວໂມງກ່ອນ",
       );
     }
 
@@ -7175,22 +7238,34 @@ class AppStrings {
     }
 
     if (isRomanian) {
-      return _translationFromMap(_romanian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _romanian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
     if (isHungarian) {
-      return _translationFromMap(_hungarian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _hungarian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
     if (isBulgarian) {
-      return _translationFromMap(_bulgarian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _bulgarian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
     if (isCroatian) {
-      return _translationFromMap(_croatian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _croatian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7205,7 +7280,10 @@ class AppStrings {
     }
 
     if (isSlovenian) {
-      return _translationFromMap(_slovenian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _slovenian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7218,7 +7296,10 @@ class AppStrings {
     }
 
     if (isAlbanian) {
-      return _translationFromMap(_albanian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _albanian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7264,7 +7345,10 @@ class AppStrings {
     }
 
     if (isEstonian) {
-      return _translationFromMap(_estonian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _estonian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7292,7 +7376,10 @@ class AppStrings {
     }
 
     if (isBelarusian) {
-      return _translationFromMap(_belarusian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _belarusian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
@@ -7318,18 +7405,47 @@ class AppStrings {
     }
 
     if (isArmenian) {
-      return _translationFromMap(_armenian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _armenian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
     if (isGeorgian) {
-      return _translationFromMap(_georgian, _translationAliases[text] ?? text) ??
+      return _translationFromMap(
+            _georgian,
+            _translationAliases[text] ?? text,
+          ) ??
           text;
     }
 
     if (isAzerbaijani) {
       return _translationFromMap(
             _azerbaijani,
+            _translationAliases[text] ?? text,
+          ) ??
+          text;
+    }
+
+    if (isGuarani) {
+      return _translationFromMap(_guarani, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isQuechua) {
+      return _translationFromMap(_quechua, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isAymara) {
+      return _translationFromMap(_aymara, _translationAliases[text] ?? text) ??
+          text;
+    }
+
+    if (isHaitianCreole) {
+      return _translationFromMap(
+            _haitianCreole,
             _translationAliases[text] ?? text,
           ) ??
           text;
@@ -8203,6 +8319,22 @@ class AppStrings {
 
     if (isAzerbaijani) {
       return "Azərbaycan dili";
+    }
+
+    if (isGuarani) {
+      return "Guaraní";
+    }
+
+    if (isQuechua) {
+      return "Quechua";
+    }
+
+    if (isAymara) {
+      return "Aymara";
+    }
+
+    if (isHaitianCreole) {
+      return "Kreyòl ayisyen";
     }
 
     if (isThai) {

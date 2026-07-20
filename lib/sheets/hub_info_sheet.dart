@@ -69,19 +69,17 @@ void showHubInfoSheet({
             final hubStatus = _hubInfoMap(home['hubStatus']);
             final hubEvaluation = evaluateHubStatus(home);
 
-            final hubId = (home['hubId'] ?? hubStatus['hubId'])
-                    ?.toString()
-                    .trim() ??
-                '';
-            final tracked = hubId.isNotEmpty || hubEvaluation['tracked'] == true;
+            final hubId =
+                (home['hubId'] ?? hubStatus['hubId'])?.toString().trim() ?? '';
+            final tracked =
+                hubId.isNotEmpty || hubEvaluation['tracked'] == true;
             final checking = hubEvaluation['checking'] == true;
-            final online = tracked && hubEvaluation['online'] == true && !checking;
+            final online =
+                tracked && hubEvaluation['online'] == true && !checking;
 
             final hubName = hubStatus['hubName']?.toString().trim() ?? '';
             final hubType = _hubTypeText(hubStatus);
-            final wifiConnected = parseDeviceBool(
-              hubStatus['wifiConnected'],
-            );
+            final wifiConnected = parseDeviceBool(hubStatus['wifiConnected']);
             final wifiSsid = hubStatus['wifiSsid']?.toString().trim() ?? '';
             final lastHeartbeat = _formatHubDateTime(
               hubStatus['lastHeartbeatAt'],
@@ -90,20 +88,20 @@ void showHubInfoSheet({
             final statusText = !tracked
                 ? strings.t('Hub chưa gửi trạng thái')
                 : checking
-                    ? strings.t('Đang kiểm tra kết nối Hub')
-                    : online
-                        ? strings.t('Online')
-                        : strings.t('Offline');
+                ? strings.t('Đang kiểm tra kết nối Hub')
+                : online
+                ? strings.t('Online')
+                : strings.t('Offline');
             final statusColor = !tracked || checking
                 ? SafeHomeColors.textSecondary
                 : online
-                    ? SafeHomeColors.safe
-                    : SafeHomeColors.danger;
+                ? SafeHomeColors.safe
+                : SafeHomeColors.danger;
             final statusIcon = !tracked || checking
                 ? Icons.sync_rounded
                 : online
-                    ? Icons.check_circle_rounded
-                    : Icons.cloud_off_rounded;
+                ? Icons.check_circle_rounded
+                : Icons.cloud_off_rounded;
 
             String wifiText;
             Color wifiColor;
@@ -154,7 +152,9 @@ void showHubInfoSheet({
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              homeName.trim().isEmpty ? homeId : homeName.trim(),
+                              homeName.trim().isEmpty
+                                  ? homeId
+                                  : homeName.trim(),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(

@@ -8,7 +8,6 @@ import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../safehome_theme.dart';
 import 'device_alarm_policy_sheet.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
 import '../navigation/safehome_navigation.dart';
 import '../widgets/ios_alarm_platform_notice.dart';
 
@@ -61,11 +60,6 @@ int _normalizeAlarmRepeatMinutes(Object? rawValue) {
   }
 
   return const [0, 15, 30, 60].contains(value) ? value : 30;
-}
-
-String _alarmRepeatLabel(Object? rawValue, AppStrings strings) {
-  final value = _normalizeAlarmRepeatMinutes(rawValue);
-  return value == 0 ? strings.t("Không lặp lại") : strings.minuteText(value);
 }
 
 List<int> _normalizeAlarmDays(Object? rawValue) {
@@ -249,200 +243,6 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
   }
 }
 
-String _alarmWeekdayShortLabel(int day, AppStrings strings) {
-  switch (day) {
-    case 1:
-      return strings.choose(
-        vi: "T2",
-        my: "တနင်္လာ",
-        fil: "Lun",
-        km: "ច.",
-        en: "Mon",
-        zh: "周一",
-        ko: "월",
-        ja: "月",
-        de: "Mo",
-        ru: "Пн",
-        fr: "Lun",
-        es: "Lun",
-        id: "Sen",
-        th: "จ.",
-        ms: "Isn",
-        lo: "ຈ.",
-        ta: "திங்.",
-        pt: "seg.",
-        tet: "Seg.",
-      );
-    case 2:
-      return strings.choose(
-        vi: "T3",
-        my: "အင်္ဂါ",
-        fil: "Mar",
-        km: "អ.",
-        en: "Tue",
-        zh: "周二",
-        ko: "화",
-        ja: "火",
-        de: "Di",
-        ru: "Вт",
-        fr: "Mar",
-        es: "Mar",
-        id: "Sel",
-        th: "อ.",
-        ms: "Sel",
-        lo: "ອ.",
-        ta: "செவ்.",
-        pt: "ter.",
-        tet: "Ter.",
-      );
-    case 3:
-      return strings.choose(
-        vi: "T4",
-        my: "ဗုဒ္ဓဟူး",
-        fil: "Miy",
-        km: "ព.",
-        en: "Wed",
-        zh: "周三",
-        ko: "수",
-        ja: "水",
-        de: "Mi",
-        ru: "Ср",
-        fr: "Mer",
-        es: "Mié",
-        id: "Rab",
-        th: "พ.",
-        ms: "Rab",
-        lo: "ພ.",
-        ta: "புத.",
-        pt: "qua.",
-        tet: "Kua.",
-      );
-    case 4:
-      return strings.choose(
-        vi: "T5",
-        my: "ကြာသပတေး",
-        fil: "Huw",
-        km: "ព្រ.",
-        en: "Thu",
-        zh: "周四",
-        ko: "목",
-        ja: "木",
-        de: "Do",
-        ru: "Чт",
-        fr: "Jeu",
-        es: "Jue",
-        id: "Kam",
-        th: "พฤ.",
-        ms: "Kha",
-        lo: "ພຫ.",
-        ta: "வியா.",
-        pt: "qui.",
-        tet: "Kin.",
-      );
-    case 5:
-      return strings.choose(
-        vi: "T6",
-        my: "သောကြာ",
-        fil: "Biy",
-        km: "សុ.",
-        en: "Fri",
-        zh: "周五",
-        ko: "금",
-        ja: "金",
-        de: "Fr",
-        ru: "Пт",
-        fr: "Ven",
-        es: "Vie",
-        id: "Jum",
-        th: "ศ.",
-        ms: "Jum",
-        lo: "ສຸ.",
-        ta: "வெள்.",
-        pt: "sex.",
-        tet: "Ses.",
-      );
-    case 6:
-      return strings.choose(
-        vi: "T7",
-        my: "စနေ",
-        fil: "Sab",
-        km: "សៅ.",
-        en: "Sat",
-        zh: "周六",
-        ko: "토",
-        ja: "土",
-        de: "Sa",
-        ru: "Сб",
-        fr: "Sam",
-        es: "Sáb",
-        id: "Sab",
-        th: "ส.",
-        ms: "Sab",
-        lo: "ສ.",
-        ta: "சனி.",
-        pt: "sáb.",
-        tet: "Sáb.",
-      );
-    case 7:
-      return strings.choose(
-        vi: "CN",
-        my: "တနင်္ဂနွေ",
-        fil: "Lin",
-        km: "អា.",
-        en: "Sun",
-        zh: "周日",
-        ko: "일",
-        ja: "日",
-        de: "So",
-        ru: "Вс",
-        fr: "Dim",
-        es: "Dom",
-        id: "Min",
-        th: "อา.",
-        ms: "Ahd",
-        lo: "ອາ.",
-        ta: "ஞாயி.",
-        pt: "dom.",
-        tet: "Dom.",
-      );
-    default:
-      return "";
-  }
-}
-
-String _alarmDaysLabel(Object? rawValue, AppStrings strings) {
-  final days = _normalizeAlarmDays(rawValue);
-
-  if (days.length == 7) {
-    return strings.choose(
-      vi: "Hằng ngày",
-      my: "နေ့တိုင်း",
-      fil: "Araw-araw",
-      km: "រាល់ថ្ងៃ",
-      en: "Every day",
-      zh: "每天",
-      ko: "매일",
-      ja: "毎日",
-      de: "Täglich",
-      ru: "Каждый день",
-      fr: "Tous les jours",
-      es: "Todos los días",
-      id: "Setiap hari",
-      th: "ทุกวัน",
-      ms: "Setiap hari",
-      lo: "ທຸກມື້",
-      ta: "தினமும்",
-      pt: "Todos os dias",
-      tet: "Loron-loron",
-    );
-  }
-
-  return days
-      .map((day) => _alarmWeekdayShortLabel(day, strings))
-      .where((label) => label.isNotEmpty)
-      .join(", ");
-}
-
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -593,13 +393,15 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     var followHomeSchedule = true;
     var fullscreenEnabled = true;
 
-    final commonPolicies = entries.map((entry) {
-      final device = Map<String, dynamic>.from(entry.value as Map);
-      return DeviceAlarmPolicySettings.fromDevice(
-        device: device,
-        deviceType: device['type']?.toString() ?? 'door',
-      );
-    }).toList(growable: false);
+    final commonPolicies = entries
+        .map((entry) {
+          final device = Map<String, dynamic>.from(entry.value as Map);
+          return DeviceAlarmPolicySettings.fromDevice(
+            device: device,
+            deviceType: device['type']?.toString() ?? 'door',
+          );
+        })
+        .toList(growable: false);
 
     var physicalSirenEnabled = commonPolicies.every(
       (policy) => policy.physicalSirenEnabled,
@@ -609,24 +411,26 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         .reduce((first, second) => first < second ? first : second);
 
     if (personal) {
-      final preferences = entries.map((entry) {
-        final key = entry.key;
-        final device = Map<String, dynamic>.from(entry.value as Map);
-        final realId = _realDeviceId(key, device);
-        final rawCustomDevice = customDevices[realId] ?? customDevices[key];
-        final customDevice = rawCustomDevice is Map
-            ? Map<String, dynamic>.from(rawCustomDevice)
-            : const <String, dynamic>{};
-        final policy = DeviceAlarmPolicySettings.fromDevice(
-          device: device,
-          deviceType: device['type']?.toString() ?? 'door',
-        );
+      final preferences = entries
+          .map((entry) {
+            final key = entry.key;
+            final device = Map<String, dynamic>.from(entry.value as Map);
+            final realId = _realDeviceId(key, device);
+            final rawCustomDevice = customDevices[realId] ?? customDevices[key];
+            final customDevice = rawCustomDevice is Map
+                ? Map<String, dynamic>.from(rawCustomDevice)
+                : const <String, dynamic>{};
+            final policy = DeviceAlarmPolicySettings.fromDevice(
+              device: device,
+              deviceType: device['type']?.toString() ?? 'door',
+            );
 
-        return DevicePersonalAlarmPreferences.fromCustomDevice(
-          customDevice: customDevice,
-          legacyFullscreenEnabled: policy.fullscreenEnabled,
-        );
-      }).toList(growable: false);
+            return DevicePersonalAlarmPreferences.fromCustomDevice(
+              customDevice: customDevice,
+              legacyFullscreenEnabled: policy.fullscreenEnabled,
+            );
+          })
+          .toList(growable: false);
 
       fullscreenEnabled = preferences.every(
         (preference) => preference.fullscreenEnabled,
@@ -697,8 +501,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       final currentPolicy =
                           DeviceAlarmPolicySettings.fromDevice(
                             device: device,
-                            deviceType:
-                                device['type']?.toString() ?? 'door',
+                            deviceType: device['type']?.toString() ?? 'door',
                           );
                       updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
                           DeviceAlarmPolicySettings(
@@ -711,18 +514,15 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           ).toFirebaseMap();
                     }
                   } else {
-                    final currentPolicy =
-                        DeviceAlarmPolicySettings.fromDevice(
-                          device: device,
-                          deviceType:
-                              device['type']?.toString() ?? 'door',
-                        );
+                    final currentPolicy = DeviceAlarmPolicySettings.fromDevice(
+                      device: device,
+                      deviceType: device['type']?.toString() ?? 'door',
+                    );
                     updates['accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId/alarmPolicy'] =
                         DeviceAlarmPolicySettings(
                           enabled: currentPolicy.enabled,
                           physicalSirenEnabled: physicalSirenEnabled,
-                          fullscreenEnabled:
-                              currentPolicy.fullscreenEnabled,
+                          fullscreenEnabled: currentPolicy.fullscreenEnabled,
                           triggerDelaySeconds: triggerDelaySeconds,
                         ).toFirebaseMap();
                   }
@@ -731,6 +531,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 await FirebaseDatabase.instance.ref().update(updates);
                 if (!context.mounted) return;
                 Navigator.of(context).pop();
+
+                if (!mounted) return;
+
                 showTopToast(
                   this.context,
                   strings.t('Đã áp dụng lịch báo động'),
@@ -814,14 +617,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           secondary: const Icon(Icons.campaign_rounded),
                           title: Text(
                             strings.t('Bật còi vật lý'),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                           subtitle: Text(
-                            strings.t(
-                              'Cho phép kích hoạt còi trong nhà.',
-                            ),
+                            strings.t('Cho phép kích hoạt còi trong nhà.'),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -846,33 +645,20 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                 child: DropdownButton<int>(
                                   value: triggerDelaySeconds,
                                   isDense: true,
-                                  items: const [
-                                    0,
-                                    5,
-                                    10,
-                                    15,
-                                    30,
-                                    60,
-                                    90,
-                                    120,
-                                  ]
+                                  items: const [0, 5, 10, 15, 30, 60, 90, 120]
                                       .map(
-                                        (seconds) =>
-                                            DropdownMenuItem<int>(
-                                              value: seconds,
-                                              child: Text(
-                                                seconds == 0
-                                                    ? strings.t(
-                                                        'Ngay lập tức',
-                                                      )
-                                                    : '$seconds ${strings.t('giây')}',
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight:
-                                                      FontWeight.w700,
-                                                ),
-                                              ),
+                                        (seconds) => DropdownMenuItem<int>(
+                                          value: seconds,
+                                          child: Text(
+                                            seconds == 0
+                                                ? strings.t('Ngay lập tức')
+                                                : '$seconds ${strings.t('giây')}',
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w700,
                                             ),
+                                          ),
+                                        ),
                                       )
                                       .toList(),
                                   onChanged: saving
@@ -905,12 +691,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           contentPadding: EdgeInsets.zero,
                           secondary: const Icon(Icons.home_work_rounded),
                           title: Text(
-                            strings.t(
-                              'Nhận cảnh báo theo lịch chung của nhà',
-                            ),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                            ),
+                            strings.t('Nhận cảnh báo theo lịch chung của nhà'),
+                            style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                           subtitle: Text(
                             strings.t(
@@ -936,9 +718,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             defaultTargetPlatform == TargetPlatform.iOS
                                 ? strings.t('Cảnh báo trên iOS')
                                 : strings.t('Đánh thức màn hình'),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                           subtitle: Text(
                             strings.t(
@@ -1527,128 +1307,6 @@ class _AlarmRepeatDropdown extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _AlarmModeCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final bool selected;
-  final bool enabled;
-  final VoidCallback onTap;
-
-  const _AlarmModeCard({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.selected,
-    required this.enabled,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final accent = SafeHomeColors.primary;
-
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 160),
-      opacity: enabled ? 1 : 0.62,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: enabled ? onTap : null,
-          borderRadius: BorderRadius.circular(18),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            curve: Curves.easeOut,
-            constraints: const BoxConstraints(minHeight: 142),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: selected
-                  ? accent.withValues(alpha: 0.08)
-                  : SafeHomeColors.surface,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: selected ? accent : SafeHomeColors.border,
-                width: selected ? 1.6 : 1,
-              ),
-              boxShadow: selected
-                  ? [
-                      BoxShadow(
-                        color: accent.withValues(alpha: 0.10),
-                        blurRadius: 14,
-                        offset: const Offset(0, 5),
-                      ),
-                    ]
-                  : null,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 38,
-                      height: 38,
-                      decoration: BoxDecoration(
-                        color: selected
-                            ? accent.withValues(alpha: 0.12)
-                            : SafeHomeColors.background,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        icon,
-                        color: selected ? accent : SafeHomeColors.textSecondary,
-                        size: 21,
-                      ),
-                    ),
-                    const Spacer(),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 160),
-                      child: selected
-                          ? Icon(
-                              Icons.check_circle_rounded,
-                              key: const ValueKey("selected"),
-                              color: accent,
-                              size: 22,
-                            )
-                          : Icon(
-                              Icons.circle_outlined,
-                              key: const ValueKey("unselected"),
-                              color: SafeHomeColors.border,
-                              size: 22,
-                            ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: selected ? accent : SafeHomeColors.textPrimary,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  subtitle,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
-                    fontSize: 11.5,
-                    height: 1.35,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

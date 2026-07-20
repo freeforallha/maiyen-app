@@ -3,7 +3,8 @@ const Map<String, String> isStrings = {
   "Không đọc được số điện thoại": "Ekki tókst að lesa símanúmer",
   "Tin nhắn quá dài": "Skilaboðin eru of löng",
   "Không gửi được tin nhắn": "Ekki tókst að senda skilaboðin",
-  "Bạn không có quyền sửa lịch chung của nhà": "Þú hefur ekki heimild til að breyta sameiginlegri áætlun heimilisins",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Þú hefur ekki heimild til að breyta sameiginlegri áætlun heimilisins",
   "Nhà của bạn": "Heimilið þitt",
   "Tải tin cũ hơn": "Hlaða eldri skilaboðum",
   "Nhà chưa đặt tên": "Ónefnt heimili",
@@ -91,20 +92,27 @@ const Map<String, String> isStrings = {
   "Đang theo dõi": "Vöktun",
   "Chưa nhận diện": "Óþekkt tæki",
   "Chưa có cập nhật": "Engar uppfærslur enn",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Engin tæki enn. Pikkaðu á + til að bæta við tæki og byrja að vernda heimilið.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Engin tæki enn. Pikkaðu á + til að bæta við tæki og byrja að vernda heimilið.",
   "CHƯA AN TOÀN": "EKKI ÖRUGGT",
   "ĐÃ AN TOÀN": "ÖRUGGT",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Heimilið þitt þarfnast athygli. Farðu yfir stöðurnar hér að neðan.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Heimilið þitt starfar eðlilega.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Engin óvenjuleg reyk- eða SOS-virkni greindist.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Ekki er næg nýleg virkni fyrir ítarlegri greiningu.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Heimilið þitt þarfnast athygli. Farðu yfir stöðurnar hér að neðan.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Heimilið þitt starfar eðlilega.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Engin óvenjuleg reyk- eða SOS-virkni greindist.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Ekki er næg nýleg virkni fyrir ítarlegri greiningu.",
   "Hub kết nối bình thường": "Hubinn er tengdur",
-  "Cài đặt cảnh báo cho nhà hiện tại": "Viðvörunarstillingar fyrir þetta heimili",
+  "Cài đặt cảnh báo cho nhà hiện tại":
+      "Viðvörunarstillingar fyrir þetta heimili",
   "Nhận cảnh báo báo động": "Fá viðvaranir um neyðarboð",
   "Đang bật cho tài khoản này": "Virkjað fyrir þennan reikning",
   "Đang tắt cho tài khoản này": "Óvirkt fyrir þennan reikning",
   "Hẹn giờ nhắc nhở": "Áætlun áminninga",
-  "Nhắc kiểm tra nhà theo thời gian": "Tímasetja áminningar um að athuga heimilið",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Tímasetja áminningar um að athuga heimilið",
   "Hẹn giờ báo động": "Tímasetja viðvörun",
   "Chưa thiết lập": "Ekki stillt",
   "Chưa thiết lập thời gian": "Engin tímaáætlun skilgreind",
@@ -161,20 +169,26 @@ const Map<String, String> isStrings = {
   "Đã rời khỏi home": "Yfirgaf heimilið",
   "Đã cập nhật": "Uppfært",
   "Tìm home...": "Leita að heimilum...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Stilla staðsetningu heimilis og virkja sjálfvirka vernd",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Flytja eignarhald heimilis eða eyða heimili",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Stilla áminningu/viðvörun fyrir valin heimili",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Stilla staðsetningu heimilis og virkja sjálfvirka vernd",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Flytja eignarhald heimilis eða eyða heimili",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Stilla áminningu/viðvörun fyrir valin heimili",
   "Chia sẻ nhà đã chọn": "Deila völdum heimilum",
   "Mở danh sách chia sẻ nhà": "Opna lista yfir deilingu heimila",
   "Xoá các nhà đã chọn?": "Eyða völdum heimilum?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Völdum heimilum verður eytt varanlega.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Eða skannaðu QR-kóða til að biðja um aðgang að völdum heimilum",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Völdum heimilum verður eytt varanlega.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Eða skannaðu QR-kóða til að biðja um aðgang að völdum heimilum",
   "Email người nhận": "Netfang viðtakanda",
   "Chia sẻ": "Deila",
   "Email chưa đăng ký": "Netfangið er ekki skráð",
   "Chia sẻ hoàn tất": "Deilingu lokið",
   "Mở List chia sẻ nhà": "Opna lista yfir deilingu heimila",
-  "Không có nhà nào bạn có quyền quản lý": "Þú stjórnar engu af völdum heimilum",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Þú stjórnar engu af völdum heimilum",
   "Chưa share cho ai": "Ekki deilt með neinum enn",
   "Tìm nhà": "Leita að heimilum",
   "Xoá các nhà đã chọn ?": "Eyða völdum heimilum?",
@@ -182,13 +196,15 @@ const Map<String, String> isStrings = {
   "Thông báo nhà": "Tilkynningar heimilis",
   "Vai trò thành viên đã thay đổi": "Hlutverk meðlims hefur breyst",
   "Xoá tất cả thông báo?": "Eyða öllum tilkynningum?",
-  "Toàn bộ thông báo nhà sẽ bị xoá.": "Öllum tilkynningum heimilis verður eytt.",
+  "Toàn bộ thông báo nhà sẽ bị xoá.":
+      "Öllum tilkynningum heimilis verður eytt.",
   "Chưa có thông báo nào": "Engar tilkynningar enn",
   "Chưa có thông báo": "Engar tilkynningar",
   "Vuốt lên để tải thêm": "Strjúktu upp til að hlaða fleiri",
   "Không có thiết bị": "Engin tæki",
   "Chỉ chủ nhà mới được xoá nhà": "Aðeins eigandinn getur eytt þessu heimili",
-  "Chỉ chủ nhà mới được chuyển quyền": "Aðeins eigandinn getur flutt eignarhaldið",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Aðeins eigandinn getur flutt eignarhaldið",
   "Lưu ý khi bật báo động": "Athugasemd um að virkja viðvörun",
   "Báo động đã được bật": "Viðvörun virkjuð",
   "Đã hiểu": "Skilið",
@@ -197,27 +213,35 @@ const Map<String, String> isStrings = {
   "Đã tắt báo động": "Slökkt hefur verið á viðvöruninni",
   "Tắt báo động": "Stöðva viðvörun",
   "Cả ngày": "Allan daginn",
-  "Bạn không có quyền thực hiện thao tác này.": "Þú hefur ekki heimild til að framkvæma þessa aðgerð.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Ekki tókst að ljúka aðgerðinni. Reyndu aftur.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Ógildur QR-kóði til að tengjast mörgum heimilum",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Þú hefur ekki heimild til að framkvæma þessa aðgerð.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Ekki tókst að ljúka aðgerðinni. Reyndu aftur.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Ógildur QR-kóði til að tengjast mörgum heimilum",
   "Bạn đang là chủ các nhà này": "Þú átt þessi heimili",
   "Một người dùng": "Notandi",
   "Yêu cầu gia nhập nhà": "Beiðni um aðgang að heimili",
   "Đã gửi yêu cầu gia nhập nhà": "Beiðni um aðgang send",
   "QR gia nhập không hợp lệ": "Ógildur QR-kóði fyrir aðgang",
   "Bạn đang là chủ nhà này": "Þú átt þegar þetta heimili",
-  "QR này không phải mã xin gia nhập nhà": "Þessi QR-kóði er ekki kóði til að biðja um aðgang að heimili",
-  "Bạn không có quyền thêm thiết bị": "Þú hefur ekki heimild til að bæta við tækjum",
+  "QR này không phải mã xin gia nhập nhà":
+      "Þessi QR-kóði er ekki kóði til að biðja um aðgang að heimili",
+  "Bạn không có quyền thêm thiết bị":
+      "Þú hefur ekki heimild til að bæta við tækjum",
   "Đã mở chế độ thêm thiết bị": "Pörun tækja virkjuð",
   "Rời khỏi Home này?": "Yfirgefa þetta heimili?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Þessu heimili og öllum tækjum þess verður eytt varanlega.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Þessu heimili og öllum tækjum þess verður eytt varanlega.",
   "Đã xoá nhà": "Heimili eytt",
   "QR của nhà này": "QR-kóði heimilis",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Aðrir geta skannað þennan kóða til að biðja um aðgang að heimilinu.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Aðrir geta skannað þennan kóða til að biðja um aðgang að heimilinu.",
   "Chia sẻ nhà": "Deila heimili",
   "Quét QR để xin gia nhập nhà": "Skanna QR-kóða til að tengjast heimili",
   "Quét QR xin gia nhập nhà": "Skanna QR-kóða til að tengjast heimili",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Settu QR-kóða deilda heimilisins innan rammans",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Settu QR-kóða deilda heimilisins innan rammans",
   "Mã QR này do chủ nhà chia sẻ": "Eigandi heimilisins deilir þessum QR-kóða",
   "Nhập mã mời": "Sláðu inn boðskóða",
   "Gửi yêu cầu gia nhập": "Senda beiðni um aðgang",
@@ -229,7 +253,8 @@ const Map<String, String> isStrings = {
   "Lời mời chia sẻ nhà": "Boð um deilingu heimilis",
   "Đã share home": "Heimili deilt",
   "Chuyển quyền chủ nhà": "Flytja eignarhald",
-  "Không thể chuyển quyền cho chính bạn": "Þú getur ekki flutt eignarhaldið til sjálfs þín",
+  "Không thể chuyển quyền cho chính bạn":
+      "Þú getur ekki flutt eignarhaldið til sjálfs þín",
   "Không tìm thấy user": "Notandi fannst ekki",
   "Không tìm thấy tài khoản": "Reikningur fannst ekki",
   "Xác nhận chuyển quyền": "Staðfesta flutning eignarhalds",
@@ -261,7 +286,8 @@ const Map<String, String> isStrings = {
   "Không thể lưu thông tin": "Ekki tókst að vista upplýsingarnar",
   "Đã lưu thông tin": "Upplýsingar vistaðar",
   "Lỗi lưu profile": "Ekki tókst að vista notandaupplýsingar",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Bættu við símanúmeri fyrir neyðartilvik",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Bættu við símanúmeri fyrir neyðartilvik",
   "Hoàn tất": "Lokið",
   "Đã tạo nhà mới": "Heimili stofnað",
   "Về muộn": "Kem seint heim",
@@ -280,7 +306,8 @@ const Map<String, String> isStrings = {
   "SĐT": "Sími",
   "Ngày sinh": "Fæðingardagur",
   "Yêu cầu & lời mời": "Beiðnir og boð",
-  "Xem lời mời chia sẻ và xin gia nhập": "Skoða boð um deilingu og aðgangsbeiðnir",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Skoða boð um deilingu og aðgangsbeiðnir",
   "Cài đặt bảo mật": "Öryggisstillingar",
   "Quyền báo động toàn màn hình": "Heimild fyrir viðvörun á öllum skjánum",
   "Báo động toàn màn hình": "Viðvörun á öllum skjánum",
@@ -326,11 +353,13 @@ const Map<String, String> isStrings = {
   "Ngập/rò nước": "Vatnsleki",
   "Phát hiện khói": "Reykur greindur",
   "Quản lý phòng": "Umsjón herbergja",
-  "Bạn không có quyền quản lý phòng": "Þú hefur ekki heimild til að stjórna herbergjum",
+  "Bạn không có quyền quản lý phòng":
+      "Þú hefur ekki heimild til að stjórna herbergjum",
   "Đổi tên phòng": "Endurnefna herbergi",
   "Tên phòng": "Heiti herbergis",
   "Xoá phòng": "Eyða herbergi",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Tæki í þessu herbergi verða færð í Óúthlutað.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Tæki í þessu herbergi verða færð í Óúthlutað.",
   "Thêm phòng": "Bæta við herbergi",
   "Ví dụ: Phòng khách": "Dæmi: Stofa",
   "Phòng khách": "Stofa",
@@ -351,9 +380,11 @@ const Map<String, String> isStrings = {
   "Cửa đóng": "Hurðin er lokuð",
   "Chưa đặt vị trí nhà": "Staðsetning heimilis er ekki stillt",
   "Đặt vị trí nhà tại đây": "Stilltu staðsetningu heimilis hér",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Stilltu staðsetningu heimilis áður en Sjálfvirk vernd er virkjuð",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Stilltu staðsetningu heimilis áður en Sjálfvirk vernd er virkjuð",
   "Bán kính bảo vệ mặc định: 150 m": "Sjálfgefinn verndarradíus: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Hver meðlimur þarf að veita staðsetningarheimildina Alltaf svo staða fjarveru/heimkomu virki í bakgrunni.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Hver meðlimur þarf að veita staðsetningarheimildina Alltaf svo staða fjarveru/heimkomu virki í bakgrunni.",
   "Lưu cài đặt": "Vista stillingar",
   "Đã đặt vị trí nhà": "Staðsetning heimilis stillt",
   "Đang lấy vị trí...": "Sæki staðsetningu...",
@@ -362,22 +393,27 @@ const Map<String, String> isStrings = {
   "Cập nhật thông tin nhà": "Uppfæra upplýsingar um heimili",
   "Nhập địa chỉ của nhà": "Sláðu inn heimilisfangið",
   "Lưu thay đổi": "Vista breytingar",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Þetta heiti birtist aðeins á þínum reikningi.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Heiti og heimilisfang verða uppfærð fyrir alla meðlimi heimilisins.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Þetta heiti birtist aðeins á þínum reikningi.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Heiti og heimilisfang verða uppfærð fyrir alla meðlimi heimilisins.",
   "Một thành viên": "Meðlimur",
   "Đã cập nhật thông tin nhà": "Upplýsingar um heimili uppfærðar",
   "Thay tên": "Endurnefna",
   "Đã đổi tên thiết bị": "Tæki endurnefnt",
   "Chưa chọn nhà để kiểm tra": "Veldu heimili til að prófa",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Framkvæmdu þetta próf með reikningi eigandans",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Framkvæmdu þetta próf með reikningi eigandans",
   "Không đọc được dữ liệu nhà": "Ekki tókst að lesa gögn heimilisins",
-  "Nhà cần có ít nhất một thiết bị để test": "Heimilið þarf að hafa að minnsta kosti eitt tæki til prófunar",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Heimilið þarf að hafa að minnsta kosti eitt tæki til prófunar",
   "Đóng": "Loka",
   "Đã thiết lập": "Stillt",
   "Quét QR": "Skanna QR",
   "Quét QR để thêm thiết bị": "Skanna QR-kóða til að bæta við tæki",
   "Nhập HUB ID thủ công": "Sláðu inn HUB-auðkenni handvirkt",
-  "Bạn không có quyền sắp xếp phòng": "Þú hefur ekki heimild til að endurraða herbergjum",
+  "Bạn không có quyền sắp xếp phòng":
+      "Þú hefur ekki heimild til að endurraða herbergjum",
   "Cảnh báo khói": "Reykviðvörun",
   "Cập nhật thiết bị": "Uppfærsla tækis",
   "Cửa đang mở": "Hurðin er opin",
@@ -427,8 +463,10 @@ const Map<String, String> isStrings = {
   "Chế độ áp dụng": "Notkunarhamur",
   "Theo nhà": "Tímaáætlun heimilis",
   "Riêng tôi": "Persónulegt",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Nota sameiginlegu tímaáætlunina sem eigandinn eða stjórnandi stillti",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Nota persónulega tímaáætlun sem gildir aðeins fyrir þinn reikning",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Nota sameiginlegu tímaáætlunina sem eigandinn eða stjórnandi stillti",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Nota persónulega tímaáætlun sem gildir aðeins fyrir þinn reikning",
   "Thiết lập nhanh báo động": "Flýtistilling viðvörunar",
   "Thiết lập nhanh toàn bộ thiết bị": "Flýtistilling allra tækja",
   "Áp dụng cho toàn bộ thiết bị": "Nota fyrir öll tæki",
@@ -442,7 +480,8 @@ const Map<String, String> isStrings = {
   "Hôm nay đã ghi nhận cảnh báo SOS": "SOS-viðvörun var skráð í dag",
   "Hôm nay đã ghi nhận cảnh báo khói": "Reykviðvörun var skráð í dag",
   "Khói đã an toàn": "Reykástand er aftur eðlilegt",
-  "Không tìm thấy nhà của thông báo này": "Heimilið fyrir þessa tilkynningu fannst ekki",
+  "Không tìm thấy nhà của thông báo này":
+      "Heimilið fyrir þessa tilkynningu fannst ekki",
   "Không tìm thấy thiết bị trong nhà này": "Tækið fannst ekki á þessu heimili",
   "Một chủ nhà": "Eigandi heimilis",
   "Ngôi nhà đang hoạt động ổn định": "Heimilið starfar eðlilega",
@@ -468,8 +507,10 @@ const Map<String, String> isStrings = {
   "Đã rời khỏi nhà": "Yfirgaf heimilið",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Þú yfirgefur deildu heimilin.",
   "Các nhà của bạn sẽ bị xoá.\n": "Heimilunum þínum verður eytt.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Þetta breytir viðvörunaráætlunum allra öryggistækja á völdum heimilum.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Þetta bætir áminningu við völdu heimilin.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Þetta breytir viðvörunaráætlunum allra öryggistækja á völdum heimilum.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Þetta bætir áminningu við völdu heimilin.\n\n",
   "Xác nhận thay đổi báo động": "Staðfesta breytingar á viðvörun",
   "Xác nhận thay đổi nhắc nhở": "Staðfesta breytingar á áminningu",
   "Lặp lại khi sự cố vẫn còn": "Endurtaka meðan vandamálið varir",
@@ -477,43 +518,61 @@ const Map<String, String> isStrings = {
   "VD: Mr Chung": "T.d. herra Chung",
   "🏡 Chưa có nhà nào": "🏡 Engin heimili enn",
   "Vẫn chuyển về Bình thường": "Skipta samt yfir í Venjulegt",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Sjálfvirk vernd þegar allir eru fjarverandi er enn virk. Ef allir meðlimir eru enn fjarverandi getur kerfið virkjað Vernd aftur eftir nokkrar mínútur.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Sjálfvirk vernd þegar allir eru fjarverandi er enn virk. Ef allir meðlimir eru enn fjarverandi getur kerfið virkjað Vernd aftur eftir nokkrar mínútur.",
   "Chuyển về Bình thường?": "Skipta yfir í Venjulegt?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Þegar þetta er virkjað verður strax fylgst með öryggistækjum.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Þegar þetta er virkjað verður strax fylgst með öryggistækjum.\n\n",
   "Bật Bảo vệ thủ công?": "Virkja handvirka Vernd?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Þessi aðgerð breytir viðvörunartíma sumra tækja í dag...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Þessi aðgerð gerir allar viðvaranir heimilisins óvirkar",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Þessi aðgerð breytir viðvörunartíma sumra tækja í dag...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Þessi aðgerð gerir allar viðvaranir heimilisins óvirkar",
   "Tắt toàn bộ báo động?": "Gera allar viðvaranir óvirkar?",
-  "Không xoá được lịch tạm tắt báo động": "Ekki tókst að eyða tímaáætlun hlés á viðvörun",
+  "Không xoá được lịch tạm tắt báo động":
+      "Ekki tókst að eyða tímaáætlun hlés á viðvörun",
   "Không lưu được tạm tắt báo động": "Ekki tókst að vista hlé á viðvörun",
   "Không gửi được yêu cầu xoá": "Ekki tókst að senda beiðni um eyðingu",
   "Không lưu được cài đặt": "Ekki tókst að vista stillinguna",
-  "Không lấy được vị trí hiện tại": "Ekki tókst að sækja núverandi staðsetningu",
-  "Không thể xác nhận tài khoản hiện tại": "Ekki tókst að staðfesta núverandi reikning",
+  "Không lấy được vị trí hiện tại":
+      "Ekki tókst að sækja núverandi staðsetningu",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Ekki tókst að staðfesta núverandi reikning",
   "Mật khẩu không đúng": "Rangt lykilorð",
   "Không thể xác nhận mật khẩu": "Ekki tókst að staðfesta lykilorðið",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Aðeins eigandinn eða stjórnandi getur breytt endurtekningarstillingu viðvörunar",
-  "Không lưu được thời gian lặp báo động": "Ekki tókst að vista endurtekningartíma viðvörunar",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Aðeins eigandinn eða stjórnandi getur breytt Verndarham",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Aðeins eigandinn eða stjórnandi getur breytt endurtekningarstillingu viðvörunar",
+  "Không lưu được thời gian lặp báo động":
+      "Ekki tókst að vista endurtekningartíma viðvörunar",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Aðeins eigandinn eða stjórnandi getur breytt Verndarham",
   "Không thể thay đổi chế độ nhà": "Ekki tókst að breyta ham heimilisins",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Vernd er virk en ekki tókst að senda tilkynninguna",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Vernd er virk en ekki tókst að senda tilkynninguna",
   "Đã bật Chế độ Bảo vệ thủ công": "Handvirk Vernd virkjuð",
   "Đã chuyển nhà về Bình thường": "Heimilið var sett aftur í Venjulegt",
   "60 phút": "60 mínútur",
   "30 phút": "30 mínútur",
   "15 phút": "15 mínútur",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Þú ert að skoða tímaáætlun eigandans. Veldu Aðeins ég til að stilla þína eigin viðvörunaráætlun.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Þú ert að skoða tímaáætlun eigandans. Veldu Aðeins ég til að stilla þína eigin viðvörunaráætlun.",
   "Chọn giờ kết thúc báo động": "Veldu lokatíma viðvörunar",
   "Chọn giờ bắt đầu báo động": "Veldu upphafstíma viðvörunar",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Þú hefur ekki heimild til að breyta viðvörunaráætlun þessa heimilis",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Ekki tókst að nota viðvörun fyrir öll tæki",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Þetta heimili er ekki með öryggistæki sem hægt er að nota viðvörun fyrir",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Þú hefur ekki heimild til að breyta stillingum heimilisins. Veldu Aðeins ég.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Þú hefur ekki heimild til að breyta viðvörunaráætlun þessa heimilis",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Ekki tókst að nota viðvörun fyrir öll tæki",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Þetta heimili er ekki með öryggistæki sem hægt er að nota viðvörun fyrir",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Þú hefur ekki heimild til að breyta stillingum heimilisins. Veldu Aðeins ég.",
   "Không thể lưu chế độ báo động": "Ekki tókst að vista viðvörunarham",
   "Thêm nhắc nhở": "Bæta við áminningu",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Áminningin minnir þig á að athuga öryggisstöðu heimilisins á völdum tíma.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Áminningin minnir þig á að athuga öryggisstöðu heimilisins á völdum tíma.",
   "Thêm khung giờ báo động": "Bæta við tímabili viðvörunar",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Notar þínar eigin áminningarstillingar",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Notar þínar eigin áminningarstillingar",
   "Đang sử dụng nhắc nhở của chủ nhà": "Notar áminningarstillingar eigandans",
   "Sửa giờ nhắc nhở": "Breyta tíma áminningar",
   "Sửa giờ kết thúc báo động": "Breyta lokatíma viðvörunar",
@@ -531,118 +590,180 @@ const Map<String, String> isStrings = {
   "Xoá thành viên": "Fjarlægja meðlim",
   "Đã xoá thành viên": "Meðlimur fjarlægður",
   "Đồng ý": "Í lagi",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Ertu viss um að þú viljir yfirgefa þetta heimili?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Ertu viss um að þú viljir yfirgefa þetta heimili?",
   "Xoá thành viên?": "Fjarlægja meðlim?",
   "Rời khỏi nhà?": "Yfirgefa þetta heimili?",
-  "Chỉ chủ nhà mới được thay đổi vai trò": "Aðeins eigandinn getur breytt hlutverkum",
-  "Bạn không có quyền xoá thành viên này": "Þú hefur ekki heimild til að fjarlægja þennan meðlim",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Aðeins eigandinn getur breytt hlutverkum",
+  "Bạn không có quyền xoá thành viên này":
+      "Þú hefur ekki heimild til að fjarlægja þennan meðlim",
   "Bạn": "Þú",
   "Không có email": "Ekkert netfang",
   "Chưa có số điện thoại": "Ekkert símanúmer",
   "Không mở được ứng dụng gọi điện": "Ekki tókst að opna símaforritið",
-  "Thành viên chưa cập nhật số điện thoại": "Þessi meðlimur hefur ekki bætt við símanúmeri",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Handvirk Vernd er virk – skiptu yfir í Venjulegt til að slökkva á henni",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Þessi meðlimur hefur ekki bætt við símanúmeri",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Handvirk Vernd er virk – skiptu yfir í Venjulegt til að slökkva á henni",
   "Thời gian lặp": "Endurtekningarbil",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Veldu 0 til að fá aðeins eina viðvörun. Þessi stilling gildir bæði um handvirka Vernd og sjálfvirka vernd þegar allir eru fjarverandi.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Veldu 0 til að fá aðeins eina viðvörun. Þessi stilling gildir bæði um handvirka Vernd og sjálfvirka vernd þegar allir eru fjarverandi.",
   "Lặp báo động khi sự cố vẫn còn": "Endurtaka viðvörun meðan vandamálið varir",
   "Đang được sử dụng": "Virkt núna",
   "Chuyển về sử dụng thông thường": "Skipta aftur yfir í venjulega notkun",
   "Chế độ nhà": "Hamur heimilis",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS-tækið hefur ekki skráð viðvörun.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Reykskynjarinn hefur ekki greint vandamál.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Þú eða meðlimur virkjaði Vernd handvirkt.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome virkjaði Vernd sjálfkrafa vegna þess að þú yfirgafst heimilið.",
-  "Nhà đang ở chế độ dùng bình thường.": "Þetta heimili er í venjulegri notkun.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS-tækið hefur ekki skráð viðvörun.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Reykskynjarinn hefur ekki greint vandamál.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Þú eða meðlimur virkjaði Vernd handvirkt.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome virkjaði Vernd sjálfkrafa vegna þess að þú yfirgafst heimilið.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Þetta heimili er í venjulegri notkun.",
   "Bảo vệ thủ công đang bật": "Handvirk Vernd er virk",
   "Bảo vệ tự động đang bật": "Sjálfvirk Vernd er virk",
   "Bảo vệ đang tắt": "Vernd er óvirk",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Þú hefur opnað forritið nýlega til að athuga stöðuna.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Opnaðu forritið reglulega til að yfirfara heimildir, tímaáætlanir og ólesnar viðvaranir.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Eftir nokkur skipti getur SafeHome metið venjur þínar við að athuga forritið betur.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Þú hefur opnað forritið nýlega til að athuga stöðuna.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Opnaðu forritið reglulega til að yfirfara heimildir, tímaáætlanir og ólesnar viðvaranir.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Eftir nokkur skipti getur SafeHome metið venjur þínar við að athuga forritið betur.",
   "Tần suất vào ứng dụng ổn": "Tíðni athugana í forritinu lítur vel út",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Nokkuð er liðið frá síðustu athugun í forritinu",
-  "Đang ghi nhận tần suất vào ứng dụng": "Verið er að skrá tíðni athugana í forritinu",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Athugaðu staðsetningarheimildina Alltaf og skilyrði fyrir bakgrunnsvinnslu.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Þetta tæki uppfyllir kröfur fyrir Sjálfvirkt fjarverandi.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Virkjaðu það ef þú vilt að Vernd kvikni sjálfkrafa þegar þú yfirgefur heimilið.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Nokkuð er liðið frá síðustu athugun í forritinu",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Verið er að skrá tíðni athugana í forritinu",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Athugaðu staðsetningarheimildina Alltaf og skilyrði fyrir bakgrunnsvinnslu.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Þetta tæki uppfyllir kröfur fyrir Sjálfvirkt fjarverandi.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Virkjaðu það ef þú vilt að Vernd kvikni sjálfkrafa þegar þú yfirgefur heimilið.",
   "Auto rời khỏi nhà chưa ổn": "Sjálfvirkt fjarverandi er ekki tilbúið",
   "Auto rời khỏi nhà đã sẵn sàng": "Sjálfvirkt fjarverandi er tilbúið",
   "Auto rời khỏi nhà chưa bật": "Sjálfvirkt fjarverandi er ekki virkt",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Bættu við reykskynjara, SOS-tæki eða öðru neyðartæki sem hentar heimilinu.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Bættu við reykskynjara, SOS-tæki eða öðru neyðartæki sem hentar heimilinu.",
   "Chưa có thiết bị khẩn cấp": "Ekkert neyðartæki enn",
   "Đã có thiết bị khẩn cấp": "Neyðartækjum hefur verið bætt við",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Stilltu viðvörunaráætlun fyrir svefntíma eða þegar þú ert fjarverandi.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Þetta heimili er með viðvörunaráætlun eða viðvaranir fyrir einstök tæki.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Stilltu viðvörunaráætlun fyrir svefntíma eða þegar þú ert fjarverandi.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Þetta heimili er með viðvörunaráætlun eða viðvaranir fyrir einstök tæki.",
   "Chưa cài lịch báo động": "Viðvörunaráætlun er ekki stillt",
   "Đã cài lịch báo động": "Viðvörunaráætlun er stillt",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Stilltu að minnsta kosti eina áminningu svo þú gleymir ekki að athuga heimilið.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Forritið minnir þig á að athuga heimilið samkvæmt áætlun.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Stilltu að minnsta kosti eina áminningu svo þú gleymir ekki að athuga heimilið.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Forritið minnir þig á að athuga heimilið samkvæmt áætlun.",
   "Chưa cài đặt nhắc nhở": "Áminning er ekki sett upp",
   "Đã cài đặt nhắc nhở": "Áminning er sett upp",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Opnaðu forritið aftur eða skráðu þig aftur inn ef þetta tæki fær ekki viðvaranir.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Þetta tæki er ekki skráð til að fá viðvaranir",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Opnaðu forritið aftur eða skráðu þig aftur inn ef þetta tæki fær ekki viðvaranir.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Þetta tæki er ekki skráð til að fá viðvaranir",
   "Thiết bị nhận cảnh báo bình thường": "Þetta tæki getur fengið viðvaranir",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS stjórnar bakgrunnsvinnslu strangar en Android. Hafðu tilkynningar og staðsetningarheimildina Alltaf virka ef þú notar Sjálfvirkt fjarverandi.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS stjórnar bakgrunnsvinnslu strangar en Android. Hafðu tilkynningar og staðsetningarheimildina Alltaf virka ef þú notar Sjálfvirkt fjarverandi.",
   "Cơ chế iOS": "Virkni iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Athugaðu heimild fyrir bakgrunnsvinnslu og sjálfvirka ræsingu svo viðvaranir tefjist ekki.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Tækið hefur staðfest mikilvægu skilyrðin fyrir bakgrunnsvinnslu.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Athuga bakgrunnsvinnslu/sjálfvirka ræsingu",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Athugaðu heimild fyrir bakgrunnsvinnslu og sjálfvirka ræsingu svo viðvaranir tefjist ekki.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Tækið hefur staðfest mikilvægu skilyrðin fyrir bakgrunnsvinnslu.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Athuga bakgrunnsvinnslu/sjálfvirka ræsingu",
   "Chạy nền ổn định": "Bakgrunnsvinnsla virðist stöðug",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Sumir Android-símar geta tafið viðvaranir meðan rafhlöðuhagræðing er virk.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Síminn er ólíklegri til að tefja SafeHome-viðvaranir.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Sumir Android-símar geta tafið viðvaranir meðan rafhlöðuhagræðing er virk.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Síminn er ólíklegri til að tefja SafeHome-viðvaranir.",
   "Chưa tắt tối ưu pin": "Rafhlöðuhagræðing er enn virk",
   "Tối ưu pin không chặn ứng dụng": "Rafhlöðuhagræðing hindrar ekki forritið",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Sjálfvirkt fjarverandi þarf staðsetningarheimildina Alltaf til að virka áreiðanlega.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Staðsetningarheimild er nauðsynleg fyrir Sjálfvirkt fjarverandi.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Staðsetningarþjónusta er slökkt, svo Sjálfvirkt fjarverandi virkar hugsanlega ekki áreiðanlega.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Þessi heimild er aðeins nauðsynleg þegar Sjálfvirkt fjarverandi er notað.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Sjálfvirkt fjarverandi þarf staðsetningarheimildina Alltaf til að virka áreiðanlega.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Staðsetningarheimild er nauðsynleg fyrir Sjálfvirkt fjarverandi.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Staðsetningarþjónusta er slökkt, svo Sjálfvirkt fjarverandi virkar hugsanlega ekki áreiðanlega.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Þessi heimild er aðeins nauðsynleg þegar Sjálfvirkt fjarverandi er notað.",
   "Chưa cấp vị trí luôn luôn": "Staðsetning Alltaf er ekki leyfð",
   "Đã cấp vị trí luôn luôn": "Staðsetning Alltaf er leyfð",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS opnar ekki á öllum skjánum eins og Android. Forritið notar kerfistilkynningar og hljóð.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android notar viðvaranir á öllum skjánum. Veittu heimild í stillingum ef síminn hindrar þær.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS opnar ekki á öllum skjánum eins og Android. Forritið notar kerfistilkynningar og hljóð.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android notar viðvaranir á öllum skjánum. Veittu heimild í stillingum ef síminn hindrar þær.",
   "Cảnh báo trên iOS": "Viðvaranir á iOS",
   "Cảnh báo toàn màn hình": "Viðvaranir á öllum skjánum",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Viðvaranir birtast hugsanlega ekki ef slökkt er á tilkynningum.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Þessi sími getur fengið SafeHome-tilkynningar.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Viðvaranir birtast hugsanlega ekki ef slökkt er á tilkynningum.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Þessi sími getur fengið SafeHome-tilkynningar.",
   "Chưa bật thông báo": "Tilkynningar eru ekki virkar",
   "Đã bật thông báo": "Tilkynningar eru virkar",
   "Hệ thống: Sẵn sàng": "Kerfi: Tilbúið",
-  "Hệ thống: Có thể bỏ lỡ cảnh báo": "Kerfi: Viðvaranir gætu farið fram hjá þér",
+  "Hệ thống: Có thể bỏ lỡ cảnh báo":
+      "Kerfi: Viðvaranir gætu farið fram hjá þér",
   "Cách bạn đang dùng ứng dụng": "Hvernig þú notar forritið",
   "Thiết bị của bạn": "Tækið þitt",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Athugar símann þinn og hvernig þú notar forritið.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Athugar símann þinn og hvernig þú notar forritið.",
   "Hệ thống SafeHome": "SafeHome-kerfi",
   "Hệ thống: Đang kiểm tra...": "Kerfi: Athugar...",
   "Tên": "Nafn",
-  "Bạn không có quyền thay đổi vị trí nhà": "Þú hefur ekki heimild til að breyta staðsetningu heimilisins",
-  "Hãy bật GPS để đặt vị trí nhà": "Kveiktu á GPS til að stilla staðsetningu heimilisins",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Þú hefur ekki heimild til að breyta staðsetningu heimilisins",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Kveiktu á GPS til að stilla staðsetningu heimilisins",
   "Bạn chưa cấp quyền vị trí": "Staðsetningarheimild hefur ekki verið veitt",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Veittu staðsetningarheimild í stillingum forritsins",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Sjálfvirk Vernd þegar allir yfirgefa heimilið er virk",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Sjálfvirk Vernd þegar allir yfirgefa heimilið er óvirk",
-  "Không thể thay đổi trạng thái báo động": "Ekki tókst að breyta stöðu viðvörunar",
-  "Đã tắt toàn bộ báo động của nhà": "Slökkt hefur verið á öllum viðvörunum heimilisins",
-  "QR này không phải mã xin gia nhập Home": "Þessi QR-kóði er ekki kóði til að tengjast heimili",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Veittu staðsetningarheimild í stillingum forritsins",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Sjálfvirk Vernd þegar allir yfirgefa heimilið er virk",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Sjálfvirk Vernd þegar allir yfirgefa heimilið er óvirk",
+  "Không thể thay đổi trạng thái báo động":
+      "Ekki tókst að breyta stöðu viðvörunar",
+  "Đã tắt toàn bộ báo động của nhà":
+      "Slökkt hefur verið á öllum viðvörunum heimilisins",
+  "QR này không phải mã xin gia nhập Home":
+      "Þessi QR-kóði er ekki kóði til að tengjast heimili",
   "Thêm Home": "Bæta við heimili",
   "Mở cài đặt": "Opna stillingar",
   "Để sau": "Síðar",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome þarf staðsetningarheimildina Alltaf til að greina þegar þú yfirgefur heimilið eða kemur aftur, einnig þegar forritið keyrir í bakgrunni.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome getur nú aðeins fengið aðgang að staðsetningu meðan forritið er í notkun.\n\nOpnaðu staðsetningarheimild og veldu \"Leyfa alltaf\" svo sjálfvirk vernd haldi áfram að virka í bakgrunni.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome þarf staðsetningarheimildina Alltaf til að greina þegar þú yfirgefur heimilið eða kemur aftur, einnig þegar forritið keyrir í bakgrunni.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome getur nú aðeins fengið aðgang að staðsetningu meðan forritið er í notkun.\n\nOpnaðu staðsetningarheimild og veldu \"Leyfa alltaf\" svo sjálfvirk vernd haldi áfram að virka í bakgrunni.",
   "Cho phép vị trí luôn luôn": "Leyfa staðsetningu alltaf",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Heimilunum þínum verður eytt.\nÞú yfirgefur deildu heimilin.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Þetta breytir viðvörunaráætlunum allra öryggistækja á völdum heimilum.\n\nÞetta hefur áhrif á meðlimi sem nota viðvörunarstillingar heimilisins.\nPersónulegum viðvörunarstillingum verður ekki breytt.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Þetta bætir áminningu við völdu heimilin.\n\nÞetta hefur áhrif á meðlimi sem nota áminningarstillingar heimilisins.\nPersónulegum áminningarstillingum verður ekki breytt.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Strax verður fylgst með öryggistækjum.\n\nSjálfvirk Vernd þegar allir eru fjarverandi verður sett í bið. Þessi hamur slekkur ekki sjálfkrafa á sér þegar einhver kemur heim og meðlimur með heimild þarf að skipta aftur yfir í Venjulegt.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Þessi aðgerð breytir viðvörunartíma sumra tækja í dag...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Þessi aðgerð gerir allar viðvaranir þessa heimilis óvirkar. Þú færð ekki lengur hættuviðvaranir í þennan síma.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Viðvörun notar stillingar heimilisins.\n\nÞú færð viðvaranir samkvæmt sameiginlegum tímaáætlunum sem eigandinn eða stjórnandi hefur stillt.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Viðvörun notar Mínar stillingar.\n\nÞú færð viðvaranir samkvæmt persónulegum viðvörunaráætlunum þessa reiknings.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Heimilunum þínum verður eytt.\nÞú yfirgefur deildu heimilin.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Þetta breytir viðvörunaráætlunum allra öryggistækja á völdum heimilum.\n\nÞetta hefur áhrif á meðlimi sem nota viðvörunarstillingar heimilisins.\nPersónulegum viðvörunarstillingum verður ekki breytt.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Þetta bætir áminningu við völdu heimilin.\n\nÞetta hefur áhrif á meðlimi sem nota áminningarstillingar heimilisins.\nPersónulegum áminningarstillingum verður ekki breytt.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Strax verður fylgst með öryggistækjum.\n\nSjálfvirk Vernd þegar allir eru fjarverandi verður sett í bið. Þessi hamur slekkur ekki sjálfkrafa á sér þegar einhver kemur heim og meðlimur með heimild þarf að skipta aftur yfir í Venjulegt.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Þessi aðgerð breytir viðvörunartíma sumra tækja í dag...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Þessi aðgerð gerir allar viðvaranir þessa heimilis óvirkar. Þú færð ekki lengur hættuviðvaranir í þennan síma.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Viðvörun notar stillingar heimilisins.\n\nÞú færð viðvaranir samkvæmt sameiginlegum tímaáætlunum sem eigandinn eða stjórnandi hefur stillt.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Viðvörun notar Mínar stillingar.\n\nÞú færð viðvaranir samkvæmt persónulegum viðvörunaráætlunum þessa reiknings.",
   "Không thể đăng nhập bằng Google": "Ekki tókst að skrá inn með Google",
   "Không đặt được mật khẩu": "Ekki tókst að stilla lykilorð",
   "Chấp nhận": "Samþykkja",
   "Cho phép": "Leyfa",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Ekki tókst að samþykkja boðið. Reyndu aftur.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Ekki tókst að samþykkja beiðni um aðgang að heimilinu. Reyndu aftur.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Ekki tókst að samþykkja boðið. Reyndu aftur.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Ekki tókst að samþykkja beiðni um aðgang að heimilinu. Reyndu aftur.",
   "Từ chối": "Hafna",
   "Lời mời từ chủ nhà": "Boð frá eigandanum",
   "Nhận quyền chủ nhà": "Taka við eignarhaldi heimilis",
@@ -652,7 +773,8 @@ const Map<String, String> isStrings = {
   "Nhập HUB ID": "Sláðu inn HUB-auðkenni",
   "VD: HUB_001": "Dæmi: HUB_001",
   "Pair": "Para",
-  "Mật khẩu tối thiểu 6 ký tự": "Lykilorðið þarf að vera að minnsta kosti 6 stafir",
+  "Mật khẩu tối thiểu 6 ký tự":
+      "Lykilorðið þarf að vera að minnsta kosti 6 stafir",
   "Mật khẩu nhập lại không khớp": "Lykilorðin passa ekki saman",
   "Tạo mật khẩu": "Búa til lykilorð",
   "Mật khẩu mới": "Nýtt lykilorð",
@@ -664,15 +786,19 @@ const Map<String, String> isStrings = {
   "KIỂM TRA NHÀ": "ATHUGA HEIMILI",
   "ĐÓNG NHẮC NHỞ": "LOKA ÁMINNINGU",
   "SafeHome Security Alert": "SafeHome-öryggisviðvörun",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Veldu staðsetningarheimildina Leyfa alltaf í stillingum forritsins",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google-reikningurinn þinn þarf viðbótarlykilorð til að nota öryggiseiginleika.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Veldu staðsetningarheimildina Leyfa alltaf í stillingum forritsins",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google-reikningurinn þinn þarf viðbótarlykilorð til að nota öryggiseiginleika.",
   "Báo động": "Viðvörun",
-  "Bạn không có quyền thực hiện thao tác này。": "Þú hefur ekki heimild til að framkvæma þessa aðgerð.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Þú hefur ekki heimild til að framkvæma þessa aðgerð.",
   "Cài đặt": "Stillingar",
   "Cập nhật": "Uppfæra",
   "Chọn ngôn ngữ": "Velja tungumál",
   "Chưa có dữ liệu thiết bị để đánh giá": "Engin tækjagögn tiltæk til mats",
-  "Chuyển quyền sở hữu cho thành viên khác": "Flytja eignarhald til annars meðlims",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Flytja eignarhald til annars meðlims",
   "Có": "Já",
   "Cửa đã đóng an toàn": "Hurðin er tryggilega lokuð",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Villa kom upp. Reyndu aftur.",
@@ -684,13 +810,15 @@ const Map<String, String> isStrings = {
   "Hub chưa gửi trạng thái": "Staða Hub er ekki tiltæk",
   "Hub mất kết nối": "Hub er ótengt",
   "Hub tín hiệu bình thường": "Hub er tengt",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Ólæst meðan heimilið er í Verndarham",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Ólæst meðan heimilið er í Verndarham",
   "Khóa đang mở trong giờ báo động": "Ólæst á viðvörunartíma",
   "Không có thông báo": "Engar tilkynningar",
   "Khu vực nguy hiểm": "Hættusvæði",
   "Kiểm tra thiết bị trong nhà này": "Farðu yfir tækin á þessu heimili",
   "Mất điện lưới": "Rafmagn af dreifikerfi rofið",
-  "Mời người khác tham gia nhà này": "Bjóddu einhverjum að tengjast þessu heimili",
+  "Mời người khác tham gia nhà này":
+      "Bjóddu einhverjum að tengjast þessu heimili",
   "Môi trường hiện tại": "Núverandi umhverfi",
   "MQTT mất kết nối": "MQTT er ótengt",
   "Ngôn ngữ": "Tungumál",
@@ -712,7 +840,8 @@ const Map<String, String> isStrings = {
   "Thành viên đang ở ngoài": "Meðlimir sem eru fjarverandi núna",
   "Thành viên chưa xác định vị trí": "Meðlimir með óþekkta staðsetningu",
   "Thay đổi ngôn ngữ hiển thị": "Breyta birtingartungumáli",
-  "Thêm, đổi tên và sắp xếp phòng": "Bæta við, endurnefna og endurraða herbergjum",
+  "Thêm, đổi tên và sắp xếp phòng":
+      "Bæta við, endurnefna og endurraða herbergjum",
   "Thiết bị đang được giám sát": "Fylgst er með tækinu",
   "Tiếng Anh": "Enska",
   "Tiếng Hàn": "Kóreska",
@@ -730,201 +859,296 @@ const Map<String, String> isStrings = {
   "Đã tạo nhà": "Heimili stofnað",
   "Chế độ Bảo vệ thủ công đã bật": "Handvirk Vernd virkjuð",
   "Báo động không lặp lại.": "Viðvörunin verður ekki endurtekin.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Viðvörunin endurtekur sig eftir \$securityModeRepeatMinutes mínútur ef vandamálið varir.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName virkjaði Handvirka Vernd fyrir \"\$homeName\". Þessi hamur slekkur aðeins á sér þegar meðlimur með heimild skiptir aftur yfir í Venjulegt. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Þú virkjaðir viðvörun fyrir \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Þú gerðir allar viðvaranir fyrir \"\$homeName\" óvirkar.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Viðvörunin endurtekur sig eftir \$securityModeRepeatMinutes mínútur ef vandamálið varir.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName virkjaði Handvirka Vernd fyrir \"\$homeName\". Þessi hamur slekkur aðeins á sér þegar meðlimur með heimild skiptir aftur yfir í Venjulegt. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Þú virkjaðir viðvörun fyrir \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Þú gerðir allar viðvaranir fyrir \"\$homeName\" óvirkar.",
   "Thành viên mới": "Nýr meðlimur",
   "Thành viên rời nhà": "Meðlimur yfirgaf heimilið",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName yfirgaf \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName breytti hlutverki \$memberName úr \$oldRoleName í \$newRoleName á \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName yfirgaf \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName breytti hlutverki \$memberName úr \$oldRoleName í \$newRoleName á \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "\$count ólesin skilaboð",
   "Hãy an tâm nghỉ ngơi.": "Þú getur hvílst örugglega.",
   "Có thiết bị chưa an toàn.": "Sum tæki eru ekki örugg.",
   "SafeHome đang cập nhật vị trí": "SafeHome uppfærir staðsetningu",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Fylgist með til að virkja Verndarham sjálfkrafa.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Notar staðsetningu til að virkja Verndarham sjálfkrafa þegar allir yfirgefa heimilið.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Fylgist með til að virkja Verndarham sjálfkrafa.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Notar staðsetningu til að virkja Verndarham sjálfkrafa þegar allir yfirgefa heimilið.",
   "CẢNH BÁO SOS": "SOS-VIÐVÖRUN",
   "CẢNH BÁO KHÓI / CHÁY": "REYK-/ELDVIÐVÖRUN",
   "CẢNH BÁO NGẬP NƯỚC": "FLÓÐVIÐVÖRUN",
   "CẢNH BÁO RÒ KHÍ": "GASLEKAVIÐVÖRUN",
   "CẢNH BÁO CỬA": "HURÐARVIÐVÖRUN",
   "CẢNH BÁO AN NINH": "ÖRYGGISVIÐVÖRUN",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Ekki tókst að staðfesta við SafeHome. Athugaðu tenginguna og reyndu aftur.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Stöðvaðu viðvörun aðeins eftir að þú hefur athugað ástand heimilisins.\n\nErtu viss um að þú viljir stöðva viðvörunina?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Ekki tókst að staðfesta við SafeHome. Athugaðu tenginguna og reyndu aftur.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Stöðvaðu viðvörun aðeins eftir að þú hefur athugað ástand heimilisins.\n\nErtu viss um að þú viljir stöðva viðvörunina?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome greindi viðvörun",
   "Mở SafeHome để kiểm tra ngay.": "Opnaðu SafeHome til að athuga strax.",
   "\$count tin nhắn mới": "\$count ný skilaboð",
   "Tin nhắn HomeChat": "HomeChat-skilaboð",
   "\$senderName đã gửi một tin nhắn": "\$senderName sendi skilaboð",
   "Bạn có tin nhắn mới": "Þú ert með ný skilaboð",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Verndarhamur varar aðeins einu sinni",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Verndarhamur endurtekur viðvörunina eftir \$minutes mínútur",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Beiðnir um aðgang sendar fyrir \$count heimili",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName bað um aðgang að \"\$homeName\".",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Verndarhamur varar aðeins einu sinni",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Verndarhamur endurtekur viðvörunina eftir \$minutes mínútur",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Beiðnir um aðgang sendar fyrir \$count heimili",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName bað um aðgang að \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "Þú eyddir \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Þú sendir beiðni um flutning eignarhalds fyrir \"\$homeName\" til \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName vill flytja eignarhald á \"\$homeName\" til þín.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName bauð þér að tengjast \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome fjarlægir \"\$deviceName\" af \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Tækinu \"\$deviceName\" var bætt við \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Þú sendir beiðni um flutning eignarhalds fyrir \"\$homeName\" til \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName vill flytja eignarhald á \"\$homeName\" til þín.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName bauð þér að tengjast \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome fjarlægir \"\$deviceName\" af \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Tækinu \"\$deviceName\" var bætt við \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Þú stofnaðir heimilið \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName uppfærði heiti heimilisins í \"\$newName\" og breytti heimilisfanginu.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName endurnefndi heimilið sem \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName uppfærði heimilisfangið fyrir \"\$newName\".",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName endurnefndi tækið \"\$oldDeviceName\" sem \"\$newName\" á \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName uppfærði heiti heimilisins í \"\$newName\" og breytti heimilisfanginu.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName endurnefndi heimilið sem \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName uppfærði heimilisfangið fyrir \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName endurnefndi tækið \"\$oldDeviceName\" sem \"\$newName\" á \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Pörun: \$seconds sek.",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Pörun tækja var virkjuð á \"\$homeName\" í \$seconds sekúndur.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Hléstímabilið verður að vera innan viðvörunaráætlunarinnar (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total próf staðist\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name hefur ekki bætt símanúmeri við notandaupplýsingar sínar.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Pörun tækja var virkjuð á \"\$homeName\" í \$seconds sekúndur.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Hléstímabilið verður að vera innan viðvörunaráætlunarinnar (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total próf staðist\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name hefur ekki bætt símanúmeri við notandaupplýsingar sínar.",
   "Tin nhắn mới trong \$homeName": "Ný skilaboð á \$homeName",
   "\$current/\$total kết quả": "\$current/\$total niðurstöður",
   "Đang trả lời \$name": "Svarar \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" greindi reyk á \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" er aftur í eðlilegu ástandi.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" virkjaði SOS á \"\$homeName\".",
-  "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" er ekki lengur í SOS-ástandi.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" tilkynnti um inngrip á \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Viðvörun um inngrip fyrir \"\$name\" hefur hreinsast.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" lokaðist á \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" er opið á \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" á \"\$homeName\" er með litla hleðslu.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" á \"\$homeName\" fór af netinu.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" á \"\$homeName\" er aftur á netinu.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" skráði hátt hitastig á \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" skráði hátt rakastig á \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" greindi reyk á \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" er aftur í eðlilegu ástandi.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" virkjaði SOS á \"\$homeName\".",
+  "\"\$name\" đã hết trạng thái SOS.":
+      "\"\$name\" er ekki lengur í SOS-ástandi.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" tilkynnti um inngrip á \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Viðvörun um inngrip fyrir \"\$name\" hefur hreinsast.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" lokaðist á \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" er opið á \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$name\" á \"\$homeName\" er með litla hleðslu.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$name\" á \"\$homeName\" fór af netinu.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$name\" á \"\$homeName\" er aftur á netinu.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" skráði hátt hitastig á \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" skráði hátt rakastig á \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "SOS-hnappur var virkjaður",
   "Có dấu hiệu khói hoặc cháy": "Reykur eða eldur greindist",
   "Có dấu hiệu ngập nước": "Flóð greindist",
   "Có dấu hiệu rò khí": "Gasleki greindist",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Hurð er opin eða átt hefur verið við tæki",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Hurð er opin eða átt hefur verið við tæki",
   "Có thiết bị đang cảnh báo": "Tæki gefur viðvörun",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Ef enginn staðfestir mun SafeHome hefja neyðarsímtal.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Varar aftur við kl. \$time ef ekki hefur verið brugðist við vandamálinu.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Varar aftur við samkvæmt viðvörunaráætlun ef ekki hefur verið brugðist við vandamálinu.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" lokaðist á \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" er opið á \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ef enginn staðfestir mun SafeHome hefja neyðarsímtal.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Varar aftur við kl. \$time ef ekki hefur verið brugðist við vandamálinu.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Varar aftur við samkvæmt viðvörunaráætlun ef ekki hefur verið brugðist við vandamálinu.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" lokaðist á \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" er opið á \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count heimili valin",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count óörugg heimili\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count heimili þurfa athygli\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count heimili þurfa athygli\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count örugg heimili",
   "\$count nhà đang được theo dõi": "Fylgst er með \$count heimilum",
   "\$minutes phút": "\$minutes mínútur",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Áminning var stillt fyrir \$updatedHomes heimili.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Viðvörun var stillt fyrir \$updatedDevices tæki á \$updatedHomes heimilum.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Heimilunum sem þú stjórnar var deilt.\n\n\$skipped heimilum var sleppt vegna þess að þú hefur ekki heimild til að deila þeim.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Viðvörun var notuð fyrir \$count öryggistæki",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Nota sömu tímaáætlun fyrir \$count öryggistæki",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Áminning var stillt fyrir \$updatedHomes heimili.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Viðvörun var stillt fyrir \$updatedDevices tæki á \$updatedHomes heimilum.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Heimilunum sem þú stjórnar var deilt.\n\n\$skipped heimilum var sleppt vegna þess að þú hefur ekki heimild til að deila þeim.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Viðvörun var notuð fyrir \$count öryggistæki",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Nota sömu tímaáætlun fyrir \$count öryggistæki",
   "\$count phút trước": "Fyrir \$count mínútum",
   "\$count giờ trước": "Fyrir \$count klukkustundum",
   "\${count}h trước": "Fyrir \${count} klst.",
   "\${hours}h\$minutes' trước": "Fyrir \${hours} klst. og \$minutes mín.",
   "\$count ngày trước": "Fyrir \$count dögum",
   "\$count tháng trước": "Fyrir \$count mánuðum",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Ertu viss um að þú viljir fjarlægja \$name af þessu heimili?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nBiður um aðgang að \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Ertu viss um að þú viljir fjarlægja \$name af þessu heimili?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nBiður um aðgang að \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Biður um aðgang að \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Þér hefur verið boðið að taka við eignarhaldi á \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nBýður þér að tengjast \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Þér hefur verið boðið að taka við eignarhaldi á \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nBýður þér að tengjast \"\$homeName\"",
   "Mời bạn gia nhập \"\$homeName\"": "Býður þér að tengjast \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Krefst athygli: \$joined",
   "Cập nhật \$value": "Uppfært \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Bættu við fyrsta SafeHome-tækinu þínu til að hefja vöktun þessa heimilis.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Athugaðu fyrst neyðarviðvaranir og hafðu síðan samband við meðlimi heimilisins ef þörf krefur.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Enginn meðlimur er heima en hurð eða lás er opin. Athugaðu það strax.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Athugaðu opnu hurðina eða lásinn áður en heimilið er haft í Verndarham.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Einhver gæti enn verið heima. Ef svo er skaltu skipta aftur yfir í Venjulegt.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Staðsetning sumra meðlima er óþekkt. Biddu þá að opna forritið eða athuga staðsetningarheimild.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Tæki er ótengt. Athugaðu rafhlöðu, aflgjafa eða staðsetningu þess.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Tæki er með litla hleðslu. Skiptu fljótlega um rafhlöðu til að forðast að viðvaranir tapist.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Áminning er ekki stillt. Búðu til áætlun til að athuga heimilið reglulega.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Viðvörunaráætlun er ekki stillt. Virkjaðu vernd á tímum þegar þú ert venjulega fjarverandi.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Engin tafarlaus aðgerð er nauðsynleg. Haltu áfram að fylgjast með heimilinu.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Bættu við fyrsta SafeHome-tækinu þínu til að hefja vöktun þessa heimilis.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Athugaðu fyrst neyðarviðvaranir og hafðu síðan samband við meðlimi heimilisins ef þörf krefur.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Enginn meðlimur er heima en hurð eða lás er opin. Athugaðu það strax.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Athugaðu opnu hurðina eða lásinn áður en heimilið er haft í Verndarham.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Einhver gæti enn verið heima. Ef svo er skaltu skipta aftur yfir í Venjulegt.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Staðsetning sumra meðlima er óþekkt. Biddu þá að opna forritið eða athuga staðsetningarheimild.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Tæki er ótengt. Athugaðu rafhlöðu, aflgjafa eða staðsetningu þess.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Tæki er með litla hleðslu. Skiptu fljótlega um rafhlöðu til að forðast að viðvaranir tapist.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Áminning er ekki stillt. Búðu til áætlun til að athuga heimilið reglulega.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Viðvörunaráætlun er ekki stillt. Virkjaðu vernd á tímum þegar þú ert venjulega fjarverandi.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Engin tafarlaus aðgerð er nauðsynleg. Haltu áfram að fylgjast með heimilinu.",
   "Lặp sau \$minutes phút": "Endurtaka eftir \$minutes mínútur",
   "Đang dùng • \$repeatText": "Virkt • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Öryggisvöktun • \$repeatText",
   "Gia đình: \$mode": "Hamur heimilis: \$mode",
   "Gợi ý xử lý": "Tillögur að aðgerðum",
   "Phát hiện \$count vấn đề cần xử lý": "\$count vandamál þurfa athygli",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Hurðir voru notaðar \$count sinnum í dag",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Hurðir voru notaðar \$count sinnum í dag",
   "Đã ghi nhận \$count hoạt động gần đây": "\$count nýlegar aðgerðir skráðar",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Kerfi: \$issueCount atriði þarf að athuga",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM-auðkennið er tilbúið í þessum síma.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM-auðkennið er tilbúið en Sjálfvirkt fjarverandi uppfyllir ekki eitt skilyrði.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "\$emergencyTotal neyðartæki fundust. Ráðlagt lágmark: reykskynjari og SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Flytja eignarhald heimilis til:\n\$targetEmail?",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Kerfi: \$issueCount atriði þarf að athuga",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM-auðkennið er tilbúið í þessum síma.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM-auðkennið er tilbúið en Sjálfvirkt fjarverandi uppfyllir ekki eitt skilyrði.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "\$emergencyTotal neyðartæki fundust. Ráðlagt lágmark: reykskynjari og SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Flytja eignarhald heimilis til:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count hurðir tryggilega lokaðar",
   "\$count cửa và khóa đã an toàn": "\$count hurðir og lásar tryggð",
   "\$count thiết bị đang được theo dõi": "Fylgst er með \$count tækjum",
   "Cập nhật \$timeText": "Uppfært \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Nýjustu gögn voru uppfærð fyrir \$count mínútum",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Nýjustu gögn voru uppfærð fyrir \$count klukkustundum",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Nýjustu gögn voru uppfærð fyrir \$count mínútum",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Nýjustu gögn voru uppfærð fyrir \$count klukkustundum",
   "Thành viên trong nhà: \$count": "Meðlimir heima: \$count",
   "Thành viên bên ngoài: \$count": "Meðlimir fjarverandi: \$count",
   "Chưa xác định vị trí: \$count": "Óþekkt staðsetning: \$count",
   "Môi trường hiện tại: \$environment": "Núverandi umhverfi: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Opið meðan heimilið er í Verndarham",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Opið meðan heimilið er í Verndarham",
   "An tâm hơn trong từng ngôi nhà": "Hugarró á hverju heimili",
   "Báo động SafeHome": "SafeHome-viðvörun",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Öryggisviðvörun krefst tafarlausrar athugunar.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Öryggisviðvörun krefst tafarlausrar athugunar.",
   "Có cảnh báo cần kiểm tra": "Viðvörun krefst athygli þinnar",
   "Tự đóng sau \$time": "Lokast sjálfkrafa eftir \$time",
   "Ngày trong tuần": "Vikudagar",
   "Hoặc": "Eða",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Upphafs- og lokatími mega ekki vera eins",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Lokatíminn þarf að vera eftir núverandi tíma",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Upphafs- og lokatími mega ekki vera eins",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Lokatíminn þarf að vera eftir núverandi tíma",
   "Khoảng tạm tắt không hợp lệ": "Ógilt hlébil viðvörunar",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Hlébilið skarast ekki við neina virka viðvörunaráætlun",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Hlébilið skarast ekki við neina virka viðvörunaráætlun",
   "Cài đặt báo động": "Viðvörunarstillingar",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Stjórnaðu því hvernig þessi skynjari virkjar viðvaranir.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Stjórnaðu því hvernig þessi skynjari virkjar viðvaranir.",
   "Tham gia báo động": "Taka þátt í viðvörunum",
-  "Tắt để cảm biến không tạo báo động.": "Slökktu til að koma í veg fyrir að skynjarinn stofni viðvörun.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Slökktu til að koma í veg fyrir að skynjarinn stofni viðvörun.",
   "Bật còi vật lý": "Virkja líkamlega sírenu",
   "Cho phép kích hoạt còi trong nhà.": "Leyfa sírenu heimilisins að virkjast.",
   "Đánh thức màn hình": "Vekja skjá",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Sýna viðvörun á öllum skjánum í símanum.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Sýna viðvörun á öllum skjánum í símanum.",
   "Độ trễ kích hoạt": "Seinkun virkjunar",
   "Chỉ áp dụng cho cảm biến an ninh.": "Gildir aðeins um öryggisskynjara.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Neyðarskynjarar virkjast alltaf samstundis.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Neyðarskynjarar virkjast alltaf samstundis.",
   "Ngay lập tức": "Samstundis",
   "giây": "sekúndur",
   "Đã lưu cấu hình báo động": "Viðvörunarstillingar vistaðar",
   "Không thể lưu cấu hình báo động": "Ekki tókst að vista viðvörunarstillingar",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Aðeins eigandi heimilisins og stjórnendur geta breytt þessari stillingu.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Aðeins eigandi heimilisins og stjórnendur geta breytt þessari stillingu.",
   "Thông tin chi tiết": "Upplýsingar um tæki",
   "Thông báo báo động": "Viðvörunartilkynning",
   "Cài đặt nhắc nhở": "Áminningarstillingar",
   "Nhắc nhở theo lịch": "Tímasett áminning",
   "Danh sách thông báo": "Tilkynningar",
   "Cài đặt thông báo": "Tilkynningastillingar",
-  "Sử dụng báo động theo lịch đã thiết lập": "Nota skilgreinda viðvörunaráætlun",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Senda aðeins tilkynningar. Ekki virkja viðvörunina",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Slökkt er á öllum viðvörunum heimilisins. Kerfið sendir aðeins tilkynningar.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Aðeins eigandinn getur virkjað þennan ham.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Nota skilgreinda viðvörunaráætlun",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Senda aðeins tilkynningar. Ekki virkja viðvörunina",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Slökkt er á öllum viðvörunum heimilisins. Kerfið sendir aðeins tilkynningar.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Aðeins eigandinn getur virkjað þennan ham.",
   "Bật Không bảo vệ?": "Virkja Óvarið ham?",
-  "Cảm biến vừa phát hiện một sự kiện.": "Skynjari greindi rétt í þessu atburð.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Aðeins eigandinn getur virkjað Óvarið ham",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "Skynjari greindi rétt í þessu atburð.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Aðeins eigandinn getur virkjað Óvarið ham",
   "Đã chuyển nhà sang Không bảo vệ": "Heimilið var sett í Óvarið ham",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Skipt var í Óvarið ham en ekki tókst að senda tilkynninguna",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Skipt var í Óvarið ham en ekki tókst að senda tilkynninguna",
   "Giám sát toàn diện": "Full vöktun",
   "Không bảo vệ": "Óvarið",
   "Không bảo vệ đang bật": "Óvarið hamur er virkur",
   "Nhà đã chuyển sang Không bảo vệ": "Heimilið var sett í Óvarið ham",
   "Thông báo cảm biến": "Skynjaratilkynningar",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Venjulegar tilkynningar þegar skynjari greinir atburð.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Venjulegar tilkynningar þegar skynjari greinir atburð.",
   "Tôi hiểu, tiếp tục": "Ég skil, halda áfram",
   "Cảnh báo an ninh đã kết thúc": "Öryggisviðvöruninni er lokið",
   "Sự cố nguy hiểm đã kết thúc": "Neyðartilvikinu er lokið",
   "Cảnh báo đã được kết thúc.": "Viðvöruninni er lokið.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Önnur viðvörun er enn virk.",
   "Báo động đã hoạt động trở lại": "Viðvörunin er aftur virk",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Hléstímabili viðvörunar er lokið.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Hléstímabili viðvörunar er lokið.",
   "MQTT đã kết nối trở lại": "MQTT er aftur tengt",
   "Còi báo động đã được tắt": "Slökkt var á líkamlegu sírenunni",
   "Sự cố vẫn đang được theo dõi.": "Enn er fylgst með atvikinu.",
   "Bảo vệ tự động đã bật": "Sjálfvirk vernd virkjuð",
-  "Toàn bộ thành viên đã rời khỏi nhà.": "Allir meðlimir hafa yfirgefið heimilið.",
+  "Toàn bộ thành viên đã rời khỏi nhà.":
+      "Allir meðlimir hafa yfirgefið heimilið.",
   "Bảo vệ tự động đã tắt": "Sjálfvirk vernd óvirk",
   "Có thành viên đã trở về nhà.": "Meðlimur hefur komið heim.",
   "Thiết bị đã được xoá": "Tækið var fjarlægt",
@@ -934,34 +1158,47 @@ const Map<String, String> isStrings = {
   "Nhà đang ở chế độ Bình thường.": "Heimilið er í Venjulegum ham.",
   "Pin thiết bị đã ổn định": "Rafhlaða tækisins er stöðug",
   "Hub đã kết nối trở lại": "Hub er aftur tengt",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Skipt var í Venjulegt en ekki tókst að senda tilkynninguna",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Skipt var í Venjulegt en ekki tókst að senda tilkynninguna",
   "Chung cho nhà": "Sameiginlegt fyrir heimilið",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Gildir fyrir alla meðlimi og getur virkjað líkamlegu sírenuna.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Gildir fyrir alla meðlimi og getur virkjað líkamlegu sírenuna.",
   "Cá nhân": "Persónulegt",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Persónulega tímaáætlunin virkar sjálfstætt og virkjar aldrei líkamlegu sírenuna.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Þessi stilling gildir aðeins fyrir þinn reikning.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Aðeins eigandinn og stjórnendur geta breytt sameiginlegum stillingum heimilisins.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Persónulega tímaáætlunin virkar sjálfstætt og virkjar aldrei líkamlegu sírenuna.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Þessi stilling gildir aðeins fyrir þinn reikning.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Aðeins eigandinn og stjórnendur geta breytt sameiginlegum stillingum heimilisins.",
   "Tham gia hệ thống báo động": "Taka þátt í viðvörunarkerfinu",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Neyðarskynjarar taka alltaf þátt í viðvörunarkerfinu.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Slökktu til að koma í veg fyrir að tækið stofni viðvörun.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Neyðarskynjarar taka alltaf þátt í viðvörunarkerfinu.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Slökktu til að koma í veg fyrir að tækið stofni viðvörun.",
   "Lịch báo động chung": "Sameiginleg viðvörunaráætlun",
   "Lịch báo động cá nhân": "Persónuleg viðvörunaráætlun",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Sýna viðvörun á öllum skjánum í símanum þínum.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Sýna viðvörun á öllum skjánum í símanum þínum.",
   "Lặp lại cảnh báo": "Endurtaka viðvörun",
   "Báo động chung": "Sameiginleg viðvörun",
   "Báo động cá nhân": "Persónuleg viðvörun",
   "Đã cài đặt": "Stillt",
   "Chưa cài đặt": "Ekki stillt",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Sameiginleg og persónuleg tímaáætlun virka samhliða. Þú þarft ekki lengur að velja á milli þeirra.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Sameiginleg og persónuleg tímaáætlun virka samhliða. Þú þarft ekki lengur að velja á milli þeirra.",
   "Cài nhanh chung": "Flýtistilling sameiginlegrar áætlunar",
   "Cài nhanh cá nhân": "Flýtistilling persónulegrar áætlunar",
   "Thiết lập nhanh lịch cá nhân": "Flýtistilling persónulegrar tímaáætlunar",
   "Thiết lập nhanh lịch chung": "Flýtistilling sameiginlegrar tímaáætlunar",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Þessi tímaáætlun gildir aðeins fyrir þig og virkjar ekki líkamlegu sírenuna.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Þessi tímaáætlun gildir fyrir alla meðlimi heimilisins.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Þessi tímaáætlun gildir aðeins fyrir þig og virkjar ekki líkamlegu sírenuna.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Þessi tímaáætlun gildir fyrir alla meðlimi heimilisins.",
   "Đã áp dụng lịch báo động": "Viðvörunaráætlun notuð",
   "Không thể lưu lịch báo động": "Ekki tókst að vista viðvörunaráætlun",
   "Nhà chưa có thiết bị an ninh": "Þetta heimili er ekki með öryggistæki",
-  "Nhận cảnh báo theo lịch chung của nhà": "Fá viðvaranir samkvæmt sameiginlegri tímaáætlun heimilisins",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Slökktu á þessu til að stöðva tilkynningar og viðvaranir á öllum skjánum frá sameiginlegu tímaáætluninni. Sírena heimilisins mun áfram virka.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Fá viðvaranir samkvæmt sameiginlegri tímaáætlun heimilisins",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Slökktu á þessu til að stöðva tilkynningar og viðvaranir á öllum skjánum frá sameiginlegu tímaáætluninni. Sírena heimilisins mun áfram virka.",
 };

@@ -3,7 +3,8 @@ const Map<String, String> slStrings = {
   "Không đọc được số điện thoại": "Telefonske številke ni mogoče prebrati",
   "Tin nhắn quá dài": "Sporočilo je predolgo",
   "Không gửi được tin nhắn": "Sporočila ni mogoče poslati",
-  "Bạn không có quyền sửa lịch chung của nhà": "Nimate dovoljenja za uređivanje skupnega urnika doma",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Nimate dovoljenja za uređivanje skupnega urnika doma",
   "Nhà của bạn": "Vaš dom",
   "Tải tin cũ hơn": "Učitaj starije sporočila",
   "Nhà chưa đặt tên": "Neimenovani dom",
@@ -91,20 +92,26 @@ const Map<String, String> slStrings = {
   "Đang theo dõi": "Spremljanje je aktivno",
   "Chưa nhận diện": "Neprepoznat naprava",
   "Chưa có cập nhật": "Še ni ažuriranja",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Še ni naprave. Dodirnite + kako biste dodali naprava in počeli štititi svoj dom.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Še ni naprave. Dodirnite + kako biste dodali naprava in počeli štititi svoj dom.",
   "CHƯA AN TOÀN": "NI VARNO",
   "ĐÃ AN TOÀN": "VARNO",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Dom pokazuje znakove ki treba provjeriti. Pregledajte stanja v nastavku.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Dom deluje normalno. Lahko biti mirni.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Nisu zaznani neuobičajeni znakovi dima ni SOS aktivnosti.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Ni dovoljno nedavnih aktivnosti za dublju analizu.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Dom pokazuje znakove ki treba provjeriti. Pregledajte stanja v nastavku.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Dom deluje normalno. Lahko biti mirni.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Nisu zaznani neuobičajeni znakovi dima ni SOS aktivnosti.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Ni dovoljno nedavnih aktivnosti za dublju analizu.",
   "Hub kết nối bình thường": "Hub je normalno povezan",
   "Cài đặt cảnh báo cho nhà hiện tại": "Nastavitve opozorila za ta dom",
   "Nhận cảnh báo báo động": "Primaj opozorila alarma",
   "Đang bật cho tài khoản này": "Omogućeno za ta račun",
   "Đang tắt cho tài khoản này": "Onemogućeno za ta račun",
   "Hẹn giờ nhắc nhở": "Urnik opomnika",
-  "Nhắc kiểm tra nhà theo thời gian": "Rasporedi podsjetnike za preverjanje doma",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Rasporedi podsjetnike za preverjanje doma",
   "Hẹn giờ báo động": "Urnik alarma",
   "Chưa thiết lập": "Ni postavljeno",
   "Chưa thiết lập thời gian": "Ni postavljenog urnika",
@@ -149,7 +156,8 @@ const Map<String, String> slStrings = {
   "Giờ nhắc nhở": "Čas opomnika",
   "Giờ bắt đầu báo động": "Čas početka alarma",
   "Giờ kết thúc báo động": "Čas završetka alarma",
-  "Không có nhà nào đủ điều kiện để cài": "Ni dostupnih domova ki ispunjavaju uvjete",
+  "Không có nhà nào đủ điều kiện để cài":
+      "Ni dostupnih domova ki ispunjavaju uvjete",
   "Cài đặt hoàn tất": "Nastavljanje je dovršeno",
   "Xác nhận rời nhà": "Potrdi napuštanje doma",
   "Xác nhận xoá nhà": "Potrdi brisanje doma",
@@ -161,20 +169,25 @@ const Map<String, String> slStrings = {
   "Đã rời khỏi home": "Napustili ste dom",
   "Đã cập nhật": "Ažurirano",
   "Tìm home...": "Išči domove...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Nastavite lokacijo doma in vklopite samodejno zaščito",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Nastavite lokacijo doma in vklopite samodejno zaščito",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "Prenesite lastništvo ali izbrišite dom",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Nastavite opomnik/alarm za izbrane domove",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Nastavite opomnik/alarm za izbrane domove",
   "Chia sẻ nhà đã chọn": "Dijeli izbrane domove",
   "Mở danh sách chia sẻ nhà": "Odpri popis dijeljenja doma",
   "Xoá các nhà đã chọn?": "Izbrisati izbrane domove?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Izbrani domovi bodo trajno izbrisani.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Ali skenirajte QR pri kako biste zatražili dostop izbranim domovih",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Izbrani domovi bodo trajno izbrisani.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Ali skenirajte QR pri kako biste zatražili dostop izbranim domovih",
   "Email người nhận": "E-adresa primatelja",
   "Chia sẻ": "Dijeli",
   "Email chưa đăng ký": "E-adresa ni registrirana",
   "Chia sẻ hoàn tất": "Deljenje je dovršeno",
   "Mở List chia sẻ nhà": "Odpri popis dijeljenja doma",
-  "Không có nhà nào bạn có quyền quản lý": "Ne upravljate nijednim od odabranih domova",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Ne upravljate nijednim od odabranih domova",
   "Chưa share cho ai": "Še ni podijeljeno ni s kim",
   "Tìm nhà": "Išči domove",
   "Xoá các nhà đã chọn ?": "Izbrisati izbrane domove?",
@@ -197,27 +210,34 @@ const Map<String, String> slStrings = {
   "Đã tắt báo động": "Alarm je izklopljen",
   "Tắt báo động": "Zaustavi alarm",
   "Cả ngày": "Cijeli dan",
-  "Bạn không có quyền thực hiện thao tác này.": "Nimate dovoljenja za ovu radnju.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Radnju ni mogoče dovršiti. Pokušajte znova.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Nevažeći QR pri za pridružitev več domova",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Nimate dovoljenja za ovu radnju.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Radnju ni mogoče dovršiti. Pokušajte znova.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Nevažeći QR pri za pridružitev več domova",
   "Bạn đang là chủ các nhà này": "Vi ste lastnik teh domova",
   "Một người dùng": "Jedan uporabnik",
   "Yêu cầu gia nhập nhà": "Zahteva za pridružitev domu",
   "Đã gửi yêu cầu gia nhập nhà": "Zahteva za pridružitev je poslan",
   "QR gia nhập không hợp lệ": "Nevažeći QR pri za pridružitev",
   "Bạn đang là chủ nhà này": "Već ste lastnik ovog doma",
-  "QR này không phải mã xin gia nhập nhà": "Ta QR pri ni pri za pridružitev domu",
+  "QR này không phải mã xin gia nhập nhà":
+      "Ta QR pri ni pri za pridružitev domu",
   "Bạn không có quyền thêm thiết bị": "Nimate dovoljenja za dodavanje naprave",
   "Đã mở chế độ thêm thiết bị": "Omogućeno je uparivanje naprave",
   "Rời khỏi Home này?": "Napustiti ta dom?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Ta dom in vse naprave v njem bodo trajno izbrisani.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Ta dom in vse naprave v njem bodo trajno izbrisani.",
   "Đã xoá nhà": "Dom je izbrisan",
   "QR của nhà này": "QR pri ovog doma",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Drugi mogu skenirati ta pri kako bi zatražili dostop domu.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Drugi mogu skenirati ta pri kako bi zatražili dostop domu.",
   "Chia sẻ nhà": "Dijeli dom",
   "Quét QR để xin gia nhập nhà": "Skenirajte QR pri za pridružitev domu",
   "Quét QR xin gia nhập nhà": "Skenirajte QR pri za pridružitev domu",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Nastavite QR pri dijeljenog doma unutar okvira",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Nastavite QR pri dijeljenog doma unutar okvira",
   "Mã QR này do chủ nhà chia sẻ": "Ta QR pri dijeli lastnik doma",
   "Nhập mã mời": "Vnesite pri pozivnice",
   "Gửi yêu cầu gia nhập": "Pošalji zahteva za pridružitev",
@@ -237,7 +257,8 @@ const Map<String, String> slStrings = {
   "Xác nhận mật khẩu": "Potrdi geslo",
   "Yêu cầu chuyển quyền chủ nhà": "Zahteva za prijenos lastništva",
   "Đã gửi yêu cầu chuyển quyền": "Zahteva za prijenos je poslan",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Zahteva za prijenos lastništva je poslan",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Zahteva za prijenos lastništva je poslan",
   "Bạn không có quyền xoá thiết bị": "Nimate dovoljenja za brisanje naprave",
   "Xóa Device?": "Izbrisati ta naprava?",
   "Đã gửi yêu cầu xoá thiết bị": "Zahteva za brisanje naprave je poslan",
@@ -247,7 +268,8 @@ const Map<String, String> slStrings = {
   "Thêm nhà mới": "Dodaj novi dom",
   "Tạo nhà mới": "Izradi novi dom",
   "Tạo một ngôi nhà mới của bạn": "Izradite novi dom",
-  "Quét mã QR được chủ nhà chia sẻ": "Skenirajte QR pri ki je podijelio lastnik",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Skenirajte QR pri ki je podijelio lastnik",
   "Tên nhà": "Naziv doma",
   "Số điện thoại": "Telefonski številka",
   "Nam": "Muško",
@@ -261,7 +283,8 @@ const Map<String, String> slStrings = {
   "Không thể lưu thông tin": "Podatke ni mogoče shraniti",
   "Đã lưu thông tin": "Podatki so spremljeni",
   "Lỗi lưu profile": "Profil ni mogoče shraniti",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Dodajte telefonski številka za hitne slučajeve",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Dodajte telefonski številka za hitne slučajeve",
   "Hoàn tất": "Gotovo",
   "Đã tạo nhà mới": "Novi dom je izrađen",
   "Về muộn": "Vraćam se kasno",
@@ -280,7 +303,8 @@ const Map<String, String> slStrings = {
   "SĐT": "Telefon",
   "Ngày sinh": "Datum rođenja",
   "Yêu cầu & lời mời": "Zahtjevi in pozivnice",
-  "Xem lời mời chia sẻ và xin gia nhập": "Pregledajte pozivnice za deljenje in zahtjeve za pridružitev",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Pregledajte pozivnice za deljenje in zahtjeve za pridružitev",
   "Cài đặt bảo mật": "Varnostne nastavitve",
   "Quyền báo động toàn màn hình": "Dovoljenje za alarm čez celoten zaslon",
   "Báo động toàn màn hình": "Alarm čez celoten zaslon",
@@ -291,7 +315,8 @@ const Map<String, String> slStrings = {
   "Thoát tài khoản khỏi thiết bị này": "Odjavi račun s ovog naprave",
   "Không có yêu cầu hoặc lời mời nào": "Ni zahteve ni pozivnica",
   "Xoá tài khoản": "Izbriši račun",
-  "Hành động này sẽ xoá toàn bộ dữ liệu:": "To dejanje bo izbrisati vse podatke:",
+  "Hành động này sẽ xoá toàn bộ dữ liệu:":
+      "To dejanje bo izbrisati vse podatke:",
   "Nhà và thiết bị": "Domovi in naprave",
   "Chia sẻ và quyền truy cập": "Deljenje in dostop",
   "Toàn bộ dữ liệu liên quan": "Vsi povezani podatki",
@@ -326,11 +351,13 @@ const Map<String, String> slStrings = {
   "Ngập/rò nước": "Poplava/puščanje vode",
   "Phát hiện khói": "Zaznan je dim",
   "Quản lý phòng": "Upravljanje prostorijama",
-  "Bạn không có quyền quản lý phòng": "Nimate dovoljenja za upravljanje prostorijama",
+  "Bạn không có quyền quản lý phòng":
+      "Nimate dovoljenja za upravljanje prostorijama",
   "Đổi tên phòng": "Preimenuj prostoriju",
   "Tên phòng": "Naziv prostorije",
   "Xoá phòng": "Izbriši prostoriju",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Naprave v ovoj prostoriji bo premješteni v Nedodijeljeno.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Naprave v ovoj prostoriji bo premješteni v Nedodijeljeno.",
   "Thêm phòng": "Dodaj prostoriju",
   "Ví dụ: Phòng khách": "Primjer: Dnevni boravak",
   "Phòng khách": "Dnevni boravak",
@@ -351,9 +378,11 @@ const Map<String, String> slStrings = {
   "Cửa đóng": "Vrata so zaprta",
   "Chưa đặt vị trí nhà": "Lokacija doma ni postavljena",
   "Đặt vị trí nhà tại đây": "Nastavite lokacijo doma ovdje",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Nastavite lokacijo doma pred uključivanja automatske zaščite",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Nastavite lokacijo doma pred uključivanja automatske zaščite",
   "Bán kính bảo vệ mặc định: 150 m": "Zadani polumjer zaščite: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Vsak član mora dovoliti lokacijo Vedno kako bi stanje odsoten/doma radilo v ozadju.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Vsak član mora dovoliti lokacijo Vedno kako bi stanje odsoten/doma radilo v ozadju.",
   "Lưu cài đặt": "Shrani nastavitve",
   "Đã đặt vị trí nhà": "Lokacija doma je postavljena",
   "Đang lấy vị trí...": "Dohvaćanje lokacije...",
@@ -362,22 +391,27 @@ const Map<String, String> slStrings = {
   "Cập nhật thông tin nhà": "Ažuriraj podatke o domu",
   "Nhập địa chỉ của nhà": "Vnesite adresu doma",
   "Lưu thay đổi": "Shrani spremembe",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "To se ime prikazuje samo na vašem računu.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Naziv in adresa ažurirat se bo za vse člane doma.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "To se ime prikazuje samo na vašem računu.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Naziv in adresa ažurirat se bo za vse člane doma.",
   "Một thành viên": "En član",
   "Đã cập nhật thông tin nhà": "Podatki o domu so ažurirani",
   "Thay tên": "Preimenuj",
   "Đã đổi tên thiết bị": "Naprava je preimenovan",
   "Chưa chọn nhà để kiểm tra": "Za preverjanje ni izbran noben dom",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Izvršite preverjanje pomoću računa Lastnika",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Izvršite preverjanje pomoću računa Lastnika",
   "Không đọc được dữ liệu nhà": "Ni mogoče pročitati podatke doma",
-  "Nhà cần có ít nhất một thiết bị để test": "Dom mora imati barem jedan naprava za testiranje",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Dom mora imati barem jedan naprava za testiranje",
   "Đóng": "Zapri",
   "Đã thiết lập": "Postavljeno",
   "Quét QR": "Skeniraj QR pri",
   "Quét QR để thêm thiết bị": "Skenirajte QR pri za dodavanje naprave",
   "Nhập HUB ID thủ công": "Ročno vnesite HUB ID",
-  "Bạn không có quyền sắp xếp phòng": "Nimate dovoljenja za promjenu redoslijeda prostorija",
+  "Bạn không có quyền sắp xếp phòng":
+      "Nimate dovoljenja za promjenu redoslijeda prostorija",
   "Cảnh báo khói": "Opozorilo na dim",
   "Cập nhật thiết bị": "Ažuriranje naprave",
   "Cửa đang mở": "Vrata so odprta",
@@ -427,8 +461,10 @@ const Map<String, String> slStrings = {
   "Chế độ áp dụng": "Način primjene",
   "Theo nhà": "Po urniku doma",
   "Riêng tôi": "Samo zame",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Uporablja skupni urnik ki ga je nastavil Lastnik ali Administrator",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Uporablja osebni urnik ki velja samo za vaš račun",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Uporablja skupni urnik ki ga je nastavil Lastnik ali Administrator",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Uporablja osebni urnik ki velja samo za vaš račun",
   "Thiết lập nhanh báo động": "Brzo nastavljanje alarma",
   "Thiết lập nhanh toàn bộ thiết bị": "Brzo nastavljanje svih naprave",
   "Áp dụng cho toàn bộ thiết bị": "Primijeni na vse naprave",
@@ -442,7 +478,8 @@ const Map<String, String> slStrings = {
   "Hôm nay đã ghi nhận cảnh báo SOS": "Danes je zabilježeno SOS opozorilo",
   "Hôm nay đã ghi nhận cảnh báo khói": "Danes je zabilježeno opozorilo na dim",
   "Khói đã an toàn": "Nevarnost od dima je prestala",
-  "Không tìm thấy nhà của thông báo này": "Dom povezan s tem obvestila ni bil najden",
+  "Không tìm thấy nhà của thông báo này":
+      "Dom povezan s tem obvestila ni bil najden",
   "Không tìm thấy thiết bị trong nhà này": "Naprava ni bil najden v tem domu",
   "Một chủ nhà": "Jedan lastnik",
   "Ngôi nhà đang hoạt động ổn định": "Dom deluje normalno",
@@ -468,8 +505,10 @@ const Map<String, String> slStrings = {
   "Đã rời khỏi nhà": "Napustili ste dom",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Napustit boste dijeljene domove.",
   "Các nhà của bạn sẽ bị xoá.\n": "Vaši domovi bodo izbrisani.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "To dejanje bo spremenilo urnik alarma za vse varnostne naprave v izbranih domovih.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "To dejanje bo dodalo opomnik izbranim domovih.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "To dejanje bo spremenilo urnik alarma za vse varnostne naprave v izbranih domovih.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "To dejanje bo dodalo opomnik izbranim domovih.\n\n",
   "Xác nhận thay đổi báo động": "Potrdi spremembe alarma",
   "Xác nhận thay đổi nhắc nhở": "Potrdi spremembe opomnika",
   "Lặp lại khi sự cố vẫn còn": "Ponavljaj medtem ko problem traje",
@@ -477,14 +516,19 @@ const Map<String, String> slStrings = {
   "VD: Mr Chung": "Npr. g. Chung",
   "🏡 Chưa có nhà nào": "🏡 Še ni domova",
   "Vẫn chuyển về Bình thường": "Ipak prebaci na Normalno",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Samodejna zaščita pri odhodu je še vedno vklopljena. Če so vsi člani še vedno zunaj doma, sistem lahko znova vklopi Zaščito čez nekaj minut.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Samodejna zaščita pri odhodu je še vedno vklopljena. Če so vsi člani še vedno zunaj doma, sistem lahko znova vklopi Zaščito čez nekaj minut.",
   "Chuyển về Bình thường?": "Prebaciti na Normalno?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Ko je funkcija vklopljena, varnostni naprave se začnejo takoj nadzirati.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Ko je funkcija vklopljena, varnostni naprave se začnejo takoj nadzirati.\n\n",
   "Bật Bảo vệ thủ công?": "Vklopiti ročni način zaščite?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "To dejanje bo danes spremeniti čas alarma za neke naprave",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "To dejanje bo izklopilo vse alarme doma",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "To dejanje bo danes spremeniti čas alarma za neke naprave",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "To dejanje bo izklopilo vse alarme doma",
   "Tắt toàn bộ báo động?": "Izklopiti vse alarme?",
-  "Không xoá được lịch tạm tắt báo động": "Ni mogoče izbrisati urnik premora alarma",
+  "Không xoá được lịch tạm tắt báo động":
+      "Ni mogoče izbrisati urnik premora alarma",
   "Không lưu được tạm tắt báo động": "Ni mogoče shraniti pauzu alarma",
   "Không gửi được yêu cầu xoá": "Ni mogoče poslati zahteva za brisanje",
   "Không lưu được cài đặt": "Ni mogoče shraniti postavku",
@@ -492,29 +536,41 @@ const Map<String, String> slStrings = {
   "Không thể xác nhận tài khoản hiện tại": "Ni mogoče potvrditi trenutni račun",
   "Mật khẩu không đúng": "Netočna geslo",
   "Không thể xác nhận mật khẩu": "Ni mogoče potvrditi geslo",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Samo Lastnik ali Administrator lahko spremeniti ponavljanje alarma",
-  "Không lưu được thời gian lặp báo động": "Ni mogoče shraniti čas ponavljanja alarma",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Samo Lastnik ali Administrator lahko spremeniti način zaščite",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Samo Lastnik ali Administrator lahko spremeniti ponavljanje alarma",
+  "Không lưu được thời gian lặp báo động":
+      "Ni mogoče shraniti čas ponavljanja alarma",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Samo Lastnik ali Administrator lahko spremeniti način zaščite",
   "Không thể thay đổi chế độ nhà": "Ni mogoče spremeniti način doma",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Način zaščite je uključen, ali obvestilo ni mogoče poslati",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Način zaščite je uključen, ali obvestilo ni mogoče poslati",
   "Đã bật Chế độ Bảo vệ thủ công": "Ročni način zaščite je vklopljen",
   "Đã chuyển nhà về Bình thường": "Dom je preklopljen v običajni način",
   "60 phút": "60 minuta",
   "30 phút": "30 minuta",
   "15 phút": "15 minuta",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Ogledujete urnik Lastnika. Izberite Samo zame da nastavite lastni urnik Alarma.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Ogledujete urnik Lastnika. Izberite Samo zame da nastavite lastni urnik Alarma.",
   "Chọn giờ kết thúc báo động": "Izberite čas završetka alarma",
   "Chọn giờ bắt đầu báo động": "Izberite čas početka alarma",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Nimate dovoljenja za uređivanje urnika Alarma ovog doma",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Ni mogoče primijeniti Alarm na vse naprave",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Ta dom ni sigurnosnih naprave na ki se postavka lahko primijeniti",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Nimate dovoljenja za uređivanje postavki Doma. Izberite Samo zame.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Nimate dovoljenja za uređivanje urnika Alarma ovog doma",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Ni mogoče primijeniti Alarm na vse naprave",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Ta dom ni sigurnosnih naprave na ki se postavka lahko primijeniti",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Nimate dovoljenja za uređivanje postavki Doma. Izberite Samo zame.",
   "Không thể lưu chế độ báo động": "Ni mogoče shraniti način Alarma",
   "Thêm nhắc nhở": "Dodaj opomnik",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Opomnik bo vas v izbrano čas podsjetiti da preverite varnostno stanje doma.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Opomnik bo vas v izbrano čas podsjetiti da preverite varnostno stanje doma.",
   "Thêm khung giờ báo động": "Dodaj vremenski raspon alarma",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Koriste se vaše osobne nastavitve Opomnika",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Koriste se nastavitve Opomnika Lastnika",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Koriste se vaše osobne nastavitve Opomnika",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Koriste se nastavitve Opomnika Lastnika",
   "Sửa giờ nhắc nhở": "Uredi čas opomnika",
   "Sửa giờ kết thúc báo động": "Uredi čas završetka alarma",
   "Sửa giờ bắt đầu báo động": "Uredi čas početka alarma",
@@ -531,118 +587,178 @@ const Map<String, String> slStrings = {
   "Xoá thành viên": "Odstrani člana",
   "Đã xoá thành viên": "Član je odstranjen",
   "Đồng ý": "V redu",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Ali ste prepričani da želite napustiti ta dom?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Ali ste prepričani da želite napustiti ta dom?",
   "Xoá thành viên?": "Odstraniti člana?",
   "Rời khỏi nhà?": "Napustiti dom?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Samo Lastnik lahko mijenjati uloge",
-  "Bạn không có quyền xoá thành viên này": "Nimate dovoljenja za odstranitev tega člana.",
+  "Bạn không có quyền xoá thành viên này":
+      "Nimate dovoljenja za odstranitev tega člana.",
   "Bạn": "Vi",
   "Không có email": "Ni adrese e-pošte",
   "Chưa có số điện thoại": "Še ni telefonskog številke",
   "Không mở được ứng dụng gọi điện": "Ni mogoče odpreti aplikacijo za pozive",
-  "Thành viên chưa cập nhật số điện thoại": "Član še ni dodal telefonske številke.",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Ročna Zaščita je vklopljena — lahko se izklopiti samo povratkom na Normalno",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Član še ni dodal telefonske številke.",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Ročna Zaščita je vklopljena — lahko se izklopiti samo povratkom na Normalno",
   "Thời gian lặp": "Interval ponavljanja",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Izberite 0 za enkratno opozorilo. Ta postavka velja za ročno Zaščito in samodejno Zaščito pri odhodu.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Izberite 0 za enkratno opozorilo. Ta postavka velja za ročno Zaščito in samodejno Zaščito pri odhodu.",
   "Lặp báo động khi sự cố vẫn còn": "Ponavljaj alarm medtem ko problem traje",
   "Đang được sử dụng": "Trenutno se uporablja",
   "Chuyển về sử dụng thông thường": "Vrne na uobičajenu upotrebu",
   "Chế độ nhà": "Način doma",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS naprava ni zabilježio opozorilo.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Senzor dima ni otkrio nepravilnosti.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Vi ali drugi član ročno ste uključili Zaščito.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome je samodejno uključio Zaščito ker ste napustili dom.",
-  "Nhà đang ở chế độ dùng bình thường.": "Dom je trenutno v uobičajenom načinu rada.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS naprava ni zabilježio opozorilo.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Senzor dima ni otkrio nepravilnosti.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Vi ali drugi član ročno ste uključili Zaščito.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome je samodejno uključio Zaščito ker ste napustili dom.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Dom je trenutno v uobičajenom načinu rada.",
   "Bảo vệ thủ công đang bật": "Ročna Zaščita je vklopljena",
   "Bảo vệ tự động đang bật": "Samodejna zaščita je vklopljena",
   "Bảo vệ đang tắt": "Zaščita je izklopljena",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Nedavno ste otvorili aplikacijo da preverite stanje.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Redno odpirajte aplikacijo da preverite dovoljenja, rasporede in neprebrana opozorila.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Po nekaj uporabah SafeHome bo lahko bolje ocenil vašo navado preverjanja aplikacije.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Nedavno ste otvorili aplikacijo da preverite stanje.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Redno odpirajte aplikacijo da preverite dovoljenja, rasporede in neprebrana opozorila.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Po nekaj uporabah SafeHome bo lahko bolje ocenil vašo navado preverjanja aplikacije.",
   "Tần suất vào ứng dụng ổn": "Učestalost preverijo aplikacije je dobra",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Prošlo je dosta časa od posljednje preverijo aplikacije",
-  "Đang ghi nhận tần suất vào ứng dụng": "Bilježi se učestalost preverijo aplikacije",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Preverite dovoljenje lokacije „Vedno” in uvjete rada v ozadju.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Ta naprava ispunjava uvjete za Samodejno odhod.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Vklopite če želite da se Zaščita samodejno aktivira ko napustite dom.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Prošlo je dosta časa od posljednje preverijo aplikacije",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Bilježi se učestalost preverijo aplikacije",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Preverite dovoljenje lokacije „Vedno” in uvjete rada v ozadju.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Ta naprava ispunjava uvjete za Samodejno odhod.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Vklopite če želite da se Zaščita samodejno aktivira ko napustite dom.",
   "Auto rời khỏi nhà chưa ổn": "Samodejno odhod ni spreman",
   "Auto rời khỏi nhà đã sẵn sàng": "Samodejno odhod je spreman",
   "Auto rời khỏi nhà chưa bật": "Samodejno odhod ni uključen",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Preporučuje se dodati senzor dima, SOS ali drugi nujni naprava prikladan za dom.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Preporučuje se dodati senzor dima, SOS ali drugi nujni naprava prikladan za dom.",
   "Chưa có thiết bị khẩn cấp": "Še ni hitnog naprave",
   "Đã có thiết bị khẩn cấp": "Dodani so nujni naprave",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Nastavite urnik Alarma za čas spavanja ali ko niste pri hiše.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Dom ima urnik Alarma ali urnik opozorila po napravah.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Nastavite urnik Alarma za čas spavanja ali ko niste pri hiše.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Dom ima urnik Alarma ali urnik opozorila po napravah.",
   "Chưa cài lịch báo động": "Urnik Alarma ni nastavljen",
   "Đã cài lịch báo động": "Urnik Alarma je nastavljen",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Nastavite barem jedan Opomnik kako ne biste zaboravili provjeriti dom.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Aplikacija bo vas podsjetiti da preverite dom po postavljenom urniku.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Nastavite barem jedan Opomnik kako ne biste zaboravili provjeriti dom.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Aplikacija bo vas podsjetiti da preverite dom po postavljenom urniku.",
   "Chưa cài đặt nhắc nhở": "Opomnik ni nastavljen",
   "Đã cài đặt nhắc nhở": "Opomnik je nastavljen",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Znova odprite aplikacijo ali se znova prijavite če ta naprava ne prima opozorila.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Ta naprava ni registriran za opozorila",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Znova odprite aplikacijo ali se znova prijavite če ta naprava ne prima opozorila.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Ta naprava ni registriran za opozorila",
   "Thiết bị nhận cảnh báo bình thường": "Ta naprava normalno prima opozorila",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS strožje upravlja delovanje v ozadju od Androida; pustite obvestila in lokacijo „Vedno” vklopljene če uporabljate Samodejno odhod.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS strožje upravlja delovanje v ozadju od Androida; pustite obvestila in lokacijo „Vedno” vklopljene če uporabljate Samodejno odhod.",
   "Cơ chế iOS": "Ponašanje sistema iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Preverite dovoljenje za delovanje v ozadju in samodejni zagon kako opozorila ne bi kasnila.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Naprava je potvrdio važne uvjete rada v ozadju.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Provjeri rad v ozadju / samodejni zagon",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Preverite dovoljenje za delovanje v ozadju in samodejni zagon kako opozorila ne bi kasnila.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Naprava je potvrdio važne uvjete rada v ozadju.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Provjeri rad v ozadju / samodejni zagon",
   "Chạy nền ổn định": "Rad v ozadju je stabilan",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Nekateri Android telefoni mogu odgoditi opozorila medtem ko je optimizacija baterije vklopljena.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Mala je vjerojatnost da bo telefon odgađati SafeHome opozorila.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Nekateri Android telefoni mogu odgoditi opozorila medtem ko je optimizacija baterije vklopljena.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Mala je vjerojatnost da bo telefon odgađati SafeHome opozorila.",
   "Chưa tắt tối ưu pin": "Optimizacija baterije še je vklopljena",
-  "Tối ưu pin không chặn ứng dụng": "Optimizacija baterije ne blokira aplikacijo",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Samodejno odhod potrebuje dovoljenje za lokacijo „Vedno” za pouzdan rad.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Za rad Automatskog odlaska potrebno je dovoljenje lokacije.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Usluga lokacije je izklopljena pa Samodejno odhod možda neće pouzdano delovati.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "To dovoljenje potrebno je samo ko uporabljate Samodejno odhod.",
+  "Tối ưu pin không chặn ứng dụng":
+      "Optimizacija baterije ne blokira aplikacijo",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Samodejno odhod potrebuje dovoljenje za lokacijo „Vedno” za pouzdan rad.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Za rad Automatskog odlaska potrebno je dovoljenje lokacije.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Usluga lokacije je izklopljena pa Samodejno odhod možda neće pouzdano delovati.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "To dovoljenje potrebno je samo ko uporabljate Samodejno odhod.",
   "Chưa cấp vị trí luôn luôn": "Lokacija „Vedno” ni dopuštena",
   "Đã cấp vị trí luôn luôn": "Lokacija „Vedno” je dopuštena",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS ne otvara opozorila čez celoten zaslon kao Android; aplikacija uporablja sistemske obvestila in zvuk.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android uporablja opozorila čez celoten zaslon; če ih telefon blokira, dovolite ih v nastavitvah.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS ne otvara opozorila čez celoten zaslon kao Android; aplikacija uporablja sistemske obvestila in zvuk.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android uporablja opozorila čez celoten zaslon; če ih telefon blokira, dovolite ih v nastavitvah.",
   "Cảnh báo trên iOS": "Opozorila na iOS-v",
   "Cảnh báo toàn màn hình": "Opozorila čez celoten zaslon",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Opozorila se možda neće prikazati če so obvestila isključene.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Ta telefon lahko prejema obvestila SafeHome.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Opozorila se možda neće prikazati če so obvestila isključene.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Ta telefon lahko prejema obvestila SafeHome.",
   "Chưa bật thông báo": "Obvestila niso vklopljena",
   "Đã bật thông báo": "Obvestila so vklopljena",
   "Hệ thống: Sẵn sàng": "Sistem: Spreman",
-  "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistem: Neka opozorila mogu biti propuštena",
+  "Hệ thống: Có thể bỏ lỡ cảnh báo":
+      "Sistem: Neka opozorila mogu biti propuštena",
   "Cách bạn đang dùng ứng dụng": "Kče uporabljate aplikacijo",
   "Thiết bị của bạn": "Vaš naprava",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Preverja telefon in način na ki uporabljate aplikacijo.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Preverja telefon in način na ki uporabljate aplikacijo.",
   "Hệ thống SafeHome": "Sistem SafeHome",
   "Hệ thống: Đang kiểm tra...": "Sistem: Preverjanje...",
   "Tên": "Ime",
-  "Bạn không có quyền thay đổi vị trí nhà": "Nimate dovoljenja za promjenu lokacije doma",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Nimate dovoljenja za promjenu lokacije doma",
   "Hãy bật GPS để đặt vị trí nhà": "Vklopite GPS da nastavite lokacijo doma",
   "Bạn chưa cấp quyền vị trí": "Niste dali dovoljenje lokacije",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Dovolite lokacijo v nastavitvah aplikacije",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Samodejna zaščita ko vsi napuste dom je vklopljena",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Samodejna zaščita ko vsi napuste dom je izklopljena",
-  "Không thể thay đổi trạng thái báo động": "Ni mogoče spremeniti stanje Alarma",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Dovolite lokacijo v nastavitvah aplikacije",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Samodejna zaščita ko vsi napuste dom je vklopljena",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Samodejna zaščita ko vsi napuste dom je izklopljena",
+  "Không thể thay đổi trạng thái báo động":
+      "Ni mogoče spremeniti stanje Alarma",
   "Đã tắt toàn bộ báo động của nhà": "Vsi Alarmi doma so isključeni",
-  "QR này không phải mã xin gia nhập Home": "Ta QR pri ni pri za pridružitev Domu",
+  "QR này không phải mã xin gia nhập Home":
+      "Ta QR pri ni pri za pridružitev Domu",
   "Thêm Home": "Dodaj Dom",
   "Mở cài đặt": "Odpri nastavitve",
   "Để sau": "Pozneje",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome potrebuje dovoljenje za lokacijo „Vedno dovoli” da prepozna ko odidete ali se vrnete domov, tudi ko aplikacija deluje v ozadju.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome trenutno lahko pristupati lokaciji samo medtem ko uporabljate aplikacijo.\n\nOtvorite dovoljenje za lokacijo in izberite „Vedno dovoli” kako bi Samodejna zaščita pri odhodu radila in v ozadju.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome potrebuje dovoljenje za lokacijo „Vedno dovoli” da prepozna ko odidete ali se vrnete domov, tudi ko aplikacija deluje v ozadju.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome trenutno lahko pristupati lokaciji samo medtem ko uporabljate aplikacijo.\n\nOtvorite dovoljenje za lokacijo in izberite „Vedno dovoli” kako bi Samodejna zaščita pri odhodu radila in v ozadju.",
   "Cho phép vị trí luôn luôn": "Vedno dovoli lokacijo",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Vaši bo domovi biti izbrisani.\nNapustit boste dijeljene domove.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "To dejanje bo spremenilo urnik Alarma za vse varnostne naprave v izbranih domovih.\n\nTo bo vplivati na člane, ki koriste Alarm „Po urniku doma”.\nOsobni Alarmi v načinu „Samo zame” se ne bo spremenilo.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "To dejanje bo dodalo Opomnik izbranim domovih.\n\nTo bo vplivati na člane, ki koriste Opomnik „Po urniku doma”.\nOsobni Opomniki v načinu „Samo zame” se ne bo spremenilo.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Ko je funkcija vklopljena, varnostni naprave se začnejo takoj nadzirati.\n\nAutomatska Zaščita pri odhodu bo pauzirana. Ta način ne isključuje se samodejno ko se nekdo vrne domov in lahko ga izklopiti samo pooblaščeni član ručnim povratkom na Normalno.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "To dejanje bo danes spremeniti čas Alarma za neke naprave...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "To dejanje bo izklopilo vse Alarme doma. Ne boste več prejemali opozorila na nevarnost na telefonu.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarm uporablja način „Po urniku doma”.\n\nPrejemali boste opozorila po skupnem urniku ki ga je nastavil Lastnik ali Administrator.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarm uporablja način „Samo zame”.\n\nPrejemali boste opozorila po osebnem urniku Alarma za ta račun.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Vaši bo domovi biti izbrisani.\nNapustit boste dijeljene domove.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "To dejanje bo spremenilo urnik Alarma za vse varnostne naprave v izbranih domovih.\n\nTo bo vplivati na člane, ki koriste Alarm „Po urniku doma”.\nOsobni Alarmi v načinu „Samo zame” se ne bo spremenilo.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "To dejanje bo dodalo Opomnik izbranim domovih.\n\nTo bo vplivati na člane, ki koriste Opomnik „Po urniku doma”.\nOsobni Opomniki v načinu „Samo zame” se ne bo spremenilo.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Ko je funkcija vklopljena, varnostni naprave se začnejo takoj nadzirati.\n\nAutomatska Zaščita pri odhodu bo pauzirana. Ta način ne isključuje se samodejno ko se nekdo vrne domov in lahko ga izklopiti samo pooblaščeni član ručnim povratkom na Normalno.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "To dejanje bo danes spremeniti čas Alarma za neke naprave...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "To dejanje bo izklopilo vse Alarme doma. Ne boste več prejemali opozorila na nevarnost na telefonu.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarm uporablja način „Po urniku doma”.\n\nPrejemali boste opozorila po skupnem urniku ki ga je nastavil Lastnik ali Administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarm uporablja način „Samo zame”.\n\nPrejemali boste opozorila po osebnem urniku Alarma za ta račun.",
   "Không thể đăng nhập bằng Google": "Prijava putem Googlea ni uspjela",
   "Không đặt được mật khẩu": "Ni mogoče postaviti geslo",
   "Chấp nhận": "Prihvati",
   "Cho phép": "Dopusti",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Ni mogoče prihvatiti pozivnicu. Pokušajte znova.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Ni mogoče prihvatiti zahteva za pridružitev domu. Pokušajte znova.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Ni mogoče prihvatiti pozivnicu. Pokušajte znova.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Ni mogoče prihvatiti zahteva za pridružitev domu. Pokušajte znova.",
   "Từ chối": "Odbij",
   "Lời mời từ chủ nhà": "Pozivnica Lastnika",
   "Nhận quyền chủ nhà": "Preuzmi lastništvo doma",
@@ -664,15 +780,19 @@ const Map<String, String> slStrings = {
   "KIỂM TRA NHÀ": "PREVERI DOM",
   "ĐÓNG NHẮC NHỞ": "ZAPRI OPOMNIK",
   "SafeHome Security Alert": "SafeHome varnostno opozorilo",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Izberite dovoljenje lokacije „Vedno dovoli” v nastavitvah aplikacije",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google račun treba dodatnu geslo za uporaba sigurnosnih značajki.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Izberite dovoljenje lokacije „Vedno dovoli” v nastavitvah aplikacije",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google račun treba dodatnu geslo za uporaba sigurnosnih značajki.",
   "Báo động": "Alarm",
-  "Bạn không có quyền thực hiện thao tác này。": "Nimate dovoljenja za izvođenje ove radnje.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Nimate dovoljenja za izvođenje ove radnje.",
   "Cài đặt": "Nastavitve",
   "Cập nhật": "Ažuriraj",
   "Chọn ngôn ngữ": "Izberite jezik",
   "Chưa có dữ liệu thiết bị để đánh giá": "Ni podatkov o napravah za procjenu",
-  "Chuyển quyền sở hữu cho thành viên khác": "Prenesi lastništvo na drugog člana",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Prenesi lastništvo na drugog člana",
   "Có": "Da",
   "Cửa đã đóng an toàn": "Vrata so varno zaprta",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Došlo je do pogreške. Pokušajte znova.",
@@ -684,8 +804,10 @@ const Map<String, String> slStrings = {
   "Hub chưa gửi trạng thái": "Stanje Huba ni na voljo",
   "Hub mất kết nối": "Hub ni povezan",
   "Hub tín hiệu bình thường": "Hub je povezan",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Ključavnica je otključana medtem ko je dom v načinu zaščite",
-  "Khóa đang mở trong giờ báo động": "Ključavnica je otključana med časa Alarma",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Ključavnica je otključana medtem ko je dom v načinu zaščite",
+  "Khóa đang mở trong giờ báo động":
+      "Ključavnica je otključana med časa Alarma",
   "Không có thông báo": "Ni obvestila",
   "Khu vực nguy hiểm": "Opasna zona",
   "Kiểm tra thiết bị trong nhà này": "Provjeri naprave v tem domu",
@@ -712,7 +834,8 @@ const Map<String, String> slStrings = {
   "Thành viên đang ở ngoài": "Člani ki so trenutno zunaj doma",
   "Thành viên chưa xác định vị trí": "Člani s nepoznatom lokacijom",
   "Thay đổi ngôn ngữ hiển thị": "Promijeni jezik prikaza",
-  "Thêm, đổi tên và sắp xếp phòng": "Dodaj, preimenuj in promijeni redoslijed prostorija",
+  "Thêm, đổi tên và sắp xếp phòng":
+      "Dodaj, preimenuj in promijeni redoslijed prostorija",
   "Thiết bị đang được giám sát": "Naprava se nadzire",
   "Tiếng Anh": "Engleski",
   "Tiếng Hàn": "Korejski",
@@ -730,196 +853,293 @@ const Map<String, String> slStrings = {
   "Đã tạo nhà": "Dom je izrađen",
   "Chế độ Bảo vệ thủ công đã bật": "Ročni način zaščite je uključen",
   "Báo động không lặp lại.": "Alarm se neće ponavljati.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Alarm se ponavlja po \$securityModeRepeatMinutes minuta če problem in dalje traje.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName je uključio ročni način zaščite za „\$homeName”. Ta način je mogoče izklopiti samo ko ga pooblaščeni član ročno vrne na Normalno. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Uključili ste Alarm za dom „\$homeName”.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Isključili ste vse Alarme doma „\$homeName”.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Alarm se ponavlja po \$securityModeRepeatMinutes minuta če problem in dalje traje.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName je uključio ročni način zaščite za „\$homeName”. Ta način je mogoče izklopiti samo ko ga pooblaščeni član ročno vrne na Normalno. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Uključili ste Alarm za dom „\$homeName”.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Isključili ste vse Alarme doma „\$homeName”.",
   "Thành viên mới": "Nov član",
   "Thành viên rời nhà": "Član je zapustil dom",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName je napustio dom „\$homeName”.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName je spremenil ulogu člana \$memberName iz \$oldRoleName v \$newRoleName v domu „\$homeName”.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName je napustio dom „\$homeName”.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName je spremenil ulogu člana \$memberName iz \$oldRoleName v \$newRoleName v domu „\$homeName”.",
   "Còn \$count tin nhắn chưa đọc": "Še \$count nepročitanih sporočilo",
   "Hãy an tâm nghỉ ngơi.": "Lahko mirno odmoriti.",
   "Có thiết bị chưa an toàn.": "Nekateri naprave nisu sigurni.",
   "SafeHome đang cập nhật vị trí": "SafeHome ažurira lokacijo",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Nadzire se deluje automatskog uključivanja načina Zaščite.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Uporablja lokacijo za automatsko uključivanje načina Zaščite ko vsi napuste dom.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Nadzire se deluje automatskog uključivanja načina Zaščite.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Uporablja lokacijo za automatsko uključivanje načina Zaščite ko vsi napuste dom.",
   "CẢNH BÁO SOS": "SOS OPOZORILO",
   "CẢNH BÁO KHÓI / CHÁY": "OPOZORILO NA DIM / POŽAR",
   "CẢNH BÁO NGẬP NƯỚC": "OPOZORILO NA POPLAVU",
   "CẢNH BÁO RÒ KHÍ": "OPOZORILO NA PUŠČANJE PLINA",
   "CẢNH BÁO CỬA": "OPOZORILO ZA VRATA",
   "CẢNH BÁO AN NINH": "VARNOSTNO OPOZORILO",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Potrditev sa SafeHomeom ni uspjela. Preverite vezu in pokušajte znova.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Izklopite opozorilo šele po tem, ko preverite stanje doma.\n\nAli ste prepričani da želite izklopiti opozorilo?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Potrditev sa SafeHomeom ni uspjela. Preverite vezu in pokušajte znova.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Izklopite opozorilo šele po tem, ko preverite stanje doma.\n\nAli ste prepričani da želite izklopiti opozorilo?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome je otkrio opozorilo",
-  "Mở SafeHome để kiểm tra ngay.": "Odprite SafeHome kako biste takoj preverili.",
+  "Mở SafeHome để kiểm tra ngay.":
+      "Odprite SafeHome kako biste takoj preverili.",
   "\$count tin nhắn mới": "\$count novih sporočilo",
   "Tin nhắn HomeChat": "HomeChat sporočilo",
   "\$senderName đã gửi một tin nhắn": "\$senderName je poslao sporočilo",
   "Bạn có tin nhắn mới": "Imate novu sporočilo",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Način zaščite upozorit bo samo jednom",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Način zaščite ponovit bo opozorilo po \$minutes minuta",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Poslani so zahtjevi za pridružitev za \$count domova",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName išči pridružitev domu „\$homeName”.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Način zaščite upozorit bo samo jednom",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Način zaščite ponovit bo opozorilo po \$minutes minuta",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Poslani so zahtjevi za pridružitev za \$count domova",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName išči pridružitev domu „\$homeName”.",
   "Bạn đã xoá nhà \"\$homeName\".": "Izbrisali ste dom „\$homeName”.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Poslali ste zahteva za prijenos lastništva doma „\$homeName” na \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName vam želi prenijeti lastništvo doma „\$homeName”.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName vas je pozvao da se pridružite domu „\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome uklanja naprava „\$deviceName” iz doma „\$homeName”.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Naprava „\$deviceName” dodan je v dom „\$homeName”.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Poslali ste zahteva za prijenos lastništva doma „\$homeName” na \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName vam želi prenijeti lastništvo doma „\$homeName”.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName vas je pozvao da se pridružite domu „\$homeName”.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome uklanja naprava „\$deviceName” iz doma „\$homeName”.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Naprava „\$deviceName” dodan je v dom „\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Izradili ste dom „\$name”.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName je ažurirao naziv doma v „\$newName” in spremenil njegovu adresu.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName je preimenovao dom v „\$newName”.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName je ažurirao adresu doma „\$newName”.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName je preimenovao naprava „\$oldDeviceName” v „\$newName” v domu „\$homeName”.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName je ažurirao naziv doma v „\$newName” in spremenil njegovu adresu.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName je preimenovao dom v „\$newName”.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName je ažurirao adresu doma „\$newName”.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName je preimenovao naprava „\$oldDeviceName” v „\$newName” v domu „\$homeName”.",
   "Đang ghép nối: \$seconds giây": "Uparivanje: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Način dodavanja naprave uključen je v domu „\$homeName” na \$seconds sekundi.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Razdoblje premora mora biti unutar urnika Alarma (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total testova je prošlo\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name ni dodao telefonski številka v svoj profil.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Način dodavanja naprave uključen je v domu „\$homeName” na \$seconds sekundi.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Razdoblje premora mora biti unutar urnika Alarma (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total testova je prošlo\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name ni dodao telefonski številka v svoj profil.",
   "Tin nhắn mới trong \$homeName": "Nova sporočilo v \$homeName",
   "\$current/\$total kết quả": "\$current/\$total rezultata",
   "Đang trả lời \$name": "Odgovarate uporabniku \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "„\$name” je otkrio dim v domu „\$homeName”.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "„\$name” se vratio v normalno stanje.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "„\$name” je upravo aktivirao SOS v domu „\$homeName”.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "„\$name” je otkrio dim v domu „\$homeName”.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "„\$name” se vratio v normalno stanje.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "„\$name” je upravo aktivirao SOS v domu „\$homeName”.",
   "\"\$name\" đã hết trạng thái SOS.": "„\$name” več ni v SOS stanju.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "„\$name” je prijavio uklanjanje ali nasilno odpiranje v domu „\$homeName”.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Opozorilo na neovlašteno uklanjanje za „\$name” je prestalo.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "„\$name” je zatvoren v domu „\$homeName”.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "„\$name” je otvoren v domu „\$homeName”.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "„\$name” v domu „\$homeName” ima slabu bateriju.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "„\$name” v domu „\$homeName” izgubio je vezu.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "„\$name” v domu „\$homeName” znova je na mreži.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "„\$name” je zabilježio visoku temperaturu v domu „\$homeName”.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "„\$name” je zabilježio visoku vlažnost v domu „\$homeName”.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "„\$name” je prijavio uklanjanje ali nasilno odpiranje v domu „\$homeName”.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Opozorilo na neovlašteno uklanjanje za „\$name” je prestalo.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "„\$name” je zatvoren v domu „\$homeName”.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "„\$name” je otvoren v domu „\$homeName”.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "„\$name” v domu „\$homeName” ima slabu bateriju.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "„\$name” v domu „\$homeName” izgubio je vezu.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "„\$name” v domu „\$homeName” znova je na mreži.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "„\$name” je zabilježio visoku temperaturu v domu „\$homeName”.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "„\$name” je zabilježio visoku vlažnost v domu „\$homeName”.",
   "Có nút SOS vừa được kích hoạt": "Aktiviran je SOS gumb",
   "Có dấu hiệu khói hoặc cháy": "Zaznani so znakovi dima ali požara",
   "Có dấu hiệu ngập nước": "Zaznani so znakovi poplave",
   "Có dấu hiệu rò khí": "Zaznani so znakovi puščanja plina",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Vrata so odprta ali je zaznano neovlašteno uklanjanje naprave",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Vrata so odprta ali je zaznano neovlašteno uklanjanje naprave",
   "Có thiết bị đang cảnh báo": "Naprava šalje opozorilo",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Če nitko ne potrdi, SafeHome bo pokrenuti nujni poziv.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Opozorilo se bo ponoviti v \$time če problem ni rešen.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Opozorilo se bo ponoviti po urniku Alarma če problem ni rešen.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "„\$deviceName” je zatvoren v domu „\$resolvedHomeName”.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "„\$deviceName” je otvoren v domu „\$resolvedHomeName”.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Če nitko ne potrdi, SafeHome bo pokrenuti nujni poziv.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Opozorilo se bo ponoviti v \$time če problem ni rešen.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Opozorilo se bo ponoviti po urniku Alarma če problem ni rešen.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "„\$deviceName” je zatvoren v domu „\$resolvedHomeName”.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "„\$deviceName” je otvoren v domu „\$resolvedHomeName”.",
   "\$count nhà đã chọn": "Izbrano je \$count domova",
-  "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count nesigurnih domova\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count domova zahtijeva pažnju\$suffix",
+  "🚨 \$count nhà không an toàn\$suffix":
+      "🚨 \$count nesigurnih domova\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count domova zahtijeva pažnju\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count sigurnih domova",
   "\$count nhà đang được theo dõi": "Nadzire se \$count domova",
   "\$minutes phút": "\$minutes minuta",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Opomnik je nastavljen za \$updatedHomes domova.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarm je nastavljen za \$updatedDevices naprave v \$updatedHomes domova.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Domovi, za katere imate dovoljenje so bili uspešno deljeni.\n\n\$skipped domova je bilo preskočenih, ker Nimate dovoljenja za deljenje.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarm je primijenjen na \$count sigurnosnih naprave",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Primijeni isti urnik na \$count sigurnosnih naprave",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Opomnik je nastavljen za \$updatedHomes domova.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarm je nastavljen za \$updatedDevices naprave v \$updatedHomes domova.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Domovi, za katere imate dovoljenje so bili uspešno deljeni.\n\n\$skipped domova je bilo preskočenih, ker Nimate dovoljenja za deljenje.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarm je primijenjen na \$count sigurnosnih naprave",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Primijeni isti urnik na \$count sigurnosnih naprave",
   "\$count phút trước": "Pred \$count minuta",
   "\$count giờ trước": "Pred \$count ure",
   "\${count}h trước": "Pred \${count} h",
   "\${hours}h\$minutes' trước": "Pred \${hours} h in \$minutes min",
   "\$count ngày trước": "Pred \$count dana",
   "\$count tháng trước": "Pred \$count mjeseci",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Ali ste prepričani da želite ukloniti \$name iz ovog doma?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nTraži pridružitev domu „\$homeName”",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Ali ste prepričani da želite ukloniti \$name iz ovog doma?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nTraži pridružitev domu „\$homeName”",
   "Xin gia nhập \"\$homeName\"": "Išči pridružitev domu „\$homeName”",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Pozvani ste preuzeti lastništvo doma „\$homeName”",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nPoziva vas da se pridružite domu „\$homeName”",
-  "Mời bạn gia nhập \"\$homeName\"": "Poziva vas da se pridružite domu „\$homeName”",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Pozvani ste preuzeti lastništvo doma „\$homeName”",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nPoziva vas da se pridružite domu „\$homeName”",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Poziva vas da se pridružite domu „\$homeName”",
   "Cần kiểm tra: \$joined": "Potrebna preverjanje: \$joined",
   "Cập nhật \$value": "Ažurirano \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Dodajte prvi SafeHome naprava kako biste počeli nadzirati dom.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Prvo preverite nujna opozorila, a zatim po potrebi kontaktirajte člane doma.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Nijedan član ni pri hiše, ali vrata ali ključavnica so otvoreni. Takoj preverite.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Preverite odprta vrata ali bravu pred nego što dom pustite v načinu zaščite.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Mogoče je da je nekdo še pri hiše; če jest, prebacite na Normalno.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Nekateri člani imajo nepoznatu lokacijo. Prosite jih naj odprejo aplikacijo ali preverijo dovoljenje lokacije.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Naprava ni povezan. Preverite bateriju, napajanje ali položaj naprave.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Naprava ima slabu bateriju. Uskoro je zamijenite kako ne biste propustili opozorila.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Opomnik ni nastavljen. Izradite urnik za redovitu preverjanje doma.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Urnik Alarma ni nastavljen. Vklopite Zaščito za razdoblja ko obično niste pri hiše.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Ni potrebna nujna dejanje. Nastavite pratiti stanje doma.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Dodajte prvi SafeHome naprava kako biste počeli nadzirati dom.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Prvo preverite nujna opozorila, a zatim po potrebi kontaktirajte člane doma.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Nijedan član ni pri hiše, ali vrata ali ključavnica so otvoreni. Takoj preverite.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Preverite odprta vrata ali bravu pred nego što dom pustite v načinu zaščite.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Mogoče je da je nekdo še pri hiše; če jest, prebacite na Normalno.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Nekateri člani imajo nepoznatu lokacijo. Prosite jih naj odprejo aplikacijo ali preverijo dovoljenje lokacije.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Naprava ni povezan. Preverite bateriju, napajanje ali položaj naprave.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Naprava ima slabu bateriju. Uskoro je zamijenite kako ne biste propustili opozorila.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Opomnik ni nastavljen. Izradite urnik za redovitu preverjanje doma.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Urnik Alarma ni nastavljen. Vklopite Zaščito za razdoblja ko obično niste pri hiše.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Ni potrebna nujna dejanje. Nastavite pratiti stanje doma.",
   "Lặp sau \$minutes phút": "Ponovi po \$minutes minuta",
   "Đang dùng • \$repeatText": "Aktivno • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Varnostni nadzor • \$repeatText",
   "Gia đình: \$mode": "Način doma: \$mode",
   "Gợi ý xử lý": "Predložene radnje",
-  "Phát hiện \$count vấn đề cần xử lý": "Zaznano je \$count problema ki zahtijevaju pažnju",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Vrata so danes korištena \$count puta",
-  "Đã ghi nhận \$count hoạt động gần đây": "Zabilježeno je \$count nedavnih aktivnosti",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistem: \$issueCount stavki treba preverjanje",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM token spreman je na tem telefonu.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM token je spreman, ali Automatskom odhodu nedostaje jedan pogoj.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Pronađeno je \$emergencyTotal nujnih naprave. Preporučeni minimum: senzor dima in SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Ali ste prepričani da želite prenijeti lastništvo na:\n\$targetEmail?",
+  "Phát hiện \$count vấn đề cần xử lý":
+      "Zaznano je \$count problema ki zahtijevaju pažnju",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Vrata so danes korištena \$count puta",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Zabilježeno je \$count nedavnih aktivnosti",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistem: \$issueCount stavki treba preverjanje",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM token spreman je na tem telefonu.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM token je spreman, ali Automatskom odhodu nedostaje jedan pogoj.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Pronađeno je \$emergencyTotal nujnih naprave. Preporučeni minimum: senzor dima in SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Ali ste prepričani da želite prenijeti lastništvo na:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count vrata varno zaprto",
   "\$count cửa và khóa đã an toàn": "\$count vrata in ključavnica osigurano",
   "\$count thiết bị đang được theo dõi": "Nadzire se \$count naprave",
   "Cập nhật \$timeText": "Ažurirano \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Najnoviji podatki ažurirani so pred \$count minuta",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Najnoviji podatki ažurirani so pred \$count ure",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Najnoviji podatki ažurirani so pred \$count minuta",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Najnoviji podatki ažurirani so pred \$count ure",
   "Thành viên trong nhà: \$count": "Člani pri hiše: \$count",
   "Thành viên bên ngoài: \$count": "Člani zunaj doma: \$count",
   "Chưa xác định vị trí: \$count": "Neznana lokacija: \$count",
   "Môi trường hiện tại: \$environment": "Trenutno okruženje: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Odprto medtem ko je dom v načinu zaščite",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Odprto medtem ko je dom v načinu zaščite",
   "An tâm hơn trong từng ngôi nhà": "Mir v svakom domu",
   "Báo động SafeHome": "SafeHome Alarm",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Varnostno opozorilo zahtijeva hitnu preverjanje.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Varnostno opozorilo zahtijeva hitnu preverjanje.",
   "Có cảnh báo cần kiểm tra": "Opozorilo zahtijeva preverjanje",
   "Tự đóng sau \$time": "Samodejno se zatvara za \$time",
   "Ngày trong tuần": "Dani v tjednu",
   "Hoặc": "Ali",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Čas početka in završetka ne mogu biti isti",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Čas završetka mora biti po trenutačnog časa",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Čas početka in završetka ne mogu biti isti",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Čas završetka mora biti po trenutačnog časa",
   "Khoảng tạm tắt không hợp lệ": "Nevažeći raspon premora Alarma",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Raspon premora ne preklapa se ni s jednim aktivnim rasporedom Alarma",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Raspon premora ne preklapa se ni s jednim aktivnim rasporedom Alarma",
   "Cài đặt báo động": "Nastavitve Alarma",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Upravlja načinom na ki ta senzor pokreće opozorila.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Upravlja načinom na ki ta senzor pokreće opozorila.",
   "Tham gia báo động": "Sudjeluj v alarmima",
-  "Tắt để cảm biến không tạo báo động.": "Izklopite kako ta senzor ne bi pokretao Alarm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Izklopite kako ta senzor ne bi pokretao Alarm.",
   "Bật còi vật lý": "Omogući fizičku sirenu",
   "Cho phép kích hoạt còi trong nhà.": "Dopušta uključivanje sirene v domu.",
   "Đánh thức màn hình": "Probudi zaslon",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Prikazuje opozorilo čez celoten zaslon telefona.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Prikazuje opozorilo čez celoten zaslon telefona.",
   "Độ trễ kích hoạt": "Odgoda aktiviranja",
-  "Chỉ áp dụng cho cảm biến an ninh.": "Primjenjuje se samo na varnostne senzore.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Nujni senzori vedno se aktiviraju takoj.",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "Primjenjuje se samo na varnostne senzore.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Nujni senzori vedno se aktiviraju takoj.",
   "Ngay lập tức": "Takoj",
   "giây": "sekundi",
   "Đã lưu cấu hình báo động": "Nastavitve Alarma so spremljene",
   "Không thể lưu cấu hình báo động": "Ni mogoče shraniti nastavitve Alarma",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Samo Lastnik in Administratori mogu spremeniti ovu postavku.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Samo Lastnik in Administratori mogu spremeniti ovu postavku.",
   "Thông tin chi tiết": "Pojedinosti o napravi",
   "Thông báo báo động": "Obvestilo o Alarmu",
   "Cài đặt nhắc nhở": "Nastavitve Opomnika",
   "Nhắc nhở theo lịch": "Zakazani Opomnik",
   "Danh sách thông báo": "Popis obvestila",
   "Cài đặt thông báo": "Nastavitve obvestila",
-  "Sử dụng báo động theo lịch đã thiết lập": "Uporablja Alarm po postavljenom urniku",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Šalji samo obvestila, brez pokretanja Alarma",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Vsi Alarmi doma so isključeni; sistem bo slati samo obvestila.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Uporablja Alarm po postavljenom urniku",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Šalji samo obvestila, brez pokretanja Alarma",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Vsi Alarmi doma so isključeni; sistem bo slati samo obvestila.",
   "Chỉ Chủ nhà có thể bật chế độ này.": "Samo Lastnik lahko vklopiti ta način.",
   "Bật Không bảo vệ?": "Vklopiti način Brez zaščite?",
   "Cảm biến vừa phát hiện một sự kiện.": "Senzor je upravo otkrio događaj.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Samo Lastnik lahko vklopiti način Brez zaščite",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Samo Lastnik lahko vklopiti način Brez zaščite",
   "Đã chuyển nhà sang Không bảo vệ": "Dom je prebačen v način Brez zaščite",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Prebačeno je na način Brez zaščite, ali obvestilo ni mogoče poslati",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Prebačeno je na način Brez zaščite, ali obvestilo ni mogoče poslati",
   "Giám sát toàn diện": "Potpuni nadzor",
   "Không bảo vệ": "Brez zaščite",
   "Không bảo vệ đang bật": "Način Brez zaščite je aktivan",
   "Nhà đã chuyển sang Không bảo vệ": "Dom je prebačen v način Brez zaščite",
   "Thông báo cảm biến": "Obvestila senzora",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Uobičajene obvestila ko senzor otkrije događaj.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Uobičajene obvestila ko senzor otkrije događaj.",
   "Tôi hiểu, tiếp tục": "Razumijem, nastavi",
   "Cảnh báo an ninh đã kết thúc": "Varnostno opozorilo je završilo",
   "Sự cố nguy hiểm đã kết thúc": "Nujni slučaj je završen",
   "Cảnh báo đã được kết thúc.": "Opozorilo je završilo.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "Drugo opozorilo še je aktivno.",
   "Báo động đã hoạt động trở lại": "Alarm je znova aktivan",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Razdoblje premora Alarma je završilo.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Razdoblje premora Alarma je završilo.",
   "MQTT đã kết nối trở lại": "MQTT se znova povezao",
   "Còi báo động đã được tắt": "Fizička sirena je izklopljena",
   "Sự cố vẫn đang được theo dõi.": "Incident se in dalje nadzire.",
@@ -934,34 +1154,47 @@ const Map<String, String> slStrings = {
   "Nhà đang ở chế độ Bình thường.": "Dom je v načinu Normalno.",
   "Pin thiết bị đã ổn định": "Baterija naprave je stabilna",
   "Hub đã kết nối trở lại": "Hub se znova povezao",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Vraćeno je na Normalno, ali obvestilo ni mogoče poslati",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Vraćeno je na Normalno, ali obvestilo ni mogoče poslati",
   "Chung cho nhà": "Zajedničko za dom",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Primjenjuje se na vse člane in lahko vklopiti fizičku sirenu.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Primjenjuje se na vse člane in lahko vklopiti fizičku sirenu.",
   "Cá nhân": "Osobno",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Osebni urnik deluje neovisno in nikada ne uključuje fizičku sirenu.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Ta postavka velja samo za vaš račun.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Samo Lastnik in Administratori mogu mijenjati zajedničke nastavitve doma.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Osebni urnik deluje neovisno in nikada ne uključuje fizičku sirenu.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Ta postavka velja samo za vaš račun.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Samo Lastnik in Administratori mogu mijenjati zajedničke nastavitve doma.",
   "Tham gia hệ thống báo động": "Sudjeluj v sustavu Alarma",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Nujni senzori vedno sudjeluju v sustavu Alarma.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Izklopite kako naprava ne bi pokretao nijedan Alarm.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Nujni senzori vedno sudjeluju v sustavu Alarma.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Izklopite kako naprava ne bi pokretao nijedan Alarm.",
   "Lịch báo động chung": "Skupni urnik Alarma",
   "Lịch báo động cá nhân": "Osebni urnik Alarma",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Prikazuje opozorilo čez celoten zaslon vašeg telefona.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Prikazuje opozorilo čez celoten zaslon vašeg telefona.",
   "Lặp lại cảnh báo": "Ponavljaj opozorilo",
   "Báo động chung": "Skupni Alarm",
   "Báo động cá nhân": "Osebni Alarm",
   "Đã cài đặt": "Postavljeno",
   "Chưa cài đặt": "Ni postavljeno",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Skupni in osebni rasporedi rade paralelno; več ne morate birati između njih.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Skupni in osebni rasporedi rade paralelno; več ne morate birati između njih.",
   "Cài nhanh chung": "Brzo zajedničko nastavljanje",
   "Cài nhanh cá nhân": "Brzo osobno nastavljanje",
   "Thiết lập nhanh lịch cá nhân": "Brzo nastavljanje osebnega urnika",
   "Thiết lập nhanh lịch chung": "Brzo nastavljanje skupnega urnika",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Ta urnik velja samo za vas in ne uključuje fizičku sirenu.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Ta urnik velja za vse člane doma.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Ta urnik velja samo za vas in ne uključuje fizičku sirenu.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Ta urnik velja za vse člane doma.",
   "Đã áp dụng lịch báo động": "Urnik Alarma je primijenjen",
   "Không thể lưu lịch báo động": "Ni mogoče shraniti urnik Alarma",
   "Nhà chưa có thiết bị an ninh": "Ta dom ni sigurnosnih naprave",
-  "Nhận cảnh báo theo lịch chung của nhà": "Primaj opozorila po skupnem urniku doma",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Izklopite, če ne želite več prejemati obvestila ali opozorila na celotnem zaslonu iz skupnega urnika. Sirena doma bo še naprej delovala.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Primaj opozorila po skupnem urniku doma",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Izklopite, če ne želite več prejemati obvestila ali opozorila na celotnem zaslonu iz skupnega urnika. Sirena doma bo še naprej delovala.",
 };

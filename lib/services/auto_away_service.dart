@@ -1339,16 +1339,6 @@ class AutoAwayService {
         .update(updates);
   }
 
-  static String _locationErrorText(Object error) {
-    final text = error.toString();
-
-    if (text.length <= 500) {
-      return text;
-    }
-
-    return text.substring(0, 500);
-  }
-
   static Future<void> _writeMonitoringStatus({
     required String uid,
     required _DesiredGeofence item,

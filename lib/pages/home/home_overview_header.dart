@@ -61,9 +61,7 @@ class HomeOverviewHeader extends StatelessWidget {
 
   String _statusPanelKey() {
     final issues = List<String>.from(overall["issues"] ?? const []);
-    final safeSummary = List<String>.from(
-      overall["safeSummary"] ?? const [],
-    );
+    final safeSummary = List<String>.from(overall["safeSummary"] ?? const []);
     final presenceWarnings = List<String>.from(
       overall["presenceWarnings"] ?? const [],
     );

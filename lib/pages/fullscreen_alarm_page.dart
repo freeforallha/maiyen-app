@@ -957,27 +957,6 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
         type == 'gas';
   }
 
-  String _compactAlarmHomeNames(
-    Iterable<String> rawNames,
-    AppStrings strings,
-  ) {
-    final names = rawNames
-        .map((name) => name.trim())
-        .where((name) => name.isNotEmpty)
-        .toSet()
-        .toList();
-
-    if (names.isEmpty) {
-      return strings.defaultHomeName();
-    }
-
-    if (names.length <= 2) {
-      return names.join('  •  ');
-    }
-
-    return '${names.take(2).join('  •  ')}  •  +${names.length - 2}';
-  }
-
   Widget _buildAndroidAlarmUI(BuildContext context) {
     final strings = AppStrings.of(context);
     final type = alarmType();
@@ -1023,9 +1002,10 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                       children: [
                         ScaleTransition(
                           scale: isEmergency
-                              ? Tween<double>(begin: 0.96, end: 1.04).animate(
-                                  _dangerPulse,
-                                )
+                              ? Tween<double>(
+                                  begin: 0.96,
+                                  end: 1.04,
+                                ).animate(_dangerPulse)
                               : const AlwaysStoppedAnimation<double>(1.0),
                           child: Container(
                             width: compact ? 56 : 64,
@@ -1212,7 +1192,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                                       isEmergency
                                           ? Icons.priority_high_rounded
                                           : Icons.schedule_rounded,
-                                      color: Colors.white.withValues(alpha: 0.88),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.88,
+                                      ),
                                       size: 19,
                                     ),
                                     const SizedBox(width: 9),

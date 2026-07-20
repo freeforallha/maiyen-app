@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/home_helper.dart';
-import '../helpers/top_toast.dart';
 import 'device_alarm_policy_sheet.dart';
 import '../localization/app_strings.dart';
 import '../navigation/safehome_navigation.dart';
@@ -361,18 +360,23 @@ void showDeviceDetail({
                               final personalHome = rawPersonalHome is Map
                                   ? Map<String, dynamic>.from(rawPersonalHome)
                                   : const <String, dynamic>{};
-                              final rawPersonalDevices = personalHome["devices"];
+                              final rawPersonalDevices =
+                                  personalHome["devices"];
                               final personalDevices = rawPersonalDevices is Map
-                                  ? Map<String, dynamic>.from(rawPersonalDevices)
+                                  ? Map<String, dynamic>.from(
+                                      rawPersonalDevices,
+                                    )
                                   : const <String, dynamic>{};
                               final rawPersonalDevice =
                                   personalDevices[currentDeviceId];
                               final personalDevice = rawPersonalDevice is Map
                                   ? Map<String, dynamic>.from(rawPersonalDevice)
                                   : const <String, dynamic>{};
-                              final legacyAlarmMode = (personalHome["alarmMode"] ??
-                                    personalHome["mode"] ??
-                                    "home").toString();
+                              final legacyAlarmMode =
+                                  (personalHome["alarmMode"] ??
+                                          personalHome["mode"] ??
+                                          "home")
+                                      .toString();
                               final commonAlarm = normalizeDeviceAlarmSchedule(
                                 device["alarm"],
                               );
@@ -948,10 +952,7 @@ Widget _alarmSettingsSummary({
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.end,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w800,
-              ),
+              style: TextStyle(color: color, fontWeight: FontWeight.w800),
             ),
           ),
         ],
@@ -970,9 +971,7 @@ Widget _alarmSettingsSummary({
     child: Column(
       children: [
         row(
-          icon: settings.enabled
-              ? Icons.shield_rounded
-              : Icons.shield_outlined,
+          icon: settings.enabled ? Icons.shield_rounded : Icons.shield_outlined,
           title: strings.t("Tham gia hệ thống báo động"),
           value: strings.t(settings.enabled ? "Bật" : "Tắt"),
           color: settings.enabled
@@ -983,9 +982,7 @@ Widget _alarmSettingsSummary({
         row(
           icon: Icons.campaign_rounded,
           title: strings.t("Bật còi vật lý"),
-          value: strings.t(
-            settings.physicalSirenEnabled ? "Bật" : "Tắt",
-          ),
+          value: strings.t(settings.physicalSirenEnabled ? "Bật" : "Tắt"),
           color: settings.physicalSirenEnabled
               ? SafeHomeColors.primary
               : SafeHomeColors.textSecondary,
@@ -1052,171 +1049,6 @@ Widget _alarmSettingsSummary({
             ),
           ),
         ),
-      ],
-    ),
-  );
-}
-
-Widget _alarmPolicySection({
-  required AppStrings strings,
-  required DeviceAlarmPolicySettings settings,
-  required bool isEmergency,
-  required bool canEdit,
-  required Future<void> Function(DeviceAlarmPolicySettings settings) onChanged,
-}) {
-  const delayOptions = <int>[0, 5, 10, 15, 30, 60, 90, 120];
-  final dependentControlsEnabled = canEdit && (isEmergency || settings.enabled);
-  final selectedDelay = isEmergency ? 0 : settings.triggerDelaySeconds;
-  final availableDelayOptions = <int>{
-    ...delayOptions,
-    selectedDelay,
-  }.where((value) => value >= 0 && value <= 120).toList()..sort();
-
-  DeviceAlarmPolicySettings copyWith({
-    bool? enabled,
-    bool? physicalSirenEnabled,
-    bool? fullscreenEnabled,
-    int? triggerDelaySeconds,
-  }) {
-    return DeviceAlarmPolicySettings(
-      enabled: isEmergency ? true : enabled ?? settings.enabled,
-      physicalSirenEnabled:
-          physicalSirenEnabled ?? settings.physicalSirenEnabled,
-      fullscreenEnabled: fullscreenEnabled ?? settings.fullscreenEnabled,
-      triggerDelaySeconds: isEmergency
-          ? 0
-          : triggerDelaySeconds ?? settings.triggerDelaySeconds,
-    );
-  }
-
-  return Container(
-    width: double.infinity,
-    decoration: BoxDecoration(
-      color: SafeHomeColors.surface,
-      borderRadius: BorderRadius.circular(18),
-      border: Border.all(color: SafeHomeColors.border),
-    ),
-    child: Column(
-      children: [
-        _alarmPolicySwitchRow(
-          icon: Icons.shield_rounded,
-          title: strings.t("Tham gia báo động"),
-          value: isEmergency ? true : settings.enabled,
-          enabled: canEdit && !isEmergency,
-          onChanged: (value) => onChanged(copyWith(enabled: value)),
-        ),
-        const Divider(height: 1, indent: 52),
-        _alarmPolicySwitchRow(
-          icon: Icons.campaign_rounded,
-          title: strings.t("Bật còi vật lý"),
-          value: settings.physicalSirenEnabled,
-          enabled: dependentControlsEnabled,
-          onChanged: (value) =>
-              onChanged(copyWith(physicalSirenEnabled: value)),
-        ),
-        const Divider(height: 1, indent: 52),
-        _alarmPolicySwitchRow(
-          icon: Icons.phone_android_rounded,
-          title: strings.t("Đánh thức màn hình"),
-          value: settings.fullscreenEnabled,
-          enabled: dependentControlsEnabled,
-          onChanged: (value) => onChanged(copyWith(fullscreenEnabled: value)),
-        ),
-        const Divider(height: 1, indent: 52),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
-          child: Row(
-            children: [
-              const SizedBox(
-                width: 32,
-                height: 32,
-                child: Icon(
-                  Icons.timer_outlined,
-                  color: SafeHomeColors.warning,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  strings.t("Độ trễ kích hoạt"),
-                  style: const TextStyle(
-                    color: SafeHomeColors.textPrimary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              DropdownButtonHideUnderline(
-                child: DropdownButton<int>(
-                  value: selectedDelay,
-                  isDense: true,
-                  items: availableDelayOptions
-                      .map(
-                        (seconds) => DropdownMenuItem<int>(
-                          value: seconds,
-                          child: Text(
-                            seconds == 0
-                                ? strings.t("Ngay lập tức")
-                                : "$seconds ${strings.t("giây")}",
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: dependentControlsEnabled && !isEmergency
-                      ? (value) {
-                          if (value != null) {
-                            onChanged(copyWith(triggerDelaySeconds: value));
-                          }
-                        }
-                      : null,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _alarmPolicySwitchRow({
-  required IconData icon,
-  required String title,
-  required bool value,
-  required bool enabled,
-  required ValueChanged<bool> onChanged,
-}) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(14, 4, 8, 4),
-    child: Row(
-      children: [
-        SizedBox(
-          width: 32,
-          height: 32,
-          child: Icon(
-            icon,
-            color: enabled
-                ? SafeHomeColors.primary
-                : SafeHomeColors.textSecondary,
-            size: 20,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: SafeHomeColors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-        Switch.adaptive(value: value, onChanged: enabled ? onChanged : null),
       ],
     ),
   );
@@ -1366,7 +1198,7 @@ Future<String?> _showDeviceSelector({
                   shrinkWrap: true,
                   padding: const EdgeInsets.fromLTRB(14, 4, 14, 20),
                   itemCount: entries.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final entry = entries[index];
                     final device = entry.value;

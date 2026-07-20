@@ -3,7 +3,8 @@ const Map<String, String> csStrings = {
   "Không đọc được số điện thoại": "Telefonní číslo se nepodařilo načíst",
   "Tin nhắn quá dài": "Zpráva je příliš dlouhá",
   "Không gửi được tin nhắn": "Zprávu se nepodařilo odeslat",
-  "Bạn không có quyền sửa lịch chung của nhà": "Nemáte oprávnění upravovat společný plán domácnosti",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Nemáte oprávnění upravovat společný plán domácnosti",
   "Nhà của bạn": "Váš domov",
   "Tải tin cũ hơn": "Načíst starší zprávy",
   "Nhà chưa đặt tên": "Dům bez názvu",
@@ -91,20 +92,26 @@ const Map<String, String> csStrings = {
   "Đang theo dõi": "Sledování aktivní",
   "Chưa nhận diện": "Nerozpoznáno",
   "Chưa có cập nhật": "Zatím žádné aktualizace",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Zatím nejsou přidána žádná zařízení. Klepnutím na + přidejte zařízení a začněte chránit svůj domov",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Zatím nejsou přidána žádná zařízení. Klepnutím na + přidejte zařízení a začněte chránit svůj domov",
   "CHƯA AN TOÀN": "NENÍ BEZPEČNÉ",
   "ĐÃ AN TOÀN": "BEZPEČNÉ",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "V domě jsou známky, které je třeba zkontrolovat. Prohlédněte si níže uvedené stavy.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Domov funguje stabilně. Můžete být v klidu.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Žádné známky kouře ani neobvyklého SOS signálu.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Zatím není dostatek nové aktivity pro podrobnější analýzu.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "V domě jsou známky, které je třeba zkontrolovat. Prohlédněte si níže uvedené stavy.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Domov funguje stabilně. Můžete být v klidu.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Žádné známky kouře ani neobvyklého SOS signálu.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Zatím není dostatek nové aktivity pro podrobnější analýzu.",
   "Hub kết nối bình thường": "Připojení hubu je v pořádku",
   "Cài đặt cảnh báo cho nhà hiện tại": "Nastavit upozornění pro aktuální domov",
   "Nhận cảnh báo báo động": "Přijímat poplašná upozornění",
   "Đang bật cho tài khoản này": "Zapnuto pro tento účet",
   "Đang tắt cho tài khoản này": "Vypnuto pro tento účet",
   "Hẹn giờ nhắc nhở": "Naplánovat připomenutí",
-  "Nhắc kiểm tra nhà theo thời gian": "Připomínat kontrolu domova v naplánovaný čas",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Připomínat kontrolu domova v naplánovaný čas",
   "Hẹn giờ báo động": "Naplánovat alarm",
   "Chưa thiết lập": "Nenastaveno",
   "Chưa thiết lập thời gian": "Čas není nastaven",
@@ -161,20 +168,26 @@ const Map<String, String> csStrings = {
   "Đã rời khỏi home": "Domov byl opuštěn",
   "Đã cập nhật": "Aktualizováno",
   "Tìm home...": "Hledat domov...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Nastavit polohu domova a zapnout automatickou ochranu",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Převést vlastnictví nebo odstranit domov",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Nastavit připomenutí/alarm pro vybrané domovy",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Nastavit polohu domova a zapnout automatickou ochranu",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Převést vlastnictví nebo odstranit domov",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Nastavit připomenutí/alarm pro vybrané domovy",
   "Chia sẻ nhà đã chọn": "Sdílet vybrané domovy",
   "Mở danh sách chia sẻ nhà": "Otevřít seznam sdílení domova",
   "Xoá các nhà đã chọn?": "Odstranit vybrané domovy?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Vybrané domovy budou trvale odstraněny.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Nebo naskenujte QR kód a požádejte o připojení k vybraným domovům",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Vybrané domovy budou trvale odstraněny.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Nebo naskenujte QR kód a požádejte o připojení k vybraným domovům",
   "Email người nhận": "E-mail příjemce",
   "Chia sẻ": "Sdílet",
   "Email chưa đăng ký": "E-mail není zaregistrován",
   "Chia sẻ hoàn tất": "Sdílení dokončeno",
   "Mở List chia sẻ nhà": "Otevřít seznam sdílení domova",
-  "Không có nhà nào bạn có quyền quản lý": "Nemáte žádný domov, který můžete spravovat",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Nemáte žádný domov, který můžete spravovat",
   "Chưa share cho ai": "Zatím s nikým nesdíleno",
   "Tìm nhà": "Hledat domov",
   "Xoá các nhà đã chọn ?": "Odstranit vybrané domovy?",
@@ -182,13 +195,15 @@ const Map<String, String> csStrings = {
   "Thông báo nhà": "Oznámení domova",
   "Vai trò thành viên đã thay đổi": "Role člena byla změněna",
   "Xoá tất cả thông báo?": "Odstranit všechna oznámení?",
-  "Toàn bộ thông báo nhà sẽ bị xoá.": "Všechna oznámení domova budou odstraněna.",
+  "Toàn bộ thông báo nhà sẽ bị xoá.":
+      "Všechna oznámení domova budou odstraněna.",
   "Chưa có thông báo nào": "Zatím žádná oznámení",
   "Chưa có thông báo": "Žádná oznámení",
   "Vuốt lên để tải thêm": "Přejetím nahoru načtete další",
   "Không có thiết bị": "Žádná zařízení",
   "Chỉ chủ nhà mới được xoá nhà": "Domov může odstranit pouze vlastník",
-  "Chỉ chủ nhà mới được chuyển quyền": "Vlastnictví může převést pouze vlastník",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Vlastnictví může převést pouze vlastník",
   "Lưu ý khi bật báo động": "Upozornění při zapnutí alarmu",
   "Báo động đã được bật": "Alarm byl zapnut",
   "Đã hiểu": "Rozumím",
@@ -197,27 +212,35 @@ const Map<String, String> csStrings = {
   "Đã tắt báo động": "Alarm vypnutý",
   "Tắt báo động": "Vypnout alarm",
   "Cả ngày": "Celý den",
-  "Bạn không có quyền thực hiện thao tác này.": "K provedení této akce nemáte oprávnění.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Akci se nepodařilo dokončit. Zkuste to znovu.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Neplatný QR kód pro připojení k více domovům",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "K provedení této akce nemáte oprávnění.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Akci se nepodařilo dokončit. Zkuste to znovu.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Neplatný QR kód pro připojení k více domovům",
   "Bạn đang là chủ các nhà này": "Jste vlastníkem těchto domovů",
   "Một người dùng": "Jeden uživatel",
   "Yêu cầu gia nhập nhà": "Žádost o připojení k domovu",
   "Đã gửi yêu cầu gia nhập nhà": "Žádost o připojení k domovu byla odeslána",
   "QR gia nhập không hợp lệ": "Neplatný QR kód pro připojení",
   "Bạn đang là chủ nhà này": "Jste vlastníkem tohoto domova",
-  "QR này không phải mã xin gia nhập nhà": "Tento QR kód není určen k žádosti o připojení k domovu",
+  "QR này không phải mã xin gia nhập nhà":
+      "Tento QR kód není určen k žádosti o připojení k domovu",
   "Bạn không có quyền thêm thiết bị": "Nemáte oprávnění přidávat zařízení",
   "Đã mở chế độ thêm thiết bị": "Režim přidávání zařízení byl spuštěn",
   "Rời khỏi Home này?": "Opustit tento domov?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Tento domov a všechna zařízení v něm budou trvale odstraněny.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Tento domov a všechna zařízení v něm budou trvale odstraněny.",
   "Đã xoá nhà": "Domov byl odstraněn",
   "QR của nhà này": "QR kód tohoto domova",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Ostatní mohou tento kód naskenovat a odeslat žádost o připojení k domovu.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Ostatní mohou tento kód naskenovat a odeslat žádost o připojení k domovu.",
   "Chia sẻ nhà": "Sdílet domov",
   "Quét QR để xin gia nhập nhà": "Naskenovat QR kód a požádat o připojení",
-  "Quét QR xin gia nhập nhà": "Naskenovat QR kód pro žádost o připojení k domovu",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Umístěte QR kód pro sdílení domova do rámečku",
+  "Quét QR xin gia nhập nhà":
+      "Naskenovat QR kód pro žádost o připojení k domovu",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Umístěte QR kód pro sdílení domova do rámečku",
   "Mã QR này do chủ nhà chia sẻ": "Tento QR kód sdílel vlastník domova",
   "Nhập mã mời": "Zadejte kód pozvánky",
   "Gửi yêu cầu gia nhập": "Odeslat žádost o připojení",
@@ -237,7 +260,8 @@ const Map<String, String> csStrings = {
   "Xác nhận mật khẩu": "Potvrdit heslo",
   "Yêu cầu chuyển quyền chủ nhà": "Žádost o převod vlastnictví domova",
   "Đã gửi yêu cầu chuyển quyền": "Žádost o převod byla odeslána",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Žádost o převod vlastnictví domova byla odeslána",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Žádost o převod vlastnictví domova byla odeslána",
   "Bạn không có quyền xoá thiết bị": "Nemáte oprávnění odstraňovat zařízení",
   "Xóa Device?": "Odstranit zařízení?",
   "Đã gửi yêu cầu xoá thiết bị": "Žádost o odstranění zařízení byla odeslána",
@@ -261,7 +285,8 @@ const Map<String, String> csStrings = {
   "Không thể lưu thông tin": "Informace se nepodařilo uložit",
   "Đã lưu thông tin": "Informace byly uloženy",
   "Lỗi lưu profile": "Chyba při ukládání profilu",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Přidejte telefonní číslo pro nouzové situace",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Přidejte telefonní číslo pro nouzové situace",
   "Hoàn tất": "Dokončit",
   "Đã tạo nhà mới": "Nový domov byl vytvořen",
   "Về muộn": "Pozdní návrat",
@@ -280,7 +305,8 @@ const Map<String, String> csStrings = {
   "SĐT": "Tel.",
   "Ngày sinh": "Datum narození",
   "Yêu cầu & lời mời": "Žádosti a pozvánky",
-  "Xem lời mời chia sẻ và xin gia nhập": "Zobrazit pozvánky ke sdílení a žádosti o připojení",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Zobrazit pozvánky ke sdílení a žádosti o připojení",
   "Cài đặt bảo mật": "Nastavení zabezpečení",
   "Quyền báo động toàn màn hình": "Oprávnění pro alarm na celou obrazovku",
   "Báo động toàn màn hình": "Alarm na celou obrazovku",
@@ -330,7 +356,8 @@ const Map<String, String> csStrings = {
   "Đổi tên phòng": "Přejmenovat místnost",
   "Tên phòng": "Název místnosti",
   "Xoá phòng": "Odstranit místnost",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Zařízení v této místnosti budou přesunuta do sekce Nepřiřazeno.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Zařízení v této místnosti budou přesunuta do sekce Nepřiřazeno.",
   "Thêm phòng": "Přidat místnost",
   "Ví dụ: Phòng khách": "Například: Obývací pokoj",
   "Phòng khách": "Obývací pokoj",
@@ -351,9 +378,11 @@ const Map<String, String> csStrings = {
   "Cửa đóng": "Dveře zavřené",
   "Chưa đặt vị trí nhà": "Poloha domova není nastavena",
   "Đặt vị trí nhà tại đây": "Nastavit polohu domova zde",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Před zapnutím automatické ochrany nejprve nastavte polohu domova",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Před zapnutím automatické ochrany nejprve nastavte polohu domova",
   "Bán kính bảo vệ mặc định: 150 m": "Výchozí poloměr ochrany: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Každý člen musí povolit přístup k poloze Vždy, aby se příchod a odchod z domova zaznamenával i na pozadí.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Každý člen musí povolit přístup k poloze Vždy, aby se příchod a odchod z domova zaznamenával i na pozadí.",
   "Lưu cài đặt": "Uložit nastavení",
   "Đã đặt vị trí nhà": "Poloha domova byla nastavena",
   "Đang lấy vị trí...": "Získávání polohy...",
@@ -362,16 +391,20 @@ const Map<String, String> csStrings = {
   "Cập nhật thông tin nhà": "Aktualizovat informace o domovu",
   "Nhập địa chỉ của nhà": "Zadejte adresu domova",
   "Lưu thay đổi": "Uložit změny",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Tento název se zobrazí pouze ve vašem účtu.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Název a adresa budou aktualizovány pro všechny členy domova.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Tento název se zobrazí pouze ve vašem účtu.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Název a adresa budou aktualizovány pro všechny členy domova.",
   "Một thành viên": "Jeden člen",
   "Đã cập nhật thông tin nhà": "Informace o domovu byly aktualizovány",
   "Thay tên": "Změnit název",
   "Đã đổi tên thiết bị": "Název zařízení byl změněn",
   "Chưa chọn nhà để kiểm tra": "Není vybrán domov ke kontrole",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Proveďte kontrolu pomocí účtu vlastníka",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Proveďte kontrolu pomocí účtu vlastníka",
   "Không đọc được dữ liệu nhà": "Data domova se nepodařilo načíst",
-  "Nhà cần có ít nhất một thiết bị để test": "Domov musí mít alespoň jedno zařízení pro testování",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Domov musí mít alespoň jedno zařízení pro testování",
   "Đóng": "Zavřít",
   "Đã thiết lập": "Nastaveno",
   "Quét QR": "Naskenovat QR kód",
@@ -427,8 +460,10 @@ const Map<String, String> csStrings = {
   "Chế độ áp dụng": "Režim použití",
   "Theo nhà": "Podle domova",
   "Riêng tôi": "Pouze pro mě",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Použít společný plán nastavený vlastníkem nebo správcem",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Použít osobní plán platný pouze pro váš účet",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Použít společný plán nastavený vlastníkem nebo správcem",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Použít osobní plán platný pouze pro váš účet",
   "Thiết lập nhanh báo động": "Rychlé nastavení alarmu",
   "Thiết lập nhanh toàn bộ thiết bị": "Rychlé nastavení všech zařízení",
   "Áp dụng cho toàn bộ thiết bị": "Použít na všechna zařízení",
@@ -440,10 +475,12 @@ const Map<String, String> csStrings = {
   "Đưa mã QR vào giữa khung": "Umístěte QR kód doprostřed rámečku",
   "Đang áp dụng...": "Používá se...",
   "Hôm nay đã ghi nhận cảnh báo SOS": "Dnes bylo zaznamenáno upozornění SOS",
-  "Hôm nay đã ghi nhận cảnh báo khói": "Dnes bylo zaznamenáno upozornění na kouř",
+  "Hôm nay đã ghi nhận cảnh báo khói":
+      "Dnes bylo zaznamenáno upozornění na kouř",
   "Khói đã an toàn": "Stav kouře je opět bezpečný",
   "Không tìm thấy nhà của thông báo này": "Domov tohoto oznámení nebyl nalezen",
-  "Không tìm thấy thiết bị trong nhà này": "Zařízení nebylo v tomto domově nalezeno",
+  "Không tìm thấy thiết bị trong nhà này":
+      "Zařízení nebylo v tomto domově nalezeno",
   "Một chủ nhà": "Jeden vlastník",
   "Ngôi nhà đang hoạt động ổn định": "Domov funguje stabilně",
   "Nhiệt độ cao": "Vysoká teplota",
@@ -468,8 +505,10 @@ const Map<String, String> csStrings = {
   "Đã rời khỏi nhà": "Opustili jste domov",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Opustíte sdílené domovy.",
   "Các nhà của bạn sẽ bị xoá.\n": "Vaše domovy budou odstraněny.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Tato akce změní plán alarmu všech bezpečnostních zařízení ve vybraných domovech.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Tato akce přidá připomenutí pro vybrané domovy.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Tato akce změní plán alarmu všech bezpečnostních zařízení ve vybraných domovech.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Tato akce přidá připomenutí pro vybrané domovy.\n\n",
   "Xác nhận thay đổi báo động": "Potvrdit změny alarmu",
   "Xác nhận thay đổi nhắc nhở": "Potvrdit změny připomenutí",
   "Lặp lại khi sự cố vẫn còn": "Opakovat, dokud problém trvá",
@@ -477,41 +516,57 @@ const Map<String, String> csStrings = {
   "VD: Mr Chung": "Např.: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 Zatím žádné domovy",
   "Vẫn chuyển về Bình thường": "Přesto přepnout na Normální",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automatická ochrana při odchodu je stále zapnutá. Pokud jsou všichni členové stále mimo domov, systém může po několika minutách ochranu znovu automaticky zapnout.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automatická ochrana při odchodu je stále zapnutá. Pokud jsou všichni členové stále mimo domov, systém může po několika minutách ochranu znovu automaticky zapnout.",
   "Chuyển về Bình thường?": "Přepnout na Normální?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Po zapnutí budou bezpečnostní zařízení okamžitě sledována.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Po zapnutí budou bezpečnostní zařízení okamžitě sledována.\n\n",
   "Bật Bảo vệ thủ công?": "Zapnout ruční ochranu?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Tato akce změní čas alarmu některých zařízení",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Tato akce vypne všechny alarmy domova",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Tato akce změní čas alarmu některých zařízení",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Tato akce vypne všechny alarmy domova",
   "Tắt toàn bộ báo động?": "Vypnout všechny alarmy?",
-  "Không xoá được lịch tạm tắt báo động": "Plán dočasného vypnutí alarmu se nepodařilo odstranit",
-  "Không lưu được tạm tắt báo động": "Dočasné vypnutí alarmu se nepodařilo uložit",
+  "Không xoá được lịch tạm tắt báo động":
+      "Plán dočasného vypnutí alarmu se nepodařilo odstranit",
+  "Không lưu được tạm tắt báo động":
+      "Dočasné vypnutí alarmu se nepodařilo uložit",
   "Không gửi được yêu cầu xoá": "Žádost o odstranění se nepodařilo odeslat",
   "Không lưu được cài đặt": "Nastavení se nepodařilo uložit",
   "Không lấy được vị trí hiện tại": "Aktuální polohu se nepodařilo získat",
   "Không thể xác nhận tài khoản hiện tại": "Aktuální účet se nepodařilo ověřit",
   "Mật khẩu không đúng": "Nesprávné heslo",
   "Không thể xác nhận mật khẩu": "Heslo se nepodařilo ověřit",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Opakování alarmu může měnit pouze vlastník nebo správce",
-  "Không lưu được thời gian lặp báo động": "Interval opakování alarmu se nepodařilo uložit",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Režim ochrany může měnit pouze vlastník nebo správce",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Opakování alarmu může měnit pouze vlastník nebo správce",
+  "Không lưu được thời gian lặp báo động":
+      "Interval opakování alarmu se nepodařilo uložit",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Režim ochrany může měnit pouze vlastník nebo správce",
   "Không thể thay đổi chế độ nhà": "Režim domova se nepodařilo změnit",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Ochrana byla zapnuta, ale oznámení se nepodařilo odeslat",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Ochrana byla zapnuta, ale oznámení se nepodařilo odeslat",
   "Đã bật Chế độ Bảo vệ thủ công": "Ruční režim ochrany byl zapnut",
   "Đã chuyển nhà về Bình thường": "Domov byl přepnut do normálního režimu",
   "60 phút": "60 minut",
   "30 phút": "30 minut",
   "15 phút": "15 minut",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Prohlížíte plán vlastníka. Chcete-li nastavit vlastní plán alarmu, vyberte Pouze pro mě.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Prohlížíte plán vlastníka. Chcete-li nastavit vlastní plán alarmu, vyberte Pouze pro mě.",
   "Chọn giờ kết thúc báo động": "Vyberte čas ukončení alarmu",
   "Chọn giờ bắt đầu báo động": "Vyberte čas začátku alarmu",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Nemáte oprávnění upravovat plán alarmu domova",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Alarm se nepodařilo použít na všechna zařízení",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Domov nemá žádná bezpečnostní zařízení, na která lze nastavení použít",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Nemáte oprávnění upravovat plán Podle domova. Vyberte Pouze pro mě.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Nemáte oprávnění upravovat plán alarmu domova",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Alarm se nepodařilo použít na všechna zařízení",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Domov nemá žádná bezpečnostní zařízení, na která lze nastavení použít",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Nemáte oprávnění upravovat plán Podle domova. Vyberte Pouze pro mě.",
   "Không thể lưu chế độ báo động": "Režim alarmu se nepodařilo uložit",
   "Thêm nhắc nhở": "Přidat připomenutí",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Připomenutí vás ve zvolený čas upozorní, abyste zkontrolovali bezpečnostní stav domova.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Připomenutí vás ve zvolený čas upozorní, abyste zkontrolovali bezpečnostní stav domova.",
   "Thêm khung giờ báo động": "Přidat časové období alarmu",
   "Đang sử dụng nhắc nhở riêng của bạn": "Používají se vaše osobní připomenutí",
   "Đang sử dụng nhắc nhở của chủ nhà": "Používají se připomenutí vlastníka",
@@ -523,7 +578,8 @@ const Map<String, String> csStrings = {
   "Mỗi 30 phút": "Každých 30 minut",
   "Mỗi 15 phút": "Každých 15 minut",
   "Không báo lại": "Znovu neupozorňovat",
-  "Báo lại khi vẫn chưa an toàn": "Znovu upozornit, pokud stav stále není bezpečný",
+  "Báo lại khi vẫn chưa an toàn":
+      "Znovu upozornit, pokud stav stále není bezpečný",
   "Báo lại mỗi 1 giờ": "Upozorňovat každou hodinu",
   "Báo lại mỗi 30 phút": "Upozorňovat každých 30 minut",
   "Báo lại mỗi 15 phút": "Upozorňovat každých 15 minut",
@@ -535,114 +591,173 @@ const Map<String, String> csStrings = {
   "Xoá thành viên?": "Odstranit člena?",
   "Rời khỏi nhà?": "Opustit domov?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Role může měnit pouze vlastník",
-  "Bạn không có quyền xoá thành viên này": "Nemáte oprávnění odstranit tohoto člena",
+  "Bạn không có quyền xoá thành viên này":
+      "Nemáte oprávnění odstranit tohoto člena",
   "Bạn": "Vy",
   "Không có email": "Bez e-mailu",
   "Chưa có số điện thoại": "Telefonní číslo nebylo přidáno",
-  "Không mở được ứng dụng gọi điện": "Aplikaci pro volání se nepodařilo otevřít",
-  "Thành viên chưa cập nhật số điện thoại": "Člen zatím nepřidal telefonní číslo",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Ruční ochrana je zapnutá a vypne se pouze přepnutím do normálního režimu",
+  "Không mở được ứng dụng gọi điện":
+      "Aplikaci pro volání se nepodařilo otevřít",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Člen zatím nepřidal telefonní číslo",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Ruční ochrana je zapnutá a vypne se pouze přepnutím do normálního režimu",
   "Thời gian lặp": "Interval opakování",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Zvolte 0 pro jediné upozornění. Toto nastavení platí pro ruční ochranu i automatickou ochranu při odchodu z domova.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Zvolte 0 pro jediné upozornění. Toto nastavení platí pro ruční ochranu i automatickou ochranu při odchodu z domova.",
   "Lặp báo động khi sự cố vẫn còn": "Opakovat alarm, dokud problém trvá",
   "Đang được sử dụng": "Používá se",
   "Chuyển về sử dụng thông thường": "Přepnout zpět na běžné používání",
   "Chế độ nhà": "Režim domova",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "Zařízení SOS zatím nezaznamenalo žádné upozornění.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Detektor kouře nezaznamenal žádnou abnormalitu.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Vy nebo jiný člen jste ručně zapnuli ochranu.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome automaticky zapnul ochranu, protože jste opustili domov.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "Zařízení SOS zatím nezaznamenalo žádné upozornění.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Detektor kouře nezaznamenal žádnou abnormalitu.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Vy nebo jiný člen jste ručně zapnuli ochranu.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome automaticky zapnul ochranu, protože jste opustili domov.",
   "Nhà đang ở chế độ dùng bình thường.": "Domov je v režimu běžného používání.",
   "Bảo vệ thủ công đang bật": "Ruční ochrana je zapnutá",
   "Bảo vệ tự động đang bật": "Automatická ochrana je zapnutá",
   "Bảo vệ đang tắt": "Ochrana je vypnutá",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Nedávno jste aplikaci otevřeli a zkontrolovali stav.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Pravidelně otevírejte aplikaci a kontrolujte oprávnění, plány a nepřečtená upozornění.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Po několika použitích bude SafeHome lépe vyhodnocovat vaše návyky při kontrole aplikace.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Nedávno jste aplikaci otevřeli a zkontrolovali stav.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Pravidelně otevírejte aplikaci a kontrolujte oprávnění, plány a nepřečtená upozornění.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Po několika použitích bude SafeHome lépe vyhodnocovat vaše návyky při kontrole aplikace.",
   "Tần suất vào ứng dụng ổn": "Frekvence používání aplikace je v pořádku",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Aplikaci jste už dlouho neotevřeli ke kontrole",
-  "Đang ghi nhận tần suất vào ứng dụng": "Zaznamenává se frekvence používání aplikace",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Zkontrolujte oprávnění k poloze Vždy a podmínky běhu na pozadí.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Zařízení splňuje podmínky pro automatickou ochranu při odchodu z domova.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Můžete ji zapnout, pokud chcete při odchodu z domova automaticky přepnout do režimu ochrany.",
-  "Auto rời khỏi nhà chưa ổn": "Automatická ochrana při odchodu ještě není připravena",
-  "Auto rời khỏi nhà đã sẵn sàng": "Automatická ochrana při odchodu je připravena",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Aplikaci jste už dlouho neotevřeli ke kontrole",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Zaznamenává se frekvence používání aplikace",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Zkontrolujte oprávnění k poloze Vždy a podmínky běhu na pozadí.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Zařízení splňuje podmínky pro automatickou ochranu při odchodu z domova.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Můžete ji zapnout, pokud chcete při odchodu z domova automaticky přepnout do režimu ochrany.",
+  "Auto rời khỏi nhà chưa ổn":
+      "Automatická ochrana při odchodu ještě není připravena",
+  "Auto rời khỏi nhà đã sẵn sàng":
+      "Automatická ochrana při odchodu je připravena",
   "Auto rời khỏi nhà chưa bật": "Automatická ochrana při odchodu není zapnutá",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Doporučujeme přidat detektor kouře, SOS tlačítko nebo jiné vhodné nouzové zařízení.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Doporučujeme přidat detektor kouře, SOS tlačítko nebo jiné vhodné nouzové zařízení.",
   "Chưa có thiết bị khẩn cấp": "Žádná nouzová zařízení",
   "Đã có thiết bị khẩn cấp": "Nouzová zařízení jsou k dispozici",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Doporučujeme nastavit plán alarmu na dobu spánku nebo nepřítomnosti.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Domov již má plán alarmu nebo upozornění podle zařízení.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Doporučujeme nastavit plán alarmu na dobu spánku nebo nepřítomnosti.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Domov již má plán alarmu nebo upozornění podle zařízení.",
   "Chưa cài lịch báo động": "Plán alarmu není nastaven",
   "Đã cài lịch báo động": "Plán alarmu je nastaven",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Doporučujeme nastavit alespoň jedno připomenutí, abyste nezapomněli zkontrolovat domov.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Aplikace vám podle nastaveného plánu připomene kontrolu domova.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Doporučujeme nastavit alespoň jedno připomenutí, abyste nezapomněli zkontrolovat domov.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Aplikace vám podle nastaveného plánu připomene kontrolu domova.",
   "Chưa cài đặt nhắc nhở": "Připomenutí nejsou nastavena",
   "Đã cài đặt nhắc nhở": "Připomenutí jsou nastavena",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Pokud zařízení nepřijímá upozornění, znovu otevřete aplikaci nebo se znovu přihlaste.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Zařízení není zaregistrováno pro příjem upozornění",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Pokud zařízení nepřijímá upozornění, znovu otevřete aplikaci nebo se znovu přihlaste.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Zařízení není zaregistrováno pro příjem upozornění",
   "Thiết bị nhận cảnh báo bình thường": "Zařízení přijímá upozornění normálně",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS omezuje běh na pozadí přísněji než Android. Pokud používáte automatickou ochranu při odchodu, ponechte oznámení a polohu Vždy povolené.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS omezuje běh na pozadí přísněji než Android. Pokud používáte automatickou ochranu při odchodu, ponechte oznámení a polohu Vždy povolené.",
   "Cơ chế iOS": "Mechanismus iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Zkontrolujte běh na pozadí a automatické spouštění, aby upozornění nebyla zpožděna.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Zařízení potvrdilo důležité podmínky pro běh na pozadí.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Zkontrolujte běh na pozadí / automatické spouštění",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Zkontrolujte běh na pozadí a automatické spouštění, aby upozornění nebyla zpožděna.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Zařízení potvrdilo důležité podmínky pro běh na pozadí.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Zkontrolujte běh na pozadí / automatické spouštění",
   "Chạy nền ổn định": "Stabilní běh na pozadí",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Některé telefony Android mohou upozornění zpozdit, pokud je zapnutá optimalizace baterie.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "U tohoto telefonu je menší pravděpodobnost zpoždění upozornění SafeHome.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Některé telefony Android mohou upozornění zpozdit, pokud je zapnutá optimalizace baterie.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "U tohoto telefonu je menší pravděpodobnost zpoždění upozornění SafeHome.",
   "Chưa tắt tối ưu pin": "Optimalizace baterie nebyla vypnuta",
   "Tối ưu pin không chặn ứng dụng": "Optimalizace baterie aplikaci neblokuje",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Automatická ochrana při odchodu vyžaduje pro stabilní provoz oprávnění k poloze Vždy.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Povolte přístup k poloze, aby automatická ochrana při odchodu fungovala.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Polohové služby jsou vypnuté, takže automatická ochrana při odchodu nemusí fungovat stabilně.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Toto oprávnění je potřeba pouze pro automatickou ochranu při odchodu.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Automatická ochrana při odchodu vyžaduje pro stabilní provoz oprávnění k poloze Vždy.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Povolte přístup k poloze, aby automatická ochrana při odchodu fungovala.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Polohové služby jsou vypnuté, takže automatická ochrana při odchodu nemusí fungovat stabilně.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Toto oprávnění je potřeba pouze pro automatickou ochranu při odchodu.",
   "Chưa cấp vị trí luôn luôn": "Poloha Vždy není povolena",
   "Đã cấp vị trí luôn luôn": "Poloha Vždy je povolena",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS neotevírá upozornění na celou obrazovku jako Android; aplikace používá oznámení a systémové zvuky.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android používá upozornění na celou obrazovku. Pokud je telefon blokuje, udělte oprávnění v nastavení.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS neotevírá upozornění na celou obrazovku jako Android; aplikace používá oznámení a systémové zvuky.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android používá upozornění na celou obrazovku. Pokud je telefon blokuje, udělte oprávnění v nastavení.",
   "Cảnh báo trên iOS": "Upozornění v iOS",
   "Cảnh báo toàn màn hình": "Upozornění na celou obrazovku",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Pokud jsou oznámení vypnutá, upozornění se nemusí zobrazit.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Telefon může přijímat oznámení SafeHome.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Pokud jsou oznámení vypnutá, upozornění se nemusí zobrazit.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Telefon může přijímat oznámení SafeHome.",
   "Chưa bật thông báo": "Oznámení nejsou zapnutá",
   "Đã bật thông báo": "Oznámení jsou zapnutá",
   "Hệ thống: Sẵn sàng": "Systém: Připraven",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Systém: Upozornění mohou být zmeškána",
   "Cách bạn đang dùng ứng dụng": "Jak aplikaci používáte",
   "Thiết bị của bạn": "Vaše zařízení",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Zkontrolujte telefon a způsob používání aplikace.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Zkontrolujte telefon a způsob používání aplikace.",
   "Hệ thống SafeHome": "Systém SafeHome",
   "Hệ thống: Đang kiểm tra...": "Systém: Probíhá kontrola...",
   "Tên": "Jméno",
-  "Bạn không có quyền thay đổi vị trí nhà": "Nemáte oprávnění měnit polohu domova",
-  "Hãy bật GPS để đặt vị trí nhà": "Zapněte GPS, abyste mohli nastavit polohu domova",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Nemáte oprávnění měnit polohu domova",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Zapněte GPS, abyste mohli nastavit polohu domova",
   "Bạn chưa cấp quyền vị trí": "Nepovolili jste přístup k poloze",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Povolte přístup k poloze v nastavení aplikace",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Automatická ochrana při odchodu všech členů byla zapnuta",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automatická ochrana při odchodu všech členů byla vypnuta",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Povolte přístup k poloze v nastavení aplikace",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Automatická ochrana při odchodu všech členů byla zapnuta",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automatická ochrana při odchodu všech členů byla vypnuta",
   "Không thể thay đổi trạng thái báo động": "Stav alarmu se nepodařilo změnit",
   "Đã tắt toàn bộ báo động của nhà": "Všechny alarmy domova byly vypnuty",
-  "QR này không phải mã xin gia nhập Home": "Tento QR kód není určen k žádosti o připojení k domovu",
+  "QR này không phải mã xin gia nhập Home":
+      "Tento QR kód není určen k žádosti o připojení k domovu",
   "Thêm Home": "Přidat domov",
   "Mở cài đặt": "Otevřít nastavení",
   "Để sau": "Později",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome potřebuje oprávnění k poloze „Vždy“, aby rozpoznal váš odchod a návrat domů, i když aplikace běží na pozadí.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome má nyní přístup k poloze pouze při používání aplikace.\n\nOtevřete nastavení Polohy a zvolte „Vždy“, aby automatická ochrana při odchodu fungovala i na pozadí.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome potřebuje oprávnění k poloze „Vždy“, aby rozpoznal váš odchod a návrat domů, i když aplikace běží na pozadí.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome má nyní přístup k poloze pouze při používání aplikace.\n\nOtevřete nastavení Polohy a zvolte „Vždy“, aby automatická ochrana při odchodu fungovala i na pozadí.",
   "Cho phép vị trí luôn luôn": "Povolit polohu Vždy",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Vaše domovy budou odstraněny.\nSdílené domovy budou opuštěny.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tato akce změní plán alarmu všech bezpečnostních zařízení ve vybraných domovech.\n\nOvlivní členy, kteří používají alarm Podle domova.\nOsobní alarmy v režimu Pouze pro mě se nezmění.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tato akce přidá připomenutí pro vybrané domovy.\n\nOvlivní členy, kteří používají připomenutí Podle domova.\nOsobní připomenutí v režimu Pouze pro mě se nezmění.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Po zapnutí budou bezpečnostní zařízení okamžitě sledována.\n\nAutomatická ochrana při odchodu bude pozastavena. Tento režim se automaticky nevypne, když se někdo vrátí domů, a lze jej vypnout pouze ručním přepnutím oprávněného člena do normálního režimu.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Tato akce změní dnešní čas alarmu některých zařízení...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Tato akce vypne všechny alarmy domova ve všech režimech. Při nebezpečí už nebudete dostávat upozornění do telefonu.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarm používá režim Podle domova.\n\nUpozornění budete dostávat podle společného plánu alarmu nastaveného vlastníkem nebo správcem.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarm používá režim Pouze pro mě.\n\nUpozornění budete dostávat podle osobního plánu alarmu nastaveného pro tento účet.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Vaše domovy budou odstraněny.\nSdílené domovy budou opuštěny.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tato akce změní plán alarmu všech bezpečnostních zařízení ve vybraných domovech.\n\nOvlivní členy, kteří používají alarm Podle domova.\nOsobní alarmy v režimu Pouze pro mě se nezmění.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tato akce přidá připomenutí pro vybrané domovy.\n\nOvlivní členy, kteří používají připomenutí Podle domova.\nOsobní připomenutí v režimu Pouze pro mě se nezmění.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Po zapnutí budou bezpečnostní zařízení okamžitě sledována.\n\nAutomatická ochrana při odchodu bude pozastavena. Tento režim se automaticky nevypne, když se někdo vrátí domů, a lze jej vypnout pouze ručním přepnutím oprávněného člena do normálního režimu.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Tato akce změní dnešní čas alarmu některých zařízení...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Tato akce vypne všechny alarmy domova ve všech režimech. Při nebezpečí už nebudete dostávat upozornění do telefonu.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarm používá režim Podle domova.\n\nUpozornění budete dostávat podle společného plánu alarmu nastaveného vlastníkem nebo správcem.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarm používá režim Pouze pro mě.\n\nUpozornění budete dostávat podle osobního plánu alarmu nastaveného pro tento účet.",
   "Không thể đăng nhập bằng Google": "Přihlášení přes Google se nezdařilo",
   "Không đặt được mật khẩu": "Heslo se nepodařilo nastavit",
   "Chấp nhận": "Přijmout",
   "Cho phép": "Povolit",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Pozvánku se nepodařilo přijmout. Zkuste to znovu.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Žádost o připojení k domovu se nepodařilo přijmout. Zkuste to znovu.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Pozvánku se nepodařilo přijmout. Zkuste to znovu.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Žádost o připojení k domovu se nepodařilo přijmout. Zkuste to znovu.",
   "Từ chối": "Odmítnout",
   "Lời mời từ chủ nhà": "Pozvánka od vlastníka",
   "Nhận quyền chủ nhà": "Převzít vlastnictví domova",
@@ -664,15 +779,20 @@ const Map<String, String> csStrings = {
   "KIỂM TRA NHÀ": "ZKONTROLOVAT DOMOV",
   "ĐÓNG NHẮC NHỞ": "ZAVŘÍT PŘIPOMENUTÍ",
   "SafeHome Security Alert": "Bezpečnostní upozornění SafeHome",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "V nastavení aplikace vyberte oprávnění k poloze Vždy",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Pro používání bezpečnostních funkcí je u účtu Google nutné vytvořit další heslo.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "V nastavení aplikace vyberte oprávnění k poloze Vždy",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Pro používání bezpečnostních funkcí je u účtu Google nutné vytvořit další heslo.",
   "Báo động": "Alarm",
-  "Bạn không có quyền thực hiện thao tác này。": "K provedení této akce nemáte oprávnění.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "K provedení této akce nemáte oprávnění.",
   "Cài đặt": "Nastavení",
   "Cập nhật": "Aktualizovat",
   "Chọn ngôn ngữ": "Vybrat jazyk",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Nejsou k dispozici data zařízení pro vyhodnocení",
-  "Chuyển quyền sở hữu cho thành viên khác": "Převést vlastnictví na jiného člena",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Nejsou k dispozici data zařízení pro vyhodnocení",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Převést vlastnictví na jiného člena",
   "Có": "Ano",
   "Cửa đã đóng an toàn": "Dveře jsou bezpečně zavřené",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Došlo k chybě. Zkuste to znovu.",
@@ -684,7 +804,8 @@ const Map<String, String> csStrings = {
   "Hub chưa gửi trạng thái": "Hub zatím neodeslal stav",
   "Hub mất kết nối": "Hub je odpojen",
   "Hub tín hiệu bình thường": "Signál hubu je v pořádku",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Zámek je odemčený, když je domov v režimu ochrany",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Zámek je odemčený, když je domov v režimu ochrany",
   "Khóa đang mở trong giờ báo động": "Zámek je odemčený během času alarmu",
   "Không có thông báo": "Žádná oznámení",
   "Khu vực nguy hiểm": "Nebezpečná oblast",
@@ -730,189 +851,283 @@ const Map<String, String> csStrings = {
   "Đã tạo nhà": "Domov vytvořen",
   "Chế độ Bảo vệ thủ công đã bật": "Ruční režim ochrany byl zapnut",
   "Báo động không lặp lại.": "Alarm se nebude opakovat.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Pokud incident stále trvá, alarm se zopakuje za \$securityModeRepeatMinutes minut.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName zapnul(a) ruční režim ochrany pro „\$homeName“. Tento režim se vypne pouze tehdy, když jej oprávněný člen ručně přepne zpět na Normální. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Zapnuli jste alarm pro domov „\$homeName“.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Vypnuli jste všechny alarmy domova „\$homeName“.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Pokud incident stále trvá, alarm se zopakuje za \$securityModeRepeatMinutes minut.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName zapnul(a) ruční režim ochrany pro „\$homeName“. Tento režim se vypne pouze tehdy, když jej oprávněný člen ručně přepne zpět na Normální. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Zapnuli jste alarm pro domov „\$homeName“.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Vypnuli jste všechny alarmy domova „\$homeName“.",
   "Thành viên mới": "Nový člen",
   "Thành viên rời nhà": "Člen odešel z domova",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName opustil(a) domov „\$homeName“.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName změnil(a) roli uživatele \$memberName v domově „\$homeName“ z \$oldRoleName na \$newRoleName.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName opustil(a) domov „\$homeName“.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName změnil(a) roli uživatele \$memberName v domově „\$homeName“ z \$oldRoleName na \$newRoleName.",
   "Còn \$count tin nhắn chưa đọc": "Zbývá \$count nepřečtených zpráv",
   "Hãy an tâm nghỉ ngơi.": "Můžete v klidu odpočívat.",
   "Có thiết bị chưa an toàn.": "Některá zařízení nejsou v bezpečném stavu.",
   "SafeHome đang cập nhật vị trí": "SafeHome aktualizuje polohu",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Probíhá sledování pro automatické zapnutí režimu ochrany.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Použít polohu k automatickému zapnutí režimu ochrany, když všichni odejdou z domova.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Probíhá sledování pro automatické zapnutí režimu ochrany.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Použít polohu k automatickému zapnutí režimu ochrany, když všichni odejdou z domova.",
   "CẢNH BÁO SOS": "VÝSTRAHA SOS",
   "CẢNH BÁO KHÓI / CHÁY": "VÝSTRAHA KOUŘE / POŽÁRU",
   "CẢNH BÁO NGẬP NƯỚC": "VÝSTRAHA ZAPLAVENÍ",
   "CẢNH BÁO RÒ KHÍ": "VÝSTRAHA ÚNIKU PLYNU",
   "CẢNH BÁO CỬA": "VÝSTRAHA DVEŘÍ",
   "CẢNH BÁO AN NINH": "BEZPEČNOSTNÍ VÝSTRAHA",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Potvrzení se službou SafeHome se nezdařilo. Zkontrolujte připojení a zkuste to znovu.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Výstrahu vypněte až po kontrole situace v domě.\n\nOpravdu chcete výstrahu vypnout?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Potvrzení se službou SafeHome se nezdařilo. Zkontrolujte připojení a zkuste to znovu.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Výstrahu vypněte až po kontrole situace v domě.\n\nOpravdu chcete výstrahu vypnout?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome zjistil výstrahu",
-  "Mở SafeHome để kiểm tra ngay.": "Otevřete SafeHome a ihned vše zkontrolujte.",
+  "Mở SafeHome để kiểm tra ngay.":
+      "Otevřete SafeHome a ihned vše zkontrolujte.",
   "\$count tin nhắn mới": "\$count nových zpráv",
   "Tin nhắn HomeChat": "Zprávy HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName poslal(a) zprávu",
   "Bạn có tin nhắn mới": "Máte novou zprávu",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Režim ochrany spustí alarm pouze jednou",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Režim ochrany zopakuje alarm za \$minutes minut",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Odeslána žádost o připojení k \$count domovům",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName žádá o připojení k domovu „\$homeName“.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Režim ochrany spustí alarm pouze jednou",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Režim ochrany zopakuje alarm za \$minutes minut",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Odeslána žádost o připojení k \$count domovům",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName žádá o připojení k domovu „\$homeName“.",
   "Bạn đã xoá nhà \"\$homeName\".": "Smazali jste domov „\$homeName“.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Odeslali jste žádost o převod vlastnictví domova „\$homeName“ na \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName vám chce převést vlastnictví domova „\$homeName“.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName vás pozval(a) do domova „\$homeName“.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome odstraňuje zařízení „\$deviceName“ z domova „\$homeName“.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Zařízení „\$deviceName“ se objevilo v domově „\$homeName“.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Odeslali jste žádost o převod vlastnictví domova „\$homeName“ na \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName vám chce převést vlastnictví domova „\$homeName“.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName vás pozval(a) do domova „\$homeName“.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome odstraňuje zařízení „\$deviceName“ z domova „\$homeName“.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Zařízení „\$deviceName“ se objevilo v domově „\$homeName“.",
   "Bạn đã tạo nhà \"\$name\".": "Vytvořili jste domov „\$name“.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName změnil(a) název domova na „\$newName“ a aktualizoval(a) adresu.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName změnil(a) název domova na „\$newName“.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName aktualizoval(a) adresu domova „\$newName“.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName přejmenoval(a) zařízení „\$oldDeviceName“ v domově „\$homeName“ na „\$newName“.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName změnil(a) název domova na „\$newName“ a aktualizoval(a) adresu.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName změnil(a) název domova na „\$newName“.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName aktualizoval(a) adresu domova „\$newName“.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName přejmenoval(a) zařízení „\$oldDeviceName“ v domově „\$homeName“ na „\$newName“.",
   "Đang ghép nối: \$seconds giây": "Párování: \$seconds sekund",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Režim přidávání zařízení byl v domově „\$homeName“ otevřen na \$seconds sekund.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Časový úsek musí být v rámci okna alarmu (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "Úspěšných testů: \$passCount/\$total\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name dosud nepřidal(a) do profilu telefonní číslo.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Režim přidávání zařízení byl v domově „\$homeName“ otevřen na \$seconds sekund.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Časový úsek musí být v rámci okna alarmu (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "Úspěšných testů: \$passCount/\$total\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name dosud nepřidal(a) do profilu telefonní číslo.",
   "Tin nhắn mới trong \$homeName": "Nová zpráva v \$homeName",
   "\$current/\$total kết quả": "\$current/\$total výsledků",
   "Đang trả lời \$name": "Odpověď uživateli \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "„\$name“ zjistil kouř v domově „\$homeName“.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "„\$name“ se vrátil do normálního stavu.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "„\$name“ právě aktivoval SOS v domově „\$homeName“.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "„\$name“ zjistil kouř v domově „\$homeName“.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "„\$name“ se vrátil do normálního stavu.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "„\$name“ právě aktivoval SOS v domově „\$homeName“.",
   "\"\$name\" đã hết trạng thái SOS.": "Stav SOS zařízení „\$name“ skončil.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "„\$name“ hlásí manipulaci v domově „\$homeName“.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Výstraha manipulace zařízení „\$name“ skončila.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "„\$name“ je zavřeno v domově „\$homeName“.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "„\$name“ je otevřeno v domově „\$homeName“.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "„\$name“ v domově „\$homeName“ má téměř vybitou baterii.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "„\$name“ v domově „\$homeName“ ztratil připojení.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "„\$name“ v domově „\$homeName“ je znovu připojeno.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "„\$name“ zaznamenal vysokou teplotu v domově „\$homeName“.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "„\$name“ zaznamenal vysokou vlhkost v domově „\$homeName“.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "„\$name“ hlásí manipulaci v domově „\$homeName“.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Výstraha manipulace zařízení „\$name“ skončila.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "„\$name“ je zavřeno v domově „\$homeName“.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "„\$name“ je otevřeno v domově „\$homeName“.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "„\$name“ v domově „\$homeName“ má téměř vybitou baterii.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "„\$name“ v domově „\$homeName“ ztratil připojení.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "„\$name“ v domově „\$homeName“ je znovu připojeno.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "„\$name“ zaznamenal vysokou teplotu v domově „\$homeName“.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "„\$name“ zaznamenal vysokou vlhkost v domově „\$homeName“.",
   "Có nút SOS vừa được kích hoạt": "Právě bylo aktivováno tlačítko SOS",
   "Có dấu hiệu khói hoặc cháy": "Byly zjištěny známky kouře nebo požáru",
   "Có dấu hiệu ngập nước": "Byly zjištěny známky zaplavení",
   "Có dấu hiệu rò khí": "Byly zjištěny známky úniku plynu",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Některé dveře jsou otevřené nebo bylo manipulováno se zařízením",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Některé dveře jsou otevřené nebo bylo manipulováno se zařízením",
   "Có thiết bị đang cảnh báo": "Některé zařízení hlásí výstrahu",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Pokud nikdo nepotvrdí situaci, SafeHome přejde k nouzovému volání.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Pokud problém nebude vyřešen, upozornit znovu v \$time.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Pokud problém nebude vyřešen, upozornění se zopakuje podle nastaveného plánu alarmu.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "„\$deviceName“ je zavřeno v domově „\$resolvedHomeName“.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "„\$deviceName“ je otevřeno v domově „\$resolvedHomeName“.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Pokud nikdo nepotvrdí situaci, SafeHome přejde k nouzovému volání.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Pokud problém nebude vyřešen, upozornit znovu v \$time.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Pokud problém nebude vyřešen, upozornění se zopakuje podle nastaveného plánu alarmu.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ je zavřeno v domově „\$resolvedHomeName“.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "„\$deviceName“ je otevřeno v domově „\$resolvedHomeName“.",
   "\$count nhà đã chọn": "Vybráno domovů: \$count",
-  "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count nebezpečných domovů\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count domovů vyžaduje pozornost\$suffix",
+  "🚨 \$count nhà không an toàn\$suffix":
+      "🚨 \$count nebezpečných domovů\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count domovů vyžaduje pozornost\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count bezpečných domovů",
   "\$count nhà đang được theo dõi": "Sledováno domovů: \$count",
   "\$minutes phút": "\$minutes minut",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Připomenutí byla nastavena pro \$updatedHomes domovů.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarmy byly nastaveny pro \$updatedDevices zařízení v \$updatedHomes domovech.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Domovy, ke kterým máte oprávnění, byly sdíleny.\n\n\$skipped domovů bylo přeskočeno, protože je nemáte oprávnění sdílet.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarm použit pro \$count bezpečnostních zařízení",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Použít stejný plán pro \$count bezpečnostních zařízení",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Připomenutí byla nastavena pro \$updatedHomes domovů.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarmy byly nastaveny pro \$updatedDevices zařízení v \$updatedHomes domovech.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Domovy, ke kterým máte oprávnění, byly sdíleny.\n\n\$skipped domovů bylo přeskočeno, protože je nemáte oprávnění sdílet.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarm použit pro \$count bezpečnostních zařízení",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Použít stejný plán pro \$count bezpečnostních zařízení",
   "\$count phút trước": "Před \$count minutami",
   "\$count giờ trước": "Před \$count hodinami",
   "\${count}h trước": "Před \${count} h",
   "\${hours}h\$minutes' trước": "Před \${hours} h \$minutes min",
   "\$count ngày trước": "Před \$count dny",
   "\$count tháng trước": "Před \$count měsíci",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Opravdu chcete odebrat uživatele \$name z tohoto domova?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nŽádá o připojení k domovu „\$homeName“",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Opravdu chcete odebrat uživatele \$name z tohoto domova?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nŽádá o připojení k domovu „\$homeName“",
   "Xin gia nhập \"\$homeName\"": "Žádost o připojení k domovu „\$homeName“",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Byli jste pozváni k převzetí vlastnictví domova „\$homeName“",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nZve vás do domova „\$homeName“",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Byli jste pozváni k převzetí vlastnictví domova „\$homeName“",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nZve vás do domova „\$homeName“",
   "Mời bạn gia nhập \"\$homeName\"": "Pozvánka do domova „\$homeName“",
   "Cần kiểm tra: \$joined": "Je třeba zkontrolovat: \$joined",
   "Cập nhật \$value": "Aktualizováno \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Přidejte první zařízení SafeHome a začněte svůj domov sledovat.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Nejprve zkontrolujte nouzovou výstrahu a poté v případě potřeby kontaktujte členy domácnosti.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Nikdo není doma, ale dveře nebo zámek jsou otevřené. Ihned to zkontrolujte.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Před ponecháním domova v režimu ochrany zkontrolujte otevřené dveře nebo zámky.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Někdo může být stále doma; pokud ano, přepněte režim na Normální.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Poloha některého člena není známá. Požádejte jej, aby otevřel aplikaci nebo zkontroloval oprávnění k poloze.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Některé zařízení je odpojeno. Zkontrolujte baterii, napájení nebo jeho umístění.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Některé zařízení má slabou baterii. Brzy ji vyměňte, aby nedošlo ke ztrátě výstrah.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Zatím jste nenastavili žádná připomenutí. Vytvořte plán pravidelných kontrol domova.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Zatím jste nenastavili plán alarmu. Zapněte ochranu na dobu, kdy bývá domov obvykle prázdný.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Nyní není třeba nic řešit; stačí dále sledovat stav domova.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Přidejte první zařízení SafeHome a začněte svůj domov sledovat.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Nejprve zkontrolujte nouzovou výstrahu a poté v případě potřeby kontaktujte členy domácnosti.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Nikdo není doma, ale dveře nebo zámek jsou otevřené. Ihned to zkontrolujte.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Před ponecháním domova v režimu ochrany zkontrolujte otevřené dveře nebo zámky.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Někdo může být stále doma; pokud ano, přepněte režim na Normální.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Poloha některého člena není známá. Požádejte jej, aby otevřel aplikaci nebo zkontroloval oprávnění k poloze.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Některé zařízení je odpojeno. Zkontrolujte baterii, napájení nebo jeho umístění.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Některé zařízení má slabou baterii. Brzy ji vyměňte, aby nedošlo ke ztrátě výstrah.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Zatím jste nenastavili žádná připomenutí. Vytvořte plán pravidelných kontrol domova.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Zatím jste nenastavili plán alarmu. Zapněte ochranu na dobu, kdy bývá domov obvykle prázdný.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Nyní není třeba nic řešit; stačí dále sledovat stav domova.",
   "Lặp sau \$minutes phút": "Opakovat za \$minutes minut",
   "Đang dùng • \$repeatText": "Používá se • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Bezpečnostní dohled • \$repeatText",
   "Gia đình: \$mode": "Rodina: \$mode",
   "Gợi ý xử lý": "Doporučený postup",
   "Phát hiện \$count vấn đề cần xử lý": "Zjištěno problémů k řešení: \$count",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Dnes byly dveře použity \$count krát",
-  "Đã ghi nhận \$count hoạt động gần đây": "Zaznamenáno nedávných aktivit: \$count",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Systém: Je třeba zkontrolovat \$issueCount položek",
-  "FCM token đã sẵn sàng trên điện thoại này.": "Token FCM je v tomto telefonu připraven.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "Token FCM je připraven, ale funkci Automaticky při odchodu stále chybí některé podmínky.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Aktuálně je k dispozici \$emergencyTotal nouzových zařízení. Doporučené minimum: detektor kouře a SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Opravdu chcete převést vlastnictví na:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Dnes byly dveře použity \$count krát",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Zaznamenáno nedávných aktivit: \$count",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Systém: Je třeba zkontrolovat \$issueCount položek",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "Token FCM je v tomto telefonu připraven.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "Token FCM je připraven, ale funkci Automaticky při odchodu stále chybí některé podmínky.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Aktuálně je k dispozici \$emergencyTotal nouzových zařízení. Doporučené minimum: detektor kouře a SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Opravdu chcete převést vlastnictví na:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "Bezpečně zavřených dveří: \$count",
   "\$count cửa và khóa đã an toàn": "Bezpečných dveří a zámků: \$count",
   "\$count thiết bị đang được theo dõi": "Sledovaných zařízení: \$count",
   "Cập nhật \$timeText": "Aktualizováno \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Poslední aktualizace dat před \$count minutami",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Poslední aktualizace dat před \$count hodinami",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Poslední aktualizace dat před \$count minutami",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Poslední aktualizace dat před \$count hodinami",
   "Thành viên trong nhà: \$count": "Členové doma: \$count",
   "Thành viên bên ngoài: \$count": "Členové mimo domov: \$count",
   "Chưa xác định vị trí: \$count": "Neznámá poloha: \$count",
   "Môi trường hiện tại: \$environment": "Aktuální prostředí: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Otevřeno, když je domov v režimu ochrany",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Otevřeno, když je domov v režimu ochrany",
   "An tâm hơn trong từng ngôi nhà": "Větší klid v každém domově",
   "Báo động SafeHome": "Alarm SafeHome",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Je zde bezpečnostní výstraha, kterou je třeba ihned zkontrolovat.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Je zde bezpečnostní výstraha, kterou je třeba ihned zkontrolovat.",
   "Có cảnh báo cần kiểm tra": "Je zde výstraha, kterou je třeba zkontrolovat",
   "Tự đóng sau \$time": "Automaticky zavřít za \$time",
   "Ngày trong tuần": "Dny v týdnu",
   "Hoặc": "Nebo",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Čas začátku a konce nesmí být stejný",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Čas konce musí být později než aktuální čas",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Čas začátku a konce nesmí být stejný",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Čas konce musí být později než aktuální čas",
   "Khoảng tạm tắt không hợp lệ": "Neplatný interval pozastavení",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Interval pozastavení se nepřekrývá s žádným zapnutým plánem alarmu",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Interval pozastavení se nepřekrývá s žádným zapnutým plánem alarmu",
   "Cài đặt báo động": "Nastavení alarmu",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Nastavte, jak tento senzor spouští výstrahy.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Nastavte, jak tento senzor spouští výstrahy.",
   "Tham gia báo động": "Zapojit do alarmu",
-  "Tắt để cảm biến không tạo báo động.": "Vypnutím zabráníte tomu, aby senzor spustil alarm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Vypnutím zabráníte tomu, aby senzor spustil alarm.",
   "Bật còi vật lý": "Zapnout fyzickou sirénu",
   "Cho phép kích hoạt còi trong nhà.": "Povolit aktivaci sirény v domě.",
   "Đánh thức màn hình": "Probudit obrazovku",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Zobrazit výstrahu na celou obrazovku telefonu.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Zobrazit výstrahu na celou obrazovku telefonu.",
   "Độ trễ kích hoạt": "Zpoždění aktivace",
   "Chỉ áp dụng cho cảm biến an ninh.": "Platí pouze pro bezpečnostní senzory.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Nouzové senzory se vždy aktivují okamžitě.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Nouzové senzory se vždy aktivují okamžitě.",
   "Ngay lập tức": "Okamžitě",
   "giây": "sekund",
   "Đã lưu cấu hình báo động": "Nastavení alarmu bylo uloženo",
   "Không thể lưu cấu hình báo động": "Nastavení alarmu se nepodařilo uložit",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Toto nastavení mohou změnit pouze vlastník a správci.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Toto nastavení mohou změnit pouze vlastník a správci.",
   "Thông tin chi tiết": "Podrobnosti",
   "Thông báo báo động": "Oznámení alarmu",
   "Cài đặt nhắc nhở": "Nastavení připomenutí",
   "Nhắc nhở theo lịch": "Plánovaná připomenutí",
   "Danh sách thông báo": "Seznam oznámení",
   "Cài đặt thông báo": "Nastavení oznámení",
-  "Sử dụng báo động theo lịch đã thiết lập": "Používat alarm podle nastaveného plánu",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Pouze odeslat oznámení, nespouštět alarm",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Všechny alarmy domova jsou vypnuté; systém pouze odesílá oznámení.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Tento režim může zapnout pouze vlastník.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Používat alarm podle nastaveného plánu",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Pouze odeslat oznámení, nespouštět alarm",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Všechny alarmy domova jsou vypnuté; systém pouze odesílá oznámení.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Tento režim může zapnout pouze vlastník.",
   "Bật Không bảo vệ?": "Zapnout režim Bez ochrany?",
   "Cảm biến vừa phát hiện một sự kiện.": "Senzor právě zjistil událost.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Režim Bez ochrany může zapnout pouze vlastník",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Režim Bez ochrany může zapnout pouze vlastník",
   "Đã chuyển nhà sang Không bảo vệ": "Domov byl přepnut do režimu Bez ochrany",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Přepnuto do režimu Bez ochrany, ale oznámení se nepodařilo odeslat",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Přepnuto do režimu Bez ochrany, ale oznámení se nepodařilo odeslat",
   "Giám sát toàn diện": "Komplexní dohled",
   "Không bảo vệ": "Bez ochrany",
   "Không bảo vệ đang bật": "Režim Bez ochrany je zapnutý",
   "Nhà đã chuyển sang Không bảo vệ": "Domov byl přepnut do režimu Bez ochrany",
   "Thông báo cảm biến": "Oznámení senzorů",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Běžné oznámení, když senzor zjistí událost.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Běžné oznámení, když senzor zjistí událost.",
   "Tôi hiểu, tiếp tục": "Rozumím, pokračovat",
   "Cảnh báo an ninh đã kết thúc": "Bezpečnostní výstraha skončila",
   "Sự cố nguy hiểm đã kết thúc": "Nebezpečný incident skončil",
@@ -934,34 +1149,48 @@ const Map<String, String> csStrings = {
   "Nhà đang ở chế độ Bình thường.": "Domov je v normálním režimu.",
   "Pin thiết bị đã ổn định": "Baterie zařízení je opět v pořádku",
   "Hub đã kết nối trở lại": "Hub je znovu připojen",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Přepnuto zpět na Normální, ale oznámení se nepodařilo odeslat",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Přepnuto zpět na Normální, ale oznámení se nepodařilo odeslat",
   "Chung cho nhà": "Společné pro domov",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Platí pro všechny členy a může aktivovat fyzickou sirénu.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Platí pro všechny členy a může aktivovat fyzickou sirénu.",
   "Cá nhân": "Osobní",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Osobní plán funguje nezávisle a neaktivuje fyzickou sirénu.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Toto nastavení platí pouze pro váš účet.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Společná nastavení domova mohou měnit pouze vlastník a správci.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Osobní plán funguje nezávisle a neaktivuje fyzickou sirénu.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Toto nastavení platí pouze pro váš účet.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Společná nastavení domova mohou měnit pouze vlastník a správci.",
   "Tham gia hệ thống báo động": "Zapojit do systému alarmu",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Nouzové senzory jsou vždy zapojeny do systému alarmu.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Vypnutím zabráníte zařízení ve spuštění jakéhokoli alarmu.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Nouzové senzory jsou vždy zapojeny do systému alarmu.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Vypnutím zabráníte zařízení ve spuštění jakéhokoli alarmu.",
   "Lịch báo động chung": "Společný plán alarmu",
   "Lịch báo động cá nhân": "Osobní plán alarmu",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Zobrazit výstrahu na celou obrazovku vašeho telefonu.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Zobrazit výstrahu na celou obrazovku vašeho telefonu.",
   "Lặp lại cảnh báo": "Opakovat výstrahu",
   "Báo động chung": "Společný alarm",
   "Báo động cá nhân": "Osobní alarm",
   "Đã cài đặt": "Nastaveno",
   "Chưa cài đặt": "Nenastaveno",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Společný a osobní plán fungují souběžně; již není nutné volit pouze jeden z nich.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Společný a osobní plán fungují souběžně; již není nutné volit pouze jeden z nich.",
   "Cài nhanh chung": "Rychlé společné nastavení",
   "Cài nhanh cá nhân": "Rychlé osobní nastavení",
   "Thiết lập nhanh lịch cá nhân": "Rychlé nastavení osobního plánu",
   "Thiết lập nhanh lịch chung": "Rychlé nastavení společného plánu",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Tento plán platí pouze pro vás a neaktivuje fyzickou sirénu.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Tento plán platí pro všechny členy domova.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Tento plán platí pouze pro vás a neaktivuje fyzickou sirénu.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Tento plán platí pro všechny členy domova.",
   "Đã áp dụng lịch báo động": "Plán alarmu byl použit",
   "Không thể lưu lịch báo động": "Plán alarmu se nepodařilo uložit",
-  "Nhà chưa có thiết bị an ninh": "Domov zatím nemá žádná bezpečnostní zařízení",
-  "Nhận cảnh báo theo lịch chung của nhà": "Přijímat výstrahy podle společného plánu domova",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Vypnutím nebudete dostávat oznámení ani celoobrazovkové výstrahy ze společného plánu. Fyzická siréna v domě zůstane aktivní.",
+  "Nhà chưa có thiết bị an ninh":
+      "Domov zatím nemá žádná bezpečnostní zařízení",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Přijímat výstrahy podle společného plánu domova",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Vypnutím nebudete dostávat oznámení ani celoobrazovkové výstrahy ze společného plánu. Fyzická siréna v domě zůstane aktivní.",
 };

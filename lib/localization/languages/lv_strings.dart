@@ -3,7 +3,8 @@ const Map<String, String> lvStrings = {
   "Không đọc được số điện thoại": "Tālruņa numuru neizdevās nolasīt",
   "Tin nhắn quá dài": "Ziņojums ir pārāk garš",
   "Không gửi được tin nhắn": "Ziņojumu neizdevās nosūtīt",
-  "Bạn không có quyền sửa lịch chung của nhà": "Jums nav atļaujas rediģēt mājas kopīgo grafiku",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Jums nav atļaujas rediģēt mājas kopīgo grafiku",
   "Nhà của bạn": "Jūsu māja",
   "Tải tin cũ hơn": "Ielādēt vecākus ziņojumus",
   "Nhà chưa đặt tên": "Māja bez nosaukuma",
@@ -91,13 +92,18 @@ const Map<String, String> lvStrings = {
   "Đang theo dõi": "Uzraudzība",
   "Chưa nhận diện": "Neatpazīta ierīce",
   "Chưa có cập nhật": "Vēl nav atjauninājumu",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Vēl nav ierīču. Pieskarieties +, lai pievienotu ierīci un sāktu aizsargāt māju.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Vēl nav ierīču. Pieskarieties +, lai pievienotu ierīci un sāktu aizsargāt māju.",
   "CHƯA AN TOÀN": "NAV DROŠI",
   "ĐÃ AN TOÀN": "DROŠI",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Jūsu mājai jāpievērš uzmanība. Pārskatiet zemāk redzamos statusus.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Jūsu māja darbojas normāli.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Nav konstatēta neparasta dūmu vai SOS darbība.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Nav pietiekami daudz nesenas darbības padziļinātai analīzei.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Jūsu mājai jāpievērš uzmanība. Pārskatiet zemāk redzamos statusus.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Jūsu māja darbojas normāli.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Nav konstatēta neparasta dūmu vai SOS darbība.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Nav pietiekami daudz nesenas darbības padziļinātai analīzei.",
   "Hub kết nối bình thường": "Centrmezgls pievienots",
   "Cài đặt cảnh báo cho nhà hiện tại": "Brīdinājumu iestatījumi šai mājai",
   "Nhận cảnh báo báo động": "Saņemt trauksmes paziņojumus",
@@ -149,7 +155,8 @@ const Map<String, String> lvStrings = {
   "Giờ nhắc nhở": "Atgādinājuma laiks",
   "Giờ bắt đầu báo động": "Trauksmes sākuma laiks",
   "Giờ kết thúc báo động": "Trauksmes beigu laiks",
-  "Không có nhà nào đủ điều kiện để cài": "Netika atrasta neviena piemērota māja",
+  "Không có nhà nào đủ điều kiện để cài":
+      "Netika atrasta neviena piemērota māja",
   "Cài đặt hoàn tất": "Iestatīšana pabeigta",
   "Xác nhận rời nhà": "Apstiprināt iziešanu no mājas",
   "Xác nhận xoá nhà": "Apstiprināt mājas dzēšanu",
@@ -161,20 +168,26 @@ const Map<String, String> lvStrings = {
   "Đã rời khỏi home": "Māja pamesta",
   "Đã cập nhật": "Atjaunināts",
   "Tìm home...": "Meklēt mājas...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Iestatīt mājas atrašanās vietu un iespējot automātisko aizsardzību",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Nodot mājas īpašumtiesības vai dzēst māju",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Iestatīt atgādinājumu/trauksmi atlasītajām mājām",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Iestatīt mājas atrašanās vietu un iespējot automātisko aizsardzību",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Nodot mājas īpašumtiesības vai dzēst māju",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Iestatīt atgādinājumu/trauksmi atlasītajām mājām",
   "Chia sẻ nhà đã chọn": "Kopīgot atlasītās mājas",
   "Mở danh sách chia sẻ nhà": "Atvērt mājas kopīgošanas sarakstu",
   "Xoá các nhà đã chọn?": "Dzēst atlasītās mājas?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Atlasītās mājas tiks neatgriezeniski izdzēstas.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Vai skenējiet QR kodu, lai pieprasītu piekļuvi atlasītajām mājām",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Atlasītās mājas tiks neatgriezeniski izdzēstas.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Vai skenējiet QR kodu, lai pieprasītu piekļuvi atlasītajām mājām",
   "Email người nhận": "Saņēmēja e-pasts",
   "Chia sẻ": "Kopīgot",
   "Email chưa đăng ký": "E-pasts nav reģistrēts",
   "Chia sẻ hoàn tất": "Kopīgošana pabeigta",
   "Mở List chia sẻ nhà": "Atvērt mājas kopīgošanas sarakstu",
-  "Không có nhà nào bạn có quyền quản lý": "Jūs nepārvaldāt nevienu no atlasītajām mājām",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Jūs nepārvaldāt nevienu no atlasītajām mājām",
   "Chưa share cho ai": "Vēl nav kopīgots ne ar vienu",
   "Tìm nhà": "Meklēt mājas",
   "Xoá các nhà đã chọn ?": "Dzēst atlasītās mājas?",
@@ -188,7 +201,8 @@ const Map<String, String> lvStrings = {
   "Vuốt lên để tải thêm": "Pavelciet uz augšu, lai ielādētu vairāk",
   "Không có thiết bị": "Nav ierīču",
   "Chỉ chủ nhà mới được xoá nhà": "Tikai īpašnieks var dzēst šo māju",
-  "Chỉ chủ nhà mới được chuyển quyền": "Tikai īpašnieks var nodot īpašumtiesības",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Tikai īpašnieks var nodot īpašumtiesības",
   "Lưu ý khi bật báo động": "Trauksmes paziņojums",
   "Báo động đã được bật": "Trauksme iespējota",
   "Đã hiểu": "Sapratu",
@@ -197,27 +211,34 @@ const Map<String, String> lvStrings = {
   "Đã tắt báo động": "Trauksme ir izslēgta",
   "Tắt báo động": "Apturēt trauksmi",
   "Cả ngày": "Visu dienu",
-  "Bạn không có quyền thực hiện thao tác này.": "Jums nav atļaujas veikt šo darbību.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Darbību neizdevās pabeigt. Lūdzu, mēģiniet vēlreiz.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Nederīgs QR kods pievienošanai vairākām mājām",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Jums nav atļaujas veikt šo darbību.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Darbību neizdevās pabeigt. Lūdzu, mēģiniet vēlreiz.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Nederīgs QR kods pievienošanai vairākām mājām",
   "Bạn đang là chủ các nhà này": "Šīs mājas pieder jums",
   "Một người dùng": "Lietotājs",
   "Yêu cầu gia nhập nhà": "Pieprasījums pievienoties mājai",
   "Đã gửi yêu cầu gia nhập nhà": "Pievienošanās pieprasījums nosūtīts",
   "QR gia nhập không hợp lệ": "Nederīgs pievienošanās QR kods",
   "Bạn đang là chủ nhà này": "Jums jau pieder šī māja",
-  "QR này không phải mã xin gia nhập nhà": "Šis QR kods nav mājas pievienošanās kods",
+  "QR này không phải mã xin gia nhập nhà":
+      "Šis QR kods nav mājas pievienošanās kods",
   "Bạn không có quyền thêm thiết bị": "Jums nav atļaujas pievienot ierīces",
   "Đã mở chế độ thêm thiết bị": "Ierīču savienošana pārī iespējota",
   "Rời khỏi Home này?": "Pamest šo māju?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Šī māja un visas tās ierīces tiks neatgriezeniski izdzēstas.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Šī māja un visas tās ierīces tiks neatgriezeniski izdzēstas.",
   "Đã xoá nhà": "Māja izdzēsta",
   "QR của nhà này": "Mājas QR kods",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Citi var skenēt šo kodu, lai pieprasītu piekļuvi mājai.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Citi var skenēt šo kodu, lai pieprasītu piekļuvi mājai.",
   "Chia sẻ nhà": "Kopīgot māju",
   "Quét QR để xin gia nhập nhà": "Skenēt QR kodu, lai pievienotos mājai",
   "Quét QR xin gia nhập nhà": "Skenēt QR kodu, lai pievienotos mājai",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Novietojiet koplietotās mājas QR kodu rāmī",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Novietojiet koplietotās mājas QR kodu rāmī",
   "Mã QR này do chủ nhà chia sẻ": "Šo QR kodu kopīgoja mājas īpašnieks",
   "Nhập mã mời": "Ievadiet ielūguma kodu",
   "Gửi yêu cầu gia nhập": "Nosūtīt pievienošanās pieprasījumu",
@@ -229,7 +250,8 @@ const Map<String, String> lvStrings = {
   "Lời mời chia sẻ nhà": "Mājas kopīgošanas ielūgums",
   "Đã share home": "Māja kopīgota",
   "Chuyển quyền chủ nhà": "Nodot īpašumtiesības",
-  "Không thể chuyển quyền cho chính bạn": "Jūs nevarat nodot īpašumtiesības sev",
+  "Không thể chuyển quyền cho chính bạn":
+      "Jūs nevarat nodot īpašumtiesības sev",
   "Không tìm thấy user": "Lietotājs nav atrasts",
   "Không tìm thấy tài khoản": "Konts nav atrasts",
   "Xác nhận chuyển quyền": "Apstiprināt īpašumtiesību nodošanu",
@@ -237,7 +259,8 @@ const Map<String, String> lvStrings = {
   "Xác nhận mật khẩu": "Apstiprināt paroli",
   "Yêu cầu chuyển quyền chủ nhà": "Īpašumtiesību nodošanas pieprasījums",
   "Đã gửi yêu cầu chuyển quyền": "Nodošanas pieprasījums nosūtīts",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Īpašumtiesību nodošanas pieprasījums nosūtīts",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Īpašumtiesību nodošanas pieprasījums nosūtīts",
   "Bạn không có quyền xoá thiết bị": "Jums nav atļaujas dzēst ierīces",
   "Xóa Device?": "Dzēst šo ierīci?",
   "Đã gửi yêu cầu xoá thiết bị": "Ierīces dzēšanas pieprasījums nosūtīts",
@@ -247,7 +270,8 @@ const Map<String, String> lvStrings = {
   "Thêm nhà mới": "Pievienot jaunu māju",
   "Tạo nhà mới": "Izveidot jaunu māju",
   "Tạo một ngôi nhà mới của bạn": "Izveidot jaunu māju",
-  "Quét mã QR được chủ nhà chia sẻ": "Skenējiet mājas īpašnieka kopīgoto QR kodu",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Skenējiet mājas īpašnieka kopīgoto QR kodu",
   "Tên nhà": "Mājas nosaukums",
   "Số điện thoại": "Tālruņa numurs",
   "Nam": "Vīrietis",
@@ -261,7 +285,8 @@ const Map<String, String> lvStrings = {
   "Không thể lưu thông tin": "Informāciju neizdevās saglabāt",
   "Đã lưu thông tin": "Informācija saglabāta",
   "Lỗi lưu profile": "Profilu neizdevās saglabāt",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Pievienojiet tālruņa numuru ārkārtas gadījumiem",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Pievienojiet tālruņa numuru ārkārtas gadījumiem",
   "Hoàn tất": "Gatavs",
   "Đã tạo nhà mới": "Māja izveidota",
   "Về muộn": "Atgriezīšos vēlu",
@@ -280,7 +305,8 @@ const Map<String, String> lvStrings = {
   "SĐT": "Tālrunis",
   "Ngày sinh": "Dzimšanas datums",
   "Yêu cầu & lời mời": "Pieprasījumi un ielūgumi",
-  "Xem lời mời chia sẻ và xin gia nhập": "Skatīt kopīgošanas ielūgumus un pievienošanās pieprasījumus",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Skatīt kopīgošanas ielūgumus un pievienošanās pieprasījumus",
   "Cài đặt bảo mật": "Drošības iestatījumi",
   "Quyền báo động toàn màn hình": "Pilnekrāna trauksmes atļauja",
   "Báo động toàn màn hình": "Pilnekrāna trauksme",
@@ -330,7 +356,8 @@ const Map<String, String> lvStrings = {
   "Đổi tên phòng": "Pārdēvēt telpu",
   "Tên phòng": "Telpas nosaukums",
   "Xoá phòng": "Dzēst telpu",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Šīs telpas ierīces tiks pārvietotas uz sadaļu Nepiešķirts.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Šīs telpas ierīces tiks pārvietotas uz sadaļu Nepiešķirts.",
   "Thêm phòng": "Pievienot telpu",
   "Ví dụ: Phòng khách": "Piemērs: Dzīvojamā istaba",
   "Phòng khách": "Dzīvojamā istaba",
@@ -351,9 +378,11 @@ const Map<String, String> lvStrings = {
   "Cửa đóng": "Durvis aizvērtas",
   "Chưa đặt vị trí nhà": "Mājas atrašanās vieta nav iestatīta",
   "Đặt vị trí nhà tại đây": "Iestatīt mājas atrašanās vietu šeit",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Iestatiet mājas atrašanās vietu pirms automātiskās apsardzes ieslēgšanas",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Iestatiet mājas atrašanās vietu pirms automātiskās apsardzes ieslēgšanas",
   "Bán kính bảo vệ mặc định: 150 m": "Noklusējuma aizsardzības rādiuss: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Katram dalībniekam jāatļauj piekļuve atrašanās vietai vienmēr, lai prombūtnes/mājās statuss darbotos fonā.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Katram dalībniekam jāatļauj piekļuve atrašanās vietai vienmēr, lai prombūtnes/mājās statuss darbotos fonā.",
   "Lưu cài đặt": "Saglabāt iestatījumus",
   "Đã đặt vị trí nhà": "Mājas atrašanās vieta iestatīta",
   "Đang lấy vị trí...": "Notiek atrašanās vietas iegūšana...",
@@ -362,16 +391,20 @@ const Map<String, String> lvStrings = {
   "Cập nhật thông tin nhà": "Atjaunināt mājas informāciju",
   "Nhập địa chỉ của nhà": "Ievadiet mājas adresi",
   "Lưu thay đổi": "Saglabāt izmaiņas",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Šis vārds tiek rādīts tikai jūsu kontā.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Nosaukums un adrese tiks atjaunināti visiem mājas dalībniekiem.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Šis vārds tiek rādīts tikai jūsu kontā.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Nosaukums un adrese tiks atjaunināti visiem mājas dalībniekiem.",
   "Một thành viên": "Dalībnieks",
   "Đã cập nhật thông tin nhà": "Mājas informācija atjaunināta",
   "Thay tên": "Pārdēvēt",
   "Đã đổi tên thiết bị": "Ierīce pārdēvēta",
   "Chưa chọn nhà để kiểm tra": "Izvēlieties māju testēšanai",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Veiciet šo testu, izmantojot īpašnieka kontu",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Veiciet šo testu, izmantojot īpašnieka kontu",
   "Không đọc được dữ liệu nhà": "Nevar nolasīt mājas datus",
-  "Nhà cần có ít nhất một thiết bị để test": "Testēšanai mājā jābūt vismaz vienai ierīcei",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Testēšanai mājā jābūt vismaz vienai ierīcei",
   "Đóng": "Aizvērt",
   "Đã thiết lập": "Iestatīt",
   "Quét QR": "Skenēt QR kodu",
@@ -427,8 +460,10 @@ const Map<String, String> lvStrings = {
   "Chế độ áp dụng": "Lietot režīmu",
   "Theo nhà": "Mājas grafiks",
   "Riêng tôi": "Personīgs",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Izmantot īpašnieka vai administratora iestatīto kopīgo grafiku",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Izmantot personīgu grafiku, kas attiecas tikai uz jūsu kontu",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Izmantot īpašnieka vai administratora iestatīto kopīgo grafiku",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Izmantot personīgu grafiku, kas attiecas tikai uz jūsu kontu",
   "Thiết lập nhanh báo động": "Ātrā trauksmes iestatīšana",
   "Thiết lập nhanh toàn bộ thiết bị": "Ātri iestatīt visas ierīces",
   "Áp dụng cho toàn bộ thiết bị": "Lietot visām ierīcēm",
@@ -440,9 +475,11 @@ const Map<String, String> lvStrings = {
   "Đưa mã QR vào giữa khung": "Novietojiet QR kodu rāmī",
   "Đang áp dụng...": "Notiek lietošana...",
   "Hôm nay đã ghi nhận cảnh báo SOS": "Šodien tika reģistrēts SOS brīdinājums",
-  "Hôm nay đã ghi nhận cảnh báo khói": "Šodien tika reģistrēts dūmu brīdinājums",
+  "Hôm nay đã ghi nhận cảnh báo khói":
+      "Šodien tika reģistrēts dūmu brīdinājums",
   "Khói đã an toàn": "Dūmu stāvoklis ir novērsts",
-  "Không tìm thấy nhà của thông báo này": "Šim paziņojumam atbilstošā māja nav atrasta",
+  "Không tìm thấy nhà của thông báo này":
+      "Šim paziņojumam atbilstošā māja nav atrasta",
   "Không tìm thấy thiết bị trong nhà này": "Ierīce šajā mājā nav atrasta",
   "Một chủ nhà": "Mājas īpašnieks",
   "Ngôi nhà đang hoạt động ổn định": "Māja darbojas normāli",
@@ -468,8 +505,10 @@ const Map<String, String> lvStrings = {
   "Đã rời khỏi nhà": "Māja atstāta",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Jūs pametīsiet kopīgotās mājas.",
   "Các nhà của bạn sẽ bị xoá.\n": "Jūsu mājas tiks dzēstas.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Tas mainīs mājas trauksmes grafikus visām drošības ierīcēm atlasītajās mājās.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Tas pievienos mājas atgādinājumu atlasītajām mājām.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Tas mainīs mājas trauksmes grafikus visām drošības ierīcēm atlasītajās mājās.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Tas pievienos mājas atgādinājumu atlasītajām mājām.\n\n",
   "Xác nhận thay đổi báo động": "Apstiprināt trauksmes izmaiņas",
   "Xác nhận thay đổi nhắc nhở": "Apstiprināt atgādinājuma izmaiņas",
   "Lặp lại khi sự cố vẫn còn": "Atkārtot, kamēr problēma pastāv",
@@ -477,44 +516,63 @@ const Map<String, String> lvStrings = {
   "VD: Mr Chung": "Piem., Čuna kungs",
   "🏡 Chưa có nhà nào": "🏡 Vēl nav māju",
   "Vẫn chuyển về Bình thường": "Tomēr pārslēgt uz parasto režīmu",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automātiskais aizsardzības režīms prombūtnes laikā joprojām ir ieslēgts. Ja visi dalībnieki joprojām ir prom, sistēma pēc dažām minūtēm var atkal ieslēgt aizsardzības režīmu.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automātiskais aizsardzības režīms prombūtnes laikā joprojām ir ieslēgts. Ja visi dalībnieki joprojām ir prom, sistēma pēc dažām minūtēm var atkal ieslēgt aizsardzības režīmu.",
   "Chuyển về Bình thường?": "Pārslēgt uz parasto režīmu?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Drošības ierīces tiks uzraudzītas nekavējoties.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Drošības ierīces tiks uzraudzītas nekavējoties.\n\n",
   "Bật Bảo vệ thủ công?": "Ieslēgt manuālo aizsardzības režīmu?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Šī darbība šodien mainīs dažu ierīču trauksmes laiku...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Šī darbība atspējos visas trauksmes šajā ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Šī darbība šodien mainīs dažu ierīču trauksmes laiku...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Šī darbība atspējos visas trauksmes šajā ",
   "Tắt toàn bộ báo động?": "Izslēgt visas trauksmes?",
-  "Không xoá được lịch tạm tắt báo động": "Neizdevās dzēst trauksmes apturēšanas grafiku",
+  "Không xoá được lịch tạm tắt báo động":
+      "Neizdevās dzēst trauksmes apturēšanas grafiku",
   "Không lưu được tạm tắt báo động": "Neizdevās saglabāt trauksmes apturēšanu",
   "Không gửi được yêu cầu xoá": "Neizdevās nosūtīt dzēšanas pieprasījumu",
   "Không lưu được cài đặt": "Neizdevās saglabāt iestatījumu",
-  "Không lấy được vị trí hiện tại": "Neizdevās iegūt pašreizējo atrašanās vietu",
-  "Không thể xác nhận tài khoản hiện tại": "Neizdevās pārbaudīt pašreizējo kontu",
+  "Không lấy được vị trí hiện tại":
+      "Neizdevās iegūt pašreizējo atrašanās vietu",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Neizdevās pārbaudīt pašreizējo kontu",
   "Mật khẩu không đúng": "Nepareiza parole",
   "Không thể xác nhận mật khẩu": "Neizdevās pārbaudīt paroli",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Tikai īpašnieks vai administrators var mainīt trauksmes atkārtošanas iestatījumu",
-  "Không lưu được thời gian lặp báo động": "Neizdevās saglabāt trauksmes atkārtošanas laiku",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Tikai īpašnieks vai administrators var mainīt aizsardzības režīmu",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Tikai īpašnieks vai administrators var mainīt trauksmes atkārtošanas iestatījumu",
+  "Không lưu được thời gian lặp báo động":
+      "Neizdevās saglabāt trauksmes atkārtošanas laiku",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Tikai īpašnieks vai administrators var mainīt aizsardzības režīmu",
   "Không thể thay đổi chế độ nhà": "Neizdevās mainīt mājas režīmu",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Aizsardzības režīms ir ieslēgts, bet paziņojumu neizdevās nosūtīt",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Aizsardzības režīms ir ieslēgts, bet paziņojumu neizdevās nosūtīt",
   "Đã bật Chế độ Bảo vệ thủ công": "Manuālais aizsardzības režīms ieslēgts",
   "Đã chuyển nhà về Bình thường": "Māja pārslēgta atpakaļ uz parasto režīmu",
   "60 phút": "60 minūtes",
   "30 phút": "30 minūtes",
   "15 phút": "15 minūtes",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Jūs skatāt īpašnieka grafiku. Lai iestatītu savu trauksmes grafiku, izvēlieties Tikai es.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Jūs skatāt īpašnieka grafiku. Lai iestatītu savu trauksmes grafiku, izvēlieties Tikai es.",
   "Chọn giờ kết thúc báo động": "Izvēlieties trauksmes beigu laiku",
   "Chọn giờ bắt đầu báo động": "Izvēlieties trauksmes sākuma laiku",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Jums nav atļaujas rediģēt šīs mājas trauksmes grafiku",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Neizdevās lietot trauksmi visām ierīcēm",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Šajā mājā nav drošības ierīču, kurām to lietot",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Jums nav atļaujas rediģēt mājas iestatījumus. Izvēlieties Tikai es.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Jums nav atļaujas rediģēt šīs mājas trauksmes grafiku",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Neizdevās lietot trauksmi visām ierīcēm",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Šajā mājā nav drošības ierīču, kurām to lietot",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Jums nav atļaujas rediģēt mājas iestatījumus. Izvēlieties Tikai es.",
   "Không thể lưu chế độ báo động": "Neizdevās saglabāt trauksmes režīmu",
   "Thêm nhắc nhở": "Pievienot atgādinājumu",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Atgādinājums izvēlētajā laikā atgādinās pārbaudīt mājas drošības stāvokli.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Atgādinājums izvēlētajā laikā atgādinās pārbaudīt mājas drošības stāvokli.",
   "Thêm khung giờ báo động": "Pievienot trauksmes laika intervālu",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Tiek izmantoti jūsu paša atgādinājuma iestatījumi",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Tiek izmantoti īpašnieka atgādinājuma iestatījumi",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Tiek izmantoti jūsu paša atgādinājuma iestatījumi",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Tiek izmantoti īpašnieka atgādinājuma iestatījumi",
   "Sửa giờ nhắc nhở": "Rediģēt atgādinājuma laiku",
   "Sửa giờ kết thúc báo động": "Rediģēt trauksmes beigu laiku",
   "Sửa giờ bắt đầu báo động": "Rediģēt trauksmes sākuma laiku",
@@ -535,114 +593,175 @@ const Map<String, String> lvStrings = {
   "Xoá thành viên?": "Noņemt dalībnieku?",
   "Rời khỏi nhà?": "Pamest šo māju?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Tikai īpašnieks var mainīt lomas",
-  "Bạn không có quyền xoá thành viên này": "Jums nav atļaujas noņemt šo dalībnieku",
+  "Bạn không có quyền xoá thành viên này":
+      "Jums nav atļaujas noņemt šo dalībnieku",
   "Bạn": "Jūs",
   "Không có email": "Nav e-pasta",
   "Chưa có số điện thoại": "Nav tālruņa numura",
   "Không mở được ứng dụng gọi điện": "Neizdevās atvērt tālruņa lietotni",
-  "Thành viên chưa cập nhật số điện thoại": "Šis dalībnieks nav pievienojis tālruņa numuru",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Manuālais aizsardzības režīms ir ieslēgts — pārslēdziet uz parasto režīmu, lai to izslēgtu",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Šis dalībnieks nav pievienojis tālruņa numuru",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Manuālais aizsardzības režīms ir ieslēgts — pārslēdziet uz parasto režīmu, lai to izslēgtu",
   "Thời gian lặp": "Atkārtošanas intervāls",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Izvēlieties 0, lai brīdinātu vienu reizi. Šis iestatījums attiecas uz manuālo aizsardzības režīmu un automātisko aizsardzības režīmu prombūtnes laikā.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Izvēlieties 0, lai brīdinātu vienu reizi. Šis iestatījums attiecas uz manuālo aizsardzības režīmu un automātisko aizsardzības režīmu prombūtnes laikā.",
   "Lặp báo động khi sự cố vẫn còn": "Atkārtot trauksmi, kamēr problēma pastāv",
   "Đang được sử dụng": "Pašlaik aktīvs",
   "Chuyển về sử dụng thông thường": "Pārslēgt atpakaļ uz parastu lietošanu",
   "Chế độ nhà": "Mājas režīms",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS ierīce nav reģistrējusi brīdinājumu.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Dūmu sensors nav konstatējis problēmu.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Jūs vai kāds dalībnieks manuāli ieslēdza aizsardzības režīmu.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome automātiski ieslēdza aizsardzības režīmu, jo jūs izgājāt no mājām.",
-  "Nhà đang ở chế độ dùng bình thường.": "Šī māja pašlaik tiek izmantota parastajā režīmā.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS ierīce nav reģistrējusi brīdinājumu.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Dūmu sensors nav konstatējis problēmu.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Jūs vai kāds dalībnieks manuāli ieslēdza aizsardzības režīmu.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome automātiski ieslēdza aizsardzības režīmu, jo jūs izgājāt no mājām.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Šī māja pašlaik tiek izmantota parastajā režīmā.",
   "Bảo vệ thủ công đang bật": "Manuālais aizsardzības režīms ir ieslēgts",
   "Bảo vệ tự động đang bật": "Automātiskais aizsardzības režīms ir ieslēgts",
   "Bảo vệ đang tắt": "Aizsardzības režīms ir izslēgts",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Jūs nesen atvērāt lietotni, lai pārbaudītu statusu.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Regulāri atveriet lietotni, lai pārskatītu atļaujas, grafikus un nelasītos brīdinājumus.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Pēc dažām lietošanas reizēm SafeHome varēs labāk novērtēt jūsu lietotnes pārbaudes paradumus.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Jūs nesen atvērāt lietotni, lai pārbaudītu statusu.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Regulāri atveriet lietotni, lai pārskatītu atļaujas, grafikus un nelasītos brīdinājumus.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pēc dažām lietošanas reizēm SafeHome varēs labāk novērtēt jūsu lietotnes pārbaudes paradumus.",
   "Tần suất vào ứng dụng ổn": "Lietotnes pārbaudes biežums ir labs",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Kopš pēdējās lietotnes pārbaudes ir pagājis ilgs laiks",
-  "Đang ghi nhận tần suất vào ứng dụng": "Tiek reģistrēts lietotnes pārbaudes biežums",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Pārbaudiet atrašanās vietas atļauju Vienmēr un darbības fonā nosacījumus.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Šī ierīce atbilst automātiskās aizsardzības prombūtnē prasībām.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Ieslēdziet to, ja vēlaties, lai aizsardzības režīms automātiski ieslēgtos, kad dodaties prom.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Kopš pēdējās lietotnes pārbaudes ir pagājis ilgs laiks",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Tiek reģistrēts lietotnes pārbaudes biežums",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Pārbaudiet atrašanās vietas atļauju Vienmēr un darbības fonā nosacījumus.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Šī ierīce atbilst automātiskās aizsardzības prombūtnē prasībām.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Ieslēdziet to, ja vēlaties, lai aizsardzības režīms automātiski ieslēgtos, kad dodaties prom.",
   "Auto rời khỏi nhà chưa ổn": "Automātiskā aizsardzība prombūtnē nav gatava",
-  "Auto rời khỏi nhà đã sẵn sàng": "Automātiskā aizsardzība prombūtnē ir gatava",
-  "Auto rời khỏi nhà chưa bật": "Automātiskā aizsardzība prombūtnē nav ieslēgta",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Pievienojiet savai mājai piemērotu dūmu sensoru, SOS vai ārkārtas ierīci.",
+  "Auto rời khỏi nhà đã sẵn sàng":
+      "Automātiskā aizsardzība prombūtnē ir gatava",
+  "Auto rời khỏi nhà chưa bật":
+      "Automātiskā aizsardzība prombūtnē nav ieslēgta",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Pievienojiet savai mājai piemērotu dūmu sensoru, SOS vai ārkārtas ierīci.",
   "Chưa có thiết bị khẩn cấp": "Vēl nav ārkārtas ierīces",
   "Đã có thiết bị khẩn cấp": "Ārkārtas ierīces ir pievienotas",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Iestatiet trauksmes grafiku miega laikam vai prombūtnei no mājām.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Šai mājai ir trauksmes grafiks vai ierīces līmeņa brīdinājumu grafiks.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Iestatiet trauksmes grafiku miega laikam vai prombūtnei no mājām.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Šai mājai ir trauksmes grafiks vai ierīces līmeņa brīdinājumu grafiks.",
   "Chưa cài lịch báo động": "Trauksmes grafiks nav iestatīts",
   "Đã cài lịch báo động": "Trauksmes grafiks ir iestatīts",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Iestatiet vismaz vienu atgādinājumu, lai neaizmirstu pārbaudīt māju.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Lietotne atgādinās pārbaudīt māju pēc grafika.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Iestatiet vismaz vienu atgādinājumu, lai neaizmirstu pārbaudīt māju.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Lietotne atgādinās pārbaudīt māju pēc grafika.",
   "Chưa cài đặt nhắc nhở": "Atgādinājums nav iestatīts",
   "Đã cài đặt nhắc nhở": "Atgādinājums ir iestatīts",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Atveriet lietotni vēlreiz vai pierakstieties atkārtoti, ja šī ierīce nesaņem brīdinājumus.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Šī ierīce nav reģistrēta brīdinājumu saņemšanai",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Atveriet lietotni vēlreiz vai pierakstieties atkārtoti, ja šī ierīce nesaņem brīdinājumus.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Šī ierīce nav reģistrēta brīdinājumu saņemšanai",
   "Thiết bị nhận cảnh báo bình thường": "Šī ierīce var saņemt brīdinājumus",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS stingrāk nekā Android ierobežo darbību fonā; ja izmantojat automātisko aizsardzību prombūtnē, atstājiet ieslēgtus paziņojumus un atrašanās vietu Vienmēr.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS stingrāk nekā Android ierobežo darbību fonā; ja izmantojat automātisko aizsardzību prombūtnē, atstājiet ieslēgtus paziņojumus un atrašanās vietu Vienmēr.",
   "Cơ chế iOS": "iOS darbība",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Pārbaudiet darbības fonā atļauju un automātisko palaišanu, lai brīdinājumi netiktu aizkavēti.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Ierīce ir apstiprinājusi svarīgos darbības fonā nosacījumus.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Pārbaudīt darbību fonā / automātisko palaišanu",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Pārbaudiet darbības fonā atļauju un automātisko palaišanu, lai brīdinājumi netiktu aizkavēti.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Ierīce ir apstiprinājusi svarīgos darbības fonā nosacījumus.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Pārbaudīt darbību fonā / automātisko palaišanu",
   "Chạy nền ổn định": "Darbība fonā izskatās stabila",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Daži Android tālruņi var aizkavēt brīdinājumus, kamēr ir ieslēgta akumulatora optimizācija.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Tālrunis retāk aizkavēs SafeHome brīdinājumus.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Daži Android tālruņi var aizkavēt brīdinājumus, kamēr ir ieslēgta akumulatora optimizācija.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Tālrunis retāk aizkavēs SafeHome brīdinājumus.",
   "Chưa tắt tối ưu pin": "Akumulatora optimizācija joprojām ir ieslēgta",
   "Tối ưu pin không chặn ứng dụng": "Akumulatora optimizācija nebloķē lietotni",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Automātiskai aizsardzībai prombūtnē uzticamai darbībai nepieciešama atrašanās vieta Vienmēr.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Automātiskajai aizsardzībai prombūtnē ir nepieciešama atrašanās vietas atļauja.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Atrašanās vietas pakalpojums ir izslēgts, tāpēc automātiskā aizsardzība prombūtnē var nedarboties uzticami.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Tas ir nepieciešams tikai tad, ja izmantojat automātisko aizsardzību prombūtnē.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Automātiskai aizsardzībai prombūtnē uzticamai darbībai nepieciešama atrašanās vieta Vienmēr.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Automātiskajai aizsardzībai prombūtnē ir nepieciešama atrašanās vietas atļauja.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Atrašanās vietas pakalpojums ir izslēgts, tāpēc automātiskā aizsardzība prombūtnē var nedarboties uzticami.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Tas ir nepieciešams tikai tad, ja izmantojat automātisko aizsardzību prombūtnē.",
   "Chưa cấp vị trí luôn luôn": "Atrašanās vieta Vienmēr nav atļauta",
   "Đã cấp vị trí luôn luôn": "Atrašanās vieta Vienmēr ir atļauta",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS neatver pilnekrāna skatu kā Android; lietotne izmanto sistēmas paziņojumus un skaņu.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android izmanto pilnekrāna brīdinājumus; atļaujiet tos iestatījumos, ja tālrunis tos bloķē.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS neatver pilnekrāna skatu kā Android; lietotne izmanto sistēmas paziņojumus un skaņu.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android izmanto pilnekrāna brīdinājumus; atļaujiet tos iestatījumos, ja tālrunis tos bloķē.",
   "Cảnh báo trên iOS": "Brīdinājumi iOS",
   "Cảnh báo toàn màn hình": "Pilnekrāna brīdinājumi",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Ja paziņojumi ir atspējoti, brīdinājumi var neparādīties.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Šis tālrunis var saņemt SafeHome paziņojumus.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Ja paziņojumi ir atspējoti, brīdinājumi var neparādīties.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Šis tālrunis var saņemt SafeHome paziņojumus.",
   "Chưa bật thông báo": "Paziņojumi nav iespējoti",
   "Đã bật thông báo": "Paziņojumi ir iespējoti",
   "Hệ thống: Sẵn sàng": "Sistēma: gatava",
-  "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistēma: brīdinājumi var tikt palaisti garām",
+  "Hệ thống: Có thể bỏ lỡ cảnh báo":
+      "Sistēma: brīdinājumi var tikt palaisti garām",
   "Cách bạn đang dùng ứng dụng": "Kā jūs izmantojat lietotni",
   "Thiết bị của bạn": "Jūsu ierīce",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Pārbauda jūsu tālruni un to, kā izmantojat lietotni.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Pārbauda jūsu tālruni un to, kā izmantojat lietotni.",
   "Hệ thống SafeHome": "SafeHome sistēma",
   "Hệ thống: Đang kiểm tra...": "Sistēma: notiek pārbaude...",
   "Tên": "Nosaukums",
-  "Bạn không có quyền thay đổi vị trí nhà": "Jums nav atļaujas mainīt mājas atrašanās vietu",
-  "Hãy bật GPS để đặt vị trí nhà": "Ieslēdziet GPS, lai iestatītu mājas atrašanās vietu",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Jums nav atļaujas mainīt mājas atrašanās vietu",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Ieslēdziet GPS, lai iestatītu mājas atrašanās vietu",
   "Bạn chưa cấp quyền vị trí": "Atrašanās vietas atļauja nav piešķirta",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Piešķiriet atrašanās vietas atļauju lietotnes iestatījumos",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Automātiskais aizsardzības režīms, kad visi atstāj māju, ir ieslēgts",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automātiskais aizsardzības režīms, kad visi atstāj māju, ir izslēgts",
-  "Không thể thay đổi trạng thái báo động": "Neizdevās mainīt trauksmes statusu",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Piešķiriet atrašanās vietas atļauju lietotnes iestatījumos",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Automātiskais aizsardzības režīms, kad visi atstāj māju, ir ieslēgts",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automātiskais aizsardzības režīms, kad visi atstāj māju, ir izslēgts",
+  "Không thể thay đổi trạng thái báo động":
+      "Neizdevās mainīt trauksmes statusu",
   "Đã tắt toàn bộ báo động của nhà": "Visas mājas trauksmes ir izslēgtas",
-  "QR này không phải mã xin gia nhập Home": "Šis QR kods nav mājas pievienošanās kods",
+  "QR này không phải mã xin gia nhập Home":
+      "Šis QR kods nav mājas pievienošanās kods",
   "Thêm Home": "Pievienot māju",
   "Mở cài đặt": "Atvērt iestatījumus",
   "Để sau": "Vēlāk",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome nepieciešama atrašanās vietas atļauja Vienmēr, lai noteiktu, kad jūs atstājat māju vai atgriežaties, arī tad, kad lietotne darbojas fonā.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "Pašlaik SafeHome var piekļūt atrašanās vietai tikai lietotnes lietošanas laikā.\n\nAtveriet atrašanās vietas atļauju un izvēlieties “Atļaut vienmēr”, lai automātiskā aizsardzība turpinātu darboties fonā.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome nepieciešama atrašanās vietas atļauja Vienmēr, lai noteiktu, kad jūs atstājat māju vai atgriežaties, arī tad, kad lietotne darbojas fonā.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Pašlaik SafeHome var piekļūt atrašanās vietai tikai lietotnes lietošanas laikā.\n\nAtveriet atrašanās vietas atļauju un izvēlieties “Atļaut vienmēr”, lai automātiskā aizsardzība turpinātu darboties fonā.",
   "Cho phép vị trí luôn luôn": "Vienmēr atļaut atrašanās vietu",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Jūsu mājas tiks dzēstas.\nJūs pametīsiet kopīgotās mājas.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tas mainīs mājas trauksmes grafikus visām drošības ierīcēm atlasītajās mājās.\n\nTas ietekmēs dalībniekus, kuri izmanto mājas trauksmes iestatījumus.\nPersonīgie trauksmes iestatījumi netiks mainīti.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tas pievienos mājas atgādinājumu atlasītajām mājām.\n\nTas ietekmēs dalībniekus, kuri izmanto mājas atgādinājuma iestatījumus.\nPersonīgie atgādinājuma iestatījumi netiks mainīti.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Drošības ierīces tiks uzraudzītas nekavējoties.\n\nAutomātiskais aizsardzības režīms prombūtnē tiks apturēts. Šis režīms neizslēdzas automātiski, kad kāds atgriežas mājās, un pilnvarotam dalībniekam tas jāpārslēdz atpakaļ uz parasto režīmu.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Šī darbība šodien mainīs dažu ierīču trauksmes laiku...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Šī darbība atspējos visas šīs mājas trauksmes. Jūs vairs nesaņemsiet bīstamības brīdinājumus šajā tālrunī.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Trauksme izmanto mājas iestatījumus.\n\nJūs saņemsiet brīdinājumus saskaņā ar īpašnieka vai administratora konfigurētajiem kopīgajiem grafikiem.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Trauksme izmanto manus iestatījumus.\n\nJūs saņemsiet brīdinājumus saskaņā ar šī konta personīgajiem trauksmes grafikiem.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Jūsu mājas tiks dzēstas.\nJūs pametīsiet kopīgotās mājas.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tas mainīs mājas trauksmes grafikus visām drošības ierīcēm atlasītajās mājās.\n\nTas ietekmēs dalībniekus, kuri izmanto mājas trauksmes iestatījumus.\nPersonīgie trauksmes iestatījumi netiks mainīti.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tas pievienos mājas atgādinājumu atlasītajām mājām.\n\nTas ietekmēs dalībniekus, kuri izmanto mājas atgādinājuma iestatījumus.\nPersonīgie atgādinājuma iestatījumi netiks mainīti.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Drošības ierīces tiks uzraudzītas nekavējoties.\n\nAutomātiskais aizsardzības režīms prombūtnē tiks apturēts. Šis režīms neizslēdzas automātiski, kad kāds atgriežas mājās, un pilnvarotam dalībniekam tas jāpārslēdz atpakaļ uz parasto režīmu.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Šī darbība šodien mainīs dažu ierīču trauksmes laiku...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Šī darbība atspējos visas šīs mājas trauksmes. Jūs vairs nesaņemsiet bīstamības brīdinājumus šajā tālrunī.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Trauksme izmanto mājas iestatījumus.\n\nJūs saņemsiet brīdinājumus saskaņā ar īpašnieka vai administratora konfigurētajiem kopīgajiem grafikiem.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Trauksme izmanto manus iestatījumus.\n\nJūs saņemsiet brīdinājumus saskaņā ar šī konta personīgajiem trauksmes grafikiem.",
   "Không thể đăng nhập bằng Google": "Neizdevās pierakstīties ar Google",
   "Không đặt được mật khẩu": "Neizdevās iestatīt paroli",
   "Chấp nhận": "Pieņemt",
   "Cho phép": "Atļaut",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Neizdevās pieņemt uzaicinājumu. Lūdzu, mēģiniet vēlreiz.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Neizdevās pieņemt pievienošanās pieprasījumu. Lūdzu, mēģiniet vēlreiz.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Neizdevās pieņemt uzaicinājumu. Lūdzu, mēģiniet vēlreiz.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Neizdevās pieņemt pievienošanās pieprasījumu. Lūdzu, mēģiniet vēlreiz.",
   "Từ chối": "Noraidīt",
   "Lời mời từ chủ nhà": "Uzaicinājums no īpašnieka",
   "Nhận quyền chủ nhà": "Saņemt mājas īpašumtiesības",
@@ -664,27 +783,34 @@ const Map<String, String> lvStrings = {
   "KIỂM TRA NHÀ": "PĀRBAUDĪT MĀJU",
   "ĐÓNG NHẮC NHỞ": "AIZVĒRT ATGĀDINĀJUMU",
   "SafeHome Security Alert": "SafeHome drošības brīdinājums",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Lietotnes iestatījumos izvēlieties atrašanās vietas atļauju Atļaut vienmēr",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Jūsu Google kontam nepieciešama papildu parole, lai izmantotu drošības funkcijas.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Lietotnes iestatījumos izvēlieties atrašanās vietas atļauju Atļaut vienmēr",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Jūsu Google kontam nepieciešama papildu parole, lai izmantotu drošības funkcijas.",
   "Báo động": "Trauksme",
-  "Bạn không có quyền thực hiện thao tác này。": "Jums nav atļaujas veikt šo darbību.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Jums nav atļaujas veikt šo darbību.",
   "Cài đặt": "Iestatījumi",
   "Cập nhật": "Atjaunināt",
   "Chọn ngôn ngữ": "Izvēlēties valodu",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Novērtēšanai nav pieejami ierīces dati",
-  "Chuyển quyền sở hữu cho thành viên khác": "Nodot īpašumtiesības citam dalībniekam",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Novērtēšanai nav pieejami ierīces dati",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Nodot īpašumtiesības citam dalībniekam",
   "Có": "Jā",
   "Cửa đã đóng an toàn": "Durvis ir droši aizvērtas",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Radās kļūda. Lūdzu, mēģiniet vēlreiz.",
   "Đang kiểm tra kết nối Hub": "Notiek Hub savienojuma pārbaude",
-  "Đang mở khi nhà ở chế độ Bảo vệ": "Atvērtas, kamēr māja ir aizsardzības režīmā",
+  "Đang mở khi nhà ở chế độ Bảo vệ":
+      "Atvērtas, kamēr māja ir aizsardzības režīmā",
   "Đang mở trong giờ báo động": "Atvērtas trauksmes laikā",
   "Đang tải...": "Notiek ielāde...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Profils, pieprasījumi un uzaicinājumi",
   "Hub chưa gửi trạng thái": "Hub statuss nav pieejams",
   "Hub mất kết nối": "Hub atvienots",
   "Hub tín hiệu bình thường": "Hub savienots",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Atslēgtas, kamēr māja ir aizsardzības režīmā",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Atslēgtas, kamēr māja ir aizsardzības režīmā",
   "Khóa đang mở trong giờ báo động": "Atslēgtas trauksmes laikā",
   "Không có thông báo": "Nav paziņojumu",
   "Khu vực nguy hiểm": "Bīstamības zona",
@@ -730,196 +856,292 @@ const Map<String, String> lvStrings = {
   "Đã tạo nhà": "Māja izveidota",
   "Chế độ Bảo vệ thủ công đã bật": "Manuālais aizsardzības režīms ieslēgts",
   "Báo động không lặp lại.": "Trauksme netiks atkārtota.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Ja problēma turpinās, trauksme atkārtosies pēc \$securityModeRepeatMinutes minūtēm.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName ieslēdza manuālo aizsardzības režīmu mājā “\$homeName”. Šis režīms izslēdzas tikai tad, kad pilnvarots dalībnieks pārslēdzas atpakaļ uz parasto režīmu. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Jūs ieslēdzāt trauksmi mājai “\$homeName”.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Jūs izslēdzāt visas trauksmes mājā “\$homeName”.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Ja problēma turpinās, trauksme atkārtosies pēc \$securityModeRepeatMinutes minūtēm.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName ieslēdza manuālo aizsardzības režīmu mājā “\$homeName”. Šis režīms izslēdzas tikai tad, kad pilnvarots dalībnieks pārslēdzas atpakaļ uz parasto režīmu. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Jūs ieslēdzāt trauksmi mājai “\$homeName”.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Jūs izslēdzāt visas trauksmes mājā “\$homeName”.",
   "Thành viên mới": "Jauns dalībnieks",
   "Thành viên rời nhà": "Dalībnieks pameta māju",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName pameta māju “\$homeName”.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName mainīja \$memberName lomu mājā “\$homeName” no \$oldRoleName uz \$newRoleName.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName pameta māju “\$homeName”.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName mainīja \$memberName lomu mājā “\$homeName” no \$oldRoleName uz \$newRoleName.",
   "Còn \$count tin nhắn chưa đọc": "\$count nelasīti ziņojumi",
   "Hãy an tâm nghỉ ngơi.": "Varat būt mierīgs.",
   "Có thiết bị chưa an toàn.": "Dažas ierīces nav drošā stāvoklī.",
   "SafeHome đang cập nhật vị trí": "SafeHome atjaunina atrašanās vietu",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Uzraudzība, lai automātiski ieslēgtu aizsardzības režīmu.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Izmanto atrašanās vietu, lai automātiski ieslēgtu aizsardzības režīmu, kad visi atstāj māju.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Uzraudzība, lai automātiski ieslēgtu aizsardzības režīmu.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Izmanto atrašanās vietu, lai automātiski ieslēgtu aizsardzības režīmu, kad visi atstāj māju.",
   "CẢNH BÁO SOS": "SOS BRĪDINĀJUMS",
   "CẢNH BÁO KHÓI / CHÁY": "DŪMU / UGUNSGRĒKA BRĪDINĀJUMS",
   "CẢNH BÁO NGẬP NƯỚC": "PLŪDU BRĪDINĀJUMS",
   "CẢNH BÁO RÒ KHÍ": "GĀZES NOPLŪDES BRĪDINĀJUMS",
   "CẢNH BÁO CỬA": "DURVJU BRĪDINĀJUMS",
   "CẢNH BÁO AN NINH": "DROŠĪBAS BRĪDINĀJUMS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Neizdevās apstiprināt ar SafeHome. Pārbaudiet savienojumu un mēģiniet vēlreiz.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Apturiet brīdinājumu tikai pēc mājas stāvokļa pārbaudes.\n\nVai tiešām vēlaties apturēt brīdinājumu?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Neizdevās apstiprināt ar SafeHome. Pārbaudiet savienojumu un mēģiniet vēlreiz.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Apturiet brīdinājumu tikai pēc mājas stāvokļa pārbaudes.\n\nVai tiešām vēlaties apturēt brīdinājumu?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome konstatēja brīdinājumu",
   "Mở SafeHome để kiểm tra ngay.": "Atveriet SafeHome, lai pārbaudītu tūlīt.",
   "\$count tin nhắn mới": "\$count jauni ziņojumi",
   "Tin nhắn HomeChat": "HomeChat ziņojums",
   "\$senderName đã gửi một tin nhắn": "\$senderName nosūtīja ziņojumu",
   "Bạn có tin nhắn mới": "Jums ir jauns ziņojums",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Aizsardzības režīms brīdinās tikai vienu reizi",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Aizsardzības režīms atkārtos brīdinājumu pēc \$minutes minūtēm",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Pievienošanās pieprasījumi nosūtīti \$count mājām",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName pieprasīja pievienoties mājai “\$homeName”.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Aizsardzības režīms brīdinās tikai vienu reizi",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Aizsardzības režīms atkārtos brīdinājumu pēc \$minutes minūtēm",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Pievienošanās pieprasījumi nosūtīti \$count mājām",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName pieprasīja pievienoties mājai “\$homeName”.",
   "Bạn đã xoá nhà \"\$homeName\".": "Jūs izdzēsāt māju “\$homeName”.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Jūs nosūtījāt mājas “\$homeName” īpašumtiesību nodošanas pieprasījumu uz \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName vēlas nodot jums mājas “\$homeName” īpašumtiesības.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName uzaicināja jūs pievienoties mājai “\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome noņem ierīci “\$deviceName” no mājas “\$homeName”.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Ierīce “\$deviceName” tika pievienota mājai “\$homeName”.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Jūs nosūtījāt mājas “\$homeName” īpašumtiesību nodošanas pieprasījumu uz \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName vēlas nodot jums mājas “\$homeName” īpašumtiesības.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName uzaicināja jūs pievienoties mājai “\$homeName”.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome noņem ierīci “\$deviceName” no mājas “\$homeName”.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Ierīce “\$deviceName” tika pievienota mājai “\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Jūs izveidojāt māju “\$name”.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName atjaunināja mājas nosaukumu uz “\$newName” un mainīja tās adresi.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName pārdēvēja māju par “\$newName”.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName atjaunināja mājas “\$newName” adresi.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName pārdēvēja ierīci “\$oldDeviceName” par “\$newName” mājā “\$homeName”.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName atjaunināja mājas nosaukumu uz “\$newName” un mainīja tās adresi.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName pārdēvēja māju par “\$newName”.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName atjaunināja mājas “\$newName” adresi.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName pārdēvēja ierīci “\$oldDeviceName” par “\$newName” mājā “\$homeName”.",
   "Đang ghép nối: \$seconds giây": "Savienošana pārī: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Ierīču savienošana pārī tika iespējota mājā “\$homeName” uz \$seconds sekundēm.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Apturēšanas periodam jābūt trauksmes grafikā (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "Nokārtoti \$passCount/\$total testi\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name nav pievienojis tālruņa numuru savam profilam.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Ierīču savienošana pārī tika iespējota mājā “\$homeName” uz \$seconds sekundēm.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Apturēšanas periodam jābūt trauksmes grafikā (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "Nokārtoti \$passCount/\$total testi\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name nav pievienojis tālruņa numuru savam profilam.",
   "Tin nhắn mới trong \$homeName": "Jauns ziņojums mājā \$homeName",
   "\$current/\$total kết quả": "\$current/\$total rezultāti",
   "Đang trả lời \$name": "Atbildat \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "“\$name” konstatēja dūmus mājā “\$homeName”.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "“\$name” ir atgriezies normālā stāvoklī.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "“\$name” aktivizēja SOS mājā “\$homeName”.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "“\$name” konstatēja dūmus mājā “\$homeName”.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "“\$name” ir atgriezies normālā stāvoklī.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "“\$name” aktivizēja SOS mājā “\$homeName”.",
   "\"\$name\" đã hết trạng thái SOS.": "“\$name” vairs nav SOS stāvoklī.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "“\$name” ziņoja par iejaukšanos mājā “\$homeName”.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Ierīces “\$name” iejaukšanās brīdinājums ir novērsts.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "“\$name” aizvērās mājā “\$homeName”.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "“\$name” ir atvērts mājā “\$homeName”.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "Ierīcei “\$name” mājā “\$homeName” ir zems akumulatora līmenis.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "Ierīce “\$name” mājā “\$homeName” pārgāja bezsaistē.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "Ierīce “\$name” mājā “\$homeName” atkal ir tiešsaistē.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "“\$name” reģistrēja augstu temperatūru mājā “\$homeName”.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "“\$name” reģistrēja augstu mitrumu mājā “\$homeName”.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "“\$name” ziņoja par iejaukšanos mājā “\$homeName”.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Ierīces “\$name” iejaukšanās brīdinājums ir novērsts.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "“\$name” aizvērās mājā “\$homeName”.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "“\$name” ir atvērts mājā “\$homeName”.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "Ierīcei “\$name” mājā “\$homeName” ir zems akumulatora līmenis.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "Ierīce “\$name” mājā “\$homeName” pārgāja bezsaistē.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "Ierīce “\$name” mājā “\$homeName” atkal ir tiešsaistē.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "“\$name” reģistrēja augstu temperatūru mājā “\$homeName”.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "“\$name” reģistrēja augstu mitrumu mājā “\$homeName”.",
   "Có nút SOS vừa được kích hoạt": "Tika aktivizēta SOS poga",
   "Có dấu hiệu khói hoặc cháy": "Tika konstatēti dūmi vai ugunsgrēks",
   "Có dấu hiệu ngập nước": "Tika konstatēta ūdens noplūde",
   "Có dấu hiệu rò khí": "Tika konstatēta gāzes noplūde",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Durvis ir atvērtas vai ierīce ir aizskarta",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Durvis ir atvērtas vai ierīce ir aizskarta",
   "Có thiết bị đang cảnh báo": "Ierīce brīdina",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Ja neviens neapstiprinās, SafeHome uzsāks ārkārtas zvanu.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Ja problēma nav novērsta, brīdinās vēlreiz plkst. \$time.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Ja problēma nav novērsta, brīdinās vēlreiz saskaņā ar trauksmes grafiku.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "“\$deviceName” aizvērās mājā “\$resolvedHomeName”.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "“\$deviceName” ir atvērts mājā “\$resolvedHomeName”.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ja neviens neapstiprinās, SafeHome uzsāks ārkārtas zvanu.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Ja problēma nav novērsta, brīdinās vēlreiz plkst. \$time.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Ja problēma nav novērsta, brīdinās vēlreiz saskaņā ar trauksmes grafiku.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "“\$deviceName” aizvērās mājā “\$resolvedHomeName”.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "“\$deviceName” ir atvērts mājā “\$resolvedHomeName”.",
   "\$count nhà đã chọn": "Atlasītas \$count mājas",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count nedrošas mājas\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count mājām jāpievērš uzmanība\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count mājām jāpievērš uzmanība\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count drošas mājas",
   "\$count nhà đang được theo dõi": "Tiek uzraudzītas \$count mājas",
   "\$minutes phút": "\$minutes minūtes",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Atgādinājums iestatīts \$updatedHomes mājām.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Trauksme iestatīta \$updatedDevices ierīcēm \$updatedHomes mājās.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Jūsu pārvaldītās mājas tika kopīgotas.\n\n\$skipped mājas tika izlaistas, jo jums nav kopīgošanas atļaujas.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Trauksme lietota \$count drošības ierīcēm",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Lietot to pašu grafiku \$count drošības ierīcēm",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Atgādinājums iestatīts \$updatedHomes mājām.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Trauksme iestatīta \$updatedDevices ierīcēm \$updatedHomes mājās.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Jūsu pārvaldītās mājas tika kopīgotas.\n\n\$skipped mājas tika izlaistas, jo jums nav kopīgošanas atļaujas.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Trauksme lietota \$count drošības ierīcēm",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Lietot to pašu grafiku \$count drošības ierīcēm",
   "\$count phút trước": "Pirms \$count minūtēm",
   "\$count giờ trước": "Pirms \$count stundām",
   "\${count}h trước": "Pirms \${count} h",
   "\${hours}h\$minutes' trước": "Pirms \${hours} h \$minutes min",
   "\$count ngày trước": "Pirms \$count dienām",
   "\$count tháng trước": "Pirms \$count mēnešiem",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Vai tiešām vēlaties noņemt \$name no šīs mājas?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nPieprasa pievienoties mājai “\$homeName”",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Vai tiešām vēlaties noņemt \$name no šīs mājas?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nPieprasa pievienoties mājai “\$homeName”",
   "Xin gia nhập \"\$homeName\"": "Pieprasa pievienoties mājai “\$homeName”",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Jūs uzaicināja saņemt mājas “\$homeName” īpašumtiesības",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nUzaicina jūs pievienoties mājai “\$homeName”",
-  "Mời bạn gia nhập \"\$homeName\"": "Uzaicina jūs pievienoties mājai “\$homeName”",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Jūs uzaicināja saņemt mājas “\$homeName” īpašumtiesības",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nUzaicina jūs pievienoties mājai “\$homeName”",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Uzaicina jūs pievienoties mājai “\$homeName”",
   "Cần kiểm tra: \$joined": "Jāpievērš uzmanība: \$joined",
   "Cập nhật \$value": "Atjaunināts \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Pievienojiet savu pirmo SafeHome ierīci, lai sāktu šīs mājas uzraudzību.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Vispirms pārbaudiet ārkārtas brīdinājumus un, ja nepieciešams, sazinieties ar mājsaimniecības locekļiem.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Neviens mājsaimniecības loceklis nav mājās, bet durvis vai slēdzene ir atvērta. Pārbaudiet tūlīt.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Pārbaudiet atvērtās durvis vai slēdzeni, pirms atstājat šo māju aizsardzības režīmā.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Kāds, iespējams, vēl ir mājās. Ja tā, pārslēdziet atpakaļ uz parasto režīmu.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Dažu dalībnieku atrašanās vieta nav zināma. Lūdziet viņiem atvērt lietotni vai pārbaudīt atrašanās vietas atļauju.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Ierīce ir atvienota. Pārbaudiet tās akumulatoru, barošanu vai novietojumu.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Ierīcei ir zems akumulatora līmenis. Drīz nomainiet to, lai nepalaistu garām brīdinājumus.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Atgādinājums nav iestatīts. Izveidojiet grafiku, lai regulāri pārbaudītu māju.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Trauksmes grafiks nav iestatīts. Ieslēdziet aizsardzību laikam, kad parasti esat prom.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Tūlītēja rīcība nav nepieciešama. Turpiniet uzraudzīt šo māju.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Pievienojiet savu pirmo SafeHome ierīci, lai sāktu šīs mājas uzraudzību.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Vispirms pārbaudiet ārkārtas brīdinājumus un, ja nepieciešams, sazinieties ar mājsaimniecības locekļiem.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Neviens mājsaimniecības loceklis nav mājās, bet durvis vai slēdzene ir atvērta. Pārbaudiet tūlīt.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Pārbaudiet atvērtās durvis vai slēdzeni, pirms atstājat šo māju aizsardzības režīmā.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Kāds, iespējams, vēl ir mājās. Ja tā, pārslēdziet atpakaļ uz parasto režīmu.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Dažu dalībnieku atrašanās vieta nav zināma. Lūdziet viņiem atvērt lietotni vai pārbaudīt atrašanās vietas atļauju.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Ierīce ir atvienota. Pārbaudiet tās akumulatoru, barošanu vai novietojumu.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Ierīcei ir zems akumulatora līmenis. Drīz nomainiet to, lai nepalaistu garām brīdinājumus.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Atgādinājums nav iestatīts. Izveidojiet grafiku, lai regulāri pārbaudītu māju.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Trauksmes grafiks nav iestatīts. Ieslēdziet aizsardzību laikam, kad parasti esat prom.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Tūlītēja rīcība nav nepieciešama. Turpiniet uzraudzīt šo māju.",
   "Lặp sau \$minutes phút": "Atkārtot pēc \$minutes minūtēm",
   "Đang dùng • \$repeatText": "Aktīvs • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Drošības uzraudzība • \$repeatText",
   "Gia đình: \$mode": "Mājas režīms: \$mode",
   "Gợi ý xử lý": "Ieteiktās darbības",
   "Phát hiện \$count vấn đề cần xử lý": "Jāpievērš uzmanība \$count problēmām",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Durvis šodien tika izmantotas \$count reizes",
-  "Đã ghi nhận \$count hoạt động gần đây": "Reģistrētas \$count nesenas darbības",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistēma: jāpārbauda \$issueCount vienumi",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM marķieris šajā tālrunī ir gatavs.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM marķieris ir gatavs, bet automātiskajai aizsardzībai prombūtnē trūkst vienas prasības.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Atrastas \$emergencyTotal ārkārtas ierīces. Ieteicamais minimums: dūmu sensors un SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Nodot mājas īpašumtiesības:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Durvis šodien tika izmantotas \$count reizes",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Reģistrētas \$count nesenas darbības",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistēma: jāpārbauda \$issueCount vienumi",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM marķieris šajā tālrunī ir gatavs.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM marķieris ir gatavs, bet automātiskajai aizsardzībai prombūtnē trūkst vienas prasības.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Atrastas \$emergencyTotal ārkārtas ierīces. Ieteicamais minimums: dūmu sensors un SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Nodot mājas īpašumtiesības:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count durvis droši aizvērtas",
   "\$count cửa và khóa đã an toàn": "Nostiprinātas \$count durvis un slēdzenes",
   "\$count thiết bị đang được theo dõi": "Tiek uzraudzītas \$count ierīces",
   "Cập nhật \$timeText": "Atjaunināts \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Jaunākie dati atjaunināti pirms \$count minūtēm",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Jaunākie dati atjaunināti pirms \$count stundām",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Jaunākie dati atjaunināti pirms \$count minūtēm",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Jaunākie dati atjaunināti pirms \$count stundām",
   "Thành viên trong nhà: \$count": "Dalībnieki mājās: \$count",
   "Thành viên bên ngoài: \$count": "Dalībnieki prom: \$count",
   "Chưa xác định vị trí: \$count": "Atrašanās vieta nav zināma: \$count",
   "Môi trường hiện tại: \$environment": "Pašreizējā vide: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: atvērts, kamēr māja ir aizsardzības režīmā",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: atvērts, kamēr māja ir aizsardzības režīmā",
   "An tâm hơn trong từng ngôi nhà": "Sirdsmiers ikvienā mājā",
   "Báo động SafeHome": "SafeHome trauksme",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Drošības brīdinājumam nepieciešama jūsu uzmanība.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Drošības brīdinājumam nepieciešama jūsu uzmanība.",
   "Có cảnh báo cần kiểm tra": "Brīdinājumam nepieciešama jūsu uzmanība",
   "Tự đóng sau \$time": "Automātiski aizvērsies pēc \$time",
   "Ngày trong tuần": "Nedēļas dienas",
   "Hoặc": "Vai",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Sākuma un beigu laiks nevar būt vienāds",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Beigu laikam jābūt pēc pašreizējā laika",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Sākuma un beigu laiks nevar būt vienāds",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Beigu laikam jābūt pēc pašreizējā laika",
   "Khoảng tạm tắt không hợp lệ": "Nederīgs trauksmes apturēšanas diapazons",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Apturēšanas diapazons nepārklājas ne ar vienu aktīvu trauksmes grafiku",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Apturēšanas diapazons nepārklājas ne ar vienu aktīvu trauksmes grafiku",
   "Cài đặt báo động": "Trauksmes iestatījumi",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Kontrolējiet, kā šis sensors aktivizē brīdinājumus.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Kontrolējiet, kā šis sensors aktivizē brīdinājumus.",
   "Tham gia báo động": "Piedalīties trauksmēs",
-  "Tắt để cảm biến không tạo báo động.": "Izslēdziet, lai šis sensors nevarētu izraisīt trauksmi.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Izslēdziet, lai šis sensors nevarētu izraisīt trauksmi.",
   "Bật còi vật lý": "Iespējot fizisko sirēnu",
   "Cho phép kích hoạt còi trong nhà.": "Atļaut iekštelpu sirēnai aktivizēties.",
   "Đánh thức màn hình": "Aktivizēt ekrānu",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Rādīt pilnekrāna brīdinājumu tālrunī.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Rādīt pilnekrāna brīdinājumu tālrunī.",
   "Độ trễ kích hoạt": "Aktivizēšanas aizkave",
   "Chỉ áp dụng cho cảm biến an ninh.": "Attiecas tikai uz drošības sensoriem.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Ārkārtas sensori vienmēr aktivizējas nekavējoties.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Ārkārtas sensori vienmēr aktivizējas nekavējoties.",
   "Ngay lập tức": "Nekavējoties",
   "giây": "sekundes",
   "Đã lưu cấu hình báo động": "Trauksmes iestatījumi saglabāti",
-  "Không thể lưu cấu hình báo động": "Neizdevās saglabāt trauksmes iestatījumus",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Šo iestatījumu var mainīt tikai mājas īpašnieks un administratori.",
+  "Không thể lưu cấu hình báo động":
+      "Neizdevās saglabāt trauksmes iestatījumus",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Šo iestatījumu var mainīt tikai mājas īpašnieks un administratori.",
   "Thông tin chi tiết": "Ierīces informācija",
   "Thông báo báo động": "Trauksmes paziņojums",
   "Cài đặt nhắc nhở": "Atgādinājuma iestatījumi",
   "Nhắc nhở theo lịch": "Ieplānots atgādinājums",
   "Danh sách thông báo": "Paziņojumi",
   "Cài đặt thông báo": "Paziņojumu iestatījumi",
-  "Sử dụng báo động theo lịch đã thiết lập": "Izmantot konfigurēto trauksmes grafiku",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Sūtīt tikai paziņojumus; neaktivizēt trauksmi",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Visas mājas trauksmes ir izslēgtas; sistēma sūtīs tikai paziņojumus.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Šo režīmu var ieslēgt tikai īpašnieks.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Izmantot konfigurēto trauksmes grafiku",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Sūtīt tikai paziņojumus; neaktivizēt trauksmi",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Visas mājas trauksmes ir izslēgtas; sistēma sūtīs tikai paziņojumus.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Šo režīmu var ieslēgt tikai īpašnieks.",
   "Bật Không bảo vệ?": "Ieslēgt neaizsargāto režīmu?",
   "Cảm biến vừa phát hiện một sự kiện.": "Sensors tikko konstatēja notikumu.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Tikai īpašnieks var ieslēgt neaizsargāto režīmu",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Tikai īpašnieks var ieslēgt neaizsargāto režīmu",
   "Đã chuyển nhà sang Không bảo vệ": "Māja pārslēgta uz neaizsargāto režīmu",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Pārslēgts uz neaizsargāto režīmu, bet paziņojumu neizdevās nosūtīt",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Pārslēgts uz neaizsargāto režīmu, bet paziņojumu neizdevās nosūtīt",
   "Giám sát toàn diện": "Pilna uzraudzība",
   "Không bảo vệ": "Neaizsargāts",
   "Không bảo vệ đang bật": "Neaizsargātais režīms ir aktīvs",
   "Nhà đã chuyển sang Không bảo vệ": "Māja pārslēgta uz neaizsargāto režīmu",
   "Thông báo cảm biến": "Sensora paziņojumi",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Standarta paziņojumi, kad sensors konstatē notikumu.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Standarta paziņojumi, kad sensors konstatē notikumu.",
   "Tôi hiểu, tiếp tục": "Es saprotu, turpināt",
   "Cảnh báo an ninh đã kết thúc": "Drošības brīdinājums beidzies",
   "Sự cố nguy hiểm đã kết thúc": "Ārkārtas situācija beigusies",
   "Cảnh báo đã được kết thúc.": "Brīdinājums ir beidzies.",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "Cits brīdinājums joprojām ir aktīvs.",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "Cits brīdinājums joprojām ir aktīvs.",
   "Báo động đã hoạt động trở lại": "Trauksme atkal ir aktīva",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Trauksmes apturēšanas periods ir beidzies.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Trauksmes apturēšanas periods ir beidzies.",
   "MQTT đã kết nối trở lại": "MQTT savienojums atjaunots",
   "Còi báo động đã được tắt": "Fiziskā sirēna tika izslēgta",
   "Sự cố vẫn đang được theo dõi.": "Incidents joprojām tiek uzraudzīts.",
@@ -929,39 +1151,53 @@ const Map<String, String> lvStrings = {
   "Có thành viên đã trở về nhà.": "Dalībnieks ir atgriezies mājās.",
   "Thiết bị đã được xoá": "Ierīce tika noņemta",
   "Không thể xoá thiết bị": "Neizdevās noņemt ierīci",
-  "Hãy thử lại thao tác xoá thiết bị.": "Lūdzu, mēģiniet noņemt ierīci vēlreiz.",
+  "Hãy thử lại thao tác xoá thiết bị.":
+      "Lūdzu, mēģiniet noņemt ierīci vēlreiz.",
   "Chế độ Bảo vệ đã được tắt.": "Aizsardzības režīms tika izslēgts.",
   "Nhà đang ở chế độ Bình thường.": "Māja ir parastajā režīmā.",
   "Pin thiết bị đã ổn định": "Ierīces akumulators ir stabils",
   "Hub đã kết nối trở lại": "Hub savienojums atjaunots",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Pārslēgts uz parasto režīmu, bet paziņojumu neizdevās nosūtīt",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Pārslēgts uz parasto režīmu, bet paziņojumu neizdevās nosūtīt",
   "Chung cho nhà": "Kopīgota māja",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Attiecas uz visiem dalībniekiem un var aktivizēt fizisko sirēnu.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Attiecas uz visiem dalībniekiem un var aktivizēt fizisko sirēnu.",
   "Cá nhân": "Personīgs",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Personīgais grafiks darbojas neatkarīgi un nekad neaktivizē fizisko sirēnu.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Šis iestatījums attiecas tikai uz jūsu kontu.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Kopīgotās mājas iestatījumus var mainīt tikai īpašnieks un administratori.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Personīgais grafiks darbojas neatkarīgi un nekad neaktivizē fizisko sirēnu.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Šis iestatījums attiecas tikai uz jūsu kontu.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Kopīgotās mājas iestatījumus var mainīt tikai īpašnieks un administratori.",
   "Tham gia hệ thống báo động": "Piedalīties trauksmes sistēmā",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Ārkārtas sensori vienmēr piedalās trauksmes sistēmā.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Izslēdziet, lai ierīce nevarētu izraisīt nevienu trauksmi.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Ārkārtas sensori vienmēr piedalās trauksmes sistēmā.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Izslēdziet, lai ierīce nevarētu izraisīt nevienu trauksmi.",
   "Lịch báo động chung": "Kopīgais trauksmes grafiks",
   "Lịch báo động cá nhân": "Personīgais trauksmes grafiks",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Rādīt pilnekrāna brīdinājumu tālrunī.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Rādīt pilnekrāna brīdinājumu tālrunī.",
   "Lặp lại cảnh báo": "Atkārtot brīdinājumu",
   "Báo động chung": "Kopīgā trauksme",
   "Báo động cá nhân": "Personīgā trauksme",
   "Đã cài đặt": "Konfigurēts",
   "Chưa cài đặt": "Nav konfigurēts",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Kopīgie un personīgie grafiki darbojas paralēli; vairs nav jāizvēlas viens no tiem.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Kopīgie un personīgie grafiki darbojas paralēli; vairs nav jāizvēlas viens no tiem.",
   "Cài nhanh chung": "Ātrā kopīgo iestatījumu konfigurēšana",
   "Cài nhanh cá nhân": "Ātrā personīgo iestatījumu konfigurēšana",
   "Thiết lập nhanh lịch cá nhân": "Ātrā personīgā grafika iestatīšana",
   "Thiết lập nhanh lịch chung": "Ātrā kopīgā grafika iestatīšana",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Šis grafiks attiecas tikai uz jums un neaktivizē fizisko sirēnu.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Šis grafiks attiecas uz visiem mājas dalībniekiem.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Šis grafiks attiecas tikai uz jums un neaktivizē fizisko sirēnu.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Šis grafiks attiecas uz visiem mājas dalībniekiem.",
   "Đã áp dụng lịch báo động": "Trauksmes grafiks lietots",
   "Không thể lưu lịch báo động": "Neizdevās saglabāt trauksmes grafiku",
   "Nhà chưa có thiết bị an ninh": "Šajā mājā nav drošības ierīču",
-  "Nhận cảnh báo theo lịch chung của nhà": "Saņemt brīdinājumus no kopīgā mājas grafika",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Izslēdziet to, lai apturētu paziņojumus un pilnekrāna brīdinājumus no kopīgā grafika. Mājas sirēna turpinās darboties.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Saņemt brīdinājumus no kopīgā mājas grafika",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Izslēdziet to, lai apturētu paziņojumus un pilnekrāna brīdinājumus no kopīgā grafika. Mājas sirēna turpinās darboties.",
 };

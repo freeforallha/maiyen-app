@@ -11,8 +11,8 @@ import 'android/android_background_notification_service.dart' as android;
 
 @pragma('vm:entry-point')
 Future<void> safeHomeFirebaseMessagingBackgroundHandler(
-    RemoteMessage message,
-    ) async {
+  RemoteMessage message,
+) async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await android.firebaseMessagingBackgroundHandler(message);
     return;
@@ -24,9 +24,7 @@ Future<void> safeHomeFirebaseMessagingBackgroundHandler(
 
   DartPluginRegistrant.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final type = message.data['type']?.toString() ?? '';
 

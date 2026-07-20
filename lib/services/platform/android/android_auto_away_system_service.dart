@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class AndroidAutoAwaySystemService {
   const AndroidAutoAwaySystemService._();
 

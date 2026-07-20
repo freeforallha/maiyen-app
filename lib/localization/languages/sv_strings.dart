@@ -3,7 +3,8 @@ const Map<String, String> svStrings = {
   "Không đọc được số điện thoại": "Det gick inte att läsa telefonnumret",
   "Tin nhắn quá dài": "Meddelandet är för långt",
   "Không gửi được tin nhắn": "Det gick inte att skicka meddelandet",
-  "Bạn không có quyền sửa lịch chung của nhà": "Du har inte behörighet att redigera hemmets gemensamma schema",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Du har inte behörighet att redigera hemmets gemensamma schema",
   "Nhà của bạn": "Ditt hem",
   "Tải tin cũ hơn": "Läs in äldre meddelanden",
   "Nhà chưa đặt tên": "Namnlöst hem",
@@ -91,13 +92,18 @@ const Map<String, String> svStrings = {
   "Đang theo dõi": "Övervakar",
   "Chưa nhận diện": "Okänd enhet",
   "Chưa có cập nhật": "Inga uppdateringar ännu",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Inga enheter ännu. Tryck på + för att lägga till en och börja skydda ditt hem.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Inga enheter ännu. Tryck på + för att lägga till en och börja skydda ditt hem.",
   "CHƯA AN TOÀN": "OSÄKERT",
   "ĐÃ AN TOÀN": "SÄKERT",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Ditt hem behöver tillsyn. Granska statusarna nedan.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Ditt hem fungerar normalt.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Ingen ovanlig rök- eller SOS-aktivitet upptäcktes.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Det finns inte tillräckligt med ny aktivitet för en djupare analys.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Ditt hem behöver tillsyn. Granska statusarna nedan.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Ditt hem fungerar normalt.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Ingen ovanlig rök- eller SOS-aktivitet upptäcktes.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Det finns inte tillräckligt med ny aktivitet för en djupare analys.",
   "Hub kết nối bình thường": "Hubben är ansluten",
   "Cài đặt cảnh báo cho nhà hiện tại": "Larminställningar för det här hemmet",
   "Nhận cảnh báo báo động": "Ta emot larmaviseringar",
@@ -161,20 +167,25 @@ const Map<String, String> svStrings = {
   "Đã rời khỏi home": "Du har lämnat hemmet",
   "Đã cập nhật": "Uppdaterad",
   "Tìm home...": "Sök hem...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Ange hemmets plats och aktivera automatiskt skydd",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Överför ägarskapet eller ta bort hemmet",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Ställ in påminnelse/larm för valda hem",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Ange hemmets plats och aktivera automatiskt skydd",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Överför ägarskapet eller ta bort hemmet",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Ställ in påminnelse/larm för valda hem",
   "Chia sẻ nhà đã chọn": "Dela valda hem",
   "Mở danh sách chia sẻ nhà": "Öppna listan över hemdelning",
   "Xoá các nhà đã chọn?": "Ta bort valda hem?",
   "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "De valda hemmen tas bort permanent.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Eller skanna en QR-kod för att begära åtkomst till valda hem",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Eller skanna en QR-kod för att begära åtkomst till valda hem",
   "Email người nhận": "Mottagarens e-postadress",
   "Chia sẻ": "Dela",
   "Email chưa đăng ký": "E-postadressen är inte registrerad",
   "Chia sẻ hoàn tất": "Delningen är klar",
   "Mở List chia sẻ nhà": "Öppna listan över hemdelning",
-  "Không có nhà nào bạn có quyền quản lý": "Du hanterar inget av de valda hemmen",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Du hanterar inget av de valda hemmen",
   "Chưa share cho ai": "Inte delat med någon ännu",
   "Tìm nhà": "Sök hem",
   "Xoá các nhà đã chọn ?": "Ta bort valda hem?",
@@ -197,27 +208,35 @@ const Map<String, String> svStrings = {
   "Đã tắt báo động": "Larmet är avstängt",
   "Tắt báo động": "Stoppa larmet",
   "Cả ngày": "Hela dagen",
-  "Bạn không có quyền thực hiện thao tác này.": "Du har inte behörighet att utföra den här åtgärden.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Åtgärden kunde inte slutföras. Försök igen.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Ogiltig QR-kod för anslutning till flera hem",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Du har inte behörighet att utföra den här åtgärden.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Åtgärden kunde inte slutföras. Försök igen.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Ogiltig QR-kod för anslutning till flera hem",
   "Bạn đang là chủ các nhà này": "Du äger dessa hem",
   "Một người dùng": "En användare",
   "Yêu cầu gia nhập nhà": "Begäran om att gå med i hemmet",
   "Đã gửi yêu cầu gia nhập nhà": "Begäran om att gå med har skickats",
   "QR gia nhập không hợp lệ": "Ogiltig QR-kod för anslutning",
   "Bạn đang là chủ nhà này": "Du äger redan det här hemmet",
-  "QR này không phải mã xin gia nhập nhà": "Den här QR-koden är inte en kod för att gå med i ett hem",
-  "Bạn không có quyền thêm thiết bị": "Du har inte behörighet att lägga till enheter",
+  "QR này không phải mã xin gia nhập nhà":
+      "Den här QR-koden är inte en kod för att gå med i ett hem",
+  "Bạn không có quyền thêm thiết bị":
+      "Du har inte behörighet att lägga till enheter",
   "Đã mở chế độ thêm thiết bị": "Enhetsparkoppling har aktiverats",
   "Rời khỏi Home này?": "Lämna det här hemmet?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Det här hemmet och alla dess enheter tas bort permanent.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Det här hemmet och alla dess enheter tas bort permanent.",
   "Đã xoá nhà": "Hemmet har tagits bort",
   "QR của nhà này": "Hemmets QR-kod",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Andra kan skanna den här koden för att begära åtkomst till hemmet.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Andra kan skanna den här koden för att begära åtkomst till hemmet.",
   "Chia sẻ nhà": "Dela hemmet",
   "Quét QR để xin gia nhập nhà": "Skanna QR för att gå med i ett hem",
   "Quét QR xin gia nhập nhà": "Skanna QR för att gå med i hemmet",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Placera QR-koden för det delade hemmet inom ramen",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Placera QR-koden för det delade hemmet inom ramen",
   "Mã QR này do chủ nhà chia sẻ": "Den här QR-koden delas av hemmets ägare",
   "Nhập mã mời": "Ange inbjudningskod",
   "Gửi yêu cầu gia nhập": "Skicka begäran om att gå med",
@@ -229,7 +248,8 @@ const Map<String, String> svStrings = {
   "Lời mời chia sẻ nhà": "Inbjudan till hemdelning",
   "Đã share home": "Hemmet har delats",
   "Chuyển quyền chủ nhà": "Överför ägarskap",
-  "Không thể chuyển quyền cho chính bạn": "Du kan inte överföra ägarskapet till dig själv",
+  "Không thể chuyển quyền cho chính bạn":
+      "Du kan inte överföra ägarskapet till dig själv",
   "Không tìm thấy user": "Användaren hittades inte",
   "Không tìm thấy tài khoản": "Kontot hittades inte",
   "Xác nhận chuyển quyền": "Bekräfta överföring av ägarskap",
@@ -237,17 +257,21 @@ const Map<String, String> svStrings = {
   "Xác nhận mật khẩu": "Bekräfta lösenord",
   "Yêu cầu chuyển quyền chủ nhà": "Begäran om överföring av ägarskap",
   "Đã gửi yêu cầu chuyển quyền": "Begäran om överföring har skickats",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Begäran om överföring av ägarskap har skickats",
-  "Bạn không có quyền xoá thiết bị": "Du har inte behörighet att ta bort enheter",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Begäran om överföring av ägarskap har skickats",
+  "Bạn không có quyền xoá thiết bị":
+      "Du har inte behörighet att ta bort enheter",
   "Xóa Device?": "Ta bort den här enheten?",
-  "Đã gửi yêu cầu xoá thiết bị": "Begäran om borttagning av enheten har skickats",
+  "Đã gửi yêu cầu xoá thiết bị":
+      "Begäran om borttagning av enheten har skickats",
   "Đang xoá thiết bị": "Enheten tas bort",
   "Đăng xuất?": "Logga ut?",
   "Thêm nhà": "Lägg till hem",
   "Thêm nhà mới": "Lägg till nytt hem",
   "Tạo nhà mới": "Skapa nytt hem",
   "Tạo một ngôi nhà mới của bạn": "Skapa ett nytt hem",
-  "Quét mã QR được chủ nhà chia sẻ": "Skanna QR-koden som hemmets ägare har delat",
+  "Quét mã QR được chủ nhà chia sẻ":
+      "Skanna QR-koden som hemmets ägare har delat",
   "Tên nhà": "Hemmets namn",
   "Số điện thoại": "Telefonnummer",
   "Nam": "Man",
@@ -261,7 +285,8 @@ const Map<String, String> svStrings = {
   "Không thể lưu thông tin": "Det gick inte att spara informationen",
   "Đã lưu thông tin": "Informationen har sparats",
   "Lỗi lưu profile": "Det gick inte att spara profilen",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Lägg till ett telefonnummer för nödsituationer",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Lägg till ett telefonnummer för nödsituationer",
   "Hoàn tất": "Klar",
   "Đã tạo nhà mới": "Hemmet har skapats",
   "Về muộn": "Kommer hem sent",
@@ -280,7 +305,8 @@ const Map<String, String> svStrings = {
   "SĐT": "Telefon",
   "Ngày sinh": "Födelsedatum",
   "Yêu cầu & lời mời": "Förfrågningar och inbjudningar",
-  "Xem lời mời chia sẻ và xin gia nhập": "Se delningsinbjudningar och förfrågningar om att gå med",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Se delningsinbjudningar och förfrågningar om att gå med",
   "Cài đặt bảo mật": "Säkerhetsinställningar",
   "Quyền báo động toàn màn hình": "Behörighet för helskärmslarm",
   "Báo động toàn màn hình": "Helskärmslarm",
@@ -330,7 +356,8 @@ const Map<String, String> svStrings = {
   "Đổi tên phòng": "Byt namn på rum",
   "Tên phòng": "Rumsnamn",
   "Xoá phòng": "Ta bort rum",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Enheter i det här rummet flyttas till Ej tilldelade.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Enheter i det här rummet flyttas till Ej tilldelade.",
   "Thêm phòng": "Lägg till rum",
   "Ví dụ: Phòng khách": "Exempel: Vardagsrum",
   "Phòng khách": "Vardagsrum",
@@ -351,9 +378,11 @@ const Map<String, String> svStrings = {
   "Cửa đóng": "Dörren är stängd",
   "Chưa đặt vị trí nhà": "Hemmets plats har inte angetts",
   "Đặt vị trí nhà tại đây": "Ange hemmets plats här",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Ange hemmets plats innan du aktiverar Automatiskt skydd",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Ange hemmets plats innan du aktiverar Automatiskt skydd",
   "Bán kính bảo vệ mặc định: 150 m": "Standardradie för skydd: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Varje medlem måste tillåta platsåtkomst Alltid så att borta/hemma-status kan fungera i bakgrunden.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Varje medlem måste tillåta platsåtkomst Alltid så att borta/hemma-status kan fungera i bakgrunden.",
   "Lưu cài đặt": "Spara inställningar",
   "Đã đặt vị trí nhà": "Hemmets plats har angetts",
   "Đang lấy vị trí...": "Hämtar plats...",
@@ -362,8 +391,10 @@ const Map<String, String> svStrings = {
   "Cập nhật thông tin nhà": "Uppdatera heminformation",
   "Nhập địa chỉ của nhà": "Ange hemmets adress",
   "Lưu thay đổi": "Spara ändringar",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Det här namnet visas bara på ditt konto.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Namnet och adressen uppdateras för alla medlemmar i hemmet.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Det här namnet visas bara på ditt konto.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Namnet och adressen uppdateras för alla medlemmar i hemmet.",
   "Một thành viên": "En medlem",
   "Đã cập nhật thông tin nhà": "Heminformationen har uppdaterats",
   "Thay tên": "Byt namn",
@@ -371,13 +402,15 @@ const Map<String, String> svStrings = {
   "Chưa chọn nhà để kiểm tra": "Välj ett hem att testa",
   "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Kör testet med ägarkontot",
   "Không đọc được dữ liệu nhà": "Det gick inte att läsa hemdata",
-  "Nhà cần có ít nhất một thiết bị để test": "Hemmet behöver minst en enhet för testning",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Hemmet behöver minst en enhet för testning",
   "Đóng": "Stäng",
   "Đã thiết lập": "Ställ in",
   "Quét QR": "Skanna QR",
   "Quét QR để thêm thiết bị": "Skanna QR för att lägga till en enhet",
   "Nhập HUB ID thủ công": "Ange HUB-ID manuellt",
-  "Bạn không có quyền sắp xếp phòng": "Du har inte behörighet att ändra ordningen på rum",
+  "Bạn không có quyền sắp xếp phòng":
+      "Du har inte behörighet att ändra ordningen på rum",
   "Cảnh báo khói": "Röklarm",
   "Cập nhật thiết bị": "Enhetsuppdatering",
   "Cửa đang mở": "Dörren är öppen",
@@ -388,7 +421,8 @@ const Map<String, String> svStrings = {
   "Khôi phục mật khẩu": "Återställ lösenord",
   "Nhập email của bạn": "Ange din e-postadress",
   "Gửi": "Skicka",
-  "Đã gửi email khôi phục": "E-postmeddelandet för lösenordsåterställning har skickats",
+  "Đã gửi email khôi phục":
+      "E-postmeddelandet för lösenordsåterställning har skickats",
   "Không gửi được email": "Det gick inte att skicka e-postmeddelandet",
   "Vui lòng nhập email và mật khẩu": "Ange e-postadress och lösenord",
   "Mật khẩu xác nhận không khớp": "Lösenorden matchar inte",
@@ -427,8 +461,10 @@ const Map<String, String> svStrings = {
   "Chế độ áp dụng": "Tillämpa läge",
   "Theo nhà": "Hemschema",
   "Riêng tôi": "Personligt",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Använd det gemensamma schemat som ägaren eller administratören har ställt in",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Använd ett personligt schema som endast gäller ditt konto",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Använd det gemensamma schemat som ägaren eller administratören har ställt in",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Använd ett personligt schema som endast gäller ditt konto",
   "Thiết lập nhanh báo động": "Snabb larminställning",
   "Thiết lập nhanh toàn bộ thiết bị": "Snabbinställ alla enheter",
   "Áp dụng cho toàn bộ thiết bị": "Tillämpa på alla enheter",
@@ -442,8 +478,10 @@ const Map<String, String> svStrings = {
   "Hôm nay đã ghi nhận cảnh báo SOS": "Ett SOS-larm registrerades i dag",
   "Hôm nay đã ghi nhận cảnh báo khói": "Ett röklarm registrerades i dag",
   "Khói đã an toàn": "Röktillståndet har återställts",
-  "Không tìm thấy nhà của thông báo này": "Hemmet för den här aviseringen hittades inte",
-  "Không tìm thấy thiết bị trong nhà này": "Enheten hittades inte i det här hemmet",
+  "Không tìm thấy nhà của thông báo này":
+      "Hemmet för den här aviseringen hittades inte",
+  "Không tìm thấy thiết bị trong nhà này":
+      "Enheten hittades inte i det här hemmet",
   "Một chủ nhà": "En husägare",
   "Ngôi nhà đang hoạt động ổn định": "Hemmet fungerar normalt",
   "Nhiệt độ cao": "Hög temperatur",
@@ -466,10 +504,13 @@ const Map<String, String> svStrings = {
   "Đã chia sẻ nhà thành công.": "Hemmen har delats.",
   "Tìm nhà...": "Sök hem...",
   "Đã rời khỏi nhà": "Lämnade hemmet",
-  "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Du kommer att lämna de delade hemmen.",
+  "Bạn sẽ rời khỏi các nhà được chia sẻ.":
+      "Du kommer att lämna de delade hemmen.",
   "Các nhà của bạn sẽ bị xoá.\n": "Dina hem kommer att tas bort.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Detta ändrar scheman för Hemlarm för alla säkerhetsenheter i de valda hemmen.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Detta lägger till en Hempåminnelse i de valda hemmen.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Detta ändrar scheman för Hemlarm för alla säkerhetsenheter i de valda hemmen.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Detta lägger till en Hempåminnelse i de valda hemmen.\n\n",
   "Xác nhận thay đổi báo động": "Bekräfta larmändringar",
   "Xác nhận thay đổi nhắc nhở": "Bekräfta ändringar av påminnelse",
   "Lặp lại khi sự cố vẫn còn": "Upprepa så länge problemet kvarstår",
@@ -477,44 +518,64 @@ const Map<String, String> svStrings = {
   "VD: Mr Chung": "T.ex. herr Chung",
   "🏡 Chưa có nhà nào": "🏡 Inga hem ännu",
   "Vẫn chuyển về Bình thường": "Byt ändå till Normal",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automatiskt skydd när du är borta är fortfarande aktiverat. Om alla medlemmar fortfarande är borta kan systemet aktivera Skyddsläge igen efter några minuter.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automatiskt skydd när du är borta är fortfarande aktiverat. Om alla medlemmar fortfarande är borta kan systemet aktivera Skyddsläge igen efter några minuter.",
   "Chuyển về Bình thường?": "Byta till Normal?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Säkerhetsenheterna övervakas omedelbart.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Säkerhetsenheterna övervakas omedelbart.\n\n",
   "Bật Bảo vệ thủ công?": "Aktivera manuellt Skyddsläge?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Den här åtgärden ändrar larmtiden för vissa enheter i dag...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Den här åtgärden inaktiverar alla larm för detta ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Den här åtgärden ändrar larmtiden för vissa enheter i dag...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Den här åtgärden inaktiverar alla larm för detta ",
   "Tắt toàn bộ báo động?": "Stänga av alla larm?",
-  "Không xoá được lịch tạm tắt báo động": "Det gick inte att ta bort schemat för larmpaus",
+  "Không xoá được lịch tạm tắt báo động":
+      "Det gick inte att ta bort schemat för larmpaus",
   "Không lưu được tạm tắt báo động": "Det gick inte att spara larmpausen",
-  "Không gửi được yêu cầu xoá": "Det gick inte att skicka begäran om borttagning",
+  "Không gửi được yêu cầu xoá":
+      "Det gick inte att skicka begäran om borttagning",
   "Không lưu được cài đặt": "Det gick inte att spara inställningen",
-  "Không lấy được vị trí hiện tại": "Det gick inte att hämta den aktuella platsen",
-  "Không thể xác nhận tài khoản hiện tại": "Det gick inte att verifiera det aktuella kontot",
+  "Không lấy được vị trí hiện tại":
+      "Det gick inte att hämta den aktuella platsen",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Det gick inte att verifiera det aktuella kontot",
   "Mật khẩu không đúng": "Fel lösenord",
   "Không thể xác nhận mật khẩu": "Det gick inte att verifiera lösenordet",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Endast Ägaren eller en Administratör kan ändra inställningen för larmupprepning",
-  "Không lưu được thời gian lặp báo động": "Det gick inte att spara larmets upprepningstid",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Endast Ägaren eller en Administratör kan ändra Skyddsläge",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Endast Ägaren eller en Administratör kan ändra inställningen för larmupprepning",
+  "Không lưu được thời gian lặp báo động":
+      "Det gick inte att spara larmets upprepningstid",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Endast Ägaren eller en Administratör kan ändra Skyddsläge",
   "Không thể thay đổi chế độ nhà": "Det gick inte att ändra hemmets läge",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Skyddsläge är aktiverat, men aviseringen kunde inte skickas",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Skyddsläge är aktiverat, men aviseringen kunde inte skickas",
   "Đã bật Chế độ Bảo vệ thủ công": "Manuellt Skyddsläge har aktiverats",
   "Đã chuyển nhà về Bình thường": "Hemmet har återgått till Normal",
   "60 phút": "60 minuter",
   "30 phút": "30 minuter",
   "15 phút": "15 minuter",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Du visar ägarens schema. Välj Bara jag för att ställa in ditt eget larmschema.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Du visar ägarens schema. Välj Bara jag för att ställa in ditt eget larmschema.",
   "Chọn giờ kết thúc báo động": "Välj larmets sluttid",
   "Chọn giờ bắt đầu báo động": "Välj larmets starttid",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Du har inte behörighet att redigera larmschemat för det här hemmet",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Det gick inte att tillämpa larmet på alla enheter",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Det här hemmet har inga säkerhetsenheter att tillämpa inställningen på",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Du har inte behörighet att redigera Heminställningar. Välj Bara jag.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Du har inte behörighet att redigera larmschemat för det här hemmet",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Det gick inte att tillämpa larmet på alla enheter",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Det här hemmet har inga säkerhetsenheter att tillämpa inställningen på",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Du har inte behörighet att redigera Heminställningar. Välj Bara jag.",
   "Không thể lưu chế độ báo động": "Det gick inte att spara larmläget",
   "Thêm nhắc nhở": "Lägg till påminnelse",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Påminnelsen påminner dig om att kontrollera hemmets säkerhetsstatus vid den valda tiden.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Påminnelsen påminner dig om att kontrollera hemmets säkerhetsstatus vid den valda tiden.",
   "Thêm khung giờ báo động": "Lägg till tidsintervall för larm",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Dina egna påminnelseinställningar används",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Ägarens påminnelseinställningar används",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Dina egna påminnelseinställningar används",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Ägarens påminnelseinställningar används",
   "Sửa giờ nhắc nhở": "Redigera påminnelsetid",
   "Sửa giờ kết thúc báo động": "Redigera larmets sluttid",
   "Sửa giờ bắt đầu báo động": "Redigera larmets starttid",
@@ -531,118 +592,177 @@ const Map<String, String> svStrings = {
   "Xoá thành viên": "Ta bort medlem",
   "Đã xoá thành viên": "Medlemmen har tagits bort",
   "Đồng ý": "OK",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Är du säker på att du vill lämna det här hemmet?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Är du säker på att du vill lämna det här hemmet?",
   "Xoá thành viên?": "Ta bort medlemmen?",
   "Rời khỏi nhà?": "Lämna det här hemmet?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Endast ägaren kan ändra roller",
-  "Bạn không có quyền xoá thành viên này": "Du har inte behörighet att ta bort den här medlemmen",
+  "Bạn không có quyền xoá thành viên này":
+      "Du har inte behörighet att ta bort den här medlemmen",
   "Bạn": "Du",
   "Không có email": "Ingen e-postadress",
   "Chưa có số điện thoại": "Inget telefonnummer",
   "Không mở được ứng dụng gọi điện": "Det gick inte att öppna telefonappen",
-  "Thành viên chưa cập nhật số điện thoại": "Den här medlemmen har inte lagt till något telefonnummer",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Manuellt Skyddsläge är aktiverat – byt till Normal för att stänga av det",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Den här medlemmen har inte lagt till något telefonnummer",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Manuellt Skyddsläge är aktiverat – byt till Normal för att stänga av det",
   "Thời gian lặp": "Upprepningsintervall",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Välj 0 för att få en avisering en gång. Inställningen gäller manuellt Skyddsläge och Automatiskt skydd när du är borta.",
-  "Lặp báo động khi sự cố vẫn còn": "Upprepa larmet så länge problemet kvarstår",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Välj 0 för att få en avisering en gång. Inställningen gäller manuellt Skyddsläge och Automatiskt skydd när du är borta.",
+  "Lặp báo động khi sự cố vẫn còn":
+      "Upprepa larmet så länge problemet kvarstår",
   "Đang được sử dụng": "Aktivt just nu",
   "Chuyển về sử dụng thông thường": "Återgå till normal användning",
   "Chế độ nhà": "Hemläge",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS-enheten har inte registrerat något larm.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Röksensorn har inte upptäckt något problem.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Du eller en medlem aktiverade Skydd manuellt.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome aktiverade Skydd automatiskt eftersom du lämnade hemmet.",
-  "Nhà đang ở chế độ dùng bình thường.": "Det här hemmet används normalt just nu.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS-enheten har inte registrerat något larm.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Röksensorn har inte upptäckt något problem.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Du eller en medlem aktiverade Skydd manuellt.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome aktiverade Skydd automatiskt eftersom du lämnade hemmet.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Det här hemmet används normalt just nu.",
   "Bảo vệ thủ công đang bật": "Manuellt Skydd är aktiverat",
   "Bảo vệ tự động đang bật": "Automatiskt Skydd är aktiverat",
   "Bảo vệ đang tắt": "Skyddsläge är avstängt",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Du har nyligen öppnat appen för att kontrollera status.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Öppna appen regelbundet för att granska behörigheter, scheman och olästa larm.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Efter några användningar kan SafeHome bedöma din vana att kontrollera appen bättre.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Du har nyligen öppnat appen för att kontrollera status.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Öppna appen regelbundet för att granska behörigheter, scheman och olästa larm.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Efter några användningar kan SafeHome bedöma din vana att kontrollera appen bättre.",
   "Tần suất vào ứng dụng ổn": "Frekvensen för appkontroller ser bra ut",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Det var ett tag sedan appen kontrollerades senast",
-  "Đang ghi nhận tần suất vào ứng dụng": "Frekvensen för appkontroller registreras",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Kontrollera platsbehörigheten Alltid och villkoren för bakgrundskörning.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Den här enheten uppfyller kraven för Automatiskt bortaläge.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Aktivera det om du vill att Skyddsläge ska slås på automatiskt när du går hemifrån.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Det var ett tag sedan appen kontrollerades senast",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Frekvensen för appkontroller registreras",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Kontrollera platsbehörigheten Alltid och villkoren för bakgrundskörning.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Den här enheten uppfyller kraven för Automatiskt bortaläge.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Aktivera det om du vill att Skyddsläge ska slås på automatiskt när du går hemifrån.",
   "Auto rời khỏi nhà chưa ổn": "Automatiskt bortaläge är inte klart",
   "Auto rời khỏi nhà đã sẵn sàng": "Automatiskt bortaläge är klart",
   "Auto rời khỏi nhà chưa bật": "Automatiskt bortaläge är inte aktiverat",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Lägg till en röksensor, SOS-enhet eller annan nödenhet som passar ditt hem.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Lägg till en röksensor, SOS-enhet eller annan nödenhet som passar ditt hem.",
   "Chưa có thiết bị khẩn cấp": "Ingen nödenhet ännu",
   "Đã có thiết bị khẩn cấp": "Nödenheter har lagts till",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Ställ in ett larmschema för sovtid eller när du är borta.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Det här hemmet har ett larmschema eller ett enhetsspecifikt larmschema.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Ställ in ett larmschema för sovtid eller när du är borta.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Det här hemmet har ett larmschema eller ett enhetsspecifikt larmschema.",
   "Chưa cài lịch báo động": "Larmschema är inte inställt",
   "Đã cài lịch báo động": "Larmschema är inställt",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Ställ in minst en Påminnelse så att du inte glömmer att kontrollera hemmet.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Appen påminner dig om att kontrollera hemmet enligt schemat.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Ställ in minst en Påminnelse så att du inte glömmer att kontrollera hemmet.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Appen påminner dig om att kontrollera hemmet enligt schemat.",
   "Chưa cài đặt nhắc nhở": "Påminnelse är inte inställd",
   "Đã cài đặt nhắc nhở": "Påminnelse är inställd",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Öppna appen igen eller logga in på nytt om den här enheten inte tar emot larm.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Den här enheten är inte registrerad för larm",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Öppna appen igen eller logga in på nytt om den här enheten inte tar emot larm.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Den här enheten är inte registrerad för larm",
   "Thiết bị nhận cảnh báo bình thường": "Den här enheten kan ta emot larm",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS begränsar bakgrundsanvändning mer än Android. Ha aviseringar och platsåtkomst Alltid aktiverade om du använder Automatiskt bortaläge.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS begränsar bakgrundsanvändning mer än Android. Ha aviseringar och platsåtkomst Alltid aktiverade om du använder Automatiskt bortaläge.",
   "Cơ chế iOS": "iOS-beteende",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Kontrollera bakgrundsbehörighet och autostart så att larm inte fördröjs.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Enheten har bekräftat de viktiga villkoren för bakgrundskörning.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Kontrollera bakgrundsanvändning/autostart",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Kontrollera bakgrundsbehörighet och autostart så att larm inte fördröjs.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Enheten har bekräftat de viktiga villkoren för bakgrundskörning.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Kontrollera bakgrundsanvändning/autostart",
   "Chạy nền ổn định": "Bakgrundsanvändningen verkar stabil",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Vissa Android-telefoner kan fördröja larm när batterioptimering är aktiverad.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Telefonen är mindre benägen att fördröja SafeHome-larm.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Vissa Android-telefoner kan fördröja larm när batterioptimering är aktiverad.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Telefonen är mindre benägen att fördröja SafeHome-larm.",
   "Chưa tắt tối ưu pin": "Batterioptimering är fortfarande aktiverad",
   "Tối ưu pin không chặn ứng dụng": "Batterioptimering blockerar inte appen",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Automatiskt bortaläge behöver platsåtkomst Alltid för att fungera tillförlitligt.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Platsbehörighet krävs för Automatiskt bortaläge.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Platstjänsten är avstängd, så Automatiskt bortaläge kanske inte fungerar tillförlitligt.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Detta krävs endast när Automatiskt bortaläge används.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Automatiskt bortaläge behöver platsåtkomst Alltid för att fungera tillförlitligt.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Platsbehörighet krävs för Automatiskt bortaläge.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Platstjänsten är avstängd, så Automatiskt bortaläge kanske inte fungerar tillförlitligt.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Detta krävs endast när Automatiskt bortaläge används.",
   "Chưa cấp vị trí luôn luôn": "Platsåtkomst Alltid är inte tillåten",
   "Đã cấp vị trí luôn luôn": "Platsåtkomst Alltid är tillåten",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS öppnar inte helskärm som Android. Appen använder systemaviseringar och ljud.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android använder helskärmslarm. Tillåt dem i inställningarna om telefonen blockerar dem.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS öppnar inte helskärm som Android. Appen använder systemaviseringar och ljud.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android använder helskärmslarm. Tillåt dem i inställningarna om telefonen blockerar dem.",
   "Cảnh báo trên iOS": "Larm på iOS",
   "Cảnh báo toàn màn hình": "Helskärmslarm",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Larm kanske inte visas om aviseringar är avstängda.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Den här telefonen kan ta emot SafeHome-aviseringar.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Larm kanske inte visas om aviseringar är avstängda.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Den här telefonen kan ta emot SafeHome-aviseringar.",
   "Chưa bật thông báo": "Aviseringar är inte aktiverade",
   "Đã bật thông báo": "Aviseringar är aktiverade",
   "Hệ thống: Sẵn sàng": "System: Klart",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "System: Larm kan missas",
   "Cách bạn đang dùng ứng dụng": "Hur du använder appen",
   "Thiết bị của bạn": "Din enhet",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Kontrollerar telefonen och hur du använder appen.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Kontrollerar telefonen och hur du använder appen.",
   "Hệ thống SafeHome": "SafeHome-systemet",
   "Hệ thống: Đang kiểm tra...": "System: Kontrollerar...",
   "Tên": "Namn",
-  "Bạn không có quyền thay đổi vị trí nhà": "Du har inte behörighet att ändra hemmets plats",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Du har inte behörighet att ändra hemmets plats",
   "Hãy bật GPS để đặt vị trí nhà": "Aktivera GPS för att ange hemmets plats",
   "Bạn chưa cấp quyền vị trí": "Platsbehörighet har inte beviljats",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Bevilja platsbehörighet i appinställningarna",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Hemmet skyddas automatiskt när alla går hemifrån",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automatiskt skydd när alla går hemifrån är inaktiverat",
-  "Không thể thay đổi trạng thái báo động": "Det gick inte att ändra larmstatus",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Bevilja platsbehörighet i appinställningarna",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Hemmet skyddas automatiskt när alla går hemifrån",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automatiskt skydd när alla går hemifrån är inaktiverat",
+  "Không thể thay đổi trạng thái báo động":
+      "Det gick inte att ändra larmstatus",
   "Đã tắt toàn bộ báo động của nhà": "Alla hemlarm har stängts av",
-  "QR này không phải mã xin gia nhập Home": "Den här QR-koden är inte en kod för att gå med i ett Hem",
+  "QR này không phải mã xin gia nhập Home":
+      "Den här QR-koden är inte en kod för att gå med i ett Hem",
   "Thêm Home": "Lägg till Hem",
   "Mở cài đặt": "Öppna inställningar",
   "Để sau": "Senare",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome behöver platsbehörigheten Alltid för att upptäcka när du lämnar eller återvänder hem, även när appen körs i bakgrunden.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome kan just nu bara komma åt platsen medan appen används.\n\nÖppna platsbehörigheten och välj ”Tillåt alltid” så att det automatiska skyddet fortsätter att fungera i bakgrunden.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome behöver platsbehörigheten Alltid för att upptäcka när du lämnar eller återvänder hem, även när appen körs i bakgrunden.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome kan just nu bara komma åt platsen medan appen används.\n\nÖppna platsbehörigheten och välj ”Tillåt alltid” så att det automatiska skyddet fortsätter att fungera i bakgrunden.",
   "Cho phép vị trí luôn luôn": "Tillåt alltid platsåtkomst",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Dina hem tas bort.\nDu lämnar de delade hemmen.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Detta ändrar scheman för Hemlarm för alla säkerhetsenheter i de valda hemmen.\n\nMedlemmar som använder inställningarna för Hemlarm påverkas.\nPersonliga larminställningar ändras inte.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Detta lägger till en Hempåminnelse i de valda hemmen.\n\nMedlemmar som använder inställningarna för Hempåminnelse påverkas.\nPersonliga påminnelseinställningar ändras inte.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Säkerhetsenheterna övervakas omedelbart.\n\nAutomatiskt skydd när du är borta pausas. Läget stängs inte av automatiskt när någon kommer hem och måste återställas till Normal av en behörig medlem.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Den här åtgärden ändrar larmtiden för vissa enheter i dag...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Den här åtgärden stänger av alla larm för det här hemmet. Du får inte längre farolarm på den här telefonen.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Larmet använder Heminställningar.\n\nDu får larm enligt de gemensamma scheman som ägaren eller en administratör har konfigurerat.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Larmet använder Mina inställningar.\n\nDu får larm enligt de personliga larmschemana för det här kontot.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Dina hem tas bort.\nDu lämnar de delade hemmen.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Detta ändrar scheman för Hemlarm för alla säkerhetsenheter i de valda hemmen.\n\nMedlemmar som använder inställningarna för Hemlarm påverkas.\nPersonliga larminställningar ändras inte.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Detta lägger till en Hempåminnelse i de valda hemmen.\n\nMedlemmar som använder inställningarna för Hempåminnelse påverkas.\nPersonliga påminnelseinställningar ändras inte.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Säkerhetsenheterna övervakas omedelbart.\n\nAutomatiskt skydd när du är borta pausas. Läget stängs inte av automatiskt när någon kommer hem och måste återställas till Normal av en behörig medlem.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Den här åtgärden ändrar larmtiden för vissa enheter i dag...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Den här åtgärden stänger av alla larm för det här hemmet. Du får inte längre farolarm på den här telefonen.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Larmet använder Heminställningar.\n\nDu får larm enligt de gemensamma scheman som ägaren eller en administratör har konfigurerat.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Larmet använder Mina inställningar.\n\nDu får larm enligt de personliga larmschemana för det här kontot.",
   "Không thể đăng nhập bằng Google": "Det gick inte att logga in med Google",
   "Không đặt được mật khẩu": "Det gick inte att ange lösenord",
   "Chấp nhận": "Acceptera",
   "Cho phép": "Tillåt",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Det gick inte att acceptera inbjudan. Försök igen.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Det gick inte att acceptera begäran om att gå med. Försök igen.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Det gick inte att acceptera inbjudan. Försök igen.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Det gick inte att acceptera begäran om att gå med. Försök igen.",
   "Từ chối": "Avböj",
   "Lời mời từ chủ nhà": "Inbjudan från ägaren",
   "Nhận quyền chủ nhà": "Ta emot ägarskapet för hemmet",
@@ -664,15 +784,20 @@ const Map<String, String> svStrings = {
   "KIỂM TRA NHÀ": "KONTROLLERA HEMMET",
   "ĐÓNG NHẮC NHỞ": "STÄNG PÅMINNELSEN",
   "SafeHome Security Alert": "SafeHome-säkerhetslarm",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Välj platsbehörigheten Tillåt alltid i appinställningarna",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Ditt Google-konto behöver ett extra lösenord för att använda säkerhetsfunktionerna.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Välj platsbehörigheten Tillåt alltid i appinställningarna",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Ditt Google-konto behöver ett extra lösenord för att använda säkerhetsfunktionerna.",
   "Báo động": "Larm",
-  "Bạn không có quyền thực hiện thao tác này。": "Du har inte behörighet att utföra den här åtgärden.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Du har inte behörighet att utföra den här åtgärden.",
   "Cài đặt": "Inställningar",
   "Cập nhật": "Uppdatera",
   "Chọn ngôn ngữ": "Välj språk",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Inga enhetsdata tillgängliga för bedömning",
-  "Chuyển quyền sở hữu cho thành viên khác": "Överför ägarskapet till en annan medlem",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Inga enhetsdata tillgängliga för bedömning",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Överför ägarskapet till en annan medlem",
   "Có": "Ja",
   "Cửa đã đóng an toàn": "Dörren är säkert stängd",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Ett fel uppstod. Försök igen.",
@@ -680,7 +805,8 @@ const Map<String, String> svStrings = {
   "Đang mở khi nhà ở chế độ Bảo vệ": "Öppen medan Hemmet är i Skyddsläge",
   "Đang mở trong giờ báo động": "Öppen under larmtiden",
   "Đang tải...": "Läser in...",
-  "Hồ sơ, yêu cầu và lời mời tham gia": "Profil, förfrågningar och inbjudningar",
+  "Hồ sơ, yêu cầu và lời mời tham gia":
+      "Profil, förfrågningar och inbjudningar",
   "Hub chưa gửi trạng thái": "Hubbstatus är inte tillgänglig",
   "Hub mất kết nối": "Hubben är frånkopplad",
   "Hub tín hiệu bình thường": "Hubben är ansluten",
@@ -690,7 +816,8 @@ const Map<String, String> svStrings = {
   "Khu vực nguy hiểm": "Riskzon",
   "Kiểm tra thiết bị trong nhà này": "Granska enheterna i det här hemmet",
   "Mất điện lưới": "Nätströmmen har brutits",
-  "Mời người khác tham gia nhà này": "Bjud in någon att gå med i det här hemmet",
+  "Mời người khác tham gia nhà này":
+      "Bjud in någon att gå med i det här hemmet",
   "Môi trường hiện tại": "Aktuell miljö",
   "MQTT mất kết nối": "MQTT är frånkopplat",
   "Ngôn ngữ": "Språk",
@@ -730,28 +857,38 @@ const Map<String, String> svStrings = {
   "Đã tạo nhà": "Hemmet har skapats",
   "Chế độ Bảo vệ thủ công đã bật": "Manuellt Skyddsläge har aktiverats",
   "Báo động không lặp lại.": "Larmet upprepas inte.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Larmet upprepas efter \$securityModeRepeatMinutes minuter om problemet kvarstår.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName aktiverade manuellt Skyddsläge för \"\$homeName\". Läget stängs endast av när en behörig medlem byter tillbaka till Normal. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Du aktiverade Larm för \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Du inaktiverade alla Larm för \"\$homeName\".",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Larmet upprepas efter \$securityModeRepeatMinutes minuter om problemet kvarstår.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName aktiverade manuellt Skyddsläge för \"\$homeName\". Läget stängs endast av när en behörig medlem byter tillbaka till Normal. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Du aktiverade Larm för \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Du inaktiverade alla Larm för \"\$homeName\".",
   "Thành viên mới": "Ny medlem",
   "Thành viên rời nhà": "Medlem lämnade hemmet",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName lämnade \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName ändrade \$memberName:s roll från \$oldRoleName till \$newRoleName i \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName lämnade \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName ändrade \$memberName:s roll från \$oldRoleName till \$newRoleName i \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "\$count olästa meddelanden",
   "Hãy an tâm nghỉ ngơi.": "Du kan känna dig trygg.",
   "Có thiết bị chưa an toàn.": "Vissa enheter är inte säkra.",
   "SafeHome đang cập nhật vị trí": "SafeHome uppdaterar platsen",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Övervakar för att aktivera Skyddsläge automatiskt.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Använder platsen för att aktivera Skyddsläge automatiskt när alla lämnar hemmet.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Övervakar för att aktivera Skyddsläge automatiskt.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Använder platsen för att aktivera Skyddsläge automatiskt när alla lämnar hemmet.",
   "CẢNH BÁO SOS": "SOS-LARM",
   "CẢNH BÁO KHÓI / CHÁY": "RÖK-/BRANDLARM",
   "CẢNH BÁO NGẬP NƯỚC": "ÖVERSVÄMNINGSALARM",
   "CẢNH BÁO RÒ KHÍ": "GASLÄCKAGELARM",
   "CẢNH BÁO CỬA": "DÖRRLARM",
   "CẢNH BÁO AN NINH": "SÄKERHETSLARM",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Det gick inte att bekräfta med SafeHome. Kontrollera anslutningen och försök igen.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Stoppa larmet först efter att du har kontrollerat hemmets tillstånd.\n\nÄr du säker på att du vill stoppa larmet?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Det gick inte att bekräfta med SafeHome. Kontrollera anslutningen och försök igen.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Stoppa larmet först efter att du har kontrollerat hemmets tillstånd.\n\nÄr du säker på att du vill stoppa larmet?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome upptäckte ett larm",
   "Mở SafeHome để kiểm tra ngay.": "Öppna SafeHome för att kontrollera nu.",
   "\$count tin nhắn mới": "\$count nya meddelanden",
@@ -759,165 +896,249 @@ const Map<String, String> svStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName skickade ett meddelande",
   "Bạn có tin nhắn mới": "Du har ett nytt meddelande",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Skyddsläge larmar endast en gång",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Skyddsläge upprepar larmet efter \$minutes minuter",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Begäran om att gå med skickades för \$count hem",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName begärde att få gå med i \"\$homeName\".",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Skyddsläge upprepar larmet efter \$minutes minuter",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Begäran om att gå med skickades för \$count hem",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName begärde att få gå med i \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "Du tog bort \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Du skickade en begäran om att överföra ägarskapet för \"\$homeName\" till \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName vill överföra ägarskapet för \"\$homeName\" till dig.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName bjöd in dig att gå med i \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome tar bort \"\$deviceName\" från \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Enheten \"\$deviceName\" lades till i \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Du skickade en begäran om att överföra ägarskapet för \"\$homeName\" till \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName vill överföra ägarskapet för \"\$homeName\" till dig.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName bjöd in dig att gå med i \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome tar bort \"\$deviceName\" från \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Enheten \"\$deviceName\" lades till i \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Du skapade hemmet \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName uppdaterade hemmets namn till \"\$newName\" och ändrade adressen.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName bytte namn på hemmet till \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName uppdaterade adressen för \"\$newName\".",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName bytte namn på enheten \"\$oldDeviceName\" till \"\$newName\" i \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName uppdaterade hemmets namn till \"\$newName\" och ändrade adressen.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName bytte namn på hemmet till \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName uppdaterade adressen för \"\$newName\".",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName bytte namn på enheten \"\$oldDeviceName\" till \"\$newName\" i \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Parkoppling: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Enhetsparkoppling aktiverades i \"\$homeName\" i \$seconds sekunder.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Pausperioden måste ligga inom larmschemat (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total tester godkändes\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name har inte lagt till något telefonnummer i sin profil.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Enhetsparkoppling aktiverades i \"\$homeName\" i \$seconds sekunder.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Pausperioden måste ligga inom larmschemat (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total tester godkändes\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name har inte lagt till något telefonnummer i sin profil.",
   "Tin nhắn mới trong \$homeName": "Nytt meddelande i \$homeName",
   "\$current/\$total kết quả": "\$current/\$total resultat",
   "Đang trả lời \$name": "Svarar \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" upptäckte rök i \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" har återgått till normalt läge.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" utlöste SOS i \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" upptäckte rök i \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" har återgått till normalt läge.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" utlöste SOS i \"\$homeName\".",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" är inte längre i SOS-läge.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" rapporterade sabotage i \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Sabotagelarmet för \"\$name\" har återställts.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" stängdes i \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" är öppen i \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" i \"\$homeName\" har låg batterinivå.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" i \"\$homeName\" gick offline.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" i \"\$homeName\" är online igen.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" registrerade hög temperatur i \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" registrerade hög luftfuktighet i \"\$homeName\".",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" rapporterade sabotage i \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Sabotagelarmet för \"\$name\" har återställts.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" stängdes i \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" är öppen i \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$name\" i \"\$homeName\" har låg batterinivå.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$name\" i \"\$homeName\" gick offline.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$name\" i \"\$homeName\" är online igen.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" registrerade hög temperatur i \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" registrerade hög luftfuktighet i \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "En SOS-knapp utlöstes",
   "Có dấu hiệu khói hoặc cháy": "Rök eller brand upptäcktes",
   "Có dấu hiệu ngập nước": "Vattenöversvämning upptäcktes",
   "Có dấu hiệu rò khí": "Gasläcka upptäcktes",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "En dörr är öppen eller en enhet har utsatts för sabotage",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "En dörr är öppen eller en enhet har utsatts för sabotage",
   "Có thiết bị đang cảnh báo": "En enhet larmar",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Om ingen bekräftar startar SafeHome ett nödsamtal.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Larmar igen kl. \$time om problemet inte har åtgärdats.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Larmar igen enligt larmschemat om problemet inte har åtgärdats.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" stängdes i \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" är öppen i \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Om ingen bekräftar startar SafeHome ett nödsamtal.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Larmar igen kl. \$time om problemet inte har åtgärdats.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Larmar igen enligt larmschemat om problemet inte har åtgärdats.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" stängdes i \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" är öppen i \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count valda hem",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count osäkra hem\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count hem behöver tillsyn\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count säkra hem",
   "\$count nhà đang được theo dõi": "\$count övervakade hem",
   "\$minutes phút": "\$minutes minuter",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Påminnelsen ställdes in för \$updatedHomes hem.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Larm ställdes in för \$updatedDevices enheter i \$updatedHomes hem.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Hemmen du hanterar delades.\n\n\$skipped hem hoppades över eftersom du saknar delningsbehörighet.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Larmet tillämpades på \$count säkerhetsenheter",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Tillämpa samma schema på \$count säkerhetsenheter",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Påminnelsen ställdes in för \$updatedHomes hem.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Larm ställdes in för \$updatedDevices enheter i \$updatedHomes hem.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Hemmen du hanterar delades.\n\n\$skipped hem hoppades över eftersom du saknar delningsbehörighet.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Larmet tillämpades på \$count säkerhetsenheter",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Tillämpa samma schema på \$count säkerhetsenheter",
   "\$count phút trước": "\$count minuter sedan",
   "\$count giờ trước": "\$count timmar sedan",
   "\${count}h trước": "\${count} tim sedan",
   "\${hours}h\$minutes' trước": "\${hours} tim \$minutes min sedan",
   "\$count ngày trước": "\$count dagar sedan",
   "\$count tháng trước": "\$count månader sedan",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Är du säker på att du vill ta bort \$name från det här hemmet?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nBegär att få gå med i \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Är du säker på att du vill ta bort \$name från det här hemmet?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nBegär att få gå med i \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Begär att få gå med i \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Du har bjudits in att ta emot ägarskapet för \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nBjuder in dig att gå med i \"\$homeName\"",
-  "Mời bạn gia nhập \"\$homeName\"": "Bjuder in dig att gå med i \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Du har bjudits in att ta emot ägarskapet för \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nBjuder in dig att gå med i \"\$homeName\"",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Bjuder in dig att gå med i \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Behöver tillsyn: \$joined",
   "Cập nhật \$value": "Uppdaterad \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Lägg till din första SafeHome-enhet för att börja övervaka det här hemmet.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Kontrollera nödlarmen först och kontakta sedan hushållets medlemmar vid behov.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Ingen i hushållet är hemma, men en dörr eller ett lås är öppet. Kontrollera det nu.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Kontrollera den öppna dörren eller låset innan du behåller hemmet i Skyddsläge.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Någon kan fortfarande vara hemma. Byt i så fall tillbaka till Normal.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Vissa medlemmars plats är okänd. Be dem öppna appen eller kontrollera platsbehörigheten.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "En enhet är frånkopplad. Kontrollera batteriet, strömmen eller placeringen.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "En enhet har låg batterinivå. Byt den snart för att undvika missade larm.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Påminnelsen är inte inställd. Skapa ett schema för att kontrollera hemmet regelbundet.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Larmschemat är inte inställt. Aktivera skydd för tider då du vanligtvis är borta.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Ingen omedelbar åtgärd behövs. Fortsätt övervaka det här hemmet.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Lägg till din första SafeHome-enhet för att börja övervaka det här hemmet.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Kontrollera nödlarmen först och kontakta sedan hushållets medlemmar vid behov.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Ingen i hushållet är hemma, men en dörr eller ett lås är öppet. Kontrollera det nu.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Kontrollera den öppna dörren eller låset innan du behåller hemmet i Skyddsläge.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Någon kan fortfarande vara hemma. Byt i så fall tillbaka till Normal.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Vissa medlemmars plats är okänd. Be dem öppna appen eller kontrollera platsbehörigheten.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "En enhet är frånkopplad. Kontrollera batteriet, strömmen eller placeringen.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "En enhet har låg batterinivå. Byt den snart för att undvika missade larm.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Påminnelsen är inte inställd. Skapa ett schema för att kontrollera hemmet regelbundet.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Larmschemat är inte inställt. Aktivera skydd för tider då du vanligtvis är borta.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Ingen omedelbar åtgärd behövs. Fortsätt övervaka det här hemmet.",
   "Lặp sau \$minutes phút": "Upprepa efter \$minutes minuter",
   "Đang dùng • \$repeatText": "Aktiv • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Säkerhetsövervakning • \$repeatText",
   "Gia đình: \$mode": "Hemläge: \$mode",
   "Gợi ý xử lý": "Föreslagna åtgärder",
   "Phát hiện \$count vấn đề cần xử lý": "\$count problem behöver tillsyn",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Dörrarna användes \$count gånger i dag",
-  "Đã ghi nhận \$count hoạt động gần đây": "\$count senaste aktiviteter registrerades",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "System: \$issueCount objekt behöver kontrolleras",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM-token är klart på den här telefonen.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM-token är klart, men Automatiskt bortaläge saknar ett krav.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "\$emergencyTotal nödenheter hittades. Rekommenderat minimum: röksensor och SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Överföra ägarskapet för hemmet till:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Dörrarna användes \$count gånger i dag",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "\$count senaste aktiviteter registrerades",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "System: \$issueCount objekt behöver kontrolleras",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM-token är klart på den här telefonen.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM-token är klart, men Automatiskt bortaläge saknar ett krav.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "\$emergencyTotal nödenheter hittades. Rekommenderat minimum: röksensor och SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Överföra ägarskapet för hemmet till:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count dörrar säkert stängda",
   "\$count cửa và khóa đã an toàn": "\$count dörrar och lås säkrade",
   "\$count thiết bị đang được theo dõi": "\$count övervakade enheter",
   "Cập nhật \$timeText": "Uppdaterad \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Senaste data uppdaterades för \$count minuter sedan",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Senaste data uppdaterades för \$count timmar sedan",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Senaste data uppdaterades för \$count minuter sedan",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Senaste data uppdaterades för \$count timmar sedan",
   "Thành viên trong nhà: \$count": "Medlemmar hemma: \$count",
   "Thành viên bên ngoài: \$count": "Medlemmar borta: \$count",
   "Chưa xác định vị trí: \$count": "Okänd plats: \$count",
   "Môi trường hiện tại: \$environment": "Aktuell miljö: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Öppen medan Hemmet är i Skyddsläge",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Öppen medan Hemmet är i Skyddsläge",
   "An tâm hơn trong từng ngôi nhà": "Trygghet i varje hem",
   "Báo động SafeHome": "SafeHome-larm",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Ett säkerhetslarm kräver din uppmärksamhet.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Ett säkerhetslarm kräver din uppmärksamhet.",
   "Có cảnh báo cần kiểm tra": "Ett larm kräver din uppmärksamhet",
   "Tự đóng sau \$time": "Stängs automatiskt om \$time",
   "Ngày trong tuần": "Veckodagar",
   "Hoặc": "Eller",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Start- och sluttid får inte vara samma",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Sluttiden måste ligga efter den aktuella tiden",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Start- och sluttid får inte vara samma",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Sluttiden måste ligga efter den aktuella tiden",
   "Khoảng tạm tắt không hợp lệ": "Ogiltigt intervall för larmpaus",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Pausintervallet överlappar inget aktivt larmschema",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Pausintervallet överlappar inget aktivt larmschema",
   "Cài đặt báo động": "Larminställningar",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Styr hur sensorn utlöser larm.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Styr hur sensorn utlöser larm.",
   "Tham gia báo động": "Delta i larm",
-  "Tắt để cảm biến không tạo báo động.": "Stäng av för att hindra sensorn från att skapa ett Larm.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Stäng av för att hindra sensorn från att skapa ett Larm.",
   "Bật còi vật lý": "Aktivera fysisk siren",
   "Cho phép kích hoạt còi trong nhà.": "Tillåt att inomhussirenen aktiveras.",
   "Đánh thức màn hình": "Väck skärmen",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Visa ett helskärmslarm på telefonen.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Visa ett helskärmslarm på telefonen.",
   "Độ trễ kích hoạt": "Utlösningsfördröjning",
   "Chỉ áp dụng cho cảm biến an ninh.": "Gäller endast säkerhetssensorer.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Nödsensorer utlöses alltid omedelbart.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Nödsensorer utlöses alltid omedelbart.",
   "Ngay lập tức": "Omedelbart",
   "giây": "sekunder",
   "Đã lưu cấu hình báo động": "Larminställningarna har sparats",
-  "Không thể lưu cấu hình báo động": "Det gick inte att spara larminställningarna",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Endast hemmets ägare och administratörer kan ändra den här inställningen.",
+  "Không thể lưu cấu hình báo động":
+      "Det gick inte att spara larminställningarna",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Endast hemmets ägare och administratörer kan ändra den här inställningen.",
   "Thông tin chi tiết": "Enhetsdetaljer",
   "Thông báo báo động": "Larmavisering",
   "Cài đặt nhắc nhở": "Påminnelseinställningar",
   "Nhắc nhở theo lịch": "Schemalagd påminnelse",
   "Danh sách thông báo": "Aviseringar",
   "Cài đặt thông báo": "Aviseringsinställningar",
-  "Sử dụng báo động theo lịch đã thiết lập": "Använd det konfigurerade larmschemat",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Skicka endast aviseringar; utlös inte larmet",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Alla hemlarm är avstängda; systemet skickar endast aviseringar.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Endast ägaren kan aktivera det här läget.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Använd det konfigurerade larmschemat",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Skicka endast aviseringar; utlös inte larmet",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Alla hemlarm är avstängda; systemet skickar endast aviseringar.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Endast ägaren kan aktivera det här läget.",
   "Bật Không bảo vệ?": "Aktivera Oskyddat läge?",
-  "Cảm biến vừa phát hiện một sự kiện.": "En sensor upptäckte just en händelse.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Endast ägaren kan aktivera Oskyddat läge",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "En sensor upptäckte just en händelse.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Endast ägaren kan aktivera Oskyddat läge",
   "Đã chuyển nhà sang Không bảo vệ": "Hemmet har bytt till Oskyddat läge",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Bytte till Oskyddat läge, men aviseringen kunde inte skickas",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Bytte till Oskyddat läge, men aviseringen kunde inte skickas",
   "Giám sát toàn diện": "Fullständig övervakning",
   "Không bảo vệ": "Oskyddat",
   "Không bảo vệ đang bật": "Oskyddat läge är aktivt",
   "Nhà đã chuyển sang Không bảo vệ": "Hemmet har bytt till Oskyddat läge",
   "Thông báo cảm biến": "Sensoraviseringar",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Standardaviseringar när en sensor upptäcker en händelse.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Standardaviseringar när en sensor upptäcker en händelse.",
   "Tôi hiểu, tiếp tục": "Jag förstår, fortsätt",
   "Cảnh báo an ninh đã kết thúc": "Säkerhetslarmet har upphört",
   "Sự cố nguy hiểm đã kết thúc": "Nödsituationen har upphört",
   "Cảnh báo đã được kết thúc.": "Larmet har upphört.",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "Ett annat larm är fortfarande aktivt.",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "Ett annat larm är fortfarande aktivt.",
   "Báo động đã hoạt động trở lại": "Larmet är aktivt igen",
   "Thời gian tạm dừng báo động đã kết thúc.": "Larmpausen har upphört.",
   "MQTT đã kết nối trở lại": "MQTT har anslutits igen",
@@ -934,34 +1155,47 @@ const Map<String, String> svStrings = {
   "Nhà đang ở chế độ Bình thường.": "Hemmet är i Normalläge.",
   "Pin thiết bị đã ổn định": "Enhetens batteri är stabilt",
   "Hub đã kết nối trở lại": "Hubben har anslutits igen",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Bytte till Normal, men aviseringen kunde inte skickas",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Bytte till Normal, men aviseringen kunde inte skickas",
   "Chung cho nhà": "Delat hem",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Gäller alla medlemmar och kan aktivera den fysiska sirenen.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Gäller alla medlemmar och kan aktivera den fysiska sirenen.",
   "Cá nhân": "Personligt",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Det personliga schemat fungerar oberoende och aktiverar aldrig den fysiska sirenen.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Den här inställningen gäller endast ditt konto.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Endast ägaren och administratörer kan ändra inställningarna för det delade hemmet.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Det personliga schemat fungerar oberoende och aktiverar aldrig den fysiska sirenen.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Den här inställningen gäller endast ditt konto.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Endast ägaren och administratörer kan ändra inställningarna för det delade hemmet.",
   "Tham gia hệ thống báo động": "Delta i larmsystemet",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Nödsensorer deltar alltid i larmsystemet.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Stäng av för att hindra enheten från att skapa något larm.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Nödsensorer deltar alltid i larmsystemet.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Stäng av för att hindra enheten från att skapa något larm.",
   "Lịch báo động chung": "Gemensamt larmschema",
   "Lịch báo động cá nhân": "Personligt larmschema",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Visa ett helskärmslarm på telefonen.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Visa ett helskärmslarm på telefonen.",
   "Lặp lại cảnh báo": "Upprepa larm",
   "Báo động chung": "Gemensamt larm",
   "Báo động cá nhân": "Personligt larm",
   "Đã cài đặt": "Konfigurerad",
   "Chưa cài đặt": "Inte konfigurerad",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Gemensamma och personliga scheman fungerar parallellt; du behöver inte längre välja ett.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Gemensamma och personliga scheman fungerar parallellt; du behöver inte längre välja ett.",
   "Cài nhanh chung": "Snabb gemensam konfiguration",
   "Cài nhanh cá nhân": "Snabb personlig konfiguration",
   "Thiết lập nhanh lịch cá nhân": "Snabbinställning av personligt schema",
   "Thiết lập nhanh lịch chung": "Snabbinställning av gemensamt schema",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Det här schemat gäller endast dig och aktiverar inte den fysiska sirenen.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Det här schemat gäller alla medlemmar i hemmet.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Det här schemat gäller endast dig och aktiverar inte den fysiska sirenen.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Det här schemat gäller alla medlemmar i hemmet.",
   "Đã áp dụng lịch báo động": "Larmschemat har tillämpats",
   "Không thể lưu lịch báo động": "Det gick inte att spara larmschemat",
   "Nhà chưa có thiết bị an ninh": "Det här hemmet har inga säkerhetsenheter",
-  "Nhận cảnh báo theo lịch chung của nhà": "Ta emot larm från det gemensamma hemschemat",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Stäng av detta för att stoppa aviseringar och helskärmslarm från det gemensamma schemat. Hemmets siren fortsätter att fungera.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Ta emot larm från det gemensamma hemschemat",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Stäng av detta för att stoppa aviseringar och helskärmslarm från det gemensamma schemat. Hemmets siren fortsätter att fungera.",
 };

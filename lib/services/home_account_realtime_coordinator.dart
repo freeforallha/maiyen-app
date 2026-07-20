@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 typedef HomeAccountProfileChanged = void Function(Map<String, dynamic> profile);
 typedef HomeAccountHomeChanged =
     void Function(String homeId, Map<String, dynamic> homeData);

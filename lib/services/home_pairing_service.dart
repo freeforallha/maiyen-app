@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
@@ -8,6 +7,7 @@ import '../localization/app_strings.dart';
 import 'home_notification_service.dart';
 import 'share_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 enum HomeScannedQrStatus {
   joinMultiSent,
   joinSingleSent,
@@ -72,7 +72,7 @@ class HomePairingService {
       final targetData = await ShareService.loadAccount(uid);
       final targetProfile = safeMap(targetData["profile"]);
       final requesterName =
-      targetProfile["name"]?.toString().trim().isNotEmpty == true
+          targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
           : myEmail ?? strings.t("Một người dùng");
 
@@ -91,8 +91,7 @@ class HomePairingService {
           "targetUid": uid,
           "targetEmail": myEmail ?? "",
           "targetName": requesterName,
-          "targetPhotoUrl":
-          targetProfile["photoUrl"]?.toString().trim() ?? "",
+          "targetPhotoUrl": targetProfile["photoUrl"]?.toString().trim() ?? "",
           "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
           "type": "join_request",
           "time": DateTime.now().millisecondsSinceEpoch,
@@ -139,7 +138,7 @@ class HomePairingService {
       final targetData = await ShareService.loadAccount(uid);
       final targetProfile = safeMap(targetData["profile"]);
       final requesterName =
-      targetProfile["name"]?.toString().trim().isNotEmpty == true
+          targetProfile["name"]?.toString().trim().isNotEmpty == true
           ? targetProfile["name"].toString().trim()
           : myEmail ?? strings.t("Một người dùng");
 
@@ -156,8 +155,7 @@ class HomePairingService {
         "targetUid": uid,
         "targetEmail": myEmail ?? "",
         "targetName": requesterName,
-        "targetPhotoUrl":
-        targetProfile["photoUrl"]?.toString().trim() ?? "",
+        "targetPhotoUrl": targetProfile["photoUrl"]?.toString().trim() ?? "",
         "targetPhone": targetProfile["phone"]?.toString().trim() ?? "",
         "type": "join_request",
         "time": DateTime.now().millisecondsSinceEpoch,
@@ -193,27 +191,24 @@ class HomePairingService {
     await FirebaseDatabase.instance
         .ref(FirebasePaths.pairRequest(requestId))
         .set({
-      "active": true,
-      "hubId": hubId.trim(),
-      "homeId": homeId,
-      "ownerUid": ownerUid,
-      "requestedBy": uid,
-      "roomId": selectedRoomId == "overview"
-          ? "unassigned"
-          : selectedRoomId,
-      "duration": 60,
-      "time": DateTime.now().millisecondsSinceEpoch,
-    });
+          "active": true,
+          "hubId": hubId.trim(),
+          "homeId": homeId,
+          "ownerUid": ownerUid,
+          "requestedBy": uid,
+          "roomId": selectedRoomId == "overview"
+              ? "unassigned"
+              : selectedRoomId,
+          "duration": 60,
+          "time": DateTime.now().millisecondsSinceEpoch,
+        });
     await HomeNotificationService.notifyHome(
       ownerUid: ownerUid,
       homeId: homeId,
       type: "pair_started",
       category: "device",
       title: strings.t("Đã mở chế độ thêm thiết bị"),
-      message: strings.pairingEnabledMessage(
-        homeName: homeName,
-        seconds: 60,
-      ),
+      message: strings.pairingEnabledMessage(homeName: homeName, seconds: 60),
       homeName: homeName,
     );
 

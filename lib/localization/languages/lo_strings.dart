@@ -3,7 +3,8 @@ const Map<String, String> loStrings = {
   "Không đọc được số điện thoại": "ບໍ່ສາມາດອ່ານເບີໂທລະສັບ",
   "Tin nhắn quá dài": "ຂໍ້ຄວາມຍາວເກີນໄປ",
   "Không gửi được tin nhắn": "ບໍ່ສາມາດສົ່ງຂໍ້ຄວາມໄດ້",
-  "Bạn không có quyền sửa lịch chung của nhà": "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງຮ່ວມຂອງເຮືອນ",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງຮ່ວມຂອງເຮືອນ",
   "Nhà của bạn": "ເຮືອນຂອງທ່ານ",
   "Tải tin cũ hơn": "ໂຫຼດຂໍ້ຄວາມເກົ່າກວ່າ",
   "Nhà chưa đặt tên": "ເຮືອນທີ່ຍັງບໍ່ມີຊື່",
@@ -91,13 +92,18 @@ const Map<String, String> loStrings = {
   "Đang theo dõi": "ກຳລັງຕິດຕາມ",
   "Chưa nhận diện": "ບໍ່ຮູ້ຈັກອຸປະກອນ",
   "Chưa có cập nhật": "ຍັງບໍ່ມີອັບເດດ",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "ຍັງບໍ່ມີອຸປະກອນ. ແຕະ + ເພື່ອເພີ່ມ ແລະ ເລີ່ມປົກປ້ອງເຮືອນຂອງທ່ານ",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "ຍັງບໍ່ມີອຸປະກອນ. ແຕະ + ເພື່ອເພີ່ມ ແລະ ເລີ່ມປົກປ້ອງເຮືອນຂອງທ່ານ",
   "CHƯA AN TOÀN": "ບໍ່ປອດໄພ",
   "ĐÃ AN TOÀN": "ປອດໄພ",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "ເຮືອນຂອງທ່ານຕ້ອງການການກວດສອບ. ກະລຸນາເບິ່ງສະຖານະດ້ານລຸ່ມ",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "ເຮືອນຂອງທ່ານເຮັດວຽກປົກກະຕິ ແລະ ປອດໄພ",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "ບໍ່ພົບຄວັນ ຫຼື ກິດຈະກຳ SOS ຜິດປົກກະຕິ",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "ຍັງບໍ່ມີກິດຈະກຳຫຼ້າສຸດພຽງພໍສຳລັບການວິເຄາະເພີ່ມເຕີມ",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "ເຮືອນຂອງທ່ານຕ້ອງການການກວດສອບ. ກະລຸນາເບິ່ງສະຖານະດ້ານລຸ່ມ",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "ເຮືອນຂອງທ່ານເຮັດວຽກປົກກະຕິ ແລະ ປອດໄພ",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "ບໍ່ພົບຄວັນ ຫຼື ກິດຈະກຳ SOS ຜິດປົກກະຕິ",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "ຍັງບໍ່ມີກິດຈະກຳຫຼ້າສຸດພຽງພໍສຳລັບການວິເຄາະເພີ່ມເຕີມ",
   "Hub kết nối bình thường": "Hub ເຊື່ອມຕໍ່ປົກກະຕິ",
   "Cài đặt cảnh báo cho nhà hiện tại": "ການຕັ້ງຄ່າການເຕືອນສຳລັບເຮືອນນີ້",
   "Nhận cảnh báo báo động": "ຮັບການເຕືອນສັນຍານເຕືອນໄພ",
@@ -161,14 +167,17 @@ const Map<String, String> loStrings = {
   "Đã rời khỏi home": "ອອກຈາກເຮືອນແລ້ວ",
   "Đã cập nhật": "ອັບເດດແລ້ວ",
   "Tìm home...": "ຄົ້ນຫາເຮືອນ...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "ຕັ້ງຕຳແໜ່ງເຮືອນ ແລະ ເປີດການປ້ອງກັນອັດຕະໂນມັດ",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "ຕັ້ງຕຳແໜ່ງເຮືອນ ແລະ ເປີດການປ້ອງກັນອັດຕະໂນມັດ",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "ໂອນຄວາມເປັນເຈົ້າຂອງ ຫຼື ລຶບເຮືອນ",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "ຕັ້ງການເຕືອນຄວາມຈຳ / ສັນຍານເຕືອນໄພໃຫ້ເຮືອນທີ່ເລືອກ",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "ຕັ້ງການເຕືອນຄວາມຈຳ / ສັນຍານເຕືອນໄພໃຫ້ເຮືອນທີ່ເລືອກ",
   "Chia sẻ nhà đã chọn": "ແບ່ງປັນເຮືອນທີ່ເລືອກ",
   "Mở danh sách chia sẻ nhà": "ເປີດລາຍການແບ່ງປັນເຮືອນ",
   "Xoá các nhà đã chọn?": "ລຶບເຮືອນທີ່ເລືອກບໍ?",
   "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "ເຮືອນທີ່ເລືອກຈະຖືກລຶບຢ່າງຖາວອນ",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "ຫຼື ສະແກນ QR ເພື່ອຂໍເຂົ້າຮ່ວມເຮືອນທີ່ເລືອກ",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "ຫຼື ສະແກນ QR ເພື່ອຂໍເຂົ້າຮ່ວມເຮືອນທີ່ເລືອກ",
   "Email người nhận": "ອີເມວຜູ້ຮັບ",
   "Chia sẻ": "ແບ່ງປັນ",
   "Email chưa đăng ký": "ອີເມວຍັງບໍ່ໄດ້ລົງທະບຽນ",
@@ -198,8 +207,10 @@ const Map<String, String> loStrings = {
   "Tắt báo động": "ຢຸດສັນຍານເຕືອນໄພ",
   "Cả ngày": "ຕະຫຼອດມື້",
   "Bạn không có quyền thực hiện thao tác này.": "ທ່ານບໍ່ມີສິດດຳເນີນການນີ້",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "ບໍ່ສາມາດດຳເນີນການໃຫ້ສຳເລັດ. ກະລຸນາລອງອີກຄັ້ງ",
-  "QR gia nhập nhiều nhà không hợp lệ": "ລະຫັດ QR ສຳລັບເຂົ້າຮ່ວມຫຼາຍເຮືອນບໍ່ຖືກຕ້ອງ",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "ບໍ່ສາມາດດຳເນີນການໃຫ້ສຳເລັດ. ກະລຸນາລອງອີກຄັ້ງ",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "ລະຫັດ QR ສຳລັບເຂົ້າຮ່ວມຫຼາຍເຮືອນບໍ່ຖືກຕ້ອງ",
   "Bạn đang là chủ các nhà này": "ທ່ານເປັນເຈົ້າຂອງເຮືອນເຫຼົ່ານີ້",
   "Một người dùng": "ຜູ້ໃຊ້ໜຶ່ງຄົນ",
   "Yêu cầu gia nhập nhà": "ຄຳຂໍເຂົ້າຮ່ວມເຮືອນ",
@@ -210,10 +221,12 @@ const Map<String, String> loStrings = {
   "Bạn không có quyền thêm thiết bị": "ທ່ານບໍ່ມີສິດເພີ່ມອຸປະກອນ",
   "Đã mở chế độ thêm thiết bị": "ເປີດໂໝດຈັບຄູ່ອຸປະກອນແລ້ວ",
   "Rời khỏi Home này?": "ອອກຈາກເຮືອນນີ້ບໍ?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "ເຮືອນນີ້ ແລະ ອຸປະກອນທັງໝົດຈະຖືກລຶບຢ່າງຖາວອນ",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "ເຮືອນນີ້ ແລະ ອຸປະກອນທັງໝົດຈະຖືກລຶບຢ່າງຖາວອນ",
   "Đã xoá nhà": "ລຶບເຮືອນແລ້ວ",
   "QR của nhà này": "ລະຫັດ QR ຂອງເຮືອນ",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "ຜູ້ອື່ນສາມາດສະແກນລະຫັດນີ້ເພື່ອຂໍເຂົ້າຮ່ວມເຮືອນ",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "ຜູ້ອື່ນສາມາດສະແກນລະຫັດນີ້ເພື່ອຂໍເຂົ້າຮ່ວມເຮືອນ",
   "Chia sẻ nhà": "ແບ່ງປັນເຮືອນ",
   "Quét QR để xin gia nhập nhà": "ສະແກນ QR ເພື່ອເຂົ້າຮ່ວມເຮືອນ",
   "Quét QR xin gia nhập nhà": "ສະແກນ QR ເພື່ອເຂົ້າຮ່ວມເຮືອນ",
@@ -261,7 +274,8 @@ const Map<String, String> loStrings = {
   "Không thể lưu thông tin": "ບໍ່ສາມາດບັນທຶກຂໍ້ມູນ",
   "Đã lưu thông tin": "ບັນທຶກຂໍ້ມູນແລ້ວ",
   "Lỗi lưu profile": "ບໍ່ສາມາດບັນທຶກໂປຣໄຟລ໌",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "ເພີ່ມເບີໂທລະສັບສຳລັບເຫດສຸກເສີນ",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "ເພີ່ມເບີໂທລະສັບສຳລັບເຫດສຸກເສີນ",
   "Hoàn tất": "ສຳເລັດ",
   "Đã tạo nhà mới": "ສ້າງເຮືອນໃໝ່ແລ້ວ",
   "Về muộn": "ກັບຊ້າ",
@@ -330,7 +344,8 @@ const Map<String, String> loStrings = {
   "Đổi tên phòng": "ປ່ຽນຊື່ຫ້ອງ",
   "Tên phòng": "ຊື່ຫ້ອງ",
   "Xoá phòng": "ລຶບຫ້ອງ",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "ອຸປະກອນໃນຫ້ອງນີ້ຈະຖືກຍ້າຍໄປທີ່ ຍັງບໍ່ຈັດຫ້ອງ",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "ອຸປະກອນໃນຫ້ອງນີ້ຈະຖືກຍ້າຍໄປທີ່ ຍັງບໍ່ຈັດຫ້ອງ",
   "Thêm phòng": "ເພີ່ມຫ້ອງ",
   "Ví dụ: Phòng khách": "ຕົວຢ່າງ: ຫ້ອງຮັບແຂກ",
   "Phòng khách": "ຫ້ອງຮັບແຂກ",
@@ -351,9 +366,11 @@ const Map<String, String> loStrings = {
   "Cửa đóng": "ປະຕູປິດແລ້ວ",
   "Chưa đặt vị trí nhà": "ຍັງບໍ່ໄດ້ຕັ້ງຕຳແໜ່ງເຮືອນ",
   "Đặt vị trí nhà tại đây": "ຕັ້ງຕຳແໜ່ງເຮືອນຢູ່ນີ້",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "ຕັ້ງຕຳແໜ່ງເຮືອນກ່ອນເປີດການປ້ອງກັນອັດຕະໂນມັດ",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "ຕັ້ງຕຳແໜ່ງເຮືອນກ່ອນເປີດການປ້ອງກັນອັດຕະໂນມັດ",
   "Bán kính bảo vệ mặc định: 150 m": "ລັດສະໝີປ້ອງກັນເລີ່ມຕົ້ນ: 150 ມ",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "ສະມາຊິກແຕ່ລະຄົນຕ້ອງອະນຸຍາດຕຳແໜ່ງ ຕະຫຼອດເວລາ ເພື່ອໃຫ້ສະຖານະອອກ/ຮອດເຮືອນເຮັດວຽກໃນພື້ນຫຼັງ",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "ສະມາຊິກແຕ່ລະຄົນຕ້ອງອະນຸຍາດຕຳແໜ່ງ ຕະຫຼອດເວລາ ເພື່ອໃຫ້ສະຖານະອອກ/ຮອດເຮືອນເຮັດວຽກໃນພື້ນຫຼັງ",
   "Lưu cài đặt": "ບັນທຶກການຕັ້ງຄ່າ",
   "Đã đặt vị trí nhà": "ຕັ້ງຕຳແໜ່ງເຮືອນແລ້ວ",
   "Đang lấy vị trí...": "ກຳລັງຮັບຕຳແໜ່ງ...",
@@ -362,16 +379,20 @@ const Map<String, String> loStrings = {
   "Cập nhật thông tin nhà": "ອັບເດດຂໍ້ມູນເຮືອນ",
   "Nhập địa chỉ của nhà": "ປ້ອນທີ່ຢູ່ເຮືອນ",
   "Lưu thay đổi": "ບັນທຶກການປ່ຽນແປງ",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "ຊື່ນີ້ສະແດງສະເພາະໃນບັນຊີຂອງທ່ານ",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "ຊື່ ແລະ ທີ່ຢູ່ຈະຖືກອັບເດດໃຫ້ສະມາຊິກທັງໝົດ",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "ຊື່ນີ້ສະແດງສະເພາະໃນບັນຊີຂອງທ່ານ",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "ຊື່ ແລະ ທີ່ຢູ່ຈະຖືກອັບເດດໃຫ້ສະມາຊິກທັງໝົດ",
   "Một thành viên": "ສະມາຊິກໜຶ່ງຄົນ",
   "Đã cập nhật thông tin nhà": "ອັບເດດຂໍ້ມູນເຮືອນແລ້ວ",
   "Thay tên": "ປ່ຽນຊື່",
   "Đã đổi tên thiết bị": "ປ່ຽນຊື່ອຸປະກອນແລ້ວ",
   "Chưa chọn nhà để kiểm tra": "ເລືອກເຮືອນເພື່ອທົດສອບ",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "ດຳເນີນການທົດສອບດ້ວຍບັນຊີເຈົ້າຂອງ",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "ດຳເນີນການທົດສອບດ້ວຍບັນຊີເຈົ້າຂອງ",
   "Không đọc được dữ liệu nhà": "ບໍ່ສາມາດອ່ານຂໍ້ມູນເຮືອນ",
-  "Nhà cần có ít nhất một thiết bị để test": "ເຮືອນຕ້ອງມີຢ່າງນ້ອຍໜຶ່ງອຸປະກອນເພື່ອທົດສອບ",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "ເຮືອນຕ້ອງມີຢ່າງນ້ອຍໜຶ່ງອຸປະກອນເພື່ອທົດສອບ",
   "Đóng": "ປິດ",
   "Đã thiết lập": "ຕັ້ງຄ່າແລ້ວ",
   "Quét QR": "ສະແກນ QR",
@@ -427,8 +448,10 @@ const Map<String, String> loStrings = {
   "Chế độ áp dụng": "ໂໝດນຳໃຊ້",
   "Theo nhà": "ຕາຕະລາງຂອງເຮືອນ",
   "Riêng tôi": "ສ່ວນຕົວ",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "ໃຊ້ຕາຕະລາງຮ່ວມທີ່ເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງຕັ້ງໄວ້",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "ໃຊ້ຕາຕະລາງສ່ວນຕົວສະເພາະບັນຊີຂອງທ່ານ",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "ໃຊ້ຕາຕະລາງຮ່ວມທີ່ເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງຕັ້ງໄວ້",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "ໃຊ້ຕາຕະລາງສ່ວນຕົວສະເພາະບັນຊີຂອງທ່ານ",
   "Thiết lập nhanh báo động": "ຕັ້ງຄ່າສັນຍານເຕືອນໄພດ່ວນ",
   "Thiết lập nhanh toàn bộ thiết bị": "ຕັ້ງຄ່າອຸປະກອນທັງໝົດຢ່າງວ່ອງໄວ",
   "Áp dụng cho toàn bộ thiết bị": "ນຳໃຊ້ກັບອຸປະກອນທັງໝົດ",
@@ -468,8 +491,10 @@ const Map<String, String> loStrings = {
   "Đã rời khỏi nhà": "ອອກຈາກເຮືອນແລ້ວ",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "ທ່ານຈະອອກຈາກເຮືອນທີ່ແບ່ງປັນ",
   "Các nhà của bạn sẽ bị xoá.\n": "ເຮືອນຂອງທ່ານຈະຖືກລຶບ.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "ການດຳເນີນການນີ້ຈະປ່ຽນຕາຕະລາງສັນຍານເຕືອນໄພຂອງອຸປະກອນຄວາມປອດໄພທັງໝົດໃນເຮືອນທີ່ເລືອກ.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "ການດຳເນີນການນີ້ຈະເພີ່ມການເຕືອນຄວາມຈຳໃຫ້ເຮືອນທີ່ເລືອກ.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "ການດຳເນີນການນີ້ຈະປ່ຽນຕາຕະລາງສັນຍານເຕືອນໄພຂອງອຸປະກອນຄວາມປອດໄພທັງໝົດໃນເຮືອນທີ່ເລືອກ.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "ການດຳເນີນການນີ້ຈະເພີ່ມການເຕືອນຄວາມຈຳໃຫ້ເຮືອນທີ່ເລືອກ.\n\n",
   "Xác nhận thay đổi báo động": "ຢືນຢັນການປ່ຽນສັນຍານເຕືອນໄພ",
   "Xác nhận thay đổi nhắc nhở": "ຢືນຢັນການປ່ຽນການເຕືອນຄວາມຈຳ",
   "Lặp lại khi sự cố vẫn còn": "ເຮັດຊ້ຳເມື່ອບັນຫາຍັງຄົງຢູ່",
@@ -477,14 +502,19 @@ const Map<String, String> loStrings = {
   "VD: Mr Chung": "ຕົວຢ່າງ: ທ່ານ Chung",
   "🏡 Chưa có nhà nào": "🏡 ຍັງບໍ່ມີເຮືອນ",
   "Vẫn chuyển về Bình thường": "ຍັງປ່ຽນກັບເປັນປົກກະຕິ",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "ການປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນຍັງເປີດຢູ່. ຖ້າສະມາຊິກທັງໝົດຍັງຢູ່ນອກ, ລະບົບອາດເປີດໂໝດປ້ອງກັນອີກຄັ້ງຫຼັງຈາກສອງສາມນາທີ",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "ການປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນຍັງເປີດຢູ່. ຖ້າສະມາຊິກທັງໝົດຍັງຢູ່ນອກ, ລະບົບອາດເປີດໂໝດປ້ອງກັນອີກຄັ້ງຫຼັງຈາກສອງສາມນາທີ",
   "Chuyển về Bình thường?": "ປ່ຽນກັບເປັນປົກກະຕິບໍ?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "ເມື່ອເປີດ, ອຸປະກອນຄວາມປອດໄພຈະຖືກຕິດຕາມທັນທີ.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "ເມື່ອເປີດ, ອຸປະກອນຄວາມປອດໄພຈະຖືກຕິດຕາມທັນທີ.\n\n",
   "Bật Bảo vệ thủ công?": "ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງບໍ?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງບາງອຸປະກອນ ",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "ການດຳເນີນການນີ້ຈະປິດສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນ ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງບາງອຸປະກອນ ",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "ການດຳເນີນການນີ້ຈະປິດສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນ ",
   "Tắt toàn bộ báo động?": "ປິດສັນຍານເຕືອນໄພທັງໝົດບໍ?",
-  "Không xoá được lịch tạm tắt báo động": "ບໍ່ສາມາດລຶບຕາຕະລາງຢຸດສັນຍານເຕືອນໄພຊົ່ວຄາວ",
+  "Không xoá được lịch tạm tắt báo động":
+      "ບໍ່ສາມາດລຶບຕາຕະລາງຢຸດສັນຍານເຕືອນໄພຊົ່ວຄາວ",
   "Không lưu được tạm tắt báo động": "ບໍ່ສາມາດບັນທຶກການຢຸດສັນຍານເຕືອນໄພຊົ່ວຄາວ",
   "Không gửi được yêu cầu xoá": "ບໍ່ສາມາດສົ່ງຄຳຂໍລຶບ",
   "Không lưu được cài đặt": "ບໍ່ສາມາດບັນທຶກການຕັ້ງຄ່າ",
@@ -492,29 +522,40 @@ const Map<String, String> loStrings = {
   "Không thể xác nhận tài khoản hiện tại": "ບໍ່ສາມາດຢືນຢັນບັນຊີປັດຈຸບັນ",
   "Mật khẩu không đúng": "ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ",
   "Không thể xác nhận mật khẩu": "ບໍ່ສາມາດຢືນຢັນລະຫັດຜ່ານ",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "ມີພຽງເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການເຮັດຊ້ຳສັນຍານເຕືອນໄພໄດ້",
-  "Không lưu được thời gian lặp báo động": "ບໍ່ສາມາດບັນທຶກເວລາເຮັດຊ້ຳສັນຍານເຕືອນໄພ",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "ມີພຽງເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ຄອງທີ່ປ່ຽນໂໝດປ້ອງກັນໄດ້",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "ມີພຽງເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການເຮັດຊ້ຳສັນຍານເຕືອນໄພໄດ້",
+  "Không lưu được thời gian lặp báo động":
+      "ບໍ່ສາມາດບັນທຶກເວລາເຮັດຊ້ຳສັນຍານເຕືອນໄພ",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "ມີພຽງເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ຄອງທີ່ປ່ຽນໂໝດປ້ອງກັນໄດ້",
   "Không thể thay đổi chế độ nhà": "ບໍ່ສາມາດປ່ຽນໂໝດເຮືອນ",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "ໂໝດປ້ອງກັນເປີດແລ້ວ ແຕ່ບໍ່ສາມາດສົ່ງແຈ້ງເຕືອນ",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "ໂໝດປ້ອງກັນເປີດແລ້ວ ແຕ່ບໍ່ສາມາດສົ່ງແຈ້ງເຕືອນ",
   "Đã bật Chế độ Bảo vệ thủ công": "ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງແລ້ວ",
   "Đã chuyển nhà về Bình thường": "ເຮືອນກັບຄືນເປັນປົກກະຕິແລ້ວ",
   "60 phút": "60 ນາທີ",
   "30 phút": "30 ນາທີ",
   "15 phút": "15 ນາທີ",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "ທ່ານກຳລັງເບິ່ງຕາຕະລາງຂອງເຈົ້າຂອງ. ເລືອກ ສ່ວນຕົວ ເພື່ອຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພຂອງທ່ານ",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "ທ່ານກຳລັງເບິ່ງຕາຕະລາງຂອງເຈົ້າຂອງ. ເລືອກ ສ່ວນຕົວ ເພື່ອຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພຂອງທ່ານ",
   "Chọn giờ kết thúc báo động": "ເລືອກເວລາສິ້ນສຸດສັນຍານເຕືອນໄພ",
   "Chọn giờ bắt đầu báo động": "ເລືອກເວລາເລີ່ມສັນຍານເຕືອນໄພ",
-  "Bạn không có quyền sửa lịch báo động của nhà": "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງສັນຍານເຕືອນໄພຂອງເຮືອນ",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "ບໍ່ສາມາດນຳໃຊ້ສັນຍານເຕືອນໄພກັບອຸປະກອນທັງໝົດ",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "ເຮືອນນີ້ຍັງບໍ່ມີອຸປະກອນຄວາມປອດໄພໃຫ້ນຳໃຊ້",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງຂອງເຮືອນ. ກະລຸນາເລືອກ ສ່ວນຕົວ",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງສັນຍານເຕືອນໄພຂອງເຮືອນ",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "ບໍ່ສາມາດນຳໃຊ້ສັນຍານເຕືອນໄພກັບອຸປະກອນທັງໝົດ",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "ເຮືອນນີ້ຍັງບໍ່ມີອຸປະກອນຄວາມປອດໄພໃຫ້ນຳໃຊ້",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "ທ່ານບໍ່ມີສິດແກ້ໄຂຕາຕະລາງຂອງເຮືອນ. ກະລຸນາເລືອກ ສ່ວນຕົວ",
   "Không thể lưu chế độ báo động": "ບໍ່ສາມາດບັນທຶກໂໝດສັນຍານເຕືອນໄພ",
   "Thêm nhắc nhở": "ເພີ່ມການເຕືອນຄວາມຈຳ",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "ການເຕືອນຄວາມຈຳຈະເຕືອນໃຫ້ທ່ານກວດສະຖານະຄວາມປອດໄພຂອງເຮືອນໃນເວລາທີ່ເລືອກ",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "ການເຕືອນຄວາມຈຳຈະເຕືອນໃຫ້ທ່ານກວດສະຖານະຄວາມປອດໄພຂອງເຮືອນໃນເວລາທີ່ເລືອກ",
   "Thêm khung giờ báo động": "ເພີ່ມຊ່ວງເວລາສັນຍານເຕືອນໄພ",
   "Đang sử dụng nhắc nhở riêng của bạn": "ກຳລັງໃຊ້ການຕັ້ງຄ່າເຕືອນຄວາມຈຳຂອງທ່ານ",
-  "Đang sử dụng nhắc nhở của chủ nhà": "ກຳລັງໃຊ້ການຕັ້ງຄ່າເຕືອນຄວາມຈຳຂອງເຈົ້າຂອງ",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "ກຳລັງໃຊ້ການຕັ້ງຄ່າເຕືອນຄວາມຈຳຂອງເຈົ້າຂອງ",
   "Sửa giờ nhắc nhở": "ແກ້ໄຂເວລາເຕືອນຄວາມຈຳ",
   "Sửa giờ kết thúc báo động": "ແກ້ໄຂເວລາສິ້ນສຸດສັນຍານເຕືອນໄພ",
   "Sửa giờ bắt đầu báo động": "ແກ້ໄຂເວລາເລີ່ມສັນຍານເຕືອນໄພ",
@@ -540,109 +581,156 @@ const Map<String, String> loStrings = {
   "Không có email": "ບໍ່ມີອີເມວ",
   "Chưa có số điện thoại": "ຍັງບໍ່ມີເບີໂທລະສັບ",
   "Không mở được ứng dụng gọi điện": "ບໍ່ສາມາດເປີດແອັບໂທລະສັບ",
-  "Thành viên chưa cập nhật số điện thoại": "ສະມາຊິກນີ້ຍັງບໍ່ໄດ້ເພີ່ມເບີໂທລະສັບ",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "ໂໝດປ້ອງກັນດ້ວຍຕົນເອງເປີດຢູ່ - ປ່ຽນເປັນປົກກະຕິເພື່ອປິດ",
+  "Thành viên chưa cập nhật số điện thoại":
+      "ສະມາຊິກນີ້ຍັງບໍ່ໄດ້ເພີ່ມເບີໂທລະສັບ",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "ໂໝດປ້ອງກັນດ້ວຍຕົນເອງເປີດຢູ່ - ປ່ຽນເປັນປົກກະຕິເພື່ອປິດ",
   "Thời gian lặp": "ໄລຍະເຮັດຊ້ຳ",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "ເລືອກ 0 ເພື່ອເຕືອນຄັ້ງດຽວ. ການຕັ້ງຄ່ານີ້ໃຊ້ກັບທັງໂໝດປ້ອງກັນດ້ວຍຕົນເອງ ແລະ ປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "ເລືອກ 0 ເພື່ອເຕືອນຄັ້ງດຽວ. ການຕັ້ງຄ່ານີ້ໃຊ້ກັບທັງໂໝດປ້ອງກັນດ້ວຍຕົນເອງ ແລະ ປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
   "Lặp báo động khi sự cố vẫn còn": "ເຮັດຊ້ຳສັນຍານເຕືອນໄພເມື່ອບັນຫາຍັງຢູ່",
   "Đang được sử dụng": "ກຳລັງໃຊ້ງານ",
   "Chuyển về sử dụng thông thường": "ປ່ຽນກັບເປັນການໃຊ້ປົກກະຕິ",
   "Chế độ nhà": "ໂໝດເຮືອນ",
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "ອຸປະກອນ SOS ຍັງບໍ່ໄດ້ບັນທຶກການເຕືອນ",
   "Cảm biến khói chưa ghi nhận bất thường.": "ເຊັນເຊີຄວັນຍັງບໍ່ພົບບັນຫາ",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "ທ່ານ ຫຼື ສະມາຊິກໄດ້ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງ",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome ເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເພາະທ່ານອອກຈາກເຮືອນ",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "ທ່ານ ຫຼື ສະມາຊິກໄດ້ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງ",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome ເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເພາະທ່ານອອກຈາກເຮືອນ",
   "Nhà đang ở chế độ dùng bình thường.": "ເຮືອນນີ້ກຳລັງໃຊ້ງານປົກກະຕິ",
   "Bảo vệ thủ công đang bật": "ໂໝດປ້ອງກັນດ້ວຍຕົນເອງເປີດຢູ່",
   "Bảo vệ tự động đang bật": "ໂໝດປ້ອງກັນອັດຕະໂນມັດເປີດຢູ່",
   "Bảo vệ đang tắt": "ໂໝດປ້ອງກັນປິດຢູ່",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "ທ່ານເປີດແອັບເມື່ອບໍ່ດົນນີ້ເພື່ອກວດສະຖານະ",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "ຄວນເປີດແອັບເປັນປະຈຳເພື່ອກວດສິດ, ຕາຕະລາງ ແລະ ການເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານ",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "ຫຼັງຈາກໃຊ້ສອງສາມຄັ້ງ SafeHome ຈະປະເມີນນິໄສການກວດແອັບໄດ້ດີຂຶ້ນ",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "ທ່ານເປີດແອັບເມື່ອບໍ່ດົນນີ້ເພື່ອກວດສະຖານະ",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "ຄວນເປີດແອັບເປັນປະຈຳເພື່ອກວດສິດ, ຕາຕະລາງ ແລະ ການເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານ",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "ຫຼັງຈາກໃຊ້ສອງສາມຄັ້ງ SafeHome ຈະປະເມີນນິໄສການກວດແອັບໄດ້ດີຂຶ້ນ",
   "Tần suất vào ứng dụng ổn": "ຄວາມຖີ່ໃນການກວດແອັບດີ",
   "Đã lâu chưa vào ứng dụng kiểm tra": "ດົນແລ້ວທີ່ບໍ່ໄດ້ເປີດແອັບກວດ",
   "Đang ghi nhận tần suất vào ứng dụng": "ກຳລັງບັນທຶກຄວາມຖີ່ການກວດແອັບ",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "ຕ້ອງກວດສິດຕຳແໜ່ງຕະຫຼອດເວລາ ແລະ ເງື່ອນໄຂພື້ນຫຼັງ",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "ອຸປະກອນນີ້ພ້ອມສຳລັບການປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "ທ່ານສາມາດເປີດເພື່ອໃຫ້ໂໝດປ້ອງກັນເປີດອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "ຕ້ອງກວດສິດຕຳແໜ່ງຕະຫຼອດເວລາ ແລະ ເງື່ອນໄຂພື້ນຫຼັງ",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "ອຸປະກອນນີ້ພ້ອມສຳລັບການປ້ອງກັນອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "ທ່ານສາມາດເປີດເພື່ອໃຫ້ໂໝດປ້ອງກັນເປີດອັດຕະໂນມັດເມື່ອອອກເຮືອນ",
   "Auto rời khỏi nhà chưa ổn": "ການປ້ອງກັນອັດຕະໂນມັດຍັງບໍ່ພ້ອມ",
   "Auto rời khỏi nhà đã sẵn sàng": "ການປ້ອງກັນອັດຕະໂນມັດພ້ອມແລ້ວ",
   "Auto rời khỏi nhà chưa bật": "ການປ້ອງກັນອັດຕະໂນມັດຍັງບໍ່ເປີດ",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "ຄວນເພີ່ມເຊັນເຊີຄວັນ, SOS ຫຼື ອຸປະກອນສຸກເສີນທີ່ເໝາະກັບເຮືອນ",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "ຄວນເພີ່ມເຊັນເຊີຄວັນ, SOS ຫຼື ອຸປະກອນສຸກເສີນທີ່ເໝາະກັບເຮືອນ",
   "Chưa có thiết bị khẩn cấp": "ຍັງບໍ່ມີອຸປະກອນສຸກເສີນ",
   "Đã có thiết bị khẩn cấp": "ມີອຸປະກອນສຸກເສີນແລ້ວ",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "ຄວນຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພສຳລັບເວລານອນ ຫຼື ບໍ່ຢູ່ເຮືອນ",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "ເຮືອນນີ້ມີຕາຕະລາງສັນຍານເຕືອນໄພ ຫຼື ຕາຕະລາງເຕືອນຕາມອຸປະກອນແລ້ວ",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "ຄວນຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພສຳລັບເວລານອນ ຫຼື ບໍ່ຢູ່ເຮືອນ",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "ເຮືອນນີ້ມີຕາຕະລາງສັນຍານເຕືອນໄພ ຫຼື ຕາຕະລາງເຕືອນຕາມອຸປະກອນແລ້ວ",
   "Chưa cài lịch báo động": "ຍັງບໍ່ໄດ້ຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພ",
   "Đã cài lịch báo động": "ຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພແລ້ວ",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "ຄວນມີຢ່າງນ້ອຍໜຶ່ງການເຕືອນຄວາມຈຳເພື່ອບໍ່ລືມກວດເຮືອນ",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "ແອັບຈະເຕືອນໃຫ້ທ່ານກວດເຮືອນຕາມຕາຕະລາງ",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "ຄວນມີຢ່າງນ້ອຍໜຶ່ງການເຕືອນຄວາມຈຳເພື່ອບໍ່ລືມກວດເຮືອນ",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "ແອັບຈະເຕືອນໃຫ້ທ່ານກວດເຮືອນຕາມຕາຕະລາງ",
   "Chưa cài đặt nhắc nhở": "ຍັງບໍ່ໄດ້ຕັ້ງການເຕືອນຄວາມຈຳ",
   "Đã cài đặt nhắc nhở": "ຕັ້ງການເຕືອນຄວາມຈຳແລ້ວ",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "ເປີດແອັບຄືນ ຫຼື ເຂົ້າລະບົບໃໝ່ຖ້າອຸປະກອນນີ້ບໍ່ໄດ້ຮັບການເຕືອນ",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "ເປີດແອັບຄືນ ຫຼື ເຂົ້າລະບົບໃໝ່ຖ້າອຸປະກອນນີ້ບໍ່ໄດ້ຮັບການເຕືອນ",
   "Thiết bị chưa đăng ký nhận cảnh báo": "ອຸປະກອນນີ້ຍັງບໍ່ລົງທະບຽນຮັບການເຕືອນ",
   "Thiết bị nhận cảnh báo bình thường": "ອຸປະກອນນີ້ຮັບການເຕືອນໄດ້ປົກກະຕິ",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS ຄວບຄຸມການເຮັດວຽກພື້ນຫຼັງເຂັ້ມງວດກວ່າ Android; ເປີດແຈ້ງເຕືອນ ແລະ ຕຳແໜ່ງຕະຫຼອດເວລາໄວ້ຖ້າໃຊ້ການປ້ອງກັນອັດຕະໂນມັດ",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS ຄວບຄຸມການເຮັດວຽກພື້ນຫຼັງເຂັ້ມງວດກວ່າ Android; ເປີດແຈ້ງເຕືອນ ແລະ ຕຳແໜ່ງຕະຫຼອດເວລາໄວ້ຖ້າໃຊ້ການປ້ອງກັນອັດຕະໂນມັດ",
   "Cơ chế iOS": "ການເຮັດວຽກຂອງ iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "ກວດສິດພື້ນຫຼັງ ແລະ ການເລີ່ມອັດຕະໂນມັດເພື່ອບໍ່ໃຫ້ການເຕືອນຊັກຊ້າ",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "ອຸປະກອນຢືນຢັນເງື່ອນໄຂພື້ນຫຼັງທີ່ສຳຄັນແລ້ວ",
-  "Cần kiểm tra chạy nền / tự khởi động": "ກວດການເຮັດວຽກພື້ນຫຼັງ / ເລີ່ມອັດຕະໂນມັດ",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "ກວດສິດພື້ນຫຼັງ ແລະ ການເລີ່ມອັດຕະໂນມັດເພື່ອບໍ່ໃຫ້ການເຕືອນຊັກຊ້າ",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "ອຸປະກອນຢືນຢັນເງື່ອນໄຂພື້ນຫຼັງທີ່ສຳຄັນແລ້ວ",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "ກວດການເຮັດວຽກພື້ນຫຼັງ / ເລີ່ມອັດຕະໂນມັດ",
   "Chạy nền ổn định": "ການເຮັດວຽກພື້ນຫຼັງສະຖຽນ",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "ໂທລະສັບ Android ບາງລຸ້ນອາດຊັກຊ້າການເຕືອນຖ້າຍັງເປີດການປະຢັດແບັດເຕີຣີ",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "ໂທລະສັບນີ້ມີໂອກາດຊັກຊ້າການເຕືອນ SafeHome ໜ້ອຍ",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "ໂທລະສັບ Android ບາງລຸ້ນອາດຊັກຊ້າການເຕືອນຖ້າຍັງເປີດການປະຢັດແບັດເຕີຣີ",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "ໂທລະສັບນີ້ມີໂອກາດຊັກຊ້າການເຕືອນ SafeHome ໜ້ອຍ",
   "Chưa tắt tối ưu pin": "ຍັງເປີດການປະຢັດແບັດເຕີຣີ",
   "Tối ưu pin không chặn ứng dụng": "ການປະຢັດແບັດເຕີຣີບໍ່ປິດກັ້ນແອັບ",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "ການປ້ອງກັນອັດຕະໂນມັດຕ້ອງການສິດຕຳແໜ່ງຕະຫຼອດເວລາເພື່ອເຮັດວຽກສະຖຽນ",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "ຕ້ອງອະນຸຍາດຕຳແໜ່ງເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກ",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "ບໍລິການຕຳແໜ່ງປິດຢູ່ ດັ່ງນັ້ນການປ້ອງກັນອັດຕະໂນມັດອາດບໍ່ສະຖຽນ",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "ຕ້ອງການສິດນີ້ສະເພາະເມື່ອໃຊ້ການປ້ອງກັນອັດຕະໂນມັດ",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "ການປ້ອງກັນອັດຕະໂນມັດຕ້ອງການສິດຕຳແໜ່ງຕະຫຼອດເວລາເພື່ອເຮັດວຽກສະຖຽນ",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "ຕ້ອງອະນຸຍາດຕຳແໜ່ງເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກ",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "ບໍລິການຕຳແໜ່ງປິດຢູ່ ດັ່ງນັ້ນການປ້ອງກັນອັດຕະໂນມັດອາດບໍ່ສະຖຽນ",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "ຕ້ອງການສິດນີ້ສະເພາະເມື່ອໃຊ້ການປ້ອງກັນອັດຕະໂນມັດ",
   "Chưa cấp vị trí luôn luôn": "ຍັງບໍ່ອະນຸຍາດຕຳແໜ່ງຕະຫຼອດເວລາ",
   "Đã cấp vị trí luôn luôn": "ອະນຸຍາດຕຳແໜ່ງຕະຫຼອດເວລາແລ້ວ",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS ບໍ່ເປີດເຕັມຈໍເໝືອນ Android; ແອັບໃຊ້ແຈ້ງເຕືອນ ແລະ ສຽງລະບົບ",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android ໃຊ້ການເຕືອນເຕັມຈໍ; ອະນຸຍາດໃນການຕັ້ງຄ່າຖ້າໂທລະສັບປິດກັ້ນ",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS ບໍ່ເປີດເຕັມຈໍເໝືອນ Android; ແອັບໃຊ້ແຈ້ງເຕືອນ ແລະ ສຽງລະບົບ",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android ໃຊ້ການເຕືອນເຕັມຈໍ; ອະນຸຍາດໃນການຕັ້ງຄ່າຖ້າໂທລະສັບປິດກັ້ນ",
   "Cảnh báo trên iOS": "ການເຕືອນໃນ iOS",
   "Cảnh báo toàn màn hình": "ການເຕືອນເຕັມຈໍ",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "ການເຕືອນອາດບໍ່ສະແດງຖ້າປິດແຈ້ງເຕືອນ",
-  "Điện thoại có thể nhận thông báo SafeHome.": "ໂທລະສັບນີ້ສາມາດຮັບແຈ້ງເຕືອນ SafeHome",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "ການເຕືອນອາດບໍ່ສະແດງຖ້າປິດແຈ້ງເຕືອນ",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "ໂທລະສັບນີ້ສາມາດຮັບແຈ້ງເຕືອນ SafeHome",
   "Chưa bật thông báo": "ຍັງບໍ່ເປີດແຈ້ງເຕືອນ",
   "Đã bật thông báo": "ເປີດແຈ້ງເຕືອນແລ້ວ",
   "Hệ thống: Sẵn sàng": "ລະບົບ: ພ້ອມ",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "ລະບົບ: ອາດພາດການເຕືອນ",
   "Cách bạn đang dùng ứng dụng": "ວິທີທີ່ທ່ານໃຊ້ແອັບ",
   "Thiết bị của bạn": "ອຸປະກອນຂອງທ່ານ",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "ກວດໂທລະສັບ ແລະ ວິທີທີ່ທ່ານໃຊ້ແອັບ",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "ກວດໂທລະສັບ ແລະ ວິທີທີ່ທ່ານໃຊ້ແອັບ",
   "Hệ thống SafeHome": "ລະບົບ SafeHome",
   "Hệ thống: Đang kiểm tra...": "ລະບົບ: ກຳລັງກວດ...",
   "Tên": "ຊື່",
   "Bạn không có quyền thay đổi vị trí nhà": "ທ່ານບໍ່ມີສິດປ່ຽນຕຳແໜ່ງເຮືອນ",
   "Hãy bật GPS để đặt vị trí nhà": "ເປີດ GPS ເພື່ອຕັ້ງຕຳແໜ່ງເຮືອນ",
   "Bạn chưa cấp quyền vị trí": "ຍັງບໍ່ໄດ້ອະນຸຍາດຕຳແໜ່ງ",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "ອະນຸຍາດຕຳແໜ່ງໃນການຕັ້ງຄ່າແອັບ",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "ເປີດການປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນແລ້ວ",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "ປິດການປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນແລ້ວ",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "ອະນຸຍາດຕຳແໜ່ງໃນການຕັ້ງຄ່າແອັບ",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "ເປີດການປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນແລ້ວ",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "ປິດການປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນແລ້ວ",
   "Không thể thay đổi trạng thái báo động": "ບໍ່ສາມາດປ່ຽນສະຖານະສັນຍານເຕືອນໄພ",
   "Đã tắt toàn bộ báo động của nhà": "ປິດສັນຍານເຕືອນໄພຂອງເຮືອນທັງໝົດແລ້ວ",
   "QR này không phải mã xin gia nhập Home": "QR ນີ້ບໍ່ແມ່ນລະຫັດເຂົ້າຮ່ວມເຮືອນ",
   "Thêm Home": "ເພີ່ມເຮືອນ",
   "Mở cài đặt": "ເປີດການຕັ້ງຄ່າ",
   "Để sau": "ໄວ້ພາຍຫຼັງ",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome ຕ້ອງການສິດຕຳແໜ່ງ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອຮູ້ເມື່ອທ່ານອອກ ຫຼື ກັບເຮືອນ ລວມທັງເມື່ອແອັບເຮັດວຽກພື້ນຫຼັງ",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "ປັດຈຸບັນ SafeHome ເຂົ້າເຖິງຕຳແໜ່ງໄດ້ສະເພາະເມື່ອໃຊ້ແອັບ.\n\nເປີດສິດຕຳແໜ່ງ ແລະ ເລືອກ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກພື້ນຫຼັງ",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome ຕ້ອງການສິດຕຳແໜ່ງ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອຮູ້ເມື່ອທ່ານອອກ ຫຼື ກັບເຮືອນ ລວມທັງເມື່ອແອັບເຮັດວຽກພື້ນຫຼັງ",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "ປັດຈຸບັນ SafeHome ເຂົ້າເຖິງຕຳແໜ່ງໄດ້ສະເພາະເມື່ອໃຊ້ແອັບ.\n\nເປີດສິດຕຳແໜ່ງ ແລະ ເລືອກ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກພື້ນຫຼັງ",
   "Cho phép vị trí luôn luôn": "ອະນຸຍາດຕຳແໜ່ງຕະຫຼອດເວລາ",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "ເຮືອນຂອງທ່ານຈະຖືກລຶບ.\nທ່ານຈະອອກຈາກເຮືອນທີ່ແບ່ງປັນ",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "ການດຳເນີນການນີ້ຈະປ່ຽນຕາຕະລາງສັນຍານເຕືອນໄພຂອງອຸປະກອນຄວາມປອດໄພໃນເຮືອນທີ່ເລືອກ.\n\nສະມາຊິກທີ່ໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນຈະໄດ້ຮັບຜົນ.\nການຕັ້ງຄ່າສ່ວນຕົວຈະບໍ່ຖືກປ່ຽນ",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "ການດຳເນີນການນີ້ຈະເພີ່ມການເຕືອນຄວາມຈຳໃຫ້ເຮືອນທີ່ເລືອກ.\n\nສະມາຊິກທີ່ໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນຈະໄດ້ຮັບຜົນ.\nການຕັ້ງຄ່າສ່ວນຕົວຈະບໍ່ຖືກປ່ຽນ",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "ເມື່ອເປີດ ອຸປະກອນຄວາມປອດໄພຈະຖືກຕິດຕາມທັນທີ.\n\nການປ້ອງກັນອັດຕະໂນມັດຈະຢຸດຊົ່ວຄາວ. ໂໝດນີ້ບໍ່ປິດເອງເມື່ອມີຄົນກັບເຮືອນ ແລະ ຕ້ອງປ່ຽນກັບເປັນປົກກະຕິໂດຍສະມາຊິກທີ່ມີສິດ",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງບາງອຸປະກອນໃນມື້ນີ້...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "ການດຳເນີນການນີ້ຈະປິດສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນ. ທ່ານຈະບໍ່ໄດ້ຮັບການເຕືອນອັນຕະລາຍໃນໂທລະສັບອີກ",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "ສັນຍານເຕືອນໄພກຳລັງໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນ.\n\nທ່ານຈະໄດ້ຮັບການເຕືອນຕາມຕາຕະລາງຮ່ວມທີ່ເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງຕັ້ງໄວ້",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "ສັນຍານເຕືອນໄພກຳລັງໃຊ້ການຕັ້ງຄ່າສ່ວນຕົວ.\n\nທ່ານຈະໄດ້ຮັບການເຕືອນຕາມຕາຕະລາງສ່ວນຕົວຂອງບັນຊີນີ້",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "ເຮືອນຂອງທ່ານຈະຖືກລຶບ.\nທ່ານຈະອອກຈາກເຮືອນທີ່ແບ່ງປັນ",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "ການດຳເນີນການນີ້ຈະປ່ຽນຕາຕະລາງສັນຍານເຕືອນໄພຂອງອຸປະກອນຄວາມປອດໄພໃນເຮືອນທີ່ເລືອກ.\n\nສະມາຊິກທີ່ໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນຈະໄດ້ຮັບຜົນ.\nການຕັ້ງຄ່າສ່ວນຕົວຈະບໍ່ຖືກປ່ຽນ",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "ການດຳເນີນການນີ້ຈະເພີ່ມການເຕືອນຄວາມຈຳໃຫ້ເຮືອນທີ່ເລືອກ.\n\nສະມາຊິກທີ່ໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນຈະໄດ້ຮັບຜົນ.\nການຕັ້ງຄ່າສ່ວນຕົວຈະບໍ່ຖືກປ່ຽນ",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "ເມື່ອເປີດ ອຸປະກອນຄວາມປອດໄພຈະຖືກຕິດຕາມທັນທີ.\n\nການປ້ອງກັນອັດຕະໂນມັດຈະຢຸດຊົ່ວຄາວ. ໂໝດນີ້ບໍ່ປິດເອງເມື່ອມີຄົນກັບເຮືອນ ແລະ ຕ້ອງປ່ຽນກັບເປັນປົກກະຕິໂດຍສະມາຊິກທີ່ມີສິດ",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "ການດຳເນີນການນີ້ຈະປ່ຽນເວລາສັນຍານເຕືອນໄພຂອງບາງອຸປະກອນໃນມື້ນີ້...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "ການດຳເນີນການນີ້ຈະປິດສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນ. ທ່ານຈະບໍ່ໄດ້ຮັບການເຕືອນອັນຕະລາຍໃນໂທລະສັບອີກ",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "ສັນຍານເຕືອນໄພກຳລັງໃຊ້ການຕັ້ງຄ່າຂອງເຮືອນ.\n\nທ່ານຈະໄດ້ຮັບການເຕືອນຕາມຕາຕະລາງຮ່ວມທີ່ເຈົ້າຂອງ ຫຼື ຜູ້ຄຸ້ມຄອງຕັ້ງໄວ້",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "ສັນຍານເຕືອນໄພກຳລັງໃຊ້ການຕັ້ງຄ່າສ່ວນຕົວ.\n\nທ່ານຈະໄດ້ຮັບການເຕືອນຕາມຕາຕະລາງສ່ວນຕົວຂອງບັນຊີນີ້",
   "Không thể đăng nhập bằng Google": "ບໍ່ສາມາດເຂົ້າລະບົບດ້ວຍ Google",
   "Không đặt được mật khẩu": "ບໍ່ສາມາດຕັ້ງລະຫັດຜ່ານ",
   "Chấp nhận": "ຍອມຮັບ",
   "Cho phép": "ອະນຸຍາດ",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "ບໍ່ສາມາດຍອມຮັບຄຳເຊີນ. ກະລຸນາລອງໃໝ່",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "ບໍ່ສາມາດຍອມຮັບຄຳຂໍເຂົ້າຮ່ວມ. ກະລຸນາລອງໃໝ່",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "ບໍ່ສາມາດຍອມຮັບຄຳເຊີນ. ກະລຸນາລອງໃໝ່",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "ບໍ່ສາມາດຍອມຮັບຄຳຂໍເຂົ້າຮ່ວມ. ກະລຸນາລອງໃໝ່",
   "Từ chối": "ປະຕິເສດ",
   "Lời mời từ chủ nhà": "ຄຳເຊີນຈາກເຈົ້າຂອງ",
   "Nhận quyền chủ nhà": "ຮັບຄວາມເປັນເຈົ້າຂອງເຮືອນ",
@@ -664,15 +752,18 @@ const Map<String, String> loStrings = {
   "KIỂM TRA NHÀ": "ກວດເຮືອນ",
   "ĐÓNG NHẮC NHỞ": "ປິດການເຕືອນຄວາມຈຳ",
   "SafeHome Security Alert": "ການເຕືອນຄວາມປອດໄພ SafeHome",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "ເລືອກສິດຕຳແໜ່ງ ອະນຸຍາດຕະຫຼອດເວລາ ໃນການຕັ້ງຄ່າແອັບ",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "ບັນຊີ Google ຕ້ອງສ້າງລະຫັດຜ່ານເພີ່ມເພື່ອໃຊ້ຟີເຈີຄວາມປອດໄພ",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "ເລືອກສິດຕຳແໜ່ງ ອະນຸຍາດຕະຫຼອດເວລາ ໃນການຕັ້ງຄ່າແອັບ",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "ບັນຊີ Google ຕ້ອງສ້າງລະຫັດຜ່ານເພີ່ມເພື່ອໃຊ້ຟີເຈີຄວາມປອດໄພ",
   "Báo động": "ສັນຍານເຕືອນໄພ",
   "Bạn không có quyền thực hiện thao tác này。": "ທ່ານບໍ່ມີສິດດຳເນີນການນີ້",
   "Cài đặt": "ການຕັ້ງຄ່າ",
   "Cập nhật": "ອັບເດດ",
   "Chọn ngôn ngữ": "ເລືອກພາສາ",
   "Chưa có dữ liệu thiết bị để đánh giá": "ບໍ່ມີຂໍ້ມູນອຸປະກອນສຳລັບປະເມີນ",
-  "Chuyển quyền sở hữu cho thành viên khác": "ໂອນຄວາມເປັນເຈົ້າຂອງໃຫ້ສະມາຊິກອື່ນ",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "ໂອນຄວາມເປັນເຈົ້າຂອງໃຫ້ສະມາຊິກອື່ນ",
   "Có": "ແມ່ນ",
   "Cửa đã đóng an toàn": "ປະຕູປິດຢ່າງປອດໄພ",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "ເກີດຂໍ້ຜິດພາດ. ກະລຸນາລອງໃໝ່",
@@ -684,7 +775,8 @@ const Map<String, String> loStrings = {
   "Hub chưa gửi trạng thái": "ບໍ່ມີສະຖານະ Hub",
   "Hub mất kết nối": "Hub ຂາດການເຊື່ອມຕໍ່",
   "Hub tín hiệu bình thường": "Hub ເຊື່ອມຕໍ່ປົກກະຕິ",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "ບໍ່ໄດ້ລັອກຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "ບໍ່ໄດ້ລັອກຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
   "Khóa đang mở trong giờ báo động": "ບໍ່ໄດ້ລັອກໃນຊ່ວງສັນຍານເຕືອນໄພ",
   "Không có thông báo": "ບໍ່ມີແຈ້ງເຕືອນ",
   "Khu vực nguy hiểm": "ເຂດອັນຕະລາຍ",
@@ -730,28 +822,38 @@ const Map<String, String> loStrings = {
   "Đã tạo nhà": "ສ້າງເຮືອນແລ້ວ",
   "Chế độ Bảo vệ thủ công đã bật": "ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງແລ້ວ",
   "Báo động không lặp lại.": "ສັນຍານເຕືອນໄພຈະບໍ່ເຮັດຊ້ຳ",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "ສັນຍານເຕືອນໄພຈະເຮັດຊ້ຳຫຼັງ \$securityModeRepeatMinutes ນາທີ ຖ້າບັນຫາຍັງຄົງຢູ່",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງສຳລັບ \"\$homeName\". ໂໝດນີ້ຈະປິດເມື່ອສະມາຊິກທີ່ມີສິດປ່ຽນກັບເປັນປົກກະຕິ. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "ທ່ານເປີດສັນຍານເຕືອນໄພສຳລັບ \"\$homeName\" ແລ້ວ",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "ທ່ານປິດສັນຍານເຕືອນໄພທັງໝົດຂອງ \"\$homeName\" ແລ້ວ",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "ສັນຍານເຕືອນໄພຈະເຮັດຊ້ຳຫຼັງ \$securityModeRepeatMinutes ນາທີ ຖ້າບັນຫາຍັງຄົງຢູ່",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງສຳລັບ \"\$homeName\". ໂໝດນີ້ຈະປິດເມື່ອສະມາຊິກທີ່ມີສິດປ່ຽນກັບເປັນປົກກະຕິ. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "ທ່ານເປີດສັນຍານເຕືອນໄພສຳລັບ \"\$homeName\" ແລ້ວ",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "ທ່ານປິດສັນຍານເຕືອນໄພທັງໝົດຂອງ \"\$homeName\" ແລ້ວ",
   "Thành viên mới": "ສະມາຊິກໃໝ່",
   "Thành viên rời nhà": "ສະມາຊິກອອກຈາກເຮືອນ",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName ອອກຈາກ \"\$homeName\" ແລ້ວ",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName ປ່ຽນບົດບາດຂອງ \$memberName ຈາກ \$oldRoleName ເປັນ \$newRoleName ໃນ \"\$homeName\"",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName ອອກຈາກ \"\$homeName\" ແລ້ວ",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName ປ່ຽນບົດບາດຂອງ \$memberName ຈາກ \$oldRoleName ເປັນ \$newRoleName ໃນ \"\$homeName\"",
   "Còn \$count tin nhắn chưa đọc": "ມີ \$count ຂໍ້ຄວາມທີ່ຍັງບໍ່ອ່ານ",
   "Hãy an tâm nghỉ ngơi.": "ທ່ານສາມາດພັກຜ່ອນໄດ້ຢ່າງສະບາຍໃຈ",
   "Có thiết bị chưa an toàn.": "ມີອຸປະກອນບາງອັນບໍ່ປອດໄພ",
   "SafeHome đang cập nhật vị trí": "SafeHome ກຳລັງອັບເດດຕຳແໜ່ງ",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "ກຳລັງຕິດຕາມເພື່ອເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດ",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "ໃຊ້ຕຳແໜ່ງເພື່ອເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນ",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "ກຳລັງຕິດຕາມເພື່ອເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດ",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "ໃຊ້ຕຳແໜ່ງເພື່ອເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເມື່ອທຸກຄົນອອກເຮືອນ",
   "CẢNH BÁO SOS": "ການເຕືອນ SOS",
   "CẢNH BÁO KHÓI / CHÁY": "ການເຕືອນຄວັນ / ໄຟໄໝ້",
   "CẢNH BÁO NGẬP NƯỚC": "ການເຕືອນນ້ຳຖ້ວມ",
   "CẢNH BÁO RÒ KHÍ": "ການເຕືອນກາຊຮົ່ວ",
   "CẢNH BÁO CỬA": "ການເຕືອນປະຕູ",
   "CẢNH BÁO AN NINH": "ການເຕືອນຄວາມປອດໄພ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "ບໍ່ສາມາດຢືນຢັນກັບ SafeHome. ກວດການເຊື່ອມຕໍ່ ແລະ ລອງໃໝ່",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "ປິດການເຕືອນຫຼັງຈາກກວດສະພາບໃນເຮືອນແລ້ວເທົ່ານັ້ນ.\n\nທ່ານແນ່ໃຈບໍວ່າຈະປິດການເຕືອນ?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "ບໍ່ສາມາດຢືນຢັນກັບ SafeHome. ກວດການເຊື່ອມຕໍ່ ແລະ ລອງໃໝ່",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "ປິດການເຕືອນຫຼັງຈາກກວດສະພາບໃນເຮືອນແລ້ວເທົ່ານັ້ນ.\n\nທ່ານແນ່ໃຈບໍວ່າຈະປິດການເຕືອນ?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome ກວດພົບການເຕືອນ",
   "Mở SafeHome để kiểm tra ngay.": "ເປີດ SafeHome ເພື່ອກວດທັນທີ",
   "\$count tin nhắn mới": "\$count ຂໍ້ຄວາມໃໝ່",
@@ -759,167 +861,244 @@ const Map<String, String> loStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName ສົ່ງຂໍ້ຄວາມ",
   "Bạn có tin nhắn mới": "ທ່ານມີຂໍ້ຄວາມໃໝ່",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "ໂໝດປ້ອງກັນຈະເຕືອນພຽງຄັ້ງດຽວ",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "ໂໝດປ້ອງກັນຈະເຮັດຊ້ຳການເຕືອນຫຼັງ \$minutes ນາທີ",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "ໂໝດປ້ອງກັນຈະເຮັດຊ້ຳການເຕືອນຫຼັງ \$minutes ນາທີ",
   "Đã gửi yêu cầu gia nhập \$count nhà": "ສົ່ງຄຳຂໍເຂົ້າຮ່ວມ \$count ເຮືອນແລ້ວ",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName ກຳລັງຂໍເຂົ້າຮ່ວມ \"\$homeName\"",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName ກຳລັງຂໍເຂົ້າຮ່ວມ \"\$homeName\"",
   "Bạn đã xoá nhà \"\$homeName\".": "ທ່ານລຶບເຮືອນ \"\$homeName\" ແລ້ວ",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "ທ່ານສົ່ງຄຳຂໍໂອນຄວາມເປັນເຈົ້າຂອງ \"\$homeName\" ໃຫ້ \$email ແລ້ວ",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName ຕ້ອງການໂອນຄວາມເປັນເຈົ້າຂອງ \"\$homeName\" ໃຫ້ທ່ານ",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName ເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome ກຳລັງລຶບອຸປະກອນ \"\$deviceName\" ອອກຈາກ \"\$homeName\"",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "ເພີ່ມອຸປະກອນ \"\$deviceName\" ເຂົ້າໃນ \"\$homeName\" ແລ້ວ",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "ທ່ານສົ່ງຄຳຂໍໂອນຄວາມເປັນເຈົ້າຂອງ \"\$homeName\" ໃຫ້ \$email ແລ້ວ",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName ຕ້ອງການໂອນຄວາມເປັນເຈົ້າຂອງ \"\$homeName\" ໃຫ້ທ່ານ",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName ເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome ກຳລັງລຶບອຸປະກອນ \"\$deviceName\" ອອກຈາກ \"\$homeName\"",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "ເພີ່ມອຸປະກອນ \"\$deviceName\" ເຂົ້າໃນ \"\$homeName\" ແລ້ວ",
   "Bạn đã tạo nhà \"\$name\".": "ທ່ານສ້າງເຮືອນ \"\$name\" ແລ້ວ",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName ອັບເດດຊື່ເຮືອນເປັນ \"\$newName\" ແລະ ປ່ຽນທີ່ຢູ່",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName ປ່ຽນຊື່ເຮືອນເປັນ \"\$newName\"",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName ອັບເດດທີ່ຢູ່ຂອງ \"\$newName\"",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName ປ່ຽນຊື່ອຸປະກອນ \"\$oldDeviceName\" ເປັນ \"\$newName\" ໃນ \"\$homeName\"",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName ອັບເດດຊື່ເຮືອນເປັນ \"\$newName\" ແລະ ປ່ຽນທີ່ຢູ່",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName ປ່ຽນຊື່ເຮືອນເປັນ \"\$newName\"",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName ອັບເດດທີ່ຢູ່ຂອງ \"\$newName\"",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName ປ່ຽນຊື່ອຸປະກອນ \"\$oldDeviceName\" ເປັນ \"\$newName\" ໃນ \"\$homeName\"",
   "Đang ghép nối: \$seconds giây": "ກຳລັງຈັບຄູ່: \$seconds ວິນາທີ",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "ເປີດການຈັບຄູ່ອຸປະກອນໃນ \"\$homeName\" ເປັນເວລາ \$seconds ວິນາທີ",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "ຊ່ວງເວລາຢຸດຕ້ອງຢູ່ໃນຕາຕະລາງສັນຍານເຕືອນໄພ (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "ຜ່ານ \$passCount/\$total ການທົດສອບ\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name ຍັງບໍ່ໄດ້ເພີ່ມເບີໂທລະສັບໃນໂປຣໄຟລ໌",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "ເປີດການຈັບຄູ່ອຸປະກອນໃນ \"\$homeName\" ເປັນເວລາ \$seconds ວິນາທີ",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "ຊ່ວງເວລາຢຸດຕ້ອງຢູ່ໃນຕາຕະລາງສັນຍານເຕືອນໄພ (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "ຜ່ານ \$passCount/\$total ການທົດສອບ\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name ຍັງບໍ່ໄດ້ເພີ່ມເບີໂທລະສັບໃນໂປຣໄຟລ໌",
   "Tin nhắn mới trong \$homeName": "ຂໍ້ຄວາມໃໝ່ໃນ \$homeName",
   "\$current/\$total kết quả": "\$current/\$total ຜົນລັບ",
   "Đang trả lời \$name": "ກຳລັງຕອບ \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" ກວດພົບຄວັນໃນ \"\$homeName\"",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" ກັບຄືນເປັນປົກກະຕິແລ້ວ",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" ກະຕຸ້ນ SOS ໃນ \"\$homeName\"",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" ກວດພົບຄວັນໃນ \"\$homeName\"",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" ກັບຄືນເປັນປົກກະຕິແລ້ວ",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" ກະຕຸ້ນ SOS ໃນ \"\$homeName\"",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" ສິ້ນສຸດສະຖານະ SOS ແລ້ວ",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" ລາຍງານການຖອດງັດໃນ \"\$homeName\"",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "ການເຕືອນຖອດງັດຂອງ \"\$name\" ສິ້ນສຸດແລ້ວ",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" ປິດແລ້ວໃນ \"\$homeName\"",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" ເປີດຢູ່ໃນ \"\$homeName\"",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$name\" ໃນ \"\$homeName\" ມີແບັດເຕີຣີຕ່ຳ",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$name\" ໃນ \"\$homeName\" ອອບລາຍ",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$name\" ໃນ \"\$homeName\" ກັບມາອອນລາຍແລ້ວ",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" ບັນທຶກອຸນຫະພູມສູງໃນ \"\$homeName\"",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" ບັນທຶກຄວາມຊຸ່ມສູງໃນ \"\$homeName\"",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" ລາຍງານການຖອດງັດໃນ \"\$homeName\"",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "ການເຕືອນຖອດງັດຂອງ \"\$name\" ສິ້ນສຸດແລ້ວ",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" ປິດແລ້ວໃນ \"\$homeName\"",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" ເປີດຢູ່ໃນ \"\$homeName\"",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$name\" ໃນ \"\$homeName\" ມີແບັດເຕີຣີຕ່ຳ",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$name\" ໃນ \"\$homeName\" ອອບລາຍ",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$name\" ໃນ \"\$homeName\" ກັບມາອອນລາຍແລ້ວ",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" ບັນທຶກອຸນຫະພູມສູງໃນ \"\$homeName\"",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" ບັນທຶກຄວາມຊຸ່ມສູງໃນ \"\$homeName\"",
   "Có nút SOS vừa được kích hoạt": "ມີປຸ່ມ SOS ຖືກກະຕຸ້ນ",
   "Có dấu hiệu khói hoặc cháy": "ກວດພົບຄວັນ ຫຼື ໄຟໄໝ້",
   "Có dấu hiệu ngập nước": "ກວດພົບນ້ຳຖ້ວມ",
   "Có dấu hiệu rò khí": "ກວດພົບກາຊຮົ່ວ",
   "Có cửa đang mở hoặc thiết bị bị tháo": "ມີປະຕູເປີດ ຫຼື ອຸປະກອນຖືກຖອດງັດ",
   "Có thiết bị đang cảnh báo": "ມີອຸປະກອນກຳລັງເຕືອນ",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "ຖ້າບໍ່ມີໃຜຢືນຢັນ SafeHome ຈະເລີ່ມການໂທສຸກເສີນ",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "ຈະເຕືອນອີກຄັ້ງເວລາ \$time ຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "ຈະເຕືອນອີກຄັ້ງຕາມຕາຕະລາງສັນຍານເຕືອນໄພຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" ປິດແລ້ວໃນ \"\$resolvedHomeName\"",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" ເປີດຢູ່ໃນ \"\$resolvedHomeName\"",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "ຖ້າບໍ່ມີໃຜຢືນຢັນ SafeHome ຈະເລີ່ມການໂທສຸກເສີນ",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "ຈະເຕືອນອີກຄັ້ງເວລາ \$time ຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "ຈະເຕືອນອີກຄັ້ງຕາມຕາຕະລາງສັນຍານເຕືອນໄພຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" ປິດແລ້ວໃນ \"\$resolvedHomeName\"",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" ເປີດຢູ່ໃນ \"\$resolvedHomeName\"",
   "\$count nhà đã chọn": "ເລືອກ \$count ເຮືອນ",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count ເຮືອນບໍ່ປອດໄພ\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count ເຮືອນຕ້ອງໃສ່ໃຈ\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count ເຮືອນປອດໄພ",
   "\$count nhà đang được theo dõi": "ກຳລັງຕິດຕາມ \$count ເຮືອນ",
   "\$minutes phút": "\$minutes ນາທີ",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "ຕັ້ງການເຕືອນຄວາມຈຳໃຫ້ \$updatedHomes ເຮືອນແລ້ວ",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "ຕັ້ງສັນຍານເຕືອນໄພໃຫ້ \$updatedDevices ອຸປະກອນໃນ \$updatedHomes ເຮືອນແລ້ວ.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "ແບ່ງປັນເຮືອນທີ່ທ່ານຈັດການແລ້ວ.\n\nຂ້າມ \$skipped ເຮືອນເພາະທ່ານບໍ່ມີສິດແບ່ງປັນ",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "ນຳໃຊ້ສັນຍານເຕືອນໄພກັບ \$count ອຸປະກອນຄວາມປອດໄພແລ້ວ",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "ນຳໃຊ້ຕາຕະລາງດຽວກັນກັບ \$count ອຸປະກອນຄວາມປອດໄພ",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "ຕັ້ງການເຕືອນຄວາມຈຳໃຫ້ \$updatedHomes ເຮືອນແລ້ວ",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "ຕັ້ງສັນຍານເຕືອນໄພໃຫ້ \$updatedDevices ອຸປະກອນໃນ \$updatedHomes ເຮືອນແລ້ວ.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "ແບ່ງປັນເຮືອນທີ່ທ່ານຈັດການແລ້ວ.\n\nຂ້າມ \$skipped ເຮືອນເພາະທ່ານບໍ່ມີສິດແບ່ງປັນ",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "ນຳໃຊ້ສັນຍານເຕືອນໄພກັບ \$count ອຸປະກອນຄວາມປອດໄພແລ້ວ",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "ນຳໃຊ້ຕາຕະລາງດຽວກັນກັບ \$count ອຸປະກອນຄວາມປອດໄພ",
   "\$count phút trước": "\$count ນາທີກ່ອນ",
   "\$count giờ trước": "\$count ຊົ່ວໂມງກ່ອນ",
   "\${count}h trước": "\${count} ຊົ່ວໂມງກ່ອນ",
   "\${hours}h\$minutes' trước": "\${hours} ຊົ່ວໂມງ \$minutes ນາທີກ່ອນ",
   "\$count ngày trước": "\$count ມື້ກ່ອນ",
   "\$count tháng trước": "\$count ເດືອນກ່ອນ",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "ທ່ານແນ່ໃຈບໍວ່າຈະລຶບ \$name ອອກຈາກເຮືອນນີ້?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nຂໍເຂົ້າຮ່ວມ \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "ທ່ານແນ່ໃຈບໍວ່າຈະລຶບ \$name ອອກຈາກເຮືອນນີ້?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nຂໍເຂົ້າຮ່ວມ \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "ຂໍເຂົ້າຮ່ວມ \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "ທ່ານຖືກເຊີນໃຫ້ຮັບຄວາມເປັນເຈົ້າຂອງ \"\$homeName\"",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "ທ່ານຖືກເຊີນໃຫ້ຮັບຄວາມເປັນເຈົ້າຂອງ \"\$homeName\"",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
   "Mời bạn gia nhập \"\$homeName\"": "ເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
   "Cần kiểm tra: \$joined": "ຕ້ອງກວດ: \$joined",
   "Cập nhật \$value": "ອັບເດດ \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "ເພີ່ມອຸປະກອນ SafeHome ອັນທຳອິດເພື່ອເລີ່ມຕິດຕາມເຮືອນ",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "ກວດການເຕືອນສຸກເສີນກ່ອນ ແລ້ວຕິດຕໍ່ສະມາຊິກໃນເຮືອນຖ້າຈຳເປັນ",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "ບໍ່ມີສະມາຊິກຢູ່ເຮືອນ ແຕ່ມີປະຕູ ຫຼື ກະແຈເປີດຢູ່. ກວດທັນທີ",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "ກວດປະຕູ ຫຼື ກະແຈທີ່ເປີດກ່ອນຮັກສາເຮືອນໃນໂໝດປ້ອງກັນ",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "ອາດຍັງມີຄົນຢູ່ເຮືອນ; ຖ້າແມ່ນ ຄວນປ່ຽນກັບເປັນປົກກະຕິ",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "ມີສະມາຊິກທີ່ບໍ່ຮູ້ຕຳແໜ່ງ. ໃຫ້ພວກເຂົາເປີດແອັບ ຫຼື ກວດສິດຕຳແໜ່ງ",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "ມີອຸປະກອນຂາດການເຊື່ອມຕໍ່. ກວດແບັດເຕີຣີ, ໄຟ ຫຼື ຕຳແໜ່ງອຸປະກອນ",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "ມີອຸປະກອນແບັດເຕີຣີຕ່ຳ. ຄວນປ່ຽນໄວເພື່ອບໍ່ພາດການເຕືອນ",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "ຍັງບໍ່ໄດ້ຕັ້ງການເຕືອນຄວາມຈຳ. ສ້າງຕາຕະລາງກວດເຮືອນເປັນປະຈຳ",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "ຍັງບໍ່ໄດ້ຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພ. ເປີດການປ້ອງກັນໃນເວລາທີ່ມັກບໍ່ຢູ່ເຮືອນ",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "ບໍ່ມີສິ່ງທີ່ຕ້ອງຈັດການທັນທີ. ສືບຕໍ່ຕິດຕາມສະຖານະເຮືອນ",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "ເພີ່ມອຸປະກອນ SafeHome ອັນທຳອິດເພື່ອເລີ່ມຕິດຕາມເຮືອນ",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "ກວດການເຕືອນສຸກເສີນກ່ອນ ແລ້ວຕິດຕໍ່ສະມາຊິກໃນເຮືອນຖ້າຈຳເປັນ",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "ບໍ່ມີສະມາຊິກຢູ່ເຮືອນ ແຕ່ມີປະຕູ ຫຼື ກະແຈເປີດຢູ່. ກວດທັນທີ",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "ກວດປະຕູ ຫຼື ກະແຈທີ່ເປີດກ່ອນຮັກສາເຮືອນໃນໂໝດປ້ອງກັນ",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "ອາດຍັງມີຄົນຢູ່ເຮືອນ; ຖ້າແມ່ນ ຄວນປ່ຽນກັບເປັນປົກກະຕິ",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "ມີສະມາຊິກທີ່ບໍ່ຮູ້ຕຳແໜ່ງ. ໃຫ້ພວກເຂົາເປີດແອັບ ຫຼື ກວດສິດຕຳແໜ່ງ",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "ມີອຸປະກອນຂາດການເຊື່ອມຕໍ່. ກວດແບັດເຕີຣີ, ໄຟ ຫຼື ຕຳແໜ່ງອຸປະກອນ",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "ມີອຸປະກອນແບັດເຕີຣີຕ່ຳ. ຄວນປ່ຽນໄວເພື່ອບໍ່ພາດການເຕືອນ",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "ຍັງບໍ່ໄດ້ຕັ້ງການເຕືອນຄວາມຈຳ. ສ້າງຕາຕະລາງກວດເຮືອນເປັນປະຈຳ",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "ຍັງບໍ່ໄດ້ຕັ້ງຕາຕະລາງສັນຍານເຕືອນໄພ. ເປີດການປ້ອງກັນໃນເວລາທີ່ມັກບໍ່ຢູ່ເຮືອນ",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "ບໍ່ມີສິ່ງທີ່ຕ້ອງຈັດການທັນທີ. ສືບຕໍ່ຕິດຕາມສະຖານະເຮືອນ",
   "Lặp sau \$minutes phút": "ເຮັດຊ້ຳຫຼັງ \$minutes ນາທີ",
   "Đang dùng • \$repeatText": "ກຳລັງໃຊ້ • \$repeatText",
   "Giám sát an ninh • \$repeatText": "ຕິດຕາມຄວາມປອດໄພ • \$repeatText",
   "Gia đình: \$mode": "ໂໝດເຮືອນ: \$mode",
   "Gợi ý xử lý": "ການດຳເນີນການທີ່ແນະນຳ",
   "Phát hiện \$count vấn đề cần xử lý": "ພົບ \$count ບັນຫາທີ່ຕ້ອງຈັດການ",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "ມື້ນີ້ປະຕູຖືກໃຊ້ \$count ຄັ້ງ",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "ມື້ນີ້ປະຕູຖືກໃຊ້ \$count ຄັ້ງ",
   "Đã ghi nhận \$count hoạt động gần đây": "ບັນທຶກ \$count ກິດຈະກຳຫຼ້າສຸດ",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "ລະບົບ: ຕ້ອງກວດ \$issueCount ລາຍການ",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "ລະບົບ: ຕ້ອງກວດ \$issueCount ລາຍການ",
   "FCM token đã sẵn sàng trên điện thoại này.": "ໂທເຄັນ FCM ພ້ອມໃນໂທລະສັບນີ້",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "ໂທເຄັນ FCM ພ້ອມ ແຕ່ການປ້ອງກັນອັດຕະໂນມັດຍັງຂາດເງື່ອນໄຂ",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "ພົບ \$emergencyTotal ອຸປະກອນສຸກເສີນ. ແນະນຳຢ່າງນ້ອຍ: ເຊັນເຊີຄວັນ ແລະ SOS",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "ໂອນຄວາມເປັນເຈົ້າຂອງເຮືອນໃຫ້:\n\$targetEmail ບໍ?",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "ໂທເຄັນ FCM ພ້ອມ ແຕ່ການປ້ອງກັນອັດຕະໂນມັດຍັງຂາດເງື່ອນໄຂ",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "ພົບ \$emergencyTotal ອຸປະກອນສຸກເສີນ. ແນະນຳຢ່າງນ້ອຍ: ເຊັນເຊີຄວັນ ແລະ SOS",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "ໂອນຄວາມເປັນເຈົ້າຂອງເຮືອນໃຫ້:\n\$targetEmail ບໍ?",
   "\$count cửa đã đóng an toàn": "\$count ປະຕູປິດຢ່າງປອດໄພ",
   "\$count cửa và khóa đã an toàn": "\$count ປະຕູ ແລະ ກະແຈປອດໄພ",
   "\$count thiết bị đang được theo dõi": "ກຳລັງຕິດຕາມ \$count ອຸປະກອນ",
   "Cập nhật \$timeText": "ອັບເດດ \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ \$count ນາທີກ່ອນ",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ \$count ຊົ່ວໂມງກ່ອນ",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ \$count ນາທີກ່ອນ",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ \$count ຊົ່ວໂມງກ່ອນ",
   "Thành viên trong nhà: \$count": "ສະມາຊິກໃນເຮືອນ: \$count",
   "Thành viên bên ngoài: \$count": "ສະມາຊິກຢູ່ນອກ: \$count",
   "Chưa xác định vị trí: \$count": "ບໍ່ຮູ້ຕຳແໜ່ງ: \$count",
   "Môi trường hiện tại: \$environment": "ສິ່ງແວດລ້ອມປັດຈຸບັນ: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: ເປີດຢູ່ຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: ເປີດຢູ່ຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
   "An tâm hơn trong từng ngôi nhà": "ອຸ່ນໃຈກວ່າໃນທຸກເຮືອນ",
   "Báo động SafeHome": "ສັນຍານເຕືອນໄພ SafeHome",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "ມີການເຕືອນຄວາມປອດໄພທີ່ຕ້ອງກວດທັນທີ",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "ມີການເຕືອນຄວາມປອດໄພທີ່ຕ້ອງກວດທັນທີ",
   "Có cảnh báo cần kiểm tra": "ມີການເຕືອນທີ່ຕ້ອງກວດ",
   "Tự đóng sau \$time": "ປິດເອງຫຼັງ \$time",
   "Ngày trong tuần": "ມື້ໃນອາທິດ",
   "Hoặc": "ຫຼື",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "ເວລາເລີ່ມ ແລະ ສິ້ນສຸດຕ້ອງບໍ່ຄືກັນ",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "ເວລາສິ້ນສຸດຕ້ອງຫຼັງຈາກເວລາປັດຈຸບັນ",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "ເວລາເລີ່ມ ແລະ ສິ້ນສຸດຕ້ອງບໍ່ຄືກັນ",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "ເວລາສິ້ນສຸດຕ້ອງຫຼັງຈາກເວລາປັດຈຸບັນ",
   "Khoảng tạm tắt không hợp lệ": "ຊ່ວງຢຸດສັນຍານເຕືອນໄພບໍ່ຖືກຕ້ອງ",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "ຊ່ວງຢຸດບໍ່ຊ້ອນກັບຕາຕະລາງສັນຍານເຕືອນໄພທີ່ເປີດຢູ່",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "ຊ່ວງຢຸດບໍ່ຊ້ອນກັບຕາຕະລາງສັນຍານເຕືອນໄພທີ່ເປີດຢູ່",
   "Cài đặt báo động": "ການຕັ້ງຄ່າສັນຍານເຕືອນໄພ",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "ຄວບຄຸມວິທີທີ່ເຊັນເຊີນີ້ກະຕຸ້ນການເຕືອນ",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "ຄວບຄຸມວິທີທີ່ເຊັນເຊີນີ້ກະຕຸ້ນການເຕືອນ",
   "Tham gia báo động": "ເຂົ້າຮ່ວມສັນຍານເຕືອນໄພ",
-  "Tắt để cảm biến không tạo báo động.": "ປິດເພື່ອບໍ່ໃຫ້ເຊັນເຊີສ້າງສັນຍານເຕືອນໄພ",
+  "Tắt để cảm biến không tạo báo động.":
+      "ປິດເພື່ອບໍ່ໃຫ້ເຊັນເຊີສ້າງສັນຍານເຕືອນໄພ",
   "Bật còi vật lý": "ເປີດສຽງຫວໍຈິງ",
   "Cho phép kích hoạt còi trong nhà.": "ອະນຸຍາດໃຫ້ກະຕຸ້ນສຽງຫວໍໃນເຮືອນ",
   "Đánh thức màn hình": "ປຸກໜ້າຈໍ",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "ສະແດງການເຕືອນເຕັມຈໍໃນໂທລະສັບ",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "ສະແດງການເຕືອນເຕັມຈໍໃນໂທລະສັບ",
   "Độ trễ kích hoạt": "ການໜ່ວງເວລາກະຕຸ້ນ",
   "Chỉ áp dụng cho cảm biến an ninh.": "ໃຊ້ກັບເຊັນເຊີຄວາມປອດໄພເທົ່ານັ້ນ",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "ເຊັນເຊີສຸກເສີນຈະກະຕຸ້ນທັນທີສະເໝີ",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "ເຊັນເຊີສຸກເສີນຈະກະຕຸ້ນທັນທີສະເໝີ",
   "Ngay lập tức": "ທັນທີ",
   "giây": "ວິນາທີ",
   "Đã lưu cấu hình báo động": "ບັນທຶກການຕັ້ງຄ່າສັນຍານເຕືອນໄພແລ້ວ",
   "Không thể lưu cấu hình báo động": "ບໍ່ສາມາດບັນທຶກການຕັ້ງຄ່າສັນຍານເຕືອນໄພ",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "ມີພຽງເຈົ້າຂອງເຮືອນ ແລະ ຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການຕັ້ງຄ່ານີ້ໄດ້",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "ມີພຽງເຈົ້າຂອງເຮືອນ ແລະ ຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການຕັ້ງຄ່ານີ້ໄດ້",
   "Thông tin chi tiết": "ລາຍລະອຽດອຸປະກອນ",
   "Thông báo báo động": "ແຈ້ງເຕືອນສັນຍານເຕືອນໄພ",
   "Cài đặt nhắc nhở": "ການຕັ້ງຄ່າການເຕືອນຄວາມຈຳ",
   "Nhắc nhở theo lịch": "ການເຕືອນຄວາມຈຳຕາມກຳນົດ",
   "Danh sách thông báo": "ແຈ້ງເຕືອນ",
   "Cài đặt thông báo": "ການຕັ້ງຄ່າແຈ້ງເຕືອນ",
-  "Sử dụng báo động theo lịch đã thiết lập": "ໃຊ້ຕາຕະລາງສັນຍານເຕືອນໄພທີ່ຕັ້ງໄວ້",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "ສົ່ງສະເພາະແຈ້ງເຕືອນ ໂດຍບໍ່ເປີດສັນຍານເຕືອນໄພ",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "ສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນຖືກປິດ; ລະບົບຈະສົ່ງສະເພາະແຈ້ງເຕືອນ.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "ມີພຽງເຈົ້າຂອງເຮືອນເທົ່ານັ້ນທີ່ສາມາດເປີດໂໝດນີ້ໄດ້.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "ໃຊ້ຕາຕະລາງສັນຍານເຕືອນໄພທີ່ຕັ້ງໄວ້",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "ສົ່ງສະເພາະແຈ້ງເຕືອນ ໂດຍບໍ່ເປີດສັນຍານເຕືອນໄພ",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "ສັນຍານເຕືອນໄພທັງໝົດຂອງເຮືອນຖືກປິດ; ລະບົບຈະສົ່ງສະເພາະແຈ້ງເຕືອນ.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "ມີພຽງເຈົ້າຂອງເຮືອນເທົ່ານັ້ນທີ່ສາມາດເປີດໂໝດນີ້ໄດ້.",
   "Bật Không bảo vệ?": "ເປີດໂໝດບໍ່ປ້ອງກັນບໍ?",
   "Cảm biến vừa phát hiện một sự kiện.": "ເຊັນເຊີຫາກໍກວດພົບເຫດການ.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "ມີພຽງເຈົ້າຂອງເຮືອນເທົ່ານັ້ນທີ່ເປີດໂໝດບໍ່ປ້ອງກັນໄດ້",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "ມີພຽງເຈົ້າຂອງເຮືອນເທົ່ານັ້ນທີ່ເປີດໂໝດບໍ່ປ້ອງກັນໄດ້",
   "Đã chuyển nhà sang Không bảo vệ": "ເຮືອນປ່ຽນເປັນໂໝດບໍ່ປ້ອງກັນແລ້ວ",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "ປ່ຽນເປັນໂໝດບໍ່ປ້ອງກັນແລ້ວ ແຕ່ສົ່ງແຈ້ງເຕືອນບໍ່ໄດ້",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "ປ່ຽນເປັນໂໝດບໍ່ປ້ອງກັນແລ້ວ ແຕ່ສົ່ງແຈ້ງເຕືອນບໍ່ໄດ້",
   "Giám sát toàn diện": "ການຕິດຕາມຢ່າງຄົບຖ້ວນ",
   "Không bảo vệ": "ບໍ່ປ້ອງກັນ",
   "Không bảo vệ đang bật": "ໂໝດບໍ່ປ້ອງກັນກຳລັງເຮັດວຽກ",
   "Nhà đã chuyển sang Không bảo vệ": "ເຮືອນປ່ຽນເປັນໂໝດບໍ່ປ້ອງກັນແລ້ວ",
   "Thông báo cảm biến": "ແຈ້ງເຕືອນຈາກເຊັນເຊີ",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "ແຈ້ງເຕືອນທົ່ວໄປເມື່ອເຊັນເຊີກວດພົບເຫດການ.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "ແຈ້ງເຕືອນທົ່ວໄປເມື່ອເຊັນເຊີກວດພົບເຫດການ.",
   "Tôi hiểu, tiếp tục": "ຂ້ອຍເຂົ້າໃຈ, ສືບຕໍ່",
   "Cảnh báo an ninh đã kết thúc": "ການເຕືອນຄວາມປອດໄພສິ້ນສຸດແລ້ວ",
   "Sự cố nguy hiểm đã kết thúc": "ເຫດການອັນຕະລາຍສິ້ນສຸດແລ້ວ",
   "Cảnh báo đã được kết thúc.": "ການເຕືອນສິ້ນສຸດແລ້ວ.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "ຍັງມີການເຕືອນອື່ນເຮັດວຽກຢູ່.",
   "Báo động đã hoạt động trở lại": "ສັນຍານເຕືອນໄພກັບມາເຮັດວຽກແລ້ວ",
-  "Thời gian tạm dừng báo động đã kết thúc.": "ໄລຍະຢຸດສັນຍານເຕືອນໄພສິ້ນສຸດແລ້ວ.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "ໄລຍະຢຸດສັນຍານເຕືອນໄພສິ້ນສຸດແລ້ວ.",
   "MQTT đã kết nối trở lại": "MQTT ເຊື່ອມຕໍ່ຄືນແລ້ວ",
   "Còi báo động đã được tắt": "ປິດສຽງຫວໍຈິງແລ້ວ",
   "Sự cố vẫn đang được theo dõi.": "ເຫດການຍັງຖືກຕິດຕາມຢູ່.",
@@ -934,34 +1113,47 @@ const Map<String, String> loStrings = {
   "Nhà đang ở chế độ Bình thường.": "ເຮືອນຢູ່ໃນໂໝດປົກກະຕິ.",
   "Pin thiết bị đã ổn định": "ແບັດເຕີຣີອຸປະກອນກັບມາປົກກະຕິ",
   "Hub đã kết nối trở lại": "Hub ເຊື່ອມຕໍ່ຄືນແລ້ວ",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "ປ່ຽນເປັນໂໝດປົກກະຕິແລ້ວ ແຕ່ສົ່ງແຈ້ງເຕືອນບໍ່ໄດ້",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "ປ່ຽນເປັນໂໝດປົກກະຕິແລ້ວ ແຕ່ສົ່ງແຈ້ງເຕືອນບໍ່ໄດ້",
   "Chung cho nhà": "ສຳລັບທັງເຮືອນ",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "ນຳໃຊ້ກັບສະມາຊິກທຸກຄົນ ແລະສາມາດເປີດໄຊເຣນຈິງໄດ້.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "ນຳໃຊ້ກັບສະມາຊິກທຸກຄົນ ແລະສາມາດເປີດໄຊເຣນຈິງໄດ້.",
   "Cá nhân": "ສ່ວນຕົວ",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "ຕາຕະລາງສ່ວນຕົວເຮັດວຽກແຍກອິດສະຫຼະ ແລະບໍ່ເປີດໄຊເຣນຈິງ.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "ການຕັ້ງຄ່ານີ້ນຳໃຊ້ກັບບັນຊີຂອງທ່ານເທົ່ານັ້ນ.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "ມີພຽງເຈົ້າຂອງເຮືອນ ແລະຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການຕັ້ງຄ່າຮ່ວມໄດ້.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "ຕາຕະລາງສ່ວນຕົວເຮັດວຽກແຍກອິດສະຫຼະ ແລະບໍ່ເປີດໄຊເຣນຈິງ.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "ການຕັ້ງຄ່ານີ້ນຳໃຊ້ກັບບັນຊີຂອງທ່ານເທົ່ານັ້ນ.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "ມີພຽງເຈົ້າຂອງເຮືອນ ແລະຜູ້ຄຸ້ມຄອງທີ່ປ່ຽນການຕັ້ງຄ່າຮ່ວມໄດ້.",
   "Tham gia hệ thống báo động": "ເຂົ້າຮ່ວມລະບົບແຈ້ງເຕືອນ",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "ເຊັນເຊີສຸກເສີນເຂົ້າຮ່ວມລະບົບແຈ້ງເຕືອນສະເໝີ.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "ປິດເພື່ອບໍ່ໃຫ້ອຸປະກອນສ້າງການແຈ້ງເຕືອນ.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "ເຊັນເຊີສຸກເສີນເຂົ້າຮ່ວມລະບົບແຈ້ງເຕືອນສະເໝີ.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "ປິດເພື່ອບໍ່ໃຫ້ອຸປະກອນສ້າງການແຈ້ງເຕືອນ.",
   "Lịch báo động chung": "ຕາຕະລາງແຈ້ງເຕືອນຮ່ວມ",
   "Lịch báo động cá nhân": "ຕາຕະລາງແຈ້ງເຕືອນສ່ວນຕົວ",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "ສະແດງການແຈ້ງເຕືອນເຕັມໜ້າຈໍໃນໂທລະສັບຂອງທ່ານ.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "ສະແດງການແຈ້ງເຕືອນເຕັມໜ້າຈໍໃນໂທລະສັບຂອງທ່ານ.",
   "Lặp lại cảnh báo": "ແຈ້ງເຕືອນຊ້ຳ",
   "Báo động chung": "ການແຈ້ງເຕືອນຮ່ວມ",
   "Báo động cá nhân": "ການແຈ້ງເຕືອນສ່ວນຕົວ",
   "Đã cài đặt": "ຕັ້ງຄ່າແລ້ວ",
   "Chưa cài đặt": "ຍັງບໍ່ໄດ້ຕັ້ງ",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "ຕາຕະລາງຮ່ວມ ແລະສ່ວນຕົວເຮັດວຽກພ້ອມກັນ ບໍ່ຕ້ອງເລືອກອັນໃດອັນໜຶ່ງ.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "ຕາຕະລາງຮ່ວມ ແລະສ່ວນຕົວເຮັດວຽກພ້ອມກັນ ບໍ່ຕ້ອງເລືອກອັນໃດອັນໜຶ່ງ.",
   "Cài nhanh chung": "ຕັ້ງຄ່າຮ່ວມດ່ວນ",
   "Cài nhanh cá nhân": "ຕັ້ງຄ່າສ່ວນຕົວດ່ວນ",
   "Thiết lập nhanh lịch cá nhân": "ຕັ້ງຕາຕະລາງສ່ວນຕົວດ່ວນ",
   "Thiết lập nhanh lịch chung": "ຕັ້ງຕາຕະລາງຮ່ວມດ່ວນ",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "ຕາຕະລາງນີ້ນຳໃຊ້ກັບທ່ານເທົ່ານັ້ນ ແລະບໍ່ເປີດໄຊເຣນຈິງ.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "ຕາຕະລາງນີ້ນຳໃຊ້ກັບສະມາຊິກທຸກຄົນໃນເຮືອນ.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "ຕາຕະລາງນີ້ນຳໃຊ້ກັບທ່ານເທົ່ານັ້ນ ແລະບໍ່ເປີດໄຊເຣນຈິງ.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "ຕາຕະລາງນີ້ນຳໃຊ້ກັບສະມາຊິກທຸກຄົນໃນເຮືອນ.",
   "Đã áp dụng lịch báo động": "ນຳໃຊ້ຕາຕະລາງແຈ້ງເຕືອນແລ້ວ",
   "Không thể lưu lịch báo động": "ບໍ່ສາມາດບັນທຶກຕາຕະລາງແຈ້ງເຕືອນ",
   "Nhà chưa có thiết bị an ninh": "ເຮືອນນີ້ບໍ່ມີອຸປະກອນຄວາມປອດໄພ",
-  "Nhận cảnh báo theo lịch chung của nhà": "ຮັບການແຈ້ງເຕືອນຈາກຕາຕະລາງຮ່ວມຂອງເຮືອນ",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "ປິດເພື່ອບໍ່ຮັບແຈ້ງເຕືອນ ຫຼືການເຕືອນເຕັມໜ້າຈໍຈາກຕາຕະລາງຮ່ວມ. ໄຊເຣນຂອງເຮືອນຍັງເຮັດວຽກຕາມປົກກະຕິ.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "ຮັບການແຈ້ງເຕືອນຈາກຕາຕະລາງຮ່ວມຂອງເຮືອນ",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "ປິດເພື່ອບໍ່ຮັບແຈ້ງເຕືອນ ຫຼືການເຕືອນເຕັມໜ້າຈໍຈາກຕາຕະລາງຮ່ວມ. ໄຊເຣນຂອງເຮືອນຍັງເຮັດວຽກຕາມປົກກະຕິ.",
 };

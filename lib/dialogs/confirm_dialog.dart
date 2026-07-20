@@ -16,9 +16,7 @@ Future<bool> showConfirmDialog(BuildContext context, String title) async {
             onPressed: () {
               Navigator.pop(dialogContext, false);
             },
-            child: Text(
-              strings.t("Không"),
-            ),
+            child: Text(strings.t("Không")),
           ),
 
           ElevatedButton(

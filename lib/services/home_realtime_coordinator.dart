@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 
 import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import 'chat_service.dart';
 import 'device_notification_event_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 typedef HomeNotificationUnreadChanged = void Function(int count);
 typedef HomeEventsChanged = void Function(Map<String, dynamic> events);
 typedef HomeAlarmPauseCleared = void Function();
@@ -63,9 +63,7 @@ class HomeRealtimeDeviceNotification {
 }
 
 class _HomePresenceListenState {
-  _HomePresenceListenState({
-    required this.ownerUid,
-  });
+  _HomePresenceListenState({required this.ownerUid});
 
   String ownerUid;
   StreamSubscription<DatabaseEvent>? sharedMembersSubscription;
@@ -470,7 +468,9 @@ class HomeRealtimeCoordinator {
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
           onError: (Object error) {
-            safeDebugPrint("HOME_MEMBER_PRESENCE_STATUS_LISTENER_ERROR: $error");
+            safeDebugPrint(
+              "HOME_MEMBER_PRESENCE_STATUS_LISTENER_ERROR: $error",
+            );
             state.fallbackMemberStatusPrimed = true;
             _syncHomePresenceMembers(homeId: homeId, state: state);
           },
@@ -519,8 +519,9 @@ class HomeRealtimeCoordinator {
                 return;
               }
 
-              state.rawPresenceByMember[memberUid] =
-                  safeMap(event.snapshot.value);
+              state.rawPresenceByMember[memberUid] = safeMap(
+                event.snapshot.value,
+              );
               state.primedMemberUids.add(memberUid);
               _emitHomePresence(homeId);
             },
@@ -547,11 +548,9 @@ class HomeRealtimeCoordinator {
     );
   }
 
-  bool _hasFreshKnownPresence(
-    Map<String, dynamic> rawPresence,
-    DateTime now,
-  ) {
-    final rawState = rawPresence["state"]?.toString().trim().toLowerCase() ?? "";
+  bool _hasFreshKnownPresence(Map<String, dynamic> rawPresence, DateTime now) {
+    final rawState =
+        rawPresence["state"]?.toString().trim().toLowerCase() ?? "";
     final lastSeenAt = _presenceTimestamp(rawPresence);
     final isKnownState = rawState == "inside" || rawState == "outside";
 
@@ -572,8 +571,7 @@ class HomeRealtimeCoordinator {
   }) {
     final selectedPresence = usePrimary ? primaryPresence : fallbackPresence;
     final rawState =
-        selectedPresence["state"]?.toString().trim().toLowerCase() ??
-            "unknown";
+        selectedPresence["state"]?.toString().trim().toLowerCase() ?? "unknown";
     final lastSeenAt = _presenceTimestamp(selectedPresence);
 
     return <String, dynamic>{
@@ -611,7 +609,8 @@ class HomeRealtimeCoordinator {
     }
 
     final lastSeenAt =
-        _presenceTimestamp(primaryPresence) ?? _presenceTimestamp(fallbackPresence);
+        _presenceTimestamp(primaryPresence) ??
+        _presenceTimestamp(fallbackPresence);
 
     return <String, dynamic>{
       ...fallbackPresence,
@@ -750,14 +749,13 @@ class HomeRealtimeCoordinator {
       return;
     }
 
-    _homePresenceRefreshTimer ??= Timer.periodic(
-      const Duration(minutes: 1),
-      (_) {
-        for (final homeId in _homePresenceStates.keys.toList()) {
-          _emitHomePresence(homeId);
-        }
-      },
-    );
+    _homePresenceRefreshTimer ??= Timer.periodic(const Duration(minutes: 1), (
+      _,
+    ) {
+      for (final homeId in _homePresenceStates.keys.toList()) {
+        _emitHomePresence(homeId);
+      }
+    });
   }
 
   void _disposeHomePresenceState(String homeId) {

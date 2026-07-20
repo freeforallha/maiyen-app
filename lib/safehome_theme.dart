@@ -28,23 +28,24 @@ class SafeHomeTheme {
   const SafeHomeTheme._();
 
   static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: SafeHomeColors.primary,
-      brightness: Brightness.light,
-    ).copyWith(
-      primary: SafeHomeColors.primary,
-      onPrimary: Colors.white,
-      primaryContainer: SafeHomeColors.primarySoft,
-      onPrimaryContainer: SafeHomeColors.primaryDark,
-      secondary: SafeHomeColors.info,
-      onSecondary: Colors.white,
-      surface: SafeHomeColors.surface,
-      onSurface: SafeHomeColors.textPrimary,
-      error: SafeHomeColors.danger,
-      onError: Colors.white,
-      outline: SafeHomeColors.border,
-      outlineVariant: SafeHomeColors.border,
-    );
+    final colorScheme =
+        ColorScheme.fromSeed(
+          seedColor: SafeHomeColors.primary,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: SafeHomeColors.primary,
+          onPrimary: Colors.white,
+          primaryContainer: SafeHomeColors.primarySoft,
+          onPrimaryContainer: SafeHomeColors.primaryDark,
+          secondary: SafeHomeColors.info,
+          onSecondary: Colors.white,
+          surface: SafeHomeColors.surface,
+          onSurface: SafeHomeColors.textPrimary,
+          error: SafeHomeColors.danger,
+          onError: Colors.white,
+          outline: SafeHomeColors.border,
+          outlineVariant: SafeHomeColors.border,
+        );
 
     final base = ThemeData(
       useMaterial3: true,
@@ -102,10 +103,7 @@ class SafeHomeTheme {
           fontWeight: FontWeight.w500,
           height: 1.3,
         ),
-        labelLarge: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w800,
-        ),
+        labelLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
       ),
       appBarTheme: const AppBarTheme(
         elevation: 0,
@@ -114,10 +112,7 @@ class SafeHomeTheme {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         foregroundColor: SafeHomeColors.textPrimary,
-        iconTheme: IconThemeData(
-          color: SafeHomeColors.textPrimary,
-          size: 24,
-        ),
+        iconTheme: IconThemeData(color: SafeHomeColors.textPrimary, size: 24),
         titleTextStyle: TextStyle(
           color: SafeHomeColors.textPrimary,
           fontSize: 20,
@@ -132,10 +127,7 @@ class SafeHomeTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(
-            color: SafeHomeColors.border,
-            width: 0.8,
-          ),
+          side: const BorderSide(color: SafeHomeColors.border, width: 0.8),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -195,10 +187,7 @@ class SafeHomeTheme {
           backgroundColor: SafeHomeColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -211,10 +200,7 @@ class SafeHomeTheme {
           foregroundColor: Colors.white,
           elevation: 0,
           shadowColor: Colors.transparent,
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -224,14 +210,8 @@ class SafeHomeTheme {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(64, 48),
           foregroundColor: SafeHomeColors.primary,
-          side: const BorderSide(
-            color: SafeHomeColors.border,
-            width: 1.2,
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-          ),
+          side: const BorderSide(color: SafeHomeColors.border, width: 1.2),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -240,10 +220,7 @@ class SafeHomeTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: SafeHomeColors.primary,
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -268,17 +245,13 @@ class SafeHomeTheme {
         dragHandleColor: SafeHomeColors.border,
         dragHandleSize: Size(44, 5),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(28),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: SafeHomeColors.surface,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         titleTextStyle: const TextStyle(
           color: SafeHomeColors.textPrimary,
           fontSize: 20,
@@ -304,10 +277,7 @@ class SafeHomeTheme {
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 2,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 2),
       ),
       chipTheme: base.chipTheme.copyWith(
         backgroundColor: SafeHomeColors.surfaceSoft,
@@ -321,13 +291,8 @@ class SafeHomeTheme {
           color: SafeHomeColors.primary,
           fontWeight: FontWeight.w800,
         ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 8,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(999),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
       dividerTheme: const DividerThemeData(
         color: SafeHomeColors.border,
@@ -342,10 +307,7 @@ class SafeHomeTheme {
         indicatorColor: SafeHomeColors.primarySoft,
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return const IconThemeData(
-              color: SafeHomeColors.primary,
-              size: 24,
-            );
+            return const IconThemeData(color: SafeHomeColors.primary, size: 24);
           }
 
           return const IconThemeData(
@@ -372,9 +334,7 @@ class SafeHomeTheme {
           color: Colors.white,
           fontWeight: FontWeight.w600,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
   }

@@ -55,7 +55,8 @@ const Map<String, String> koStrings = {
   "Xóa nhà": "집 삭제",
   "Xoá toàn bộ dữ liệu và thiết bị": "모든 집 데이터와 기기 삭제",
   "Bạn không có quyền thực hiện thao tác này.": "이 작업을 수행할 권한이 없습니다.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "작업을 완료할 수 없습니다. 다시 시도해 주세요.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "작업을 완료할 수 없습니다. 다시 시도해 주세요.",
   "An toàn": "안전",
   "Không an toàn": "안전하지 않음",
   "ĐÃ AN TOÀN": "안전",
@@ -74,7 +75,8 @@ const Map<String, String> koStrings = {
   "Chưa có dữ liệu trạng thái": "상태 데이터가 없습니다",
   "Chưa có dữ liệu tổng quan": "요약 데이터가 없습니다",
   "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "자세히 분석할 새 활동이 많지 않습니다.",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "집에 확인이 필요한 신호가 있습니다. 아래 상태를 확인해 주세요.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "집에 확인이 필요한 신호가 있습니다. 아래 상태를 확인해 주세요.",
   "Cần xử lý ngay": "즉시 처리 필요",
   "Chưa có dữ liệu thiết bị để đánh giá": "평가할 기기 데이터가 없습니다",
   "Đang kiểm tra kết nối Hub": "Hub 연결 확인 중",
@@ -95,7 +97,8 @@ const Map<String, String> koStrings = {
   "Đặt vị trí nhà tại đây": "현재 위치를 집 위치로 설정",
   "Bán kính bảo vệ mặc định: 150 m": "기본 보호 반경: 150 m",
   "Đã đặt vị trí nhà": "집 위치가 설정되었습니다",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "각 구성원은 앱이 백그라운드에서 실행될 때 외출/귀가 상태가 작동하도록 위치 권한을 항상 허용해야 합니다.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "각 구성원은 앱이 백그라운드에서 실행될 때 외출/귀가 상태가 작동하도록 위치 권한을 항상 허용해야 합니다.",
   "Lưu cài đặt": "설정 저장",
   "An ninh ra/vào": "출입 보안",
   "Nguy hiểm khẩn cấp": "긴급 위험",
@@ -229,7 +232,8 @@ const Map<String, String> koStrings = {
   "Không thể lưu thông tin": "정보를 저장할 수 없습니다",
   "Đã lưu thông tin": "정보가 저장되었습니다",
   "Lỗi lưu profile": "프로필 저장 오류",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "긴급 상황에 사용할 전화번호를 추가하세요",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "긴급 상황에 사용할 전화번호를 추가하세요",
   "Lưu thay đổi": "변경 사항 저장",
   "Hoàn tất": "완료",
   "Cài đặt": "설정",
@@ -248,7 +252,8 @@ const Map<String, String> koStrings = {
   "Mở danh sách chia sẻ nhà": "집 공유 목록 열기",
   "Xoá các nhà đã chọn?": "선택한 집을 삭제할까요?",
   "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "선택한 집이 영구적으로 삭제됩니다.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "또는 QR 코드를 스캔하여 선택한 집 참여를 요청하세요",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "또는 QR 코드를 스캔하여 선택한 집 참여를 요청하세요",
   "Email người nhận": "받는 사람 이메일",
   "Mời thành viên bằng mã QR": "QR 코드로 구성원 초대",
   "Tạo một ngôi nhà mới của bạn": "새 집을 만듭니다",
@@ -259,17 +264,21 @@ const Map<String, String> koStrings = {
   "Chế độ áp dụng": "적용 모드",
   "Theo nhà": "집 기준",
   "Riêng tôi": "나만",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "집 소유자 또는 관리자가 설정한 공용 일정을 사용합니다",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "내 계정에만 적용되는 개인 일정을 사용합니다",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "집 소유자 또는 관리자가 설정한 공용 일정을 사용합니다",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "내 계정에만 적용되는 개인 일정을 사용합니다",
   "Thiết lập nhanh báo động": "경보 빠른 설정",
   "Thiết lập nhanh toàn bộ thiết bị": "모든 기기 빠른 설정",
   "Không lặp lại": "반복 없음",
   "Thời gian lặp lại": "반복 시간",
   "Chưa thiết lập": "설정되지 않음",
   "Đã thiết lập": "설정됨",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "리마인더는 선택한 시간에 집의 안전 상태를 확인하도록 알려줍니다.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "리마인더는 선택한 시간에 집의 안전 상태를 확인하도록 알려줍니다.",
   "Thêm nhắc nhở": "리마인더 추가",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "이 작업은 오늘 일부 기기의 경보 시간을 변경합니다...",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "이 작업은 오늘 일부 기기의 경보 시간을 변경합니다...",
   "Cửa đã đóng an toàn": "문이 안전하게 닫힘",
   "Nhiệt độ cao": "온도 높음",
   "Độ ẩm cao": "습도 높음",
@@ -305,8 +314,10 @@ const Map<String, String> koStrings = {
   "Đã rời khỏi nhà": "집에서 나갔습니다",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "공유된 집에서 나가게 됩니다.",
   "Các nhà của bạn sẽ bị xoá.\n": "내 집은 삭제됩니다.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "선택한 집의 모든 보안 기기 경보 일정을 변경합니다.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "선택한 집에 집 리마인더를 추가합니다.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "선택한 집의 모든 보안 기기 경보 일정을 변경합니다.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "선택한 집에 집 리마인더를 추가합니다.\n\n",
   "Xác nhận thay đổi báo động": "경보 변경 확인",
   "Xác nhận thay đổi nhắc nhở": "리마인더 변경 확인",
   "Lặp lại khi sự cố vẫn còn": "문제가 계속되면 반복",
@@ -314,11 +325,14 @@ const Map<String, String> koStrings = {
   "VD: Mr Chung": "예: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 아직 집이 없습니다",
   "Vẫn chuyển về Bình thường": "그래도 일반 모드로 전환",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "외출 시 자동 보호가 아직 켜져 있습니다. 모든 구성원이 아직 외출 중이면 몇 분 후 시스템이 보호 모드를 다시 켤 수 있습니다.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "외출 시 자동 보호가 아직 켜져 있습니다. 모든 구성원이 아직 외출 중이면 몇 분 후 시스템이 보호 모드를 다시 켤 수 있습니다.",
   "Chuyển về Bình thường?": "일반 모드로 전환할까요?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "켜면 보안 기기가 즉시 모니터링됩니다.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "켜면 보안 기기가 즉시 모니터링됩니다.\n\n",
   "Bật Bảo vệ thủ công?": "수동 보호 모드를 켜시겠습니까?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "이 작업은 오늘 일부 기기의 경보 시간을 변경합니다...",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "이 작업은 오늘 일부 기기의 경보 시간을 변경합니다...",
   "Hành động này sẽ tắt toàn bộ báo động của nhà ": "이 작업은 이 집의 모든 경보을 끕니다. ",
   "Tắt toàn bộ báo động?": "모든 경보을 끄시겠습니까?",
   "Không xoá được lịch tạm tắt báo động": "경보 임시 중지 일정을 삭제할 수 없습니다",
@@ -329,9 +343,11 @@ const Map<String, String> koStrings = {
   "Không thể xác nhận tài khoản hiện tại": "현재 계정을 확인할 수 없습니다",
   "Mật khẩu không đúng": "비밀번호가 올바르지 않습니다",
   "Không thể xác nhận mật khẩu": "비밀번호를 확인할 수 없습니다",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "소유자 또는 관리자만 경보 반복 설정을 변경할 수 있습니다",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "소유자 또는 관리자만 경보 반복 설정을 변경할 수 있습니다",
   "Không lưu được thời gian lặp báo động": "경보 반복 시간을 저장할 수 없습니다",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "소유자 또는 관리자만 보호 모드를 변경할 수 있습니다",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "소유자 또는 관리자만 보호 모드를 변경할 수 있습니다",
   "Không thể thay đổi chế độ nhà": "집 모드를 변경할 수 없습니다",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "보호 모드는 켜졌지만 알림을 보낼 수 없습니다",
   "Đã bật Chế độ Bảo vệ thủ công": "수동 보호 모드가 켜졌습니다",
@@ -339,13 +355,15 @@ const Map<String, String> koStrings = {
   "60 phút": "60분",
   "30 phút": "30분",
   "15 phút": "15분",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "집 소유자의 일정을 보고 있습니다. 나만을 선택해 내 경보 일정을 설정하세요.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "집 소유자의 일정을 보고 있습니다. 나만을 선택해 내 경보 일정을 설정하세요.",
   "Chọn giờ kết thúc báo động": "경보 종료 시간 선택",
   "Chọn giờ bắt đầu báo động": "경보 시작 시간 선택",
   "Bạn không có quyền sửa lịch báo động của nhà": "이 집의 경보 일정을 수정할 권한이 없습니다",
   "Không thể áp dụng báo động cho toàn bộ thiết bị": "전체 기기에 경보을 적용할 수 없습니다",
   "Nhà chưa có thiết bị an ninh để áp dụng": "이 집에는 적용할 보안 기기가 없습니다.",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "집 기준 일정을 수정할 권한이 없습니다. 나만을 선택하세요.",
   "Không thể lưu chế độ báo động": "경보 모드를 저장할 수 없습니다",
   "Thêm khung giờ báo động": "경보 시간대 추가",
   "Đang sử dụng nhắc nhở riêng của bạn": "내 리마인더 설정을 사용 중입니다",
@@ -378,9 +396,11 @@ const Map<String, String> koStrings = {
   "Thành viên chưa cập nhật số điện thoại": "이 구성원이 전화번호를 추가하지 않았습니다",
   "Hôm nay đã ghi nhận cảnh báo SOS": "오늘 SOS 경보가 기록되었습니다",
   "Hôm nay đã ghi nhận cảnh báo khói": "오늘 연기 경보가 기록되었습니다",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "수동 보호 모드가 켜져 있습니다. 끄려면 일반 모드로 전환하세요.",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "수동 보호 모드가 켜져 있습니다. 끄려면 일반 모드로 전환하세요.",
   "Thời gian lặp": "반복 시간",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "0을 선택하면 한 번만 알립니다. 이 설정은 수동 보호와 외출 시 자동 보호 모두에 적용됩니다.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "0을 선택하면 한 번만 알립니다. 이 설정은 수동 보호와 외출 시 자동 보호 모두에 적용됩니다.",
   "Lặp báo động khi sự cố vẫn còn": "문제가 계속되면 경보 반복",
   "Đang được sử dụng": "사용 중",
   "Chuyển về sử dụng thông thường": "일반 사용으로 전환",
@@ -388,59 +408,83 @@ const Map<String, String> koStrings = {
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS 기기에 기록된 알림이 없습니다.",
   "Cảm biến khói chưa ghi nhận bất thường.": "연기 감지기가 이상을 감지하지 않았습니다.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "사용자 또는 구성원이 수동으로 보호를 켰습니다.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "집을 떠났기 때문에 SafeHome이 자동으로 보호를 켰습니다.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "집을 떠났기 때문에 SafeHome이 자동으로 보호를 켰습니다.",
   "Nhà đang ở chế độ dùng bình thường.": "이 집은 현재 일반 사용 모드입니다.",
   "Bảo vệ thủ công đang bật": "수동 보호가 켜져 있음",
   "Bảo vệ tự động đang bật": "자동 보호가 켜져 있음",
   "Bảo vệ đang tắt": "보호 모드 꺼짐",
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "최근 앱을 열어 상태를 확인했습니다.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "권한, 일정, 읽지 않은 경고를 확인하기 위해 앱을 정기적으로 여세요.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "몇 번 사용한 후 SafeHome이 앱 확인 습관을 더 잘 평가할 수 있습니다.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "권한, 일정, 읽지 않은 경고를 확인하기 위해 앱을 정기적으로 여세요.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "몇 번 사용한 후 SafeHome이 앱 확인 습관을 더 잘 평가할 수 있습니다.",
   "Tần suất vào ứng dụng ổn": "앱 확인 빈도가 양호합니다",
   "Đã lâu chưa vào ứng dụng kiểm tra": "앱을 확인한 지 오래되었습니다",
   "Đang ghi nhận tần suất vào ứng dụng": "앱 확인 빈도를 기록 중",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "항상 위치 권한과 백그라운드 조건을 확인하세요.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "이 기기는 자동 외출에 필요한 조건을 충족합니다.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "외출 시 보호 모드를 자동으로 켜려면 활성화하세요.",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "항상 위치 권한과 백그라운드 조건을 확인하세요.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "이 기기는 자동 외출에 필요한 조건을 충족합니다.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "외출 시 보호 모드를 자동으로 켜려면 활성화하세요.",
   "Auto rời khỏi nhà chưa ổn": "자동 외출이 준비되지 않음",
   "Auto rời khỏi nhà đã sẵn sàng": "자동 외출 준비됨",
   "Auto rời khỏi nhà chưa bật": "자동 외출이 꺼져 있음",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "집에 맞는 연기 감지기, SOS 또는 긴급 기기를 추가하세요.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "집에 맞는 연기 감지기, SOS 또는 긴급 기기를 추가하세요.",
   "Chưa có thiết bị khẩn cấp": "긴급 기기 없음",
   "Đã có thiết bị khẩn cấp": "긴급 기기가 추가됨",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "수면 시간이나 외출 시간에 경보 일정을 설정하세요.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "이 집에는 경보 일정 또는 기기별 경고 일정이 있습니다.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "수면 시간이나 외출 시간에 경보 일정을 설정하세요.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "이 집에는 경보 일정 또는 기기별 경고 일정이 있습니다.",
   "Chưa cài lịch báo động": "경보 일정이 설정되지 않음",
   "Đã cài lịch báo động": "경보 일정 설정됨",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "집 확인을 잊지 않도록 최소 하나의 리마인더를 설정하세요.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "앱이 설정된 일정에 따라 집 확인을 알려줍니다.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "집 확인을 잊지 않도록 최소 하나의 리마인더를 설정하세요.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "앱이 설정된 일정에 따라 집 확인을 알려줍니다.",
   "Chưa cài đặt nhắc nhở": "리마인더가 설정되지 않음",
   "Đã cài đặt nhắc nhở": "리마인더 설정됨",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "이 기기가 경고를 받지 못하면 앱을 다시 열거나 다시 로그인하세요.",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "이 기기가 경고를 받지 못하면 앱을 다시 열거나 다시 로그인하세요.",
   "Thiết bị chưa đăng ký nhận cảnh báo": "이 기기는 경고 수신 등록이 되어 있지 않습니다",
   "Thiết bị nhận cảnh báo bình thường": "이 기기는 경고를 받을 수 있습니다",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS는 Android보다 백그라운드를 더 엄격하게 관리합니다. 자동 외출을 사용하면 알림과 항상 위치 권한을 켜 두세요.",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS는 Android보다 백그라운드를 더 엄격하게 관리합니다. 자동 외출을 사용하면 알림과 항상 위치 권한을 켜 두세요.",
   "Cơ chế iOS": "iOS 동작 방식",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "경고가 지연되지 않도록 백그라운드 권한과 자동 시작을 확인하세요.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "기기가 중요한 백그라운드 조건을 확인했습니다.",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "경고가 지연되지 않도록 백그라운드 권한과 자동 시작을 확인하세요.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "기기가 중요한 백그라운드 조건을 확인했습니다.",
   "Cần kiểm tra chạy nền / tự khởi động": "백그라운드 실행 / 자동 시작 확인 필요",
   "Chạy nền ổn định": "백그라운드 실행이 안정적입니다",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "일부 Android 휴대폰은 배터리 최적화가 켜져 있으면 경고가 지연될 수 있습니다.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "휴대폰이 SafeHome 경고를 지연할 가능성이 낮습니다.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "일부 Android 휴대폰은 배터리 최적화가 켜져 있으면 경고가 지연될 수 있습니다.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "휴대폰이 SafeHome 경고를 지연할 가능성이 낮습니다.",
   "Chưa tắt tối ưu pin": "배터리 최적화가 아직 켜져 있음",
   "Tối ưu pin không chặn ứng dụng": "배터리 최적화가 앱을 차단하지 않음",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "자동 외출이 안정적으로 작동하려면 항상 위치 권한이 필요합니다.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "자동 외출에는 위치 권한이 필요합니다.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "위치 서비스가 꺼져 있어 자동 외출이 안정적으로 작동하지 않을 수 있습니다.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "자동 외출이 안정적으로 작동하려면 항상 위치 권한이 필요합니다.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "자동 외출에는 위치 권한이 필요합니다.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "위치 서비스가 꺼져 있어 자동 외출이 안정적으로 작동하지 않을 수 있습니다.",
   "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "자동 외출 기능을 사용할 때만 필요합니다.",
   "Chưa cấp vị trí luôn luôn": "항상 위치 권한이 허용되지 않음",
   "Đã cấp vị trí luôn luôn": "항상 위치 권한 허용됨",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS는 Android처럼 전체 화면으로 열리지 않으며 시스템 알림과 소리를 사용합니다.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android는 전체 화면 경고를 사용합니다. 휴대폰이 차단하면 설정에서 허용하세요.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS는 Android처럼 전체 화면으로 열리지 않으며 시스템 알림과 소리를 사용합니다.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android는 전체 화면 경고를 사용합니다. 휴대폰이 차단하면 설정에서 허용하세요.",
   "Cảnh báo trên iOS": "iOS 알림",
   "Cảnh báo toàn màn hình": "전체 화면 경고",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "알림이 꺼져 있으면 경고가 표시되지 않을 수 있습니다.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "이 휴대폰은 SafeHome 알림을 받을 수 있습니다.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "알림이 꺼져 있으면 경고가 표시되지 않을 수 있습니다.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "이 휴대폰은 SafeHome 알림을 받을 수 있습니다.",
   "Chưa bật thông báo": "알림이 꺼져 있음",
   "Đã bật thông báo": "알림이 켜져 있음",
   "Hệ thống: Sẵn sàng": "시스템: 준비됨",
@@ -615,22 +659,33 @@ const Map<String, String> koStrings = {
   "Chưa nhận diện": "인식되지 않음",
   "Mở cài đặt": "설정 열기",
   "Để sau": "나중에",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome은 앱이 백그라운드에서 실행 중일 때도 외출 또는 귀가를 감지하려면 \"항상 허용\" 위치 권한이 필요합니다.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome은 현재 앱을 사용하는 동안에만 위치에 접근할 수 있습니다.\n\n위치 권한을 열고 \"항상 허용\"을 선택하면 외출 시 자동 보호 기능이 백그라운드에서도 계속 작동합니다.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome은 앱이 백그라운드에서 실행 중일 때도 외출 또는 귀가를 감지하려면 \"항상 허용\" 위치 권한이 필요합니다.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome은 현재 앱을 사용하는 동안에만 위치에 접근할 수 있습니다.\n\n위치 권한을 열고 \"항상 허용\"을 선택하면 외출 시 자동 보호 기능이 백그라운드에서도 계속 작동합니다.",
   "Cho phép vị trí luôn luôn": "위치 항상 허용",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "내 집은 삭제됩니다.\n공유된 집에서는 나가게 됩니다.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "선택한 집의 모든 보안 기기 경보 일정을 변경합니다.\n\nAlarm을 집 기준으로 사용하는 구성원이 영향을 받습니다.\n나만 모드의 개인 경보은 변경되지 않습니다.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "선택한 집에 집 리마인더를 추가합니다.\n\nReminder를 집 기준으로 사용하는 구성원이 영향을 받습니다.\n나만 모드의 개인 리마인더는 변경되지 않습니다.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "켜면 보안 기기가 즉시 모니터링됩니다.\n\n외출 시 자동 보호는 일시 중지됩니다. 이 모드는 누군가 집에 돌아와도 자동으로 꺼지지 않으며, 권한이 있는 구성원이 직접 일반 모드로 전환해야 합니다.",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "이 작업은 이 집의 모든 경보을 끕니다. 이 휴대전화에서 위험 알림을 더 이상 받지 않습니다.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "경보이 집 기준 설정을 사용 중입니다.\n\n집 소유자 또는 관리자가 설정한 공용 일정에 따라 알림을 받습니다.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "경보이 나만 설정을 사용 중입니다.\n\n이 계정에 설정된 개인 경보 일정에 따라 알림을 받습니다.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "내 집은 삭제됩니다.\n공유된 집에서는 나가게 됩니다.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "선택한 집의 모든 보안 기기 경보 일정을 변경합니다.\n\nAlarm을 집 기준으로 사용하는 구성원이 영향을 받습니다.\n나만 모드의 개인 경보은 변경되지 않습니다.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "선택한 집에 집 리마인더를 추가합니다.\n\nReminder를 집 기준으로 사용하는 구성원이 영향을 받습니다.\n나만 모드의 개인 리마인더는 변경되지 않습니다.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "켜면 보안 기기가 즉시 모니터링됩니다.\n\n외출 시 자동 보호는 일시 중지됩니다. 이 모드는 누군가 집에 돌아와도 자동으로 꺼지지 않으며, 권한이 있는 구성원이 직접 일반 모드로 전환해야 합니다.",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "이 작업은 이 집의 모든 경보을 끕니다. 이 휴대전화에서 위험 알림을 더 이상 받지 않습니다.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "경보이 집 기준 설정을 사용 중입니다.\n\n집 소유자 또는 관리자가 설정한 공용 일정에 따라 알림을 받습니다.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "경보이 나만 설정을 사용 중입니다.\n\n이 계정에 설정된 개인 경보 일정에 따라 알림을 받습니다.",
   "Không thể đăng nhập bằng Google": "Google로 로그인할 수 없습니다",
   "Không đặt được mật khẩu": "비밀번호를 설정할 수 없습니다",
   "Chấp nhận": "수락",
   "Cho phép": "허용",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "초대를 수락할 수 없습니다. 다시 시도해 주세요.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "집 참여 요청을 수락할 수 없습니다. 다시 시도해 주세요.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "초대를 수락할 수 없습니다. 다시 시도해 주세요.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "집 참여 요청을 수락할 수 없습니다. 다시 시도해 주세요.",
   "Từ chối": "거절",
   "Lời mời từ chủ nhà": "소유자의 초대",
   "Nhận quyền chủ nhà": "집 소유권 받기",
@@ -655,16 +710,23 @@ const Map<String, String> koStrings = {
   "SafeHome Security Alert": "SafeHome 보안 경고",
   "Bạn không có quyền sắp xếp phòng": "방을 정렬할 권한이 없습니다",
   "Chọn giờ kết thúc tạm tắt": "일시 중지 종료 시간 선택",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "아직 기기가 없습니다. 보안을 유지하려면 + 버튼을 눌러 추가하세요",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "앱 설정에서 위치 권한을 항상 허용으로 선택하세요",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "아직 기기가 없습니다. 보안을 유지하려면 + 버튼을 눌러 추가하세요",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "앱 설정에서 위치 권한을 항상 허용으로 선택하세요",
   "Không có nhà nào bạn có quyền quản lý": "관리 권한이 있는 집이 없습니다",
   "Không tìm thấy thành viên phù hợp": "일치하는 구성원을 찾을 수 없습니다",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "다른 사람이 이 코드를 스캔하여 집 가입 요청을 보낼 수 있습니다.",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "이 집과 안의 모든 기기가 영구적으로 삭제됩니다.",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google 계정은 보안 기능을 사용하려면 추가 비밀번호를 만들어야 합니다.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "다른 사람이 이 코드를 스캔하여 집 가입 요청을 보낼 수 있습니다.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "이 집과 안의 모든 기기가 영구적으로 삭제됩니다.",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google 계정은 보안 기능을 사용하려면 추가 비밀번호를 만들어야 합니다.",
   "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "이 이름은 내 계정에만 표시됩니다.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "이름과 주소가 집의 모든 구성원에게 업데이트됩니다.",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "이 방의 기기는 미분류로 이동됩니다.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "이름과 주소가 집의 모든 구성원에게 업데이트됩니다.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "이 방의 기기는 미분류로 이동됩니다.",
   "Tìm nội dung hoặc tên người gửi": "내용 또는 보낸 사람 이름 검색",
   "⏸️ Tạm tắt báo động hôm nay": "⏸️ 오늘 경보 일시 중지",
   "Bấm vào để xem chi tiết": "탭하여 상세 보기",
@@ -730,28 +792,36 @@ const Map<String, String> koStrings = {
   "Đã tạo nhà": "집을 만들었습니다",
   "Chế độ Bảo vệ thủ công đã bật": "수동 보호 모드가 켜졌습니다",
   "Báo động không lặp lại.": "알람은 반복되지 않습니다.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "문제가 계속되면 \$securityModeRepeatMinutes분 후 알람이 반복됩니다.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName님이 \"\$homeName\"의 수동 보호 모드를 켰습니다. 이 모드는 권한이 있는 구성원이 일반 모드로 전환해야 꺼집니다. \$repeatMessage",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "문제가 계속되면 \$securityModeRepeatMinutes분 후 알람이 반복됩니다.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName님이 \"\$homeName\"의 수동 보호 모드를 켰습니다. 이 모드는 권한이 있는 구성원이 일반 모드로 전환해야 꺼집니다. \$repeatMessage",
   "Bạn đã bật báo động cho nhà \"\$homeName\".": "\"\$homeName\"의 경보을 켰습니다.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "\"\$homeName\"의 모든 경보을 껐습니다.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "\"\$homeName\"의 모든 경보을 껐습니다.",
   "Thành viên mới": "새 구성원",
   "Thành viên rời nhà": "구성원이 집을 나갔습니다",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName님이 \"\$homeName\"에서 나갔습니다.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName님이 \"\$homeName\"에서 \$memberName님의 역할을 변경했습니다. 이전 역할: \$oldRoleName, 새 역할: \$newRoleName.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName님이 \"\$homeName\"에서 나갔습니다.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName님이 \"\$homeName\"에서 \$memberName님의 역할을 변경했습니다. 이전 역할: \$oldRoleName, 새 역할: \$newRoleName.",
   "Còn \$count tin nhắn chưa đọc": "읽지 않은 메시지 \$count개",
   "Hãy an tâm nghỉ ngơi.": "안심하셔도 됩니다.",
   "Có thiết bị chưa an toàn.": "일부 기기가 안전하지 않습니다.",
   "SafeHome đang cập nhật vị trí": "SafeHome이 위치를 업데이트 중입니다",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "보호 모드를 자동으로 켜기 위해 모니터링 중입니다.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "모두가 집을 떠나면 위치를 사용해 보호 모드를 자동으로 켭니다.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "모두가 집을 떠나면 위치를 사용해 보호 모드를 자동으로 켭니다.",
   "CẢNH BÁO SOS": "SOS 경고",
   "CẢNH BÁO KHÓI / CHÁY": "연기/화재 경고",
   "CẢNH BÁO NGẬP NƯỚC": "침수 경고",
   "CẢNH BÁO RÒ KHÍ": "가스 누출 경고",
   "CẢNH BÁO CỬA": "문 경고",
   "CẢNH BÁO AN NINH": "보안 경고",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "SafeHome에서 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "집 상태를 확인한 후에만 경고를 중지하세요.\n\n경고를 중지하시겠습니까?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "SafeHome에서 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "집 상태를 확인한 후에만 경고를 중지하세요.\n\n경고를 중지하시겠습니까?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome이 경고를 감지했습니다",
   "Mở SafeHome để kiểm tra ngay.": "SafeHome을 열어 지금 확인하세요.",
   "\$count tin nhắn mới": "새 메시지 \$count개",
@@ -759,52 +829,81 @@ const Map<String, String> koStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName님이 메시지를 보냈습니다",
   "Bạn có tin nhắn mới": "새 메시지가 있습니다",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "보호 모드는 한 번만 경고합니다",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "보호 모드는 \$minutes분 후 경고를 반복합니다",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "보호 모드는 \$minutes분 후 경고를 반복합니다",
   "Đã gửi yêu cầu gia nhập \$count nhà": "\$count개 집에 참여 요청을 보냈습니다",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName님이 \"\$homeName\" 참여를 요청했습니다.",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName님이 \"\$homeName\" 참여를 요청했습니다.",
   "Bạn đã xoá nhà \"\$homeName\".": "\"\$homeName\"을 삭제했습니다.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "\$email님에게 \"\$homeName\" 소유권 이전 요청을 보냈습니다.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName님이 \"\$homeName\"의 소유권을 회원님에게 이전하려고 합니다.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName님이 \"\$homeName\"에 초대했습니다.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome이 \"\$homeName\"에서 \"\$deviceName\"을 제거하는 중입니다.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "기기 \"\$deviceName\"이 \"\$homeName\"에 추가되었습니다.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "\$email님에게 \"\$homeName\" 소유권 이전 요청을 보냈습니다.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName님이 \"\$homeName\"의 소유권을 회원님에게 이전하려고 합니다.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName님이 \"\$homeName\"에 초대했습니다.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome이 \"\$homeName\"에서 \"\$deviceName\"을 제거하는 중입니다.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "기기 \"\$deviceName\"이 \"\$homeName\"에 추가되었습니다.",
   "Bạn đã tạo nhà \"\$name\".": "\"\$name\" 집을 만들었습니다.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName님이 집 이름을 \"\$newName\"로 업데이트하고 주소를 변경했습니다.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName님이 집 이름을 변경했습니다. 새 이름은 \"\$newName\"입니다.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName님이 \"\$newName\"의 주소를 업데이트했습니다.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName님이 \"\$homeName\"에서 기기 \"\$oldDeviceName\"의 이름을 변경했습니다. 새 이름은 \"\$newName\"입니다.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName님이 집 이름을 \"\$newName\"로 업데이트하고 주소를 변경했습니다.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName님이 집 이름을 변경했습니다. 새 이름은 \"\$newName\"입니다.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName님이 \"\$newName\"의 주소를 업데이트했습니다.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName님이 \"\$homeName\"에서 기기 \"\$oldDeviceName\"의 이름을 변경했습니다. 새 이름은 \"\$newName\"입니다.",
   "Đang ghép nối: \$seconds giây": "페어링 중: \$seconds초",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "\"\$homeName\"에서 \$seconds초 동안 기기 추가 모드가 켜졌습니다.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "일시 중지 시간은 경보 일정 범위(\$start → \$end) 안이어야 합니다",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "\"\$homeName\"에서 \$seconds초 동안 기기 추가 모드가 켜졌습니다.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "일시 중지 시간은 경보 일정 범위(\$start → \$end) 안이어야 합니다",
   "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total개 테스트 통과\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name님이 프로필에 전화번호를 추가하지 않았습니다.",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name님이 프로필에 전화번호를 추가하지 않았습니다.",
   "Tin nhắn mới trong \$homeName": "\$homeName의 새 메시지",
   "\$current/\$total kết quả": "\$current/\$total 결과",
   "Đang trả lời \$name": "\$name님에게 답장 중",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 연기를 감지했습니다.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 연기를 감지했습니다.",
   "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\"이 정상 상태로 돌아왔습니다.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 SOS를 작동했습니다.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 SOS를 작동했습니다.",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\"의 SOS 상태가 해제되었습니다.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 분리/조작을 보고했습니다.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 분리/조작을 보고했습니다.",
   "\"\$name\" đã hết cảnh báo tháo/cạy.": "\"\$name\"의 분리/조작 경고가 해제되었습니다.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 닫혔습니다.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 열려 있습니다.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "\"\$homeName\"의 \"\$name\" 배터리가 부족합니다.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "\"\$homeName\"의 \"\$name\"이 오프라인 상태가 되었습니다.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "\"\$homeName\"의 \"\$name\"이 다시 온라인 상태입니다.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 높은 온도를 기록했습니다.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\"이 \"\$homeName\"에서 높은 습도를 기록했습니다.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 닫혔습니다.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 열려 있습니다.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "\"\$homeName\"의 \"\$name\" 배터리가 부족합니다.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "\"\$homeName\"의 \"\$name\"이 오프라인 상태가 되었습니다.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "\"\$homeName\"의 \"\$name\"이 다시 온라인 상태입니다.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 높은 온도를 기록했습니다.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\"이 \"\$homeName\"에서 높은 습도를 기록했습니다.",
   "Có nút SOS vừa được kích hoạt": "SOS 버튼이 작동되었습니다",
   "Có dấu hiệu khói hoặc cháy": "연기 또는 화재가 감지되었습니다",
   "Có dấu hiệu ngập nước": "침수가 감지되었습니다",
   "Có dấu hiệu rò khí": "가스 누출이 감지되었습니다",
   "Có cửa đang mở hoặc thiết bị bị tháo": "문이 열려 있거나 기기가 분리/조작되었습니다",
   "Có thiết bị đang cảnh báo": "경고 중인 기기가 있습니다",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "아무도 확인하지 않으면 SafeHome이 긴급 전화로 전환합니다.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "문제가 처리되지 않으면 \$time에 다시 알립니다.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "문제가 처리되지 않으면 경보 일정에 따라 다시 알립니다.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\"이 \"\$resolvedHomeName\"에서 닫혔습니다.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\"이 \"\$resolvedHomeName\"에서 열려 있습니다.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "아무도 확인하지 않으면 SafeHome이 긴급 전화로 전환합니다.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "문제가 처리되지 않으면 \$time에 다시 알립니다.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "문제가 처리되지 않으면 경보 일정에 따라 다시 알립니다.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\"이 \"\$resolvedHomeName\"에서 닫혔습니다.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\"이 \"\$resolvedHomeName\"에서 열려 있습니다.",
   "\$count nhà đã chọn": "\$count개 집 선택됨",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 안전하지 않은 집 \$count개\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ 주의가 필요한 집 \$count개\$suffix",
@@ -812,10 +911,14 @@ const Map<String, String> koStrings = {
   "\$count nhà đang được theo dõi": "\$count개 집을 모니터링 중",
   "\$minutes phút": "\$minutes분",
   "Đã cài nhắc nhở cho \$updatedHomes nhà.": "\$updatedHomes개 집에 리마인더를 설정했습니다.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "\$updatedHomes개 집의 \$updatedDevices개 기기에 경보을 설정했습니다.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "관리 중인 집이 공유되었습니다.\n\n공유 권한이 없어 \$skipped개 집은 건너뛰었습니다.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "\$count개 보안 기기에 경보이 적용되었습니다",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "\$count개 보안 기기에 같은 일정을 적용",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "\$updatedHomes개 집의 \$updatedDevices개 기기에 경보을 설정했습니다.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "관리 중인 집이 공유되었습니다.\n\n공유 권한이 없어 \$skipped개 집은 건너뛰었습니다.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "\$count개 보안 기기에 경보이 적용되었습니다",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "\$count개 보안 기기에 같은 일정을 적용",
   "\$count phút trước": "\$count분 전",
   "\$count giờ trước": "\$count시간 전",
   "\${count}h trước": "\${count}시간 전",
@@ -823,24 +926,38 @@ const Map<String, String> koStrings = {
   "\$count ngày trước": "\$count일 전",
   "\$count tháng trước": "\$count개월 전",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "\$name님을 이 집에서 삭제하시겠습니까?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\n\"\$homeName\" 참여 요청",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\n\"\$homeName\" 참여 요청",
   "Xin gia nhập \"\$homeName\"": "\"\$homeName\" 참여 요청",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "\"\$homeName\"의 소유권을 받도록 초대되었습니다",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\n\"\$homeName\"에 초대합니다",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "\"\$homeName\"의 소유권을 받도록 초대되었습니다",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\n\"\$homeName\"에 초대합니다",
   "Mời bạn gia nhập \"\$homeName\"": "\"\$homeName\"에 초대합니다",
   "Cần kiểm tra: \$joined": "확인 필요: \$joined",
   "Cập nhật \$value": "업데이트됨: \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "첫 SafeHome 기기를 추가해 이 집 모니터링을 시작하세요.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "먼저 긴급 경고를 확인한 뒤 필요하면 집 구성원에게 연락하세요.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "집에 구성원이 없지만 문이나 잠금장치가 열려 있습니다. 지금 확인하세요.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "이 집을 보호 모드로 유지하기 전에 열린 문이나 잠금을 확인하세요.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "아직 집에 사람이 있을 수 있습니다. 그렇다면 일반 모드로 전환하세요.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "일부 구성원의 위치를 알 수 없습니다. 앱을 열거나 위치 권한을 확인하도록 안내하세요.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "기기 연결이 끊겼습니다. 배터리, 전원 또는 설치 위치를 확인하세요.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "배터리가 부족한 기기가 있습니다. 알림을 놓치지 않도록 곧 배터리를 교체하세요.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "리마인더가 설정되지 않았습니다. 집을 정기적으로 확인할 일정을 만드세요.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "경보 일정이 설정되지 않았습니다. 평소 집을 비우는 시간대에 보호를 켜세요.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "즉시 조치할 필요는 없습니다. 이 집을 계속 모니터링하세요.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "첫 SafeHome 기기를 추가해 이 집 모니터링을 시작하세요.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "먼저 긴급 경고를 확인한 뒤 필요하면 집 구성원에게 연락하세요.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "집에 구성원이 없지만 문이나 잠금장치가 열려 있습니다. 지금 확인하세요.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "이 집을 보호 모드로 유지하기 전에 열린 문이나 잠금을 확인하세요.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "아직 집에 사람이 있을 수 있습니다. 그렇다면 일반 모드로 전환하세요.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "일부 구성원의 위치를 알 수 없습니다. 앱을 열거나 위치 권한을 확인하도록 안내하세요.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "기기 연결이 끊겼습니다. 배터리, 전원 또는 설치 위치를 확인하세요.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "배터리가 부족한 기기가 있습니다. 알림을 놓치지 않도록 곧 배터리를 교체하세요.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "리마인더가 설정되지 않았습니다. 집을 정기적으로 확인할 일정을 만드세요.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "경보 일정이 설정되지 않았습니다. 평소 집을 비우는 시간대에 보호를 켜세요.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "즉시 조치할 필요는 없습니다. 이 집을 계속 모니터링하세요.",
   "Lặp sau \$minutes phút": "\$minutes분 후 반복",
   "Đang dùng • \$repeatText": "활성 • \$repeatText",
   "Giám sát an ninh • \$repeatText": "보안 모니터링 • \$repeatText",
@@ -851,15 +968,20 @@ const Map<String, String> koStrings = {
   "Đã ghi nhận \$count hoạt động gần đây": "최근 활동 \$count건이 기록되었습니다",
   "Hệ thống: Cần kiểm tra \$issueCount mục": "시스템: \$issueCount개 항목 확인 필요",
   "FCM token đã sẵn sàng trên điện thoại này.": "이 휴대폰의 FCM 토큰이 준비되었습니다.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM 토큰은 준비되었지만 자동 외출에 필요한 조건이 부족합니다.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "긴급 기기 \$emergencyTotal개가 발견되었습니다. 권장 최소 구성: 연기 센서와 SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "집 소유권을 다음 계정으로 이전하시겠습니까:\n\$targetEmail?",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM 토큰은 준비되었지만 자동 외출에 필요한 조건이 부족합니다.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "긴급 기기 \$emergencyTotal개가 발견되었습니다. 권장 최소 구성: 연기 센서와 SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "집 소유권을 다음 계정으로 이전하시겠습니까:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "문 \$count개가 안전하게 닫혔습니다",
   "\$count cửa và khóa đã an toàn": "문과 잠금장치 \$count개가 안전합니다",
   "\$count thiết bị đang được theo dõi": "\$count개 기기를 모니터링 중",
   "Cập nhật \$timeText": "\$timeText 업데이트됨",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "최신 데이터가 \$count분 전에 업데이트되었습니다",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "최신 데이터가 \$count시간 전에 업데이트되었습니다",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "최신 데이터가 \$count분 전에 업데이트되었습니다",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "최신 데이터가 \$count시간 전에 업데이트되었습니다",
   "Thành viên trong nhà: \$count": "집에 있는 구성원: \$count",
   "Thành viên bên ngoài: \$count": "외출 중인 구성원: \$count",
   "Chưa xác định vị trí: \$count": "위치 알 수 없음: \$count",
@@ -875,9 +997,11 @@ const Map<String, String> koStrings = {
   "Giờ bắt đầu và kết thúc không được trùng nhau": "시작 시간과 종료 시간은 같을 수 없습니다",
   "Giờ kết thúc phải sau thời điểm hiện tại": "종료 시간은 현재 시간 이후여야 합니다",
   "Khoảng tạm tắt không hợp lệ": "경보 일시 중지 범위가 올바르지 않습니다",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "일시 중지 범위가 활성화된 경보 일정과 겹치지 않습니다",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "일시 중지 범위가 활성화된 경보 일정과 겹치지 않습니다",
   "Cài đặt báo động": "경보 설정",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "이 센서가 경보를 작동하는 방식을 설정합니다.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "이 센서가 경보를 작동하는 방식을 설정합니다.",
   "Tham gia báo động": "알람에 참여",
   "Tắt để cảm biến không tạo báo động.": "끄면 이 센서가 경보을 생성하지 않습니다.",
   "Bật còi vật lý": "실내 사이렌 켜기",
@@ -891,7 +1015,8 @@ const Map<String, String> koStrings = {
   "giây": "초",
   "Đã lưu cấu hình báo động": "알람 설정을 저장했습니다",
   "Không thể lưu cấu hình báo động": "알람 설정을 저장할 수 없습니다",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "집 소유자와 관리자만 이 설정을 변경할 수 있습니다.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "집 소유자와 관리자만 이 설정을 변경할 수 있습니다.",
   "Thông tin chi tiết": "기기 상세 정보",
   "Thông báo báo động": "경보 알림",
   "Cài đặt nhắc nhở": "리마인더 설정",
@@ -900,19 +1025,23 @@ const Map<String, String> koStrings = {
   "Cài đặt thông báo": "알림 설정",
   "Sử dụng báo động theo lịch đã thiết lập": "설정된 경보 일정 사용",
   "Chỉ gửi thông báo, không kích hoạt báo động": "알림만 보내고 경보는 작동하지 않음",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "집의 모든 경보가 꺼져 있습니다. 시스템은 알림만 보냅니다.",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "집의 모든 경보가 꺼져 있습니다. 시스템은 알림만 보냅니다.",
   "Chỉ Chủ nhà có thể bật chế độ này.": "소유자만 이 모드를 켤 수 있습니다.",
   "Bật Không bảo vệ?": "보호 안 함 모드를 켜시겠어요?",
   "Cảm biến vừa phát hiện một sự kiện.": "센서가 방금 이벤트를 감지했습니다.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "소유자만 보호 안 함 모드를 켤 수 있습니다",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "소유자만 보호 안 함 모드를 켤 수 있습니다",
   "Đã chuyển nhà sang Không bảo vệ": "집이 보호 안 함 모드로 전환되었습니다",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "보호 안 함 모드로 전환했지만 알림을 보내지 못했습니다",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "보호 안 함 모드로 전환했지만 알림을 보내지 못했습니다",
   "Giám sát toàn diện": "전체 모니터링",
   "Không bảo vệ": "보호 안 함",
   "Không bảo vệ đang bật": "보호 안 함 모드가 켜져 있습니다",
   "Nhà đã chuyển sang Không bảo vệ": "집이 보호 안 함 모드로 전환되었습니다",
   "Thông báo cảm biến": "센서 알림",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "센서가 이벤트를 감지할 때 보내는 일반 알림입니다.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "센서가 이벤트를 감지할 때 보내는 일반 알림입니다.",
   "Tôi hiểu, tiếp tục": "이해했습니다. 계속",
   "Cảnh báo an ninh đã kết thúc": "보안 경고가 종료됨",
   "Sự cố nguy hiểm đã kết thúc": "긴급 위험 상황이 종료됨",
@@ -934,34 +1063,44 @@ const Map<String, String> koStrings = {
   "Nhà đang ở chế độ Bình thường.": "집이 일반 모드입니다.",
   "Pin thiết bị đã ổn định": "기기 배터리 상태가 안정됨",
   "Hub đã kết nối trở lại": "Hub가 다시 연결됨",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "일반 모드로 전환했지만 알림을 보내지 못했습니다",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "일반 모드로 전환했지만 알림을 보내지 못했습니다",
   "Chung cho nhà": "집 전체",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "모든 구성원에게 적용되며 실물 사이렌을 켤 수 있습니다.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "모든 구성원에게 적용되며 실물 사이렌을 켤 수 있습니다.",
   "Cá nhân": "개인",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "개인 일정은 독립적으로 작동하며 실물 사이렌을 켜지 않습니다.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "개인 일정은 독립적으로 작동하며 실물 사이렌을 켜지 않습니다.",
   "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "이 설정은 내 계정에만 적용됩니다.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "소유자와 관리자만 집 전체 설정을 변경할 수 있습니다.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "소유자와 관리자만 집 전체 설정을 변경할 수 있습니다.",
   "Tham gia hệ thống báo động": "경보 시스템 참여",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "긴급 센서는 항상 경보 시스템에 참여합니다.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "긴급 센서는 항상 경보 시스템에 참여합니다.",
   "Tắt để thiết bị không tạo bất kỳ báo động nào.": "끄면 이 기기에서 경보가 생성되지 않습니다.",
   "Lịch báo động chung": "집 전체 경보 일정",
   "Lịch báo động cá nhân": "개인 경보 일정",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "내 휴대전화에 전체 화면 경보를 표시합니다.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "내 휴대전화에 전체 화면 경보를 표시합니다.",
   "Lặp lại cảnh báo": "경보 반복",
   "Báo động chung": "집 전체 경보",
   "Báo động cá nhân": "개인 경보",
   "Đã cài đặt": "설정됨",
   "Chưa cài đặt": "설정되지 않음",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "집 전체 일정과 개인 일정이 동시에 작동하므로 하나를 선택할 필요가 없습니다.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "집 전체 일정과 개인 일정이 동시에 작동하므로 하나를 선택할 필요가 없습니다.",
   "Cài nhanh chung": "집 전체 빠른 설정",
   "Cài nhanh cá nhân": "개인 빠른 설정",
   "Thiết lập nhanh lịch cá nhân": "개인 일정 빠른 설정",
   "Thiết lập nhanh lịch chung": "집 전체 일정 빠른 설정",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "이 일정은 나에게만 적용되며 실물 사이렌을 켜지 않습니다.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "이 일정은 집의 모든 구성원에게 적용됩니다.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "이 일정은 나에게만 적용되며 실물 사이렌을 켜지 않습니다.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "이 일정은 집의 모든 구성원에게 적용됩니다.",
   "Đã áp dụng lịch báo động": "경보 일정 적용됨",
   "Không thể lưu lịch báo động": "경보 일정을 저장할 수 없습니다",
   "Nhà chưa có thiết bị an ninh": "이 집에는 보안 기기가 없습니다",
   "Nhận cảnh báo theo lịch chung của nhà": "집 공용 일정의 경고 받기",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "끄면 공용 일정의 알림과 전체 화면 경고를 받지 않습니다. 집의 실물 사이렌은 계속 작동합니다.",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "끄면 공용 일정의 알림과 전체 화면 경고를 받지 않습니다. 집의 실물 사이렌은 계속 작동합니다.",
 };

@@ -25,6 +25,25 @@ class NotificationService {
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
       ValueNotifier<Map<String, String>?>(null);
 
+  static String homeChatPayload({
+    required String homeId,
+    required String homeName,
+    required String ownerUid,
+    required String messageId,
+  }) {
+    return 'home_chat::${jsonEncode({"homeId": homeId, "homeName": homeName, "ownerUid": ownerUid, "messageId": messageId})}';
+  }
+
+  static int homeChatNotificationId(String homeId) {
+    var hash = 0;
+
+    for (final codeUnit in homeId.codeUnits) {
+      hash = ((hash * 31) + codeUnit) & 0x7fffffff;
+    }
+
+    return 200000 + (hash % 700000);
+  }
+
   static String localizedExactTextOrRaw(String raw, AppStrings strings) {
     final clean = raw.trim();
 
@@ -65,7 +84,7 @@ class NotificationService {
 
     _activeHomeChatId = cleanHomeId;
 
-    unawaited(localNotif.cancel(_chatNotificationId(cleanHomeId)));
+    unawaited(localNotif.cancel(homeChatNotificationId(cleanHomeId)));
   }
 
   static void markHomeChatClosed(String homeId) {
@@ -188,8 +207,7 @@ class NotificationService {
     }
 
     final homeName = data['homeName']?.toString().trim() ?? '';
-    final deviceName =
-        data['deviceName']?.toString().trim().isNotEmpty == true
+    final deviceName = data['deviceName']?.toString().trim().isNotEmpty == true
         ? data['deviceName'].toString().trim()
         : data['name']?.toString().trim() ?? '';
     final reason = data['reason']?.toString().trim().isNotEmpty == true
@@ -802,6 +820,7 @@ class NotificationService {
         final context = appNavigatorKey.currentContext;
 
         if (context == null) return;
+        if (!context.mounted) return;
 
         showTopToast(
           context,
@@ -910,7 +929,6 @@ class NotificationService {
     );
   }
 
-
   /// iOS chỉ đưa ứng dụng lên foreground sau khi người dùng chạm notification.
   /// Mở ngay dữ liệu trong payload để phản hồi nhanh, sau đó đồng bộ toàn bộ
   /// incident đang active của tài khoản để giữ đúng mô hình gom nhiều nhà và
@@ -959,7 +977,8 @@ class NotificationService {
         }
 
         final incident = Map<String, dynamic>.from(rawIncident);
-        final status = incident['status']?.toString().trim().toLowerCase() ?? '';
+        final status =
+            incident['status']?.toString().trim().toLowerCase() ?? '';
 
         if (status != 'active') {
           continue;
@@ -1121,26 +1140,20 @@ class NotificationService {
 
     final iosDetails = IosNotificationConfig.chatDetails(homeId: homeId);
 
-    final payload =
-        "home_chat::${jsonEncode({"homeId": homeId, "homeName": homeName, "ownerUid": data["ownerUid"]?.toString() ?? "", "messageId": data["messageId"]?.toString() ?? ""})}";
+    final payload = homeChatPayload(
+      homeId: homeId,
+      homeName: homeName,
+      ownerUid: data["ownerUid"]?.toString() ?? "",
+      messageId: data["messageId"]?.toString() ?? "",
+    );
 
     await localNotif.show(
-      _chatNotificationId(homeId),
+      homeChatNotificationId(homeId),
       title,
       body,
       NotificationDetails(android: androidDetails, iOS: iosDetails),
       payload: payload,
     );
-  }
-
-  static int _chatNotificationId(String homeId) {
-    var hash = 0;
-
-    for (final codeUnit in homeId.codeUnits) {
-      hash = ((hash * 31) + codeUnit) & 0x7fffffff;
-    }
-
-    return 200000 + (hash % 700000);
   }
 
   static Future<void> stopAlarmNotification() async {
@@ -1344,13 +1357,34 @@ class NotificationService {
         .whenComplete(markReminderPageClosed);
   }
 
-  static Future<void> init() async {
+  static Future<void>? _initializationFuture;
+
+  static Future<void> init() {
+    final existingFuture = _initializationFuture;
+
+    if (existingFuture != null) {
+      return existingFuture;
+    }
+
+    late final Future<void> future;
+    future = _initInternal().catchError((Object error, StackTrace stackTrace) {
+      if (identical(_initializationFuture, future)) {
+        _initializationFuture = null;
+      }
+
+      Error.throwWithStackTrace(error, stackTrace);
+    });
+    _initializationFuture = future;
+
+    return future;
+  }
+
+  static Future<void> _initInternal() async {
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
       badge: true,
       sound: true,
-      criticalAlert:
-          IosNotificationConfig.criticalAlertsEntitlementEnabled,
+      criticalAlert: IosNotificationConfig.criticalAlertsEntitlementEnabled,
     );
 
     // [iOS] Tắt hiển thị APNs tự động khi app đang foreground.
@@ -1513,10 +1547,7 @@ class NotificationService {
     ].join('|');
   }
 
-  static void _addAlarmItems(
-    String alarmItemsJson, {
-    String incidentId = '',
-  }) {
+  static void _addAlarmItems(String alarmItemsJson, {String incidentId = ''}) {
     try {
       final decoded = jsonDecode(alarmItemsJson);
 

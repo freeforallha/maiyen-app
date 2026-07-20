@@ -894,9 +894,7 @@ class _StatusPanelState extends State<StatusPanel> {
       liveOverall["presenceWarnings"] ?? const [],
     );
 
-    final emergencyIssues = rawEmergencyIssues
-        .map(strings.statusText)
-        .toList();
+    final emergencyIssues = rawEmergencyIssues.map(strings.statusText).toList();
 
     final dangerIssues = rawDangerIssues.map(strings.statusText).toList();
 
@@ -1182,9 +1180,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     return StreamBuilder<DatabaseEvent>(
       stream: FirebaseDatabase.instance
-          .ref(
-            "accounts/$cleanOwnerUid/homes/$cleanHomeId/devices",
-          )
+          .ref("accounts/$cleanOwnerUid/homes/$cleanHomeId/devices")
           .onValue,
       builder: (context, snapshot) {
         final devices = safeMap(snapshot.data?.snapshot.value);
@@ -1194,10 +1190,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
         for (final value in devices.values) {
           final device = safeMap(value);
-          final type = device["type"]
-              ?.toString()
-              .trim()
-              .toLowerCase();
+          final type = device["type"]?.toString().trim().toLowerCase();
 
           if (type != "siren") {
             continue;
@@ -1228,12 +1221,7 @@ class _StatusPanelState extends State<StatusPanel> {
     required Color color,
     required IconData icon,
   }) {
-    showTopToast(
-      context,
-      message,
-      color: color,
-      icon: icon,
-    );
+    showTopToast(context, message, color: color, icon: icon);
   }
 
   Future<void> _handleQuickSirenTap({
@@ -1294,9 +1282,7 @@ class _StatusPanelState extends State<StatusPanel> {
         final color = !hasSiren
             ? SafeHomeColors.textSecondary
             : sirenActive
-            ? (dangerPhase
-                  ? SafeHomeColors.danger
-                  : SafeHomeColors.warning)
+            ? (dangerPhase ? SafeHomeColors.danger : SafeHomeColors.warning)
             : !sirenConnected
             ? SafeHomeColors.warning
             : SafeHomeColors.safe;
@@ -1314,10 +1300,10 @@ class _StatusPanelState extends State<StatusPanel> {
                 onTap: _mutingHomeSiren
                     ? null
                     : () => _handleQuickSirenTap(
-                          hasSiren: hasSiren,
-                          sirenActive: sirenActive,
-                          sirenConnected: sirenConnected,
-                        ),
+                        hasSiren: hasSiren,
+                        sirenActive: sirenActive,
+                        sirenConnected: sirenConnected,
+                      ),
                 borderRadius: BorderRadius.circular(9),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 320),
@@ -1327,9 +1313,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(9),
                     border: Border.all(
-                      color: color.withValues(
-                        alpha: sirenActive ? 0.82 : 0.36,
-                      ),
+                      color: color.withValues(alpha: sirenActive ? 0.82 : 0.36),
                       width: sirenActive ? 1.15 : 1,
                     ),
                   ),
@@ -1372,10 +1356,7 @@ class _StatusPanelState extends State<StatusPanel> {
       onTap: widget.onEnvironmentTap,
       borderRadius: BorderRadius.circular(8),
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 2,
-          vertical: 3,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1567,163 +1548,159 @@ class _StatusPanelState extends State<StatusPanel> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(statusIcon, color: statusColor, size: 19),
-                    const SizedBox(width: 7),
-                    Expanded(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(statusIcon, color: statusColor, size: 19),
+                        const SizedBox(width: 7),
+                        Expanded(
+                          child: Text(
+                            statusText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              height: 1,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -0.2,
+                              color: statusColor,
+                            ),
+                          ),
+                        ),
+                        _buildEnvironmentAction(environment),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 43),
                       child: Text(
-                        statusText,
+                        subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 18,
-                          height: 1,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -0.2,
-                          color: statusColor,
-                        ),
-                      ),
-                    ),
-                    _buildEnvironmentAction(environment),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.only(right: 43),
-                  child: Text(
-                    subtitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12.2,
-                      height: 1.15,
-                      fontWeight: FontWeight.w800,
-                      color: issues.isNotEmpty
-                          ? statusColor
-                          : SafeHomeColors.textSecondary,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.only(right: 43),
-                  child: _statusLine(
-                    text: displayFirstLine,
-                    color: emergencyStatus
-                        ? statusColor
-                        : manualSecurityMode
-                        ? SafeHomeColors.danger
-                        : issues.isNotEmpty
-                        ? statusColor
-                        : SafeHomeColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
-                  child: Row(
-                    key: ValueKey(displaySecondLine),
-                    children: [
-                      Container(
-                        width: 5,
-                        height: 5,
-                        decoration: BoxDecoration(
+                          fontSize: 12.2,
+                          height: 1.15,
+                          fontWeight: FontWeight.w800,
                           color: issues.isNotEmpty
                               ? statusColor
                               : SafeHomeColors.textSecondary,
-                          shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 7),
-                      Expanded(
-                        child: Text(
-                          displaySecondLineWithHint,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
-                            height: 1.15,
-                            color: issues.isNotEmpty
-                                ? statusColor
-                                : SafeHomeColors.textSecondary,
-                            fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 43),
+                      child: _statusLine(
+                        text: displayFirstLine,
+                        color: emergencyStatus
+                            ? statusColor
+                            : manualSecurityMode
+                            ? SafeHomeColors.danger
+                            : issues.isNotEmpty
+                            ? statusColor
+                            : SafeHomeColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: Row(
+                        key: ValueKey(displaySecondLine),
+                        children: [
+                          Container(
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: issues.isNotEmpty
+                                  ? statusColor
+                                  : SafeHomeColors.textSecondary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 7),
+                          Expanded(
+                            child: Text(
+                              displaySecondLineWithHint,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                height: 1.15,
+                                color: issues.isNotEmpty
+                                    ? statusColor
+                                    : SafeHomeColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    const SizedBox(height: 9),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _alarmStatusItem(
+                            icon: normalizedSecurityMode == "unprotected"
+                                ? Icons.shield_outlined
+                                : Icons.shield_rounded,
+                            value: normalizedSecurityMode == "armed"
+                                ? _strings.t("Bảo vệ")
+                                : normalizedSecurityMode == "unprotected"
+                                ? _strings.t("Không bảo vệ")
+                                : _strings.t("Bình thường"),
+                            secondaryValue: normalizedSecurityMode == "armed"
+                                ? _strings.armedSecurityModeSourceDetailLabel(
+                                    widget.securityModeSource,
+                                  )
+                                : null,
+                            active: normalizedSecurityMode != "normal",
+                            activeColor: normalizedSecurityMode == "unprotected"
+                                ? SafeHomeColors.warning
+                                : SafeHomeColors.danger,
+                            onTap: () => _showSecurityModeOptions(context),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-
-                const SizedBox(height: 9),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: normalizedSecurityMode == "unprotected"
-                            ? Icons.shield_outlined
-                            : Icons.shield_rounded,
-                        value: normalizedSecurityMode == "armed"
-                            ? _strings.t("Bảo vệ")
-                            : normalizedSecurityMode == "unprotected"
-                            ? _strings.t("Không bảo vệ")
-                            : _strings.t("Bình thường"),
-                        secondaryValue: normalizedSecurityMode == "armed"
-                            ? _strings.armedSecurityModeSourceDetailLabel(
-                                widget.securityModeSource,
-                              )
-                            : null,
-                        active: normalizedSecurityMode != "normal",
-                        activeColor: normalizedSecurityMode == "unprotected"
-                            ? SafeHomeColors.warning
-                            : SafeHomeColors.danger,
-                        onTap: () => _showSecurityModeOptions(context),
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 22,
-                      color: SafeHomeColors.border,
-                    ),
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: Icons.crisis_alert_rounded,
-                        value: alarmScheduleText,
-                        active: alarmScheduleSet,
-                        activeColor: SafeHomeColors.primary,
-                        onTap: widget.onScheduleAlarm,
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 22,
-                      color: SafeHomeColors.border,
-                    ),
-                    Expanded(
-                      child: _alarmStatusItem(
-                        icon: Icons.pause_circle_outline_rounded,
-                        value: alarmPauseSet
-                            ? alarmPauseText
-                            : _strings.t("Tắt"),
-                        active: alarmPauseSet,
-                        activeColor: SafeHomeColors.warning,
-                        onTap: widget.onAlarmPauseToday,
-                      ),
+                        Container(
+                          width: 1,
+                          height: 22,
+                          color: SafeHomeColors.border,
+                        ),
+                        Expanded(
+                          child: _alarmStatusItem(
+                            icon: Icons.crisis_alert_rounded,
+                            value: alarmScheduleText,
+                            active: alarmScheduleSet,
+                            activeColor: SafeHomeColors.primary,
+                            onTap: widget.onScheduleAlarm,
+                          ),
+                        ),
+                        Container(
+                          width: 1,
+                          height: 22,
+                          color: SafeHomeColors.border,
+                        ),
+                        Expanded(
+                          child: _alarmStatusItem(
+                            icon: Icons.pause_circle_outline_rounded,
+                            value: alarmPauseSet
+                                ? alarmPauseText
+                                : _strings.t("Tắt"),
+                            active: alarmPauseSet,
+                            activeColor: SafeHomeColors.warning,
+                            onTap: widget.onAlarmPauseToday,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                  ],
-                ),
-                Positioned(
-                  top: 23,
-                  right: 0,
-                  child: _buildQuickSirenAction(),
-                ),
+                Positioned(top: 23, right: 0, child: _buildQuickSirenAction()),
               ],
             ),
           ),
@@ -1806,10 +1783,7 @@ class _StatusPanelState extends State<StatusPanel> {
             ),
           ),
         ),
-        if (trailing != null) ...[
-          const SizedBox(width: 8),
-          trailing,
-        ],
+        if (trailing != null) ...[const SizedBox(width: 8), trailing],
       ],
     );
   }

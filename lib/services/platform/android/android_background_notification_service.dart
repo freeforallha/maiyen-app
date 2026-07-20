@@ -66,6 +66,10 @@ const Set<String> _supportedLanguageCodes = {
   'hy',
   'ka',
   'az',
+  'gn',
+  'qu',
+  'ay',
+  'ht',
 };
 
 String? _supportedLanguageCode(String? code) {
@@ -185,6 +189,14 @@ Locale _localeForLanguageCode(String code) {
       return const Locale('ka', 'GE');
     case 'az':
       return const Locale('az', 'AZ');
+    case 'gn':
+      return const Locale('gn', 'PY');
+    case 'qu':
+      return const Locale('qu', 'PE');
+    case 'ay':
+      return const Locale('ay', 'BO');
+    case 'ht':
+      return const Locale('ht', 'HT');
     case 'en':
       return const Locale('en');
     case 'vi':
@@ -417,10 +429,14 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
       ? strings.homeChatSenderMessage(senderName)
       : strings.homeChatNewMessage();
 
-  final payload =
-      'home_chat::${jsonEncode({'homeId': homeId, 'homeName': homeName, 'ownerUid': data['ownerUid']?.toString() ?? '', 'messageId': data['messageId']?.toString() ?? ''})}';
+  final payload = NotificationService.homeChatPayload(
+    homeId: homeId,
+    homeName: homeName,
+    ownerUid: data['ownerUid']?.toString() ?? '',
+    messageId: data['messageId']?.toString() ?? '',
+  );
 
-  final notificationId = _chatNotificationId(homeId);
+  final notificationId = NotificationService.homeChatNotificationId(homeId);
 
   await localNotif.cancel(notificationId);
 
@@ -438,16 +454,6 @@ Future<void> _showBackgroundChatNotification(Map<String, dynamic> data) async {
     ),
     payload: payload,
   );
-}
-
-int _chatNotificationId(String homeId) {
-  var hash = 0;
-
-  for (final codeUnit in homeId.codeUnits) {
-    hash = ((hash * 31) + codeUnit) & 0x7fffffff;
-  }
-
-  return 200000 + (hash % 700000);
 }
 
 String _buildScheduleBody(Map<String, dynamic> data, AppStrings strings) {

@@ -19,20 +19,13 @@ class ChatTypingMember {
 class ChatService {
   static const int maxMessageLength = 1000;
   static const int typingStaleMillis = 12000;
-  static const Map<String, String> _serverTimestamp = {
-    ".sv": "timestamp",
-  };
+  static const Map<String, String> _serverTimestamp = {".sv": "timestamp"};
 
   static Stream<DatabaseEvent> unreadCountersStream(String uid) {
-    return FirebaseDatabase.instance
-        .ref(FirebasePaths.chatUnread(uid))
-        .onValue;
+    return FirebaseDatabase.instance.ref(FirebasePaths.chatUnread(uid)).onValue;
   }
 
-  static Stream<DatabaseEvent> messagesStream(
-      String homeId, {
-        int limit = 80,
-      }) {
+  static Stream<DatabaseEvent> messagesStream(String homeId, {int limit = 80}) {
     return FirebaseDatabase.instance
         .ref(FirebasePaths.homeMessages(homeId))
         .orderByChild("time")
@@ -119,9 +112,9 @@ class ChatService {
       FirebasePaths.homeLastRead(homeId, uid): _serverTimestamp,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/count": 0,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt":
-      _serverTimestamp,
+          _serverTimestamp,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/updatedAt":
-      _serverTimestamp,
+          _serverTimestamp,
     });
 
     return messageId;
@@ -139,10 +132,9 @@ class ChatService {
     await FirebaseDatabase.instance.ref().update({
       FirebasePaths.homeLastRead(homeId, uid): lastReadAt,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/count": 0,
-      "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt":
-      lastReadAt,
+      "${FirebasePaths.chatUnreadHome(uid, homeId)}/lastReadAt": lastReadAt,
       "${FirebasePaths.chatUnreadHome(uid, homeId)}/updatedAt":
-      _serverTimestamp,
+          _serverTimestamp,
     });
   }
 
@@ -176,8 +168,7 @@ class ChatService {
   }) {
     if (typing == null || typing is! Map) return const [];
 
-    final currentMillis =
-        (now ?? DateTime.now()).millisecondsSinceEpoch;
+    final currentMillis = (now ?? DateTime.now()).millisecondsSinceEpoch;
 
     final staleBefore = currentMillis - typingStaleMillis;
     final typingMap = Map<String, dynamic>.from(typing);
@@ -190,9 +181,7 @@ class ChatService {
         continue;
       }
 
-      final member = Map<String, dynamic>.from(
-        entry.value as Map,
-      );
+      final member = Map<String, dynamic>.from(entry.value as Map);
 
       final updatedAt = _asMillis(member["updatedAt"]);
 
@@ -210,9 +199,7 @@ class ChatService {
       );
     }
 
-    members.sort(
-          (a, b) => b.updatedAt.compareTo(a.updatedAt),
-    );
+    members.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
 
     return members;
   }

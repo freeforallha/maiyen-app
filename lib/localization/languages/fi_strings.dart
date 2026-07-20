@@ -3,7 +3,8 @@ const Map<String, String> fiStrings = {
   "Không đọc được số điện thoại": "Puhelinnumeroa ei voitu lukea",
   "Tin nhắn quá dài": "Viesti on liian pitkä",
   "Không gửi được tin nhắn": "Viestiä ei voitu lähettää",
-  "Bạn không có quyền sửa lịch chung của nhà": "Sinulla ei ole oikeutta muokata kodin yhteistä aikataulua",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Sinulla ei ole oikeutta muokata kodin yhteistä aikataulua",
   "Nhà của bạn": "Kotisi",
   "Tải tin cũ hơn": "Lataa vanhemmat viestit",
   "Nhà chưa đặt tên": "Nimetön koti",
@@ -91,13 +92,18 @@ const Map<String, String> fiStrings = {
   "Đang theo dõi": "Seurannassa",
   "Chưa nhận diện": "Tunnistamaton laite",
   "Chưa có cập nhật": "Ei päivityksiä vielä",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Laitteita ei ole vielä. Lisää laite napauttamalla + ja aloita kotisi suojaaminen.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Laitteita ei ole vielä. Lisää laite napauttamalla + ja aloita kotisi suojaaminen.",
   "CHƯA AN TOÀN": "EI TURVALLINEN",
   "ĐÃ AN TOÀN": "TURVALLINEN",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Kotisi vaatii huomiota. Tarkista alla olevat tilat.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Kotisi toimii normaalisti.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Poikkeavaa savu- tai SOS-toimintaa ei havaittu.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Viimeaikaista toimintaa ei ole riittävästi syvempää analyysia varten.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Kotisi vaatii huomiota. Tarkista alla olevat tilat.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Kotisi toimii normaalisti.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Poikkeavaa savu- tai SOS-toimintaa ei havaittu.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Viimeaikaista toimintaa ei ole riittävästi syvempää analyysia varten.",
   "Hub kết nối bình thường": "Hubi yhdistetty",
   "Cài đặt cảnh báo cho nhà hiện tại": "Tämän kodin hälytysasetukset",
   "Nhận cảnh báo báo động": "Vastaanota hälytysilmoituksia",
@@ -161,20 +167,25 @@ const Map<String, String> fiStrings = {
   "Đã rời khỏi home": "Poistui kodista",
   "Đã cập nhật": "Päivitetty",
   "Tìm home...": "Hae koteja...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Aseta kodin sijainti ja ota automaattinen suojaus käyttöön",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Siirrä kodin omistajuus tai poista koti",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Aseta muistutus/hälytys valituille kodeille",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Aseta kodin sijainti ja ota automaattinen suojaus käyttöön",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Siirrä kodin omistajuus tai poista koti",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Aseta muistutus/hälytys valituille kodeille",
   "Chia sẻ nhà đã chọn": "Jaa valitut kodit",
   "Mở danh sách chia sẻ nhà": "Avaa kodin jakamisluettelo",
   "Xoá các nhà đã chọn?": "Poistetaanko valitut kodit?",
   "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Valitut kodit poistetaan pysyvästi.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Tai pyydä pääsyä valittuihin koteihin skannaamalla QR-koodi",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Tai pyydä pääsyä valittuihin koteihin skannaamalla QR-koodi",
   "Email người nhận": "Vastaanottajan sähköposti",
   "Chia sẻ": "Jaa",
   "Email chưa đăng ký": "Sähköpostiosoitetta ei ole rekisteröity",
   "Chia sẻ hoàn tất": "Jakaminen valmis",
   "Mở List chia sẻ nhà": "Avaa kodin jakamisluettelo",
-  "Không có nhà nào bạn có quyền quản lý": "Et hallinnoi yhtäkään valituista kodeista",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Et hallinnoi yhtäkään valituista kodeista",
   "Chưa share cho ai": "Ei vielä jaettu kenellekään",
   "Tìm nhà": "Hae koteja",
   "Xoá các nhà đã chọn ?": "Poistetaanko valitut kodit?",
@@ -192,32 +203,41 @@ const Map<String, String> fiStrings = {
   "Lưu ý khi bật báo động": "Huomio hälytyksen käyttöönotosta",
   "Báo động đã được bật": "Hälytys käytössä",
   "Đã hiểu": "Selvä",
-  "Lưu ý tạm tắt báo động": "Huomautus hälytyksen väliaikaisesta keskeyttämisestä",
+  "Lưu ý tạm tắt báo động":
+      "Huomautus hälytyksen väliaikaisesta keskeyttämisestä",
   "Đã bật báo động": "Hälytys käytössä",
   "Đã tắt báo động": "Hälytys on kytketty pois päältä",
   "Tắt báo động": "Pysäytä hälytys",
   "Cả ngày": "Koko päivä",
-  "Bạn không có quyền thực hiện thao tác này.": "Sinulla ei ole oikeutta suorittaa tätä toimintoa.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Toimintoa ei voitu suorittaa. Yritä uudelleen.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Virheellinen usean kodin liittymis-QR-koodi",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Sinulla ei ole oikeutta suorittaa tätä toimintoa.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Toimintoa ei voitu suorittaa. Yritä uudelleen.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Virheellinen usean kodin liittymis-QR-koodi",
   "Bạn đang là chủ các nhà này": "Omistat nämä kodit",
   "Một người dùng": "Käyttäjä",
   "Yêu cầu gia nhập nhà": "Kotiin liittymispyyntö",
   "Đã gửi yêu cầu gia nhập nhà": "Liittymispyyntö lähetetty",
   "QR gia nhập không hợp lệ": "Virheellinen liittymis-QR-koodi",
   "Bạn đang là chủ nhà này": "Omistat jo tämän kodin",
-  "QR này không phải mã xin gia nhập nhà": "Tämä QR-koodi ei ole kotiin liittymispyynnön koodi",
-  "Bạn không có quyền thêm thiết bị": "Sinulla ei ole oikeutta lisätä laitteita",
+  "QR này không phải mã xin gia nhập nhà":
+      "Tämä QR-koodi ei ole kotiin liittymispyynnön koodi",
+  "Bạn không có quyền thêm thiết bị":
+      "Sinulla ei ole oikeutta lisätä laitteita",
   "Đã mở chế độ thêm thiết bị": "Laitteiden pariliitos käytössä",
   "Rời khỏi Home này?": "Poistutaanko tästä kodista?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Tämä koti ja kaikki sen laitteet poistetaan pysyvästi.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Tämä koti ja kaikki sen laitteet poistetaan pysyvästi.",
   "Đã xoá nhà": "Koti poistettu",
   "QR của nhà này": "Kodin QR-koodi",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Muut voivat pyytää pääsyä kotiin skannaamalla tämän koodin.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Muut voivat pyytää pääsyä kotiin skannaamalla tämän koodin.",
   "Chia sẻ nhà": "Jaa koti",
   "Quét QR để xin gia nhập nhà": "Liity kotiin skannaamalla QR-koodi",
   "Quét QR xin gia nhập nhà": "Liity kotiin skannaamalla QR-koodi",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Aseta jaetun kodin QR-koodi kehyksen sisään",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Aseta jaetun kodin QR-koodi kehyksen sisään",
   "Mã QR này do chủ nhà chia sẻ": "Kodin omistaja on jakanut tämän QR-koodin",
   "Nhập mã mời": "Anna kutsukoodi",
   "Gửi yêu cầu gia nhập": "Lähetä liittymispyyntö",
@@ -229,7 +249,8 @@ const Map<String, String> fiStrings = {
   "Lời mời chia sẻ nhà": "Kodin jakamiskutsu",
   "Đã share home": "Koti jaettu",
   "Chuyển quyền chủ nhà": "Siirrä omistajuus",
-  "Không thể chuyển quyền cho chính bạn": "Et voi siirtää omistajuutta itsellesi",
+  "Không thể chuyển quyền cho chính bạn":
+      "Et voi siirtää omistajuutta itsellesi",
   "Không tìm thấy user": "Käyttäjää ei löytynyt",
   "Không tìm thấy tài khoản": "Tiliä ei löytynyt",
   "Xác nhận chuyển quyền": "Vahvista omistajuuden siirto",
@@ -238,7 +259,8 @@ const Map<String, String> fiStrings = {
   "Yêu cầu chuyển quyền chủ nhà": "Omistajuuden siirtopyyntö",
   "Đã gửi yêu cầu chuyển quyền": "Siirtopyyntö lähetetty",
   "Đã gửi yêu cầu chuyển quyền chủ nhà": "Omistajuuden siirtopyyntö lähetetty",
-  "Bạn không có quyền xoá thiết bị": "Sinulla ei ole oikeutta poistaa laitteita",
+  "Bạn không có quyền xoá thiết bị":
+      "Sinulla ei ole oikeutta poistaa laitteita",
   "Xóa Device?": "Poistetaanko tämä laite?",
   "Đã gửi yêu cầu xoá thiết bị": "Laitteen poistopyyntö lähetetty",
   "Đang xoá thiết bị": "Laitetta poistetaan",
@@ -261,7 +283,8 @@ const Map<String, String> fiStrings = {
   "Không thể lưu thông tin": "Tietoja ei voitu tallentaa",
   "Đã lưu thông tin": "Tiedot tallennettu",
   "Lỗi lưu profile": "Profiilia ei voitu tallentaa",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Lisää puhelinnumero hätätilanteita varten",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Lisää puhelinnumero hätätilanteita varten",
   "Hoàn tất": "Valmis",
   "Đã tạo nhà mới": "Koti luotu",
   "Về muộn": "Palaan myöhään",
@@ -280,7 +303,8 @@ const Map<String, String> fiStrings = {
   "SĐT": "Puhelin",
   "Ngày sinh": "Syntymäaika",
   "Yêu cầu & lời mời": "Pyynnöt ja kutsut",
-  "Xem lời mời chia sẻ và xin gia nhập": "Näytä jakamiskutsut ja liittymispyynnöt",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Näytä jakamiskutsut ja liittymispyynnöt",
   "Cài đặt bảo mật": "Suojausasetukset",
   "Quyền báo động toàn màn hình": "Koko näytön hälytyksen käyttöoikeus",
   "Báo động toàn màn hình": "Koko näytön hälytys",
@@ -326,11 +350,13 @@ const Map<String, String> fiStrings = {
   "Ngập/rò nước": "Vesivuoto",
   "Phát hiện khói": "Savua havaittu",
   "Quản lý phòng": "Huoneiden hallinta",
-  "Bạn không có quyền quản lý phòng": "Sinulla ei ole oikeutta hallita huoneita",
+  "Bạn không có quyền quản lý phòng":
+      "Sinulla ei ole oikeutta hallita huoneita",
   "Đổi tên phòng": "Nimeä huone uudelleen",
   "Tên phòng": "Huoneen nimi",
   "Xoá phòng": "Poista huone",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Tämän huoneen laitteet siirretään Ei määritetty -ryhmään.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Tämän huoneen laitteet siirretään Ei määritetty -ryhmään.",
   "Thêm phòng": "Lisää huone",
   "Ví dụ: Phòng khách": "Esimerkki: Olohuone",
   "Phòng khách": "Olohuone",
@@ -351,9 +377,11 @@ const Map<String, String> fiStrings = {
   "Cửa đóng": "Ovi on suljettu",
   "Chưa đặt vị trí nhà": "Kodin sijaintia ei ole asetettu",
   "Đặt vị trí nhà tại đây": "Aseta kodin sijainti tähän",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Aseta kodin sijainti ennen automaattisen suojauksen käyttöönottoa",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Aseta kodin sijainti ennen automaattisen suojauksen käyttöönottoa",
   "Bán kính bảo vệ mặc định: 150 m": "Suojauksen oletussäde: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Jokaisen jäsenen on sallittava sijainti Aina, jotta poissa/kotona-tila toimii taustalla.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Jokaisen jäsenen on sallittava sijainti Aina, jotta poissa/kotona-tila toimii taustalla.",
   "Lưu cài đặt": "Tallenna asetukset",
   "Đã đặt vị trí nhà": "Kodin sijainti asetettu",
   "Đang lấy vị trí...": "Haetaan sijaintia...",
@@ -362,22 +390,27 @@ const Map<String, String> fiStrings = {
   "Cập nhật thông tin nhà": "Päivitä kodin tiedot",
   "Nhập địa chỉ của nhà": "Anna kodin osoite",
   "Lưu thay đổi": "Tallenna muutokset",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Tämä nimi näkyy vain omalla tililläsi.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Nimi ja osoite päivitetään kaikille kodin jäsenille.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Tämä nimi näkyy vain omalla tililläsi.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Nimi ja osoite päivitetään kaikille kodin jäsenille.",
   "Một thành viên": "Jäsen",
   "Đã cập nhật thông tin nhà": "Kodin tiedot päivitetty",
   "Thay tên": "Nimeä uudelleen",
   "Đã đổi tên thiết bị": "Laite nimetty uudelleen",
   "Chưa chọn nhà để kiểm tra": "Valitse testattava koti",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Suorita tämä testi omistajan tilillä",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Suorita tämä testi omistajan tilillä",
   "Không đọc được dữ liệu nhà": "Kodin tietoja ei voitu lukea",
-  "Nhà cần có ít nhất một thiết bị để test": "Kodissa on oltava vähintään yksi laite testausta varten",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Kodissa on oltava vähintään yksi laite testausta varten",
   "Đóng": "Sulje",
   "Đã thiết lập": "Asetettu",
   "Quét QR": "Skannaa QR",
   "Quét QR để thêm thiết bị": "Lisää laite skannaamalla QR-koodi",
   "Nhập HUB ID thủ công": "Anna HUB-tunnus manuaalisesti",
-  "Bạn không có quyền sắp xếp phòng": "Sinulla ei ole oikeutta järjestää huoneita uudelleen",
+  "Bạn không có quyền sắp xếp phòng":
+      "Sinulla ei ole oikeutta järjestää huoneita uudelleen",
   "Cảnh báo khói": "Savuhälytys",
   "Cập nhật thiết bị": "Laitteen päivitys",
   "Cửa đang mở": "Ovi on auki",
@@ -427,8 +460,10 @@ const Map<String, String> fiStrings = {
   "Chế độ áp dụng": "Käyttötila",
   "Theo nhà": "Kodin aikataulu",
   "Riêng tôi": "Henkilökohtainen",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Käytä omistajan tai ylläpitäjän määrittämää yhteistä aikataulua",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Käytä vain omaan tiliisi sovellettavaa henkilökohtaista aikataulua",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Käytä omistajan tai ylläpitäjän määrittämää yhteistä aikataulua",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Käytä vain omaan tiliisi sovellettavaa henkilökohtaista aikataulua",
   "Thiết lập nhanh báo động": "Hälytyksen pika-asetus",
   "Thiết lập nhanh toàn bộ thiết bị": "Kaikkien laitteiden pika-asetus",
   "Áp dụng cho toàn bộ thiết bị": "Käytä kaikissa laitteissa",
@@ -468,8 +503,10 @@ const Map<String, String> fiStrings = {
   "Đã rời khỏi nhà": "Poistui kodista",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Poistut jaetuista kodeista.",
   "Các nhà của bạn sẽ bị xoá.\n": "Omat kotisi poistetaan.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Tämä muuttaa kaikkien valittujen kotien turvalaitteiden hälytysaikatauluja.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Tämä lisää kodin muistutuksen valittuihin koteihin.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Tämä muuttaa kaikkien valittujen kotien turvalaitteiden hälytysaikatauluja.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Tämä lisää kodin muistutuksen valittuihin koteihin.\n\n",
   "Xác nhận thay đổi báo động": "Vahvista hälytysmuutokset",
   "Xác nhận thay đổi nhắc nhở": "Vahvista muistutusmuutokset",
   "Lặp lại khi sự cố vẫn còn": "Toista niin kauan kuin ongelma jatkuu",
@@ -477,44 +514,62 @@ const Map<String, String> fiStrings = {
   "VD: Mr Chung": "Esim. herra Chung",
   "🏡 Chưa có nhà nào": "🏡 Ei koteja vielä",
   "Vẫn chuyển về Bình thường": "Vaihda silti Normaali-tilaan",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Automaattinen suojaus kaikkien ollessa poissa on edelleen käytössä. Jos kaikki jäsenet ovat yhä poissa, järjestelmä voi ottaa Suojaus-tilan uudelleen käyttöön muutaman minuutin kuluttua.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Automaattinen suojaus kaikkien ollessa poissa on edelleen käytössä. Jos kaikki jäsenet ovat yhä poissa, järjestelmä voi ottaa Suojaus-tilan uudelleen käyttöön muutaman minuutin kuluttua.",
   "Chuyển về Bình thường?": "Vaihda Normaali-tilaan?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Kun tämä otetaan käyttöön, turvalaitteiden valvonta alkaa heti.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Kun tämä otetaan käyttöön, turvalaitteiden valvonta alkaa heti.\n\n",
   "Bật Bảo vệ thủ công?": "Otetaanko manuaalinen Suojaus-tila käyttöön?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Tämä toiminto muuttaa joidenkin laitteiden hälytysaikaa tänään...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Tämä toiminto poistaa kaikki kodin hälytykset käytöstä",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Tämä toiminto muuttaa joidenkin laitteiden hälytysaikaa tänään...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Tämä toiminto poistaa kaikki kodin hälytykset käytöstä",
   "Tắt toàn bộ báo động?": "Poistetaanko kaikki hälytykset käytöstä?",
-  "Không xoá được lịch tạm tắt báo động": "Hälytyksen keskeytysaikataulua ei voitu poistaa",
-  "Không lưu được tạm tắt báo động": "Hälytyksen keskeytystä ei voitu tallentaa",
+  "Không xoá được lịch tạm tắt báo động":
+      "Hälytyksen keskeytysaikataulua ei voitu poistaa",
+  "Không lưu được tạm tắt báo động":
+      "Hälytyksen keskeytystä ei voitu tallentaa",
   "Không gửi được yêu cầu xoá": "Poistopyyntöä ei voitu lähettää",
   "Không lưu được cài đặt": "Asetusta ei voitu tallentaa",
   "Không lấy được vị trí hiện tại": "Nykyistä sijaintia ei voitu hakea",
   "Không thể xác nhận tài khoản hiện tại": "Nykyistä tiliä ei voitu vahvistaa",
   "Mật khẩu không đúng": "Väärä salasana",
   "Không thể xác nhận mật khẩu": "Salasanaa ei voitu vahvistaa",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Vain omistaja tai ylläpitäjä voi muuttaa hälytyksen toistoasetusta",
-  "Không lưu được thời gian lặp báo động": "Hälytyksen toistoaikaa ei voitu tallentaa",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Vain omistaja tai ylläpitäjä voi muuttaa Suojaus-tilaa",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Vain omistaja tai ylläpitäjä voi muuttaa hälytyksen toistoasetusta",
+  "Không lưu được thời gian lặp báo động":
+      "Hälytyksen toistoaikaa ei voitu tallentaa",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Vain omistaja tai ylläpitäjä voi muuttaa Suojaus-tilaa",
   "Không thể thay đổi chế độ nhà": "Kodin tilaa ei voitu muuttaa",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Suojaus on käytössä, mutta ilmoitusta ei voitu lähettää",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Suojaus on käytössä, mutta ilmoitusta ei voitu lähettää",
   "Đã bật Chế độ Bảo vệ thủ công": "Manuaalinen Suojaus-tila käytössä",
   "Đã chuyển nhà về Bình thường": "Koti vaihdettiin takaisin Normaali-tilaan",
   "60 phút": "60 minuuttia",
   "30 phút": "30 minuuttia",
   "15 phút": "15 minuuttia",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Tarkastelet omistajan aikataulua. Valitse Vain minä, jos haluat määrittää oman hälytysaikataulusi.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Tarkastelet omistajan aikataulua. Valitse Vain minä, jos haluat määrittää oman hälytysaikataulusi.",
   "Chọn giờ kết thúc báo động": "Valitse hälytyksen päättymisaika",
   "Chọn giờ bắt đầu báo động": "Valitse hälytyksen alkamisaika",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Sinulla ei ole oikeutta muokata tämän kodin hälytysaikataulua",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Hälytystä ei voitu ottaa käyttöön kaikissa laitteissa",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Tässä kodissa ei ole turvalaitteita, joihin hälytys voitaisiin ottaa käyttöön",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Sinulla ei ole oikeutta muokata kodin asetuksia. Valitse Vain minä.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Sinulla ei ole oikeutta muokata tämän kodin hälytysaikataulua",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Hälytystä ei voitu ottaa käyttöön kaikissa laitteissa",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Tässä kodissa ei ole turvalaitteita, joihin hälytys voitaisiin ottaa käyttöön",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Sinulla ei ole oikeutta muokata kodin asetuksia. Valitse Vain minä.",
   "Không thể lưu chế độ báo động": "Hälytystilaa ei voitu tallentaa",
   "Thêm nhắc nhở": "Lisää muistutus",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Muistutus kehottaa tarkistamaan kodin turvallisuustilan valittuna aikana.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Muistutus kehottaa tarkistamaan kodin turvallisuustilan valittuna aikana.",
   "Thêm khung giờ báo động": "Lisää hälytysaikaväli",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Käytössä ovat omat muistutusasetuksesi",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Käytössä ovat omistajan muistutusasetukset",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Käytössä ovat omat muistutusasetuksesi",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Käytössä ovat omistajan muistutusasetukset",
   "Sửa giờ nhắc nhở": "Muokkaa muistutuksen aikaa",
   "Sửa giờ kết thúc báo động": "Muokkaa hälytyksen päättymisaikaa",
   "Sửa giờ bắt đầu báo động": "Muokkaa hälytyksen alkamisaikaa",
@@ -531,118 +586,178 @@ const Map<String, String> fiStrings = {
   "Xoá thành viên": "Poista jäsen",
   "Đã xoá thành viên": "Jäsen poistettu",
   "Đồng ý": "OK",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Haluatko varmasti poistua tästä kodista?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Haluatko varmasti poistua tästä kodista?",
   "Xoá thành viên?": "Poistetaanko jäsen?",
   "Rời khỏi nhà?": "Poistutaanko tästä kodista?",
   "Chỉ chủ nhà mới được thay đổi vai trò": "Vain omistaja voi muuttaa rooleja",
-  "Bạn không có quyền xoá thành viên này": "Sinulla ei ole oikeutta poistaa tätä jäsentä",
+  "Bạn không có quyền xoá thành viên này":
+      "Sinulla ei ole oikeutta poistaa tätä jäsentä",
   "Bạn": "Sinä",
   "Không có email": "Ei sähköpostiosoitetta",
   "Chưa có số điện thoại": "Ei puhelinnumeroa",
   "Không mở được ứng dụng gọi điện": "Puhelinsovellusta ei voitu avata",
-  "Thành viên chưa cập nhật số điện thoại": "Tämä jäsen ei ole lisännyt puhelinnumeroa",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Manuaalinen Suojaus on käytössä – poista se käytöstä vaihtamalla Normaali-tilaan",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Tämä jäsen ei ole lisännyt puhelinnumeroa",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Manuaalinen Suojaus on käytössä – poista se käytöstä vaihtamalla Normaali-tilaan",
   "Thời gian lặp": "Toistoväli",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Valitse 0, jos haluat vain yhden ilmoituksen. Tämä asetus koskee sekä manuaalista Suojausta että automaattista suojausta kaikkien ollessa poissa.",
-  "Lặp báo động khi sự cố vẫn còn": "Toista hälytys niin kauan kuin ongelma jatkuu",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Valitse 0, jos haluat vain yhden ilmoituksen. Tämä asetus koskee sekä manuaalista Suojausta että automaattista suojausta kaikkien ollessa poissa.",
+  "Lặp báo động khi sự cố vẫn còn":
+      "Toista hälytys niin kauan kuin ongelma jatkuu",
   "Đang được sử dụng": "Käytössä nyt",
   "Chuyển về sử dụng thông thường": "Vaihda takaisin normaaliin käyttöön",
   "Chế độ nhà": "Kodin tila",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS-laite ei ole kirjannut hälytystä.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Savuilmaisin ei ole havainnut ongelmaa.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Sinä tai toinen jäsen otitte Suojaus-tilan käyttöön manuaalisesti.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome otti Suojaus-tilan käyttöön automaattisesti, koska poistuit kotoa.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "SOS-laite ei ole kirjannut hälytystä.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Savuilmaisin ei ole havainnut ongelmaa.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Sinä tai toinen jäsen otitte Suojaus-tilan käyttöön manuaalisesti.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome otti Suojaus-tilan käyttöön automaattisesti, koska poistuit kotoa.",
   "Nhà đang ở chế độ dùng bình thường.": "Tämä koti on normaalissa käytössä.",
   "Bảo vệ thủ công đang bật": "Manuaalinen Suojaus on käytössä",
   "Bảo vệ tự động đang bật": "Automaattinen Suojaus on käytössä",
   "Bảo vệ đang tắt": "Suojaus on pois käytöstä",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Olet avannut sovelluksen äskettäin tarkistaaksesi tilan.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Avaa sovellus säännöllisesti tarkistaaksesi käyttöoikeudet, aikataulut ja lukemattomat hälytykset.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "Muutaman käyttökerran jälkeen SafeHome voi arvioida sovelluksen tarkistustottumuksiasi paremmin.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Olet avannut sovelluksen äskettäin tarkistaaksesi tilan.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Avaa sovellus säännöllisesti tarkistaaksesi käyttöoikeudet, aikataulut ja lukemattomat hälytykset.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Muutaman käyttökerran jälkeen SafeHome voi arvioida sovelluksen tarkistustottumuksiasi paremmin.",
   "Tần suất vào ứng dụng ổn": "Sovelluksen tarkistusväli näyttää hyvältä",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "Sovelluksen viimeisestä tarkistuksesta on kulunut aikaa",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "Sovelluksen viimeisestä tarkistuksesta on kulunut aikaa",
   "Đang ghi nhận tần suất vào ứng dụng": "Sovelluksen tarkistusväliä kirjataan",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Tarkista sijainnin Aina-käyttöoikeus ja taustatoiminnan edellytykset.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Tämä laite täyttää Automaattinen poissa -toiminnon vaatimukset.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Ota toiminto käyttöön, jos haluat Suojaus-tilan aktivoituvan automaattisesti poistuessasi kotoa.",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Tarkista sijainnin Aina-käyttöoikeus ja taustatoiminnan edellytykset.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Tämä laite täyttää Automaattinen poissa -toiminnon vaatimukset.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Ota toiminto käyttöön, jos haluat Suojaus-tilan aktivoituvan automaattisesti poistuessasi kotoa.",
   "Auto rời khỏi nhà chưa ổn": "Automaattinen poissa ei ole valmis",
   "Auto rời khỏi nhà đã sẵn sàng": "Automaattinen poissa on valmis",
   "Auto rời khỏi nhà chưa bật": "Automaattinen poissa ei ole käytössä",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Lisää kotiin sopiva savuilmaisin, SOS-laite tai muu hätätilannelaite.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Lisää kotiin sopiva savuilmaisin, SOS-laite tai muu hätätilannelaite.",
   "Chưa có thiết bị khẩn cấp": "Ei hätätilannelaitetta vielä",
   "Đã có thiết bị khẩn cấp": "Hätätilannelaitteita on lisätty",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Aseta hälytysaikataulu nukkuma-ajaksi tai poissaolon ajaksi.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Tässä kodissa on hälytysaikataulu tai laitekohtainen ilmoitusaikataulu.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Aseta hälytysaikataulu nukkuma-ajaksi tai poissaolon ajaksi.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Tässä kodissa on hälytysaikataulu tai laitekohtainen ilmoitusaikataulu.",
   "Chưa cài lịch báo động": "Hälytysaikataulua ei ole asetettu",
   "Đã cài lịch báo động": "Hälytysaikataulu on asetettu",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Aseta vähintään yksi muistutus, jotta et unohda tarkistaa kotia.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Sovellus muistuttaa tarkistamaan kodin asetetun aikataulun mukaisesti.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Aseta vähintään yksi muistutus, jotta et unohda tarkistaa kotia.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Sovellus muistuttaa tarkistamaan kodin asetetun aikataulun mukaisesti.",
   "Chưa cài đặt nhắc nhở": "Muistutusta ei ole määritetty",
   "Đã cài đặt nhắc nhở": "Muistutus on määritetty",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Avaa sovellus uudelleen tai kirjaudu uudelleen sisään, jos tämä laite ei vastaanota hälytyksiä.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Tätä laitetta ei ole rekisteröity vastaanottamaan hälytyksiä",
-  "Thiết bị nhận cảnh báo bình thường": "Tämä laite voi vastaanottaa hälytyksiä",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS hallitsee taustatoimintaa Androidia tiukemmin. Pidä ilmoitukset ja sijainnin Aina-käyttöoikeus käytössä, jos käytät Automaattinen poissa -toimintoa.",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Avaa sovellus uudelleen tai kirjaudu uudelleen sisään, jos tämä laite ei vastaanota hälytyksiä.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Tätä laitetta ei ole rekisteröity vastaanottamaan hälytyksiä",
+  "Thiết bị nhận cảnh báo bình thường":
+      "Tämä laite voi vastaanottaa hälytyksiä",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS hallitsee taustatoimintaa Androidia tiukemmin. Pidä ilmoitukset ja sijainnin Aina-käyttöoikeus käytössä, jos käytät Automaattinen poissa -toimintoa.",
   "Cơ chế iOS": "iOS:n toiminta",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Tarkista taustatoiminnan käyttöoikeus ja automaattinen käynnistys, jotta hälytykset eivät viivästy.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Laite on vahvistanut tärkeät taustatoiminnan edellytykset.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Tarkista taustatoiminta/automaattinen käynnistys",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Tarkista taustatoiminnan käyttöoikeus ja automaattinen käynnistys, jotta hälytykset eivät viivästy.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Laite on vahvistanut tärkeät taustatoiminnan edellytykset.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Tarkista taustatoiminta/automaattinen käynnistys",
   "Chạy nền ổn định": "Taustatoiminta näyttää vakaalta",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Jotkin Android-puhelimet voivat viivästyttää hälytyksiä, jos akun optimointi on käytössä.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Puhelin viivästyttää SafeHome-hälytyksiä epätodennäköisemmin.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Jotkin Android-puhelimet voivat viivästyttää hälytyksiä, jos akun optimointi on käytössä.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Puhelin viivästyttää SafeHome-hälytyksiä epätodennäköisemmin.",
   "Chưa tắt tối ưu pin": "Akun optimointi on edelleen käytössä",
   "Tối ưu pin không chặn ứng dụng": "Akun optimointi ei estä sovellusta",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Automaattinen poissa tarvitsee sijainnin Aina-käyttöoikeuden toimiakseen luotettavasti.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Sijainnin käyttöoikeus vaaditaan Automaattinen poissa -toimintoon.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Sijaintipalvelu on poissa käytöstä, joten Automaattinen poissa ei ehkä toimi luotettavasti.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Tämä käyttöoikeus tarvitaan vain Automaattinen poissa -toimintoa käytettäessä.",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Automaattinen poissa tarvitsee sijainnin Aina-käyttöoikeuden toimiakseen luotettavasti.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Sijainnin käyttöoikeus vaaditaan Automaattinen poissa -toimintoon.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Sijaintipalvelu on poissa käytöstä, joten Automaattinen poissa ei ehkä toimi luotettavasti.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Tämä käyttöoikeus tarvitaan vain Automaattinen poissa -toimintoa käytettäessä.",
   "Chưa cấp vị trí luôn luôn": "Sijainti Aina ei ole sallittu",
   "Đã cấp vị trí luôn luôn": "Sijainti Aina on sallittu",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS ei avaa koko näytön näkymää Androidin tavoin. Sovellus käyttää järjestelmän ilmoituksia ja ääniä.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android käyttää koko näytön hälytyksiä. Salli ne asetuksista, jos puhelin estää ne.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS ei avaa koko näytön näkymää Androidin tavoin. Sovellus käyttää järjestelmän ilmoituksia ja ääniä.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android käyttää koko näytön hälytyksiä. Salli ne asetuksista, jos puhelin estää ne.",
   "Cảnh báo trên iOS": "Hälytykset iOS:ssä",
   "Cảnh báo toàn màn hình": "Koko näytön hälytykset",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Hälytykset eivät ehkä näy, jos ilmoitukset on poistettu käytöstä.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Tämä puhelin voi vastaanottaa SafeHome-ilmoituksia.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Hälytykset eivät ehkä näy, jos ilmoitukset on poistettu käytöstä.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Tämä puhelin voi vastaanottaa SafeHome-ilmoituksia.",
   "Chưa bật thông báo": "Ilmoitukset eivät ole käytössä",
   "Đã bật thông báo": "Ilmoitukset ovat käytössä",
   "Hệ thống: Sẵn sàng": "Järjestelmä: Valmis",
-  "Hệ thống: Có thể bỏ lỡ cảnh báo": "Järjestelmä: Hälytyksiä voi jäädä saamatta",
+  "Hệ thống: Có thể bỏ lỡ cảnh báo":
+      "Järjestelmä: Hälytyksiä voi jäädä saamatta",
   "Cách bạn đang dùng ứng dụng": "Miten käytät sovellusta",
   "Thiết bị của bạn": "Laitteesi",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Tarkistaa puhelimesi ja sovelluksen käyttötapasi.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Tarkistaa puhelimesi ja sovelluksen käyttötapasi.",
   "Hệ thống SafeHome": "SafeHome-järjestelmä",
   "Hệ thống: Đang kiểm tra...": "Järjestelmä: Tarkistetaan...",
   "Tên": "Nimi",
-  "Bạn không có quyền thay đổi vị trí nhà": "Sinulla ei ole oikeutta muuttaa kodin sijaintia",
-  "Hãy bật GPS để đặt vị trí nhà": "Ota GPS käyttöön kodin sijainnin asettamiseksi",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Sinulla ei ole oikeutta muuttaa kodin sijaintia",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Ota GPS käyttöön kodin sijainnin asettamiseksi",
   "Bạn chưa cấp quyền vị trí": "Sijainnin käyttöoikeutta ei ole myönnetty",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Myönnä sijainnin käyttöoikeus sovelluksen asetuksissa",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Automaattinen Suojaus kaikkien poistuessa kotoa on käytössä",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Automaattinen Suojaus kaikkien poistuessa kotoa on pois käytöstä",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Myönnä sijainnin käyttöoikeus sovelluksen asetuksissa",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Automaattinen Suojaus kaikkien poistuessa kotoa on käytössä",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Automaattinen Suojaus kaikkien poistuessa kotoa on pois käytöstä",
   "Không thể thay đổi trạng thái báo động": "Hälytyksen tilaa ei voitu muuttaa",
-  "Đã tắt toàn bộ báo động của nhà": "Kaikki kodin hälytykset on poistettu käytöstä",
-  "QR này không phải mã xin gia nhập Home": "Tämä QR-koodi ei ole kotiin liittymisen koodi",
+  "Đã tắt toàn bộ báo động của nhà":
+      "Kaikki kodin hälytykset on poistettu käytöstä",
+  "QR này không phải mã xin gia nhập Home":
+      "Tämä QR-koodi ei ole kotiin liittymisen koodi",
   "Thêm Home": "Lisää koti",
   "Mở cài đặt": "Avaa asetukset",
   "Để sau": "Myöhemmin",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome tarvitsee sijainnin Aina-käyttöoikeuden tunnistaakseen, kun poistut kotoa tai palaat kotiin, myös sovelluksen toimiessa taustalla.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome voi tällä hetkellä käyttää sijaintia vain sovelluksen ollessa käytössä.\n\nAvaa sijainnin käyttöoikeus ja valitse \"Salli aina\", jotta automaattinen suojaus toimii myös taustalla.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome tarvitsee sijainnin Aina-käyttöoikeuden tunnistaakseen, kun poistut kotoa tai palaat kotiin, myös sovelluksen toimiessa taustalla.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome voi tällä hetkellä käyttää sijaintia vain sovelluksen ollessa käytössä.\n\nAvaa sijainnin käyttöoikeus ja valitse \"Salli aina\", jotta automaattinen suojaus toimii myös taustalla.",
   "Cho phép vị trí luôn luôn": "Salli sijainti aina",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Omat kotisi poistetaan.\nPoistut jaetuista kodeista.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tämä muuttaa kaikkien valittujen kotien turvalaitteiden hälytysaikatauluja.\n\nJäseniin, jotka käyttävät kodin hälytysasetuksia, tämä vaikuttaa.\nHenkilökohtaisia hälytysasetuksia ei muuteta.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Tämä lisää kodin muistutuksen valittuihin koteihin.\n\nJäseniin, jotka käyttävät kodin muistutusasetuksia, tämä vaikuttaa.\nHenkilökohtaisia muistutusasetuksia ei muuteta.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Turvalaitteiden valvonta alkaa heti.\n\nAutomaattinen Suojaus kaikkien ollessa poissa keskeytetään. Tämä tila ei poistu automaattisesti käytöstä jonkun palatessa kotiin, vaan jäsenen, jolla on oikeus, on vaihdettava tila takaisin Normaali-tilaan.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Tämä toiminto muuttaa joidenkin laitteiden hälytysaikaa tänään...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Tämä toiminto poistaa kaikki tämän kodin hälytykset käytöstä. Et enää saa vaarahälytyksiä tähän puhelimeen.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Hälytys käyttää kodin asetuksia.\n\nSaat hälytykset omistajan tai ylläpitäjän määrittämien yhteisten aikataulujen mukaan.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Hälytys käyttää Omia asetuksia.\n\nSaat hälytykset tämän tilin henkilökohtaisten hälytysaikataulujen mukaan.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Omat kotisi poistetaan.\nPoistut jaetuista kodeista.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tämä muuttaa kaikkien valittujen kotien turvalaitteiden hälytysaikatauluja.\n\nJäseniin, jotka käyttävät kodin hälytysasetuksia, tämä vaikuttaa.\nHenkilökohtaisia hälytysasetuksia ei muuteta.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Tämä lisää kodin muistutuksen valittuihin koteihin.\n\nJäseniin, jotka käyttävät kodin muistutusasetuksia, tämä vaikuttaa.\nHenkilökohtaisia muistutusasetuksia ei muuteta.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Turvalaitteiden valvonta alkaa heti.\n\nAutomaattinen Suojaus kaikkien ollessa poissa keskeytetään. Tämä tila ei poistu automaattisesti käytöstä jonkun palatessa kotiin, vaan jäsenen, jolla on oikeus, on vaihdettava tila takaisin Normaali-tilaan.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Tämä toiminto muuttaa joidenkin laitteiden hälytysaikaa tänään...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Tämä toiminto poistaa kaikki tämän kodin hälytykset käytöstä. Et enää saa vaarahälytyksiä tähän puhelimeen.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Hälytys käyttää kodin asetuksia.\n\nSaat hälytykset omistajan tai ylläpitäjän määrittämien yhteisten aikataulujen mukaan.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Hälytys käyttää Omia asetuksia.\n\nSaat hälytykset tämän tilin henkilökohtaisten hälytysaikataulujen mukaan.",
   "Không thể đăng nhập bằng Google": "Google-kirjautuminen epäonnistui",
   "Không đặt được mật khẩu": "Salasanaa ei voitu asettaa",
   "Chấp nhận": "Hyväksy",
   "Cho phép": "Salli",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Kutsua ei voitu hyväksyä. Yritä uudelleen.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Kotiin liittymispyyntöä ei voitu hyväksyä. Yritä uudelleen.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Kutsua ei voitu hyväksyä. Yritä uudelleen.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Kotiin liittymispyyntöä ei voitu hyväksyä. Yritä uudelleen.",
   "Từ chối": "Hylkää",
   "Lời mời từ chủ nhà": "Kutsu omistajalta",
   "Nhận quyền chủ nhà": "Vastaanota kodin omistajuus",
@@ -664,15 +779,20 @@ const Map<String, String> fiStrings = {
   "KIỂM TRA NHÀ": "TARKISTA KOTI",
   "ĐÓNG NHẮC NHỞ": "SULJE MUISTUTUS",
   "SafeHome Security Alert": "SafeHome-turvahälytys",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Valitse sovelluksen asetuksissa sijainnin käyttöoikeudeksi Salli aina",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google-tilillesi on luotava lisäsalasana suojausominaisuuksien käyttöä varten.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Valitse sovelluksen asetuksissa sijainnin käyttöoikeudeksi Salli aina",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google-tilillesi on luotava lisäsalasana suojausominaisuuksien käyttöä varten.",
   "Báo động": "Hälytys",
-  "Bạn không có quyền thực hiện thao tác này。": "Sinulla ei ole oikeutta suorittaa tätä toimintoa.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Sinulla ei ole oikeutta suorittaa tätä toimintoa.",
   "Cài đặt": "Asetukset",
   "Cập nhật": "Päivitä",
   "Chọn ngôn ngữ": "Valitse kieli",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Laitetietoja ei ole saatavilla arviointiin",
-  "Chuyển quyền sở hữu cho thành viên khác": "Siirrä omistajuus toiselle jäsenelle",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Laitetietoja ei ole saatavilla arviointiin",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Siirrä omistajuus toiselle jäsenelle",
   "Có": "Kyllä",
   "Cửa đã đóng an toàn": "Ovi on turvallisesti suljettu",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "Tapahtui virhe. Yritä uudelleen.",
@@ -684,7 +804,8 @@ const Map<String, String> fiStrings = {
   "Hub chưa gửi trạng thái": "Hubin tila ei ole saatavilla",
   "Hub mất kết nối": "Hub-yhteys katkennut",
   "Hub tín hiệu bình thường": "Hub yhdistetty",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Lukitus auki kodin ollessa Suojaus-tilassa",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Lukitus auki kodin ollessa Suojaus-tilassa",
   "Khóa đang mở trong giờ báo động": "Lukitus auki hälytysaikana",
   "Không có thông báo": "Ei ilmoituksia",
   "Khu vực nguy hiểm": "Vaaravyöhyke",
@@ -712,7 +833,8 @@ const Map<String, String> fiStrings = {
   "Thành viên đang ở ngoài": "Tällä hetkellä poissa olevat jäsenet",
   "Thành viên chưa xác định vị trí": "Jäsenet, joiden sijainti on tuntematon",
   "Thay đổi ngôn ngữ hiển thị": "Vaihda näyttökieli",
-  "Thêm, đổi tên và sắp xếp phòng": "Lisää, nimeä uudelleen ja järjestä huoneita",
+  "Thêm, đổi tên và sắp xếp phòng":
+      "Lisää, nimeä uudelleen ja järjestä huoneita",
   "Thiết bị đang được giám sát": "Laitetta valvotaan",
   "Tiếng Anh": "Englanti",
   "Tiếng Hàn": "Korea",
@@ -730,28 +852,39 @@ const Map<String, String> fiStrings = {
   "Đã tạo nhà": "Koti luotu",
   "Chế độ Bảo vệ thủ công đã bật": "Manuaalinen Suojaus-tila käytössä",
   "Báo động không lặp lại.": "Hälytystä ei toisteta.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Hälytys toistetaan \$securityModeRepeatMinutes minuutin kuluttua, jos ongelma jatkuu.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName otti Manuaalisen Suojaus-tilan käyttöön kodissa \"\$homeName\". Tämä tila poistuu käytöstä vain, kun jäsen, jolla on oikeus, vaihtaa takaisin Normaali-tilaan. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Otit hälytyksen käyttöön kodissa \"\$homeName\".",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Poistit kaikki kodin \"\$homeName\" hälytykset käytöstä.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Hälytys toistetaan \$securityModeRepeatMinutes minuutin kuluttua, jos ongelma jatkuu.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName otti Manuaalisen Suojaus-tilan käyttöön kodissa \"\$homeName\". Tämä tila poistuu käytöstä vain, kun jäsen, jolla on oikeus, vaihtaa takaisin Normaali-tilaan. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Otit hälytyksen käyttöön kodissa \"\$homeName\".",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Poistit kaikki kodin \"\$homeName\" hälytykset käytöstä.",
   "Thành viên mới": "Uusi jäsen",
   "Thành viên rời nhà": "Jäsen poistui kodista",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName poistui kodista \"\$homeName\".",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName muutti jäsenen \$memberName roolin roolista \$oldRoleName rooliin \$newRoleName kodissa \"\$homeName\".",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName poistui kodista \"\$homeName\".",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName muutti jäsenen \$memberName roolin roolista \$oldRoleName rooliin \$newRoleName kodissa \"\$homeName\".",
   "Còn \$count tin nhắn chưa đọc": "\$count lukematonta viestiä",
   "Hãy an tâm nghỉ ngơi.": "Voit levätä turvallisin mielin.",
-  "Có thiết bị chưa an toàn.": "Jotkin laitteet eivät ole turvallisessa tilassa.",
+  "Có thiết bị chưa an toàn.":
+      "Jotkin laitteet eivät ole turvallisessa tilassa.",
   "SafeHome đang cập nhật vị trí": "SafeHome päivittää sijaintia",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Valvoo Suojaus-tilan automaattista käyttöönottoa varten.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Käyttää sijaintia Suojaus-tilan automaattiseen käyttöönottoon kaikkien poistuessa kotoa.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Valvoo Suojaus-tilan automaattista käyttöönottoa varten.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Käyttää sijaintia Suojaus-tilan automaattiseen käyttöönottoon kaikkien poistuessa kotoa.",
   "CẢNH BÁO SOS": "SOS-HÄLYTYS",
   "CẢNH BÁO KHÓI / CHÁY": "SAVU-/PALOHÄLYTYS",
   "CẢNH BÁO NGẬP NƯỚC": "TULVAHÄLYTYS",
   "CẢNH BÁO RÒ KHÍ": "KAASUVUOTOHÄLYTYS",
   "CẢNH BÁO CỬA": "OVIHÄLYTYS",
   "CẢNH BÁO AN NINH": "TURVAHÄLYTYS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Vahvistaminen SafeHomen kanssa epäonnistui. Tarkista yhteys ja yritä uudelleen.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Pysäytä hälytys vasta, kun olet tarkistanut kodin tilanteen.\n\nHaluatko varmasti pysäyttää hälytyksen?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Vahvistaminen SafeHomen kanssa epäonnistui. Tarkista yhteys ja yritä uudelleen.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Pysäytä hälytys vasta, kun olet tarkistanut kodin tilanteen.\n\nHaluatko varmasti pysäyttää hälytyksen?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome havaitsi hälytyksen",
   "Mở SafeHome để kiểm tra ngay.": "Avaa SafeHome ja tarkista tilanne heti.",
   "\$count tin nhắn mới": "\$count uutta viestiä",
@@ -759,172 +892,257 @@ const Map<String, String> fiStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName lähetti viestin",
   "Bạn có tin nhắn mới": "Sinulla on uusi viesti",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Suojaus-tila hälyttää vain kerran",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Suojaus-tila toistaa hälytyksen \$minutes minuutin kuluttua",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Liittymispyynnöt lähetetty \$count kotiin",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName pyysi liittymistä kotiin \"\$homeName\".",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Suojaus-tila toistaa hälytyksen \$minutes minuutin kuluttua",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Liittymispyynnöt lähetetty \$count kotiin",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName pyysi liittymistä kotiin \"\$homeName\".",
   "Bạn đã xoá nhà \"\$homeName\".": "Poistit kodin \"\$homeName\".",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Lähetit kodin \"\$homeName\" omistajuuden siirtopyynnön osoitteeseen \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName haluaa siirtää kodin \"\$homeName\" omistajuuden sinulle.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName kutsui sinut liittymään kotiin \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome poistaa laitteen \"\$deviceName\" kodista \"\$homeName\".",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Laite \"\$deviceName\" lisättiin kotiin \"\$homeName\".",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Lähetit kodin \"\$homeName\" omistajuuden siirtopyynnön osoitteeseen \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName haluaa siirtää kodin \"\$homeName\" omistajuuden sinulle.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName kutsui sinut liittymään kotiin \"\$homeName\".",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome poistaa laitteen \"\$deviceName\" kodista \"\$homeName\".",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Laite \"\$deviceName\" lisättiin kotiin \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Loit kodin \"\$name\".",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName päivitti kodin nimeksi \"\$newName\" ja muutti osoitetta.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName nimesi kodin uudelleen nimellä \"\$newName\".",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName päivitti kodin \"\$newName\" osoitteen.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName nimesi laitteen \"\$oldDeviceName\" uudelleen nimellä \"\$newName\" kodissa \"\$homeName\".",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName päivitti kodin nimeksi \"\$newName\" ja muutti osoitetta.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName nimesi kodin uudelleen nimellä \"\$newName\".",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName päivitti kodin \"\$newName\" osoitteen.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName nimesi laitteen \"\$oldDeviceName\" uudelleen nimellä \"\$newName\" kodissa \"\$homeName\".",
   "Đang ghép nối: \$seconds giây": "Muodostetaan pariliitosta: \$seconds s",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Laitteiden pariliitos otettiin käyttöön kodissa \"\$homeName\" \$seconds sekunniksi.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Keskeytysajan on oltava hälytysaikataulun sisällä (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total testiä hyväksytty\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name ei ole lisännyt puhelinnumeroa profiiliinsa.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Laitteiden pariliitos otettiin käyttöön kodissa \"\$homeName\" \$seconds sekunniksi.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Keskeytysajan on oltava hälytysaikataulun sisällä (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total testiä hyväksytty\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name ei ole lisännyt puhelinnumeroa profiiliinsa.",
   "Tin nhắn mới trong \$homeName": "Uusi viesti kodissa \$homeName",
   "\$current/\$total kết quả": "\$current/\$total tulosta",
   "Đang trả lời \$name": "Vastataan käyttäjälle \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "\"\$name\" havaitsi savua kodissa \"\$homeName\".",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "\"\$name\" on palannut normaaliin tilaan.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "\"\$name\" käynnisti SOS-hälytyksen kodissa \"\$homeName\".",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "\"\$name\" havaitsi savua kodissa \"\$homeName\".",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "\"\$name\" on palannut normaaliin tilaan.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "\"\$name\" käynnisti SOS-hälytyksen kodissa \"\$homeName\".",
   "\"\$name\" đã hết trạng thái SOS.": "\"\$name\" ei ole enää SOS-tilassa.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "\"\$name\" ilmoitti peukaloinnista kodissa \"\$homeName\".",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Laitteen \"\$name\" peukalointihälytys on poistunut.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "\"\$name\" suljettiin kodissa \"\$homeName\".",
-  "\"\$name\" đang mở trong \"\$homeName\".": "\"\$name\" on auki kodissa \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "Laitteen \"\$name\" akku on vähissä kodissa \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "Laite \"\$name\" menetti yhteyden kodissa \"\$homeName\".",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "Laite \"\$name\" on jälleen yhteydessä kodissa \"\$homeName\".",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "\"\$name\" kirjasi korkean lämpötilan kodissa \"\$homeName\".",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "\"\$name\" kirjasi korkean ilmankosteuden kodissa \"\$homeName\".",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "\"\$name\" ilmoitti peukaloinnista kodissa \"\$homeName\".",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Laitteen \"\$name\" peukalointihälytys on poistunut.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "\"\$name\" suljettiin kodissa \"\$homeName\".",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "\"\$name\" on auki kodissa \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "Laitteen \"\$name\" akku on vähissä kodissa \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "Laite \"\$name\" menetti yhteyden kodissa \"\$homeName\".",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "Laite \"\$name\" on jälleen yhteydessä kodissa \"\$homeName\".",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "\"\$name\" kirjasi korkean lämpötilan kodissa \"\$homeName\".",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "\"\$name\" kirjasi korkean ilmankosteuden kodissa \"\$homeName\".",
   "Có nút SOS vừa được kích hoạt": "SOS-painike käynnistettiin",
   "Có dấu hiệu khói hoặc cháy": "Savua tai tulipalo havaittiin",
   "Có dấu hiệu ngập nước": "Tulvimista havaittiin",
   "Có dấu hiệu rò khí": "Kaasuvuoto havaittiin",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "Ovi on auki tai laitetta on peukaloitu",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "Ovi on auki tai laitetta on peukaloitu",
   "Có thiết bị đang cảnh báo": "Laite hälyttää",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Jos kukaan ei vahvista tilannetta, SafeHome aloittaa hätäpuhelun.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Hälyttää uudelleen klo \$time, jos ongelmaa ei ole käsitelty.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Hälyttää uudelleen hälytysaikataulun mukaan, jos ongelmaa ei ole käsitelty.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "\"\$deviceName\" suljettiin kodissa \"\$resolvedHomeName\".",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "\"\$deviceName\" on auki kodissa \"\$resolvedHomeName\".",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jos kukaan ei vahvista tilannetta, SafeHome aloittaa hätäpuhelun.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Hälyttää uudelleen klo \$time, jos ongelmaa ei ole käsitelty.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Hälyttää uudelleen hälytysaikataulun mukaan, jos ongelmaa ei ole käsitelty.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" suljettiin kodissa \"\$resolvedHomeName\".",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "\"\$deviceName\" on auki kodissa \"\$resolvedHomeName\".",
   "\$count nhà đã chọn": "\$count kotia valittu",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count turvatonta kotia\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count kotia vaatii huomiota\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count kotia vaatii huomiota\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count turvallista kotia",
   "\$count nhà đang được theo dõi": "\$count kotia valvotaan",
   "\$minutes phút": "\$minutes minuuttia",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Muistutus asetettiin \$updatedHomes kotiin.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Hälytys asetettiin \$updatedDevices laitteelle \$updatedHomes kodissa.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Hallinnoimasi kodit jaettiin.\n\n\$skipped kotia ohitettiin, koska sinulla ei ole niiden jakamisoikeutta.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Hälytys otettiin käyttöön \$count turvalaitteessa",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Käytä samaa aikataulua \$count turvalaitteessa",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Muistutus asetettiin \$updatedHomes kotiin.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Hälytys asetettiin \$updatedDevices laitteelle \$updatedHomes kodissa.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Hallinnoimasi kodit jaettiin.\n\n\$skipped kotia ohitettiin, koska sinulla ei ole niiden jakamisoikeutta.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Hälytys otettiin käyttöön \$count turvalaitteessa",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Käytä samaa aikataulua \$count turvalaitteessa",
   "\$count phút trước": "\$count minuuttia sitten",
   "\$count giờ trước": "\$count tuntia sitten",
   "\${count}h trước": "\${count} t sitten",
   "\${hours}h\$minutes' trước": "\${hours} t \$minutes min sitten",
   "\$count ngày trước": "\$count päivää sitten",
   "\$count tháng trước": "\$count kuukautta sitten",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Haluatko varmasti poistaa jäsenen \$name tästä kodista?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nPyytää liittymistä kotiin \"\$homeName\"",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Haluatko varmasti poistaa jäsenen \$name tästä kodista?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nPyytää liittymistä kotiin \"\$homeName\"",
   "Xin gia nhập \"\$homeName\"": "Pyytää liittymistä kotiin \"\$homeName\"",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Sinut on kutsuttu vastaanottamaan kodin \"\$homeName\" omistajuus",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nKutsuu sinut liittymään kotiin \"\$homeName\"",
-  "Mời bạn gia nhập \"\$homeName\"": "Kutsuu sinut liittymään kotiin \"\$homeName\"",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Sinut on kutsuttu vastaanottamaan kodin \"\$homeName\" omistajuus",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nKutsuu sinut liittymään kotiin \"\$homeName\"",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Kutsuu sinut liittymään kotiin \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Vaatii huomiota: \$joined",
   "Cập nhật \$value": "Päivitetty \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Lisää ensimmäinen SafeHome-laitteesi aloittaaksesi tämän kodin valvonnan.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Tarkista ensin hätähälytykset ja ota sitten tarvittaessa yhteyttä kodin jäseniin.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Kukaan jäsen ei ole kotona, mutta ovi tai lukko on auki. Tarkista se heti.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Tarkista avoin ovi tai lukko ennen kodin pitämistä Suojaus-tilassa.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Joku voi yhä olla kotona. Vaihda siinä tapauksessa takaisin Normaali-tilaan.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Joidenkin jäsenten sijainti on tuntematon. Pyydä heitä avaamaan sovellus tai tarkistamaan sijainnin käyttöoikeus.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Laitteen yhteys on katkennut. Tarkista akku, virtalähde tai laitteen sijainti.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Laitteen akku on vähissä. Vaihda se pian, jotta hälytyksiä ei jää saamatta.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Muistutusta ei ole asetettu. Luo aikataulu kodin säännöllistä tarkistamista varten.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Hälytysaikataulua ei ole asetettu. Ota suojaus käyttöön ajankohtina, jolloin olet yleensä poissa.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Välitöntä toimintaa ei tarvita. Jatka kodin tilan seurantaa.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Lisää ensimmäinen SafeHome-laitteesi aloittaaksesi tämän kodin valvonnan.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Tarkista ensin hätähälytykset ja ota sitten tarvittaessa yhteyttä kodin jäseniin.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Kukaan jäsen ei ole kotona, mutta ovi tai lukko on auki. Tarkista se heti.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Tarkista avoin ovi tai lukko ennen kodin pitämistä Suojaus-tilassa.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Joku voi yhä olla kotona. Vaihda siinä tapauksessa takaisin Normaali-tilaan.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Joidenkin jäsenten sijainti on tuntematon. Pyydä heitä avaamaan sovellus tai tarkistamaan sijainnin käyttöoikeus.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Laitteen yhteys on katkennut. Tarkista akku, virtalähde tai laitteen sijainti.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Laitteen akku on vähissä. Vaihda se pian, jotta hälytyksiä ei jää saamatta.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Muistutusta ei ole asetettu. Luo aikataulu kodin säännöllistä tarkistamista varten.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Hälytysaikataulua ei ole asetettu. Ota suojaus käyttöön ajankohtina, jolloin olet yleensä poissa.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Välitöntä toimintaa ei tarvita. Jatka kodin tilan seurantaa.",
   "Lặp sau \$minutes phút": "Toista \$minutes minuutin kuluttua",
   "Đang dùng • \$repeatText": "Käytössä • \$repeatText",
   "Giám sát an ninh • \$repeatText": "Turvallisuusvalvonta • \$repeatText",
   "Gia đình: \$mode": "Kodin tila: \$mode",
   "Gợi ý xử lý": "Ehdotetut toimet",
   "Phát hiện \$count vấn đề cần xử lý": "\$count ongelmaa vaatii huomiota",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Ovia käytettiin tänään \$count kertaa",
-  "Đã ghi nhận \$count hoạt động gần đây": "\$count viimeaikaista toimintoa kirjattu",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Järjestelmä: \$issueCount kohdetta tarkistettava",
-  "FCM token đã sẵn sàng trên điện thoại này.": "FCM-tunnus on valmis tässä puhelimessa.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCM-tunnus on valmis, mutta Automaattinen poissa -toiminnolta puuttuu vaatimus.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Hätätilannelaitteita löytyi \$emergencyTotal. Suositeltu vähimmäismäärä: savuilmaisin ja SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Siirretäänkö kodin omistajuus käyttäjälle:\n\$targetEmail?",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Ovia käytettiin tänään \$count kertaa",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "\$count viimeaikaista toimintoa kirjattu",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Järjestelmä: \$issueCount kohdetta tarkistettava",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "FCM-tunnus on valmis tässä puhelimessa.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCM-tunnus on valmis, mutta Automaattinen poissa -toiminnolta puuttuu vaatimus.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Hätätilannelaitteita löytyi \$emergencyTotal. Suositeltu vähimmäismäärä: savuilmaisin ja SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Siirretäänkö kodin omistajuus käyttäjälle:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count ovea suljettu turvallisesti",
   "\$count cửa và khóa đã an toàn": "\$count ovea ja lukkoa turvattu",
   "\$count thiết bị đang được theo dõi": "\$count laitetta valvotaan",
   "Cập nhật \$timeText": "Päivitetty \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Uusimmat tiedot päivitettiin \$count minuuttia sitten",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Uusimmat tiedot päivitettiin \$count tuntia sitten",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Uusimmat tiedot päivitettiin \$count minuuttia sitten",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Uusimmat tiedot päivitettiin \$count tuntia sitten",
   "Thành viên trong nhà: \$count": "Jäseniä kotona: \$count",
   "Thành viên bên ngoài: \$count": "Jäseniä poissa: \$count",
   "Chưa xác định vị trí: \$count": "Sijainti tuntematon: \$count",
   "Môi trường hiện tại: \$environment": "Nykyinen ympäristö: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Auki kodin ollessa Suojaus-tilassa",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Auki kodin ollessa Suojaus-tilassa",
   "An tâm hơn trong từng ngôi nhà": "Mielenrauhaa jokaiseen kotiin",
   "Báo động SafeHome": "SafeHome-hälytys",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "Turvahälytys vaatii välitöntä tarkistamista.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "Turvahälytys vaatii välitöntä tarkistamista.",
   "Có cảnh báo cần kiểm tra": "Hälytys vaatii huomiotasi",
   "Tự đóng sau \$time": "Sulkeutuu automaattisesti \$time kuluttua",
   "Ngày trong tuần": "Viikonpäivät",
   "Hoặc": "Tai",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Alkamis- ja päättymisaika eivät voi olla samat",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Päättymisajan on oltava nykyisen ajan jälkeen",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Alkamis- ja päättymisaika eivät voi olla samat",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Päättymisajan on oltava nykyisen ajan jälkeen",
   "Khoảng tạm tắt không hợp lệ": "Virheellinen hälytyksen keskeytysväli",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Keskeytysväli ei osu minkään aktiivisen hälytysaikataulun ajalle",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Keskeytysväli ei osu minkään aktiivisen hälytysaikataulun ajalle",
   "Cài đặt báo động": "Hälytysasetukset",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Määritä, miten tämä anturi käynnistää hälytyksiä.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Määritä, miten tämä anturi käynnistää hälytyksiä.",
   "Tham gia báo động": "Osallistu hälytyksiin",
-  "Tắt để cảm biến không tạo báo động.": "Poista käytöstä, jotta anturi ei käynnistä hälytystä.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Poista käytöstä, jotta anturi ei käynnistä hälytystä.",
   "Bật còi vật lý": "Ota fyysinen sireeni käyttöön",
   "Cho phép kích hoạt còi trong nhà.": "Salli kodin sireenin käynnistyminen.",
   "Đánh thức màn hình": "Herätä näyttö",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Näytä puhelimessa koko näytön hälytys.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Näytä puhelimessa koko näytön hälytys.",
   "Độ trễ kích hoạt": "Aktivointiviive",
   "Chỉ áp dụng cho cảm biến an ninh.": "Koskee vain turva-antureita.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Hätätilanneanturit aktivoituvat aina välittömästi.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Hätätilanneanturit aktivoituvat aina välittömästi.",
   "Ngay lập tức": "Välittömästi",
   "giây": "sekuntia",
   "Đã lưu cấu hình báo động": "Hälytysasetukset tallennettu",
   "Không thể lưu cấu hình báo động": "Hälytysasetuksia ei voitu tallentaa",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Vain kodin omistaja ja ylläpitäjät voivat muuttaa tätä asetusta.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Vain kodin omistaja ja ylläpitäjät voivat muuttaa tätä asetusta.",
   "Thông tin chi tiết": "Laitteen tiedot",
   "Thông báo báo động": "Hälytysilmoitus",
   "Cài đặt nhắc nhở": "Muistutusasetukset",
   "Nhắc nhở theo lịch": "Ajastettu muistutus",
   "Danh sách thông báo": "Ilmoitukset",
   "Cài đặt thông báo": "Ilmoitusasetukset",
-  "Sử dụng báo động theo lịch đã thiết lập": "Käytä määritettyä hälytysaikataulua",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Lähetä vain ilmoituksia. Älä käynnistä hälytystä",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Kaikki kodin hälytykset ovat pois käytöstä. Järjestelmä lähettää vain ilmoituksia.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Vain omistaja voi ottaa tämän tilan käyttöön.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Käytä määritettyä hälytysaikataulua",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Lähetä vain ilmoituksia. Älä käynnistä hälytystä",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Kaikki kodin hälytykset ovat pois käytöstä. Järjestelmä lähettää vain ilmoituksia.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Vain omistaja voi ottaa tämän tilan käyttöön.",
   "Bật Không bảo vệ?": "Otetaanko Suojaamaton-tila käyttöön?",
   "Cảm biến vừa phát hiện một sự kiện.": "Anturi havaitsi juuri tapahtuman.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Vain omistaja voi ottaa Suojaamaton-tilan käyttöön",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Vain omistaja voi ottaa Suojaamaton-tilan käyttöön",
   "Đã chuyển nhà sang Không bảo vệ": "Koti vaihdettiin Suojaamaton-tilaan",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "Vaihdettiin Suojaamaton-tilaan, mutta ilmoitusta ei voitu lähettää",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "Vaihdettiin Suojaamaton-tilaan, mutta ilmoitusta ei voitu lähettää",
   "Giám sát toàn diện": "Täysi valvonta",
   "Không bảo vệ": "Suojaamaton",
   "Không bảo vệ đang bật": "Suojaamaton-tila on käytössä",
   "Nhà đã chuyển sang Không bảo vệ": "Koti vaihdettiin Suojaamaton-tilaan",
   "Thông báo cảm biến": "Anturi-ilmoitukset",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Tavalliset ilmoitukset, kun anturi havaitsee tapahtuman.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Tavalliset ilmoitukset, kun anturi havaitsee tapahtuman.",
   "Tôi hiểu, tiếp tục": "Ymmärrän, jatka",
   "Cảnh báo an ninh đã kết thúc": "Turvahälytys päättyi",
   "Sự cố nguy hiểm đã kết thúc": "Hätätilanne päättyi",
   "Cảnh báo đã được kết thúc.": "Hälytys on päättynyt.",
-  "Vẫn còn cảnh báo khác đang hoạt động.": "Toinen hälytys on edelleen aktiivinen.",
+  "Vẫn còn cảnh báo khác đang hoạt động.":
+      "Toinen hälytys on edelleen aktiivinen.",
   "Báo động đã hoạt động trở lại": "Hälytys on jälleen aktiivinen",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Hälytyksen keskeytysaika on päättynyt.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Hälytyksen keskeytysaika on päättynyt.",
   "MQTT đã kết nối trở lại": "MQTT-yhteys palautui",
   "Còi báo động đã được tắt": "Fyysinen sireeni poistettiin käytöstä",
   "Sự cố vẫn đang được theo dõi.": "Tapahtumaa valvotaan edelleen.",
   "Bảo vệ tự động đã bật": "Automaattinen suojaus käytössä",
-  "Toàn bộ thành viên đã rời khỏi nhà.": "Kaikki jäsenet ovat poistuneet kotoa.",
+  "Toàn bộ thành viên đã rời khỏi nhà.":
+      "Kaikki jäsenet ovat poistuneet kotoa.",
   "Bảo vệ tự động đã tắt": "Automaattinen suojaus pois käytöstä",
   "Có thành viên đã trở về nhà.": "Jäsen on palannut kotiin.",
   "Thiết bị đã được xoá": "Laite poistettiin",
@@ -934,34 +1152,47 @@ const Map<String, String> fiStrings = {
   "Nhà đang ở chế độ Bình thường.": "Koti on Normaali-tilassa.",
   "Pin thiết bị đã ổn định": "Laitteen akku on vakaassa tilassa",
   "Hub đã kết nối trở lại": "Hub-yhteys palautui",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "Vaihdettiin Normaali-tilaan, mutta ilmoitusta ei voitu lähettää",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "Vaihdettiin Normaali-tilaan, mutta ilmoitusta ei voitu lähettää",
   "Chung cho nhà": "Kodin yhteinen",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Koskee kaikkia jäseniä ja voi aktivoida fyysisen sireenin.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Koskee kaikkia jäseniä ja voi aktivoida fyysisen sireenin.",
   "Cá nhân": "Henkilökohtainen",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Henkilökohtainen aikataulu toimii itsenäisesti eikä koskaan aktivoi fyysistä sireeniä.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Tämä asetus koskee vain omaa tiliäsi.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Vain omistaja ja ylläpitäjät voivat muuttaa kodin yhteisiä asetuksia.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Henkilökohtainen aikataulu toimii itsenäisesti eikä koskaan aktivoi fyysistä sireeniä.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Tämä asetus koskee vain omaa tiliäsi.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Vain omistaja ja ylläpitäjät voivat muuttaa kodin yhteisiä asetuksia.",
   "Tham gia hệ thống báo động": "Osallistu hälytysjärjestelmään",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Hätätilanneanturit osallistuvat aina hälytysjärjestelmään.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Poista käytöstä, jotta laite ei käynnistä mitään hälytyksiä.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Hätätilanneanturit osallistuvat aina hälytysjärjestelmään.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Poista käytöstä, jotta laite ei käynnistä mitään hälytyksiä.",
   "Lịch báo động chung": "Yhteinen hälytysaikataulu",
   "Lịch báo động cá nhân": "Henkilökohtainen hälytysaikataulu",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Näytä puhelimessasi koko näytön hälytys.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Näytä puhelimessasi koko näytön hälytys.",
   "Lặp lại cảnh báo": "Toista hälytys",
   "Báo động chung": "Yhteinen hälytys",
   "Báo động cá nhân": "Henkilökohtainen hälytys",
   "Đã cài đặt": "Määritetty",
   "Chưa cài đặt": "Ei määritetty",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Yhteinen ja henkilökohtainen aikataulu toimivat rinnakkain. Sinun ei enää tarvitse valita niiden väliltä.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Yhteinen ja henkilökohtainen aikataulu toimivat rinnakkain. Sinun ei enää tarvitse valita niiden väliltä.",
   "Cài nhanh chung": "Yhteisen aikataulun pika-asetus",
   "Cài nhanh cá nhân": "Henkilökohtaisen aikataulun pika-asetus",
   "Thiết lập nhanh lịch cá nhân": "Henkilökohtaisen aikataulun nopea määritys",
   "Thiết lập nhanh lịch chung": "Yhteisen aikataulun nopea määritys",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Tämä aikataulu koskee vain sinua eikä aktivoi fyysistä sireeniä.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Tämä aikataulu koskee kaikkia kodin jäseniä.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Tämä aikataulu koskee vain sinua eikä aktivoi fyysistä sireeniä.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Tämä aikataulu koskee kaikkia kodin jäseniä.",
   "Đã áp dụng lịch báo động": "Hälytysaikataulu otettu käyttöön",
   "Không thể lưu lịch báo động": "Hälytysaikataulua ei voitu tallentaa",
   "Nhà chưa có thiết bị an ninh": "Tässä kodissa ei ole turvalaitteita",
-  "Nhận cảnh báo theo lịch chung của nhà": "Vastaanota hälytyksiä kodin yhteisen aikataulun mukaan",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Poista tämä käytöstä, jos et halua yhteisen aikataulun ilmoituksia tai koko näytön hälytyksiä. Kodin sireeni toimii edelleen.",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Vastaanota hälytyksiä kodin yhteisen aikataulun mukaan",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Poista tämä käytöstä, jos et halua yhteisen aikataulun ilmoituksia tai koko näytön hälytyksiä. Kodin sireeni toimii edelleen.",
 };

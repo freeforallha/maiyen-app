@@ -109,9 +109,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
             TextField(
               controller: passController,
               obscureText: true,
-              decoration: InputDecoration(
-                labelText: strings.t("Mật khẩu mới"),
-              ),
+              decoration: InputDecoration(labelText: strings.t("Mật khẩu mới")),
             ),
 
             TextField(

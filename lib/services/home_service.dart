@@ -10,9 +10,7 @@ class HomeService {
     final currentUid = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUid == null || currentUid.isEmpty) {
-      throw StateError(
-        "Không có tài khoản Firebase Auth đang đăng nhập",
-      );
+      throw StateError("Không có tài khoản Firebase Auth đang đăng nhập");
     }
 
     return currentUid;
@@ -25,9 +23,7 @@ class HomeService {
     final currentUid = await _requireSignedInUid();
 
     if (ownerUid.trim().isEmpty || homeId.trim().isEmpty) {
-      throw ArgumentError(
-        "ownerUid và homeId không được để trống",
-      );
+      throw ArgumentError("ownerUid và homeId không được để trống");
     }
 
     if (currentUid == ownerUid) {
@@ -35,27 +31,19 @@ class HomeService {
     }
 
     final accessSnap = await _db
-        .ref(
-      "accounts/$currentUid/sharedHomes/$homeId",
-    )
+        .ref("accounts/$currentUid/sharedHomes/$homeId")
         .get();
 
     final access = accessSnap.value is Map
-        ? Map<String, dynamic>.from(
-      accessSnap.value as Map,
-    )
+        ? Map<String, dynamic>.from(accessSnap.value as Map)
         : <String, dynamic>{};
 
-    final sharedOwnerUid =
-        access["ownerUid"]?.toString() ?? "";
+    final sharedOwnerUid = access["ownerUid"]?.toString() ?? "";
 
-    final role =
-        access["role"]?.toString() ?? "member";
+    final role = access["role"]?.toString() ?? "member";
 
     if (sharedOwnerUid != ownerUid || role != "admin") {
-      throw StateError(
-        "Bạn không có quyền quản lý nhà này",
-      );
+      throw StateError("Bạn không có quyền quản lý nhà này");
     }
   }
 
@@ -65,24 +53,17 @@ class HomeService {
     required String deviceId,
     required String name,
   }) async {
-    await _requireManageHome(
-      ownerUid: ownerUid,
-      homeId: homeId,
-    );
+    await _requireManageHome(ownerUid: ownerUid, homeId: homeId);
 
     final cleanDeviceId = deviceId.trim();
     final cleanName = name.trim();
 
     if (cleanDeviceId.isEmpty || cleanName.isEmpty) {
-      throw ArgumentError(
-        "deviceId và tên thiết bị không được để trống",
-      );
+      throw ArgumentError("deviceId và tên thiết bị không được để trống");
     }
 
     await _db
-        .ref(
-      "${FirebasePaths.device(ownerUid, homeId, cleanDeviceId)}/name",
-    )
+        .ref("${FirebasePaths.device(ownerUid, homeId, cleanDeviceId)}/name")
         .set(cleanName);
   }
 
@@ -92,24 +73,17 @@ class HomeService {
     required String deviceId,
     required String roomId,
   }) async {
-    await _requireManageHome(
-      ownerUid: ownerUid,
-      homeId: homeId,
-    );
+    await _requireManageHome(ownerUid: ownerUid, homeId: homeId);
 
     final cleanDeviceId = deviceId.trim();
     final cleanRoomId = roomId.trim();
 
     if (cleanDeviceId.isEmpty || cleanRoomId.isEmpty) {
-      throw ArgumentError(
-        "deviceId và roomId không được để trống",
-      );
+      throw ArgumentError("deviceId và roomId không được để trống");
     }
 
     await _db
-        .ref(
-      "${FirebasePaths.device(ownerUid, homeId, cleanDeviceId)}/roomId",
-    )
+        .ref("${FirebasePaths.device(ownerUid, homeId, cleanDeviceId)}/roomId")
         .set(cleanRoomId);
   }
 
@@ -117,14 +91,9 @@ class HomeService {
     required String ownerUid,
     required String homeId,
   }) async {
-    await _requireManageHome(
-      ownerUid: ownerUid,
-      homeId: homeId,
-    );
+    await _requireManageHome(ownerUid: ownerUid, homeId: homeId);
 
-    final homeRef = _db.ref(
-      FirebasePaths.home(ownerUid, homeId),
-    );
+    final homeRef = _db.ref(FirebasePaths.home(ownerUid, homeId));
 
     final snap = await homeRef.get();
     final data = snap.value;
@@ -136,9 +105,7 @@ class HomeService {
     final home = Map<String, dynamic>.from(data);
 
     final devices = home["devices"] is Map
-        ? Map<String, dynamic>.from(
-      home["devices"] as Map,
-    )
+        ? Map<String, dynamic>.from(home["devices"] as Map)
         : <String, dynamic>{};
 
     final updates = <String, Object?>{};
@@ -161,12 +128,10 @@ class HomeService {
 
       final deviceMap = Map<String, dynamic>.from(device);
 
-      final roomId =
-      deviceMap["roomId"]?.toString().trim();
+      final roomId = deviceMap["roomId"]?.toString().trim();
 
       if (roomId == null || roomId.isEmpty) {
-        updates["devices/$deviceId/roomId"] =
-        "unassigned";
+        updates["devices/$deviceId/roomId"] = "unassigned";
       }
     }
 
@@ -180,27 +145,16 @@ class HomeService {
     required String homeId,
     required String deviceId,
   }) async {
-    await _requireManageHome(
-      ownerUid: ownerUid,
-      homeId: homeId,
-    );
+    await _requireManageHome(ownerUid: ownerUid, homeId: homeId);
 
     final cleanDeviceId = deviceId.trim();
 
     if (cleanDeviceId.isEmpty) {
-      throw ArgumentError(
-        "deviceId không được để trống",
-      );
+      throw ArgumentError("deviceId không được để trống");
     }
 
     await _db
-        .ref(
-      FirebasePaths.device(
-        ownerUid,
-        homeId,
-        cleanDeviceId,
-      ),
-    )
+        .ref(FirebasePaths.device(ownerUid, homeId, cleanDeviceId))
         .remove();
   }
 
@@ -209,23 +163,16 @@ class HomeService {
     required String homeId,
     required String name,
   }) async {
-    await _requireManageHome(
-      ownerUid: ownerUid,
-      homeId: homeId,
-    );
+    await _requireManageHome(ownerUid: ownerUid, homeId: homeId);
 
     final cleanName = name.trim();
 
     if (cleanName.isEmpty) {
-      throw ArgumentError(
-        "Tên nhà không được để trống",
-      );
+      throw ArgumentError("Tên nhà không được để trống");
     }
 
     await _db
-        .ref(
-      "${FirebasePaths.home(ownerUid, homeId)}/name",
-    )
+        .ref("${FirebasePaths.home(ownerUid, homeId)}/name")
         .set(cleanName);
   }
 
@@ -238,54 +185,28 @@ class HomeService {
     final currentUid = await _requireSignedInUid();
 
     if (uid != currentUid) {
-      throw StateError(
-        "Không thể tạo nhà cho tài khoản khác",
-      );
+      throw StateError("Không thể tạo nhà cho tài khoản khác");
     }
 
     final cleanId = id.trim();
     final cleanName = name.trim();
 
     if (cleanId.isEmpty || cleanName.isEmpty) {
-      throw ArgumentError(
-        "ID và tên nhà không được để trống",
-      );
+      throw ArgumentError("ID và tên nhà không được để trống");
     }
 
-    await _db
-        .ref(
-      FirebasePaths.home(
-        currentUid,
-        cleanId,
-      ),
-    )
-        .set({
+    await _db.ref(FirebasePaths.home(currentUid, cleanId)).set({
       "name": cleanName,
       "address": address.trim(),
       "_ownerUid": currentUid,
       "_shared": false,
       "devices": {},
       "rooms": {
-        "unassigned": {
-          "name": "Chưa phân phòng",
-          "icon": "home",
-          "order": 0,
-        },
-        "living_room": {
-          "name": "Phòng khách",
-          "icon": "living",
-          "order": 1,
-        },
+        "unassigned": {"name": "Chưa phân phòng", "icon": "home", "order": 0},
+        "living_room": {"name": "Phòng khách", "icon": "living", "order": 1},
       },
-      "alarm": {
-        "enabled": false,
-        "start": "23:00",
-        "end": "06:00",
-      },
-      "schedules": {
-        "alarms": [],
-        "notifications": [],
-      },
+      "alarm": {"enabled": false, "start": "23:00", "end": "06:00"},
+      "schedules": {"alarms": [], "notifications": []},
     });
   }
 }

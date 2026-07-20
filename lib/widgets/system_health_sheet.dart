@@ -565,7 +565,8 @@ class _SystemHealthSnapshot {
     final schedules = safeMap(home['schedules']);
     final devices = safeMap(home['devices']);
     final legacyMode = customRules['mode']?.toString();
-    final alarmLegacyMode = (customRules['alarmMode'] ?? customRules['mode'] ?? 'home').toString();
+    final alarmLegacyMode =
+        (customRules['alarmMode'] ?? customRules['mode'] ?? 'home').toString();
     final reminderMode = customRules['reminderMode']?.toString() ?? legacyMode;
     final reminderCustomMode = reminderMode == 'custom';
     final customNotifications = safeMap(customRules['notifications']);
@@ -580,11 +581,10 @@ class _SystemHealthSnapshot {
     final homeAlarmScheduleEnabled =
         _hasEnabledSchedule(schedules['alarms']) ||
         _hasEnabledDeviceAlarm(devices);
-    final customAlarmScheduleEnabled =
-        _hasEnabledCustomDeviceAlarm(
-          customDevices,
-          legacyAlarmMode: alarmLegacyMode,
-        );
+    final customAlarmScheduleEnabled = _hasEnabledCustomDeviceAlarm(
+      customDevices,
+      legacyAlarmMode: alarmLegacyMode,
+    );
     final alarmScheduleEnabled =
         homeAlarmScheduleEnabled || customAlarmScheduleEnabled;
     final emergencyCounts = _emergencyDeviceCounts(devices);

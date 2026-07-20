@@ -83,7 +83,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
 
                 return SingleChildScrollView(
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -169,9 +169,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
                           icon: const Icon(Icons.save_rounded),
                           label: Text(
                             strings.t("Lưu thay đổi"),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                           style: FilledButton.styleFrom(
                             backgroundColor: SafeHomeColors.primary,
@@ -186,11 +184,11 @@ Future<Map<String, String>?> showRenameHomeSheet({
                       Text(
                         usePersonalName
                             ? strings.t(
-                          "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
-                        )
+                                "Tên này chỉ hiển thị riêng trên tài khoản của bạn.",
+                              )
                             : strings.t(
-                          "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
-                        ),
+                                "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.",
+                              ),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: SafeHomeColors.textSecondary,
@@ -225,9 +223,7 @@ Future<String?> showShareHomeSheet({
       return StatefulBuilder(
         builder: (context, setPageState) {
           final email = inputEmail.trim().toLowerCase();
-          final emailOk = RegExp(
-            r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-          ).hasMatch(email);
+          final emailOk = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
 
           void submit() {
             if (!emailOk) return;
@@ -247,77 +243,75 @@ Future<String?> showShareHomeSheet({
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
                 child: Column(
                   children: [
-                      Text(
-                        strings.t("Chia sẻ nhà"),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        ),
+                    Text(
+                      strings.t("Chia sẻ nhà"),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
                       ),
-                      const SizedBox(height: 14),
-                      Text(
-                        strings.t("Mời thành viên bằng mã QR"),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      QrImageView(
-                        data: qrData,
-                        version: QrVersions.auto,
-                        size: qrSize,
-                      ),
-                      const SizedBox(height: 18),
-                      Row(
-                        children: [
-                          const Expanded(child: Divider()),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              strings.t("Hoặc"),
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w600,
-                              ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      strings.t("Mời thành viên bằng mã QR"),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 12),
+                    QrImageView(
+                      data: qrData,
+                      version: QrVersions.auto,
+                      size: qrSize,
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        const Expanded(child: Divider()),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            strings.t("Hoặc"),
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const Expanded(child: Divider()),
-                        ],
-                      ),
-                      const SizedBox(height: 18),
-                      TextFormField(
-                        autofocus: false,
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.done,
-                        onChanged: (value) {
-                          inputEmail = value;
-                          setPageState(() {});
-                        },
-                        onFieldSubmitted: (_) {
-                          if (emailOk) submit();
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.email_rounded),
-                          labelText: strings.t("Email người nhận"),
-                          filled: true,
-                          fillColor: Colors.grey.shade100,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
-                          ),
+                        ),
+                        const Expanded(child: Divider()),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    TextFormField(
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                      onChanged: (value) {
+                        inputEmail = value;
+                        setPageState(() {});
+                      },
+                      onFieldSubmitted: (_) {
+                        if (emailOk) submit();
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.email_rounded),
+                        labelText: strings.t("Email người nhận"),
+                        filled: true,
+                        fillColor: Colors.grey.shade100,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
                         ),
                       ),
-                      const SizedBox(height: 18),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: emailOk ? submit : null,
-                          icon: const Icon(Icons.share_rounded),
-                          label: Text(strings.t("Chia sẻ")),
-                        ),
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: emailOk ? submit : null,
+                        icon: const Icon(Icons.share_rounded),
+                        label: Text(strings.t("Chia sẻ")),
                       ),
+                    ),
                   ],
                 ),
               ),

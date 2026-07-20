@@ -3,7 +3,8 @@ const Map<String, String> roStrings = {
   "Không đọc được số điện thoại": "Numărul de telefon nu a putut fi citit",
   "Tin nhắn quá dài": "Mesajul este prea lung",
   "Không gửi được tin nhắn": "Mesajul nu a putut fi trimis",
-  "Bạn không có quyền sửa lịch chung của nhà": "Nu ai permisiunea de a modifica programul comun al locuinței",
+  "Bạn không có quyền sửa lịch chung của nhà":
+      "Nu ai permisiunea de a modifica programul comun al locuinței",
   "Nhà của bạn": "Locuința ta",
   "Tải tin cũ hơn": "Încarcă mesajele mai vechi",
   "Nhà chưa đặt tên": "Locuință fără nume",
@@ -91,20 +92,27 @@ const Map<String, String> roStrings = {
   "Đang theo dõi": "Se monitorizează",
   "Chưa nhận diện": "Dispozitiv nerecunoscut",
   "Chưa có cập nhật": "Nu există încă actualizări",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "Nu există încă dispozitive. Apasă + pentru a adăuga unul și a începe să-ți protejezi locuința.",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "Nu există încă dispozitive. Apasă + pentru a adăuga unul și a începe să-ți protejezi locuința.",
   "CHƯA AN TOÀN": "NESIGUR",
   "ĐÃ AN TOÀN": "ÎN SIGURANȚĂ",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "Locuința prezintă semne care trebuie verificate. Consultă stările de mai jos.",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "Locuința funcționează normal. Poți sta liniștit.",
-  "Không có dấu hiệu khói hoặc SOS bất thường.": "Nu au fost detectate semne neobișnuite de fum sau activări SOS.",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "Nu există suficiente activități recente pentru o analiză mai aprofundată.",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "Locuința prezintă semne care trebuie verificate. Consultă stările de mai jos.",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "Locuința funcționează normal. Poți sta liniștit.",
+  "Không có dấu hiệu khói hoặc SOS bất thường.":
+      "Nu au fost detectate semne neobișnuite de fum sau activări SOS.",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "Nu există suficiente activități recente pentru o analiză mai aprofundată.",
   "Hub kết nối bình thường": "Hubul este conectat normal",
-  "Cài đặt cảnh báo cho nhà hiện tại": "Setări de alertă pentru această locuință",
+  "Cài đặt cảnh báo cho nhà hiện tại":
+      "Setări de alertă pentru această locuință",
   "Nhận cảnh báo báo động": "Primește alerte de alarmă",
   "Đang bật cho tài khoản này": "Activat pentru acest cont",
   "Đang tắt cho tài khoản này": "Dezactivat pentru acest cont",
   "Hẹn giờ nhắc nhở": "Program pentru mementouri",
-  "Nhắc kiểm tra nhà theo thời gian": "Programează mementouri pentru verificarea locuinței",
+  "Nhắc kiểm tra nhà theo thời gian":
+      "Programează mementouri pentru verificarea locuinței",
   "Hẹn giờ báo động": "Programează alarma",
   "Chưa thiết lập": "Neconfigurat",
   "Chưa thiết lập thời gian": "Nu a fost configurat niciun program",
@@ -113,7 +121,8 @@ const Map<String, String> roStrings = {
   "Đánh giá tự động": "Evaluare automată",
   "Tự động đánh giá": "Evaluare automată",
   "Tổng quan hôm nay": "Prezentarea generală de azi",
-  "Chưa có dữ liệu tổng quan": "Nu există încă date pentru prezentarea generală",
+  "Chưa có dữ liệu tổng quan":
+      "Nu există încă date pentru prezentarea generală",
   "Chưa có dữ liệu trạng thái": "Nu există încă date de stare",
   "Chưa đủ dữ liệu để đánh giá": "Nu există suficiente date pentru evaluare",
   "Chưa có dữ liệu để đánh giá": "Nu există date pentru evaluare",
@@ -149,7 +158,8 @@ const Map<String, String> roStrings = {
   "Giờ nhắc nhở": "Ora mementoului",
   "Giờ bắt đầu báo động": "Ora de începere a alarmei",
   "Giờ kết thúc báo động": "Ora de încheiere a alarmei",
-  "Không có nhà nào đủ điều kiện để cài": "Nu au fost găsite locuințe eligibile",
+  "Không có nhà nào đủ điều kiện để cài":
+      "Nu au fost găsite locuințe eligibile",
   "Cài đặt hoàn tất": "Configurare finalizată",
   "Xác nhận rời nhà": "Confirmă ieșirea din locuință",
   "Xác nhận xoá nhà": "Confirmă ștergerea locuinței",
@@ -161,20 +171,26 @@ const Map<String, String> roStrings = {
   "Đã rời khỏi home": "Ai părăsit locuința",
   "Đã cập nhật": "Actualizat",
   "Tìm home...": "Caută locuințe...",
-  "Đặt vị trí nhà và bật bảo vệ tự động": "Setează locația locuinței și activează protecția automată",
-  "Chuyển quyền chủ nhà hoặc xoá nhà": "Transferă dreptul de proprietate sau șterge locuința",
-  "Đặt nhắc nhở / báo động nhà đã chọn": "Setează memento/alarmă pentru locuințele selectate",
+  "Đặt vị trí nhà và bật bảo vệ tự động":
+      "Setează locația locuinței și activează protecția automată",
+  "Chuyển quyền chủ nhà hoặc xoá nhà":
+      "Transferă dreptul de proprietate sau șterge locuința",
+  "Đặt nhắc nhở / báo động nhà đã chọn":
+      "Setează memento/alarmă pentru locuințele selectate",
   "Chia sẻ nhà đã chọn": "Partajează locuințele selectate",
   "Mở danh sách chia sẻ nhà": "Deschide lista de partajare a locuinței",
   "Xoá các nhà đã chọn?": "Ștergi locuințele selectate?",
-  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.": "Locuințele selectate vor fi șterse definitiv.",
-  "Hoặc quét QR để xin gia nhập các nhà đã chọn": "Sau scanează un cod QR pentru a solicita acces la locuințele selectate",
+  "Các nhà đã chọn sẽ bị xoá vĩnh viễn.":
+      "Locuințele selectate vor fi șterse definitiv.",
+  "Hoặc quét QR để xin gia nhập các nhà đã chọn":
+      "Sau scanează un cod QR pentru a solicita acces la locuințele selectate",
   "Email người nhận": "E-mailul destinatarului",
   "Chia sẻ": "Partajează",
   "Email chưa đăng ký": "Adresa de e-mail nu este înregistrată",
   "Chia sẻ hoàn tất": "Partajare finalizată",
   "Mở List chia sẻ nhà": "Deschide lista de partajare a locuinței",
-  "Không có nhà nào bạn có quyền quản lý": "Nu gestionezi niciuna dintre locuințele selectate",
+  "Không có nhà nào bạn có quyền quản lý":
+      "Nu gestionezi niciuna dintre locuințele selectate",
   "Chưa share cho ai": "Nu a fost partajată încă cu nimeni",
   "Tìm nhà": "Caută locuințe",
   "Xoá các nhà đã chọn ?": "Ștergi locuințele selectate?",
@@ -182,13 +198,16 @@ const Map<String, String> roStrings = {
   "Thông báo nhà": "Notificări pentru locuință",
   "Vai trò thành viên đã thay đổi": "Rolul membrului a fost modificat",
   "Xoá tất cả thông báo?": "Ștergi toate notificările?",
-  "Toàn bộ thông báo nhà sẽ bị xoá.": "Toate notificările locuinței vor fi șterse.",
+  "Toàn bộ thông báo nhà sẽ bị xoá.":
+      "Toate notificările locuinței vor fi șterse.",
   "Chưa có thông báo nào": "Nu există încă notificări",
   "Chưa có thông báo": "Nu există notificări",
   "Vuốt lên để tải thêm": "Glisează în sus pentru a încărca mai multe",
   "Không có thiết bị": "Nu există dispozitive",
-  "Chỉ chủ nhà mới được xoá nhà": "Doar proprietarul poate șterge această locuință",
-  "Chỉ chủ nhà mới được chuyển quyền": "Doar proprietarul poate transfera dreptul de proprietate",
+  "Chỉ chủ nhà mới được xoá nhà":
+      "Doar proprietarul poate șterge această locuință",
+  "Chỉ chủ nhà mới được chuyển quyền":
+      "Doar proprietarul poate transfera dreptul de proprietate",
   "Lưu ý khi bật báo động": "Notă privind activarea alarmei",
   "Báo động đã được bật": "Alarma a fost activată",
   "Đã hiểu": "Am înțeles",
@@ -197,28 +216,39 @@ const Map<String, String> roStrings = {
   "Đã tắt báo động": "Alarma a fost oprită",
   "Tắt báo động": "Oprește alarma",
   "Cả ngày": "Toată ziua",
-  "Bạn không có quyền thực hiện thao tác này.": "Nu ai permisiunea de a efectua această acțiune.",
-  "Không thể hoàn tất thao tác. Vui lòng thử lại.": "Acțiunea nu a putut fi finalizată. Încearcă din nou.",
-  "QR gia nhập nhiều nhà không hợp lệ": "Cod QR nevalid pentru alăturarea la mai multe locuințe",
+  "Bạn không có quyền thực hiện thao tác này.":
+      "Nu ai permisiunea de a efectua această acțiune.",
+  "Không thể hoàn tất thao tác. Vui lòng thử lại.":
+      "Acțiunea nu a putut fi finalizată. Încearcă din nou.",
+  "QR gia nhập nhiều nhà không hợp lệ":
+      "Cod QR nevalid pentru alăturarea la mai multe locuințe",
   "Bạn đang là chủ các nhà này": "Ești proprietarul acestor locuințe",
   "Một người dùng": "Un utilizator",
   "Yêu cầu gia nhập nhà": "Solicitare de alăturare la locuință",
   "Đã gửi yêu cầu gia nhập nhà": "Solicitarea de alăturare a fost trimisă",
   "QR gia nhập không hợp lệ": "Cod QR de alăturare nevalid",
   "Bạn đang là chủ nhà này": "Ești deja proprietarul acestei locuințe",
-  "QR này không phải mã xin gia nhập nhà": "Acest cod QR nu este un cod de alăturare la locuință",
-  "Bạn không có quyền thêm thiết bị": "Nu ai permisiunea de a adăuga dispozitive",
-  "Đã mở chế độ thêm thiết bị": "Modul de asociere a dispozitivelor a fost activat",
+  "QR này không phải mã xin gia nhập nhà":
+      "Acest cod QR nu este un cod de alăturare la locuință",
+  "Bạn không có quyền thêm thiết bị":
+      "Nu ai permisiunea de a adăuga dispozitive",
+  "Đã mở chế độ thêm thiết bị":
+      "Modul de asociere a dispozitivelor a fost activat",
   "Rời khỏi Home này?": "Părăsești această locuință?",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "Această locuință și toate dispozitivele din ea vor fi șterse definitiv.",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "Această locuință și toate dispozitivele din ea vor fi șterse definitiv.",
   "Đã xoá nhà": "Locuința a fost ștearsă",
   "QR của nhà này": "Codul QR al acestei locuințe",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "Alte persoane pot scana acest cod pentru a solicita acces la locuință.",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "Alte persoane pot scana acest cod pentru a solicita acces la locuință.",
   "Chia sẻ nhà": "Partajează locuința",
-  "Quét QR để xin gia nhập nhà": "Scanează codul QR pentru a te alătura unei locuințe",
+  "Quét QR để xin gia nhập nhà":
+      "Scanează codul QR pentru a te alătura unei locuințe",
   "Quét QR xin gia nhập nhà": "Scanează codul QR pentru a te alătura locuinței",
-  "Đưa mã QR chia sẻ nhà vào khung hình": "Încadrează codul QR al locuinței partajate",
-  "Mã QR này do chủ nhà chia sẻ": "Acest cod QR este partajat de proprietarul locuinței",
+  "Đưa mã QR chia sẻ nhà vào khung hình":
+      "Încadrează codul QR al locuinței partajate",
+  "Mã QR này do chủ nhà chia sẻ":
+      "Acest cod QR este partajat de proprietarul locuinței",
   "Nhập mã mời": "Introdu codul de invitație",
   "Gửi yêu cầu gia nhập": "Trimite solicitarea de alăturare",
   "QR này không phải mã thiết bị": "Acest cod QR nu este un cod de dispozitiv",
@@ -229,18 +259,23 @@ const Map<String, String> roStrings = {
   "Lời mời chia sẻ nhà": "Invitație de partajare a locuinței",
   "Đã share home": "Locuința a fost partajată",
   "Chuyển quyền chủ nhà": "Transferă dreptul de proprietate",
-  "Không thể chuyển quyền cho chính bạn": "Nu poți transfera dreptul de proprietate către tine însuți",
+  "Không thể chuyển quyền cho chính bạn":
+      "Nu poți transfera dreptul de proprietate către tine însuți",
   "Không tìm thấy user": "Utilizatorul nu a fost găsit",
   "Không tìm thấy tài khoản": "Contul nu a fost găsit",
   "Xác nhận chuyển quyền": "Confirmă transferul dreptului de proprietate",
   "Chuyển": "Transferă",
   "Xác nhận mật khẩu": "Confirmă parola",
-  "Yêu cầu chuyển quyền chủ nhà": "Solicitare de transfer al dreptului de proprietate",
+  "Yêu cầu chuyển quyền chủ nhà":
+      "Solicitare de transfer al dreptului de proprietate",
   "Đã gửi yêu cầu chuyển quyền": "Solicitarea de transfer a fost trimisă",
-  "Đã gửi yêu cầu chuyển quyền chủ nhà": "Solicitarea de transfer al dreptului de proprietate a fost trimisă",
-  "Bạn không có quyền xoá thiết bị": "Nu ai permisiunea de a șterge dispozitive",
+  "Đã gửi yêu cầu chuyển quyền chủ nhà":
+      "Solicitarea de transfer al dreptului de proprietate a fost trimisă",
+  "Bạn không có quyền xoá thiết bị":
+      "Nu ai permisiunea de a șterge dispozitive",
   "Xóa Device?": "Ștergi acest dispozitiv?",
-  "Đã gửi yêu cầu xoá thiết bị": "Solicitarea de ștergere a dispozitivului a fost trimisă",
+  "Đã gửi yêu cầu xoá thiết bị":
+      "Solicitarea de ștergere a dispozitivului a fost trimisă",
   "Đang xoá thiết bị": "Se șterge dispozitivul",
   "Đăng xuất?": "Te deconectezi?",
   "Thêm nhà": "Adaugă o locuință",
@@ -261,7 +296,8 @@ const Map<String, String> roStrings = {
   "Không thể lưu thông tin": "Informațiile nu au putut fi salvate",
   "Đã lưu thông tin": "Informațiile au fost salvate",
   "Lỗi lưu profile": "Profilul nu a putut fi salvat",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "Adaugă un număr de telefon pentru situații de urgență",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "Adaugă un număr de telefon pentru situații de urgență",
   "Hoàn tất": "Finalizat",
   "Đã tạo nhà mới": "Locuința nouă a fost creată",
   "Về muộn": "Mă întorc târziu",
@@ -280,7 +316,8 @@ const Map<String, String> roStrings = {
   "SĐT": "Telefon",
   "Ngày sinh": "Data nașterii",
   "Yêu cầu & lời mời": "Solicitări și invitații",
-  "Xem lời mời chia sẻ và xin gia nhập": "Vezi invitațiile de partajare și solicitările de alăturare",
+  "Xem lời mời chia sẻ và xin gia nhập":
+      "Vezi invitațiile de partajare și solicitările de alăturare",
   "Cài đặt bảo mật": "Setări de securitate",
   "Quyền báo động toàn màn hình": "Permisiune pentru alarmă pe ecran complet",
   "Báo động toàn màn hình": "Alarmă pe ecran complet",
@@ -288,10 +325,12 @@ const Map<String, String> roStrings = {
   "Chưa được cấp quyền": "Permisiune neacordată",
   "Mở cài đặt hệ thống": "Deschide setările sistemului",
   "Đăng xuất": "Deconectare",
-  "Thoát tài khoản khỏi thiết bị này": "Deconectează contul de pe acest dispozitiv",
+  "Thoát tài khoản khỏi thiết bị này":
+      "Deconectează contul de pe acest dispozitiv",
   "Không có yêu cầu hoặc lời mời nào": "Nu există solicitări sau invitații",
   "Xoá tài khoản": "Șterge contul",
-  "Hành động này sẽ xoá toàn bộ dữ liệu:": "Această acțiune va șterge toate datele:",
+  "Hành động này sẽ xoá toàn bộ dữ liệu:":
+      "Această acțiune va șterge toate datele:",
   "Nhà và thiết bị": "Locuințe și dispozitive",
   "Chia sẻ và quyền truy cập": "Partajare și acces",
   "Toàn bộ dữ liệu liên quan": "Toate datele asociate",
@@ -326,11 +365,13 @@ const Map<String, String> roStrings = {
   "Ngập/rò nước": "Inundație/scurgere de apă",
   "Phát hiện khói": "Fum detectat",
   "Quản lý phòng": "Gestionarea camerelor",
-  "Bạn không có quyền quản lý phòng": "Nu ai permisiunea de a gestiona camerele",
+  "Bạn không có quyền quản lý phòng":
+      "Nu ai permisiunea de a gestiona camerele",
   "Đổi tên phòng": "Redenumește camera",
   "Tên phòng": "Numele camerei",
   "Xoá phòng": "Șterge camera",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "Dispozitivele din această cameră vor fi mutate la Neatribuite.",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "Dispozitivele din această cameră vor fi mutate la Neatribuite.",
   "Thêm phòng": "Adaugă o cameră",
   "Ví dụ: Phòng khách": "Exemplu: Living",
   "Phòng khách": "Living",
@@ -351,9 +392,11 @@ const Map<String, String> roStrings = {
   "Cửa đóng": "Ușa este închisă",
   "Chưa đặt vị trí nhà": "Locația locuinței nu este setată",
   "Đặt vị trí nhà tại đây": "Setează aici locația locuinței",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "Setează locația locuinței înainte de a activa protecția automată",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "Setează locația locuinței înainte de a activa protecția automată",
   "Bán kính bảo vệ mặc định: 150 m": "Raza implicită de protecție: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "Fiecare membru trebuie să acorde permisiunea de localizare „Întotdeauna”, astfel încât starea plecat/acasă să funcționeze în fundal.",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "Fiecare membru trebuie să acorde permisiunea de localizare „Întotdeauna”, astfel încât starea plecat/acasă să funcționeze în fundal.",
   "Lưu cài đặt": "Salvează setările",
   "Đã đặt vị trí nhà": "Locația locuinței a fost setată",
   "Đang lấy vị trí...": "Se obține locația...",
@@ -362,22 +405,28 @@ const Map<String, String> roStrings = {
   "Cập nhật thông tin nhà": "Actualizează informațiile locuinței",
   "Nhập địa chỉ của nhà": "Introdu adresa locuinței",
   "Lưu thay đổi": "Salvează modificările",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "Acest nume este afișat numai în contul tău.",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "Numele și adresa vor fi actualizate pentru toți membrii locuinței.",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "Acest nume este afișat numai în contul tău.",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "Numele și adresa vor fi actualizate pentru toți membrii locuinței.",
   "Một thành viên": "Un membru",
   "Đã cập nhật thông tin nhà": "Informațiile locuinței au fost actualizate",
   "Thay tên": "Redenumește",
   "Đã đổi tên thiết bị": "Dispozitivul a fost redenumit",
-  "Chưa chọn nhà để kiểm tra": "Nu a fost selectată nicio locuință pentru verificare",
-  "Hãy thực hiện kiểm tra bằng tài khoản Owner": "Efectuează verificarea folosind contul Proprietar",
+  "Chưa chọn nhà để kiểm tra":
+      "Nu a fost selectată nicio locuință pentru verificare",
+  "Hãy thực hiện kiểm tra bằng tài khoản Owner":
+      "Efectuează verificarea folosind contul Proprietar",
   "Không đọc được dữ liệu nhà": "Datele locuinței nu pot fi citite",
-  "Nhà cần có ít nhất một thiết bị để test": "Locuința trebuie să aibă cel puțin un dispozitiv pentru testare",
+  "Nhà cần có ít nhất một thiết bị để test":
+      "Locuința trebuie să aibă cel puțin un dispozitiv pentru testare",
   "Đóng": "Închide",
   "Đã thiết lập": "Configurat",
   "Quét QR": "Scanează codul QR",
   "Quét QR để thêm thiết bị": "Scanează codul QR pentru a adăuga un dispozitiv",
   "Nhập HUB ID thủ công": "Introdu manual ID-ul HUB-ului",
-  "Bạn không có quyền sắp xếp phòng": "Nu ai permisiunea de a reordona camerele",
+  "Bạn không có quyền sắp xếp phòng":
+      "Nu ai permisiunea de a reordona camerele",
   "Cảnh báo khói": "Alertă de fum",
   "Cập nhật thiết bị": "Actualizare dispozitiv",
   "Cửa đang mở": "Ușa este deschisă",
@@ -406,7 +455,8 @@ const Map<String, String> roStrings = {
   "Quên mật khẩu?": "Ai uitat parola?",
   "Chưa có tài khoản? Đăng ký": "Nu ai cont? Înregistrează-te",
   "Đã có tài khoản? Đăng nhập": "Ai deja un cont? Autentifică-te",
-  "Tính năng đang được phát triển": "Această funcție este în curs de dezvoltare",
+  "Tính năng đang được phát triển":
+      "Această funcție este în curs de dezvoltare",
   "Thông báo": "Notificare",
   "Chat trong nhà": "Chatul locuinței",
   "Tìm kiếm tin nhắn": "Caută mesaje",
@@ -427,10 +477,13 @@ const Map<String, String> roStrings = {
   "Chế độ áp dụng": "Mod de aplicare",
   "Theo nhà": "Conform locuinței",
   "Riêng tôi": "Doar pentru mine",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "Folosește programul comun configurat de Proprietar sau Administrator",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "Folosește un program personal aplicabil numai contului tău",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "Folosește programul comun configurat de Proprietar sau Administrator",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "Folosește un program personal aplicabil numai contului tău",
   "Thiết lập nhanh báo động": "Configurare rapidă a alarmei",
-  "Thiết lập nhanh toàn bộ thiết bị": "Configurare rapidă pentru toate dispozitivele",
+  "Thiết lập nhanh toàn bộ thiết bị":
+      "Configurare rapidă pentru toate dispozitivele",
   "Áp dụng cho toàn bộ thiết bị": "Aplică tuturor dispozitivelor",
   "Bắt đầu": "Început",
   "Kết thúc": "Sfârșit",
@@ -440,10 +493,13 @@ const Map<String, String> roStrings = {
   "Đưa mã QR vào giữa khung": "Așază codul QR în centrul cadrului",
   "Đang áp dụng...": "Se aplică...",
   "Hôm nay đã ghi nhận cảnh báo SOS": "Astăzi a fost înregistrată o alertă SOS",
-  "Hôm nay đã ghi nhận cảnh báo khói": "Astăzi a fost înregistrată o alertă de fum",
+  "Hôm nay đã ghi nhận cảnh báo khói":
+      "Astăzi a fost înregistrată o alertă de fum",
   "Khói đã an toàn": "Pericolul de fum a trecut",
-  "Không tìm thấy nhà của thông báo này": "Locuința asociată acestei notificări nu a fost găsită",
-  "Không tìm thấy thiết bị trong nhà này": "Dispozitivul nu a fost găsit în această locuință",
+  "Không tìm thấy nhà của thông báo này":
+      "Locuința asociată acestei notificări nu a fost găsită",
+  "Không tìm thấy thiết bị trong nhà này":
+      "Dispozitivul nu a fost găsit în această locuință",
   "Một chủ nhà": "Un proprietar",
   "Ngôi nhà đang hoạt động ổn định": "Locuința funcționează normal",
   "Nhiệt độ cao": "Temperatură ridicată",
@@ -468,8 +524,10 @@ const Map<String, String> roStrings = {
   "Đã rời khỏi nhà": "Ai părăsit locuința",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "Vei părăsi locuințele partajate.",
   "Các nhà của bạn sẽ bị xoá.\n": "Locuințele tale vor fi șterse.\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "Această acțiune va modifica programul alarmei pentru toate dispozitivele de securitate din locuințele selectate.\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "Această acțiune va adăuga un memento pentru locuințele selectate.\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "Această acțiune va modifica programul alarmei pentru toate dispozitivele de securitate din locuințele selectate.\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "Această acțiune va adăuga un memento pentru locuințele selectate.\n\n",
   "Xác nhận thay đổi báo động": "Confirmă modificările alarmei",
   "Xác nhận thay đổi nhắc nhở": "Confirmă modificările mementoului",
   "Lặp lại khi sự cố vẫn còn": "Repetă cât timp problema persistă",
@@ -477,44 +535,62 @@ const Map<String, String> roStrings = {
   "VD: Mr Chung": "Ex.: Dl Chung",
   "🏡 Chưa có nhà nào": "🏡 Nu există încă nicio locuință",
   "Vẫn chuyển về Bình thường": "Comută oricum la Normal",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "Protecția automată la plecare este încă activată. Dacă toți membrii sunt în continuare plecați, sistemul poate reactiva Protecția după câteva minute.",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "Protecția automată la plecare este încă activată. Dacă toți membrii sunt în continuare plecați, sistemul poate reactiva Protecția după câteva minute.",
   "Chuyển về Bình thường?": "Comuți la Normal?",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "Când este activată, dispozitivele de securitate vor fi monitorizate imediat.\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "Când este activată, dispozitivele de securitate vor fi monitorizate imediat.\n\n",
   "Bật Bảo vệ thủ công?": "Activezi manual modul Protecție?",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "Această acțiune va modifica astăzi intervalul alarmei pentru unele dispozitive",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "Această acțiune va dezactiva toate alarmele locuinței",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "Această acțiune va modifica astăzi intervalul alarmei pentru unele dispozitive",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "Această acțiune va dezactiva toate alarmele locuinței",
   "Tắt toàn bộ báo động?": "Dezactivezi toate alarmele?",
-  "Không xoá được lịch tạm tắt báo động": "Programul de pauză a alarmei nu a putut fi șters",
+  "Không xoá được lịch tạm tắt báo động":
+      "Programul de pauză a alarmei nu a putut fi șters",
   "Không lưu được tạm tắt báo động": "Pauza alarmei nu a putut fi salvată",
   "Không gửi được yêu cầu xoá": "Cererea de ștergere nu a putut fi trimisă",
   "Không lưu được cài đặt": "Setarea nu a putut fi salvată",
   "Không lấy được vị trí hiện tại": "Locația curentă nu a putut fi obținută",
-  "Không thể xác nhận tài khoản hiện tại": "Contul curent nu a putut fi verificat",
+  "Không thể xác nhận tài khoản hiện tại":
+      "Contul curent nu a putut fi verificat",
   "Mật khẩu không đúng": "Parolă incorectă",
   "Không thể xác nhận mật khẩu": "Parola nu a putut fi verificată",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "Numai Proprietarul sau un Administrator poate modifica repetarea alarmei",
-  "Không lưu được thời gian lặp báo động": "Intervalul de repetare a alarmei nu a putut fi salvat",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "Numai Proprietarul sau un Administrator poate modifica modul Protecție",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "Numai Proprietarul sau un Administrator poate modifica repetarea alarmei",
+  "Không lưu được thời gian lặp báo động":
+      "Intervalul de repetare a alarmei nu a putut fi salvat",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "Numai Proprietarul sau un Administrator poate modifica modul Protecție",
   "Không thể thay đổi chế độ nhà": "Modul locuinței nu a putut fi schimbat",
-  "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "Modul Protecție este activat, dar notificarea nu a putut fi trimisă",
+  "Đã bật Bảo vệ nhưng chưa gửi được thông báo":
+      "Modul Protecție este activat, dar notificarea nu a putut fi trimisă",
   "Đã bật Chế độ Bảo vệ thủ công": "Modul Protecție manuală a fost activat",
   "Đã chuyển nhà về Bình thường": "Locuința a revenit la modul Normal",
   "60 phút": "60 de minute",
   "30 phút": "30 de minute",
   "15 phút": "15 minute",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "Vizualizezi programul Proprietarului. Selectează Doar pentru mine pentru a-ți configura propriul program de Alarmă.",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "Vizualizezi programul Proprietarului. Selectează Doar pentru mine pentru a-ți configura propriul program de Alarmă.",
   "Chọn giờ kết thúc báo động": "Alege ora de încheiere a alarmei",
   "Chọn giờ bắt đầu báo động": "Alege ora de începere a alarmei",
-  "Bạn không có quyền sửa lịch báo động của nhà": "Nu ai permisiunea de a modifica programul Alarmei acestei locuințe",
-  "Không thể áp dụng báo động cho toàn bộ thiết bị": "Alarma nu a putut fi aplicată tuturor dispozitivelor",
-  "Nhà chưa có thiết bị an ninh để áp dụng": "Această locuință nu are dispozitive de securitate cărora să li se aplice setarea",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "Nu ai permisiunea de a modifica programul locuinței. Selectează Doar pentru mine.",
+  "Bạn không có quyền sửa lịch báo động của nhà":
+      "Nu ai permisiunea de a modifica programul Alarmei acestei locuințe",
+  "Không thể áp dụng báo động cho toàn bộ thiết bị":
+      "Alarma nu a putut fi aplicată tuturor dispozitivelor",
+  "Nhà chưa có thiết bị an ninh để áp dụng":
+      "Această locuință nu are dispozitive de securitate cărora să li se aplice setarea",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "Nu ai permisiunea de a modifica programul locuinței. Selectează Doar pentru mine.",
   "Không thể lưu chế độ báo động": "Modul Alarmei nu a putut fi salvat",
   "Thêm nhắc nhở": "Adaugă un memento",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "Mementoul îți va aminti să verifici starea de siguranță a locuinței la ora aleasă.",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "Mementoul îți va aminti să verifici starea de siguranță a locuinței la ora aleasă.",
   "Thêm khung giờ báo động": "Adaugă un interval de alarmă",
-  "Đang sử dụng nhắc nhở riêng của bạn": "Se folosesc setările tale personale pentru memento",
-  "Đang sử dụng nhắc nhở của chủ nhà": "Se folosesc setările de memento ale Proprietarului",
+  "Đang sử dụng nhắc nhở riêng của bạn":
+      "Se folosesc setările tale personale pentru memento",
+  "Đang sử dụng nhắc nhở của chủ nhà":
+      "Se folosesc setările de memento ale Proprietarului",
   "Sửa giờ nhắc nhở": "Editează ora mementoului",
   "Sửa giờ kết thúc báo động": "Editează ora de încheiere a alarmei",
   "Sửa giờ bắt đầu báo động": "Editează ora de începere a alarmei",
@@ -531,118 +607,182 @@ const Map<String, String> roStrings = {
   "Xoá thành viên": "Elimină membrul",
   "Đã xoá thành viên": "Membrul a fost eliminat",
   "Đồng ý": "De acord",
-  "Bạn chắc chắn muốn rời khỏi nhà này?": "Sigur vrei să părăsești această locuință?",
+  "Bạn chắc chắn muốn rời khỏi nhà này?":
+      "Sigur vrei să părăsești această locuință?",
   "Xoá thành viên?": "Elimini membrul?",
   "Rời khỏi nhà?": "Părăsești locuința?",
-  "Chỉ chủ nhà mới được thay đổi vai trò": "Numai Proprietarul poate modifica rolurile",
-  "Bạn không có quyền xoá thành viên này": "Nu ai permisiunea de a elimina acest membru",
+  "Chỉ chủ nhà mới được thay đổi vai trò":
+      "Numai Proprietarul poate modifica rolurile",
+  "Bạn không có quyền xoá thành viên này":
+      "Nu ai permisiunea de a elimina acest membru",
   "Bạn": "Tu",
   "Không có email": "Fără adresă de e-mail",
   "Chưa có số điện thoại": "Nu există încă un număr de telefon",
-  "Không mở được ứng dụng gọi điện": "Aplicația pentru apeluri nu a putut fi deschisă",
-  "Thành viên chưa cập nhật số điện thoại": "Acest membru nu a adăugat încă un număr de telefon",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "Protecția manuală este activată — poate fi oprită numai prin revenirea la Normal",
+  "Không mở được ứng dụng gọi điện":
+      "Aplicația pentru apeluri nu a putut fi deschisă",
+  "Thành viên chưa cập nhật số điện thoại":
+      "Acest membru nu a adăugat încă un număr de telefon",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "Protecția manuală este activată — poate fi oprită numai prin revenirea la Normal",
   "Thời gian lặp": "Interval de repetare",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "Alege 0 pentru o singură alertă. Această setare se aplică Protecției manuale și Protecției automate la plecare.",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "Alege 0 pentru o singură alertă. Această setare se aplică Protecției manuale și Protecției automate la plecare.",
   "Lặp báo động khi sự cố vẫn còn": "Repetă alarma cât timp problema persistă",
   "Đang được sử dụng": "În uz",
   "Chuyển về sử dụng thông thường": "Revino la utilizarea normală",
   "Chế độ nhà": "Modul locuinței",
-  "Thiết bị SOS chưa ghi nhận cảnh báo.": "Dispozitivul SOS nu a înregistrat nicio alertă.",
-  "Cảm biến khói chưa ghi nhận bất thường.": "Senzorul de fum nu a detectat nicio anomalie.",
-  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "Tu sau un membru ați activat manual Protecția.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "SafeHome a activat automat Protecția deoarece ai plecat de acasă.",
-  "Nhà đang ở chế độ dùng bình thường.": "Locuința este în modul de utilizare normală.",
+  "Thiết bị SOS chưa ghi nhận cảnh báo.":
+      "Dispozitivul SOS nu a înregistrat nicio alertă.",
+  "Cảm biến khói chưa ghi nhận bất thường.":
+      "Senzorul de fum nu a detectat nicio anomalie.",
+  "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
+      "Tu sau un membru ați activat manual Protecția.",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "SafeHome a activat automat Protecția deoarece ai plecat de acasă.",
+  "Nhà đang ở chế độ dùng bình thường.":
+      "Locuința este în modul de utilizare normală.",
   "Bảo vệ thủ công đang bật": "Protecția manuală este activată",
   "Bảo vệ tự động đang bật": "Protecția automată este activată",
   "Bảo vệ đang tắt": "Protecția este dezactivată",
-  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "Ai deschis recent aplicația pentru a verifica starea.",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "Deschide periodic aplicația pentru a verifica permisiunile, programele și alertele necitite.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "După câteva utilizări, SafeHome va putea evalua mai bine obiceiul tău de verificare a aplicației.",
+  "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.":
+      "Ai deschis recent aplicația pentru a verifica starea.",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "Deschide periodic aplicația pentru a verifica permisiunile, programele și alertele necitite.",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "După câteva utilizări, SafeHome va putea evalua mai bine obiceiul tău de verificare a aplicației.",
   "Tần suất vào ứng dụng ổn": "Frecvența verificării aplicației este bună",
-  "Đã lâu chưa vào ứng dụng kiểm tra": "A trecut mult timp de la ultima verificare a aplicației",
-  "Đang ghi nhận tần suất vào ứng dụng": "Se înregistrează frecvența verificării aplicației",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "Verifică permisiunea de locație „Întotdeauna” și condițiile de rulare în fundal.",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "Acest dispozitiv îndeplinește cerințele pentru Plecare automată.",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "Activează opțiunea dacă vrei ca Protecția să pornească automat când pleci de acasă.",
+  "Đã lâu chưa vào ứng dụng kiểm tra":
+      "A trecut mult timp de la ultima verificare a aplicației",
+  "Đang ghi nhận tần suất vào ứng dụng":
+      "Se înregistrează frecvența verificării aplicației",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "Verifică permisiunea de locație „Întotdeauna” și condițiile de rulare în fundal.",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "Acest dispozitiv îndeplinește cerințele pentru Plecare automată.",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "Activează opțiunea dacă vrei ca Protecția să pornească automat când pleci de acasă.",
   "Auto rời khỏi nhà chưa ổn": "Plecarea automată nu este pregătită",
   "Auto rời khỏi nhà đã sẵn sàng": "Plecarea automată este pregătită",
   "Auto rời khỏi nhà chưa bật": "Plecarea automată nu este activată",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "Este recomandat să adaugi un detector de fum, un dispozitiv SOS sau un alt dispozitiv de urgență potrivit locuinței.",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "Este recomandat să adaugi un detector de fum, un dispozitiv SOS sau un alt dispozitiv de urgență potrivit locuinței.",
   "Chưa có thiết bị khẩn cấp": "Nu există încă niciun dispozitiv de urgență",
   "Đã có thiết bị khẩn cấp": "Dispozitivele de urgență au fost adăugate",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "Este recomandat să setezi un program de Alarmă pentru timpul de somn sau când lipsești de acasă.",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "Locuința are un program de Alarmă sau un program de alertă la nivel de dispozitiv.",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "Este recomandat să setezi un program de Alarmă pentru timpul de somn sau când lipsești de acasă.",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "Locuința are un program de Alarmă sau un program de alertă la nivel de dispozitiv.",
   "Chưa cài lịch báo động": "Programul Alarmei nu este configurat",
   "Đã cài lịch báo động": "Programul Alarmei este configurat",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "Este recomandat să setezi cel puțin un Memento pentru a nu uita să verifici locuința.",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "Aplicația îți va aminti să verifici locuința conform programului setat.",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "Este recomandat să setezi cel puțin un Memento pentru a nu uita să verifici locuința.",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "Aplicația îți va aminti să verifici locuința conform programului setat.",
   "Chưa cài đặt nhắc nhở": "Mementoul nu este configurat",
   "Đã cài đặt nhắc nhở": "Mementoul este configurat",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "Redeschide aplicația sau autentifică-te din nou dacă acest dispozitiv nu primește alerte.",
-  "Thiết bị chưa đăng ký nhận cảnh báo": "Acest dispozitiv nu este înregistrat pentru alerte",
-  "Thiết bị nhận cảnh báo bình thường": "Acest dispozitiv poate primi alerte în mod normal",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS gestionează rularea în fundal mai strict decât Android; păstrează notificările și locația „Întotdeauna” activate dacă folosești Plecarea automată.",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "Redeschide aplicația sau autentifică-te din nou dacă acest dispozitiv nu primește alerte.",
+  "Thiết bị chưa đăng ký nhận cảnh báo":
+      "Acest dispozitiv nu este înregistrat pentru alerte",
+  "Thiết bị nhận cảnh báo bình thường":
+      "Acest dispozitiv poate primi alerte în mod normal",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS gestionează rularea în fundal mai strict decât Android; păstrează notificările și locația „Întotdeauna” activate dacă folosești Plecarea automată.",
   "Cơ chế iOS": "Comportamentul iOS",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "Verifică permisiunea de rulare în fundal și pornirea automată pentru ca alertele să nu întârzie.",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "Dispozitivul a confirmat condițiile importante de rulare în fundal.",
-  "Cần kiểm tra chạy nền / tự khởi động": "Verifică rularea în fundal / pornirea automată",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "Verifică permisiunea de rulare în fundal și pornirea automată pentru ca alertele să nu întârzie.",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "Dispozitivul a confirmat condițiile importante de rulare în fundal.",
+  "Cần kiểm tra chạy nền / tự khởi động":
+      "Verifică rularea în fundal / pornirea automată",
   "Chạy nền ổn định": "Rularea în fundal este stabilă",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "Unele telefoane Android pot întârzia alertele cât timp optimizarea bateriei este activată.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "Este puțin probabil ca telefonul să întârzie alertele SafeHome.",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "Unele telefoane Android pot întârzia alertele cât timp optimizarea bateriei este activată.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "Este puțin probabil ca telefonul să întârzie alertele SafeHome.",
   "Chưa tắt tối ưu pin": "Optimizarea bateriei este încă activată",
-  "Tối ưu pin không chặn ứng dụng": "Optimizarea bateriei nu blochează aplicația",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "Plecarea automată are nevoie de permisiunea de locație „Întotdeauna” pentru a funcționa fiabil.",
-  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "Este necesară permisiunea de locație pentru funcționarea Plecării automate.",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "Serviciul de localizare este oprit, astfel că Plecarea automată poate să nu funcționeze fiabil.",
-  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "Această permisiune este necesară numai când folosești Plecarea automată.",
+  "Tối ưu pin không chặn ứng dụng":
+      "Optimizarea bateriei nu blochează aplicația",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "Plecarea automată are nevoie de permisiunea de locație „Întotdeauna” pentru a funcționa fiabil.",
+  "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.":
+      "Este necesară permisiunea de locație pentru funcționarea Plecării automate.",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "Serviciul de localizare este oprit, astfel că Plecarea automată poate să nu funcționeze fiabil.",
+  "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.":
+      "Această permisiune este necesară numai când folosești Plecarea automată.",
   "Chưa cấp vị trí luôn luôn": "Locația „Întotdeauna” nu este permisă",
   "Đã cấp vị trí luôn luôn": "Locația „Întotdeauna” este permisă",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS nu deschide alertele pe tot ecranul ca Android; aplicația folosește notificările și sunetul sistemului.",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android folosește alerte pe tot ecranul; dacă telefonul le blochează, acordă permisiunea din setări.",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS nu deschide alertele pe tot ecranul ca Android; aplicația folosește notificările și sunetul sistemului.",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android folosește alerte pe tot ecranul; dacă telefonul le blochează, acordă permisiunea din setări.",
   "Cảnh báo trên iOS": "Alerte pe iOS",
   "Cảnh báo toàn màn hình": "Alerte pe tot ecranul",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "Este posibil ca alertele să nu apară dacă notificările sunt dezactivate.",
-  "Điện thoại có thể nhận thông báo SafeHome.": "Acest telefon poate primi notificări SafeHome.",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "Este posibil ca alertele să nu apară dacă notificările sunt dezactivate.",
+  "Điện thoại có thể nhận thông báo SafeHome.":
+      "Acest telefon poate primi notificări SafeHome.",
   "Chưa bật thông báo": "Notificările nu sunt activate",
   "Đã bật thông báo": "Notificările sunt activate",
   "Hệ thống: Sẵn sàng": "Sistem: Pregătit",
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "Sistem: Unele alerte pot fi omise",
   "Cách bạn đang dùng ứng dụng": "Cum folosești aplicația",
   "Thiết bị của bạn": "Dispozitivul tău",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "Verifică telefonul și modul în care folosești aplicația.",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "Verifică telefonul și modul în care folosești aplicația.",
   "Hệ thống SafeHome": "Sistemul SafeHome",
   "Hệ thống: Đang kiểm tra...": "Sistem: Se verifică...",
   "Tên": "Nume",
-  "Bạn không có quyền thay đổi vị trí nhà": "Nu ai permisiunea de a schimba locația locuinței",
-  "Hãy bật GPS để đặt vị trí nhà": "Activează GPS-ul pentru a seta locația locuinței",
+  "Bạn không có quyền thay đổi vị trí nhà":
+      "Nu ai permisiunea de a schimba locația locuinței",
+  "Hãy bật GPS để đặt vị trí nhà":
+      "Activează GPS-ul pentru a seta locația locuinței",
   "Bạn chưa cấp quyền vị trí": "Nu ai acordat permisiunea de locație",
-  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng": "Acordă permisiunea de locație în setările aplicației",
-  "Đã bật tự động Bảo vệ khi mọi người rời nhà": "Protecția automată când toată lumea pleacă este activată",
-  "Đã tắt tự động Bảo vệ khi mọi người rời nhà": "Protecția automată când toată lumea pleacă este dezactivată",
-  "Không thể thay đổi trạng thái báo động": "Starea Alarmei nu a putut fi schimbată",
-  "Đã tắt toàn bộ báo động của nhà": "Toate alarmele locuinței au fost dezactivate",
-  "QR này không phải mã xin gia nhập Home": "Acest cod QR nu este un cod de solicitare pentru alăturarea la o Locuință",
+  "Hãy cấp quyền vị trí trong Cài đặt ứng dụng":
+      "Acordă permisiunea de locație în setările aplicației",
+  "Đã bật tự động Bảo vệ khi mọi người rời nhà":
+      "Protecția automată când toată lumea pleacă este activată",
+  "Đã tắt tự động Bảo vệ khi mọi người rời nhà":
+      "Protecția automată când toată lumea pleacă este dezactivată",
+  "Không thể thay đổi trạng thái báo động":
+      "Starea Alarmei nu a putut fi schimbată",
+  "Đã tắt toàn bộ báo động của nhà":
+      "Toate alarmele locuinței au fost dezactivate",
+  "QR này không phải mã xin gia nhập Home":
+      "Acest cod QR nu este un cod de solicitare pentru alăturarea la o Locuință",
   "Thêm Home": "Adaugă o Locuință",
   "Mở cài đặt": "Deschide setările",
   "Để sau": "Mai târziu",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome are nevoie de permisiunea de locație „Permite întotdeauna” pentru a detecta când pleci sau revii acasă, inclusiv când aplicația rulează în fundal.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "În prezent, SafeHome poate accesa locația numai când folosești aplicația.\n\nDeschide permisiunea pentru Locație și selectează „Permite întotdeauna”, astfel încât Protecția automată la plecare să funcționeze și când aplicația rulează în fundal.",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome are nevoie de permisiunea de locație „Permite întotdeauna” pentru a detecta când pleci sau revii acasă, inclusiv când aplicația rulează în fundal.",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "În prezent, SafeHome poate accesa locația numai când folosești aplicația.\n\nDeschide permisiunea pentru Locație și selectează „Permite întotdeauna”, astfel încât Protecția automată la plecare să funcționeze și când aplicația rulează în fundal.",
   "Cho phép vị trí luôn luôn": "Permite întotdeauna locația",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "Locuințele tale vor fi șterse.\nVei părăsi locuințele partajate.",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Această acțiune va modifica programul Alarmei pentru toate dispozitivele de securitate din locuințele selectate.\n\nMembrii care folosesc Alarma „Conform locuinței” vor fi afectați.\nAlarmele personale din modul „Doar pentru mine” nu vor fi modificate.",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "Această acțiune va adăuga un Memento locuințelor selectate.\n\nMembrii care folosesc Mementoul „Conform locuinței” vor fi afectați.\nMementourile personale din modul „Doar pentru mine” nu vor fi modificate.",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "Când este activată, dispozitivele de securitate vor fi monitorizate imediat.\n\nProtecția automată la plecare va fi pusă pe pauză. Acest mod nu se dezactivează automat când cineva revine acasă și poate fi oprit numai când un membru autorizat revine manual la Normal.",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "Această acțiune va modifica astăzi intervalul Alarmei pentru unele dispozitive...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "Această acțiune va dezactiva toate Alarmele locuinței, indiferent de tip. Nu vei mai primi pe telefon alerte de pericol.",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "Alarma folosește modul „Conform locuinței”.\n\nVei primi alerte conform programului comun stabilit de Proprietar sau Administrator.",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "Alarma folosește modul „Doar pentru mine”.\n\nVei primi alerte conform programului personal al Alarmei configurat pentru acest cont.",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "Locuințele tale vor fi șterse.\nVei părăsi locuințele partajate.",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Această acțiune va modifica programul Alarmei pentru toate dispozitivele de securitate din locuințele selectate.\n\nMembrii care folosesc Alarma „Conform locuinței” vor fi afectați.\nAlarmele personale din modul „Doar pentru mine” nu vor fi modificate.",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "Această acțiune va adăuga un Memento locuințelor selectate.\n\nMembrii care folosesc Mementoul „Conform locuinței” vor fi afectați.\nMementourile personale din modul „Doar pentru mine” nu vor fi modificate.",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "Când este activată, dispozitivele de securitate vor fi monitorizate imediat.\n\nProtecția automată la plecare va fi pusă pe pauză. Acest mod nu se dezactivează automat când cineva revine acasă și poate fi oprit numai când un membru autorizat revine manual la Normal.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "Această acțiune va modifica astăzi intervalul Alarmei pentru unele dispozitive...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "Această acțiune va dezactiva toate Alarmele locuinței, indiferent de tip. Nu vei mai primi pe telefon alerte de pericol.",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "Alarma folosește modul „Conform locuinței”.\n\nVei primi alerte conform programului comun stabilit de Proprietar sau Administrator.",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "Alarma folosește modul „Doar pentru mine”.\n\nVei primi alerte conform programului personal al Alarmei configurat pentru acest cont.",
   "Không thể đăng nhập bằng Google": "Autentificarea cu Google nu a reușit",
   "Không đặt được mật khẩu": "Parola nu a putut fi setată",
   "Chấp nhận": "Acceptă",
   "Cho phép": "Permite",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "Invitația nu a putut fi acceptată. Încearcă din nou.",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "Cererea de alăturare la locuință nu a putut fi acceptată. Încearcă din nou.",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "Invitația nu a putut fi acceptată. Încearcă din nou.",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "Cererea de alăturare la locuință nu a putut fi acceptată. Încearcă din nou.",
   "Từ chối": "Refuză",
   "Lời mời từ chủ nhà": "Invitație de la Proprietar",
   "Nhận quyền chủ nhà": "Preia dreptul de Proprietar",
@@ -664,33 +804,43 @@ const Map<String, String> roStrings = {
   "KIỂM TRA NHÀ": "VERIFICĂ LOCUINȚA",
   "ĐÓNG NHẮC NHỞ": "ÎNCHIDE MEMENTOUL",
   "SafeHome Security Alert": "Alertă de securitate SafeHome",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "Selectează permisiunea de locație „Permite întotdeauna” în setările aplicației",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Contul Google trebuie să aibă și o parolă pentru a folosi funcțiile de securitate.",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "Selectează permisiunea de locație „Permite întotdeauna” în setările aplicației",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Contul Google trebuie să aibă și o parolă pentru a folosi funcțiile de securitate.",
   "Báo động": "Alarmă",
-  "Bạn không có quyền thực hiện thao tác này。": "Nu ai permisiunea de a efectua această acțiune.",
+  "Bạn không có quyền thực hiện thao tác này。":
+      "Nu ai permisiunea de a efectua această acțiune.",
   "Cài đặt": "Setări",
   "Cập nhật": "Actualizează",
   "Chọn ngôn ngữ": "Alege limba",
-  "Chưa có dữ liệu thiết bị để đánh giá": "Nu există date despre dispozitive pentru evaluare",
-  "Chuyển quyền sở hữu cho thành viên khác": "Transferă dreptul de proprietate altui membru",
+  "Chưa có dữ liệu thiết bị để đánh giá":
+      "Nu există date despre dispozitive pentru evaluare",
+  "Chuyển quyền sở hữu cho thành viên khác":
+      "Transferă dreptul de proprietate altui membru",
   "Có": "Da",
   "Cửa đã đóng an toàn": "Ușa este închisă în siguranță",
   "Đã xảy ra lỗi. Vui lòng thử lại.": "A apărut o eroare. Încearcă din nou.",
   "Đang kiểm tra kết nối Hub": "Se verifică conexiunea Hub-ului",
-  "Đang mở khi nhà ở chế độ Bảo vệ": "Deschis când locuința este în modul Protecție",
+  "Đang mở khi nhà ở chế độ Bảo vệ":
+      "Deschis când locuința este în modul Protecție",
   "Đang mở trong giờ báo động": "Deschis în intervalul Alarmei",
   "Đang tải...": "Se încarcă...",
   "Hồ sơ, yêu cầu và lời mời tham gia": "Profil, solicitări și invitații",
   "Hub chưa gửi trạng thái": "Hub-ul nu a trimis starea",
   "Hub mất kết nối": "Hub deconectat",
   "Hub tín hiệu bình thường": "Semnalul Hub-ului este normal",
-  "Khóa đang mở khi nhà ở chế độ Bảo vệ": "Încuietoarea este deschisă când locuința este în modul Protecție",
-  "Khóa đang mở trong giờ báo động": "Încuietoarea este deschisă în intervalul Alarmei",
+  "Khóa đang mở khi nhà ở chế độ Bảo vệ":
+      "Încuietoarea este deschisă când locuința este în modul Protecție",
+  "Khóa đang mở trong giờ báo động":
+      "Încuietoarea este deschisă în intervalul Alarmei",
   "Không có thông báo": "Nu există notificări",
   "Khu vực nguy hiểm": "Zonă periculoasă",
-  "Kiểm tra thiết bị trong nhà này": "Verifică dispozitivele din această locuință",
+  "Kiểm tra thiết bị trong nhà này":
+      "Verifică dispozitivele din această locuință",
   "Mất điện lưới": "Alimentarea de la rețea s-a întrerupt",
-  "Mời người khác tham gia nhà này": "Invită pe cineva să se alăture acestei locuințe",
+  "Mời người khác tham gia nhà này":
+      "Invită pe cineva să se alăture acestei locuințe",
   "Môi trường hiện tại": "Mediul actual",
   "MQTT mất kết nối": "MQTT deconectat",
   "Ngôn ngữ": "Limbă",
@@ -712,7 +862,8 @@ const Map<String, String> roStrings = {
   "Thành viên đang ở ngoài": "Membri aflați în afara locuinței",
   "Thành viên chưa xác định vị trí": "Membri cu locație necunoscută",
   "Thay đổi ngôn ngữ hiển thị": "Schimbă limba de afișare",
-  "Thêm, đổi tên và sắp xếp phòng": "Adaugă, redenumește și reordonează camerele",
+  "Thêm, đổi tên và sắp xếp phòng":
+      "Adaugă, redenumește și reordonează camerele",
   "Thiết bị đang được giám sát": "Dispozitivul este monitorizat",
   "Tiếng Anh": "Engleză",
   "Tiếng Hàn": "Coreeană",
@@ -730,196 +881,298 @@ const Map<String, String> roStrings = {
   "Đã tạo nhà": "Locuința a fost creată",
   "Chế độ Bảo vệ thủ công đã bật": "Modul Protecție manuală a fost activat",
   "Báo động không lặp lại.": "Alarma nu se va repeta.",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "Alarma se repetă după \$securityModeRepeatMinutes minute dacă problema persistă.",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName a activat modul Protecție manuală pentru „\$homeName”. Acest mod poate fi oprit numai când un membru autorizat revine manual la Normal. \$repeatMessage",
-  "Bạn đã bật báo động cho nhà \"\$homeName\".": "Ai activat Alarma pentru locuința „\$homeName”.",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "Ai dezactivat toate Alarmele locuinței „\$homeName”.",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "Alarma se repetă după \$securityModeRepeatMinutes minute dacă problema persistă.",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName a activat modul Protecție manuală pentru „\$homeName”. Acest mod poate fi oprit numai când un membru autorizat revine manual la Normal. \$repeatMessage",
+  "Bạn đã bật báo động cho nhà \"\$homeName\".":
+      "Ai activat Alarma pentru locuința „\$homeName”.",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "Ai dezactivat toate Alarmele locuinței „\$homeName”.",
   "Thành viên mới": "Membru nou",
   "Thành viên rời nhà": "Un membru a părăsit locuința",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName a părăsit locuința „\$homeName”.",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName a schimbat rolul lui \$memberName din \$oldRoleName în \$newRoleName în locuința „\$homeName”.",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName a părăsit locuința „\$homeName”.",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName a schimbat rolul lui \$memberName din \$oldRoleName în \$newRoleName în locuința „\$homeName”.",
   "Còn \$count tin nhắn chưa đọc": "Încă \$count mesaje necitite",
   "Hãy an tâm nghỉ ngơi.": "Poți să te odihnești liniștit.",
   "Có thiết bị chưa an toàn.": "Unele dispozitive nu sunt în siguranță.",
   "SafeHome đang cập nhật vị trí": "SafeHome actualizează locația",
-  "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "Se monitorizează pentru activarea automată a modului Protecție.",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "Folosește locația pentru a activa automat modul Protecție când toată lumea pleacă de acasă.",
+  "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
+      "Se monitorizează pentru activarea automată a modului Protecție.",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "Folosește locația pentru a activa automat modul Protecție când toată lumea pleacă de acasă.",
   "CẢNH BÁO SOS": "ALERTĂ SOS",
   "CẢNH BÁO KHÓI / CHÁY": "ALERTĂ DE FUM / INCENDIU",
   "CẢNH BÁO NGẬP NƯỚC": "ALERTĂ DE INUNDAȚIE",
   "CẢNH BÁO RÒ KHÍ": "ALERTĂ DE SCURGERE DE GAZ",
   "CẢNH BÁO CỬA": "ALERTĂ UȘĂ",
   "CẢNH BÁO AN NINH": "ALERTĂ DE SECURITATE",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "Confirmarea cu SafeHome nu a reușit. Verifică conexiunea și încearcă din nou.",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "Oprește alerta numai după ce ai verificat starea locuinței.\n\nSigur vrei să oprești alerta?",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "Confirmarea cu SafeHome nu a reușit. Verifică conexiunea și încearcă din nou.",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "Oprește alerta numai după ce ai verificat starea locuinței.\n\nSigur vrei să oprești alerta?",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome a detectat o alertă",
-  "Mở SafeHome để kiểm tra ngay.": "Deschide SafeHome pentru a verifica imediat.",
+  "Mở SafeHome để kiểm tra ngay.":
+      "Deschide SafeHome pentru a verifica imediat.",
   "\$count tin nhắn mới": "\$count mesaje noi",
   "Tin nhắn HomeChat": "Mesaj HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName a trimis un mesaj",
   "Bạn có tin nhắn mới": "Ai un mesaj nou",
-  "Chế độ Bảo vệ sẽ chỉ báo động một lần": "Modul Protecție va alerta o singură dată",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "Modul Protecție va repeta alerta după \$minutes minute",
-  "Đã gửi yêu cầu gia nhập \$count nhà": "Au fost trimise cereri de alăturare pentru \$count locuințe",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName solicită să se alăture locuinței „\$homeName”.",
+  "Chế độ Bảo vệ sẽ chỉ báo động một lần":
+      "Modul Protecție va alerta o singură dată",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "Modul Protecție va repeta alerta după \$minutes minute",
+  "Đã gửi yêu cầu gia nhập \$count nhà":
+      "Au fost trimise cereri de alăturare pentru \$count locuințe",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName solicită să se alăture locuinței „\$homeName”.",
   "Bạn đã xoá nhà \"\$homeName\".": "Ai șters locuința „\$homeName”.",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "Ai trimis o cerere de transfer al proprietății locuinței „\$homeName” către \$email.",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName dorește să îți transfere dreptul de proprietate asupra locuinței „\$homeName”.",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName te-a invitat să te alături locuinței „\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHome elimină dispozitivul „\$deviceName” din locuința „\$homeName”.",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "Dispozitivul „\$deviceName” a fost adăugat în locuința „\$homeName”.",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "Ai trimis o cerere de transfer al proprietății locuinței „\$homeName” către \$email.",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName dorește să îți transfere dreptul de proprietate asupra locuinței „\$homeName”.",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName te-a invitat să te alături locuinței „\$homeName”.",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHome elimină dispozitivul „\$deviceName” din locuința „\$homeName”.",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "Dispozitivul „\$deviceName” a fost adăugat în locuința „\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Ai creat locuința „\$name”.",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName a actualizat numele locuinței la „\$newName” și i-a schimbat adresa.",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName a redenumit locuința în „\$newName”.",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName a actualizat adresa locuinței „\$newName”.",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName a redenumit dispozitivul „\$oldDeviceName” în „\$newName” în locuința „\$homeName”.",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName a actualizat numele locuinței la „\$newName” și i-a schimbat adresa.",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName a redenumit locuința în „\$newName”.",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName a actualizat adresa locuinței „\$newName”.",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName a redenumit dispozitivul „\$oldDeviceName” în „\$newName” în locuința „\$homeName”.",
   "Đang ghép nối: \$seconds giây": "Se asociază: \$seconds secunde",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "Modul de adăugare a dispozitivelor a fost activat în locuința „\$homeName” pentru \$seconds secunde.",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "Perioada de pauză trebuie să se afle în intervalul Alarmei (\$start → \$end)",
-  "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total teste reușite\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name nu a adăugat un număr de telefon în profil.",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "Modul de adăugare a dispozitivelor a fost activat în locuința „\$homeName” pentru \$seconds secunde.",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "Perioada de pauză trebuie să se afle în intervalul Alarmei (\$start → \$end)",
+  "\$passCount/\$total bài test đạt\n\n":
+      "\$passCount/\$total teste reușite\n\n",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name nu a adăugat un număr de telefon în profil.",
   "Tin nhắn mới trong \$homeName": "Mesaj nou în \$homeName",
   "\$current/\$total kết quả": "\$current/\$total rezultate",
   "Đang trả lời \$name": "Răspunzi lui \$name",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "„\$name” a detectat fum în „\$homeName”.",
-  "\"\$name\" đã trở lại trạng thái bình thường.": "„\$name” a revenit la starea normală.",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "„\$name” tocmai a activat SOS în „\$homeName”.",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "„\$name” a detectat fum în „\$homeName”.",
+  "\"\$name\" đã trở lại trạng thái bình thường.":
+      "„\$name” a revenit la starea normală.",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "„\$name” tocmai a activat SOS în „\$homeName”.",
   "\"\$name\" đã hết trạng thái SOS.": "„\$name” nu mai este în starea SOS.",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "„\$name” a raportat o tentativă de demontare sau forțare în „\$homeName”.",
-  "\"\$name\" đã hết cảnh báo tháo/cạy.": "Alerta de intervenție pentru „\$name” s-a încheiat.",
-  "\"\$name\" đã đóng trong \"\$homeName\".": "„\$name” s-a închis în „\$homeName”.",
-  "\"\$name\" đang mở trong \"\$homeName\".": "„\$name” este deschis în „\$homeName”.",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "„\$name” din „\$homeName” are bateria descărcată.",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "„\$name” din „\$homeName” s-a deconectat.",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "„\$name” din „\$homeName” s-a reconectat.",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "„\$name” a înregistrat o temperatură ridicată în „\$homeName”.",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "„\$name” a înregistrat umiditate ridicată în „\$homeName”.",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "„\$name” a raportat o tentativă de demontare sau forțare în „\$homeName”.",
+  "\"\$name\" đã hết cảnh báo tháo/cạy.":
+      "Alerta de intervenție pentru „\$name” s-a încheiat.",
+  "\"\$name\" đã đóng trong \"\$homeName\".":
+      "„\$name” s-a închis în „\$homeName”.",
+  "\"\$name\" đang mở trong \"\$homeName\".":
+      "„\$name” este deschis în „\$homeName”.",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "„\$name” din „\$homeName” are bateria descărcată.",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "„\$name” din „\$homeName” s-a deconectat.",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "„\$name” din „\$homeName” s-a reconectat.",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "„\$name” a înregistrat o temperatură ridicată în „\$homeName”.",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "„\$name” a înregistrat umiditate ridicată în „\$homeName”.",
   "Có nút SOS vừa được kích hoạt": "A fost activat un buton SOS",
   "Có dấu hiệu khói hoặc cháy": "Au fost detectate semne de fum sau incendiu",
   "Có dấu hiệu ngập nước": "Au fost detectate semne de inundație",
   "Có dấu hiệu rò khí": "Au fost detectate semne de scurgere de gaz",
-  "Có cửa đang mở hoặc thiết bị bị tháo": "O ușă este deschisă sau un dispozitiv a fost manipulat",
+  "Có cửa đang mở hoặc thiết bị bị tháo":
+      "O ușă este deschisă sau un dispozitiv a fost manipulat",
   "Có thiết bị đang cảnh báo": "Un dispozitiv emite o alertă",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "Dacă nimeni nu confirmă, SafeHome va iniția un apel de urgență.",
-  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "Alerta se repetă la \$time dacă problema nu a fost rezolvată.",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "Alerta se va repeta conform programului Alarmei dacă problema nu a fost rezolvată.",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "„\$deviceName” s-a închis în „\$resolvedHomeName”.",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "„\$deviceName” este deschis în „\$resolvedHomeName”.",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "Dacă nimeni nu confirmă, SafeHome va iniția un apel de urgență.",
+  "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
+      "Alerta se repetă la \$time dacă problema nu a fost rezolvată.",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "Alerta se va repeta conform programului Alarmei dacă problema nu a fost rezolvată.",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "„\$deviceName” s-a închis în „\$resolvedHomeName”.",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "„\$deviceName” este deschis în „\$resolvedHomeName”.",
   "\$count nhà đã chọn": "\$count locuințe selectate",
-  "🚨 \$count nhà không an toàn\$suffix": "🚨 \$count locuințe nesigure\$suffix",
-  "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count locuințe necesită atenție\$suffix",
+  "🚨 \$count nhà không an toàn\$suffix":
+      "🚨 \$count locuințe nesigure\$suffix",
+  "⚠️ \$count nhà cần chú ý\$suffix":
+      "⚠️ \$count locuințe necesită atenție\$suffix",
   "✅ \$count nhà an toàn": "✅ \$count locuințe în siguranță",
   "\$count nhà đang được theo dõi": "\$count locuințe monitorizate",
   "\$minutes phút": "\$minutes minute",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "Mementoul a fost configurat pentru \$updatedHomes locuințe.",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "Alarma a fost configurată pentru \$updatedDevices dispozitive din \$updatedHomes locuințe.\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "Locuințele pe care ai permisiunea să le gestionezi au fost partajate.\n\n\$skipped locuințe au fost omise deoarece nu ai permisiunea de partajare.",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "Alarma a fost aplicată pentru \$count dispozitive de securitate",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "Aplică același program pentru \$count dispozitive de securitate",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "Mementoul a fost configurat pentru \$updatedHomes locuințe.",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "Alarma a fost configurată pentru \$updatedDevices dispozitive din \$updatedHomes locuințe.\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "Locuințele pe care ai permisiunea să le gestionezi au fost partajate.\n\n\$skipped locuințe au fost omise deoarece nu ai permisiunea de partajare.",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "Alarma a fost aplicată pentru \$count dispozitive de securitate",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "Aplică același program pentru \$count dispozitive de securitate",
   "\$count phút trước": "Acum \$count minute",
   "\$count giờ trước": "Acum \$count ore",
   "\${count}h trước": "Acum \${count} h",
   "\${hours}h\$minutes' trước": "Acum \${hours} h și \$minutes min",
   "\$count ngày trước": "Acum \$count zile",
   "\$count tháng trước": "Acum \$count luni",
-  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "Sigur vrei să elimini pe \$name din această locuință?",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\nSolicită să se alăture locuinței „\$homeName”",
-  "Xin gia nhập \"\$homeName\"": "Solicită să se alăture locuinței „\$homeName”",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "Ai fost invitat să preiei dreptul de proprietate asupra locuinței „\$homeName”",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\nTe invită să te alături locuinței „\$homeName”",
-  "Mời bạn gia nhập \"\$homeName\"": "Te invită să te alături locuinței „\$homeName”",
+  "Bạn chắc chắn muốn xoá \$name khỏi nhà này?":
+      "Sigur vrei să elimini pe \$name din această locuință?",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\nSolicită să se alăture locuinței „\$homeName”",
+  "Xin gia nhập \"\$homeName\"":
+      "Solicită să se alăture locuinței „\$homeName”",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "Ai fost invitat să preiei dreptul de proprietate asupra locuinței „\$homeName”",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\nTe invită să te alături locuinței „\$homeName”",
+  "Mời bạn gia nhập \"\$homeName\"":
+      "Te invită să te alături locuinței „\$homeName”",
   "Cần kiểm tra: \$joined": "Necesită verificare: \$joined",
   "Cập nhật \$value": "Actualizat \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "Adaugă primul dispozitiv SafeHome pentru a începe monitorizarea locuinței.",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "Verifică mai întâi alertele de urgență, apoi contactează membrii locuinței dacă este necesar.",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "Niciun membru nu este acasă, dar o ușă sau o încuietoare este deschisă. Verifică imediat.",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "Verifică ușa sau încuietoarea deschisă înainte de a menține locuința în modul Protecție.",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "Este posibil ca cineva să fie încă acasă; dacă da, revino la modul Normal.",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "Unii membri au locația necunoscută. Amintește-le să deschidă aplicația sau să verifice permisiunea de locație.",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "Un dispozitiv este deconectat. Verifică bateria, alimentarea sau amplasarea lui.",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "Un dispozitiv are bateria descărcată. Înlocuiește-o curând pentru a evita alertele ratate.",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "Mementoul nu este configurat. Creează un program pentru verificarea periodică a locuinței.",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "Programul Alarmei nu este configurat. Activează Protecția pentru perioadele în care lipsești de obicei.",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "Nu este necesară nicio acțiune imediată. Continuă să monitorizezi starea locuinței.",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "Adaugă primul dispozitiv SafeHome pentru a începe monitorizarea locuinței.",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "Verifică mai întâi alertele de urgență, apoi contactează membrii locuinței dacă este necesar.",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "Niciun membru nu este acasă, dar o ușă sau o încuietoare este deschisă. Verifică imediat.",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "Verifică ușa sau încuietoarea deschisă înainte de a menține locuința în modul Protecție.",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "Este posibil ca cineva să fie încă acasă; dacă da, revino la modul Normal.",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "Unii membri au locația necunoscută. Amintește-le să deschidă aplicația sau să verifice permisiunea de locație.",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "Un dispozitiv este deconectat. Verifică bateria, alimentarea sau amplasarea lui.",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "Un dispozitiv are bateria descărcată. Înlocuiește-o curând pentru a evita alertele ratate.",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "Mementoul nu este configurat. Creează un program pentru verificarea periodică a locuinței.",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "Programul Alarmei nu este configurat. Activează Protecția pentru perioadele în care lipsești de obicei.",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "Nu este necesară nicio acțiune imediată. Continuă să monitorizezi starea locuinței.",
   "Lặp sau \$minutes phút": "Repetă după \$minutes minute",
   "Đang dùng • \$repeatText": "Activ • \$repeatText",
-  "Giám sát an ninh • \$repeatText": "Monitorizare de securitate • \$repeatText",
+  "Giám sát an ninh • \$repeatText":
+      "Monitorizare de securitate • \$repeatText",
   "Gia đình: \$mode": "Modul locuinței: \$mode",
   "Gợi ý xử lý": "Acțiuni recomandate",
-  "Phát hiện \$count vấn đề cần xử lý": "Au fost detectate \$count probleme care necesită atenție",
-  "Hôm nay các cửa đã được sử dụng \$count lần": "Astăzi ușile au fost folosite de \$count ori",
-  "Đã ghi nhận \$count hoạt động gần đây": "Au fost înregistrate \$count activități recente",
-  "Hệ thống: Cần kiểm tra \$issueCount mục": "Sistem: \$issueCount elemente necesită verificare",
-  "FCM token đã sẵn sàng trên điện thoại này.": "Tokenul FCM este pregătit pe acest telefon.",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "Tokenul FCM este pregătit, dar Plecării automate îi lipsește o cerință.",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "Există \$emergencyTotal dispozitive de urgență. Recomandare minimă: detector de fum și SOS.",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "Sigur vrei să transferi dreptul de proprietate către:\n\$targetEmail?",
+  "Phát hiện \$count vấn đề cần xử lý":
+      "Au fost detectate \$count probleme care necesită atenție",
+  "Hôm nay các cửa đã được sử dụng \$count lần":
+      "Astăzi ușile au fost folosite de \$count ori",
+  "Đã ghi nhận \$count hoạt động gần đây":
+      "Au fost înregistrate \$count activități recente",
+  "Hệ thống: Cần kiểm tra \$issueCount mục":
+      "Sistem: \$issueCount elemente necesită verificare",
+  "FCM token đã sẵn sàng trên điện thoại này.":
+      "Tokenul FCM este pregătit pe acest telefon.",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "Tokenul FCM este pregătit, dar Plecării automate îi lipsește o cerință.",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "Există \$emergencyTotal dispozitive de urgență. Recomandare minimă: detector de fum și SOS.",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "Sigur vrei să transferi dreptul de proprietate către:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count uși închise în siguranță",
   "\$count cửa và khóa đã an toàn": "\$count uși și încuietori sunt securizate",
   "\$count thiết bị đang được theo dõi": "\$count dispozitive monitorizate",
   "Cập nhật \$timeText": "Actualizat \$timeText",
-  "Dữ liệu gần nhất cập nhật \$count phút trước": "Cele mai recente date au fost actualizate acum \$count minute",
-  "Dữ liệu gần nhất cập nhật \$count giờ trước": "Cele mai recente date au fost actualizate acum \$count ore",
+  "Dữ liệu gần nhất cập nhật \$count phút trước":
+      "Cele mai recente date au fost actualizate acum \$count minute",
+  "Dữ liệu gần nhất cập nhật \$count giờ trước":
+      "Cele mai recente date au fost actualizate acum \$count ore",
   "Thành viên trong nhà: \$count": "Membri în locuință: \$count",
   "Thành viên bên ngoài: \$count": "Membri plecați: \$count",
   "Chưa xác định vị trí: \$count": "Locație necunoscută: \$count",
   "Môi trường hiện tại: \$environment": "Mediul actual: \$environment",
-  "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: Deschis când locuința este în modul Protecție",
+  "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
+      "\$name: Deschis când locuința este în modul Protecție",
   "An tâm hơn trong từng ngôi nhà": "Mai multă liniște în fiecare locuință",
   "Báo động SafeHome": "Alarmă SafeHome",
-  "Có cảnh báo an ninh cần kiểm tra ngay.": "O alertă de securitate necesită verificare imediată.",
+  "Có cảnh báo an ninh cần kiểm tra ngay.":
+      "O alertă de securitate necesită verificare imediată.",
   "Có cảnh báo cần kiểm tra": "O alertă necesită verificare",
   "Tự đóng sau \$time": "Se închide automat peste \$time",
   "Ngày trong tuần": "Zilele săptămânii",
   "Hoặc": "Sau",
-  "Giờ bắt đầu và kết thúc không được trùng nhau": "Ora de început și cea de sfârșit nu pot fi identice",
-  "Giờ kết thúc phải sau thời điểm hiện tại": "Ora de sfârșit trebuie să fie după ora curentă",
+  "Giờ bắt đầu và kết thúc không được trùng nhau":
+      "Ora de început și cea de sfârșit nu pot fi identice",
+  "Giờ kết thúc phải sau thời điểm hiện tại":
+      "Ora de sfârșit trebuie să fie după ora curentă",
   "Khoảng tạm tắt không hợp lệ": "Interval de pauză nevalid",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "Intervalul de pauză nu se suprapune peste niciun program de Alarmă activ",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "Intervalul de pauză nu se suprapune peste niciun program de Alarmă activ",
   "Cài đặt báo động": "Setările Alarmei",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "Controlează modul în care acest senzor declanșează alertele.",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "Controlează modul în care acest senzor declanșează alertele.",
   "Tham gia báo động": "Participă la alarme",
-  "Tắt để cảm biến không tạo báo động.": "Dezactivează pentru ca acest senzor să nu genereze o Alarmă.",
+  "Tắt để cảm biến không tạo báo động.":
+      "Dezactivează pentru ca acest senzor să nu genereze o Alarmă.",
   "Bật còi vật lý": "Activează sirena fizică",
-  "Cho phép kích hoạt còi trong nhà.": "Permite activarea sirenei din locuință.",
+  "Cho phép kích hoạt còi trong nhà.":
+      "Permite activarea sirenei din locuință.",
   "Đánh thức màn hình": "Activează ecranul",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại.": "Afișează o alertă pe tot ecranul telefonului.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại.":
+      "Afișează o alertă pe tot ecranul telefonului.",
   "Độ trễ kích hoạt": "Întârziere la declanșare",
-  "Chỉ áp dụng cho cảm biến an ninh.": "Se aplică numai senzorilor de securitate.",
-  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.": "Senzorii de urgență se declanșează întotdeauna imediat.",
+  "Chỉ áp dụng cho cảm biến an ninh.":
+      "Se aplică numai senzorilor de securitate.",
+  "Cảm biến khẩn cấp luôn kích hoạt ngay lập tức.":
+      "Senzorii de urgență se declanșează întotdeauna imediat.",
   "Ngay lập tức": "Imediat",
   "giây": "secunde",
   "Đã lưu cấu hình báo động": "Setările Alarmei au fost salvate",
   "Không thể lưu cấu hình báo động": "Setările Alarmei nu au putut fi salvate",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "Numai Proprietarul și Administratorii pot modifica această setare.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "Numai Proprietarul și Administratorii pot modifica această setare.",
   "Thông tin chi tiết": "Detalii despre dispozitiv",
   "Thông báo báo động": "Notificare de Alarmă",
   "Cài đặt nhắc nhở": "Setările Mementoului",
   "Nhắc nhở theo lịch": "Memento programat",
   "Danh sách thông báo": "Lista notificărilor",
   "Cài đặt thông báo": "Setările notificărilor",
-  "Sử dụng báo động theo lịch đã thiết lập": "Folosește Alarma conform programului configurat",
-  "Chỉ gửi thông báo, không kích hoạt báo động": "Trimite numai notificări, fără a declanșa Alarma",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "Toate Alarmele locuinței sunt dezactivate; sistemul va trimite numai notificări.",
-  "Chỉ Chủ nhà có thể bật chế độ này.": "Numai Proprietarul poate activa acest mod.",
+  "Sử dụng báo động theo lịch đã thiết lập":
+      "Folosește Alarma conform programului configurat",
+  "Chỉ gửi thông báo, không kích hoạt báo động":
+      "Trimite numai notificări, fără a declanșa Alarma",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "Toate Alarmele locuinței sunt dezactivate; sistemul va trimite numai notificări.",
+  "Chỉ Chủ nhà có thể bật chế độ này.":
+      "Numai Proprietarul poate activa acest mod.",
   "Bật Không bảo vệ?": "Activezi modul Neprotejat?",
-  "Cảm biến vừa phát hiện một sự kiện.": "Un senzor tocmai a detectat un eveniment.",
-  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "Numai Proprietarul poate activa modul Neprotejat",
+  "Cảm biến vừa phát hiện một sự kiện.":
+      "Un senzor tocmai a detectat un eveniment.",
+  "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ":
+      "Numai Proprietarul poate activa modul Neprotejat",
   "Đã chuyển nhà sang Không bảo vệ": "Locuința a trecut în modul Neprotejat",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "S-a trecut la modul Neprotejat, dar notificarea nu a putut fi trimisă",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "S-a trecut la modul Neprotejat, dar notificarea nu a putut fi trimisă",
   "Giám sát toàn diện": "Monitorizare completă",
   "Không bảo vệ": "Neprotejat",
   "Không bảo vệ đang bật": "Modul Neprotejat este activ",
   "Nhà đã chuyển sang Không bảo vệ": "Locuința a trecut în modul Neprotejat",
   "Thông báo cảm biến": "Notificări de la senzori",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "Notificări obișnuite când un senzor detectează un eveniment.",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "Notificări obișnuite când un senzor detectează un eveniment.",
   "Tôi hiểu, tiếp tục": "Înțeleg, continuă",
   "Cảnh báo an ninh đã kết thúc": "Alerta de securitate s-a încheiat",
   "Sự cố nguy hiểm đã kết thúc": "Situația de urgență s-a încheiat",
   "Cảnh báo đã được kết thúc.": "Alerta s-a încheiat.",
   "Vẫn còn cảnh báo khác đang hoạt động.": "O altă alertă este încă activă.",
   "Báo động đã hoạt động trở lại": "Alarma este din nou activă",
-  "Thời gian tạm dừng báo động đã kết thúc.": "Perioada de pauză a Alarmei s-a încheiat.",
+  "Thời gian tạm dừng báo động đã kết thúc.":
+      "Perioada de pauză a Alarmei s-a încheiat.",
   "MQTT đã kết nối trở lại": "MQTT s-a reconectat",
   "Còi báo động đã được tắt": "Sirena fizică a fost oprită",
   "Sự cố vẫn đang được theo dõi.": "Incidentul este în continuare monitorizat.",
@@ -929,39 +1182,54 @@ const Map<String, String> roStrings = {
   "Có thành viên đã trở về nhà.": "Un membru s-a întors acasă.",
   "Thiết bị đã được xoá": "Dispozitivul a fost eliminat",
   "Không thể xoá thiết bị": "Dispozitivul nu a putut fi eliminat",
-  "Hãy thử lại thao tác xoá thiết bị.": "Încearcă din nou să elimini dispozitivul.",
+  "Hãy thử lại thao tác xoá thiết bị.":
+      "Încearcă din nou să elimini dispozitivul.",
   "Chế độ Bảo vệ đã được tắt.": "Modul Protecție a fost dezactivat.",
   "Nhà đang ở chế độ Bình thường.": "Locuința este în modul Normal.",
   "Pin thiết bị đã ổn định": "Bateria dispozitivului este stabilă",
   "Hub đã kết nối trở lại": "Hub-ul s-a reconectat",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "S-a revenit la Normal, dar notificarea nu a putut fi trimisă",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "S-a revenit la Normal, dar notificarea nu a putut fi trimisă",
   "Chung cho nhà": "Comun pentru locuință",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "Se aplică tuturor membrilor și poate activa sirena fizică.",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "Se aplică tuturor membrilor și poate activa sirena fizică.",
   "Cá nhân": "Personal",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "Programul personal funcționează independent și nu activează niciodată sirena fizică.",
-  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "Această setare se aplică numai contului tău.",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "Numai Proprietarul și Administratorii pot modifica setările comune ale locuinței.",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "Programul personal funcționează independent și nu activează niciodată sirena fizică.",
+  "Cài đặt này chỉ áp dụng cho tài khoản của bạn.":
+      "Această setare se aplică numai contului tău.",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "Numai Proprietarul și Administratorii pot modifica setările comune ale locuinței.",
   "Tham gia hệ thống báo động": "Participă la sistemul de Alarmă",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "Senzorii de urgență participă întotdeauna la sistemul de Alarmă.",
-  "Tắt để thiết bị không tạo bất kỳ báo động nào.": "Dezactivează pentru ca dispozitivul să nu genereze nicio Alarmă.",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "Senzorii de urgență participă întotdeauna la sistemul de Alarmă.",
+  "Tắt để thiết bị không tạo bất kỳ báo động nào.":
+      "Dezactivează pentru ca dispozitivul să nu genereze nicio Alarmă.",
   "Lịch báo động chung": "Program comun al Alarmei",
   "Lịch báo động cá nhân": "Program personal al Alarmei",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "Afișează o alertă pe tot ecranul telefonului tău.",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "Afișează o alertă pe tot ecranul telefonului tău.",
   "Lặp lại cảnh báo": "Repetă alerta",
   "Báo động chung": "Alarmă comună",
   "Báo động cá nhân": "Alarmă personală",
   "Đã cài đặt": "Configurat",
   "Chưa cài đặt": "Neconfigurat",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "Programele comune și personale funcționează în paralel; nu mai trebuie să alegi unul dintre ele.",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "Programele comune și personale funcționează în paralel; nu mai trebuie să alegi unul dintre ele.",
   "Cài nhanh chung": "Configurare rapidă comună",
   "Cài nhanh cá nhân": "Configurare rapidă personală",
   "Thiết lập nhanh lịch cá nhân": "Configurare rapidă a programului personal",
   "Thiết lập nhanh lịch chung": "Configurare rapidă a programului comun",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "Acest program se aplică numai ție și nu activează sirena fizică.",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "Acest program se aplică tuturor membrilor locuinței.",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "Acest program se aplică numai ție și nu activează sirena fizică.",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "Acest program se aplică tuturor membrilor locuinței.",
   "Đã áp dụng lịch báo động": "Programul Alarmei a fost aplicat",
   "Không thể lưu lịch báo động": "Programul Alarmei nu a putut fi salvat",
-  "Nhà chưa có thiết bị an ninh": "Această locuință nu are dispozitive de securitate",
-  "Nhận cảnh báo theo lịch chung của nhà": "Primește alerte conform programului comun al locuinței",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "Dezactivează pentru a nu mai primi notificări sau alerte pe tot ecranul din programul comun. Sirena locuinței va continua să funcționeze.",
+  "Nhà chưa có thiết bị an ninh":
+      "Această locuință nu are dispozitive de securitate",
+  "Nhận cảnh báo theo lịch chung của nhà":
+      "Primește alerte conform programului comun al locuinței",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "Dezactivează pentru a nu mai primi notificări sau alerte pe tot ecranul din programul comun. Sirena locuinței va continua să funcționeze.",
 };

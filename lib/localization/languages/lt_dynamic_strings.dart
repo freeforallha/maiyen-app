@@ -3,41 +3,56 @@ const Map<String, String> ltDynamicStrings = {
   "Bảo vệ - Thủ công": "Apsauga – rankinė",
   "Tự động": "Automatinis",
   "Thủ công": "Rankinis",
-  "\$displayMemberName đã gia nhập nhà \"\$homeName\".": "\$displayMemberName prisijungė prie namų „\$homeName“.",
+  "\$displayMemberName đã gia nhập nhà \"\$homeName\".":
+      "\$displayMemberName prisijungė prie namų „\$homeName“.",
   "NGUY HIỂM": "PAVOJUS",
   "Nguy hiểm & Khẩn cấp": "Pavojus ir avarinė situacija",
   "TẮT CÒI": "IŠJUNGTI SIRENĄ",
   "Tắt còi báo động?": "Išjungti signalizacijos sireną?",
-  "Còi vật lý sẽ dừng, nhưng cảnh báo vẫn tiếp tục cho đến khi sự cố được xử lý.\n\nBạn chắc chắn muốn tắt còi?": "Fizinė sirena nutils, tačiau perspėjimas tęsis, kol incidentas bus išspręstas.\n\nAr tikrai norite išjungti sireną?",
-  "Đã gửi lệnh tắt còi. Cảnh báo vẫn đang được theo dõi.": "Sirenos išjungimo komanda išsiųsta. Perspėjimas vis dar stebimas.",
-  "Không tìm thấy cảnh báo đang hoạt động hoặc chưa thể gửi lệnh tắt còi.": "Aktyvus perspėjimas nerastas arba nepavyko išsiųsti sirenos išjungimo komandos.",
+  "Còi vật lý sẽ dừng, nhưng cảnh báo vẫn tiếp tục cho đến khi sự cố được xử lý.\n\nBạn chắc chắn muốn tắt còi?":
+      "Fizinė sirena nutils, tačiau perspėjimas tęsis, kol incidentas bus išspręstas.\n\nAr tikrai norite išjungti sireną?",
+  "Đã gửi lệnh tắt còi. Cảnh báo vẫn đang được theo dõi.":
+      "Sirenos išjungimo komanda išsiųsta. Perspėjimas vis dar stebimas.",
+  "Không tìm thấy cảnh báo đang hoạt động hoặc chưa thể gửi lệnh tắt còi.":
+      "Aktyvus perspėjimas nerastas arba nepavyko išsiųsti sirenos išjungimo komandos.",
   "TẮT CÒI TRONG NHÀ": "IŠJUNGTI NAMŲ SIRENĄ",
-  "Đã tắt còi trong nhà. Cảnh báo vẫn tiếp tục cho đến khi được xử lý.": "Namų sirena išjungta. Perspėjimas tęsis, kol incidentas bus išspręstas.",
+  "Đã tắt còi trong nhà. Cảnh báo vẫn tiếp tục cho đến khi được xử lý.":
+      "Namų sirena išjungta. Perspėjimas tęsis, kol incidentas bus išspręstas.",
   "\$name đang chuẩn bị gửi tin...": "\$name rašo...",
   "\$name1 và \$name2 đang chuẩn bị gửi tin...": "\$name1 ir \$name2 rašo...",
-  "\$name và \$otherCount người khác đang chuẩn bị gửi tin...": "\$name ir dar \$otherCount žmonių rašo...",
-  "Kênh báo động cũ để giữ tương thích": "Senas signalizacijos kanalas paliktas suderinamumui",
+  "\$name và \$otherCount người khác đang chuẩn bị gửi tin...":
+      "\$name ir dar \$otherCount žmonių rašo...",
+  "Kênh báo động cũ để giữ tương thích":
+      "Senas signalizacijos kanalas paliktas suderinamumui",
   "SafeHome báo động toàn màn hình": "SafeHome viso ekrano signalizacija",
-  "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động": "Atidaro viso ekrano perspėjimą; sirenos garsas leidžiamas signalizacijos puslapyje",
+  "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
+      "Atidaro viso ekrano perspėjimą; sirenos garsas leidžiamas signalizacijos puslapyje",
   "SafeHome cảnh báo khẩn cấp": "SafeHome avarinis perspėjimas",
-  "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình": "Aukšto prioriteto avarinis perspėjimas prieš atidarant visą ekraną",
+  "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
+      "Aukšto prioriteto avarinis perspėjimas prieš atidarant visą ekraną",
   "SafeHome nhắc nhở toàn màn hình": "SafeHome viso ekrano priminimas",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh": "Tylus SafeHome viso ekrano priminimas",
+  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
+      "Tylus SafeHome viso ekrano priminimas",
   "SafeHome nhắc nhở ưu tiên cao": "SafeHome aukšto prioriteto priminimas",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình": "SafeHome aukšto prioriteto priminimas be viso ekrano",
+  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
+      "SafeHome aukšto prioriteto priminimas be viso ekrano",
   "Tin nhắn mới trong các nhà SafeHome": "Naujos žinutės SafeHome namuose",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.": "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką.\n\nŠi funkcija neturės įtakos įrenginių kategorijos „Avarinis pavojus“ signalams ir režimo „Apsauga“ signalams.",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
+      "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką.\n\nŠi funkcija neturės įtakos įrenginių kategorijos „Avarinis pavojus“ signalams ir režimo „Apsauga“ signalams.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count namų pavojuje\$suffix",
-  "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.": "FCM prieigos raktas paruoštas, bet automatinei apsaugai išvykus trūksta vieno reikalavimo.",
+  "FCM token đã sẵn sàng, nhưng tính năng tự động khi rời nhà còn thiếu điều kiện.":
+      "FCM prieigos raktas paruoštas, bet automatinei apsaugai išvykus trūksta vieno reikalavimo.",
   "Đã kích hoạt SOS": "SOS suaktyvintas",
   "Phát hiện chập điện": "Aptiktas trumpasis jungimas",
   "Phát hiện quá dòng": "Aptikta viršsrovė",
   "Phát hiện quá áp": "Aptikta viršįtampė",
   "Thiết bị điện quá nhiệt": "Elektros įrenginys perkaito",
   "Tài khoản đang được sử dụng": "Paskyra naudojama",
-  "Hiện tại tài khoản này đang đăng nhập trên một thiết bị khác. Nếu tiếp tục, tài khoản trên thiết bị đó sẽ tự đăng xuất.": "Ši paskyra šiuo metu prijungta kitame įrenginyje. Jei tęsite, paskyra tame įrenginyje bus automatiškai atjungta.",
+  "Hiện tại tài khoản này đang đăng nhập trên một thiết bị khác. Nếu tiếp tục, tài khoản trên thiết bị đó sẽ tự đăng xuất.":
+      "Ši paskyra šiuo metu prijungta kitame įrenginyje. Jei tęsite, paskyra tame įrenginyje bus automatiškai atjungta.",
   "Tiếp tục đăng nhập": "Tęsti prisijungimą",
-  "Tài khoản đã được đăng nhập trên một thiết bị khác.": "Prie paskyros prisijungta kitame įrenginyje.",
+  "Tài khoản đã được đăng nhập trên một thiết bị khác.":
+      "Prie paskyros prisijungta kitame įrenginyje.",
   "KHẨN CẤP": "AVARINĖ SITUACIJA",
   "CẦN CHÚ Ý": "REIKIA DĖMESIO",
   "THÔNG TIN": "INFORMACIJA",
@@ -45,7 +60,8 @@ const Map<String, String> ltDynamicStrings = {
   "Cảm biến đã trở lại trạng thái an toàn.": "Jutiklis grįžo į saugią būseną.",
   "Người dùng đã tắt cảnh báo.": "Naudotojas išjungė perspėjimą.",
   "Khung giờ bảo vệ đã kết thúc.": "Apsaugos laikotarpis baigėsi.",
-  "Cảnh báo tức thời đã tự kết thúc.": "Momentinis perspėjimas baigėsi automatiškai.",
+  "Cảnh báo tức thời đã tự kết thúc.":
+      "Momentinis perspėjimas baigėsi automatiškai.",
   "Điều kiện cảnh báo không còn hoạt động.": "Perspėjimo sąlyga nebėra aktyvi.",
   "Cảnh báo đã kết thúc: \$reason": "Perspėjimas baigėsi: \$reason",
 };

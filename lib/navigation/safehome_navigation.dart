@@ -32,9 +32,7 @@ class SafeHomeNavigation {
             resizeToAvoidBottomInset: true,
             body: SafeArea(
               bottom: false,
-              child: SizedBox.expand(
-                child: Builder(builder: builder),
-              ),
+              child: SizedBox.expand(child: Builder(builder: builder)),
             ),
           );
         },

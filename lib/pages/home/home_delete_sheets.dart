@@ -125,7 +125,7 @@ Future<bool> showDeleteHomePasswordSheet({
 
                 return SingleChildScrollView(
                   keyboardDismissBehavior:
-                  ScrollViewKeyboardDismissBehavior.onDrag,
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

@@ -16,10 +16,8 @@ class IosNotificationConfig {
     defaultValue: false,
   );
 
-  static const String securityAlarmCategoryId =
-      'SAFEHOME_SECURITY_ALARM';
-  static const String emergencyAlarmCategoryId =
-      'SAFEHOME_EMERGENCY_ALARM';
+  static const String securityAlarmCategoryId = 'SAFEHOME_SECURITY_ALARM';
+  static const String emergencyAlarmCategoryId = 'SAFEHOME_EMERGENCY_ALARM';
   static const String reminderCategoryId = 'SAFEHOME_REMINDER';
   static const String sensorCategoryId = 'SAFEHOME_SENSOR';
   static const String chatCategoryId = 'SAFEHOME_CHAT';
@@ -101,9 +99,7 @@ class IosNotificationConfig {
     );
   }
 
-  static DarwinNotificationDetails chatDetails({
-    required String homeId,
-  }) {
+  static DarwinNotificationDetails chatDetails({required String homeId}) {
     final safeHomeId = _safeIdentifierPart(homeId, fallback: 'all');
 
     return DarwinNotificationDetails(

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class HomeListenerService {
   final Map<String, StreamSubscription<DatabaseEvent>> _subscriptions = {};
   final Map<String, String> _ownerUidByHome = {};
@@ -33,10 +33,7 @@ class HomeListenerService {
 
   void syncSharedHomes({
     required Map<String, dynamic> sharedHomes,
-    required void Function(
-        String homeId,
-        Map<String, dynamic> home,
-        ) onChanged,
+    required void Function(String homeId, Map<String, dynamic> home) onChanged,
     required void Function(String homeId) onDeleted,
   }) {
     final desiredHomeIds = sharedHomes.keys
@@ -82,10 +79,7 @@ class HomeListenerService {
       if (cachedHome != null && !ownerChanged) {
         onChanged(
           homeId,
-          _decorateSharedHome(
-            homeId: homeId,
-            home: cachedHome,
-          ),
+          _decorateSharedHome(homeId: homeId, home: cachedHome),
         );
       }
 
@@ -98,29 +92,26 @@ class HomeListenerService {
           .onValue
           .listen(
             (event) {
-          final rawHome = event.snapshot.value;
+              final rawHome = event.snapshot.value;
 
-          if (rawHome == null) {
-            _latestHomeDataByHome.remove(homeId);
-            onDeleted(homeId);
-            return;
-          }
+              if (rawHome == null) {
+                _latestHomeDataByHome.remove(homeId);
+                onDeleted(homeId);
+                return;
+              }
 
-          final homeData = safeMap(rawHome);
-          _latestHomeDataByHome[homeId] = homeData;
+              final homeData = safeMap(rawHome);
+              _latestHomeDataByHome[homeId] = homeData;
 
-          onChanged(
-            homeId,
-            _decorateSharedHome(
-              homeId: homeId,
-              home: homeData,
-            ),
+              onChanged(
+                homeId,
+                _decorateSharedHome(homeId: homeId, home: homeData),
+              );
+            },
+            onError: (Object error) {
+              safeDebugPrint('SHARED_HOME_LISTENER_ERROR: $error');
+            },
           );
-        },
-        onError: (Object error) {
-          safeDebugPrint('SHARED_HOME_LISTENER_ERROR: $error');
-        },
-      );
     }
   }
 

@@ -74,9 +74,7 @@ int emergencyStatusActiveUntil(Map<String, dynamic> device) {
   return int.tryParse(device["sos_active_until"]?.toString() ?? "") ?? 0;
 }
 
-int emergencyAcknowledgedTriggerForCurrentUser(
-  Map<String, dynamic> device,
-) {
+int emergencyAcknowledgedTriggerForCurrentUser(Map<String, dynamic> device) {
   final uid = FirebaseAuth.instance.currentUser?.uid ?? "";
 
   if (uid.isEmpty) {
@@ -93,9 +91,7 @@ int emergencyAcknowledgedTriggerForCurrentUser(
   return genericValue > sosValue ? genericValue : sosValue;
 }
 
-bool isEmergencyStatusAcknowledgedByCurrentUser(
-  Map<String, dynamic> device,
-) {
+bool isEmergencyStatusAcknowledgedByCurrentUser(Map<String, dynamic> device) {
   final triggeredAt = emergencyStatusTriggeredAt(device);
 
   return triggeredAt > 0 &&
@@ -395,9 +391,9 @@ bool isSosActive(Map<String, dynamic> d) {
 
   return isEmergencyStatusActiveForCurrentUser(
     d,
-    legacyActive: status == "triggered" ||
-        emergencyStatusActiveUntil(d) >
-            DateTime.now().millisecondsSinceEpoch,
+    legacyActive:
+        status == "triggered" ||
+        emergencyStatusActiveUntil(d) > DateTime.now().millisecondsSinceEpoch,
   );
 }
 
@@ -491,26 +487,19 @@ Map<String, dynamic> evaluateDeviceStatus(
       device["temperature"]?.toString() ?? "",
     );
     final humidity = double.tryParse(device["humidity"]?.toString() ?? "");
-    final hasExplicitDangerousTemperatureAlarm = _hasTrueFlag(
-      device,
-      const [
-        "temperature_alarm",
-        "high_temperature_alarm",
-        "over_temperature_alarm",
-      ],
-    );
+    final hasExplicitDangerousTemperatureAlarm = _hasTrueFlag(device, const [
+      "temperature_alarm",
+      "high_temperature_alarm",
+      "over_temperature_alarm",
+    ]);
 
-    if (
-      isEmergencyStatusActiveForCurrentUser(
-        device,
-        legacyActive: hasExplicitDangerousTemperatureAlarm,
-      )
-    ) {
+    if (isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive: hasExplicitDangerousTemperatureAlarm,
+    )) {
       emergencyIssues.add("Nhiệt độ nguy hiểm");
-    } else if (
-      temperature != null &&
-      temperature > environmentWarningTemperatureC
-    ) {
+    } else if (temperature != null &&
+        temperature > environmentWarningTemperatureC) {
       warningIssues.add("Nhiệt độ cao");
     }
 
@@ -523,66 +512,56 @@ Map<String, dynamic> evaluateDeviceStatus(
     emergencyIssues.add("SOS");
   }
 
-  if (
-    type == "smoke" &&
-    isEmergencyStatusActiveForCurrentUser(
-      device,
-      legacyActive:
-          isActiveDeviceSignal(device["smoke"]) || status == "alarm",
-    )
-  ) {
+  if (type == "smoke" &&
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive:
+            isActiveDeviceSignal(device["smoke"]) || status == "alarm",
+      )) {
     emergencyIssues.add("Có khói");
   }
 
-  if (
-    type == "heat" &&
-    isEmergencyStatusActiveForCurrentUser(
-      device,
-      legacyActive:
-          _hasTrueFlag(device, const [
-            "heat",
-            "heat_alarm",
-            "high_temperature_alarm",
-          ]) ||
-          status == "alarm",
-    )
-  ) {
+  if (type == "heat" &&
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive:
+            _hasTrueFlag(device, const [
+              "heat",
+              "heat_alarm",
+              "high_temperature_alarm",
+            ]) ||
+            status == "alarm",
+      )) {
     emergencyIssues.add("Nhiệt độ nguy hiểm");
   }
 
-  if (
-    type == "carbon_monoxide" &&
-    isEmergencyStatusActiveForCurrentUser(
-      device,
-      legacyActive:
-          _hasTrueFlag(device, const ["carbon_monoxide", "co_alarm"]) ||
-          status == "alarm",
-    )
-  ) {
+  if (type == "carbon_monoxide" &&
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive:
+            _hasTrueFlag(device, const ["carbon_monoxide", "co_alarm"]) ||
+            status == "alarm",
+      )) {
     emergencyIssues.add("Phát hiện khí CO");
   }
 
-  if (
-    type == "gas" &&
-    isEmergencyStatusActiveForCurrentUser(
-      device,
-      legacyActive:
-          _hasTrueFlag(device, const ["gas", "gas_alarm"]) ||
-          status == "alarm",
-    )
-  ) {
+  if (type == "gas" &&
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive:
+            _hasTrueFlag(device, const ["gas", "gas_alarm"]) ||
+            status == "alarm",
+      )) {
     emergencyIssues.add("Rò rỉ gas");
   }
 
-  if (
-    (type == "water_leak" || type == "flood") &&
-    isEmergencyStatusActiveForCurrentUser(
-      device,
-      legacyActive:
-          _hasTrueFlag(device, const ["water_leak", "leak", "water"]) ||
-          status == "alarm",
-    )
-  ) {
+  if ((type == "water_leak" || type == "flood") &&
+      isEmergencyStatusActiveForCurrentUser(
+        device,
+        legacyActive:
+            _hasTrueFlag(device, const ["water_leak", "leak", "water"]) ||
+            status == "alarm",
+      )) {
     emergencyIssues.add("Phát hiện ngập nước");
   }
 
@@ -618,14 +597,14 @@ Map<String, dynamic> evaluateDeviceStatus(
       "device_overheat",
       "electrical_overheat",
     ]);
-    final electricalEmergencyVisible =
-        isEmergencyStatusActiveForCurrentUser(
-          device,
-          legacyActive: shortCircuitActive ||
-              overCurrentActive ||
-              overVoltageActive ||
-              electricalOverheatActive,
-        );
+    final electricalEmergencyVisible = isEmergencyStatusActiveForCurrentUser(
+      device,
+      legacyActive:
+          shortCircuitActive ||
+          overCurrentActive ||
+          overVoltageActive ||
+          electricalOverheatActive,
+    );
 
     if (electricalEmergencyVisible) {
       if (shortCircuitActive) {

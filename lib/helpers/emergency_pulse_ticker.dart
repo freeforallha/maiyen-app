@@ -11,11 +11,8 @@ class EmergencyPulseTicker {
 
   static const int intervalMilliseconds = 650;
 
-  static final ValueNotifier<bool> phase =
-      ValueNotifier<bool>(_currentPhase());
+  static final ValueNotifier<bool> phase = ValueNotifier<bool>(_currentPhase());
 
-  static Timer? _alignmentTimer;
-  static Timer? _periodicTimer;
   static bool _started = false;
 
   static bool _currentPhase() {
@@ -35,9 +32,9 @@ class EmergencyPulseTicker {
         ? intervalMilliseconds
         : intervalMilliseconds - remainder;
 
-    _alignmentTimer = Timer(Duration(milliseconds: delay), () {
+    Timer(Duration(milliseconds: delay), () {
       _publishCurrentPhase();
-      _periodicTimer = Timer.periodic(
+      Timer.periodic(
         const Duration(milliseconds: intervalMilliseconds),
         (_) => _publishCurrentPhase(),
       );

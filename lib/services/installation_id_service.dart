@@ -9,8 +9,7 @@ class InstallationIdService {
 
   // Giữ nguyên key cũ để FCM token và session cùng nhận diện
   // đúng một bản cài đặt ứng dụng trên thiết bị.
-  static const String _installationIdKey =
-      'safehome_fcm_installation_id';
+  static const String _installationIdKey = 'safehome_fcm_installation_id';
 
   static String _cachedInstallationId = '';
   static Future<String>? _pendingInstallationId;
@@ -37,9 +36,7 @@ class InstallationIdService {
   }
 
   static Future<String> _loadOrCreate() async {
-    final saved = await _storage.read(
-      key: _installationIdKey,
-    );
+    final saved = await _storage.read(key: _installationIdKey);
 
     final cleanSaved = saved?.trim() ?? '';
 
@@ -49,21 +46,13 @@ class InstallationIdService {
     }
 
     final random = Random.secure();
-    final bytes = List<int>.generate(
-      16,
-          (_) => random.nextInt(256),
-    );
+    final bytes = List<int>.generate(16, (_) => random.nextInt(256));
 
     final installationId = bytes
-        .map(
-          (value) => value.toRadixString(16).padLeft(2, '0'),
-    )
+        .map((value) => value.toRadixString(16).padLeft(2, '0'))
         .join();
 
-    await _storage.write(
-      key: _installationIdKey,
-      value: installationId,
-    );
+    await _storage.write(key: _installationIdKey, value: installationId);
 
     _cachedInstallationId = installationId;
     return installationId;

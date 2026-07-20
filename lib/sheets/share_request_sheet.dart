@@ -124,9 +124,9 @@ Future<bool?> showShareRequestSheet({
           final strings = AppStrings.of(context);
 
           Future<void> acceptOne(
-              String requestKey,
-              Map<String, dynamic> data,
-              ) async {
+            String requestKey,
+            Map<String, dynamic> data,
+          ) async {
             final canHandle = await canHandleRequest(data);
 
             if (!context.mounted) {
@@ -246,13 +246,13 @@ Future<bool?> showShareRequestSheet({
               if (type == "join_request") {
                 await FirebaseDatabase.instance
                     .ref(
-                  "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
-                )
+                      "${FirebasePaths.shareList(ownerUid, homeId)}/$targetUid",
+                    )
                     .set({
-                  "email": targetEmail,
-                  "name": targetName,
-                  "sharedAt": DateTime.now().millisecondsSinceEpoch,
-                });
+                      "email": targetEmail,
+                      "name": targetName,
+                      "sharedAt": DateTime.now().millisecondsSinceEpoch,
+                    });
               }
 
               try {
@@ -462,8 +462,8 @@ Future<bool?> showShareRequestSheet({
                                 data["homeName"]?.toString().trim() ?? "";
 
                             final homeName =
-                            rawHomeName.isNotEmpty &&
-                                !rawHomeName.startsWith("home_")
+                                rawHomeName.isNotEmpty &&
+                                    !rawHomeName.startsWith("home_")
                                 ? rawHomeName
                                 : strings.t("Nhà chưa đặt tên");
 
@@ -496,12 +496,12 @@ Future<bool?> showShareRequestSheet({
                                   : strings.t("Một người dùng SafeHome");
 
                               subtitle =
-                              targetEmail.isNotEmpty &&
-                                  targetName.isNotEmpty
+                                  targetEmail.isNotEmpty &&
+                                      targetName.isNotEmpty
                                   ? strings.joinHomeRequestTitle(
-                                targetEmail,
-                                homeName,
-                              )
+                                      targetEmail,
+                                      homeName,
+                                    )
                                   : strings.joinHomeRequestSubtitle(homeName);
                             } else if (isTransferOwner) {
                               title = strings.t("Nhận quyền chủ nhà");
@@ -514,11 +514,11 @@ Future<bool?> showShareRequestSheet({
                                   : strings.t("Lời mời từ chủ nhà");
 
                               subtitle =
-                              ownerEmail.isNotEmpty && ownerName.isNotEmpty
+                                  ownerEmail.isNotEmpty && ownerName.isNotEmpty
                                   ? strings.homeInviteTitle(
-                                ownerEmail,
-                                homeName,
-                              )
+                                      ownerEmail,
+                                      homeName,
+                                    )
                                   : strings.homeInviteSubtitle(homeName);
                             }
 
@@ -541,7 +541,7 @@ Future<bool?> showShareRequestSheet({
                                 children: [
                                   Row(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         backgroundColor: color.withValues(
@@ -553,20 +553,20 @@ Future<bool?> showShareRequestSheet({
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               padding:
-                                              const EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 3,
-                                              ),
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 3,
+                                                  ),
                                               decoration: BoxDecoration(
                                                 color: color.withValues(
                                                   alpha: 0.12,
                                                 ),
                                                 borderRadius:
-                                                BorderRadius.circular(20),
+                                                    BorderRadius.circular(20),
                                               ),
                                               child: Text(
                                                 badgeText,
@@ -634,11 +634,11 @@ Future<bool?> showShareRequestSheet({
                                                 context,
                                                 isJoinRequest
                                                     ? strings.t(
-                                                  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
-                                                )
+                                                        "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.",
+                                                      )
                                                     : strings.t(
-                                                  "Không thể chấp nhận lời mời. Vui lòng thử lại.",
-                                                ),
+                                                        "Không thể chấp nhận lời mời. Vui lòng thử lại.",
+                                                      ),
                                                 color: Colors.red,
                                                 icon: Icons.error_rounded,
                                               );

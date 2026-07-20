@@ -23,10 +23,7 @@ Future<String?> openQRScanner(
   return Navigator.push<String>(
     context,
     MaterialPageRoute(
-      builder: (_) => _QRScanPage(
-        controller: controller,
-        mode: mode,
-      ),
+      builder: (_) => _QRScanPage(controller: controller, mode: mode),
     ),
   );
 }
@@ -35,10 +32,7 @@ class _QRScanPage extends StatefulWidget {
   final MobileScannerController controller;
   final SafeHomeQrScanMode mode;
 
-  const _QRScanPage({
-    required this.controller,
-    required this.mode,
-  });
+  const _QRScanPage({required this.controller, required this.mode});
 
   @override
   State<_QRScanPage> createState() => _QRScanPageState();
@@ -191,10 +185,7 @@ class _QRScanPageState extends State<_QRScanPage>
                   Text(
                     helpText,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white60,
-                      fontSize: 13,
-                    ),
+                    style: const TextStyle(color: Colors.white60, fontSize: 13),
                   ),
                 ],
                 if (scanError != null) ...[

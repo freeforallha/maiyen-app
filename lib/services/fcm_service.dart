@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../localization/app_language_controller.dart';
@@ -11,10 +10,13 @@ import 'notification_service.dart';
 import 'platform/ios/ios_notification_config.dart';
 import 'single_device_session_service.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
+
 class FCMService {
   static bool _foregroundListening = false;
   static StreamSubscription<String>? _tokenRefreshSubscription;
   static String _activeUid = '';
+  static Future<void>? _setupInFlight;
+  static String _setupInFlightUid = '';
 
   static String _platformName() {
     switch (defaultTargetPlatform) {
@@ -45,9 +47,9 @@ class FCMService {
     }
 
     final identity =
-    await SingleDeviceSessionService.currentSessionIdentityIfActive(
-      uid: cleanUid,
-    );
+        await SingleDeviceSessionService.currentSessionIdentityIfActive(
+          uid: cleanUid,
+        );
 
     if (identity == null) {
       return;
@@ -55,18 +57,17 @@ class FCMService {
 
     final now = DateTime.now().millisecondsSinceEpoch;
 
-    await FirebaseDatabase.instance.ref(
-      FirebasePaths.fcmTokenInstallation(
-        cleanUid,
-        identity.installationId,
-      ),
-    ).set({
-      'installationId': identity.installationId,
-      'sessionId': identity.sessionId,
-      'token': cleanToken,
-      'platform': _platformName(),
-      'updatedAt': now,
-    });
+    await FirebaseDatabase.instance
+        .ref(
+          FirebasePaths.fcmTokenInstallation(cleanUid, identity.installationId),
+        )
+        .set({
+          'installationId': identity.installationId,
+          'sessionId': identity.sessionId,
+          'token': cleanToken,
+          'platform': _platformName(),
+          'updatedAt': now,
+        });
 
     try {
       await FirebaseDatabase.instance
@@ -77,15 +78,34 @@ class FCMService {
     }
   }
 
-  static Future<void> setupFCM({
-    required String uid,
-  }) async {
+  static Future<void> setupFCM({required String uid}) {
     final cleanUid = uid.trim();
 
     if (cleanUid.isEmpty) {
-      return;
+      return Future<void>.value();
     }
 
+    final existingSetup = _setupInFlight;
+
+    if (existingSetup != null && _setupInFlightUid == cleanUid) {
+      return existingSetup;
+    }
+
+    late final Future<void> setupFuture;
+    setupFuture = _setupFCMInternal(cleanUid).whenComplete(() {
+      if (identical(_setupInFlight, setupFuture)) {
+        _setupInFlight = null;
+        _setupInFlightUid = '';
+      }
+    });
+
+    _setupInFlight = setupFuture;
+    _setupInFlightUid = cleanUid;
+
+    return setupFuture;
+  }
+
+  static Future<void> _setupFCMInternal(String cleanUid) async {
     await _tokenRefreshSubscription?.cancel();
     _tokenRefreshSubscription = null;
     _activeUid = cleanUid;
@@ -96,12 +116,15 @@ class FCMService {
       alert: true,
       badge: true,
       sound: true,
-      criticalAlert:
-          IosNotificationConfig.criticalAlertsEntitlementEnabled,
+      criticalAlert: IosNotificationConfig.criticalAlertsEntitlementEnabled,
     );
 
     if (kDebugMode) {
       safeDebugPrint('PUSH_PERMISSION_STATUS: ${settings.authorizationStatus}');
+    }
+
+    if (_activeUid != cleanUid) {
+      return;
     }
 
     final apnsToken = await messaging.getAPNSToken();
@@ -109,51 +132,55 @@ class FCMService {
       safeDebugPrint('PUSH_IOS_REGISTRATION_AVAILABLE');
     }
 
+    if (_activeUid != cleanUid) {
+      return;
+    }
+
     final token = await messaging.getToken();
     if (kDebugMode && token != null) {
       safeDebugPrint('PUSH_REGISTRATION_AVAILABLE');
     }
 
-    if (token != null) {
-      await _saveToken(
-        uid: cleanUid,
-        token: token,
-      );
+    if (_activeUid != cleanUid) {
+      return;
     }
 
-    _tokenRefreshSubscription =
-        messaging.onTokenRefresh.listen(
-              (newToken) async {
-            final targetUid = _activeUid;
+    if (token != null) {
+      await _saveToken(uid: cleanUid, token: token);
+    }
 
-            if (targetUid.isEmpty) {
-              return;
-            }
+    if (_activeUid != cleanUid) {
+      return;
+    }
 
-            if (kDebugMode) {
-              safeDebugPrint('PUSH_REGISTRATION_REFRESHED');
-            }
+    _tokenRefreshSubscription = messaging.onTokenRefresh.listen(
+      (newToken) async {
+        final targetUid = _activeUid;
 
-            try {
-              await _saveToken(
-                uid: targetUid,
-                token: newToken,
-              );
-            } catch (error) {
-              safeDebugPrint(
-                'PUSH_REGISTRATION_REFRESH_SAVE_ERROR: $error',
-              );
-            }
-          },
-          onError: (Object error) {
-            safeDebugPrint(
-              'PUSH_REGISTRATION_REFRESH_STREAM_ERROR: $error',
-            );
-          },
-        );
+        if (targetUid.isEmpty) {
+          return;
+        }
 
-    final initialMessage =
-    await messaging.getInitialMessage();
+        if (kDebugMode) {
+          safeDebugPrint('PUSH_REGISTRATION_REFRESHED');
+        }
+
+        try {
+          await _saveToken(uid: targetUid, token: newToken);
+        } catch (error) {
+          safeDebugPrint('PUSH_REGISTRATION_REFRESH_SAVE_ERROR: $error');
+        }
+      },
+      onError: (Object error) {
+        safeDebugPrint('PUSH_REGISTRATION_REFRESH_STREAM_ERROR: $error');
+      },
+    );
+
+    final initialMessage = await messaging.getInitialMessage();
+
+    if (_activeUid != cleanUid) {
+      return;
+    }
 
     if (initialMessage != null) {
       await _handleOpenedMessage(initialMessage);
@@ -171,56 +198,51 @@ class FCMService {
 
     final installationId = await InstallationIdService.getOrCreate();
 
-    await FirebaseDatabase.instance.ref(
-      FirebasePaths.fcmTokenInstallation(
-        cleanUid,
-        installationId,
-      ),
-    ).remove();
+    await FirebaseDatabase.instance
+        .ref(FirebasePaths.fcmTokenInstallation(cleanUid, installationId))
+        .remove();
 
     if (_activeUid == cleanUid) {
       _activeUid = '';
+      _setupInFlight = null;
+      _setupInFlightUid = '';
       await _tokenRefreshSubscription?.cancel();
       _tokenRefreshSubscription = null;
     }
   }
 
-  static void listenForeground({
-    required FlutterLocalNotificationsPlugin localNotif,
-  }) {
+  static void listenForeground() {
     if (_foregroundListening) return;
     _foregroundListening = true;
 
     FirebaseMessaging.onMessage.listen((message) async {
-      final type =
-          message.data['type']?.toString() ?? '';
+      final activeUid = _activeUid;
+
+      if (activeUid.isEmpty) {
+        return;
+      }
+
+      final type = message.data['type']?.toString() ?? '';
 
       if (type == 'chat') {
-        await NotificationService.showChatNotification(
-          data: message.data,
-        );
+        await NotificationService.showChatNotification(data: message.data);
         return;
       }
 
       if (type == 'sensor_notification') {
-        await NotificationService.showSensorNotification(
-          data: message.data,
-        );
+        await NotificationService.showSensorNotification(data: message.data);
         return;
       }
 
       if (type == 'alarm_resolved') {
-        await NotificationService.handleAlarmResolved(
-          message.data,
-        );
+        await NotificationService.handleAlarmResolved(message.data);
         return;
       }
 
       if (type == 'emergency_notification' ||
           type == 'alarm_detected' ||
           type == 'alarm') {
-        await NotificationService
-            .showPriorityAlarmNotification(
+        await NotificationService.showPriorityAlarmNotification(
           data: message.data,
         );
         return;
@@ -228,45 +250,33 @@ class FCMService {
 
       if (type == 'alarm_siren') {
         if (defaultTargetPlatform == TargetPlatform.iOS) {
-          await NotificationService.openIosAlarmFromData(
-            message.data,
-          );
+          await NotificationService.openIosAlarmFromData(message.data);
         } else {
-          NotificationService.openAlarmFromData(
-            message.data,
-          );
+          NotificationService.openAlarmFromData(message.data);
         }
         return;
       }
 
-      final isSchedule =
-          type == 'schedule_notification';
+      final isSchedule = type == 'schedule_notification';
 
       if (!isSchedule) {
         return;
       }
 
-      final isSafeText =
-          message.data['isSafe']?.toString() ?? 'true';
+      final isSafeText = message.data['isSafe']?.toString() ?? 'true';
 
-      final isSafe = isSafeText == 'true' ||
-          isSafeText == '1' ||
-          isSafeText == 'yes';
+      final isSafe =
+          isSafeText == 'true' || isSafeText == '1' || isSafeText == 'yes';
 
-      final reasonCode =
-          message.data['reason']?.toString() ?? '';
+      final reasonCode = message.data['reason']?.toString() ?? '';
 
-      final reminderItems =
-          message.data['reminderItems']?.toString() ?? '';
+      final reminderItems = message.data['reminderItems']?.toString() ?? '';
 
-      final scheduleBody =
-          message.data['body']?.toString() ?? '';
+      final scheduleBody = message.data['body']?.toString() ?? '';
 
-      final forceShow =
-          message.data['forceShow']?.toString() == 'true';
+      final forceShow = message.data['forceShow']?.toString() == 'true';
 
-      final displayReason =
-      forceShow && scheduleBody.isNotEmpty
+      final displayReason = forceShow && scheduleBody.isNotEmpty
           ? scheduleBody
           : reasonCode;
 
@@ -274,29 +284,32 @@ class FCMService {
         isSafe: isSafe,
         reason: displayReason,
         reminderItemsJson: reminderItems,
-        title:
-        message.data['title']?.toString() ?? '',
+        title: message.data['title']?.toString() ?? '',
         forceShow: forceShow,
       );
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen(
-          (message) async {
-        await _handleOpenedMessage(message);
-      },
-    );
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      await _handleOpenedMessage(message, expectedUid: _activeUid);
+    });
   }
 
   static Future<void> _handleOpenedMessage(
-      RemoteMessage message,
-      ) async {
-    final type =
-        message.data['type']?.toString() ?? '';
+    RemoteMessage message, {
+    String expectedUid = '',
+  }) async {
+    final activeUid = expectedUid.trim().isNotEmpty
+        ? expectedUid.trim()
+        : _activeUid;
+
+    if (activeUid.isEmpty || _activeUid != activeUid) {
+      return;
+    }
+
+    final type = message.data['type']?.toString() ?? '';
 
     if (type == 'chat') {
-      NotificationService.requestOpenHomeChat(
-        message.data,
-      );
+      NotificationService.requestOpenHomeChat(message.data);
       return;
     }
 
@@ -306,9 +319,7 @@ class FCMService {
     }
 
     if (type == 'alarm_resolved') {
-      await NotificationService.handleAlarmResolved(
-        message.data,
-      );
+      await NotificationService.handleAlarmResolved(message.data);
       return;
     }
 
@@ -316,26 +327,18 @@ class FCMService {
         type == 'alarm_detected' ||
         type == 'alarm') {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
-        await NotificationService.openIosAlarmFromData(
-          message.data,
-        );
+        await NotificationService.openIosAlarmFromData(message.data);
       } else {
-        await NotificationService.handlePriorityAlarmOpened(
-          message.data,
-        );
+        await NotificationService.handlePriorityAlarmOpened(message.data);
       }
       return;
     }
 
     if (type == 'alarm_siren') {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
-        await NotificationService.openIosAlarmFromData(
-          message.data,
-        );
+        await NotificationService.openIosAlarmFromData(message.data);
       } else {
-        NotificationService.openAlarmFromData(
-          message.data,
-        );
+        NotificationService.openAlarmFromData(message.data);
       }
     }
   }

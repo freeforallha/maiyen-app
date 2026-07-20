@@ -50,7 +50,8 @@ const Map<String, String> jaStrings = {
   "Tự động Bảo vệ khi rời nhà": "外出時の自動警戒",
   "Chuyển về Bình thường?": "通常モードに切り替えますか？",
   "Vẫn chuyển về Bình thường": "それでも通常モードに切り替える",
-  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.": "外出時の自動警戒がまだ有効です。全員が外出中の場合、数分後に警戒モードが自動で再び有効になることがあります。",
+  "Tự động Bảo vệ khi rời nhà vẫn đang bật. Nếu mọi thành viên vẫn ở ngoài, hệ thống có thể tự bật lại Bảo vệ sau vài phút.":
+      "外出時の自動警戒がまだ有効です。全員が外出中の場合、数分後に警戒モードが自動で再び有効になることがあります。",
   "An ninh ra/vào": "出入り口セキュリティ",
   "Nguy hiểm khẩn cấp": "緊急リスク",
   "Môi trường": "環境",
@@ -79,14 +80,17 @@ const Map<String, String> jaStrings = {
   "Nhắc nhở": "リマインダー",
   "Hẹn giờ báo động": "警報予約",
   "Hẹn giờ nhắc nhở": "リマインダー 予約",
-  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.": "リマインダー は、選択した時刻に家の安全状態を確認するよう通知します。",
+  "Nhắc nhở sẽ nhắc bạn kiểm tra trạng thái an toàn của ngôi nhà vào giờ đã chọn.":
+      "リマインダー は、選択した時刻に家の安全状態を確認するよう通知します。",
   "Thêm nhắc nhở": "リマインダー を追加",
   "Báo động thiết bị": "デバイス警報",
   "Chế độ áp dụng": "適用モード",
   "Theo nhà": "家の設定",
   "Riêng tôi": "自分のみ",
-  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập": "家の所有者または管理者が設定した共通スケジュールを使用します",
-  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn": "自分のアカウントにのみ適用される個人スケジュールを使用します",
+  "Dùng lịch chung do Chủ nhà hoặc Quản trị viên thiết lập":
+      "家の所有者または管理者が設定した共通スケジュールを使用します",
+  "Dùng lịch riêng chỉ áp dụng cho tài khoản của bạn":
+      "自分のアカウントにのみ適用される個人スケジュールを使用します",
   "Thiết lập nhanh toàn bộ thiết bị": "すべてのデバイスを一括設定",
   "Bắt đầu": "開始",
   "Kết thúc": "終了",
@@ -183,7 +187,8 @@ const Map<String, String> jaStrings = {
   "Đã đặt vị trí nhà": "家の位置が設定されています",
   "Đặt vị trí nhà tại đây": "現在地を家の位置に設定",
   "Bán kính bảo vệ mặc định: 150 m": "デフォルトの保護半径: 150 m",
-  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.": "外出/帰宅状態をバックグラウンドで動作させるには、各メンバーが位置情報を「常に許可」にする必要があります。",
+  "Mỗi thành viên sẽ cần cấp quyền vị trí Luôn cho phép để trạng thái rời/đến nhà hoạt động khi ứng dụng chạy nền.":
+      "外出/帰宅状態をバックグラウンドで動作させるには、各メンバーが位置情報を「常に許可」にする必要があります。",
   "Lưu cài đặt": "設定を保存",
   "Bạn không có quyền thực hiện thao tác này。": "この操作を実行する権限がありません。",
   "Bạn không có quyền thực hiện thao tác này.": "この操作を実行する権限がありません。",
@@ -252,7 +257,8 @@ const Map<String, String> jaStrings = {
   "Lưu thay đổi": "変更を保存",
   "Đang tắt": "オフ",
   "Chọn giờ bắt đầu tạm tắt": "一時停止の開始時刻を選択",
-  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ": "自動警戒を有効にする前に家の位置を設定してください",
+  "Hãy đặt vị trí nhà trước khi bật tự động Bảo vệ":
+      "自動警戒を有効にする前に家の位置を設定してください",
   "Đang lấy vị trí...": "位置情報を取得中...",
   "Đang lưu...": "保存中...",
   "Báo động đã được bật": "警報が有効になりました",
@@ -409,8 +415,10 @@ const Map<String, String> jaStrings = {
   "CHƯA AN TOÀN": "安全ではありません",
   "Cần chú ý": "注意が必要",
   "ĐÃ AN TOÀN": "安全",
-  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.": "家は安定して稼働しています。安心してご利用いただけます。",
-  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.": "詳細に分析するための新しい活動がまだ十分にありません。",
+  "Nhà đang hoạt động ổn định, bạn có thể yên tâm.":
+      "家は安定して稼働しています。安心してご利用いただけます。",
+  "Chưa có nhiều hoạt động mới để phân tích sâu hơn.":
+      "詳細に分析するための新しい活動がまだ十分にありません。",
   "Chưa có dữ liệu trạng thái": "状態データがありません",
   "Cần xử lý ngay": "すぐに対応が必要",
   "Chưa có dữ liệu tổng quan": "概要データがありません",
@@ -421,18 +429,23 @@ const Map<String, String> jaStrings = {
   "Đã rời khỏi nhà": "家から退出しました",
   "Bạn sẽ rời khỏi các nhà được chia sẻ.": "共有された家から退出します。",
   "Các nhà của bạn sẽ bị xoá.\n": "自分の家は削除されます。\n",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n": "選択した家のすべてのセキュリティデバイスの警報スケジュールを変更します。\n\n",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n": "選択した家に家の リマインダー を追加します。\n\n",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\n":
+      "選択した家のすべてのセキュリティデバイスの警報スケジュールを変更します。\n\n",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\n":
+      "選択した家に家の リマインダー を追加します。\n\n",
   "Xác nhận thay đổi báo động": "警報の変更を確認",
   "Xác nhận thay đổi nhắc nhở": "リマインダー の変更を確認",
   "Lặp lại khi sự cố vẫn còn": "問題が続く間は繰り返す",
   "Thời gian lặp lại báo động": "警報の繰り返し時間",
   "VD: Mr Chung": "例: Mr Chung",
   "🏡 Chưa có nhà nào": "🏡 まだ家がありません",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n": "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\n":
+      "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n",
   "Bật Bảo vệ thủ công?": "手動保護モードをオンにしますか？",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ": "この操作により、本日の一部デバイスの警報時刻が変更されます...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà ": "この操作により、この家のすべての警報がオフになります。",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị ":
+      "この操作により、本日の一部デバイスの警報時刻が変更されます...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà ":
+      "この操作により、この家のすべての警報がオフになります。",
   "Tắt toàn bộ báo động?": "すべての警報をオフにしますか？",
   "Không xoá được lịch tạm tắt báo động": "警報の一時停止スケジュールを削除できません",
   "Không lưu được tạm tắt báo động": "警報の一時停止を保存できません",
@@ -442,9 +455,11 @@ const Map<String, String> jaStrings = {
   "Không thể xác nhận tài khoản hiện tại": "現在のアカウントを確認できませんでした",
   "Mật khẩu không đúng": "パスワードが正しくありません",
   "Không thể xác nhận mật khẩu": "パスワードを確認できませんでした",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động": "所有者または管理者のみが警報の繰り返し設定を変更できます",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi lặp báo động":
+      "所有者または管理者のみが警報の繰り返し設定を変更できます",
   "Không lưu được thời gian lặp báo động": "警報の繰り返し時間を保存できませんでした",
-  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ": "所有者または管理者のみが保護モードを変更できます",
+  "Chỉ Chủ nhà hoặc Quản trị viên mới có quyền thay đổi Chế độ Bảo vệ":
+      "所有者または管理者のみが保護モードを変更できます",
   "Không thể thay đổi chế độ nhà": "家のモードを変更できませんでした",
   "Đã bật Bảo vệ nhưng chưa gửi được thông báo": "保護モードはオンですが、通知を送信できませんでした",
   "Đã bật Chế độ Bảo vệ thủ công": "手動保護モードがオンになりました",
@@ -452,13 +467,15 @@ const Map<String, String> jaStrings = {
   "60 phút": "60 分",
   "30 phút": "30 分",
   "15 phút": "15 分",
-  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.": "所有者のスケジュールを表示しています。自分の警報スケジュールを設定するには「自分のみ」を選択してください。",
+  "Bạn đang xem lịch của chủ nhà. Chọn Riêng tôi để tự đặt lịch báo động.":
+      "所有者のスケジュールを表示しています。自分の警報スケジュールを設定するには「自分のみ」を選択してください。",
   "Chọn giờ kết thúc báo động": "警報の終了時刻を選択",
   "Chọn giờ bắt đầu báo động": "警報の開始時刻を選択",
   "Bạn không có quyền sửa lịch báo động của nhà": "この家の警報スケジュールを編集する権限がありません",
   "Không thể áp dụng báo động cho toàn bộ thiết bị": "すべてのデバイスに警報を適用できません",
   "Nhà chưa có thiết bị an ninh để áp dụng": "この家には適用できるセキュリティデバイスがありません",
-  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.": "家の設定を編集する権限がありません。「自分のみ」を選択してください。",
+  "Bạn không có quyền sửa lịch Theo nhà. Hãy chọn Riêng tôi.":
+      "家の設定を編集する権限がありません。「自分のみ」を選択してください。",
   "Không thể lưu chế độ báo động": "警報モードを保存できません",
   "Thêm khung giờ báo động": "警報時間帯を追加",
   "Đang sử dụng nhắc nhở riêng của bạn": "自分の リマインダー 設定を使用中",
@@ -490,8 +507,10 @@ const Map<String, String> jaStrings = {
   "Thành viên chưa cập nhật số điện thoại": "このメンバーは電話番号を追加していません",
   "Hôm nay đã ghi nhận cảnh báo SOS": "今日は SOS アラートが記録されました",
   "Hôm nay đã ghi nhận cảnh báo khói": "今日は煙アラートが記録されました",
-  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường": "手動警戒モードがオンです - オフにするには通常モードに切り替えてください",
-  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.": "0 を選ぶと 1 回だけ通知します。この設定は手動保護モードと外出時の自動保護の両方に適用されます。",
+  "Bảo vệ thủ công đang bật - chỉ tắt khi chuyển về Bình thường":
+      "手動警戒モードがオンです - オフにするには通常モードに切り替えてください",
+  "Chọn 0 để chỉ báo một lần. Cài đặt này dùng cho cả Bảo vệ thủ công và Tự động Bảo vệ khi rời nhà.":
+      "0 を選ぶと 1 回だけ通知します。この設定は手動保護モードと外出時の自動保護の両方に適用されます。",
   "Lặp báo động khi sự cố vẫn còn": "問題が続く間警報を繰り返す",
   "Đang được sử dụng": "現在有効です",
   "Chuyển về sử dụng thông thường": "通常の使用に戻す",
@@ -499,58 +518,80 @@ const Map<String, String> jaStrings = {
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS デバイスにアラートは記録されていません。",
   "Cảm biến khói chưa ghi nhận bất thường.": "煙センサーは異常を検知していません。",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "あなたまたはメンバーが手動で警戒をオンにしました。",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "外出したため SafeHome が自動で警戒をオンにしました。",
+  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "外出したため SafeHome が自動で警戒をオンにしました。",
   "Nhà đang ở chế độ dùng bình thường.": "この家は現在通常モードです。",
   "Bảo vệ thủ công đang bật": "手動警戒がオンです",
   "Bảo vệ tự động đang bật": "自動警戒がオンです",
   "Bảo vệ đang tắt": "警戒モードはオフです",
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "最近アプリを開いて状態を確認しています。",
-  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.": "権限、スケジュール、未読警報を確認するため定期的にアプリを開いてください。",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.": "数回使用すると、SafeHome がアプリ確認習慣をより正確に評価できます。",
+  "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
+      "権限、スケジュール、未読警報を確認するため定期的にアプリを開いてください。",
+  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "数回使用すると、SafeHome がアプリ確認習慣をより正確に評価できます。",
   "Tần suất vào ứng dụng ổn": "アプリ確認頻度は良好です",
   "Đã lâu chưa vào ứng dụng kiểm tra": "アプリ確認から時間が経っています",
   "Đang ghi nhận tần suất vào ứng dụng": "アプリ確認頻度を記録中",
-  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.": "常に位置情報の許可とバックグラウンド条件を確認してください。",
-  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.": "このデバイスは自動外出の条件を満たしています。",
-  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.": "外出時に自動で警戒モードにしたい場合は有効にしてください。",
+  "Cần kiểm tra quyền vị trí luôn luôn và điều kiện chạy nền.":
+      "常に位置情報の許可とバックグラウンド条件を確認してください。",
+  "Thiết bị đủ điều kiện để Auto rời khỏi nhà hoạt động.":
+      "このデバイスは自動外出の条件を満たしています。",
+  "Bạn có thể bật khi muốn tự động chuyển Bảo vệ lúc rời nhà.":
+      "外出時に自動で警戒モードにしたい場合は有効にしてください。",
   "Auto rời khỏi nhà chưa ổn": "自動外出は準備できていません",
   "Auto rời khỏi nhà đã sẵn sàng": "自動外出は準備完了です",
   "Auto rời khỏi nhà chưa bật": "自動外出は有効ではありません",
-  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.": "煙センサー、SOS、または家に合った緊急デバイスを追加してください。",
+  "Nên thêm báo khói, SOS hoặc thiết bị khẩn cấp phù hợp với nhà.":
+      "煙センサー、SOS、または家に合った緊急デバイスを追加してください。",
   "Chưa có thiết bị khẩn cấp": "緊急デバイスがありません",
   "Đã có thiết bị khẩn cấp": "緊急デバイスが追加されています",
-  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.": "就寝中や外出時のために警報スケジュールを設定してください。",
-  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.": "この家には警報スケジュールまたはデバイス別警報スケジュールがあります。",
+  "Nên đặt lịch báo động cho thời gian ngủ hoặc vắng nhà.":
+      "就寝中や外出時のために警報スケジュールを設定してください。",
+  "Nhà đã có lịch báo động hoặc lịch cảnh báo theo thiết bị.":
+      "この家には警報スケジュールまたはデバイス別警報スケジュールがあります。",
   "Chưa cài lịch báo động": "警報スケジュールが未設定です",
   "Đã cài lịch báo động": "警報スケジュール設定済み",
-  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.": "家の確認を忘れないように少なくとも 1 つ リマインダー を設定してください。",
-  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.": "アプリが設定したスケジュールで家の確認を促します。",
+  "Nên có ít nhất một nhắc nhở để không quên kiểm tra nhà.":
+      "家の確認を忘れないように少なくとも 1 つ リマインダー を設定してください。",
+  "Ứng dụng sẽ nhắc bạn kiểm tra nhà theo lịch đã đặt.":
+      "アプリが設定したスケジュールで家の確認を促します。",
   "Chưa cài đặt nhắc nhở": "リマインダー が未設定です",
   "Đã cài đặt nhắc nhở": "リマインダー 設定済み",
-  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.": "このデバイスが警報を受信しない場合は、アプリを開き直すか再ログインしてください。",
+  "Hãy mở lại ứng dụng hoặc đăng nhập lại nếu thiết bị không nhận cảnh báo.":
+      "このデバイスが警報を受信しない場合は、アプリを開き直すか再ログインしてください。",
   "Thiết bị chưa đăng ký nhận cảnh báo": "このデバイスは警報受信に登録されていません",
   "Thiết bị nhận cảnh báo bình thường": "このデバイスは警報を受信できます",
-  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.": "iOS は Android よりバックグラウンド動作を厳しく管理します。自動外出を使う場合は通知と常に位置情報をオンにしてください。",
+  "iOS quản lý chạy nền chặt hơn Android; hãy giữ thông báo và vị trí luôn luôn nếu dùng Auto rời khỏi nhà.":
+      "iOS は Android よりバックグラウンド動作を厳しく管理します。自動外出を使う場合は通知と常に位置情報をオンにしてください。",
   "Cơ chế iOS": "iOS の仕組み",
-  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.": "警報が遅れないようにバックグラウンド権限と自動起動を確認してください。",
-  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.": "デバイスは重要なバックグラウンド条件を確認済みです。",
+  "Hãy kiểm tra quyền chạy nền và tự khởi động để cảnh báo không bị trễ.":
+      "警報が遅れないようにバックグラウンド権限と自動起動を確認してください。",
+  "Thiết bị đã xác nhận các điều kiện chạy nền quan trọng.":
+      "デバイスは重要なバックグラウンド条件を確認済みです。",
   "Cần kiểm tra chạy nền / tự khởi động": "バックグラウンド動作 / 自動起動を確認してください",
   "Chạy nền ổn định": "バックグラウンド動作は安定しています",
-  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.": "一部の Android 端末では、バッテリー最適化が有効だと警報が遅れる場合があります。",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.": "端末が SafeHome の警報を遅らせる可能性は低いです。",
+  "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
+      "一部の Android 端末では、バッテリー最適化が有効だと警報が遅れる場合があります。",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
+      "端末が SafeHome の警報を遅らせる可能性は低いです。",
   "Chưa tắt tối ưu pin": "バッテリー最適化がまだ有効です",
   "Tối ưu pin không chặn ứng dụng": "バッテリー最適化はアプリを妨げていません",
-  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.": "自動外出を安定して動かすには常に位置情報が必要です。",
+  "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
+      "自動外出を安定して動かすには常に位置情報が必要です。",
   "Cần cấp quyền vị trí để Auto rời khỏi nhà hoạt động.": "自動外出には位置情報の許可が必要です。",
-  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.": "位置情報サービスがオフのため、自動外出が安定しない可能性があります。",
+  "Dịch vụ vị trí đang tắt nên Auto rời khỏi nhà không ổn định.":
+      "位置情報サービスがオフのため、自動外出が安定しない可能性があります。",
   "Chỉ cần quyền này khi dùng Auto rời khỏi nhà.": "自動外出を使う場合のみ必要です。",
   "Chưa cấp vị trí luôn luôn": "常に位置情報が許可されていません",
   "Đã cấp vị trí luôn luôn": "常に位置情報が許可されています",
-  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.": "iOS は Android のように全画面表示せず、システム通知と音を使います。",
-  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.": "Android は全画面警報を使います。端末がブロックする場合は設定で許可してください。",
+  "iOS không mở toàn màn hình như Android; ứng dụng dùng thông báo và âm thanh hệ thống.":
+      "iOS は Android のように全画面表示せず、システム通知と音を使います。",
+  "Android dùng cảnh báo toàn màn hình; nếu máy chặn, hãy cấp quyền trong cài đặt.":
+      "Android は全画面警報を使います。端末がブロックする場合は設定で許可してください。",
   "Cảnh báo trên iOS": "iOS の警報",
   "Cảnh báo toàn màn hình": "全画面アラート",
-  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "通知が無効だと警報が表示されない可能性があります。",
+  "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
+      "通知が無効だと警報が表示されない可能性があります。",
   "Điện thoại có thể nhận thông báo SafeHome.": "この端末は SafeHome の通知を受け取れます。",
   "Chưa bật thông báo": "通知が有効ではありません",
   "Đã bật thông báo": "通知が有効です",
@@ -558,27 +599,40 @@ const Map<String, String> jaStrings = {
   "Hệ thống: Có thể bỏ lỡ cảnh báo": "システム:警報を見逃す可能性",
   "Cách bạn đang dùng ứng dụng": "アプリの使い方",
   "Thiết bị của bạn": "あなたのデバイス",
-  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "スマートフォンとアプリの使い方を確認します。",
+  "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
+      "スマートフォンとアプリの使い方を確認します。",
   "Hệ thống SafeHome": "SafeHome システム",
   "Hệ thống: Đang kiểm tra...": "システム: 確認中...",
   "Mở cài đặt": "設定を開く",
   "Để sau": "後で",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.": "SafeHome には、外出または帰宅を検知するために \"常に許可\" の位置情報権限が必要です。アプリがバックグラウンドで動作している場合も含まれます。",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.": "SafeHome は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n位置情報の権限を開き、\"常に許可\" を選択すると、外出時の自動保護がバックグラウンドでも動作し続けます。",
+  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "SafeHome には、外出または帰宅を検知するために \"常に許可\" の位置情報権限が必要です。アプリがバックグラウンドで動作している場合も含まれます。",
+  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "SafeHome は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n位置情報の権限を開き、\"常に許可\" を選択すると、外出時の自動保護がバックグラウンドでも動作し続けます。",
   "Cho phép vị trí luôn luôn": "位置情報を常に許可",
-  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.": "自分の家は削除されます。\n共有された家からは退出します。",
-  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "選択した家のすべてのセキュリティデバイスの警報スケジュールを変更します。\n\n家の警報設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人警報は変更されません。",
-  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.": "選択した家に家の リマインダー を追加します。\n\n家の リマインダー 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 リマインダー は変更されません。",
-  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.": "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n外出時の自動保護は一時停止します。このモードは誰かが帰宅しても自動ではオフにならず、権限のあるメンバーが手動で通常モードに戻す必要があります。",
-  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...": "この操作により、本日の一部デバイスの警報時刻が変更されます...",
-  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.": "この操作により、この家のすべての警報がオフになります。この端末で危険通知を受け取れなくなります。",
-  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.": "警報は「家の設定」モードを使用しています。\n\n所有者または管理者が設定した共有スケジュールに従って通知を受け取ります。",
-  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.": "警報は「自分のみ」モードを使用しています。\n\nこのアカウントに設定された個人用警報スケジュールに従って通知を受け取ります。",
+  "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
+      "自分の家は削除されます。\n共有された家からは退出します。",
+  "Thao tác này sẽ thay đổi lịch báo động của toàn bộ thiết bị an ninh trong các nhà đã chọn.\n\nNhững thành viên đang sử dụng báo động 'Theo nhà' sẽ bị ảnh hưởng.\nBáo động cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "選択した家のすべてのセキュリティデバイスの警報スケジュールを変更します。\n\n家の警報設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人警報は変更されません。",
+  "Thao tác này sẽ thêm nhắc nhở cho các nhà đã chọn.\n\nNhững thành viên đang sử dụng nhắc nhở 'Theo nhà' sẽ bị ảnh hưởng.\nNhắc nhở cá nhân ở chế độ 'Riêng tôi' sẽ không bị thay đổi.":
+      "選択した家に家の リマインダー を追加します。\n\n家の リマインダー 設定を使用しているメンバーに影響します。\n「自分のみ」モードの個人 リマインダー は変更されません。",
+  "Khi bật, các thiết bị an ninh sẽ được giám sát ngay.\n\nTự động Bảo vệ khi rời nhà sẽ tạm dừng. Chế độ này không tự tắt khi có người về nhà và chỉ được tắt khi một thành viên có quyền chủ động chuyển về Bình thường.":
+      "オンにすると、セキュリティデバイスはすぐに監視されます。\n\n外出時の自動保護は一時停止します。このモードは誰かが帰宅しても自動ではオフにならず、権限のあるメンバーが手動で通常モードに戻す必要があります。",
+  "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị trong hôm nay...":
+      "この操作により、本日の一部デバイスの警報時刻が変更されます...",
+  "Hành động này sẽ tắt toàn bộ báo động của nhà dưới mọi hình thức. Bạn sẽ không còn nhận được cảnh báo khi có nguy hiểm trên điện thoại nữa.":
+      "この操作により、この家のすべての警報がオフになります。この端末で危険通知を受け取れなくなります。",
+  "Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.":
+      "警報は「家の設定」モードを使用しています。\n\n所有者または管理者が設定した共有スケジュールに従って通知を受け取ります。",
+  "Báo động đang sử dụng chế độ Riêng tôi.\n\nBạn sẽ nhận cảnh báo theo lịch báo động riêng đã thiết lập cho tài khoản này.":
+      "警報は「自分のみ」モードを使用しています。\n\nこのアカウントに設定された個人用警報スケジュールに従って通知を受け取ります。",
   "Không đặt được mật khẩu": "パスワードを設定できません",
   "Chấp nhận": "承認",
   "Cho phép": "許可",
-  "Không thể chấp nhận lời mời. Vui lòng thử lại.": "招待を承認できませんでした。もう一度お試しください。",
-  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.": "参加リクエストを承認できませんでした。もう一度お試しください。",
+  "Không thể chấp nhận lời mời. Vui lòng thử lại.":
+      "招待を承認できませんでした。もう一度お試しください。",
+  "Không thể chấp nhận lời xin vào nhà. Vui lòng thử lại.":
+      "参加リクエストを承認できませんでした。もう一度お試しください。",
   "Từ chối": "拒否",
   "Lời mời từ chủ nhà": "所有者からの招待",
   "Nhận quyền chủ nhà": "家の所有権を受け取る",
@@ -604,18 +658,27 @@ const Map<String, String> jaStrings = {
   "Báo động đã tắt": "警報はオフになりました",
   "Báo động kích hoạt": "アラームが作動しました",
   "Chọn giờ kết thúc tạm tắt": "一時停止の終了時刻を選択",
-  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh": "まだデバイスがありません。+ ボタンを押して追加し、セキュリティを維持しましょう",
-  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng": "アプリ設定で位置情報の権限を「常に許可」にしてください",
+  "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
+      "まだデバイスがありません。+ ボタンを押して追加し、セキュリティを維持しましょう",
+  "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
+      "アプリ設定で位置情報の権限を「常に許可」にしてください",
   "Hoặc quét QR để xin gia nhập các nhà đã chọn": "または QR をスキャンして選択した家への参加を申請",
   "Không có nhà nào bạn có quyền quản lý": "管理権限のある家がありません",
   "Không tìm thấy thành viên phù hợp": "該当するメンバーが見つかりません",
-  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "他の人がこのコードをスキャンして家への参加リクエストを送信できます。",
-  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.": "この家と中のすべてのデバイスは完全に削除されます。",
-  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.": "Google アカウントでセキュリティ機能を使うには、追加のパスワードを作成する必要があります。",
-  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.": "この名前はあなたのアカウントにのみ表示されます。",
-  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.": "名前と住所は家のすべてのメンバーに更新されます。",
-  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp": "緊急時に使う電話番号を追加してください",
-  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.": "この部屋のデバイスは「未分類」に移動されます。",
+  "Người khác quét mã này để gửi yêu cầu gia nhập nhà.":
+      "他の人がこのコードをスキャンして家への参加リクエストを送信できます。",
+  "Nhà này và toàn bộ thiết bị bên trong sẽ bị xoá vĩnh viễn.":
+      "この家と中のすべてのデバイスは完全に削除されます。",
+  "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
+      "Google アカウントでセキュリティ機能を使うには、追加のパスワードを作成する必要があります。",
+  "Tên này chỉ hiển thị riêng trên tài khoản của bạn.":
+      "この名前はあなたのアカウントにのみ表示されます。",
+  "Tên và địa chỉ sẽ được cập nhật cho toàn bộ thành viên trong nhà.":
+      "名前と住所は家のすべてのメンバーに更新されます。",
+  "Thêm số điện thoại để dùng cho các trường hợp khẩn cấp":
+      "緊急時に使う電話番号を追加してください",
+  "Thiết bị trong phòng này sẽ được chuyển về Chưa phân phòng.":
+      "この部屋のデバイスは「未分類」に移動されます。",
   "Thông báo": "通知",
   "Tìm nội dung hoặc tên người gửi": "内容または送信者名を検索",
   "Xem lời mời chia sẻ và xin gia nhập": "共有招待と参加リクエストを表示",
@@ -687,7 +750,8 @@ const Map<String, String> jaStrings = {
   "Nguồn dự phòng": "バックアップ電源",
   "Nguồn dự phòng UPS": "UPSバックアップ電源",
   "Nhà đã chia sẻ": "共有された家",
-  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.": "家に確認が必要な兆候があります。下の状態を確認してください。",
+  "Nhà đang có dấu hiệu cần kiểm tra, bạn nên xem lại các trạng thái bên dưới.":
+      "家に確認が必要な兆候があります。下の状態を確認してください。",
   "Nhà đang hoạt động bình thường": "家は正常に動作しています",
   "Nhắc kiểm tra nhà theo thời gian": "指定時刻に家の確認を通知",
   "Nhận cảnh báo báo động": "警報アラートを受信",
@@ -730,28 +794,36 @@ const Map<String, String> jaStrings = {
   "Đã tạo nhà": "家を作成しました",
   "Chế độ Bảo vệ thủ công đã bật": "手動保護モードが有効です",
   "Báo động không lặp lại.": "アラームは繰り返されません。",
-  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.": "問題が残っている場合、\$securityModeRepeatMinutes 分後にアラームが繰り返されます。",
-  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage": "\$actorName が「\$homeName」の手動保護モードをオンにしました。このモードは、権限のあるメンバーが通常モードに戻したときだけオフになります。\$repeatMessage",
+  "Báo động lặp sau \$securityModeRepeatMinutes phút nếu sự cố vẫn còn.":
+      "問題が残っている場合、\$securityModeRepeatMinutes 分後にアラームが繰り返されます。",
+  "\$actorName đã bật Chế độ Bảo vệ thủ công cho \"\$homeName\". Chế độ này chỉ tắt khi một thành viên có quyền chủ động chuyển về Bình thường. \$repeatMessage":
+      "\$actorName が「\$homeName」の手動保護モードをオンにしました。このモードは、権限のあるメンバーが通常モードに戻したときだけオフになります。\$repeatMessage",
   "Bạn đã bật báo động cho nhà \"\$homeName\".": "「\$homeName」の警報をオンにしました。",
-  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".": "「\$homeName」のすべての警報をオフにしました。",
+  "Bạn đã tắt toàn bộ báo động của nhà \"\$homeName\".":
+      "「\$homeName」のすべての警報をオフにしました。",
   "Thành viên mới": "新しいメンバー",
   "Thành viên rời nhà": "メンバーが家を出ました",
-  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".": "\$displayMemberName が「\$homeName」から退出しました。",
-  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".": "\$actorName が「\$homeName」で \$memberName の役割を \$oldRoleName から \$newRoleName に変更しました。",
+  "\$displayMemberName đã rời khỏi nhà \"\$homeName\".":
+      "\$displayMemberName が「\$homeName」から退出しました。",
+  "\$actorName đã đổi vai trò của \$memberName từ \$oldRoleName thành \$newRoleName trong nhà \"\$homeName\".":
+      "\$actorName が「\$homeName」で \$memberName の役割を \$oldRoleName から \$newRoleName に変更しました。",
   "Còn \$count tin nhắn chưa đọc": "未読メッセージ \$count 件",
   "Hãy an tâm nghỉ ngơi.": "安心して大丈夫です。",
   "Có thiết bị chưa an toàn.": "一部のデバイスが安全ではありません。",
   "SafeHome đang cập nhật vị trí": "SafeHomeが位置情報を更新しています",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "保護モードを自動でオンにするため監視中です。",
-  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.": "全員が外出したとき、位置情報を使って保護モードを自動でオンにします。",
+  "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
+      "全員が外出したとき、位置情報を使って保護モードを自動でオンにします。",
   "CẢNH BÁO SOS": "SOSアラート",
   "CẢNH BÁO KHÓI / CHÁY": "煙/火災アラート",
   "CẢNH BÁO NGẬP NƯỚC": "浸水アラート",
   "CẢNH BÁO RÒ KHÍ": "ガス漏れアラート",
   "CẢNH BÁO CỬA": "ドアアラート",
   "CẢNH BÁO AN NINH": "セキュリティアラート",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.": "SafeHomeで確認できませんでした。接続を確認してもう一度お試しください。",
-  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?": "家の状態を確認してからアラートを停止してください。\n\nアラートを停止してもよろしいですか？",
+  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
+      "SafeHomeで確認できませんでした。接続を確認してもう一度お試しください。",
+  "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
+      "家の状態を確認してからアラートを停止してください。\n\nアラートを停止してもよろしいですか？",
   "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHomeがアラートを検知しました",
   "Mở SafeHome để kiểm tra ngay.": "SafeHomeを開いて今すぐ確認してください。",
   "\$count tin nhắn mới": "新着メッセージ \$count 件",
@@ -759,63 +831,94 @@ const Map<String, String> jaStrings = {
   "\$senderName đã gửi một tin nhắn": "\$senderName がメッセージを送信しました",
   "Bạn có tin nhắn mới": "新着メッセージがあります",
   "Chế độ Bảo vệ sẽ chỉ báo động một lần": "保護モードは一度だけアラートします",
-  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút": "保護モードは \$minutes 分後にアラートを繰り返します",
+  "Chế độ Bảo vệ sẽ lặp báo động sau \$minutes phút":
+      "保護モードは \$minutes 分後にアラートを繰り返します",
   "Đã gửi yêu cầu gia nhập \$count nhà": "\$count 件の家に参加リクエストを送信しました",
-  "\$requesterName đang xin gia nhập nhà \"\$homeName\".": "\$requesterName が「\$homeName」への参加をリクエストしました。",
+  "\$requesterName đang xin gia nhập nhà \"\$homeName\".":
+      "\$requesterName が「\$homeName」への参加をリクエストしました。",
   "Bạn đã xoá nhà \"\$homeName\".": "「\$homeName」を削除しました。",
-  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.": "\$email に「\$homeName」の所有権譲渡リクエストを送信しました。",
-  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.": "\$actorName が「\$homeName」の所有権をあなたに譲渡しようとしています。",
-  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".": "\$actorName が「\$homeName」への参加に招待しました。",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".": "SafeHomeが「\$homeName」から「\$deviceName」を削除しています。",
-  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".": "デバイス「\$deviceName」が「\$homeName」に追加されました。",
+  "Bạn đã gửi yêu cầu chuyển quyền chủ nhà \"\$homeName\" cho \$email.":
+      "\$email に「\$homeName」の所有権譲渡リクエストを送信しました。",
+  "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.":
+      "\$actorName が「\$homeName」の所有権をあなたに譲渡しようとしています。",
+  "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
+      "\$actorName が「\$homeName」への参加に招待しました。",
+  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "SafeHomeが「\$homeName」から「\$deviceName」を削除しています。",
+  "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
+      "デバイス「\$deviceName」が「\$homeName」に追加されました。",
   "Bạn đã tạo nhà \"\$name\".": "家「\$name」を作成しました。",
-  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.": "\$actorName が家の名前を「\$newName」に更新し、住所を変更しました。",
-  "\$actorName đã đổi tên nhà thành \"\$newName\".": "\$actorName が家の名前を「\$newName」に変更しました。",
-  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".": "\$actorName が「\$newName」の住所を更新しました。",
-  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".": "\$actorName が「\$homeName」のデバイス「\$oldDeviceName」を「\$newName」に名前変更しました。",
+  "\$actorName đã cập nhật tên nhà thành \"\$newName\" và thay đổi địa chỉ.":
+      "\$actorName が家の名前を「\$newName」に更新し、住所を変更しました。",
+  "\$actorName đã đổi tên nhà thành \"\$newName\".":
+      "\$actorName が家の名前を「\$newName」に変更しました。",
+  "\$actorName đã cập nhật địa chỉ của nhà \"\$newName\".":
+      "\$actorName が「\$newName」の住所を更新しました。",
+  "\$actorName đã đổi tên thiết bị \"\$oldDeviceName\" thành \"\$newName\" trong nhà \"\$homeName\".":
+      "\$actorName が「\$homeName」のデバイス「\$oldDeviceName」を「\$newName」に名前変更しました。",
   "Đang ghép nối: \$seconds giây": "ペアリング中: \$seconds 秒",
-  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.": "「\$homeName」でデバイス追加モードが \$seconds 秒間有効になりました。",
-  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)": "一時停止時間は警報スケジュール内（\$start → \$end）である必要があります",
+  "Chế độ thêm thiết bị đã được mở trong nhà \"\$homeName\" trong \$seconds giây.":
+      "「\$homeName」でデバイス追加モードが \$seconds 秒間有効になりました。",
+  "Khoảng thời gian phải nằm trong khung báo động (\$start → \$end)":
+      "一時停止時間は警報スケジュール内（\$start → \$end）である必要があります",
   "\$passCount/\$total bài test đạt\n\n": "\$passCount/\$total 件のテストに合格\n\n",
-  "\$name chưa cập nhật số điện thoại trong hồ sơ.": "\$name はプロフィールに電話番号を追加していません。",
+  "\$name chưa cập nhật số điện thoại trong hồ sơ.":
+      "\$name はプロフィールに電話番号を追加していません。",
   "Tin nhắn mới trong \$homeName": "\$homeName に新着メッセージ",
   "\$current/\$total kết quả": "\$current/\$total 件の結果",
   "Đang trả lời \$name": "\$name に返信中",
-  "\"\$name\" phát hiện khói trong \"\$homeName\".": "「\$homeName」の「\$name」が煙を検知しました。",
+  "\"\$name\" phát hiện khói trong \"\$homeName\".":
+      "「\$homeName」の「\$name」が煙を検知しました。",
   "\"\$name\" đã trở lại trạng thái bình thường.": "「\$name」は通常状態に戻りました。",
-  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".": "「\$homeName」の「\$name」がSOSを作動しました。",
+  "\"\$name\" vừa kích hoạt SOS trong \"\$homeName\".":
+      "「\$homeName」の「\$name」がSOSを作動しました。",
   "\"\$name\" đã hết trạng thái SOS.": "「\$name」はSOS状態ではなくなりました。",
-  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".": "「\$homeName」の「\$name」が取り外し・こじ開けを検知しました。",
+  "\"\$name\" báo bị tháo/cạy trong \"\$homeName\".":
+      "「\$homeName」の「\$name」が取り外し・こじ開けを検知しました。",
   "\"\$name\" đã hết cảnh báo tháo/cạy.": "「\$name」の取り外し・こじ開けアラートは解除されました。",
   "\"\$name\" đã đóng trong \"\$homeName\".": "「\$homeName」の「\$name」が閉じました。",
   "\"\$name\" đang mở trong \"\$homeName\".": "「\$homeName」の「\$name」が開いています。",
-  "\"\$name\" trong \"\$homeName\" đang yếu pin.": "「\$homeName」の「\$name」はバッテリー残量が少なくなっています。",
-  "\"\$name\" trong \"\$homeName\" đã mất kết nối.": "「\$homeName」の「\$name」がオフラインになりました。",
-  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.": "「\$homeName」の「\$name」がオンラインに戻りました。",
-  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".": "「\$homeName」の「\$name」が高温を記録しました。",
-  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".": "「\$homeName」の「\$name」が高湿度を記録しました。",
+  "\"\$name\" trong \"\$homeName\" đang yếu pin.":
+      "「\$homeName」の「\$name」はバッテリー残量が少なくなっています。",
+  "\"\$name\" trong \"\$homeName\" đã mất kết nối.":
+      "「\$homeName」の「\$name」がオフラインになりました。",
+  "\"\$name\" trong \"\$homeName\" đã kết nối trở lại.":
+      "「\$homeName」の「\$name」がオンラインに戻りました。",
+  "\"\$name\" ghi nhận nhiệt độ cao trong \"\$homeName\".":
+      "「\$homeName」の「\$name」が高温を記録しました。",
+  "\"\$name\" ghi nhận độ ẩm cao trong \"\$homeName\".":
+      "「\$homeName」の「\$name」が高湿度を記録しました。",
   "Có nút SOS vừa được kích hoạt": "SOSボタンが作動しました",
   "Có dấu hiệu khói hoặc cháy": "煙または火災を検知しました",
   "Có dấu hiệu ngập nước": "浸水を検知しました",
   "Có dấu hiệu rò khí": "ガス漏れを検知しました",
   "Có cửa đang mở hoặc thiết bị bị tháo": "ドアが開いているか、デバイスが取り外されています",
   "Có thiết bị đang cảnh báo": "アラート中のデバイスがあります",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.": "誰も確認しない場合、SafeHomeは緊急通話に切り替えます。",
+  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
+      "誰も確認しない場合、SafeHomeは緊急通話に切り替えます。",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "問題が未対応の場合、\$time に再通知します。",
-  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.": "問題が未対応の場合、警報スケジュールに従って再通知します。",
-  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".": "「\$resolvedHomeName」の「\$deviceName」が閉じました。",
-  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".": "「\$resolvedHomeName」の「\$deviceName」が開いています。",
+  "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
+      "問題が未対応の場合、警報スケジュールに従って再通知します。",
+  "\"\$deviceName\" đã đóng trong \"\$resolvedHomeName\".":
+      "「\$resolvedHomeName」の「\$deviceName」が閉じました。",
+  "\"\$deviceName\" đang mở trong \"\$resolvedHomeName\".":
+      "「\$resolvedHomeName」の「\$deviceName」が開いています。",
   "\$count nhà đã chọn": "\$count 件の家を選択済み",
   "🚨 \$count nhà không an toàn\$suffix": "🚨 安全ではない家 \$count 件\$suffix",
   "⚠️ \$count nhà cần chú ý\$suffix": "⚠️ \$count 件の家に注意が必要です\$suffix",
   "✅ \$count nhà an toàn": "✅ 安全な家 \$count 件",
   "\$count nhà đang được theo dõi": "\$count 件の家を監視中",
   "\$minutes phút": "\$minutes分",
-  "Đã cài nhắc nhở cho \$updatedHomes nhà.": "\$updatedHomes 件の家にリマインダーを設定しました。",
-  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n": "\$updatedHomes 件の家にある \$updatedDevices 台のデバイスに警報を設定しました。\n",
-  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.": "管理している家を共有しました。\n\n共有権限がないため、\$skipped 件の家をスキップしました。",
-  "Đã áp dụng báo động cho \$count thiết bị an ninh": "\$count 台のセキュリティデバイスに警報を適用しました",
-  "Áp dụng cùng một lịch cho \$count thiết bị an ninh": "\$count 台のセキュリティデバイスに同じスケジュールを適用",
+  "Đã cài nhắc nhở cho \$updatedHomes nhà.":
+      "\$updatedHomes 件の家にリマインダーを設定しました。",
+  "Đã cài báo động cho \$updatedDevices thiết bị trong \$updatedHomes nhà.\n":
+      "\$updatedHomes 件の家にある \$updatedDevices 台のデバイスに警報を設定しました。\n",
+  "Đã chia sẻ các nhà bạn có quyền.\n\n\$skipped nhà bị bỏ qua vì bạn không có quyền chia sẻ.":
+      "管理している家を共有しました。\n\n共有権限がないため、\$skipped 件の家をスキップしました。",
+  "Đã áp dụng báo động cho \$count thiết bị an ninh":
+      "\$count 台のセキュリティデバイスに警報を適用しました",
+  "Áp dụng cùng một lịch cho \$count thiết bị an ninh":
+      "\$count 台のセキュリティデバイスに同じスケジュールを適用",
   "\$count phút trước": "\$count分前",
   "\$count giờ trước": "\$count時間前",
   "\${count}h trước": "\${count}時間前",
@@ -823,24 +926,38 @@ const Map<String, String> jaStrings = {
   "\$count ngày trước": "\$count日前",
   "\$count tháng trước": "\$countか月前",
   "Bạn chắc chắn muốn xoá \$name khỏi nhà này?": "\$name をこの家から削除してもよろしいですか？",
-  "\$targetEmail\nXin gia nhập \"\$homeName\"": "\$targetEmail\n「\$homeName」への参加をリクエスト",
+  "\$targetEmail\nXin gia nhập \"\$homeName\"":
+      "\$targetEmail\n「\$homeName」への参加をリクエスト",
   "Xin gia nhập \"\$homeName\"": "「\$homeName」への参加をリクエスト",
-  "Bạn được mời nhận quyền nhà \"\$homeName\"": "「\$homeName」の所有権を受け取るよう招待されました",
-  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"": "\$ownerEmail\n「\$homeName」への参加に招待しています",
+  "Bạn được mời nhận quyền nhà \"\$homeName\"":
+      "「\$homeName」の所有権を受け取るよう招待されました",
+  "\$ownerEmail\nMời bạn gia nhập \"\$homeName\"":
+      "\$ownerEmail\n「\$homeName」への参加に招待しています",
   "Mời bạn gia nhập \"\$homeName\"": "「\$homeName」への参加に招待しています",
   "Cần kiểm tra: \$joined": "確認が必要: \$joined",
   "Cập nhật \$value": "更新: \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.": "最初のSafeHomeデバイスを追加して、この家の監視を始めましょう。",
-  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.": "まず緊急アラートを確認し、必要に応じて家のメンバーに連絡してください。",
-  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.": "家にメンバーがいませんが、ドアまたはロックが開いています。今すぐ確認してください。",
-  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.": "この家を保護モードのままにする前に、開いているドアまたはロックを確認してください。",
-  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.": "まだ家に人がいる可能性があります。その場合は通常モードに戻してください。",
-  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.": "位置不明のメンバーがいます。アプリを開くか位置権限を確認するよう伝えてください。",
-  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.": "デバイスが切断されています。バッテリー、電源、設置場所を確認してください。",
-  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.": "バッテリー残量が少ないデバイスがあります。アラートを逃さないよう早めに交換してください。",
-  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.": "リマインダーが未設定です。家を定期的に確認するスケジュールを作成してください。",
-  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.": "警報スケジュールが未設定です。普段不在にする時間帯に保護を有効にしてください。",
-  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.": "今すぐ対応する必要はありません。この家の監視を続けてください。",
+  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
+      "最初のSafeHomeデバイスを追加して、この家の監視を始めましょう。",
+  "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
+      "まず緊急アラートを確認し、必要に応じて家のメンバーに連絡してください。",
+  "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
+      "家にメンバーがいませんが、ドアまたはロックが開いています。今すぐ確認してください。",
+  "Kiểm tra cửa hoặc khóa đang mở trước khi giữ nhà ở chế độ Bảo vệ.":
+      "この家を保護モードのままにする前に、開いているドアまたはロックを確認してください。",
+  "Có thể vẫn có người ở nhà; nếu đúng, nên chuyển về Bình thường.":
+      "まだ家に人がいる可能性があります。その場合は通常モードに戻してください。",
+  "Có thành viên chưa xác định vị trí, hãy nhắc họ mở ứng dụng hoặc kiểm tra quyền vị trí.":
+      "位置不明のメンバーがいます。アプリを開くか位置権限を確認するよう伝えてください。",
+  "Có thiết bị mất kết nối, hãy kiểm tra pin, nguồn hoặc vị trí đặt thiết bị.":
+      "デバイスが切断されています。バッテリー、電源、設置場所を確認してください。",
+  "Có thiết bị pin yếu, nên thay pin sớm để tránh mất cảnh báo.":
+      "バッテリー残量が少ないデバイスがあります。アラートを逃さないよう早めに交換してください。",
+  "Bạn chưa đặt nhắc nhở, nên tạo lịch nhắc kiểm tra nhà định kỳ.":
+      "リマインダーが未設定です。家を定期的に確認するスケジュールを作成してください。",
+  "Bạn chưa đặt lịch báo động, nên bật bảo vệ theo khung giờ thường vắng nhà.":
+      "警報スケジュールが未設定です。普段不在にする時間帯に保護を有効にしてください。",
+  "Không có việc cần xử lý ngay, bạn chỉ cần tiếp tục theo dõi trạng thái nhà.":
+      "今すぐ対応する必要はありません。この家の監視を続けてください。",
   "Lặp sau \$minutes phút": "\$minutes 分後に繰り返し",
   "Đang dùng • \$repeatText": "有効 • \$repeatText",
   "Giám sát an ninh • \$repeatText": "セキュリティ監視 • \$repeatText",
@@ -851,9 +968,12 @@ const Map<String, String> jaStrings = {
   "Đã ghi nhận \$count hoạt động gần đây": "最近のアクティビティ \$count 件を記録しました",
   "Hệ thống: Cần kiểm tra \$issueCount mục": "システム: \$issueCount 件の確認が必要です",
   "FCM token đã sẵn sàng trên điện thoại này.": "この端末のFCMトークンは準備済みです。",
-  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.": "FCMトークンは準備済みですが、自動外出に必要な条件が不足しています。",
-  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.": "緊急デバイスが \$emergencyTotal 台見つかりました。推奨最小構成: 煙センサーとSOS。",
-  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?": "家の所有権を次に譲渡しますか:\n\$targetEmail?",
+  "FCM token đã sẵn sàng, nhưng Auto rời khỏi nhà còn thiếu điều kiện.":
+      "FCMトークンは準備済みですが、自動外出に必要な条件が不足しています。",
+  "Hiện có \$emergencyTotal thiết bị khẩn cấp. Khuyến nghị tối thiểu: báo khói và SOS.":
+      "緊急デバイスが \$emergencyTotal 台見つかりました。推奨最小構成: 煙センサーとSOS。",
+  "Bạn chắc chắn muốn chuyển quyền chủ nhà cho:\n\$targetEmail?":
+      "家の所有権を次に譲渡しますか:\n\$targetEmail?",
   "\$count cửa đã đóng an toàn": "\$count 個のドアが安全に閉じています",
   "\$count cửa và khóa đã an toàn": "\$count 個のドアとロックが安全です",
   "\$count thiết bị đang được theo dõi": "\$count 台のデバイスを監視中",
@@ -875,9 +995,11 @@ const Map<String, String> jaStrings = {
   "Giờ bắt đầu và kết thúc không được trùng nhau": "開始時刻と終了時刻を同じにすることはできません",
   "Giờ kết thúc phải sau thời điểm hiện tại": "終了時刻は現在時刻より後に設定してください",
   "Khoảng tạm tắt không hợp lệ": "警報の一時停止期間が無効です",
-  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật": "一時停止期間は有効な警報スケジュールと重なっていません",
+  "Khoảng tạm tắt không trùng với lịch báo động nào đang bật":
+      "一時停止期間は有効な警報スケジュールと重なっていません",
   "Cài đặt báo động": "警報設定",
-  "Điều khiển cách cảm biến này kích hoạt cảnh báo.": "このセンサーが警報を作動させる方法を設定します。",
+  "Điều khiển cách cảm biến này kích hoạt cảnh báo.":
+      "このセンサーが警報を作動させる方法を設定します。",
   "Tham gia báo động": "アラームに参加",
   "Tắt để cảm biến không tạo báo động.": "オフにすると、このセンサーは警報を作成しません。",
   "Bật còi vật lý": "屋内サイレンを有効化",
@@ -891,7 +1013,8 @@ const Map<String, String> jaStrings = {
   "giây": "秒",
   "Đã lưu cấu hình báo động": "アラーム設定を保存しました",
   "Không thể lưu cấu hình báo động": "アラーム設定を保存できません",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.": "家の所有者と管理者のみがこの設定を変更できます。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi cài đặt này.":
+      "家の所有者と管理者のみがこの設定を変更できます。",
   "Thông tin chi tiết": "デバイス詳細",
   "Thông báo báo động": "警報通知",
   "Cài đặt nhắc nhở": "リマインダー設定",
@@ -900,19 +1023,22 @@ const Map<String, String> jaStrings = {
   "Cài đặt thông báo": "通知設定",
   "Sử dụng báo động theo lịch đã thiết lập": "設定済みの警報スケジュールを使用",
   "Chỉ gửi thông báo, không kích hoạt báo động": "通知のみ送信し、警報は作動させない",
-  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.": "家のすべての警報はオフです。システムは通知のみ送信します。",
+  "Toàn bộ báo động của nhà đang tắt; hệ thống chỉ gửi thông báo.":
+      "家のすべての警報はオフです。システムは通知のみ送信します。",
   "Chỉ Chủ nhà có thể bật chế độ này.": "このモードを有効にできるのは所有者のみです。",
   "Bật Không bảo vệ?": "無保護モードを有効にしますか？",
   "Cảm biến vừa phát hiện một sự kiện.": "センサーがイベントを検知しました。",
   "Chỉ Chủ nhà mới có quyền bật chế độ Không bảo vệ": "無保護モードを有効にできるのは所有者のみです",
   "Đã chuyển nhà sang Không bảo vệ": "家を無保護モードに切り替えました",
-  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo": "無保護モードに切り替えましたが、通知を送信できませんでした",
+  "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo":
+      "無保護モードに切り替えましたが、通知を送信できませんでした",
   "Giám sát toàn diện": "完全監視",
   "Không bảo vệ": "無保護",
   "Không bảo vệ đang bật": "無保護モードが有効です",
   "Nhà đã chuyển sang Không bảo vệ": "家が無保護モードに切り替わりました",
   "Thông báo cảm biến": "センサー通知",
-  "Thông báo thông thường khi cảm biến phát hiện sự kiện.": "センサーがイベントを検知したときの通常の通知です。",
+  "Thông báo thông thường khi cảm biến phát hiện sự kiện.":
+      "センサーがイベントを検知したときの通常の通知です。",
   "Tôi hiểu, tiếp tục": "理解して続行",
   "Cảnh báo an ninh đã kết thúc": "セキュリティ警告が終了しました",
   "Sự cố nguy hiểm đã kết thúc": "緊急事態が終了しました",
@@ -934,34 +1060,44 @@ const Map<String, String> jaStrings = {
   "Nhà đang ở chế độ Bình thường.": "家は通常モードです。",
   "Pin thiết bị đã ổn định": "デバイスの電池状態が安定しました",
   "Hub đã kết nối trở lại": "Hubが再接続されました",
-  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo": "通常モードに切り替えましたが、通知を送信できませんでした",
+  "Đã chuyển về Bình thường nhưng chưa gửi được thông báo":
+      "通常モードに切り替えましたが、通知を送信できませんでした",
   "Chung cho nhà": "家全体",
-  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.": "全メンバーに適用され、物理サイレンを作動できます。",
+  "Áp dụng cho toàn bộ thành viên và có thể bật còi vật lý.":
+      "全メンバーに適用され、物理サイレンを作動できます。",
   "Cá nhân": "個人",
-  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.": "個人スケジュールは独立して動作し、物理サイレンは作動しません。",
+  "Lịch cá nhân hoạt động độc lập và không bật còi vật lý.":
+      "個人スケジュールは独立して動作し、物理サイレンは作動しません。",
   "Cài đặt này chỉ áp dụng cho tài khoản của bạn.": "この設定はあなたのアカウントにのみ適用されます。",
-  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.": "家全体の設定を変更できるのは所有者と管理者だけです。",
+  "Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.":
+      "家全体の設定を変更できるのは所有者と管理者だけです。",
   "Tham gia hệ thống báo động": "警報システムに参加",
-  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.": "緊急センサーは常に警報システムに参加します。",
+  "Cảm biến khẩn cấp luôn tham gia hệ thống báo động.":
+      "緊急センサーは常に警報システムに参加します。",
   "Tắt để thiết bị không tạo bất kỳ báo động nào.": "オフにすると、このデバイスは警報を作成しません。",
   "Lịch báo động chung": "家全体の警報スケジュール",
   "Lịch báo động cá nhân": "個人の警報スケジュール",
-  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.": "スマートフォンに全画面警報を表示します。",
+  "Hiển thị cảnh báo toàn màn hình trên điện thoại của bạn.":
+      "スマートフォンに全画面警報を表示します。",
   "Lặp lại cảnh báo": "警報を繰り返す",
   "Báo động chung": "家全体の警報",
   "Báo động cá nhân": "個人警報",
   "Đã cài đặt": "設定済み",
   "Chưa cài đặt": "未設定",
-  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.": "家全体と個人のスケジュールは同時に動作し、どちらかを選ぶ必要はありません。",
+  "Lịch chung và lịch cá nhân hoạt động song song, không còn phải chọn một trong hai.":
+      "家全体と個人のスケジュールは同時に動作し、どちらかを選ぶ必要はありません。",
   "Cài nhanh chung": "家全体を一括設定",
   "Cài nhanh cá nhân": "個人を一括設定",
   "Thiết lập nhanh lịch cá nhân": "個人スケジュールを一括設定",
   "Thiết lập nhanh lịch chung": "家全体のスケジュールを一括設定",
-  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.": "このスケジュールはあなたにのみ適用され、物理サイレンは作動しません。",
-  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.": "このスケジュールは家の全メンバーに適用されます。",
+  "Lịch này chỉ áp dụng cho bạn và không bật còi vật lý.":
+      "このスケジュールはあなたにのみ適用され、物理サイレンは作動しません。",
+  "Lịch này áp dụng cho toàn bộ thành viên trong nhà.":
+      "このスケジュールは家の全メンバーに適用されます。",
   "Đã áp dụng lịch báo động": "警報スケジュールを適用しました",
   "Không thể lưu lịch báo động": "警報スケジュールを保存できません",
   "Nhà chưa có thiết bị an ninh": "この家には防犯デバイスがありません",
   "Nhận cảnh báo theo lịch chung của nhà": "家の共通スケジュールの警報を受信",
-  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.": "オフにすると共通スケジュールの通知と全画面警報を受信しません。家の物理サイレンは引き続き作動します。",
+  "Tắt để không nhận thông báo hoặc cảnh báo toàn màn hình từ lịch chung. Còi vật lý của nhà vẫn hoạt động.":
+      "オフにすると共通スケジュールの通知と全画面警報を受信しません。家の物理サイレンは引き続き作動します。",
 };
