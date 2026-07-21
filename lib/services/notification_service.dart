@@ -404,7 +404,21 @@ class NotificationService {
             ) ??
             0;
 
-        if (status != 'active' || isExpired || presentationSuppressedAt > 0) {
+        final incomingType =
+            data['type']?.toString().trim().toLowerCase() ?? '';
+        final incomingStage =
+            data['alarmStage']?.toString().trim().toLowerCase() ?? '';
+        final requestsFullscreen =
+            incomingType == 'alarm_siren' ||
+            incomingStage == 'siren' ||
+            incomingStage == 'fullscreen_siren';
+
+        // presentationSuppressedAt chỉ có nghĩa là người dùng đã đóng/đã xem
+        // lần fullscreen hiện tại. Nó không được chặn notification báo lại
+        // theo lịch 15/30/60 phút khi incident vẫn còn active.
+        if (status != 'active' ||
+            isExpired ||
+            (presentationSuppressedAt > 0 && requestsFullscreen)) {
           if (updateLocalState) {
             _dropAlarmIncidentLocally(incidentId);
           }

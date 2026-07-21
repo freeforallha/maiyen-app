@@ -142,6 +142,7 @@ double heartbeatLimitHours(String type) {
 
     case "repeater":
     case "hub":
+    case "siren":
       return 1;
 
     case "smoke":
@@ -165,7 +166,6 @@ double heartbeatLimitHours(String type) {
     case "smart_plug":
     case "power_monitor":
     case "ups":
-    case "siren":
     case "smart_valve":
     case "camera":
     case "doorbell":
@@ -374,6 +374,64 @@ String normalizeAvailability(dynamic value) {
   }
 
   return "";
+}
+
+bool isSirenConnectedForUi(Map<String, dynamic> device) {
+  if (normalizeAvailability(device["availability"]) != "online") {
+    return false;
+  }
+
+  final lastSeen = parseLastSeen(device["last_seen"]);
+
+  if (lastSeen == null) {
+    return true;
+  }
+
+  final age = DateTime.now().toUtc().difference(lastSeen.toUtc());
+
+  if (age.isNegative) {
+    return true;
+  }
+
+  final maxAge = Duration(
+    minutes: (heartbeatLimitHours("siren") * 60).round(),
+  );
+
+  return age <= maxAge;
+}
+
+bool isConfirmedSirenActiveForUi(Map<String, dynamic> device) {
+  final type = device["type"]?.toString().trim().toLowerCase() ?? "";
+
+  if (type != "siren" || !isSirenConnectedForUi(device)) {
+    return false;
+  }
+
+  final hasAlarmState = device.containsKey("alarm");
+  final alarmOn = hasAlarmState
+      ? isActiveDeviceSignal(device["alarm"])
+      : normalizeDeviceSwitchState(device) == "on";
+
+  if (!alarmOn) {
+    return false;
+  }
+
+  final commandStatus =
+      device["siren_command_status"]?.toString().trim().toLowerCase() ?? "";
+
+  if (commandStatus == "reported_on") {
+    return true;
+  }
+
+  final reportedAt =
+      int.tryParse(device["last_siren_report_at"]?.toString() ?? "") ?? 0;
+  final commandedAt =
+      int.tryParse(device["last_siren_command_at"]?.toString() ?? "") ?? 0;
+
+  // MQTT broker nhận lệnh chưa chứng minh còi đã kêu. Chỉ hiển thị trạng thái
+  // đang bật khi có packet trạng thái thật mới hơn lệnh điều khiển gần nhất.
+  return reportedAt > 0 &&
+      (commandedAt <= 0 || reportedAt >= commandedAt);
 }
 
 String normalizeSecurityMode(dynamic value) {

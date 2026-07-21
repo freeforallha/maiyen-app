@@ -13,6 +13,7 @@ import '../services/notification_service.dart';
 import '../services/account_session_service.dart';
 import '../services/auto_away_service.dart';
 import '../services/auto_login_service.dart';
+import '../services/fcm_service.dart';
 import '../services/session_logout_service.dart';
 import '../services/single_device_session_service.dart';
 import '../safehome_theme.dart';
@@ -158,6 +159,13 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
         sessionId: identity.sessionId,
       );
 
+      unawaited(
+        FCMService.setupFCM(uid: user.uid).catchError((Object error) {
+          safeDebugPrint('FCM_RESUME_SETUP_ERROR: $error');
+        }),
+      );
+      FCMService.listenForeground();
+
       SingleDeviceSessionService.startActiveSessionListener(
         uid: user.uid,
         onSessionRevoked: forceSignOutForRemoteSession,
@@ -230,8 +238,18 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     final details = await localNotif.getNotificationAppLaunchDetails();
 
     payload = details?.notificationResponse?.payload ?? "";
+    final alarmLaunchPayload =
+        payload.startsWith('alarm_siren::') ||
+            payload.startsWith('priority_alarm::')
+        ? payload
+        : '';
 
-    if (payload.startsWith("alarm_summary|")) {
+    if (alarmLaunchPayload.isNotEmpty) {
+      // Không để AlarmLaunchGate rơi thẳng về AuthGate khi Android mở app từ
+      // fullScreenIntent. Xử lý payload ngay ở frame đầu; NotificationService
+      // sẽ xác minh incident và tự chờ Navigator sẵn sàng trước khi push trang.
+      payload = '';
+    } else if (payload.startsWith("alarm_summary|")) {
       // Giữ nguyên payload Alarm.
     } else if (payload == "open_home" ||
         payload == "schedule_notification" ||
@@ -246,6 +264,16 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     setState(() {
       checked = true;
     });
+
+    if (alarmLaunchPayload.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(
+          NotificationService.handleAlarmNotificationPayload(
+            alarmLaunchPayload,
+          ),
+        );
+      });
+    }
   }
 
   @override
@@ -387,6 +415,13 @@ class _AuthGateState extends State<AuthGate> {
       uid: uid,
       sessionId: identity.sessionId,
     );
+
+    unawaited(
+      FCMService.setupFCM(uid: uid).catchError((Object error) {
+        safeDebugPrint('FCM_SESSION_READY_SETUP_ERROR: $error');
+      }),
+    );
+    FCMService.listenForeground();
 
     SingleDeviceSessionService.startActiveSessionListener(
       uid: uid,

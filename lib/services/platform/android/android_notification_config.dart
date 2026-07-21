@@ -206,6 +206,7 @@ class AndroidNotificationConfig {
       fullScreenIntent: false,
       playSound: true,
       enableVibration: true,
+      onlyAlertOnce: false,
       styleInformation: BigTextStyleInformation(
         body,
         contentTitle: title,

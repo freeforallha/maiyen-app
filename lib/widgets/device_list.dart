@@ -131,8 +131,7 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   bool _isSirenActive(Map<String, dynamic> device) {
-    return isActiveDeviceSignal(device["alarm"]) ||
-        normalizeDeviceSwitchState(device) == "on";
+    return isConfirmedSirenActiveForUi(device);
   }
 
   bool _hasActiveSiren() {
@@ -986,11 +985,13 @@ class _DeviceListState extends State<DeviceList> {
             : strings.t("Nguồn điện bình thường");
 
       case "siren":
-        final active =
-            isActiveDeviceSignal(d["alarm"]) ||
-            normalizeDeviceSwitchState(d) == "on";
+        if (!isSirenConnectedForUi(d)) {
+          return strings.t("Thiết bị đang Offline");
+        }
 
-        return active ? strings.t("Còi đang bật") : strings.t("Còi sẵn sàng");
+        return isConfirmedSirenActiveForUi(d)
+            ? strings.t("Còi đang bật")
+            : strings.t("Còi sẵn sàng");
 
       case "smart_valve":
         return normalizeDeviceSwitchState(d) == "on"
@@ -1177,9 +1178,7 @@ class _DeviceListState extends State<DeviceList> {
       final device = safeMap(entry.value);
       final type = device["type"]?.toString() ?? "";
 
-      return type == "siren" &&
-          (isActiveDeviceSignal(device["alarm"]) ||
-              normalizeDeviceSwitchState(device) == "on");
+      return type == "siren" && isConfirmedSirenActiveForUi(device);
     });
     if (hasActiveSiren) {
       return (compact ? 106.0 : 114.0) + localeHeightExtra;

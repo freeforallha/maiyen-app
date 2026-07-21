@@ -16,6 +16,14 @@ bool _safeHomeAppStarted = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Phải đăng ký trước runApp để Android có callback ngay cả khi tiến trình
+  // được dựng lại chỉ để nhận FCM khi app đang background/terminated.
+  try {
+    PlatformBootstrapService.registerBackgroundHandlers();
+  } catch (error) {
+    safeDebugPrint('STARTUP_BACKGROUND_HANDLER_ERROR: $error');
+  }
+
   // Quan trọng:
   // Không chờ Firebase trước runApp().
   // Luôn vẽ Splash ngay để tránh màn trắng/đen native khi app vừa mở.
@@ -79,12 +87,6 @@ void _scheduleDeferredStartupInit() {
   _deferredStartupScheduled = true;
 
   WidgetsBinding.instance.addPostFrameCallback((_) {
-    try {
-      PlatformBootstrapService.registerBackgroundHandlers();
-    } catch (error) {
-      safeDebugPrint('STARTUP_BACKGROUND_HANDLER_ERROR: $error');
-    }
-
     unawaited(
       _runDeferredStartupTask(
         label: 'PLATFORM_BOOTSTRAP_INIT',

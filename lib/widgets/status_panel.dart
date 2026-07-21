@@ -1097,34 +1097,11 @@ class _StatusPanelState extends State<StatusPanel> {
   }
 
   bool _isSirenActive(Map<String, dynamic> device) {
-    return isActiveDeviceSignal(device["alarm"]) ||
-        normalizeDeviceSwitchState(device) == "on";
+    return isConfirmedSirenActiveForUi(device);
   }
 
   bool _isSirenConnected(Map<String, dynamic> device) {
-    final availability = normalizeAvailability(device["availability"]);
-
-    if (availability != "online") {
-      return false;
-    }
-
-    final lastSeen = parseLastSeen(device["last_seen"]);
-
-    if (lastSeen == null) {
-      return true;
-    }
-
-    final age = DateTime.now().toUtc().difference(lastSeen.toUtc());
-
-    if (age.isNegative) {
-      return true;
-    }
-
-    final maxAge = Duration(
-      minutes: (heartbeatLimitHours("siren") * 60).round(),
-    );
-
-    return age <= maxAge;
+    return isSirenConnectedForUi(device);
   }
 
   Future<void> _muteHomeSiren() async {

@@ -281,23 +281,41 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 
   if (type == 'alarm_siren') {
-    final validatedData =
-        await NotificationService.validateIncomingAlarmData(
-          message.data,
-          updateLocalState: false,
-        );
+    final alarmData = Map<String, dynamic>.from(message.data);
 
-    if (validatedData == null) {
-      // Bỏ qua payload cũ. Không hủy notification khác vì tài khoản có thể
-      // vẫn còn một incident mới đang hoạt động với cùng notification ID.
+    if (!_shouldPresentFullscreenAlarmImmediately(alarmData)) {
       return;
     }
 
+    // Fullscreen Alarm là đường khẩn cấp: không chờ một lượt đọc Firebase
+    // trong background isolate. Việc chờ network tại đây có thể khiến Android
+    // kết thúc handler trước khi local notification có fullScreenIntent được tạo.
+    // Khi Activity mở, NotificationService vẫn xác minh incident với Firebase.
     await _showBackgroundFullscreenAlarm(
-      validatedData,
+      alarmData,
       message.notification,
     );
   }
+}
+
+bool _shouldPresentFullscreenAlarmImmediately(
+  Map<String, dynamic> data,
+) {
+  final status = data['incidentStatus']?.toString().trim().toLowerCase() ?? '';
+
+  if (status.isNotEmpty && status != 'active') {
+    return false;
+  }
+
+  final sentAt = int.tryParse(data['sentAt']?.toString() ?? '') ?? 0;
+
+  if (sentAt > 0 &&
+      DateTime.now().millisecondsSinceEpoch - sentAt >
+          const Duration(minutes: 2).inMilliseconds) {
+    return false;
+  }
+
+  return true;
 }
 
 Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {

@@ -35,7 +35,7 @@ class FCMService {
     }
   }
 
-  static Future<void> _saveToken({
+  static Future<bool> _saveToken({
     required String uid,
     required String token,
   }) async {
@@ -43,7 +43,7 @@ class FCMService {
     final cleanToken = token.trim();
 
     if (cleanUid.isEmpty || cleanToken.isEmpty) {
-      return;
+      return false;
     }
 
     final identity =
@@ -52,7 +52,7 @@ class FCMService {
         );
 
     if (identity == null) {
-      return;
+      return false;
     }
 
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -76,6 +76,51 @@ class FCMService {
     } catch (_) {
       // Token vẫn hợp lệ; ngôn ngữ sẽ được đồng bộ lại khi người dùng đổi.
     }
+
+    return true;
+  }
+
+  static Future<bool> _saveTokenWhenSessionReady({
+    required String uid,
+    required String token,
+  }) async {
+    const retryDelays = <Duration>[
+      Duration.zero,
+      Duration(milliseconds: 500),
+      Duration(seconds: 1),
+      Duration(seconds: 2),
+      Duration(seconds: 4),
+      Duration(seconds: 8),
+    ];
+
+    Object? lastError;
+
+    for (final delay in retryDelays) {
+      if (_activeUid != uid) {
+        return false;
+      }
+
+      if (delay > Duration.zero) {
+        await Future<void>.delayed(delay);
+      }
+
+      if (_activeUid != uid) {
+        return false;
+      }
+
+      try {
+        if (await _saveToken(uid: uid, token: token)) {
+          return true;
+        }
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    safeDebugPrint(
+      "PUSH_REGISTRATION_SAVE_RETRY_EXHAUSTED: ${lastError ?? 'session_not_ready'}",
+    );
+    return false;
   }
 
   static Future<void> setupFCM({required String uid}) {
@@ -146,7 +191,10 @@ class FCMService {
     }
 
     if (token != null) {
-      await _saveToken(uid: cleanUid, token: token);
+      await _saveTokenWhenSessionReady(
+        uid: cleanUid,
+        token: token,
+      );
     }
 
     if (_activeUid != cleanUid) {
@@ -166,7 +214,10 @@ class FCMService {
         }
 
         try {
-          await _saveToken(uid: targetUid, token: newToken);
+          await _saveTokenWhenSessionReady(
+            uid: targetUid,
+            token: newToken,
+          );
         } catch (error) {
           safeDebugPrint('PUSH_REGISTRATION_REFRESH_SAVE_ERROR: $error');
         }
