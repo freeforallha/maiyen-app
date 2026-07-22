@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
@@ -28,6 +29,8 @@ import 'all_home_page.dart';
 import 'home/home_add_sheets.dart';
 import 'home/home_alarm_menu_sheet.dart';
 import 'home/home_alarm_pause_sheet.dart';
+import 'home/home_auto_away_map_page.dart';
+import 'home/home_auto_away_models.dart';
 import 'home/home_auto_away_sheet.dart';
 import 'home/home_alarm_formatters.dart';
 import 'home/home_bottom_bar.dart';
@@ -860,6 +863,144 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
+  Future<List<HomeAutoAwayMember>> _loadAutoAwayMembers({
+    required String ownerUid,
+    required String homeId,
+  }) async {
+    final db = FirebaseDatabase.instance;
+    final membersByUid = <String, HomeAutoAwayMember>{};
+
+    Map<String, dynamic> asStringMap(Object? value) {
+      if (value is Map) {
+        return Map<String, dynamic>.from(value);
+      }
+
+      return <String, dynamic>{};
+    }
+
+    try {
+      final membersSnap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
+      final membersData = asStringMap(membersSnap.value);
+
+      for (final entry in membersData.entries) {
+        final memberUid = entry.key.trim();
+
+        if (memberUid.isEmpty) {
+          continue;
+        }
+
+        final raw = asStringMap(entry.value);
+        final email = raw['email']?.toString().trim() ?? '';
+        final rawName = raw['name']?.toString().trim() ?? '';
+        final name = rawName.isNotEmpty
+            ? rawName
+            : email.isNotEmpty
+            ? email
+            : memberUid;
+        final role = memberUid == ownerUid
+            ? 'owner'
+            : raw['role']?.toString().trim() == 'admin'
+            ? 'admin'
+            : 'member';
+
+        membersByUid[memberUid] = HomeAutoAwayMember(
+          uid: memberUid,
+          name: name,
+          role: role,
+          email: email,
+          photoUrl: raw['photoUrl']?.toString().trim() ?? '',
+        );
+      }
+    } catch (error) {
+      safeDebugPrint('AUTO_AWAY_MEMBER_LIST_ERROR: $error');
+    }
+
+    if (!membersByUid.containsKey(ownerUid)) {
+      var ownerName = ownerUid == uid ? userName.trim() : '';
+      var ownerEmail = '';
+      var ownerPhotoUrl = ownerUid == uid ? userPhotoUrl.trim() : '';
+
+      try {
+        final ownerDirectorySnap = await db.ref('userDirectory/$ownerUid').get();
+        final ownerDirectory = asStringMap(ownerDirectorySnap.value);
+        final directoryName = ownerDirectory['name']?.toString().trim() ?? '';
+        final directoryEmail = ownerDirectory['email']?.toString().trim() ?? '';
+        final directoryPhoto =
+            ownerDirectory['photoUrl']?.toString().trim() ?? '';
+
+        if (directoryName.isNotEmpty) {
+          ownerName = directoryName;
+        }
+        if (directoryEmail.isNotEmpty) {
+          ownerEmail = directoryEmail;
+        }
+        if (directoryPhoto.isNotEmpty) {
+          ownerPhotoUrl = directoryPhoto;
+        }
+      } catch (error) {
+        safeDebugPrint('AUTO_AWAY_OWNER_PROFILE_ERROR: $error');
+      }
+
+      if (ownerName.isEmpty) {
+        ownerName = ownerEmail.isNotEmpty ? ownerEmail : _strings.owner;
+      }
+
+      membersByUid[ownerUid] = HomeAutoAwayMember(
+        uid: ownerUid,
+        name: ownerName,
+        role: 'owner',
+        email: ownerEmail,
+        photoUrl: ownerPhotoUrl,
+      );
+    }
+
+    // Dữ liệu sharedByHome cũ có thể thiếu chính tài khoản Admin đang mở nhà.
+    // Bổ sung từ hồ sơ cục bộ để Admin vẫn xuất hiện trong danh sách lựa chọn,
+    // còn Firebase Rules sẽ kiểm tra membership qua sharedHomes.
+    final currentUid = uid.trim();
+    if (currentUid.isNotEmpty && !membersByUid.containsKey(currentUid)) {
+      final currentRole = getMyRole();
+      final currentName = userName.trim().isNotEmpty
+          ? userName.trim()
+          : currentUid;
+
+      membersByUid[currentUid] = HomeAutoAwayMember(
+        uid: currentUid,
+        name: currentName,
+        role: currentUid == ownerUid ? 'owner' : currentRole,
+        email: '',
+        photoUrl: userPhotoUrl.trim(),
+      );
+    }
+
+    final members = membersByUid.values.toList();
+
+    int roleOrder(String role) {
+      switch (role) {
+        case 'owner':
+          return 0;
+        case 'admin':
+          return 1;
+        default:
+          return 2;
+      }
+    }
+
+    members.sort((first, second) {
+      final roleCompare = roleOrder(first.role).compareTo(
+        roleOrder(second.role),
+      );
+
+      if (roleCompare != 0) {
+        return roleCompare;
+      }
+
+      return first.name.toLowerCase().compareTo(second.name.toLowerCase());
+    });
+
+    return members;
+  }
+
   Future<void> openAutoAwaySetup() async {
     final homeId = selectedHome;
 
@@ -870,7 +1011,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (!canManageHome()) {
       showTopToast(
         context,
-        _strings.t("Bạn không có quyền thay đổi vị trí nhà"),
+        _strings.t('Bạn không có quyền thay đổi vị trí nhà'),
         color: Colors.orange,
         icon: Icons.lock_rounded,
       );
@@ -879,155 +1020,207 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final ownerUid = getHomeOwnerUid();
     final currentHome = safeMap(homes[homeId]);
-    final currentAutoAway = safeMap(currentHome["autoAway"]);
+    final currentAutoAway = safeMap(currentHome['autoAway']);
     final pageContext = context;
+    final members = await _loadAutoAwayMembers(
+      ownerUid: ownerUid,
+      homeId: homeId,
+    );
+
+    if (!mounted) {
+      return;
+    }
 
     double? readDouble(dynamic raw) {
       if (raw is num) {
         return raw.toDouble();
       }
 
-      return double.tryParse(raw?.toString() ?? "");
+      return double.tryParse(raw?.toString() ?? '');
     }
 
-    const radiusMeters = 150;
+    Set<String> readParticipantUids() {
+      final rawParticipants = safeMap(currentAutoAway['participantUids']);
+      final validMemberUids = members.map((member) => member.uid).toSet();
+      final selected = rawParticipants.entries
+          .where((entry) => entry.value == true)
+          .map((entry) => entry.key.toString().trim())
+          .where(validMemberUids.contains)
+          .toSet();
 
-    await showHomeAutoAwaySheet(
-      context: context,
-      strings: _strings,
-      initialEnabled: currentAutoAway["enabled"] == true,
-      initialLatitude: readDouble(currentAutoAway["latitude"]),
-      initialLongitude: readDouble(currentAutoAway["longitude"]),
-      radiusMeters: radiusMeters,
-      onCaptureLocation: () async {
-        try {
-          final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (selected.isEmpty) {
+        selected.addAll(validMemberUids);
+      }
 
-          if (!serviceEnabled) {
-            if (!mounted) {
-              return null;
-            }
+      if (selected.isEmpty && ownerUid.isNotEmpty) {
+        selected.add(ownerUid);
+      }
 
-            showTopToast(
-              context,
-              _strings.t("Hãy bật GPS để đặt vị trí nhà"),
-              color: Colors.orange,
-              icon: Icons.location_off_rounded,
-            );
+      return selected;
+    }
 
-            await Geolocator.openLocationSettings();
-            return null;
-          }
+    Future<HomeAutoAwayLocation?> captureHomeLocation() async {
+      try {
+        final serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
-          var permission = await Geolocator.checkPermission();
-
-          if (permission == LocationPermission.denied) {
-            permission = await Geolocator.requestPermission();
-          }
-
-          if (permission == LocationPermission.denied) {
-            if (!mounted) {
-              return null;
-            }
-
-            showTopToast(
-              context,
-              _strings.t("Bạn chưa cấp quyền vị trí"),
-              color: Colors.orange,
-              icon: Icons.location_disabled_rounded,
-            );
-            return null;
-          }
-
-          if (permission == LocationPermission.deniedForever) {
-            if (!mounted) {
-              return null;
-            }
-
-            showTopToast(
-              context,
-              _strings.t("Hãy cấp quyền vị trí trong Cài đặt ứng dụng"),
-              color: Colors.orange,
-              icon: Icons.settings_rounded,
-            );
-
-            await Geolocator.openAppSettings();
-            return null;
-          }
-
-          final position = await Geolocator.getCurrentPosition(
-            locationSettings: const LocationSettings(
-              accuracy: LocationAccuracy.high,
-              timeLimit: Duration(seconds: 20),
-            ),
-          );
-
-          if (!mounted) {
-            return null;
-          }
-
-          return HomeAutoAwayLocation(
-            latitude: position.latitude,
-            longitude: position.longitude,
-          );
-        } catch (error) {
+        if (!serviceEnabled) {
           if (!mounted) {
             return null;
           }
 
           showTopToast(
             context,
-            _strings.sanitizeUserMessage(
-              error.toString(),
-              fallback: _strings.t("Không lấy được vị trí hiện tại"),
-            ),
-            color: Colors.red,
-            icon: Icons.error_outline_rounded,
+            _strings.t('Hãy bật GPS để đặt vị trí nhà'),
+            color: Colors.orange,
+            icon: Icons.location_off_rounded,
+          );
+
+          await Geolocator.openLocationSettings();
+          return null;
+        }
+
+        var permission = await Geolocator.checkPermission();
+
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+        }
+
+        if (permission == LocationPermission.denied) {
+          if (!mounted) {
+            return null;
+          }
+
+          showTopToast(
+            context,
+            _strings.t('Bạn chưa cấp quyền vị trí'),
+            color: Colors.orange,
+            icon: Icons.location_disabled_rounded,
           );
           return null;
         }
-      },
-      onSave: (data) async {
-        if (data.enabled) {
-          final hasBackgroundPermission =
-              await AutoAwayService.ensureBackgroundPermission();
 
-          if (!hasBackgroundPermission) {
-            if (!mounted) {
-              return false;
-            }
-
-            showTopToast(
-              context,
-              _strings.t(
-                "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
-              ),
-              color: Colors.orange,
-              icon: Icons.location_disabled_rounded,
-            );
-
-            await Geolocator.openAppSettings();
-            return false;
+        if (permission == LocationPermission.deniedForever) {
+          if (!mounted) {
+            return null;
           }
+
+          showTopToast(
+            context,
+            _strings.t('Hãy cấp quyền vị trí trong Cài đặt ứng dụng'),
+            color: Colors.orange,
+            icon: Icons.settings_rounded,
+          );
+
+          await Geolocator.openAppSettings();
+          return null;
         }
 
+        final position = await Geolocator.getCurrentPosition(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+            timeLimit: Duration(seconds: 20),
+          ),
+        );
+
+        if (!mounted) {
+          return null;
+        }
+
+        return HomeAutoAwayLocation(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        );
+      } catch (error) {
+        if (!mounted) {
+          return null;
+        }
+
+        showTopToast(
+          context,
+          _strings.sanitizeUserMessage(
+            error.toString(),
+            fallback: _strings.t('Không lấy được vị trí hiện tại'),
+          ),
+          color: Colors.red,
+          icon: Icons.error_outline_rounded,
+        );
+        return null;
+      }
+    }
+
+    final radiusMeters =
+        int.tryParse(currentAutoAway['radiusMeters']?.toString() ?? '') ?? 150;
+
+    await showHomeAutoAwaySheet(
+      context: context,
+      strings: _strings,
+      initialEnabled: currentAutoAway['enabled'] == true,
+      initialLatitude: readDouble(currentAutoAway['latitude']),
+      initialLongitude: readDouble(currentAutoAway['longitude']),
+      radiusMeters: radiusMeters.clamp(100, 1000).toInt(),
+      members: members,
+      initialParticipantUids: readParticipantUids(),
+      onCaptureLocation: captureHomeLocation,
+      onPickLocationOnMap:
+          ({required latitude, required longitude, required radiusMeters}) {
+            return showHomeAutoAwayMapPicker(
+              context: pageContext,
+              strings: _strings,
+              initialLatitude: latitude,
+              initialLongitude: longitude,
+              radiusMeters: radiusMeters,
+              onGetCurrentLocation: captureHomeLocation,
+            );
+          },
+      onSave: (data) async {
+        final allowedParticipantUids = members
+            .map((member) => member.uid.trim())
+            .where((memberUid) => memberUid.isNotEmpty)
+            .toSet()
+          ..add(ownerUid);
+
+        // Chỉ ghi các UID đang thật sự thuộc nhà. Việc này loại bỏ UID cũ
+        // còn sót trong cấu hình trước đây và tránh Firebase Rules từ chối cả
+        // lần lưu của Owner lẫn Admin.
+        final normalizedParticipantUids = data.participantUids
+            .map((participantUid) => participantUid.trim())
+            .where(
+              (participantUid) =>
+                  participantUid.isNotEmpty &&
+                  allowedParticipantUids.contains(participantUid),
+            )
+            .toSet();
+
+        if (normalizedParticipantUids.isEmpty && ownerUid.isNotEmpty) {
+          normalizedParticipantUids.add(ownerUid);
+        }
+
+        final currentUserParticipates = normalizedParticipantUids.contains(uid);
         final hasLocation = data.latitude != null && data.longitude != null;
+        final sortedParticipantUids = normalizedParticipantUids.toList()..sort();
+        final clientUpdatedAt = DateTime.now().millisecondsSinceEpoch;
         final autoAwayData = <String, Object?>{
-          "enabled": data.enabled,
-          "radiusMeters": data.radiusMeters,
-          "updatedAt": DateTime.now().millisecondsSinceEpoch,
-          "updatedBy": uid,
+          'enabled': data.enabled,
+          'radiusMeters': data.radiusMeters,
+          'participantUids': {
+            for (final participantUid in sortedParticipantUids)
+              participantUid: true,
+          },
+          'updatedAt': clientUpdatedAt,
+          'updatedBy': uid,
         };
 
         if (hasLocation) {
-          autoAwayData["latitude"] = data.latitude;
-          autoAwayData["longitude"] = data.longitude;
+          autoAwayData['latitude'] = data.latitude;
+          autoAwayData['longitude'] = data.longitude;
         }
 
         try {
-          await FirebaseDatabase.instance
-              .ref("accounts/$ownerUid/homes/$homeId/autoAway")
-              .set(autoAwayData);
+          final autoAwayRef = FirebaseDatabase.instance.ref(
+            'accounts/$ownerUid/homes/$homeId/autoAway',
+          );
+
+          await autoAwayRef.set(autoAwayData);
 
           if (!mounted) {
             return false;
@@ -1035,7 +1228,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           setState(() {
             final cachedHome = safeMap(homes[homeId]);
-            cachedHome["autoAway"] = Map<String, Object?>.from(autoAwayData);
+            cachedHome['autoAway'] = Map<String, Object?>.from(autoAwayData);
             homes[homeId] = cachedHome;
           });
 
@@ -1045,29 +1238,76 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               homes: homes,
               force: true,
             ).catchError((Object error) {
-              safeDebugPrint("AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error");
+              safeDebugPrint('AUTO_AWAY_SYNC_AFTER_SAVE_ERROR: $error');
             }),
           );
           unawaited(_syncAutoAwayLocationMonitoring());
 
+          // Đóng sheet ngay sau khi Firebase đã lưu thành công. Xin quyền vị trí
+          // chạy sau đó để hộp thoại hệ thống không làm người dùng tưởng nút Lưu
+          // bị treo hoặc không hoạt động.
           unawaited(
-            Future<void>.delayed(Duration.zero, () {
+            Future<void>.delayed(Duration.zero, () async {
+              var backgroundPermissionReady = true;
+
+              if (data.enabled && currentUserParticipates) {
+                backgroundPermissionReady =
+                    await AutoAwayService.ensureBackgroundPermission();
+              }
+
               if (!mounted || !pageContext.mounted) {
                 return;
               }
 
+              final permissionRequired =
+                  data.enabled &&
+                  currentUserParticipates &&
+                  !backgroundPermissionReady;
+
               showTopToast(
                 pageContext,
-                data.enabled
-                    ? _strings.t("Đã bật tự động Bảo vệ khi mọi người rời nhà")
-                    : _strings.t("Đã tắt tự động Bảo vệ khi mọi người rời nhà"),
-                color: SafeHomeColors.safe,
-                icon: Icons.check_circle_rounded,
+                permissionRequired
+                    ? _strings.autoAwaySavedPermissionRequired
+                    : data.enabled
+                    ? _strings.autoAwayEnabledForSelectedParticipants
+                    : _strings.t(
+                        'Đã tắt tự động Bảo vệ khi mọi người rời nhà',
+                      ),
+                color: permissionRequired
+                    ? Colors.orange
+                    : SafeHomeColors.safe,
+                icon: permissionRequired
+                    ? Icons.location_disabled_rounded
+                    : Icons.check_circle_rounded,
               );
             }),
           );
           return true;
+        } on FirebaseException catch (error) {
+          safeDebugPrint(
+            'AUTO_AWAY_SAVE_FIREBASE_ERROR: '
+            'code=${error.code} message=${error.message} '
+            'ownerUid=$ownerUid homeId=$homeId actorUid=$uid '
+            'participants=${sortedParticipantUids.join(',')}',
+          );
+
+          if (!mounted) {
+            return false;
+          }
+
+          showTopToast(
+            context,
+            _strings.sanitizeUserMessage(
+              error.message ?? error.toString(),
+              fallback: _strings.t('Không lưu được cài đặt'),
+            ),
+            color: Colors.red,
+            icon: Icons.error_outline_rounded,
+          );
+          return false;
         } catch (error) {
+          safeDebugPrint('AUTO_AWAY_SAVE_ERROR: $error');
+
           if (!mounted) {
             return false;
           }
@@ -1076,7 +1316,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             context,
             _strings.sanitizeUserMessage(
               error.toString(),
-              fallback: _strings.t("Không lưu được cài đặt"),
+              fallback: _strings.t('Không lưu được cài đặt'),
             ),
             color: Colors.red,
             icon: Icons.error_outline_rounded,

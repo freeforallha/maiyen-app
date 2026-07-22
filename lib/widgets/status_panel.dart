@@ -837,6 +837,23 @@ class _StatusPanelState extends State<StatusPanel> {
     );
   }
 
+  List<String> _uniqueStatusLines(Iterable<String> lines) {
+    final result = <String>[];
+    final seen = <String>{};
+
+    for (final rawLine in lines) {
+      final line = rawLine.trim();
+
+      if (line.isEmpty || !seen.add(line)) {
+        continue;
+      }
+
+      result.add(line);
+    }
+
+    return result;
+  }
+
   bool _isEnvironmentSummaryLine(String text) {
     final normalized = text.trim().toLowerCase();
 
@@ -895,6 +912,10 @@ class _StatusPanelState extends State<StatusPanel> {
       liveOverall["presenceWarnings"] ?? const [],
     );
 
+    final rawPresencePanelLines = List<String>.from(
+      liveOverall["presencePanelLines"] ?? const [],
+    );
+
     final emergencyIssues = rawEmergencyIssues.map(strings.statusText).toList();
 
     final dangerIssues = rawDangerIssues.map(strings.statusText).toList();
@@ -937,11 +958,12 @@ class _StatusPanelState extends State<StatusPanel> {
       devices: devices,
       strings: strings,
     );
-    final overviewItems = <String>[
+    final overviewItems = _uniqueStatusLines([
       strings.familyModeText(liveSecurityMode),
       if (environmentLine.isNotEmpty) environmentLine,
+      ...rawPresencePanelLines.map(strings.statusText),
       ...safeSummary,
-    ];
+    ]);
 
     return ListView(
       shrinkWrap: true,
@@ -1401,7 +1423,16 @@ class _StatusPanelState extends State<StatusPanel> {
       widget.overall["safeSummary"] ?? const [],
     );
 
-    final allLines = issues.isNotEmpty ? issues : safeSummary;
+    final presencePanelLines = List<String>.from(
+      widget.overall["presencePanelLines"] ?? const [],
+    );
+
+    // Trạng thái vị trí không làm đổi mức an toàn chung, nhưng luôn được
+    // đưa vào vòng xoay của StatusPanel để người dùng thấy đủ trạng thái
+    // toàn bộ thành viên và nhóm được chọn cho Tự động Bảo vệ.
+    final allLines = issues.isNotEmpty
+        ? _uniqueStatusLines([...issues, ...presencePanelLines])
+        : _uniqueStatusLines([...presencePanelLines, ...safeSummary]);
 
     final normalizedSecurityMode = normalizeSecurityMode(widget.securityMode);
     final manualSecurityMode =

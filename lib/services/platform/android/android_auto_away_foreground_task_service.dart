@@ -212,6 +212,10 @@ class AndroidAutoAwayForegroundTaskService {
         continue;
       }
 
+      if (!_isSelectedAutoAwayParticipant(autoAway, uid)) {
+        continue;
+      }
+
       final latitude = _asDouble(autoAway['latitude']);
       final longitude = _asDouble(autoAway['longitude']);
       final radiusMeters = _asDouble(autoAway['radiusMeters']) ?? 150.0;
@@ -254,6 +258,20 @@ class AndroidAutoAwayForegroundTaskService {
     }
 
     return <String, dynamic>{};
+  }
+
+  static bool _isSelectedAutoAwayParticipant(
+    Map<String, dynamic> autoAway,
+    String uid,
+  ) {
+    final participantUids = _asMap(autoAway['participantUids']);
+
+    // Nhà cũ chưa có participantUids tiếp tục dùng toàn bộ thành viên.
+    if (participantUids.isEmpty) {
+      return true;
+    }
+
+    return participantUids[uid] == true;
   }
 
   static double? _asDouble(Object? value) {

@@ -163,11 +163,18 @@ class HomeSelectionStateService {
   String autoAwayConfigSignature(Map<String, dynamic> home) {
     final autoAway = safeMap(home['autoAway']);
 
+    final participantUids = safeMap(autoAway['participantUids']).entries
+        .where((entry) => entry.value == true)
+        .map((entry) => entry.key.toString())
+        .toList()
+      ..sort();
+
     return [
       autoAway['enabled'] == true,
       autoAway['latitude'],
       autoAway['longitude'],
       autoAway['radiusMeters'],
+      participantUids.join(','),
     ].join('|');
   }
 }

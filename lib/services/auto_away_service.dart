@@ -803,6 +803,10 @@ class AutoAwayService {
         continue;
       }
 
+      if (!_isSelectedAutoAwayParticipant(autoAway, normalizedUid)) {
+        continue;
+      }
+
       final latitude = _asDouble(autoAway['latitude']);
       final longitude = _asDouble(autoAway['longitude']);
       final radius = _asDouble(autoAway['radiusMeters']) ?? 150.0;
@@ -934,6 +938,10 @@ class AutoAwayService {
       final autoAway = _asMap(home['autoAway']);
 
       if (homeId.isEmpty || autoAway['enabled'] != true) {
+        continue;
+      }
+
+      if (!_isSelectedAutoAwayParticipant(autoAway, normalizedUid)) {
         continue;
       }
 
@@ -1488,6 +1496,21 @@ class AutoAwayService {
     }
 
     return <String, dynamic>{};
+  }
+
+
+  static bool _isSelectedAutoAwayParticipant(
+    Map<String, dynamic> autoAway,
+    String uid,
+  ) {
+    final participantUids = _asMap(autoAway['participantUids']);
+
+    // Nhà cũ chưa có participantUids tiếp tục dùng toàn bộ thành viên.
+    if (participantUids.isEmpty) {
+      return true;
+    }
+
+    return participantUids[uid] == true;
   }
 
   static int? _asInt(dynamic raw) {

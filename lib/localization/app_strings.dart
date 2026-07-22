@@ -94,6 +94,8 @@ import 'languages/hy_dynamic_strings.dart';
 import 'languages/ka_dynamic_strings.dart';
 import 'languages/az_dynamic_strings.dart';
 
+part 'auto_away_feature_strings.dart';
+
 class AppStrings {
   final bool isEnglish;
   final bool isChinese;
@@ -7015,6 +7017,18 @@ class AppStrings {
         my: "နောက်ဆုံးအချက်အလက်ကို $count နာရီအကြာက မွမ်းမံထားသည်",
         lo: "ຂໍ້ມູນຫຼ້າສຸດອັບເດດ $count ຊົ່ວໂມງກ່ອນ",
       );
+    }
+
+    final autoAwayPresenceMatch = RegExp(
+      r"^Tự động Bảo vệ khi rời nhà • (Thành viên đang ở trong nhà|Thành viên đang ở ngoài|Thành viên chưa xác định vị trí): (\d+)/(\d+)$",
+    ).firstMatch(text);
+
+    if (autoAwayPresenceMatch != null) {
+      final label = autoAwayPresenceMatch.group(1)!;
+      final count =
+          "${autoAwayPresenceMatch.group(2)}/${autoAwayPresenceMatch.group(3)}";
+
+      return '${t("Tự động Bảo vệ khi rời nhà")} • ${t(label)}: $count';
     }
 
     final membersAtHomeMatch = RegExp(

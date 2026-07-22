@@ -1006,6 +1006,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
       "dangerIssues": <String>[],
       "warningIssues": <String>[],
       "presenceWarnings": <String>[],
+      "presencePanelLines": <String>[],
       "issues": <String>[],
       "safeSummary": <String>["Chưa có dữ liệu để đánh giá"],
       "hubTracked": false,
@@ -1033,6 +1034,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   // Thông tin vị trí thành viên chỉ dùng để hiển thị riêng.
   // Nó không được làm thay đổi trạng thái chung của ngôi nhà.
   final presenceWarnings = <String>[];
+  final presencePanelLines = <String>[];
 
   // ================= HUB =================
 
@@ -1086,25 +1088,100 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
         ? summaryTotalMemberCount
         : insideCount + outsideCount + unknownCount;
 
+    var participantCount = summaryCount("participantCount");
+    var participantInsideCount = summaryCount("participantInsideCount");
+    var participantOutsideCount = summaryCount("participantOutsideCount");
+    var participantUnknownCount = summaryCount("participantUnknownCount");
+
+    // Tương thích trong thời gian backend mới chưa kịp ghi bộ đếm participant*:
+    // tạm suy ra trực tiếp từ memberPresenceStatus đã có sẵn.
+    final hasParticipantBreakdown =
+        presenceSummary.containsKey("participantInsideCount") &&
+        presenceSummary.containsKey("participantOutsideCount") &&
+        presenceSummary.containsKey("participantUnknownCount");
+
+    if (!hasParticipantBreakdown) {
+      final memberPresenceStatus = safeMap(home["memberPresenceStatus"]);
+      var derivedParticipantCount = 0;
+      var derivedInsideCount = 0;
+      var derivedOutsideCount = 0;
+
+      for (final rawStatus in memberPresenceStatus.values) {
+        final status = safeMap(rawStatus);
+
+        if (status["autoAwayParticipant"] != true) {
+          continue;
+        }
+
+        derivedParticipantCount++;
+
+        final state = status["state"]?.toString().trim() ?? "unknown";
+        if (state == "inside") {
+          derivedInsideCount++;
+        } else if (state == "outside") {
+          derivedOutsideCount++;
+        }
+      }
+
+      if (derivedParticipantCount > 0) {
+        participantCount = derivedParticipantCount;
+        participantInsideCount = derivedInsideCount;
+        participantOutsideCount = derivedOutsideCount;
+        participantUnknownCount =
+            derivedParticipantCount - derivedInsideCount - derivedOutsideCount;
+      }
+    }
+
     // UI luôn dùng tổng thành viên thật làm mẫu số.
     // Auto Away backend vẫn dùng known/eligible riêng để quyết định bật Bảo vệ.
     if (totalMemberCount > 0) {
       final insideText =
           "Thành viên đang ở trong nhà: $insideCount/$totalMemberCount";
+      final outsideText =
+          "Thành viên đang ở ngoài: $outsideCount/$totalMemberCount";
+      final unknownText =
+          "Thành viên chưa xác định vị trí: $unknownCount/$totalMemberCount";
+
+      presencePanelLines.addAll([insideText, outsideText, unknownText]);
 
       // Số người trong/ngoài nhà là thông tin tổng quan, không phải lỗi.
       safeSummary.insert(0, insideText);
 
       if (outsideCount > 0) {
-        safeSummary.add(
-          "Thành viên đang ở ngoài: $outsideCount/$totalMemberCount",
-        );
+        safeSummary.add(outsideText);
       }
 
       if (unknownCount > 0) {
-        presenceWarnings.add(
-          "Thành viên chưa xác định vị trí: $unknownCount/$totalMemberCount",
-        );
+        presenceWarnings.add(unknownText);
+      }
+    }
+
+    if (participantCount > 0) {
+      final autoAwayPrefix = "Tự động Bảo vệ khi rời nhà";
+      final participantInsideText =
+          "$autoAwayPrefix • Thành viên đang ở trong nhà: "
+          "$participantInsideCount/$participantCount";
+      final participantOutsideText =
+          "$autoAwayPrefix • Thành viên đang ở ngoài: "
+          "$participantOutsideCount/$participantCount";
+      final participantUnknownText =
+          "$autoAwayPrefix • Thành viên chưa xác định vị trí: "
+          "$participantUnknownCount/$participantCount";
+
+      presencePanelLines.addAll([
+        participantInsideText,
+        participantOutsideText,
+        participantUnknownText,
+      ]);
+
+      safeSummary.add(participantInsideText);
+
+      if (participantOutsideCount > 0) {
+        safeSummary.add(participantOutsideText);
+      }
+
+      if (participantUnknownCount > 0) {
+        presenceWarnings.add(participantUnknownText);
       }
     }
   }
@@ -1125,6 +1202,7 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     "dangerIssues": dangerIssues,
     "warningIssues": warningIssues,
     "presenceWarnings": presenceWarnings,
+    "presencePanelLines": presencePanelLines,
     "issues": [...emergencyIssues, ...dangerIssues, ...warningIssues],
     "safeSummary": safeSummary,
     "hubTracked": hubTracked,
