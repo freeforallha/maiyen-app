@@ -74,6 +74,8 @@ class HomeOverviewHeader extends StatelessWidget {
       issues.join("|"),
       presenceWarnings.join("|"),
       safeSummary.join("|"),
+      alarmStart,
+      alarmEnd,
     ].join("|");
   }
 

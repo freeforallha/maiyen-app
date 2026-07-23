@@ -4,6 +4,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "vi": {
     "chooseOnMap": "Chọn trên bản đồ",
     "participantsTitle": "Thành viên xác định chế độ",
+    "statusParticipantsCount": "Số thành viên dùng để xác định mở Tự động bảo vệ",
     "participantsDescription": "Chỉ những thành viên được chọn mới được dùng để quyết định khi nào tự động Bảo vệ bật hoặc trở về Bình thường.",
     "selectAtLeastOneParticipant": "Hãy chọn ít nhất một thành viên.",
     "mapTitle": "Chọn vị trí nhà",
@@ -15,6 +16,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "en": {
     "chooseOnMap": "Choose on map",
     "participantsTitle": "People used for Auto Protection",
+    "statusParticipantsCount": "People used for Auto Protection",
     "participantsDescription": "Only selected people are used to decide when Auto Protection turns on or returns to Normal.",
     "selectAtLeastOneParticipant": "Select at least one person.",
     "mapTitle": "Choose home location",
@@ -26,6 +28,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "zh": {
     "chooseOnMap": "在地图上选择",
     "participantsTitle": "用于自动防护的成员",
+    "statusParticipantsCount": "用于自动防护的成员",
     "participantsDescription": "只有选中的成员用于决定何时开启自动防护或恢复正常模式。",
     "selectAtLeastOneParticipant": "请至少选择一名成员。",
     "mapTitle": "选择家庭位置",
@@ -37,6 +40,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ko": {
     "chooseOnMap": "지도에서 선택",
     "participantsTitle": "자동 보호 판단 구성원",
+    "statusParticipantsCount": "자동 보호 판단 구성원",
     "participantsDescription": "선택한 구성원만 자동 보호를 켜거나 일반 모드로 돌아갈 시점을 판단하는 데 사용됩니다.",
     "selectAtLeastOneParticipant": "구성원을 한 명 이상 선택하세요.",
     "mapTitle": "집 위치 선택",
@@ -48,6 +52,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ja": {
     "chooseOnMap": "地図で選択",
     "participantsTitle": "自動保護の判定メンバー",
+    "statusParticipantsCount": "自動保護の判定メンバー",
     "participantsDescription": "選択したメンバーだけを使って、自動保護をオンにする時刻や通常モードに戻す時刻を判断します。",
     "selectAtLeastOneParticipant": "少なくとも1人のメンバーを選択してください。",
     "mapTitle": "自宅の位置を選択",
@@ -59,6 +64,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "de": {
     "chooseOnMap": "Auf Karte auswählen",
     "participantsTitle": "Personen für den Auto-Schutz",
+    "statusParticipantsCount": "Personen für den Auto-Schutz",
     "participantsDescription": "Nur ausgewählte Personen bestimmen, wann der Auto-Schutz aktiviert oder auf Normal zurückgestellt wird.",
     "selectAtLeastOneParticipant": "Wähle mindestens eine Person aus.",
     "mapTitle": "Zuhause-Standort auswählen",
@@ -70,6 +76,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ru": {
     "chooseOnMap": "Выбрать на карте",
     "participantsTitle": "Участники для автоохраны",
+    "statusParticipantsCount": "Участники для автоохраны",
     "participantsDescription": "Только выбранные участники определяют, когда включать автоохрану или возвращать обычный режим.",
     "selectAtLeastOneParticipant": "Выберите хотя бы одного участника.",
     "mapTitle": "Выбрать местоположение дома",
@@ -81,6 +88,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "fr": {
     "chooseOnMap": "Choisir sur la carte",
     "participantsTitle": "Personnes utilisées pour la protection automatique",
+    "statusParticipantsCount": "Personnes utilisées pour la protection automatique",
     "participantsDescription": "Seules les personnes sélectionnées déterminent quand activer la protection automatique ou revenir au mode Normal.",
     "selectAtLeastOneParticipant": "Sélectionnez au moins une personne.",
     "mapTitle": "Choisir l’emplacement du domicile",
@@ -92,6 +100,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "es": {
     "chooseOnMap": "Elegir en el mapa",
     "participantsTitle": "Personas para la protección automática",
+    "statusParticipantsCount": "Personas para la protección automática",
     "participantsDescription": "Solo las personas seleccionadas se usan para decidir cuándo activar la protección automática o volver al modo Normal.",
     "selectAtLeastOneParticipant": "Selecciona al menos una persona.",
     "mapTitle": "Elegir ubicación de la casa",
@@ -103,6 +112,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "id": {
     "chooseOnMap": "Pilih di peta",
     "participantsTitle": "Anggota penentu Perlindungan Otomatis",
+    "statusParticipantsCount": "Anggota penentu Perlindungan Otomatis",
     "participantsDescription": "Hanya anggota yang dipilih yang digunakan untuk menentukan kapan Perlindungan Otomatis aktif atau kembali ke mode Normal.",
     "selectAtLeastOneParticipant": "Pilih setidaknya satu anggota.",
     "mapTitle": "Pilih lokasi rumah",
@@ -114,6 +124,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "th": {
     "chooseOnMap": "เลือกบนแผนที่",
     "participantsTitle": "สมาชิกที่ใช้กำหนดการป้องกันอัตโนมัติ",
+    "statusParticipantsCount": "สมาชิกที่ใช้กำหนดการป้องกันอัตโนมัติ",
     "participantsDescription": "ระบบจะใช้เฉพาะสมาชิกที่เลือกเพื่อตัดสินใจว่าจะเปิดการป้องกันอัตโนมัติหรือกลับสู่โหมดปกติเมื่อใด",
     "selectAtLeastOneParticipant": "เลือกสมาชิกอย่างน้อยหนึ่งคน",
     "mapTitle": "เลือกตำแหน่งบ้าน",
@@ -125,6 +136,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ms": {
     "chooseOnMap": "Pilih pada peta",
     "participantsTitle": "Ahli penentu Perlindungan Automatik",
+    "statusParticipantsCount": "Ahli penentu Perlindungan Automatik",
     "participantsDescription": "Hanya ahli yang dipilih digunakan untuk menentukan bila Perlindungan Automatik dihidupkan atau kembali ke mod Normal.",
     "selectAtLeastOneParticipant": "Pilih sekurang-kurangnya seorang ahli.",
     "mapTitle": "Pilih lokasi rumah",
@@ -136,6 +148,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "fil": {
     "chooseOnMap": "Pumili sa mapa",
     "participantsTitle": "Mga taong batayan ng Awtomatikong Proteksiyon",
+    "statusParticipantsCount": "Mga taong batayan ng Awtomatikong Proteksiyon",
     "participantsDescription": "Ang mga napiling tao lamang ang gagamitin upang magpasya kung kailan bubuksan ang Awtomatikong Proteksiyon o ibabalik sa Normal.",
     "selectAtLeastOneParticipant": "Pumili ng kahit isang tao.",
     "mapTitle": "Piliin ang lokasyon ng bahay",
@@ -147,6 +160,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "km": {
     "chooseOnMap": "ជ្រើសរើសលើផែនទី",
     "participantsTitle": "សមាជិកសម្រាប់កំណត់ការការពារស្វ័យប្រវត្តិ",
+    "statusParticipantsCount": "សមាជិកសម្រាប់កំណត់ការការពារស្វ័យប្រវត្តិ",
     "participantsDescription": "ប្រើតែសមាជិកដែលបានជ្រើសរើស ដើម្បីកំណត់ពេលបើកការការពារស្វ័យប្រវត្តិ ឬត្រឡប់ទៅរបៀបធម្មតា។",
     "selectAtLeastOneParticipant": "សូមជ្រើសរើសសមាជិកយ៉ាងហោចណាស់ម្នាក់។",
     "mapTitle": "ជ្រើសរើសទីតាំងផ្ទះ",
@@ -158,6 +172,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "my": {
     "chooseOnMap": "မြေပုံပေါ်တွင် ရွေးချယ်ပါ",
     "participantsTitle": "အလိုအလျောက်ကာကွယ်မှု ဆုံးဖြတ်မည့် အဖွဲ့ဝင်များ",
+    "statusParticipantsCount": "အလိုအလျောက်ကာကွယ်မှု ဆုံးဖြတ်မည့် အဖွဲ့ဝင်များ",
     "participantsDescription": "အလိုအလျောက်ကာကွယ်မှု ဖွင့်မည့်အချိန် သို့မဟုတ် ပုံမှန်မုဒ်သို့ ပြန်မည့်အချိန်ကို ရွေးချယ်ထားသော အဖွဲ့ဝင်များဖြင့်သာ ဆုံးဖြတ်ပါမည်။",
     "selectAtLeastOneParticipant": "အနည်းဆုံး အဖွဲ့ဝင်တစ်ဦးကို ရွေးချယ်ပါ။",
     "mapTitle": "အိမ်တည်နေရာ ရွေးချယ်ပါ",
@@ -169,6 +184,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "lo": {
     "chooseOnMap": "ເລືອກໃນແຜນທີ່",
     "participantsTitle": "ສະມາຊິກສຳລັບກຳນົດການປ້ອງກັນອັດຕະໂນມັດ",
+    "statusParticipantsCount": "ສະມາຊິກສຳລັບກຳນົດການປ້ອງກັນອັດຕະໂນມັດ",
     "participantsDescription": "ໃຊ້ສະເພາະສະມາຊິກທີ່ເລືອກເພື່ອຕັດສິນວ່າເມື່ອໃດຈະເປີດການປ້ອງກັນອັດຕະໂນມັດ ຫຼືກັບສູ່ໂໝດປົກກະຕິ.",
     "selectAtLeastOneParticipant": "ກະລຸນາເລືອກສະມາຊິກຢ່າງໜ້ອຍໜຶ່ງຄົນ.",
     "mapTitle": "ເລືອກຕຳແໜ່ງເຮືອນ",
@@ -180,6 +196,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ta": {
     "chooseOnMap": "வரைபடத்தில் தேர்வு செய்",
     "participantsTitle": "தானியங்கு பாதுகாப்பை நிர்ணயிக்கும் உறுப்பினர்கள்",
+    "statusParticipantsCount": "தானியங்கு பாதுகாப்பை நிர்ணயிக்கும் உறுப்பினர்கள்",
     "participantsDescription": "தானியங்கு பாதுகாப்பு எப்போது இயங்க வேண்டும் அல்லது இயல்பு நிலைக்குத் திரும்ப வேண்டும் என்பதைத் தீர்மானிக்க தேர்ந்தெடுக்கப்பட்ட உறுப்பினர்கள் மட்டுமே பயன்படுத்தப்படுவர்.",
     "selectAtLeastOneParticipant": "குறைந்தது ஒரு உறுப்பினரைத் தேர்வு செய்யுங்கள்.",
     "mapTitle": "வீட்டு இருப்பிடத்தைத் தேர்வு செய்",
@@ -191,6 +208,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "pt": {
     "chooseOnMap": "Escolher no mapa",
     "participantsTitle": "Pessoas usadas na Proteção Automática",
+    "statusParticipantsCount": "Pessoas usadas na Proteção Automática",
     "participantsDescription": "Apenas as pessoas selecionadas são usadas para decidir quando ativar a Proteção Automática ou voltar ao modo Normal.",
     "selectAtLeastOneParticipant": "Selecione pelo menos uma pessoa.",
     "mapTitle": "Escolher localização da casa",
@@ -202,6 +220,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "tet": {
     "chooseOnMap": "Hili iha mapa",
     "participantsTitle": "Ema sira ba Protesaun Automátika",
+    "statusParticipantsCount": "Ema sira ba Protesaun Automátika",
     "participantsDescription": "Ema ne’ebé hili de’it mak uza atu determina bainhira Protesaun Automátika liga ka fila ba modu Normal.",
     "selectAtLeastOneParticipant": "Hili pelumenus ema ida.",
     "mapTitle": "Hili lokalizasaun uma",
@@ -213,6 +232,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "it": {
     "chooseOnMap": "Scegli sulla mappa",
     "participantsTitle": "Persone usate per la Protezione automatica",
+    "statusParticipantsCount": "Persone usate per la Protezione automatica",
     "participantsDescription": "Solo le persone selezionate vengono usate per decidere quando attivare la Protezione automatica o tornare alla modalità Normale.",
     "selectAtLeastOneParticipant": "Seleziona almeno una persona.",
     "mapTitle": "Scegli la posizione della casa",
@@ -224,6 +244,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "pl": {
     "chooseOnMap": "Wybierz na mapie",
     "participantsTitle": "Osoby używane przez ochronę automatyczną",
+    "statusParticipantsCount": "Osoby używane przez ochronę automatyczną",
     "participantsDescription": "Tylko wybrane osoby decydują, kiedy włączyć ochronę automatyczną lub wrócić do trybu Normalnego.",
     "selectAtLeastOneParticipant": "Wybierz co najmniej jedną osobę.",
     "mapTitle": "Wybierz lokalizację domu",
@@ -235,6 +256,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "nl": {
     "chooseOnMap": "Kiezen op kaart",
     "participantsTitle": "Personen voor Automatische beveiliging",
+    "statusParticipantsCount": "Personen voor Automatische beveiliging",
     "participantsDescription": "Alleen geselecteerde personen bepalen wanneer Automatische beveiliging wordt ingeschakeld of teruggaat naar Normaal.",
     "selectAtLeastOneParticipant": "Selecteer minstens één persoon.",
     "mapTitle": "Thuislocatie kiezen",
@@ -246,6 +268,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "cs": {
     "chooseOnMap": "Vybrat na mapě",
     "participantsTitle": "Osoby pro automatickou ochranu",
+    "statusParticipantsCount": "Osoby pro automatickou ochranu",
     "participantsDescription": "Pouze vybrané osoby určují, kdy se automatická ochrana zapne nebo vrátí do normálního režimu.",
     "selectAtLeastOneParticipant": "Vyberte alespoň jednu osobu.",
     "mapTitle": "Vybrat polohu domova",
@@ -257,6 +280,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "sk": {
     "chooseOnMap": "Vybrať na mape",
     "participantsTitle": "Osoby pre automatickú ochranu",
+    "statusParticipantsCount": "Osoby pre automatickú ochranu",
     "participantsDescription": "Iba vybrané osoby určujú, kedy sa automatická ochrana zapne alebo vráti do normálneho režimu.",
     "selectAtLeastOneParticipant": "Vyberte aspoň jednu osobu.",
     "mapTitle": "Vybrať polohu domova",
@@ -268,6 +292,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "uk": {
     "chooseOnMap": "Вибрати на карті",
     "participantsTitle": "Учасники для автоохорони",
+    "statusParticipantsCount": "Учасники для автоохорони",
     "participantsDescription": "Лише вибрані учасники визначають, коли вмикати автоохорону або повертати звичайний режим.",
     "selectAtLeastOneParticipant": "Виберіть принаймні одного учасника.",
     "mapTitle": "Вибрати розташування дому",
@@ -279,6 +304,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ro": {
     "chooseOnMap": "Alege pe hartă",
     "participantsTitle": "Persoane pentru Protecția automată",
+    "statusParticipantsCount": "Persoane pentru Protecția automată",
     "participantsDescription": "Doar persoanele selectate sunt folosite pentru a decide când se activează Protecția automată sau se revine la modul Normal.",
     "selectAtLeastOneParticipant": "Selectează cel puțin o persoană.",
     "mapTitle": "Alege locația casei",
@@ -290,6 +316,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "hu": {
     "chooseOnMap": "Kiválasztás a térképen",
     "participantsTitle": "Az automatikus védelemhez használt személyek",
+    "statusParticipantsCount": "Az automatikus védelemhez használt személyek",
     "participantsDescription": "Csak a kiválasztott személyek alapján dől el, mikor kapcsoljon be az automatikus védelem, vagy mikor térjen vissza Normál módba.",
     "selectAtLeastOneParticipant": "Válassz ki legalább egy személyt.",
     "mapTitle": "Otthon helyének kiválasztása",
@@ -301,6 +328,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "bg": {
     "chooseOnMap": "Избор на картата",
     "participantsTitle": "Хора за автоматичната защита",
+    "statusParticipantsCount": "Хора за автоматичната защита",
     "participantsDescription": "Само избраните хора определят кога автоматичната защита да се включи или да се върне в Нормален режим.",
     "selectAtLeastOneParticipant": "Изберете поне един човек.",
     "mapTitle": "Избор на местоположение на дома",
@@ -312,6 +340,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "hr": {
     "chooseOnMap": "Odaberi na karti",
     "participantsTitle": "Osobe za automatsku zaštitu",
+    "statusParticipantsCount": "Osobe za automatsku zaštitu",
     "participantsDescription": "Samo odabrane osobe određuju kada se automatska zaštita uključuje ili vraća u Normalni način.",
     "selectAtLeastOneParticipant": "Odaberite barem jednu osobu.",
     "mapTitle": "Odaberi lokaciju doma",
@@ -323,6 +352,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "sr": {
     "chooseOnMap": "Изабери на мапи",
     "participantsTitle": "Особе за аутоматску заштиту",
+    "statusParticipantsCount": "Особе за аутоматску заштиту",
     "participantsDescription": "Само изабране особе одређују када се аутоматска заштита укључује или враћа у Нормални режим.",
     "selectAtLeastOneParticipant": "Изаберите бар једну особу.",
     "mapTitle": "Изабери локацију дома",
@@ -334,6 +364,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "bs": {
     "chooseOnMap": "Odaberi na karti",
     "participantsTitle": "Osobe za automatsku zaštitu",
+    "statusParticipantsCount": "Osobe za automatsku zaštitu",
     "participantsDescription": "Samo odabrane osobe određuju kada se automatska zaštita uključuje ili vraća u Normalni način.",
     "selectAtLeastOneParticipant": "Odaberite najmanje jednu osobu.",
     "mapTitle": "Odaberi lokaciju doma",
@@ -345,6 +376,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "sl": {
     "chooseOnMap": "Izberi na zemljevidu",
     "participantsTitle": "Osebe za samodejno zaščito",
+    "statusParticipantsCount": "Osebe za samodejno zaščito",
     "participantsDescription": "Samo izbrane osebe določajo, kdaj se samodejna zaščita vklopi ali vrne v običajni način.",
     "selectAtLeastOneParticipant": "Izberite vsaj eno osebo.",
     "mapTitle": "Izberi lokacijo doma",
@@ -356,6 +388,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "mk": {
     "chooseOnMap": "Избери на карта",
     "participantsTitle": "Лица за автоматска заштита",
+    "statusParticipantsCount": "Лица за автоматска заштита",
     "participantsDescription": "Само избраните лица одредуваат кога автоматската заштита се вклучува или се враќа во Нормален режим.",
     "selectAtLeastOneParticipant": "Изберете најмалку едно лице.",
     "mapTitle": "Избери локација на домот",
@@ -367,6 +400,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "sq": {
     "chooseOnMap": "Zgjidh në hartë",
     "participantsTitle": "Personat për Mbrojtjen automatike",
+    "statusParticipantsCount": "Personat për Mbrojtjen automatike",
     "participantsDescription": "Vetëm personat e zgjedhur përdoren për të vendosur kur aktivizohet Mbrojtja automatike ose kur kthehet në modalitetin Normal.",
     "selectAtLeastOneParticipant": "Zgjidh të paktën një person.",
     "mapTitle": "Zgjidh vendndodhjen e shtëpisë",
@@ -378,6 +412,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "el": {
     "chooseOnMap": "Επιλογή στον χάρτη",
     "participantsTitle": "Άτομα για την Αυτόματη προστασία",
+    "statusParticipantsCount": "Άτομα για την Αυτόματη προστασία",
     "participantsDescription": "Μόνο τα επιλεγμένα άτομα χρησιμοποιούνται για να αποφασιστεί πότε ενεργοποιείται η Αυτόματη προστασία ή επιστρέφει σε Κανονική λειτουργία.",
     "selectAtLeastOneParticipant": "Επιλέξτε τουλάχιστον ένα άτομο.",
     "mapTitle": "Επιλογή τοποθεσίας σπιτιού",
@@ -389,6 +424,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "tr": {
     "chooseOnMap": "Haritadan seç",
     "participantsTitle": "Otomatik Koruma için kişiler",
+    "statusParticipantsCount": "Otomatik Koruma için kişiler",
     "participantsDescription": "Yalnızca seçilen kişiler, Otomatik Korumanın ne zaman açılacağını veya Normal moda dönüleceğini belirlemek için kullanılır.",
     "selectAtLeastOneParticipant": "En az bir kişi seçin.",
     "mapTitle": "Ev konumunu seç",
@@ -400,6 +436,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "sv": {
     "chooseOnMap": "Välj på kartan",
     "participantsTitle": "Personer för Automatiskt skydd",
+    "statusParticipantsCount": "Personer för Automatiskt skydd",
     "participantsDescription": "Endast valda personer används för att avgöra när Automatiskt skydd aktiveras eller återgår till Normalläge.",
     "selectAtLeastOneParticipant": "Välj minst en person.",
     "mapTitle": "Välj hemposition",
@@ -411,6 +448,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "da": {
     "chooseOnMap": "Vælg på kortet",
     "participantsTitle": "Personer til Automatisk beskyttelse",
+    "statusParticipantsCount": "Personer til Automatisk beskyttelse",
     "participantsDescription": "Kun valgte personer bruges til at afgøre, hvornår Automatisk beskyttelse aktiveres eller vender tilbage til Normal.",
     "selectAtLeastOneParticipant": "Vælg mindst én person.",
     "mapTitle": "Vælg hjemmets placering",
@@ -422,6 +460,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "nb": {
     "chooseOnMap": "Velg på kartet",
     "participantsTitle": "Personer for Automatisk beskyttelse",
+    "statusParticipantsCount": "Personer for Automatisk beskyttelse",
     "participantsDescription": "Bare valgte personer brukes til å avgjøre når Automatisk beskyttelse slås på eller går tilbake til Normal.",
     "selectAtLeastOneParticipant": "Velg minst én person.",
     "mapTitle": "Velg hjemmeposisjon",
@@ -433,6 +472,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "fi": {
     "chooseOnMap": "Valitse kartalta",
     "participantsTitle": "Automaattiseen suojaukseen käytettävät henkilöt",
+    "statusParticipantsCount": "Automaattiseen suojaukseen käytettävät henkilöt",
     "participantsDescription": "Vain valitut henkilöt määrittävät, milloin Automaattinen suojaus otetaan käyttöön tai palataan Normaali-tilaan.",
     "selectAtLeastOneParticipant": "Valitse vähintään yksi henkilö.",
     "mapTitle": "Valitse kodin sijainti",
@@ -444,6 +484,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "is": {
     "chooseOnMap": "Velja á korti",
     "participantsTitle": "Einstaklingar fyrir Sjálfvirka vernd",
+    "statusParticipantsCount": "Einstaklingar fyrir Sjálfvirka vernd",
     "participantsDescription": "Aðeins valdir einstaklingar ráða hvenær Sjálfvirk vernd kveikir eða fer aftur í Venjulega stillingu.",
     "selectAtLeastOneParticipant": "Veldu að minnsta kosti einn einstakling.",
     "mapTitle": "Velja staðsetningu heimilis",
@@ -455,6 +496,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "et": {
     "chooseOnMap": "Vali kaardil",
     "participantsTitle": "Automaatkaitse jaoks kasutatavad inimesed",
+    "statusParticipantsCount": "Automaatkaitse jaoks kasutatavad inimesed",
     "participantsDescription": "Ainult valitud inimesed määravad, millal Automaatkaitse sisse lülitub või naaseb Tavarežiimi.",
     "selectAtLeastOneParticipant": "Vali vähemalt üks inimene.",
     "mapTitle": "Vali kodu asukoht",
@@ -466,6 +508,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "lv": {
     "chooseOnMap": "Izvēlēties kartē",
     "participantsTitle": "Personas automātiskajai aizsardzībai",
+    "statusParticipantsCount": "Personas automātiskajai aizsardzībai",
     "participantsDescription": "Tikai izvēlētās personas nosaka, kad ieslēgt automātisko aizsardzību vai atgriezties Normālajā režīmā.",
     "selectAtLeastOneParticipant": "Izvēlieties vismaz vienu personu.",
     "mapTitle": "Izvēlēties mājas atrašanās vietu",
@@ -477,6 +520,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "lt": {
     "chooseOnMap": "Pasirinkti žemėlapyje",
     "participantsTitle": "Asmenys automatinei apsaugai",
+    "statusParticipantsCount": "Asmenys automatinei apsaugai",
     "participantsDescription": "Tik pasirinkti asmenys lemia, kada įjungti Automatinę apsaugą arba grįžti į Įprastą režimą.",
     "selectAtLeastOneParticipant": "Pasirinkite bent vieną asmenį.",
     "mapTitle": "Pasirinkti namų vietą",
@@ -488,6 +532,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ga": {
     "chooseOnMap": "Roghnaigh ar an léarscáil",
     "participantsTitle": "Daoine don Chosaint Uathoibríoch",
+    "statusParticipantsCount": "Daoine don Chosaint Uathoibríoch",
     "participantsDescription": "Is iad na daoine roghnaithe amháin a úsáidtear chun cinneadh a dhéanamh cathain a chuirtear an Chosaint Uathoibríoch ar siúl nó a fhilltear ar an ngnáthmhód.",
     "selectAtLeastOneParticipant": "Roghnaigh duine amháin ar a laghad.",
     "mapTitle": "Roghnaigh suíomh an tí",
@@ -499,6 +544,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "mt": {
     "chooseOnMap": "Agħżel fuq il-mappa",
     "participantsTitle": "Persuni għall-Protezzjoni Awtomatika",
+    "statusParticipantsCount": "Persuni għall-Protezzjoni Awtomatika",
     "participantsDescription": "Il-persuni magħżula biss jintużaw biex jiġi deċiż meta tinxtegħel il-Protezzjoni Awtomatika jew terġa’ lura għall-modalità Normali.",
     "selectAtLeastOneParticipant": "Agħżel mill-inqas persuna waħda.",
     "mapTitle": "Agħżel il-post tad-dar",
@@ -510,6 +556,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "be": {
     "chooseOnMap": "Выбраць на карце",
     "participantsTitle": "Удзельнікі для аўтааховы",
+    "statusParticipantsCount": "Удзельнікі для аўтааховы",
     "participantsDescription": "Толькі выбраныя ўдзельнікі вызначаюць, калі ўключаць аўтаахову або вяртаць звычайны рэжым.",
     "selectAtLeastOneParticipant": "Выберыце хаця б аднаго ўдзельніка.",
     "mapTitle": "Выбраць месцазнаходжанне дома",
@@ -521,6 +568,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "lb": {
     "chooseOnMap": "Op der Kaart auswielen",
     "participantsTitle": "Persoune fir den Automatesche Schutz",
+    "statusParticipantsCount": "Persoune fir den Automatesche Schutz",
     "participantsDescription": "Nëmmen déi ausgewielte Persoune bestëmmen, wéini den Automatesche Schutz aktivéiert gëtt oder zeréck op Normal wiesselt.",
     "selectAtLeastOneParticipant": "Wielt op d’mannst eng Persoun.",
     "mapTitle": "Heemstanduert auswielen",
@@ -532,6 +580,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ca": {
     "chooseOnMap": "Triar al mapa",
     "participantsTitle": "Persones per a la Protecció automàtica",
+    "statusParticipantsCount": "Persones per a la Protecció automàtica",
     "participantsDescription": "Només les persones seleccionades s’utilitzen per decidir quan s’activa la Protecció automàtica o es torna al mode Normal.",
     "selectAtLeastOneParticipant": "Selecciona almenys una persona.",
     "mapTitle": "Triar la ubicació de casa",
@@ -543,6 +592,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "cnr": {
     "chooseOnMap": "Izaberi na mapi",
     "participantsTitle": "Osobe za automatsku zaštitu",
+    "statusParticipantsCount": "Osobe za automatsku zaštitu",
     "participantsDescription": "Samo izabrane osobe određuju kada se automatska zaštita uključuje ili vraća u Normalni režim.",
     "selectAtLeastOneParticipant": "Izaberite najmanje jednu osobu.",
     "mapTitle": "Izaberi lokaciju doma",
@@ -554,6 +604,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "hy": {
     "chooseOnMap": "Ընտրել քարտեզի վրա",
     "participantsTitle": "Ավտոմատ պաշտպանության համար օգտագործվող անձինք",
+    "statusParticipantsCount": "Ավտոմատ պաշտպանության համար օգտագործվող անձինք",
     "participantsDescription": "Միայն ընտրված անձինք են օգտագործվում որոշելու համար, թե երբ միացնել Ավտոմատ պաշտպանությունը կամ վերադառնալ Սովորական ռեժիմին։",
     "selectAtLeastOneParticipant": "Ընտրեք առնվազն մեկ անձ։",
     "mapTitle": "Ընտրել տան տեղադրությունը",
@@ -565,6 +616,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "ka": {
     "chooseOnMap": "რუკაზე არჩევა",
     "participantsTitle": "ავტომატური დაცვისთვის გამოყენებული პირები",
+    "statusParticipantsCount": "ავტომატური დაცვისთვის გამოყენებული პირები",
     "participantsDescription": "მხოლოდ არჩეული პირები გამოიყენება იმის დასადგენად, როდის ჩაირთოს ავტომატური დაცვა ან დაბრუნდეს ჩვეულებრივ რეჟიმში.",
     "selectAtLeastOneParticipant": "აირჩიეთ მინიმუმ ერთი პირი.",
     "mapTitle": "სახლის მდებარეობის არჩევა",
@@ -576,6 +628,7 @@ const Map<String, Map<String, String>> _autoAwayFeatureTranslations = {
   "az": {
     "chooseOnMap": "Xəritədə seç",
     "participantsTitle": "Avtomatik Qoruma üçün şəxslər",
+    "statusParticipantsCount": "Avtomatik Qoruma üçün şəxslər",
     "participantsDescription": "Yalnız seçilmiş şəxslər Avtomatik Qorumanın nə vaxt açılacağını və ya Normal rejimə qayıdacağını müəyyən etmək üçün istifadə olunur.",
     "selectAtLeastOneParticipant": "Ən azı bir şəxsi seçin.",
     "mapTitle": "Ev məkanını seç",
@@ -1035,6 +1088,8 @@ extension AutoAwayFeatureStrings on AppStrings {
 
   String get autoAwayChooseOnMap => _autoAwayFeatureText("chooseOnMap");
   String get autoAwayParticipantsTitle => _autoAwayFeatureText("participantsTitle");
+  String get autoAwayStatusParticipantsCount =>
+      _autoAwayFeatureText("statusParticipantsCount");
   String get autoAwayParticipantsDescription => _autoAwayFeatureText("participantsDescription");
   String get autoAwaySelectAtLeastOneParticipant => _autoAwayFeatureText("selectAtLeastOneParticipant");
   String get autoAwayMapTitle => _autoAwayFeatureText("mapTitle");

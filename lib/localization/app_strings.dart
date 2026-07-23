@@ -7019,16 +7019,16 @@ class AppStrings {
       );
     }
 
-    final autoAwayPresenceMatch = RegExp(
-      r"^Tự động Bảo vệ khi rời nhà • (Thành viên đang ở trong nhà|Thành viên đang ở ngoài|Thành viên chưa xác định vị trí): (\d+)/(\d+)$",
+    final autoAwayParticipantCountMatch = RegExp(
+      r"^Số thành viên dùng để xác định mở Tự động bảo vệ: (\d+)/(\d+)$",
     ).firstMatch(text);
 
-    if (autoAwayPresenceMatch != null) {
-      final label = autoAwayPresenceMatch.group(1)!;
+    if (autoAwayParticipantCountMatch != null) {
       final count =
-          "${autoAwayPresenceMatch.group(2)}/${autoAwayPresenceMatch.group(3)}";
+          "${autoAwayParticipantCountMatch.group(1)}/${autoAwayParticipantCountMatch.group(2)}";
 
-      return '${t("Tự động Bảo vệ khi rời nhà")} • ${t(label)}: $count';
+      return '${AutoAwayFeatureStrings(this).autoAwayStatusParticipantsCount}: '
+          '$count';
     }
 
     final membersAtHomeMatch = RegExp(

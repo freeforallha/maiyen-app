@@ -233,11 +233,8 @@ class _StatusPanelState extends State<StatusPanel> {
     required List<String> rawEmergencyIssues,
     required List<String> rawDangerIssues,
     required List<String> rawWarningIssues,
-    required List<String> rawSafeSummary,
   }) {
-    final hasDevices = overall["hasDevices"] == true;
-
-    if (!hasDevices) {
+    if (overall["hasDevices"] != true) {
       return [strings.statusAddFirstDeviceSuggestion()];
     }
 
@@ -257,131 +254,116 @@ class _StatusPanelState extends State<StatusPanel> {
       suggestions.add(cleanText);
     }
 
-    bool containsAny(String source, List<String> keywords) {
-      final normalized = source.toLowerCase();
+    final securityMode = normalizeSecurityMode(liveHome["securityMode"]);
+    final securityModeSource =
+        liveHome["securityModeSource"]?.toString().trim().toLowerCase() ?? "";
+    final isArmed = securityMode == "armed";
+    final isManualArmed =
+        isArmed &&
+        (securityModeSource.isEmpty || securityModeSource == "manual");
 
-      return keywords.any((keyword) {
-        return normalized.contains(keyword.toLowerCase());
-      });
+    final autoAway = safeMap(liveHome["autoAway"]);
+    final autoAwayEnabled = autoAway["enabled"] == true;
+    final presenceSummary = safeMap(liveHome["presenceSummary"]);
+
+    int summaryCount(String key) {
+      return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
     }
 
-    bool hasEnabledScheduleValue(dynamic raw) {
-      if (raw is List) {
-        return raw.any(hasEnabledScheduleValue);
-      }
+    final insideCount = summaryCount("insideCount");
+    final outsideCount = summaryCount("outsideCount");
+    final unknownCount = summaryCount("unknownCount");
+    final explicitTotalMemberCount = summaryCount("totalMemberCount");
+    final totalMemberCount = explicitTotalMemberCount > 0
+        ? explicitTotalMemberCount
+        : insideCount + outsideCount + unknownCount;
+    final hasPresenceCounts = totalMemberCount > 0;
+    final noMemberInside =
+        hasPresenceCounts && insideCount == 0 && unknownCount == 0;
+    final hasMemberInside = insideCount > 0;
 
-      if (raw is Map) {
-        if (raw["enabled"] == true) {
-          return true;
-        }
+    var participantUnknownCount = summaryCount("participantUnknownCount");
 
-        return raw.values.any(hasEnabledScheduleValue);
-      }
+    // Tương thích khi backend chưa kịp ghi participantUnknownCount.
+    if (!presenceSummary.containsKey("participantUnknownCount")) {
+      final memberPresenceStatus = safeMap(liveHome["memberPresenceStatus"]);
 
-      return false;
+      participantUnknownCount = memberPresenceStatus.values.where((rawStatus) {
+        final status = safeMap(rawStatus);
+        final state = status["state"]?.toString().trim().toLowerCase() ?? "";
+
+        return status["autoAwayParticipant"] == true && state == "unknown";
+      }).length;
     }
-
-    bool hasEnabledDeviceAlarm(Map<String, dynamic> devices) {
-      for (final rawDevice in devices.values) {
-        final device = safeMap(rawDevice);
-        final alarm = safeMap(device["alarm"]);
-
-        if (alarm["enabled"] == true) {
-          return true;
-        }
-
-        if (hasEnabledScheduleValue(device["alarmSchedules"]) ||
-            hasEnabledScheduleValue(device["alarms"])) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    final rawEmergencyText = rawEmergencyIssues.join("\n").toLowerCase();
-    final rawDangerText = rawDangerIssues.join("\n").toLowerCase();
-    final rawWarningText = rawWarningIssues.join("\n").toLowerCase();
-    final rawSafeText = rawSafeSummary.join("\n").toLowerCase();
-    final allRawText =
-        "$rawEmergencyText\n$rawDangerText\n$rawWarningText\n$rawSafeText";
-
-    final hasEmergencyIssue = containsAny(rawEmergencyText, const [
-      "sos",
-      "có khói",
-      "rò rỉ gas",
-      "phát hiện khí co",
-      "phát hiện ngập nước",
-      "nhiệt độ nguy hiểm",
-      "phát hiện chập điện",
-      "phát hiện quá dòng",
-      "phát hiện quá áp",
-      "thiết bị điện quá nhiệt",
-    ]);
-
-    final hasOpenIssue = containsAny("$rawDangerText\n$rawWarningText", const [
-      "đang mở",
-      "khóa đang mở",
-    ]);
-
-    final hasArmedOpenIssue = containsAny(rawDangerText, const [
-      "đang mở khi nhà ở chế độ bảo vệ",
-      "khóa đang mở khi nhà ở chế độ bảo vệ",
-      "đang mở trong giờ báo động",
-      "khóa đang mở trong giờ báo động",
-    ]);
-
-    final hasUnknownMemberLocation = containsAny(rawWarningText, const [
-      "chưa xác định vị trí",
-    ]);
-
-    final hasDisconnectedDevice = containsAny(rawWarningText, const [
-      "mất kết nối",
-    ]);
-
-    final hasLowBatteryDevice = containsAny(rawWarningText, const ["pin yếu"]);
-
-    final noMemberInside = RegExp(
-      r"thành viên(?: đang ở)? trong nhà:\s*0/",
-    ).hasMatch(allRawText);
-
-    final hasMemberInside = RegExp(
-      r"thành viên(?: đang ở)? trong nhà:\s*[1-9][0-9]*/",
-    ).hasMatch(allRawText);
-
-    final isArmed = normalizeSecurityMode(liveHome["securityMode"]) == "armed";
 
     final devices = safeMap(liveHome["devices"]);
-    final schedules = safeMap(liveHome["schedules"]);
-    final homeAlarm = safeMap(liveHome["alarm"]);
+    var hasOpenDevice = false;
+    var hasDisconnectedDevice = false;
+    var hasLowBatteryDevice = false;
 
-    final hasReminderSchedule = hasEnabledScheduleValue(
-      schedules["notifications"],
-    );
+    for (final rawDevice in devices.values) {
+      final device = safeMap(rawDevice);
 
-    final hasAlarmSchedule =
-        homeAlarm["enabled"] == true ||
-        hasEnabledScheduleValue(schedules["alarms"]) ||
-        hasEnabledDeviceAlarm(devices);
+      if (device.isEmpty) {
+        continue;
+      }
 
-    if (hasEmergencyIssue) {
-      addSuggestion(strings.statusEmergencyActionSuggestion());
+      final evaluation = evaluateDeviceStatus(
+        device,
+        securityMode: securityMode,
+      );
+      final deviceWarnings = List<String>.from(
+        evaluation["warningIssues"] ?? const <String>[],
+      );
+
+      hasOpenDevice = hasOpenDevice || evaluation["isOpen"] == true;
+      hasDisconnectedDevice =
+          hasDisconnectedDevice || deviceWarnings.contains("Mất kết nối");
+      hasLowBatteryDevice =
+          hasLowBatteryDevice || deviceWarnings.contains("Pin yếu");
     }
 
-    if (hasOpenIssue && noMemberInside) {
-      addSuggestion(strings.statusOpenHomeEmptySuggestion());
+    final hubNeedsAttention =
+        overall["hubTracked"] == true &&
+        overall["hubChecking"] != true &&
+        overall["hubOnline"] != true;
+
+    // Khi có tình huống khẩn cấp, chỉ giữ một hành động ưu tiên cao nhất
+    // để tránh các gợi ý cấu hình hoặc bảo trì làm loãng thông tin.
+    if (rawEmergencyIssues.isNotEmpty) {
+      return [strings.statusEmergencyActionSuggestion()];
     }
 
-    if (hasArmedOpenIssue) {
-      addSuggestion(strings.statusArmedOpenSuggestion());
+    if (hasOpenDevice) {
+      if (noMemberInside) {
+        addSuggestion(strings.statusOpenHomeEmptySuggestion());
+      } else if (isManualArmed) {
+        // Chỉ dùng câu "trước khi giữ nhà ở chế độ Bảo vệ" khi người dùng
+        // hoặc thành viên đã chủ động bật Bảo vệ.
+        addSuggestion(strings.statusArmedOpenSuggestion());
+      } else {
+        // Auto Away và lịch tự động đã bật Bảo vệ rồi, nên không dùng câu
+        // mang nghĩa người dùng còn đang chuẩn bị bật chế độ.
+        addSuggestion(strings.t("Kiểm tra thiết bị trong nhà này"));
+      }
     }
 
-    if (isArmed && hasMemberInside) {
+    // Có người ở nhà chỉ là lý do cân nhắc tắt Bảo vệ khi chế độ được bật
+    // thủ công. Với Auto Away, hệ thống chỉ dựa vào nhóm thành viên đã chọn.
+    if (isManualArmed && hasMemberInside) {
       addSuggestion(strings.statusMemberInsideWhileArmedSuggestion());
     }
 
-    if (hasUnknownMemberLocation) {
+    // Chỉ nhắc xử lý vị trí khi người chưa xác định thuộc chính nhóm dùng
+    // để quyết định Auto Away. Thành viên không tham gia không được tạo ra
+    // một gợi ý xử lý sai ngữ cảnh.
+    if (autoAwayEnabled && participantUnknownCount > 0) {
       addSuggestion(strings.statusUnknownLocationSuggestion());
+    }
+
+    // Hub/MQTT mất kết nối không được dùng câu hướng dẫn thay pin của cảm biến.
+    if (hubNeedsAttention) {
+      addSuggestion(strings.t("Kiểm tra thiết bị trong nhà này"));
     }
 
     if (hasDisconnectedDevice) {
@@ -392,12 +374,12 @@ class _StatusPanelState extends State<StatusPanel> {
       addSuggestion(strings.statusLowBatterySuggestion());
     }
 
-    if (!hasReminderSchedule) {
-      addSuggestion(strings.statusReminderMissingSuggestion());
-    }
-
-    if (!hasAlarmSchedule) {
-      addSuggestion(strings.statusAlarmMissingSuggestion());
+    // Bổ sung đường lui cho các cảnh báo khác như bị tháo, chuyển động,
+    // nhiệt độ/độ ẩm cao, sóng yếu hoặc mất điện lưới để không báo sai rằng
+    // "không có việc cần xử lý".
+    if (suggestions.isEmpty &&
+        (rawDangerIssues.isNotEmpty || rawWarningIssues.isNotEmpty)) {
+      addSuggestion(strings.t("Kiểm tra thiết bị trong nhà này"));
     }
 
     if (suggestions.isEmpty) {
@@ -916,22 +898,36 @@ class _StatusPanelState extends State<StatusPanel> {
       liveOverall["presencePanelLines"] ?? const [],
     );
 
-    final emergencyIssues = rawEmergencyIssues.map(strings.statusText).toList();
+    final emergencyIssues = _uniqueStatusLines(
+      rawEmergencyIssues.map(strings.statusText),
+    );
 
-    final dangerIssues = rawDangerIssues.map(strings.statusText).toList();
+    final dangerIssues = _uniqueStatusLines(
+      rawDangerIssues.map(strings.statusText),
+    );
 
-    final warningIssues = [
-      ...rawWarningIssues,
-      ...rawPresenceWarnings,
-    ].map(strings.statusText).toList();
+    final warningIssues = _uniqueStatusLines(
+      [...rawWarningIssues, ...rawPresenceWarnings].map(strings.statusText),
+    );
 
     final rawSafeSummary = List<String>.from(
       liveOverall["safeSummary"] ?? const [],
     );
-    final safeSummary = rawSafeSummary
-        .where((line) => !_isEnvironmentSummaryLine(line))
-        .map(strings.statusText)
-        .toList();
+    final rawIssueLines = <String>{
+      ...rawEmergencyIssues.map((line) => line.trim()),
+      ...rawDangerIssues.map((line) => line.trim()),
+      ...rawWarningIssues.map((line) => line.trim()),
+      ...rawPresenceWarnings.map((line) => line.trim()),
+    };
+    final safeSummary = _uniqueStatusLines(
+      rawSafeSummary
+          .where(
+            (line) =>
+                !_isEnvironmentSummaryLine(line) &&
+                !rawIssueLines.contains(line.trim()),
+          )
+          .map(strings.statusText),
+    );
 
     final actionSuggestions = _buildActionSuggestions(
       strings: strings,
@@ -939,8 +935,7 @@ class _StatusPanelState extends State<StatusPanel> {
       overall: liveOverall,
       rawEmergencyIssues: rawEmergencyIssues,
       rawDangerIssues: rawDangerIssues,
-      rawWarningIssues: [...rawWarningIssues, ...rawPresenceWarnings],
-      rawSafeSummary: rawSafeSummary,
+      rawWarningIssues: rawWarningIssues,
     );
 
     final normalizedLiveSecurityMode = normalizeSecurityMode(
@@ -958,10 +953,16 @@ class _StatusPanelState extends State<StatusPanel> {
       devices: devices,
       strings: strings,
     );
+    final presenceWarningLines = rawPresenceWarnings
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty)
+        .toSet();
     final overviewItems = _uniqueStatusLines([
       strings.familyModeText(liveSecurityMode),
       if (environmentLine.isNotEmpty) environmentLine,
-      ...rawPresencePanelLines.map(strings.statusText),
+      ...rawPresencePanelLines
+          .where((line) => !presenceWarningLines.contains(line.trim()))
+          .map(strings.statusText),
       ...safeSummary,
     ]);
 
@@ -1003,7 +1004,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ),
         const SizedBox(height: 12),
         _summarySection(
-          title: strings.t("Tổng quan hôm nay"),
+          title: strings.t("Tổng hợp trạng thái"),
           icon: Icons.bar_chart_rounded,
           color: SafeHomeColors.safe,
           items: overviewItems.isEmpty

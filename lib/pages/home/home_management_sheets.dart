@@ -243,13 +243,23 @@ Future<String?> showShareHomeSheet({
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
                 child: Column(
                   children: [
-                    Text(
-                      strings.t("Chia sẻ nhà"),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                      ),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.share_rounded,
+                          color: SafeHomeColors.info,
+                          size: 25,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          strings.t("Chia sẻ nhà"),
+                          style: const TextStyle(
+                            color: SafeHomeColors.textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 14),
                     Text(

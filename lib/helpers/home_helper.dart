@@ -1089,47 +1089,16 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
         : insideCount + outsideCount + unknownCount;
 
     var participantCount = summaryCount("participantCount");
-    var participantInsideCount = summaryCount("participantInsideCount");
-    var participantOutsideCount = summaryCount("participantOutsideCount");
-    var participantUnknownCount = summaryCount("participantUnknownCount");
 
-    // Tương thích trong thời gian backend mới chưa kịp ghi bộ đếm participant*:
-    // tạm suy ra trực tiếp từ memberPresenceStatus đã có sẵn.
-    final hasParticipantBreakdown =
-        presenceSummary.containsKey("participantInsideCount") &&
-        presenceSummary.containsKey("participantOutsideCount") &&
-        presenceSummary.containsKey("participantUnknownCount");
-
-    if (!hasParticipantBreakdown) {
+    // Tương thích trong lúc backend mới chưa kịp ghi participantCount:
+    // tạm suy ra số thành viên được chọn từ memberPresenceStatus.
+    if (participantCount <= 0) {
       final memberPresenceStatus = safeMap(home["memberPresenceStatus"]);
-      var derivedParticipantCount = 0;
-      var derivedInsideCount = 0;
-      var derivedOutsideCount = 0;
 
-      for (final rawStatus in memberPresenceStatus.values) {
+      participantCount = memberPresenceStatus.values.where((rawStatus) {
         final status = safeMap(rawStatus);
-
-        if (status["autoAwayParticipant"] != true) {
-          continue;
-        }
-
-        derivedParticipantCount++;
-
-        final state = status["state"]?.toString().trim() ?? "unknown";
-        if (state == "inside") {
-          derivedInsideCount++;
-        } else if (state == "outside") {
-          derivedOutsideCount++;
-        }
-      }
-
-      if (derivedParticipantCount > 0) {
-        participantCount = derivedParticipantCount;
-        participantInsideCount = derivedInsideCount;
-        participantOutsideCount = derivedOutsideCount;
-        participantUnknownCount =
-            derivedParticipantCount - derivedInsideCount - derivedOutsideCount;
-      }
+        return status["autoAwayParticipant"] == true;
+      }).length;
     }
 
     // UI luôn dùng tổng thành viên thật làm mẫu số.
@@ -1157,32 +1126,15 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
     }
 
     if (participantCount > 0) {
-      final autoAwayPrefix = "Tự động Bảo vệ khi rời nhà";
-      final participantInsideText =
-          "$autoAwayPrefix • Thành viên đang ở trong nhà: "
-          "$participantInsideCount/$participantCount";
-      final participantOutsideText =
-          "$autoAwayPrefix • Thành viên đang ở ngoài: "
-          "$participantOutsideCount/$participantCount";
-      final participantUnknownText =
-          "$autoAwayPrefix • Thành viên chưa xác định vị trí: "
-          "$participantUnknownCount/$participantCount";
+      final participantTotal = totalMemberCount >= participantCount
+          ? totalMemberCount
+          : participantCount;
+      final participantSummaryText =
+          "Số thành viên dùng để xác định mở Tự động bảo vệ: "
+          "$participantCount/$participantTotal";
 
-      presencePanelLines.addAll([
-        participantInsideText,
-        participantOutsideText,
-        participantUnknownText,
-      ]);
-
-      safeSummary.add(participantInsideText);
-
-      if (participantOutsideCount > 0) {
-        safeSummary.add(participantOutsideText);
-      }
-
-      if (participantUnknownCount > 0) {
-        presenceWarnings.add(participantUnknownText);
-      }
+      presencePanelLines.add(participantSummaryText);
+      safeSummary.add(participantSummaryText);
     }
   }
 

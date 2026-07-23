@@ -20,12 +20,21 @@ class HomeAlarmFormatters {
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
+
+      if (!isSecurityDeviceType(device["type"])) {
+        continue;
+      }
+
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
       final customDevice = safeMap(customDevices[realDeviceId]);
       final policy = DeviceAlarmPolicySettings.fromDevice(
         device: device,
         deviceType: device["type"]?.toString() ?? "door",
       );
+
+      if (!policy.enabled) {
+        continue;
+      }
       final commonSchedules = normalizeDeviceAlarmSchedules(
         rawSchedules: device["alarmSchedules"],
         legacyAlarm: device["alarm"],
@@ -85,7 +94,7 @@ class HomeAlarmFormatters {
     final legacyAlarmMode =
         (selectedRules["alarmMode"] ?? selectedRules["mode"] ?? "home")
             .toString();
-    final intervals = <Map<String, int>>[];
+    final intervalsByKey = <String, Map<String, int>>{};
 
     void addAlarm(Map<String, dynamic> alarm) {
       if (alarm["enabled"] != true) {
@@ -97,18 +106,33 @@ class HomeAlarmFormatters {
       if (startMinutes == null || endMinutes == null) {
         return;
       }
-      intervals.add({"start": startMinutes, "end": endMinutes});
+
+      final intervalKey =
+          "$startMinutes:$endMinutes:${_alarmScheduleDaysKey(alarm["days"])}";
+      intervalsByKey.putIfAbsent(
+        intervalKey,
+        () => {"start": startMinutes, "end": endMinutes},
+      );
     }
 
     for (final entry in devices.entries) {
       final deviceId = entry.key.toString();
       final device = safeMap(entry.value);
+
+      if (!isSecurityDeviceType(device["type"])) {
+        continue;
+      }
+
       final realDeviceId = device["_deviceId"]?.toString() ?? deviceId;
       final customDevice = safeMap(customDevices[realDeviceId]);
       final policy = DeviceAlarmPolicySettings.fromDevice(
         device: device,
         deviceType: device["type"]?.toString() ?? "door",
       );
+
+      if (!policy.enabled) {
+        continue;
+      }
       final commonSchedules = normalizeDeviceAlarmSchedules(
         rawSchedules: device["alarmSchedules"],
         legacyAlarm: device["alarm"],
@@ -128,85 +152,41 @@ class HomeAlarmFormatters {
       }
     }
 
+    final intervals = intervalsByKey.values.toList(growable: false)
+      ..sort((first, second) {
+        final startCompare = (first["start"] ?? 0).compareTo(
+          second["start"] ?? 0,
+        );
+
+        if (startCompare != 0) {
+          return startCompare;
+        }
+
+        return (first["end"] ?? 0).compareTo(second["end"] ?? 0);
+      });
+
     if (intervals.isEmpty) {
       return "Tắt";
     }
 
-    if (intervals.length == 1) {
-      final firstInterval = intervals.first;
-      final start = firstInterval["start"];
-      final end = firstInterval["end"];
+    final firstInterval = intervals.first;
+    final start = firstInterval["start"];
+    final end = firstInterval["end"];
 
-      if (start == null || end == null) {
-        return "Tắt";
-      }
-
-      return "${_formatClockMinutes(start)} → ${_formatClockMinutes(end)}";
-    }
-
-    // Tìm một khoảng liên tục ngắn nhất nhưng bao phủ toàn bộ
-    // các lịch Alarm, kể cả lịch đi qua 00:00.
-    int? bestStart;
-    int? bestEnd;
-    var bestSpan = 1 << 30;
-
-    final candidateCuts = <int>{
-      for (final interval in intervals)
-        if (interval["start"] != null) interval["start"] as int,
-      for (final interval in intervals)
-        if (interval["end"] != null) interval["end"] as int,
-    };
-
-    for (final cut in candidateCuts) {
-      var minStart = 1 << 30;
-      var maxEnd = -(1 << 30);
-
-      for (final interval in intervals) {
-        final startMinutes = interval["start"];
-        final endMinutes = interval["end"];
-
-        if (startMinutes == null || endMinutes == null) {
-          continue;
-        }
-
-        var duration = (endMinutes - startMinutes + 1440) % 1440;
-
-        // Cùng giờ bắt đầu/kết thúc được hiểu là cả ngày.
-        if (duration == 0) {
-          duration = 1440;
-        }
-
-        final mappedStart = (startMinutes - cut + 1440) % 1440;
-        final mappedEnd = mappedStart + duration;
-
-        if (mappedStart < minStart) {
-          minStart = mappedStart;
-        }
-
-        if (mappedEnd > maxEnd) {
-          maxEnd = mappedEnd;
-        }
-      }
-
-      final span = maxEnd - minStart;
-
-      if (span < bestSpan) {
-        bestSpan = span;
-        bestStart = cut + minStart;
-        bestEnd = cut + maxEnd;
-      }
-    }
-
-    if (bestStart == null || bestEnd == null) {
+    if (start == null || end == null) {
       return "Tắt";
     }
 
-    if (bestSpan >= 1440) {
-      return "Cả ngày";
+    final firstText =
+        "${_formatClockMinutes(start)} → ${_formatClockMinutes(end)}";
+
+    if (intervals.length == 1) {
+      return firstText;
     }
 
-    return "${_formatClockMinutes(bestStart)} → "
-        "${_formatClockMinutes(bestEnd)}";
+    // Status Panel chỉ có một dòng ngắn. Không gộp nhiều lịch thành một
+    // khoảng giả vì người dùng sẽ không biết lịch mới đã được thêm.
+    return "$firstText (+${intervals.length - 1})";
   }
 }
 
@@ -226,6 +206,36 @@ bool _hasEnabledScheduleValue(dynamic raw) {
   }
 
   return false;
+}
+
+
+String _alarmScheduleDaysKey(dynamic rawDays) {
+  final days = <int>[];
+
+  void addDay(dynamic rawDay) {
+    final day = int.tryParse(rawDay?.toString() ?? "");
+
+    if (day != null && day >= 1 && day <= 7 && !days.contains(day)) {
+      days.add(day);
+    }
+  }
+
+  if (rawDays is Iterable) {
+    for (final rawDay in rawDays) {
+      addDay(rawDay);
+    }
+  } else if (rawDays is Map) {
+    for (final rawDay in rawDays.values) {
+      addDay(rawDay);
+    }
+  }
+
+  if (days.isEmpty) {
+    return "1,2,3,4,5,6,7";
+  }
+
+  days.sort();
+  return days.join(",");
 }
 
 String _formatTimeOfDay(TimeOfDay time) {

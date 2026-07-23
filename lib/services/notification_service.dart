@@ -426,14 +426,35 @@ class NotificationService {
         }
 
         final freshData = Map<String, dynamic>.from(data);
-        final freshItems = _alarmItemsFromValue(incident['items']);
+        final incomingItems = _alarmItemsFromData(data);
+        final freshIncidentItems = _alarmItemsFromValue(incident['items']);
 
-        for (final item in freshItems) {
+        for (final item in freshIncidentItems) {
           item['incidentId'] = incidentId;
           item['homeId'] ??= incident['homeId']?.toString() ?? '';
           item['homeName'] ??= incident['homeName']?.toString() ?? '';
           item['ownerUid'] ??= incident['ownerUid']?.toString() ?? '';
         }
+
+        // Fullscreen phải hiển thị toàn bộ điều kiện đang còn active. Riêng
+        // notification gửi lại theo chu kỳ chỉ được giữ giao của payload lần
+        // này với snapshot incident mới nhất. Nhờ vậy một lỗi đã được xử lý
+        // không bị ghép trở lại chỉ vì incident của Home vẫn còn lỗi khác.
+        final freshItems = requestsFullscreen
+            ? freshIncidentItems
+            : _freshAlarmItemsForDelivery(
+                incomingItems: incomingItems,
+                freshIncidentItems: freshIncidentItems,
+              );
+
+        if (!requestsFullscreen &&
+            incomingItems.isNotEmpty &&
+            freshItems.isEmpty) {
+          return null;
+        }
+
+        freshData.remove('alarmItems');
+        freshData.remove('alarmItemsJson');
 
         if (freshItems.isNotEmpty) {
           freshData['alarmItems'] = jsonEncode(freshItems);
@@ -567,6 +588,42 @@ class NotificationService {
         'nextAlarm': data['nextAlarm']?.toString().trim() ?? '',
       },
     ];
+  }
+
+  static String _alarmConditionKey(Map<String, dynamic> item) {
+    final homeId = item['homeId']?.toString().trim() ?? '';
+    final deviceId = item['deviceId']?.toString().trim() ?? '';
+    final deviceName =
+        item['deviceName']?.toString().trim().isNotEmpty == true
+        ? item['deviceName'].toString().trim()
+        : item['name']?.toString().trim() ?? '';
+    final type = item['type']?.toString().trim() ?? '';
+    final reason = item['reason']?.toString().trim() ?? '';
+
+    return [
+      homeId,
+      deviceId.isNotEmpty ? deviceId : deviceName,
+      type,
+      reason,
+    ].join('|');
+  }
+
+  static List<Map<String, dynamic>> _freshAlarmItemsForDelivery({
+    required List<Map<String, dynamic>> incomingItems,
+    required List<Map<String, dynamic>> freshIncidentItems,
+  }) {
+    if (incomingItems.isEmpty) {
+      return freshIncidentItems;
+    }
+
+    final requestedKeys = incomingItems
+        .map(_alarmConditionKey)
+        .where((key) => key.isNotEmpty)
+        .toSet();
+
+    return freshIncidentItems
+        .where((item) => requestedKeys.contains(_alarmConditionKey(item)))
+        .toList();
   }
 
   static String _alarmItemsJsonFromData(Map<String, dynamic> data) {
@@ -1634,6 +1691,7 @@ class NotificationService {
 
   static Future<void> stopReminderNotification() async {
     await localNotif.cancel(999998);
+    _resetReminderSession();
   }
 
   static String lastScheduleBody = _strings.safetyReminderBody(isSafe: true);
@@ -1646,11 +1704,21 @@ class NotificationService {
   static const String reminderRouteName = "fullscreen_reminder";
 
   static bool _reminderPageOpen = false;
+  static const Duration _reminderMergeWindow = Duration(seconds: 12);
+  static int _lastReminderMergeAt = 0;
 
   static final ValueNotifier<int> reminderRevision = ValueNotifier<int>(0);
 
   static void markReminderPageClosed() {
     _reminderPageOpen = false;
+  }
+
+  static void _resetReminderSession() {
+    lastReminderItemsJson = '';
+    lastScheduleTitle = _strings.defaultHomeName();
+    lastScheduleBody = _strings.safetyReminderBody(isSafe: true);
+    _lastReminderMergeAt = 0;
+    reminderRevision.value++;
   }
 
   static List<Map<String, dynamic>> _decodeReminderItems(String raw) {
@@ -1679,22 +1747,29 @@ class NotificationService {
     required String reminderItemsJson,
   }) {
     final strings = _strings;
-    final existingItems = _decodeReminderItems(lastReminderItemsJson);
-
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final keepPreviousBatch =
+        _lastReminderMergeAt > 0 &&
+        now - _lastReminderMergeAt <= _reminderMergeWindow.inMilliseconds;
+    final existingItems = keepPreviousBatch
+        ? _decodeReminderItems(lastReminderItemsJson)
+        : <Map<String, dynamic>>[];
     final incomingItems = _decodeReminderItems(reminderItemsJson);
+
+    _lastReminderMergeAt = now;
 
     if (incomingItems.isEmpty) {
       final cleanBody = strings.stripSafetyStatusText(body);
       final translatedCleanBody = cleanBody.isEmpty
-          ? ""
+          ? ''
           : strings.statusText(cleanBody);
 
       incomingItems.add({
-        "homeId": "",
-        "homeName": title.trim().isEmpty
+        'homeId': '',
+        'homeName': title.trim().isEmpty
             ? strings.defaultHomeName()
             : title.trim(),
-        "reasons": isSafe
+        'reasons': isSafe
             ? <String>[]
             : <String>[
                 translatedCleanBody.isEmpty
@@ -1704,24 +1779,18 @@ class NotificationService {
       });
     }
 
-    final merged = <String, Map<String, dynamic>>{};
-
-    for (final item in [...existingItems, ...incomingItems]) {
-      final homeId = item["homeId"]?.toString().trim() ?? "";
-
-      final homeName = item["homeName"]?.toString().trim().isNotEmpty == true
-          ? item["homeName"].toString().trim()
+    Map<String, dynamic> normalizeItem(Map<String, dynamic> item) {
+      final homeId = item['homeId']?.toString().trim() ?? '';
+      final homeName = item['homeName']?.toString().trim().isNotEmpty == true
+          ? item['homeName'].toString().trim()
           : strings.defaultHomeName();
-
-      final key = homeId.isNotEmpty ? homeId : homeName.toLowerCase();
-
       final reasons = <String>[];
-      final rawReasons = item["reasons"];
+      final rawReasons = item['reasons'];
 
       if (rawReasons is List) {
         for (final reason in rawReasons) {
-          final text = reason?.toString().trim() ?? "";
-          final translatedText = text.isEmpty ? "" : strings.statusText(text);
+          final text = reason?.toString().trim() ?? '';
+          final translatedText = text.isEmpty ? '' : strings.statusText(text);
 
           if (translatedText.isNotEmpty && !reasons.contains(translatedText)) {
             reasons.add(translatedText);
@@ -1729,34 +1798,46 @@ class NotificationService {
         }
       }
 
-      final current = merged.putIfAbsent(
-        key,
-        () => {"homeId": homeId, "homeName": homeName, "reasons": <String>[]},
-      );
+      return {
+        'homeId': homeId,
+        'homeName': homeName,
+        'reasons': reasons,
+      };
+    }
 
-      final currentReasons = List<String>.from(current["reasons"] as List);
+    String itemKey(Map<String, dynamic> item) {
+      final homeId = item['homeId']?.toString().trim() ?? '';
+      final homeName =
+          item['homeName']?.toString().trim().toLowerCase() ?? '';
 
-      for (final reason in reasons) {
-        if (!currentReasons.contains(reason)) {
-          currentReasons.add(reason);
-        }
-      }
+      return homeId.isNotEmpty ? homeId : homeName;
+    }
 
-      current["reasons"] = currentReasons;
+    final merged = <String, Map<String, dynamic>>{};
+
+    for (final item in existingItems) {
+      final normalized = normalizeItem(item);
+      merged[itemKey(normalized)] = normalized;
+    }
+
+    // Payload mới thay thế trạng thái cũ của cùng một nhà. Nhờ vậy một nhà
+    // vừa trở lại an toàn sẽ không còn giữ lý do "chưa an toàn" từ Reminder
+    // trước. Các nhà khác chỉ được gộp trong cửa sổ 12 giây của cùng một lượt.
+    for (final item in incomingItems) {
+      final normalized = normalizeItem(item);
+      merged[itemKey(normalized)] = normalized;
     }
 
     final mergedItems = merged.values.toList();
-
     final hasUnsafe = mergedItems.any((item) {
-      final reasons = item["reasons"];
+      final reasons = item['reasons'];
 
       return reasons is List && reasons.isNotEmpty;
     });
 
     lastReminderItemsJson = jsonEncode(mergedItems);
-
     lastScheduleTitle = mergedItems.length == 1
-        ? mergedItems.first["homeName"]?.toString() ?? strings.defaultHomeName()
+        ? mergedItems.first['homeName']?.toString() ?? strings.defaultHomeName()
         : strings.scheduledReminder;
 
     if (!hasUnsafe) {
@@ -1767,18 +1848,48 @@ class NotificationService {
     final issueLines = <String>[];
 
     for (final item in mergedItems) {
-      final reasons = item["reasons"];
+      final reasons = item['reasons'];
 
       if (reasons is! List || reasons.isEmpty) continue;
 
       final homeName =
-          item["homeName"]?.toString() ?? strings.defaultHomeName();
+          item['homeName']?.toString() ?? strings.defaultHomeName();
 
-      issueLines.add("$homeName: ${reasons.join(", ")}");
+      issueLines.add('$homeName: ${reasons.join(', ')}');
     }
 
     lastScheduleBody =
-        "⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join("\n")}";
+        '⚠️ ${strings.unsafeStatusTitle()}\n${issueLines.join('\n')}';
+  }
+
+  static bool _currentReminderIsSafe() {
+    final items = _decodeReminderItems(lastReminderItemsJson);
+
+    return !items.any((item) {
+      final reasons = item['reasons'];
+
+      return reasons is List && reasons.isNotEmpty;
+    });
+  }
+
+  static String _currentReminderReason() {
+    final strings = _strings;
+    final lines = <String>[];
+
+    for (final item in _decodeReminderItems(lastReminderItemsJson)) {
+      final reasons = item['reasons'];
+
+      if (reasons is! List || reasons.isEmpty) continue;
+
+      final homeName =
+          item['homeName']?.toString().trim().isNotEmpty == true
+          ? item['homeName'].toString().trim()
+          : strings.defaultHomeName();
+
+      lines.add('$homeName: ${reasons.join(', ')}');
+    }
+
+    return lines.join('\n');
   }
 
   static void openOrMergeReminderPage({
@@ -2226,16 +2337,22 @@ class NotificationService {
       reminderItemsJson: reminderItemsJson,
     );
 
+    final effectiveIsSafe = _currentReminderIsSafe();
+    final effectiveReason = effectiveIsSafe
+        ? ''
+        : _currentReminderReason();
     final notificationTitle = strings.safetyReminderNotificationTitle(
       homeTitle: lastScheduleTitle.trim().isEmpty
           ? "SafeHome"
           : lastScheduleTitle,
-      isSafe: isSafe,
+      isSafe: effectiveIsSafe,
     );
 
-    final notificationBody = isSafe
+    final notificationBody = effectiveIsSafe
         ? strings.safeReminderBody()
-        : strings.unsafeReminderBody(cleanReason);
+        : strings.unsafeReminderBody(
+            effectiveReason.isEmpty ? cleanReason : effectiveReason,
+          );
 
     final androidDetails = AndroidNotificationConfig.reminderDetails(
       title: notificationTitle,
