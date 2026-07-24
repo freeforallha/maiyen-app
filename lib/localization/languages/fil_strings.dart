@@ -18,7 +18,7 @@ const Map<String, String> filStrings = {
   "Nguy hiểm khẩn cấp": "Mga agarang panganib",
   "Điều khiển & hạ tầng": "Kontrol at imprastraktura",
   "Môi trường": "Kapaligiran",
-  "Toàn bộ thiết bị SafeHome": "Lahat ng aparato ng SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Lahat ng aparato ng MaiYen",
   "Cửa ra/vào": "Pinto sa pasukan",
   "Cửa": "Pinto",
   "Cửa sổ": "Bintana",
@@ -635,8 +635,8 @@ const Map<String, String> filStrings = {
       "Wala pang natukoy na problema ang sensor ng usok.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Manu-manong in-on mo o ng isang miyembro ang Mode ng Proteksyon.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "Awtomatikong in-on ng SafeHome ang Mode ng Proteksyon dahil umalis ka sa bahay.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "Awtomatikong in-on ng MaiYen ang Mode ng Proteksyon dahil umalis ka sa bahay.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Kasalukuyang nasa Normal mode ang bahay na ito.",
   "Bảo vệ thủ công đang bật": "Naka-on ang manu-manong Mode ng Proteksyon",
@@ -646,8 +646,8 @@ const Map<String, String> filStrings = {
       "Binuksan mo kamakailan ang app para tingnan ang status.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Buksan nang regular ang app para tingnan ang mga pahintulot, iskedyul, at hindi pa nababasang alerto.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Pagkatapos ng ilang paggamit, mas mahusay nang masusuri ng SafeHome ang nakasanayan mong pagtingin sa app.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pagkatapos ng ilang paggamit, mas mahusay nang masusuri ng MaiYen ang nakasanayan mong pagtingin sa app.",
   "Tần suất vào ứng dụng ổn": "Maayos ang dalas ng pagtingin sa app",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Matagal mo nang hindi binubuksan ang app para tingnan ang status",
@@ -699,8 +699,8 @@ const Map<String, String> filStrings = {
   "Chạy nền ổn định": "Maayos ang pagpapatakbo sa background",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Maaaring maantala ng ilang Android phone ang mga alerto habang naka-on ang pag-optimize ng baterya.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Mas maliit ang posibilidad na maantala ng telepono ang mga alerto ng SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Mas maliit ang posibilidad na maantala ng telepono ang mga alerto ng MaiYen.",
   "Chưa tắt tối ưu pin": "Naka-enable pa rin ang pag-optimize ng baterya",
   "Tối ưu pin không chặn ứng dụng":
       "Hindi hinaharangan ng pag-optimize ng baterya ang app",
@@ -723,8 +723,8 @@ const Map<String, String> filStrings = {
   "Cảnh báo toàn màn hình": "Mga full-screen na alerto",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Maaaring hindi lumabas ang mga alerto kung naka-disable ang mga notipikasyon.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Makakatanggap ang teleponong ito ng mga notipikasyon ng SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Makakatanggap ang teleponong ito ng mga notipikasyon ng MaiYen.",
   "Chưa bật thông báo": "Hindi naka-enable ang mga notipikasyon",
   "Đã bật thông báo": "Naka-enable ang mga notipikasyon",
   "Hệ thống: Sẵn sàng": "System: Handa",
@@ -734,7 +734,7 @@ const Map<String, String> filStrings = {
   "Thiết bị của bạn": "Ang iyong aparato",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Sinusuri ang iyong telepono at kung paano mo ginagamit ang app.",
-  "Hệ thống SafeHome": "System ng SafeHome",
+  "Hệ thống MaiYen": "System ng MaiYen",
   "Hệ thống: Đang kiểm tra...": "System: Sinusuri...",
   "Tên": "Pangalan",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -755,10 +755,10 @@ const Map<String, String> filStrings = {
   "Thêm Home": "Magdagdag ng bahay",
   "Mở cài đặt": "Buksan ang mga setting",
   "Để sau": "Mamaya",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "Kailangan ng SafeHome ang pahintulot sa lokasyon na \"Palaging Payagan\" upang matukoy kung umalis ka o bumalik sa bahay, kahit tumatakbo ang app sa background.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Kasalukuyang maa-access lang ng SafeHome ang lokasyon habang ginagamit mo ang app.\n\nBuksan ang setting ng pahintulot sa Lokasyon at piliin ang \"Palaging Payagan\" upang patuloy na gumana sa background ang awtomatikong proteksyon kapag wala sa bahay.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "Kailangan ng MaiYen ang pahintulot sa lokasyon na \"Palaging Payagan\" upang matukoy kung umalis ka o bumalik sa bahay, kahit tumatakbo ang app sa background.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Kasalukuyang maa-access lang ng MaiYen ang lokasyon habang ginagamit mo ang app.\n\nBuksan ang setting ng pahintulot sa Lokasyon at piliin ang \"Palaging Payagan\" upang patuloy na gumana sa background ang awtomatikong proteksyon kapag wala sa bahay.",
   "Cho phép vị trí luôn luôn": "Palaging payagan ang access sa lokasyon",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Tatanggalin ang mga bahay mo.\nAalis ka sa mga ibinahaging bahay.",
@@ -787,7 +787,7 @@ const Map<String, String> filStrings = {
   "Từ chối": "Tanggihan",
   "Lời mời từ chủ nhà": "Imbitasyon mula sa may-ari",
   "Nhận quyền chủ nhà": "Tanggapin ang pagmamay-ari ng bahay",
-  "Một người dùng SafeHome": "Isang user ng SafeHome",
+  "Một người dùng MaiYen": "Isang user ng MaiYen",
   "Lời mời gia nhập": "Imbitasyon na sumali",
   "Lời xin vào nhà": "Kahilingan na sumali sa bahay",
   "Nhập HUB ID": "Ilagay ang HUB ID",
@@ -805,7 +805,7 @@ const Map<String, String> filStrings = {
   "CẦN KIỂM TRA": "KAILANGANG SURIIN",
   "KIỂM TRA NHÀ": "SURIIN ANG BAHAY",
   "ĐÓNG NHẮC NHỞ": "ISARA ANG paalala",
-  "SafeHome Security Alert": "Alerto sa Seguridad ng SafeHome",
+  "MaiYen Security Alert": "Alerto sa Seguridad ng MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Piliin ang pahintulot sa lokasyon na Palaging Payagan sa mga setting ng app",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -851,7 +851,7 @@ const Map<String, String> filStrings = {
   "Phòng": "Kuwarto",
   "Quản trị viên": "Tagapangasiwa",
   "Nhắc nhở": "Paalala",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Mahina ang signal",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Account at system",
@@ -902,7 +902,7 @@ const Map<String, String> filStrings = {
   "Còn \$count tin nhắn chưa đọc": "May \$count hindi pa nababasang mensahe",
   "Hãy an tâm nghỉ ngơi.": "Makapagpahinga ka nang panatag.",
   "Có thiết bị chưa an toàn.": "May mga aparatong hindi ligtas.",
-  "SafeHome đang cập nhật vị trí": "Ina-update ng SafeHome ang lokasyon",
+  "MaiYen đang cập nhật vị trí": "Ina-update ng MaiYen ang lokasyon",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Sinusubaybayan upang awtomatikong i-on ang Mode ng Proteksyon.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -913,13 +913,13 @@ const Map<String, String> filStrings = {
   "CẢNH BÁO RÒ KHÍ": "ALERTO SA TAGAS NG GAS",
   "CẢNH BÁO CỬA": "ALERTO SA PINTO",
   "CẢNH BÁO AN NINH": "ALERTO SA SEGURIDAD",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Hindi makumpirma ng SafeHome. Suriin ang koneksyon at subukang muli.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Hindi makumpirma ng MaiYen. Suriin ang koneksyon at subukang muli.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "I-off lamang ang alerto pagkatapos suriin ang kalagayan ng bahay.\n\nSigurado ka bang gusto mong i-off ang alerto?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 May natukoy na alerto ang SafeHome",
-  "Mở SafeHome để kiểm tra ngay.":
-      "Buksan ang SafeHome upang suriin ito ngayon.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 May natukoy na alerto ang MaiYen",
+  "Mở MaiYen để kiểm tra ngay.":
+      "Buksan ang MaiYen upang suriin ito ngayon.",
   "\$count tin nhắn mới": "\$count bagong mensahe",
   "Tin nhắn HomeChat": "Mensahe sa HomeChat",
   "\$senderName đã gửi một tin nhắn": "Nagpadala ng mensahe si \$senderName",
@@ -939,8 +939,8 @@ const Map<String, String> filStrings = {
       "Gustong ilipat ni \$actorName sa iyo ang pagmamay-ari ng bahay na \"\$homeName\".",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "Inimbitahan ka ni \$actorName na sumali sa bahay na \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "Tinatanggal ng SafeHome ang \"\$deviceName\" mula sa bahay na \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "Tinatanggal ng MaiYen ang \"\$deviceName\" mula sa bahay na \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Naidagdag ang aparatong \"\$deviceName\" sa bahay na \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Nagawa mo na ang bahay na \"\$name\".",
@@ -996,8 +996,8 @@ const Map<String, String> filStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "May bukas na pinto o may aparatong pinakialaman",
   "Có thiết bị đang cảnh báo": "May aparatong nag-aalerto",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Kung walang magkumpirma, magsasagawa ang SafeHome ng emergency call.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Kung walang magkumpirma, magsasagawa ang MaiYen ng emergency call.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Mag-aalerto muli sa \$time kung hindi pa nalulutas ang problema.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1044,8 +1044,8 @@ const Map<String, String> filStrings = {
       "Iniimbitahan kang sumali sa \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Kailangang bigyang-pansin: \$joined",
   "Cập nhật \$value": "In-update ang \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Idagdag ang una mong aparatong SafeHome upang simulang subaybayan ang bahay na ito.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Idagdag ang una mong aparatong MaiYen upang simulang subaybayan ang bahay na ito.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Suriin muna ang mga alertong pang-emergency, pagkatapos ay kontakin ang mga miyembro ng bahay kung kailangan.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1103,7 +1103,7 @@ const Map<String, String> filStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Bukas habang nasa Mode ng Proteksyon ang bahay",
   "An tâm hơn trong từng ngôi nhà": "Panatag sa bawat bahay",
-  "Báo động SafeHome": "alarma ng SafeHome",
+  "Báo động MaiYen": "alarma ng MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "May alerto sa seguridad na kailangang suriin agad.",
   "Có cảnh báo cần kiểm tra": "May alertong kailangang suriin",

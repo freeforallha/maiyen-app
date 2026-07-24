@@ -18,7 +18,7 @@ const Map<String, String> fiStrings = {
   "Nguy hiểm khẩn cấp": "Hätätilanteiden vaarat",
   "Điều khiển & hạ tầng": "Ohjaus ja infrastruktuuri",
   "Môi trường": "Ympäristö",
-  "Toàn bộ thiết bị SafeHome": "Kaikki SafeHome-laitteet",
+  "Toàn bộ thiết bị MaiYen": "Kaikki MaiYen-laitteet",
   "Cửa ra/vào": "Ulko-ovi",
   "Cửa": "Ovi",
   "Cửa sổ": "Ikkuna",
@@ -615,8 +615,8 @@ const Map<String, String> fiStrings = {
       "Savuilmaisin ei ole havainnut ongelmaa.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Sinä tai toinen jäsen otitte Suojaus-tilan käyttöön manuaalisesti.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome otti Suojaus-tilan käyttöön automaattisesti, koska poistuit kotoa.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen otti Suojaus-tilan käyttöön automaattisesti, koska poistuit kotoa.",
   "Nhà đang ở chế độ dùng bình thường.": "Tämä koti on normaalissa käytössä.",
   "Bảo vệ thủ công đang bật": "Manuaalinen Suojaus on käytössä",
   "Bảo vệ tự động đang bật": "Automaattinen Suojaus on käytössä",
@@ -625,8 +625,8 @@ const Map<String, String> fiStrings = {
       "Olet avannut sovelluksen äskettäin tarkistaaksesi tilan.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Avaa sovellus säännöllisesti tarkistaaksesi käyttöoikeudet, aikataulut ja lukemattomat hälytykset.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Muutaman käyttökerran jälkeen SafeHome voi arvioida sovelluksen tarkistustottumuksiasi paremmin.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Muutaman käyttökerran jälkeen MaiYen voi arvioida sovelluksen tarkistustottumuksiasi paremmin.",
   "Tần suất vào ứng dụng ổn": "Sovelluksen tarkistusväli näyttää hyvältä",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Sovelluksen viimeisestä tarkistuksesta on kulunut aikaa",
@@ -674,8 +674,8 @@ const Map<String, String> fiStrings = {
   "Chạy nền ổn định": "Taustatoiminta näyttää vakaalta",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Jotkin Android-puhelimet voivat viivästyttää hälytyksiä, jos akun optimointi on käytössä.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Puhelin viivästyttää SafeHome-hälytyksiä epätodennäköisemmin.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Puhelin viivästyttää MaiYen-hälytyksiä epätodennäköisemmin.",
   "Chưa tắt tối ưu pin": "Akun optimointi on edelleen käytössä",
   "Tối ưu pin không chặn ứng dụng": "Akun optimointi ei estä sovellusta",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -696,8 +696,8 @@ const Map<String, String> fiStrings = {
   "Cảnh báo toàn màn hình": "Koko näytön hälytykset",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Hälytykset eivät ehkä näy, jos ilmoitukset on poistettu käytöstä.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Tämä puhelin voi vastaanottaa SafeHome-ilmoituksia.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Tämä puhelin voi vastaanottaa MaiYen-ilmoituksia.",
   "Chưa bật thông báo": "Ilmoitukset eivät ole käytössä",
   "Đã bật thông báo": "Ilmoitukset ovat käytössä",
   "Hệ thống: Sẵn sàng": "Järjestelmä: Valmis",
@@ -707,7 +707,7 @@ const Map<String, String> fiStrings = {
   "Thiết bị của bạn": "Laitteesi",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Tarkistaa puhelimesi ja sovelluksen käyttötapasi.",
-  "Hệ thống SafeHome": "SafeHome-järjestelmä",
+  "Hệ thống MaiYen": "MaiYen-järjestelmä",
   "Hệ thống: Đang kiểm tra...": "Järjestelmä: Tarkistetaan...",
   "Tên": "Nimi",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -729,10 +729,10 @@ const Map<String, String> fiStrings = {
   "Thêm Home": "Lisää koti",
   "Mở cài đặt": "Avaa asetukset",
   "Để sau": "Myöhemmin",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome tarvitsee sijainnin Aina-käyttöoikeuden tunnistaakseen, kun poistut kotoa tai palaat kotiin, myös sovelluksen toimiessa taustalla.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome voi tällä hetkellä käyttää sijaintia vain sovelluksen ollessa käytössä.\n\nAvaa sijainnin käyttöoikeus ja valitse \"Salli aina\", jotta automaattinen suojaus toimii myös taustalla.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen tarvitsee sijainnin Aina-käyttöoikeuden tunnistaakseen, kun poistut kotoa tai palaat kotiin, myös sovelluksen toimiessa taustalla.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen voi tällä hetkellä käyttää sijaintia vain sovelluksen ollessa käytössä.\n\nAvaa sijainnin käyttöoikeus ja valitse \"Salli aina\", jotta automaattinen suojaus toimii myös taustalla.",
   "Cho phép vị trí luôn luôn": "Salli sijainti aina",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Omat kotisi poistetaan.\nPoistut jaetuista kodeista.",
@@ -761,7 +761,7 @@ const Map<String, String> fiStrings = {
   "Từ chối": "Hylkää",
   "Lời mời từ chủ nhà": "Kutsu omistajalta",
   "Nhận quyền chủ nhà": "Vastaanota kodin omistajuus",
-  "Một người dùng SafeHome": "SafeHome-käyttäjä",
+  "Một người dùng MaiYen": "MaiYen-käyttäjä",
   "Lời mời gia nhập": "Liittymiskutsu",
   "Lời xin vào nhà": "Kotiin liittymispyyntö",
   "Nhập HUB ID": "Anna HUB-tunnus",
@@ -778,7 +778,7 @@ const Map<String, String> fiStrings = {
   "CẦN KIỂM TRA": "TARKISTETTAVA",
   "KIỂM TRA NHÀ": "TARKISTA KOTI",
   "ĐÓNG NHẮC NHỞ": "SULJE MUISTUTUS",
-  "SafeHome Security Alert": "SafeHome-turvahälytys",
+  "MaiYen Security Alert": "MaiYen-turvahälytys",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Valitse sovelluksen asetuksissa sijainnin käyttöoikeudeksi Salli aina",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -821,7 +821,7 @@ const Map<String, String> fiStrings = {
   "Phòng": "Huone",
   "Quản trị viên": "Ylläpitäjä",
   "Nhắc nhở": "Muistutus",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Heikko signaali",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Tili ja järjestelmä",
@@ -870,7 +870,7 @@ const Map<String, String> fiStrings = {
   "Hãy an tâm nghỉ ngơi.": "Voit levätä turvallisin mielin.",
   "Có thiết bị chưa an toàn.":
       "Jotkin laitteet eivät ole turvallisessa tilassa.",
-  "SafeHome đang cập nhật vị trí": "SafeHome päivittää sijaintia",
+  "MaiYen đang cập nhật vị trí": "MaiYen päivittää sijaintia",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Valvoo Suojaus-tilan automaattista käyttöönottoa varten.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -881,12 +881,12 @@ const Map<String, String> fiStrings = {
   "CẢNH BÁO RÒ KHÍ": "KAASUVUOTOHÄLYTYS",
   "CẢNH BÁO CỬA": "OVIHÄLYTYS",
   "CẢNH BÁO AN NINH": "TURVAHÄLYTYS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Vahvistaminen SafeHomen kanssa epäonnistui. Tarkista yhteys ja yritä uudelleen.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Vahvistaminen MaiYenin kanssa epäonnistui. Tarkista yhteys ja yritä uudelleen.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Pysäytä hälytys vasta, kun olet tarkistanut kodin tilanteen.\n\nHaluatko varmasti pysäyttää hälytyksen?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome havaitsi hälytyksen",
-  "Mở SafeHome để kiểm tra ngay.": "Avaa SafeHome ja tarkista tilanne heti.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen havaitsi hälytyksen",
+  "Mở MaiYen để kiểm tra ngay.": "Avaa MaiYen ja tarkista tilanne heti.",
   "\$count tin nhắn mới": "\$count uutta viestiä",
   "Tin nhắn HomeChat": "HomeChat-viesti",
   "\$senderName đã gửi một tin nhắn": "\$senderName lähetti viestin",
@@ -905,8 +905,8 @@ const Map<String, String> fiStrings = {
       "\$actorName haluaa siirtää kodin \"\$homeName\" omistajuuden sinulle.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName kutsui sinut liittymään kotiin \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome poistaa laitteen \"\$deviceName\" kodista \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen poistaa laitteen \"\$deviceName\" kodista \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Laite \"\$deviceName\" lisättiin kotiin \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Loit kodin \"\$name\".",
@@ -962,8 +962,8 @@ const Map<String, String> fiStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Ovi on auki tai laitetta on peukaloitu",
   "Có thiết bị đang cảnh báo": "Laite hälyttää",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Jos kukaan ei vahvista tilannetta, SafeHome aloittaa hätäpuhelun.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jos kukaan ei vahvista tilannetta, MaiYen aloittaa hätäpuhelun.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Hälyttää uudelleen klo \$time, jos ongelmaa ei ole käsitelty.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1008,8 +1008,8 @@ const Map<String, String> fiStrings = {
       "Kutsuu sinut liittymään kotiin \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Vaatii huomiota: \$joined",
   "Cập nhật \$value": "Päivitetty \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Lisää ensimmäinen SafeHome-laitteesi aloittaaksesi tämän kodin valvonnan.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Lisää ensimmäinen MaiYen-laitteesi aloittaaksesi tämän kodin valvonnan.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Tarkista ensin hätähälytykset ja ota sitten tarvittaessa yhteyttä kodin jäseniin.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1065,7 +1065,7 @@ const Map<String, String> fiStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Auki kodin ollessa Suojaus-tilassa",
   "An tâm hơn trong từng ngôi nhà": "Mielenrauhaa jokaiseen kotiin",
-  "Báo động SafeHome": "SafeHome-hälytys",
+  "Báo động MaiYen": "MaiYen-hälytys",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Turvahälytys vaatii välitöntä tarkistamista.",
   "Có cảnh báo cần kiểm tra": "Hälytys vaatii huomiotasi",

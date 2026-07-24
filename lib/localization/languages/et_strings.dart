@@ -18,7 +18,7 @@ const Map<String, String> etStrings = {
   "Nguy hiểm khẩn cấp": "Hädaohud",
   "Điều khiển & hạ tầng": "Juhtimine ja taristu",
   "Môi trường": "Keskkond",
-  "Toàn bộ thiết bị SafeHome": "Kõik SafeHome'i seadmed",
+  "Toàn bộ thiết bị MaiYen": "Kõik MaiYen'i seadmed",
   "Cửa ra/vào": "Välisuks",
   "Cửa": "Uks",
   "Cửa sổ": "Aken",
@@ -613,8 +613,8 @@ const Map<String, String> etStrings = {
       "Suitsuandur pole probleemi tuvastanud.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Sina või mõni liige lülitas valverežiimi käsitsi sisse.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome lülitas valverežiimi automaatselt sisse, sest lahkusid kodust.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen lülitas valverežiimi automaatselt sisse, sest lahkusid kodust.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Seda kodu kasutatakse praegu tavarežiimis.",
   "Bảo vệ thủ công đang bật": "Käsitsi valverežiim on sisse lülitatud",
@@ -624,8 +624,8 @@ const Map<String, String> etStrings = {
       "Oled hiljuti rakenduse avanud, et olekut kontrollida.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Ava rakendus regulaarselt, et vaadata üle õigused, ajakavad ja lugemata hoiatused.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Pärast mõnda kasutuskorda saab SafeHome sinu rakenduse kontrollimise harjumust paremini hinnata.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pärast mõnda kasutuskorda saab MaiYen sinu rakenduse kontrollimise harjumust paremini hinnata.",
   "Tần suất vào ứng dụng ổn": "Rakenduse kontrollimise sagedus on hea",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Viimasest rakenduse kontrollimisest on palju aega möödas",
@@ -674,8 +674,8 @@ const Map<String, String> etStrings = {
   "Chạy nền ổn định": "Taustal töötamine näib stabiilne",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Mõni Androidi telefon võib aku optimeerimise ajal hoiatusi edasi lükata.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telefon lükkab SafeHome'i hoiatusi väiksema tõenäosusega edasi.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telefon lükkab MaiYen'i hoiatusi väiksema tõenäosusega edasi.",
   "Chưa tắt tối ưu pin": "Aku optimeerimine on endiselt sisse lülitatud",
   "Tối ưu pin không chặn ứng dụng": "Aku optimeerimine ei blokeeri rakendust",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -696,8 +696,8 @@ const Map<String, String> etStrings = {
   "Cảnh báo toàn màn hình": "Täisekraanihoiatused",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Kui teavitused on keelatud, ei pruugi hoiatused ilmuda.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "See telefon saab SafeHome'i teavitusi vastu võtta.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "See telefon saab MaiYen'i teavitusi vastu võtta.",
   "Chưa bật thông báo": "Teavitused pole lubatud",
   "Đã bật thông báo": "Teavitused on lubatud",
   "Hệ thống: Sẵn sàng": "Süsteem: valmis",
@@ -706,7 +706,7 @@ const Map<String, String> etStrings = {
   "Thiết bị của bạn": "Sinu seade",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Kontrollib sinu telefoni ja rakenduse kasutust.",
-  "Hệ thống SafeHome": "SafeHome'i süsteem",
+  "Hệ thống MaiYen": "MaiYen'i süsteem",
   "Hệ thống: Đang kiểm tra...": "Süsteem: kontrollimine...",
   "Tên": "Nimi",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -726,10 +726,10 @@ const Map<String, String> etStrings = {
   "Thêm Home": "Lisa kodu",
   "Mở cài đặt": "Ava seaded",
   "Để sau": "Hiljem",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome vajab alati lubatud asukohaõigust, et tuvastada kodust lahkumine või naasmine ka siis, kui rakendus töötab taustal.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Praegu saab SafeHome asukohale ligi ainult rakenduse kasutamise ajal.\n\nAva asukohaõigus ja vali „Luba kogu aeg“, et automaatne kaitse jätkaks taustal töötamist.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen vajab alati lubatud asukohaõigust, et tuvastada kodust lahkumine või naasmine ka siis, kui rakendus töötab taustal.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Praegu saab MaiYen asukohale ligi ainult rakenduse kasutamise ajal.\n\nAva asukohaõigus ja vali „Luba kogu aeg“, et automaatne kaitse jätkaks taustal töötamist.",
   "Cho phép vị trí luôn luôn": "Luba asukoht alati",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Sinu kodud kustutatakse.\nLahkud jagatud kodudest.",
@@ -758,7 +758,7 @@ const Map<String, String> etStrings = {
   "Từ chối": "Keeldu",
   "Lời mời từ chủ nhà": "Kutse omanikult",
   "Nhận quyền chủ nhà": "Võta kodu omandiõigus vastu",
-  "Một người dùng SafeHome": "SafeHome'i kasutaja",
+  "Một người dùng MaiYen": "MaiYen'i kasutaja",
   "Lời mời gia nhập": "Liitumiskutse",
   "Lời xin vào nhà": "Koduga liitumise taotlus",
   "Nhập HUB ID": "Sisesta HUB-i ID",
@@ -775,7 +775,7 @@ const Map<String, String> etStrings = {
   "CẦN KIỂM TRA": "VAJAB KONTROLLIMIST",
   "KIỂM TRA NHÀ": "KONTROLLI KODU",
   "ĐÓNG NHẮC NHỞ": "SULGE MEELDETULETUS",
-  "SafeHome Security Alert": "SafeHome'i turvahoiatus",
+  "MaiYen Security Alert": "MaiYen'i turvahoiatus",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Vali rakenduse seadetes asukohaõigus Luba alati",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -818,7 +818,7 @@ const Map<String, String> etStrings = {
   "Phòng": "Tuba",
   "Quản trị viên": "Administraator",
   "Nhắc nhở": "Meeldetuletus",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Nõrk signaal",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Konto ja süsteem",
@@ -865,7 +865,7 @@ const Map<String, String> etStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count lugemata sõnumit",
   "Hãy an tâm nghỉ ngơi.": "Võid olla rahulik.",
   "Có thiết bị chưa an toàn.": "Mõni seade pole ohutus seisundis.",
-  "SafeHome đang cập nhật vị trí": "SafeHome uuendab asukohta",
+  "MaiYen đang cập nhật vị trí": "MaiYen uuendab asukohta",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Jälgimine valverežiimi automaatseks sisselülitamiseks.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -876,12 +876,12 @@ const Map<String, String> etStrings = {
   "CẢNH BÁO RÒ KHÍ": "GAASILEKKE HÄIRE",
   "CẢNH BÁO CỬA": "UKSEHÄIRE",
   "CẢNH BÁO AN NINH": "TURVAHOIATUS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome'iga ei õnnestunud kinnitada. Kontrolli ühendust ja proovi uuesti.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen'iga ei õnnestunud kinnitada. Kontrolli ühendust ja proovi uuesti.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Peata hoiatus alles pärast kodu olukorra kontrollimist.\n\nKas oled kindel, et soovid hoiatuse peatada?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome tuvastas häire",
-  "Mở SafeHome để kiểm tra ngay.": "Ava SafeHome ja kontrolli kohe.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen tuvastas häire",
+  "Mở MaiYen để kiểm tra ngay.": "Ava MaiYen ja kontrolli kohe.",
   "\$count tin nhắn mới": "\$count uut sõnumit",
   "Tin nhắn HomeChat": "HomeChati sõnum",
   "\$senderName đã gửi một tin nhắn": "\$senderName saatis sõnumi",
@@ -901,8 +901,8 @@ const Map<String, String> etStrings = {
       "\$actorName soovib anda kodu „\$homeName“ omandiõiguse sulle üle.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName kutsus sind liituma koduga „\$homeName“.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome eemaldab seadme „\$deviceName“ kodust „\$homeName“.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen eemaldab seadme „\$deviceName“ kodust „\$homeName“.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Seade „\$deviceName“ lisati koju „\$homeName“.",
   "Bạn đã tạo nhà \"\$name\".": "Lõid kodu „\$name“.",
@@ -957,8 +957,8 @@ const Map<String, String> etStrings = {
   "Có dấu hiệu rò khí": "Tuvastati gaasileke",
   "Có cửa đang mở hoặc thiết bị bị tháo": "Uks on avatud või seadet on rikutud",
   "Có thiết bị đang cảnh báo": "Seade annab häiret",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Kui keegi ei kinnita, algatab SafeHome hädaabikõne.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Kui keegi ei kinnita, algatab MaiYen hädaabikõne.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Kui probleemi pole lahendatud, annab uuesti häiret kell \$time.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1002,8 +1002,8 @@ const Map<String, String> etStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Kutsub sind liituma koduga „\$homeName“",
   "Cần kiểm tra: \$joined": "Vajab tähelepanu: \$joined",
   "Cập nhật \$value": "Uuendatud \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Lisa oma esimene SafeHome'i seade, et alustada selle kodu jälgimist.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Lisa oma esimene MaiYen'i seade, et alustada selle kodu jälgimist.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Kontrolli esmalt hädaolukorra hoiatusi ja võta vajaduse korral ühendust pereliikmetega.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1059,7 +1059,7 @@ const Map<String, String> etStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: avatud, kui kodu on valverežiimis",
   "An tâm hơn trong từng ngôi nhà": "Meelerahu igas kodus",
-  "Báo động SafeHome": "SafeHome'i alarm",
+  "Báo động MaiYen": "MaiYen'i alarm",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Turvahoiatus vajab sinu tähelepanu.",
   "Có cảnh báo cần kiểm tra": "Hoiatus vajab sinu tähelepanu",

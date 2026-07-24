@@ -24,20 +24,20 @@ const Map<String, String> kaDynamicStrings = {
       "\$name და კიდევ \$otherCount ადამიანი წერენ...",
   "Kênh báo động cũ để giữ tương thích":
       "ძველი განგაშის არხი შენარჩუნებულია თავსებადობისთვის",
-  "SafeHome báo động toàn màn hình": "SafeHome-ის სრულეკრანიანი განგაში",
+  "MaiYen báo động toàn màn hình": "MaiYen-ის სრულეკრანიანი განგაში",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "სრულეკრანიანი გაფრთხილების გახსნა; სირენის ხმა განგაშის გვერდიდან ირთვება",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-ის საგანგებო გაფრთხილება",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-ის საგანგებო გაფრთხილება",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "მაღალი პრიორიტეტის საგანგებო გაფრთხილება სრულ ეკრანზე გახსნამდე",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-ის სრულეკრანიანი შეხსენება",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "SafeHome-ის უხმო სრულეკრანიანი შეხსენება",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-ის მაღალი პრიორიტეტის შეხსენება",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-ის მაღალი პრიორიტეტის შეხსენება სრულეკრანიანი რეჟიმის გარეშე",
-  "Tin nhắn mới trong các nhà SafeHome":
-      "ახალი შეტყობინებები SafeHome-ის სახლებში",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-ის სრულეკრანიანი შეხსენება",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "MaiYen-ის უხმო სრულეკრანიანი შეხსენება",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-ის მაღალი პრიორიტეტის შეხსენება",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-ის მაღალი პრიორიტეტის შეხსენება სრულეკრანიანი რეჟიმის გარეშე",
+  "Tin nhắn mới trong các nhà MaiYen":
+      "ახალი შეტყობინებები MaiYen-ის სახლებში",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "ეს მოქმედება დღეს ზოგიერთი მოწყობილობის განგაშის დროს შეცვლის.\n\n„საგანგებო საფრთხის“ კატეგორიის მოწყობილობების განგაშებსა და „დაცვის“ რეჟიმის განგაშებზე ეს ფუნქცია არ იმოქმედებს.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count სახლი საფრთხეშია\$suffix",

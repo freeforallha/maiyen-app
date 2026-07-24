@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../config/brand_config.dart';
 import '../safehome_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -755,7 +756,7 @@ void showSettingsSheet({
 
                 tile(
                   icon: Icons.hub_rounded,
-                  title: "${strings.t('Hub trung tâm')} SafeHome (HUB)",
+                  title: "${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)",
                   subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
                   color: SafeHomeColors.primaryDark,
                   onTap: () {

@@ -25,19 +25,19 @@ const Map<String, String> nbDynamicStrings = {
       "\$name og \$otherCount andre skriver...",
   "Kênh báo động cũ để giữ tương thích":
       "Eldre alarmkanal beholdt for kompatibilitet",
-  "SafeHome báo động toàn màn hình": "SafeHome-alarm i fullskjerm",
+  "MaiYen báo động toàn màn hình": "MaiYen-alarm i fullskjerm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Åpner fullskjermvarselet; sirenelyden spilles fra alarmsiden",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-nødvarsel",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-nødvarsel",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Nødvarsel med høy prioritet før fullskjerm åpnes",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-påminnelse i fullskjerm",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Lydløs SafeHome-påminnelse i fullskjerm",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-påminnelse med høy prioritet",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-påminnelse med høy prioritet uten fullskjerm",
-  "Tin nhắn mới trong các nhà SafeHome": "Nye meldinger i SafeHome-hjem",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-påminnelse i fullskjerm",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Lydløs MaiYen-påminnelse i fullskjerm",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-påminnelse med høy prioritet",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-påminnelse med høy prioritet uten fullskjerm",
+  "Tin nhắn mới trong các nhà MaiYen": "Nye meldinger i MaiYen-hjem",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Denne handlingen endrer alarmtiden for enkelte enheter i dag.\n\nAlarmer fra enheter i kategorien «Akutt fare» og alarmer i modusen «Beskyttelse» påvirkes ikke av denne funksjonen.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count hjem i fare\$suffix",

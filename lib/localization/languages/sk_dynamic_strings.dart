@@ -25,19 +25,19 @@ const Map<String, String> skDynamicStrings = {
       "\$name a ďalších \$otherCount používateľov píše správu…",
   "Kênh báo động cũ để giữ tương thích":
       "Starý kanál alarmu kvôli spätnej kompatibilite",
-  "SafeHome báo động toàn màn hình": "Celoobrazovkový alarm SafeHome",
+  "MaiYen báo động toàn màn hình": "Celoobrazovkový alarm MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Otvorí upozornenie na celú obrazovku; zvuk sirény sa prehráva na stránke alarmu",
-  "SafeHome cảnh báo khẩn cấp": "Núdzové upozornenie SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Núdzové upozornenie MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Núdzové upozornenie s vysokou prioritou pred otvorením na celú obrazovku",
-  "SafeHome nhắc nhở toàn màn hình": "Celoobrazovková pripomienka SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Celoobrazovková pripomienka SafeHome bez zvuku",
-  "SafeHome nhắc nhở ưu tiên cao": "Pripomienka SafeHome s vysokou prioritou",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Pripomienka SafeHome s vysokou prioritou bez otvorenia na celú obrazovku",
-  "Tin nhắn mới trong các nhà SafeHome": "Nové správy v domovoch SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Celoobrazovková pripomienka MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Celoobrazovková pripomienka MaiYen bez zvuku",
+  "MaiYen nhắc nhở ưu tiên cao": "Pripomienka MaiYen s vysokou prioritou",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Pripomienka MaiYen s vysokou prioritou bez otvorenia na celú obrazovku",
+  "Tin nhắn mới trong các nhà MaiYen": "Nové správy v domovoch MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Táto akcia dnes zmení čas alarmu niektorých zariadení.\n\nAlarmy zariadení v kategórii „Núdzové nebezpečenstvo“ a alarmy v režime „Ochrana“ nebudú touto funkciou ovplyvnené.",
   "🆘 \$count nhà nguy hiểm\$suffix":

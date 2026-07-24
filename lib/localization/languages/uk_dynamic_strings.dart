@@ -25,19 +25,19 @@ const Map<String, String> ukDynamicStrings = {
       "\$name та ще \$otherCount користувачів набирають повідомлення…",
   "Kênh báo động cũ để giữ tương thích":
       "Старий канал тривоги для зворотної сумісності",
-  "SafeHome báo động toàn màn hình": "Повноекранна тривога SafeHome",
+  "MaiYen báo động toàn màn hình": "Повноекранна тривога MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Відкриває попередження на весь екран; звук сирени відтворюється зі сторінки тривоги",
-  "SafeHome cảnh báo khẩn cấp": "Екстрене попередження SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Екстрене попередження MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Екстрене попередження високого пріоритету перед відкриттям на весь екран",
-  "SafeHome nhắc nhở toàn màn hình": "Повноекранне нагадування SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Повноекранне нагадування SafeHome без звуку",
-  "SafeHome nhắc nhở ưu tiên cao": "Нагадування SafeHome високого пріоритету",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Нагадування SafeHome високого пріоритету без відкриття на весь екран",
-  "Tin nhắn mới trong các nhà SafeHome": "Нові повідомлення в домах SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Повноекранне нагадування MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Повноекранне нагадування MaiYen без звуку",
+  "MaiYen nhắc nhở ưu tiên cao": "Нагадування MaiYen високого пріоритету",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Нагадування MaiYen високого пріоритету без відкриття на весь екран",
+  "Tin nhắn mới trong các nhà MaiYen": "Нові повідомлення в домах MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ця дія змінить сьогодні час тривоги для деяких пристроїв.\n\nТривоги пристроїв у категорії «Надзвичайна небезпека» та тривоги в режимі «Захист» не зазнають впливу цієї функції.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count небезпечних домів\$suffix",

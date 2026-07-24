@@ -24,19 +24,19 @@ const Map<String, String> beDynamicStrings = {
       "\$name і яшчэ \$otherCount пішуць...",
   "Kênh báo động cũ để giữ tương thích":
       "Стары канал трывогі захаваны для сумяшчальнасці",
-  "SafeHome báo động toàn màn hình": "Поўнаэкранная трывога SafeHome",
+  "MaiYen báo động toàn màn hình": "Поўнаэкранная трывога MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Адкрывае поўнаэкраннае папярэджанне; гук сірэны прайграецца са старонкі трывогі",
-  "SafeHome cảnh báo khẩn cấp": "Надзвычайнае папярэджанне SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Надзвычайнае папярэджанне MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Надзвычайнае папярэджанне высокага прыярытэту перад адкрыццём на ўвесь экран",
-  "SafeHome nhắc nhở toàn màn hình": "Поўнаэкранны напамін SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Бязгучны поўнаэкранны напамін SafeHome",
-  "SafeHome nhắc nhở ưu tiên cao": "Напамін SafeHome высокага прыярытэту",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Напамін SafeHome высокага прыярытэту без поўнаэкраннага рэжыму",
-  "Tin nhắn mới trong các nhà SafeHome": "Новыя паведамленні ў дамах SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Поўнаэкранны напамін MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Бязгучны поўнаэкранны напамін MaiYen",
+  "MaiYen nhắc nhở ưu tiên cao": "Напамін MaiYen высокага прыярытэту",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Напамін MaiYen высокага прыярытэту без поўнаэкраннага рэжыму",
+  "Tin nhắn mới trong các nhà MaiYen": "Новыя паведамленні ў дамах MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Гэта дзеянне зменіць сёння час трывогі для некаторых прылад.\n\nТрывогі прылад з катэгорыі «Надзвычайная небяспека» і трывогі ў рэжыме «Ахова» не будуць закрануты гэтай функцыяй.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count дамоў у небяспецы\$suffix",

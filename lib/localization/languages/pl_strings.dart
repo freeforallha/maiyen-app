@@ -18,7 +18,7 @@ const Map<String, String> plStrings = {
   "Nguy hiểm khẩn cấp": "Zagrożenia i sytuacje awaryjne",
   "Điều khiển & hạ tầng": "Sterowanie i infrastruktura",
   "Môi trường": "Środowisko",
-  "Toàn bộ thiết bị SafeHome": "Wszystkie urządzenia SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Wszystkie urządzenia MaiYen",
   "Cửa ra/vào": "Drzwi wejściowe",
   "Cửa": "Drzwi",
   "Cửa sổ": "Okno",
@@ -623,8 +623,8 @@ const Map<String, String> plStrings = {
       "Czujnik dymu nie wykrył nieprawidłowości.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Ty lub inny członek ręcznie włączyliście tryb ochrony.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome automatycznie włączył tryb ochrony, ponieważ opuściłeś dom.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen automatycznie włączył tryb ochrony, ponieważ opuściłeś dom.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Dom jest obecnie używany w trybie normalnym.",
   "Bảo vệ thủ công đang bật": "Ręczny tryb ochrony jest włączony",
@@ -634,8 +634,8 @@ const Map<String, String> plStrings = {
       "Niedawno otworzyłeś aplikację, aby sprawdzić stan.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Otwieraj aplikację regularnie, aby sprawdzać uprawnienia, harmonogramy i nieprzeczytane alerty.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Po kilku użyciach SafeHome będzie lepiej oceniać Twój zwyczaj sprawdzania aplikacji.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Po kilku użyciach MaiYen będzie lepiej oceniać Twój zwyczaj sprawdzania aplikacji.",
   "Tần suất vào ứng dụng ổn":
       "Częstotliwość sprawdzania aplikacji jest odpowiednia",
   "Đã lâu chưa vào ứng dụng kiểm tra":
@@ -688,8 +688,8 @@ const Map<String, String> plStrings = {
   "Chạy nền ổn định": "Działanie w tle jest stabilne",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Niektóre telefony z Androidem mogą opóźniać alerty, gdy optymalizacja baterii jest włączona.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telefon raczej nie będzie opóźniał alertów SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telefon raczej nie będzie opóźniał alertów MaiYen.",
   "Chưa tắt tối ưu pin": "Optymalizacja baterii jest nadal włączona",
   "Tối ưu pin không chặn ứng dụng":
       "Optymalizacja baterii nie blokuje aplikacji",
@@ -711,8 +711,8 @@ const Map<String, String> plStrings = {
   "Cảnh báo toàn màn hình": "Alerty pełnoekranowe",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Alerty mogą się nie wyświetlać, jeśli powiadomienia są wyłączone.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Ten telefon może odbierać powiadomienia SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Ten telefon może odbierać powiadomienia MaiYen.",
   "Chưa bật thông báo": "Powiadomienia nie są włączone",
   "Đã bật thông báo": "Powiadomienia są włączone",
   "Hệ thống: Sẵn sàng": "System: gotowy",
@@ -721,7 +721,7 @@ const Map<String, String> plStrings = {
   "Thiết bị của bạn": "Twoje urządzenie",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Sprawdza telefon i sposób korzystania z aplikacji.",
-  "Hệ thống SafeHome": "System SafeHome",
+  "Hệ thống MaiYen": "System MaiYen",
   "Hệ thống: Đang kiểm tra...": "System: sprawdzanie...",
   "Tên": "Nazwa",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -742,10 +742,10 @@ const Map<String, String> plStrings = {
   "Thêm Home": "Dodaj dom",
   "Mở cài đặt": "Otwórz ustawienia",
   "Để sau": "Później",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome potrzebuje dostępu do lokalizacji „Zawsze”, aby wykrywać wyjście z domu i powrót, także gdy aplikacja działa w tle.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome ma obecnie dostęp do lokalizacji tylko podczas używania aplikacji.\n\nOtwórz uprawnienie Lokalizacja i wybierz „Zezwalaj zawsze”, aby automatyczna ochrona po wyjściu z domu działała również w tle.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen potrzebuje dostępu do lokalizacji „Zawsze”, aby wykrywać wyjście z domu i powrót, także gdy aplikacja działa w tle.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen ma obecnie dostęp do lokalizacji tylko podczas używania aplikacji.\n\nOtwórz uprawnienie Lokalizacja i wybierz „Zezwalaj zawsze”, aby automatyczna ochrona po wyjściu z domu działała również w tle.",
   "Cho phép vị trí luôn luôn": "Zawsze zezwalaj na dostęp do lokalizacji",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Twoje domy zostaną usunięte.\nOpuścisz udostępnione domy.",
@@ -774,7 +774,7 @@ const Map<String, String> plStrings = {
   "Từ chối": "Odrzuć",
   "Lời mời từ chủ nhà": "Zaproszenie od właściciela",
   "Nhận quyền chủ nhà": "Przejmij własność domu",
-  "Một người dùng SafeHome": "Użytkownik SafeHome",
+  "Một người dùng MaiYen": "Użytkownik MaiYen",
   "Lời mời gia nhập": "Zaproszenie do dołączenia",
   "Lời xin vào nhà": "Prośba o dołączenie do domu",
   "Nhập HUB ID": "Wprowadź identyfikator HUB",
@@ -791,7 +791,7 @@ const Map<String, String> plStrings = {
   "CẦN KIỂM TRA": "WYMAGA SPRAWDZENIA",
   "KIỂM TRA NHÀ": "SPRAWDŹ DOM",
   "ĐÓNG NHẮC NHỞ": "ZAMKNIJ PRZYPOMNIENIE",
-  "SafeHome Security Alert": "Alert bezpieczeństwa SafeHome",
+  "MaiYen Security Alert": "Alert bezpieczeństwa MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Wybierz dostęp do lokalizacji „Zawsze” w ustawieniach aplikacji",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -833,7 +833,7 @@ const Map<String, String> plStrings = {
   "Phòng": "Pomieszczenie",
   "Quản trị viên": "Administrator",
   "Nhắc nhở": "Przypomnienie",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Słaby sygnał",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Konto i system",
@@ -882,7 +882,7 @@ const Map<String, String> plStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count nieprzeczytanych wiadomości",
   "Hãy an tâm nghỉ ngơi.": "Możesz spokojnie odpocząć.",
   "Có thiết bị chưa an toàn.": "Niektóre urządzenia nie są bezpieczne.",
-  "SafeHome đang cập nhật vị trí": "SafeHome aktualizuje lokalizację",
+  "MaiYen đang cập nhật vị trí": "MaiYen aktualizuje lokalizację",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Monitorowanie w celu automatycznego włączenia trybu ochrony.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -893,12 +893,12 @@ const Map<String, String> plStrings = {
   "CẢNH BÁO RÒ KHÍ": "ALERT WYCIEKU GAZU",
   "CẢNH BÁO CỬA": "ALERT DRZWI",
   "CẢNH BÁO AN NINH": "ALERT BEZPIECZEŃSTWA",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Nie można potwierdzić w SafeHome. Sprawdź połączenie i spróbuj ponownie.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Nie można potwierdzić w MaiYen. Sprawdź połączenie i spróbuj ponownie.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Wyłącz alert dopiero po sprawdzeniu sytuacji w domu.\n\nCzy na pewno chcesz wyłączyć alert?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome wykrył alert",
-  "Mở SafeHome để kiểm tra ngay.": "Otwórz SafeHome i sprawdź teraz.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen wykrył alert",
+  "Mở MaiYen để kiểm tra ngay.": "Otwórz MaiYen i sprawdź teraz.",
   "\$count tin nhắn mới": "\$count nowych wiadomości",
   "Tin nhắn HomeChat": "Wiadomość HomeChat",
   "\$senderName đã gửi một tin nhắn": "Nowa wiadomość od: \$senderName",
@@ -917,8 +917,8 @@ const Map<String, String> plStrings = {
       "\$actorName chce przenieść na Ciebie własność domu „\$homeName”.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName zaprasza Cię do domu „\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome usuwa urządzenie „\$deviceName” z domu „\$homeName”.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen usuwa urządzenie „\$deviceName” z domu „\$homeName”.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Urządzenie „\$deviceName” pojawiło się w domu „\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Utworzono dom „\$name”.",
@@ -975,8 +975,8 @@ const Map<String, String> plStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Drzwi są otwarte lub wykryto sabotaż urządzenia",
   "Có thiết bị đang cảnh báo": "Urządzenie zgłasza alert",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Jeśli nikt nie potwierdzi, SafeHome rozpocznie połączenie alarmowe.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jeśli nikt nie potwierdzi, MaiYen rozpocznie połączenie alarmowe.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Alert zostanie powtórzony o \$time, jeśli problem nie zostanie rozwiązany.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1020,8 +1020,8 @@ const Map<String, String> plStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Zaprasza Cię do domu „\$homeName”",
   "Cần kiểm tra: \$joined": "Wymaga uwagi: \$joined",
   "Cập nhật \$value": "Zaktualizowano \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Dodaj pierwsze urządzenie SafeHome, aby rozpocząć monitorowanie tego domu.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Dodaj pierwsze urządzenie MaiYen, aby rozpocząć monitorowanie tego domu.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Najpierw sprawdź alerty awaryjne, a następnie w razie potrzeby skontaktuj się z domownikami.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1079,7 +1079,7 @@ const Map<String, String> plStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: otwarte, gdy dom jest w trybie ochrony",
   "An tâm hơn trong từng ngôi nhà": "Spokój w każdym domu",
-  "Báo động SafeHome": "Alarm SafeHome",
+  "Báo động MaiYen": "Alarm MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Alert bezpieczeństwa wymaga natychmiastowego sprawdzenia.",
   "Có cảnh báo cần kiểm tra": "Alert wymaga sprawdzenia",

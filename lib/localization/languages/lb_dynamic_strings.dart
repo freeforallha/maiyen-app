@@ -25,19 +25,19 @@ const Map<String, String> lbDynamicStrings = {
       "\$name an \$otherCount aner schreiwen...",
   "Kênh báo động cũ để giữ tương thích":
       "Alen Alarmkanal fir Kompatibilitéit bäibehalen",
-  "SafeHome báo động toàn màn hình": "SafeHome-Alarm am Vollbild",
+  "MaiYen báo động toàn màn hình": "MaiYen-Alarm am Vollbild",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Vollbildwarnung opmaachen; de Sirèneklang gëtt vun der Alarmsäit ofgespillt",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-Noutwarnung",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-Noutwarnung",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Noutwarnung mat héijer Prioritéit virum Vollbild",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-Erënnerung am Vollbild",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Stomm SafeHome-Erënnerung am Vollbild",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-Erënnerung mat héijer Prioritéit",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-Erënnerung mat héijer Prioritéit ouni Vollbild",
-  "Tin nhắn mới trong các nhà SafeHome": "Nei Messagen an de SafeHome-Doheemer",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-Erënnerung am Vollbild",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Stomm MaiYen-Erënnerung am Vollbild",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-Erënnerung mat héijer Prioritéit",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-Erënnerung mat héijer Prioritéit ouni Vollbild",
+  "Tin nhắn mới trong các nhà MaiYen": "Nei Messagen an de MaiYen-Doheemer",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Dës Aktioun ännert haut d’Alarmzäit vun e puer Apparater.\n\nAlarmer vun Apparater an der Kategorie „Akut Gefor“ an Alarmer am Modus „Schutz“ ginn duerch dës Funktioun net beaflosst.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count Doheemer a Gefor\$suffix",

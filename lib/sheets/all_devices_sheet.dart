@@ -23,7 +23,7 @@ void showAllDevicesSheet({
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _AllDevicesHeader(
-                title: strings.t("Toàn bộ thiết bị SafeHome"),
+                title: strings.t("Toàn bộ thiết bị MaiYen"),
                 subtitle: strings.allDevicesSubtitle,
                 deviceCount: devices.length,
               ),

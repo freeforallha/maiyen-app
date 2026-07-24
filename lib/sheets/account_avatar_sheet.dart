@@ -491,10 +491,6 @@ class AccountAvatarSheet {
     final user = FirebaseAuth.instance.currentUser;
     final photoUrl = user?.photoURL ?? "";
 
-    final displayName = userName.trim().isNotEmpty
-        ? userName.trim()
-        : "Tài khoản SafeHome";
-
     final dob = userDob.trim().isNotEmpty ? userDob.split("T").first : "";
     int hiddenDeleteTapCount = 0;
     DateTime? lastHiddenDeleteTapAt;
@@ -528,6 +524,9 @@ class AccountAvatarSheet {
       routeName: "account",
       builder: (sheetContext) {
         final strings = AppStrings.of(sheetContext);
+        final displayName = userName.trim().isNotEmpty
+            ? userName.trim()
+            : strings.t("Tài khoản cá nhân");
 
         return SafeArea(
           child: Container(

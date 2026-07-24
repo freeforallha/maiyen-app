@@ -25,19 +25,19 @@ const Map<String, String> elDynamicStrings = {
       "Ο/Η \$name και \$otherCount ακόμη πληκτρολογούν...",
   "Kênh báo động cũ để giữ tương thích":
       "Το παλαιό κανάλι Συναγερμού διατηρείται για συμβατότητα",
-  "SafeHome báo động toàn màn hình": "Συναγερμός SafeHome πλήρους οθόνης",
+  "MaiYen báo động toàn màn hình": "Συναγερμός MaiYen πλήρους οθόνης",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Ανοίγει συναγερμούς πλήρους οθόνης· ο ήχος της σειρήνας αναπαράγεται από τη σελίδα Συναγερμού",
-  "SafeHome cảnh báo khẩn cấp": "Προτεραιότητα έκτακτης ανάγκης SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Προτεραιότητα έκτακτης ανάγκης MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Ειδοποίηση έκτακτης ανάγκης υψηλής προτεραιότητας πριν ανοίξει η πλήρης οθόνη",
-  "SafeHome nhắc nhở toàn màn hình": "Πρόγραμμα SafeHome πλήρους οθόνης",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Αθόρυβη Υπενθύμιση SafeHome πλήρους οθόνης",
-  "SafeHome nhắc nhở ưu tiên cao": "Προτεραιότητα Υπενθύμισης SafeHome",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Υπενθύμιση SafeHome υψηλής προτεραιότητας χωρίς πλήρη οθόνη",
-  "Tin nhắn mới trong các nhà SafeHome": "Νέα μηνύματα σε σπίτια SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Πρόγραμμα MaiYen πλήρους οθόνης",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Αθόρυβη Υπενθύμιση MaiYen πλήρους οθόνης",
+  "MaiYen nhắc nhở ưu tiên cao": "Προτεραιότητα Υπενθύμισης MaiYen",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Υπενθύμιση MaiYen υψηλής προτεραιότητας χωρίς πλήρη οθόνη",
+  "Tin nhắn mới trong các nhà MaiYen": "Νέα μηνύματα σε σπίτια MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Αυτή η ενέργεια θα αλλάξει σήμερα την ώρα συναγερμού ορισμένων συσκευών.\n\nΟι συναγερμοί συσκευών στην κατηγορία «Κίνδυνος έκτακτης ανάγκης» και οι συναγερμοί στη λειτουργία «Προστασία» δεν θα επηρεαστούν από αυτή τη λειτουργία.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count σπίτια σε κίνδυνο\$suffix",

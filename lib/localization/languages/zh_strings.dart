@@ -17,7 +17,7 @@ const Map<String, String> zhStrings = {
   "Nguy hiểm khẩn cấp": "紧急危险",
   "Điều khiển & hạ tầng": "控制与基础设施",
   "Môi trường": "环境",
-  "Toàn bộ thiết bị SafeHome": "所有 SafeHome 设备",
+  "Toàn bộ thiết bị MaiYen": "所有 MaiYen 设备",
   "Cửa ra/vào": "出入门",
   "Cửa": "门",
   "Cửa sổ": "窗户",
@@ -543,7 +543,7 @@ const Map<String, String> zhStrings = {
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS 设备未记录警报。",
   "Cảm biến khói chưa ghi nhận bất thường.": "烟雾传感器未记录异常。",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "你或成员已手动开启布防。",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "由于你已离家，SafeHome 已自动开启布防。",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.": "由于你已离家，MaiYen 已自动开启布防。",
   "Nhà đang ở chế độ dùng bình thường.": "此家庭当前处于普通使用模式。",
   "Bảo vệ thủ công đang bật": "手动布防已开启",
   "Bảo vệ tự động đang bật": "自动布防已开启",
@@ -551,8 +551,8 @@ const Map<String, String> zhStrings = {
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "你最近已打开应用检查状态。",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "建议定期打开应用检查权限、时间表和未读警报。",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "使用几次后，SafeHome 可以更好地评估你的应用检查习惯。",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "使用几次后，MaiYen 可以更好地评估你的应用检查习惯。",
   "Tần suất vào ứng dụng ổn": "应用检查频率良好",
   "Đã lâu chưa vào ứng dụng kiểm tra": "距离上次打开应用检查已有一段时间",
   "Đang ghi nhận tần suất vào ứng dụng": "正在记录应用检查频率",
@@ -593,8 +593,8 @@ const Map<String, String> zhStrings = {
   "Chạy nền ổn định": "后台运行看起来稳定",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "某些 Android 手机在开启电池优化时可能延迟警报。",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "手机较少可能延迟 SafeHome警报。",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "手机较少可能延迟 MaiYen警报。",
   "Chưa tắt tối ưu pin": "尚未关闭电池优化",
   "Tối ưu pin không chặn ứng dụng": "电池优化未阻止应用",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -612,7 +612,7 @@ const Map<String, String> zhStrings = {
   "Cảnh báo trên iOS": "iOS 上的警报",
   "Cảnh báo toàn màn hình": "全屏警报",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.": "如果通知被关闭，警报可能不会显示。",
-  "Điện thoại có thể nhận thông báo SafeHome.": "此手机可以接收 SafeHome 通知。",
+  "Điện thoại có thể nhận thông báo MaiYen.": "此手机可以接收 MaiYen 通知。",
   "Chưa bật thông báo": "尚未开启通知",
   "Đã bật thông báo": "已开启通知",
   "Hệ thống: Sẵn sàng": "系统：已就绪",
@@ -620,7 +620,7 @@ const Map<String, String> zhStrings = {
   "Cách bạn đang dùng ứng dụng": "你使用应用的方式",
   "Thiết bị của bạn": "你的设备",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "检查你的手机以及你使用应用的方式。",
-  "Hệ thống SafeHome": "SafeHome 系统",
+  "Hệ thống MaiYen": "MaiYen 系统",
   "Hệ thống: Đang kiểm tra...": "系统：正在检查...",
   "Đổi tên nhóm": "重命名分组",
   "Tên": "名称",
@@ -655,10 +655,10 @@ const Map<String, String> zhStrings = {
   "Khói đã an toàn": "烟雾状态已安全",
   "Mở cài đặt": "打开设置",
   "Để sau": "稍后",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome 需要\"始终允许\"位置权限，才能在应用后台运行时识别你离家或回家。",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome 目前只能在你使用应用时访问位置。\n\n请打开位置权限并选择\"始终允许\"，以便离家自动保护功能在后台也能继续工作。",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen 需要\"始终允许\"位置权限，才能在应用后台运行时识别你离家或回家。",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen 目前只能在你使用应用时访问位置。\n\n请打开位置权限并选择\"始终允许\"，以便离家自动保护功能在后台也能继续工作。",
   "Cho phép vị trí luôn luôn": "始终允许位置",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "你的家庭将被删除。\n你将离开共享家庭。",
@@ -685,7 +685,7 @@ const Map<String, String> zhStrings = {
   "Từ chối": "拒绝",
   "Lời mời từ chủ nhà": "来自屋主的邀请",
   "Nhận quyền chủ nhà": "接收屋主权限",
-  "Một người dùng SafeHome": "一位 SafeHome 用户",
+  "Một người dùng MaiYen": "一位 MaiYen 用户",
   "Lời mời gia nhập": "加入邀请",
   "Lời xin vào nhà": "加入家庭请求",
   "Nhập HUB ID": "输入 HUB ID",
@@ -702,7 +702,7 @@ const Map<String, String> zhStrings = {
   "CẦN KIỂM TRA": "需要检查",
   "KIỂM TRA NHÀ": "检查家庭",
   "ĐÓNG NHẮC NHỞ": "关闭提醒",
-  "SafeHome Security Alert": "SafeHome 安全警报",
+  "MaiYen Security Alert": "MaiYen 安全警报",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "请在应用设置中将位置权限选择为始终允许",
   "Người khác quét mã này để gửi yêu cầu gia nhập nhà.": "其他人扫描此二维码以发送加入家庭的请求。",
@@ -748,7 +748,7 @@ const Map<String, String> zhStrings = {
   "Phòng": "房间",
   "Quản trị viên": "管理员",
   "Nhắc nhở": "提醒",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "信号弱",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "账号与系统",
@@ -794,7 +794,7 @@ const Map<String, String> zhStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count 条未读消息",
   "Hãy an tâm nghỉ ngơi.": "你可以放心。",
   "Có thiết bị chưa an toàn.": "有些设备不安全。",
-  "SafeHome đang cập nhật vị trí": "SafeHome 正在更新位置",
+  "MaiYen đang cập nhật vị trí": "MaiYen 正在更新位置",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "正在监测以自动开启布防模式。",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
       "使用位置在所有人离家时自动开启布防模式。",
@@ -804,12 +804,12 @@ const Map<String, String> zhStrings = {
   "CẢNH BÁO RÒ KHÍ": "燃气泄漏警报",
   "CẢNH BÁO CỬA": "门警报",
   "CẢNH BÁO AN NINH": "安全警报",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "无法通过 SafeHome 确认。请检查连接并重试。",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "无法通过 MaiYen 确认。请检查连接并重试。",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "请只在检查家中情况后停止警报。\n\n确定要停止警报吗？",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome 检测到警报",
-  "Mở SafeHome để kiểm tra ngay.": "打开 SafeHome 立即检查。",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen 检测到警报",
+  "Mở MaiYen để kiểm tra ngay.": "打开 MaiYen 立即检查。",
   "\$count tin nhắn mới": "\$count 条新消息",
   "Tin nhắn HomeChat": "HomeChat 消息",
   "\$senderName đã gửi một tin nhắn": "\$senderName 发送了一条消息",
@@ -827,8 +827,8 @@ const Map<String, String> zhStrings = {
       "\$actorName 想将 \"\$homeName\" 的所有权转让给你。",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName 邀请你加入 \"\$homeName\"。",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome 正在从 \"\$homeName\" 移除 \"\$deviceName\"。",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen 正在从 \"\$homeName\" 移除 \"\$deviceName\"。",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "设备 \"\$deviceName\" 已添加到 \"\$homeName\"。",
   "Bạn đã tạo nhà \"\$name\".": "你已创建家庭 \"\$name\"。",
@@ -879,8 +879,8 @@ const Map<String, String> zhStrings = {
   "Có dấu hiệu rò khí": "检测到燃气泄漏",
   "Có cửa đang mở hoặc thiết bị bị tháo": "有门打开或设备被拆动/撬动",
   "Có thiết bị đang cảnh báo": "有设备正在报警",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "如果无人确认，SafeHome 将转为紧急呼叫。",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "如果无人确认，MaiYen 将转为紧急呼叫。",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "如果问题尚未处理，将在 \$time 再次提醒。",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
       "如果问题尚未处理，将按警报日程再次提醒。",
@@ -918,8 +918,8 @@ const Map<String, String> zhStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "邀请你加入 \"\$homeName\"",
   "Cần kiểm tra: \$joined": "需要检查：\$joined",
   "Cập nhật \$value": "已更新：\$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "添加你的第一台 SafeHome 设备，开始监测这个家。",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "添加你的第一台 MaiYen 设备，开始监测这个家。",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "请先检查紧急警报，必要时联系家中成员。",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -968,7 +968,7 @@ const Map<String, String> zhStrings = {
   "Môi trường hiện tại: \$environment": "当前环境：\$environment",
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name：家庭处于布防模式时打开",
   "An tâm hơn trong từng ngôi nhà": "让每个家庭更安心",
-  "Báo động SafeHome": "SafeHome警报",
+  "Báo động MaiYen": "MaiYen警报",
   "Có cảnh báo an ninh cần kiểm tra ngay.": "有安全警报需要你立即处理。",
   "Có cảnh báo cần kiểm tra": "有警报需要你检查",
   "Tự đóng sau \$time": "\$time 后自动关闭",

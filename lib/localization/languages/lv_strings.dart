@@ -18,7 +18,7 @@ const Map<String, String> lvStrings = {
   "Nguy hiểm khẩn cấp": "Ārkārtas apdraudējumi",
   "Điều khiển & hạ tầng": "Vadība un infrastruktūra",
   "Môi trường": "Vide",
-  "Toàn bộ thiết bị SafeHome": "Visas SafeHome ierīces",
+  "Toàn bộ thiết bị MaiYen": "Visas MaiYen ierīces",
   "Cửa ra/vào": "Ieejas durvis",
   "Cửa": "Durvis",
   "Cửa sổ": "Logs",
@@ -616,8 +616,8 @@ const Map<String, String> lvStrings = {
       "Dūmu sensors nav konstatējis problēmu.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Jūs vai kāds dalībnieks manuāli ieslēdza aizsardzības režīmu.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome automātiski ieslēdza aizsardzības režīmu, jo jūs izgājāt no mājām.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen automātiski ieslēdza aizsardzības režīmu, jo jūs izgājāt no mājām.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Šī māja pašlaik tiek izmantota parastajā režīmā.",
   "Bảo vệ thủ công đang bật": "Manuālais aizsardzības režīms ir ieslēgts",
@@ -627,8 +627,8 @@ const Map<String, String> lvStrings = {
       "Jūs nesen atvērāt lietotni, lai pārbaudītu statusu.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Regulāri atveriet lietotni, lai pārskatītu atļaujas, grafikus un nelasītos brīdinājumus.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Pēc dažām lietošanas reizēm SafeHome varēs labāk novērtēt jūsu lietotnes pārbaudes paradumus.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pēc dažām lietošanas reizēm MaiYen varēs labāk novērtēt jūsu lietotnes pārbaudes paradumus.",
   "Tần suất vào ứng dụng ổn": "Lietotnes pārbaudes biežums ir labs",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Kopš pēdējās lietotnes pārbaudes ir pagājis ilgs laiks",
@@ -678,8 +678,8 @@ const Map<String, String> lvStrings = {
   "Chạy nền ổn định": "Darbība fonā izskatās stabila",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Daži Android tālruņi var aizkavēt brīdinājumus, kamēr ir ieslēgta akumulatora optimizācija.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Tālrunis retāk aizkavēs SafeHome brīdinājumus.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Tālrunis retāk aizkavēs MaiYen brīdinājumus.",
   "Chưa tắt tối ưu pin": "Akumulatora optimizācija joprojām ir ieslēgta",
   "Tối ưu pin không chặn ứng dụng": "Akumulatora optimizācija nebloķē lietotni",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -700,8 +700,8 @@ const Map<String, String> lvStrings = {
   "Cảnh báo toàn màn hình": "Pilnekrāna brīdinājumi",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Ja paziņojumi ir atspējoti, brīdinājumi var neparādīties.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Šis tālrunis var saņemt SafeHome paziņojumus.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Šis tālrunis var saņemt MaiYen paziņojumus.",
   "Chưa bật thông báo": "Paziņojumi nav iespējoti",
   "Đã bật thông báo": "Paziņojumi ir iespējoti",
   "Hệ thống: Sẵn sàng": "Sistēma: gatava",
@@ -711,7 +711,7 @@ const Map<String, String> lvStrings = {
   "Thiết bị của bạn": "Jūsu ierīce",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Pārbauda jūsu tālruni un to, kā izmantojat lietotni.",
-  "Hệ thống SafeHome": "SafeHome sistēma",
+  "Hệ thống MaiYen": "MaiYen sistēma",
   "Hệ thống: Đang kiểm tra...": "Sistēma: notiek pārbaude...",
   "Tên": "Nosaukums",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -733,10 +733,10 @@ const Map<String, String> lvStrings = {
   "Thêm Home": "Pievienot māju",
   "Mở cài đặt": "Atvērt iestatījumus",
   "Để sau": "Vēlāk",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome nepieciešama atrašanās vietas atļauja Vienmēr, lai noteiktu, kad jūs atstājat māju vai atgriežaties, arī tad, kad lietotne darbojas fonā.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Pašlaik SafeHome var piekļūt atrašanās vietai tikai lietotnes lietošanas laikā.\n\nAtveriet atrašanās vietas atļauju un izvēlieties “Atļaut vienmēr”, lai automātiskā aizsardzība turpinātu darboties fonā.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen nepieciešama atrašanās vietas atļauja Vienmēr, lai noteiktu, kad jūs atstājat māju vai atgriežaties, arī tad, kad lietotne darbojas fonā.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Pašlaik MaiYen var piekļūt atrašanās vietai tikai lietotnes lietošanas laikā.\n\nAtveriet atrašanās vietas atļauju un izvēlieties “Atļaut vienmēr”, lai automātiskā aizsardzība turpinātu darboties fonā.",
   "Cho phép vị trí luôn luôn": "Vienmēr atļaut atrašanās vietu",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Jūsu mājas tiks dzēstas.\nJūs pametīsiet kopīgotās mājas.",
@@ -765,7 +765,7 @@ const Map<String, String> lvStrings = {
   "Từ chối": "Noraidīt",
   "Lời mời từ chủ nhà": "Uzaicinājums no īpašnieka",
   "Nhận quyền chủ nhà": "Saņemt mājas īpašumtiesības",
-  "Một người dùng SafeHome": "SafeHome lietotājs",
+  "Một người dùng MaiYen": "MaiYen lietotājs",
   "Lời mời gia nhập": "Pievienošanās uzaicinājums",
   "Lời xin vào nhà": "Mājas pievienošanās pieprasījums",
   "Nhập HUB ID": "Ievadiet HUB ID",
@@ -782,7 +782,7 @@ const Map<String, String> lvStrings = {
   "CẦN KIỂM TRA": "JĀPĀRBAUDA",
   "KIỂM TRA NHÀ": "PĀRBAUDĪT MĀJU",
   "ĐÓNG NHẮC NHỞ": "AIZVĒRT ATGĀDINĀJUMU",
-  "SafeHome Security Alert": "SafeHome drošības brīdinājums",
+  "MaiYen Security Alert": "MaiYen drošības brīdinājums",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Lietotnes iestatījumos izvēlieties atrašanās vietas atļauju Atļaut vienmēr",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -826,7 +826,7 @@ const Map<String, String> lvStrings = {
   "Phòng": "Telpa",
   "Quản trị viên": "Administrators",
   "Nhắc nhở": "Atgādinājums",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Vājš signāls",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Konts un sistēma",
@@ -873,7 +873,7 @@ const Map<String, String> lvStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count nelasīti ziņojumi",
   "Hãy an tâm nghỉ ngơi.": "Varat būt mierīgs.",
   "Có thiết bị chưa an toàn.": "Dažas ierīces nav drošā stāvoklī.",
-  "SafeHome đang cập nhật vị trí": "SafeHome atjaunina atrašanās vietu",
+  "MaiYen đang cập nhật vị trí": "MaiYen atjaunina atrašanās vietu",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Uzraudzība, lai automātiski ieslēgtu aizsardzības režīmu.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -884,12 +884,12 @@ const Map<String, String> lvStrings = {
   "CẢNH BÁO RÒ KHÍ": "GĀZES NOPLŪDES BRĪDINĀJUMS",
   "CẢNH BÁO CỬA": "DURVJU BRĪDINĀJUMS",
   "CẢNH BÁO AN NINH": "DROŠĪBAS BRĪDINĀJUMS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Neizdevās apstiprināt ar SafeHome. Pārbaudiet savienojumu un mēģiniet vēlreiz.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Neizdevās apstiprināt ar MaiYen. Pārbaudiet savienojumu un mēģiniet vēlreiz.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Apturiet brīdinājumu tikai pēc mājas stāvokļa pārbaudes.\n\nVai tiešām vēlaties apturēt brīdinājumu?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome konstatēja brīdinājumu",
-  "Mở SafeHome để kiểm tra ngay.": "Atveriet SafeHome, lai pārbaudītu tūlīt.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen konstatēja brīdinājumu",
+  "Mở MaiYen để kiểm tra ngay.": "Atveriet MaiYen, lai pārbaudītu tūlīt.",
   "\$count tin nhắn mới": "\$count jauni ziņojumi",
   "Tin nhắn HomeChat": "HomeChat ziņojums",
   "\$senderName đã gửi một tin nhắn": "\$senderName nosūtīja ziņojumu",
@@ -909,8 +909,8 @@ const Map<String, String> lvStrings = {
       "\$actorName vēlas nodot jums mājas “\$homeName” īpašumtiesības.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName uzaicināja jūs pievienoties mājai “\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome noņem ierīci “\$deviceName” no mājas “\$homeName”.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen noņem ierīci “\$deviceName” no mājas “\$homeName”.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Ierīce “\$deviceName” tika pievienota mājai “\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Jūs izveidojāt māju “\$name”.",
@@ -966,8 +966,8 @@ const Map<String, String> lvStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Durvis ir atvērtas vai ierīce ir aizskarta",
   "Có thiết bị đang cảnh báo": "Ierīce brīdina",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Ja neviens neapstiprinās, SafeHome uzsāks ārkārtas zvanu.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ja neviens neapstiprinās, MaiYen uzsāks ārkārtas zvanu.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Ja problēma nav novērsta, brīdinās vēlreiz plkst. \$time.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1012,8 +1012,8 @@ const Map<String, String> lvStrings = {
       "Uzaicina jūs pievienoties mājai “\$homeName”",
   "Cần kiểm tra: \$joined": "Jāpievērš uzmanība: \$joined",
   "Cập nhật \$value": "Atjaunināts \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Pievienojiet savu pirmo SafeHome ierīci, lai sāktu šīs mājas uzraudzību.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Pievienojiet savu pirmo MaiYen ierīci, lai sāktu šīs mājas uzraudzību.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Vispirms pārbaudiet ārkārtas brīdinājumus un, ja nepieciešams, sazinieties ar mājsaimniecības locekļiem.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1069,7 +1069,7 @@ const Map<String, String> lvStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: atvērts, kamēr māja ir aizsardzības režīmā",
   "An tâm hơn trong từng ngôi nhà": "Sirdsmiers ikvienā mājā",
-  "Báo động SafeHome": "SafeHome trauksme",
+  "Báo động MaiYen": "MaiYen trauksme",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Drošības brīdinājumam nepieciešama jūsu uzmanība.",
   "Có cảnh báo cần kiểm tra": "Brīdinājumam nepieciešama jūsu uzmanība",

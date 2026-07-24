@@ -18,7 +18,7 @@ const Map<String, String> huStrings = {
   "Nguy hiểm khẩn cấp": "Vészhelyzeti veszélyek",
   "Điều khiển & hạ tầng": "Vezérlés és infrastruktúra",
   "Môi trường": "Környezet",
-  "Toàn bộ thiết bị SafeHome": "Minden SafeHome-eszköz",
+  "Toàn bộ thiết bị MaiYen": "Minden MaiYen-eszköz",
   "Cửa ra/vào": "Bejárati ajtó",
   "Cửa": "Ajtó",
   "Cửa sổ": "Ablak",
@@ -623,8 +623,8 @@ const Map<String, String> huStrings = {
       "A füstérzékelő nem észlelt rendellenességet.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Ön vagy egy tag kézzel bekapcsolta a Védelmet.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "A SafeHome automatikusan bekapcsolta a Védelmet, mert Ön elhagyta az otthont.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "A MaiYen automatikusan bekapcsolta a Védelmet, mert Ön elhagyta az otthont.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Az otthon jelenleg normál használatban van.",
   "Bảo vệ thủ công đang bật": "A kézi Védelem be van kapcsolva",
@@ -634,8 +634,8 @@ const Map<String, String> huStrings = {
       "Nemrég megnyitotta az alkalmazást az állapot ellenőrzéséhez.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Rendszeresen nyissa meg az alkalmazást az engedélyek, ütemezések és olvasatlan riasztások ellenőrzéséhez.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Néhány használat után a SafeHome pontosabban tudja értékelni az alkalmazás ellenőrzési szokásait.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Néhány használat után a MaiYen pontosabban tudja értékelni az alkalmazás ellenőrzési szokásait.",
   "Tần suất vào ứng dụng ổn": "Az alkalmazás ellenőrzési gyakorisága megfelelő",
   "Đã lâu chưa vào ứng dụng kiểm tra": "Már régen ellenőrizte az alkalmazást",
   "Đang ghi nhận tần suất vào ứng dụng":
@@ -683,8 +683,8 @@ const Map<String, String> huStrings = {
   "Chạy nền ổn định": "A háttérben futás stabil",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Egyes Android-telefonok késleltethetik a riasztásokat, amíg az akkumulátor-optimalizálás be van kapcsolva.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "A telefon várhatóan nem késlelteti a SafeHome riasztásait.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "A telefon várhatóan nem késlelteti a MaiYen riasztásait.",
   "Chưa tắt tối ưu pin": "Az akkumulátor-optimalizálás még be van kapcsolva",
   "Tối ưu pin không chặn ứng dụng":
       "Az akkumulátor-optimalizálás nem blokkolja az alkalmazást",
@@ -706,8 +706,8 @@ const Map<String, String> huStrings = {
   "Cảnh báo toàn màn hình": "Teljes képernyős riasztások",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "A riasztások nem jelennek meg, ha az értesítések ki vannak kapcsolva.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Ez a telefon képes SafeHome-értesítéseket fogadni.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Ez a telefon képes MaiYen-értesítéseket fogadni.",
   "Chưa bật thông báo": "Az értesítések nincsenek bekapcsolva",
   "Đã bật thông báo": "Az értesítések be vannak kapcsolva",
   "Hệ thống: Sẵn sàng": "Rendszer: Készen áll",
@@ -716,7 +716,7 @@ const Map<String, String> huStrings = {
   "Thiết bị của bạn": "Az Ön eszköze",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Ellenőrzi a telefont és az alkalmazáshasználat módját.",
-  "Hệ thống SafeHome": "SafeHome rendszer",
+  "Hệ thống MaiYen": "MaiYen rendszer",
   "Hệ thống: Đang kiểm tra...": "Rendszer: Ellenőrzés...",
   "Tên": "Név",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -739,10 +739,10 @@ const Map<String, String> huStrings = {
   "Thêm Home": "Otthon hozzáadása",
   "Mở cài đặt": "Beállítások megnyitása",
   "Để sau": "Később",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "A SafeHome-nak „Mindig engedélyezett” helyhozzáférésre van szüksége ahhoz, hogy akkor is érzékelje az elindulást vagy hazatérést, amikor az alkalmazás a háttérben fut.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "A SafeHome jelenleg csak az alkalmazás használata közben fér hozzá a helyadatokhoz.\n\nNyissa meg a Hely engedélyt, és válassza a „Mindig engedélyezett” lehetőséget, hogy az automatikus Védelem távollétkor a háttérben is működjön.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "A MaiYen-nak „Mindig engedélyezett” helyhozzáférésre van szüksége ahhoz, hogy akkor is érzékelje az elindulást vagy hazatérést, amikor az alkalmazás a háttérben fut.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "A MaiYen jelenleg csak az alkalmazás használata közben fér hozzá a helyadatokhoz.\n\nNyissa meg a Hely engedélyt, és válassza a „Mindig engedélyezett” lehetőséget, hogy az automatikus Védelem távollétkor a háttérben is működjön.",
   "Cho phép vị trí luôn luôn": "Helyhozzáférés mindig engedélyezése",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Az Ön otthonai törlődnek.\nKi fog lépni a megosztott otthonokból.",
@@ -771,7 +771,7 @@ const Map<String, String> huStrings = {
   "Từ chối": "Elutasítás",
   "Lời mời từ chủ nhà": "Meghívás a Tulajdonostól",
   "Nhận quyền chủ nhà": "Tulajdonjog átvétele",
-  "Một người dùng SafeHome": "Egy SafeHome-felhasználó",
+  "Một người dùng MaiYen": "Egy MaiYen-felhasználó",
   "Lời mời gia nhập": "Csatlakozási meghívás",
   "Lời xin vào nhà": "Otthonhoz csatlakozási kérelem",
   "Nhập HUB ID": "HUB-azonosító megadása",
@@ -789,7 +789,7 @@ const Map<String, String> huStrings = {
   "CẦN KIỂM TRA": "ELLENŐRZÉST IGÉNYEL",
   "KIỂM TRA NHÀ": "OTTHON ELLENŐRZÉSE",
   "ĐÓNG NHẮC NHỞ": "EMLÉKEZTETŐ BEZÁRÁSA",
-  "SafeHome Security Alert": "SafeHome biztonsági riasztás",
+  "MaiYen Security Alert": "MaiYen biztonsági riasztás",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Válassza a „Mindig engedélyezett” helyhozzáférést az alkalmazás beállításaiban",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -832,7 +832,7 @@ const Map<String, String> huStrings = {
   "Phòng": "Helyiség",
   "Quản trị viên": "Adminisztrátor",
   "Nhắc nhở": "Emlékeztető",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Gyenge jel",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Fiók és rendszer",
@@ -880,7 +880,7 @@ const Map<String, String> huStrings = {
   "Còn \$count tin nhắn chưa đọc": "Még \$count olvasatlan üzenet",
   "Hãy an tâm nghỉ ngơi.": "Nyugodtan pihenhet.",
   "Có thiết bị chưa an toàn.": "Néhány eszköz nincs biztonságos állapotban.",
-  "SafeHome đang cập nhật vị trí": "A SafeHome frissíti a helyadatokat",
+  "MaiYen đang cập nhật vị trí": "A MaiYen frissíti a helyadatokat",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Megfigyelés az automatikus Védelem bekapcsolásához.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -891,13 +891,13 @@ const Map<String, String> huStrings = {
   "CẢNH BÁO RÒ KHÍ": "GÁZSZIVÁRGÁSI RIASZTÁS",
   "CẢNH BÁO CỬA": "AJTÓRIASZTÁS",
   "CẢNH BÁO AN NINH": "BIZTONSÁGI RIASZTÁS",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "A SafeHome-mal való megerősítés sikertelen. Ellenőrizze a kapcsolatot, és próbálja újra.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "A MaiYen-mal való megerősítés sikertelen. Ellenőrizze a kapcsolatot, és próbálja újra.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Csak az otthon állapotának ellenőrzése után állítsa le a riasztást.\n\nBiztosan le szeretné állítani a riasztást?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 A SafeHome riasztást észlelt",
-  "Mở SafeHome để kiểm tra ngay.":
-      "Nyissa meg a SafeHome-ot az azonnali ellenőrzéshez.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 A MaiYen riasztást észlelt",
+  "Mở MaiYen để kiểm tra ngay.":
+      "Nyissa meg a MaiYen-ot az azonnali ellenőrzéshez.",
   "\$count tin nhắn mới": "\$count új üzenet",
   "Tin nhắn HomeChat": "HomeChat-üzenet",
   "\$senderName đã gửi một tin nhắn": "\$senderName üzenetet küldött",
@@ -916,8 +916,8 @@ const Map<String, String> huStrings = {
       "\$actorName át szeretné ruházni Önre a(z) „\$homeName” otthon tulajdonjogát.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName meghívta Önt a(z) „\$homeName” otthonhoz.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "A SafeHome eltávolítja a(z) „\$deviceName” eszközt a(z) „\$homeName” otthonból.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "A MaiYen eltávolítja a(z) „\$deviceName” eszközt a(z) „\$homeName” otthonból.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "A(z) „\$deviceName” eszköz megjelent a(z) „\$homeName” otthonban.",
   "Bạn đã tạo nhà \"\$name\".": "Létrehozta a(z) „\$name” otthont.",
@@ -973,8 +973,8 @@ const Map<String, String> huStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Egy ajtó nyitva van, vagy egy eszközt manipuláltak",
   "Có thiết bị đang cảnh báo": "Egy eszköz riasztást jelez",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Ha senki sem erősíti meg, a SafeHome segélyhívást kezdeményez.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ha senki sem erősíti meg, a MaiYen segélyhívást kezdeményez.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Újabb riasztás ekkor: \$time, ha a probléma nincs megoldva.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1020,8 +1020,8 @@ const Map<String, String> huStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Meghívás a(z) „\$homeName” otthonhoz",
   "Cần kiểm tra: \$joined": "Figyelmet igényel: \$joined",
   "Cập nhật \$value": "Frissítve: \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Adja hozzá az első SafeHome-eszközt az otthon megfigyelésének megkezdéséhez.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Adja hozzá az első MaiYen-eszközt az otthon megfigyelésének megkezdéséhez.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Először ellenőrizze a vészhelyzeti riasztásokat, majd szükség esetén lépjen kapcsolatba az otthon tagjaival.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1078,7 +1078,7 @@ const Map<String, String> huStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Nyitva, miközben az otthon Védelem módban van",
   "An tâm hơn trong từng ngôi nhà": "Nyugalom minden otthonban",
-  "Báo động SafeHome": "SafeHome-riasztás",
+  "Báo động MaiYen": "MaiYen-riasztás",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Egy biztonsági riasztás azonnali ellenőrzést igényel.",
   "Có cảnh báo cần kiểm tra": "Egy riasztás ellenőrzést igényel",

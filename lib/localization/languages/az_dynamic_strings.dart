@@ -24,19 +24,19 @@ const Map<String, String> azDynamicStrings = {
       "\$name və daha \$otherCount nəfər yazır...",
   "Kênh báo động cũ để giữ tương thích":
       "Uyğunluğu qorumaq üçün köhnə həyəcan kanalı saxlanılıb",
-  "SafeHome báo động toàn màn hình": "SafeHome tam ekran həyəcanı",
+  "MaiYen báo động toàn màn hình": "MaiYen tam ekran həyəcanı",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Tam ekran xəbərdarlığını açır; siren səsi həyəcan səhifəsindən səslənir",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome fövqəladə xəbərdarlığı",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen fövqəladə xəbərdarlığı",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Tam ekran açılmazdan əvvəl yüksək prioritetli fövqəladə xəbərdarlıq",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome tam ekran xatırlatması",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Səssiz SafeHome tam ekran xatırlatması",
-  "SafeHome nhắc nhở ưu tiên cao": "Yüksək prioritetli SafeHome xatırlatması",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Tam ekran olmadan yüksək prioritetli SafeHome xatırlatması",
-  "Tin nhắn mới trong các nhà SafeHome": "SafeHome evlərində yeni mesajlar",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen tam ekran xatırlatması",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Səssiz MaiYen tam ekran xatırlatması",
+  "MaiYen nhắc nhở ưu tiên cao": "Yüksək prioritetli MaiYen xatırlatması",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Tam ekran olmadan yüksək prioritetli MaiYen xatırlatması",
+  "Tin nhắn mới trong các nhà MaiYen": "MaiYen evlərində yeni mesajlar",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Bu əməliyyat bu gün bəzi cihazların siqnal vaxtını dəyişəcək.\n\n“Fövqəladə təhlükə” kateqoriyasındakı cihazların siqnalları və “Mühafizə” rejimindəki siqnallar bu funksiyadan təsirlənməyəcək.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count ev təhlükədədir\$suffix",

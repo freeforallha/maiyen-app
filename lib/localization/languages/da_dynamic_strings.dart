@@ -25,19 +25,19 @@ const Map<String, String> daDynamicStrings = {
       "\$name og \$otherCount andre skriver...",
   "Kênh báo động cũ để giữ tương thích":
       "Ældre alarmkanal bevaret af hensyn til kompatibilitet",
-  "SafeHome báo động toàn màn hình": "SafeHome-alarm i fuld skærm",
+  "MaiYen báo động toàn màn hình": "MaiYen-alarm i fuld skærm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Åbner advarslen i fuld skærm; sirenelyden afspilles fra alarmsiden",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-nødadvarsel",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-nødadvarsel",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Nødadvarsel med høj prioritet før visning i fuld skærm",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-påmindelse i fuld skærm",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Lydløs SafeHome-påmindelse i fuld skærm",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-påmindelse med høj prioritet",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-påmindelse med høj prioritet uden fuld skærm",
-  "Tin nhắn mới trong các nhà SafeHome": "Nye beskeder i SafeHome-hjem",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-påmindelse i fuld skærm",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Lydløs MaiYen-påmindelse i fuld skærm",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-påmindelse med høj prioritet",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-påmindelse med høj prioritet uden fuld skærm",
+  "Tin nhắn mới trong các nhà MaiYen": "Nye beskeder i MaiYen-hjem",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Denne handling ændrer alarmtiden for nogle enheder i dag.\n\nAlarmer fra enheder i kategorien „Akut fare“ og alarmer i tilstanden „Beskyttelse“ påvirkes ikke af denne funktion.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count hjem i fare\$suffix",

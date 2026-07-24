@@ -6,7 +6,7 @@ const Map<String, String> koStrings = {
   "Bạn không có quyền sửa lịch chung của nhà": "공유된 집 일정을 수정할 권한이 없습니다",
   "Nhà của bạn": "내 집",
   "Tải tin cũ hơn": "이전 메시지 불러오기",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Nhà chưa đặt tên": "이름 없는 집",
   "Nhà": "집",
   "Thêm nhà": "집 추가",
@@ -104,7 +104,7 @@ const Map<String, String> koStrings = {
   "Nguy hiểm khẩn cấp": "긴급 위험",
   "Môi trường": "환경",
   "Điều khiển & hạ tầng": "제어 및 인프라",
-  "Toàn bộ thiết bị SafeHome": "전체 SafeHome 기기",
+  "Toàn bộ thiết bị MaiYen": "전체 MaiYen 기기",
   "Cửa ra/vào": "출입문",
   "Cửa": "문",
   "Cửa sổ": "창문",
@@ -408,8 +408,8 @@ const Map<String, String> koStrings = {
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS 기기에 기록된 알림이 없습니다.",
   "Cảm biến khói chưa ghi nhận bất thường.": "연기 감지기가 이상을 감지하지 않았습니다.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "사용자 또는 구성원이 수동으로 보호를 켰습니다.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "집을 떠났기 때문에 SafeHome이 자동으로 보호를 켰습니다.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "집을 떠났기 때문에 MaiYen이 자동으로 보호를 켰습니다.",
   "Nhà đang ở chế độ dùng bình thường.": "이 집은 현재 일반 사용 모드입니다.",
   "Bảo vệ thủ công đang bật": "수동 보호가 켜져 있음",
   "Bảo vệ tự động đang bật": "자동 보호가 켜져 있음",
@@ -417,8 +417,8 @@ const Map<String, String> koStrings = {
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "최근 앱을 열어 상태를 확인했습니다.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "권한, 일정, 읽지 않은 경고를 확인하기 위해 앱을 정기적으로 여세요.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "몇 번 사용한 후 SafeHome이 앱 확인 습관을 더 잘 평가할 수 있습니다.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "몇 번 사용한 후 MaiYen이 앱 확인 습관을 더 잘 평가할 수 있습니다.",
   "Tần suất vào ứng dụng ổn": "앱 확인 빈도가 양호합니다",
   "Đã lâu chưa vào ứng dụng kiểm tra": "앱을 확인한 지 오래되었습니다",
   "Đang ghi nhận tần suất vào ứng dụng": "앱 확인 빈도를 기록 중",
@@ -462,8 +462,8 @@ const Map<String, String> koStrings = {
   "Chạy nền ổn định": "백그라운드 실행이 안정적입니다",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "일부 Android 휴대폰은 배터리 최적화가 켜져 있으면 경고가 지연될 수 있습니다.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "휴대폰이 SafeHome 경고를 지연할 가능성이 낮습니다.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "휴대폰이 MaiYen 경고를 지연할 가능성이 낮습니다.",
   "Chưa tắt tối ưu pin": "배터리 최적화가 아직 켜져 있음",
   "Tối ưu pin không chặn ứng dụng": "배터리 최적화가 앱을 차단하지 않음",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -483,8 +483,8 @@ const Map<String, String> koStrings = {
   "Cảnh báo toàn màn hình": "전체 화면 경고",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "알림이 꺼져 있으면 경고가 표시되지 않을 수 있습니다.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "이 휴대폰은 SafeHome 알림을 받을 수 있습니다.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "이 휴대폰은 MaiYen 알림을 받을 수 있습니다.",
   "Chưa bật thông báo": "알림이 꺼져 있음",
   "Đã bật thông báo": "알림이 켜져 있음",
   "Hệ thống: Sẵn sàng": "시스템: 준비됨",
@@ -492,7 +492,7 @@ const Map<String, String> koStrings = {
   "Cách bạn đang dùng ứng dụng": "앱 사용 방식",
   "Thiết bị của bạn": "내 기기",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.": "휴대폰과 앱 사용 상태를 확인합니다.",
-  "Hệ thống SafeHome": "SafeHome 시스템",
+  "Hệ thống MaiYen": "MaiYen 시스템",
   "Hệ thống: Đang kiểm tra...": "시스템: 확인 중...",
   "Không có": "없음",
   "Tổng hợp trạng thái": "상태 요약",
@@ -659,10 +659,10 @@ const Map<String, String> koStrings = {
   "Chưa nhận diện": "인식되지 않음",
   "Mở cài đặt": "설정 열기",
   "Để sau": "나중에",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome은 앱이 백그라운드에서 실행 중일 때도 외출 또는 귀가를 감지하려면 \"항상 허용\" 위치 권한이 필요합니다.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome은 현재 앱을 사용하는 동안에만 위치에 접근할 수 있습니다.\n\n위치 권한을 열고 \"항상 허용\"을 선택하면 외출 시 자동 보호 기능이 백그라운드에서도 계속 작동합니다.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen은 앱이 백그라운드에서 실행 중일 때도 외출 또는 귀가를 감지하려면 \"항상 허용\" 위치 권한이 필요합니다.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen은 현재 앱을 사용하는 동안에만 위치에 접근할 수 있습니다.\n\n위치 권한을 열고 \"항상 허용\"을 선택하면 외출 시 자동 보호 기능이 백그라운드에서도 계속 작동합니다.",
   "Cho phép vị trí luôn luôn": "위치 항상 허용",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "내 집은 삭제됩니다.\n공유된 집에서는 나가게 됩니다.",
@@ -689,7 +689,7 @@ const Map<String, String> koStrings = {
   "Từ chối": "거절",
   "Lời mời từ chủ nhà": "소유자의 초대",
   "Nhận quyền chủ nhà": "집 소유권 받기",
-  "Một người dùng SafeHome": "SafeHome 사용자",
+  "Một người dùng MaiYen": "MaiYen 사용자",
   "Lời mời gia nhập": "참여 초대",
   "Lời xin vào nhà": "집 참여 요청",
   "Đã cập nhật": "업데이트됨",
@@ -707,7 +707,7 @@ const Map<String, String> koStrings = {
   "CẦN KIỂM TRA": "확인 필요",
   "KIỂM TRA NHÀ": "집 확인",
   "ĐÓNG NHẮC NHỞ": "리마인더 닫기",
-  "SafeHome Security Alert": "SafeHome 보안 경고",
+  "MaiYen Security Alert": "MaiYen 보안 경고",
   "Bạn không có quyền sắp xếp phòng": "방을 정렬할 권한이 없습니다",
   "Chọn giờ kết thúc tạm tắt": "일시 중지 종료 시간 선택",
   "Chưa có thiết bị, hãy nhấn nút + để thêm để bắt đầu duy trì an ninh":
@@ -808,7 +808,7 @@ const Map<String, String> koStrings = {
   "Còn \$count tin nhắn chưa đọc": "읽지 않은 메시지 \$count개",
   "Hãy an tâm nghỉ ngơi.": "안심하셔도 됩니다.",
   "Có thiết bị chưa an toàn.": "일부 기기가 안전하지 않습니다.",
-  "SafeHome đang cập nhật vị trí": "SafeHome이 위치를 업데이트 중입니다",
+  "MaiYen đang cập nhật vị trí": "MaiYen이 위치를 업데이트 중입니다",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "보호 모드를 자동으로 켜기 위해 모니터링 중입니다.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
       "모두가 집을 떠나면 위치를 사용해 보호 모드를 자동으로 켭니다.",
@@ -818,12 +818,12 @@ const Map<String, String> koStrings = {
   "CẢNH BÁO RÒ KHÍ": "가스 누출 경고",
   "CẢNH BÁO CỬA": "문 경고",
   "CẢNH BÁO AN NINH": "보안 경고",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome에서 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen에서 확인할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "집 상태를 확인한 후에만 경고를 중지하세요.\n\n경고를 중지하시겠습니까?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome이 경고를 감지했습니다",
-  "Mở SafeHome để kiểm tra ngay.": "SafeHome을 열어 지금 확인하세요.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen이 경고를 감지했습니다",
+  "Mở MaiYen để kiểm tra ngay.": "MaiYen을 열어 지금 확인하세요.",
   "\$count tin nhắn mới": "새 메시지 \$count개",
   "Tin nhắn HomeChat": "HomeChat 메시지",
   "\$senderName đã gửi một tin nhắn": "\$senderName님이 메시지를 보냈습니다",
@@ -841,8 +841,8 @@ const Map<String, String> koStrings = {
       "\$actorName님이 \"\$homeName\"의 소유권을 회원님에게 이전하려고 합니다.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName님이 \"\$homeName\"에 초대했습니다.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome이 \"\$homeName\"에서 \"\$deviceName\"을 제거하는 중입니다.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen이 \"\$homeName\"에서 \"\$deviceName\"을 제거하는 중입니다.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "기기 \"\$deviceName\"이 \"\$homeName\"에 추가되었습니다.",
   "Bạn đã tạo nhà \"\$name\".": "\"\$name\" 집을 만들었습니다.",
@@ -894,8 +894,8 @@ const Map<String, String> koStrings = {
   "Có dấu hiệu rò khí": "가스 누출이 감지되었습니다",
   "Có cửa đang mở hoặc thiết bị bị tháo": "문이 열려 있거나 기기가 분리/조작되었습니다",
   "Có thiết bị đang cảnh báo": "경고 중인 기기가 있습니다",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "아무도 확인하지 않으면 SafeHome이 긴급 전화로 전환합니다.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "아무도 확인하지 않으면 MaiYen이 긴급 전화로 전환합니다.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "문제가 처리되지 않으면 \$time에 다시 알립니다.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -936,8 +936,8 @@ const Map<String, String> koStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "\"\$homeName\"에 초대합니다",
   "Cần kiểm tra: \$joined": "확인 필요: \$joined",
   "Cập nhật \$value": "업데이트됨: \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "첫 SafeHome 기기를 추가해 이 집 모니터링을 시작하세요.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "첫 MaiYen 기기를 추가해 이 집 모니터링을 시작하세요.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "먼저 긴급 경고를 확인한 뒤 필요하면 집 구성원에게 연락하세요.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -988,7 +988,7 @@ const Map<String, String> koStrings = {
   "Môi trường hiện tại: \$environment": "현재 환경: \$environment",
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: 집이 보호 모드일 때 열림",
   "An tâm hơn trong từng ngôi nhà": "모든 집에 더 큰 안심을",
-  "Báo động SafeHome": "SafeHome 알람",
+  "Báo động MaiYen": "MaiYen 알람",
   "Có cảnh báo an ninh cần kiểm tra ngay.": "확인이 필요한 보안 경고가 있습니다.",
   "Có cảnh báo cần kiểm tra": "확인이 필요한 경고가 있습니다",
   "Tự đóng sau \$time": "\$time 후 자동으로 닫힘",

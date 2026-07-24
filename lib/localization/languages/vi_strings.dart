@@ -18,7 +18,7 @@ const Map<String, String> viStrings = {
   "Nguy hiểm khẩn cấp": "Nguy hiểm khẩn cấp",
   "Điều khiển & hạ tầng": "Điều khiển & hạ tầng",
   "Môi trường": "Môi trường",
-  "Toàn bộ thiết bị SafeHome": "Toàn bộ thiết bị SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Toàn bộ thiết bị MaiYen",
   "Cửa ra/vào": "Cửa ra/vào",
   "Cửa": "Cửa",
   "Cửa sổ": "Cửa sổ",
@@ -610,8 +610,8 @@ const Map<String, String> viStrings = {
       "Cảm biến khói chưa ghi nhận bất thường.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Bạn hoặc thành viên đã chủ động bật Bảo vệ.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.",
   "Nhà đang ở chế độ dùng bình thường.": "Nhà đang ở chế độ dùng bình thường.",
   "Bảo vệ thủ công đang bật": "Bảo vệ thủ công đang bật",
   "Bảo vệ tự động đang bật": "Bảo vệ tự động đang bật",
@@ -620,8 +620,8 @@ const Map<String, String> viStrings = {
       "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
   "Tần suất vào ứng dụng ổn": "Tần suất vào ứng dụng ổn",
   "Đã lâu chưa vào ứng dụng kiểm tra": "Đã lâu chưa vào ứng dụng kiểm tra",
   "Đang ghi nhận tần suất vào ứng dụng": "Đang ghi nhận tần suất vào ứng dụng",
@@ -666,8 +666,8 @@ const Map<String, String> viStrings = {
   "Chạy nền ổn định": "Chạy nền ổn định",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.",
   "Chưa tắt tối ưu pin": "Chưa tắt tối ưu pin",
   "Tối ưu pin không chặn ứng dụng": "Tối ưu pin không chặn ứng dụng",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -688,8 +688,8 @@ const Map<String, String> viStrings = {
   "Cảnh báo toàn màn hình": "Cảnh báo toàn màn hình",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Điện thoại có thể nhận thông báo SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Điện thoại có thể nhận thông báo MaiYen.",
   "Chưa bật thông báo": "Chưa bật thông báo",
   "Đã bật thông báo": "Đã bật thông báo",
   "Hệ thống: Sẵn sàng": "Hệ thống: Sẵn sàng",
@@ -698,7 +698,7 @@ const Map<String, String> viStrings = {
   "Thiết bị của bạn": "Thiết bị của bạn",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.",
-  "Hệ thống SafeHome": "Hệ thống SafeHome",
+  "Hệ thống MaiYen": "Hệ thống MaiYen",
   "Hệ thống: Đang kiểm tra...": "Hệ thống: Đang kiểm tra...",
   "Tên": "Tên",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -719,10 +719,10 @@ const Map<String, String> viStrings = {
   "Thêm Home": "Thêm nhà",
   "Mở cài đặt": "Mở cài đặt",
   "Để sau": "Để sau",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
   "Cho phép vị trí luôn luôn": "Cho phép vị trí luôn luôn",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.",
@@ -751,7 +751,7 @@ const Map<String, String> viStrings = {
   "Từ chối": "Từ chối",
   "Lời mời từ chủ nhà": "Lời mời từ chủ nhà",
   "Nhận quyền chủ nhà": "Nhận quyền chủ nhà",
-  "Một người dùng SafeHome": "Một người dùng SafeHome",
+  "Một người dùng MaiYen": "Một người dùng MaiYen",
   "Lời mời gia nhập": "Lời mời gia nhập",
   "Lời xin vào nhà": "Lời xin vào nhà",
   "Nhập HUB ID": "Nhập HUB ID",
@@ -768,7 +768,7 @@ const Map<String, String> viStrings = {
   "CẦN KIỂM TRA": "CẦN KIỂM TRA",
   "KIỂM TRA NHÀ": "KIỂM TRA NHÀ",
   "ĐÓNG NHẮC NHỞ": "ĐÓNG NHẮC NHỞ",
-  "SafeHome Security Alert": "Cảnh báo an ninh SafeHome",
+  "MaiYen Security Alert": "Cảnh báo an ninh MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -811,7 +811,7 @@ const Map<String, String> viStrings = {
   "Phòng": "Phòng",
   "Quản trị viên": "Quản trị viên",
   "Nhắc nhở": "Nhắc nhở",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Sóng yếu",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Tài khoản & hệ thống",
@@ -858,7 +858,7 @@ const Map<String, String> viStrings = {
   "Còn \$count tin nhắn chưa đọc": "Còn \$count tin nhắn chưa đọc",
   "Hãy an tâm nghỉ ngơi.": "Hãy an tâm nghỉ ngơi.",
   "Có thiết bị chưa an toàn.": "Có thiết bị chưa an toàn.",
-  "SafeHome đang cập nhật vị trí": "SafeHome đang cập nhật vị trí",
+  "MaiYen đang cập nhật vị trí": "MaiYen đang cập nhật vị trí",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Đang theo dõi để tự động bật Chế độ Bảo vệ.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -869,12 +869,12 @@ const Map<String, String> viStrings = {
   "CẢNH BÁO RÒ KHÍ": "CẢNH BÁO RÒ KHÍ",
   "CẢNH BÁO CỬA": "CẢNH BÁO CỬA",
   "CẢNH BÁO AN NINH": "CẢNH BÁO AN NINH",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome phát hiện cảnh báo",
-  "Mở SafeHome để kiểm tra ngay.": "Mở SafeHome để kiểm tra ngay.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen phát hiện cảnh báo",
+  "Mở MaiYen để kiểm tra ngay.": "Mở MaiYen để kiểm tra ngay.",
   "\$count tin nhắn mới": "\$count tin nhắn mới",
   "Tin nhắn HomeChat": "Tin nhắn HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName đã gửi một tin nhắn",
@@ -893,8 +893,8 @@ const Map<String, String> viStrings = {
       "\$actorName muốn chuyển quyền chủ nhà \"\$homeName\" cho bạn.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName đã mời bạn tham gia nhà \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Bạn đã tạo nhà \"\$name\".",
@@ -950,8 +950,8 @@ const Map<String, String> viStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Có cửa đang mở hoặc thiết bị bị tháo",
   "Có thiết bị đang cảnh báo": "Có thiết bị đang cảnh báo",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Báo lại lúc \$time nếu vấn đề chưa được xử lý.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -995,8 +995,8 @@ const Map<String, String> viStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Mời bạn gia nhập \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Cần kiểm tra: \$joined",
   "Cập nhật \$value": "Cập nhật \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1052,7 +1052,7 @@ const Map<String, String> viStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Đang mở khi nhà ở chế độ Bảo vệ",
   "An tâm hơn trong từng ngôi nhà": "An tâm hơn trong từng ngôi nhà",
-  "Báo động SafeHome": "Báo động SafeHome",
+  "Báo động MaiYen": "Báo động MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Có cảnh báo an ninh cần kiểm tra ngay.",
   "Có cảnh báo cần kiểm tra": "Có cảnh báo cần kiểm tra",

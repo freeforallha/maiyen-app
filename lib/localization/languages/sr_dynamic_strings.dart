@@ -24,19 +24,19 @@ const Map<String, String> srDynamicStrings = {
       "\$name i još \$otherCount drugih pišu...",
   "Kênh báo động cũ để giữ tương thích":
       "Stari alarmni kanal radi kompatibilnosti",
-  "SafeHome báo động toàn màn hình": "SafeHome alarm preko celog ekrana",
+  "MaiYen báo động toàn màn hình": "MaiYen alarm preko celog ekrana",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Otvara upozorenje preko celog ekrana; zvuk sirene se reprodukuje sa stranice alarma",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome hitno upozorenje",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen hitno upozorenje",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Hitno upozorenje visokog prioriteta pre prikaza preko celog ekrana",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome podsetnik preko celog ekrana",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Tihi SafeHome podsetnik preko celog ekrana",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome podsetnik visokog prioriteta",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome podsetnik visokog prioriteta bez prikaza preko celog ekrana",
-  "Tin nhắn mới trong các nhà SafeHome": "Nove poruke u SafeHome domovima",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen podsetnik preko celog ekrana",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Tihi MaiYen podsetnik preko celog ekrana",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen podsetnik visokog prioriteta",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen podsetnik visokog prioriteta bez prikaza preko celog ekrana",
+  "Tin nhắn mới trong các nhà MaiYen": "Nove poruke u MaiYen domovima",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ova radnja će danas promeniti vreme alarma za neke uređaje.\n\nOva funkcija neće uticati na alarme uređaja u kategoriji „Hitna opasnost“ niti na alarme u režimu „Zaštita“.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count domova u opasnosti\$suffix",

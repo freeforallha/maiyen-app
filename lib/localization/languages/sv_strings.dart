@@ -18,7 +18,7 @@ const Map<String, String> svStrings = {
   "Nguy hiểm khẩn cấp": "Akuta faror",
   "Điều khiển & hạ tầng": "Styrning och infrastruktur",
   "Môi trường": "Miljö",
-  "Toàn bộ thiết bị SafeHome": "Alla SafeHome-enheter",
+  "Toàn bộ thiết bị MaiYen": "Alla MaiYen-enheter",
   "Cửa ra/vào": "Entrédörr",
   "Cửa": "Dörr",
   "Cửa sổ": "Fönster",
@@ -621,8 +621,8 @@ const Map<String, String> svStrings = {
       "Röksensorn har inte upptäckt något problem.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Du eller en medlem aktiverade Skydd manuellt.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome aktiverade Skydd automatiskt eftersom du lämnade hemmet.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen aktiverade Skydd automatiskt eftersom du lämnade hemmet.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Det här hemmet används normalt just nu.",
   "Bảo vệ thủ công đang bật": "Manuellt Skydd är aktiverat",
@@ -632,8 +632,8 @@ const Map<String, String> svStrings = {
       "Du har nyligen öppnat appen för att kontrollera status.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Öppna appen regelbundet för att granska behörigheter, scheman och olästa larm.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Efter några användningar kan SafeHome bedöma din vana att kontrollera appen bättre.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Efter några användningar kan MaiYen bedöma din vana att kontrollera appen bättre.",
   "Tần suất vào ứng dụng ổn": "Frekvensen för appkontroller ser bra ut",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Det var ett tag sedan appen kontrollerades senast",
@@ -681,8 +681,8 @@ const Map<String, String> svStrings = {
   "Chạy nền ổn định": "Bakgrundsanvändningen verkar stabil",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Vissa Android-telefoner kan fördröja larm när batterioptimering är aktiverad.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telefonen är mindre benägen att fördröja SafeHome-larm.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telefonen är mindre benägen att fördröja MaiYen-larm.",
   "Chưa tắt tối ưu pin": "Batterioptimering är fortfarande aktiverad",
   "Tối ưu pin không chặn ứng dụng": "Batterioptimering blockerar inte appen",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -703,8 +703,8 @@ const Map<String, String> svStrings = {
   "Cảnh báo toàn màn hình": "Helskärmslarm",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Larm kanske inte visas om aviseringar är avstängda.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Den här telefonen kan ta emot SafeHome-aviseringar.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Den här telefonen kan ta emot MaiYen-aviseringar.",
   "Chưa bật thông báo": "Aviseringar är inte aktiverade",
   "Đã bật thông báo": "Aviseringar är aktiverade",
   "Hệ thống: Sẵn sàng": "System: Klart",
@@ -713,7 +713,7 @@ const Map<String, String> svStrings = {
   "Thiết bị của bạn": "Din enhet",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Kontrollerar telefonen och hur du använder appen.",
-  "Hệ thống SafeHome": "SafeHome-systemet",
+  "Hệ thống MaiYen": "MaiYen-systemet",
   "Hệ thống: Đang kiểm tra...": "System: Kontrollerar...",
   "Tên": "Namn",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -734,10 +734,10 @@ const Map<String, String> svStrings = {
   "Thêm Home": "Lägg till Hem",
   "Mở cài đặt": "Öppna inställningar",
   "Để sau": "Senare",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome behöver platsbehörigheten Alltid för att upptäcka när du lämnar eller återvänder hem, även när appen körs i bakgrunden.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome kan just nu bara komma åt platsen medan appen används.\n\nÖppna platsbehörigheten och välj ”Tillåt alltid” så att det automatiska skyddet fortsätter att fungera i bakgrunden.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen behöver platsbehörigheten Alltid för att upptäcka när du lämnar eller återvänder hem, även när appen körs i bakgrunden.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen kan just nu bara komma åt platsen medan appen används.\n\nÖppna platsbehörigheten och välj ”Tillåt alltid” så att det automatiska skyddet fortsätter att fungera i bakgrunden.",
   "Cho phép vị trí luôn luôn": "Tillåt alltid platsåtkomst",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Dina hem tas bort.\nDu lämnar de delade hemmen.",
@@ -766,7 +766,7 @@ const Map<String, String> svStrings = {
   "Từ chối": "Avböj",
   "Lời mời từ chủ nhà": "Inbjudan från ägaren",
   "Nhận quyền chủ nhà": "Ta emot ägarskapet för hemmet",
-  "Một người dùng SafeHome": "En SafeHome-användare",
+  "Một người dùng MaiYen": "En MaiYen-användare",
   "Lời mời gia nhập": "Inbjudan att gå med",
   "Lời xin vào nhà": "Begäran om att gå med i hemmet",
   "Nhập HUB ID": "Ange HUB-ID",
@@ -783,7 +783,7 @@ const Map<String, String> svStrings = {
   "CẦN KIỂM TRA": "BEHÖVER KONTROLLERAS",
   "KIỂM TRA NHÀ": "KONTROLLERA HEMMET",
   "ĐÓNG NHẮC NHỞ": "STÄNG PÅMINNELSEN",
-  "SafeHome Security Alert": "SafeHome-säkerhetslarm",
+  "MaiYen Security Alert": "MaiYen-säkerhetslarm",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Välj platsbehörigheten Tillåt alltid i appinställningarna",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -827,7 +827,7 @@ const Map<String, String> svStrings = {
   "Phòng": "Rum",
   "Quản trị viên": "Administratör",
   "Nhắc nhở": "Påminnelse",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Svag signal",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Konto och system",
@@ -874,7 +874,7 @@ const Map<String, String> svStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count olästa meddelanden",
   "Hãy an tâm nghỉ ngơi.": "Du kan känna dig trygg.",
   "Có thiết bị chưa an toàn.": "Vissa enheter är inte säkra.",
-  "SafeHome đang cập nhật vị trí": "SafeHome uppdaterar platsen",
+  "MaiYen đang cập nhật vị trí": "MaiYen uppdaterar platsen",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Övervakar för att aktivera Skyddsläge automatiskt.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -885,12 +885,12 @@ const Map<String, String> svStrings = {
   "CẢNH BÁO RÒ KHÍ": "GASLÄCKAGELARM",
   "CẢNH BÁO CỬA": "DÖRRLARM",
   "CẢNH BÁO AN NINH": "SÄKERHETSLARM",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Det gick inte att bekräfta med SafeHome. Kontrollera anslutningen och försök igen.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Det gick inte att bekräfta med MaiYen. Kontrollera anslutningen och försök igen.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Stoppa larmet först efter att du har kontrollerat hemmets tillstånd.\n\nÄr du säker på att du vill stoppa larmet?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome upptäckte ett larm",
-  "Mở SafeHome để kiểm tra ngay.": "Öppna SafeHome för att kontrollera nu.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen upptäckte ett larm",
+  "Mở MaiYen để kiểm tra ngay.": "Öppna MaiYen för att kontrollera nu.",
   "\$count tin nhắn mới": "\$count nya meddelanden",
   "Tin nhắn HomeChat": "HomeChat-meddelande",
   "\$senderName đã gửi một tin nhắn": "\$senderName skickade ett meddelande",
@@ -909,8 +909,8 @@ const Map<String, String> svStrings = {
       "\$actorName vill överföra ägarskapet för \"\$homeName\" till dig.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName bjöd in dig att gå med i \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome tar bort \"\$deviceName\" från \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen tar bort \"\$deviceName\" från \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Enheten \"\$deviceName\" lades till i \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Du skapade hemmet \"\$name\".",
@@ -966,8 +966,8 @@ const Map<String, String> svStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "En dörr är öppen eller en enhet har utsatts för sabotage",
   "Có thiết bị đang cảnh báo": "En enhet larmar",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Om ingen bekräftar startar SafeHome ett nödsamtal.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Om ingen bekräftar startar MaiYen ett nödsamtal.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Larmar igen kl. \$time om problemet inte har åtgärdats.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1011,8 +1011,8 @@ const Map<String, String> svStrings = {
       "Bjuder in dig att gå med i \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Behöver tillsyn: \$joined",
   "Cập nhật \$value": "Uppdaterad \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Lägg till din första SafeHome-enhet för att börja övervaka det här hemmet.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Lägg till din första MaiYen-enhet för att börja övervaka det här hemmet.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Kontrollera nödlarmen först och kontakta sedan hushållets medlemmar vid behov.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1068,7 +1068,7 @@ const Map<String, String> svStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Öppen medan Hemmet är i Skyddsläge",
   "An tâm hơn trong từng ngôi nhà": "Trygghet i varje hem",
-  "Báo động SafeHome": "SafeHome-larm",
+  "Báo động MaiYen": "MaiYen-larm",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Ett säkerhetslarm kräver din uppmärksamhet.",
   "Có cảnh báo cần kiểm tra": "Ett larm kräver din uppmärksamhet",

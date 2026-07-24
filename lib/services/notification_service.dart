@@ -6,7 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import '../app/safe_home_app.dart';
+import '../config/brand_config.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
@@ -1428,7 +1430,7 @@ class NotificationService {
       title: localizedNotificationTitle(
         alarmData['title']?.toString() ?? '',
         strings,
-        '🚨 SafeHome',
+        '🚨 ${BrandConfig.appName}',
       ),
       body: localizedAlarmBodyForData(alarmData, strings),
       alarmItemsJson: _alarmItemsJsonFromData(alarmData),
@@ -2001,7 +2003,7 @@ class NotificationService {
           final alarmData = {'body': rawBody, 'alarmItemsJson': alarmItems};
 
           openAlarmPage(
-            title: '🚨 SafeHome',
+            title: '🚨 ${BrandConfig.appName}',
             body: localizedAlarmBodyForData(alarmData, strings),
             alarmItemsJson: alarmItems,
           );
@@ -2017,7 +2019,7 @@ class NotificationService {
           };
 
           openAlarmPage(
-            title: '🚨 SafeHome',
+            title: '🚨 ${BrandConfig.appName}',
             body: localizedAlarmBodyForData(alarmData, strings),
             alarmItemsJson: lastAlarmItemsJson,
           );
@@ -2178,7 +2180,7 @@ class NotificationService {
       title: localizedNotificationTitle(
         data['title']?.toString() ?? '',
         strings,
-        '🚨 SafeHome',
+        '🚨 ${BrandConfig.appName}',
       ),
       body: localizedAlarmBodyForData(data, strings),
       alarmItemsJson: data['alarmItemsJson']?.toString() ?? '',
@@ -2343,7 +2345,7 @@ class NotificationService {
         : _currentReminderReason();
     final notificationTitle = strings.safetyReminderNotificationTitle(
       homeTitle: lastScheduleTitle.trim().isEmpty
-          ? "SafeHome"
+          ? BrandConfig.appName
           : lastScheduleTitle,
       isSafe: effectiveIsSafe,
     );

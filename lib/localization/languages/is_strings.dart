@@ -18,7 +18,7 @@ const Map<String, String> isStrings = {
   "Nguy hiểm khẩn cấp": "Bráð hætta",
   "Điều khiển & hạ tầng": "Stýring og innviðir",
   "Môi trường": "Umhverfi",
-  "Toàn bộ thiết bị SafeHome": "Öll SafeHome-tæki",
+  "Toàn bộ thiết bị MaiYen": "Öll MaiYen-tæki",
   "Cửa ra/vào": "Inngangshurð",
   "Cửa": "Hurð",
   "Cửa sổ": "Gluggi",
@@ -619,8 +619,8 @@ const Map<String, String> isStrings = {
       "Reykskynjarinn hefur ekki greint vandamál.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Þú eða meðlimur virkjaði Vernd handvirkt.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome virkjaði Vernd sjálfkrafa vegna þess að þú yfirgafst heimilið.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen virkjaði Vernd sjálfkrafa vegna þess að þú yfirgafst heimilið.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Þetta heimili er í venjulegri notkun.",
   "Bảo vệ thủ công đang bật": "Handvirk Vernd er virk",
@@ -630,8 +630,8 @@ const Map<String, String> isStrings = {
       "Þú hefur opnað forritið nýlega til að athuga stöðuna.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Opnaðu forritið reglulega til að yfirfara heimildir, tímaáætlanir og ólesnar viðvaranir.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Eftir nokkur skipti getur SafeHome metið venjur þínar við að athuga forritið betur.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Eftir nokkur skipti getur MaiYen metið venjur þínar við að athuga forritið betur.",
   "Tần suất vào ứng dụng ổn": "Tíðni athugana í forritinu lítur vel út",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Nokkuð er liðið frá síðustu athugun í forritinu",
@@ -679,8 +679,8 @@ const Map<String, String> isStrings = {
   "Chạy nền ổn định": "Bakgrunnsvinnsla virðist stöðug",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Sumir Android-símar geta tafið viðvaranir meðan rafhlöðuhagræðing er virk.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Síminn er ólíklegri til að tefja SafeHome-viðvaranir.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Síminn er ólíklegri til að tefja MaiYen-viðvaranir.",
   "Chưa tắt tối ưu pin": "Rafhlöðuhagræðing er enn virk",
   "Tối ưu pin không chặn ứng dụng": "Rafhlöðuhagræðing hindrar ekki forritið",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -701,8 +701,8 @@ const Map<String, String> isStrings = {
   "Cảnh báo toàn màn hình": "Viðvaranir á öllum skjánum",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Viðvaranir birtast hugsanlega ekki ef slökkt er á tilkynningum.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Þessi sími getur fengið SafeHome-tilkynningar.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Þessi sími getur fengið MaiYen-tilkynningar.",
   "Chưa bật thông báo": "Tilkynningar eru ekki virkar",
   "Đã bật thông báo": "Tilkynningar eru virkar",
   "Hệ thống: Sẵn sàng": "Kerfi: Tilbúið",
@@ -712,7 +712,7 @@ const Map<String, String> isStrings = {
   "Thiết bị của bạn": "Tækið þitt",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Athugar símann þinn og hvernig þú notar forritið.",
-  "Hệ thống SafeHome": "SafeHome-kerfi",
+  "Hệ thống MaiYen": "MaiYen-kerfi",
   "Hệ thống: Đang kiểm tra...": "Kerfi: Athugar...",
   "Tên": "Nafn",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -735,10 +735,10 @@ const Map<String, String> isStrings = {
   "Thêm Home": "Bæta við heimili",
   "Mở cài đặt": "Opna stillingar",
   "Để sau": "Síðar",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome þarf staðsetningarheimildina Alltaf til að greina þegar þú yfirgefur heimilið eða kemur aftur, einnig þegar forritið keyrir í bakgrunni.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome getur nú aðeins fengið aðgang að staðsetningu meðan forritið er í notkun.\n\nOpnaðu staðsetningarheimild og veldu \"Leyfa alltaf\" svo sjálfvirk vernd haldi áfram að virka í bakgrunni.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen þarf staðsetningarheimildina Alltaf til að greina þegar þú yfirgefur heimilið eða kemur aftur, einnig þegar forritið keyrir í bakgrunni.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen getur nú aðeins fengið aðgang að staðsetningu meðan forritið er í notkun.\n\nOpnaðu staðsetningarheimild og veldu \"Leyfa alltaf\" svo sjálfvirk vernd haldi áfram að virka í bakgrunni.",
   "Cho phép vị trí luôn luôn": "Leyfa staðsetningu alltaf",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Heimilunum þínum verður eytt.\nÞú yfirgefur deildu heimilin.",
@@ -767,7 +767,7 @@ const Map<String, String> isStrings = {
   "Từ chối": "Hafna",
   "Lời mời từ chủ nhà": "Boð frá eigandanum",
   "Nhận quyền chủ nhà": "Taka við eignarhaldi heimilis",
-  "Một người dùng SafeHome": "SafeHome-notandi",
+  "Một người dùng MaiYen": "MaiYen-notandi",
   "Lời mời gia nhập": "Boð um aðgang",
   "Lời xin vào nhà": "Beiðni um aðgang að heimili",
   "Nhập HUB ID": "Sláðu inn HUB-auðkenni",
@@ -785,7 +785,7 @@ const Map<String, String> isStrings = {
   "CẦN KIỂM TRA": "ÞARF AÐ ATHUGA",
   "KIỂM TRA NHÀ": "ATHUGA HEIMILI",
   "ĐÓNG NHẮC NHỞ": "LOKA ÁMINNINGU",
-  "SafeHome Security Alert": "SafeHome-öryggisviðvörun",
+  "MaiYen Security Alert": "MaiYen-öryggisviðvörun",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Veldu staðsetningarheimildina Leyfa alltaf í stillingum forritsins",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -828,7 +828,7 @@ const Map<String, String> isStrings = {
   "Phòng": "Herbergi",
   "Quản trị viên": "Stjórnandi",
   "Nhắc nhở": "Áminning",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Veikt merki",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Reikningur og kerfi",
@@ -876,7 +876,7 @@ const Map<String, String> isStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count ólesin skilaboð",
   "Hãy an tâm nghỉ ngơi.": "Þú getur hvílst örugglega.",
   "Có thiết bị chưa an toàn.": "Sum tæki eru ekki örugg.",
-  "SafeHome đang cập nhật vị trí": "SafeHome uppfærir staðsetningu",
+  "MaiYen đang cập nhật vị trí": "MaiYen uppfærir staðsetningu",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Fylgist með til að virkja Verndarham sjálfkrafa.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -887,12 +887,12 @@ const Map<String, String> isStrings = {
   "CẢNH BÁO RÒ KHÍ": "GASLEKAVIÐVÖRUN",
   "CẢNH BÁO CỬA": "HURÐARVIÐVÖRUN",
   "CẢNH BÁO AN NINH": "ÖRYGGISVIÐVÖRUN",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Ekki tókst að staðfesta við SafeHome. Athugaðu tenginguna og reyndu aftur.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Ekki tókst að staðfesta við MaiYen. Athugaðu tenginguna og reyndu aftur.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Stöðvaðu viðvörun aðeins eftir að þú hefur athugað ástand heimilisins.\n\nErtu viss um að þú viljir stöðva viðvörunina?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome greindi viðvörun",
-  "Mở SafeHome để kiểm tra ngay.": "Opnaðu SafeHome til að athuga strax.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen greindi viðvörun",
+  "Mở MaiYen để kiểm tra ngay.": "Opnaðu MaiYen til að athuga strax.",
   "\$count tin nhắn mới": "\$count ný skilaboð",
   "Tin nhắn HomeChat": "HomeChat-skilaboð",
   "\$senderName đã gửi một tin nhắn": "\$senderName sendi skilaboð",
@@ -912,8 +912,8 @@ const Map<String, String> isStrings = {
       "\$actorName vill flytja eignarhald á \"\$homeName\" til þín.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName bauð þér að tengjast \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome fjarlægir \"\$deviceName\" af \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen fjarlægir \"\$deviceName\" af \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Tækinu \"\$deviceName\" var bætt við \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Þú stofnaðir heimilið \"\$name\".",
@@ -970,8 +970,8 @@ const Map<String, String> isStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Hurð er opin eða átt hefur verið við tæki",
   "Có thiết bị đang cảnh báo": "Tæki gefur viðvörun",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Ef enginn staðfestir mun SafeHome hefja neyðarsímtal.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ef enginn staðfestir mun MaiYen hefja neyðarsímtal.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Varar aftur við kl. \$time ef ekki hefur verið brugðist við vandamálinu.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1015,8 +1015,8 @@ const Map<String, String> isStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Býður þér að tengjast \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Krefst athygli: \$joined",
   "Cập nhật \$value": "Uppfært \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Bættu við fyrsta SafeHome-tækinu þínu til að hefja vöktun þessa heimilis.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Bættu við fyrsta MaiYen-tækinu þínu til að hefja vöktun þessa heimilis.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Athugaðu fyrst neyðarviðvaranir og hafðu síðan samband við meðlimi heimilisins ef þörf krefur.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1071,7 +1071,7 @@ const Map<String, String> isStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Opið meðan heimilið er í Verndarham",
   "An tâm hơn trong từng ngôi nhà": "Hugarró á hverju heimili",
-  "Báo động SafeHome": "SafeHome-viðvörun",
+  "Báo động MaiYen": "MaiYen-viðvörun",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Öryggisviðvörun krefst tafarlausrar athugunar.",
   "Có cảnh báo cần kiểm tra": "Viðvörun krefst athygli þinnar",

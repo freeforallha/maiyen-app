@@ -9,6 +9,7 @@ import '../pages/login_page.dart';
 import '../pages/home_page.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import '../pages/profile_setup_page.dart';
+import '../config/brand_config.dart';
 import '../services/notification_service.dart';
 import '../services/account_session_service.dart';
 import '../services/auto_away_service.dart';
@@ -305,7 +306,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
       final alarmItems = parts.length > 2 ? Uri.decodeComponent(parts[2]) : "";
 
       return FullscreenAlarmPage(
-        title: "🚨 SafeHome",
+        title: "🚨 ${BrandConfig.appName}",
         body: body,
         alarmItemsJson: alarmItems,
       );
@@ -675,10 +676,10 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
           content: Text(
             currentlyWhileUsing
                 ? strings.t(
-                    "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
+                    "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.",
                   )
                 : strings.t(
-                    "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
+                    "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.",
                   ),
           ),
           actions: [

@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../firebase_options.dart';
+import '../../../config/brand_config.dart';
 import '../../../localization/app_strings.dart';
 import '../../notification_service.dart';
 import 'android_notification_config.dart';
@@ -399,7 +400,7 @@ Future<void> _showBackgroundScheduleNotification(
       ? strings.defaultHomeName()
       : rawHomeTitle.isNotEmpty
       ? rawHomeTitle
-      : 'SafeHome';
+      : BrandConfig.appName;
 
   final isSafe =
       data['isSafe']?.toString() == 'true' ||

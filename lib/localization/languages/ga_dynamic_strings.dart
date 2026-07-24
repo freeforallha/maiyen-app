@@ -25,20 +25,20 @@ const Map<String, String> gaDynamicStrings = {
       "Tá \$name agus \$otherCount duine eile ag clóscríobh...",
   "Kênh báo động cũ để giữ tương thích":
       "Sean-chainéal aláraim coinnithe ar mhaithe le comhoiriúnacht",
-  "SafeHome báo động toàn màn hình": "Aláram lánscáileáin SafeHome",
+  "MaiYen báo động toàn màn hình": "Aláram lánscáileáin MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Osclaíonn sé foláireamh lánscáileáin; seinntear fuaim an bhonnáin ón leathanach aláraim",
-  "SafeHome cảnh báo khẩn cấp": "Foláireamh éigeandála SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Foláireamh éigeandála MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Foláireamh éigeandála ardtosaíochta sula n-osclaítear an lánscáileán",
-  "SafeHome nhắc nhở toàn màn hình": "Meabhrúchán lánscáileáin SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Meabhrúchán lánscáileáin SafeHome gan fuaim",
-  "SafeHome nhắc nhở ưu tiên cao": "Meabhrúchán ardtosaíochta SafeHome",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Meabhrúchán ardtosaíochta SafeHome gan lánscáileán",
-  "Tin nhắn mới trong các nhà SafeHome":
-      "Teachtaireachtaí nua i mbailte SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Meabhrúchán lánscáileáin MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Meabhrúchán lánscáileáin MaiYen gan fuaim",
+  "MaiYen nhắc nhở ưu tiên cao": "Meabhrúchán ardtosaíochta MaiYen",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Meabhrúchán ardtosaíochta MaiYen gan lánscáileán",
+  "Tin nhắn mới trong các nhà MaiYen":
+      "Teachtaireachtaí nua i mbailte MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Athróidh an gníomh seo am aláraim roinnt gléasanna inniu.\n\nNí dhéanfaidh an ghné seo difear d’aláraim gléasanna sa chatagóir “Contúirt éigeandála” ná d’aláraim sa mhód “Cosaint”.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count baile i mbaol\$suffix",

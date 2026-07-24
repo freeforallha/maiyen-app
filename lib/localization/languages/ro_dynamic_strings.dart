@@ -24,19 +24,19 @@ const Map<String, String> roDynamicStrings = {
       "\$name și încă \$otherCount persoane scriu...",
   "Kênh báo động cũ để giữ tương thích":
       "Canal vechi de alarmă păstrat pentru compatibilitate",
-  "SafeHome báo động toàn màn hình": "Alarmă SafeHome pe tot ecranul",
+  "MaiYen báo động toàn màn hình": "Alarmă MaiYen pe tot ecranul",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Deschide alerta pe tot ecranul; sunetul sirenei este redat din pagina Alarmei",
-  "SafeHome cảnh báo khẩn cấp": "Alertă de urgență SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Alertă de urgență MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alertă de urgență cu prioritate ridicată înainte de deschiderea pe tot ecranul",
-  "SafeHome nhắc nhở toàn màn hình": "Memento SafeHome pe tot ecranul",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Memento SafeHome pe tot ecranul, fără sunet",
-  "SafeHome nhắc nhở ưu tiên cao": "Memento SafeHome cu prioritate ridicată",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Memento SafeHome cu prioritate ridicată, fără deschidere pe tot ecranul",
-  "Tin nhắn mới trong các nhà SafeHome": "Mesaje noi în locuințele SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Memento MaiYen pe tot ecranul",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Memento MaiYen pe tot ecranul, fără sunet",
+  "MaiYen nhắc nhở ưu tiên cao": "Memento MaiYen cu prioritate ridicată",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Memento MaiYen cu prioritate ridicată, fără deschidere pe tot ecranul",
+  "Tin nhắn mới trong các nhà MaiYen": "Mesaje noi în locuințele MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Această acțiune va modifica astăzi ora alarmei pentru unele dispozitive.\n\nAlarmele dispozitivelor din categoria „Pericol de urgență” și alarmele din modul „Protecție” nu vor fi afectate de această funcție.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count locuințe în pericol\$suffix",

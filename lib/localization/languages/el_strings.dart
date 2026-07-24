@@ -19,7 +19,7 @@ const Map<String, String> elStrings = {
   "Nguy hiểm khẩn cấp": "Κίνδυνοι έκτακτης ανάγκης",
   "Điều khiển & hạ tầng": "Έλεγχος και υποδομή",
   "Môi trường": "Περιβάλλον",
-  "Toàn bộ thiết bị SafeHome": "Όλες οι συσκευές SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Όλες οι συσκευές MaiYen",
   "Cửa ra/vào": "Πόρτα εισόδου",
   "Cửa": "Πόρτα",
   "Cửa sổ": "Παράθυρο",
@@ -641,8 +641,8 @@ const Map<String, String> elStrings = {
       "Ο αισθητήρας καπνού δεν έχει εντοπίσει πρόβλημα.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Εσείς ή ένα μέλος ενεργοποιήσατε χειροκίνητα την Προστασία.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "Το SafeHome ενεργοποίησε αυτόματα την Προστασία επειδή φύγατε από το σπίτι.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "Το MaiYen ενεργοποίησε αυτόματα την Προστασία επειδή φύγατε από το σπίτι.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Αυτό το σπίτι βρίσκεται τώρα σε κανονική χρήση.",
   "Bảo vệ thủ công đang bật": "Η χειροκίνητη Προστασία είναι ενεργή",
@@ -652,8 +652,8 @@ const Map<String, String> elStrings = {
       "Ανοίξατε πρόσφατα την εφαρμογή για να ελέγξετε την κατάσταση.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Ανοίγετε τακτικά την εφαρμογή για να ελέγχετε άδειες, προγράμματα και μη αναγνωσμένες ειδοποιήσεις.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Μετά από μερικές χρήσεις, το SafeHome θα μπορεί να αξιολογήσει καλύτερα τη συνήθειά σας να ελέγχετε την εφαρμογή.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Μετά από μερικές χρήσεις, το MaiYen θα μπορεί να αξιολογήσει καλύτερα τη συνήθειά σας να ελέγχετε την εφαρμογή.",
   "Tần suất vào ứng dụng ổn": "Η συχνότητα ελέγχου της εφαρμογής φαίνεται καλή",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Έχει περάσει αρκετός χρόνος από τον τελευταίο έλεγχο της εφαρμογής",
@@ -702,8 +702,8 @@ const Map<String, String> elStrings = {
   "Chạy nền ổn định": "Η χρήση στο παρασκήνιο φαίνεται σταθερή",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Ορισμένα τηλέφωνα Android μπορεί να καθυστερούν τις ειδοποιήσεις όταν είναι ενεργή η βελτιστοποίηση μπαταρίας.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Το τηλέφωνο είναι λιγότερο πιθανό να καθυστερεί τις ειδοποιήσεις SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Το τηλέφωνο είναι λιγότερο πιθανό να καθυστερεί τις ειδοποιήσεις MaiYen.",
   "Chưa tắt tối ưu pin": "Η βελτιστοποίηση μπαταρίας είναι ακόμη ενεργή",
   "Tối ưu pin không chặn ứng dụng":
       "Η βελτιστοποίηση μπαταρίας δεν εμποδίζει την εφαρμογή",
@@ -725,8 +725,8 @@ const Map<String, String> elStrings = {
   "Cảnh báo toàn màn hình": "Ειδοποιήσεις πλήρους οθόνης",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Οι ειδοποιήσεις μπορεί να μην εμφανίζονται αν οι γνωστοποιήσεις είναι απενεργοποιημένες.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Αυτό το τηλέφωνο μπορεί να λαμβάνει ειδοποιήσεις SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Αυτό το τηλέφωνο μπορεί να λαμβάνει ειδοποιήσεις MaiYen.",
   "Chưa bật thông báo": "Οι ειδοποιήσεις δεν είναι ενεργοποιημένες",
   "Đã bật thông báo": "Οι ειδοποιήσεις είναι ενεργοποιημένες",
   "Hệ thống: Sẵn sàng": "Σύστημα: Έτοιμο",
@@ -736,7 +736,7 @@ const Map<String, String> elStrings = {
   "Thiết bị của bạn": "Η συσκευή σας",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Ελέγχει το τηλέφωνό σας και τον τρόπο με τον οποίο χρησιμοποιείτε την εφαρμογή.",
-  "Hệ thống SafeHome": "Σύστημα SafeHome",
+  "Hệ thống MaiYen": "Σύστημα MaiYen",
   "Hệ thống: Đang kiểm tra...": "Σύστημα: Έλεγχος...",
   "Tên": "Όνομα",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -759,10 +759,10 @@ const Map<String, String> elStrings = {
   "Thêm Home": "Προσθήκη Σπιτιού",
   "Mở cài đặt": "Άνοιγμα ρυθμίσεων",
   "Để sau": "Αργότερα",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "Το SafeHome χρειάζεται άδεια τοποθεσίας «Πάντα» για να ανιχνεύει πότε φεύγετε ή επιστρέφετε στο σπίτι, ακόμη και όταν η εφαρμογή βρίσκεται στο παρασκήνιο.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Το SafeHome μπορεί αυτή τη στιγμή να έχει πρόσβαση στην τοποθεσία μόνο όταν χρησιμοποιείται η εφαρμογή.\n\nΑνοίξτε την άδεια Τοποθεσίας και επιλέξτε «Να επιτρέπεται πάντα», ώστε η αυτόματη προστασία να συνεχίσει να λειτουργεί στο παρασκήνιο.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "Το MaiYen χρειάζεται άδεια τοποθεσίας «Πάντα» για να ανιχνεύει πότε φεύγετε ή επιστρέφετε στο σπίτι, ακόμη και όταν η εφαρμογή βρίσκεται στο παρασκήνιο.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Το MaiYen μπορεί αυτή τη στιγμή να έχει πρόσβαση στην τοποθεσία μόνο όταν χρησιμοποιείται η εφαρμογή.\n\nΑνοίξτε την άδεια Τοποθεσίας και επιλέξτε «Να επιτρέπεται πάντα», ώστε η αυτόματη προστασία να συνεχίσει να λειτουργεί στο παρασκήνιο.",
   "Cho phép vị trí luôn luôn": "Η τοποθεσία επιτρέπεται πάντα",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Τα σπίτια σας θα διαγραφούν.\nΘα αποχωρήσετε από τα κοινόχρηστα σπίτια.",
@@ -791,7 +791,7 @@ const Map<String, String> elStrings = {
   "Từ chối": "Απόρριψη",
   "Lời mời từ chủ nhà": "Πρόσκληση από τον ιδιοκτήτη",
   "Nhận quyền chủ nhà": "Αποδοχή ιδιοκτησίας σπιτιού",
-  "Một người dùng SafeHome": "Ένας χρήστης SafeHome",
+  "Một người dùng MaiYen": "Ένας χρήστης MaiYen",
   "Lời mời gia nhập": "Πρόσκληση συμμετοχής",
   "Lời xin vào nhà": "Αίτημα συμμετοχής στο σπίτι",
   "Nhập HUB ID": "Εισαγάγετε το αναγνωριστικό HUB",
@@ -809,7 +809,7 @@ const Map<String, String> elStrings = {
   "CẦN KIỂM TRA": "ΧΡΕΙΑΖΕΤΑΙ ΕΛΕΓΧΟ",
   "KIỂM TRA NHÀ": "ΕΛΕΓΞΤΕ ΤΟ ΣΠΙΤΙ",
   "ĐÓNG NHẮC NHỞ": "ΚΛΕΙΣΙΜΟ ΥΠΕΝΘΥΜΙΣΗΣ",
-  "SafeHome Security Alert": "Ειδοποίηση ασφαλείας SafeHome",
+  "MaiYen Security Alert": "Ειδοποίηση ασφαλείας MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Επιλέξτε την άδεια τοποθεσίας «Να επιτρέπεται πάντα» στις ρυθμίσεις της εφαρμογής",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -854,7 +854,7 @@ const Map<String, String> elStrings = {
   "Phòng": "Δωμάτιο",
   "Quản trị viên": "Διαχειριστής",
   "Nhắc nhở": "Υπενθύμιση",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Ασθενές σήμα",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Λογαριασμός και σύστημα",
@@ -903,7 +903,7 @@ const Map<String, String> elStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count μη αναγνωσμένα μηνύματα",
   "Hãy an tâm nghỉ ngơi.": "Μπορείτε να είστε ήσυχοι.",
   "Có thiết bị chưa an toàn.": "Ορισμένες συσκευές δεν είναι ασφαλείς.",
-  "SafeHome đang cập nhật vị trí": "Το SafeHome ενημερώνει την τοποθεσία",
+  "MaiYen đang cập nhật vị trí": "Το MaiYen ενημερώνει την τοποθεσία",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Παρακολούθηση για αυτόματη ενεργοποίηση της λειτουργίας προστασίας.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -914,12 +914,12 @@ const Map<String, String> elStrings = {
   "CẢNH BÁO RÒ KHÍ": "ΕΙΔΟΠΟΙΗΣΗ ΔΙΑΡΡΟΗΣ ΑΕΡΙΟΥ",
   "CẢNH BÁO CỬA": "ΕΙΔΟΠΟΙΗΣΗ ΠΟΡΤΑΣ",
   "CẢNH BÁO AN NINH": "ΕΙΔΟΠΟΙΗΣΗ ΑΣΦΑΛΕΙΑΣ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Δεν ήταν δυνατή η επιβεβαίωση με το SafeHome. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Δεν ήταν δυνατή η επιβεβαίωση με το MaiYen. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Σταματήστε την ειδοποίηση μόνο αφού ελέγξετε την κατάσταση του σπιτιού.\n\nΕίστε βέβαιοι ότι θέλετε να σταματήσετε την ειδοποίηση;",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 Το SafeHome εντόπισε μια ειδοποίηση",
-  "Mở SafeHome để kiểm tra ngay.": "Ανοίξτε το SafeHome για έλεγχο τώρα.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 Το MaiYen εντόπισε μια ειδοποίηση",
+  "Mở MaiYen để kiểm tra ngay.": "Ανοίξτε το MaiYen για έλεγχο τώρα.",
   "\$count tin nhắn mới": "\$count νέα μηνύματα",
   "Tin nhắn HomeChat": "Μήνυμα HomeChat",
   "\$senderName đã gửi một tin nhắn": "Ο/Η \$senderName έστειλε ένα μήνυμα",
@@ -939,8 +939,8 @@ const Map<String, String> elStrings = {
       "Ο/Η \$actorName θέλει να σας μεταβιβάσει την ιδιοκτησία του \"\$homeName\".",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "Ο/Η \$actorName σας προσκάλεσε να συμμετάσχετε στο \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "Το SafeHome αφαιρεί το \"\$deviceName\" από το \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "Το MaiYen αφαιρεί το \"\$deviceName\" από το \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Η συσκευή \"\$deviceName\" προστέθηκε στο \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Δημιουργήσατε το σπίτι \"\$name\".",
@@ -997,8 +997,8 @@ const Map<String, String> elStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Μια πόρτα είναι ανοιχτή ή παραβιάστηκε μια συσκευή",
   "Có thiết bị đang cảnh báo": "Μια συσκευή εκπέμπει ειδοποίηση",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Αν δεν επιβεβαιώσει κανείς, το SafeHome θα ξεκινήσει κλήση έκτακτης ανάγκης.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Αν δεν επιβεβαιώσει κανείς, το MaiYen θα ξεκινήσει κλήση έκτακτης ανάγκης.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Η ειδοποίηση επαναλαμβάνεται στις \$time αν το πρόβλημα δεν έχει αντιμετωπιστεί.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1043,8 +1043,8 @@ const Map<String, String> elStrings = {
       "Σας προσκαλεί να συμμετάσχετε στο \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Χρειάζεται προσοχή: \$joined",
   "Cập nhật \$value": "Ενημερώθηκε \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Προσθέστε την πρώτη συσκευή SafeHome για να αρχίσετε να παρακολουθείτε αυτό το σπίτι.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Προσθέστε την πρώτη συσκευή MaiYen για να αρχίσετε να παρακολουθείτε αυτό το σπίτι.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Ελέγξτε πρώτα τις ειδοποιήσεις έκτακτης ανάγκης και έπειτα επικοινωνήστε με τα μέλη του νοικοκυριού αν χρειάζεται.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1102,7 +1102,7 @@ const Map<String, String> elStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Ανοιχτό ενώ το Σπίτι βρίσκεται σε λειτουργία προστασίας",
   "An tâm hơn trong từng ngôi nhà": "Ηρεμία σε κάθε σπίτι",
-  "Báo động SafeHome": "Συναγερμός SafeHome",
+  "Báo động MaiYen": "Συναγερμός MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Μια ειδοποίηση ασφαλείας χρειάζεται την προσοχή σας.",
   "Có cảnh báo cần kiểm tra": "Μια ειδοποίηση χρειάζεται την προσοχή σας",

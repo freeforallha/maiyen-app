@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../config/brand_config.dart';
+
 class HomeNotificationService {
   static const int maxNotifications = 120;
 
@@ -399,7 +401,7 @@ class HomeNotificationService {
   static String _cleanTitle(String title) {
     final cleanTitle = title.trim();
 
-    return cleanTitle.isNotEmpty ? cleanTitle : "SafeHome";
+    return cleanTitle.isNotEmpty ? cleanTitle : BrandConfig.appName;
   }
 
   static String _cleanHomeName(String? value) {

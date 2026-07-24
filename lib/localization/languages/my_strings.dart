@@ -18,7 +18,7 @@ const Map<String, String> myStrings = {
   "Nguy hiểm khẩn cấp": "အရေးပေါ်အန္တရာယ်များ",
   "Điều khiển & hạ tầng": "ထိန်းချုပ်မှုနှင့် အခြေခံစနစ်",
   "Môi trường": "ပတ်ဝန်းကျင်",
-  "Toàn bộ thiết bị SafeHome": "SafeHome စက်ပစ္စည်းအားလုံး",
+  "Toàn bộ thiết bị MaiYen": "MaiYen စက်ပစ္စည်းအားလုံး",
   "Cửa ra/vào": "အဝင်တံခါး",
   "Cửa": "တံခါး",
   "Cửa sổ": "ပြတင်းပေါက်",
@@ -622,8 +622,8 @@ const Map<String, String> myStrings = {
       "မီးခိုးအာရုံခံကိရိယာတွင် ပုံမှန်မဟုတ်သောအခြေအနေ မတွေ့ရသေးပါ။",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "သင် သို့မဟုတ် အဖွဲ့ဝင်တစ်ဦးက ကာကွယ်ရေးမုဒ်ကို ကိုယ်တိုင်ဖွင့်ထားသည်။",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "သင်အိမ်မှထွက်သွားသောကြောင့် SafeHome က ကာကွယ်ရေးမုဒ်ကို အလိုအလျောက်ဖွင့်ထားသည်။",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "သင်အိမ်မှထွက်သွားသောကြောင့် MaiYen က ကာကွယ်ရေးမုဒ်ကို အလိုအလျောက်ဖွင့်ထားသည်။",
   "Nhà đang ở chế độ dùng bình thường.":
       "ဤအိမ်သည် ပုံမှန်အသုံးပြုမှုမုဒ်တွင် ရှိနေသည်။",
   "Bảo vệ thủ công đang bật": "ကိုယ်တိုင် ကာကွယ်ရေးမုဒ် ဖွင့်ထားသည်",
@@ -633,8 +633,8 @@ const Map<String, String> myStrings = {
       "အခြေအနေစစ်ဆေးရန် မကြာသေးမီက အက်ပ်ကို ဖွင့်ထားသည်။",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "ခွင့်ပြုချက်များ၊ အချိန်ဇယားများနှင့် မဖတ်ရသေးသောသတိပေးချက်များကို စစ်ဆေးရန် အက်ပ်ကို ပုံမှန်ဖွင့်ပါ။",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "အကြိမ်အနည်းငယ် အသုံးပြုပြီးနောက် SafeHome က အက်ပ်စစ်ဆေးသည့်အလေ့အထကို ပိုမိုကောင်းမွန်စွာ အကဲဖြတ်နိုင်မည်။",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "အကြိမ်အနည်းငယ် အသုံးပြုပြီးနောက် MaiYen က အက်ပ်စစ်ဆေးသည့်အလေ့အထကို ပိုမိုကောင်းမွန်စွာ အကဲဖြတ်နိုင်မည်။",
   "Tần suất vào ứng dụng ổn": "အက်ပ်စစ်ဆေးသည့်အကြိမ်ရေ ကောင်းမွန်သည်",
   "Đã lâu chưa vào ứng dụng kiểm tra": "အက်ပ်ကို မစစ်ဆေးသည်မှာ အချိန်ကြာပြီ",
   "Đang ghi nhận tần suất vào ứng dụng":
@@ -685,8 +685,8 @@ const Map<String, String> myStrings = {
   "Chạy nền ổn định": "နောက်ခံလည်ပတ်မှု တည်ငြိမ်သည်",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "ဘက်ထရီချွေတာမှု ဖွင့်ထားပါက Android ဖုန်းအချို့တွင် သတိပေးချက်များ နှောင့်နှေးနိုင်သည်။",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "ဤဖုန်းတွင် SafeHome သတိပေးချက်များ နှောင့်နှေးနိုင်ခြေ နည်းသည်။",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "ဤဖုန်းတွင် MaiYen သတိပေးချက်များ နှောင့်နှေးနိုင်ခြေ နည်းသည်။",
   "Chưa tắt tối ưu pin": "ဘက်ထရီချွေတာမှု ဖွင့်ထားဆဲဖြစ်သည်",
   "Tối ưu pin không chặn ứng dụng": "ဘက်ထရီချွေတာမှုက အက်ပ်ကို မပိတ်ဆို့ပါ",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -707,8 +707,8 @@ const Map<String, String> myStrings = {
   "Cảnh báo toàn màn hình": "မျက်နှာပြင်အပြည့် သတိပေးချက်များ",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "အကြောင်းကြားချက်များ ပိတ်ထားပါက သတိပေးချက် မပေါ်နိုင်ပါ။",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "ဤဖုန်းသည် SafeHome အကြောင်းကြားချက်များ လက်ခံနိုင်သည်။",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "ဤဖုန်းသည် MaiYen အကြောင်းကြားချက်များ လက်ခံနိုင်သည်။",
   "Chưa bật thông báo": "အကြောင်းကြားချက်များ မဖွင့်ရသေးပါ",
   "Đã bật thông báo": "အကြောင်းကြားချက်များ ဖွင့်ထားသည်",
   "Hệ thống: Sẵn sàng": "စနစ် - အသင့်ဖြစ်သည်",
@@ -717,7 +717,7 @@ const Map<String, String> myStrings = {
   "Thiết bị của bạn": "သင့်စက်ပစ္စည်း",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "သင့်ဖုန်းနှင့် အက်ပ်အသုံးပြုပုံကို စစ်ဆေးသည်။",
-  "Hệ thống SafeHome": "SafeHome စနစ်",
+  "Hệ thống MaiYen": "MaiYen စနစ်",
   "Hệ thống: Đang kiểm tra...": "စနစ် - စစ်ဆေးနေသည်...",
   "Tên": "အမည်",
   "Bạn không có quyền thay đổi vị trí nhà": "အိမ်တည်နေရာ ပြောင်းလဲခွင့် မရှိပါ",
@@ -738,10 +738,10 @@ const Map<String, String> myStrings = {
   "Thêm Home": "အိမ်ထည့်ရန်",
   "Mở cài đặt": "ဆက်တင်များ ဖွင့်ရန်",
   "Để sau": "နောက်မှ",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "အက်ပ် နောက်ခံတွင်လည်ပတ်နေချိန်အပါအဝင် သင်အိမ်မှထွက်ခြင်း သို့မဟုတ် ပြန်ရောက်ခြင်းကို သိရှိရန် SafeHome က တည်နေရာကို \"အမြဲခွင့်ပြုရန်\" လိုအပ်သည်။",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "လက်ရှိတွင် အက်ပ်ကို အသုံးပြုနေချိန်သာ SafeHome က တည်နေရာကို ရယူနိုင်သည်။\n\nအက်ပ် နောက်ခံတွင်လည်ပတ်နေချိန် အပြင်ထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု အလုပ်လုပ်နိုင်ရန် တည်နေရာခွင့်ပြုချက်ကို ဖွင့်ပြီး \"အမြဲခွင့်ပြုရန်\" ကို ရွေးပါ။",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "အက်ပ် နောက်ခံတွင်လည်ပတ်နေချိန်အပါအဝင် သင်အိမ်မှထွက်ခြင်း သို့မဟုတ် ပြန်ရောက်ခြင်းကို သိရှိရန် MaiYen က တည်နေရာကို \"အမြဲခွင့်ပြုရန်\" လိုအပ်သည်။",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "လက်ရှိတွင် အက်ပ်ကို အသုံးပြုနေချိန်သာ MaiYen က တည်နေရာကို ရယူနိုင်သည်။\n\nအက်ပ် နောက်ခံတွင်လည်ပတ်နေချိန် အပြင်ထွက်ချိန် အလိုအလျောက်ကာကွယ်မှု အလုပ်လုပ်နိုင်ရန် တည်နေရာခွင့်ပြုချက်ကို ဖွင့်ပြီး \"အမြဲခွင့်ပြုရန်\" ကို ရွေးပါ။",
   "Cho phép vị trí luôn luôn": "တည်နေရာကို အမြဲခွင့်ပြုရန်",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "သင်ပိုင်သောအိမ်များကို ဖျက်ပါမည်။\nမျှဝေထားသောအိမ်များမှ သင်ထွက်ပါမည်။",
@@ -770,7 +770,7 @@ const Map<String, String> myStrings = {
   "Từ chối": "ငြင်းပယ်ရန်",
   "Lời mời từ chủ nhà": "အိမ်ပိုင်ရှင်ထံမှ ဖိတ်ကြားချက်",
   "Nhận quyền chủ nhà": "အိမ်ပိုင်ဆိုင်မှု လက်ခံရန်",
-  "Một người dùng SafeHome": "SafeHome အသုံးပြုသူတစ်ဦး",
+  "Một người dùng MaiYen": "MaiYen အသုံးပြုသူတစ်ဦး",
   "Lời mời gia nhập": "ဝင်ရောက်ရန် ဖိတ်ကြားချက်",
   "Lời xin vào nhà": "အိမ်ဝင်ခွင့်တောင်းဆိုမှု",
   "Nhập HUB ID": "HUB ID ရိုက်ထည့်ပါ",
@@ -787,7 +787,7 @@ const Map<String, String> myStrings = {
   "CẦN KIỂM TRA": "စစ်ဆေးရန်လိုသည်",
   "KIỂM TRA NHÀ": "အိမ်ကို စစ်ဆေးရန်",
   "ĐÓNG NHẮC NHỞ": "သတိပေးချက် ပိတ်ရန်",
-  "SafeHome Security Alert": "SafeHome လုံခြုံရေးသတိပေးချက်",
+  "MaiYen Security Alert": "MaiYen လုံခြုံရေးသတိပေးချက်",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "App ဆက်တင်များတွင် တည်နေရာကို အမြဲခွင့်ပြုရန် ရွေးပါ",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -834,7 +834,7 @@ const Map<String, String> myStrings = {
   "Phòng": "အခန်း",
   "Quản trị viên": "စီမံခန့်ခွဲသူ",
   "Nhắc nhở": "သတိပေးချက်",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "အချက်ပြလှိုင်း အားနည်းသည်",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "အကောင့်နှင့် စနစ်",
@@ -882,7 +882,7 @@ const Map<String, String> myStrings = {
   "Còn \$count tin nhắn chưa đọc": "မဖတ်ရသေးသောစာတို \$count စောင်ရှိသည်",
   "Hãy an tâm nghỉ ngơi.": "စိတ်ချလက်ချ အနားယူနိုင်ပါသည်။",
   "Có thiết bị chưa an toàn.": "စက်ပစ္စည်းအချို့ မလုံခြုံပါ။",
-  "SafeHome đang cập nhật vị trí": "SafeHome က တည်နေရာကို မွမ်းမံနေသည်",
+  "MaiYen đang cập nhật vị trí": "MaiYen က တည်နေရာကို မွမ်းမံနေသည်",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "ကာကွယ်ရေးမုဒ်ကို အလိုအလျောက်ဖွင့်ရန် စောင့်ကြည့်နေသည်။",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -893,12 +893,12 @@ const Map<String, String> myStrings = {
   "CẢNH BÁO RÒ KHÍ": "ဓာတ်ငွေ့ယိုစိမ့်မှု သတိပေးချက်",
   "CẢNH BÁO CỬA": "တံခါး သတိပေးချက်",
   "CẢNH BÁO AN NINH": "လုံခြုံရေး သတိပေးချက်",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome နှင့် အတည်ပြု၍မရပါ။ ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen နှင့် အတည်ပြု၍မရပါ။ ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "အိမ်အခြေအနေကို စစ်ဆေးပြီးမှသာ သတိပေးချက်ကို ပိတ်ပါ။\n\nသတိပေးချက်ကို ပိတ်လိုသည်မှာ သေချာပါသလား?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome က သတိပေးချက်တစ်ခု တွေ့ရှိသည်",
-  "Mở SafeHome để kiểm tra ngay.": "ချက်ချင်းစစ်ဆေးရန် SafeHome ကို ဖွင့်ပါ။",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen က သတိပေးချက်တစ်ခု တွေ့ရှိသည်",
+  "Mở MaiYen để kiểm tra ngay.": "ချက်ချင်းစစ်ဆေးရန် MaiYen ကို ဖွင့်ပါ။",
   "\$count tin nhắn mới": "စာတိုအသစ် \$count စောင်",
   "Tin nhắn HomeChat": "HomeChat စာတို",
   "\$senderName đã gửi một tin nhắn": "\$senderName က စာတိုတစ်စောင် ပို့ခဲ့သည်",
@@ -918,8 +918,8 @@ const Map<String, String> myStrings = {
       "\$actorName က \"\$homeName\" ၏ပိုင်ဆိုင်မှုကို သင့်ထံ လွှဲပြောင်းလိုသည်။",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName က \"\$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်။",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome က \"\$homeName\" မှ \"\$deviceName\" စက်ပစ္စည်းကို ဖယ်ရှားနေသည်။",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen က \"\$homeName\" မှ \"\$deviceName\" စက်ပစ္စည်းကို ဖယ်ရှားနေသည်။",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "\"\$deviceName\" စက်ပစ္စည်းကို \"\$homeName\" သို့ ထည့်ပြီးပါပြီ။",
   "Bạn đã tạo nhà \"\$name\".": "\"\$name\" အိမ်ကို သင်ဖန်တီးပြီးပါပြီ။",
@@ -975,8 +975,8 @@ const Map<String, String> myStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "တံခါးတစ်ချပ် ဖွင့်နေသည် သို့မဟုတ် စက်ပစ္စည်းတစ်ခုကို ဖြုတ်/ဖောက်ထားသည်",
   "Có thiết bị đang cảnh báo": "စက်ပစ္စည်းတစ်ခုက သတိပေးနေသည်",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "မည်သူမျှ အတည်မပြုပါက SafeHome က အရေးပေါ်ဖုန်းခေါ်ဆိုမှု စတင်မည်။",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "မည်သူမျှ အတည်မပြုပါက MaiYen က အရေးပေါ်ဖုန်းခေါ်ဆိုမှု စတင်မည်။",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "ပြဿနာ မဖြေရှင်းရသေးပါက \$time တွင် ထပ်မံသတိပေးမည်။",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1022,8 +1022,8 @@ const Map<String, String> myStrings = {
       "\"\$homeName\" သို့ ဝင်ရန် သင့်ကို ဖိတ်ထားသည်",
   "Cần kiểm tra: \$joined": "စစ်ဆေးရန်လိုသည် - \$joined",
   "Cập nhật \$value": "\$value တွင် မွမ်းမံထားသည်",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "ဤအိမ်ကို စတင်စောင့်ကြည့်ရန် ပထမဆုံး SafeHome စက်ပစ္စည်းကို ထည့်ပါ။",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "ဤအိမ်ကို စတင်စောင့်ကြည့်ရန် ပထမဆုံး MaiYen စက်ပစ္စည်းကို ထည့်ပါ။",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "အရေးပေါ်သတိပေးချက်များကို ဦးစွာစစ်ဆေးပြီး လိုအပ်ပါက အိမ်တွင်ရှိသူများကို ဆက်သွယ်ပါ။",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1081,7 +1081,7 @@ const Map<String, String> myStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name - အိမ်က ကာကွယ်ရေးမုဒ်တွင်ရှိချိန် ဖွင့်ထားသည်",
   "An tâm hơn trong từng ngôi nhà": "အိမ်တိုင်းအတွက် စိတ်ချမ်းသာမှု",
-  "Báo động SafeHome": "SafeHome အရေးပေါ်အချက်ပေးသံ သတိပေးချက်",
+  "Báo động MaiYen": "MaiYen အရေးပေါ်အချက်ပေးသံ သတိပေးချက်",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "လုံခြုံရေးသတိပေးချက်တစ်ခုကို ချက်ချင်းစစ်ဆေးရန်လိုသည်။",
   "Có cảnh báo cần kiểm tra": "စစ်ဆေးရန်လိုသော သတိပေးချက်ရှိသည်",

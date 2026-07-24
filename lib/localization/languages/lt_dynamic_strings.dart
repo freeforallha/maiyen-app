@@ -24,19 +24,19 @@ const Map<String, String> ltDynamicStrings = {
       "\$name ir dar \$otherCount žmonių rašo...",
   "Kênh báo động cũ để giữ tương thích":
       "Senas signalizacijos kanalas paliktas suderinamumui",
-  "SafeHome báo động toàn màn hình": "SafeHome viso ekrano signalizacija",
+  "MaiYen báo động toàn màn hình": "MaiYen viso ekrano signalizacija",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Atidaro viso ekrano perspėjimą; sirenos garsas leidžiamas signalizacijos puslapyje",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome avarinis perspėjimas",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen avarinis perspėjimas",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Aukšto prioriteto avarinis perspėjimas prieš atidarant visą ekraną",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome viso ekrano priminimas",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Tylus SafeHome viso ekrano priminimas",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome aukšto prioriteto priminimas",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome aukšto prioriteto priminimas be viso ekrano",
-  "Tin nhắn mới trong các nhà SafeHome": "Naujos žinutės SafeHome namuose",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen viso ekrano priminimas",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Tylus MaiYen viso ekrano priminimas",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen aukšto prioriteto priminimas",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen aukšto prioriteto priminimas be viso ekrano",
+  "Tin nhắn mới trong các nhà MaiYen": "Naujos žinutės MaiYen namuose",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Šis veiksmas šiandien pakeis kai kurių įrenginių signalizacijos laiką.\n\nŠi funkcija neturės įtakos įrenginių kategorijos „Avarinis pavojus“ signalams ir režimo „Apsauga“ signalams.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count namų pavojuje\$suffix",

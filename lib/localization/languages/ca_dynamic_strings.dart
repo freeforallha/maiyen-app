@@ -25,19 +25,19 @@ const Map<String, String> caDynamicStrings = {
       "\$name i \$otherCount persones més estan escrivint...",
   "Kênh báo động cũ để giữ tương thích":
       "Canal d'alarma antic mantingut per compatibilitat",
-  "SafeHome báo động toàn màn hình": "Alarma SafeHome a pantalla completa",
+  "MaiYen báo động toàn màn hình": "Alarma MaiYen a pantalla completa",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Obre l'alerta a pantalla completa; el so de la sirena es reprodueix des de la pàgina d'alarma",
-  "SafeHome cảnh báo khẩn cấp": "Alerta d'emergència SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Alerta d'emergència MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alerta d'emergència d'alta prioritat abans d'obrir la pantalla completa",
-  "SafeHome nhắc nhở toàn màn hình": "Recordatori SafeHome a pantalla completa",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Recordatori SafeHome silenciós a pantalla completa",
-  "SafeHome nhắc nhở ưu tiên cao": "Recordatori SafeHome d'alta prioritat",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Recordatori SafeHome d'alta prioritat sense pantalla completa",
-  "Tin nhắn mới trong các nhà SafeHome": "Missatges nous a les llars SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Recordatori MaiYen a pantalla completa",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Recordatori MaiYen silenciós a pantalla completa",
+  "MaiYen nhắc nhở ưu tiên cao": "Recordatori MaiYen d'alta prioritat",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Recordatori MaiYen d'alta prioritat sense pantalla completa",
+  "Tin nhắn mới trong các nhà MaiYen": "Missatges nous a les llars MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Aquesta acció canviarà avui l’hora de l’alarma d’alguns dispositius.\n\nLes alarmes dels dispositius de la categoria «Perill d’emergència» i les alarmes en mode «Protecció» no es veuran afectades per aquesta funció.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count llars en perill\$suffix",

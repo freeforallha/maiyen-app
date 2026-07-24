@@ -18,7 +18,7 @@ const Map<String, String> azStrings = {
   "Nguy hiểm khẩn cấp": "Fövqəladə təhlükələr",
   "Điều khiển & hạ tầng": "İdarəetmə və infrastruktur",
   "Môi trường": "Mühit",
-  "Toàn bộ thiết bị SafeHome": "Bütün SafeHome cihazları",
+  "Toàn bộ thiết bị MaiYen": "Bütün MaiYen cihazları",
   "Cửa ra/vào": "Giriş qapısı",
   "Cửa": "Qapı",
   "Cửa sổ": "Pəncərə",
@@ -610,8 +610,8 @@ const Map<String, String> azStrings = {
       "Tüstü sensoru problem aşkar etməyib.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Siz və ya üzvlərdən biri Mühafizəni əl ilə aktivləşdirmisiniz.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "Evdən çıxdığınız üçün SafeHome Mühafizəni avtomatik aktivləşdirdi.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "Evdən çıxdığınız üçün MaiYen Mühafizəni avtomatik aktivləşdirdi.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Bu ev hazırda normal rejimdə istifadə olunur.",
   "Bảo vệ thủ công đang bật": "Əl ilə Mühafizə aktivdir",
@@ -621,8 +621,8 @@ const Map<String, String> azStrings = {
       "Vəziyyəti yoxlamaq üçün tətbiqi bu yaxınlarda açmısınız.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "İcazələri, cədvəlləri və oxunmamış xəbərdarlıqları nəzərdən keçirmək üçün tətbiqi müntəzəm açın.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Bir neçə istifadədən sonra SafeHome tətbiqi yoxlama vərdişinizi daha yaxşı qiymətləndirə biləcək.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Bir neçə istifadədən sonra MaiYen tətbiqi yoxlama vərdişinizi daha yaxşı qiymətləndirə biləcək.",
   "Tần suất vào ứng dụng ổn": "Tətbiqi yoxlama tezliyi yaxşıdır",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Tətbiqin son yoxlanışından xeyli vaxt keçib",
@@ -669,8 +669,8 @@ const Map<String, String> azStrings = {
   "Chạy nền ổn định": "Arxa plan istifadəsi sabitdir",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Bəzi Android telefonları batareya optimallaşdırması aktiv olduqda xəbərdarlıqları gecikdirə bilər.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telefonun SafeHome xəbərdarlıqlarını gecikdirmə ehtimalı daha azdır.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telefonun MaiYen xəbərdarlıqlarını gecikdirmə ehtimalı daha azdır.",
   "Chưa tắt tối ưu pin": "Batareya optimallaşdırması hələ də aktivdir",
   "Tối ưu pin không chặn ứng dụng":
       "Batareya optimallaşdırması tətbiqi bloklamır",
@@ -692,8 +692,8 @@ const Map<String, String> azStrings = {
   "Cảnh báo toàn màn hình": "Tam ekran xəbərdarlıqları",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Bildirişlər söndürülübsə, xəbərdarlıqlar görünməyə bilər.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Bu telefon SafeHome bildirişlərini ala bilər.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Bu telefon MaiYen bildirişlərini ala bilər.",
   "Chưa bật thông báo": "Bildirişlər aktiv deyil",
   "Đã bật thông báo": "Bildirişlər aktivdir",
   "Hệ thống: Sẵn sàng": "Sistem: Hazırdır",
@@ -702,7 +702,7 @@ const Map<String, String> azStrings = {
   "Thiết bị của bạn": "Cihazınız",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Telefonunuzu və tətbiqdən necə istifadə etdiyinizi yoxlayır.",
-  "Hệ thống SafeHome": "SafeHome sistemi",
+  "Hệ thống MaiYen": "MaiYen sistemi",
   "Hệ thống: Đang kiểm tra...": "Sistem: Yoxlanılır...",
   "Tên": "Ad",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -722,10 +722,10 @@ const Map<String, String> azStrings = {
   "Thêm Home": "Ev əlavə et",
   "Mở cài đặt": "Parametrləri aç",
   "Để sau": "Sonra",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome evdən çıxdığınızı və ya qayıtdığınızı, hətta tətbiq arxa planda işləyərkən də aşkar etmək üçün “Həmişə” məkan icazəsinə ehtiyac duyur.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome hazırda məkana yalnız tətbiqdən istifadə etdiyiniz zaman daxil ola bilir.\n\nMəkan icazəsini açın və avtomatik mühafizənin arxa planda işləməsi üçün “Həmişə icazə ver” seçin.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen evdən çıxdığınızı və ya qayıtdığınızı, hətta tətbiq arxa planda işləyərkən də aşkar etmək üçün “Həmişə” məkan icazəsinə ehtiyac duyur.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen hazırda məkana yalnız tətbiqdən istifadə etdiyiniz zaman daxil ola bilir.\n\nMəkan icazəsini açın və avtomatik mühafizənin arxa planda işləməsi üçün “Həmişə icazə ver” seçin.",
   "Cho phép vị trí luôn luôn": "Məkana həmişə icazə ver",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Evləriniz silinəcək.\nPaylaşılan evlərdən çıxacaqsınız.",
@@ -754,7 +754,7 @@ const Map<String, String> azStrings = {
   "Từ chối": "Rədd et",
   "Lời mời từ chủ nhà": "Sahibdən dəvət",
   "Nhận quyền chủ nhà": "Ev sahibliyini qəbul et",
-  "Một người dùng SafeHome": "SafeHome istifadəçisi",
+  "Một người dùng MaiYen": "MaiYen istifadəçisi",
   "Lời mời gia nhập": "Qoşulma dəvəti",
   "Lời xin vào nhà": "Evə qoşulma sorğusu",
   "Nhập HUB ID": "HUB ID-ni daxil edin",
@@ -771,7 +771,7 @@ const Map<String, String> azStrings = {
   "CẦN KIỂM TRA": "YOXLAMA TƏLƏB OLUNUR",
   "KIỂM TRA NHÀ": "EVİ YOXLA",
   "ĐÓNG NHẮC NHỞ": "XATIRLATMANI BAĞLA",
-  "SafeHome Security Alert": "SafeHome Təhlükəsizlik Xəbərdarlığı",
+  "MaiYen Security Alert": "MaiYen Təhlükəsizlik Xəbərdarlığı",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Tətbiq parametrlərində “Həmişə icazə ver” məkan icazəsini seçin",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -813,7 +813,7 @@ const Map<String, String> azStrings = {
   "Phòng": "Otaq",
   "Quản trị viên": "Administrator",
   "Nhắc nhở": "Xatırlatma",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Zəif siqnal",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Hesab və sistem",
@@ -861,7 +861,7 @@ const Map<String, String> azStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count oxunmamış mesaj qalıb",
   "Hãy an tâm nghỉ ngơi.": "Rahat ola bilərsiniz.",
   "Có thiết bị chưa an toàn.": "Bəzi cihazlar təhlükəsiz deyil.",
-  "SafeHome đang cập nhật vị trí": "SafeHome məkanı yeniləyir",
+  "MaiYen đang cập nhật vị trí": "MaiYen məkanı yeniləyir",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Mühafizə rejimini avtomatik açmaq üçün izlənilir.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -872,12 +872,12 @@ const Map<String, String> azStrings = {
   "CẢNH BÁO RÒ KHÍ": "QAZ SIZMASI XƏBƏRDARLIĞI",
   "CẢNH BÁO CỬA": "QAPI XƏBƏRDARLIĞI",
   "CẢNH BÁO AN NINH": "TƏHLÜKƏSİZLİK XƏBƏRDARLIĞI",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome ilə təsdiq edilə bilmədi. Bağlantını yoxlayın və yenidən cəhd edin.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen ilə təsdiq edilə bilmədi. Bağlantını yoxlayın və yenidən cəhd edin.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Xəbərdarlığı yalnız evin vəziyyətini yoxladıqdan sonra dayandırın.\n\nXəbərdarlığı dayandırmaq istədiyinizə əminsiniz?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome xəbərdarlıq aşkar etdi",
-  "Mở SafeHome để kiểm tra ngay.": "İndi yoxlamaq üçün SafeHome-u açın.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen xəbərdarlıq aşkar etdi",
+  "Mở MaiYen để kiểm tra ngay.": "İndi yoxlamaq üçün MaiYen-u açın.",
   "\$count tin nhắn mới": "\$count yeni mesaj",
   "Tin nhắn HomeChat": "HomeChat mesajı",
   "\$senderName đã gửi một tin nhắn": "\$senderName mesaj göndərdi",
@@ -897,8 +897,8 @@ const Map<String, String> azStrings = {
       "\$actorName \"\$homeName\" evinin sahibliyini sizə ötürmək istəyir.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName sizi \"\$homeName\" evinə qoşulmağa dəvət etdi.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome \"\$deviceName\" cihazını \"\$homeName\" evindən silir.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen \"\$deviceName\" cihazını \"\$homeName\" evindən silir.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "\"\$deviceName\" cihazı \"\$homeName\" evinə əlavə edildi.",
   "Bạn đã tạo nhà \"\$name\".": "\"\$name\" evini yaratdınız.",
@@ -955,8 +955,8 @@ const Map<String, String> azStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Qapı açıqdır və ya cihaza müdaxilə edilib",
   "Có thiết bị đang cảnh báo": "Cihaz xəbərdarlıq edir",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Heç kim təsdiqləməsə, SafeHome fövqəladə zəng başladacaq.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Heç kim təsdiqləməsə, MaiYen fövqəladə zəng başladacaq.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Problem həll edilməyibsə, \$time vaxtında yenidən xəbərdarlıq edir.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1001,8 +1001,8 @@ const Map<String, String> azStrings = {
       "Sizi \"\$homeName\" evinə qoşulmağa dəvət edir",
   "Cần kiểm tra: \$joined": "Diqqət tələb edir: \$joined",
   "Cập nhật \$value": "Yeniləndi \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Bu evi izləməyə başlamaq üçün ilk SafeHome cihazınızı əlavə edin.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Bu evi izləməyə başlamaq üçün ilk MaiYen cihazınızı əlavə edin.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Əvvəlcə fövqəladə xəbərdarlıqları yoxlayın, sonra lazım gələrsə ev üzvləri ilə əlaqə saxlayın.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1057,7 +1057,7 @@ const Map<String, String> azStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Ev Mühafizə rejimində olarkən açıqdır",
   "An tâm hơn trong từng ngôi nhà": "Hər evdə rahatlıq",
-  "Báo động SafeHome": "SafeHome Siqnalı",
+  "Báo động MaiYen": "MaiYen Siqnalı",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Təhlükəsizlik xəbərdarlığı diqqətinizi tələb edir.",
   "Có cảnh báo cần kiểm tra": "Xəbərdarlıq diqqətinizi tələb edir",

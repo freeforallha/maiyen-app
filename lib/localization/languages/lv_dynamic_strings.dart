@@ -24,19 +24,19 @@ const Map<String, String> lvDynamicStrings = {
       "\$name un vēl \$otherCount citi raksta...",
   "Kênh báo động cũ để giữ tương thích":
       "Vecais trauksmes kanāls saglabāts saderībai",
-  "SafeHome báo động toàn màn hình": "SafeHome pilnekrāna trauksme",
+  "MaiYen báo động toàn màn hình": "MaiYen pilnekrāna trauksme",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Atver pilnekrāna brīdinājumu; sirēnas skaņa tiek atskaņota no trauksmes lapas",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome ārkārtas brīdinājums",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen ārkārtas brīdinājums",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Augstas prioritātes ārkārtas brīdinājums pirms pilnekrāna atvēršanas",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome pilnekrāna atgādinājums",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "SafeHome pilnekrāna atgādinājums bez skaņas",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome augstas prioritātes atgādinājums",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome augstas prioritātes atgādinājums bez pilnekrāna",
-  "Tin nhắn mới trong các nhà SafeHome": "Jauni ziņojumi SafeHome mājās",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen pilnekrāna atgādinājums",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "MaiYen pilnekrāna atgādinājums bez skaņas",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen augstas prioritātes atgādinājums",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen augstas prioritātes atgādinājums bez pilnekrāna",
+  "Tin nhắn mới trong các nhà MaiYen": "Jauni ziņojumi MaiYen mājās",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Šī darbība šodien mainīs dažu ierīču trauksmes laiku.\n\nŠī funkcija neietekmēs kategorijas “Ārkārtas apdraudējums” ierīču trauksmes un režīma “Aizsardzība” trauksmes.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count mājas apdraudētas\$suffix",

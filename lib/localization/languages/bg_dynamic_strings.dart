@@ -24,19 +24,19 @@ const Map<String, String> bgDynamicStrings = {
       "\$name и още \$otherCount души пишат...",
   "Kênh báo động cũ để giữ tương thích":
       "Стар канал за аларми, запазен за съвместимост",
-  "SafeHome báo động toàn màn hình": "Аларма SafeHome на цял екран",
+  "MaiYen báo động toàn màn hình": "Аларма MaiYen на цял екран",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Отваря предупреждение на цял екран; звукът на сирената се възпроизвежда от страницата на Алармата",
-  "SafeHome cảnh báo khẩn cấp": "Спешно предупреждение SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Спешно предупреждение MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Спешно предупреждение с висок приоритет преди отваряне на цял екран",
-  "SafeHome nhắc nhở toàn màn hình": "Напомняне SafeHome на цял екран",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Напомняне SafeHome на цял екран без звук",
-  "SafeHome nhắc nhở ưu tiên cao": "Напомняне SafeHome с висок приоритет",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Напомняне SafeHome с висок приоритет, без отваряне на цял екран",
-  "Tin nhắn mới trong các nhà SafeHome": "Нови съобщения в домовете SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Напомняне MaiYen на цял екран",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Напомняне MaiYen на цял екран без звук",
+  "MaiYen nhắc nhở ưu tiên cao": "Напомняне MaiYen с висок приоритет",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Напомняне MaiYen с висок приоритет, без отваряне на цял екран",
+  "Tin nhắn mới trong các nhà MaiYen": "Нови съобщения в домовете MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Това действие ще промени днешния час за аларма на някои устройства.\n\nАлармите на устройствата в категория „Спешна опасност“ и алармите в режим „Защита“ няма да бъдат засегнати от тази функция.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count дома в опасност\$suffix",

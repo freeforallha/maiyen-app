@@ -18,7 +18,7 @@ const Map<String, String> slStrings = {
   "Nguy hiểm khẩn cấp": "Hitne nevarnosti",
   "Điều khiển & hạ tầng": "Upravljanje in infrastruktura",
   "Môi trường": "Okoliš",
-  "Toàn bộ thiết bị SafeHome": "Vsi SafeHome naprave",
+  "Toàn bộ thiết bị MaiYen": "Vsi MaiYen naprave",
   "Cửa ra/vào": "Ulazna vrata",
   "Cửa": "Vrata",
   "Cửa sổ": "Okno",
@@ -615,8 +615,8 @@ const Map<String, String> slStrings = {
       "Senzor dima ni otkrio nepravilnosti.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Vi ali drugi član ročno ste uključili Zaščito.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome je samodejno uključio Zaščito ker ste napustili dom.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen je samodejno uključio Zaščito ker ste napustili dom.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Dom je trenutno v uobičajenom načinu rada.",
   "Bảo vệ thủ công đang bật": "Ročna Zaščita je vklopljena",
@@ -626,8 +626,8 @@ const Map<String, String> slStrings = {
       "Nedavno ste otvorili aplikacijo da preverite stanje.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Redno odpirajte aplikacijo da preverite dovoljenja, rasporede in neprebrana opozorila.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Po nekaj uporabah SafeHome bo lahko bolje ocenil vašo navado preverjanja aplikacije.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Po nekaj uporabah MaiYen bo lahko bolje ocenil vašo navado preverjanja aplikacije.",
   "Tần suất vào ứng dụng ổn": "Učestalost preverijo aplikacije je dobra",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Prošlo je dosta časa od posljednje preverijo aplikacije",
@@ -675,8 +675,8 @@ const Map<String, String> slStrings = {
   "Chạy nền ổn định": "Rad v ozadju je stabilan",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Nekateri Android telefoni mogu odgoditi opozorila medtem ko je optimizacija baterije vklopljena.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Mala je vjerojatnost da bo telefon odgađati SafeHome opozorila.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Mala je vjerojatnost da bo telefon odgađati MaiYen opozorila.",
   "Chưa tắt tối ưu pin": "Optimizacija baterije še je vklopljena",
   "Tối ưu pin không chặn ứng dụng":
       "Optimizacija baterije ne blokira aplikacijo",
@@ -698,8 +698,8 @@ const Map<String, String> slStrings = {
   "Cảnh báo toàn màn hình": "Opozorila čez celoten zaslon",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Opozorila se možda neće prikazati če so obvestila isključene.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Ta telefon lahko prejema obvestila SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Ta telefon lahko prejema obvestila MaiYen.",
   "Chưa bật thông báo": "Obvestila niso vklopljena",
   "Đã bật thông báo": "Obvestila so vklopljena",
   "Hệ thống: Sẵn sàng": "Sistem: Spreman",
@@ -709,7 +709,7 @@ const Map<String, String> slStrings = {
   "Thiết bị của bạn": "Vaš naprava",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Preverja telefon in način na ki uporabljate aplikacijo.",
-  "Hệ thống SafeHome": "Sistem SafeHome",
+  "Hệ thống MaiYen": "Sistem MaiYen",
   "Hệ thống: Đang kiểm tra...": "Sistem: Preverjanje...",
   "Tên": "Ime",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -730,10 +730,10 @@ const Map<String, String> slStrings = {
   "Thêm Home": "Dodaj Dom",
   "Mở cài đặt": "Odpri nastavitve",
   "Để sau": "Pozneje",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome potrebuje dovoljenje za lokacijo „Vedno dovoli” da prepozna ko odidete ali se vrnete domov, tudi ko aplikacija deluje v ozadju.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome trenutno lahko pristupati lokaciji samo medtem ko uporabljate aplikacijo.\n\nOtvorite dovoljenje za lokacijo in izberite „Vedno dovoli” kako bi Samodejna zaščita pri odhodu radila in v ozadju.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen potrebuje dovoljenje za lokacijo „Vedno dovoli” da prepozna ko odidete ali se vrnete domov, tudi ko aplikacija deluje v ozadju.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen trenutno lahko pristupati lokaciji samo medtem ko uporabljate aplikacijo.\n\nOtvorite dovoljenje za lokacijo in izberite „Vedno dovoli” kako bi Samodejna zaščita pri odhodu radila in v ozadju.",
   "Cho phép vị trí luôn luôn": "Vedno dovoli lokacijo",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Vaši bo domovi biti izbrisani.\nNapustit boste dijeljene domove.",
@@ -762,7 +762,7 @@ const Map<String, String> slStrings = {
   "Từ chối": "Odbij",
   "Lời mời từ chủ nhà": "Pozivnica Lastnika",
   "Nhận quyền chủ nhà": "Preuzmi lastništvo doma",
-  "Một người dùng SafeHome": "Uporabnik SafeHomea",
+  "Một người dùng MaiYen": "Uporabnik MaiYena",
   "Lời mời gia nhập": "Pozivnica za pridružitev",
   "Lời xin vào nhà": "Zahteva za pridružitev domu",
   "Nhập HUB ID": "Vnesite HUB ID",
@@ -779,7 +779,7 @@ const Map<String, String> slStrings = {
   "CẦN KIỂM TRA": "POTREBNA PREVERJANJE",
   "KIỂM TRA NHÀ": "PREVERI DOM",
   "ĐÓNG NHẮC NHỞ": "ZAPRI OPOMNIK",
-  "SafeHome Security Alert": "SafeHome varnostno opozorilo",
+  "MaiYen Security Alert": "MaiYen varnostno opozorilo",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Izberite dovoljenje lokacije „Vedno dovoli” v nastavitvah aplikacije",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -822,7 +822,7 @@ const Map<String, String> slStrings = {
   "Phòng": "Prostorija",
   "Quản trị viên": "Administrator",
   "Nhắc nhở": "Opomnik",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Slab signal",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Račun in sistem",
@@ -870,7 +870,7 @@ const Map<String, String> slStrings = {
   "Còn \$count tin nhắn chưa đọc": "Še \$count nepročitanih sporočilo",
   "Hãy an tâm nghỉ ngơi.": "Lahko mirno odmoriti.",
   "Có thiết bị chưa an toàn.": "Nekateri naprave nisu sigurni.",
-  "SafeHome đang cập nhật vị trí": "SafeHome ažurira lokacijo",
+  "MaiYen đang cập nhật vị trí": "MaiYen ažurira lokacijo",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Nadzire se deluje automatskog uključivanja načina Zaščite.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -881,13 +881,13 @@ const Map<String, String> slStrings = {
   "CẢNH BÁO RÒ KHÍ": "OPOZORILO NA PUŠČANJE PLINA",
   "CẢNH BÁO CỬA": "OPOZORILO ZA VRATA",
   "CẢNH BÁO AN NINH": "VARNOSTNO OPOZORILO",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Potrditev sa SafeHomeom ni uspjela. Preverite vezu in pokušajte znova.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Potrditev sa MaiYenom ni uspjela. Preverite vezu in pokušajte znova.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Izklopite opozorilo šele po tem, ko preverite stanje doma.\n\nAli ste prepričani da želite izklopiti opozorilo?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome je otkrio opozorilo",
-  "Mở SafeHome để kiểm tra ngay.":
-      "Odprite SafeHome kako biste takoj preverili.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen je otkrio opozorilo",
+  "Mở MaiYen để kiểm tra ngay.":
+      "Odprite MaiYen kako biste takoj preverili.",
   "\$count tin nhắn mới": "\$count novih sporočilo",
   "Tin nhắn HomeChat": "HomeChat sporočilo",
   "\$senderName đã gửi một tin nhắn": "\$senderName je poslao sporočilo",
@@ -907,8 +907,8 @@ const Map<String, String> slStrings = {
       "\$actorName vam želi prenijeti lastništvo doma „\$homeName”.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName vas je pozvao da se pridružite domu „\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome uklanja naprava „\$deviceName” iz doma „\$homeName”.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen uklanja naprava „\$deviceName” iz doma „\$homeName”.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Naprava „\$deviceName” dodan je v dom „\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Izradili ste dom „\$name”.",
@@ -964,8 +964,8 @@ const Map<String, String> slStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Vrata so odprta ali je zaznano neovlašteno uklanjanje naprave",
   "Có thiết bị đang cảnh báo": "Naprava šalje opozorilo",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Če nitko ne potrdi, SafeHome bo pokrenuti nujni poziv.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Če nitko ne potrdi, MaiYen bo pokrenuti nujni poziv.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Opozorilo se bo ponoviti v \$time če problem ni rešen.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1011,8 +1011,8 @@ const Map<String, String> slStrings = {
       "Poziva vas da se pridružite domu „\$homeName”",
   "Cần kiểm tra: \$joined": "Potrebna preverjanje: \$joined",
   "Cập nhật \$value": "Ažurirano \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Dodajte prvi SafeHome naprava kako biste počeli nadzirati dom.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Dodajte prvi MaiYen naprava kako biste počeli nadzirati dom.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Prvo preverite nujna opozorila, a zatim po potrebi kontaktirajte člane doma.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1069,7 +1069,7 @@ const Map<String, String> slStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Odprto medtem ko je dom v načinu zaščite",
   "An tâm hơn trong từng ngôi nhà": "Mir v svakom domu",
-  "Báo động SafeHome": "SafeHome Alarm",
+  "Báo động MaiYen": "MaiYen Alarm",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Varnostno opozorilo zahtijeva hitnu preverjanje.",
   "Có cảnh báo cần kiểm tra": "Opozorilo zahtijeva preverjanje",

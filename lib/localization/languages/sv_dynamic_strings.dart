@@ -25,19 +25,19 @@ const Map<String, String> svDynamicStrings = {
       "\$name och \$otherCount andra skriver...",
   "Kênh báo động cũ để giữ tương thích":
       "Den äldre larmkanalen behålls för kompatibilitet",
-  "SafeHome báo động toàn màn hình": "SafeHome-larm i helskärm",
+  "MaiYen báo động toàn màn hình": "MaiYen-larm i helskärm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Öppnar helskärmslarm; sirenljudet spelas från larmsidan",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-nödprioritet",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-nödprioritet",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Högprioriterat nödlarm innan helskärmen öppnas",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-schema i helskärm",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Tyst SafeHome-påminnelse i helskärm",
-  "SafeHome nhắc nhở ưu tiên cao": "Prioritet för SafeHome-påminnelse",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Högprioriterad SafeHome-påminnelse utan helskärm",
-  "Tin nhắn mới trong các nhà SafeHome": "Nya meddelanden i SafeHome-hem",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-schema i helskärm",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Tyst MaiYen-påminnelse i helskärm",
+  "MaiYen nhắc nhở ưu tiên cao": "Prioritet för MaiYen-påminnelse",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Högprioriterad MaiYen-påminnelse utan helskärm",
+  "Tin nhắn mới trong các nhà MaiYen": "Nya meddelanden i MaiYen-hem",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Den här åtgärden ändrar alarmtiden för vissa enheter i dag.\n\nLarm från enheter i kategorin ”Akut fara” och larm i läget ”Skydd” påverkas inte av den här funktionen.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count hem i fara\$suffix",

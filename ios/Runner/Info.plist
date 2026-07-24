@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Safehome App</string>
+	<string>MaiYen</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>safehome_app</string>
+	<string>MaiYen</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,13 +29,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>SafeHome cần dùng camera để quét mã QR khi chia sẻ hoặc tham gia nhà.</string>
+	<string>MaiYen cần dùng camera để quét mã QR khi chia sẻ hoặc tham gia nhà.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>SafeHome cần quyền vị trí luôn luôn để tự động nhận biết khi bạn rời hoặc trở về nhà.</string>
+	<string>MaiYen cần quyền vị trí luôn luôn để tự động nhận biết khi bạn rời hoặc trở về nhà.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>SafeHome cần quyền vị trí luôn luôn để tự động nhận biết khi bạn rời hoặc trở về nhà.</string>
+	<string>MaiYen cần quyền vị trí luôn luôn để tự động nhận biết khi bạn rời hoặc trở về nhà.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>SafeHome cần dùng vị trí để xác định bạn đang ở trong hay ngoài nhà.</string>
+	<string>MaiYen cần dùng vị trí để xác định bạn đang ở trong hay ngoài nhà.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

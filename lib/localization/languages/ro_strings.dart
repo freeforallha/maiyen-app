@@ -18,7 +18,7 @@ const Map<String, String> roStrings = {
   "Nguy hiểm khẩn cấp": "Pericole de urgență",
   "Điều khiển & hạ tầng": "Control și infrastructură",
   "Môi trường": "Mediu",
-  "Toàn bộ thiết bị SafeHome": "Toate dispozitivele SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Toate dispozitivele MaiYen",
   "Cửa ra/vào": "Ușă de acces",
   "Cửa": "Ușă",
   "Cửa sổ": "Fereastră",
@@ -637,8 +637,8 @@ const Map<String, String> roStrings = {
       "Senzorul de fum nu a detectat nicio anomalie.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Tu sau un membru ați activat manual Protecția.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome a activat automat Protecția deoarece ai plecat de acasă.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen a activat automat Protecția deoarece ai plecat de acasă.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Locuința este în modul de utilizare normală.",
   "Bảo vệ thủ công đang bật": "Protecția manuală este activată",
@@ -648,8 +648,8 @@ const Map<String, String> roStrings = {
       "Ai deschis recent aplicația pentru a verifica starea.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Deschide periodic aplicația pentru a verifica permisiunile, programele și alertele necitite.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "După câteva utilizări, SafeHome va putea evalua mai bine obiceiul tău de verificare a aplicației.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "După câteva utilizări, MaiYen va putea evalua mai bine obiceiul tău de verificare a aplicației.",
   "Tần suất vào ứng dụng ổn": "Frecvența verificării aplicației este bună",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "A trecut mult timp de la ultima verificare a aplicației",
@@ -698,8 +698,8 @@ const Map<String, String> roStrings = {
   "Chạy nền ổn định": "Rularea în fundal este stabilă",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Unele telefoane Android pot întârzia alertele cât timp optimizarea bateriei este activată.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Este puțin probabil ca telefonul să întârzie alertele SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Este puțin probabil ca telefonul să întârzie alertele MaiYen.",
   "Chưa tắt tối ưu pin": "Optimizarea bateriei este încă activată",
   "Tối ưu pin không chặn ứng dụng":
       "Optimizarea bateriei nu blochează aplicația",
@@ -721,8 +721,8 @@ const Map<String, String> roStrings = {
   "Cảnh báo toàn màn hình": "Alerte pe tot ecranul",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Este posibil ca alertele să nu apară dacă notificările sunt dezactivate.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Acest telefon poate primi notificări SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Acest telefon poate primi notificări MaiYen.",
   "Chưa bật thông báo": "Notificările nu sunt activate",
   "Đã bật thông báo": "Notificările sunt activate",
   "Hệ thống: Sẵn sàng": "Sistem: Pregătit",
@@ -731,7 +731,7 @@ const Map<String, String> roStrings = {
   "Thiết bị của bạn": "Dispozitivul tău",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Verifică telefonul și modul în care folosești aplicația.",
-  "Hệ thống SafeHome": "Sistemul SafeHome",
+  "Hệ thống MaiYen": "Sistemul MaiYen",
   "Hệ thống: Đang kiểm tra...": "Sistem: Se verifică...",
   "Tên": "Nume",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -754,10 +754,10 @@ const Map<String, String> roStrings = {
   "Thêm Home": "Adaugă o Locuință",
   "Mở cài đặt": "Deschide setările",
   "Để sau": "Mai târziu",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome are nevoie de permisiunea de locație „Permite întotdeauna” pentru a detecta când pleci sau revii acasă, inclusiv când aplicația rulează în fundal.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "În prezent, SafeHome poate accesa locația numai când folosești aplicația.\n\nDeschide permisiunea pentru Locație și selectează „Permite întotdeauna”, astfel încât Protecția automată la plecare să funcționeze și când aplicația rulează în fundal.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen are nevoie de permisiunea de locație „Permite întotdeauna” pentru a detecta când pleci sau revii acasă, inclusiv când aplicația rulează în fundal.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "În prezent, MaiYen poate accesa locația numai când folosești aplicația.\n\nDeschide permisiunea pentru Locație și selectează „Permite întotdeauna”, astfel încât Protecția automată la plecare să funcționeze și când aplicația rulează în fundal.",
   "Cho phép vị trí luôn luôn": "Permite întotdeauna locația",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Locuințele tale vor fi șterse.\nVei părăsi locuințele partajate.",
@@ -786,7 +786,7 @@ const Map<String, String> roStrings = {
   "Từ chối": "Refuză",
   "Lời mời từ chủ nhà": "Invitație de la Proprietar",
   "Nhận quyền chủ nhà": "Preia dreptul de Proprietar",
-  "Một người dùng SafeHome": "Un utilizator SafeHome",
+  "Một người dùng MaiYen": "Un utilizator MaiYen",
   "Lời mời gia nhập": "Invitație de alăturare",
   "Lời xin vào nhà": "Cerere de alăturare la locuință",
   "Nhập HUB ID": "Introdu ID-ul HUB-ului",
@@ -803,7 +803,7 @@ const Map<String, String> roStrings = {
   "CẦN KIỂM TRA": "NECESITĂ VERIFICARE",
   "KIỂM TRA NHÀ": "VERIFICĂ LOCUINȚA",
   "ĐÓNG NHẮC NHỞ": "ÎNCHIDE MEMENTOUL",
-  "SafeHome Security Alert": "Alertă de securitate SafeHome",
+  "MaiYen Security Alert": "Alertă de securitate MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Selectează permisiunea de locație „Permite întotdeauna” în setările aplicației",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -850,7 +850,7 @@ const Map<String, String> roStrings = {
   "Phòng": "Cameră",
   "Quản trị viên": "Administrator",
   "Nhắc nhở": "Memento",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Semnal slab",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Cont și sistem",
@@ -898,7 +898,7 @@ const Map<String, String> roStrings = {
   "Còn \$count tin nhắn chưa đọc": "Încă \$count mesaje necitite",
   "Hãy an tâm nghỉ ngơi.": "Poți să te odihnești liniștit.",
   "Có thiết bị chưa an toàn.": "Unele dispozitive nu sunt în siguranță.",
-  "SafeHome đang cập nhật vị trí": "SafeHome actualizează locația",
+  "MaiYen đang cập nhật vị trí": "MaiYen actualizează locația",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Se monitorizează pentru activarea automată a modului Protecție.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -909,13 +909,13 @@ const Map<String, String> roStrings = {
   "CẢNH BÁO RÒ KHÍ": "ALERTĂ DE SCURGERE DE GAZ",
   "CẢNH BÁO CỬA": "ALERTĂ UȘĂ",
   "CẢNH BÁO AN NINH": "ALERTĂ DE SECURITATE",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Confirmarea cu SafeHome nu a reușit. Verifică conexiunea și încearcă din nou.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Confirmarea cu MaiYen nu a reușit. Verifică conexiunea și încearcă din nou.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Oprește alerta numai după ce ai verificat starea locuinței.\n\nSigur vrei să oprești alerta?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome a detectat o alertă",
-  "Mở SafeHome để kiểm tra ngay.":
-      "Deschide SafeHome pentru a verifica imediat.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen a detectat o alertă",
+  "Mở MaiYen để kiểm tra ngay.":
+      "Deschide MaiYen pentru a verifica imediat.",
   "\$count tin nhắn mới": "\$count mesaje noi",
   "Tin nhắn HomeChat": "Mesaj HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName a trimis un mesaj",
@@ -935,8 +935,8 @@ const Map<String, String> roStrings = {
       "\$actorName dorește să îți transfere dreptul de proprietate asupra locuinței „\$homeName”.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName te-a invitat să te alături locuinței „\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome elimină dispozitivul „\$deviceName” din locuința „\$homeName”.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen elimină dispozitivul „\$deviceName” din locuința „\$homeName”.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Dispozitivul „\$deviceName” a fost adăugat în locuința „\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Ai creat locuința „\$name”.",
@@ -992,8 +992,8 @@ const Map<String, String> roStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "O ușă este deschisă sau un dispozitiv a fost manipulat",
   "Có thiết bị đang cảnh báo": "Un dispozitiv emite o alertă",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Dacă nimeni nu confirmă, SafeHome va iniția un apel de urgență.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Dacă nimeni nu confirmă, MaiYen va iniția un apel de urgență.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Alerta se repetă la \$time dacă problema nu a fost rezolvată.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1040,8 +1040,8 @@ const Map<String, String> roStrings = {
       "Te invită să te alături locuinței „\$homeName”",
   "Cần kiểm tra: \$joined": "Necesită verificare: \$joined",
   "Cập nhật \$value": "Actualizat \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Adaugă primul dispozitiv SafeHome pentru a începe monitorizarea locuinței.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Adaugă primul dispozitiv MaiYen pentru a începe monitorizarea locuinței.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Verifică mai întâi alertele de urgență, apoi contactează membrii locuinței dacă este necesar.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1099,7 +1099,7 @@ const Map<String, String> roStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Deschis când locuința este în modul Protecție",
   "An tâm hơn trong từng ngôi nhà": "Mai multă liniște în fiecare locuință",
-  "Báo động SafeHome": "Alarmă SafeHome",
+  "Báo động MaiYen": "Alarmă MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "O alertă de securitate necesită verificare imediată.",
   "Có cảnh báo cần kiểm tra": "O alertă necesită verificare",

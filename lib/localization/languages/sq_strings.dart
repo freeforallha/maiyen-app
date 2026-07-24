@@ -18,7 +18,7 @@ const Map<String, String> sqStrings = {
   "Nguy hiểm khẩn cấp": "Rreziqe emergjente",
   "Điều khiển & hạ tầng": "Kontrolli dhe infrastruktura",
   "Môi trường": "Mjedisi",
-  "Toàn bộ thiết bị SafeHome": "Të gjitha pajisjet SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Të gjitha pajisjet MaiYen",
   "Cửa ra/vào": "Dera e hyrjes",
   "Cửa": "Dera",
   "Cửa sổ": "Dritarja",
@@ -621,8 +621,8 @@ const Map<String, String> sqStrings = {
       "Sensori i tymit nuk ka zbuluar problem.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Ju ose një anëtar e aktivizuat manualisht Mbrojtjen.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome e aktivizoi Mbrojtjen automatikisht sepse u larguat nga shtëpia.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen e aktivizoi Mbrojtjen automatikisht sepse u larguat nga shtëpia.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Kjo shtëpi është aktualisht në përdorim normal.",
   "Bảo vệ thủ công đang bật": "Mbrojtja manuale është aktive",
@@ -632,8 +632,8 @@ const Map<String, String> sqStrings = {
       "E keni hapur së fundmi aplikacionin për të kontrolluar gjendjen.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Hapeni rregullisht aplikacionin për të kontrolluar lejet, oraret dhe alarmet e palexuara.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Pas disa përdorimeve, SafeHome mund ta vlerësojë më mirë zakonin tuaj të kontrollimit të aplikacionit.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Pas disa përdorimeve, MaiYen mund ta vlerësojë më mirë zakonin tuaj të kontrollimit të aplikacionit.",
   "Tần suất vào ứng dụng ổn":
       "Shpeshtësia e kontrollit të aplikacionit duket e mirë",
   "Đã lâu chưa vào ứng dụng kiểm tra":
@@ -682,8 +682,8 @@ const Map<String, String> sqStrings = {
   "Chạy nền ổn định": "Përdorimi në sfond duket i qëndrueshëm",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Disa telefona Android mund t'i vonojnë alarmet kur optimizimi i baterisë është aktiv.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telefoni ka më pak gjasa t'i vonojë alarmet e SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telefoni ka më pak gjasa t'i vonojë alarmet e MaiYen.",
   "Chưa tắt tối ưu pin": "Optimizimi i baterisë është ende aktiv",
   "Tối ưu pin không chặn ứng dụng":
       "Optimizimi i baterisë nuk po e bllokon aplikacionin",
@@ -705,8 +705,8 @@ const Map<String, String> sqStrings = {
   "Cảnh báo toàn màn hình": "Alarmet në ekran të plotë",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Alarmet mund të mos shfaqen nëse njoftimet janë çaktivizuar.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Ky telefon mund të marrë njoftime nga SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Ky telefon mund të marrë njoftime nga MaiYen.",
   "Chưa bật thông báo": "Njoftimet nuk janë aktivizuar",
   "Đã bật thông báo": "Njoftimet janë aktivizuar",
   "Hệ thống: Sẵn sàng": "Sistemi: Gati",
@@ -715,7 +715,7 @@ const Map<String, String> sqStrings = {
   "Thiết bị của bạn": "Pajisja juaj",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Kontrollon telefonin tuaj dhe mënyrën si e përdorni aplikacionin.",
-  "Hệ thống SafeHome": "Sistemi SafeHome",
+  "Hệ thống MaiYen": "Sistemi MaiYen",
   "Hệ thống: Đang kiểm tra...": "Sistemi: Po kontrollon...",
   "Tên": "Emri",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -738,10 +738,10 @@ const Map<String, String> sqStrings = {
   "Thêm Home": "Shto Shtëpi",
   "Mở cài đặt": "Hap cilësimet",
   "Để sau": "Më vonë",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome ka nevojë për leje të përhershme të vendndodhjes për të zbuluar kur largoheni ose ktheheni në shtëpi, edhe kur aplikacioni është në sfond.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome aktualisht mund të përdorë vendndodhjen vetëm kur aplikacioni është në përdorim.\n\nHapni lejen e vendndodhjes dhe zgjidhni \"Lejo gjithmonë\" që mbrojtja automatike të vazhdojë të funksionojë në sfond.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen ka nevojë për leje të përhershme të vendndodhjes për të zbuluar kur largoheni ose ktheheni në shtëpi, edhe kur aplikacioni është në sfond.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen aktualisht mund të përdorë vendndodhjen vetëm kur aplikacioni është në përdorim.\n\nHapni lejen e vendndodhjes dhe zgjidhni \"Lejo gjithmonë\" që mbrojtja automatike të vazhdojë të funksionojë në sfond.",
   "Cho phép vị trí luôn luôn": "Vendndodhja lejohet gjithmonë",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Shtëpitë tuaja do të fshihen.\nDo të largoheni nga shtëpitë e përbashkëta.",
@@ -770,7 +770,7 @@ const Map<String, String> sqStrings = {
   "Từ chối": "Refuzo",
   "Lời mời từ chủ nhà": "Ftesë nga pronari",
   "Nhận quyền chủ nhà": "Merr pronësinë e shtëpisë",
-  "Một người dùng SafeHome": "Një përdorues SafeHome",
+  "Một người dùng MaiYen": "Një përdorues MaiYen",
   "Lời mời gia nhập": "Ftesë për t'u bashkuar",
   "Lời xin vào nhà": "Kërkesë për t'u bashkuar me shtëpinë",
   "Nhập HUB ID": "Fut ID-në e HUB-it",
@@ -788,7 +788,7 @@ const Map<String, String> sqStrings = {
   "CẦN KIỂM TRA": "DUHET KONTROLLUAR",
   "KIỂM TRA NHÀ": "KONTROLLO SHTËPINË",
   "ĐÓNG NHẮC NHỞ": "MBYLL KUJTESËN",
-  "SafeHome Security Alert": "Alarm sigurie SafeHome",
+  "MaiYen Security Alert": "Alarm sigurie MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Zgjidhni lejen e vendndodhjes Lejo gjithmonë në cilësimet e aplikacionit",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -833,7 +833,7 @@ const Map<String, String> sqStrings = {
   "Phòng": "Dhoma",
   "Quản trị viên": "Administrator",
   "Nhắc nhở": "Kujtesë",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Sinjal i dobët",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Llogaria dhe sistemi",
@@ -880,7 +880,7 @@ const Map<String, String> sqStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count mesazhe të palexuara",
   "Hãy an tâm nghỉ ngơi.": "Mund të jeni të qetë.",
   "Có thiết bị chưa an toàn.": "Disa pajisje nuk janë të sigurta.",
-  "SafeHome đang cập nhật vị trí": "SafeHome po përditëson vendndodhjen",
+  "MaiYen đang cập nhật vị trí": "MaiYen po përditëson vendndodhjen",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Po monitoron për të aktivizuar automatikisht modalitetin e mbrojtjes.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -891,12 +891,12 @@ const Map<String, String> sqStrings = {
   "CẢNH BÁO RÒ KHÍ": "ALARM RRJEDHJEJE GAZI",
   "CẢNH BÁO CỬA": "ALARM DERE",
   "CẢNH BÁO AN NINH": "ALARM SIGURIE",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Nuk mund të konfirmohej me SafeHome. Kontrolloni lidhjen dhe provoni përsëri.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Nuk mund të konfirmohej me MaiYen. Kontrolloni lidhjen dhe provoni përsëri.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Ndalo alarmin vetëm pasi të kesh kontrolluar gjendjen e shtëpisë.\n\nJeni të sigurt se doni ta ndaloni alarmin?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome zbuloi një alarm",
-  "Mở SafeHome để kiểm tra ngay.": "Hap SafeHome për ta kontrolluar tani.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen zbuloi një alarm",
+  "Mở MaiYen để kiểm tra ngay.": "Hap MaiYen për ta kontrolluar tani.",
   "\$count tin nhắn mới": "\$count mesazhe të reja",
   "Tin nhắn HomeChat": "Mesazh në HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName dërgoi një mesazh",
@@ -916,8 +916,8 @@ const Map<String, String> sqStrings = {
       "\$actorName dëshiron t'ju transferojë pronësinë e \"\$homeName\".",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName ju ftoi të bashkoheni me \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome po heq \"\$deviceName\" nga \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen po heq \"\$deviceName\" nga \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Pajisja \"\$deviceName\" u shtua te \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Krijuat shtëpinë \"\$name\".",
@@ -974,8 +974,8 @@ const Map<String, String> sqStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Një derë është e hapur ose një pajisje është ndërhyrë",
   "Có thiết bị đang cảnh báo": "Një pajisje po jep alarm",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Nëse askush nuk konfirmon, SafeHome do të nisë një telefonatë emergjente.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Nëse askush nuk konfirmon, MaiYen do të nisë një telefonatë emergjente.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Alarmi përsëritet në \$time nëse problemi nuk është trajtuar.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1020,8 +1020,8 @@ const Map<String, String> sqStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Ju fton të bashkoheni me \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Kërkon vëmendje: \$joined",
   "Cập nhật \$value": "U përditësua \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Shto pajisjen e parë SafeHome për të filluar monitorimin e kësaj shtëpie.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Shto pajisjen e parë MaiYen për të filluar monitorimin e kësaj shtëpie.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Kontrollo fillimisht alarmet e emergjencës, pastaj kontakto anëtarët e familjes nëse nevojitet.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1077,7 +1077,7 @@ const Map<String, String> sqStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Hapur ndërsa Shtëpia është në modalitetin e mbrojtjes",
   "An tâm hơn trong từng ngôi nhà": "Qetësi në çdo shtëpi",
-  "Báo động SafeHome": "Alarmi SafeHome",
+  "Báo động MaiYen": "Alarmi MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Një alarm sigurie kërkon vëmendjen tuaj.",
   "Có cảnh báo cần kiểm tra": "Një alarm kërkon vëmendjen tuaj",

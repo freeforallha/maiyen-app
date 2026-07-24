@@ -7,6 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../config/brand_config.dart';
 import '../../localization/app_strings.dart';
 import '../../navigation/safehome_navigation.dart';
 import '../../safehome_theme.dart';
@@ -156,7 +157,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
     );
     request.headers.set(
       HttpHeaders.userAgentHeader,
-      'SafeHome/1.0 (com.myfamily.safehome)',
+      BrandConfig.mapUserAgent,
     );
     request.headers.set(HttpHeaders.acceptHeader, 'application/json');
     request.headers.set(HttpHeaders.acceptLanguageHeader, languageCode);

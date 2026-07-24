@@ -18,7 +18,7 @@ const Map<String, String> mtStrings = {
   "Nguy hiểm khẩn cấp": "Perikli ta' emerġenza",
   "Điều khiển & hạ tầng": "Kontroll u infrastruttura",
   "Môi trường": "Ambjent",
-  "Toàn bộ thiết bị SafeHome": "It-tagħmir kollu ta' SafeHome",
+  "Toàn bộ thiết bị MaiYen": "It-tagħmir kollu ta' MaiYen",
   "Cửa ra/vào": "Bieb tad-dħul",
   "Cửa": "Bieb",
   "Cửa sổ": "Tieqa",
@@ -628,8 +628,8 @@ const Map<String, String> mtStrings = {
       "Is-sensur tad-duħħan ma sab ebda problema.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Int jew membru xegħeltu l-Protezzjoni manwalment.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome xegħel il-Protezzjoni awtomatikament għax tlaqt mid-dar.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen xegħel il-Protezzjoni awtomatikament għax tlaqt mid-dar.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Din id-dar bħalissa qed tintuża b’mod normali.",
   "Bảo vệ thủ công đang bật": "Il-Protezzjoni manwali hija mixgħula",
@@ -639,8 +639,8 @@ const Map<String, String> mtStrings = {
       "Ftaħt l-app dan l-aħħar biex tiċċekkja l-istatus.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Iftaħ l-app regolarment biex tirrevedi l-permessi, l-iskedi u t-twissijiet mhux moqrija.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Wara ftit sessjonijiet, SafeHome ikun jista’ jevalwa aħjar id-drawwa tiegħek li tiċċekkja l-app.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Wara ftit sessjonijiet, MaiYen ikun jista’ jevalwa aħjar id-drawwa tiegħek li tiċċekkja l-app.",
   "Tần suất vào ứng dụng ổn": "Il-frekwenza tal-kontroll tal-app tidher tajba",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Għadda żmien mill-aħħar kontroll tal-app",
@@ -689,8 +689,8 @@ const Map<String, String> mtStrings = {
   "Chạy nền ổn định": "L-użu fl-isfond jidher stabbli",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Xi telefowns Android jistgħu jdewwmu t-twissijiet meta l-ottimizzazzjoni tal-batterija tkun mixgħula.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "It-telefon għandu inqas probabbiltà li jdewwem it-twissijiet ta’ SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "It-telefon għandu inqas probabbiltà li jdewwem it-twissijiet ta’ MaiYen.",
   "Chưa tắt tối ưu pin": "L-ottimizzazzjoni tal-batterija għadha mixgħula",
   "Tối ưu pin không chặn ứng dụng":
       "L-ottimizzazzjoni tal-batterija mhix qed timblokka l-app",
@@ -712,8 +712,8 @@ const Map<String, String> mtStrings = {
   "Cảnh báo toàn màn hình": "Twissijiet fuq skrin sħiħ",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "It-twissijiet jistgħu ma jidhrux jekk in-notifiki jkunu mitfija.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Dan it-telefon jista’ jirċievi notifiki ta’ SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Dan it-telefon jista’ jirċievi notifiki ta’ MaiYen.",
   "Chưa bật thông báo": "In-notifiki mhumiex mixgħula",
   "Đã bật thông báo": "In-notifiki huma mixgħula",
   "Hệ thống: Sẵn sàng": "Sistema: Lesta",
@@ -722,7 +722,7 @@ const Map<String, String> mtStrings = {
   "Thiết bị của bạn": "L-apparat tiegħek",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Jiċċekkja t-telefon tiegħek u kif qed tuża l-app.",
-  "Hệ thống SafeHome": "Sistema SafeHome",
+  "Hệ thống MaiYen": "Sistema MaiYen",
   "Hệ thống: Đang kiểm tra...": "Sistema: Qed tiċċekkja...",
   "Tên": "Isem",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -744,10 +744,10 @@ const Map<String, String> mtStrings = {
   "Thêm Home": "Żid Dar",
   "Mở cài đặt": "Iftaħ is-settings",
   "Để sau": "Aktar tard",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome jeħtieġ permess tal-post “Dejjem” biex jagħraf meta titlaq jew terġa’ lura d-dar, anke meta l-app tkun qed taħdem fl-isfond.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome bħalissa jista’ jaċċessa l-post biss meta tkun qed tuża l-app.\n\nIftaħ il-permess tal-Post u agħżel “Ħalli l-ħin kollu” sabiex il-protezzjoni awtomatika tkompli taħdem fl-isfond.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen jeħtieġ permess tal-post “Dejjem” biex jagħraf meta titlaq jew terġa’ lura d-dar, anke meta l-app tkun qed taħdem fl-isfond.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen bħalissa jista’ jaċċessa l-post biss meta tkun qed tuża l-app.\n\nIftaħ il-permess tal-Post u agħżel “Ħalli l-ħin kollu” sabiex il-protezzjoni awtomatika tkompli taħdem fl-isfond.",
   "Cho phép vị trí luôn luôn": "Dejjem ħalli l-post",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Id-djar tiegħek se jitħassru.\nSe titlaq mid-djar kondiviżi.",
@@ -776,7 +776,7 @@ const Map<String, String> mtStrings = {
   "Từ chối": "Irrifjuta",
   "Lời mời từ chủ nhà": "Stedina mis-sid",
   "Nhận quyền chủ nhà": "Irċievi s-sjieda tad-dar",
-  "Một người dùng SafeHome": "Utent ta’ SafeHome",
+  "Một người dùng MaiYen": "Utent ta’ MaiYen",
   "Lời mời gia nhập": "Stedina biex tingħaqad",
   "Lời xin vào nhà": "Talba biex tingħaqad mad-dar",
   "Nhập HUB ID": "Daħħal HUB ID",
@@ -794,7 +794,7 @@ const Map<String, String> mtStrings = {
   "CẦN KIỂM TRA": "JEĦTIEĠ KONTROLL",
   "KIỂM TRA NHÀ": "IĊĊEKKJA D-DAR",
   "ĐÓNG NHẮC NHỞ": "AGĦLAQ IT-TFAKKIRA",
-  "SafeHome Security Alert": "Twissija tas-Sigurtà SafeHome",
+  "MaiYen Security Alert": "Twissija tas-Sigurtà MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Agħżel il-permess tal-post “Dejjem ħalli” fis-settings tal-app",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -840,7 +840,7 @@ const Map<String, String> mtStrings = {
   "Phòng": "Kamra",
   "Quản trị viên": "Amministratur",
   "Nhắc nhở": "Tfakkira",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Sinjal dgħajjef",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Kont u sistema",
@@ -889,7 +889,7 @@ const Map<String, String> mtStrings = {
   "Còn \$count tin nhắn chưa đọc": "Fadal \$count messaġġi mhux moqrija",
   "Hãy an tâm nghỉ ngơi.": "Tista’ tistrieħ moħħok.",
   "Có thiết bị chưa an toàn.": "Xi apparati mhumiex siguri.",
-  "SafeHome đang cập nhật vị trí": "SafeHome qed jaġġorna l-post",
+  "MaiYen đang cập nhật vị trí": "MaiYen qed jaġġorna l-post",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Qed isir monitoraġġ biex il-modalità ta’ Protezzjoni tinxtegħel awtomatikament.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -900,12 +900,12 @@ const Map<String, String> mtStrings = {
   "CẢNH BÁO RÒ KHÍ": "TWISSIJA TA’ TNIXXIJA TAL-GASS",
   "CẢNH BÁO CỬA": "TWISSIJA TAL-BIEB",
   "CẢNH BÁO AN NINH": "TWISSIJA TAS-SIGURTÀ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Ma setax jiġi kkonfermat ma’ SafeHome. Iċċekkja l-konnessjoni u erġa’ pprova.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Ma setax jiġi kkonfermat ma’ MaiYen. Iċċekkja l-konnessjoni u erġa’ pprova.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Waqqaf it-twissija biss wara li tiċċekkja l-kundizzjoni tad-dar.\n\nŻgur li trid twaqqaf it-twissija?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome sab twissija",
-  "Mở SafeHome để kiểm tra ngay.": "Iftaħ SafeHome biex tiċċekkja issa.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen sab twissija",
+  "Mở MaiYen để kiểm tra ngay.": "Iftaħ MaiYen biex tiċċekkja issa.",
   "\$count tin nhắn mới": "\$count messaġġi ġodda",
   "Tin nhắn HomeChat": "Messaġġ HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName bagħat messaġġ",
@@ -925,8 +925,8 @@ const Map<String, String> mtStrings = {
       "\$actorName irid jittrasferixxi s-sjieda ta’ \"\$homeName\" lilek.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName stedinek tingħaqad ma’ \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome qed ineħħi \"\$deviceName\" minn \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen qed ineħħi \"\$deviceName\" minn \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "L-apparat \"\$deviceName\" ġie miżjud ma’ \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Ħloqt id-dar \"\$name\".",
@@ -982,8 +982,8 @@ const Map<String, String> mtStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Hemm bieb miftuħ jew apparat ġie mbagħbas",
   "Có thiết bị đang cảnh báo": "Hemm apparat li qed jagħti twissija",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Jekk ħadd ma jikkonferma, SafeHome jibda telefonata ta’ emerġenza.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Jekk ħadd ma jikkonferma, MaiYen jibda telefonata ta’ emerġenza.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Jerġa’ javża fil-\$time jekk il-problema ma tkunx ġiet solvuta.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1027,8 +1027,8 @@ const Map<String, String> mtStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Jistiednek tingħaqad ma’ \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Jeħtieġ attenzjoni: \$joined",
   "Cập nhật \$value": "Aġġornat \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Żid l-ewwel apparat SafeHome tiegħek biex tibda timmonitorja din id-dar.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Żid l-ewwel apparat MaiYen tiegħek biex tibda timmonitorja din id-dar.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "L-ewwel iċċekkja t-twissijiet ta’ emerġenza, imbagħad ikkuntattja lill-membri tad-dar jekk meħtieġ.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1085,7 +1085,7 @@ const Map<String, String> mtStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Miftuħ waqt li d-Dar tkun fil-modalità ta’ Protezzjoni",
   "An tâm hơn trong từng ngôi nhà": "Serħan il-moħħ f’kull dar",
-  "Báo động SafeHome": "Allarm SafeHome",
+  "Báo động MaiYen": "Allarm MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Twissija tas-sigurtà teħtieġ l-attenzjoni tiegħek.",
   "Có cảnh báo cần kiểm tra": "Twissija teħtieġ l-attenzjoni tiegħek",

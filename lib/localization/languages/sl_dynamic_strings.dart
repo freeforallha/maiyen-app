@@ -25,19 +25,19 @@ const Map<String, String> slDynamicStrings = {
       "\$name in še \$otherCount drugih piše ...",
   "Kênh báo động cũ để giữ tương thích":
       "Stari alarmni kanal zaradi združljivosti",
-  "SafeHome báo động toàn màn hình": "Celozaslonski alarm SafeHome",
+  "MaiYen báo động toàn màn hình": "Celozaslonski alarm MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Odpre celozaslonsko opozorilo; zvok sirene se predvaja na strani alarma",
-  "SafeHome cảnh báo khẩn cấp": "Nujno opozorilo SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Nujno opozorilo MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Nujno opozorilo visoke prednosti pred celozaslonskim prikazom",
-  "SafeHome nhắc nhở toàn màn hình": "Celozaslonski opomnik SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Tihi celozaslonski opomnik SafeHome",
-  "SafeHome nhắc nhở ưu tiên cao": "Opomnik SafeHome visoke prednosti",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Opomnik SafeHome visoke prednosti brez celozaslonskega prikaza",
-  "Tin nhắn mới trong các nhà SafeHome": "Nova sporočila v domovih SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Celozaslonski opomnik MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Tihi celozaslonski opomnik MaiYen",
+  "MaiYen nhắc nhở ưu tiên cao": "Opomnik MaiYen visoke prednosti",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Opomnik MaiYen visoke prednosti brez celozaslonskega prikaza",
+  "Tin nhắn mới trong các nhà MaiYen": "Nova sporočila v domovih MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "To dejanje bo danes spremenilo čas alarma za nekatere naprave.\n\nTa funkcija ne bo vplivala na alarme naprav v kategoriji »Nujna nevarnost« niti na alarme v načinu »Zaščita«.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count domov v nevarnosti\$suffix",

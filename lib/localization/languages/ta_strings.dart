@@ -18,7 +18,7 @@ const Map<String, String> taStrings = {
   "Nguy hiểm khẩn cấp": "அவசர ஆபத்து",
   "Điều khiển & hạ tầng": "கட்டுப்பாடு மற்றும் உள்கட்டமைப்பு",
   "Môi trường": "சுற்றுச்சூழல்",
-  "Toàn bộ thiết bị SafeHome": "SafeHome உபகரணங்களின் முழுமையான தொகுப்பு",
+  "Toàn bộ thiết bị MaiYen": "MaiYen உபகரணங்களின் முழுமையான தொகுப்பு",
   "Cửa ra/vào": "நுழைவு / வெளியேறும் கதவு",
   "Cửa": "கதவு",
   "Cửa sổ": "ஜன்னல்",
@@ -642,8 +642,8 @@ const Map<String, String> taStrings = {
       "புகை சென்சார் எந்த அசாதாரணங்களையும் பதிவு செய்யவில்லை.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "நீங்கள் அல்லது உறுப்பினர் செயலில் பாதுகாப்பை இயக்கியுள்ளீர்கள்.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "நீங்கள் வீட்டை விட்டு வெளியேறியதால் SafeHome தானாகவே பாதுகாப்பை இயக்கும்.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "நீங்கள் வீட்டை விட்டு வெளியேறியதால் MaiYen தானாகவே பாதுகாப்பை இயக்கும்.",
   "Nhà đang ở chế độ dùng bình thường.":
       "வீடு சாதாரண பயன்பாட்டு முறையில் உள்ளது.",
   "Bảo vệ thủ công đang bật": "கைமுறை பாதுகாப்பு இயக்கத்தில் உள்ளது",
@@ -653,8 +653,8 @@ const Map<String, String> taStrings = {
       "நிலையைச் சரிபார்க்க சமீபத்தில் பயன்பாட்டைத் திறந்தீர்கள்.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "அனுமதிகள், காலெண்டர்கள் மற்றும் படிக்காத விழிப்பூட்டல்களைச் சரிபார்க்க, நீங்கள் அவ்வப்போது பயன்பாட்டைத் திறக்க வேண்டும்.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "சில முறை பயன்படுத்திய பிறகு, SafeHome பயன்பாட்டைச் சரிபார்க்கும் பழக்கத்தை மேலும் நன்றாக மதிப்பிடும்.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "சில முறை பயன்படுத்திய பிறகு, MaiYen பயன்பாட்டைச் சரிபார்க்கும் பழக்கத்தை மேலும் நன்றாக மதிப்பிடும்.",
   "Tần suất vào ứng dụng ổn":
       "பயன்பாட்டை உள்ளிடுவதற்கான அதிர்வெண் நன்றாக உள்ளது",
   "Đã lâu chưa vào ứng dụng kiểm tra":
@@ -707,8 +707,8 @@ const Map<String, String> taStrings = {
   "Chạy nền ổn định": "பின்னணியில் சீராக இயங்குகிறது",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "பேட்டரி மேம்படுத்தல் இயக்கப்பட்டிருந்தால் சில Android சாதனங்கள் எச்சரிக்கைகளை தாமதப்படுத்தலாம்.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "ஃபோன் SafeHome எச்சரிக்கையை தாமதப்படுத்தும் வாய்ப்பு குறைவு.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "ஃபோன் MaiYen எச்சரிக்கையை தாமதப்படுத்தும் வாய்ப்பு குறைவு.",
   "Chưa tắt tối ưu pin": "பேட்டரி தேர்வுமுறையை முடக்க வேண்டாம்",
   "Tối ưu pin không chặn ứng dụng":
       "பேட்டரி மேம்படுத்தல் பயன்பாடுகளைத் தடுக்காது",
@@ -730,8 +730,8 @@ const Map<String, String> taStrings = {
   "Cảnh báo toàn màn hình": "முழுத்திரை எச்சரிக்கை",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "அறிவிப்புகள் முடக்கப்பட்டிருந்தால் எச்சரிக்கைகள் காட்டப்படாமல் போகலாம்.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "தொலைபேசி SafeHome அறிவிப்புகளைப் பெற முடியும்.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "தொலைபேசி MaiYen அறிவிப்புகளைப் பெற முடியும்.",
   "Chưa bật thông báo": "அறிவிப்புகள் இயக்கப்படவில்லை",
   "Đã bật thông báo": "அறிவிப்புகள் இயக்கப்பட்டன",
   "Hệ thống: Sẵn sàng": "அமைப்பு: தயார்",
@@ -741,7 +741,7 @@ const Map<String, String> taStrings = {
   "Thiết bị của bạn": "உங்கள் சாதனம்",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "உங்கள் ஃபோனையும், ஆப்ஸை எப்படிப் பயன்படுத்துகிறீர்கள் என்பதையும் சரிபார்க்கவும்.",
-  "Hệ thống SafeHome": "SafeHome அமைப்பு",
+  "Hệ thống MaiYen": "MaiYen அமைப்பு",
   "Hệ thống: Đang kiểm tra...": "அமைப்பு: சரிபார்க்கிறது...",
   "Tên": "பெயர்",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -763,10 +763,10 @@ const Map<String, String> taStrings = {
   "Thêm Home": "வீட்டைச் சேர்க்கவும்",
   "Mở cài đặt": "அமைப்புகளைத் திறக்கவும்",
   "Để sau": "பின்னர்",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome க்கு \"எப்போதும் அனுமதி\" இருப்பிட அனுமதி தேவை, நீங்கள் வெளியேறும்போது அல்லது வீட்டிற்குத் திரும்பும்போது, ஆப்ஸ் பின்னணியில் இயங்கும் போதும்.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome தற்போது நீங்கள் பயன்பாட்டைப் பயன்படுத்தும் போது மட்டுமே இருப்பிடத்தை அணுகும்.\n\nஇருப்பிட அனுமதியைத் தேர்ந்தெடுத்து, \"எப்போதும் அனுமதி\" என்பதற்கு மாறவும், இதன் மூலம் ஆப்ஸ் பின்னணியில் இயங்கும் போது தானியங்கி லீவ்-ஹோம் பாதுகாப்பு செயல்படும்.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen க்கு \"எப்போதும் அனுமதி\" இருப்பிட அனுமதி தேவை, நீங்கள் வெளியேறும்போது அல்லது வீட்டிற்குத் திரும்பும்போது, ஆப்ஸ் பின்னணியில் இயங்கும் போதும்.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen தற்போது நீங்கள் பயன்பாட்டைப் பயன்படுத்தும் போது மட்டுமே இருப்பிடத்தை அணுகும்.\n\nஇருப்பிட அனுமதியைத் தேர்ந்தெடுத்து, \"எப்போதும் அனுமதி\" என்பதற்கு மாறவும், இதன் மூலம் ஆப்ஸ் பின்னணியில் இயங்கும் போது தானியங்கி லீவ்-ஹோம் பாதுகாப்பு செயல்படும்.",
   "Cho phép vị trí luôn luôn": "எப்போதும் இருப்பிடத்தை அனுமதிக்கவும்",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "உங்கள் வீடுகள் நீக்கப்படும்.\nபகிர்ந்த வீடுகள் எஞ்சியிருக்கும்.",
@@ -795,7 +795,7 @@ const Map<String, String> taStrings = {
   "Từ chối": "மறுக்கவும்",
   "Lời mời từ chủ nhà": "தொகுப்பாளரிடமிருந்து அழைப்பு",
   "Nhận quyền chủ nhà": "வீட்டு உரிமையாளரின் உரிமைகளைப் பெறுங்கள்",
-  "Một người dùng SafeHome": "ஒரு பயனர் SafeHome",
+  "Một người dùng MaiYen": "ஒரு பயனர் MaiYen",
   "Lời mời gia nhập": "சேர அழைப்பு",
   "Lời xin vào nhà": "வீட்டிற்குள் நுழைய ஒரு வேண்டுகோள்",
   "Nhập HUB ID": "HUB ஐடியை உள்ளிடவும்",
@@ -813,7 +813,7 @@ const Map<String, String> taStrings = {
   "CẦN KIỂM TRA": "சரிபார்க்க வேண்டும்",
   "KIỂM TRA NHÀ": "வீட்டு ஆய்வு",
   "ĐÓNG NHẮC NHỞ": "நினைவூட்டலை மூடவும்",
-  "SafeHome Security Alert": "பாதுகாப்பு எச்சரிக்கை SafeHome",
+  "MaiYen Security Alert": "பாதுகாப்பு எச்சரிக்கை MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "ஆப் அமைப்புகளில் இருப்பிட அனுமதியை எப்போதும் அனுமதி என்பதைத் தேர்ந்தெடுக்கவும்",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -859,7 +859,7 @@ const Map<String, String> taStrings = {
   "Phòng": "அறை",
   "Quản trị viên": "நிர்வாகி",
   "Nhắc nhở": "நினைவூட்டல்",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "பலவீனமான அலைகள்",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "கணக்குகள் மற்றும் அமைப்புகள்",
@@ -909,7 +909,7 @@ const Map<String, String> taStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count செய்தி படிக்கப்படாமல் உள்ளது",
   "Hãy an tâm nghỉ ngơi.": "தயவுசெய்து உறுதியாக இருங்கள்.",
   "Có thiết bị chưa an toàn.": "சில உபகரணங்கள் பாதுகாப்பாக இல்லை.",
-  "SafeHome đang cập nhật vị trí": "SafeHome இருப்பிடத்தைப் புதுப்பிக்கிறது",
+  "MaiYen đang cập nhật vị trí": "MaiYen இருப்பிடத்தைப் புதுப்பிக்கிறது",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "பாதுகாக்கப்பட்ட பயன்முறையை தானாக இயக்க பார்க்கிறது.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -920,12 +920,12 @@ const Map<String, String> taStrings = {
   "CẢNH BÁO RÒ KHÍ": "எரிவாயு கசிவு எச்சரிக்கை",
   "CẢNH BÁO CỬA": "கதவு எச்சரிக்கை",
   "CẢNH BÁO AN NINH": "பாதுகாப்பு எச்சரிக்கை",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome உடன் உறுதிப்படுத்த முடியவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen உடன் உறுதிப்படுத்த முடியவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "உங்கள் வீட்டில் உள்ள நிலையைச் சரிபார்த்தவுடன் அலாரத்தை மட்டும் அணைக்கவும்.\n\nஎச்சரிக்கையை முடக்க வேண்டுமா?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome எச்சரிக்கையைக் கண்டறிந்தது",
-  "Mở SafeHome để kiểm tra ngay.": "இப்போது சோதிக்க SafeHome ஐத் திறக்கவும்.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen எச்சரிக்கையைக் கண்டறிந்தது",
+  "Mở MaiYen để kiểm tra ngay.": "இப்போது சோதிக்க MaiYen ஐத் திறக்கவும்.",
   "\$count tin nhắn mới": "\$count புதிய செய்தி",
   "Tin nhắn HomeChat": "HomeChat செய்திகள்",
   "\$senderName đã gửi một tin nhắn":
@@ -946,8 +946,8 @@ const Map<String, String> taStrings = {
       "\$actorName \"\$homeName\" வீட்டின் உரிமையை உங்களுக்கு மாற்ற விரும்புகிறார்.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName \"\$homeName\" குடும்பத்தில் சேர உங்களை அழைத்துள்ளது.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome \"\$homeName\" வீட்டிலிருந்து \"\$deviceName\" சாதனத்தை அகற்றுகிறது.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen \"\$homeName\" வீட்டிலிருந்து \"\$deviceName\" சாதனத்தை அகற்றுகிறது.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "\"\$deviceName\" சாதனம் \"\$homeName\" இல் தோன்றியது.",
   "Bạn đã tạo nhà \"\$name\".":
@@ -1004,8 +1004,8 @@ const Map<String, String> taStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "ஒரு கதவு திறந்திருக்கும் அல்லது உபகரணங்கள் அகற்றப்பட்டன",
   "Có thiết bị đang cảnh báo": "சாதன எச்சரிக்கை உள்ளது",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "யாரும் உறுதிப்படுத்தவில்லை என்றால், SafeHome அவசர அழைப்புக்கு மாறும்.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "யாரும் உறுதிப்படுத்தவில்லை என்றால், MaiYen அவசர அழைப்புக்கு மாறும்.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "சிக்கல் தீர்க்கப்படாவிட்டால் \$time இல் புகாரளிக்கவும்.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1049,8 +1049,8 @@ const Map<String, String> taStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "தயவுசெய்து \"\$homeName\" இல் சேரவும்",
   "Cần kiểm tra: \$joined": "சரிபார்க்க வேண்டும்: \$joined",
   "Cập nhật \$value": "\$valueஐப் புதுப்பிக்கவும்",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "வீட்டுக் கண்காணிப்பைத் தொடங்க உங்களின் முதல் SafeHome சாதனத்தைச் சேர்க்கவும்.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "வீட்டுக் கண்காணிப்பைத் தொடங்க உங்களின் முதல் MaiYen சாதனத்தைச் சேர்க்கவும்.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "அவசரகால எச்சரிக்கைகளை முதலில் சரிபார்க்கவும், பின்னர் தேவைப்பட்டால் குடும்ப உறுப்பினர்களைத் தொடர்பு கொள்ளவும்.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1108,7 +1108,7 @@ const Map<String, String> taStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: வீடு பாதுகாப்பு பயன்முறையில் இருக்கும்போது திறந்துள்ளது",
   "An tâm hơn trong từng ngôi nhà": "ஒவ்வொரு வீட்டிலும் அதிக நிம்மதி",
-  "Báo động SafeHome": "அலாரம் SafeHome",
+  "Báo động MaiYen": "அலாரம் MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "உடனடியாகச் சரிபார்க்க வேண்டிய பாதுகாப்பு எச்சரிக்கை உள்ளது.",
   "Có cảnh báo cần kiểm tra": "சரிபார்க்கப்பட வேண்டிய எச்சரிக்கைகள் உள்ளன",

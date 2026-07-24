@@ -167,7 +167,7 @@ Future<void> showSystemHealthSheet({
                     children: [
                       Expanded(
                         child: Text(
-                          strings.t("Hệ thống SafeHome"),
+                          strings.t("Hệ thống MaiYen"),
                           style: const TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.w900,
@@ -443,7 +443,7 @@ class _SystemHealthSnapshot {
             ? strings.t("Đã bật thông báo")
             : strings.t("Chưa bật thông báo"),
         message: notificationOk
-            ? strings.t("Điện thoại có thể nhận thông báo SafeHome.")
+            ? strings.t("Điện thoại có thể nhận thông báo MaiYen.")
             : strings.t("Cảnh báo có thể không hiển thị nếu thông báo bị tắt."),
       ),
       _SystemHealthItem(
@@ -500,7 +500,7 @@ class _SystemHealthSnapshot {
               : strings.t("Chưa tắt tối ưu pin"),
           message: batteryUnrestricted
               ? strings.t(
-                  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.",
+                  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.",
                 )
               : strings.t(
                   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
@@ -703,7 +703,7 @@ class _SystemHealthSnapshot {
             : strings.t("Tần suất vào ứng dụng ổn"),
         message: previousOpenAt <= 0
             ? strings.t(
-                "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
+                "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.",
               )
             : daysSincePreviousOpen >= 3
             ? strings.t(
@@ -830,7 +830,7 @@ class _SystemHealthSnapshot {
     }
 
     if (securityModeSource == 'auto_away') {
-      return strings.t("SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.");
+      return strings.t("MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.");
     }
 
     return strings.t("Bạn hoặc thành viên đã chủ động bật Bảo vệ.");

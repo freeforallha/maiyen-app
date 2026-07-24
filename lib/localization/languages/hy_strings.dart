@@ -18,7 +18,7 @@ const Map<String, String> hyStrings = {
   "Nguy hiểm khẩn cấp": "Արտակարգ վտանգներ",
   "Điều khiển & hạ tầng": "Կառավարում և ենթակառուցվածք",
   "Môi trường": "Շրջակա միջավայր",
-  "Toàn bộ thiết bị SafeHome": "SafeHome-ի բոլոր սարքերը",
+  "Toàn bộ thiết bị MaiYen": "MaiYen-ի բոլոր սարքերը",
   "Cửa ra/vào": "Մուտքի դուռ",
   "Cửa": "Դուռ",
   "Cửa sổ": "Պատուհան",
@@ -616,8 +616,8 @@ const Map<String, String> hyStrings = {
   "Cảm biến khói chưa ghi nhận bất thường.": "Ծխի տվիչը խնդիր չի հայտնաբերել։",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Դուք կամ անդամներից մեկը ձեռքով միացրել եք պաշտպանությունը։",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome-ը պաշտպանությունն ավտոմատ միացրել է, քանի որ դուք դուրս եք եկել տնից։",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen-ը պաշտպանությունն ավտոմատ միացրել է, քանի որ դուք դուրս եք եկել տնից։",
   "Nhà đang ở chế độ dùng bình thường.":
       "Այս տունն այժմ օգտագործվում է սովորական ռեժիմով։",
   "Bảo vệ thủ công đang bật": "Ձեռքով պաշտպանությունը միացված է",
@@ -627,8 +627,8 @@ const Map<String, String> hyStrings = {
       "Դուք վերջերս բացել եք հավելվածը՝ վիճակը ստուգելու համար։",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Պարբերաբար բացեք հավելվածը՝ թույլտվությունները, ժամանակացույցերը և չկարդացված ահազանգերը ստուգելու համար։",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Մի քանի օգտագործումից հետո SafeHome-ը կկարողանա ավելի լավ գնահատել հավելվածը ստուգելու ձեր սովորությունը։",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Մի քանի օգտագործումից հետո MaiYen-ը կկարողանա ավելի լավ գնահատել հավելվածը ստուգելու ձեր սովորությունը։",
   "Tần suất vào ứng dụng ổn": "Հավելվածի ստուգման հաճախականությունը լավ է",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Հավելվածի վերջին ստուգումից երկար ժամանակ է անցել",
@@ -676,8 +676,8 @@ const Map<String, String> hyStrings = {
   "Chạy nền ổn định": "Ֆոնային աշխատանքը կայուն է",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Որոշ Android հեռախոսներ կարող են ուշացնել ահազանգերը, երբ մարտկոցի օպտիմալացումը միացված է։",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Հեռախոսը քիչ հավանականությամբ կուշացնի SafeHome-ի ահազանգերը։",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Հեռախոսը քիչ հավանականությամբ կուշացնի MaiYen-ի ահազանգերը։",
   "Chưa tắt tối ưu pin": "Մարտկոցի օպտիմալացումը դեռ միացված է",
   "Tối ưu pin không chặn ứng dụng":
       "Մարտկոցի օպտիմալացումը չի արգելափակում հավելվածը",
@@ -699,8 +699,8 @@ const Map<String, String> hyStrings = {
   "Cảnh báo toàn màn hình": "Ամբողջ էկրանով ահազանգեր",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Ահազանգերը կարող են չցուցադրվել, եթե ծանուցումներն անջատված են։",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Այս հեռախոսը կարող է ստանալ SafeHome-ի ծանուցումներ։",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Այս հեռախոսը կարող է ստանալ MaiYen-ի ծանուցումներ։",
   "Chưa bật thông báo": "Ծանուցումները միացված չեն",
   "Đã bật thông báo": "Ծանուցումները միացված են",
   "Hệ thống: Sẵn sàng": "Համակարգ․ պատրաստ է",
@@ -710,7 +710,7 @@ const Map<String, String> hyStrings = {
   "Thiết bị của bạn": "Ձեր սարքը",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Ստուգում է ձեր հեռախոսը և հավելվածի օգտագործման եղանակը։",
-  "Hệ thống SafeHome": "SafeHome համակարգ",
+  "Hệ thống MaiYen": "MaiYen համակարգ",
   "Hệ thống: Đang kiểm tra...": "Համակարգ․ ստուգվում է...",
   "Tên": "Անուն",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -730,10 +730,10 @@ const Map<String, String> hyStrings = {
   "Thêm Home": "Ավելացնել տուն",
   "Mở cài đặt": "Բացել կարգավորումները",
   "Để sau": "Հետո",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome-ին անհրաժեշտ է «Միշտ» տեղադրության թույլտվություն՝ հասկանալու, երբ դուք դուրս եք գալիս կամ վերադառնում տուն, նույնիսկ հավելվածի ֆոնային աշխատանքի ժամանակ։",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Այժմ SafeHome-ը կարող է հասանելիություն ունենալ տեղադրությանը միայն հավելվածն օգտագործելիս։\n\nԲացեք տեղադրության թույլտվությունը և ընտրեք «Թույլատրել միշտ», որպեսզի ավտոմատ պաշտպանությունը շարունակի աշխատել ֆոնային ռեժիմում։",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen-ին անհրաժեշտ է «Միշտ» տեղադրության թույլտվություն՝ հասկանալու, երբ դուք դուրս եք գալիս կամ վերադառնում տուն, նույնիսկ հավելվածի ֆոնային աշխատանքի ժամանակ։",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Այժմ MaiYen-ը կարող է հասանելիություն ունենալ տեղադրությանը միայն հավելվածն օգտագործելիս։\n\nԲացեք տեղադրության թույլտվությունը և ընտրեք «Թույլատրել միշտ», որպեսզի ավտոմատ պաշտպանությունը շարունակի աշխատել ֆոնային ռեժիմում։",
   "Cho phép vị trí luôn luôn": "Միշտ թույլատրել տեղադրությունը",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Ձեր տները կջնջվեն։\nԴուք դուրս կգաք համօգտագործվող տներից։",
@@ -762,7 +762,7 @@ const Map<String, String> hyStrings = {
   "Từ chối": "Մերժել",
   "Lời mời từ chủ nhà": "Հրավեր սեփականատիրոջից",
   "Nhận quyền chủ nhà": "Ստանալ տան սեփականության իրավունքը",
-  "Một người dùng SafeHome": "SafeHome-ի օգտատեր",
+  "Một người dùng MaiYen": "MaiYen-ի օգտատեր",
   "Lời mời gia nhập": "Միանալու հրավեր",
   "Lời xin vào nhà": "Տուն միանալու հարցում",
   "Nhập HUB ID": "Մուտքագրեք HUB ID-ն",
@@ -779,7 +779,7 @@ const Map<String, String> hyStrings = {
   "CẦN KIỂM TRA": "ՍՏՈՒԳՄԱՆ ԿԱՐԻՔ ՈՒՆԻ",
   "KIỂM TRA NHÀ": "ՍՏՈՒԳԵԼ ՏՈՒՆԸ",
   "ĐÓNG NHẮC NHỞ": "ՓԱԿԵԼ ՀԻՇԵՑՈՒՄԸ",
-  "SafeHome Security Alert": "SafeHome անվտանգության ահազանգ",
+  "MaiYen Security Alert": "MaiYen անվտանգության ահազանգ",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Հավելվածի կարգավորումներում ընտրեք «Միշտ թույլատրել» տեղադրության թույլտվությունը",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -822,7 +822,7 @@ const Map<String, String> hyStrings = {
   "Phòng": "Սենյակ",
   "Quản trị viên": "Ադմինիստրատոր",
   "Nhắc nhở": "Հիշեցում",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Թույլ ազդանշան",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Հաշիվ և համակարգ",
@@ -871,7 +871,7 @@ const Map<String, String> hyStrings = {
       "Մնացել է \$count չկարդացված հաղորդագրություն",
   "Hãy an tâm nghỉ ngơi.": "Կարող եք հանգիստ լինել։",
   "Có thiết bị chưa an toàn.": "Որոշ սարքեր անվտանգ չեն։",
-  "SafeHome đang cập nhật vị trí": "SafeHome-ը թարմացնում է տեղադրությունը",
+  "MaiYen đang cập nhật vị trí": "MaiYen-ը թարմացնում է տեղադրությունը",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Վերահսկվում է՝ պաշտպանության ռեժիմն ավտոմատ միացնելու համար։",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -882,12 +882,12 @@ const Map<String, String> hyStrings = {
   "CẢNH BÁO RÒ KHÍ": "ԳԱԶԻ ԱՐՏԱՀՈՍՔԻ ԱՀԱԶԱՆԳ",
   "CẢNH BÁO CỬA": "ԴՌԱՆ ԱՀԱԶԱՆԳ",
   "CẢNH BÁO AN NINH": "ԱՆՎՏԱՆԳՈՒԹՅԱՆ ԱՀԱԶԱՆԳ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Չհաջողվեց հաստատել SafeHome-ի հետ։ Ստուգեք կապը և կրկին փորձեք։",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Չհաջողվեց հաստատել MaiYen-ի հետ։ Ստուգեք կապը և կրկին փորձեք։",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Դադարեցրեք ահազանգը միայն տան վիճակը ստուգելուց հետո։\n\nՎստա՞հ եք, որ ցանկանում եք դադարեցնել ահազանգը։",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome-ը ահազանգ է հայտնաբերել",
-  "Mở SafeHome để kiểm tra ngay.": "Բացեք SafeHome-ը՝ հիմա ստուգելու համար։",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen-ը ահազանգ է հայտնաբերել",
+  "Mở MaiYen để kiểm tra ngay.": "Բացեք MaiYen-ը՝ հիմա ստուգելու համար։",
   "\$count tin nhắn mới": "\$count նոր հաղորդագրություն",
   "Tin nhắn HomeChat": "HomeChat հաղորդագրություն",
   "\$senderName đã gửi một tin nhắn":
@@ -908,8 +908,8 @@ const Map<String, String> hyStrings = {
       "\$actorName-ը ցանկանում է \"\$homeName\" տան սեփականության իրավունքը փոխանցել ձեզ։",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName-ը հրավիրել է ձեզ միանալ \"\$homeName\" տանը։",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome-ը \"\$deviceName\" սարքը հեռացնում է \"\$homeName\" տնից։",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen-ը \"\$deviceName\" սարքը հեռացնում է \"\$homeName\" տնից։",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "\"\$deviceName\" սարքն ավելացվել է \"\$homeName\" տանը։",
   "Bạn đã tạo nhà \"\$name\".": "Դուք ստեղծել եք \"\$name\" տունը։",
@@ -965,8 +965,8 @@ const Map<String, String> hyStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Դուռը բաց է կամ սարքի նկատմամբ միջամտություն է եղել",
   "Có thiết bị đang cảnh báo": "Սարքն ահազանգում է",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Եթե ոչ ոք չհաստատի, SafeHome-ը կսկսի արտակարգ զանգ։",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Եթե ոչ ոք չհաստատի, MaiYen-ը կսկսի արտակարգ զանգ։",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Կրկին ահազանգում է \$time-ին, եթե խնդիրը չի լուծվել։",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1011,8 +1011,8 @@ const Map<String, String> hyStrings = {
       "Հրավիրում է ձեզ միանալ \"\$homeName\" տանը",
   "Cần kiểm tra: \$joined": "Ուշադրության կարիք ունի՝ \$joined",
   "Cập nhật \$value": "Թարմացվել է \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Ավելացրեք ձեր առաջին SafeHome սարքը՝ այս տունը վերահսկելու համար։",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Ավելացրեք ձեր առաջին MaiYen սարքը՝ այս տունը վերահսկելու համար։",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Նախ ստուգեք արտակարգ ահազանգերը, ապա անհրաժեշտության դեպքում կապվեք տան անդամների հետ։",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1068,7 +1068,7 @@ const Map<String, String> hyStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name․ բաց է, երբ տունը պաշտպանության ռեժիմում է",
   "An tâm hơn trong từng ngôi nhà": "Հանգստություն յուրաքանչյուր տանը",
-  "Báo động SafeHome": "SafeHome ահազանգ",
+  "Báo động MaiYen": "MaiYen ահազանգ",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Անվտանգության ահազանգը պահանջում է ձեր ուշադրությունը։",
   "Có cảnh báo cần kiểm tra": "Ահազանգը պահանջում է ձեր ուշադրությունը",

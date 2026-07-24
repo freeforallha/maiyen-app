@@ -19,7 +19,7 @@ const Map<String, String> gaStrings = {
   "Nguy hiểm khẩn cấp": "Guaiseacha éigeandála",
   "Điều khiển & hạ tầng": "Rialú agus bonneagar",
   "Môi trường": "Timpeallacht",
-  "Toàn bộ thiết bị SafeHome": "Gach gléas SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Gach gléas MaiYen",
   "Cửa ra/vào": "Doras iontrála",
   "Cửa": "Doras",
   "Cửa sổ": "Fuinneog",
@@ -623,8 +623,8 @@ const Map<String, String> gaStrings = {
       "Níor bhraith an braiteoir deataigh fadhb.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Chuir tusa nó ball Mód Cosanta ar siúl de láimh.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "Chuir SafeHome Mód Cosanta ar siúl go huathoibríoch mar d'fhág tú an baile.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "Chuir MaiYen Mód Cosanta ar siúl go huathoibríoch mar d'fhág tú an baile.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Tá an baile seo á úsáid de ghnáth faoi láthair.",
   "Bảo vệ thủ công đang bật": "Tá Mód Cosanta láimhe ar siúl",
@@ -634,8 +634,8 @@ const Map<String, String> gaStrings = {
       "D'oscail tú an aip le déanaí chun an stádas a sheiceáil.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Oscail an aip go rialta chun ceadanna, sceidil agus foláirimh neamhléite a athbhreithniú.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Tar éis cúpla seisiún, beidh SafeHome in ann do nós seiceála aipe a mheas níos fearr.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Tar éis cúpla seisiún, beidh MaiYen in ann do nós seiceála aipe a mheas níos fearr.",
   "Tần suất vào ứng dụng ổn": "Tá minicíocht seiceála na haipe go maith",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Tá tamall caite ón seiceáil dheireanach ar an aip",
@@ -687,8 +687,8 @@ const Map<String, String> gaStrings = {
   "Chạy nền ổn định": "Tá úsáid sa chúlra cobhsaí",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "D'fhéadfadh roinnt fóin Android moill a chur ar fholáirimh agus barrfheabhsú cadhnra ar siúl.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Is lú an seans go gcuirfidh an fón moill ar fholáirimh SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Is lú an seans go gcuirfidh an fón moill ar fholáirimh MaiYen.",
   "Chưa tắt tối ưu pin": "Tá barrfheabhsú cadhnra fós cumasaithe",
   "Tối ưu pin không chặn ứng dụng":
       "Níl barrfheabhsú cadhnra ag cur bac ar an aip",
@@ -710,8 +710,8 @@ const Map<String, String> gaStrings = {
   "Cảnh báo toàn màn hình": "Foláirimh lánscáileáin",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Seans nach dtaispeánfar foláirimh má tá fógraí díchumasaithe.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Is féidir leis an bhfón seo fógraí SafeHome a fháil.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Is féidir leis an bhfón seo fógraí MaiYen a fháil.",
   "Chưa bật thông báo": "Níl fógraí cumasaithe",
   "Đã bật thông báo": "Tá fógraí cumasaithe",
   "Hệ thống: Sẵn sàng": "Córas: Réidh",
@@ -720,7 +720,7 @@ const Map<String, String> gaStrings = {
   "Thiết bị của bạn": "Do ghléas",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Seiceálann sé do ghuthán agus an chaoi a n-úsáideann tú an aip.",
-  "Hệ thống SafeHome": "Córas SafeHome",
+  "Hệ thống MaiYen": "Córas MaiYen",
   "Hệ thống: Đang kiểm tra...": "Córas: Á sheiceáil...",
   "Tên": "Ainm",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -742,10 +742,10 @@ const Map<String, String> gaStrings = {
   "Thêm Home": "Cuir baile leis",
   "Mở cài đặt": "Oscail socruithe",
   "Để sau": "Níos déanaí",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "Teastaíonn cead suímh I gcónaí ó SafeHome chun a bhrath cathain a fhágann tú nó a fhilleann tú abhaile, fiú agus an aip sa chúlra.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Faoi láthair, ní féidir le SafeHome suíomh a rochtain ach agus an aip in úsáid.\n\nOscail an cead Suímh agus roghnaigh “Ceadaigh an t-am ar fad” ionas go leanfaidh cosaint uathoibríoch ag obair sa chúlra.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "Teastaíonn cead suímh I gcónaí ó MaiYen chun a bhrath cathain a fhágann tú nó a fhilleann tú abhaile, fiú agus an aip sa chúlra.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Faoi láthair, ní féidir le MaiYen suíomh a rochtain ach agus an aip in úsáid.\n\nOscail an cead Suímh agus roghnaigh “Ceadaigh an t-am ar fad” ionas go leanfaidh cosaint uathoibríoch ag obair sa chúlra.",
   "Cho phép vị trí luôn luôn": "Ceadaigh suíomh i gcónaí",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Scriosfar do bhailte.\nFágfaidh tú na bailte comhroinnte.",
@@ -774,7 +774,7 @@ const Map<String, String> gaStrings = {
   "Từ chối": "Diúltaigh",
   "Lời mời từ chủ nhà": "Cuireadh ón úinéir",
   "Nhận quyền chủ nhà": "Glac úinéireacht an bhaile",
-  "Một người dùng SafeHome": "Úsáideoir SafeHome",
+  "Một người dùng MaiYen": "Úsáideoir MaiYen",
   "Lời mời gia nhập": "Cuireadh chun dul isteach",
   "Lời xin vào nhà": "Iarratas chun dul isteach sa bhaile",
   "Nhập HUB ID": "Cuir ID an HUB isteach",
@@ -792,7 +792,7 @@ const Map<String, String> gaStrings = {
   "CẦN KIỂM TRA": "NÍ MÓR SEICEÁIL",
   "KIỂM TRA NHÀ": "SEICEÁIL AN BAILE",
   "ĐÓNG NHẮC NHỞ": "DÚN AN MEABHRÚCHÁN",
-  "SafeHome Security Alert": "Foláireamh Slándála SafeHome",
+  "MaiYen Security Alert": "Foláireamh Slándála MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Roghnaigh cead suímh Ceadaigh i gcónaí i socruithe na haipe",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -836,7 +836,7 @@ const Map<String, String> gaStrings = {
   "Phòng": "Seomra",
   "Quản trị viên": "Riarthóir",
   "Nhắc nhở": "Meabhrúchán",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Comhartha lag",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Cuntas agus córas",
@@ -884,7 +884,7 @@ const Map<String, String> gaStrings = {
   "Còn \$count tin nhắn chưa đọc": "\$count teachtaireacht neamhléite",
   "Hãy an tâm nghỉ ngơi.": "Is féidir leat a bheith ar do shuaimhneas.",
   "Có thiết bị chưa an toàn.": "Níl roinnt gléasanna sábháilte.",
-  "SafeHome đang cập nhật vị trí": "Tá SafeHome ag nuashonrú an tsuímh",
+  "MaiYen đang cập nhật vị trí": "Tá MaiYen ag nuashonrú an tsuímh",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Monatóireacht chun Mód Cosanta a chur ar siúl go huathoibríoch.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -895,12 +895,12 @@ const Map<String, String> gaStrings = {
   "CẢNH BÁO RÒ KHÍ": "FOLÁIREAMH SCEITE GÁIS",
   "CẢNH BÁO CỬA": "FOLÁIREAMH DORAIS",
   "CẢNH BÁO AN NINH": "FOLÁIREAMH SLÁNDÁLA",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Níorbh fhéidir deimhniú le SafeHome. Seiceáil do cheangal agus bain triail eile as.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Níorbh fhéidir deimhniú le MaiYen. Seiceáil do cheangal agus bain triail eile as.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Ná stop an foláireamh go dtí go mbeidh riocht an bhaile seiceáilte agat.\n\nAn bhfuil tú cinnte gur mhaith leat an foláireamh a stopadh?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 Bhraith SafeHome foláireamh",
-  "Mở SafeHome để kiểm tra ngay.": "Oscail SafeHome chun seiceáil anois.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 Bhraith MaiYen foláireamh",
+  "Mở MaiYen để kiểm tra ngay.": "Oscail MaiYen chun seiceáil anois.",
   "\$count tin nhắn mới": "\$count teachtaireacht nua",
   "Tin nhắn HomeChat": "Teachtaireacht HomeChat",
   "\$senderName đã gửi một tin nhắn": "Sheol \$senderName teachtaireacht",
@@ -920,8 +920,8 @@ const Map<String, String> gaStrings = {
       "Tá \$actorName ag iarraidh úinéireacht “\$homeName” a aistriú chugat.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "Thug \$actorName cuireadh duit dul isteach i “\$homeName”.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "Tá SafeHome ag baint “\$deviceName” ó “\$homeName”.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "Tá MaiYen ag baint “\$deviceName” ó “\$homeName”.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Cuireadh an gléas “\$deviceName” le “\$homeName”.",
   "Bạn đã tạo nhà \"\$name\".": "Chruthaigh tú an baile “\$name”.",
@@ -977,8 +977,8 @@ const Map<String, String> gaStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Tá doras oscailte nó cuireadh isteach ar ghléas",
   "Có thiết bị đang cảnh báo": "Tá gléas ag tabhairt foláirimh",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Mura ndeimhníonn aon duine, cuirfidh SafeHome tús le glao éigeandála.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Mura ndeimhníonn aon duine, cuirfidh MaiYen tús le glao éigeandála.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Tabharfar foláireamh arís ag \$time mura bhfuil an fhadhb láimhseáilte.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1024,8 +1024,8 @@ const Map<String, String> gaStrings = {
       "Ag tabhairt cuireadh duit dul isteach i “\$homeName”",
   "Cần kiểm tra: \$joined": "Aird de dhíth: \$joined",
   "Cập nhật \$value": "Nuashonraithe \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Cuir do chéad ghléas SafeHome leis chun monatóireacht a dhéanamh ar an mbaile seo.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Cuir do chéad ghléas MaiYen leis chun monatóireacht a dhéanamh ar an mbaile seo.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Seiceáil foláirimh éigeandála ar dtús, ansin déan teagmháil le baill an teaghlaigh más gá.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1081,7 +1081,7 @@ const Map<String, String> gaStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Oscailte agus an Baile i Mód Cosanta",
   "An tâm hơn trong từng ngôi nhà": "Suaimhneas intinne i ngach baile",
-  "Báo động SafeHome": "Aláram SafeHome",
+  "Báo động MaiYen": "Aláram MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Teastaíonn d'aird ó fholáireamh slándála.",
   "Có cảnh báo cần kiểm tra": "Teastaíonn d'aird ó fholáireamh",

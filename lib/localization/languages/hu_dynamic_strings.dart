@@ -25,19 +25,19 @@ const Map<String, String> huDynamicStrings = {
       "\$name és további \$otherCount személy éppen ír...",
   "Kênh báo động cũ để giữ tương thích":
       "Régi riasztási csatorna a kompatibilitás megőrzéséhez",
-  "SafeHome báo động toàn màn hình": "SafeHome teljes képernyős riasztás",
+  "MaiYen báo động toàn màn hình": "MaiYen teljes képernyős riasztás",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Teljes képernyős riasztás megnyitása; a szirénahang a Riasztási oldalról szól",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome vészhelyzeti riasztás",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen vészhelyzeti riasztás",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Magas prioritású vészhelyzeti riasztás a teljes képernyős megnyitás előtt",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome teljes képernyős Emlékeztető",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "SafeHome teljes képernyős Emlékeztető hang nélkül",
-  "SafeHome nhắc nhở ưu tiên cao": "Magas prioritású SafeHome Emlékeztető",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Magas prioritású SafeHome Emlékeztető teljes képernyős megnyitás nélkül",
-  "Tin nhắn mới trong các nhà SafeHome": "Új üzenetek a SafeHome-otthonokban",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen teljes képernyős Emlékeztető",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "MaiYen teljes képernyős Emlékeztető hang nélkül",
+  "MaiYen nhắc nhở ưu tiên cao": "Magas prioritású MaiYen Emlékeztető",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Magas prioritású MaiYen Emlékeztető teljes képernyős megnyitás nélkül",
+  "Tin nhắn mới trong các nhà MaiYen": "Új üzenetek a MaiYen-otthonokban",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ez a művelet ma módosítja néhány eszköz riasztási idejét.\n\nA „Vészhelyzeti veszély” kategóriába tartozó eszközök riasztásait és a „Védelem” módban működő riasztásokat ez a funkció nem érinti.",
   "🆘 \$count nhà nguy hiểm\$suffix":

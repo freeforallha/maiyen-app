@@ -18,7 +18,7 @@ const Map<String, String> mkStrings = {
   "Nguy hiểm khẩn cấp": "Аваријни опасности",
   "Điều khiển & hạ tầng": "Управление и инфраструктура",
   "Môi trường": "Околна среда",
-  "Toàn bộ thiết bị SafeHome": "Сите уреди SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Сите уреди MaiYen",
   "Cửa ra/vào": "Входна врата",
   "Cửa": "Врата",
   "Cửa sổ": "Прозорец",
@@ -631,8 +631,8 @@ const Map<String, String> mkStrings = {
       "Сензорот за дим не е открил проблем.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Вие или друг член сте вклјучили рачно Заштитата.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome автоматично вклучи Заштитата, бидејќи сте напуснали дома.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen автоматично вклучи Заштитата, бидејќи сте напуснали дома.",
   "Nhà đang ở chế độ dùng bình thường.":
       "Домот е во нормален режим на користење.",
   "Bảo vệ thủ công đang bật": "Рачната заштита е вклучена",
@@ -642,8 +642,8 @@ const Map<String, String> mkStrings = {
       "Наскоро сте отворили апликацијата, за да проверите состојбата.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Отворајте апликацијата редовно, за да проверјавате дозволите, распоредите и непрочетените предупредувања.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "По неколку користења SafeHome ќе може по-добре да оцени вашата навика за проверка на апликацијата.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "По неколку користења MaiYen ќе може по-добре да оцени вашата навика за проверка на апликацијата.",
   "Tần suất vào ứng dụng ổn": "Честотата на проверка на апликацијата е добра",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Мина много време од последната проверка на апликацијата",
@@ -692,8 +692,8 @@ const Map<String, String> mkStrings = {
   "Chạy nền ổn định": "Работата во заднина е стабилна",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Некои телефони со Android може да ги одложат предупредувањата, додека оптимизацијата на батеријата е вклучена.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Малко веројатно е телефонот да забавја предупредувањата на SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Малко веројатно е телефонот да забавја предупредувањата на MaiYen.",
   "Chưa tắt tối ưu pin": "Оптимизацијата на батеријата сè уЌе е вклучена",
   "Tối ưu pin không chặn ứng dụng":
       "Оптимизацијата на батеријата не блокира апликацијата",
@@ -715,8 +715,8 @@ const Map<String, String> mkStrings = {
   "Cảnh báo toàn màn hình": "Предупредувања на цел екран",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Предупредувањата може да не се показват, ако известувањата се исклучени.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Овој телефон може да добива известувања од SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Овој телефон може да добива известувања од MaiYen.",
   "Chưa bật thông báo": "Известувањата не се вклучени",
   "Đã bật thông báo": "Известувањата се вклучени",
   "Hệ thống: Sẵn sàng": "Система: Готова",
@@ -726,7 +726,7 @@ const Map<String, String> mkStrings = {
   "Thiết bị của bạn": "Вашето уред",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Проверјава телефона и начина, по којто користите апликацијата.",
-  "Hệ thống SafeHome": "Система SafeHome",
+  "Hệ thống MaiYen": "Система MaiYen",
   "Hệ thống: Đang kiểm tra...": "Система: Проверка...",
   "Tên": "Име",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -748,10 +748,10 @@ const Map<String, String> mkStrings = {
   "Thêm Home": "Додавање на Дом",
   "Mở cài đặt": "Отвори поставките",
   "Để sau": "По-касно",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome има потреба од дозвола за локација „Секогаш дозволено“, за да препознава кога заминувате или се враќате дома, вклучително кога апликацијата работи во заднина.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "Во моментов SafeHome има пристап до локацијата само кога користите апликацијата.\n\nОтворете ја дозволата за локација и изберете „Секогаш дозволено“, за да функционира Автоматската заштита при отсуство и во заднина.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen има потреба од дозвола за локација „Секогаш дозволено“, за да препознава кога заминувате или се враќате дома, вклучително кога апликацијата работи во заднина.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "Во моментов MaiYen има пристап до локацијата само кога користите апликацијата.\n\nОтворете ја дозволата за локација и изберете „Секогаш дозволено“, за да функционира Автоматската заштита при отсуство и во заднина.",
   "Cho phép vị trí luôn luôn": "Секогаш разрешавај локацијата",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Вашите домови ќе бидат изтрити.\nЌе напуснете споделените домови.",
@@ -780,7 +780,7 @@ const Map<String, String> mkStrings = {
   "Từ chối": "Откажи",
   "Lời mời từ chủ nhà": "Покана од сопственикот",
   "Nhận quyền chủ nhà": "Получаване на сопственоста вархдома",
-  "Một người dùng SafeHome": "Корисник на SafeHome",
+  "Một người dùng MaiYen": "Корисник на MaiYen",
   "Lời mời gia nhập": "Покана за придружување",
   "Lời xin vào nhà": "Барање за придружување кон дома",
   "Nhập HUB ID": "Внесете HUB ID",
@@ -797,7 +797,7 @@ const Map<String, String> mkStrings = {
   "CẦN KIỂM TRA": "НУЖНА Е ПРОВЕРКА",
   "KIỂM TRA NHÀ": "ПРОВЕРИ ДОМА",
   "ĐÓNG NHẮC NHỞ": "ЗАТВОРИ ПОТСЕТНИКОТ",
-  "SafeHome Security Alert": "Предупредување за безбедност од SafeHome",
+  "MaiYen Security Alert": "Предупредување за безбедност од MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Изберете дозвола за локација „Секогаш дозволено“ во поставките на апликацијата",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -842,7 +842,7 @@ const Map<String, String> mkStrings = {
   "Phòng": "Стаја",
   "Quản trị viên": "Администратор",
   "Nhắc nhở": "Потсетник",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Слаб сигнал",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Сметка и система",
@@ -891,7 +891,7 @@ const Map<String, String> mkStrings = {
   "Còn \$count tin nhắn chưa đọc": "УЌе \$count непрочетени пораки",
   "Hãy an tâm nghỉ ngơi.": "Можете да си починете спокојно.",
   "Có thiết bị chưa an toàn.": "Некои уреди не се во безопасност.",
-  "SafeHome đang cập nhật vị trí": "SafeHome актуализира локацијата",
+  "MaiYen đang cập nhật vị trí": "MaiYen актуализира локацијата",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Наблјудение за автоматично вклучување на режима Заштита.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -902,13 +902,13 @@ const Map<String, String> mkStrings = {
   "CẢNH BÁO RÒ KHÍ": "ПРЕДУПРЕДУВАЊЕ ЗА ИЗТИЧАНЕ НА ГАЗ",
   "CẢNH BÁO CỬA": "ПРЕДУПРЕДУВАЊЕ ЗА ВРАТА",
   "CẢNH BÁO AN NINH": "ПРЕДУПРЕДУВАЊЕ ЗА БЕЗБЕДНОСТ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Потварждението со SafeHome не бе успешно. Проверете вразката и опитајте повторно.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Потварждението со MaiYen не бе успешно. Проверете вразката и опитајте повторно.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Исклучете го предупредувањето само откако проверите состојбата на домот.\n\nДали сте сигурни дека искате да Исклучете го предупредувањето?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome откри предупредување",
-  "Mở SafeHome để kiểm tra ngay.":
-      "Отворете SafeHome, за да проверите веднага.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen откри предупредување",
+  "Mở MaiYen để kiểm tra ngay.":
+      "Отворете MaiYen, за да проверите веднага.",
   "\$count tin nhắn mới": "\$count нови пораки",
   "Tin nhắn HomeChat": "Порака во HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName изпрати порака",
@@ -928,8 +928,8 @@ const Map<String, String> mkStrings = {
       "\$actorName иска да ви прехварли сопственоста вархдома „\$homeName“.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName ви покани да се присаедините кон дома „\$homeName“.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome премахва уредот „\$deviceName“ од дома „\$homeName“.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen премахва уредот „\$deviceName“ од дома „\$homeName“.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Уредот „\$deviceName“ бе добавено во дома „\$homeName“.",
   "Bạn đã tạo nhà \"\$name\".": "Саздадохте дома „\$name“.",
@@ -985,8 +985,8 @@ const Map<String, String> mkStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Има отворена врата или уред со откриена намеса",
   "Có thiết bị đang cảnh báo": "Уред подава предупредување",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Ако никој не потварди, SafeHome ќе започне итно обаждане.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Ако никој не потварди, MaiYen ќе започне итно обаждане.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Предупредувањето ќе се повтори во \$time, ако проблемот не е отстранен.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1031,8 +1031,8 @@ const Map<String, String> mkStrings = {
       "Кани ви да се присаедините кон дома „\$homeName“",
   "Cần kiểm tra: \$joined": "Потреба се од проверка: \$joined",
   "Cập nhật \$value": "Ажурирано \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Додадете Првото си уред SafeHome, за да започнете наблјудение на домот.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Додадете Првото си уред MaiYen, за да започнете наблјудение на домот.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Прво проверете итните предупредувања, потоа контактирајте со членовите на домот, ако е потребно.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1090,7 +1090,7 @@ const Map<String, String> mkStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Отворено, додека домот е во режим Заштита",
   "An tâm hơn trong từng ngôi nhà": "Спокојствие во секој дом",
-  "Báo động SafeHome": "Аларм SafeHome",
+  "Báo động MaiYen": "Аларм MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Предупредување за безбедност изисква незабавна проверка.",
   "Có cảnh báo cần kiểm tra": "Предупредување изисква проверка",

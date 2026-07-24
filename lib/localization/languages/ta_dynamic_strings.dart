@@ -24,19 +24,19 @@ const Map<String, String> taDynamicStrings = {
   "\$name và \$otherCount người khác đang chuẩn bị gửi tin...":
       "\$name மற்றும் மேலும் \$otherCount பேர் செய்தி அனுப்பத் தயாராகிறார்கள்...",
   "Kênh báo động cũ để giữ tương thích": "இணக்கத்திற்கான பழைய அலாரம் சேனல்",
-  "SafeHome báo động toàn màn hình": "SafeHome முழுத்திரை அலாரம்",
+  "MaiYen báo động toàn màn hình": "MaiYen முழுத்திரை அலாரம்",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "முழுத்திரை எச்சரிக்கையைத் திறக்கவும்; சைரன் ஒலி அலாரம் பக்கத்தில் இயக்கப்படும்",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome அவசர எச்சரிக்கை",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen அவசர எச்சரிக்கை",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "முழுத்திரை திறப்பதற்கு முன் உயர் முன்னுரிமை அவசர எச்சரிக்கை",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome முழுத்திரை நினைவூட்டல்",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "ஒலியற்ற SafeHome முழுத்திரை நினைவூட்டல்",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome உயர் முன்னுரிமை நினைவூட்டல்",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "முழுத்திரை திறக்காத உயர் முன்னுரிமை SafeHome நினைவூட்டல்",
-  "Tin nhắn mới trong các nhà SafeHome": "SafeHome வீடுகளில் புதிய செய்திகள்",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen முழுத்திரை நினைவூட்டல்",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "ஒலியற்ற MaiYen முழுத்திரை நினைவூட்டல்",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen உயர் முன்னுரிமை நினைவூட்டல்",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "முழுத்திரை திறக்காத உயர் முன்னுரிமை MaiYen நினைவூட்டல்",
+  "Tin nhắn mới trong các nhà MaiYen": "MaiYen வீடுகளில் புதிய செய்திகள்",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "இந்தச் செயல் இன்று சில சாதனங்களின் அலாரம் நேரத்தை மாற்றும்.\n\n“அவசர ஆபத்து” பிரிவில் உள்ள சாதனங்களின் அலாரங்களும் “பாதுகாப்பு” பயன்முறையிலுள்ள அலாரங்களும் இந்த அம்சத்தால் பாதிக்கப்படாது.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 ஆபத்திலுள்ள \$count வீடுகள்\$suffix",

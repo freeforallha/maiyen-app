@@ -25,20 +25,20 @@ const Map<String, String> etDynamicStrings = {
       "\$name ja veel \$otherCount inimest kirjutavad...",
   "Kênh báo động cũ để giữ tương thích":
       "Ühilduvuse säilitamiseks jäetud vana alarmikanal",
-  "SafeHome báo động toàn màn hình": "SafeHome'i täisekraanialarm",
+  "MaiYen báo động toàn màn hình": "MaiYen'i täisekraanialarm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Avab täisekraanihoiatuse; sireeniheli esitatakse alarmilehelt",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome'i hädaolukorra hoiatus",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen'i hädaolukorra hoiatus",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Kõrge prioriteediga hädaolukorra hoiatus enne täisekraani avamist",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome'i täisekraani meeldetuletus",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Helitu SafeHome'i täisekraani meeldetuletus",
-  "SafeHome nhắc nhở ưu tiên cao":
-      "SafeHome'i kõrge prioriteediga meeldetuletus",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Kõrge prioriteediga SafeHome'i meeldetuletus ilma täisekraanita",
-  "Tin nhắn mới trong các nhà SafeHome": "Uued sõnumid SafeHome'i kodudes",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen'i täisekraani meeldetuletus",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Helitu MaiYen'i täisekraani meeldetuletus",
+  "MaiYen nhắc nhở ưu tiên cao":
+      "MaiYen'i kõrge prioriteediga meeldetuletus",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Kõrge prioriteediga MaiYen'i meeldetuletus ilma täisekraanita",
+  "Tin nhắn mới trong các nhà MaiYen": "Uued sõnumid MaiYen'i kodudes",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "See toiming muudab täna mõne seadme alarmiaega.\n\nKategooria „Hädaolukorra oht“ seadmete alarmid ja režiimi „Kaitse“ alarmid jäävad sellest funktsioonist puutumata.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count kodu ohus\$suffix",

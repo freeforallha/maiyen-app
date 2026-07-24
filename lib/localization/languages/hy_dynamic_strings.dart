@@ -25,21 +25,21 @@ const Map<String, String> hyDynamicStrings = {
       "\$name-ը և ևս \$otherCount հոգի գրում են...",
   "Kênh báo động cũ để giữ tương thích":
       "Հին ահազանգի ալիքը պահպանվել է համատեղելիության համար",
-  "SafeHome báo động toàn màn hình": "SafeHome-ի ամբողջէկրան ահազանգ",
+  "MaiYen báo động toàn màn hình": "MaiYen-ի ամբողջէկրան ահազանգ",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Բացում է ամբողջէկրան նախազգուշացումը․ շչակի ձայնը հնչում է ահազանգի էջից",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-ի արտակարգ նախազգուշացում",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-ի արտակարգ նախազգուշացում",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Բարձր առաջնահերթությամբ արտակարգ նախազգուշացում՝ մինչև ամբողջ էկրան բացելը",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-ի ամբողջէկրան հիշեցում",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "SafeHome-ի անձայն ամբողջէկրան հիշեցում",
-  "SafeHome nhắc nhở ưu tiên cao":
-      "SafeHome-ի բարձր առաջնահերթությամբ հիշեցում",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-ի բարձր առաջնահերթությամբ հիշեցում՝ առանց ամբողջ էկրանի",
-  "Tin nhắn mới trong các nhà SafeHome":
-      "Նոր հաղորդագրություններ SafeHome տներում",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-ի ամբողջէկրան հիշեցում",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "MaiYen-ի անձայն ամբողջէկրան հիշեցում",
+  "MaiYen nhắc nhở ưu tiên cao":
+      "MaiYen-ի բարձր առաջնահերթությամբ հիշեցում",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-ի բարձր առաջնահերթությամբ հիշեցում՝ առանց ամբողջ էկրանի",
+  "Tin nhắn mới trong các nhà MaiYen":
+      "Նոր հաղորդագրություններ MaiYen տներում",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Այս գործողությունն այսօր կփոխի որոշ սարքերի տագնապի ժամը։\n\n«Արտակարգ վտանգ» կատեգորիայի սարքերի տագնապները և «Պաշտպանություն» ռեժիմի տագնապները չեն ազդվի այս գործառույթից։",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count վտանգավոր տուն\$suffix",

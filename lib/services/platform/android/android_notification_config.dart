@@ -4,6 +4,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:safehome_app/localization/app_strings.dart';
 import 'package:safehome_app/helpers/debug_log.dart';
 
+import '../../../config/brand_config.dart';
+
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
 
@@ -210,7 +212,7 @@ class AndroidNotificationConfig {
       styleInformation: BigTextStyleInformation(
         body,
         contentTitle: title,
-        summaryText: 'SafeHome',
+        summaryText: BrandConfig.appName,
       ),
     );
   }
@@ -237,7 +239,7 @@ class AndroidNotificationConfig {
       styleInformation: BigTextStyleInformation(
         body,
         contentTitle: title,
-        summaryText: 'SafeHome',
+        summaryText: BrandConfig.appName,
       ),
     );
   }
@@ -307,7 +309,7 @@ class AndroidNotificationConfig {
       styleInformation: BigTextStyleInformation(
         bigText,
         contentTitle: title,
-        summaryText: 'SafeHome',
+        summaryText: BrandConfig.appName,
       ),
     );
   }

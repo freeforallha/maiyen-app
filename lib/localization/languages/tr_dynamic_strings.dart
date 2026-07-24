@@ -25,19 +25,19 @@ const Map<String, String> trDynamicStrings = {
       "\$name ve \$otherCount kişi daha yazıyor...",
   "Kênh báo động cũ để giữ tương thích":
       "Eski Alarm kanalı uyumluluk için korunuyor",
-  "SafeHome báo động toàn màn hình": "SafeHome Tam Ekran Alarm",
+  "MaiYen báo động toàn màn hình": "MaiYen Tam Ekran Alarm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Tam ekran alarmları açar; siren sesi Alarm sayfasından çalınır",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome Acil Durum Önceliği",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen Acil Durum Önceliği",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Tam ekran açılmadan önce yüksek öncelikli acil durum uyarısı",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome Tam Ekran Programı",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Sessiz tam ekran SafeHome Hatırlatıcısı",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome Hatırlatıcı Önceliği",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Tam ekran olmadan yüksek öncelikli SafeHome Hatırlatıcısı",
-  "Tin nhắn mới trong các nhà SafeHome": "SafeHome evlerinde yeni mesajlar",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen Tam Ekran Programı",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Sessiz tam ekran MaiYen Hatırlatıcısı",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen Hatırlatıcı Önceliği",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Tam ekran olmadan yüksek öncelikli MaiYen Hatırlatıcısı",
+  "Tin nhắn mới trong các nhà MaiYen": "MaiYen evlerinde yeni mesajlar",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Bu işlem bugün bazı cihazların alarm saatini değiştirecek.\n\n“Acil tehlike” kategorisindeki cihazların alarmları ve “Koruma” modundaki alarmlar bu özellikten etkilenmeyecektir.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count ev tehlikede\$suffix",

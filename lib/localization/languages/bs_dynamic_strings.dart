@@ -24,19 +24,19 @@ const Map<String, String> bsDynamicStrings = {
       "\$name i još \$otherCount osoba pišu...",
   "Kênh báo động cũ để giữ tương thích":
       "Stari kanal alarma zadržan radi kompatibilnosti",
-  "SafeHome báo động toàn màn hình": "SafeHome Alarm preko cijelog ekrana",
+  "MaiYen báo động toàn màn hình": "MaiYen Alarm preko cijelog ekrana",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Otvara upozorenje preko cijelog ekrana; zvuk sirene reproducira se sa stranice Alarma",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome hitno upozorenje",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen hitno upozorenje",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Hitno upozorenje visokog prioriteta prije otvaranja preko cijelog ekrana",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome Podsjetnik preko cijelog ekrana",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "SafeHome Podsjetnik preko cijelog ekrana bez zvuka",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome Podsjetnik visokog prioriteta",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome Podsjetnik visokog prioriteta bez otvaranja preko cijelog ekrana",
-  "Tin nhắn mới trong các nhà SafeHome": "Nove poruke u SafeHome domovima",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen Podsjetnik preko cijelog ekrana",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "MaiYen Podsjetnik preko cijelog ekrana bez zvuka",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen Podsjetnik visokog prioriteta",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen Podsjetnik visokog prioriteta bez otvaranja preko cijelog ekrana",
+  "Tin nhắn mới trong các nhà MaiYen": "Nove poruke u MaiYen domovima",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ova radnja će danas promijeniti vrijeme alarma za neke uređaje.\n\nAlarmi uređaja u kategoriji „Hitna opasnost“ i alarmi u režimu „Zaštita“ neće biti obuhvaćeni ovom funkcijom.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count domova u opasnosti\$suffix",

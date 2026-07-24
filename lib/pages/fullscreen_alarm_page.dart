@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app/safe_home_app.dart';
+import '../config/brand_config.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../services/notification_service.dart';
@@ -609,7 +610,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
         continue;
       }
 
-      final key = homeName == null || homeName.isEmpty ? "SafeHome" : homeName;
+      final key = homeName == null || homeName.isEmpty
+          ? BrandConfig.appName
+          : homeName;
 
       result[key] = nextAlarm;
     }
@@ -1469,7 +1472,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                         const SizedBox(height: 6),
 
                         Text(
-                          strings.t("SafeHome Security Alert"),
+                          strings.t("MaiYen Security Alert"),
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 13,

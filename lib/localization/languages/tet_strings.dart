@@ -18,7 +18,7 @@ const Map<String, String> tetStrings = {
   "Nguy hiểm khẩn cấp": "Perigu urjente",
   "Điều khiển & hạ tầng": "Kontrolu & infraestrutura",
   "Môi trường": "Ambiente",
-  "Toàn bộ thiết bị SafeHome": "Konjuntu kompletu husi ekipamentu SafeHome",
+  "Toàn bộ thiết bị MaiYen": "Konjuntu kompletu husi ekipamentu MaiYen",
   "Cửa ra/vào": "Odamatan tama/sai",
   "Cửa": "Odamatan",
   "Cửa sổ": "Janela",
@@ -625,8 +625,8 @@ const Map<String, String> tetStrings = {
       "Sensor suar nian la rejista anomalia ruma.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "Ita-boot ka membru ida ativa ona Protesaun.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome loke Protesaun automatikamente tanba ita-boot sai hosi uma.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen loke Protesaun automatikamente tanba ita-boot sai hosi uma.",
   "Nhà đang ở chế độ dùng bình thường.": "Uma ne'e iha modo uzu normál.",
   "Bảo vệ thủ công đang bật": "Protesaun manuál iha",
   "Bảo vệ tự động đang bật": "Protesaun automátika ativadu",
@@ -635,8 +635,8 @@ const Map<String, String> tetStrings = {
       "Ita-boot loke aplikasaun foin lalais ne'e atu verifika estatutu.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "Ita-boot tenke loke aplikasaun periodikamente hodi verifika lisensa sira, kalendáriu sira, no alerta sira ne'ebé seidauk lee.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "Hafoin uza dala balun, SafeHome sei aprende no avalia di'ak liu ábitu atu verifika aplikasaun.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "Hafoin uza dala balun, MaiYen sei aprende no avalia di'ak liu ábitu atu verifika aplikasaun.",
   "Tần suất vào ứng dụng ổn": "Frekuénsia atu hatama aplikasaun ne'e di'ak",
   "Đã lâu chưa vào ứng dụng kiểm tra":
       "Dala ikus verifika aplikasaun liu ona tempu naruk",
@@ -688,8 +688,8 @@ const Map<String, String> tetStrings = {
   "Chạy nền ổn định": "Hala'o iha kotuk ho estabilidade",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "Dispozitivu Android balu bele atraza avizu sira se optimizasaun bateria nian ativadu.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "Telemovel ne'e ladún atraza avizu SafeHome.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "Telemovel ne'e ladún atraza avizu MaiYen.",
   "Chưa tắt tối ưu pin": "Labele hamate optimizasaun bateria nian",
   "Tối ưu pin không chặn ứng dụng":
       "Optimizasaun bateria la blokeia aplikasaun sira",
@@ -711,8 +711,8 @@ const Map<String, String> tetStrings = {
   "Cảnh báo toàn màn hình": "Alerta ekran tomak",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "Alerta sira bele la hatudu se notifikasaun sira dezativadu.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "Telefone bele simu notifikasaun hosi SafeHome.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "Telefone bele simu notifikasaun hosi MaiYen.",
   "Chưa bật thông báo": "Notifikasaun sira la ativa",
   "Đã bật thông báo": "Notifikasaun sira ativadu",
   "Hệ thống: Sẵn sàng": "Sistema: Prontu",
@@ -721,7 +721,7 @@ const Map<String, String> tetStrings = {
   "Thiết bị của bạn": "Ita-boot nia dispozitivu",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "Verifika ita-boot nia telefone no oinsá ita-boot uza aplikasaun.",
-  "Hệ thống SafeHome": "Sistema SafeHome",
+  "Hệ thống MaiYen": "Sistema MaiYen",
   "Hệ thống: Đang kiểm tra...": "Sistema: Verifika...",
   "Tên": "Naran",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -742,10 +742,10 @@ const Map<String, String> tetStrings = {
   "Thêm Home": "Hatama uma",
   "Mở cài đặt": "Loke konfigurasaun sira",
   "Để sau": "Tuir mai",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome presiza lisensa lokalizasaun \"Permite nafatin\" atu rekoñese bainhira ita sai ka fila ba uma, maski bainhira aplikasaun hala'o iha kotuk.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome agora daudaun asesu de'it ba lokalizasaun bainhira ita-boot uza hela aplikasaun.\n\nHili lisensa lokalizasaun no muda ba \"Permite nafatin\" atu protesaun automátika bainhira sai hosi uma bele funsiona bainhira aplikasaun hala'o iha kotuk.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen presiza lisensa lokalizasaun \"Permite nafatin\" atu rekoñese bainhira ita sai ka fila ba uma, maski bainhira aplikasaun hala'o iha kotuk.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen agora daudaun asesu de'it ba lokalizasaun bainhira ita-boot uza hela aplikasaun.\n\nHili lisensa lokalizasaun no muda ba \"Permite nafatin\" atu protesaun automátika bainhira sai hosi uma bele funsiona bainhira aplikasaun hala'o iha kotuk.",
   "Cho phép vị trí luôn luôn": "Permite lokalizasaun nafatin",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "Ita-boot nia uma sira sei hamoos.\nUma sira ne'ebé fahe sei husik hela.",
@@ -774,7 +774,7 @@ const Map<String, String> tetStrings = {
   "Từ chối": "Rekuza",
   "Lời mời từ chủ nhà": "Konvite husi uma nain",
   "Nhận quyền chủ nhà": "Hetan direitu ba uma-na'in",
-  "Một người dùng SafeHome": "Utilizadór ida SafeHome",
+  "Một người dùng MaiYen": "Utilizadór ida MaiYen",
   "Lời mời gia nhập": "Konvite atu hamutuk",
   "Lời xin vào nhà": "Pedidu ida atu tama ba uma",
   "Nhập HUB ID": "Hatama HUB ID",
@@ -792,7 +792,7 @@ const Map<String, String> tetStrings = {
   "CẦN KIỂM TRA": "PRESIZA ATU VERIFIKA",
   "KIỂM TRA NHÀ": "INSPESAUN IHA UMA",
   "ĐÓNG NHẮC NHỞ": "TAKA LEMBRASAUN",
-  "SafeHome Security Alert": "Alarme seguransa SafeHome",
+  "MaiYen Security Alert": "Alarme seguransa MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "Hili Sempre permite lisensa ba lokalizasaun iha Konfigurasaun Aplikasaun nian",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -838,7 +838,7 @@ const Map<String, String> tetStrings = {
   "Phòng": "Kuartu",
   "Quản trị viên": "Administradór",
   "Nhắc nhở": "Lembransa",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "Laloran fraku sira",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "Konta sira & sistema sira",
@@ -886,7 +886,7 @@ const Map<String, String> tetStrings = {
   "Còn \$count tin nhắn chưa đọc": "Mensajen \$count seidauk lee",
   "Hãy an tâm nghỉ ngơi.": "Favor ida, hakmatek.",
   "Có thiết bị chưa an toàn.": "Ekipamentu balu ladún seguru.",
-  "SafeHome đang cập nhật vị trí": "SafeHome atualiza hela lokalizasaun",
+  "MaiYen đang cập nhật vị trí": "MaiYen atualiza hela lokalizasaun",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "Haree atu ativa automatikamente Modu Protejidu.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -897,12 +897,12 @@ const Map<String, String> tetStrings = {
   "CẢNH BÁO RÒ KHÍ": "AVISO FUZA GÁS",
   "CẢNH BÁO CỬA": "AVISO BA ODAMATAN",
   "CẢNH BÁO AN NINH": "AVISO BA SEGURANSA",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "Labele konfirma ho SafeHome. Favor verifika ita-boot nia ligasaun no koko fali.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "Labele konfirma ho MaiYen. Favor verifika ita-boot nia ligasaun no koko fali.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Hamate de'it alarme bainhira ita-boot verifika ona kondisaun iha ita-boot nia uma.\n\nIta-boot iha serteza katak ita-boot hakarak hamate avizu?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome detekta avizu sira",
-  "Mở SafeHome để kiểm tra ngay.": "Loke SafeHome hodi verifika agora.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen detekta avizu sira",
+  "Mở MaiYen để kiểm tra ngay.": "Loke MaiYen hodi verifika agora.",
   "\$count tin nhắn mới": "\$count mensajen foun",
   "Tin nhắn HomeChat": "Mensajen sira HomeChat nian",
   "\$senderName đã gửi một tin nhắn": "\$senderName haruka mensajen ida",
@@ -922,8 +922,8 @@ const Map<String, String> tetStrings = {
       "\$actorName hakarak transfere direitu uma-na'in nian ba \"\$homeName\" ba ita-boot.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName konvida ona ita-boot sira atu hamutuk ho família \"\$homeName\".",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome hasai hela dispozitivu \"\$deviceName\" hosi uma \"\$homeName\".",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen hasai hela dispozitivu \"\$deviceName\" hosi uma \"\$homeName\".",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "Dispozitivu \"\$deviceName\" mosu ona iha \"\$homeName\".",
   "Bạn đã tạo nhà \"\$name\".": "Ita-boot kria ona uma \"\$name\".",
@@ -979,8 +979,8 @@ const Map<String, String> tetStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "Iha odamatan ida nakloke ka ekipamentu hasai tiha ona",
   "Có thiết bị đang cảnh báo": "Iha avizu ida ba dispozitivu",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "Se laiha ema ida maka konfirma, SafeHome sei muda ba xamada emerjénsia.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "Se laiha ema ida maka konfirma, MaiYen sei muda ba xamada emerjénsia.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "Relata fali ba \$time se problema ne'e la rezolve.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1023,8 +1023,8 @@ const Map<String, String> tetStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "Favor ida hamutuk ho \"\$homeName\"",
   "Cần kiểm tra: \$joined": "Presiza atu verifika: \$joined",
   "Cập nhật \$value": "Atualiza \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "Hatama ita-boot nia dispozitivu SafeHome dahuluk hodi hahú monitorizasaun uma nian.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "Hatama ita-boot nia dispozitivu MaiYen dahuluk hodi hahú monitorizasaun uma nian.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "Verifika uluk alerta emerjénsia nian, hafoin kontaktu membru família sira se nesesáriu.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1083,7 +1083,7 @@ const Map<String, String> tetStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: Nakloke bainhira uma iha modu protesaun",
   "An tâm hơn trong từng ngôi nhà": "Hakmatek liután iha uma ida-idak",
-  "Báo động SafeHome": "Alarme SafeHome",
+  "Báo động MaiYen": "Alarme MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "Iha alerta seguransa nian ne'ebé presiza atu verifika kedas.",
   "Có cảnh báo cần kiểm tra": "Iha avizu sira ne'ebé presiza atu verifika",

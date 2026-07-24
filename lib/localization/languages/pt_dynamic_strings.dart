@@ -25,19 +25,19 @@ const Map<String, String> ptDynamicStrings = {
       "\$name e mais \$otherCount pessoas estão digitando...",
   "Kênh báo động cũ để giữ tương thích":
       "Canal de alarme legado para compatibilidade",
-  "SafeHome báo động toàn màn hình": "Alarme SafeHome em tela cheia",
+  "MaiYen báo động toàn màn hình": "Alarme MaiYen em tela cheia",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Abrir o alerta em tela cheia; o som da sirene é reproduzido na tela do alarme",
-  "SafeHome cảnh báo khẩn cấp": "Alerta de emergência SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Alerta de emergência MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alerta de emergência de alta prioridade antes de abrir a tela cheia",
-  "SafeHome nhắc nhở toàn màn hình": "Lembrete SafeHome em tela cheia",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Lembrete SafeHome silencioso em tela cheia",
-  "SafeHome nhắc nhở ưu tiên cao": "Lembrete SafeHome de alta prioridade",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Lembrete SafeHome de alta prioridade sem abrir a tela cheia",
-  "Tin nhắn mới trong các nhà SafeHome": "Novas mensagens nas casas SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Lembrete MaiYen em tela cheia",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Lembrete MaiYen silencioso em tela cheia",
+  "MaiYen nhắc nhở ưu tiên cao": "Lembrete MaiYen de alta prioridade",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Lembrete MaiYen de alta prioridade sem abrir a tela cheia",
+  "Tin nhắn mới trong các nhà MaiYen": "Novas mensagens nas casas MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Esta ação alterará hoje o horário do alarme de alguns dispositivos.\n\nOs alarmes dos dispositivos na categoria “Perigo de emergência” e os alarmes no modo “Proteção” não serão afetados por esta funcionalidade.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count casas em perigo\$suffix",

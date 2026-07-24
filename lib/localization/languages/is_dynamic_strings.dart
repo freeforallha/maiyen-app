@@ -24,19 +24,19 @@ const Map<String, String> isDynamicStrings = {
       "\$name og \$otherCount aðrir skrifa...",
   "Kênh báo động cũ để giữ tương thích":
       "Eldri viðvörunarrás haldin til samhæfis",
-  "SafeHome báo động toàn màn hình": "SafeHome-viðvörun á öllum skjánum",
+  "MaiYen báo động toàn màn hình": "MaiYen-viðvörun á öllum skjánum",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Opnar viðvörun á öllum skjánum; sírenuhljóðið spilast af viðvörunarsíðunni",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-neyðarviðvörun",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-neyðarviðvörun",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Neyðarviðvörun með háum forgangi áður en allur skjárinn opnast",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-áminning á öllum skjánum",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Hljóðlaus SafeHome-áminning á öllum skjánum",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-áminning með háum forgangi",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-áminning með háum forgangi án alls skjás",
-  "Tin nhắn mới trong các nhà SafeHome": "Ný skilaboð á SafeHome-heimilum",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-áminning á öllum skjánum",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Hljóðlaus MaiYen-áminning á öllum skjánum",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-áminning með háum forgangi",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-áminning með háum forgangi án alls skjás",
+  "Tin nhắn mới trong các nhà MaiYen": "Ný skilaboð á MaiYen-heimilum",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Þessi aðgerð breytir viðvörunartíma sumra tækja í dag.\n\nViðvaranir tækja í flokknum „Bráð hætta“ og viðvaranir í stillingunni „Vörn“ verða ekki fyrir áhrifum af þessari aðgerð.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count heimili í hættu\$suffix",

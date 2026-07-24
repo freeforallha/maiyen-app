@@ -18,7 +18,7 @@ const Map<String, String> kaStrings = {
   "Nguy hiểm khẩn cấp": "საგანგებო საფრთხეები",
   "Điều khiển & hạ tầng": "მართვა და ინფრასტრუქტურა",
   "Môi trường": "გარემო",
-  "Toàn bộ thiết bị SafeHome": "SafeHome-ის ყველა მოწყობილობა",
+  "Toàn bộ thiết bị MaiYen": "MaiYen-ის ყველა მოწყობილობა",
   "Cửa ra/vào": "შესასვლელი კარი",
   "Cửa": "კარი",
   "Cửa sổ": "ფანჯარა",
@@ -618,8 +618,8 @@ const Map<String, String> kaStrings = {
       "კვამლის სენსორს პრობლემა არ გამოუვლენია.",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "თქვენ ან წევრმა დაცვა ხელით ჩართეთ.",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome-მა დაცვა ავტომატურად ჩართო, რადგან სახლიდან გახვედით.",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen-მა დაცვა ავტომატურად ჩართო, რადგან სახლიდან გახვედით.",
   "Nhà đang ở chế độ dùng bình thường.":
       "ეს სახლი ამჟამად ჩვეულებრივ რეჟიმში გამოიყენება.",
   "Bảo vệ thủ công đang bật": "ხელით დაცვა ჩართულია",
@@ -629,8 +629,8 @@ const Map<String, String> kaStrings = {
       "მდგომარეობის შესამოწმებლად აპი ცოტა ხნის წინ გახსენით.",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "რეგულარულად გახსენით აპი ნებართვების, განრიგებისა და წაუკითხავი გაფრთხილებების შესამოწმებლად.",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "რამდენიმე გამოყენების შემდეგ SafeHome უკეთ შეაფასებს აპის შემოწმების თქვენს ჩვევას.",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "რამდენიმე გამოყენების შემდეგ MaiYen უკეთ შეაფასებს აპის შემოწმების თქვენს ჩვევას.",
   "Tần suất vào ứng dụng ổn": "აპის შემოწმების სიხშირე კარგია",
   "Đã lâu chưa vào ứng dụng kiểm tra": "აპის ბოლო შემოწმებიდან დიდი დრო გავიდა",
   "Đang ghi nhận tần suất vào ứng dụng": "აპის შემოწმების სიხშირე იწერება",
@@ -677,8 +677,8 @@ const Map<String, String> kaStrings = {
   "Chạy nền ổn định": "ფონური მუშაობა სტაბილურია",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "ზოგიერთ Android ტელეფონს გაფრთხილებების დაგვიანება შეუძლია, თუ ბატარეის ოპტიმიზაცია ჩართულია.",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "ტელეფონი SafeHome-ის გაფრთხილებებს ნაკლებად დააგვიანებს.",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "ტელეფონი MaiYen-ის გაფრთხილებებს ნაკლებად დააგვიანებს.",
   "Chưa tắt tối ưu pin": "ბატარეის ოპტიმიზაცია ჯერ კიდევ ჩართულია",
   "Tối ưu pin không chặn ứng dụng": "ბატარეის ოპტიმიზაცია აპს არ ბლოკავს",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -699,8 +699,8 @@ const Map<String, String> kaStrings = {
   "Cảnh báo toàn màn hình": "სრულეკრანიანი გაფრთხილებები",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "თუ შეტყობინებები გამორთულია, გაფრთხილებები შეიძლება არ გამოჩნდეს.",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "ამ ტელეფონს SafeHome-ის შეტყობინებების მიღება შეუძლია.",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "ამ ტელეფონს MaiYen-ის შეტყობინებების მიღება შეუძლია.",
   "Chưa bật thông báo": "შეტყობინებები ჩართული არ არის",
   "Đã bật thông báo": "შეტყობინებები ჩართულია",
   "Hệ thống: Sẵn sàng": "სისტემა: მზადაა",
@@ -710,7 +710,7 @@ const Map<String, String> kaStrings = {
   "Thiết bị của bạn": "თქვენი მოწყობილობა",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "ამოწმებს თქვენს ტელეფონს და აპის გამოყენების წესს.",
-  "Hệ thống SafeHome": "SafeHome სისტემა",
+  "Hệ thống MaiYen": "MaiYen სისტემა",
   "Hệ thống: Đang kiểm tra...": "სისტემა: მოწმდება...",
   "Tên": "სახელი",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -731,10 +731,10 @@ const Map<String, String> kaStrings = {
   "Thêm Home": "სახლის დამატება",
   "Mở cài đặt": "პარამეტრების გახსნა",
   "Để sau": "მოგვიანებით",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome-ს მდებარეობის „ყოველთვის“ ნებართვა სჭირდება, რათა სახლიდან გასვლა ან დაბრუნება მაშინაც ამოიცნოს, როცა აპი ფონურ რეჟიმში მუშაობს.",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome-ს ამჟამად მდებარეობაზე წვდომა მხოლოდ აპის გამოყენებისას აქვს.\n\nგახსენით მდებარეობის ნებართვა და აირჩიეთ „ყოველთვის დაშვება“, რათა ავტომატურმა დაცვამ ფონურ რეჟიმში განაგრძოს მუშაობა.",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen-ს მდებარეობის „ყოველთვის“ ნებართვა სჭირდება, რათა სახლიდან გასვლა ან დაბრუნება მაშინაც ამოიცნოს, როცა აპი ფონურ რეჟიმში მუშაობს.",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen-ს ამჟამად მდებარეობაზე წვდომა მხოლოდ აპის გამოყენებისას აქვს.\n\nგახსენით მდებარეობის ნებართვა და აირჩიეთ „ყოველთვის დაშვება“, რათა ავტომატურმა დაცვამ ფონურ რეჟიმში განაგრძოს მუშაობა.",
   "Cho phép vị trí luôn luôn": "მდებარეობის ყოველთვის დაშვება",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "თქვენი სახლები წაიშლება.\nთქვენ დატოვებთ გაზიარებულ სახლებს.",
@@ -763,7 +763,7 @@ const Map<String, String> kaStrings = {
   "Từ chối": "უარყოფა",
   "Lời mời từ chủ nhà": "მფლობელის მოწვევა",
   "Nhận quyền chủ nhà": "სახლის საკუთრების მიღება",
-  "Một người dùng SafeHome": "SafeHome-ის მომხმარებელი",
+  "Một người dùng MaiYen": "MaiYen-ის მომხმარებელი",
   "Lời mời gia nhập": "გაწევრიანების მოწვევა",
   "Lời xin vào nhà": "სახლში გაწევრიანების მოთხოვნა",
   "Nhập HUB ID": "შეიყვანეთ HUB ID",
@@ -780,7 +780,7 @@ const Map<String, String> kaStrings = {
   "CẦN KIỂM TRA": "შემოწმებას საჭიროებს",
   "KIỂM TRA NHÀ": "სახლის შემოწმება",
   "ĐÓNG NHẮC NHỞ": "შეხსენების დახურვა",
-  "SafeHome Security Alert": "SafeHome-ის უსაფრთხოების გაფრთხილება",
+  "MaiYen Security Alert": "MaiYen-ის უსაფრთხოების გაფრთხილება",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "აპის პარამეტრებში აირჩიეთ მდებარეობის „ყოველთვის დაშვება“",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -822,7 +822,7 @@ const Map<String, String> kaStrings = {
   "Phòng": "ოთახი",
   "Quản trị viên": "ადმინისტრატორი",
   "Nhắc nhở": "შეხსენება",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "სუსტი სიგნალი",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "ანგარიში და სისტემა",
@@ -870,7 +870,7 @@ const Map<String, String> kaStrings = {
   "Còn \$count tin nhắn chưa đọc": "დარჩენილია \$count წაუკითხავი შეტყობინება",
   "Hãy an tâm nghỉ ngơi.": "შეგიძლიათ მშვიდად იყოთ.",
   "Có thiết bị chưa an toàn.": "ზოგიერთი მოწყობილობა უსაფრთხო არ არის.",
-  "SafeHome đang cập nhật vị trí": "SafeHome მდებარეობას აახლებს",
+  "MaiYen đang cập nhật vị trí": "MaiYen მდებარეობას აახლებს",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "მიმდინარეობს მონიტორინგი დაცვის რეჟიმის ავტომატურად ჩასართავად.",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -881,12 +881,12 @@ const Map<String, String> kaStrings = {
   "CẢNH BÁO RÒ KHÍ": "გაზის გაჟონვის გაფრთხილება",
   "CẢNH BÁO CỬA": "კარის გაფრთხილება",
   "CẢNH BÁO AN NINH": "უსაფრთხოების გაფრთხილება",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHome-თან დადასტურება ვერ მოხერხდა. შეამოწმეთ კავშირი და ხელახლა სცადეთ.",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYen-თან დადასტურება ვერ მოხერხდა. შეამოწმეთ კავშირი და ხელახლა სცადეთ.",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "გაფრთხილება მხოლოდ სახლის მდგომარეობის შემოწმების შემდეგ გააჩერეთ.\n\nდარწმუნებული ხართ, რომ გაფრთხილების გაჩერება გსურთ?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome-მა გაფრთხილება აღმოაჩინა",
-  "Mở SafeHome để kiểm tra ngay.": "ახლავე შესამოწმებლად გახსენით SafeHome.",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen-მა გაფრთხილება აღმოაჩინა",
+  "Mở MaiYen để kiểm tra ngay.": "ახლავე შესამოწმებლად გახსენით MaiYen.",
   "\$count tin nhắn mới": "\$count ახალი შეტყობინება",
   "Tin nhắn HomeChat": "HomeChat შეტყობინება",
   "\$senderName đã gửi một tin nhắn": "\$senderName-მა შეტყობინება გაგზავნა",
@@ -906,8 +906,8 @@ const Map<String, String> kaStrings = {
       "\$actorName-ს სურს \"\$homeName\"-ის საკუთრება თქვენ გადმოგცეთ.",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName-მა \"\$homeName\"-ში გაწევრიანება შემოგთავაზათ.",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome \"\$deviceName\"-ს \"\$homeName\"-დან შლის.",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen \"\$deviceName\"-ს \"\$homeName\"-დან შლის.",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "მოწყობილობა \"\$deviceName\" დაემატა \"\$homeName\"-ს.",
   "Bạn đã tạo nhà \"\$name\".": "თქვენ შექმენით სახლი \"\$name\".",
@@ -964,8 +964,8 @@ const Map<String, String> kaStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "კარი ღიაა ან მოწყობილობაზე ჩარევა მოხდა",
   "Có thiết bị đang cảnh báo": "მოწყობილობა გაფრთხილებას იძლევა",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "თუ არავინ დაადასტურებს, SafeHome საგანგებო ზარს დაიწყებს.",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "თუ არავინ დაადასტურებს, MaiYen საგანგებო ზარს დაიწყებს.",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "\$time-ზე ისევ გაგაფრთხილებთ, თუ პრობლემა არ მოგვარდა.",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1011,8 +1011,8 @@ const Map<String, String> kaStrings = {
       "გიწვევთ \"\$homeName\"-ში გასაწევრიანებლად",
   "Cần kiểm tra: \$joined": "ყურადღებას საჭიროებს: \$joined",
   "Cập nhật \$value": "განახლებულია \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "ამ სახლის მონიტორინგის დასაწყებად დაამატეთ პირველი SafeHome მოწყობილობა.",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "ამ სახლის მონიტორინგის დასაწყებად დაამატეთ პირველი MaiYen მოწყობილობა.",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "ჯერ საგანგებო გაფრთხილებები შეამოწმეთ, შემდეგ საჭიროების შემთხვევაში ოჯახის წევრებს დაუკავშირდით.",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1068,7 +1068,7 @@ const Map<String, String> kaStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: ღიაა, როცა სახლი დაცვის რეჟიმშია",
   "An tâm hơn trong từng ngôi nhà": "სიმშვიდე თითოეულ სახლში",
-  "Báo động SafeHome": "SafeHome სიგნალიზაცია",
+  "Báo động MaiYen": "MaiYen სიგნალიზაცია",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "უსაფრთხოების გაფრთხილება თქვენს ყურადღებას საჭიროებს.",
   "Có cảnh báo cần kiểm tra": "გაფრთხილება თქვენს ყურადღებას საჭიროებს",

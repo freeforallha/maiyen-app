@@ -25,19 +25,19 @@ const Map<String, String> nlDynamicStrings = {
       "\$name en \$otherCount anderen zijn een bericht aan het typen...",
   "Kênh báo động cũ để giữ tương thích":
       "Oud alarmkanaal voor achterwaartse compatibiliteit",
-  "SafeHome báo động toàn màn hình": "SafeHome-alarm op volledig scherm",
+  "MaiYen báo động toàn màn hình": "MaiYen-alarm op volledig scherm",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Open de waarschuwing op volledig scherm; het sirenegeluid wordt afgespeeld vanaf de alarmpagina",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-noodwaarschuwing",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-noodwaarschuwing",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Noodwaarschuwing met hoge prioriteit vóór het openen op volledig scherm",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-herinnering op volledig scherm",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Stille SafeHome-herinnering op volledig scherm",
-  "SafeHome nhắc nhở ưu tiên cao": "SafeHome-herinnering met hoge prioriteit",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "SafeHome-herinnering met hoge prioriteit, zonder volledig scherm",
-  "Tin nhắn mới trong các nhà SafeHome": "Nieuwe berichten in SafeHome-huizen",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-herinnering op volledig scherm",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Stille MaiYen-herinnering op volledig scherm",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-herinnering met hoge prioriteit",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "MaiYen-herinnering met hoge prioriteit, zonder volledig scherm",
+  "Tin nhắn mới trong các nhà MaiYen": "Nieuwe berichten in MaiYen-huizen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Deze actie wijzigt vandaag de alarmtijd van sommige apparaten.\n\nAlarmen van apparaten in de categorie “Noodgevaar” en alarmen in de modus “Beveiliging” worden niet door deze functie beïnvloed.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count huizen in gevaar\$suffix",

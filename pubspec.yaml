@@ -2,7 +2,7 @@ name: safehome_app
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ^3.11.5
@@ -48,6 +48,18 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon.png"
+  adaptive_icon_background: "#167D5A"
+  adaptive_icon_foreground: "assets/icon_foreground.png"
+  remove_alpha_ios: true
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/maiyen_splash.png
+  android_gravity: center
+  ios_content_mode: center
+  android_12:
+    color: "#FFFFFF"
+    image: assets/icon_foreground.png
 
 flutter:
   uses-material-design: true
@@ -56,3 +68,6 @@ flutter:
     - assets/login.png
     - assets/login1.png
     - assets/login2.png
+    - assets/maiyen_mark.png
+    - assets/maiyen_logo.png
+    - assets/maiyen_splash.png

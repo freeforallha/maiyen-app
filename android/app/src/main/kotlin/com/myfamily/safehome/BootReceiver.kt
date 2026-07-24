@@ -57,7 +57,7 @@ class BootReceiver : BroadcastReceiver() {
             }
 
         // Đây là bằng chứng thực tế rằng Android đã cho phép
-        // SafeHome tự chạy trong lần khởi động hiện tại.
+        // ứng dụng tự chạy trong lần khởi động hiện tại.
         storageContext
             .getSharedPreferences(
                 PREFS_NAME,
@@ -87,6 +87,7 @@ class BootReceiver : BroadcastReceiver() {
 
     private fun showBootNotification(context: Context) {
         val channelId = "safehome_boot_channel"
+        val brandName = context.getString(R.string.app_name)
 
         val manager =
             context.getSystemService(
@@ -96,11 +97,11 @@ class BootReceiver : BroadcastReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
-                bootChannelName(),
+                bootChannelName(brandName),
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description =
-                    bootChannelDescription()
+                    bootChannelDescription(brandName)
             }
 
             manager.createNotificationChannel(channel)
@@ -109,7 +110,7 @@ class BootReceiver : BroadcastReceiver() {
         val notification =
             NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("SafeHome")
+                .setContentTitle(brandName)
                 .setContentText(
                     bootNotificationText()
                 )
@@ -122,46 +123,46 @@ class BootReceiver : BroadcastReceiver() {
         manager.notify(999001, notification)
     }
 
-    private fun bootChannelName(): String {
+    private fun bootChannelName(brandName: String): String {
         return when (Locale.getDefault().language) {
-            "vi" -> "Khởi động SafeHome"
-            "zh" -> "SafeHome 启动"
-            "ko" -> "SafeHome 시작"
-            "ja" -> "SafeHome 起動"
-            "de" -> "SafeHome-Start"
-            "ru" -> "Запуск SafeHome"
-            "fr" -> "Démarrage de SafeHome"
-            "es" -> "Inicio de SafeHome"
-            "id" -> "Mulai SafeHome"
-            "th" -> "การเริ่ม SafeHome"
-            "ms" -> "Permulaan SafeHome"
-            "fil" -> "Pagsisimula ng SafeHome"
-            "km" -> "ការចាប់ផ្ដើម SafeHome"
-            "my" -> "SafeHome စတင်ခြင်း"
-            "lo" -> "ການເລີ່ມ SafeHome"
-            else -> "SafeHome startup"
+            "vi" -> "Khởi động $brandName"
+            "zh" -> "$brandName 启动"
+            "ko" -> "$brandName 시작"
+            "ja" -> "$brandName 起動"
+            "de" -> "$brandName-Start"
+            "ru" -> "Запуск $brandName"
+            "fr" -> "Démarrage de $brandName"
+            "es" -> "Inicio de $brandName"
+            "id" -> "Mulai $brandName"
+            "th" -> "การเริ่ม $brandName"
+            "ms" -> "Permulaan $brandName"
+            "fil" -> "Pagsisimula ng $brandName"
+            "km" -> "ការចាប់ផ្ដើម $brandName"
+            "my" -> "$brandName စတင်ခြင်း"
+            "lo" -> "ການເລີ່ມ $brandName"
+            else -> "$brandName startup"
         }
     }
 
-    private fun bootChannelDescription(): String {
+    private fun bootChannelDescription(brandName: String): String {
         return when (Locale.getDefault().language) {
-            "vi" -> "Thông báo SafeHome đã tự khởi chạy"
-            "en" -> "SafeHome auto-start notification"
-            "zh" -> "SafeHome 自动启动通知"
-            "ko" -> "SafeHome 자동 시작 알림"
-            "ja" -> "SafeHome 自動起動通知"
-            "de" -> "SafeHome Autostart-Benachrichtigung"
-            "ru" -> "Уведомление об автозапуске SafeHome"
-            "fr" -> "Notification de démarrage automatique SafeHome"
-            "es" -> "Notificación de inicio automático de SafeHome"
-            "id" -> "Notifikasi mulai otomatis SafeHome"
-            "th" -> "การแจ้งเตือนการเริ่มอัตโนมัติของ SafeHome"
-            "ms" -> "Pemberitahuan mula automatik SafeHome"
-            "fil" -> "Notipikasyon ng awtomatikong pagsisimula ng SafeHome"
-            "km" -> "សេចក្តីជូនដំណឹងអំពីការចាប់ផ្ដើមស្វ័យប្រវត្តិរបស់ SafeHome"
-            "my" -> "SafeHome အလိုအလျောက်စတင်မှု အသိပေးချက်"
-            "lo" -> "ແຈ້ງເຕືອນການເລີ່ມອັດຕະໂນມັດ SafeHome"
-            else -> "SafeHome auto-start notification"
+            "vi" -> "Thông báo $brandName đã tự khởi chạy"
+            "en" -> "$brandName auto-start notification"
+            "zh" -> "$brandName 自动启动通知"
+            "ko" -> "$brandName 자동 시작 알림"
+            "ja" -> "$brandName 自動起動通知"
+            "de" -> "$brandName Autostart-Benachrichtigung"
+            "ru" -> "Уведомление об автозапуске $brandName"
+            "fr" -> "Notification de démarrage automatique $brandName"
+            "es" -> "Notificación de inicio automático de $brandName"
+            "id" -> "Notifikasi mulai otomatis $brandName"
+            "th" -> "การแจ้งเตือนการเริ่มอัตโนมัติของ $brandName"
+            "ms" -> "Pemberitahuan mula automatik $brandName"
+            "fil" -> "Notipikasyon ng awtomatikong pagsisimula ng $brandName"
+            "km" -> "សេចក្តីជូនដំណឹងអំពីការចាប់ផ្ដើមស្វ័យប្រវត្តិរបស់ $brandName"
+            "my" -> "$brandName အလိုအလျောက်စတင်မှု အသိပေးချက်"
+            "lo" -> "ແຈ້ງເຕືອນການເລີ່ມອັດຕະໂນມັດ $brandName"
+            else -> "$brandName auto-start notification"
         }
     }
 

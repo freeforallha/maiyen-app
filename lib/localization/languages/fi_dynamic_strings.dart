@@ -25,19 +25,19 @@ const Map<String, String> fiDynamicStrings = {
       "\$name ja \$otherCount muuta kirjoittavat...",
   "Kênh báo động cũ để giữ tương thích":
       "Vanha hälytyskanava säilytetään yhteensopivuuden vuoksi",
-  "SafeHome báo động toàn màn hình": "SafeHome-hälytys koko näytössä",
+  "MaiYen báo động toàn màn hình": "MaiYen-hälytys koko näytössä",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Avaa koko näytön hälytyksen; sireenin ääni toistetaan hälytyssivulta",
-  "SafeHome cảnh báo khẩn cấp": "SafeHome-hätähälytys",
+  "MaiYen cảnh báo khẩn cấp": "MaiYen-hätähälytys",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Korkean prioriteetin hätähälytys ennen koko näytön avaamista",
-  "SafeHome nhắc nhở toàn màn hình": "SafeHome-muistutus koko näytössä",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Äänetön SafeHome-muistutus koko näytössä",
-  "SafeHome nhắc nhở ưu tiên cao": "Korkean prioriteetin SafeHome-muistutus",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Korkean prioriteetin SafeHome-muistutus ilman koko näyttöä",
-  "Tin nhắn mới trong các nhà SafeHome": "Uusia viestejä SafeHome-kodeissa",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen-muistutus koko näytössä",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Äänetön MaiYen-muistutus koko näytössä",
+  "MaiYen nhắc nhở ưu tiên cao": "Korkean prioriteetin MaiYen-muistutus",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Korkean prioriteetin MaiYen-muistutus ilman koko näyttöä",
+  "Tin nhắn mới trong các nhà MaiYen": "Uusia viestejä MaiYen-kodeissa",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Tämä toiminto muuttaa joidenkin laitteiden hälytysaikaa tänään.\n\nLuokan ”Hätävaara” laitteiden hälytyksiin ja ”Suojaus”-tilan hälytyksiin tämä toiminto ei vaikuta.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count kotia vaarassa\$suffix",

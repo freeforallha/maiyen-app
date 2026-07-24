@@ -25,19 +25,19 @@ const Map<String, String> mtDynamicStrings = {
       "\$name u \$otherCount oħrajn qed jiktbu...",
   "Kênh báo động cũ để giữ tương thích":
       "Kanal tal-allarm antik miżmum għall-kompatibbiltà",
-  "SafeHome báo động toàn màn hình": "Allarm SafeHome fuq skrin sħiħ",
+  "MaiYen báo động toàn màn hình": "Allarm MaiYen fuq skrin sħiħ",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Iftaħ it-twissija fuq skrin sħiħ; il-ħoss tas-sirena jindaqq mill-paġna tal-allarm",
-  "SafeHome cảnh báo khẩn cấp": "Twissija ta' emerġenza SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Twissija ta' emerġenza MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Twissija ta' emerġenza bi prijorità għolja qabel jinfetaħ l-iskrin sħiħ",
-  "SafeHome nhắc nhở toàn màn hình": "Tfakkira SafeHome fuq skrin sħiħ",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Tfakkira SafeHome siekta fuq skrin sħiħ",
-  "SafeHome nhắc nhở ưu tiên cao": "Tfakkira SafeHome bi prijorità għolja",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Tfakkira SafeHome bi prijorità għolja mingħajr skrin sħiħ",
-  "Tin nhắn mới trong các nhà SafeHome": "Messaġġi ġodda fid-djar SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Tfakkira MaiYen fuq skrin sħiħ",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Tfakkira MaiYen siekta fuq skrin sħiħ",
+  "MaiYen nhắc nhở ưu tiên cao": "Tfakkira MaiYen bi prijorità għolja",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Tfakkira MaiYen bi prijorità għolja mingħajr skrin sħiħ",
+  "Tin nhắn mới trong các nhà MaiYen": "Messaġġi ġodda fid-djar MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Din l-azzjoni se tbiddel il-ħin tal-allarm ta’ xi apparati llum.\n\nL-allarmi tal-apparati fil-kategorija “Periklu ta’ emerġenza” u l-allarmi fil-modalità “Protezzjoni” mhumiex se jiġu affettwati minn din il-funzjoni.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count djar fil-periklu\$suffix",

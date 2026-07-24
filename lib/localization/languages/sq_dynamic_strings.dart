@@ -25,19 +25,19 @@ const Map<String, String> sqDynamicStrings = {
       "\$name dhe \$otherCount të tjerë po shkruajnë...",
   "Kênh báo động cũ để giữ tương thích":
       "Kanali i vjetër i Alarmit ruhet për pajtueshmëri",
-  "SafeHome báo động toàn màn hình": "Alarm SafeHome në ekran të plotë",
+  "MaiYen báo động toàn màn hình": "Alarm MaiYen në ekran të plotë",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Hap alarmet në ekran të plotë; tingulli i sirenës luhet nga faqja e Alarmit",
-  "SafeHome cảnh báo khẩn cấp": "Përparësi emergjence SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Përparësi emergjence MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alarm emergjence me përparësi të lartë para se të hapet ekrani i plotë",
-  "SafeHome nhắc nhở toàn màn hình": "Orari SafeHome në ekran të plotë",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Kujtesë e heshtur SafeHome në ekran të plotë",
-  "SafeHome nhắc nhở ưu tiên cao": "Përparësi e Kujtesës SafeHome",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Kujtesë SafeHome me përparësi të lartë pa ekran të plotë",
-  "Tin nhắn mới trong các nhà SafeHome": "Mesazhe të reja në shtëpitë SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Orari MaiYen në ekran të plotë",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Kujtesë e heshtur MaiYen në ekran të plotë",
+  "MaiYen nhắc nhở ưu tiên cao": "Përparësi e Kujtesës MaiYen",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Kujtesë MaiYen me përparësi të lartë pa ekran të plotë",
+  "Tin nhắn mới trong các nhà MaiYen": "Mesazhe të reja në shtëpitë MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ky veprim do të ndryshojë sot orën e alarmit për disa pajisje.\n\nAlarmet e pajisjeve në kategorinë “Rrezik emergjent” dhe alarmet në modalitetin “Mbrojtje” nuk do të ndikohen nga kjo veçori.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count shtëpi në rrezik\$suffix",

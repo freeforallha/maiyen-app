@@ -493,7 +493,7 @@ Future<bool?> showShareRequestSheet({
                                   ? targetName
                                   : targetEmail.isNotEmpty
                                   ? targetEmail
-                                  : strings.t("Một người dùng SafeHome");
+                                  : strings.t("Một người dùng MaiYen");
 
                               subtitle =
                                   targetEmail.isNotEmpty &&

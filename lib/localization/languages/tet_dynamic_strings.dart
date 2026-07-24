@@ -25,19 +25,19 @@ const Map<String, String> tetDynamicStrings = {
       "\$name no ema seluk \$otherCount hela hakerek mensajen...",
   "Kênh báo động cũ để giữ tương thích":
       "Kanal alarme antigu atu halo kompatível",
-  "SafeHome báo động toàn màn hình": "Alarme SafeHome iha ekran tomak",
+  "MaiYen báo động toàn màn hình": "Alarme MaiYen iha ekran tomak",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Loke alerta ekran tomak; lian sirene sei toca iha pájina alarme",
-  "SafeHome cảnh báo khẩn cấp": "Alerta emerjénsia SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Alerta emerjénsia MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alerta emerjénsia prioridade aas antes loke ekran tomak",
-  "SafeHome nhắc nhở toàn màn hình": "Lembransa SafeHome iha ekran tomak",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Lembransa SafeHome silenciosu iha ekran tomak",
-  "SafeHome nhắc nhở ưu tiên cao": "Lembransa SafeHome prioridade aas",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Lembransa SafeHome prioridade aas ne'ebé la loke ekran tomak",
-  "Tin nhắn mới trong các nhà SafeHome": "Mensajen foun iha uma SafeHome sira",
+  "MaiYen nhắc nhở toàn màn hình": "Lembransa MaiYen iha ekran tomak",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Lembransa MaiYen silenciosu iha ekran tomak",
+  "MaiYen nhắc nhở ưu tiên cao": "Lembransa MaiYen prioridade aas",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Lembransa MaiYen prioridade aas ne'ebé la loke ekran tomak",
+  "Tin nhắn mới trong các nhà MaiYen": "Mensajen foun iha uma MaiYen sira",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Atuasaun ne’e sei muda oras alarme ba dispozitivu balun ohin.\n\nFunsaun ne’e la afeta alarme ba dispozitivu iha kategoria “Perigu emerjénsia” no alarme iha modu “Protesaun”.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count uma iha perigu\$suffix",

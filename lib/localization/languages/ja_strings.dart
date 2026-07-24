@@ -139,7 +139,7 @@ const Map<String, String> jaStrings = {
   "Thành viên chưa xác định vị trí": "位置を確認できないメンバー",
   "Quản lý phòng": "部屋の管理",
   "Toàn bộ thiết bị": "すべてのデバイス",
-  "Toàn bộ thiết bị SafeHome": "すべての SafeHome デバイス",
+  "Toàn bộ thiết bị MaiYen": "すべての MaiYen デバイス",
   "Quản lý nhà": "家の管理",
   "Chuyển quyền chủ nhà hoặc xoá nhà": "家の所有権を移転または家を削除",
   "Đặt vị trí nhà và bật bảo vệ tự động": "家の位置を設定し、自動警戒を有効にします",
@@ -518,8 +518,8 @@ const Map<String, String> jaStrings = {
   "Thiết bị SOS chưa ghi nhận cảnh báo.": "SOS デバイスにアラートは記録されていません。",
   "Cảm biến khói chưa ghi nhận bất thường.": "煙センサーは異常を検知していません。",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.": "あなたまたはメンバーが手動で警戒をオンにしました。",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "外出したため SafeHome が自動で警戒をオンにしました。",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "外出したため MaiYen が自動で警戒をオンにしました。",
   "Nhà đang ở chế độ dùng bình thường.": "この家は現在通常モードです。",
   "Bảo vệ thủ công đang bật": "手動警戒がオンです",
   "Bảo vệ tự động đang bật": "自動警戒がオンです",
@@ -527,8 +527,8 @@ const Map<String, String> jaStrings = {
   "Bạn đã mở ứng dụng gần đây để kiểm tra trạng thái.": "最近アプリを開いて状態を確認しています。",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "権限、スケジュール、未読警報を確認するため定期的にアプリを開いてください。",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "数回使用すると、SafeHome がアプリ確認習慣をより正確に評価できます。",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "数回使用すると、MaiYen がアプリ確認習慣をより正確に評価できます。",
   "Tần suất vào ứng dụng ổn": "アプリ確認頻度は良好です",
   "Đã lâu chưa vào ứng dụng kiểm tra": "アプリ確認から時間が経っています",
   "Đang ghi nhận tần suất vào ứng dụng": "アプリ確認頻度を記録中",
@@ -572,8 +572,8 @@ const Map<String, String> jaStrings = {
   "Chạy nền ổn định": "バックグラウンド動作は安定しています",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "一部の Android 端末では、バッテリー最適化が有効だと警報が遅れる場合があります。",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "端末が SafeHome の警報を遅らせる可能性は低いです。",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "端末が MaiYen の警報を遅らせる可能性は低いです。",
   "Chưa tắt tối ưu pin": "バッテリー最適化がまだ有効です",
   "Tối ưu pin không chặn ứng dụng": "バッテリー最適化はアプリを妨げていません",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -592,7 +592,7 @@ const Map<String, String> jaStrings = {
   "Cảnh báo toàn màn hình": "全画面アラート",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "通知が無効だと警報が表示されない可能性があります。",
-  "Điện thoại có thể nhận thông báo SafeHome.": "この端末は SafeHome の通知を受け取れます。",
+  "Điện thoại có thể nhận thông báo MaiYen.": "この端末は MaiYen の通知を受け取れます。",
   "Chưa bật thông báo": "通知が有効ではありません",
   "Đã bật thông báo": "通知が有効です",
   "Hệ thống: Sẵn sàng": "システム: 準備完了",
@@ -601,14 +601,14 @@ const Map<String, String> jaStrings = {
   "Thiết bị của bạn": "あなたのデバイス",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "スマートフォンとアプリの使い方を確認します。",
-  "Hệ thống SafeHome": "SafeHome システム",
+  "Hệ thống MaiYen": "MaiYen システム",
   "Hệ thống: Đang kiểm tra...": "システム: 確認中...",
   "Mở cài đặt": "設定を開く",
   "Để sau": "後で",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome には、外出または帰宅を検知するために \"常に許可\" の位置情報権限が必要です。アプリがバックグラウンドで動作している場合も含まれます。",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "SafeHome は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n位置情報の権限を開き、\"常に許可\" を選択すると、外出時の自動保護がバックグラウンドでも動作し続けます。",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen には、外出または帰宅を検知するために \"常に許可\" の位置情報権限が必要です。アプリがバックグラウンドで動作している場合も含まれます。",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "MaiYen は現在、アプリの使用中のみ位置情報にアクセスできます。\n\n位置情報の権限を開き、\"常に許可\" を選択すると、外出時の自動保護がバックグラウンドでも動作し続けます。",
   "Cho phép vị trí luôn luôn": "位置情報を常に許可",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "自分の家は削除されます。\n共有された家からは退出します。",
@@ -636,7 +636,7 @@ const Map<String, String> jaStrings = {
   "Từ chối": "拒否",
   "Lời mời từ chủ nhà": "所有者からの招待",
   "Nhận quyền chủ nhà": "家の所有権を受け取る",
-  "Một người dùng SafeHome": "SafeHome ユーザー",
+  "Một người dùng MaiYen": "MaiYen ユーザー",
   "Lời mời gia nhập": "参加招待",
   "Lời xin vào nhà": "家への参加リクエスト",
   "Nhập HUB ID": "HUB ID を入力",
@@ -653,7 +653,7 @@ const Map<String, String> jaStrings = {
   "CẦN KIỂM TRA": "確認が必要",
   "KIỂM TRA NHÀ": "家を確認",
   "ĐÓNG NHẮC NHỞ": "リマインダーを閉じる",
-  "SafeHome Security Alert": "SafeHome セキュリティ警報",
+  "MaiYen Security Alert": "MaiYen セキュリティ警報",
   "Bạn không có quyền sắp xếp phòng": "部屋を並べ替える権限がありません",
   "Báo động đã tắt": "警報はオフになりました",
   "Báo động kích hoạt": "アラームが作動しました",
@@ -771,7 +771,7 @@ const Map<String, String> jaStrings = {
   "Gửi yêu cầu gia nhập": "参加リクエストを送信",
   "QR này không phải mã thiết bị": "このQRコードはデバイスコードではありません",
   "Rung/chấn động": "振動",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "アカウントとシステム",
   "Tài khoản cá nhân": "個人アカウント",
@@ -810,7 +810,7 @@ const Map<String, String> jaStrings = {
   "Còn \$count tin nhắn chưa đọc": "未読メッセージ \$count 件",
   "Hãy an tâm nghỉ ngơi.": "安心して大丈夫です。",
   "Có thiết bị chưa an toàn.": "一部のデバイスが安全ではありません。",
-  "SafeHome đang cập nhật vị trí": "SafeHomeが位置情報を更新しています",
+  "MaiYen đang cập nhật vị trí": "MaiYenが位置情報を更新しています",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.": "保護モードを自動でオンにするため監視中です。",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
       "全員が外出したとき、位置情報を使って保護モードを自動でオンにします。",
@@ -820,12 +820,12 @@ const Map<String, String> jaStrings = {
   "CẢNH BÁO RÒ KHÍ": "ガス漏れアラート",
   "CẢNH BÁO CỬA": "ドアアラート",
   "CẢNH BÁO AN NINH": "セキュリティアラート",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "SafeHomeで確認できませんでした。接続を確認してもう一度お試しください。",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "MaiYenで確認できませんでした。接続を確認してもう一度お試しください。",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "家の状態を確認してからアラートを停止してください。\n\nアラートを停止してもよろしいですか？",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHomeがアラートを検知しました",
-  "Mở SafeHome để kiểm tra ngay.": "SafeHomeを開いて今すぐ確認してください。",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYenがアラートを検知しました",
+  "Mở MaiYen để kiểm tra ngay.": "MaiYenを開いて今すぐ確認してください。",
   "\$count tin nhắn mới": "新着メッセージ \$count 件",
   "Tin nhắn HomeChat": "HomeChatメッセージ",
   "\$senderName đã gửi một tin nhắn": "\$senderName がメッセージを送信しました",
@@ -843,8 +843,8 @@ const Map<String, String> jaStrings = {
       "\$actorName が「\$homeName」の所有権をあなたに譲渡しようとしています。",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName が「\$homeName」への参加に招待しました。",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHomeが「\$homeName」から「\$deviceName」を削除しています。",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYenが「\$homeName」から「\$deviceName」を削除しています。",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "デバイス「\$deviceName」が「\$homeName」に追加されました。",
   "Bạn đã tạo nhà \"\$name\".": "家「\$name」を作成しました。",
@@ -894,8 +894,8 @@ const Map<String, String> jaStrings = {
   "Có dấu hiệu rò khí": "ガス漏れを検知しました",
   "Có cửa đang mở hoặc thiết bị bị tháo": "ドアが開いているか、デバイスが取り外されています",
   "Có thiết bị đang cảnh báo": "アラート中のデバイスがあります",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "誰も確認しない場合、SafeHomeは緊急通話に切り替えます。",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "誰も確認しない場合、MaiYenは緊急通話に切り替えます。",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.": "問題が未対応の場合、\$time に再通知します。",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
       "問題が未対応の場合、警報スケジュールに従って再通知します。",
@@ -936,8 +936,8 @@ const Map<String, String> jaStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "「\$homeName」への参加に招待しています",
   "Cần kiểm tra: \$joined": "確認が必要: \$joined",
   "Cập nhật \$value": "更新: \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "最初のSafeHomeデバイスを追加して、この家の監視を始めましょう。",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "最初のMaiYenデバイスを追加して、この家の監視を始めましょう。",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "まず緊急アラートを確認し、必要に応じて家のメンバーに連絡してください。",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -986,7 +986,7 @@ const Map<String, String> jaStrings = {
   "Môi trường hiện tại: \$environment": "現在の環境: \$environment",
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ": "\$name: 家が保護モード中に開いています",
   "An tâm hơn trong từng ngôi nhà": "すべての家に、もっと安心を",
-  "Báo động SafeHome": "SafeHomeアラーム",
+  "Báo động MaiYen": "MaiYenアラーム",
   "Có cảnh báo an ninh cần kiểm tra ngay.": "確認が必要なセキュリティアラートがあります。",
   "Có cảnh báo cần kiểm tra": "確認が必要なアラートがあります",
   "Tự đóng sau \$time": "\$time 後に自動で閉じます",

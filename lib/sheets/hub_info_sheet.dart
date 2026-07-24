@@ -1,8 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../config/brand_config.dart';
+import '../config/system_version.dart';
 import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
+import '../localization/system_version_strings.dart';
 import '../navigation/safehome_navigation.dart';
 import '../safehome_theme.dart';
 
@@ -68,6 +71,7 @@ void showHubInfoSheet({
             final home = _hubInfoMap(snapshot.data?.snapshot.value);
             final hubStatus = _hubInfoMap(home['hubStatus']);
             final hubEvaluation = evaluateHubStatus(home);
+            final versionInfo = HubSystemVersionInfo.fromHubStatus(hubStatus);
 
             final hubId =
                 (home['hubId'] ?? hubStatus['hubId'])?.toString().trim() ?? '';
@@ -117,6 +121,30 @@ void showHubInfoSheet({
               wifiColor = SafeHomeColors.textSecondary;
             }
 
+            final compatibility = versionInfo.compatibility;
+            final compatibilityText = switch (compatibility) {
+              ProtocolCompatibility.compatible =>
+                strings.protocolCompatibleText,
+              ProtocolCompatibility.incompatible =>
+                strings.protocolIncompatibleText,
+              ProtocolCompatibility.unknown => strings.t('Chưa cập nhật'),
+            };
+            final compatibilityColor = switch (compatibility) {
+              ProtocolCompatibility.compatible => SafeHomeColors.safe,
+              ProtocolCompatibility.incompatible => SafeHomeColors.danger,
+              ProtocolCompatibility.unknown => SafeHomeColors.textSecondary,
+            };
+            final compatibilityIcon = switch (compatibility) {
+              ProtocolCompatibility.compatible => Icons.verified_rounded,
+              ProtocolCompatibility.incompatible =>
+                Icons.error_outline_rounded,
+              ProtocolCompatibility.unknown => Icons.help_outline_rounded,
+            };
+
+            String versionOrUnknown(String version) => version.isEmpty
+                ? strings.t('Chưa cập nhật')
+                : version;
+
             return SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
               child: Column(
@@ -143,7 +171,7 @@ void showHubInfoSheet({
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${strings.t('Hub trung tâm')} SafeHome (HUB)',
+                              '${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)',
                               style: const TextStyle(
                                 color: SafeHomeColors.textPrimary,
                                 fontSize: 20,
@@ -215,7 +243,9 @@ void showHubInfoSheet({
                       _HubInfoRow(
                         icon: Icons.badge_outlined,
                         label: strings.t('Tên'),
-                        value: hubName.isEmpty ? 'SafeHome HUB' : hubName,
+                        value: hubName.isEmpty
+                            ? BrandConfig.defaultHubName
+                            : hubName,
                       ),
                       _HubInfoRow(
                         icon: Icons.memory_rounded,
@@ -251,6 +281,52 @@ void showHubInfoSheet({
                         value: lastHeartbeat.isEmpty
                             ? strings.t('Chưa cập nhật')
                             : lastHeartbeat,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    strings.systemVersionsTitle,
+                    style: const TextStyle(
+                      color: SafeHomeColors.textPrimary,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 9),
+                  _HubInfoCard(
+                    children: [
+                      _HubInfoRow(
+                        icon: Icons.phone_android_rounded,
+                        label: strings.appVersionLabel,
+                        value: SystemVersionConfig.appVersionDisplay,
+                      ),
+                      _HubInfoRow(
+                        icon: Icons.dns_rounded,
+                        label: strings.backendVersionLabel,
+                        value: versionOrUnknown(
+                          versionInfo.backendVersion,
+                        ),
+                      ),
+                      _HubInfoRow(
+                        icon: Icons.developer_board_rounded,
+                        label: strings.hubFirmwareVersionLabel,
+                        value: versionOrUnknown(
+                          versionInfo.hubFirmwareVersion,
+                        ),
+                      ),
+                      _HubInfoRow(
+                        icon: Icons.lan_rounded,
+                        label: strings.protocolVersionLabel,
+                        value: versionOrUnknown(
+                          versionInfo.protocolVersion,
+                        ),
+                      ),
+                      _HubInfoRow(
+                        icon: compatibilityIcon,
+                        label: strings.protocolCompatibilityLabel,
+                        value: compatibilityText,
+                        valueColor: compatibilityColor,
                       ),
                     ],
                   ),

@@ -18,7 +18,7 @@ const Map<String, String> loStrings = {
   "Nguy hiểm khẩn cấp": "ອັນຕະລາຍສຸກເສີນ",
   "Điều khiển & hạ tầng": "ການຄວບຄຸມ ແລະ ໂຄງລ່າງ",
   "Môi trường": "ສິ່ງແວດລ້ອມ",
-  "Toàn bộ thiết bị SafeHome": "ອຸປະກອນ SafeHome ທັງໝົດ",
+  "Toàn bộ thiết bị MaiYen": "ອຸປະກອນ MaiYen ທັງໝົດ",
   "Cửa ra/vào": "ປະຕູເຂົ້າ/ອອກ",
   "Cửa": "ປະຕູ",
   "Cửa sổ": "ປ່ອງຢ້ຽມ",
@@ -596,8 +596,8 @@ const Map<String, String> loStrings = {
   "Cảm biến khói chưa ghi nhận bất thường.": "ເຊັນເຊີຄວັນຍັງບໍ່ພົບບັນຫາ",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "ທ່ານ ຫຼື ສະມາຊິກໄດ້ເປີດໂໝດປ້ອງກັນດ້ວຍຕົນເອງ",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome ເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເພາະທ່ານອອກຈາກເຮືອນ",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen ເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດເພາະທ່ານອອກຈາກເຮືອນ",
   "Nhà đang ở chế độ dùng bình thường.": "ເຮືອນນີ້ກຳລັງໃຊ້ງານປົກກະຕິ",
   "Bảo vệ thủ công đang bật": "ໂໝດປ້ອງກັນດ້ວຍຕົນເອງເປີດຢູ່",
   "Bảo vệ tự động đang bật": "ໂໝດປ້ອງກັນອັດຕະໂນມັດເປີດຢູ່",
@@ -606,8 +606,8 @@ const Map<String, String> loStrings = {
       "ທ່ານເປີດແອັບເມື່ອບໍ່ດົນນີ້ເພື່ອກວດສະຖານະ",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "ຄວນເປີດແອັບເປັນປະຈຳເພື່ອກວດສິດ, ຕາຕະລາງ ແລະ ການເຕືອນທີ່ຍັງບໍ່ໄດ້ອ່ານ",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "ຫຼັງຈາກໃຊ້ສອງສາມຄັ້ງ SafeHome ຈະປະເມີນນິໄສການກວດແອັບໄດ້ດີຂຶ້ນ",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "ຫຼັງຈາກໃຊ້ສອງສາມຄັ້ງ MaiYen ຈະປະເມີນນິໄສການກວດແອັບໄດ້ດີຂຶ້ນ",
   "Tần suất vào ứng dụng ổn": "ຄວາມຖີ່ໃນການກວດແອັບດີ",
   "Đã lâu chưa vào ứng dụng kiểm tra": "ດົນແລ້ວທີ່ບໍ່ໄດ້ເປີດແອັບກວດ",
   "Đang ghi nhận tần suất vào ứng dụng": "ກຳລັງບັນທຶກຄວາມຖີ່ການກວດແອັບ",
@@ -652,8 +652,8 @@ const Map<String, String> loStrings = {
   "Chạy nền ổn định": "ການເຮັດວຽກພື້ນຫຼັງສະຖຽນ",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "ໂທລະສັບ Android ບາງລຸ້ນອາດຊັກຊ້າການເຕືອນຖ້າຍັງເປີດການປະຢັດແບັດເຕີຣີ",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "ໂທລະສັບນີ້ມີໂອກາດຊັກຊ້າການເຕືອນ SafeHome ໜ້ອຍ",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "ໂທລະສັບນີ້ມີໂອກາດຊັກຊ້າການເຕືອນ MaiYen ໜ້ອຍ",
   "Chưa tắt tối ưu pin": "ຍັງເປີດການປະຢັດແບັດເຕີຣີ",
   "Tối ưu pin không chặn ứng dụng": "ການປະຢັດແບັດເຕີຣີບໍ່ປິດກັ້ນແອັບ",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":
@@ -674,8 +674,8 @@ const Map<String, String> loStrings = {
   "Cảnh báo toàn màn hình": "ການເຕືອນເຕັມຈໍ",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "ການເຕືອນອາດບໍ່ສະແດງຖ້າປິດແຈ້ງເຕືອນ",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "ໂທລະສັບນີ້ສາມາດຮັບແຈ້ງເຕືອນ SafeHome",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "ໂທລະສັບນີ້ສາມາດຮັບແຈ້ງເຕືອນ MaiYen",
   "Chưa bật thông báo": "ຍັງບໍ່ເປີດແຈ້ງເຕືອນ",
   "Đã bật thông báo": "ເປີດແຈ້ງເຕືອນແລ້ວ",
   "Hệ thống: Sẵn sàng": "ລະບົບ: ພ້ອມ",
@@ -684,7 +684,7 @@ const Map<String, String> loStrings = {
   "Thiết bị của bạn": "ອຸປະກອນຂອງທ່ານ",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "ກວດໂທລະສັບ ແລະ ວິທີທີ່ທ່ານໃຊ້ແອັບ",
-  "Hệ thống SafeHome": "ລະບົບ SafeHome",
+  "Hệ thống MaiYen": "ລະບົບ MaiYen",
   "Hệ thống: Đang kiểm tra...": "ລະບົບ: ກຳລັງກວດ...",
   "Tên": "ຊື່",
   "Bạn không có quyền thay đổi vị trí nhà": "ທ່ານບໍ່ມີສິດປ່ຽນຕຳແໜ່ງເຮືອນ",
@@ -702,10 +702,10 @@ const Map<String, String> loStrings = {
   "Thêm Home": "ເພີ່ມເຮືອນ",
   "Mở cài đặt": "ເປີດການຕັ້ງຄ່າ",
   "Để sau": "ໄວ້ພາຍຫຼັງ",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome ຕ້ອງການສິດຕຳແໜ່ງ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອຮູ້ເມື່ອທ່ານອອກ ຫຼື ກັບເຮືອນ ລວມທັງເມື່ອແອັບເຮັດວຽກພື້ນຫຼັງ",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "ປັດຈຸບັນ SafeHome ເຂົ້າເຖິງຕຳແໜ່ງໄດ້ສະເພາະເມື່ອໃຊ້ແອັບ.\n\nເປີດສິດຕຳແໜ່ງ ແລະ ເລືອກ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກພື້ນຫຼັງ",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen ຕ້ອງການສິດຕຳແໜ່ງ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອຮູ້ເມື່ອທ່ານອອກ ຫຼື ກັບເຮືອນ ລວມທັງເມື່ອແອັບເຮັດວຽກພື້ນຫຼັງ",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "ປັດຈຸບັນ MaiYen ເຂົ້າເຖິງຕຳແໜ່ງໄດ້ສະເພາະເມື່ອໃຊ້ແອັບ.\n\nເປີດສິດຕຳແໜ່ງ ແລະ ເລືອກ \"ອະນຸຍາດຕະຫຼອດເວລາ\" ເພື່ອໃຫ້ການປ້ອງກັນອັດຕະໂນມັດເຮັດວຽກພື້ນຫຼັງ",
   "Cho phép vị trí luôn luôn": "ອະນຸຍາດຕຳແໜ່ງຕະຫຼອດເວລາ",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "ເຮືອນຂອງທ່ານຈະຖືກລຶບ.\nທ່ານຈະອອກຈາກເຮືອນທີ່ແບ່ງປັນ",
@@ -734,7 +734,7 @@ const Map<String, String> loStrings = {
   "Từ chối": "ປະຕິເສດ",
   "Lời mời từ chủ nhà": "ຄຳເຊີນຈາກເຈົ້າຂອງ",
   "Nhận quyền chủ nhà": "ຮັບຄວາມເປັນເຈົ້າຂອງເຮືອນ",
-  "Một người dùng SafeHome": "ຜູ້ໃຊ້ SafeHome ໜຶ່ງຄົນ",
+  "Một người dùng MaiYen": "ຜູ້ໃຊ້ MaiYen ໜຶ່ງຄົນ",
   "Lời mời gia nhập": "ຄຳເຊີນເຂົ້າຮ່ວມ",
   "Lời xin vào nhà": "ຄຳຂໍເຂົ້າຮ່ວມເຮືອນ",
   "Nhập HUB ID": "ປ້ອນ HUB ID",
@@ -751,7 +751,7 @@ const Map<String, String> loStrings = {
   "CẦN KIỂM TRA": "ຕ້ອງກວດສອບ",
   "KIỂM TRA NHÀ": "ກວດເຮືອນ",
   "ĐÓNG NHẮC NHỞ": "ປິດການເຕືອນຄວາມຈຳ",
-  "SafeHome Security Alert": "ການເຕືອນຄວາມປອດໄພ SafeHome",
+  "MaiYen Security Alert": "ການເຕືອນຄວາມປອດໄພ MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "ເລືອກສິດຕຳແໜ່ງ ອະນຸຍາດຕະຫຼອດເວລາ ໃນການຕັ້ງຄ່າແອັບ",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -792,7 +792,7 @@ const Map<String, String> loStrings = {
   "Phòng": "ຫ້ອງ",
   "Quản trị viên": "ຜູ້ຄຸ້ມຄອງ",
   "Nhắc nhở": "ການເຕືອນຄວາມຈຳ",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "ສັນຍານອ່ອນ",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "ບັນຊີ ແລະ ລະບົບ",
@@ -839,7 +839,7 @@ const Map<String, String> loStrings = {
   "Còn \$count tin nhắn chưa đọc": "ມີ \$count ຂໍ້ຄວາມທີ່ຍັງບໍ່ອ່ານ",
   "Hãy an tâm nghỉ ngơi.": "ທ່ານສາມາດພັກຜ່ອນໄດ້ຢ່າງສະບາຍໃຈ",
   "Có thiết bị chưa an toàn.": "ມີອຸປະກອນບາງອັນບໍ່ປອດໄພ",
-  "SafeHome đang cập nhật vị trí": "SafeHome ກຳລັງອັບເດດຕຳແໜ່ງ",
+  "MaiYen đang cập nhật vị trí": "MaiYen ກຳລັງອັບເດດຕຳແໜ່ງ",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "ກຳລັງຕິດຕາມເພື່ອເປີດໂໝດປ້ອງກັນອັດຕະໂນມັດ",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -850,12 +850,12 @@ const Map<String, String> loStrings = {
   "CẢNH BÁO RÒ KHÍ": "ການເຕືອນກາຊຮົ່ວ",
   "CẢNH BÁO CỬA": "ການເຕືອນປະຕູ",
   "CẢNH BÁO AN NINH": "ການເຕືອນຄວາມປອດໄພ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "ບໍ່ສາມາດຢືນຢັນກັບ SafeHome. ກວດການເຊື່ອມຕໍ່ ແລະ ລອງໃໝ່",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "ບໍ່ສາມາດຢືນຢັນກັບ MaiYen. ກວດການເຊື່ອມຕໍ່ ແລະ ລອງໃໝ່",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "ປິດການເຕືອນຫຼັງຈາກກວດສະພາບໃນເຮືອນແລ້ວເທົ່ານັ້ນ.\n\nທ່ານແນ່ໃຈບໍວ່າຈະປິດການເຕືອນ?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome ກວດພົບການເຕືອນ",
-  "Mở SafeHome để kiểm tra ngay.": "ເປີດ SafeHome ເພື່ອກວດທັນທີ",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen ກວດພົບການເຕືອນ",
+  "Mở MaiYen để kiểm tra ngay.": "ເປີດ MaiYen ເພື່ອກວດທັນທີ",
   "\$count tin nhắn mới": "\$count ຂໍ້ຄວາມໃໝ່",
   "Tin nhắn HomeChat": "ຂໍ້ຄວາມ HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName ສົ່ງຂໍ້ຄວາມ",
@@ -873,8 +873,8 @@ const Map<String, String> loStrings = {
       "\$actorName ຕ້ອງການໂອນຄວາມເປັນເຈົ້າຂອງ \"\$homeName\" ໃຫ້ທ່ານ",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName ເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome ກຳລັງລຶບອຸປະກອນ \"\$deviceName\" ອອກຈາກ \"\$homeName\"",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen ກຳລັງລຶບອຸປະກອນ \"\$deviceName\" ອອກຈາກ \"\$homeName\"",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "ເພີ່ມອຸປະກອນ \"\$deviceName\" ເຂົ້າໃນ \"\$homeName\" ແລ້ວ",
   "Bạn đã tạo nhà \"\$name\".": "ທ່ານສ້າງເຮືອນ \"\$name\" ແລ້ວ",
@@ -929,8 +929,8 @@ const Map<String, String> loStrings = {
   "Có dấu hiệu rò khí": "ກວດພົບກາຊຮົ່ວ",
   "Có cửa đang mở hoặc thiết bị bị tháo": "ມີປະຕູເປີດ ຫຼື ອຸປະກອນຖືກຖອດງັດ",
   "Có thiết bị đang cảnh báo": "ມີອຸປະກອນກຳລັງເຕືອນ",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "ຖ້າບໍ່ມີໃຜຢືນຢັນ SafeHome ຈະເລີ່ມການໂທສຸກເສີນ",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "ຖ້າບໍ່ມີໃຜຢືນຢັນ MaiYen ຈະເລີ່ມການໂທສຸກເສີນ",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "ຈະເຕືອນອີກຄັ້ງເວລາ \$time ຖ້າບັນຫາຍັງບໍ່ໄດ້ແກ້ໄຂ",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -973,8 +973,8 @@ const Map<String, String> loStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "ເຊີນທ່ານເຂົ້າຮ່ວມ \"\$homeName\"",
   "Cần kiểm tra: \$joined": "ຕ້ອງກວດ: \$joined",
   "Cập nhật \$value": "ອັບເດດ \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "ເພີ່ມອຸປະກອນ SafeHome ອັນທຳອິດເພື່ອເລີ່ມຕິດຕາມເຮືອນ",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "ເພີ່ມອຸປະກອນ MaiYen ອັນທຳອິດເພື່ອເລີ່ມຕິດຕາມເຮືອນ",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "ກວດການເຕືອນສຸກເສີນກ່ອນ ແລ້ວຕິດຕໍ່ສະມາຊິກໃນເຮືອນຖ້າຈຳເປັນ",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1028,7 +1028,7 @@ const Map<String, String> loStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name: ເປີດຢູ່ຂະນະທີ່ເຮືອນຢູ່ໃນໂໝດປ້ອງກັນ",
   "An tâm hơn trong từng ngôi nhà": "ອຸ່ນໃຈກວ່າໃນທຸກເຮືອນ",
-  "Báo động SafeHome": "ສັນຍານເຕືອນໄພ SafeHome",
+  "Báo động MaiYen": "ສັນຍານເຕືອນໄພ MaiYen",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "ມີການເຕືອນຄວາມປອດໄພທີ່ຕ້ອງກວດທັນທີ",
   "Có cảnh báo cần kiểm tra": "ມີການເຕືອນທີ່ຕ້ອງກວດ",

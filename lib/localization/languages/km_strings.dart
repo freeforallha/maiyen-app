@@ -18,7 +18,7 @@ const Map<String, String> kmStrings = {
   "Nguy hiểm khẩn cấp": "គ្រោះថ្នាក់បន្ទាន់",
   "Điều khiển & hạ tầng": "ការគ្រប់គ្រង និងហេដ្ឋារចនាសម្ព័ន្ធ",
   "Môi trường": "បរិស្ថាន",
-  "Toàn bộ thiết bị SafeHome": "ឧបករណ៍ SafeHome ទាំងអស់",
+  "Toàn bộ thiết bị MaiYen": "ឧបករណ៍ MaiYen ទាំងអស់",
   "Cửa ra/vào": "ទ្វារច្រកចូល",
   "Cửa": "ទ្វារ",
   "Cửa sổ": "បង្អួច",
@@ -615,8 +615,8 @@ const Map<String, String> kmStrings = {
       "ឧបករណ៍ចាប់ផ្សែងមិនបានរកឃើញបញ្ហាទេ។",
   "Bạn hoặc thành viên đã chủ động bật Bảo vệ.":
       "អ្នក ឬសមាជិកម្នាក់បានបើកមុខងារការពារដោយដៃ។",
-  "SafeHome tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
-      "SafeHome បានបើកមុខងារការពារដោយស្វ័យប្រវត្តិ ព្រោះអ្នកបានចាកចេញពីផ្ទះ។",
+  "MaiYen tự bật Bảo vệ vì bạn đã rời khỏi nhà.":
+      "MaiYen បានបើកមុខងារការពារដោយស្វ័យប្រវត្តិ ព្រោះអ្នកបានចាកចេញពីផ្ទះ។",
   "Nhà đang ở chế độ dùng bình thường.":
       "បច្ចុប្បន្នផ្ទះនេះកំពុងប្រើប្រាស់ក្នុងមុខងារធម្មតា។",
   "Bảo vệ thủ công đang bật": "មុខងារការពារដោយដៃបានបើក",
@@ -626,8 +626,8 @@ const Map<String, String> kmStrings = {
       "ថ្មីៗនេះអ្នកបានបើកកម្មវិធីដើម្បីពិនិត្យស្ថានភាព។",
   "Bạn nên mở ứng dụng định kỳ để kiểm tra quyền, lịch và cảnh báo chưa đọc.":
       "បើកកម្មវិធីជាប្រចាំ ដើម្បីពិនិត្យសិទ្ធិ កាលវិភាគ និងការជូនដំណឹងដែលមិនទាន់បានអាន។",
-  "Sau vài lần sử dụng, SafeHome sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
-      "បន្ទាប់ពីប្រើប្រាស់ពីរបីលើក SafeHome អាចវាយតម្លៃទម្លាប់ពិនិត្យកម្មវិធីរបស់អ្នកបានប្រសើរជាងមុន។",
+  "Sau vài lần sử dụng, MaiYen sẽ đánh giá thói quen kiểm tra ứng dụng tốt hơn.":
+      "បន្ទាប់ពីប្រើប្រាស់ពីរបីលើក MaiYen អាចវាយតម្លៃទម្លាប់ពិនិត្យកម្មវិធីរបស់អ្នកបានប្រសើរជាងមុន។",
   "Tần suất vào ứng dụng ổn": "ភាពញឹកញាប់នៃការពិនិត្យកម្មវិធីល្អ",
   "Đã lâu chưa vào ứng dụng kiểm tra": "មិនបានពិនិត្យកម្មវិធីអស់មួយរយៈហើយ",
   "Đang ghi nhận tần suất vào ứng dụng":
@@ -677,8 +677,8 @@ const Map<String, String> kmStrings = {
   "Chạy nền ổn định": "ការប្រើប្រាស់ផ្ទៃខាងក្រោយមានស្ថិរភាព",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "ទូរសព្ទ Android មួយចំនួនអាចពន្យារការជូនដំណឹង ខណៈពេលការបង្កើនប្រសិទ្ធភាពថ្មបានបើក។",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo SafeHome.":
-      "ទូរសព្ទនេះទំនងជាមិនពន្យារការជូនដំណឹង SafeHome ទេ។",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
+      "ទូរសព្ទនេះទំនងជាមិនពន្យារការជូនដំណឹង MaiYen ទេ។",
   "Chưa tắt tối ưu pin": "ការបង្កើនប្រសិទ្ធភាពថ្មនៅតែបានបើក",
   "Tối ưu pin không chặn ứng dụng":
       "ការបង្កើនប្រសិទ្ធភាពថ្មមិនរារាំងកម្មវិធីទេ",
@@ -700,8 +700,8 @@ const Map<String, String> kmStrings = {
   "Cảnh báo toàn màn hình": "ការជូនដំណឹងពេញអេក្រង់",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "ការជូនដំណឹងអាចមិនបង្ហាញ ប្រសិនបើបានបិទការជូនដំណឹង។",
-  "Điện thoại có thể nhận thông báo SafeHome.":
-      "ទូរសព្ទនេះអាចទទួលការជូនដំណឹងពី SafeHome។",
+  "Điện thoại có thể nhận thông báo MaiYen.":
+      "ទូរសព្ទនេះអាចទទួលការជូនដំណឹងពី MaiYen។",
   "Chưa bật thông báo": "ការជូនដំណឹងមិនទាន់បានបើក",
   "Đã bật thông báo": "ការជូនដំណឹងបានបើក",
   "Hệ thống: Sẵn sàng": "ប្រព័ន្ធ៖ រួចរាល់",
@@ -710,7 +710,7 @@ const Map<String, String> kmStrings = {
   "Thiết bị của bạn": "ឧបករណ៍របស់អ្នក",
   "Kiểm tra điện thoại và cách bạn đang dùng ứng dụng.":
       "ពិនិត្យទូរសព្ទរបស់អ្នក និងរបៀបដែលអ្នកប្រើកម្មវិធី។",
-  "Hệ thống SafeHome": "ប្រព័ន្ធ SafeHome",
+  "Hệ thống MaiYen": "ប្រព័ន្ធ MaiYen",
   "Hệ thống: Đang kiểm tra...": "ប្រព័ន្ធ៖ កំពុងពិនិត្យ...",
   "Tên": "ឈ្មោះ",
   "Bạn không có quyền thay đổi vị trí nhà":
@@ -731,10 +731,10 @@ const Map<String, String> kmStrings = {
   "Thêm Home": "បន្ថែមផ្ទះ",
   "Mở cài đặt": "បើកការកំណត់",
   "Để sau": "ពេលក្រោយ",
-  "SafeHome cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
-      "SafeHome ត្រូវការសិទ្ធិទីតាំងដែលអនុញ្ញាតជានិច្ច ដើម្បីដឹងពេលអ្នកចាកចេញ ឬត្រឡប់មកផ្ទះ ទោះបីកម្មវិធីកំពុងដំណើរការនៅផ្ទៃខាងក្រោយក៏ដោយ។",
-  "SafeHome hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
-      "បច្ចុប្បន្ន SafeHome អាចចូលប្រើទីតាំងបានតែពេលកំពុងប្រើកម្មវិធីប៉ុណ្ណោះ។\n\nបើកសិទ្ធិទីតាំង ហើយជ្រើសរើស \"អនុញ្ញាតគ្រប់ពេល\" ដើម្បីឱ្យការការពារដោយស្វ័យប្រវត្តិបន្តដំណើរការនៅផ្ទៃខាងក្រោយ។",
+  "MaiYen cần quyền vị trí \"Luôn cho phép\" để nhận biết khi bạn rời hoặc trở về nhà, kể cả khi ứng dụng đang chạy nền.":
+      "MaiYen ត្រូវការសិទ្ធិទីតាំងដែលអនុញ្ញាតជានិច្ច ដើម្បីដឹងពេលអ្នកចាកចេញ ឬត្រឡប់មកផ្ទះ ទោះបីកម្មវិធីកំពុងដំណើរការនៅផ្ទៃខាងក្រោយក៏ដោយ។",
+  "MaiYen hiện chỉ được truy cập vị trí khi bạn đang sử dụng ứng dụng.\n\nHãy chọn quyền Vị trí và chuyển sang \"Luôn cho phép\" để tính năng tự động Bảo vệ khi rời nhà hoạt động khi ứng dụng đang chạy nền.":
+      "បច្ចុប្បន្ន MaiYen អាចចូលប្រើទីតាំងបានតែពេលកំពុងប្រើកម្មវិធីប៉ុណ្ណោះ។\n\nបើកសិទ្ធិទីតាំង ហើយជ្រើសរើស \"អនុញ្ញាតគ្រប់ពេល\" ដើម្បីឱ្យការការពារដោយស្វ័យប្រវត្តិបន្តដំណើរការនៅផ្ទៃខាងក្រោយ។",
   "Cho phép vị trí luôn luôn": "អនុញ្ញាតទីតាំងជានិច្ច",
   "Các nhà của bạn sẽ bị xoá.\nCác nhà được chia sẻ sẽ được rời khỏi.":
       "ផ្ទះរបស់អ្នកនឹងត្រូវលុប។\nអ្នកនឹងចាកចេញពីផ្ទះដែលបានចែករំលែក។",
@@ -763,7 +763,7 @@ const Map<String, String> kmStrings = {
   "Từ chối": "បដិសេធ",
   "Lời mời từ chủ nhà": "ការអញ្ជើញពីម្ចាស់ផ្ទះ",
   "Nhận quyền chủ nhà": "ទទួលសិទ្ធិម្ចាស់ផ្ទះ",
-  "Một người dùng SafeHome": "អ្នកប្រើប្រាស់ SafeHome ម្នាក់",
+  "Một người dùng MaiYen": "អ្នកប្រើប្រាស់ MaiYen ម្នាក់",
   "Lời mời gia nhập": "ការអញ្ជើញឱ្យចូលរួម",
   "Lời xin vào nhà": "សំណើចូលរួមផ្ទះ",
   "Nhập HUB ID": "បញ្ចូល ID របស់ Hub",
@@ -780,7 +780,7 @@ const Map<String, String> kmStrings = {
   "CẦN KIỂM TRA": "ត្រូវពិនិត្យ",
   "KIỂM TRA NHÀ": "ពិនិត្យផ្ទះ",
   "ĐÓNG NHẮC NHỞ": "បិទ ការរំលឹក",
-  "SafeHome Security Alert": "ការជូនដំណឹងសន្តិសុខ SafeHome",
+  "MaiYen Security Alert": "ការជូនដំណឹងសន្តិសុខ MaiYen",
   "Hãy chọn quyền vị trí Luôn cho phép trong Cài đặt ứng dụng":
       "ជ្រើសរើសសិទ្ធិទីតាំង «អនុញ្ញាតជានិច្ច» ក្នុងការកំណត់កម្មវិធី",
   "Tài khoản Google cần tạo thêm mật khẩu để dùng các chức năng bảo mật.":
@@ -822,7 +822,7 @@ const Map<String, String> kmStrings = {
   "Phòng": "បន្ទប់",
   "Quản trị viên": "អ្នកគ្រប់គ្រង",
   "Nhắc nhở": "ការរំលឹក",
-  "SafeHome": "SafeHome",
+  "MaiYen": "MaiYen",
   "Sóng yếu": "សញ្ញាខ្សោយ",
   "SOS": "SOS",
   "Tài khoản & hệ thống": "គណនី និងប្រព័ន្ធ",
@@ -869,7 +869,7 @@ const Map<String, String> kmStrings = {
   "Còn \$count tin nhắn chưa đọc": "សារមិនទាន់អាន \$count",
   "Hãy an tâm nghỉ ngơi.": "អ្នកអាចស្ងប់ចិត្តបាន។",
   "Có thiết bị chưa an toàn.": "ឧបករណ៍មួយចំនួនមិនមានសុវត្ថិភាព។",
-  "SafeHome đang cập nhật vị trí": "SafeHome កំពុងធ្វើបច្ចុប្បន្នភាពទីតាំង",
+  "MaiYen đang cập nhật vị trí": "MaiYen កំពុងធ្វើបច្ចុប្បន្នភាពទីតាំង",
   "Đang theo dõi để tự động bật Chế độ Bảo vệ.":
       "កំពុងតាមដាន ដើម្បីបើកមុខងារការពារដោយស្វ័យប្រវត្តិ។",
   "Dùng vị trí để tự động bật Chế độ Bảo vệ khi mọi người rời nhà.":
@@ -880,12 +880,12 @@ const Map<String, String> kmStrings = {
   "CẢNH BÁO RÒ KHÍ": "ការជូនដំណឹងអំពីការលេចធ្លាយឧស្ម័ន",
   "CẢNH BÁO CỬA": "ការជូនដំណឹងអំពីទ្វារ",
   "CẢNH BÁO AN NINH": "ការជូនដំណឹងសន្តិសុខ",
-  "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.":
-      "មិនអាចបញ្ជាក់ជាមួយ SafeHome បានទេ។ សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្ដងទៀត។",
+  "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.":
+      "មិនអាចបញ្ជាក់ជាមួយ MaiYen បានទេ។ សូមពិនិត្យការតភ្ជាប់ ហើយព្យាយាមម្ដងទៀត។",
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "បញ្ឈប់ការជូនដំណឹងតែបន្ទាប់ពីបានពិនិត្យស្ថានភាពផ្ទះប៉ុណ្ណោះ។\n\nតើអ្នកប្រាកដថាចង់បញ្ឈប់ការជូនដំណឹងមែនទេ?",
-  "🚨 SafeHome phát hiện cảnh báo": "🚨 SafeHome បានរកឃើញការជូនដំណឹង",
-  "Mở SafeHome để kiểm tra ngay.": "បើក SafeHome ដើម្បីពិនិត្យឥឡូវនេះ។",
+  "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen បានរកឃើញការជូនដំណឹង",
+  "Mở MaiYen để kiểm tra ngay.": "បើក MaiYen ដើម្បីពិនិត្យឥឡូវនេះ។",
   "\$count tin nhắn mới": "សារថ្មី \$count",
   "Tin nhắn HomeChat": "សារ HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName បានផ្ញើសារ",
@@ -903,8 +903,8 @@ const Map<String, String> kmStrings = {
       "\$actorName ចង់ផ្ទេរសិទ្ធិម្ចាស់ផ្ទះរបស់ \"\$homeName\" មកឱ្យអ្នក។",
   "\$actorName đã mời bạn tham gia nhà \"\$homeName\".":
       "\$actorName បានអញ្ជើញអ្នកឱ្យចូលរួម \"\$homeName\"។",
-  "SafeHome đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
-      "SafeHome កំពុងដក \"\$deviceName\" ចេញពី \"\$homeName\"។",
+  "MaiYen đang xoá thiết bị \"\$deviceName\" khỏi nhà \"\$homeName\".":
+      "MaiYen កំពុងដក \"\$deviceName\" ចេញពី \"\$homeName\"។",
   "Thiết bị \"\$deviceName\" đã xuất hiện trong \"\$homeName\".":
       "បានបន្ថែមឧបករណ៍ \"\$deviceName\" ទៅ \"\$homeName\"។",
   "Bạn đã tạo nhà \"\$name\".": "អ្នកបានបង្កើតផ្ទះ \"\$name\"។",
@@ -961,8 +961,8 @@ const Map<String, String> kmStrings = {
   "Có cửa đang mở hoặc thiết bị bị tháo":
       "ទ្វារមួយបើក ឬឧបករណ៍មួយត្រូវបានដោះ ឬលូកលាន់",
   "Có thiết bị đang cảnh báo": "ឧបករណ៍មួយកំពុងជូនដំណឹង",
-  "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.":
-      "ប្រសិនបើគ្មាននរណាម្នាក់បញ្ជាក់ SafeHome នឹងធ្វើការហៅទូរសព្ទបន្ទាន់។",
+  "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.":
+      "ប្រសិនបើគ្មាននរណាម្នាក់បញ្ជាក់ MaiYen នឹងធ្វើការហៅទូរសព្ទបន្ទាន់។",
   "Báo lại lúc \$time nếu vấn đề chưa được xử lý.":
       "នឹងជូនដំណឹងម្ដងទៀតនៅម៉ោង \$time ប្រសិនបើបញ្ហាមិនទាន់បានដោះស្រាយ។",
   "Sẽ báo lại theo lịch báo động đã cài nếu vấn đề chưa được xử lý.":
@@ -1007,8 +1007,8 @@ const Map<String, String> kmStrings = {
   "Mời bạn gia nhập \"\$homeName\"": "បានអញ្ជើញអ្នកឱ្យចូលរួម \"\$homeName\"",
   "Cần kiểm tra: \$joined": "ត្រូវការការយកចិត្តទុកដាក់៖ \$joined",
   "Cập nhật \$value": "បានធ្វើបច្ចុប្បន្នភាព \$value",
-  "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.":
-      "បន្ថែមឧបករណ៍ SafeHome ដំបូងរបស់អ្នក ដើម្បីចាប់ផ្ដើមតាមដានផ្ទះនេះ។",
+  "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.":
+      "បន្ថែមឧបករណ៍ MaiYen ដំបូងរបស់អ្នក ដើម្បីចាប់ផ្ដើមតាមដានផ្ទះនេះ។",
   "Kiểm tra cảnh báo khẩn cấp trước, sau đó liên hệ thành viên trong nhà nếu cần.":
       "ពិនិត្យការជូនដំណឹងបន្ទាន់ជាមុនសិន បន្ទាប់មកទាក់ទងសមាជិកគ្រួសារ ប្រសិនបើចាំបាច់។",
   "Không có thành viên nào ở nhà nhưng cửa hoặc khóa đang mở, hãy kiểm tra ngay.":
@@ -1065,7 +1065,7 @@ const Map<String, String> kmStrings = {
   "\$name: Đang mở khi nhà ở chế độ Bảo vệ":
       "\$name៖ បើកខណៈពេលផ្ទះស្ថិតក្នុងមុខងារការពារ",
   "An tâm hơn trong từng ngôi nhà": "ស្ងប់ចិត្តនៅគ្រប់ផ្ទះ",
-  "Báo động SafeHome": "SafeHome សំឡេងរោទិ៍",
+  "Báo động MaiYen": "MaiYen សំឡេងរោទិ៍",
   "Có cảnh báo an ninh cần kiểm tra ngay.":
       "ការជូនដំណឹងសន្តិសុខមួយត្រូវការការយកចិត្តទុកដាក់របស់អ្នក។",
   "Có cảnh báo cần kiểm tra": "ការជូនដំណឹងមួយត្រូវការការយកចិត្តទុកដាក់របស់អ្នក",

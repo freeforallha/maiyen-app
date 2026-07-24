@@ -25,19 +25,19 @@ const Map<String, String> itDynamicStrings = {
       "\$name e altre \$otherCount persone stanno scrivendo...",
   "Kênh báo động cũ để giữ tương thích":
       "Canale di allarme precedente per la compatibilità",
-  "SafeHome báo động toàn màn hình": "Allarme SafeHome a schermo intero",
+  "MaiYen báo động toàn màn hình": "Allarme MaiYen a schermo intero",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Apri l’avviso a schermo intero; il suono della sirena viene riprodotto dalla pagina dell’allarme",
-  "SafeHome cảnh báo khẩn cấp": "Avviso di emergenza SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Avviso di emergenza MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Avviso di emergenza ad alta priorità prima dell’apertura a schermo intero",
-  "SafeHome nhắc nhở toàn màn hình": "Promemoria SafeHome a schermo intero",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Promemoria SafeHome silenzioso a schermo intero",
-  "SafeHome nhắc nhở ưu tiên cao": "Promemoria SafeHome ad alta priorità",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Promemoria SafeHome ad alta priorità senza apertura a schermo intero",
-  "Tin nhắn mới trong các nhà SafeHome": "Nuovi messaggi nelle case SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Promemoria MaiYen a schermo intero",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Promemoria MaiYen silenzioso a schermo intero",
+  "MaiYen nhắc nhở ưu tiên cao": "Promemoria MaiYen ad alta priorità",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Promemoria MaiYen ad alta priorità senza apertura a schermo intero",
+  "Tin nhắn mới trong các nhà MaiYen": "Nuovi messaggi nelle case MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Questa azione modificherà oggi l’orario dell’allarme di alcuni dispositivi.\n\nGli allarmi dei dispositivi nella categoria “Pericolo di emergenza” e gli allarmi in modalità “Protezione” non saranno interessati da questa funzione.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count case in pericolo\$suffix",

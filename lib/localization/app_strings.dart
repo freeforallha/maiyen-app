@@ -692,10 +692,10 @@ class AppStrings {
       return "$actorName vous a invité à rejoindre « $firstQuote ».";
     }
 
-    if (en.startsWith("SafeHome is removing") &&
+    if (en.startsWith("MaiYen is removing") &&
         firstQuote != null &&
         secondQuote != null) {
-      return "SafeHome supprime l'appareil « $firstQuote » de « $secondQuote ».";
+      return "MaiYen supprime l'appareil « $firstQuote » de « $secondQuote ».";
     }
 
     if (en.startsWith("Device ") &&
@@ -1740,24 +1740,24 @@ class AppStrings {
   }) {
     final cleanHomeTitle = homeTitle.trim().isNotEmpty
         ? homeTitle.trim()
-        : "SafeHome";
+        : "MaiYen";
 
     return "$cleanHomeTitle · ${isSafe ? safeStatusTitle() : unsafeStatusTitle()}";
   }
 
   String updatingLocationNotificationTitle() => choose(
-    vi: "SafeHome đang cập nhật vị trí",
-    en: "SafeHome is updating location",
-    zh: "SafeHome 正在更新位置",
-    ko: "SafeHome이 위치를 업데이트하는 중입니다",
-    ja: "SafeHome が位置情報を更新中です",
-    de: 'SafeHome aktualisiert den Standort',
-    ru: 'SafeHome обновляет местоположение',
+    vi: "MaiYen đang cập nhật vị trí",
+    en: "MaiYen is updating location",
+    zh: "MaiYen 正在更新位置",
+    ko: "MaiYen이 위치를 업데이트하는 중입니다",
+    ja: "MaiYen が位置情報を更新中です",
+    de: 'MaiYen aktualisiert den Standort',
+    ru: 'MaiYen обновляет местоположение',
 
-    es: "SafeHome está actualizando la ubicación",
+    es: "MaiYen está actualizando la ubicación",
     fr: _fr(
-      vi: "SafeHome đang cập nhật vị trí",
-      en: "SafeHome is updating location",
+      vi: "MaiYen đang cập nhật vị trí",
+      en: "MaiYen is updating location",
     ),
   );
 
@@ -2273,18 +2273,18 @@ class AppStrings {
   String defaultUnsafeReminderReason() => unsafeReminderBody("");
 
   String alarmActionErrorMessage() => choose(
-    vi: "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.",
-    en: "Could not confirm with SafeHome. Check your connection and try again.",
-    zh: "无法与 SafeHome 确认。请检查连接后重试。",
-    ko: "SafeHome에 확인할 수 없습니다. 연결을 확인한 뒤 다시 시도해 주세요.",
-    ja: "SafeHome に確認できませんでした。接続を確認してもう一度お試しください。",
-    de: 'Bestätigung mit SafeHome fehlgeschlagen. Prüfe die Verbindung und versuche es erneut.',
-    ru: 'Не удалось подтвердить через SafeHome. Проверьте подключение и повторите попытку.',
+    vi: "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.",
+    en: "Could not confirm with MaiYen. Check your connection and try again.",
+    zh: "无法与 MaiYen 确认。请检查连接后重试。",
+    ko: "MaiYen에 확인할 수 없습니다. 연결을 확인한 뒤 다시 시도해 주세요.",
+    ja: "MaiYen に確認できませんでした。接続を確認してもう一度お試しください。",
+    de: 'Bestätigung mit MaiYen fehlgeschlagen. Prüfe die Verbindung und versuche es erneut.',
+    ru: 'Не удалось подтвердить через MaiYen. Проверьте подключение и повторите попытку.',
 
-    es: "No se pudo confirmar con SafeHome. Revisa la conexión e inténtalo de nuevo.",
+    es: "No se pudo confirmar con MaiYen. Revisa la conexión e inténtalo de nuevo.",
     fr: _fr(
-      vi: "Không thể xác nhận với SafeHome. Hãy kiểm tra kết nối và thử lại.",
-      en: "Could not confirm with SafeHome. Check your connection and try again.",
+      vi: "Không thể xác nhận với MaiYen. Hãy kiểm tra kết nối và thử lại.",
+      en: "Could not confirm with MaiYen. Check your connection and try again.",
     ),
   );
 
@@ -2307,34 +2307,34 @@ class AppStrings {
   );
 
   String priorityAlarmNotificationTitle() => choose(
-    vi: "🚨 SafeHome phát hiện cảnh báo",
-    en: "🚨 SafeHome detected an alert",
-    zh: "🚨 SafeHome 检测到警报",
-    ko: "🚨 SafeHome이 경보를 감지했습니다",
-    ja: "🚨 SafeHome がアラートを検知しました",
-    de: '🚨 SafeHome hat einen Alarm erkannt',
-    ru: '🚨 SafeHome обнаружил тревогу',
+    vi: "🚨 MaiYen phát hiện cảnh báo",
+    en: "🚨 MaiYen detected an alert",
+    zh: "🚨 MaiYen 检测到警报",
+    ko: "🚨 MaiYen이 경보를 감지했습니다",
+    ja: "🚨 MaiYen がアラートを検知しました",
+    de: '🚨 MaiYen hat einen Alarm erkannt',
+    ru: '🚨 MaiYen обнаружил тревогу',
 
-    es: "🚨 SafeHome detectó una alerta",
+    es: "🚨 MaiYen detectó una alerta",
     fr: _fr(
-      vi: "🚨 SafeHome phát hiện cảnh báo",
-      en: "🚨 SafeHome detected an alert",
+      vi: "🚨 MaiYen phát hiện cảnh báo",
+      en: "🚨 MaiYen detected an alert",
     ),
   );
 
   String openSafeHomeToCheckBody() => choose(
-    vi: "Mở SafeHome để kiểm tra ngay.",
-    en: "Open SafeHome to check now.",
-    zh: "打开 SafeHome 立即检查。",
-    ko: "SafeHome을 열어 지금 확인하세요.",
-    ja: "SafeHome を開いて今すぐ確認してください。",
-    de: 'Öffne SafeHome, um sofort zu prüfen.',
-    ru: 'Откройте SafeHome, чтобы проверить сейчас.',
+    vi: "Mở MaiYen để kiểm tra ngay.",
+    en: "Open MaiYen to check now.",
+    zh: "打开 MaiYen 立即检查。",
+    ko: "MaiYen을 열어 지금 확인하세요.",
+    ja: "MaiYen を開いて今すぐ確認してください。",
+    de: 'Öffne MaiYen, um sofort zu prüfen.',
+    ru: 'Откройте MaiYen, чтобы проверить сейчас.',
 
-    es: "Abre SafeHome para revisar ahora.",
+    es: "Abre MaiYen para revisar ahora.",
     fr: _fr(
-      vi: "Mở SafeHome để kiểm tra ngay.",
-      en: "Open SafeHome to check now.",
+      vi: "Mở MaiYen để kiểm tra ngay.",
+      en: "Open MaiYen to check now.",
     ),
   );
 
@@ -2505,24 +2505,24 @@ class AppStrings {
   );
 
   String androidAlarmFullscreenChannelName() => choose(
-    vi: "SafeHome báo động toàn màn hình",
-    my: "SafeHome မျက်နှာပြင်အပြည့် အရေးပေါ်အချက်ပေးသံ",
-    fil: "Full-screen na alarma ng SafeHome",
-    km: "SafeHome សំឡេងរោទិ៍ ពេញអេក្រង់",
-    en: "SafeHome Alarm Fullscreen",
-    zh: "SafeHome 警报 全屏",
-    ko: "SafeHome 경보 전체 화면",
-    ja: "SafeHome 警報 フルスクリーン",
-    de: 'SafeHome Alarm Vollbild',
-    ru: 'SafeHome тревога на весь экран',
-    es: "SafeHome alarma pantalla completa",
+    vi: "MaiYen báo động toàn màn hình",
+    my: "MaiYen မျက်နှာပြင်အပြည့် အရေးပေါ်အချက်ပေးသံ",
+    fil: "Full-screen na alarma ng MaiYen",
+    km: "MaiYen សំឡេងរោទិ៍ ពេញអេក្រង់",
+    en: "MaiYen Alarm Fullscreen",
+    zh: "MaiYen 警报 全屏",
+    ko: "MaiYen 경보 전체 화면",
+    ja: "MaiYen 警報 フルスクリーン",
+    de: 'MaiYen Alarm Vollbild',
+    ru: 'MaiYen тревога на весь экран',
+    es: "MaiYen alarma pantalla completa",
     fr: _fr(
-      vi: "SafeHome báo động toàn màn hình",
-      en: "SafeHome Alarm Fullscreen",
+      vi: "MaiYen báo động toàn màn hình",
+      en: "MaiYen Alarm Fullscreen",
     ),
-    th: "สัญญาณเตือน ของ SafeHome แบบเต็มหน้าจอ",
-    ms: "Penggera skrin penuh SafeHome",
-    lo: "ສັນຍານເຕືອນໄພ SafeHome ເຕັມຈໍ",
+    th: "สัญญาณเตือน ของ MaiYen แบบเต็มหน้าจอ",
+    ms: "Penggera skrin penuh MaiYen",
+    lo: "ສັນຍານເຕືອນໄພ MaiYen ເຕັມຈໍ",
   );
 
   String androidAlarmFullscreenChannelDescription() => choose(
@@ -2548,24 +2548,24 @@ class AppStrings {
   );
 
   String androidEmergencyPriorityChannelName() => choose(
-    vi: "SafeHome cảnh báo khẩn cấp",
-    my: "SafeHome အရေးပေါ်ဦးစားပေးသတိပေးချက်",
-    fil: "Mga alertong pang-emergency ng SafeHome",
-    km: "ការជូនដំណឹងបន្ទាន់របស់ SafeHome",
-    en: "SafeHome Emergency Priority",
-    zh: "SafeHome 紧急优先警报",
-    ko: "SafeHome 긴급 우선 알림",
-    ja: "SafeHome 緊急優先アラート",
-    de: 'SafeHome Notfall-Priorität',
-    ru: 'SafeHome экстренный приоритет',
-    es: "SafeHome prioridad de emergencia",
+    vi: "MaiYen cảnh báo khẩn cấp",
+    my: "MaiYen အရေးပေါ်ဦးစားပေးသတိပေးချက်",
+    fil: "Mga alertong pang-emergency ng MaiYen",
+    km: "ការជូនដំណឹងបន្ទាន់របស់ MaiYen",
+    en: "MaiYen Emergency Priority",
+    zh: "MaiYen 紧急优先警报",
+    ko: "MaiYen 긴급 우선 알림",
+    ja: "MaiYen 緊急優先アラート",
+    de: 'MaiYen Notfall-Priorität',
+    ru: 'MaiYen экстренный приоритет',
+    es: "MaiYen prioridad de emergencia",
     fr: _fr(
-      vi: "SafeHome cảnh báo khẩn cấp",
-      en: "SafeHome Emergency Priority",
+      vi: "MaiYen cảnh báo khẩn cấp",
+      en: "MaiYen Emergency Priority",
     ),
-    th: "การแจ้งเตือนฉุกเฉินของ SafeHome",
-    ms: "Amaran kecemasan SafeHome",
-    lo: "ການເຕືອນສຸກເສີນ SafeHome",
+    th: "การแจ้งเตือนฉุกเฉินของ MaiYen",
+    ms: "Amaran kecemasan MaiYen",
+    lo: "ການເຕືອນສຸກເສີນ MaiYen",
   );
 
   String androidEmergencyPriorityChannelDescription() => choose(
@@ -2591,109 +2591,109 @@ class AppStrings {
   );
 
   String androidScheduleFullscreenChannelName() => choose(
-    vi: "SafeHome nhắc nhở toàn màn hình",
-    my: "SafeHome မျက်နှာပြင်အပြည့် သတိပေးချက်",
-    fil: "Full-screen na paalala ng SafeHome",
-    km: "SafeHome ការរំលឹក ពេញអេក្រង់",
-    en: "SafeHome Schedule Fullscreen",
-    zh: "SafeHome 提醒 全屏",
-    ko: "SafeHome 리마인더 전체 화면",
-    ja: "SafeHome リマインダー フルスクリーン",
-    de: 'SafeHome Erinnerung Vollbild',
-    ru: 'SafeHome напоминание на весь экран',
-    es: "SafeHome recordatorio pantalla completa",
+    vi: "MaiYen nhắc nhở toàn màn hình",
+    my: "MaiYen မျက်နှာပြင်အပြည့် သတိပေးချက်",
+    fil: "Full-screen na paalala ng MaiYen",
+    km: "MaiYen ការរំលឹក ពេញអេក្រង់",
+    en: "MaiYen Schedule Fullscreen",
+    zh: "MaiYen 提醒 全屏",
+    ko: "MaiYen 리마인더 전체 화면",
+    ja: "MaiYen リマインダー フルスクリーン",
+    de: 'MaiYen Erinnerung Vollbild',
+    ru: 'MaiYen напоминание на весь экран',
+    es: "MaiYen recordatorio pantalla completa",
     fr: _fr(
-      vi: "SafeHome nhắc nhở toàn màn hình",
-      en: "SafeHome Schedule Fullscreen",
+      vi: "MaiYen nhắc nhở toàn màn hình",
+      en: "MaiYen Schedule Fullscreen",
     ),
-    th: "การเตือนความจำ ของ SafeHome แบบเต็มหน้าจอ",
-    ms: "Peringatan skrin penuh SafeHome",
-    lo: "ການເຕືອນຄວາມຈຳ SafeHome ເຕັມຈໍ",
+    th: "การเตือนความจำ ของ MaiYen แบบเต็มหน้าจอ",
+    ms: "Peringatan skrin penuh MaiYen",
+    lo: "ການເຕືອນຄວາມຈຳ MaiYen ເຕັມຈໍ",
   );
 
   String androidScheduleFullscreenChannelDescription() => choose(
-    vi: "Nhắc nhở SafeHome toàn màn hình không âm thanh",
-    my: "အသံမပါသော SafeHome မျက်နှာပြင်အပြည့် သတိပေးချက်",
-    fil: "Full-screen na paalala ng SafeHome na walang tunog",
-    km: "ការរំលឹក ពេញអេក្រង់របស់ SafeHome ដោយគ្មានសំឡេង",
-    en: "Silent fullscreen SafeHome Reminder",
-    zh: "无声音全屏 SafeHome 提醒",
-    ko: "무음 전체 화면 SafeHome 리마인더",
-    ja: "音なしの全画面 SafeHome リマインダー",
-    de: 'Stummer SafeHome Erinnerung im Vollbild',
-    ru: 'Беззвучный SafeHome напоминание на весь экран',
-    es: "Recordatorio de SafeHome a pantalla completa sin sonido",
+    vi: "Nhắc nhở MaiYen toàn màn hình không âm thanh",
+    my: "အသံမပါသော MaiYen မျက်နှာပြင်အပြည့် သတိပေးချက်",
+    fil: "Full-screen na paalala ng MaiYen na walang tunog",
+    km: "ការរំលឹក ពេញអេក្រង់របស់ MaiYen ដោយគ្មានសំឡេង",
+    en: "Silent fullscreen MaiYen Reminder",
+    zh: "无声音全屏 MaiYen 提醒",
+    ko: "무음 전체 화면 MaiYen 리마인더",
+    ja: "音なしの全画面 MaiYen リマインダー",
+    de: 'Stummer MaiYen Erinnerung im Vollbild',
+    ru: 'Беззвучный MaiYen напоминание на весь экран',
+    es: "Recordatorio de MaiYen a pantalla completa sin sonido",
     fr: _fr(
-      vi: "Nhắc nhở SafeHome toàn màn hình không âm thanh",
-      en: "Silent fullscreen SafeHome Reminder",
+      vi: "Nhắc nhở MaiYen toàn màn hình không âm thanh",
+      en: "Silent fullscreen MaiYen Reminder",
     ),
-    th: "การเตือนความจำ ของ SafeHome แบบเต็มหน้าจอโดยไม่มีเสียง",
-    ms: "Peringatan SafeHome skrin penuh tanpa bunyi",
-    lo: "ການເຕືອນຄວາມຈຳ SafeHome ເຕັມຈໍແບບບໍ່ມີສຽງ",
+    th: "การเตือนความจำ ของ MaiYen แบบเต็มหน้าจอโดยไม่มีเสียง",
+    ms: "Peringatan MaiYen skrin penuh tanpa bunyi",
+    lo: "ການເຕືອນຄວາມຈຳ MaiYen ເຕັມຈໍແບບບໍ່ມີສຽງ",
   );
 
   String androidReminderPriorityChannelName() => choose(
-    vi: "SafeHome nhắc nhở ưu tiên cao",
-    my: "SafeHome ဦးစားပေး သတိပေးချက်",
-    fil: "Mataas na priyoridad na paalala ng SafeHome",
-    km: "SafeHome ការរំលឹក អាទិភាពខ្ពស់",
-    en: "SafeHome Reminder Priority",
-    zh: "SafeHome 提醒 优先",
-    ko: "SafeHome 리마인더 우선 알림",
-    ja: "SafeHome リマインダー 優先通知",
-    de: 'SafeHome Erinnerung Priorität',
-    ru: 'SafeHome напоминание с приоритетом',
-    es: "SafeHome recordatorio prioritario",
+    vi: "MaiYen nhắc nhở ưu tiên cao",
+    my: "MaiYen ဦးစားပေး သတိပေးချက်",
+    fil: "Mataas na priyoridad na paalala ng MaiYen",
+    km: "MaiYen ការរំលឹក អាទិភាពខ្ពស់",
+    en: "MaiYen Reminder Priority",
+    zh: "MaiYen 提醒 优先",
+    ko: "MaiYen 리마인더 우선 알림",
+    ja: "MaiYen リマインダー 優先通知",
+    de: 'MaiYen Erinnerung Priorität',
+    ru: 'MaiYen напоминание с приоритетом',
+    es: "MaiYen recordatorio prioritario",
     fr: _fr(
-      vi: "SafeHome nhắc nhở ưu tiên cao",
-      en: "SafeHome Reminder Priority",
+      vi: "MaiYen nhắc nhở ưu tiên cao",
+      en: "MaiYen Reminder Priority",
     ),
-    th: "การเตือนความจำ ของ SafeHome ลำดับความสำคัญสูง",
-    ms: "Peringatan SafeHome keutamaan tinggi",
-    lo: "ການເຕືອນຄວາມຈຳ SafeHome ຄວາມສຳຄັນສູງ",
+    th: "การเตือนความจำ ของ MaiYen ลำดับความสำคัญสูง",
+    ms: "Peringatan MaiYen keutamaan tinggi",
+    lo: "ການເຕືອນຄວາມຈຳ MaiYen ຄວາມສຳຄັນສູງ",
   );
 
   String androidReminderPriorityChannelDescription() => choose(
-    vi: "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình",
-    my: "မျက်နှာပြင်အပြည့် မဖွင့်သော SafeHome ဦးစားပေး သတိပေးချက်",
+    vi: "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình",
+    my: "မျက်နှာပြင်အပြည့် မဖွင့်သော MaiYen ဦးစားပေး သတိပေးချက်",
     fil:
-        "Mataas na priyoridad na paalala ng SafeHome na hindi nagbubukas ng full-screen",
-    km: "ការរំលឹក អាទិភាពខ្ពស់របស់ SafeHome ដែលមិនបើកពេញអេក្រង់",
-    en: "High-priority SafeHome Reminder without fullscreen",
-    zh: "高优先级 SafeHome 提醒，不打开全屏",
-    ko: "전체 화면 없이 높은 우선순위 SafeHome 리마인더",
-    ja: "全画面を開かない高優先度の SafeHome リマインダー",
-    de: 'SafeHome Erinnerung mit hoher Priorität ohne Vollbild',
-    ru: 'SafeHome напоминание высокого приоритета без полноэкранного режима',
-    es: "Recordatorio de SafeHome de alta prioridad sin pantalla completa",
+        "Mataas na priyoridad na paalala ng MaiYen na hindi nagbubukas ng full-screen",
+    km: "ការរំលឹក អាទិភាពខ្ពស់របស់ MaiYen ដែលមិនបើកពេញអេក្រង់",
+    en: "High-priority MaiYen Reminder without fullscreen",
+    zh: "高优先级 MaiYen 提醒，不打开全屏",
+    ko: "전체 화면 없이 높은 우선순위 MaiYen 리마인더",
+    ja: "全画面を開かない高優先度の MaiYen リマインダー",
+    de: 'MaiYen Erinnerung mit hoher Priorität ohne Vollbild',
+    ru: 'MaiYen напоминание высокого приоритета без полноэкранного режима',
+    es: "Recordatorio de MaiYen de alta prioridad sin pantalla completa",
     fr: _fr(
-      vi: "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình",
-      en: "High-priority SafeHome Reminder without fullscreen",
+      vi: "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình",
+      en: "High-priority MaiYen Reminder without fullscreen",
     ),
-    th: "การเตือนความจำ ของ SafeHome ลำดับความสำคัญสูงโดยไม่เปิดเต็มหน้าจอ",
-    ms: "Peringatan SafeHome keutamaan tinggi tanpa skrin penuh",
-    lo: "ການເຕືອນຄວາມຈຳ SafeHome ຄວາມສຳຄັນສູງ ໂດຍບໍ່ເປີດເຕັມຈໍ",
+    th: "การเตือนความจำ ของ MaiYen ลำดับความสำคัญสูงโดยไม่เปิดเต็มหน้าจอ",
+    ms: "Peringatan MaiYen keutamaan tinggi tanpa skrin penuh",
+    lo: "ການເຕືອນຄວາມຈຳ MaiYen ຄວາມສຳຄັນສູງ ໂດຍບໍ່ເປີດເຕັມຈໍ",
   );
 
   String androidHomeChatChannelDescription() => choose(
-    vi: "Tin nhắn mới trong các nhà SafeHome",
-    my: "SafeHome အိမ်များရှိ စာတိုအသစ်များ",
-    fil: "Mga bagong mensahe sa mga bahay ng SafeHome",
-    km: "សារថ្មីនៅក្នុងផ្ទះ SafeHome",
-    en: "New messages in SafeHome homes",
-    zh: "SafeHome 家庭中的新消息",
-    ko: "SafeHome 집의 새 메시지",
-    ja: "SafeHome の家の新着メッセージ",
-    de: 'Neue Nachrichten in SafeHome-Zuhause',
-    ru: 'Новые сообщения в домах SafeHome',
-    es: "Mensajes nuevos en las casas SafeHome",
+    vi: "Tin nhắn mới trong các nhà MaiYen",
+    my: "MaiYen အိမ်များရှိ စာတိုအသစ်များ",
+    fil: "Mga bagong mensahe sa mga bahay ng MaiYen",
+    km: "សារថ្មីនៅក្នុងផ្ទះ MaiYen",
+    en: "New messages in MaiYen homes",
+    zh: "MaiYen 家庭中的新消息",
+    ko: "MaiYen 집의 새 메시지",
+    ja: "MaiYen の家の新着メッセージ",
+    de: 'Neue Nachrichten in MaiYen-Zuhause',
+    ru: 'Новые сообщения в домах MaiYen',
+    es: "Mensajes nuevos en las casas MaiYen",
     fr: _fr(
-      vi: "Tin nhắn mới trong các nhà SafeHome",
-      en: "New messages in SafeHome homes",
+      vi: "Tin nhắn mới trong các nhà MaiYen",
+      en: "New messages in MaiYen homes",
     ),
-    th: "ข้อความใหม่ในบ้าน SafeHome",
-    ms: "Mesej baharu dalam rumah SafeHome",
-    lo: "ຂໍ້ຄວາມໃໝ່ໃນເຮືອນ SafeHome",
+    th: "ข้อความใหม่ในบ้าน MaiYen",
+    ms: "Mesej baharu dalam rumah MaiYen",
+    lo: "ຂໍ້ຄວາມໃໝ່ໃນເຮືອນ MaiYen",
   );
 
   String homeSecurityRepeatToast(int minutes) {
@@ -2894,27 +2894,27 @@ class AppStrings {
     required String deviceName,
     required String homeName,
   }) => choose(
-    vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
+    vi: "MaiYen đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
     fil:
-        "Tinatanggal ng SafeHome ang \"$deviceName\" mula sa bahay na \"$homeName\".",
-    km: "SafeHome កំពុងដក \"$deviceName\" ចេញពី \"$homeName\"។",
-    en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
-    zh: "SafeHome 正在从“$homeName”中移除“$deviceName”。",
-    ko: "SafeHome이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
-    ja: "SafeHome は「$homeName」から「$deviceName」を削除しています。",
-    de: 'SafeHome entfernt "$deviceName" aus "$homeName".',
-    ru: 'SafeHome удаляет "$deviceName" из дома "$homeName".',
+        "Tinatanggal ng MaiYen ang \"$deviceName\" mula sa bahay na \"$homeName\".",
+    km: "MaiYen កំពុងដក \"$deviceName\" ចេញពី \"$homeName\"។",
+    en: "MaiYen is removing \"$deviceName\" from \"$homeName\".",
+    zh: "MaiYen 正在从“$homeName”中移除“$deviceName”。",
+    ko: "MaiYen이 \"$homeName\"에서 \"$deviceName\"을(를) 삭제하는 중입니다.",
+    ja: "MaiYen は「$homeName」から「$deviceName」を削除しています。",
+    de: 'MaiYen entfernt "$deviceName" aus "$homeName".',
+    ru: 'MaiYen удаляет "$deviceName" из дома "$homeName".',
 
-    es: "SafeHome está eliminando el dispositivo «$deviceName» de «$homeName».",
+    es: "MaiYen está eliminando el dispositivo «$deviceName» de «$homeName».",
     fr: _fr(
-      vi: "SafeHome đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
-      en: "SafeHome is removing \"$deviceName\" from \"$homeName\".",
+      vi: "MaiYen đang xoá thiết bị \"$deviceName\" khỏi nhà \"$homeName\".",
+      en: "MaiYen is removing \"$deviceName\" from \"$homeName\".",
     ),
-    id: "SafeHome sedang menghapus \"$deviceName\" dari \"$homeName\".",
-    th: "SafeHome กำลังลบอุปกรณ์ \"$deviceName\" ออกจากบ้าน \"$homeName\"",
-    ms: "SafeHome sedang memadam peranti \"$deviceName\" daripada rumah \"$homeName\".",
-    my: "SafeHome က \"$homeName\" မှ \"$deviceName\" စက်ပစ္စည်းကို ဖယ်ရှားနေသည်။",
-    lo: "SafeHome ກຳລັງລຶບອຸປະກອນ \"$deviceName\" ອອກຈາກ \"$homeName\"",
+    id: "MaiYen sedang menghapus \"$deviceName\" dari \"$homeName\".",
+    th: "MaiYen กำลังลบอุปกรณ์ \"$deviceName\" ออกจากบ้าน \"$homeName\"",
+    ms: "MaiYen sedang memadam peranti \"$deviceName\" daripada rumah \"$homeName\".",
+    my: "MaiYen က \"$homeName\" မှ \"$deviceName\" စက်ပစ္စည်းကို ဖယ်ရှားနေသည်။",
+    lo: "MaiYen ກຳລັງລຶບອຸປະກອນ \"$deviceName\" ອອກຈາກ \"$homeName\"",
   );
 
   String deviceAddedMessage({
@@ -3742,18 +3742,18 @@ class AppStrings {
   }
 
   String alarmEmergencyEscalationText() => choose(
-    vi: "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
-    en: "If no one confirms, SafeHome will initiate an emergency call.",
-    zh: "如果没有人确认，SafeHome 将转为紧急呼叫。",
-    ko: "아무도 확인하지 않으면 SafeHome이 긴급 전화로 전환합니다.",
-    ja: "誰も確認しない場合、SafeHome は緊急通話に切り替えます。",
-    de: 'Wenn niemand bestätigt, wechselt SafeHome zu einem Notruf.',
-    ru: 'Если никто не подтвердит, SafeHome перейдет к экстренному звонку.',
+    vi: "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.",
+    en: "If no one confirms, MaiYen will initiate an emergency call.",
+    zh: "如果没有人确认，MaiYen 将转为紧急呼叫。",
+    ko: "아무도 확인하지 않으면 MaiYen이 긴급 전화로 전환합니다.",
+    ja: "誰も確認しない場合、MaiYen は緊急通話に切り替えます。",
+    de: 'Wenn niemand bestätigt, wechselt MaiYen zu einem Notruf.',
+    ru: 'Если никто не подтвердит, MaiYen перейдет к экстренному звонку.',
 
-    es: "Si nadie confirma, SafeHome pasará a una llamada de emergencia.",
+    es: "Si nadie confirma, MaiYen pasará a una llamada de emergencia.",
     fr: _fr(
-      vi: "Nếu chưa có ai xác nhận, SafeHome sẽ chuyển sang gọi điện khẩn cấp.",
-      en: "If no one confirms, SafeHome will initiate an emergency call.",
+      vi: "Nếu chưa có ai xác nhận, MaiYen sẽ chuyển sang gọi điện khẩn cấp.",
+      en: "If no one confirms, MaiYen will initiate an emergency call.",
     ),
   );
 
@@ -6242,18 +6242,18 @@ class AppStrings {
   );
 
   String statusAddFirstDeviceSuggestion() => choose(
-    vi: "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
-    en: "Add your first SafeHome device to start monitoring this home.",
-    zh: "请先添加第一个 SafeHome 设备以开始监控家庭。",
-    ko: "집 상태를 확인하려면 먼저 SafeHome 기기를 추가하세요.",
-    ja: "家の見守りを始めるには、まず SafeHome デバイスを追加してください。",
-    de: 'Füge dein erstes SafeHome-Gerät hinzu, um dieses Zuhause zu überwachen.',
-    ru: 'Добавьте первое устройство SafeHome, чтобы начать наблюдение за этим домом.',
+    vi: "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.",
+    en: "Add your first MaiYen device to start monitoring this home.",
+    zh: "请先添加第一个 MaiYen 设备以开始监控家庭。",
+    ko: "집 상태를 확인하려면 먼저 MaiYen 기기를 추가하세요.",
+    ja: "家の見守りを始めるには、まず MaiYen デバイスを追加してください。",
+    de: 'Füge dein erstes MaiYen-Gerät hinzu, um dieses Zuhause zu überwachen.',
+    ru: 'Добавьте первое устройство MaiYen, чтобы начать наблюдение за этим домом.',
 
-    es: "Añade tu primer dispositivo SafeHome para empezar a supervisar esta casa.",
+    es: "Añade tu primer dispositivo MaiYen para empezar a supervisar esta casa.",
     fr: _fr(
-      vi: "Hãy thêm thiết bị SafeHome đầu tiên để bắt đầu theo dõi nhà.",
-      en: "Add your first SafeHome device to start monitoring this home.",
+      vi: "Hãy thêm thiết bị MaiYen đầu tiên để bắt đầu theo dõi nhà.",
+      en: "Add your first MaiYen device to start monitoring this home.",
     ),
   );
 
@@ -8174,16 +8174,16 @@ class AppStrings {
   );
 
   String get alarmTitle => choose(
-    vi: "Báo động SafeHome",
-    en: "SafeHome Alarm",
-    zh: "SafeHome 警报",
-    ko: "SafeHome 경보",
-    ja: "SafeHome 警報",
-    de: 'SafeHome Alarm',
-    ru: 'SafeHome тревога',
+    vi: "Báo động MaiYen",
+    en: "MaiYen Alarm",
+    zh: "MaiYen 警报",
+    ko: "MaiYen 경보",
+    ja: "MaiYen 警報",
+    de: 'MaiYen Alarm',
+    ru: 'MaiYen тревога',
 
-    es: "Alarma SafeHome",
-    fr: _fr(vi: "Báo động SafeHome", en: "SafeHome Alarm"),
+    es: "Alarma MaiYen",
+    fr: _fr(vi: "Báo động MaiYen", en: "MaiYen Alarm"),
   );
 
   String get alarmBody => choose(

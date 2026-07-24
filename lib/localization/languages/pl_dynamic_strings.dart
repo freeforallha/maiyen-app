@@ -24,20 +24,20 @@ const Map<String, String> plDynamicStrings = {
       "\$name i \$otherCount innych osób piszą...",
   "Kênh báo động cũ để giữ tương thích":
       "Starszy kanał alarmowy zachowany dla zgodności",
-  "SafeHome báo động toàn màn hình": "Pełnoekranowy alarm SafeHome",
+  "MaiYen báo động toàn màn hình": "Pełnoekranowy alarm MaiYen",
   "Mở cảnh báo toàn màn hình; âm còi phát từ trang báo động":
       "Otwiera alert pełnoekranowy; dźwięk syreny jest odtwarzany na ekranie alarmu",
-  "SafeHome cảnh báo khẩn cấp": "Alert awaryjny SafeHome",
+  "MaiYen cảnh báo khẩn cấp": "Alert awaryjny MaiYen",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Alert awaryjny o wysokim priorytecie przed otwarciem pełnego ekranu",
-  "SafeHome nhắc nhở toàn màn hình": "Pełnoekranowe przypomnienie SafeHome",
-  "Nhắc nhở SafeHome toàn màn hình không âm thanh":
-      "Ciche pełnoekranowe przypomnienie SafeHome",
-  "SafeHome nhắc nhở ưu tiên cao":
-      "Przypomnienie SafeHome o wysokim priorytecie",
-  "Nhắc nhở SafeHome ưu tiên cao, không mở toàn màn hình":
-      "Przypomnienie SafeHome o wysokim priorytecie bez otwierania pełnego ekranu",
-  "Tin nhắn mới trong các nhà SafeHome": "Nowe wiadomości w domach SafeHome",
+  "MaiYen nhắc nhở toàn màn hình": "Pełnoekranowe przypomnienie MaiYen",
+  "Nhắc nhở MaiYen toàn màn hình không âm thanh":
+      "Ciche pełnoekranowe przypomnienie MaiYen",
+  "MaiYen nhắc nhở ưu tiên cao":
+      "Przypomnienie MaiYen o wysokim priorytecie",
+  "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
+      "Przypomnienie MaiYen o wysokim priorytecie bez otwierania pełnego ekranu",
+  "Tin nhắn mới trong các nhà MaiYen": "Nowe wiadomości w domach MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Ta czynność zmieni dziś godzinę alarmu niektórych urządzeń.\n\nAlarmy urządzeń z kategorii „Zagrożenie awaryjne” oraz alarmy w trybie „Ochrona” nie zostaną objęte tą funkcją.",
   "🆘 \$count nhà nguy hiểm\$suffix":
