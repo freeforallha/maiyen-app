@@ -1,4 +1,5 @@
 import 'system_version.dart';
+import 'legacy_identifiers.dart';
 
 class BrandConfig {
   BrandConfig._();
@@ -19,5 +20,5 @@ class BrandConfig {
   /// Package kỹ thuật được giữ nguyên để tương thích với bản đang phát hành.
   static const String mapUserAgent =
       '$appName/${SystemVersionConfig.appVersionName} '
-      '(com.myfamily.safehome)';
+      '(${MaiYenLegacyIdentifiers.applicationId})';
 }

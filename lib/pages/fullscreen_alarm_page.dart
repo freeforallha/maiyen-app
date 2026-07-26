@@ -6,11 +6,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../app/safe_home_app.dart';
+import '../app/maiyen_app.dart';
 import '../config/brand_config.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../services/notification_service.dart';
+import '../config/legacy_identifiers.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
   final String title;
@@ -87,7 +88,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     final raw = currentReminderTitle.trim();
     final lower = raw.toLowerCase();
 
-    if (raw.isEmpty || lower.contains("safehome")) {
+    if (raw.isEmpty || lower.contains(MaiYenLegacyIdentifiers.legacyBrandToken)) {
       return "";
     }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
-import '../../safehome_theme.dart';
+import '../../maiyen_theme.dart';
 
 Future<String?> showHomeTimeTextInputDialog({
   required BuildContext context,
@@ -195,7 +195,7 @@ Future<bool> showConfirmManualSecurityModeDialog({
           children: [
             const Icon(
               Icons.warning_amber_rounded,
-              color: SafeHomeColors.warning,
+              color: MaiYenColors.warning,
             ),
             const SizedBox(width: 10),
             Expanded(child: Text(strings.t("Bật Bảo vệ thủ công?"))),
@@ -240,7 +240,7 @@ Future<bool> showConfirmUnprotectedModeDialog({
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
-            const Icon(Icons.shield_outlined, color: SafeHomeColors.danger),
+            const Icon(Icons.shield_outlined, color: MaiYenColors.danger),
             const SizedBox(width: 10),
             Expanded(child: Text(strings.t("Bật Không bảo vệ?"))),
           ],
@@ -257,7 +257,7 @@ Future<bool> showConfirmUnprotectedModeDialog({
           ),
           FilledButton(
             style: FilledButton.styleFrom(
-              backgroundColor: SafeHomeColors.danger,
+              backgroundColor: MaiYenColors.danger,
               foregroundColor: Colors.white,
             ),
             onPressed: () {
@@ -286,7 +286,7 @@ Future<bool> showConfirmNormalModeWithAutoAwayDialog({
           children: [
             const Icon(
               Icons.warning_amber_rounded,
-              color: SafeHomeColors.warning,
+              color: MaiYenColors.warning,
             ),
             const SizedBox(width: 10),
             Expanded(

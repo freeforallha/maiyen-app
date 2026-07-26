@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
-import '../../safehome_theme.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../maiyen_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 
 int? _resolveAlarmPauseMenuEndAt(Map<String, dynamic> pause) {
@@ -66,7 +66,7 @@ Future<void> showHomeAlarmMenuSheet({
   required Future<void> Function() onOpenAlarmPause,
   required VoidCallback onOpenReminderSchedule,
 }) async {
-  await SafeHomeNavigation.showModalSheet(
+  await MaiYenNavigation.showModalSheet(
     context: context,
     showDragHandle: false,
     backgroundColor: Colors.transparent,
@@ -84,7 +84,7 @@ Future<void> showHomeAlarmMenuSheet({
         child: Container(
           padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
           decoration: const BoxDecoration(
-            color: SafeHomeColors.surface,
+            color: MaiYenColors.surface,
             borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
           ),
           child: Column(
@@ -95,7 +95,7 @@ Future<void> showHomeAlarmMenuSheet({
                 height: 5,
                 margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
+                  color: MaiYenColors.border,
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
@@ -103,14 +103,14 @@ Future<void> showHomeAlarmMenuSheet({
                 leading: Icon(
                   Icons.crisis_alert_rounded,
                   color: alarmScheduleConfigured
-                      ? SafeHomeColors.primary
-                      : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
+                      ? MaiYenColors.primary
+                      : MaiYenColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
                   strings.t('Hẹn giờ báo động'),
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                   ),
                 ),
                 subtitle: Text(
@@ -121,13 +121,13 @@ Future<void> showHomeAlarmMenuSheet({
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: alarmScheduleConfigured
-                        ? SafeHomeColors.textSecondary
-                        : SafeHomeColors.textSecondary.withValues(alpha: 0.55),
+                        ? MaiYenColors.textSecondary
+                        : MaiYenColors.textSecondary.withValues(alpha: 0.55),
                   ),
                 ),
                 trailing: const Icon(
                   Icons.chevron_right_rounded,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                 ),
                 onTap: () {
                   Navigator.pop(sheetContext);
@@ -138,16 +138,16 @@ Future<void> showHomeAlarmMenuSheet({
                 leading: Icon(
                   Icons.pause_circle_filled_rounded,
                   color: pauseActive
-                      ? SafeHomeColors.warning
-                      : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
+                      ? MaiYenColors.warning
+                      : MaiYenColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
                   strings.t('Tạm tắt báo động hôm nay'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: pauseActive
-                        ? SafeHomeColors.textPrimary
-                        : SafeHomeColors.textSecondary.withValues(alpha: 0.55),
+                        ? MaiYenColors.textPrimary
+                        : MaiYenColors.textSecondary.withValues(alpha: 0.55),
                   ),
                 ),
                 subtitle: Text(
@@ -159,8 +159,8 @@ Future<void> showHomeAlarmMenuSheet({
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: pauseActive
-                        ? SafeHomeColors.textSecondary
-                        : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
+                        ? MaiYenColors.textSecondary
+                        : MaiYenColors.textSecondary.withValues(alpha: 0.45),
                   ),
                 ),
                 onTap: () async {
@@ -196,7 +196,7 @@ Future<void> showHomeAlarmMenuSheet({
                         pt: 'Nenhum alarme foi configurado',
                         tet: 'Alarme ida seidauk tau',
                       ),
-                      color: SafeHomeColors.warning,
+                      color: MaiYenColors.warning,
                       icon: Icons.schedule_rounded,
                     );
                     return;
@@ -210,16 +210,16 @@ Future<void> showHomeAlarmMenuSheet({
                 leading: Icon(
                   Icons.notifications_active_rounded,
                   color: reminderEnabled
-                      ? SafeHomeColors.primary
-                      : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
+                      ? MaiYenColors.primary
+                      : MaiYenColors.textSecondary.withValues(alpha: 0.45),
                 ),
                 title: Text(
                   strings.t('Hẹn giờ nhắc nhở'),
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     color: reminderEnabled
-                        ? SafeHomeColors.textPrimary
-                        : SafeHomeColors.textSecondary.withValues(alpha: 0.55),
+                        ? MaiYenColors.textPrimary
+                        : MaiYenColors.textSecondary.withValues(alpha: 0.55),
                   ),
                 ),
                 subtitle: Text(
@@ -228,13 +228,13 @@ Future<void> showHomeAlarmMenuSheet({
                       : strings.t('Chưa thiết lập'),
                   style: TextStyle(
                     color: reminderEnabled
-                        ? SafeHomeColors.textSecondary
-                        : SafeHomeColors.textSecondary.withValues(alpha: 0.45),
+                        ? MaiYenColors.textSecondary
+                        : MaiYenColors.textSecondary.withValues(alpha: 0.45),
                   ),
                 ),
                 trailing: const Icon(
                   Icons.chevron_right_rounded,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                 ),
                 onTap: () {
                   Navigator.pop(sheetContext);

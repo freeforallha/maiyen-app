@@ -15,15 +15,23 @@ import '../../../localization/app_strings.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 import '../../single_device_session_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../../../config/legacy_identifiers.dart';
 
 const String _autoAwayTaskDataKey =
-    'safehome_auto_away_foreground_task_config_v1';
+    MaiYenLegacyIdentifiers.autoAwayForegroundTaskConfigStorageKey;
 const int _autoAwayForegroundServiceId = 884201;
 
 @pragma('vm:entry-point')
+void maiYenAutoAwayForegroundTaskCallback() {
+  FlutterForegroundTask.setTaskHandler(_MaiYenAutoAwayTaskHandler());
+}
+
+/// Entry point cũ được giữ lại để các callback handle đã lưu từ bản MaiYen
+/// vẫn tiếp tục hoạt động sau khi nâng cấp lên MaiYen.
+@pragma('vm:entry-point')
 void safeHomeAutoAwayForegroundTaskCallback() {
-  FlutterForegroundTask.setTaskHandler(_SafeHomeAutoAwayTaskHandler());
+  maiYenAutoAwayForegroundTaskCallback();
 }
 
 class AndroidAutoAwayForegroundTaskService {
@@ -67,7 +75,8 @@ class AndroidAutoAwayForegroundTaskService {
 
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'safehome_auto_away_location_v1',
+        channelId:
+            MaiYenLegacyIdentifiers.androidAutoAwayLocationChannelId,
         channelName: strings.updatingLocationNotificationTitle(),
         channelDescription: strings.updatingLocationChannelDescription(),
         channelImportance: NotificationChannelImportance.LOW,
@@ -181,7 +190,7 @@ class AndroidAutoAwayForegroundTaskService {
       ],
       notificationTitle: strings.updatingLocationNotificationTitle(),
       notificationText: strings.updatingLocationNotificationBody(),
-      callback: safeHomeAutoAwayForegroundTaskCallback,
+      callback: maiYenAutoAwayForegroundTaskCallback,
     );
   }
 
@@ -283,7 +292,7 @@ class AndroidAutoAwayForegroundTaskService {
   }
 }
 
-class _SafeHomeAutoAwayTaskHandler extends TaskHandler {
+class _MaiYenAutoAwayTaskHandler extends TaskHandler {
   bool _heartbeatRunning = false;
   bool _firebaseReady = false;
 

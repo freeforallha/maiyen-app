@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/home_helper.dart';
-import '../../safehome_theme.dart';
+import '../../maiyen_theme.dart';
 
 class HomeDataHelpers {
   static List<String> mergeVisibleHomeOrder({
@@ -105,17 +105,17 @@ class HomeDataHelpers {
     final selected = homeId == selectedHome;
 
     if (level == "emergency") {
-      return SafeHomeColors.emergency;
+      return MaiYenColors.emergency;
     }
 
     if (level == "danger") {
-      return SafeHomeColors.danger;
+      return MaiYenColors.danger;
     }
 
     if (level == "warning") {
-      return SafeHomeColors.warning;
+      return MaiYenColors.warning;
     }
 
-    return selected ? SafeHomeColors.primary : SafeHomeColors.safe;
+    return selected ? MaiYenColors.primary : MaiYenColors.safe;
   }
 }

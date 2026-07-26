@@ -8,9 +8,9 @@ import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../pages/home/home_data_helpers.dart';
 import '../helpers/emergency_pulse_ticker.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 import '../services/notification_service.dart';
 
 class StatusPanel extends StatefulWidget {
@@ -127,22 +127,22 @@ class _StatusPanelState extends State<StatusPanel> {
 
   Color _statusColor(String level) {
     if (level == "no_data") {
-      return SafeHomeColors.textSecondary;
+      return MaiYenColors.textSecondary;
     }
 
     if (level == "emergency") {
-      return SafeHomeColors.emergency;
+      return MaiYenColors.emergency;
     }
 
     if (level == "danger") {
-      return SafeHomeColors.danger;
+      return MaiYenColors.danger;
     }
 
     if (level == "warning") {
-      return SafeHomeColors.warning;
+      return MaiYenColors.warning;
     }
 
-    return SafeHomeColors.safe;
+    return MaiYenColors.safe;
   }
 
   IconData _statusIcon(String level) {
@@ -398,7 +398,7 @@ class _StatusPanelState extends State<StatusPanel> {
         : 0;
     var repeatSaving = false;
 
-    SafeHomeNavigation.showModalSheet<void>(
+    MaiYenNavigation.showModalSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
@@ -408,7 +408,7 @@ class _StatusPanelState extends State<StatusPanel> {
               child: Container(
                 padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
                 decoration: const BoxDecoration(
-                  color: SafeHomeColors.surface,
+                  color: MaiYenColors.surface,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
                 ),
                 child: Column(
@@ -419,7 +419,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       height: 5,
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: SafeHomeColors.border,
+                        color: MaiYenColors.border,
                         borderRadius: BorderRadius.circular(999),
                       ),
                     ),
@@ -428,7 +428,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
-                        color: SafeHomeColors.textPrimary,
+                        color: MaiYenColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 14),
@@ -440,17 +440,17 @@ class _StatusPanelState extends State<StatusPanel> {
                             )
                           : _strings.t('Bảo vệ'),
                       subtitle: _strings.t('Giám sát toàn diện'),
-                      color: SafeHomeColors.danger,
+                      color: MaiYenColors.danger,
                       selected: currentMode == 'armed',
                       trailing: Container(
                         width: 124,
                         height: 40,
                         padding: const EdgeInsets.only(left: 10),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
+                          color: MaiYenColors.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: SafeHomeColors.primary.withValues(
+                            color: MaiYenColors.primary.withValues(
                               alpha: 0.28,
                             ),
                           ),
@@ -477,7 +477,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                   borderRadius: BorderRadius.circular(14),
                                   icon: const Icon(
                                     Icons.keyboard_arrow_down_rounded,
-                                    color: SafeHomeColors.primary,
+                                    color: MaiYenColors.primary,
                                   ),
                                   items: allowedRepeatMinutes
                                       .map(
@@ -492,7 +492,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                             style: const TextStyle(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w700,
-                                              color: SafeHomeColors.textPrimary,
+                                              color: MaiYenColors.textPrimary,
                                             ),
                                           ),
                                         ),
@@ -551,8 +551,8 @@ class _StatusPanelState extends State<StatusPanel> {
                           : _strings.t(
                               'Sử dụng báo động theo lịch đã thiết lập',
                             ),
-                      color: SafeHomeColors.textSecondary,
-                      selectedColor: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
+                      selectedColor: MaiYenColors.textSecondary,
                       selected: currentMode == 'normal',
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -566,7 +566,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       subtitle: _strings.t(
                         'Chỉ gửi thông báo, không kích hoạt báo động',
                       ),
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                       selected: currentMode == 'unprotected',
                       onTap: () {
                         Navigator.pop(sheetContext);
@@ -595,8 +595,8 @@ class _StatusPanelState extends State<StatusPanel> {
   }) {
     return Material(
       color: selected
-          ? SafeHomeColors.primary.withValues(alpha: 0.08)
-          : SafeHomeColors.surface,
+          ? MaiYenColors.primary.withValues(alpha: 0.08)
+          : MaiYenColors.surface,
       borderRadius: BorderRadius.circular(18),
       child: InkWell(
         onTap: onTap,
@@ -607,8 +607,8 @@ class _StatusPanelState extends State<StatusPanel> {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: selected
-                  ? SafeHomeColors.primary.withValues(alpha: 0.42)
-                  : SafeHomeColors.border,
+                  ? MaiYenColors.primary.withValues(alpha: 0.42)
+                  : MaiYenColors.border,
               width: selected ? 1.2 : 1,
             ),
           ),
@@ -619,14 +619,14 @@ class _StatusPanelState extends State<StatusPanel> {
                 height: 40,
                 decoration: BoxDecoration(
                   color: selected
-                      ? SafeHomeColors.primary.withValues(alpha: 0.14)
+                      ? MaiYenColors.primary.withValues(alpha: 0.14)
                       : color.withValues(alpha: 0.11),
                   borderRadius: BorderRadius.circular(13),
                 ),
                 child: Icon(
                   icon,
                   color: selected
-                      ? (selectedColor ?? SafeHomeColors.primary)
+                      ? (selectedColor ?? MaiYenColors.primary)
                       : color,
                   size: 21,
                 ),
@@ -644,7 +644,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w800,
-                        color: SafeHomeColors.textPrimary,
+                        color: MaiYenColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -654,7 +654,7 @@ class _StatusPanelState extends State<StatusPanel> {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 11.5,
-                        color: SafeHomeColors.textSecondary,
+                        color: MaiYenColors.textSecondary,
                       ),
                     ),
                   ],
@@ -675,7 +675,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     final strings = AppStrings.of(context);
 
-    SafeHomeNavigation.showModalSheet<void>(
+    MaiYenNavigation.showModalSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -687,7 +687,7 @@ class _StatusPanelState extends State<StatusPanel> {
             ),
             padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
             decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
+              color: MaiYenColors.background,
               borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
             child: Column(
@@ -698,7 +698,7 @@ class _StatusPanelState extends State<StatusPanel> {
                   height: 5,
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
+                    color: MaiYenColors.border,
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
@@ -710,13 +710,13 @@ class _StatusPanelState extends State<StatusPanel> {
                         style: const TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w900,
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                         ),
                       ),
                     ),
                     const Icon(
                       Icons.insights_rounded,
-                      color: SafeHomeColors.primary,
+                      color: MaiYenColors.primary,
                     ),
                   ],
                 ),
@@ -973,7 +973,7 @@ class _StatusPanelState extends State<StatusPanel> {
           _summarySection(
             title: strings.emergencySectionTitle(),
             icon: Icons.crisis_alert_rounded,
-            color: SafeHomeColors.emergency,
+            color: MaiYenColors.emergency,
             items: emergencyIssues,
           ),
           const SizedBox(height: 12),
@@ -982,7 +982,7 @@ class _StatusPanelState extends State<StatusPanel> {
           _summarySection(
             title: strings.t("Cần xử lý ngay"),
             icon: Icons.warning_amber_rounded,
-            color: SafeHomeColors.danger,
+            color: MaiYenColors.danger,
             items: dangerIssues,
           ),
           const SizedBox(height: 12),
@@ -991,7 +991,7 @@ class _StatusPanelState extends State<StatusPanel> {
           _summarySection(
             title: strings.t("Cần kiểm tra"),
             icon: Icons.info_outline_rounded,
-            color: SafeHomeColors.warning,
+            color: MaiYenColors.warning,
             items: warningIssues,
           ),
           const SizedBox(height: 12),
@@ -999,14 +999,14 @@ class _StatusPanelState extends State<StatusPanel> {
         _summarySection(
           title: strings.actionSuggestionTitle(),
           icon: Icons.tips_and_updates_rounded,
-          color: SafeHomeColors.info,
+          color: MaiYenColors.info,
           items: actionSuggestions,
         ),
         const SizedBox(height: 12),
         _summarySection(
           title: strings.t("Tổng hợp trạng thái"),
           icon: Icons.bar_chart_rounded,
-          color: SafeHomeColors.safe,
+          color: MaiYenColors.safe,
           items: overviewItems.isEmpty
               ? [strings.t("Chưa có dữ liệu tổng quan")]
               : overviewItems,
@@ -1022,13 +1022,13 @@ class _StatusPanelState extends State<StatusPanel> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: SafeHomeColors.textSecondary, size: 34),
+            Icon(icon, color: MaiYenColors.textSecondary, size: 34),
             const SizedBox(height: 10),
             Text(
               text,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: SafeHomeColors.textSecondary,
+                color: MaiYenColors.textSecondary,
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
@@ -1048,7 +1048,7 @@ class _StatusPanelState extends State<StatusPanel> {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: color.withValues(alpha: 0.13)),
         boxShadow: [
@@ -1110,7 +1110,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 fontSize: 13.5,
                 height: 1.35,
                 fontWeight: FontWeight.w600,
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
               ),
             ),
           ),
@@ -1178,7 +1178,7 @@ class _StatusPanelState extends State<StatusPanel> {
       showTopToast(
         context,
         _strings.sirenMutedShortMessage(),
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
         icon: Icons.campaign_rounded,
       );
       return;
@@ -1187,7 +1187,7 @@ class _StatusPanelState extends State<StatusPanel> {
     showTopToast(
       context,
       _strings.sirenStopUnavailableMessage(),
-      color: SafeHomeColors.danger,
+      color: MaiYenColors.danger,
       icon: Icons.error_outline_rounded,
     );
   }
@@ -1262,7 +1262,7 @@ class _StatusPanelState extends State<StatusPanel> {
     if (!hasSiren) {
       _showQuickSirenMessage(
         message: _strings.noPhysicalSirenMessage(),
-        color: SafeHomeColors.textSecondary,
+        color: MaiYenColors.textSecondary,
         icon: Icons.campaign_rounded,
       );
       return;
@@ -1276,7 +1276,7 @@ class _StatusPanelState extends State<StatusPanel> {
     if (!sirenConnected) {
       _showQuickSirenMessage(
         message: _strings.sirenConnectionIssueMessage(),
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
         icon: Icons.wifi_off_rounded,
       );
       return;
@@ -1284,7 +1284,7 @@ class _StatusPanelState extends State<StatusPanel> {
 
     _showQuickSirenMessage(
       message: _strings.sirenReadyMessage(),
-      color: SafeHomeColors.safe,
+      color: MaiYenColors.safe,
       icon: Icons.campaign_rounded,
     );
   }
@@ -1306,12 +1306,12 @@ class _StatusPanelState extends State<StatusPanel> {
       valueListenable: EmergencyPulseTicker.phase,
       builder: (context, dangerPhase, child) {
         final color = !hasSiren
-            ? SafeHomeColors.textSecondary
+            ? MaiYenColors.textSecondary
             : sirenActive
-            ? (dangerPhase ? SafeHomeColors.danger : SafeHomeColors.warning)
+            ? (dangerPhase ? MaiYenColors.danger : MaiYenColors.warning)
             : !sirenConnected
-            ? SafeHomeColors.warning
-            : SafeHomeColors.safe;
+            ? MaiYenColors.warning
+            : MaiYenColors.safe;
 
         return Tooltip(
           message: tooltip,
@@ -1389,7 +1389,7 @@ class _StatusPanelState extends State<StatusPanel> {
             const Icon(
               Icons.thermostat_rounded,
               size: 15,
-              color: SafeHomeColors.textSecondary,
+              color: MaiYenColors.textSecondary,
             ),
             const SizedBox(width: 3),
             Text(
@@ -1400,7 +1400,7 @@ class _StatusPanelState extends State<StatusPanel> {
                 fontSize: 11.2,
                 height: 1,
                 fontWeight: FontWeight.w800,
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
               ),
             ),
           ],
@@ -1485,8 +1485,8 @@ class _StatusPanelState extends State<StatusPanel> {
         : "$displaySecondLine... →";
 
     final emergencyPulseColor = _emergencyPulseDanger
-        ? SafeHomeColors.danger
-        : SafeHomeColors.warning;
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
     final statusColor = emergencyStatus
         ? emergencyPulseColor
         : _statusColor(level);
@@ -1494,7 +1494,7 @@ class _StatusPanelState extends State<StatusPanel> {
         ? emergencyPulseColor.withValues(
             alpha: _emergencyPulseDanger ? 0.20 : 0.15,
           )
-        : SafeHomeColors.surface;
+        : MaiYenColors.surface;
     final statusIcon = _statusIcon(level);
     final statusText = _statusText(level);
 
@@ -1618,7 +1618,7 @@ class _StatusPanelState extends State<StatusPanel> {
                           fontWeight: FontWeight.w800,
                           color: issues.isNotEmpty
                               ? statusColor
-                              : SafeHomeColors.textSecondary,
+                              : MaiYenColors.textSecondary,
                         ),
                       ),
                     ),
@@ -1630,10 +1630,10 @@ class _StatusPanelState extends State<StatusPanel> {
                         color: emergencyStatus
                             ? statusColor
                             : manualSecurityMode
-                            ? SafeHomeColors.danger
+                            ? MaiYenColors.danger
                             : issues.isNotEmpty
                             ? statusColor
-                            : SafeHomeColors.textSecondary,
+                            : MaiYenColors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -1651,7 +1651,7 @@ class _StatusPanelState extends State<StatusPanel> {
                             decoration: BoxDecoration(
                               color: issues.isNotEmpty
                                   ? statusColor
-                                  : SafeHomeColors.textSecondary,
+                                  : MaiYenColors.textSecondary,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -1666,7 +1666,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                 height: 1.15,
                                 color: issues.isNotEmpty
                                     ? statusColor
-                                    : SafeHomeColors.textSecondary,
+                                    : MaiYenColors.textSecondary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -1696,29 +1696,29 @@ class _StatusPanelState extends State<StatusPanel> {
                                 : null,
                             active: normalizedSecurityMode != "normal",
                             activeColor: normalizedSecurityMode == "unprotected"
-                                ? SafeHomeColors.warning
-                                : SafeHomeColors.danger,
+                                ? MaiYenColors.warning
+                                : MaiYenColors.danger,
                             onTap: () => _showSecurityModeOptions(context),
                           ),
                         ),
                         Container(
                           width: 1,
                           height: 22,
-                          color: SafeHomeColors.border,
+                          color: MaiYenColors.border,
                         ),
                         Expanded(
                           child: _alarmStatusItem(
                             icon: Icons.crisis_alert_rounded,
                             value: alarmScheduleText,
                             active: alarmScheduleSet,
-                            activeColor: SafeHomeColors.primary,
+                            activeColor: MaiYenColors.primary,
                             onTap: widget.onScheduleAlarm,
                           ),
                         ),
                         Container(
                           width: 1,
                           height: 22,
-                          color: SafeHomeColors.border,
+                          color: MaiYenColors.border,
                         ),
                         Expanded(
                           child: _alarmStatusItem(
@@ -1727,7 +1727,7 @@ class _StatusPanelState extends State<StatusPanel> {
                                 ? alarmPauseText
                                 : _strings.t("Tắt"),
                             active: alarmPauseSet,
-                            activeColor: SafeHomeColors.warning,
+                            activeColor: MaiYenColors.warning,
                             onTap: widget.onAlarmPauseToday,
                           ),
                         ),
@@ -1752,7 +1752,7 @@ class _StatusPanelState extends State<StatusPanel> {
     required Color activeColor,
     VoidCallback? onTap,
   }) {
-    final color = active ? activeColor : SafeHomeColors.textSecondary;
+    final color = active ? activeColor : MaiYenColors.textSecondary;
     final cleanSecondaryValue = secondaryValue?.trim() ?? "";
     final displayValue = cleanSecondaryValue.isEmpty
         ? value

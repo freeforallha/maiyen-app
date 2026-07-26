@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
-import '../../safehome_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
+import '../../maiyen_theme.dart';
 
 Future<Map<String, String>?> showRenameHomeSheet({
   required BuildContext context,
@@ -15,7 +15,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
   String inputName = currentName.trim();
   String inputAddress = currentAddress.trim();
 
-  return SafeHomeNavigation.showModalSheet<Map<String, String>>(
+  return MaiYenNavigation.showModalSheet<Map<String, String>>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -30,7 +30,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
           child: Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
             decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
+              color: MaiYenColors.background,
               borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: StatefulBuilder(
@@ -45,25 +45,25 @@ Future<Map<String, String>?> showRenameHomeSheet({
                   return InputDecoration(
                     labelText: label,
                     hintText: hint,
-                    prefixIcon: Icon(icon, color: SafeHomeColors.primary),
+                    prefixIcon: Icon(icon, color: MaiYenColors.primary),
                     filled: true,
-                    fillColor: SafeHomeColors.surface,
+                    fillColor: MaiYenColors.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: const BorderSide(
-                        color: SafeHomeColors.border,
+                        color: MaiYenColors.border,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: const BorderSide(
-                        color: SafeHomeColors.border,
+                        color: MaiYenColors.border,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: const BorderSide(
-                        color: SafeHomeColors.primary,
+                        color: MaiYenColors.primary,
                         width: 1.5,
                       ),
                     ),
@@ -91,7 +91,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
                         width: 44,
                         height: 5,
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.border,
+                          color: MaiYenColors.border,
                           borderRadius: BorderRadius.circular(999),
                         ),
                       ),
@@ -100,12 +100,12 @@ Future<Map<String, String>?> showRenameHomeSheet({
                         width: 58,
                         height: 58,
                         decoration: const BoxDecoration(
-                          color: SafeHomeColors.primarySoft,
+                          color: MaiYenColors.primarySoft,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.home_rounded,
-                          color: SafeHomeColors.primary,
+                          color: MaiYenColors.primary,
                           size: 31,
                         ),
                       ),
@@ -115,7 +115,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
                             ? strings.t("Đổi tên hiển thị")
                             : strings.t("Cập nhật thông tin nhà"),
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 19,
                           fontWeight: FontWeight.w900,
                         ),
@@ -172,8 +172,8 @@ Future<Map<String, String>?> showRenameHomeSheet({
                             style: const TextStyle(fontWeight: FontWeight.w800),
                           ),
                           style: FilledButton.styleFrom(
-                            backgroundColor: SafeHomeColors.primary,
-                            disabledBackgroundColor: SafeHomeColors.border,
+                            backgroundColor: MaiYenColors.primary,
+                            disabledBackgroundColor: MaiYenColors.border,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -191,7 +191,7 @@ Future<Map<String, String>?> showRenameHomeSheet({
                               ),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 12,
                           height: 1.35,
                         ),
@@ -216,7 +216,7 @@ Future<String?> showShareHomeSheet({
   String inputEmail = "";
   FocusManager.instance.primaryFocus?.unfocus();
 
-  return SafeHomeNavigation.pushChildPage<String>(
+  return MaiYenNavigation.pushChildPage<String>(
     context: context,
     routeName: "share_home",
     builder: (pageContext) {
@@ -235,7 +235,7 @@ Future<String?> showShareHomeSheet({
           final qrSize = keyboardOpen ? 130.0 : 180.0;
 
           return ColoredBox(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             child: SafeArea(
               child: SingleChildScrollView(
                 keyboardDismissBehavior:
@@ -247,14 +247,14 @@ Future<String?> showShareHomeSheet({
                       children: [
                         const Icon(
                           Icons.share_rounded,
-                          color: SafeHomeColors.info,
+                          color: MaiYenColors.info,
                           size: 25,
                         ),
                         const SizedBox(width: 10),
                         Text(
                           strings.t("Chia sẻ nhà"),
                           style: const TextStyle(
-                            color: SafeHomeColors.textPrimary,
+                            color: MaiYenColors.textPrimary,
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
                           ),
@@ -338,7 +338,7 @@ void showJoinHomeQrSheet({
   required AppStrings strings,
   required String qrData,
 }) {
-  SafeHomeNavigation.showModalSheet(
+  MaiYenNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (_) {

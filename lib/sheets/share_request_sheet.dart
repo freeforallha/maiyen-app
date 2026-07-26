@@ -4,10 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 import '../services/share_service.dart';
 import '../services/home_notification_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 Future<bool?> showShareRequestSheet({
   required BuildContext context,
@@ -62,7 +62,7 @@ Future<bool?> showShareRequestSheet({
     return false;
   }
 
-  return SafeHomeNavigation.pushChildPage<bool>(
+  return MaiYenNavigation.pushChildPage<bool>(
     context: context,
     routeName: "share_requests",
     builder: (sheetContext) {

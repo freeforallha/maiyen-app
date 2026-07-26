@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../../../config/legacy_identifiers.dart';
 
 /// Cấu hình hiển thị notification riêng cho iOS.
 ///
@@ -12,15 +13,20 @@ class IosNotificationConfig {
   /// Có thể chuẩn bị build bằng:
   /// --dart-define=SAFEHOME_IOS_CRITICAL_ALERTS=true
   static const bool criticalAlertsEntitlementEnabled = bool.fromEnvironment(
-    'SAFEHOME_IOS_CRITICAL_ALERTS',
+    MaiYenLegacyIdentifiers.iosCriticalAlertsDartDefine,
     defaultValue: false,
   );
 
-  static const String securityAlarmCategoryId = 'SAFEHOME_SECURITY_ALARM';
-  static const String emergencyAlarmCategoryId = 'SAFEHOME_EMERGENCY_ALARM';
-  static const String reminderCategoryId = 'SAFEHOME_REMINDER';
-  static const String sensorCategoryId = 'SAFEHOME_SENSOR';
-  static const String chatCategoryId = 'SAFEHOME_CHAT';
+  static const String securityAlarmCategoryId =
+      MaiYenLegacyIdentifiers.iosSecurityAlarmCategoryId;
+  static const String emergencyAlarmCategoryId =
+      MaiYenLegacyIdentifiers.iosEmergencyAlarmCategoryId;
+  static const String reminderCategoryId =
+      MaiYenLegacyIdentifiers.iosReminderCategoryId;
+  static const String sensorCategoryId =
+      MaiYenLegacyIdentifiers.iosSensorCategoryId;
+  static const String chatCategoryId =
+      MaiYenLegacyIdentifiers.iosChatCategoryId;
 
   static const DarwinInitializationSettings initializationSettings =
       DarwinInitializationSettings(
@@ -73,7 +79,7 @@ class IosNotificationConfig {
       categoryIdentifier: isEmergency
           ? emergencyAlarmCategoryId
           : securityAlarmCategoryId,
-      threadIdentifier: 'safehome_alarm_$homeId',
+      threadIdentifier: MaiYenLegacyIdentifiers.iosAlarmThreadId(homeId),
       interruptionLevel: useCritical
           ? InterruptionLevel.critical
           : InterruptionLevel.timeSensitive,
@@ -94,13 +100,13 @@ class IosNotificationConfig {
       presentSound: true,
       sound: 'default',
       categoryIdentifier: sensorCategoryId,
-      threadIdentifier: 'safehome_sensor_$homeId',
+      threadIdentifier: MaiYenLegacyIdentifiers.iosSensorThreadId(homeId),
       interruptionLevel: InterruptionLevel.active,
     );
   }
 
   static DarwinNotificationDetails chatDetails({required String homeId}) {
-    final safeHomeId = _safeIdentifierPart(homeId, fallback: 'all');
+    final safeIdentifier = _safeIdentifierPart(homeId, fallback: 'all');
 
     return DarwinNotificationDetails(
       presentAlert: true,
@@ -108,7 +114,7 @@ class IosNotificationConfig {
       presentSound: true,
       sound: 'default',
       categoryIdentifier: chatCategoryId,
-      threadIdentifier: 'safehome_chat_$safeHomeId',
+      threadIdentifier: MaiYenLegacyIdentifiers.iosChatThreadId(safeIdentifier),
       interruptionLevel: InterruptionLevel.active,
     );
   }
@@ -120,7 +126,7 @@ class IosNotificationConfig {
         presentSound: true,
         sound: 'default',
         categoryIdentifier: reminderCategoryId,
-        threadIdentifier: 'safehome_reminder',
+        threadIdentifier: MaiYenLegacyIdentifiers.iosReminderThreadId,
         interruptionLevel: InterruptionLevel.active,
       );
 }

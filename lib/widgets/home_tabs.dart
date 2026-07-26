@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../helpers/emergency_pulse_ticker.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 
 class HomeTabs extends StatefulWidget {
   final Map<String, dynamic> homes;
@@ -77,7 +77,7 @@ class _HomeTabsState extends State<HomeTabs> {
   bool _hasEmergencyHome() {
     for (final homeId in homeOrder) {
       if (homes.containsKey(homeId) &&
-          getHomeColor(homeId) == SafeHomeColors.emergency) {
+          getHomeColor(homeId) == MaiYenColors.emergency) {
         return true;
       }
     }
@@ -107,7 +107,7 @@ class _HomeTabsState extends State<HomeTabs> {
   }
 
   bool _isEmergencyHome(String homeId) {
-    return getHomeColor(homeId) == SafeHomeColors.emergency;
+    return getHomeColor(homeId) == MaiYenColors.emergency;
   }
 
   Color _displayHomeColor(String homeId) {
@@ -116,13 +116,13 @@ class _HomeTabsState extends State<HomeTabs> {
     }
 
     return _emergencyPulseDanger
-        ? SafeHomeColors.danger
-        : SafeHomeColors.warning;
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
   }
 
   Color _homeCardBackground(String homeId) {
     if (!_isEmergencyHome(homeId)) {
-      return SafeHomeColors.surface;
+      return MaiYenColors.surface;
     }
 
     return _displayHomeColor(
@@ -209,7 +209,7 @@ class _HomeTabsState extends State<HomeTabs> {
         ? ownerEmail
         : strings.t("Chưa có thông tin");
 
-    SafeHomeNavigation.showModalSheet<void>(
+    MaiYenNavigation.showModalSheet<void>(
       context: context,
       showDragHandle: false,
       backgroundColor: Colors.transparent,
@@ -218,7 +218,7 @@ class _HomeTabsState extends State<HomeTabs> {
           child: Container(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
             decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
+              color: MaiYenColors.background,
               borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: Column(
@@ -229,7 +229,7 @@ class _HomeTabsState extends State<HomeTabs> {
                   height: 5,
                   margin: const EdgeInsets.only(bottom: 15),
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
+                    color: MaiYenColors.border,
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
@@ -237,9 +237,9 @@ class _HomeTabsState extends State<HomeTabs> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.surface,
+                    color: MaiYenColors.surface,
                     borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: SafeHomeColors.border),
+                    border: Border.all(color: MaiYenColors.border),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.04),
@@ -253,14 +253,14 @@ class _HomeTabsState extends State<HomeTabs> {
                       Icon(
                         isShared ? Icons.share_rounded : Icons.home_rounded,
                         size: 34,
-                        color: SafeHomeColors.primary,
+                        color: MaiYenColors.primary,
                       ),
                       const SizedBox(height: 9),
                       Text(
                         displayName,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 19,
                           height: 1.2,
                           fontWeight: FontWeight.w900,
@@ -303,7 +303,7 @@ class _HomeTabsState extends State<HomeTabs> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 19, color: SafeHomeColors.primary),
+        Icon(icon, size: 19, color: MaiYenColors.primary),
         const SizedBox(width: 9),
         Expanded(
           child: Column(
@@ -312,7 +312,7 @@ class _HomeTabsState extends State<HomeTabs> {
               Text(
                 label,
                 style: const TextStyle(
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
@@ -321,7 +321,7 @@ class _HomeTabsState extends State<HomeTabs> {
               Text(
                 value,
                 style: const TextStyle(
-                  color: SafeHomeColors.textPrimary,
+                  color: MaiYenColors.textPrimary,
                   fontSize: 13.5,
                   height: 1.3,
                   fontWeight: FontWeight.w800,
@@ -332,7 +332,7 @@ class _HomeTabsState extends State<HomeTabs> {
                 Text(
                   subtitle,
                   style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
+                    color: MaiYenColors.textSecondary,
                     fontSize: 11.5,
                     height: 1.25,
                     fontWeight: FontWeight.w500,
@@ -473,7 +473,7 @@ class _HomeTabsState extends State<HomeTabs> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: SafeHomeColors.textSecondary
+                                  color: MaiYenColors.textSecondary
                                       .withValues(alpha: 0.82),
                                   fontSize: 11,
                                   height: 1.05,
@@ -526,10 +526,10 @@ class _HomeTabsState extends State<HomeTabs> {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.danger,
+                          color: MaiYenColors.danger,
                           borderRadius: BorderRadius.circular(999),
                           border: Border.all(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             width: 2,
                           ),
                         ),
@@ -755,15 +755,15 @@ class _HomeTabsState extends State<HomeTabs> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: SafeHomeColors.danger,
+                                    color: MaiYenColors.danger,
                                     borderRadius: BorderRadius.circular(999),
                                     border: Border.all(
-                                      color: SafeHomeColors.surface,
+                                      color: MaiYenColors.surface,
                                       width: 2,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: SafeHomeColors.danger.withValues(
+                                        color: MaiYenColors.danger.withValues(
                                           alpha: 0.24,
                                         ),
                                         blurRadius: 8,

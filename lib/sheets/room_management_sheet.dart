@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
-import '../safehome_theme.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../maiyen_theme.dart';
 
 Future<void> showRoomManagementSheet({
   required BuildContext context,
@@ -54,12 +54,12 @@ Future<void> showRoomManagementSheet({
 
   final roomsRef = homeRef.child("rooms");
 
-  await SafeHomeNavigation.pushChildPage<void>(
+  await MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "room_management",
     builder: (sheetContext) {
       return ColoredBox(
-        color: SafeHomeColors.background,
+        color: MaiYenColors.background,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),

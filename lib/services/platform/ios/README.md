@@ -1,4 +1,4 @@
-# SafeHome iOS Alarm Bridge
+# MaiYen iOS Alarm Bridge
 
 ## Đã triển khai trong bước này
 
@@ -45,7 +45,7 @@ notification thông thường, không làm hỏng build tài khoản cá nhân.
 
 - iOS không cho ứng dụng tự ép mở giao diện Flutter khi đang background hoặc
   ở màn hình khoá. Notification hệ thống là điểm tiếp cận chính; khi người
-  dùng chạm vào, SafeHome mới mở `FullscreenAlarmPage`.
+  dùng chạm vào, MaiYen mới mở `FullscreenAlarmPage`.
 - Push `alarm_resolved` chạy nền có thể bị iOS trì hoãn hoặc không giao ngay.
   Việc dọn notification đã giao là best-effort; dữ liệu incident trên Firebase
   vẫn là nguồn trạng thái thật khi ứng dụng được mở lại.

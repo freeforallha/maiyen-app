@@ -5,22 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../helpers/top_toast.dart';
 import '../helpers/home_helper.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
 import '../services/home_realtime_coordinator.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
-import '../navigation/safehome_navigation.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../config/legacy_identifiers.dart';
 
-class AllHomePage extends StatefulWidget {
+class AllHome extends StatefulWidget {
   final List<String> homeOrder;
 
-  const AllHomePage({super.key, required this.homeOrder});
+  const AllHome({super.key, required this.homeOrder});
 
   @override
-  State<AllHomePage> createState() => _AllHomePageState();
+  State<AllHome> createState() => _AllHomeState();
 }
 
-class _AllHomePageState extends State<AllHomePage> {
+class _AllHomeState extends State<AllHome> {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> homes = {};
   Map<String, int> unreadChatCounts = {};
@@ -123,7 +124,7 @@ class _AllHomePageState extends State<AllHomePage> {
     int sheetIndex = summaryIndex;
     Timer? sheetTimer;
 
-    SafeHomeNavigation.showModalSheet(
+    MaiYenNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -139,7 +140,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   });
                 });
 
-                final safeHomes = <Map<String, dynamic>>[];
+                final normalHomes = <Map<String, dynamic>>[];
                 final warningHomes = <Map<String, dynamic>>[];
                 final dangerHomes = <Map<String, dynamic>>[];
                 final emergencyHomes = <Map<String, dynamic>>[];
@@ -172,7 +173,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   } else if (level == "warning") {
                     warningHomes.add(item);
                   } else {
-                    safeHomes.add(item);
+                    normalHomes.add(item);
                   }
                 }
 
@@ -332,7 +333,7 @@ class _AllHomePageState extends State<AllHomePage> {
                         section(
                           title: _strings.emergencyStatusTitle(),
                           icon: Icons.crisis_alert_rounded,
-                          color: SafeHomeColors.emergency,
+                          color: MaiYenColors.emergency,
                           items: emergencyHomes,
                           compact: true,
                         ),
@@ -353,8 +354,8 @@ class _AllHomePageState extends State<AllHomePage> {
                         section(
                           title: _strings.t("An toàn"),
                           icon: Icons.check_circle_rounded,
-                          color: SafeHomeColors.safe,
-                          items: safeHomes,
+                          color: MaiYenColors.safe,
+                          items: normalHomes,
                           compact: false,
                         ),
                       ],
@@ -783,7 +784,7 @@ class _AllHomePageState extends State<AllHomePage> {
             onTap: () {
               final allSelected = ids.every(selectedHomes.contains);
 
-              SafeHomeNavigation.showModalSheet(
+              MaiYenNavigation.showModalSheet(
                 context: context,
                 showDragHandle: false,
                 backgroundColor: Colors.transparent,
@@ -792,7 +793,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
                       decoration: const BoxDecoration(
-                        color: SafeHomeColors.surface,
+                        color: MaiYenColors.surface,
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(26),
                         ),
@@ -805,14 +806,14 @@ class _AllHomePageState extends State<AllHomePage> {
                             height: 5,
                             margin: const EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                               borderRadius: BorderRadius.circular(999),
                             ),
                           ),
                           ListTile(
                             leading: const Icon(
                               Icons.edit_rounded,
-                              color: SafeHomeColors.info,
+                              color: MaiYenColors.info,
                             ),
                             title: Text(_strings.t("Đổi tên nhóm")),
                             onTap: () {
@@ -825,7 +826,7 @@ class _AllHomePageState extends State<AllHomePage> {
                               allSelected
                                   ? Icons.check_box_rounded
                                   : Icons.check_box_outline_blank_rounded,
-                              color: SafeHomeColors.primary,
+                              color: MaiYenColors.primary,
                             ),
                             title: Text(
                               allSelected
@@ -860,7 +861,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
-                      color: SafeHomeColors.textPrimary,
+                      color: MaiYenColors.textPrimary,
                       letterSpacing: -0.15,
                     ),
                   ),
@@ -870,7 +871,7 @@ class _AllHomePageState extends State<AllHomePage> {
                     style: const TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                   ),
                 ],
@@ -916,9 +917,9 @@ class _AllHomePageState extends State<AllHomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: SafeHomeColors.danger,
+          color: MaiYenColors.danger,
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: SafeHomeColors.surface, width: 1.5),
+          border: Border.all(color: MaiYenColors.surface, width: 1.5),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.14),
@@ -952,20 +953,20 @@ class _AllHomePageState extends State<AllHomePage> {
 
     final emergencyStatus = level == "emergency";
     final emergencyPulseColor = _emergencyPulseDanger
-        ? SafeHomeColors.danger
-        : SafeHomeColors.warning;
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
     final statusColor = emergencyStatus
         ? emergencyPulseColor
         : level == "danger"
-        ? SafeHomeColors.danger
+        ? MaiYenColors.danger
         : level == "warning"
-        ? SafeHomeColors.warning
-        : SafeHomeColors.safe;
+        ? MaiYenColors.warning
+        : MaiYenColors.safe;
     final cardColor = emergencyStatus
         ? emergencyPulseColor.withValues(
             alpha: _emergencyPulseDanger ? 0.20 : 0.15,
           )
-        : SafeHomeColors.surface;
+        : MaiYenColors.surface;
 
     final rawName = data["_customName"] ?? data["name"] ?? homeId;
 
@@ -1000,11 +1001,11 @@ class _AllHomePageState extends State<AllHomePage> {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: selected ? SafeHomeColors.primarySoft : cardColor,
+          color: selected ? MaiYenColors.primarySoft : cardColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: selected
-                ? SafeHomeColors.primary
+                ? MaiYenColors.primary
                 : statusColor.withValues(alpha: emergencyStatus ? 0.95 : 0.68),
             width: selected
                 ? 2.4
@@ -1046,7 +1047,7 @@ class _AllHomePageState extends State<AllHomePage> {
                 child: Icon(
                   Icons.check_circle_rounded,
                   size: 12,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                 ),
               ),
           ],
@@ -1394,7 +1395,7 @@ class _AllHomePageState extends State<AllHomePage> {
         ),
       ];
 
-      return SafeHomeNavigation.showModalSheet<Map<String, dynamic>>(
+      return MaiYenNavigation.showModalSheet<Map<String, dynamic>>(
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
@@ -1452,14 +1453,14 @@ class _AllHomePageState extends State<AllHomePage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: SafeHomeColors.border),
+                        border: Border.all(color: MaiYenColors.border),
                       ),
                       child: Column(
                         children: [
                           Text(
                             label,
                             style: const TextStyle(
-                              color: SafeHomeColors.textSecondary,
+                              color: MaiYenColors.textSecondary,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                             ),
@@ -1468,7 +1469,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           Text(
                             value,
                             style: const TextStyle(
-                              color: SafeHomeColors.textPrimary,
+                              color: MaiYenColors.textPrimary,
                               fontSize: 15,
                               fontWeight: FontWeight.w800,
                             ),
@@ -1498,13 +1499,13 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         decoration: BoxDecoration(
                           color: selected
-                              ? SafeHomeColors.primary.withValues(alpha: 0.12)
+                              ? MaiYenColors.primary.withValues(alpha: 0.12)
                               : Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: selected
-                                ? SafeHomeColors.primary.withValues(alpha: 0.55)
-                                : SafeHomeColors.border,
+                                ? MaiYenColors.primary.withValues(alpha: 0.55)
+                                : MaiYenColors.border,
                             width: selected ? 1.3 : 1,
                           ),
                         ),
@@ -1516,8 +1517,8 @@ class _AllHomePageState extends State<AllHomePage> {
                               maxLines: 1,
                               style: TextStyle(
                                 color: selected
-                                    ? SafeHomeColors.primary
-                                    : SafeHomeColors.textPrimary,
+                                    ? MaiYenColors.primary
+                                    : MaiYenColors.textPrimary,
                                 fontSize: 12,
                                 fontWeight: selected
                                     ? FontWeight.w800
@@ -1561,7 +1562,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             height: 5,
                             margin: const EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                               borderRadius: BorderRadius.circular(999),
                             ),
                           ),
@@ -1571,14 +1572,14 @@ class _AllHomePageState extends State<AllHomePage> {
                                 width: 46,
                                 height: 46,
                                 decoration: BoxDecoration(
-                                  color: SafeHomeColors.primary.withValues(
+                                  color: MaiYenColors.primary.withValues(
                                     alpha: 0.10,
                                   ),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: const Icon(
                                   Icons.security_rounded,
-                                  color: SafeHomeColors.primary,
+                                  color: MaiYenColors.primary,
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -1589,7 +1590,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                     Text(
                                       _strings.t("Đặt báo động cho nhà"),
                                       style: const TextStyle(
-                                        color: SafeHomeColors.textPrimary,
+                                        color: MaiYenColors.textPrimary,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w900,
                                       ),
@@ -1598,7 +1599,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                     Text(
                                       selectedHomeCountText(),
                                       style: const TextStyle(
-                                        color: SafeHomeColors.textSecondary,
+                                        color: MaiYenColors.textSecondary,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -1631,9 +1632,9 @@ class _AllHomePageState extends State<AllHomePage> {
                               vertical: 7,
                             ),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.surface,
+                              color: MaiYenColors.surface,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: SafeHomeColors.border),
+                              border: Border.all(color: MaiYenColors.border),
                             ),
                             child: Row(
                               children: [
@@ -1641,7 +1642,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                   child: Text(
                                     _strings.t("Thời gian lặp lại"),
                                     style: const TextStyle(
-                                      color: SafeHomeColors.textPrimary,
+                                      color: MaiYenColors.textPrimary,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w800,
                                     ),
@@ -1656,7 +1657,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                       alignment: Alignment.centerRight,
                                       icon: const Icon(
                                         Icons.keyboard_arrow_down_rounded,
-                                        color: SafeHomeColors.textSecondary,
+                                        color: MaiYenColors.textSecondary,
                                       ),
                                       items: [
                                         DropdownMenuItem(
@@ -1698,9 +1699,9 @@ class _AllHomePageState extends State<AllHomePage> {
                             width: double.infinity,
                             padding: const EdgeInsets.fromLTRB(11, 10, 11, 12),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.surface,
+                              color: MaiYenColors.surface,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: SafeHomeColors.border),
+                              border: Border.all(color: MaiYenColors.border),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1710,7 +1711,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                   child: Text(
                                     _strings.t("Ngày trong tuần"),
                                     style: const TextStyle(
-                                      color: SafeHomeColors.textPrimary,
+                                      color: MaiYenColors.textPrimary,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w800,
                                     ),
@@ -1762,7 +1763,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             width: double.infinity,
                             child: FilledButton.icon(
                               style: FilledButton.styleFrom(
-                                backgroundColor: SafeHomeColors.primary,
+                                backgroundColor: MaiYenColors.primary,
                                 foregroundColor: Colors.white,
                               ),
                               onPressed: () {
@@ -1791,7 +1792,7 @@ class _AllHomePageState extends State<AllHomePage> {
       );
     }
 
-    final action = await SafeHomeNavigation.showModalSheet<String>(
+    final action = await MaiYenNavigation.showModalSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (actionSheetContext) {
@@ -2064,7 +2065,7 @@ class _AllHomePageState extends State<AllHomePage> {
       message = _strings.t("Các nhà đã chọn sẽ bị xoá vĩnh viễn.");
     }
 
-    final confirmOk = await SafeHomeNavigation.showModalSheet<bool>(
+    final confirmOk = await MaiYenNavigation.showModalSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
@@ -2143,7 +2144,7 @@ class _AllHomePageState extends State<AllHomePage> {
 
     String inputPassword = "";
 
-    final passwordOk = await SafeHomeNavigation.showModalSheet<bool>(
+    final passwordOk = await MaiYenNavigation.showModalSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -2356,7 +2357,7 @@ class _AllHomePageState extends State<AllHomePage> {
     final grouped = groupedHomes();
 
     return Scaffold(
-      backgroundColor: SafeHomeColors.background,
+      backgroundColor: MaiYenColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -2376,12 +2377,12 @@ class _AllHomePageState extends State<AllHomePage> {
             icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
             style:
                 IconButton.styleFrom(
-                  foregroundColor: SafeHomeColors.textPrimary,
+                  foregroundColor: MaiYenColors.textPrimary,
                   backgroundColor: Colors.transparent,
                   shape: const CircleBorder(),
                 ).copyWith(
                   overlayColor: WidgetStatePropertyAll(
-                    SafeHomeColors.primary.withValues(alpha: 0.10),
+                    MaiYenColors.primary.withValues(alpha: 0.10),
                   ),
                 ),
           ),
@@ -2422,16 +2423,12 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Safe",
-                            style: TextStyle(color: SafeHomeColors.primary),
-                          ),
-                          TextSpan(
                             text: "All",
-                            style: TextStyle(color: SafeHomeColors.textPrimary),
+                            style: TextStyle(color: MaiYenColors.primary),
                           ),
                           TextSpan(
                             text: "Home",
-                            style: TextStyle(color: SafeHomeColors.textPrimary),
+                            style: TextStyle(color: MaiYenColors.textPrimary),
                           ),
                         ],
                       ),
@@ -2451,12 +2448,12 @@ class _AllHomePageState extends State<AllHomePage> {
             ),
             style:
                 IconButton.styleFrom(
-                  foregroundColor: SafeHomeColors.textPrimary,
+                  foregroundColor: MaiYenColors.textPrimary,
                   backgroundColor: Colors.transparent,
                   shape: const CircleBorder(),
                 ).copyWith(
                   overlayColor: WidgetStatePropertyAll(
-                    SafeHomeColors.primary.withValues(alpha: 0.10),
+                    MaiYenColors.primary.withValues(alpha: 0.10),
                   ),
                 ),
             onPressed: () {
@@ -2477,12 +2474,12 @@ class _AllHomePageState extends State<AllHomePage> {
               icon: const Icon(Icons.deselect_rounded, size: 22),
               style:
                   IconButton.styleFrom(
-                    foregroundColor: SafeHomeColors.danger,
+                    foregroundColor: MaiYenColors.danger,
                     backgroundColor: Colors.transparent,
                     shape: const CircleBorder(),
                   ).copyWith(
                     overlayColor: WidgetStatePropertyAll(
-                      SafeHomeColors.danger.withValues(alpha: 0.10),
+                      MaiYenColors.danger.withValues(alpha: 0.10),
                     ),
                   ),
               onPressed: () {
@@ -2499,7 +2496,7 @@ class _AllHomePageState extends State<AllHomePage> {
       body: Stack(
         children: [
           Container(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             child: ListView(
               padding: EdgeInsets.fromLTRB(
                 12,
@@ -2592,9 +2589,12 @@ class _AllHomePageState extends State<AllHomePage> {
                           final ownerUid = currentUser.uid;
 
                           final qrData =
-                              "safehome_join_multi|$ownerUid|${selectedHomes.join(",")}";
+                              MaiYenLegacyIdentifiers.buildJoinMultipleHomesQr(
+                                ownerUid: ownerUid,
+                                homeIds: selectedHomes,
+                              );
 
-                          final targetEmail = await SafeHomeNavigation.showModalSheet<String>(
+                          final targetEmail = await MaiYenNavigation.showModalSheet<String>(
                             context: context,
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
@@ -2742,7 +2742,7 @@ class _AllHomePageState extends State<AllHomePage> {
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            SafeHomeColors
+                                                            MaiYenColors
                                                                 .primary,
                                                         foregroundColor:
                                                             Colors.white,
@@ -2934,7 +2934,7 @@ class _AllHomePageState extends State<AllHomePage> {
                             return;
                           }
 
-                          SafeHomeNavigation.showModalSheet(
+                          MaiYenNavigation.showModalSheet(
                             context: context,
                             isScrollControlled: true,
                             builder: (_) {

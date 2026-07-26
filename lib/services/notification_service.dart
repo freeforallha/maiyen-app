@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import '../app/safe_home_app.dart';
+import '../app/maiyen_app.dart';
 import '../config/brand_config.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_language_controller.dart';
@@ -15,7 +15,8 @@ import '../localization/app_strings.dart';
 import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
 import 'platform/ios/ios_notification_config.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../config/legacy_identifiers.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
@@ -693,7 +694,7 @@ class NotificationService {
     }
 
     final lowerTitle = cleanTitle.toLowerCase();
-    if (lowerTitle.contains('safehome') ||
+    if (lowerTitle.contains(MaiYenLegacyIdentifiers.legacyBrandToken) ||
         const {
           'alarm',
           'reminder',
@@ -1598,7 +1599,10 @@ class NotificationService {
       title: title,
       body: body,
       strings: strings,
-      tag: 'safehome_sensor_${homeId}_$deviceId',
+      tag: MaiYenLegacyIdentifiers.sensorNotificationTag(
+        homeId: homeId,
+        deviceId: deviceId,
+      ),
     );
 
     final iosDetails = IosNotificationConfig.sensorDetails(data: data);

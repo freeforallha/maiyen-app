@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
-import '../../safehome_theme.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../maiyen_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 Future<String?> showAddHomeOptionsSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  return SafeHomeNavigation.showModalSheet<String>(
+  return MaiYenNavigation.showModalSheet<String>(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {
@@ -22,7 +22,7 @@ Future<String?> showAddHomeOptionsSheet({
         return Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Material(
-            color: SafeHomeColors.surface,
+            color: MaiYenColors.surface,
             borderRadius: BorderRadius.circular(18),
             child: InkWell(
               borderRadius: BorderRadius.circular(18),
@@ -33,7 +33,7 @@ Future<String?> showAddHomeOptionsSheet({
                 padding: const EdgeInsets.fromLTRB(13, 11, 11, 11),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: SafeHomeColors.border),
+                  border: Border.all(color: MaiYenColors.border),
                 ),
                 child: Row(
                   children: [
@@ -54,7 +54,7 @@ Future<String?> showAddHomeOptionsSheet({
                           Text(
                             title,
                             style: const TextStyle(
-                              color: SafeHomeColors.textPrimary,
+                              color: MaiYenColors.textPrimary,
                               fontSize: 14.5,
                               fontWeight: FontWeight.w800,
                             ),
@@ -63,7 +63,7 @@ Future<String?> showAddHomeOptionsSheet({
                           Text(
                             subtitle,
                             style: const TextStyle(
-                              color: SafeHomeColors.textSecondary,
+                              color: MaiYenColors.textSecondary,
                               fontSize: 11.5,
                               fontWeight: FontWeight.w500,
                             ),
@@ -73,7 +73,7 @@ Future<String?> showAddHomeOptionsSheet({
                     ),
                     const Icon(
                       Icons.chevron_right_rounded,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                   ],
                 ),
@@ -87,7 +87,7 @@ Future<String?> showAddHomeOptionsSheet({
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
           decoration: const BoxDecoration(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           child: Column(
@@ -98,7 +98,7 @@ Future<String?> showAddHomeOptionsSheet({
                 height: 5,
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
+                  color: MaiYenColors.border,
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
@@ -107,7 +107,7 @@ Future<String?> showAddHomeOptionsSheet({
                 child: Text(
                   strings.t("Thêm nhà"),
                   style: const TextStyle(
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                     fontSize: 19,
                     fontWeight: FontWeight.w900,
                   ),
@@ -118,14 +118,14 @@ Future<String?> showAddHomeOptionsSheet({
                 icon: Icons.add_home_work_rounded,
                 title: strings.t("Tạo nhà mới"),
                 subtitle: strings.t("Tạo một ngôi nhà mới của bạn"),
-                color: SafeHomeColors.primary,
+                color: MaiYenColors.primary,
                 value: "create",
               ),
               optionTile(
                 icon: Icons.qr_code_scanner_rounded,
                 title: strings.t("Xin gia nhập nhà"),
                 subtitle: strings.t("Quét mã QR được chủ nhà chia sẻ"),
-                color: SafeHomeColors.info,
+                color: MaiYenColors.info,
                 value: "join",
               ),
             ],

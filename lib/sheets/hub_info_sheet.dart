@@ -6,8 +6,8 @@ import '../config/system_version.dart';
 import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import '../localization/system_version_strings.dart';
-import '../navigation/safehome_navigation.dart';
-import '../safehome_theme.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../maiyen_theme.dart';
 
 Map<String, dynamic> _hubInfoMap(dynamic raw) {
   if (raw is! Map) {
@@ -54,7 +54,7 @@ void showHubInfoSheet({
   required String homeId,
   required String homeName,
 }) {
-  SafeHomeNavigation.pushChildPage<void>(
+  MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: 'hub_info',
     builder: (pageContext) {
@@ -64,7 +64,7 @@ void showHubInfoSheet({
       );
 
       return ColoredBox(
-        color: SafeHomeColors.background,
+        color: MaiYenColors.background,
         child: StreamBuilder<DatabaseEvent>(
           stream: homeRef.onValue,
           builder: (context, snapshot) {
@@ -97,10 +97,10 @@ void showHubInfoSheet({
                 ? strings.t('Online')
                 : strings.t('Offline');
             final statusColor = !tracked || checking
-                ? SafeHomeColors.textSecondary
+                ? MaiYenColors.textSecondary
                 : online
-                ? SafeHomeColors.safe
-                : SafeHomeColors.danger;
+                ? MaiYenColors.safe
+                : MaiYenColors.danger;
             final statusIcon = !tracked || checking
                 ? Icons.sync_rounded
                 : online
@@ -112,13 +112,13 @@ void showHubInfoSheet({
 
             if (wifiConnected == true) {
               wifiText = wifiSsid.isNotEmpty ? wifiSsid : strings.t('Online');
-              wifiColor = SafeHomeColors.safe;
+              wifiColor = MaiYenColors.safe;
             } else if (wifiConnected == false) {
               wifiText = strings.t('Offline');
-              wifiColor = SafeHomeColors.warning;
+              wifiColor = MaiYenColors.warning;
             } else {
               wifiText = strings.t('Chưa cập nhật');
-              wifiColor = SafeHomeColors.textSecondary;
+              wifiColor = MaiYenColors.textSecondary;
             }
 
             final compatibility = versionInfo.compatibility;
@@ -130,9 +130,9 @@ void showHubInfoSheet({
               ProtocolCompatibility.unknown => strings.t('Chưa cập nhật'),
             };
             final compatibilityColor = switch (compatibility) {
-              ProtocolCompatibility.compatible => SafeHomeColors.safe,
-              ProtocolCompatibility.incompatible => SafeHomeColors.danger,
-              ProtocolCompatibility.unknown => SafeHomeColors.textSecondary,
+              ProtocolCompatibility.compatible => MaiYenColors.safe,
+              ProtocolCompatibility.incompatible => MaiYenColors.danger,
+              ProtocolCompatibility.unknown => MaiYenColors.textSecondary,
             };
             final compatibilityIcon = switch (compatibility) {
               ProtocolCompatibility.compatible => Icons.verified_rounded,
@@ -156,12 +156,12 @@ void showHubInfoSheet({
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.primarySoft,
+                          color: MaiYenColors.primarySoft,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: const Icon(
                           Icons.hub_rounded,
-                          color: SafeHomeColors.primary,
+                          color: MaiYenColors.primary,
                           size: 27,
                         ),
                       ),
@@ -173,7 +173,7 @@ void showHubInfoSheet({
                             Text(
                               '${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)',
                               style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
+                                color: MaiYenColors.textPrimary,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -186,7 +186,7 @@ void showHubInfoSheet({
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                color: SafeHomeColors.textSecondary,
+                                color: MaiYenColors.textSecondary,
                                 fontSize: 12.5,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -217,7 +217,7 @@ void showHubInfoSheet({
                               Text(
                                 strings.t('Tình trạng'),
                                 style: const TextStyle(
-                                  color: SafeHomeColors.textSecondary,
+                                  color: MaiYenColors.textSecondary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -288,7 +288,7 @@ void showHubInfoSheet({
                   Text(
                     strings.systemVersionsTitle,
                     style: const TextStyle(
-                      color: SafeHomeColors.textPrimary,
+                      color: MaiYenColors.textPrimary,
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
                     ),
@@ -350,16 +350,16 @@ class _HubInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Column(
         children: [
           for (var index = 0; index < children.length; index++) ...[
             children[index],
             if (index < children.length - 1)
-              const Divider(height: 1, color: SafeHomeColors.border),
+              const Divider(height: 1, color: MaiYenColors.border),
           ],
         ],
       ),
@@ -385,7 +385,7 @@ class _HubInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final valueStyle = TextStyle(
-      color: valueColor ?? SafeHomeColors.textPrimary,
+      color: valueColor ?? MaiYenColors.textPrimary,
       fontSize: 13,
       fontWeight: FontWeight.w800,
       height: 1.25,
@@ -400,10 +400,10 @@ class _HubInfoRow extends StatelessWidget {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: SafeHomeColors.primarySoft,
+              color: MaiYenColors.primarySoft,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: SafeHomeColors.primary, size: 20),
+            child: Icon(icon, color: MaiYenColors.primary, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -413,7 +413,7 @@ class _HubInfoRow extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
+                    color: MaiYenColors.textSecondary,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                   ),

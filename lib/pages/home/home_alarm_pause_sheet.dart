@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
-import '../../safehome_theme.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../maiyen_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 class HomeAlarmPauseFormData {
   const HomeAlarmPauseFormData({
@@ -51,7 +51,7 @@ Future<void> showHomeAlarmPauseSheet({
     );
   }
 
-  await SafeHomeNavigation.showModalSheet(
+  await MaiYenNavigation.showModalSheet(
     context: context,
     isScrollControlled: true,
     showDragHandle: false,
@@ -76,7 +76,7 @@ Future<void> showHomeAlarmPauseSheet({
                     height: 5,
                     margin: const EdgeInsets.only(bottom: 14),
                     decoration: BoxDecoration(
-                      color: SafeHomeColors.border,
+                      color: MaiYenColors.border,
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),

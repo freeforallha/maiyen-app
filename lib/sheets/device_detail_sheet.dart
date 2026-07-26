@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import '../helpers/home_helper.dart';
 import 'device_alarm_policy_sheet.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
-import '../safehome_theme.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../maiyen_theme.dart';
 
 void showDeviceDetail({
   required BuildContext context,
@@ -38,7 +38,7 @@ void showDeviceDetail({
       selectableDevices != null && deviceChoices.isNotEmpty;
   var selectedDeviceId = id;
 
-  SafeHomeNavigation.pushChildPage<void>(
+  MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "device_detail",
     builder: (sheetContext) {
@@ -68,7 +68,7 @@ void showDeviceDetail({
                 return Container(
                   padding: const EdgeInsets.all(24),
                   decoration: const BoxDecoration(
-                    color: SafeHomeColors.background,
+                    color: MaiYenColors.background,
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(26),
                     ),
@@ -81,7 +81,7 @@ void showDeviceDetail({
                         const Icon(
                           Icons.sensors_off_rounded,
                           size: 44,
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                         ),
                         const SizedBox(height: 12),
                         Text(
@@ -186,7 +186,7 @@ void showDeviceDetail({
               if (deviceType == "temperature") {
                 addMetric(
                   icon: Icons.thermostat_rounded,
-                  color: SafeHomeColors.info,
+                  color: MaiYenColors.info,
                   title: "Nhiệt độ",
                   value: temperature,
                   suffix: "°C",
@@ -194,7 +194,7 @@ void showDeviceDetail({
 
                 addMetric(
                   icon: Icons.water_drop_rounded,
-                  color: SafeHomeColors.info,
+                  color: MaiYenColors.info,
                   title: "Độ ẩm",
                   value: humidity,
                   suffix: "%",
@@ -204,7 +204,7 @@ void showDeviceDetail({
               if ({"smart_plug", "power_monitor", "ups"}.contains(deviceType)) {
                 addMetric(
                   icon: Icons.electric_bolt_rounded,
-                  color: SafeHomeColors.warning,
+                  color: MaiYenColors.warning,
                   title: "Công suất",
                   value: device["power"],
                   suffix: " W",
@@ -212,7 +212,7 @@ void showDeviceDetail({
 
                 addMetric(
                   icon: Icons.speed_rounded,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                   title: "Điện áp",
                   value: device["voltage"],
                   suffix: " V",
@@ -220,7 +220,7 @@ void showDeviceDetail({
 
                 addMetric(
                   icon: Icons.electrical_services_rounded,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                   title: "Dòng điện",
                   value: device["current"],
                   suffix: " A",
@@ -228,7 +228,7 @@ void showDeviceDetail({
 
                 addMetric(
                   icon: Icons.data_usage_rounded,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                   title: "Điện năng",
                   value: device["energy"] ?? device["consumption"],
                   suffix: " kWh",
@@ -238,14 +238,14 @@ void showDeviceDetail({
               if ({"vibration", "glass_break"}.contains(deviceType)) {
                 addMetric(
                   icon: Icons.vibration_rounded,
-                  color: SafeHomeColors.warning,
+                  color: MaiYenColors.warning,
                   title: "Cường độ rung",
                   value: device["vibration_strength"],
                 );
 
                 addMetric(
                   icon: Icons.screen_rotation_rounded,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                   title: "Góc nghiêng",
                   value: device["angle"],
                   suffix: "°",
@@ -255,7 +255,7 @@ void showDeviceDetail({
               if (deviceType == "smart_valve") {
                 addMetric(
                   icon: Icons.tune_rounded,
-                  color: SafeHomeColors.info,
+                  color: MaiYenColors.info,
                   title: "Độ mở van",
                   value: device["position"] ?? device["valve_position"],
                   suffix: "%",
@@ -267,7 +267,7 @@ void showDeviceDetail({
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
                 ),
                 decoration: const BoxDecoration(
-                  color: SafeHomeColors.background,
+                  color: MaiYenColors.background,
                   borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
                 ),
                 child: SafeArea(
@@ -293,7 +293,7 @@ void showDeviceDetail({
                                       style: const TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.w700,
-                                        color: SafeHomeColors.textPrimary,
+                                        color: MaiYenColors.textPrimary,
                                       ),
                                     ),
                                   ),
@@ -325,7 +325,7 @@ void showDeviceDetail({
                                     const SizedBox(width: 8),
                                     _compactIconButton(
                                       icon: Icons.edit_rounded,
-                                      color: SafeHomeColors.primary,
+                                      color: MaiYenColors.primary,
                                       onTap: () => onRename(currentDeviceId),
                                     ),
                                   ],
@@ -335,7 +335,7 @@ void showDeviceDetail({
                             const SizedBox(width: 12),
                             _iconButton(
                               icon: Icons.notifications_active_rounded,
-                              color: SafeHomeColors.warning,
+                              color: MaiYenColors.warning,
                               onTap: () => onNotification(currentDeviceId),
                             ),
                           ],
@@ -344,7 +344,7 @@ void showDeviceDetail({
                           const SizedBox(height: 22),
                           _sectionHeading(
                             icon: Icons.notifications_active_rounded,
-                            color: SafeHomeColors.danger,
+                            color: MaiYenColors.danger,
                             title: strings.alarmSettings,
                           ),
                           const SizedBox(height: 10),
@@ -439,7 +439,7 @@ void showDeviceDetail({
                         const SizedBox(height: 22),
                         _sectionHeading(
                           icon: Icons.info_outline_rounded,
-                          color: SafeHomeColors.primary,
+                          color: MaiYenColors.primary,
                           title: strings.t("Thông tin chi tiết"),
                         ),
                         const SizedBox(height: 10),
@@ -447,9 +447,9 @@ void showDeviceDetail({
                           width: double.infinity,
                           padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: SafeHomeColors.border),
+                            border: Border.all(color: MaiYenColors.border),
                           ),
                           child: Column(
                             children: [
@@ -471,23 +471,23 @@ void showDeviceDetail({
                                 _infoRow(
                                   icon: Icons.warning_amber_rounded,
                                   color: tamper
-                                      ? SafeHomeColors.danger
-                                      : SafeHomeColors.warning,
+                                      ? MaiYenColors.danger
+                                      : MaiYenColors.warning,
                                   title: strings.t("Tháo/Lắp"),
                                   value: strings.statusText(
                                     tamper ? "Bị tháo" : "Bình thường",
                                   ),
                                   valueColor: tamper
-                                      ? SafeHomeColors.danger
-                                      : SafeHomeColors.textPrimary,
+                                      ? MaiYenColors.danger
+                                      : MaiYenColors.textPrimary,
                                 ),
                               ...metricRows,
                               if (hasBattery)
                                 _infoRow(
                                   icon: Icons.battery_full_rounded,
                                   color: battery != null && battery < 20
-                                      ? SafeHomeColors.danger
-                                      : SafeHomeColors.safe,
+                                      ? MaiYenColors.danger
+                                      : MaiYenColors.safe,
                                   title: strings.t("Pin"),
                                   value: strings.statusText(
                                     getBatteryText(device),
@@ -497,21 +497,21 @@ void showDeviceDetail({
                                 _infoRow(
                                   icon: Icons.network_cell_rounded,
                                   color: linkquality < 50
-                                      ? SafeHomeColors.danger
-                                      : SafeHomeColors.primary,
+                                      ? MaiYenColors.danger
+                                      : MaiYenColors.primary,
                                   title: strings.t("Tín hiệu"),
                                   value: "$linkquality",
                                 ),
                               _infoRow(
                                 icon: Icons.access_time_rounded,
-                                color: SafeHomeColors.primary,
+                                color: MaiYenColors.primary,
                                 title: strings.t("Liên lạc cuối"),
                                 value: formatFullDate(lastSeen),
                               ),
                               if (deviceType == "sos")
                                 _infoRow(
                                   icon: Icons.history_rounded,
-                                  color: SafeHomeColors.warning,
+                                  color: MaiYenColors.warning,
                                   title: strings.t("Lần kích hoạt cuối"),
                                   value: formatFullDate(lastTriggered),
                                 )
@@ -519,7 +519,7 @@ void showDeviceDetail({
                                   deviceType != "repeater")
                                 _infoRow(
                                   icon: Icons.history_rounded,
-                                  color: SafeHomeColors.warning,
+                                  color: MaiYenColors.warning,
                                   title: strings.t("Sự kiện cuối"),
                                   value: formatFullDate(lastEvent),
                                 ),
@@ -531,7 +531,7 @@ void showDeviceDetail({
                           Center(
                             child: _iconButton(
                               icon: Icons.delete_forever_rounded,
-                              color: SafeHomeColors.danger,
+                              color: MaiYenColors.danger,
                               size: 26,
                               onTap: () => onDelete(currentDeviceId),
                             ),
@@ -596,7 +596,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
             : type == "gate"
             ? Icons.garage_rounded
             : Icons.sensor_door_rounded,
-        color: closed ? SafeHomeColors.safe : SafeHomeColors.danger,
+        color: closed ? MaiYenColors.safe : MaiYenColors.danger,
       );
 
     case "lock":
@@ -607,7 +607,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Khóa thông minh",
         value: unlocked ? "Khóa đang mở" : "Khóa đang đóng",
         icon: unlocked ? Icons.lock_open_rounded : Icons.lock_rounded,
-        color: unlocked ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: unlocked ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "motion":
@@ -617,7 +617,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Chuyển động",
         value: detected ? "Phát hiện chuyển động" : "Không có chuyển động",
         icon: Icons.directions_walk_rounded,
-        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.warning : MaiYenColors.safe,
       );
 
     case "presence":
@@ -627,7 +627,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Hiện diện",
         value: detected ? "Phát hiện hiện diện" : "Không phát hiện hiện diện",
         icon: Icons.sensors_rounded,
-        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.warning : MaiYenColors.safe,
       );
 
     case "vibration":
@@ -639,7 +639,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
             ? "Phát hiện rung/chấn động"
             : "Không có rung bất thường",
         icon: Icons.vibration_rounded,
-        color: detected ? SafeHomeColors.warning : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.warning : MaiYenColors.safe,
       );
 
     case "glass_break":
@@ -651,7 +651,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Kính vỡ",
         value: detected ? "Phát hiện kính vỡ" : "Không có cảnh báo kính vỡ",
         icon: Icons.broken_image_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "smoke":
@@ -661,7 +661,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Báo khói",
         value: detected ? "Phát hiện khói" : "Bình thường",
         icon: Icons.local_fire_department_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "heat":
@@ -675,7 +675,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Báo nhiệt",
         value: detected ? "Nhiệt độ nguy hiểm" : "Bình thường",
         icon: Icons.thermostat_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "carbon_monoxide":
@@ -685,7 +685,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Khí CO",
         value: detected ? "Phát hiện khí CO" : "Không phát hiện khí CO",
         icon: Icons.dangerous_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "gas":
@@ -695,7 +695,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Báo gas",
         value: detected ? "Rò rỉ gas" : "Bình thường",
         icon: Icons.gas_meter_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "water_leak":
@@ -706,7 +706,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Ngập/rò nước",
         value: detected ? "Phát hiện ngập nước" : "Bình thường",
         icon: Icons.water_damage_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "sos":
@@ -716,7 +716,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "SOS",
         value: detected ? "Đã kích hoạt" : "Sẵn sàng",
         icon: Icons.sos_rounded,
-        color: detected ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: detected ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "temperature":
@@ -724,7 +724,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Môi trường",
         value: "Đang theo dõi",
         icon: Icons.device_thermostat_rounded,
-        color: SafeHomeColors.info,
+        color: MaiYenColors.info,
       );
 
     case "smart_plug":
@@ -734,7 +734,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Ổ điện thông minh",
         value: on ? "Đang bật" : "Đang tắt",
         icon: Icons.power_rounded,
-        color: on ? SafeHomeColors.safe : SafeHomeColors.textSecondary,
+        color: on ? MaiYenColors.safe : MaiYenColors.textSecondary,
       );
 
     case "power_monitor":
@@ -742,7 +742,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Đo điện năng",
         value: "Đang theo dõi điện năng",
         icon: Icons.flash_on_rounded,
-        color: SafeHomeColors.primary,
+        color: MaiYenColors.primary,
       );
 
     case "ups":
@@ -759,8 +759,8 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
             : "Nguồn điện bình thường",
         icon: Icons.battery_charging_full_rounded,
         color: mainsPower == false
-            ? SafeHomeColors.warning
-            : SafeHomeColors.safe,
+            ? MaiYenColors.warning
+            : MaiYenColors.safe,
       );
 
     case "siren":
@@ -772,7 +772,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Còi báo động",
         value: on ? "Còi đang bật" : "Còi sẵn sàng",
         icon: Icons.notifications_active_rounded,
-        color: on ? SafeHomeColors.danger : SafeHomeColors.safe,
+        color: on ? MaiYenColors.danger : MaiYenColors.safe,
       );
 
     case "smart_valve":
@@ -782,7 +782,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Van thông minh",
         value: open ? "Van đang mở" : "Van đã đóng",
         icon: Icons.water_drop_rounded,
-        color: open ? SafeHomeColors.info : SafeHomeColors.safe,
+        color: open ? MaiYenColors.info : MaiYenColors.safe,
       );
 
     case "doorbell":
@@ -790,7 +790,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Chuông cửa",
         value: "Đang hoạt động",
         icon: Icons.notifications_rounded,
-        color: SafeHomeColors.info,
+        color: MaiYenColors.info,
       );
 
     case "keypad":
@@ -798,7 +798,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Bàn phím an ninh",
         value: "Sẵn sàng",
         icon: Icons.grid_3x3_rounded,
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
       );
 
     case "repeater":
@@ -808,7 +808,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Bộ mở rộng sóng",
         value: online ? "Đang hoạt động" : "Mất kết nối",
         icon: Icons.wifi_tethering_rounded,
-        color: online ? SafeHomeColors.safe : SafeHomeColors.danger,
+        color: online ? MaiYenColors.safe : MaiYenColors.danger,
       );
 
     case "hub":
@@ -816,7 +816,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Hub trung tâm",
         value: "Đang hoạt động",
         icon: Icons.router_rounded,
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
       );
 
     default:
@@ -824,7 +824,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
         title: "Loại thiết bị",
         value: "Chưa nhận diện",
         icon: Icons.sensors_off_rounded,
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
       );
   }
 }
@@ -854,7 +854,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Offline",
       icon: Icons.cancel_rounded,
-      color: SafeHomeColors.danger,
+      color: MaiYenColors.danger,
     );
   }
 
@@ -862,7 +862,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Pin yếu",
       icon: Icons.battery_alert_rounded,
-      color: SafeHomeColors.warning,
+      color: MaiYenColors.warning,
     );
   }
 
@@ -870,7 +870,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Sóng yếu",
       icon: Icons.signal_cellular_connected_no_internet_4_bar_rounded,
-      color: SafeHomeColors.warning,
+      color: MaiYenColors.warning,
     );
   }
 
@@ -878,7 +878,7 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Cần kiểm tra",
       icon: Icons.info_rounded,
-      color: SafeHomeColors.warning,
+      color: MaiYenColors.warning,
     );
   }
 
@@ -886,14 +886,14 @@ _DeviceHealth _getDeviceHealth({
     return const _DeviceHealth(
       text: "Online",
       icon: Icons.check_circle_rounded,
-      color: SafeHomeColors.safe,
+      color: MaiYenColors.safe,
     );
   }
 
   return const _DeviceHealth(
     text: "Cần kiểm tra",
     icon: Icons.info_rounded,
-    color: SafeHomeColors.warning,
+    color: MaiYenColors.warning,
   );
 }
 
@@ -918,7 +918,7 @@ Widget _sectionHeading({
         child: Text(
           title,
           style: const TextStyle(
-            color: SafeHomeColors.textPrimary,
+            color: MaiYenColors.textPrimary,
             fontSize: 16,
             fontWeight: FontWeight.w800,
           ),
@@ -954,7 +954,7 @@ Widget _alarmSettingsSummary({
             child: Text(
               title,
               style: const TextStyle(
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -978,9 +978,9 @@ Widget _alarmSettingsSummary({
     width: double.infinity,
     padding: const EdgeInsets.fromLTRB(14, 7, 14, 12),
     decoration: BoxDecoration(
-      color: SafeHomeColors.surface,
+      color: MaiYenColors.surface,
       borderRadius: BorderRadius.circular(18),
-      border: Border.all(color: SafeHomeColors.border),
+      border: Border.all(color: MaiYenColors.border),
     ),
     child: Column(
       children: [
@@ -989,8 +989,8 @@ Widget _alarmSettingsSummary({
           title: strings.t("Tham gia hệ thống báo động"),
           value: strings.t(settings.enabled ? "Bật" : "Tắt"),
           color: settings.enabled
-              ? SafeHomeColors.safe
-              : SafeHomeColors.textSecondary,
+              ? MaiYenColors.safe
+              : MaiYenColors.textSecondary,
         ),
         const Divider(height: 1),
         row(
@@ -1000,8 +1000,8 @@ Widget _alarmSettingsSummary({
             personalNotificationEnabled ? "Bật" : "Tắt",
           ),
           color: personalNotificationEnabled
-              ? SafeHomeColors.primary
-              : SafeHomeColors.textSecondary,
+              ? MaiYenColors.primary
+              : MaiYenColors.textSecondary,
         ),
         const Divider(height: 1),
         row(
@@ -1009,8 +1009,8 @@ Widget _alarmSettingsSummary({
           title: strings.t("Bật còi vật lý"),
           value: strings.t(settings.physicalSirenEnabled ? "Bật" : "Tắt"),
           color: settings.physicalSirenEnabled
-              ? SafeHomeColors.primary
-              : SafeHomeColors.textSecondary,
+              ? MaiYenColors.primary
+              : MaiYenColors.textSecondary,
         ),
         const Divider(height: 1),
         row(
@@ -1018,8 +1018,8 @@ Widget _alarmSettingsSummary({
           title: strings.t("Đánh thức màn hình"),
           value: strings.t(personalFullscreenEnabled ? "Bật" : "Tắt"),
           color: personalFullscreenEnabled
-              ? SafeHomeColors.primary
-              : SafeHomeColors.textSecondary,
+              ? MaiYenColors.primary
+              : MaiYenColors.textSecondary,
         ),
         if (!isEmergency) ...[
           const Divider(height: 1),
@@ -1030,8 +1030,8 @@ Widget _alarmSettingsSummary({
               commonAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
             ),
             color: commonAlarmEnabled
-                ? SafeHomeColors.primary
-                : SafeHomeColors.textSecondary,
+                ? MaiYenColors.primary
+                : MaiYenColors.textSecondary,
           ),
           const Divider(height: 1),
           row(
@@ -1041,8 +1041,8 @@ Widget _alarmSettingsSummary({
               personalAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
             ),
             color: personalAlarmEnabled
-                ? SafeHomeColors.primary
-                : SafeHomeColors.textSecondary,
+                ? MaiYenColors.primary
+                : MaiYenColors.textSecondary,
           ),
         ],
         const SizedBox(height: 9),
@@ -1053,9 +1053,9 @@ Widget _alarmSettingsSummary({
             icon: const Icon(Icons.tune_rounded, size: 19),
             label: Text(strings.t("Cài đặt báo động")),
             style: OutlinedButton.styleFrom(
-              foregroundColor: SafeHomeColors.primary,
+              foregroundColor: MaiYenColors.primary,
               side: BorderSide(
-                color: SafeHomeColors.primary.withValues(alpha: 0.30),
+                color: MaiYenColors.primary.withValues(alpha: 0.30),
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(13),
@@ -1085,15 +1085,15 @@ bool _deviceNeedsAttention(Map<String, dynamic> device) {
   final status = _getDeviceDisplayStatus(device);
 
   return batteryLow ||
-      health.color == SafeHomeColors.warning ||
-      health.color == SafeHomeColors.danger ||
-      status.color == SafeHomeColors.warning ||
-      status.color == SafeHomeColors.danger;
+      health.color == MaiYenColors.warning ||
+      health.color == MaiYenColors.danger ||
+      status.color == MaiYenColors.warning ||
+      status.color == MaiYenColors.danger;
 }
 
 Widget _deviceCountButton({required int count, required VoidCallback onTap}) {
   return Material(
-    color: SafeHomeColors.primarySoft,
+    color: MaiYenColors.primarySoft,
     borderRadius: BorderRadius.circular(10),
     child: InkWell(
       onTap: onTap,
@@ -1106,13 +1106,13 @@ Widget _deviceCountButton({required int count, required VoidCallback onTap}) {
             const Icon(
               Icons.devices_other_rounded,
               size: 16,
-              color: SafeHomeColors.primary,
+              color: MaiYenColors.primary,
             ),
             const SizedBox(width: 5),
             Text(
               "$count",
               style: const TextStyle(
-                color: SafeHomeColors.primary,
+                color: MaiYenColors.primary,
                 fontSize: 12.5,
                 height: 1,
                 fontWeight: FontWeight.w900,
@@ -1148,7 +1148,7 @@ Future<String?> _showDeviceSelector({
       return firstName.compareTo(secondName);
     });
 
-  return SafeHomeNavigation.showModalSheet<String>(
+  return MaiYenNavigation.showModalSheet<String>(
     context: context,
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -1158,7 +1158,7 @@ Future<String?> _showDeviceSelector({
           maxHeight: MediaQuery.of(selectorContext).size.height * 0.72,
         ),
         decoration: const BoxDecoration(
-          color: SafeHomeColors.background,
+          color: MaiYenColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
         ),
         child: SafeArea(
@@ -1173,7 +1173,7 @@ Future<String?> _showDeviceSelector({
                   width: 42,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.border,
+                    color: MaiYenColors.border,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
@@ -1184,14 +1184,14 @@ Future<String?> _showDeviceSelector({
                   children: [
                     const Icon(
                       Icons.hub_rounded,
-                      color: SafeHomeColors.primary,
+                      color: MaiYenColors.primary,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         strings.t("Điều khiển & hạ tầng"),
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
@@ -1200,7 +1200,7 @@ Future<String?> _showDeviceSelector({
                     Text(
                       "${entries.length}",
                       style: const TextStyle(
-                        color: SafeHomeColors.textSecondary,
+                        color: MaiYenColors.textSecondary,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -1224,13 +1224,13 @@ Future<String?> _showDeviceSelector({
                     final needsAttention = _deviceNeedsAttention(device);
                     final selected = entry.key == selectedDeviceId;
                     final textColor = needsAttention
-                        ? SafeHomeColors.warning
-                        : SafeHomeColors.textPrimary;
+                        ? MaiYenColors.warning
+                        : MaiYenColors.textPrimary;
 
                     return Material(
                       color: selected
-                          ? SafeHomeColors.primarySoft
-                          : SafeHomeColors.surface,
+                          ? MaiYenColors.primarySoft
+                          : MaiYenColors.surface,
                       borderRadius: BorderRadius.circular(15),
                       child: InkWell(
                         onTap: () => Navigator.pop(selectorContext, entry.key),
@@ -1244,14 +1244,14 @@ Future<String?> _showDeviceSelector({
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: selected
-                                  ? SafeHomeColors.primary.withValues(
+                                  ? MaiYenColors.primary.withValues(
                                       alpha: 0.42,
                                     )
                                   : needsAttention
-                                  ? SafeHomeColors.warning.withValues(
+                                  ? MaiYenColors.warning.withValues(
                                       alpha: 0.42,
                                     )
-                                  : SafeHomeColors.border,
+                                  : MaiYenColors.border,
                             ),
                           ),
                           child: Row(
@@ -1262,7 +1262,7 @@ Future<String?> _showDeviceSelector({
                                 decoration: BoxDecoration(
                                   color:
                                       (needsAttention
-                                              ? SafeHomeColors.warning
+                                              ? MaiYenColors.warning
                                               : status.color)
                                           .withValues(alpha: 0.11),
                                   borderRadius: BorderRadius.circular(12),
@@ -1271,7 +1271,7 @@ Future<String?> _showDeviceSelector({
                                   status.icon,
                                   size: 20,
                                   color: needsAttention
-                                      ? SafeHomeColors.warning
+                                      ? MaiYenColors.warning
                                       : status.color,
                                 ),
                               ),
@@ -1297,8 +1297,8 @@ Future<String?> _showDeviceSelector({
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: needsAttention
-                                            ? SafeHomeColors.warning
-                                            : SafeHomeColors.textSecondary,
+                                            ? MaiYenColors.warning
+                                            : MaiYenColors.textSecondary,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w700,
                                       ),
@@ -1311,7 +1311,7 @@ Future<String?> _showDeviceSelector({
                                   padding: EdgeInsets.only(left: 8),
                                   child: Icon(
                                     Icons.check_circle_rounded,
-                                    color: SafeHomeColors.primary,
+                                    color: MaiYenColors.primary,
                                     size: 20,
                                   ),
                                 ),
@@ -1378,7 +1378,7 @@ Widget _infoRow({
   required Color color,
   required String title,
   required String value,
-  Color valueColor = SafeHomeColors.textPrimary,
+  Color valueColor = MaiYenColors.textPrimary,
 }) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 14),
@@ -1397,7 +1397,7 @@ Widget _infoRow({
         Text(
           title,
           style: const TextStyle(
-            color: SafeHomeColors.textSecondary,
+            color: MaiYenColors.textSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),

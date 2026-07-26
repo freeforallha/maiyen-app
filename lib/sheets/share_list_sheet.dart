@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import '../helpers/firebase_paths.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 import '../services/home_notification_service.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<bool?> showShareListSheet({
@@ -200,8 +200,8 @@ Future<bool?> showShareListSheet({
             height: 10,
             decoration: BoxDecoration(
               color: online
-                  ? SafeHomeColors.safe
-                  : SafeHomeColors.textSecondary,
+                  ? MaiYenColors.safe
+                  : MaiYenColors.textSecondary,
               shape: BoxShape.circle,
             ),
           ),
@@ -231,8 +231,8 @@ Future<bool?> showShareListSheet({
             hasPhone ? Icons.phone_rounded : Icons.phone_disabled_rounded,
             size: 23,
             color: hasPhone
-                ? SafeHomeColors.safe
-                : SafeHomeColors.textSecondary,
+                ? MaiYenColors.safe
+                : MaiYenColors.textSecondary,
           ),
         ),
       ),
@@ -241,12 +241,12 @@ Future<bool?> showShareListSheet({
 
   if (!context.mounted) return null;
 
-  return SafeHomeNavigation.pushChildPage<bool>(
+  return MaiYenNavigation.pushChildPage<bool>(
     context: context,
     routeName: "home_members",
     builder: (sheetContext) {
       return ColoredBox(
-        color: SafeHomeColors.background,
+        color: MaiYenColors.background,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(18),

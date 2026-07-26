@@ -58,7 +58,7 @@ class _SetPasswordPageState extends State<SetPasswordPage> {
       if (!mounted) return;
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => HomePage()),
+        MaterialPageRoute(builder: (_) => MaiYen()),
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {

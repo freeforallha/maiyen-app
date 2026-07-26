@@ -17,10 +17,10 @@ import '../services/auto_login_service.dart';
 import '../services/fcm_service.dart';
 import '../services/session_logout_service.dart';
 import '../services/single_device_session_service.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -88,14 +88,14 @@ Future<void> forceSignOutForRemoteSession() async {
   }
 }
 
-class SafeHomeApp extends StatefulWidget {
-  const SafeHomeApp({super.key});
+class MaiYenApp extends StatefulWidget {
+  const MaiYenApp({super.key});
 
   @override
-  State<SafeHomeApp> createState() => _SafeHomeAppState();
+  State<MaiYenApp> createState() => _MaiYenAppState();
 }
 
-class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
+class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
   StreamSubscription<User?>? _authSessionSubscription;
   @override
   void initState() {
@@ -197,7 +197,7 @@ class _SafeHomeAppState extends State<SafeHomeApp> with WidgetsBindingObserver {
         return MaterialApp(
           navigatorKey: appNavigatorKey,
           debugShowCheckedModeBanner: false,
-          theme: SafeHomeTheme.light,
+          theme: MaiYenTheme.light,
           locale: appLanguageController.locale,
           supportedLocales: AppLanguageController.supportedLocales,
           localizationsDelegates: const [
@@ -282,7 +282,7 @@ class _AlarmLaunchGateState extends State<AlarmLaunchGate> {
     final strings = AppStrings.of(context);
 
     if (!checked) {
-      return const SafeHomeSplash();
+      return const MaiYenSplash();
     }
 
     if (payload == "open_home") {
@@ -448,7 +448,7 @@ class _AuthGateState extends State<AuthGate> {
     );
 
     return Scaffold(
-      backgroundColor: SafeHomeColors.background,
+      backgroundColor: MaiYenColors.background,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -459,14 +459,14 @@ class _AuthGateState extends State<AuthGate> {
                 const Icon(
                   Icons.cloud_off_rounded,
                   size: 54,
-                  color: SafeHomeColors.danger,
+                  color: MaiYenColors.danger,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   strings.t("Không thể tải dữ liệu tài khoản"),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                   ),
@@ -476,7 +476,7 @@ class _AuthGateState extends State<AuthGate> {
                   message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: SafeHomeColors.textSecondary,
+                    color: MaiYenColors.textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -505,7 +505,7 @@ class _AuthGateState extends State<AuthGate> {
   @override
   Widget build(BuildContext context) {
     if (!ready) {
-      return const SafeHomeSplash();
+      return const MaiYenSplash();
     }
 
     return ValueListenableBuilder<bool>(
@@ -526,7 +526,7 @@ class _AuthGateState extends State<AuthGate> {
               future: _ensureSessionReady(currentUser.uid),
               builder: (context, sessionSnap) {
                 if (sessionSnap.connectionState == ConnectionState.waiting) {
-                  return const SafeHomeSplash();
+                  return const MaiYenSplash();
                 }
 
                 if (sessionSnap.hasError) {
@@ -546,7 +546,7 @@ class _AuthGateState extends State<AuthGate> {
                   builder: (context, profileSnap) {
                     if (profileSnap.connectionState ==
                         ConnectionState.waiting) {
-                      return const SafeHomeSplash();
+                      return const MaiYenSplash();
                     }
 
                     if (profileSnap.hasError) {
@@ -588,7 +588,7 @@ class _AuthGateState extends State<AuthGate> {
                       );
                     }
 
-                    return const LocationPermissionGate(child: HomePage());
+                    return const LocationPermissionGate(child: MaiYen());
                   },
                 );
               },
@@ -667,7 +667,7 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
             children: [
               const Icon(
                 Icons.location_on_rounded,
-                color: SafeHomeColors.primary,
+                color: MaiYenColors.primary,
               ),
               const SizedBox(width: 9),
               Expanded(child: Text(strings.t("Cho phép vị trí luôn luôn"))),
@@ -714,14 +714,14 @@ class _LocationPermissionGateState extends State<LocationPermissionGate> {
   }
 }
 
-class SafeHomeSplash extends StatefulWidget {
-  const SafeHomeSplash({super.key});
+class MaiYenSplash extends StatefulWidget {
+  const MaiYenSplash({super.key});
 
   @override
-  State<SafeHomeSplash> createState() => _SafeHomeSplashState();
+  State<MaiYenSplash> createState() => _MaiYenSplashState();
 }
 
-class _SafeHomeSplashState extends State<SafeHomeSplash>
+class _MaiYenSplashState extends State<MaiYenSplash>
     with SingleTickerProviderStateMixin {
   late final AnimationController controller;
   late final Animation<double> fade;

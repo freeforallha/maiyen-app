@@ -7,11 +7,11 @@ import '../services/platform/platform_auto_away_task_service.dart';
 import '../services/session_logout_service.dart';
 import '../services/single_device_session_service.dart';
 import '../helpers/top_toast.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
-import '../navigation/safehome_navigation.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../navigation/maiyen_navigation.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
       showTopToast(
         context,
         strings.forcedRemoteSessionLogoutMessage,
-        color: SafeHomeColors.danger,
+        color: MaiYenColors.danger,
         icon: Icons.logout_rounded,
       );
     });
@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       // Không đọc/ghi Database và không tự điều hướng tại đây.
-      // AuthGate sẽ tự mở ProfileSetupPage hoặc HomePage theo UID mới.
+      // AuthGate sẽ tự mở ProfileSetupPage hoặc MaiYen theo UID mới.
     } on FirebaseAuthException catch (e) {
       safeDebugPrint("GOOGLE_LOGIN_FIREBASE_ERROR: ${e.code}");
 
@@ -657,7 +657,7 @@ class _LoginPageState extends State<LoginPage> {
     bool isSearching = false;
     String query = "";
 
-    SafeHomeNavigation.showModalSheet<void>(
+    MaiYenNavigation.showModalSheet<void>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -685,7 +685,7 @@ class _LoginPageState extends State<LoginPage> {
             trailing: selected
                 ? const Icon(
                     Icons.check_circle_rounded,
-                    color: SafeHomeColors.primary,
+                    color: MaiYenColors.primary,
                   )
                 : null,
             onTap: () async {
@@ -741,7 +741,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
                       decoration: const BoxDecoration(
-                        color: SafeHomeColors.surface,
+                        color: MaiYenColors.surface,
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(24),
                         ),
@@ -754,7 +754,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 5,
                             margin: const EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                               borderRadius: BorderRadius.circular(999),
                             ),
                           ),
@@ -762,14 +762,14 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               const Icon(
                                 Icons.language_rounded,
-                                color: SafeHomeColors.primary,
+                                color: MaiYenColors.primary,
                               ),
                               const SizedBox(width: 9),
                               Expanded(
                                 child: Text(
                                   strings.chooseLanguage,
                                   style: const TextStyle(
-                                    color: SafeHomeColors.textPrimary,
+                                    color: MaiYenColors.textPrimary,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -790,7 +790,7 @@ class _LoginPageState extends State<LoginPage> {
                                   isSearching
                                       ? Icons.close_rounded
                                       : Icons.search_rounded,
-                                  color: SafeHomeColors.primary,
+                                  color: MaiYenColors.primary,
                                 ),
                               ),
                             ],
@@ -804,7 +804,7 @@ class _LoginPageState extends State<LoginPage> {
                                 hintText: strings.t("Tìm ngôn ngữ"),
                                 prefixIcon: const Icon(Icons.search_rounded),
                                 filled: true,
-                                fillColor: SafeHomeColors.background,
+                                fillColor: MaiYenColors.background,
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 14,
                                   vertical: 12,
@@ -835,7 +835,7 @@ class _LoginPageState extends State<LoginPage> {
                                         child: Text(
                                           strings.t("Không có kết quả"),
                                           style: const TextStyle(
-                                            color: SafeHomeColors.textSecondary,
+                                            color: MaiYenColors.textSecondary,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -872,7 +872,7 @@ class _LoginPageState extends State<LoginPage> {
     final strings = AppStrings.of(context);
 
     return Scaffold(
-      backgroundColor: SafeHomeColors.background,
+      backgroundColor: MaiYenColors.background,
 
       body: SafeArea(
         child: Stack(
@@ -893,9 +893,9 @@ class _LoginPageState extends State<LoginPage> {
                           width: 340,
                           padding: const EdgeInsets.all(22),
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: SafeHomeColors.border),
+                            border: Border.all(color: MaiYenColors.border),
                             boxShadow: const [
                               BoxShadow(
                                 color: Colors.black12,
@@ -966,7 +966,7 @@ class _LoginPageState extends State<LoginPage> {
                                     error,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: SafeHomeColors.danger,
+                                      color: MaiYenColors.danger,
                                     ),
                                   ),
                                 ),
@@ -1038,7 +1038,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   strings.t("Quên mật khẩu?"),
                                   style: const TextStyle(
-                                    color: SafeHomeColors.primary,
+                                    color: MaiYenColors.primary,
                                   ),
                                 ),
                               ),
@@ -1072,12 +1072,12 @@ class _LoginPageState extends State<LoginPage> {
               top: 8,
               right: 12,
               child: Material(
-                color: SafeHomeColors.surface,
+                color: MaiYenColors.surface,
                 borderRadius: BorderRadius.circular(999),
                 child: IconButton(
                   tooltip: strings.language,
                   icon: const Icon(Icons.language_rounded),
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                   onPressed: _showLanguageSheet,
                 ),
               ),

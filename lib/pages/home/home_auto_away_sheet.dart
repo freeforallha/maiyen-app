@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../helpers/top_toast.dart';
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
-import '../../safehome_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
+import '../../maiyen_theme.dart';
 import 'home_auto_away_models.dart';
 
 Future<void> showHomeAutoAwaySheet({
@@ -39,7 +39,7 @@ Future<void> showHomeAutoAwaySheet({
     selectedParticipantUids.addAll(memberUids);
   }
 
-  await SafeHomeNavigation.pushChildPage<void>(
+  await MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: 'home_auto_away',
     builder: (sheetContext) {
@@ -192,12 +192,12 @@ Future<void> showHomeAutoAwaySheet({
                         width: 46,
                         height: 46,
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.primarySoft,
+                          color: MaiYenColors.primarySoft,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: const Icon(
                           Icons.location_on_rounded,
-                          color: SafeHomeColors.primary,
+                          color: MaiYenColors.primary,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -208,7 +208,7 @@ Future<void> showHomeAutoAwaySheet({
                             Text(
                               strings.t('Tự động Bảo vệ khi rời nhà'),
                               style: const TextStyle(
-                                color: SafeHomeColors.textPrimary,
+                                color: MaiYenColors.textPrimary,
                                 fontSize: 17,
                                 fontWeight: FontWeight.w900,
                               ),
@@ -217,7 +217,7 @@ Future<void> showHomeAutoAwaySheet({
                             Text(
                               strings.t('Bán kính bảo vệ mặc định: 150 m'),
                               style: const TextStyle(
-                                color: SafeHomeColors.textSecondary,
+                                color: MaiYenColors.textSecondary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -244,9 +244,9 @@ Future<void> showHomeAutoAwaySheet({
                         width: double.infinity,
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
+                          color: MaiYenColors.surface,
                           borderRadius: BorderRadius.circular(18),
-                          border: Border.all(color: SafeHomeColors.border),
+                          border: Border.all(color: MaiYenColors.border),
                         ),
                         child: Row(
                           children: [
@@ -255,15 +255,15 @@ Future<void> showHomeAutoAwaySheet({
                                   ? Icons.check_circle_rounded
                                   : Icons.location_searching_rounded,
                               color: hasLocation
-                                  ? SafeHomeColors.safe
-                                  : SafeHomeColors.warning,
+                                  ? MaiYenColors.safe
+                                  : MaiYenColors.warning,
                             ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 locationText,
                                 style: const TextStyle(
-                                  color: SafeHomeColors.textPrimary,
+                                  color: MaiYenColors.textPrimary,
                                   fontSize: 13,
                                   height: 1.35,
                                   fontWeight: FontWeight.w700,
@@ -319,7 +319,7 @@ Future<void> showHomeAutoAwaySheet({
                       Text(
                         strings.autoAwayParticipantsTitle,
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 15,
                           fontWeight: FontWeight.w900,
                         ),
@@ -328,7 +328,7 @@ Future<void> showHomeAutoAwaySheet({
                       Text(
                         strings.autoAwayParticipantsDescription,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 12,
                           height: 1.35,
                           fontWeight: FontWeight.w500,
@@ -337,9 +337,9 @@ Future<void> showHomeAutoAwaySheet({
                       const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
+                          color: MaiYenColors.surface,
                           borderRadius: BorderRadius.circular(18),
-                          border: Border.all(color: SafeHomeColors.border),
+                          border: Border.all(color: MaiYenColors.border),
                         ),
                         child: Column(
                           children: [
@@ -371,14 +371,14 @@ Future<void> showHomeAutoAwaySheet({
                                   children: [
                                     const Icon(
                                       Icons.groups_rounded,
-                                      color: SafeHomeColors.primary,
+                                      color: MaiYenColors.primary,
                                     ),
                                     const SizedBox(width: 11),
                                     Expanded(
                                       child: Text(
                                         strings.autoAwayAllParticipants,
                                         style: const TextStyle(
-                                          color: SafeHomeColors.textPrimary,
+                                          color: MaiYenColors.textPrimary,
                                           fontSize: 13.5,
                                           fontWeight: FontWeight.w900,
                                         ),
@@ -411,7 +411,7 @@ Future<void> showHomeAutoAwaySheet({
                                 height: 1,
                                 indent: 12,
                                 endIndent: 12,
-                                color: SafeHomeColors.border,
+                                color: MaiYenColors.border,
                               ),
                             for (var index = 0; index < members.length; index++)
                               _AutoAwayMemberTile(
@@ -443,7 +443,7 @@ Future<void> showHomeAutoAwaySheet({
                         strings.autoAwaySelectedMembersPermissionHint,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 11.5,
                           height: 1.35,
                           fontWeight: FontWeight.w500,
@@ -530,14 +530,14 @@ class _AutoAwayMemberTile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: SafeHomeColors.primarySoft,
+                  backgroundColor: MaiYenColors.primarySoft,
                   backgroundImage: member.photoUrl.trim().isNotEmpty
                       ? NetworkImage(member.photoUrl.trim())
                       : null,
                   child: member.photoUrl.trim().isEmpty
                       ? const Icon(
                           Icons.person_rounded,
-                          color: SafeHomeColors.primary,
+                          color: MaiYenColors.primary,
                         )
                       : null,
                 ),
@@ -551,7 +551,7 @@ class _AutoAwayMemberTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 13.5,
                           fontWeight: FontWeight.w800,
                         ),
@@ -562,7 +562,7 @@ class _AutoAwayMemberTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
                         ),
@@ -583,7 +583,7 @@ class _AutoAwayMemberTile extends StatelessWidget {
             height: 1,
             indent: 63,
             endIndent: 12,
-            color: SafeHomeColors.border,
+            color: MaiYenColors.border,
           ),
       ],
     );

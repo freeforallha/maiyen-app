@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
-import '../safehome_theme.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../maiyen_theme.dart';
 import '../widgets/ios_alarm_platform_notice.dart';
 
 const Set<String> _emergencyAlarmDeviceTypes = {
@@ -346,7 +346,7 @@ Future<void> showDeviceAlarmPolicySheet({
   required Map<String, dynamic> device,
   required bool canEdit,
 }) {
-  return SafeHomeNavigation.pushChildPage<void>(
+  return MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: 'device_alarm_policy',
     builder: (_) => _DeviceAlarmPolicySheet(
@@ -584,7 +584,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         showTopToast(
           context,
           AppStrings.of(context).t('Không thể lưu cấu hình báo động'),
-          color: SafeHomeColors.danger,
+          color: MaiYenColors.danger,
           icon: Icons.error_rounded,
         );
       }
@@ -749,7 +749,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     showTopToast(
       context,
       AppStrings.of(context).duplicateAlarmSchedule,
-      color: SafeHomeColors.warning,
+      color: MaiYenColors.warning,
       icon: Icons.content_copy_rounded,
     );
   }
@@ -813,7 +813,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         AppStrings.of(context).t(
           'Giờ bắt đầu và kết thúc không được trùng nhau',
         ),
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
         icon: Icons.schedule_rounded,
       );
       return;
@@ -851,7 +851,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           maxHeight: MediaQuery.sizeOf(context).height * 0.94,
         ),
         decoration: const BoxDecoration(
-          color: SafeHomeColors.background,
+          color: MaiYenColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
         ),
         child: SafeArea(
@@ -911,7 +911,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                           text: strings.t(
                             'Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.',
                           ),
-                          color: SafeHomeColors.warning,
+                          color: MaiYenColors.warning,
                         ),
                       ],
                     ],
@@ -928,12 +928,12 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         width: 46,
         height: 46,
         decoration: BoxDecoration(
-          color: SafeHomeColors.danger.withValues(alpha: 0.10),
+          color: MaiYenColors.danger.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(14),
         ),
         child: const Icon(
           Icons.notifications_active_rounded,
-          color: SafeHomeColors.danger,
+          color: MaiYenColors.danger,
         ),
       ),
       const SizedBox(width: 12),
@@ -946,7 +946,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
               ),
             ),
             const SizedBox(height: 3),
@@ -955,7 +955,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                color: SafeHomeColors.textSecondary,
+                color: MaiYenColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -975,7 +975,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                 Icons.cloud_done_outlined,
                 key: ValueKey('saved'),
                 size: 20,
-                color: SafeHomeColors.safe,
+                color: MaiYenColors.safe,
               ),
       ),
     ],
@@ -1008,7 +1008,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         padding: const EdgeInsets.fromLTRB(14, 11, 14, 3),
         child: Row(
           children: [
-            Icon(icon, size: 17, color: SafeHomeColors.textSecondary),
+            Icon(icon, size: 17, color: MaiYenColors.textSecondary),
             const SizedBox(width: 7),
             Expanded(
               child: Text(
@@ -1016,7 +1016,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                 ),
               ),
             ),
@@ -1039,8 +1039,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         secondary: Icon(
           icon,
           color: value
-              ? SafeHomeColors.primary
-              : SafeHomeColors.textSecondary,
+              ? MaiYenColors.primary
+              : MaiYenColors.textSecondary,
         ),
         title: Text(
           title,
@@ -1048,7 +1048,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             fontWeight: FontWeight.w700,
-            color: SafeHomeColors.textPrimary,
+            color: MaiYenColors.textPrimary,
           ),
         ),
         subtitle: subtitle == null
@@ -1062,7 +1062,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   style: const TextStyle(
                     fontSize: 12,
                     height: 1.25,
-                    color: SafeHomeColors.textSecondary,
+                    color: MaiYenColors.textSecondary,
                   ),
                 ),
               ),
@@ -1074,9 +1074,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1088,7 +1088,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
               ),
             ),
           ),
@@ -1180,9 +1180,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(10, 9, 10, 10),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1192,7 +1192,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               Icon(
                 personal ? Icons.person_rounded : Icons.home_rounded,
                 size: 21,
-                color: personal ? SafeHomeColors.info : SafeHomeColors.primary,
+                color: personal ? MaiYenColors.info : MaiYenColors.primary,
               ),
               const SizedBox(width: 9),
               Expanded(
@@ -1202,7 +1202,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontWeight: FontWeight.w800,
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                   ),
                 ),
               ),
@@ -1213,7 +1213,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                     padding: EdgeInsets.all(10),
                     child: Icon(
                       Icons.lock_clock_rounded,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                   ),
                 )
@@ -1237,7 +1237,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                     : strings.t('Thêm'),
                 style: const TextStyle(
                   fontSize: 12.5,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                 ),
               ),
             )
@@ -1286,12 +1286,12 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       child: Container(
         key: ValueKey(uiKey),
         decoration: BoxDecoration(
-          color: SafeHomeColors.background,
+          color: MaiYenColors.background,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: showDelete
-                ? SafeHomeColors.danger.withValues(alpha: 0.55)
-                : SafeHomeColors.border,
+                ? MaiYenColors.danger.withValues(alpha: 0.55)
+                : MaiYenColors.border,
           ),
         ),
         child: Column(
@@ -1319,7 +1319,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w800,
-                                color: SafeHomeColors.textPrimary,
+                                color: MaiYenColors.textPrimary,
                               ),
                             ),
                           ),
@@ -1328,7 +1328,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                             child: Icon(
                               Icons.arrow_forward_rounded,
                               size: 17,
-                              color: SafeHomeColors.textSecondary,
+                              color: MaiYenColors.textSecondary,
                             ),
                           ),
                           Flexible(
@@ -1338,7 +1338,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w800,
-                                color: SafeHomeColors.textPrimary,
+                                color: MaiYenColors.textPrimary,
                               ),
                             ),
                           ),
@@ -1356,7 +1356,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                 scheduleId: scheduleId,
                               ),
                               icon: const Icon(Icons.delete_rounded),
-                              color: SafeHomeColors.danger,
+                              color: MaiYenColors.danger,
                               visualDensity: VisualDensity.compact,
                             )
                           : const SizedBox.shrink(key: ValueKey('no_delete')),
@@ -1373,7 +1373,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                   strings.t(
                                     'Giờ bắt đầu và kết thúc không được trùng nhau',
                                   ),
-                                  color: SafeHomeColors.warning,
+                                  color: MaiYenColors.warning,
                                   icon: Icons.schedule_rounded,
                                 );
                                 return;
@@ -1402,7 +1402,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                       expanded
                           ? Icons.keyboard_arrow_up_rounded
                           : Icons.keyboard_arrow_down_rounded,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                   ],
                 ),
@@ -1429,7 +1429,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w800,
-                            color: SafeHomeColors.textPrimary,
+                            color: MaiYenColors.textPrimary,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -1473,7 +1473,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                 strings.t('Lặp lại cảnh báo'),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w700,
-                                  color: SafeHomeColors.textPrimary,
+                                  color: MaiYenColors.textPrimary,
                                 ),
                               ),
                             ),
@@ -1546,13 +1546,13 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: selected.contains(day)
-                  ? SafeHomeColors.primary
-                  : SafeHomeColors.surface,
+                  ? MaiYenColors.primary
+                  : MaiYenColors.surface,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: selected.contains(day)
-                    ? SafeHomeColors.primary
-                    : SafeHomeColors.border,
+                    ? MaiYenColors.primary
+                    : MaiYenColors.border,
               ),
             ),
             child: FittedBox(
@@ -1565,7 +1565,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   fontWeight: FontWeight.w800,
                   color: selected.contains(day)
                       ? Colors.white
-                      : SafeHomeColors.textSecondary,
+                      : MaiYenColors.textSecondary,
                 ),
               ),
             ),
@@ -1593,9 +1593,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1606,7 +1606,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontSize: 11.5,
-              color: SafeHomeColors.textSecondary,
+              color: MaiYenColors.textSecondary,
             ),
           ),
           const SizedBox(height: 2),
@@ -1615,7 +1615,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w800,
-              color: SafeHomeColors.textPrimary,
+              color: MaiYenColors.textPrimary,
             ),
           ),
         ],
@@ -1632,9 +1632,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     required ValueChanged<bool> onChanged,
   }) => Container(
     decoration: BoxDecoration(
-      color: SafeHomeColors.surface,
+      color: MaiYenColors.surface,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: SafeHomeColors.border),
+      border: Border.all(color: MaiYenColors.border),
     ),
     child: SwitchListTile.adaptive(
       value: value,
@@ -1642,21 +1642,21 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       secondary: Icon(
         icon,
         color: enabled
-            ? SafeHomeColors.primary
-            : SafeHomeColors.textSecondary,
+            ? MaiYenColors.primary
+            : MaiYenColors.textSecondary,
       ),
       title: Text(
         title,
         style: const TextStyle(
           fontWeight: FontWeight.w700,
-          color: SafeHomeColors.textPrimary,
+          color: MaiYenColors.textPrimary,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: const TextStyle(
           fontSize: 12.5,
-          color: SafeHomeColors.textSecondary,
+          color: MaiYenColors.textSecondary,
         ),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
@@ -1686,7 +1686,7 @@ Widget _noticeCard({
           text,
           style: const TextStyle(
             height: 1.35,
-            color: SafeHomeColors.textPrimary,
+            color: MaiYenColors.textPrimary,
           ),
         ),
       ),

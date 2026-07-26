@@ -13,7 +13,8 @@ import java.util.Locale
 class BootReceiver : BroadcastReceiver() {
 
     companion object {
-        const val PREFS_NAME = "safehome_monitoring"
+        const val MONITORING_PREFERENCES_NAME =
+            MaiYenNativeIdentifiers.LEGACY_MONITORING_PREFERENCES
         const val KEY_BOOT_RECEIVER_CONFIRMED =
             "boot_receiver_confirmed"
         const val KEY_CONFIRMED_BOOT_COUNT =
@@ -60,7 +61,7 @@ class BootReceiver : BroadcastReceiver() {
         // ứng dụng tự chạy trong lần khởi động hiện tại.
         storageContext
             .getSharedPreferences(
-                PREFS_NAME,
+                MONITORING_PREFERENCES_NAME,
                 Context.MODE_PRIVATE
             )
             .edit()
@@ -86,7 +87,8 @@ class BootReceiver : BroadcastReceiver() {
     }
 
     private fun showBootNotification(context: Context) {
-        val channelId = "safehome_boot_channel"
+        val channelId =
+            MaiYenNativeIdentifiers.LEGACY_BOOT_NOTIFICATION_CHANNEL_ID
         val brandName = context.getString(R.string.app_name)
 
         val manager =

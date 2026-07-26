@@ -171,7 +171,7 @@ class _ProfileSetupPageState extends State<ProfileSetupPage> {
       if (!mounted) return;
 
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => HomePage()),
+        MaterialPageRoute(builder: (_) => MaiYen()),
         (route) => false,
       );
     } catch (e) {

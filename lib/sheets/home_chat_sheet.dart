@@ -10,12 +10,12 @@ import '../services/home_notification_service.dart';
 import '../services/notification_service.dart';
 import '../helpers/firebase_paths.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../helpers/top_toast.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 void showHomeChatSheet({
   required BuildContext context,
@@ -299,7 +299,7 @@ void showHomeChatSheet({
         TextSpan(
           text: source.substring(match.start, match.end),
           style: baseStyle.copyWith(
-            color: SafeHomeColors.primary,
+            color: MaiYenColors.primary,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -352,7 +352,7 @@ void showHomeChatSheet({
 
     if (!sheetContext.mounted) return;
 
-    SafeHomeNavigation.showModalSheet(
+    MaiYenNavigation.showModalSheet(
       context: sheetContext,
       useRootNavigator: true,
       backgroundColor: Colors.transparent,
@@ -579,7 +579,7 @@ void showHomeChatSheet({
 
   NotificationService.markHomeChatOpened(homeId);
 
-  SafeHomeNavigation.pushChildPage<void>(
+  MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "home_chat",
     builder: (ctx) {
@@ -865,7 +865,7 @@ void showHomeChatSheet({
                 showTopToast(
                   ctx,
                   AppStrings.of(ctx).t("Không gửi được tin nhắn"),
-                  color: SafeHomeColors.danger,
+                  color: MaiYenColors.danger,
                   icon: Icons.error_rounded,
                 );
               }
@@ -1660,7 +1660,7 @@ void showHomeChatSheet({
                                                                       border: const Border(
                                                                         left: BorderSide(
                                                                           color:
-                                                                              SafeHomeColors.primary,
+                                                                              MaiYenColors.primary,
                                                                           width:
                                                                               3,
                                                                         ),
@@ -1683,7 +1683,7 @@ void showHomeChatSheet({
                                                                               TextOverflow.ellipsis,
                                                                           style: const TextStyle(
                                                                             color:
-                                                                                SafeHomeColors.primary,
+                                                                                MaiYenColors.primary,
                                                                             fontSize:
                                                                                 11,
                                                                             fontWeight:
@@ -1702,7 +1702,7 @@ void showHomeChatSheet({
                                                                               TextOverflow.ellipsis,
                                                                           style: const TextStyle(
                                                                             color:
-                                                                                SafeHomeColors.textSecondary,
+                                                                                MaiYenColors.textSecondary,
                                                                             fontSize:
                                                                                 11,
                                                                             height:
@@ -1774,7 +1774,7 @@ void showHomeChatSheet({
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: SafeHomeColors.border),
+                            border: Border.all(color: MaiYenColors.border),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.08),
@@ -1792,7 +1792,7 @@ void showHomeChatSheet({
                                       "Không tìm thấy thành viên phù hợp",
                                     ),
                                     style: const TextStyle(
-                                      color: SafeHomeColors.textSecondary,
+                                      color: MaiYenColors.textSecondary,
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1816,7 +1816,7 @@ void showHomeChatSheet({
                                       dense: true,
                                       leading: CircleAvatar(
                                         radius: 18,
-                                        backgroundColor: SafeHomeColors.primary
+                                        backgroundColor: MaiYenColors.primary
                                             .withValues(alpha: 0.10),
                                         backgroundImage:
                                             member.photoUrl.isNotEmpty
@@ -1826,7 +1826,7 @@ void showHomeChatSheet({
                                             ? const Icon(
                                                 Icons.person_rounded,
                                                 size: 19,
-                                                color: SafeHomeColors.primary,
+                                                color: MaiYenColors.primary,
                                               )
                                             : null,
                                       ),
@@ -1861,7 +1861,7 @@ void showHomeChatSheet({
                             margin: const EdgeInsets.only(bottom: 8),
                             padding: const EdgeInsets.fromLTRB(10, 8, 4, 8),
                             decoration: BoxDecoration(
-                              color: SafeHomeColors.primary.withValues(
+                              color: MaiYenColors.primary.withValues(
                                 alpha: 0.07,
                               ),
                               borderRadius: BorderRadius.circular(14),
@@ -1872,7 +1872,7 @@ void showHomeChatSheet({
                                   width: 3,
                                   height: 42,
                                   decoration: BoxDecoration(
-                                    color: SafeHomeColors.primary,
+                                    color: MaiYenColors.primary,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
@@ -1889,7 +1889,7 @@ void showHomeChatSheet({
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                          color: SafeHomeColors.primary,
+                                          color: MaiYenColors.primary,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w800,
                                         ),
@@ -1902,7 +1902,7 @@ void showHomeChatSheet({
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                          color: SafeHomeColors.textSecondary,
+                                          color: MaiYenColors.textSecondary,
                                           fontSize: 12,
                                           height: 1.3,
                                         ),
@@ -1917,7 +1917,7 @@ void showHomeChatSheet({
                                   icon: const Icon(
                                     Icons.close_rounded,
                                     size: 19,
-                                    color: SafeHomeColors.textSecondary,
+                                    color: MaiYenColors.textSecondary,
                                   ),
                                 ),
                               ],
@@ -1971,14 +1971,14 @@ void showHomeChatSheet({
                             width: 44,
                             height: 44,
                             child: Material(
-                              color: SafeHomeColors.safe,
+                              color: MaiYenColors.safe,
                               elevation: 3,
-                              shadowColor: SafeHomeColors.safe.withValues(
+                              shadowColor: MaiYenColors.safe.withValues(
                                 alpha: 0.35,
                               ),
                               shape: const CircleBorder(
                                 side: BorderSide(
-                                  color: SafeHomeColors.primaryDark,
+                                  color: MaiYenColors.primaryDark,
                                   width: 1,
                                 ),
                               ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 Future<bool> showDeleteHomeConfirmSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  final result = await SafeHomeNavigation.showModalSheet<bool>(
+  final result = await MaiYenNavigation.showModalSheet<bool>(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {
@@ -86,7 +86,7 @@ Future<bool> showDeleteHomePasswordSheet({
 }) async {
   String inputPassword = "";
 
-  final result = await SafeHomeNavigation.showModalSheet<bool>(
+  final result = await MaiYenNavigation.showModalSheet<bool>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,

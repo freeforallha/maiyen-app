@@ -17,14 +17,12 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
 
-    private val channelName = "safehome/native_alarm_permission"
-
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            channelName
+            MaiYenNativeIdentifiers.NATIVE_ALARM_PERMISSION_CHANNEL
         ).setMethodCallHandler { call, result ->
             when (call.method) {
                 "canUseFullScreenIntent" -> {
@@ -40,13 +38,12 @@ class MainActivity : FlutterActivity() {
                     result.success(isAlarmScreenLaunch())
                 }
 
-                "getSafeHomeAction" -> {
-                    result.success(
-                        intent?.getStringExtra("safehome_action") ?: ""
-                    )
+                MaiYenNativeIdentifiers.GET_ACTION_METHOD,
+                MaiYenNativeIdentifiers.LEGACY_GET_ACTION_METHOD -> {
+                    result.success(readMaiYenAction(intent))
                 }
 
-                // Kiểm tra SafeHome đã được đặt thành
+                // Kiểm tra MaiYen đã được đặt thành
                 // Không hạn chế pin hay chưa.
                 "isIgnoringBatteryOptimizations" -> {
                     result.success(isIgnoringBatteryOptimizations())
@@ -63,7 +60,7 @@ class MainActivity : FlutterActivity() {
                     result.success(true)
                 }
 
-                // Mở trang chi tiết SafeHome.
+                // Mở trang chi tiết MaiYen.
                 // Người dùng có thể bật Tự khởi chạy trên máy hỗ trợ.
                 "openAppDetailsSettings" -> {
                     openAppDetailsSettings()
@@ -155,7 +152,7 @@ class MainActivity : FlutterActivity() {
             return true
         }
 
-        if (isAlarmLaunchValue(launchIntent.getStringExtra("safehome_action"))) {
+        if (isAlarmLaunchValue(readMaiYenAction(launchIntent))) {
             return true
         }
 
@@ -180,6 +177,26 @@ class MainActivity : FlutterActivity() {
         }
 
         return false
+    }
+
+    private fun readMaiYenAction(sourceIntent: Intent?): String {
+        if (sourceIntent == null) {
+            return ""
+        }
+
+        val currentAction = sourceIntent
+            .getStringExtra(MaiYenNativeIdentifiers.ACTION_EXTRA)
+            ?.trim()
+            .orEmpty()
+
+        if (currentAction.isNotEmpty()) {
+            return currentAction
+        }
+
+        return sourceIntent
+            .getStringExtra(MaiYenNativeIdentifiers.LEGACY_ACTION_EXTRA)
+            ?.trim()
+            .orEmpty()
     }
 
     private fun isAlarmLaunchValue(rawValue: String?): Boolean {
@@ -284,7 +301,7 @@ class MainActivity : FlutterActivity() {
 
         val preferences =
             storageContext.getSharedPreferences(
-                BootReceiver.PREFS_NAME,
+                BootReceiver.MONITORING_PREFERENCES_NAME,
                 Context.MODE_PRIVATE
             )
 

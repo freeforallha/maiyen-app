@@ -5,9 +5,9 @@ import 'package:firebase_database/firebase_database.dart';
 import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import 'device_alarm_policy_sheet.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 
 IconData _alarmDeviceIcon(Object? rawType) {
   final type = rawType?.toString().trim().toLowerCase() ?? "unknown";
@@ -461,7 +461,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       showTopToast(
         context,
         strings.t('Bạn không có quyền sửa lịch báo động của nhà'),
-        color: SafeHomeColors.danger,
+        color: MaiYenColors.danger,
         icon: Icons.lock_rounded,
       );
       return;
@@ -472,7 +472,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       showTopToast(
         context,
         strings.t('Nhà chưa có thiết bị an ninh để áp dụng'),
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
         icon: Icons.sensors_off_rounded,
       );
       return;
@@ -521,7 +521,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     });
     var saving = false;
 
-    await SafeHomeNavigation.showModalSheet<void>(
+    await MaiYenNavigation.showModalSheet<void>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
@@ -552,7 +552,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   strings.t(
                     'Giờ bắt đầu và kết thúc không được trùng nhau',
                   ),
-                  color: SafeHomeColors.warning,
+                  color: MaiYenColors.warning,
                   icon: Icons.schedule_rounded,
                 );
                 return;
@@ -570,7 +570,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 showTopToast(
                   context,
                   strings.t('Giờ bắt đầu và kết thúc không được trùng nhau'),
-                  color: SafeHomeColors.warning,
+                  color: MaiYenColors.warning,
                   icon: Icons.schedule_rounded,
                 );
                 return;
@@ -676,7 +676,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 showTopToast(
                   this.context,
                   strings.t('Đã áp dụng lịch báo động'),
-                  color: SafeHomeColors.safe,
+                  color: MaiYenColors.safe,
                   icon: Icons.check_circle_rounded,
                 );
                 await _reload();
@@ -686,7 +686,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 showTopToast(
                   context,
                   strings.t('Không thể lưu lịch báo động'),
-                  color: SafeHomeColors.danger,
+                  color: MaiYenColors.danger,
                   icon: Icons.error_rounded,
                 );
               }
@@ -705,8 +705,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 secondary: Icon(
                   icon,
                   color: value
-                      ? SafeHomeColors.primary
-                      : SafeHomeColors.textSecondary,
+                      ? MaiYenColors.primary
+                      : MaiYenColors.textSecondary,
                 ),
                 title: Text(
                   title,
@@ -714,7 +714,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                   ),
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 10),
@@ -727,7 +727,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 maxHeight: MediaQuery.sizeOf(context).height * 0.9,
               ),
               decoration: const BoxDecoration(
-                color: SafeHomeColors.background,
+                color: MaiYenColors.background,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: SafeArea(
@@ -743,7 +743,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           width: 42,
                           height: 5,
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.border,
+                            color: MaiYenColors.border,
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
@@ -756,7 +756,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -771,7 +771,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                 'Lịch này áp dụng cho toàn bộ thành viên trong nhà.',
                               ),
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           height: 1.35,
                         ),
                       ),
@@ -779,9 +779,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.surface,
+                          color: MaiYenColors.surface,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: SafeHomeColors.border),
+                          border: Border.all(color: MaiYenColors.border),
                         ),
                         child: Column(
                           children: personal
@@ -880,10 +880,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           width: double.infinity,
                           padding: const EdgeInsets.all(13),
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.primary.withValues(alpha: 0.07),
+                            color: MaiYenColors.primary.withValues(alpha: 0.07),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: SafeHomeColors.primary.withValues(alpha: 0.20),
+                              color: MaiYenColors.primary.withValues(alpha: 0.20),
                             ),
                           ),
                           child: Row(
@@ -892,7 +892,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               const Icon(
                                 Icons.lock_clock_rounded,
                                 size: 20,
-                                color: SafeHomeColors.primary,
+                                color: MaiYenColors.primary,
                               ),
                               const SizedBox(width: 9),
                               Expanded(
@@ -901,7 +901,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                   style: const TextStyle(
                                     fontSize: 12.5,
                                     height: 1.35,
-                                    color: SafeHomeColors.textSecondary,
+                                    color: MaiYenColors.textSecondary,
                                   ),
                                 ),
                               ),
@@ -1014,7 +1014,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             style: FilledButton.styleFrom(
-              backgroundColor: SafeHomeColors.danger,
+              backgroundColor: MaiYenColors.danger,
             ),
             child: Text(strings.t('Xóa')),
           ),
@@ -1054,7 +1054,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       showTopToast(
         context,
         strings.allAlarmSchedulesDeleted,
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
         icon: Icons.delete_sweep_rounded,
       );
       await _reload();
@@ -1063,7 +1063,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       showTopToast(
         context,
         strings.t('Không thể lưu lịch báo động'),
-        color: SafeHomeColors.danger,
+        color: MaiYenColors.danger,
         icon: Icons.error_rounded,
       );
     } finally {
@@ -1083,7 +1083,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         ),
         padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
         decoration: const BoxDecoration(
-          color: SafeHomeColors.background,
+          color: MaiYenColors.background,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
@@ -1094,7 +1094,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                 width: 42,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: SafeHomeColors.border,
+                  color: MaiYenColors.border,
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -1105,7 +1105,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
               ),
             ),
             const SizedBox(height: 4),
@@ -1115,7 +1115,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               style: const TextStyle(
                 fontSize: 12.5,
                 height: 1.35,
-                color: SafeHomeColors.textSecondary,
+                color: MaiYenColors.textSecondary,
               ),
             ),
             const SizedBox(height: 14),
@@ -1162,7 +1162,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     textAlign: TextAlign.center,
                   ),
                   style: TextButton.styleFrom(
-                    foregroundColor: SafeHomeColors.danger,
+                    foregroundColor: MaiYenColors.danger,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 9,
@@ -1180,7 +1180,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       child: Text(
                         strings.t('Nhà chưa có thiết bị an ninh'),
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                         ),
                       ),
                     )
@@ -1204,9 +1204,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: SafeHomeColors.border),
+                            border: Border.all(color: MaiYenColors.border),
                           ),
                           child: InkWell(
                             onTap: () => _openDeviceSettings(key, device),
@@ -1219,7 +1219,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     width: 42,
                                     height: 42,
                                     decoration: BoxDecoration(
-                                      color: SafeHomeColors.primary.withValues(
+                                      color: MaiYenColors.primary.withValues(
                                         alpha: 0.10,
                                       ),
                                       borderRadius: BorderRadius.circular(13),
@@ -1227,7 +1227,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     child: Icon(
                                       _alarmDeviceIcon(device['type']),
                                       size: 22,
-                                      color: SafeHomeColors.primary,
+                                      color: MaiYenColors.primary,
                                     ),
                                   ),
                                   const SizedBox(width: 11),
@@ -1247,7 +1247,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w900,
-                                                  color: SafeHomeColors
+                                                  color: MaiYenColors
                                                       .textPrimary,
                                                 ),
                                               ),
@@ -1259,8 +1259,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                                   : Icons.shield_outlined,
                                               size: 17,
                                               color: policy.enabled
-                                                  ? SafeHomeColors.safe
-                                                  : SafeHomeColors
+                                                  ? MaiYenColors.safe
+                                                  : MaiYenColors
                                                         .textSecondary,
                                             ),
                                           ],
@@ -1285,7 +1285,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                   const SizedBox(width: 8),
                                   const Icon(
                                     Icons.chevron_right_rounded,
-                                    color: SafeHomeColors.textSecondary,
+                                    color: MaiYenColors.textSecondary,
                                   ),
                                 ],
                               ),
@@ -1312,7 +1312,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
         Icon(
           icon,
           size: 14,
-          color: active ? SafeHomeColors.primary : SafeHomeColors.textSecondary,
+          color: active ? MaiYenColors.primary : MaiYenColors.textSecondary,
         ),
         const SizedBox(width: 5),
         Text(
@@ -1320,7 +1320,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           style: const TextStyle(
             fontSize: 11.5,
             fontWeight: FontWeight.w700,
-            color: SafeHomeColors.textSecondary,
+            color: MaiYenColors.textSecondary,
           ),
         ),
         const SizedBox(width: 4),
@@ -1333,8 +1333,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               color: active
-                  ? SafeHomeColors.textPrimary
-                  : SafeHomeColors.textSecondary,
+                  ? MaiYenColors.textPrimary
+                  : MaiYenColors.textSecondary,
             ),
           ),
         ),
@@ -1405,9 +1405,9 @@ class _AlarmWeekdaySelector extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(11, 10, 11, 12),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1417,7 +1417,7 @@ class _AlarmWeekdaySelector extends StatelessWidget {
             child: Text(
               strings.t("Ngày trong tuần"),
               style: const TextStyle(
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
               ),
@@ -1450,7 +1450,7 @@ class _AlarmDayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = SafeHomeColors.primary;
+    final activeColor = MaiYenColors.primary;
 
     return InkWell(
       onTap: enabled ? onTap : null,
@@ -1468,7 +1468,7 @@ class _AlarmDayChip extends StatelessWidget {
           border: Border.all(
             color: selected
                 ? activeColor.withValues(alpha: enabled ? 0.65 : 0.28)
-                : SafeHomeColors.border,
+                : MaiYenColors.border,
             width: selected ? 1.4 : 1,
           ),
         ),
@@ -1481,7 +1481,7 @@ class _AlarmDayChip extends StatelessWidget {
               style: TextStyle(
                 color: selected
                     ? activeColor.withValues(alpha: enabled ? 1 : 0.45)
-                    : SafeHomeColors.textSecondary.withValues(
+                    : MaiYenColors.textSecondary.withValues(
                         alpha: enabled ? 1 : 0.45,
                       ),
                 fontSize: 12,
@@ -1514,9 +1514,9 @@ class _AlarmRepeatDropdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
       ),
       child: Row(
         children: [
@@ -1524,7 +1524,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
             child: Text(
               strings.t("Thời gian lặp lại"),
               style: const TextStyle(
-                color: SafeHomeColors.textPrimary,
+                color: MaiYenColors.textPrimary,
                 fontSize: 13,
                 fontWeight: FontWeight.w800,
               ),
@@ -1539,7 +1539,7 @@ class _AlarmRepeatDropdown extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 icon: const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                 ),
                 items: [
                   DropdownMenuItem(
