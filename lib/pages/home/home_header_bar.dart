@@ -78,11 +78,11 @@ class HomeHeaderBar extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: "Safe",
+                          text: "Mai",
                           style: TextStyle(color: MaiYenColors.primary),
                         ),
                         TextSpan(
-                          text: "Home",
+                          text: "Yen",
                           style: TextStyle(color: MaiYenColors.textPrimary),
                         ),
                       ],

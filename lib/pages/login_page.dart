@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       // Không đọc/ghi Database và không tự điều hướng tại đây.
-      // AuthGate sẽ tự mở ProfileSetupPage hoặc HomePage theo UID mới.
+      // AuthGate sẽ tự mở ProfileSetupPage hoặc MaiYen theo UID mới.
     } on FirebaseAuthException catch (e) {
       safeDebugPrint("GOOGLE_LOGIN_FIREBASE_ERROR: ${e.code}");
 

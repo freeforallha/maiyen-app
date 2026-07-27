@@ -12,16 +12,16 @@ import 'package:maiyen_app/helpers/debug_log.dart';
 import '../navigation/maiyen_navigation.dart';
 import '../config/legacy_identifiers.dart';
 
-class AllHomePage extends StatefulWidget {
+class AllHome extends StatefulWidget {
   final List<String> homeOrder;
 
-  const AllHomePage({super.key, required this.homeOrder});
+  const AllHome({super.key, required this.homeOrder});
 
   @override
-  State<AllHomePage> createState() => _AllHomePageState();
+  State<AllHome> createState() => _AllHomeState();
 }
 
-class _AllHomePageState extends State<AllHomePage> {
+class _AllHomeState extends State<AllHome> {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> homes = {};
   Map<String, int> unreadChatCounts = {};
@@ -140,7 +140,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   });
                 });
 
-                final safeHomes = <Map<String, dynamic>>[];
+                final normalHomes = <Map<String, dynamic>>[];
                 final warningHomes = <Map<String, dynamic>>[];
                 final dangerHomes = <Map<String, dynamic>>[];
                 final emergencyHomes = <Map<String, dynamic>>[];
@@ -173,7 +173,7 @@ class _AllHomePageState extends State<AllHomePage> {
                   } else if (level == "warning") {
                     warningHomes.add(item);
                   } else {
-                    safeHomes.add(item);
+                    normalHomes.add(item);
                   }
                 }
 
@@ -355,7 +355,7 @@ class _AllHomePageState extends State<AllHomePage> {
                           title: _strings.t("An toàn"),
                           icon: Icons.check_circle_rounded,
                           color: MaiYenColors.safe,
-                          items: safeHomes,
+                          items: normalHomes,
                           compact: false,
                         ),
                       ],
@@ -2423,12 +2423,8 @@ class _AllHomePageState extends State<AllHomePage> {
                         ),
                         children: [
                           TextSpan(
-                            text: "Safe",
-                            style: TextStyle(color: MaiYenColors.primary),
-                          ),
-                          TextSpan(
                             text: "All",
-                            style: TextStyle(color: MaiYenColors.textPrimary),
+                            style: TextStyle(color: MaiYenColors.primary),
                           ),
                           TextSpan(
                             text: "Home",

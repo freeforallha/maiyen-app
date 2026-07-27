@@ -588,7 +588,7 @@ class _AuthGateState extends State<AuthGate> {
                       );
                     }
 
-                    return const LocationPermissionGate(child: HomePage());
+                    return const LocationPermissionGate(child: MaiYen());
                   },
                 );
               },

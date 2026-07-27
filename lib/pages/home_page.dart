@@ -56,14 +56,14 @@ import '../localization/app_strings.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 import '../config/legacy_identifiers.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class MaiYen extends StatefulWidget {
+  const MaiYen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MaiYen> createState() => _MaiYenState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
   AppStrings get _strings => AppStrings.of(context);
   Map<String, dynamic> shareRequests = {};
   final ValueNotifier<int> inviteCountNotifier = ValueNotifier(0);
@@ -1868,7 +1868,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       _syncPhoneToCurrentHomes();
     }
 
-    // Các listener phụ chỉ chạy sau khi HomePage đã vẽ xong.
+    // Các listener phụ chỉ chạy sau khi MaiYen đã vẽ xong.
     // Mục tiêu: giảm đơ/trắng khi vừa login.
     if (!_secondaryHomeListenersReady) {
       return;
@@ -2120,7 +2120,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     _deferredHomeStartupStarted = true;
 
-    // Chờ HomePage vẽ frame đầu xong rồi mới bật các phần phụ.
+    // Chờ MaiYen vẽ frame đầu xong rồi mới bật các phần phụ.
     await Future<void>.delayed(const Duration(milliseconds: 700));
 
     if (!mounted || uid.isEmpty) {
@@ -3903,7 +3903,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       final selected = await Navigator.push<String>(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => AllHomePage(homeOrder: homeOrder),
+                          builder: (_) => AllHome(homeOrder: homeOrder),
                         ),
                       );
 
