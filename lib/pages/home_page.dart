@@ -51,9 +51,10 @@ import '../services/home_notification_service.dart';
 import '../services/auto_away_service.dart';
 import '../services/session_logout_service.dart';
 import '../services/system_usage_service.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../config/legacy_identifiers.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -433,7 +434,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           pt: "Nenhum alarme foi configurado",
           tet: "Alarme ida seidauk tau",
         ),
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
         icon: Icons.schedule_rounded,
       );
       return;
@@ -635,7 +636,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         showTopToast(
           context,
           _strings.homeSecurityRepeatToast(normalized),
-          color: SafeHomeColors.primary,
+          color: MaiYenColors.primary,
           icon: Icons.repeat_rounded,
         );
 
@@ -803,7 +804,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         showTopToast(
           context,
           _strings.t("Đã bật Chế độ Bảo vệ thủ công"),
-          color: SafeHomeColors.danger,
+          color: MaiYenColors.danger,
           icon: Icons.shield_rounded,
         );
       }
@@ -832,7 +833,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 "Đã chuyển sang Không bảo vệ nhưng chưa gửi được thông báo",
               )
             : _strings.t("Đã chuyển nhà sang Không bảo vệ"),
-        color: SafeHomeColors.warning,
+        color: MaiYenColors.warning,
         icon: Icons.shield_outlined,
       );
       return;
@@ -857,7 +858,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             : _strings.t("Đã chuyển nhà về Bình thường"),
         color: notificationStatus == HomeSecurityNotificationStatus.failed
             ? Colors.orange
-            : SafeHomeColors.safe,
+            : MaiYenColors.safe,
         icon: Icons.shield_rounded,
       );
     }
@@ -1275,7 +1276,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ),
                 color: permissionRequired
                     ? Colors.orange
-                    : SafeHomeColors.safe,
+                    : MaiYenColors.safe,
                 icon: permissionRequired
                     ? Icons.location_disabled_rounded
                     : Icons.check_circle_rounded,
@@ -2188,7 +2189,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         showTopToast(
           context,
           _strings.joinRequestsSentMessage(result.joinRequestCount),
-          color: SafeHomeColors.safe,
+          color: MaiYenColors.safe,
           icon: Icons.check_circle_rounded,
         );
         return;
@@ -2212,7 +2213,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         showTopToast(
           context,
           _strings.t("Đã gửi yêu cầu gia nhập nhà"),
-          color: SafeHomeColors.safe,
+          color: MaiYenColors.safe,
           icon: Icons.check_circle_rounded,
         );
         return;
@@ -2388,14 +2389,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   void showJoinHomeQR() {
     final shareOwnerUid = getHomeOwnerUid();
-    final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
+    final qrData = MaiYenLegacyIdentifiers.buildJoinHomeQr(
+      ownerUid: shareOwnerUid,
+      homeId: selectedHome,
+    );
 
     showJoinHomeQrSheet(context: context, strings: _strings, qrData: qrData);
   }
 
   void shareHome() async {
     final shareOwnerUid = getHomeOwnerUid();
-    final qrData = "safehome_join|$shareOwnerUid|$selectedHome";
+    final qrData = MaiYenLegacyIdentifiers.buildJoinHomeQr(
+      ownerUid: shareOwnerUid,
+      homeId: selectedHome,
+    );
 
     final targetEmail = await showShareHomeSheet(
       context: context,
@@ -2473,7 +2480,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     showTopToast(
       context,
       _strings.t("Đã share home"),
-      color: SafeHomeColors.safe,
+      color: MaiYenColors.safe,
       icon: Icons.check_circle_rounded,
     );
   }
@@ -2620,7 +2627,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     showTopToast(
       context,
       _strings.t("Đã gửi yêu cầu chuyển quyền chủ nhà"),
-      color: SafeHomeColors.safe,
+      color: MaiYenColors.safe,
       icon: Icons.check_circle_rounded,
     );
 
@@ -2664,7 +2671,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       showTopToast(
         context,
         _strings.t("Đã gửi yêu cầu xoá thiết bị"),
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
         icon: Icons.check_circle_rounded,
       );
     } catch (e) {
@@ -2754,7 +2761,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final code = await openQRScanner(
       context,
-      mode: SafeHomeQrScanMode.joinHome,
+      mode: MaiYenQrScanMode.joinHome,
     );
 
     if (!mounted || code == null || code.trim().isEmpty) {
@@ -2763,8 +2770,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     final value = code.trim();
 
-    if (!value.startsWith("safehome_join|") &&
-        !value.startsWith("safehome_join_multi|")) {
+    if (!value.startsWith(MaiYenLegacyIdentifiers.joinHomeQrPrefix) &&
+        !value.startsWith(
+          MaiYenLegacyIdentifiers.joinMultipleHomesQrPrefix,
+        )) {
       showTopToast(
         context,
         _strings.t("QR này không phải mã xin gia nhập nhà"),
@@ -3878,7 +3887,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     return Scaffold(
       extendBody: true,
-      backgroundColor: SafeHomeColors.background,
+      backgroundColor: MaiYenColors.background,
       body: _HomeStatusBackground(
         level: overviewLevel,
         child: Stack(
@@ -4132,7 +4141,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                                 final code = await openQRScanner(
                                   context,
-                                  mode: SafeHomeQrScanMode.pairDevice,
+                                  mode: MaiYenQrScanMode.pairDevice,
                                 );
 
                                 if (code != null) {
@@ -4254,7 +4263,7 @@ class _HomeStatusBackground extends StatelessWidget {
       case "safe":
         return const [
           Color(0xFFF3F8F5),
-          SafeHomeColors.background,
+          MaiYenColors.background,
           Color(0xFFFFFFFF),
         ];
       default:

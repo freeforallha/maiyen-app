@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
 
 class RoomTabs extends StatefulWidget {
@@ -147,7 +147,7 @@ class _RoomTabsState extends State<RoomTabs> {
             left: 12,
             right: 12,
             bottom: 0,
-            child: Container(height: 1, color: SafeHomeColors.border),
+            child: Container(height: 1, color: MaiYenColors.border),
           ),
           Positioned.fill(
             child: ShaderMask(
@@ -233,10 +233,10 @@ class _RoomTabsState extends State<RoomTabs> {
             color: Colors.transparent,
             child: Container(
               decoration: BoxDecoration(
-                color: SafeHomeColors.surface,
+                color: MaiYenColors.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: SafeHomeColors.primary.withValues(alpha: 0.18),
+                  color: MaiYenColors.primary.withValues(alpha: 0.18),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -295,8 +295,8 @@ class _RoomTabItem extends StatelessWidget {
                   fontSize: selected ? 16 : 13.5,
                   fontWeight: selected ? FontWeight.w900 : FontWeight.w600,
                   color: selected
-                      ? SafeHomeColors.textPrimary
-                      : SafeHomeColors.textSecondary,
+                      ? MaiYenColors.textPrimary
+                      : MaiYenColors.textSecondary,
                   letterSpacing: selected ? -0.2 : -0.05,
                 ),
                 child: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),

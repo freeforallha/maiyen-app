@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../safehome_theme.dart';
+import '../../maiyen_theme.dart';
 
 class HomeBottomBar extends StatelessWidget {
   const HomeBottomBar({
@@ -29,9 +29,9 @@ class HomeBottomBar extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
         decoration: BoxDecoration(
-          color: SafeHomeColors.surface.withValues(alpha: 0.97),
+          color: MaiYenColors.surface.withValues(alpha: 0.97),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: SafeHomeColors.border, width: 0.9),
+          border: Border.all(color: MaiYenColors.border, width: 0.9),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.075),
@@ -46,10 +46,10 @@ class HomeBottomBar extends StatelessWidget {
               minimumSize: const Size(46, 46),
               maximumSize: const Size(46, 46),
               padding: EdgeInsets.zero,
-              foregroundColor: SafeHomeColors.textSecondary,
+              foregroundColor: MaiYenColors.textSecondary,
               backgroundColor: Colors.transparent,
-              hoverColor: SafeHomeColors.primarySoft,
-              highlightColor: SafeHomeColors.primarySoft,
+              hoverColor: MaiYenColors.primarySoft,
+              highlightColor: MaiYenColors.primarySoft,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -62,7 +62,7 @@ class HomeBottomBar extends StatelessWidget {
                 tooltip: addHomeTooltip,
                 icon: const Icon(
                   Icons.add_home_work_rounded,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                 ),
                 onPressed: onAddHome,
               ),
@@ -71,7 +71,7 @@ class HomeBottomBar extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.chat_bubble_rounded,
-                      color: SafeHomeColors.primary,
+                      color: MaiYenColors.primary,
                     ),
                     onPressed: onOpenChat,
                   ),
@@ -82,10 +82,10 @@ class HomeBottomBar extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.danger,
+                          color: MaiYenColors.danger,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             width: 1.5,
                           ),
                         ),
@@ -106,7 +106,7 @@ class HomeBottomBar extends StatelessWidget {
               IconButton(
                 icon: const Icon(
                   Icons.crisis_alert_rounded,
-                  color: SafeHomeColors.danger,
+                  color: MaiYenColors.danger,
                 ),
                 onPressed: onOpenAlarm,
               ),
@@ -115,7 +115,7 @@ class HomeBottomBar extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.settings_rounded,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                     onPressed: onOpenSettings,
                   ),
@@ -133,10 +133,10 @@ class HomeBottomBar extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.danger,
+                          color: MaiYenColors.danger,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             width: 1.5,
                           ),
                         ),

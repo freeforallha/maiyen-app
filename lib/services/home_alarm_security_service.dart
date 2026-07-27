@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';

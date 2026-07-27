@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
 import '../services/home_notification_service.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 
 void showHomeEventSheet({
   required BuildContext context,
@@ -278,7 +278,7 @@ void showHomeEventSheet({
     }
   }
 
-  SafeHomeNavigation.showModalSheet(
+  MaiYenNavigation.showModalSheet(
     context: context,
     backgroundColor: Colors.white,
     isScrollControlled: true,

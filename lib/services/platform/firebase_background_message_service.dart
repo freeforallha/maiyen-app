@@ -10,7 +10,7 @@ import '../notification_service.dart';
 import 'android/android_background_notification_service.dart' as android;
 
 @pragma('vm:entry-point')
-Future<void> safeHomeFirebaseMessagingBackgroundHandler(
+Future<void> maiYenFirebaseMessagingBackgroundHandler(
   RemoteMessage message,
 ) async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -53,4 +53,13 @@ Future<void> safeHomeFirebaseMessagingBackgroundHandler(
       localNotif.cancel(NotificationService.alarmNotificationId),
     ]);
   }
+}
+
+/// Entry point cũ được giữ lại để callback handle FCM đã lưu từ bản SafeHome
+/// không bị mất hiệu lực sau khi cập nhật ứng dụng.
+@pragma('vm:entry-point')
+Future<void> safeHomeFirebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+) {
+  return maiYenFirebaseMessagingBackgroundHandler(message);
 }

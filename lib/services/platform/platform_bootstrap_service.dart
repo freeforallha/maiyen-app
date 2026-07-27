@@ -39,7 +39,7 @@ class PlatformBootstrapService {
     }
 
     FirebaseMessaging.onBackgroundMessage(
-      safeHomeFirebaseMessagingBackgroundHandler,
+      maiYenFirebaseMessagingBackgroundHandler,
     );
   }
 }

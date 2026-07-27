@@ -15,19 +15,22 @@ import 'account_session_service.dart';
 import 'platform/platform_bootstrap_service.dart';
 import 'platform/platform_auto_away_system_service.dart';
 import 'single_device_session_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
+import '../config/legacy_identifiers.dart';
 
-const String _legacyAutoAwayGeofencePrefix = 'safehome_auto_away';
+const String _legacyAutoAwayGeofencePrefix =
+    MaiYenLegacyIdentifiers.legacyAutoAwayGeofencePrefix;
 
-const String _autoAwayGeofencePrefix = 'safehome_auto_away_v2';
+const String _autoAwayGeofencePrefix =
+    MaiYenLegacyIdentifiers.autoAwayGeofencePrefixV2;
 
 const String _pendingPresenceEventsStorageKey =
-    'safehome_pending_presence_events_v1';
+    MaiYenLegacyIdentifiers.pendingPresenceEventsStorageKey;
 
 const int _pendingPresenceEventsLimit = 100;
 
 @pragma('vm:entry-point')
-Future<void> safeHomeAutoAwayGeofenceCallback(
+Future<void> maiYenAutoAwayGeofenceCallback(
   GeofenceCallbackParams params,
 ) async {
   DartPluginRegistrant.ensureInitialized();
@@ -125,6 +128,15 @@ Future<void> safeHomeAutoAwayGeofenceCallback(
     // Firebase/Auth lỗi không làm mất event đã lưu ở bước đầu.
     safeDebugPrint('AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error');
   }
+}
+
+/// Entry point cũ được giữ lại để geofence đã đăng ký từ bản SafeHome
+/// vẫn gọi được callback sau khi ứng dụng được nâng cấp.
+@pragma('vm:entry-point')
+Future<void> safeHomeAutoAwayGeofenceCallback(
+  GeofenceCallbackParams params,
+) {
+  return maiYenAutoAwayGeofenceCallback(params);
 }
 
 class AutoAwayService {
@@ -1051,7 +1063,7 @@ class AutoAwayService {
     // Thành viên thiếu điều kiện vẫn giữ geofence để một sự kiện
     // enter thực tế có thể đưa Mode về Bình thường.
     for (final registeredItem in registered) {
-      if (!_isSafeHomeAutoAwayGeofenceId(registeredItem.id)) {
+      if (!_isMaiYenAutoAwayGeofenceId(registeredItem.id)) {
         continue;
       }
 
@@ -1123,7 +1135,7 @@ class AutoAwayService {
 
       await NativeGeofenceManager.instance.createGeofence(
         geofence,
-        safeHomeAutoAwayGeofenceCallback,
+        maiYenAutoAwayGeofenceCallback,
       );
 
       changed = true;
@@ -1456,7 +1468,7 @@ class AutoAwayService {
     );
   }
 
-  static bool _isSafeHomeAutoAwayGeofenceId(String id) {
+  static bool _isMaiYenAutoAwayGeofenceId(String id) {
     return id.startsWith('$_autoAwayGeofencePrefix|') ||
         id.startsWith('$_legacyAutoAwayGeofencePrefix|');
   }

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
-import '../safehome_theme.dart';
+import '../navigation/maiyen_navigation.dart';
+import '../maiyen_theme.dart';
 
 void showAllDevicesSheet({
   required BuildContext context,
   required Map<String, dynamic> devices,
   required void Function(String deviceId) onTapDevice,
 }) {
-  SafeHomeNavigation.pushChildPage<void>(
+  MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "all_devices",
     builder: (pageContext) {
       final strings = AppStrings.of(pageContext);
 
       return ColoredBox(
-        color: SafeHomeColors.background,
+        color: MaiYenColors.background,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
           child: Column(
@@ -66,7 +66,7 @@ void showAllDevicesSheet({
                 context: pageContext,
                 devices: devices,
                 title: strings.t("Nguy hiểm khẩn cấp"),
-                color: SafeHomeColors.danger,
+                color: MaiYenColors.danger,
                 onTapDevice: onTapDevice,
                 items: const [
                   {
@@ -105,7 +105,7 @@ void showAllDevicesSheet({
                 context: pageContext,
                 devices: devices,
                 title: strings.t("Môi trường"),
-                color: SafeHomeColors.info,
+                color: MaiYenColors.info,
                 onTapDevice: onTapDevice,
                 items: const [
                   {
@@ -134,7 +134,7 @@ void showAllDevicesSheet({
                 context: pageContext,
                 devices: devices,
                 title: strings.t("Điều khiển & hạ tầng"),
-                color: SafeHomeColors.primary,
+                color: MaiYenColors.primary,
                 onTapDevice: onTapDevice,
                 items: const [
                   {
@@ -207,12 +207,12 @@ class _AllDevicesHeader extends StatelessWidget {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: SafeHomeColors.primarySoft,
+            color: MaiYenColors.primarySoft,
             borderRadius: BorderRadius.circular(17),
           ),
           child: const Icon(
             Icons.sensors_rounded,
-            color: SafeHomeColors.primary,
+            color: MaiYenColors.primary,
             size: 27,
           ),
         ),
@@ -224,7 +224,7 @@ class _AllDevicesHeader extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  color: SafeHomeColors.textPrimary,
+                  color: MaiYenColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.35,
@@ -236,7 +236,7 @@ class _AllDevicesHeader extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  color: SafeHomeColors.textSecondary,
+                  color: MaiYenColors.textSecondary,
                   fontSize: 12.5,
                   height: 1.25,
                   fontWeight: FontWeight.w600,
@@ -251,13 +251,13 @@ class _AllDevicesHeader extends StatelessWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: SafeHomeColors.primarySoft,
+            color: MaiYenColors.primarySoft,
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
             "$deviceCount",
             style: const TextStyle(
-              color: SafeHomeColors.primaryDark,
+              color: MaiYenColors.primaryDark,
               fontSize: 13,
               fontWeight: FontWeight.w900,
             ),
@@ -366,9 +366,9 @@ Widget _deviceGroup({
     width: double.infinity,
     margin: const EdgeInsets.only(bottom: 12),
     decoration: BoxDecoration(
-      color: SafeHomeColors.surface,
+      color: MaiYenColors.surface,
       borderRadius: BorderRadius.circular(22),
-      border: Border.all(color: SafeHomeColors.border, width: 0.9),
+      border: Border.all(color: MaiYenColors.border, width: 0.9),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withValues(alpha: 0.028),
@@ -388,7 +388,7 @@ Widget _deviceGroup({
                 child: Text(
                   title,
                   style: const TextStyle(
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
                   ),
@@ -401,7 +401,7 @@ Widget _deviceGroup({
                 decoration: BoxDecoration(
                   color: groupCount > 0
                       ? color.withValues(alpha: 0.10)
-                      : SafeHomeColors.surfaceSoft,
+                      : MaiYenColors.surfaceSoft,
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -409,7 +409,7 @@ Widget _deviceGroup({
                   style: TextStyle(
                     color: groupCount > 0
                         ? color
-                        : SafeHomeColors.textSecondary,
+                        : MaiYenColors.textSecondary,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w900,
                   ),
@@ -418,7 +418,7 @@ Widget _deviceGroup({
             ],
           ),
         ),
-        const Divider(height: 1, thickness: 0.8, color: SafeHomeColors.border),
+        const Divider(height: 1, thickness: 0.8, color: MaiYenColors.border),
         for (var index = 0; index < items.length; index++) ...[
           _deviceTypeRow(
             context: context,
@@ -439,7 +439,7 @@ Widget _deviceGroup({
               child: Divider(
                 height: 1,
                 thickness: 0.7,
-                color: SafeHomeColors.border,
+                color: MaiYenColors.border,
               ),
             ),
         ],
@@ -495,7 +495,7 @@ Widget _deviceTypeRow({
               decoration: BoxDecoration(
                 color: enabled
                     ? accentColor.withValues(alpha: 0.09)
-                    : SafeHomeColors.surfaceSoft,
+                    : MaiYenColors.surfaceSoft,
                 borderRadius: BorderRadius.circular(11),
               ),
               child: Icon(
@@ -503,7 +503,7 @@ Widget _deviceTypeRow({
                 size: 18,
                 color: enabled
                     ? accentColor
-                    : SafeHomeColors.textSecondary.withValues(alpha: 0.65),
+                    : MaiYenColors.textSecondary.withValues(alpha: 0.65),
               ),
             ),
             const SizedBox(width: 10),
@@ -513,8 +513,8 @@ Widget _deviceTypeRow({
                 style: TextStyle(
                   fontSize: 13.5,
                   color: enabled
-                      ? SafeHomeColors.textPrimary
-                      : SafeHomeColors.textSecondary,
+                      ? MaiYenColors.textPrimary
+                      : MaiYenColors.textSecondary,
                   fontWeight: enabled ? FontWeight.w700 : FontWeight.w600,
                 ),
               ),
@@ -525,16 +525,16 @@ Widget _deviceTypeRow({
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: enabled
-                    ? SafeHomeColors.primarySoft
-                    : SafeHomeColors.surfaceSoft,
+                    ? MaiYenColors.primarySoft
+                    : MaiYenColors.surfaceSoft,
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
                 "$count",
                 style: TextStyle(
                   color: enabled
-                      ? SafeHomeColors.primaryDark
-                      : SafeHomeColors.textSecondary,
+                      ? MaiYenColors.primaryDark
+                      : MaiYenColors.textSecondary,
                   fontSize: 11.5,
                   fontWeight: FontWeight.w900,
                 ),
@@ -553,7 +553,7 @@ void _showDevicePicker({
   required List<MapEntry<String, dynamic>> devices,
   required void Function(String deviceId) onTapDevice,
 }) {
-  SafeHomeNavigation.showModalSheet<void>(
+  MaiYenNavigation.showModalSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -565,7 +565,7 @@ void _showDevicePicker({
           ),
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
           decoration: const BoxDecoration(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           child: Column(
@@ -578,12 +578,12 @@ void _showDevicePicker({
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: SafeHomeColors.primarySoft,
+                      color: MaiYenColors.primarySoft,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: const Icon(
                       Icons.sensors_rounded,
-                      color: SafeHomeColors.primary,
+                      color: MaiYenColors.primary,
                       size: 22,
                     ),
                   ),
@@ -592,7 +592,7 @@ void _showDevicePicker({
                     child: Text(
                       title,
                       style: const TextStyle(
-                        color: SafeHomeColors.textPrimary,
+                        color: MaiYenColors.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
                       ),
@@ -618,7 +618,7 @@ void _showDevicePicker({
                     final name = device["name"]?.toString().trim() ?? "";
 
                     return Material(
-                      color: SafeHomeColors.surface,
+                      color: MaiYenColors.surface,
                       borderRadius: BorderRadius.circular(17),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(17),
@@ -636,7 +636,7 @@ void _showDevicePicker({
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(17),
                             border: Border.all(
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                               width: 0.9,
                             ),
                           ),
@@ -646,12 +646,12 @@ void _showDevicePicker({
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
-                                  color: SafeHomeColors.primarySoft,
+                                  color: MaiYenColors.primarySoft,
                                   borderRadius: BorderRadius.circular(13),
                                 ),
                                 child: Icon(
                                   _deviceIcon(type),
-                                  color: SafeHomeColors.primary,
+                                  color: MaiYenColors.primary,
                                   size: 21,
                                 ),
                               ),
@@ -662,7 +662,7 @@ void _showDevicePicker({
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    color: SafeHomeColors.textPrimary,
+                                    color: MaiYenColors.textPrimary,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -670,7 +670,7 @@ void _showDevicePicker({
                               ),
                               const Icon(
                                 Icons.chevron_right_rounded,
-                                color: SafeHomeColors.textSecondary,
+                                color: MaiYenColors.textSecondary,
                               ),
                             ],
                           ),

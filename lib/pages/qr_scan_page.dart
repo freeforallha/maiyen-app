@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../localization/app_strings.dart';
+import '../config/legacy_identifiers.dart';
 
-enum SafeHomeQrScanMode { pairDevice, joinHome }
+enum MaiYenQrScanMode { pairDevice, joinHome }
 
 bool _isJoinHomeQr(String value) {
-  return value.startsWith("safehome_join|") ||
-      value.startsWith("safehome_join_multi|");
+  return value.startsWith(MaiYenLegacyIdentifiers.joinHomeQrPrefix) ||
+      value.startsWith(
+        MaiYenLegacyIdentifiers.joinMultipleHomesQrPrefix,
+      );
 }
 
 bool _looksLikeJoinHomeQr(String value) {
-  return value.startsWith("safehome_join");
+  return value.startsWith(
+    MaiYenLegacyIdentifiers.joinHomeQrFamilyPrefix,
+  );
 }
 
 Future<String?> openQRScanner(
   BuildContext context, {
-  required SafeHomeQrScanMode mode,
+  required MaiYenQrScanMode mode,
 }) async {
   final controller = MobileScannerController();
 
@@ -30,7 +35,7 @@ Future<String?> openQRScanner(
 
 class _QRScanPage extends StatefulWidget {
   final MobileScannerController controller;
-  final SafeHomeQrScanMode mode;
+  final MaiYenQrScanMode mode;
 
   const _QRScanPage({required this.controller, required this.mode});
 
@@ -77,15 +82,15 @@ class _QRScanPageState extends State<_QRScanPage>
     final value = code.trim();
     final isJoinHomeQr = _isJoinHomeQr(value);
     final acceptsCode = switch (widget.mode) {
-      SafeHomeQrScanMode.joinHome => isJoinHomeQr,
-      SafeHomeQrScanMode.pairDevice => !_looksLikeJoinHomeQr(value),
+      MaiYenQrScanMode.joinHome => isJoinHomeQr,
+      MaiYenQrScanMode.pairDevice => !_looksLikeJoinHomeQr(value),
     };
 
     if (!acceptsCode) {
       final strings = AppStrings.of(context);
 
       setState(() {
-        scanError = widget.mode == SafeHomeQrScanMode.joinHome
+        scanError = widget.mode == MaiYenQrScanMode.joinHome
             ? strings.t("QR này không phải mã xin gia nhập nhà")
             : strings.t("QR này không phải mã thiết bị");
       });
@@ -105,7 +110,7 @@ class _QRScanPageState extends State<_QRScanPage>
   @override
   Widget build(BuildContext context) {
     final strings = AppStrings.of(context);
-    final isJoinHome = widget.mode == SafeHomeQrScanMode.joinHome;
+    final isJoinHome = widget.mode == MaiYenQrScanMode.joinHome;
     final title = isJoinHome
         ? strings.t("Quét QR xin gia nhập nhà")
         : strings.t("Quét QR để thêm thiết bị");

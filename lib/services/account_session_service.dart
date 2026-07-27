@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'installation_id_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 class AccountSessionService {
   const AccountSessionService._();

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'app/safe_home_app.dart';
+import 'app/maiyen_app.dart';
 import 'firebase_options.dart';
 import 'helpers/debug_log.dart';
 import 'services/notification_service.dart';
@@ -11,7 +11,7 @@ import 'services/platform/platform_bootstrap_service.dart';
 
 Future<FirebaseApp>? _firebaseInitialization;
 bool _deferredStartupScheduled = false;
-bool _safeHomeAppStarted = false;
+bool _maiYenAppStarted = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,15 +62,15 @@ Future<bool> _initializeFirebaseForStartup({
 }
 
 Future<void> _finishFirebaseStartupAfterFirstFrame() async {
-  while (!_safeHomeAppStarted) {
+  while (!_maiYenAppStarted) {
     final ready = await _initializeFirebaseForStartup(
       timeout: const Duration(seconds: 12),
       label: 'POST_FRAME_FIREBASE_INIT',
     );
 
     if (ready) {
-      _safeHomeAppStarted = true;
-      runApp(const SafeHomeApp());
+      _maiYenAppStarted = true;
+      runApp(const MaiYenApp());
       _scheduleDeferredStartupInit();
       return;
     }
@@ -134,7 +134,7 @@ class _StartupFallbackApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SafeHomeSplash(),
+      home: MaiYenSplash(),
     );
   }
 }

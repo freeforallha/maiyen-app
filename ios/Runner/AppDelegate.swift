@@ -5,7 +5,7 @@ import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
-  private let safeHomeAlarmTypes: Set<String> = [
+  private let maiYenAlarmTypes: Set<String> = [
     "alarm_detected",
     "alarm",
     "alarm_siren",
@@ -22,7 +22,7 @@ import UserNotifications
     )
 
     // Để Firebase Messaging và flutter_local_notifications cùng nhận đúng
-    // sự kiện notification khi SafeHome đang foreground trên iOS.
+    // sự kiện notification khi MaiYen đang foreground trên iOS.
     UNUserNotificationCenter.current().delegate = self
 
     return launched
@@ -35,7 +35,7 @@ import UserNotifications
   ) {
     // Push đóng incident là background push. Khi iOS giao được push này,
     // dọn notification APNs đã hiển thị của đúng incident; nếu không còn
-    // incident nào thì dọn toàn bộ notification Alarm của SafeHome.
+    // incident nào thì dọn toàn bộ notification Alarm của MaiYen.
     if String(describing: userInfo["type"] ?? "") == "alarm_resolved" {
       let incidentId = String(describing: userInfo["incidentId"] ?? "")
         .trimmingCharacters(in: .whitespacesAndNewlines)
@@ -61,7 +61,7 @@ import UserNotifications
     removeAll: Bool
   ) {
     let center = UNUserNotificationCenter.current()
-    let alarmTypes = safeHomeAlarmTypes
+    let alarmTypes = maiYenAlarmTypes
 
     center.getDeliveredNotifications { [alarmTypes] notifications in
       let identifiers = notifications.compactMap { notification -> String? in

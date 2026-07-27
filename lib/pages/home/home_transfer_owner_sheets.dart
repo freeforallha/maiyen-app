@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 Future<String?> showTransferOwnerEmailSheet({
   required BuildContext context,
@@ -9,7 +9,7 @@ Future<String?> showTransferOwnerEmailSheet({
 }) async {
   String inputEmail = "";
 
-  return SafeHomeNavigation.showModalSheet<String>(
+  return MaiYenNavigation.showModalSheet<String>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -97,7 +97,7 @@ Future<bool> showTransferOwnerConfirmSheet({
   required AppStrings strings,
   required String targetEmail,
 }) async {
-  final result = await SafeHomeNavigation.showModalSheet<bool>(
+  final result = await MaiYenNavigation.showModalSheet<bool>(
     context: context,
     backgroundColor: Colors.transparent,
     builder: (sheetContext) {

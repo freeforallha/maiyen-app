@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import '../helpers/home_helper.dart';
 import 'auto_away_service.dart';
 import 'platform/platform_auto_away_task_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 typedef HomeAutoAwayHomesProvider = Map<String, dynamic> Function();
 

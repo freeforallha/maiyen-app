@@ -9,9 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/brand_config.dart';
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
-import '../../safehome_theme.dart';
+import '../../navigation/maiyen_navigation.dart';
+import '../../maiyen_theme.dart';
 import 'home_auto_away_models.dart';
+import '../../config/legacy_identifiers.dart';
 
 Future<HomeAutoAwayLocation?> showHomeAutoAwayMapPicker({
   required BuildContext context,
@@ -21,7 +22,7 @@ Future<HomeAutoAwayLocation?> showHomeAutoAwayMapPicker({
   required int radiusMeters,
   required Future<HomeAutoAwayLocation?> Function() onGetCurrentLocation,
 }) {
-  return SafeHomeNavigation.pushChildPage<HomeAutoAwayLocation>(
+  return MaiYenNavigation.pushChildPage<HomeAutoAwayLocation>(
     context: context,
     routeName: 'home_auto_away_map',
     builder: (_) => HomeAutoAwayMapPage(
@@ -529,12 +530,12 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: SafeHomeColors.primarySoft,
+                  color: MaiYenColors.primarySoft,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: const Icon(
                   Icons.map_rounded,
-                  color: SafeHomeColors.primary,
+                  color: MaiYenColors.primary,
                 ),
               ),
               const SizedBox(width: 12),
@@ -545,7 +546,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                     Text(
                       widget.strings.autoAwayMapTitle,
                       style: const TextStyle(
-                        color: SafeHomeColors.textPrimary,
+                        color: MaiYenColors.textPrimary,
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
                       ),
@@ -554,7 +555,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                     Text(
                       widget.strings.autoAwayMapHint,
                       style: const TextStyle(
-                        color: SafeHomeColors.textSecondary,
+                        color: MaiYenColors.textSecondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
@@ -590,7 +591,8 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                   TileLayer(
                     urlTemplate:
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.myfamily.safehome',
+                    userAgentPackageName:
+                        MaiYenLegacyIdentifiers.applicationId,
                     maxNativeZoom: 19,
                   ),
                   CircleLayer(
@@ -599,8 +601,8 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                         point: _selectedPoint,
                         radius: widget.radiusMeters.toDouble(),
                         useRadiusInMeter: true,
-                        color: SafeHomeColors.primary.withValues(alpha: 0.14),
-                        borderColor: SafeHomeColors.primary,
+                        color: MaiYenColors.primary.withValues(alpha: 0.14),
+                        borderColor: MaiYenColors.primary,
                         borderStrokeWidth: 2,
                       ),
                     ],
@@ -615,7 +617,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                         child: const Icon(
                           Icons.location_on_rounded,
                           size: 48,
-                          color: SafeHomeColors.danger,
+                          color: MaiYenColors.danger,
                           shadows: [
                             Shadow(
                               color: Color(0x66000000),
@@ -637,7 +639,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Material(
-                      color: SafeHomeColors.surface,
+                      color: MaiYenColors.surface,
                       elevation: 3,
                       shadowColor: const Color(0x22000000),
                       borderRadius: BorderRadius.circular(16),
@@ -686,7 +688,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                       const SizedBox(height: 8),
                     if (_searchResults.isNotEmpty)
                       Material(
-                        color: SafeHomeColors.surface,
+                        color: MaiYenColors.surface,
                         elevation: 3,
                         shadowColor: const Color(0x22000000),
                         borderRadius: BorderRadius.circular(16),
@@ -700,7 +702,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                             separatorBuilder: (_, _) => const Divider(
                               height: 1,
                               indent: 48,
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                             ),
                             itemBuilder: (context, index) {
                               final result = _searchResults[index];
@@ -709,14 +711,14 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                                 dense: true,
                                 leading: const Icon(
                                   Icons.location_on_outlined,
-                                  color: SafeHomeColors.primary,
+                                  color: MaiYenColors.primary,
                                 ),
                                 title: Text(
                                   result.displayName,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                    color: SafeHomeColors.textPrimary,
+                                    color: MaiYenColors.textPrimary,
                                     fontSize: 12.5,
                                     height: 1.3,
                                     fontWeight: FontWeight.w700,
@@ -730,7 +732,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                       ),
                     if (_searchMessage != null)
                       Material(
-                        color: SafeHomeColors.surface,
+                        color: MaiYenColors.surface,
                         elevation: 3,
                         shadowColor: const Color(0x22000000),
                         borderRadius: BorderRadius.circular(16),
@@ -740,14 +742,14 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                             children: [
                               const Icon(
                                 Icons.location_off_outlined,
-                                color: SafeHomeColors.warning,
+                                color: MaiYenColors.warning,
                               ),
                               const SizedBox(width: 9),
                               Expanded(
                                 child: Text(
                                   _searchMessage!,
                                   style: const TextStyle(
-                                    color: SafeHomeColors.textSecondary,
+                                    color: MaiYenColors.textSecondary,
                                     fontSize: 12.5,
                                     height: 1.3,
                                     fontWeight: FontWeight.w600,
@@ -765,7 +767,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                 right: 14,
                 top: 82,
                 child: Material(
-                  color: SafeHomeColors.surface,
+                  color: MaiYenColors.surface,
                   elevation: 3,
                   shadowColor: const Color(0x22000000),
                   borderRadius: BorderRadius.circular(16),
@@ -780,7 +782,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                           )
                         : const Icon(
                             Icons.my_location_rounded,
-                            color: SafeHomeColors.primary,
+                            color: MaiYenColors.primary,
                           ),
                   ),
                 ),
@@ -789,7 +791,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                 left: 10,
                 bottom: 106,
                 child: Material(
-                  color: SafeHomeColors.surface.withValues(alpha: 0.90),
+                  color: MaiYenColors.surface.withValues(alpha: 0.90),
                   borderRadius: BorderRadius.circular(8),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
@@ -807,7 +809,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                       child: Text(
                         '© OpenStreetMap contributors',
                         style: TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 9.5,
                           fontWeight: FontWeight.w600,
                         ),
@@ -823,9 +825,9 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: SafeHomeColors.surface,
+                    color: MaiYenColors.surface,
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: SafeHomeColors.border),
+                    border: Border.all(color: MaiYenColors.border),
                     boxShadow: const [
                       BoxShadow(
                         color: Color(0x1A000000),
@@ -841,7 +843,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                         '${_selectedPoint.latitude.toStringAsFixed(6)}, '
                         '${_selectedPoint.longitude.toStringAsFixed(6)}',
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),

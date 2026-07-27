@@ -6,7 +6,7 @@ import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
 import 'chat_service.dart';
 import 'device_notification_event_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 typedef HomeNotificationUnreadChanged = void Function(int count);
 typedef HomeEventsChanged = void Function(Map<String, dynamic> events);

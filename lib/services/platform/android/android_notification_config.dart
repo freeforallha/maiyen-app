@@ -1,25 +1,32 @@
 import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:safehome_app/localization/app_strings.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/localization/app_strings.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 import '../../../config/brand_config.dart';
+import '../../../config/legacy_identifiers.dart';
 
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
 
-  static const legacyAlarmChannelId = 'alarm_channel_silent_v3';
-  static const alarmFullscreenChannelId = 'safehome_alarm_fullscreen_sound_v6';
-  static const emergencyPriorityChannelId = 'safehome_emergency_priority_v2';
+  static const legacyAlarmChannelId =
+      MaiYenLegacyIdentifiers.androidLegacyAlarmChannelId;
+  static const alarmFullscreenChannelId =
+      MaiYenLegacyIdentifiers.androidAlarmFullscreenChannelId;
+  static const emergencyPriorityChannelId =
+      MaiYenLegacyIdentifiers.androidEmergencyPriorityChannelId;
   static const scheduleFullscreenChannelId =
-      'safehome_schedule_fullscreen_channel_v2';
-  static const reminderPriorityChannelId = 'safehome_reminder_priority_v3';
-  static const chatChannelId = 'safehome_chat_channel_v2';
-  static const sensorNotificationChannelId = 'safehome_sensor_notification_v1';
+      MaiYenLegacyIdentifiers.androidScheduleFullscreenChannelId;
+  static const reminderPriorityChannelId =
+      MaiYenLegacyIdentifiers.androidReminderPriorityChannelId;
+  static const chatChannelId =
+      MaiYenLegacyIdentifiers.androidChatChannelId;
+  static const sensorNotificationChannelId =
+      MaiYenLegacyIdentifiers.androidSensorNotificationChannelId;
 
   static const initializationSettings = AndroidInitializationSettings(
-    'ic_stat_safehome',
+    MaiYenLegacyIdentifiers.androidNotificationIconName,
   );
 
   static bool get isAndroid => Platform.isAndroid;

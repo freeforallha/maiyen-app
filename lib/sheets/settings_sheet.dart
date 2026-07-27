@@ -2,10 +2,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../config/brand_config.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../localization/app_language_controller.dart';
 import '../localization/app_strings.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 import '../services/platform/platform_auto_away_task_service.dart';
 import 'hub_info_sheet.dart';
 
@@ -186,7 +186,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
       child: Material(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(18),
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
@@ -204,8 +204,8 @@ Future<void> _showLanguageSheet(BuildContext context) async {
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
                 color: selected
-                    ? SafeHomeColors.primary
-                    : SafeHomeColors.border,
+                    ? MaiYenColors.primary
+                    : MaiYenColors.border,
                 width: selected ? 1.4 : 0.9,
               ),
             ),
@@ -217,16 +217,16 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: selected
-                        ? SafeHomeColors.primarySoft
-                        : SafeHomeColors.background,
+                        ? MaiYenColors.primarySoft
+                        : MaiYenColors.background,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Text(
                     _languageFlag(code),
                     style: TextStyle(
                       color: selected
-                          ? SafeHomeColors.primary
-                          : SafeHomeColors.textSecondary,
+                          ? MaiYenColors.primary
+                          : MaiYenColors.textSecondary,
                       fontSize: 24,
                     ),
                   ),
@@ -239,7 +239,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                       Text(
                         title,
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 14.5,
                           fontWeight: FontWeight.w800,
                         ),
@@ -248,7 +248,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                       Text(
                         subtitle,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
                         ),
@@ -259,7 +259,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                 if (selected)
                   const Icon(
                     Icons.check_circle_rounded,
-                    color: SafeHomeColors.primary,
+                    color: MaiYenColors.primary,
                   ),
               ],
             ),
@@ -269,7 +269,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
     );
   }
 
-  await SafeHomeNavigation.pushChildPage<void>(
+  await MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "language",
     builder: (sheetContext) {
@@ -304,7 +304,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
             curve: Curves.easeOutCubic,
             padding: EdgeInsets.only(bottom: bottomInset),
             child: ColoredBox(
-              color: SafeHomeColors.background,
+              color: MaiYenColors.background,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
                 child: Column(
@@ -316,12 +316,12 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                           width: 48,
                           height: 48,
                           decoration: BoxDecoration(
-                            color: SafeHomeColors.primarySoft,
+                            color: MaiYenColors.primarySoft,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Icon(
                             Icons.language_rounded,
-                            color: SafeHomeColors.primary,
+                            color: MaiYenColors.primary,
                             size: 26,
                           ),
                         ),
@@ -330,7 +330,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                           child: Text(
                             strings.chooseLanguage,
                             style: const TextStyle(
-                              color: SafeHomeColors.textPrimary,
+                              color: MaiYenColors.textPrimary,
                               fontSize: 20,
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.35,
@@ -340,10 +340,10 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                         IconButton(
                           tooltip: strings.t("Tìm ngôn ngữ"),
                           style: IconButton.styleFrom(
-                            backgroundColor: SafeHomeColors.surface,
-                            foregroundColor: SafeHomeColors.primary,
+                            backgroundColor: MaiYenColors.surface,
+                            foregroundColor: MaiYenColors.primary,
                             side: const BorderSide(
-                              color: SafeHomeColors.border,
+                              color: MaiYenColors.border,
                               width: 0.9,
                             ),
                           ),
@@ -373,7 +373,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                           hintText: strings.t("Tìm ngôn ngữ"),
                           prefixIcon: const Icon(Icons.search_rounded),
                           filled: true,
-                          fillColor: SafeHomeColors.surface,
+                          fillColor: MaiYenColors.surface,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 14,
                             vertical: 12,
@@ -403,7 +403,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
                                   child: Text(
                                     strings.t("Không có kết quả"),
                                     style: const TextStyle(
-                                      color: SafeHomeColors.textSecondary,
+                                      color: MaiYenColors.textSecondary,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -543,7 +543,7 @@ void showSettingsSheet({
       return const Color(0xFF7656C8);
     }
 
-    return SafeHomeColors.info;
+    return MaiYenColors.info;
   }
 
   String roleText() {
@@ -574,7 +574,7 @@ void showSettingsSheet({
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 16, color: valueColor ?? SafeHomeColors.primary),
+          Icon(icon, size: 16, color: valueColor ?? MaiYenColors.primary),
           const SizedBox(width: 7),
           Expanded(
             child: Text.rich(
@@ -583,7 +583,7 @@ void showSettingsSheet({
                   TextSpan(
                     text: "$label: ",
                     style: const TextStyle(
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                       fontSize: 11.5,
                       height: 1.25,
                       fontWeight: FontWeight.w700,
@@ -592,7 +592,7 @@ void showSettingsSheet({
                   TextSpan(
                     text: displayValue,
                     style: TextStyle(
-                      color: valueColor ?? SafeHomeColors.textPrimary,
+                      color: valueColor ?? MaiYenColors.textPrimary,
                       fontSize: 12.5,
                       height: 1.25,
                       fontWeight: FontWeight.w800,
@@ -617,7 +617,7 @@ void showSettingsSheet({
         child: Text(
           title.toUpperCase(),
           style: const TextStyle(
-            color: SafeHomeColors.textSecondary,
+            color: MaiYenColors.textSecondary,
             fontSize: 11,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.75,
@@ -639,7 +639,7 @@ void showSettingsSheet({
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
       child: Material(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(19),
         child: InkWell(
           onTap: onTap,
@@ -650,8 +650,8 @@ void showSettingsSheet({
               borderRadius: BorderRadius.circular(19),
               border: Border.all(
                 color: destructive
-                    ? SafeHomeColors.danger.withValues(alpha: 0.16)
-                    : SafeHomeColors.border,
+                    ? MaiYenColors.danger.withValues(alpha: 0.16)
+                    : MaiYenColors.border,
                 width: 0.9,
               ),
               boxShadow: [
@@ -684,8 +684,8 @@ void showSettingsSheet({
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: destructive
-                              ? SafeHomeColors.danger
-                              : SafeHomeColors.textPrimary,
+                              ? MaiYenColors.danger
+                              : MaiYenColors.textPrimary,
                           fontSize: 14.5,
                           fontWeight: FontWeight.w800,
                         ),
@@ -696,7 +696,7 @@ void showSettingsSheet({
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: SafeHomeColors.textSecondary,
+                          color: MaiYenColors.textSecondary,
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
                         ),
@@ -708,7 +708,7 @@ void showSettingsSheet({
                 trailing ??
                     const Icon(
                       Icons.chevron_right_rounded,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
               ],
             ),
@@ -719,7 +719,7 @@ void showSettingsSheet({
   }
 
   void showHomeManagementSheet(BuildContext settingsSheetContext) {
-    SafeHomeNavigation.pushChildPage<void>(
+    MaiYenNavigation.pushChildPage<void>(
       context: settingsSheetContext,
       routeName: "home_management",
       builder: (managementContext) {
@@ -727,7 +727,7 @@ void showSettingsSheet({
           child: Container(
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 18),
             decoration: const BoxDecoration(
-              color: SafeHomeColors.background,
+              color: MaiYenColors.background,
               borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
             ),
             child: Column(
@@ -737,14 +737,14 @@ void showSettingsSheet({
                   children: [
                     const Icon(
                       Icons.home_work_rounded,
-                      color: SafeHomeColors.primary,
+                      color: MaiYenColors.primary,
                     ),
                     const SizedBox(width: 9),
                     Expanded(
                       child: Text(
                         strings.t("Quản lý nhà"),
                         style: const TextStyle(
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
                         ),
@@ -758,7 +758,7 @@ void showSettingsSheet({
                   icon: Icons.hub_rounded,
                   title: "${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)",
                   subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
-                  color: SafeHomeColors.primaryDark,
+                  color: MaiYenColors.primaryDark,
                   onTap: () {
                     showHubInfoSheet(
                       context: managementContext,
@@ -783,7 +783,7 @@ void showSettingsSheet({
                   icon: Icons.delete_forever_rounded,
                   title: strings.deleteHome,
                   subtitle: strings.deleteHomeSubtitle,
-                  color: SafeHomeColors.danger,
+                  color: MaiYenColors.danger,
                   destructive: true,
                   onTap: () {
                     openChild(onDeleteHome);
@@ -797,7 +797,7 @@ void showSettingsSheet({
     );
   }
 
-  SafeHomeNavigation.pushChildPage<void>(
+  MaiYenNavigation.pushChildPage<void>(
     context: context,
     routeName: "settings",
     builder: (sheetContext) {
@@ -808,7 +808,7 @@ void showSettingsSheet({
           final bottomPadding = MediaQuery.paddingOf(sheetContext).bottom;
 
           return ColoredBox(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             child: SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(16, 14, 16, 20 + bottomPadding),
               child: Column(
@@ -818,9 +818,9 @@ void showSettingsSheet({
                     width: double.infinity,
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: SafeHomeColors.surface,
+                      color: MaiYenColors.surface,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: SafeHomeColors.border),
+                      border: Border.all(color: MaiYenColors.border),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.04),
@@ -845,17 +845,17 @@ void showSettingsSheet({
                                       width: 70,
                                       height: 70,
                                       decoration: BoxDecoration(
-                                        color: SafeHomeColors.primarySoft,
+                                        color: MaiYenColors.primarySoft,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: SafeHomeColors.primary.withValues(
+                                          color: MaiYenColors.primary.withValues(
                                             alpha: 0.18,
                                           ),
                                         ),
                                       ),
                                       child: const Icon(
                                         Icons.home_rounded,
-                                        color: SafeHomeColors.primary,
+                                        color: MaiYenColors.primary,
                                         size: 36,
                                       ),
                                     ),
@@ -863,7 +863,7 @@ void showSettingsSheet({
                                       right: -2,
                                       bottom: -2,
                                       child: Material(
-                                        color: SafeHomeColors.primary,
+                                        color: MaiYenColors.primary,
                                         shape: const CircleBorder(),
                                         child: InkWell(
                                           onTap: () {
@@ -898,7 +898,7 @@ void showSettingsSheet({
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
-                                      color: SafeHomeColors.textPrimary,
+                                      color: MaiYenColors.textPrimary,
                                       fontSize: 15,
                                       height: 1.15,
                                       fontWeight: FontWeight.w900,
@@ -912,7 +912,7 @@ void showSettingsSheet({
                           const VerticalDivider(
                             width: 25,
                             thickness: 1,
-                            color: SafeHomeColors.border,
+                            color: MaiYenColors.border,
                           ),
                           Expanded(
                             child: Column(
@@ -968,7 +968,7 @@ void showSettingsSheet({
                       icon: Icons.share_rounded,
                       title: strings.shareHome,
                       subtitle: strings.shareHomeSubtitle,
-                      color: SafeHomeColors.info,
+                      color: MaiYenColors.info,
                       onTap: () {
                         openChild(onShare);
                       },
@@ -978,7 +978,7 @@ void showSettingsSheet({
                     icon: Icons.people_alt_rounded,
                     title: strings.homeMembers,
                     subtitle: strings.homeMembersSubtitle,
-                    color: SafeHomeColors.safe,
+                    color: MaiYenColors.safe,
                     onTap: () {
                       openChild(onShareList);
                     },
@@ -1000,7 +1000,7 @@ void showSettingsSheet({
                       icon: Icons.meeting_room_rounded,
                       title: strings.manageRooms,
                       subtitle: strings.manageRoomsSubtitle,
-                      color: SafeHomeColors.warning,
+                      color: MaiYenColors.warning,
                       onTap: () {
                         openChild(onRooms);
                       },
@@ -1034,7 +1034,7 @@ void showSettingsSheet({
                     icon: Icons.person_rounded,
                     title: strings.personalAccount,
                     subtitle: strings.personalAccountSubtitle,
-                    color: SafeHomeColors.primary,
+                    color: MaiYenColors.primary,
                     trailing: ValueListenableBuilder<int>(
                       valueListenable: inviteCountNotifier,
                       builder: (_, inviteCount, _) {
@@ -1053,7 +1053,7 @@ void showSettingsSheet({
                                   vertical: 3,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: SafeHomeColors.danger,
+                                  color: MaiYenColors.danger,
                                   borderRadius: BorderRadius.circular(999),
                                 ),
                                 child: Text(
@@ -1068,7 +1068,7 @@ void showSettingsSheet({
                             if (inviteCount > 0) const SizedBox(width: 4),
                             const Icon(
                               Icons.chevron_right_rounded,
-                              color: SafeHomeColors.textSecondary,
+                              color: MaiYenColors.textSecondary,
                             ),
                           ],
                         );
@@ -1085,7 +1085,7 @@ void showSettingsSheet({
                     subtitle:
                         "${strings.languageSubtitle} • "
                         "${strings.currentLanguageName}",
-                    color: SafeHomeColors.primary,
+                    color: MaiYenColors.primary,
                     onTap: () {
                       _showLanguageSheet(sheetContext);
                     },

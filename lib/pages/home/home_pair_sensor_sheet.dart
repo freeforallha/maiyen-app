@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../localization/app_strings.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../navigation/maiyen_navigation.dart';
 
 enum HomePairSensorMethod { scanQr, manualHubId }
 
@@ -9,7 +9,7 @@ Future<HomePairSensorMethod?> showHomePairSensorSheet({
   required BuildContext context,
   required AppStrings strings,
 }) async {
-  return SafeHomeNavigation.showModalSheet<HomePairSensorMethod>(
+  return MaiYenNavigation.showModalSheet<HomePairSensorMethod>(
     context: context,
     isScrollControlled: true,
     builder: (sheetContext) {

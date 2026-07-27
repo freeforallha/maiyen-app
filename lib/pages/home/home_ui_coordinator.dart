@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/home_helper.dart';
-import '../../navigation/safehome_navigation.dart';
+import '../../navigation/maiyen_navigation.dart';
 import '../../sheets/account_avatar_sheet.dart';
 import '../../sheets/alarm_device_sheet.dart';
 import '../../sheets/all_devices_sheet.dart';
@@ -99,7 +99,7 @@ class HomeUiCoordinator {
     required String homeId,
     required String deviceId,
   }) {
-    SafeHomeNavigation.pushChildPage<void>(
+    MaiYenNavigation.pushChildPage<void>(
       context: context,
       routeName: "device_notifications",
       builder: (_) {
@@ -135,7 +135,7 @@ class HomeUiCoordinator {
     required String type,
     required bool canManageHome,
   }) {
-    SafeHomeNavigation.showModalSheet(
+    MaiYenNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -156,7 +156,7 @@ class HomeUiCoordinator {
     required Map<String, dynamic> devices,
     required bool canManageHome,
   }) {
-    SafeHomeNavigation.showModalSheet(
+    MaiYenNavigation.showModalSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,

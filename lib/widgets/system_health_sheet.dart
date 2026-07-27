@@ -7,10 +7,10 @@ import 'package:geolocator/geolocator.dart';
 
 import '../helpers/home_helper.dart';
 import '../localization/app_strings.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
 import '../services/system_usage_service.dart';
-import '../navigation/safehome_navigation.dart';
+import '../navigation/maiyen_navigation.dart';
 
 class SystemHealthStatusLine extends StatelessWidget {
   const SystemHealthStatusLine({
@@ -44,7 +44,7 @@ class SystemHealthStatusLine extends StatelessWidget {
         if (data == null) {
           return _SystemHealthLineShell(
             icon: Icons.health_and_safety_rounded,
-            color: SafeHomeColors.textSecondary,
+            color: MaiYenColors.textSecondary,
             text: strings.t("Hệ thống: Đang kiểm tra..."),
             onTap: null,
           );
@@ -125,7 +125,7 @@ Future<void> showSystemHealthSheet({
 }) async {
   final strings = AppStrings.of(context);
 
-  await SafeHomeNavigation.showModalSheet<void>(
+  await MaiYenNavigation.showModalSheet<void>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -137,7 +137,7 @@ Future<void> showSystemHealthSheet({
           ),
           padding: const EdgeInsets.fromLTRB(18, 8, 18, 20),
           decoration: const BoxDecoration(
-            color: SafeHomeColors.background,
+            color: MaiYenColors.background,
             borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
           ),
           child: FutureBuilder<_SystemHealthSnapshot>(
@@ -159,7 +159,7 @@ Future<void> showSystemHealthSheet({
                     height: 5,
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: SafeHomeColors.border,
+                      color: MaiYenColors.border,
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),
@@ -171,13 +171,13 @@ Future<void> showSystemHealthSheet({
                           style: const TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.w900,
-                            color: SafeHomeColors.textPrimary,
+                            color: MaiYenColors.textPrimary,
                           ),
                         ),
                       ),
                       Icon(
                         data?.summaryIcon ?? Icons.health_and_safety_rounded,
-                        color: data?.summaryColor ?? SafeHomeColors.primary,
+                        color: data?.summaryColor ?? MaiYenColors.primary,
                       ),
                     ],
                   ),
@@ -192,7 +192,7 @@ Future<void> showSystemHealthSheet({
                         fontSize: 12.5,
                         height: 1.3,
                         fontWeight: FontWeight.w600,
-                        color: SafeHomeColors.textSecondary,
+                        color: MaiYenColors.textSecondary,
                       ),
                     ),
                   ),
@@ -249,13 +249,13 @@ class _SystemHealthItem {
   Color get color {
     switch (level) {
       case _SystemHealthLevel.ok:
-        return SafeHomeColors.safe;
+        return MaiYenColors.safe;
       case _SystemHealthLevel.info:
-        return SafeHomeColors.info;
+        return MaiYenColors.info;
       case _SystemHealthLevel.warning:
-        return SafeHomeColors.warning;
+        return MaiYenColors.warning;
       case _SystemHealthLevel.danger:
-        return SafeHomeColors.danger;
+        return MaiYenColors.danger;
     }
   }
 
@@ -372,7 +372,7 @@ class _SystemHealthSnapshot {
     if (dangerCount > 0) {
       return _SystemHealthSnapshot(
         summaryText: strings.t("Hệ thống: Có thể bỏ lỡ cảnh báo"),
-        summaryColor: SafeHomeColors.danger,
+        summaryColor: MaiYenColors.danger,
         summaryIcon: Icons.warning_rounded,
         deviceItems: deviceItems,
         usageItems: usageItems,
@@ -382,7 +382,7 @@ class _SystemHealthSnapshot {
     if (warningCount > 0) {
       return _SystemHealthSnapshot(
         summaryText: strings.systemNeedCheckText(issueCount),
-        summaryColor: SafeHomeColors.warning,
+        summaryColor: MaiYenColors.warning,
         summaryIcon: Icons.error_rounded,
         deviceItems: deviceItems,
         usageItems: usageItems,
@@ -391,7 +391,7 @@ class _SystemHealthSnapshot {
 
     return _SystemHealthSnapshot(
       summaryText: strings.t("Hệ thống: Sẵn sàng"),
-      summaryColor: SafeHomeColors.safe,
+      summaryColor: MaiYenColors.safe,
       summaryIcon: Icons.health_and_safety_rounded,
       deviceItems: deviceItems,
       usageItems: usageItems,
@@ -853,9 +853,9 @@ class _SystemHealthSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: SafeHomeColors.surface,
+        color: MaiYenColors.surface,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: SafeHomeColors.border),
+        border: Border.all(color: MaiYenColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.035),
@@ -873,10 +873,10 @@ class _SystemHealthSection extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: SafeHomeColors.primarySoft,
+                  color: MaiYenColors.primarySoft,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: SafeHomeColors.primary, size: 20),
+                child: Icon(icon, color: MaiYenColors.primary, size: 20),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -885,7 +885,7 @@ class _SystemHealthSection extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w900,
-                    color: SafeHomeColors.textPrimary,
+                    color: MaiYenColors.textPrimary,
                   ),
                 ),
               ),
@@ -938,7 +938,7 @@ class _SystemHealthTile extends StatelessWidget {
                           fontSize: 13.2,
                           height: 1.15,
                           fontWeight: FontWeight.w900,
-                          color: SafeHomeColors.textPrimary,
+                          color: MaiYenColors.textPrimary,
                         ),
                       ),
                     ),
@@ -951,7 +951,7 @@ class _SystemHealthTile extends StatelessWidget {
                     fontSize: 11.5,
                     height: 1.32,
                     fontWeight: FontWeight.w600,
-                    color: SafeHomeColors.textSecondary,
+                    color: MaiYenColors.textSecondary,
                   ),
                 ),
               ],

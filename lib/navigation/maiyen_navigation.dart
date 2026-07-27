@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 
-/// Điều hướng thống nhất theo đúng loại giao diện của SafeHome.
+/// Điều hướng thống nhất theo đúng loại giao diện của MaiYen.
 ///
 /// - Trang chức năng/chi tiết: mở toàn màn hình, trượt từ phải sang.
 /// - Thao tác nhanh/lựa chọn/xác nhận: dùng bottom sheet từ dưới lên.
 /// - Không chèn nút Back tùy chỉnh vào nội dung.
 /// - Android dùng nút Back hệ thống; iOS hỗ trợ vuốt từ mép trái.
-class SafeHomeNavigation {
-  const SafeHomeNavigation._();
+class MaiYenNavigation {
+  const MaiYenNavigation._();
 
   /// Mở trang chức năng hoặc trang chi tiết.
   ///
@@ -28,7 +28,7 @@ class SafeHomeNavigation {
         settings: RouteSettings(name: routeName),
         builder: (pageContext) {
           return Scaffold(
-            backgroundColor: SafeHomeColors.background,
+            backgroundColor: MaiYenColors.background,
             resizeToAvoidBottomInset: true,
             body: SafeArea(
               bottom: false,

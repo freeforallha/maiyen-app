@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 import '../helpers/firebase_paths.dart';
 import '../helpers/home_helper.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 typedef HomeAccountProfileChanged = void Function(Map<String, dynamic> profile);
 typedef HomeAccountHomeChanged =

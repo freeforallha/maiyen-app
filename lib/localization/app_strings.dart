@@ -2322,7 +2322,7 @@ class AppStrings {
     ),
   );
 
-  String openSafeHomeToCheckBody() => choose(
+  String openMaiYenToCheckBody() => choose(
     vi: "Mở MaiYen để kiểm tra ngay.",
     en: "Open MaiYen to check now.",
     zh: "打开 MaiYen 立即检查。",

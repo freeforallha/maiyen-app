@@ -7,7 +7,7 @@ import 'auto_login_service.dart';
 import 'fcm_service.dart';
 import 'platform/platform_auto_away_task_service.dart';
 import 'single_device_session_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 class SessionLogoutService {
   const SessionLogoutService._();

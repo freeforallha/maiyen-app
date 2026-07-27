@@ -9,7 +9,7 @@ import 'installation_id_service.dart';
 import 'notification_service.dart';
 import 'platform/ios/ios_notification_config.dart';
 import 'single_device_session_service.dart';
-import 'package:safehome_app/helpers/debug_log.dart';
+import 'package:maiyen_app/helpers/debug_log.dart';
 
 class FCMService {
   static bool _foregroundListening = false;

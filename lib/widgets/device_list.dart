@@ -10,9 +10,10 @@ import '../helpers/emergency_pulse_ticker.dart';
 import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
-import '../safehome_theme.dart';
+import '../maiyen_theme.dart';
 import '../services/notification_service.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
+import '../config/legacy_identifiers.dart';
 
 class DeviceList extends StatefulWidget {
   final String homeId;
@@ -268,7 +269,10 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   String _localOrderPrefsKey({required String uid, required String homeId}) {
-    return "safehome_device_order_${uid}_$homeId";
+    return MaiYenLegacyIdentifiers.deviceOrderStorageKey(
+      uid: uid,
+      homeId: homeId,
+    );
   }
 
   Future<void> _loadLocalDeviceOrder({
@@ -440,14 +444,14 @@ class _DeviceListState extends State<DeviceList> {
   Color getConnectionColor(String status) {
     switch (status) {
       case "on":
-        return SafeHomeColors.safe;
+        return MaiYenColors.safe;
 
       case "warn":
-        return SafeHomeColors.warning;
+        return MaiYenColors.warning;
 
       case "off":
       default:
-        return SafeHomeColors.danger;
+        return MaiYenColors.danger;
     }
   }
 
@@ -676,7 +680,7 @@ class _DeviceListState extends State<DeviceList> {
       showTopToast(
         context,
         _emergencyAcknowledgeErrorText(strings),
-        color: SafeHomeColors.danger,
+        color: MaiYenColors.danger,
         icon: Icons.error_outline_rounded,
       );
     } finally {
@@ -1025,18 +1029,18 @@ class _DeviceListState extends State<DeviceList> {
     final level = evaluation["level"]?.toString() ?? "safe";
 
     if (level == "emergency") {
-      return SafeHomeColors.emergency;
+      return MaiYenColors.emergency;
     }
 
     if (level == "danger") {
-      return SafeHomeColors.danger;
+      return MaiYenColors.danger;
     }
 
     if (level == "warning") {
-      return SafeHomeColors.warning;
+      return MaiYenColors.warning;
     }
 
-    return SafeHomeColors.safe;
+    return MaiYenColors.safe;
   }
 
   Color getIconBackground(Map<String, dynamic> d) {
@@ -1541,7 +1545,7 @@ class _DeviceListState extends State<DeviceList> {
       showTopToast(
         context,
         strings.homeSirenMutedMessage(),
-        color: SafeHomeColors.safe,
+        color: MaiYenColors.safe,
         icon: Icons.campaign_rounded,
       );
       return;
@@ -1550,7 +1554,7 @@ class _DeviceListState extends State<DeviceList> {
     showTopToast(
       context,
       strings.sirenStopUnavailableMessage(),
-      color: SafeHomeColors.danger,
+      color: MaiYenColors.danger,
       icon: Icons.error_outline_rounded,
     );
   }
@@ -1567,7 +1571,7 @@ class _DeviceListState extends State<DeviceList> {
         button: true,
         label: label,
         child: Material(
-          color: SafeHomeColors.danger.withValues(alpha: 0.10),
+          color: MaiYenColors.danger.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
             onTap: _mutingHomeSiren
@@ -1594,7 +1598,7 @@ class _DeviceListState extends State<DeviceList> {
                       Icon(
                         Icons.campaign_rounded,
                         size: compact ? 12 : 13,
-                        color: SafeHomeColors.danger,
+                        color: MaiYenColors.danger,
                       ),
                     const SizedBox(width: 4),
                     Expanded(
@@ -1608,7 +1612,7 @@ class _DeviceListState extends State<DeviceList> {
                             fontSize: compact ? 9.0 : 9.5,
                             height: 1,
                             fontWeight: FontWeight.w900,
-                            color: SafeHomeColors.danger,
+                            color: MaiYenColors.danger,
                           ),
                         ),
                       ),
@@ -1682,7 +1686,7 @@ class _DeviceListState extends State<DeviceList> {
       return Icon(
         Icons.shield_outlined,
         size: compact ? 15 : 16,
-        color: SafeHomeColors.textSecondary.withValues(alpha: 0.72),
+        color: MaiYenColors.textSecondary.withValues(alpha: 0.72),
       );
     }
 
@@ -1695,8 +1699,8 @@ class _DeviceListState extends State<DeviceList> {
         enabled ? activeIcon : inactiveIcon,
         size: iconSize,
         color: enabled
-            ? SafeHomeColors.safe
-            : SafeHomeColors.textSecondary.withValues(alpha: 0.62),
+            ? MaiYenColors.safe
+            : MaiYenColors.textSecondary.withValues(alpha: 0.62),
       );
     }
 
@@ -1755,14 +1759,14 @@ class _DeviceListState extends State<DeviceList> {
     final showEmergencyAcknowledge = _isEmergencyAwaitingAcknowledgement(id, d);
     final emergencyIsActive = _isEmergencyDeviceActiveForUi(id, d);
     final emergencyPulseColor = _sirenAlertPulseDanger
-        ? SafeHomeColors.danger
-        : SafeHomeColors.warning;
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
 
     final baseCardStatusColor =
-        accentColor == SafeHomeColors.danger || connectionStatus == "off"
-        ? SafeHomeColors.danger
+        accentColor == MaiYenColors.danger || connectionStatus == "off"
+        ? MaiYenColors.danger
         : connectionStatus == "warn"
-        ? SafeHomeColors.warning
+        ? MaiYenColors.warning
         : accentColor;
     final cardStatusColor = emergencyIsActive
         ? emergencyPulseColor
@@ -1774,7 +1778,7 @@ class _DeviceListState extends State<DeviceList> {
         ? emergencyPulseColor.withValues(
             alpha: _sirenAlertPulseDanger ? 0.20 : 0.15,
           )
-        : SafeHomeColors.surface;
+        : MaiYenColors.surface;
 
     return Material(
       color: Colors.transparent,
@@ -1853,7 +1857,7 @@ class _DeviceListState extends State<DeviceList> {
                                 fontWeight: FontWeight.w900,
                                 color: emergencyIsActive
                                     ? effectiveAccentColor
-                                    : SafeHomeColors.textPrimary,
+                                    : MaiYenColors.textPrimary,
                                 letterSpacing: -0.1,
                               ),
                             ),
@@ -1953,7 +1957,7 @@ class _DeviceListState extends State<DeviceList> {
                                       fontSize: compact ? 9.8 : 10.4,
                                       height: 1.10,
                                       fontWeight: FontWeight.w500,
-                                      color: SafeHomeColors.textSecondary,
+                                      color: MaiYenColors.textSecondary,
                                     ),
                                   ),
                                 ),
@@ -2246,11 +2250,11 @@ class _DeviceListState extends State<DeviceList> {
   Color _infrastructureSignalColor(List<MapEntry<String, dynamic>> entries) {
     switch (_infrastructureSignalGrade(entries)) {
       case "good":
-        return SafeHomeColors.safe;
+        return MaiYenColors.safe;
       case "weak":
-        return SafeHomeColors.warning;
+        return MaiYenColors.warning;
       default:
-        return SafeHomeColors.textSecondary;
+        return MaiYenColors.textSecondary;
     }
   }
 
@@ -2360,16 +2364,16 @@ class _DeviceListState extends State<DeviceList> {
           (entry) => getConnectionStatus(safeMap(entry.value)) != "on",
         );
     final pulseColor = _sirenAlertPulseDanger
-        ? SafeHomeColors.danger
-        : SafeHomeColors.warning;
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
     final accentColor = sirenIsOn
         ? pulseColor
         : hasAttention
-        ? SafeHomeColors.warning
-        : SafeHomeColors.safe;
+        ? MaiYenColors.warning
+        : MaiYenColors.safe;
     final cardColor = sirenIsOn
         ? pulseColor.withValues(alpha: _sirenAlertPulseDanger ? 0.20 : 0.15)
-        : SafeHomeColors.surface;
+        : MaiYenColors.surface;
     final firstDevice = safeMap(entries.first.value);
     final primaryStatusText = isSirenGroup
         ? _sirenReadinessText(
@@ -2384,7 +2388,7 @@ class _DeviceListState extends State<DeviceList> {
     final secondaryStatusColor = isSirenGroup
         ? sirenIsOn
               ? accentColor
-              : SafeHomeColors.textSecondary
+              : MaiYenColors.textSecondary
         : _infrastructureSignalColor(entries);
     // Đồng bộ đúng chiều cao với card thiết bị thường. Riêng Myanmar chừa
     // thêm 1 px giống _deviceGridItemHeight để tránh overflow phần glyph.
@@ -2481,7 +2485,7 @@ class _DeviceListState extends State<DeviceList> {
                                 fontWeight: FontWeight.w900,
                                 color: sirenIsOn
                                     ? accentColor
-                                    : SafeHomeColors.textPrimary,
+                                    : MaiYenColors.textPrimary,
                                 letterSpacing: -0.1,
                               ),
                             ),
@@ -2831,7 +2835,7 @@ class _DeviceListState extends State<DeviceList> {
 
   Widget _addDeviceButton() {
     return Material(
-      color: SafeHomeColors.primarySoft,
+      color: MaiYenColors.primarySoft,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onPairSensor,
@@ -2842,7 +2846,7 @@ class _DeviceListState extends State<DeviceList> {
           child: Icon(
             Icons.add_rounded,
             size: 20,
-            color: SafeHomeColors.primary,
+            color: MaiYenColors.primary,
           ),
         ),
       ),
@@ -2868,7 +2872,7 @@ class _DeviceListState extends State<DeviceList> {
                       fontSize: 14.5,
                       height: 1,
                       fontWeight: FontWeight.w800,
-                      color: SafeHomeColors.textPrimary,
+                      color: MaiYenColors.textPrimary,
                       letterSpacing: -0.15,
                     ),
                   ),
@@ -2878,7 +2882,7 @@ class _DeviceListState extends State<DeviceList> {
                       fontSize: 13,
                       height: 1,
                       fontWeight: FontWeight.w700,
-                      color: SafeHomeColors.textSecondary,
+                      color: MaiYenColors.textSecondary,
                     ),
                   ),
                 ],
@@ -2906,7 +2910,7 @@ class _DeviceListState extends State<DeviceList> {
             fontSize: 12.5,
             height: 1.35,
             fontWeight: FontWeight.w600,
-            color: SafeHomeColors.textSecondary,
+            color: MaiYenColors.textSecondary,
           ),
         ),
       ),

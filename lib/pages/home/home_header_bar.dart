@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../safehome_theme.dart';
+import '../../maiyen_theme.dart';
 
 class HomeHeaderBar extends StatelessWidget {
   const HomeHeaderBar({
@@ -30,7 +30,7 @@ class HomeHeaderBar extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Material(
-                color: SafeHomeColors.surface,
+                color: MaiYenColors.surface,
                 borderRadius: BorderRadius.circular(11),
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
@@ -41,7 +41,7 @@ class HomeHeaderBar extends StatelessWidget {
                     height: 32,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      border: Border.all(color: SafeHomeColors.border),
+                      border: Border.all(color: MaiYenColors.border),
                       borderRadius: BorderRadius.circular(11),
                       boxShadow: [
                         BoxShadow(
@@ -54,7 +54,7 @@ class HomeHeaderBar extends StatelessWidget {
                     child: const Icon(
                       Icons.grid_view_rounded,
                       size: 18,
-                      color: SafeHomeColors.textPrimary,
+                      color: MaiYenColors.textPrimary,
                     ),
                   ),
                 ),
@@ -79,11 +79,11 @@ class HomeHeaderBar extends StatelessWidget {
                       children: [
                         TextSpan(
                           text: "Safe",
-                          style: TextStyle(color: SafeHomeColors.primary),
+                          style: TextStyle(color: MaiYenColors.primary),
                         ),
                         TextSpan(
                           text: "Home",
-                          style: TextStyle(color: SafeHomeColors.textPrimary),
+                          style: TextStyle(color: MaiYenColors.textPrimary),
                         ),
                       ],
                     ),
@@ -107,12 +107,12 @@ class HomeHeaderBar extends StatelessWidget {
                     icon: const Icon(Icons.notifications_rounded, size: 21),
                     style:
                         IconButton.styleFrom(
-                          foregroundColor: SafeHomeColors.info,
+                          foregroundColor: MaiYenColors.info,
                           backgroundColor: Colors.transparent,
                           shape: const CircleBorder(),
                         ).copyWith(
                           overlayColor: WidgetStatePropertyAll(
-                            SafeHomeColors.info.withValues(alpha: 0.10),
+                            MaiYenColors.info.withValues(alpha: 0.10),
                           ),
                         ),
                   ),
@@ -131,10 +131,10 @@ class HomeHeaderBar extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: SafeHomeColors.danger,
+                          color: MaiYenColors.danger,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: SafeHomeColors.surface,
+                            color: MaiYenColors.surface,
                             width: 1.5,
                           ),
                         ),
