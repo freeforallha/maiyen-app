@@ -2483,25 +2483,23 @@ class AppStrings {
     lo: "$name ແລະອີກ $otherCount ຄົນກຳລັງພິມ...",
   );
 
-  String androidLegacyAlarmChannelDescription() => choose(
-    vi: "Kênh báo động cũ để giữ tương thích",
-    my: "ကိုက်ညီမှုရှိစေရန် ထားရှိသော အရေးပေါ်အချက်ပေးသံ ချန်နယ်အဟောင်း",
-    fil: "Lumang alarma channel para mapanatili ang compatibility",
-    km: "ឆានែល សំឡេងរោទិ៍ ចាស់សម្រាប់រក្សាភាពត្រូវគ្នា",
-    en: "Legacy Alarm channel kept for compatibility",
-    zh: "为保持兼容而保留的旧 警报 通道",
-    ko: "호환성을 위해 유지되는 기존 경보 채널",
-    ja: "互換性のために保持される旧 警報 チャンネル",
-    de: 'Alter Alarm-Kanal zur Kompatibilität',
-    ru: 'Устаревший канал тревога для совместимости',
-    es: "Canal de alarma antiguo conservado por compatibilidad",
-    fr: _fr(
-      vi: "Kênh báo động cũ để giữ tương thích",
-      en: "Legacy Alarm channel kept for compatibility",
-    ),
-    th: "ช่อง สัญญาณเตือน เดิมเพื่อรองรับความเข้ากันได้",
-    ms: "Saluran penggera lama dikekalkan untuk keserasian",
-    lo: "ຊ່ອງສັນຍານເຕືອນໄພເກົ່າເພື່ອຮັກສາຄວາມເຂົ້າກັນໄດ້",
+  String androidAlarmChannelDescription() => choose(
+    vi: "Kênh báo động chính của MaiYen",
+    my: "MaiYen ၏ အဓိက အရေးပေါ်အချက်ပေး ချန်နယ်",
+    fil: "Pangunahing alarm channel ng MaiYen",
+    km: "ឆានែលសំឡេងរោទិ៍ចម្បងរបស់ MaiYen",
+    en: "MaiYen primary alarm channel",
+    zh: "MaiYen 主警报通道",
+    ko: "MaiYen 기본 경보 채널",
+    ja: "MaiYen メイン警報チャンネル",
+    de: "Primärer MaiYen-Alarmkanal",
+    ru: "Основной канал тревоги MaiYen",
+    es: "Canal de alarma principal de MaiYen",
+    fr: "Canal d’alarme principal de MaiYen",
+    id: "Saluran alarm utama MaiYen",
+    th: "ช่องสัญญาณเตือนหลักของ MaiYen",
+    ms: "Saluran penggera utama MaiYen",
+    lo: "ຊ່ອງສັນຍານເຕືອນໄພຫຼັກຂອງ MaiYen",
   );
 
   String androidAlarmFullscreenChannelName() => choose(

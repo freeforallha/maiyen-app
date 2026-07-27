@@ -31,11 +31,11 @@ Sau khi Apple cấp entitlement:
 3. Thêm entitlement do Apple cấp vào provisioning profile.
 4. Build Flutter với:
 
-   `--dart-define=SAFEHOME_IOS_CRITICAL_ALERTS=true`
+   `--dart-define=MAIYEN_IOS_CRITICAL_ALERTS=true`
 
 5. Trên backend đặt:
 
-   `SAFEHOME_IOS_CRITICAL_ALERTS_ENABLED=true`
+   `MAIYEN_IOS_CRITICAL_ALERTS_ENABLED=true`
 
 Nếu chưa bật hai phía trên, Emergency tự động dùng Time Sensitive và âm thanh
 notification thông thường, không làm hỏng build tài khoản cá nhân.

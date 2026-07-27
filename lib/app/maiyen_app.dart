@@ -13,7 +13,6 @@ import '../config/brand_config.dart';
 import '../services/notification_service.dart';
 import '../services/account_session_service.dart';
 import '../services/auto_away_service.dart';
-import '../services/auto_login_service.dart';
 import '../services/fcm_service.dart';
 import '../services/session_logout_service.dart';
 import '../services/single_device_session_service.dart';
@@ -348,13 +347,6 @@ class _AuthGateState extends State<AuthGate> {
         ready = true;
       });
     }
-
-    // Việc dọn mật khẩu legacy không cần chặn UI.
-    unawaited(
-      AutoLoginService.removeLegacyPassword().catchError((Object error) {
-        safeDebugPrint("REMOVE_LEGACY_PASSWORD_ERROR: $error");
-      }),
-    );
   }
 
   Future<DatabaseEvent> _loadProfile(String uid) {

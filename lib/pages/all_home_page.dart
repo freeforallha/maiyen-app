@@ -10,7 +10,7 @@ import '../localization/app_strings.dart';
 import '../services/home_realtime_coordinator.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 import '../navigation/maiyen_navigation.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class AllHome extends StatefulWidget {
   final List<String> homeOrder;
@@ -2589,7 +2589,7 @@ class _AllHomeState extends State<AllHome> {
                           final ownerUid = currentUser.uid;
 
                           final qrData =
-                              MaiYenLegacyIdentifiers.buildJoinMultipleHomesQr(
+                              MaiYenIdentifiers.buildJoinMultipleHomesQr(
                                 ownerUid: ownerUid,
                                 homeIds: selectedHomes,
                               );

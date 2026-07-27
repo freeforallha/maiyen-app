@@ -16,16 +16,13 @@ import 'platform/platform_bootstrap_service.dart';
 import 'platform/platform_auto_away_system_service.dart';
 import 'single_device_session_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../config/legacy_identifiers.dart';
-
-const String _legacyAutoAwayGeofencePrefix =
-    MaiYenLegacyIdentifiers.legacyAutoAwayGeofencePrefix;
+import '../config/maiyen_identifiers.dart';
 
 const String _autoAwayGeofencePrefix =
-    MaiYenLegacyIdentifiers.autoAwayGeofencePrefixV2;
+    MaiYenIdentifiers.autoAwayGeofencePrefix;
 
 const String _pendingPresenceEventsStorageKey =
-    MaiYenLegacyIdentifiers.pendingPresenceEventsStorageKey;
+    MaiYenIdentifiers.pendingPresenceEventsStorageKey;
 
 const int _pendingPresenceEventsLimit = 100;
 
@@ -130,14 +127,6 @@ Future<void> maiYenAutoAwayGeofenceCallback(
   }
 }
 
-/// Entry point cũ được giữ lại để geofence đã đăng ký từ bản SafeHome
-/// vẫn gọi được callback sau khi ứng dụng được nâng cấp.
-@pragma('vm:entry-point')
-Future<void> safeHomeAutoAwayGeofenceCallback(
-  GeofenceCallbackParams params,
-) {
-  return maiYenAutoAwayGeofenceCallback(params);
-}
 
 class AutoAwayService {
   static bool _initialized = false;
@@ -1448,8 +1437,7 @@ class AutoAwayService {
 
     final prefix = parts.first;
 
-    if (prefix != _autoAwayGeofencePrefix &&
-        prefix != _legacyAutoAwayGeofencePrefix) {
+    if (prefix != _autoAwayGeofencePrefix) {
       return null;
     }
 
@@ -1469,8 +1457,7 @@ class AutoAwayService {
   }
 
   static bool _isMaiYenAutoAwayGeofenceId(String id) {
-    return id.startsWith('$_autoAwayGeofencePrefix|') ||
-        id.startsWith('$_legacyAutoAwayGeofencePrefix|');
+    return id.startsWith('$_autoAwayGeofencePrefix|');
   }
 
   static Future<_MonitoringStatus> _readMonitoringStatus({

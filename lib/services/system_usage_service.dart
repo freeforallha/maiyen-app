@@ -1,13 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class SystemUsageService {
   const SystemUsageService._();
 
   static const String _lastOpenAtKey =
-      MaiYenLegacyIdentifiers.lastOpenAtStorageKey;
+      MaiYenIdentifiers.lastOpenAtStorageKey;
   static const String _previousOpenAtKey =
-      MaiYenLegacyIdentifiers.previousOpenAtStorageKey;
+      MaiYenIdentifiers.previousOpenAtStorageKey;
   static const int _newSessionGapMs = 30 * 60 * 1000;
 
   static Future<void> recordAppOpen() async {

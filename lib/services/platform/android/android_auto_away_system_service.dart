@@ -1,12 +1,12 @@
 import 'package:flutter/services.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 class AndroidAutoAwaySystemService {
   const AndroidAutoAwaySystemService._();
 
   static const MethodChannel _channel = MethodChannel(
-    MaiYenLegacyIdentifiers.androidNativeAlarmPermissionChannel,
+    MaiYenIdentifiers.androidNativeAlarmPermissionChannel,
   );
 
   static Future<bool> isIgnoringBatteryOptimizations() async {

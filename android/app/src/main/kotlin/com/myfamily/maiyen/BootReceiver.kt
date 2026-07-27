@@ -1,4 +1,4 @@
-package com.myfamily.safehome
+package com.myfamily.maiyen
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,7 +14,7 @@ class BootReceiver : BroadcastReceiver() {
 
     companion object {
         const val MONITORING_PREFERENCES_NAME =
-            MaiYenNativeIdentifiers.LEGACY_MONITORING_PREFERENCES
+            MaiYenNativeIdentifiers.MONITORING_PREFERENCES
         const val KEY_BOOT_RECEIVER_CONFIRMED =
             "boot_receiver_confirmed"
         const val KEY_CONFIRMED_BOOT_COUNT =
@@ -88,7 +88,7 @@ class BootReceiver : BroadcastReceiver() {
 
     private fun showBootNotification(context: Context) {
         val channelId =
-            MaiYenNativeIdentifiers.LEGACY_BOOT_NOTIFICATION_CHANNEL_ID
+            MaiYenNativeIdentifiers.BOOT_NOTIFICATION_CHANNEL_ID
         val brandName = context.getString(R.string.app_name)
 
         val manager =
@@ -111,7 +111,7 @@ class BootReceiver : BroadcastReceiver() {
 
         val notification =
             NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_maiyen)
                 .setContentTitle(brandName)
                 .setContentText(
                     bootNotificationText()

@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 class AndroidAlarmPermissionService {
   static const MethodChannel _channel = MethodChannel(
-    MaiYenLegacyIdentifiers.androidNativeAlarmPermissionChannel,
+    MaiYenIdentifiers.androidNativeAlarmPermissionChannel,
   );
 
   static Future<bool> canUseFullScreenIntent() async {

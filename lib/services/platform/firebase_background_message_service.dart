@@ -54,12 +54,3 @@ Future<void> maiYenFirebaseMessagingBackgroundHandler(
     ]);
   }
 }
-
-/// Entry point cũ được giữ lại để callback handle FCM đã lưu từ bản SafeHome
-/// không bị mất hiệu lực sau khi cập nhật ứng dụng.
-@pragma('vm:entry-point')
-Future<void> safeHomeFirebaseMessagingBackgroundHandler(
-  RemoteMessage message,
-) {
-  return maiYenFirebaseMessagingBackgroundHandler(message);
-}

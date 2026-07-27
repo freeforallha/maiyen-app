@@ -11,10 +11,10 @@ import '../../../config/brand_config.dart';
 import '../../../localization/app_strings.dart';
 import '../../notification_service.dart';
 import 'android_notification_config.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 const String _languageStorageKey =
-    MaiYenLegacyIdentifiers.languageStorageKey;
+    MaiYenIdentifiers.languageStorageKey;
 const Set<String> _supportedLanguageCodes = {
   'vi',
   'en',

@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../localization/app_strings.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 enum MaiYenQrScanMode { pairDevice, joinHome }
 
 bool _isJoinHomeQr(String value) {
-  return value.startsWith(MaiYenLegacyIdentifiers.joinHomeQrPrefix) ||
+  return value.startsWith(MaiYenIdentifiers.joinHomeQrPrefix) ||
       value.startsWith(
-        MaiYenLegacyIdentifiers.joinMultipleHomesQrPrefix,
+        MaiYenIdentifiers.joinMultipleHomesQrPrefix,
       );
 }
 
 bool _looksLikeJoinHomeQr(String value) {
   return value.startsWith(
-    MaiYenLegacyIdentifiers.joinHomeQrFamilyPrefix,
+    MaiYenIdentifiers.joinHomeQrFamilyPrefix,
   );
 }
 

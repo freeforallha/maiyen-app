@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 /// Cấu hình hiển thị notification riêng cho iOS.
 ///
@@ -11,22 +11,22 @@ class IosNotificationConfig {
   /// capability đó đã được thêm vào Runner.entitlements trong Xcode.
   ///
   /// Có thể chuẩn bị build bằng:
-  /// --dart-define=SAFEHOME_IOS_CRITICAL_ALERTS=true
+  /// --dart-define=MAIYEN_IOS_CRITICAL_ALERTS=true
   static const bool criticalAlertsEntitlementEnabled = bool.fromEnvironment(
-    MaiYenLegacyIdentifiers.iosCriticalAlertsDartDefine,
+    MaiYenIdentifiers.iosCriticalAlertsDartDefine,
     defaultValue: false,
   );
 
   static const String securityAlarmCategoryId =
-      MaiYenLegacyIdentifiers.iosSecurityAlarmCategoryId;
+      MaiYenIdentifiers.iosSecurityAlarmCategoryId;
   static const String emergencyAlarmCategoryId =
-      MaiYenLegacyIdentifiers.iosEmergencyAlarmCategoryId;
+      MaiYenIdentifiers.iosEmergencyAlarmCategoryId;
   static const String reminderCategoryId =
-      MaiYenLegacyIdentifiers.iosReminderCategoryId;
+      MaiYenIdentifiers.iosReminderCategoryId;
   static const String sensorCategoryId =
-      MaiYenLegacyIdentifiers.iosSensorCategoryId;
+      MaiYenIdentifiers.iosSensorCategoryId;
   static const String chatCategoryId =
-      MaiYenLegacyIdentifiers.iosChatCategoryId;
+      MaiYenIdentifiers.iosChatCategoryId;
 
   static const DarwinInitializationSettings initializationSettings =
       DarwinInitializationSettings(
@@ -79,7 +79,7 @@ class IosNotificationConfig {
       categoryIdentifier: isEmergency
           ? emergencyAlarmCategoryId
           : securityAlarmCategoryId,
-      threadIdentifier: MaiYenLegacyIdentifiers.iosAlarmThreadId(homeId),
+      threadIdentifier: MaiYenIdentifiers.iosAlarmThreadId(homeId),
       interruptionLevel: useCritical
           ? InterruptionLevel.critical
           : InterruptionLevel.timeSensitive,
@@ -100,7 +100,7 @@ class IosNotificationConfig {
       presentSound: true,
       sound: 'default',
       categoryIdentifier: sensorCategoryId,
-      threadIdentifier: MaiYenLegacyIdentifiers.iosSensorThreadId(homeId),
+      threadIdentifier: MaiYenIdentifiers.iosSensorThreadId(homeId),
       interruptionLevel: InterruptionLevel.active,
     );
   }
@@ -114,7 +114,7 @@ class IosNotificationConfig {
       presentSound: true,
       sound: 'default',
       categoryIdentifier: chatCategoryId,
-      threadIdentifier: MaiYenLegacyIdentifiers.iosChatThreadId(safeIdentifier),
+      threadIdentifier: MaiYenIdentifiers.iosChatThreadId(safeIdentifier),
       interruptionLevel: InterruptionLevel.active,
     );
   }
@@ -126,7 +126,7 @@ class IosNotificationConfig {
         presentSound: true,
         sound: 'default',
         categoryIdentifier: reminderCategoryId,
-        threadIdentifier: MaiYenLegacyIdentifiers.iosReminderThreadId,
+        threadIdentifier: MaiYenIdentifiers.iosReminderThreadId,
         interruptionLevel: InterruptionLevel.active,
       );
 }

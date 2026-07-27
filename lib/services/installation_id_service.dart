@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class InstallationIdService {
   const InstallationIdService._();
@@ -11,7 +11,7 @@ class InstallationIdService {
   // Giữ nguyên key cũ để FCM token và session cùng nhận diện
   // đúng một bản cài đặt ứng dụng trên thiết bị.
   static const String _installationIdKey =
-      MaiYenLegacyIdentifiers.installationIdStorageKey;
+      MaiYenIdentifiers.installationIdStorageKey;
 
   static String _cachedInstallationId = '';
   static Future<String>? _pendingInstallationId;

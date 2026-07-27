@@ -1,5 +1,5 @@
 import 'system_version.dart';
-import 'legacy_identifiers.dart';
+import 'maiyen_identifiers.dart';
 
 class BrandConfig {
   BrandConfig._();
@@ -17,8 +17,8 @@ class BrandConfig {
   static const String defaultHubName = '$appName Hub';
 
   /// User-Agent công khai khi ứng dụng gọi dịch vụ bản đồ.
-  /// Package kỹ thuật được giữ nguyên để tương thích với bản đang phát hành.
+  /// Package kỹ thuật chính thức của ứng dụng MaiYen.
   static const String mapUserAgent =
       '$appName/${SystemVersionConfig.appVersionName} '
-      '(${MaiYenLegacyIdentifiers.applicationId})';
+      '(${MaiYenIdentifiers.applicationId})';
 }

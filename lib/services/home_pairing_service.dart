@@ -7,7 +7,7 @@ import '../localization/app_strings.dart';
 import 'home_notification_service.dart';
 import 'share_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 enum HomeScannedQrStatus {
   joinMultiSent,
@@ -46,7 +46,7 @@ class HomePairingService {
     final value = code.trim();
 
     if (value.startsWith(
-      MaiYenLegacyIdentifiers.joinMultipleHomesQrPrefix,
+      MaiYenIdentifiers.joinMultipleHomesQrPrefix,
     )) {
       final parts = value.split("|");
 
@@ -116,7 +116,7 @@ class HomePairingService {
       );
     }
 
-    if (value.startsWith(MaiYenLegacyIdentifiers.joinHomeQrPrefix)) {
+    if (value.startsWith(MaiYenIdentifiers.joinHomeQrPrefix)) {
       final parts = value.split("|");
 
       if (parts.length != 3) {

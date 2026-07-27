@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'installation_id_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class SingleDeviceSessionIdentity {
   const SingleDeviceSessionIdentity({
@@ -722,11 +722,11 @@ class SingleDeviceSessionService {
   }
 
   static String _sessionStorageKey(String uid) {
-    return MaiYenLegacyIdentifiers.activeSessionStorageKey(uid);
+    return MaiYenIdentifiers.activeSessionStorageKey(uid);
   }
 
   static String _interactiveLoginRequiredStorageKey(String uid) {
-    return MaiYenLegacyIdentifiers.interactiveLoginRequiredStorageKey(uid);
+    return MaiYenIdentifiers.interactiveLoginRequiredStorageKey(uid);
   }
 
   static String _generateSessionId() {

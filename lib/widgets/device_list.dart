@@ -13,7 +13,7 @@ import '../localization/app_strings.dart';
 import '../maiyen_theme.dart';
 import '../services/notification_service.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class DeviceList extends StatefulWidget {
   final String homeId;
@@ -269,7 +269,7 @@ class _DeviceListState extends State<DeviceList> {
   }
 
   String _localOrderPrefsKey({required String uid, required String homeId}) {
-    return MaiYenLegacyIdentifiers.deviceOrderStorageKey(
+    return MaiYenIdentifiers.deviceOrderStorageKey(
       uid: uid,
       homeId: homeId,
     );

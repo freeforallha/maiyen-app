@@ -11,7 +11,7 @@ import '../config/brand_config.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../services/notification_service.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
   final String title;
@@ -88,7 +88,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     final raw = currentReminderTitle.trim();
     final lower = raw.toLowerCase();
 
-    if (raw.isEmpty || lower.contains(MaiYenLegacyIdentifiers.legacyBrandToken)) {
+    if (raw.isEmpty || lower.contains(MaiYenIdentifiers.brandToken)) {
       return "";
     }
 

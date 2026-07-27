@@ -54,13 +54,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB0-C9tL3V0Kp8HD7v7nOPIELeTvNz_QK8',
-    appId: '1:83888615408:ios:32969a3566813eb6bd7735',
+    appId: '1:83888615408:ios:dba94b7072bb3efdbd7735',
     messagingSenderId: '83888615408',
     projectId: 'safehome-10cc9',
     databaseURL:
         'https://safehome-10cc9-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'safehome-10cc9.firebasestorage.app',
-    iosBundleId: 'com.myfamily.safehome',
+    iosBundleId: 'com.myfamily.maiyen',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -71,7 +71,7 @@ class DefaultFirebaseOptions {
     databaseURL:
         'https://safehome-10cc9-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'safehome-10cc9.firebasestorage.app',
-    iosBundleId: 'com.example.safehomeApp',
+    iosBundleId: 'com.myfamily.maiyen',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -88,7 +88,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDEYXZZz9AJA1N8ulrGLa-6u-nB1-opWv4',
-    appId: '1:83888615408:android:4ff66c30f9ff6e00bd7735',
+    appId: '1:83888615408:android:2185565eaf57dcd9bd7735',
     messagingSenderId: '83888615408',
     projectId: 'safehome-10cc9',
     databaseURL:

@@ -16,10 +16,10 @@ import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 import '../../single_device_session_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 const String _autoAwayTaskDataKey =
-    MaiYenLegacyIdentifiers.autoAwayForegroundTaskConfigStorageKey;
+    MaiYenIdentifiers.autoAwayForegroundTaskConfigStorageKey;
 const int _autoAwayForegroundServiceId = 884201;
 
 @pragma('vm:entry-point')
@@ -27,12 +27,6 @@ void maiYenAutoAwayForegroundTaskCallback() {
   FlutterForegroundTask.setTaskHandler(_MaiYenAutoAwayTaskHandler());
 }
 
-/// Entry point cũ được giữ lại để các callback handle đã lưu từ bản SafeHome
-/// vẫn tiếp tục hoạt động sau khi nâng cấp lên MaiYen.
-@pragma('vm:entry-point')
-void safeHomeAutoAwayForegroundTaskCallback() {
-  maiYenAutoAwayForegroundTaskCallback();
-}
 
 class AndroidAutoAwayForegroundTaskService {
   const AndroidAutoAwayForegroundTaskService._();
@@ -76,7 +70,7 @@ class AndroidAutoAwayForegroundTaskService {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId:
-            MaiYenLegacyIdentifiers.androidAutoAwayLocationChannelId,
+            MaiYenIdentifiers.androidAutoAwayLocationChannelId,
         channelName: strings.updatingLocationNotificationTitle(),
         channelDescription: strings.updatingLocationChannelDescription(),
         channelImportance: NotificationChannelImportance.LOW,

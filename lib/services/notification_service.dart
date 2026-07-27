@@ -16,7 +16,7 @@ import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
 import 'platform/ios/ios_notification_config.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
@@ -694,7 +694,7 @@ class NotificationService {
     }
 
     final lowerTitle = cleanTitle.toLowerCase();
-    if (lowerTitle.contains(MaiYenLegacyIdentifiers.legacyBrandToken) ||
+    if (lowerTitle.contains(MaiYenIdentifiers.brandToken) ||
         const {
           'alarm',
           'reminder',
@@ -1599,7 +1599,7 @@ class NotificationService {
       title: title,
       body: body,
       strings: strings,
-      tag: MaiYenLegacyIdentifiers.sensorNotificationTag(
+      tag: MaiYenIdentifiers.sensorNotificationTag(
         homeId: homeId,
         deviceId: deviceId,
       ),

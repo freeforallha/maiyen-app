@@ -54,7 +54,7 @@ import '../services/system_usage_service.dart';
 import '../maiyen_theme.dart';
 import '../localization/app_strings.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
-import '../config/legacy_identifiers.dart';
+import '../config/maiyen_identifiers.dart';
 
 class MaiYen extends StatefulWidget {
   const MaiYen({super.key});
@@ -2389,7 +2389,7 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
 
   void showJoinHomeQR() {
     final shareOwnerUid = getHomeOwnerUid();
-    final qrData = MaiYenLegacyIdentifiers.buildJoinHomeQr(
+    final qrData = MaiYenIdentifiers.buildJoinHomeQr(
       ownerUid: shareOwnerUid,
       homeId: selectedHome,
     );
@@ -2399,7 +2399,7 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
 
   void shareHome() async {
     final shareOwnerUid = getHomeOwnerUid();
-    final qrData = MaiYenLegacyIdentifiers.buildJoinHomeQr(
+    final qrData = MaiYenIdentifiers.buildJoinHomeQr(
       ownerUid: shareOwnerUid,
       homeId: selectedHome,
     );
@@ -2770,9 +2770,9 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
 
     final value = code.trim();
 
-    if (!value.startsWith(MaiYenLegacyIdentifiers.joinHomeQrPrefix) &&
+    if (!value.startsWith(MaiYenIdentifiers.joinHomeQrPrefix) &&
         !value.startsWith(
-          MaiYenLegacyIdentifiers.joinMultipleHomesQrPrefix,
+          MaiYenIdentifiers.joinMultipleHomesQrPrefix,
         )) {
       showTopToast(
         context,

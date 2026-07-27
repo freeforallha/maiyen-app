@@ -5,28 +5,28 @@ import 'package:maiyen_app/localization/app_strings.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 
 import '../../../config/brand_config.dart';
-import '../../../config/legacy_identifiers.dart';
+import '../../../config/maiyen_identifiers.dart';
 
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
 
-  static const legacyAlarmChannelId =
-      MaiYenLegacyIdentifiers.androidLegacyAlarmChannelId;
+  static const alarmChannelId =
+      MaiYenIdentifiers.androidAlarmChannelId;
   static const alarmFullscreenChannelId =
-      MaiYenLegacyIdentifiers.androidAlarmFullscreenChannelId;
+      MaiYenIdentifiers.androidAlarmFullscreenChannelId;
   static const emergencyPriorityChannelId =
-      MaiYenLegacyIdentifiers.androidEmergencyPriorityChannelId;
+      MaiYenIdentifiers.androidEmergencyPriorityChannelId;
   static const scheduleFullscreenChannelId =
-      MaiYenLegacyIdentifiers.androidScheduleFullscreenChannelId;
+      MaiYenIdentifiers.androidScheduleFullscreenChannelId;
   static const reminderPriorityChannelId =
-      MaiYenLegacyIdentifiers.androidReminderPriorityChannelId;
+      MaiYenIdentifiers.androidReminderPriorityChannelId;
   static const chatChannelId =
-      MaiYenLegacyIdentifiers.androidChatChannelId;
+      MaiYenIdentifiers.androidChatChannelId;
   static const sensorNotificationChannelId =
-      MaiYenLegacyIdentifiers.androidSensorNotificationChannelId;
+      MaiYenIdentifiers.androidSensorNotificationChannelId;
 
   static const initializationSettings = AndroidInitializationSettings(
-    MaiYenLegacyIdentifiers.androidNotificationIconName,
+    MaiYenIdentifiers.androidNotificationIconName,
   );
 
   static bool get isAndroid => Platform.isAndroid;
@@ -61,10 +61,10 @@ class AndroidNotificationConfig {
           AndroidFlutterLocalNotificationsPlugin
         >();
 
-    final legacyAlarmChannel = AndroidNotificationChannel(
-      legacyAlarmChannelId,
+    final alarmChannel = AndroidNotificationChannel(
+      alarmChannelId,
       strings.alarmNotification,
-      description: strings.androidLegacyAlarmChannelDescription(),
+      description: strings.androidAlarmChannelDescription(),
       importance: Importance.max,
       playSound: false,
       enableVibration: true,
@@ -125,7 +125,7 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
-    await androidPlugin?.createNotificationChannel(legacyAlarmChannel);
+    await androidPlugin?.createNotificationChannel(alarmChannel);
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);

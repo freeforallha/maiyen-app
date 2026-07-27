@@ -1,4 +1,4 @@
-package com.myfamily.safehome
+package com.myfamily.maiyen
 
 import android.app.ActivityManager
 import android.app.KeyguardManager
@@ -38,8 +38,7 @@ class MainActivity : FlutterActivity() {
                     result.success(isAlarmScreenLaunch())
                 }
 
-                MaiYenNativeIdentifiers.GET_ACTION_METHOD,
-                MaiYenNativeIdentifiers.LEGACY_GET_ACTION_METHOD -> {
+                MaiYenNativeIdentifiers.GET_ACTION_METHOD -> {
                     result.success(readMaiYenAction(intent))
                 }
 
@@ -184,17 +183,8 @@ class MainActivity : FlutterActivity() {
             return ""
         }
 
-        val currentAction = sourceIntent
-            .getStringExtra(MaiYenNativeIdentifiers.ACTION_EXTRA)
-            ?.trim()
-            .orEmpty()
-
-        if (currentAction.isNotEmpty()) {
-            return currentAction
-        }
-
         return sourceIntent
-            .getStringExtra(MaiYenNativeIdentifiers.LEGACY_ACTION_EXTRA)
+            .getStringExtra(MaiYenNativeIdentifiers.ACTION_EXTRA)
             ?.trim()
             .orEmpty()
     }

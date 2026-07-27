@@ -12,7 +12,7 @@ import '../../localization/app_strings.dart';
 import '../../navigation/maiyen_navigation.dart';
 import '../../maiyen_theme.dart';
 import 'home_auto_away_models.dart';
-import '../../config/legacy_identifiers.dart';
+import '../../config/maiyen_identifiers.dart';
 
 Future<HomeAutoAwayLocation?> showHomeAutoAwayMapPicker({
   required BuildContext context,
@@ -592,7 +592,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                     urlTemplate:
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     userAgentPackageName:
-                        MaiYenLegacyIdentifiers.applicationId,
+                        MaiYenIdentifiers.applicationId,
                     maxNativeZoom: 19,
                   ),
                   CircleLayer(
