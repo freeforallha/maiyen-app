@@ -1,1 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><path d="M170 480 L512 170 L854 480 V805 H690" fill="none" stroke="#167D5A" stroke-width="66" stroke-linecap="round" stroke-linejoin="round"/><path d="M334 805 H170 V480" fill="none" stroke="#167D5A" stroke-width="66" stroke-linecap="round" stroke-linejoin="round"/><rect x="698" y="205" width="92" height="190" rx="18" fill="#167D5A"/><path d="M512 380 L675 450 L650 620 Q625 715 512 795 Q399 715 374 620 L349 450 Z" fill="#0F5E43"/><path d="M512 380 L675 450 L650 620 Q625 715 512 795 Z" fill="#62B94E"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="roof" x1="150" y1="260" x2="830" y2="450" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#064A40"/>
+      <stop offset="0.58" stop-color="#075B47"/>
+      <stop offset="1" stop-color="#79BE43"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="310" y1="875" x2="910" y2="330" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#075246"/>
+      <stop offset="0.48" stop-color="#217A42"/>
+      <stop offset="1" stop-color="#82C642"/>
+    </linearGradient>
+    <linearGradient id="leafShade" x1="330" y1="850" x2="790" y2="570" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#064A40"/>
+      <stop offset="1" stop-color="#378E43"/>
+    </linearGradient>
+  </defs>
+
+  <!-- House -->
+  <path d="M166 350 L493 102 L820 350"
+        fill="none" stroke="url(#roof)" stroke-width="72"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M211 429 L211 676 C211 768 270 824 361 840"
+        fill="none" stroke="#075447" stroke-width="68"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M776 349 L776 506"
+        fill="none" stroke="#69B842" stroke-width="68" stroke-linecap="square"/>
+
+  <!-- Window -->
+  <g fill="#075447">
+    <rect x="390" y="345" width="76" height="76" rx="10"/>
+    <rect x="484" y="345" width="76" height="76" rx="10"/>
+    <rect x="390" y="439" width="76" height="76" rx="10"/>
+    <rect x="484" y="439" width="76" height="76" rx="10"/>
+  </g>
+
+  <!-- Leaf -->
+  <path d="M327 865
+           C414 655 600 661 769 561
+           C849 513 884 437 890 305
+           C940 514 865 739 699 842
+           C589 910 438 916 327 865 Z"
+        fill="url(#leaf)"/>
+  <path d="M327 865
+           C414 655 600 661 769 561
+           C701 655 583 741 424 835
+           C386 857 354 864 327 865 Z"
+        fill="url(#leafShade)"/>
+  <path d="M370 858 C520 778 680 676 827 544"
+        fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+</svg>
