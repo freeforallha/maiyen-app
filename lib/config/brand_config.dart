@@ -11,7 +11,7 @@ class BrandConfig {
   static const String appNameUppercase = 'MAIYEN';
 
   /// Slogan chính thức tại Việt Nam.
-  static const String sloganVi = 'Người giữ nhà';
+  static const String sloganVi = 'Vẹn nguyên tổ ấm';
 
   /// Tên Hub mặc định khi người dùng chưa đặt tên riêng.
   static const String defaultHubName = '$appName Hub';

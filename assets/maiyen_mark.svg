@@ -1,51 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-    <linearGradient id="roof" x1="150" y1="260" x2="830" y2="450" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#064A40"/>
-      <stop offset="0.58" stop-color="#075B47"/>
-      <stop offset="1" stop-color="#79BE43"/>
+    <linearGradient id="roof" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#004D3F"/>
+      <stop offset="1" stop-color="#55C51A"/>
     </linearGradient>
-    <linearGradient id="leaf" x1="310" y1="875" x2="910" y2="330" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#075246"/>
-      <stop offset="0.48" stop-color="#217A42"/>
-      <stop offset="1" stop-color="#82C642"/>
-    </linearGradient>
-    <linearGradient id="leafShade" x1="330" y1="850" x2="790" y2="570" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#064A40"/>
-      <stop offset="1" stop-color="#378E43"/>
+    <linearGradient id="leaf" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#006B45"/>
+      <stop offset="1" stop-color="#58D600"/>
     </linearGradient>
   </defs>
-
-  <!-- House -->
-  <path d="M166 350 L493 102 L820 350"
-        fill="none" stroke="url(#roof)" stroke-width="72"
-        stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M211 429 L211 676 C211 768 270 824 361 840"
-        fill="none" stroke="#075447" stroke-width="68"
-        stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M776 349 L776 506"
-        fill="none" stroke="#69B842" stroke-width="68" stroke-linecap="square"/>
-
-  <!-- Window -->
-  <g fill="#075447">
-    <rect x="390" y="345" width="76" height="76" rx="10"/>
-    <rect x="484" y="345" width="76" height="76" rx="10"/>
-    <rect x="390" y="439" width="76" height="76" rx="10"/>
-    <rect x="484" y="439" width="76" height="76" rx="10"/>
-  </g>
-
-  <!-- Leaf -->
-  <path d="M327 865
-           C414 655 600 661 769 561
-           C849 513 884 437 890 305
-           C940 514 865 739 699 842
-           C589 910 438 916 327 865 Z"
-        fill="url(#leaf)"/>
-  <path d="M327 865
-           C414 655 600 661 769 561
-           C701 655 583 741 424 835
-           C386 857 354 864 327 865 Z"
-        fill="url(#leafShade)"/>
-  <path d="M370 858 C520 778 680 676 827 544"
-        fill="none" stroke="#FFFFFF" stroke-width="22" stroke-linecap="round"/>
+  <path d="M170 470 505 205 845 470" fill="none" stroke="url(#roof)" stroke-width="72" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M205 515v245c0 70 42 118 108 135" fill="none" stroke="#005747" stroke-width="68" stroke-linecap="round"/>
+  <path d="M812 476v96" fill="none" stroke="#53C51C" stroke-width="68" stroke-linecap="square"/>
+  <rect x="425" y="448" width="72" height="72" rx="12" fill="#005747"/>
+  <rect x="519" y="448" width="72" height="72" rx="12" fill="#005747"/>
+  <rect x="425" y="542" width="72" height="72" rx="12" fill="#005747"/>
+  <rect x="519" y="542" width="72" height="72" rx="12" fill="#005747"/>
+  <path d="M312 875C385 687 548 655 684 620c100-26 154-92 184-188 22 194-32 356-156 438-112 75-259 76-400 5Z" fill="url(#leaf)"/>
+  <path d="M333 864c155-38 316-119 452-249" fill="none" stroke="#fff" stroke-width="25" stroke-linecap="round"/>
 </svg>
