@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../firebase_options.dart';
 import '../../../config/brand_config.dart';
 import '../../../localization/app_strings.dart';
+import '../../../localization/hub_update_strings.dart';
 import '../../notification_service.dart';
 import 'android_notification_config.dart';
 import '../../../config/maiyen_identifiers.dart';
@@ -240,6 +241,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   final type = message.data['type']?.toString() ?? '';
 
+  if (type == 'hub_update_available' || type == 'hub_update') {
+    await _showBackgroundHubUpdateNotification(message.data, strings);
+    return;
+  }
+
   if (type == 'chat') {
     await _showBackgroundChatNotification(message.data);
     return;
@@ -385,6 +391,53 @@ Future<void> _showBackgroundFullscreenAlarm(
         title: title,
         body: body,
         strings: strings,
+      ),
+    ),
+    payload: payload,
+  );
+}
+
+Future<void> _showBackgroundHubUpdateNotification(
+  Map<String, dynamic> data,
+  AppStrings strings,
+) async {
+  final homeId = data['homeId']?.toString().trim() ?? '';
+  final releaseId = data['releaseId']?.toString().trim() ?? '';
+
+  if (homeId.isEmpty || releaseId.isEmpty) {
+    return;
+  }
+
+  final homeName = data['homeName']?.toString().trim() ?? '';
+  final ownerUid = data['ownerUid']?.toString().trim() ?? '';
+  final criticalText = data['critical']?.toString().trim().toLowerCase() ?? '';
+  final critical =
+      criticalText == 'true' || criticalText == '1' || criticalText == 'yes';
+
+  final title = critical
+      ? '${strings.hubUpdateCriticalText}: $releaseId'
+      : strings.hubUpdateAvailableText(releaseId);
+  final body = homeName.isNotEmpty ? homeName : strings.hubUpdateSectionTitle;
+  final notificationId = NotificationService.hubUpdateNotificationId(homeId);
+  final payload = NotificationService.hubUpdatePayload(
+    homeId: homeId,
+    homeName: homeName,
+    ownerUid: ownerUid,
+    releaseId: releaseId,
+  );
+
+  await localNotif.cancel(notificationId);
+
+  await localNotif.show(
+    notificationId,
+    title,
+    body,
+    NotificationDetails(
+      android: AndroidNotificationConfig.hubUpdateDetails(
+        title: title,
+        body: body,
+        strings: strings,
+        critical: critical,
       ),
     ),
     payload: payload,

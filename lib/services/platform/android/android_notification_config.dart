@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:maiyen_app/localization/app_strings.dart';
+import 'package:maiyen_app/localization/hub_update_strings.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 
 import '../../../config/brand_config.dart';
@@ -24,6 +25,7 @@ class AndroidNotificationConfig {
       MaiYenIdentifiers.androidChatChannelId;
   static const sensorNotificationChannelId =
       MaiYenIdentifiers.androidSensorNotificationChannelId;
+  static const hubUpdateChannelId = 'maiyen_hub_updates_v1';
 
   static const initializationSettings = AndroidInitializationSettings(
     MaiYenIdentifiers.androidNotificationIconName,
@@ -125,6 +127,15 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    final hubUpdateChannel = AndroidNotificationChannel(
+      hubUpdateChannelId,
+      strings.hubUpdateSectionTitle,
+      description: strings.hubUpdateSectionTitle,
+      importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
     await androidPlugin?.createNotificationChannel(alarmChannel);
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
@@ -132,6 +143,7 @@ class AndroidNotificationConfig {
     await androidPlugin?.createNotificationChannel(reminderChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
     await androidPlugin?.createNotificationChannel(sensorNotificationChannel);
+    await androidPlugin?.createNotificationChannel(hubUpdateChannel);
   }
 
   static Future<void> createBackgroundChannels(
@@ -190,11 +202,46 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    final hubUpdateChannel = AndroidNotificationChannel(
+      hubUpdateChannelId,
+      strings.hubUpdateSectionTitle,
+      description: strings.hubUpdateSectionTitle,
+      importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
     await androidPlugin?.createNotificationChannel(reminderPriorityChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
     await androidPlugin?.createNotificationChannel(sensorNotificationChannel);
+    await androidPlugin?.createNotificationChannel(hubUpdateChannel);
+  }
+
+  static AndroidNotificationDetails hubUpdateDetails({
+    required String title,
+    required String body,
+    required AppStrings strings,
+    required bool critical,
+  }) {
+    return AndroidNotificationDetails(
+      hubUpdateChannelId,
+      strings.hubUpdateSectionTitle,
+      channelDescription: strings.hubUpdateSectionTitle,
+      visibility: NotificationVisibility.public,
+      importance: Importance.high,
+      priority: critical ? Priority.max : Priority.high,
+      category: AndroidNotificationCategory.status,
+      autoCancel: true,
+      playSound: true,
+      enableVibration: true,
+      styleInformation: BigTextStyleInformation(
+        body,
+        contentTitle: title,
+        summaryText: BrandConfig.appName,
+      ),
+    );
   }
 
   static AndroidNotificationDetails priorityAlarmDetails({
@@ -266,7 +313,6 @@ class AndroidNotificationConfig {
       category: AndroidNotificationCategory.message,
       playSound: true,
       enableVibration: true,
-      tag: tag,
       styleInformation: BigTextStyleInformation(body, contentTitle: title),
     );
   }
@@ -289,7 +335,6 @@ class AndroidNotificationConfig {
       playSound: true,
       enableVibration: true,
       autoCancel: true,
-      tag: tag,
       styleInformation: BigTextStyleInformation(body, contentTitle: title),
     );
   }

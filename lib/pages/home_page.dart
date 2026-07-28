@@ -15,6 +15,7 @@ import '../services/home_alarm_security_service.dart';
 import '../services/home_auto_away_coordinator.dart';
 import '../services/home_listener_service.dart';
 import '../services/home_pairing_service.dart';
+import '../services/hub_update_notice_coordinator.dart';
 import '../services/home_realtime_coordinator.dart';
 import '../services/home_selection_state_service.dart';
 import '../services/home_service.dart';
@@ -25,6 +26,7 @@ import '../widgets/home_tabs.dart';
 import '../widgets/device_list.dart';
 import '../widgets/system_health_sheet.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
+import '../sheets/hub_info_sheet.dart';
 import 'all_home_page.dart';
 import 'home/home_add_sheets.dart';
 import 'home/home_alarm_menu_sheet.dart';
@@ -72,6 +74,11 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
   int unreadHomeNotificationCount = 0;
   Map<String, String>? _pendingChatOpenRequest;
   bool _openingChatFromNotification = false;
+  Map<String, String>? _pendingHubUpdateOpenRequest;
+  bool _openingHubUpdateFromNotification = false;
+  final HubUpdateNoticeCoordinator _hubUpdateNoticeCoordinator =
+      HubUpdateNoticeCoordinator();
+
   void openNotificationList(String deviceId) {
     HomeUiCoordinator.openDeviceNotificationList(
       context: context,
@@ -261,6 +268,72 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
     openHomeChatSheetFor(homeId: homeId, homeName: getHomeDisplayName(homeId));
 
     _openingChatFromNotification = false;
+  }
+
+  void _handleHubUpdateOpenRequest() {
+    final request = NotificationService.hubUpdateOpenRequest.value;
+
+    if (request == null) {
+      return;
+    }
+
+    _pendingHubUpdateOpenRequest = Map<String, String>.from(request);
+    unawaited(_tryOpenPendingHubUpdate());
+  }
+
+  Future<void> _tryOpenPendingHubUpdate() async {
+    if (!mounted || _openingHubUpdateFromNotification) {
+      return;
+    }
+
+    final request = _pendingHubUpdateOpenRequest;
+
+    if (request == null) {
+      return;
+    }
+
+    final currentRoute = ModalRoute.of(context);
+
+    if (currentRoute != null && !currentRoute.isCurrent) {
+      return;
+    }
+
+    final homeId = request['homeId']?.trim() ?? '';
+
+    if (homeId.isEmpty || !homes.containsKey(homeId)) {
+      return;
+    }
+
+    final home = safeMap(homes[homeId]);
+    final storedOwnerUid = home['_ownerUid']?.toString().trim() ?? '';
+    final ownerUid = storedOwnerUid.isNotEmpty ? storedOwnerUid : uid;
+
+    if (ownerUid.isEmpty) {
+      return;
+    }
+
+    _openingHubUpdateFromNotification = true;
+    _pendingHubUpdateOpenRequest = null;
+    NotificationService.hubUpdateOpenRequest.value = null;
+
+    selectHomeFromNotification(homeId);
+
+    await WidgetsBinding.instance.endOfFrame;
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+
+    if (!mounted || selectedHome != homeId || !homes.containsKey(homeId)) {
+      _openingHubUpdateFromNotification = false;
+      return;
+    }
+
+    showHubInfoSheet(
+      context: context,
+      ownerUid: ownerUid,
+      homeId: homeId,
+      homeName: getHomeDisplayName(homeId),
+    );
+
+    _openingHubUpdateFromNotification = false;
   }
 
   Future<void> openHomeNotificationTarget(
@@ -1852,11 +1925,65 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
     );
   }
 
+  String _hubUpdateNoticeOwnerUid(
+    String homeId,
+    Map<String, dynamic> home,
+  ) {
+    if (home['_shared'] == true) {
+      return home['_ownerUid']?.toString().trim() ?? '';
+    }
+
+    final explicitOwnerUid = home['_ownerUid']?.toString().trim() ?? '';
+    return explicitOwnerUid.isNotEmpty ? explicitOwnerUid : uid;
+  }
+
+  void _scheduleHubUpdateNoticeCheck() {
+    for (final entry in homes.entries) {
+      final homeId = entry.key;
+      final home = safeMap(entry.value);
+      final hubStatus = safeMap(home['hubStatus']);
+
+      if (!hubStatus.containsKey('updateAvailable')) {
+        continue;
+      }
+
+      final updateAvailable =
+          parseDeviceBool(hubStatus['updateAvailable']) == true;
+      final request = safeMap(home['hubUpdateRequest']);
+      final requestStatus = request['status']?.toString().trim() ?? '';
+      final requestPending =
+          requestStatus == 'requested' || requestStatus == 'queued';
+
+      if (!updateAvailable || requestPending) {
+        unawaited(
+          NotificationService.cancelHubUpdateNotification(homeId).catchError((
+            Object error,
+          ) {
+            safeDebugPrint('HUB_UPDATE_NOTIFICATION_CANCEL_ERROR: $error');
+          }),
+        );
+      }
+    }
+
+    _hubUpdateNoticeCoordinator.schedule(
+      context: context,
+      uid: uid,
+      homes: homes,
+      homeOrder: homeOrder,
+      selectedHome: selectedHome,
+      ownerUidForHome: _hubUpdateNoticeOwnerUid,
+      homeNameForHome: getHomeDisplayName,
+      selectHome: selectHomeFromNotification,
+    );
+  }
+
   void _afterHomeStateChanged({
     bool syncAutoAway = false,
     bool syncPhone = false,
   }) {
     if (!mounted) return;
+
+    _scheduleHubUpdateNoticeCheck();
 
     // Các phần này cần cho trạng thái nhà chính, giữ chạy sớm.
     _ensureSelectedHomeRoomModel();
@@ -1889,6 +2016,7 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
 
     unawaited(_syncAutoAwayLocationMonitoring());
     unawaited(_tryOpenPendingChat());
+    unawaited(_tryOpenPendingHubUpdate());
   }
 
   String _autoAwayConfigSignature(Map<String, dynamic> home) {
@@ -2056,6 +2184,8 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
 
     if (state == AppLifecycleState.resumed) {
       startHubStatusGracePeriod();
+      _scheduleHubUpdateNoticeCheck();
+      unawaited(_tryOpenPendingHubUpdate());
       unawaited(_syncAutoAwayLocationMonitoring());
       unawaited(SystemUsageService.recordAppOpen());
       if (mounted) {
@@ -2138,10 +2268,16 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
       }
 
       setState(() {});
+      _scheduleHubUpdateNoticeCheck();
+      unawaited(_tryOpenPendingHubUpdate());
     });
 
     NotificationService.chatOpenRequest.addListener(_handleChatOpenRequest);
+    NotificationService.hubUpdateOpenRequest.addListener(
+      _handleHubUpdateOpenRequest,
+    );
     _handleChatOpenRequest();
+    _handleHubUpdateOpenRequest();
 
     startNotificationListener();
     syncHomeChatListeners();
@@ -4224,10 +4360,14 @@ class _MaiYenState extends State<MaiYen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     NotificationService.chatOpenRequest.removeListener(_handleChatOpenRequest);
+    NotificationService.hubUpdateOpenRequest.removeListener(
+      _handleHubUpdateOpenRequest,
+    );
     timer?.cancel();
     hubStatusRefreshTimer?.cancel();
     _alarmPauseExpiryTimer?.cancel();
     _homeAutoAwayCoordinator.dispose();
+    _hubUpdateNoticeCoordinator.dispose();
     _homeAccountRealtimeCoordinator.dispose();
     _homeRealtimeCoordinator.dispose();
     unawaited(_homeListenerService.dispose());

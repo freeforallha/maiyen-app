@@ -275,6 +275,12 @@ class FCMService {
 
       final type = message.data['type']?.toString() ?? '';
 
+      if (type == 'hub_update_available' || type == 'hub_update') {
+        // HomePage đã có banner realtime. Không tạo thêm notification khi app
+        // đang foreground để tránh hiển thị trùng.
+        return;
+      }
+
       if (type == 'chat') {
         await NotificationService.showChatNotification(data: message.data);
         return;
@@ -358,6 +364,11 @@ class FCMService {
     }
 
     final type = message.data['type']?.toString() ?? '';
+
+    if (type == 'hub_update_available' || type == 'hub_update') {
+      NotificationService.requestOpenHubUpdate(message.data);
+      return;
+    }
 
     if (type == 'chat') {
       NotificationService.requestOpenHomeChat(message.data);

@@ -28,6 +28,76 @@ class NotificationService {
   static final ValueNotifier<Map<String, String>?> chatOpenRequest =
       ValueNotifier<Map<String, String>?>(null);
 
+  static final ValueNotifier<Map<String, String>?> hubUpdateOpenRequest =
+      ValueNotifier<Map<String, String>?>(null);
+
+  static String hubUpdatePayload({
+    required String homeId,
+    required String homeName,
+    required String ownerUid,
+    required String releaseId,
+  }) {
+    return 'hub_update::${jsonEncode({
+      "homeId": homeId,
+      "homeName": homeName,
+      "ownerUid": ownerUid,
+      "releaseId": releaseId,
+    })}';
+  }
+
+  static int hubUpdateNotificationId(String homeId) {
+    var hash = 0;
+
+    for (final codeUnit in homeId.codeUnits) {
+      hash = ((hash * 31) + codeUnit) & 0x7fffffff;
+    }
+
+    return 910000 + (hash % 40000);
+  }
+
+  static Future<void> cancelHubUpdateNotification(String homeId) async {
+    final cleanHomeId = homeId.trim();
+
+    if (cleanHomeId.isEmpty) {
+      return;
+    }
+
+    await localNotif.cancel(hubUpdateNotificationId(cleanHomeId));
+  }
+
+  static void requestOpenHubUpdate(Map<String, dynamic> rawData) {
+    final homeId = rawData['homeId']?.toString().trim() ?? '';
+
+    if (homeId.isEmpty) {
+      return;
+    }
+
+    hubUpdateOpenRequest.value = {
+      'homeId': homeId,
+      'homeName': rawData['homeName']?.toString().trim() ?? '',
+      'ownerUid': rawData['ownerUid']?.toString().trim() ?? '',
+      'releaseId': rawData['releaseId']?.toString().trim() ?? '',
+      'nonce': DateTime.now().microsecondsSinceEpoch.toString(),
+    };
+  }
+
+  static bool _handleHubUpdatePayload(String payload) {
+    if (!payload.startsWith('hub_update::')) {
+      return false;
+    }
+
+    try {
+      final raw = payload.replaceFirst('hub_update::', '');
+      final decoded = jsonDecode(raw);
+
+      if (decoded is Map) {
+        requestOpenHubUpdate(Map<String, dynamic>.from(decoded));
+      }
+    } catch (_) {}
+
+    return true;
+  }
+
   static String homeChatPayload({
     required String homeId,
     required String homeName,
@@ -1986,6 +2056,10 @@ class NotificationService {
       onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload ?? '';
 
+        if (_handleHubUpdatePayload(payload)) {
+          return;
+        }
+
         if (_handleHomeChatPayload(payload)) {
           return;
         }
@@ -2046,13 +2120,17 @@ class NotificationService {
     if (launchDetails?.didNotificationLaunchApp == true) {
       final launchPayload = launchDetails?.notificationResponse?.payload ?? '';
 
-      final handledChat = _handleHomeChatPayload(launchPayload);
+      final handledHubUpdate = _handleHubUpdatePayload(launchPayload);
+      final handledChat = handledHubUpdate
+          ? false
+          : _handleHomeChatPayload(launchPayload);
 
-      final handledAlarm = handledChat
+      final handledAlarm = handledHubUpdate || handledChat
           ? false
           : await handleAlarmNotificationPayload(launchPayload);
 
-      if (!handledChat &&
+      if (!handledHubUpdate &&
+          !handledChat &&
           !handledAlarm &&
           (launchPayload == 'open_home' ||
               launchPayload == 'schedule_notification' ||
