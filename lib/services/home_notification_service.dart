@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -157,6 +159,7 @@ class HomeNotificationService {
     Iterable<String>? recipientUids,
     bool includeActor = true,
     bool writeHomeTimeline = true,
+    bool waitForBackendResult = false,
   }) async {
     final cleanOwnerUid = ownerUid.trim();
     final cleanHomeId = homeId.trim();
@@ -237,6 +240,55 @@ class HomeNotificationService {
         "writeHomeTimeline": isTargeted ? false : writeHomeTimeline,
         "time": now,
       }),
+    );
+
+    if (waitForBackendResult) {
+      await _waitForBackendResult(
+        uid: currentUid,
+        requestId: requestRef.key ?? "",
+      );
+    }
+  }
+
+  static Future<void> _waitForBackendResult({
+    required String uid,
+    required String requestId,
+  }) async {
+    if (uid.isEmpty || requestId.isEmpty) {
+      throw StateError("Không thể theo dõi kết quả Home Notification");
+    }
+
+    final resultRef = FirebaseDatabase.instance.ref(
+      "accounts/$uid/homeNotificationRequestResults/$requestId",
+    );
+    final deadline = DateTime.now().add(const Duration(seconds: 8));
+
+    while (DateTime.now().isBefore(deadline)) {
+      final resultSnap = await resultRef.get();
+
+      if (resultSnap.value is Map) {
+        final result = Map<String, dynamic>.from(
+          resultSnap.value as Map,
+        );
+        final status = result["status"]?.toString() ?? "";
+
+        if (status == "completed") {
+          return;
+        }
+
+        if (status == "rejected" || status == "failed") {
+          throw StateError(
+            result["reason"]?.toString() ??
+                "Backend từ chối Home Notification",
+          );
+        }
+      }
+
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+    }
+
+    throw TimeoutException(
+      "Quá thời gian chờ backend xử lý Home Notification",
     );
   }
 

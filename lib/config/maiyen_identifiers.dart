@@ -59,7 +59,7 @@ class MaiYenIdentifiers {
   // Android notification identifiers.
   static const String androidAlarmChannelId = 'maiyen_alarm_v1';
   static const String androidAlarmFullscreenChannelId =
-      'maiyen_alarm_fullscreen_v1';
+      'maiyen_alarm_fullscreen_v2';
   static const String androidEmergencyPriorityChannelId =
       'maiyen_emergency_priority_v1';
   static const String androidScheduleFullscreenChannelId =

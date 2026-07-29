@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:maiyen_app/localization/app_strings.dart';
@@ -10,6 +11,12 @@ import '../../../config/maiyen_identifiers.dart';
 
 class AndroidNotificationConfig {
   const AndroidNotificationConfig._();
+
+  // FLAG_INSISTENT: lặp âm thanh của notification cho tới khi notification
+  // bị hủy. Đây là lớp âm thanh dự phòng khi Flutter Activity chưa mở được.
+  static const int _notificationFlagInsistent = 0x00000004;
+  static const RawResourceAndroidNotificationSound _alarmSirenSound =
+      RawResourceAndroidNotificationSound('alarm_siren');
 
   static const alarmChannelId =
       MaiYenIdentifiers.androidAlarmChannelId;
@@ -78,6 +85,8 @@ class AndroidNotificationConfig {
       description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
       playSound: true,
+      sound: _alarmSirenSound,
+      audioAttributesUsage: AudioAttributesUsage.alarm,
       enableVibration: true,
     );
 
@@ -161,6 +170,8 @@ class AndroidNotificationConfig {
       description: strings.androidAlarmFullscreenChannelDescription(),
       importance: Importance.max,
       playSound: true,
+      sound: _alarmSirenSound,
+      audioAttributesUsage: AudioAttributesUsage.alarm,
       enableVibration: true,
     );
 
@@ -288,6 +299,11 @@ class AndroidNotificationConfig {
       ongoing: true,
       fullScreenIntent: true,
       playSound: true,
+      sound: _alarmSirenSound,
+      audioAttributesUsage: AudioAttributesUsage.alarm,
+      additionalFlags: Int32List.fromList(
+        const <int>[_notificationFlagInsistent],
+      ),
       enableVibration: true,
       onlyAlertOnce: false,
       styleInformation: BigTextStyleInformation(

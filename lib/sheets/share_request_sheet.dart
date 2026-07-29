@@ -287,6 +287,66 @@ Future<bool?> showShareRequestSheet({
                   },
                 );
               } catch (_) {}
+
+              try {
+                final memberName = targetName.trim().isNotEmpty
+                    ? targetName.trim()
+                    : targetEmail.trim().isNotEmpty
+                    ? targetEmail.trim()
+                    : strings.t("Một thành viên");
+
+                if (type == "share_request") {
+                  await HomeNotificationService.notifyHome(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                    recipientUid: ownerUid,
+                    type: "share_request_accepted",
+                    category: "member",
+                    severity: "success",
+                    title: strings.t("Lời mời chia sẻ nhà"),
+                    message: strings.memberJoinedHomeMessage(
+                      memberName: memberName,
+                      homeName: homeName,
+                    ),
+                    entityType: "member",
+                    entityId: targetUid,
+                    homeName: homeName,
+                    includeActor: false,
+                    writeHomeTimeline: false,
+                    data: {
+                      "type": "share_request_accepted",
+                      "memberName": memberName,
+                      "targetName": memberName,
+                      "homeName": homeName,
+                    },
+                  );
+                } else if (type == "join_request") {
+                  await HomeNotificationService.notifyHome(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                    recipientUid: targetUid,
+                    type: "join_request_accepted",
+                    category: "member",
+                    severity: "success",
+                    title: strings.t("Yêu cầu gia nhập nhà"),
+                    message: strings.memberJoinedHomeMessage(
+                      memberName: memberName,
+                      homeName: homeName,
+                    ),
+                    entityType: "member",
+                    entityId: targetUid,
+                    homeName: homeName,
+                    includeActor: false,
+                    writeHomeTimeline: false,
+                    data: {
+                      "type": "join_request_accepted",
+                      "memberName": memberName,
+                      "targetName": memberName,
+                      "homeName": homeName,
+                    },
+                  );
+                }
+              } catch (_) {}
             }
 
             await removeRequestFromAllApprovers(
@@ -333,9 +393,106 @@ Future<bool?> showShareRequestSheet({
             }
 
             final homeId = data["homeId"]?.toString() ?? "";
-            final ownerUid = data["ownerUid"]?.toString() ?? "";
+            final ownerUid = data["ownerUid"]?.toString().isNotEmpty == true
+                ? data["ownerUid"].toString()
+                : data["oldOwnerUid"]?.toString() ?? "";
+            final type = data["type"]?.toString() ?? "share_request";
+            final targetUid = data["targetUid"]?.toString().isNotEmpty == true
+                ? data["targetUid"].toString()
+                : data["newOwnerUid"]?.toString() ?? uid;
 
             if (homeId.isNotEmpty && ownerUid.isNotEmpty) {
+              try {
+                final homeName = await HomeNotificationService.resolveHomeName(
+                  homeId: homeId,
+                  ownerUid: ownerUid,
+                  providedHomeName: data["homeName"]?.toString(),
+                );
+                final account = await ShareService.loadAccount(uid);
+                final profile = account["profile"] is Map
+                    ? Map<String, dynamic>.from(account["profile"] as Map)
+                    : <String, dynamic>{};
+                final actorName =
+                    profile["name"]?.toString().trim().isNotEmpty == true
+                    ? profile["name"].toString().trim()
+                    : account["email"]?.toString().trim().isNotEmpty == true
+                    ? account["email"].toString().trim()
+                    : strings.t("Một thành viên");
+
+                if (type == "share_request") {
+                  await HomeNotificationService.notifyHome(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                    recipientUid: ownerUid,
+                    type: "share_request_denied",
+                    category: "member",
+                    severity: "warning",
+                    title: strings.t("Lời mời chia sẻ nhà"),
+                    message: "$actorName • ${strings.t("Huỷ")}",
+                    entityType: "member",
+                    entityId: uid,
+                    homeName: homeName,
+                    includeActor: false,
+                    writeHomeTimeline: false,
+                    waitForBackendResult: true,
+                    data: {
+                      "type": "share_request_denied",
+                      "actorName": actorName,
+                      "memberName": actorName,
+                      "homeName": homeName,
+                    },
+                  );
+                } else if (type == "join_request") {
+                  await HomeNotificationService.notifyHome(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                    recipientUid: targetUid,
+                    type: "join_request_denied",
+                    category: "member",
+                    severity: "warning",
+                    title: strings.t("Yêu cầu gia nhập nhà"),
+                    message: "$actorName • ${strings.t("Huỷ")}",
+                    entityType: "member",
+                    entityId: targetUid,
+                    homeName: homeName,
+                    includeActor: false,
+                    writeHomeTimeline: false,
+                    waitForBackendResult: true,
+                    data: {
+                      "type": "join_request_denied",
+                      "actorName": actorName,
+                      "memberName": data["targetName"]?.toString() ?? "",
+                      "homeName": homeName,
+                    },
+                  );
+                } else if (type == "transfer_owner_request") {
+                  await HomeNotificationService.notifyHome(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                    recipientUid: ownerUid,
+                    type: "transfer_owner_failed",
+                    category: "member",
+                    severity: "warning",
+                    title: strings.t("Yêu cầu chuyển quyền chủ nhà"),
+                    message: strings.t(
+                      "Không thể hoàn tất thao tác. Vui lòng thử lại.",
+                    ),
+                    entityType: "home",
+                    entityId: homeId,
+                    homeName: homeName,
+                    includeActor: false,
+                    writeHomeTimeline: false,
+                    waitForBackendResult: true,
+                    data: {
+                      "type": "transfer_owner_failed",
+                      "actorName": actorName,
+                      "homeName": homeName,
+                      "reason": "denied",
+                    },
+                  );
+                }
+              } catch (_) {}
+
               await removeRequestFromAllApprovers(
                 requestKey: requestKey,
                 data: data,

@@ -145,13 +145,14 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
   }
 
   Future<void> _startAlarmMode() async {
-    // Fullscreen đã mở thì huỷ cả notification ban đầu
-    // và notification mở toàn màn hình.
-    await NotificationService.stopAllAlarmNotifications();
+    // Bắt đầu âm thanh trong trang trước, rồi mới hủy notification native.
+    // Nhờ vậy không có khoảng im lặng khi Android vừa mở Fullscreen Alarm;
+    // nếu Activity chưa mở được thì notification native vẫn tiếp tục phát còi.
+    await startAlarmSound();
 
     if (!mounted) return;
 
-    await startAlarmSound();
+    await NotificationService.stopAllAlarmNotifications();
   }
 
   void _onAlarmResolved() {

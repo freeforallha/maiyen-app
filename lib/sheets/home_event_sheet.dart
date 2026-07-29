@@ -203,6 +203,13 @@ void showHomeEventSheet({
       case "member_role_changed":
       case "role_changed":
         return Icons.manage_accounts_rounded;
+      case "join_request_denied":
+      case "transfer_owner_failed":
+        return Icons.cancel_rounded;
+      case "member_removed":
+        return Icons.person_remove_rounded;
+      case "alarm_pause_cancelled":
+        return Icons.play_circle_fill_rounded;
       default:
         return Icons.notifications_rounded;
     }
@@ -273,6 +280,12 @@ void showHomeEventSheet({
       case "member_role_changed":
       case "role_changed":
         return Colors.deepPurple;
+      case "join_request_denied":
+      case "transfer_owner_failed":
+      case "member_removed":
+        return Colors.red;
+      case "alarm_pause_cancelled":
+        return Colors.green;
       default:
         return Colors.blue;
     }
@@ -306,15 +319,18 @@ void showHomeEventSheet({
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    const Spacer(),
-                    Text(
-                      strings.notifications,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          strings.notifications,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ),
-                    const Spacer(),
                     IconButton(
                       icon: const Icon(
                         Icons.delete_outline_rounded,

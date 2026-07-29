@@ -3843,6 +3843,34 @@ class AppStrings {
       return memberJoinedHomeTitle();
     }
 
+    if (_isMembershipRequestAcceptedNotification(type)) {
+      return memberJoinedHomeTitle();
+    }
+
+    if (type == "share_request_denied") {
+      return t("Lời mời chia sẻ nhà");
+    }
+
+    if (type == "join_request_denied") {
+      return t("Yêu cầu gia nhập nhà");
+    }
+
+    if (type == "transfer_owner_accepted") {
+      return t("Yêu cầu chuyển quyền chủ nhà");
+    }
+
+    if (type == "transfer_owner_failed") {
+      return t("Yêu cầu chuyển quyền chủ nhà");
+    }
+
+    if (type == "member_removed") {
+      return t("Đã xoá thành viên");
+    }
+
+    if (type == "alarm_pause_cancelled") {
+      return t("Báo động đã hoạt động trở lại");
+    }
+
     if (_isAlarmSettingChangedNotification(type)) {
       final enabled = _notificationBool(
         _firstNotificationValue(item, const ["alarmEnabled", "enabled"]),
@@ -3981,6 +4009,66 @@ class AppStrings {
           homeName: resolvedHomeName,
         );
       }
+    }
+
+    if (_isMembershipRequestAcceptedNotification(type)) {
+      final memberName = _firstNotificationString(item, const [
+        "memberName",
+        "targetName",
+        "actorName",
+      ]);
+
+      if (resolvedHomeName.isNotEmpty) {
+        return memberJoinedHomeMessage(
+          memberName: memberName,
+          homeName: resolvedHomeName,
+        );
+      }
+    }
+
+    if (type == "share_request_denied" ||
+        type == "join_request_denied") {
+      final actorName = _firstNotificationString(item, const [
+        "actorName",
+        "memberName",
+        "targetName",
+      ]);
+      final actor = actorName.isNotEmpty ? actorName : t("Một thành viên");
+      return "$actor • ${t("Huỷ")}";
+    }
+
+    if (type == "transfer_owner_accepted") {
+      final actorName = _firstNotificationString(item, const [
+        "actorName",
+        "newOwnerName",
+      ]);
+      final actor = actorName.isNotEmpty ? actorName : t("Một thành viên");
+      return resolvedHomeName.isNotEmpty
+          ? "$actor • ${t("Đã cập nhật")}: $resolvedHomeName"
+          : "$actor • ${t("Đã cập nhật")}";
+    }
+
+    if (type == "transfer_owner_failed") {
+      return t("Không thể hoàn tất thao tác. Vui lòng thử lại.");
+    }
+
+    if (type == "member_removed") {
+      final actorName = _firstNotificationString(item, const [
+        "actorName",
+      ]);
+      final actor = actorName.isNotEmpty ? actorName : t("Chủ nhà");
+      return resolvedHomeName.isNotEmpty
+          ? "$actor • ${t("Đã xoá thành viên")}: $resolvedHomeName"
+          : "$actor • ${t("Đã xoá thành viên")}";
+    }
+
+    if (type == "alarm_pause_cancelled") {
+      final actorName = _firstNotificationString(item, const [
+        "actorName",
+      ]);
+      return actorName.isNotEmpty
+          ? "$actorName • ${t("Báo động đã hoạt động trở lại")}"
+          : t("Báo động đã hoạt động trở lại");
     }
 
     if (_isAlarmSettingChangedNotification(type)) {
@@ -4512,6 +4600,11 @@ class AppStrings {
 
   bool _isMemberJoinedHomeNotification(String type) {
     return type == "member_join" || type == "member_joined_home";
+  }
+
+  bool _isMembershipRequestAcceptedNotification(String type) {
+    return type == "share_request_accepted" ||
+        type == "join_request_accepted";
   }
 
   bool _isAlarmSettingChangedNotification(String type) {

@@ -546,6 +546,41 @@ Future<bool?> showShareListSheet({
 
                                           if (ok != true) return;
 
+                                          if (targetUid != myUid) {
+                                            try {
+                                              final actorName =
+                                                  ownerName.trim().isNotEmpty
+                                                  ? ownerName.trim()
+                                                  : ownerEmail.trim().isNotEmpty
+                                                  ? ownerEmail.trim()
+                                                  : strings.t("Chủ nhà");
+
+                                              await HomeNotificationService.notifyHome(
+                                                ownerUid: ownerUid,
+                                                homeId: homeId,
+                                                recipientUid: targetUid,
+                                                type: "member_removed",
+                                                category: "member",
+                                                severity: "warning",
+                                                title: strings.t("Đã xoá thành viên"),
+                                                message:
+                                                    "$name • ${strings.t("Đã xoá thành viên")}",
+                                                entityType: "member",
+                                                entityId: targetUid,
+                                                homeName: homeName,
+                                                includeActor: false,
+                                                writeHomeTimeline: false,
+                                                data: {
+                                                  "type": "member_removed",
+                                                  "actorName": actorName,
+                                                  "memberName": name,
+                                                  "targetName": name,
+                                                  "homeName": homeName,
+                                                },
+                                              );
+                                            } catch (_) {}
+                                          }
+
                                           await db
                                               .ref(
                                                 "homeMemberContacts/$homeId/$targetUid",
