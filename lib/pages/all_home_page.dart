@@ -11,6 +11,7 @@ import '../services/home_realtime_coordinator.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 import '../navigation/maiyen_navigation.dart';
 import '../config/maiyen_identifiers.dart';
+import '../widgets/maiyen_wordmark.dart';
 
 class AllHome extends StatefulWidget {
   final List<String> homeOrder;
@@ -2414,24 +2415,12 @@ class _AllHomeState extends State<AllHome> {
                       horizontal: 5,
                       vertical: 4,
                     ),
-                    child: RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.3,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "All",
-                            style: TextStyle(color: MaiYenColors.primary),
-                          ),
-                          TextSpan(
-                            text: "Home",
-                            style: TextStyle(color: MaiYenColors.textPrimary),
-                          ),
-                        ],
-                      ),
+                    child: const MaiYenWordmark(
+                      suffix: 'Home',
+                      fontSize: 25,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.3,
+                      leafSize: 24,
                     ),
                   ),
                 ),

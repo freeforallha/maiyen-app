@@ -9,14 +9,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../../config/maiyen_identifiers.dart';
 import '../../../firebase_options.dart';
+import '../../../helpers/debug_log.dart';
 import '../../../localization/app_language_controller.dart';
 import '../../../localization/app_strings.dart';
 import '../../account_session_service.dart';
 import '../../auto_away_service.dart';
 import '../../single_device_session_service.dart';
-import 'package:maiyen_app/helpers/debug_log.dart';
-import '../../../config/maiyen_identifiers.dart';
 
 const String _autoAwayTaskDataKey =
     MaiYenIdentifiers.autoAwayForegroundTaskConfigStorageKey;
@@ -27,7 +27,6 @@ void maiYenAutoAwayForegroundTaskCallback() {
   FlutterForegroundTask.setTaskHandler(_MaiYenAutoAwayTaskHandler());
 }
 
-
 class AndroidAutoAwayForegroundTaskService {
   const AndroidAutoAwayForegroundTaskService._();
 
@@ -35,6 +34,7 @@ class AndroidAutoAwayForegroundTaskService {
       AppStrings.fromLocale(appLanguageController.locale);
 
   static bool _initialized = false;
+  static Future<bool>? _recoveryInFlight;
 
   static bool get _isAndroid {
     return !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
@@ -69,8 +69,7 @@ class AndroidAutoAwayForegroundTaskService {
 
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        channelId:
-            MaiYenIdentifiers.androidAutoAwayLocationChannelId,
+        channelId: MaiYenIdentifiers.androidAutoAwayLocationChannelId,
         channelName: strings.updatingLocationNotificationTitle(),
         channelDescription: strings.updatingLocationChannelDescription(),
         channelImportance: NotificationChannelImportance.LOW,
@@ -155,7 +154,6 @@ class AndroidAutoAwayForegroundTaskService {
     }
 
     final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-
     final permission = await Geolocator.checkPermission();
 
     if (!locationServiceEnabled || permission != LocationPermission.always) {
@@ -163,9 +161,6 @@ class AndroidAutoAwayForegroundTaskService {
     }
 
     if (await FlutterForegroundTask.isRunningService) {
-      // Chỉ kiểm tra ngay khi bật/tắt Auto Away,
-      // đổi tọa độ hoặc thay đổi danh sách nhà.
-      // Các cập nhật hubStatus không còn kích hoạt GPS.
       if (configChanged) {
         FlutterForegroundTask.sendDataToTask(const <String, dynamic>{
           'action': 'refresh_now',
@@ -175,6 +170,74 @@ class AndroidAutoAwayForegroundTaskService {
       return;
     }
 
+    await _startService();
+  }
+
+  /// Recovers monitoring from the last valid configuration stored on-device.
+  ///
+  /// This is safe to call from app startup/resume and from a high-priority FCM
+  /// background isolate. It both repairs a stopped foreground service and runs
+  /// one immediate presence confirmation, so stale members do not have to wait
+  /// for the next five-minute service tick.
+  static Future<bool> recoverFromStoredConfig({
+    required String event,
+  }) {
+    if (!_isAndroid) {
+      return Future<bool>.value(false);
+    }
+
+    final activeRecovery = _recoveryInFlight;
+
+    if (activeRecovery != null) {
+      return activeRecovery;
+    }
+
+    late final Future<bool> recovery;
+    recovery = _recoverFromStoredConfigInternal(event: event).whenComplete(() {
+      if (identical(_recoveryInFlight, recovery)) {
+        _recoveryInFlight = null;
+      }
+    });
+
+    _recoveryInFlight = recovery;
+    return recovery;
+  }
+
+  static Future<bool> _recoverFromStoredConfigInternal({
+    required String event,
+  }) async {
+    initialize();
+
+    final config = await _readStoredTaskConfig();
+
+    if (config == null) {
+      return false;
+    }
+
+    final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    final permission = await Geolocator.checkPermission();
+
+    if (!locationServiceEnabled || permission != LocationPermission.always) {
+      return false;
+    }
+
+    try {
+      if (!await FlutterForegroundTask.isRunningService) {
+        await _startService();
+      }
+    } catch (error) {
+      // Even when an OEM temporarily rejects the service restart, the direct
+      // heartbeat below can still refresh Firebase during this wake window.
+      safeDebugPrint('AUTO_AWAY_SERVICE_RECOVERY_START_ERROR: $error');
+    }
+
+    return _StoredAutoAwayHeartbeatRunner.run(
+      event: event,
+      prefetchedConfig: config,
+    );
+  }
+
+  static Future<void> _startService() async {
     final strings = _strings;
 
     await FlutterForegroundTask.startService(
@@ -186,6 +249,39 @@ class AndroidAutoAwayForegroundTaskService {
       notificationText: strings.updatingLocationNotificationBody(),
       callback: maiYenAutoAwayForegroundTaskCallback,
     );
+  }
+
+  static Future<_StoredAutoAwayTaskConfig?> _readStoredTaskConfig() async {
+    final rawConfig = await FlutterForegroundTask.getData<String>(
+      key: _autoAwayTaskDataKey,
+    );
+
+    if (rawConfig == null || rawConfig.trim().isEmpty) {
+      return null;
+    }
+
+    try {
+      final decoded = jsonDecode(rawConfig);
+
+      if (decoded is! Map) {
+        return null;
+      }
+
+      final config = decoded.map(
+        (key, value) => MapEntry(key.toString(), value),
+      );
+      final uid = config['uid']?.toString().trim() ?? '';
+      final homes = _asMap(config['homes']);
+
+      if (uid.isEmpty || homes.isEmpty) {
+        return null;
+      }
+
+      return _StoredAutoAwayTaskConfig(uid: uid, homes: homes);
+    } catch (error) {
+      safeDebugPrint('AUTO_AWAY_STORED_CONFIG_READ_ERROR: $error');
+      return null;
+    }
   }
 
   static Future<void> stop() async {
@@ -269,7 +365,6 @@ class AndroidAutoAwayForegroundTaskService {
   ) {
     final participantUids = _asMap(autoAway['participantUids']);
 
-    // Nhà cũ chưa có participantUids tiếp tục dùng toàn bộ thành viên.
     if (participantUids.isEmpty) {
       return true;
     }
@@ -286,66 +381,37 @@ class AndroidAutoAwayForegroundTaskService {
   }
 }
 
-class _MaiYenAutoAwayTaskHandler extends TaskHandler {
-  bool _heartbeatRunning = false;
-  bool _firebaseReady = false;
+class _StoredAutoAwayTaskConfig {
+  const _StoredAutoAwayTaskConfig({
+    required this.uid,
+    required this.homes,
+  });
 
-  @override
-  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
-    DartPluginRegistrant.ensureInitialized();
-    await _runHeartbeat('foreground_task_started');
-  }
+  final String uid;
+  final Map<String, dynamic> homes;
+}
 
-  @override
-  void onRepeatEvent(DateTime timestamp) {
-    unawaited(_runHeartbeat('foreground_task_heartbeat'));
-  }
+class _StoredAutoAwayHeartbeatRunner {
+  static bool _heartbeatRunning = false;
+  static bool _firebaseReady = false;
 
-  @override
-  void onReceiveData(Object data) {
-    if (data is Map && data['action'] == 'refresh_now') {
-      unawaited(_runHeartbeat('foreground_task_config_changed'));
-    }
-  }
-
-  @override
-  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {}
-
-  @override
-  void onNotificationPressed() {
-    FlutterForegroundTask.launchApp();
-  }
-
-  Future<void> _runHeartbeat(String event) async {
+  static Future<bool> run({
+    required String event,
+    _StoredAutoAwayTaskConfig? prefetchedConfig,
+  }) async {
     if (_heartbeatRunning) {
-      return;
+      return false;
     }
 
     _heartbeatRunning = true;
 
     try {
-      final rawConfig = await FlutterForegroundTask.getData<String>(
-        key: _autoAwayTaskDataKey,
-      );
+      final config =
+          prefetchedConfig ??
+          await AndroidAutoAwayForegroundTaskService._readStoredTaskConfig();
 
-      if (rawConfig == null || rawConfig.trim().isEmpty) {
-        return;
-      }
-
-      final decoded = jsonDecode(rawConfig);
-
-      if (decoded is! Map) {
-        return;
-      }
-
-      final config = decoded.map(
-        (key, value) => MapEntry(key.toString(), value),
-      );
-      final uid = config['uid']?.toString().trim() ?? '';
-      final homes = _asMap(config['homes']);
-
-      if (uid.isEmpty || homes.isEmpty) {
-        return;
+      if (config == null) {
+        return false;
       }
 
       await _ensureFirebaseReady();
@@ -360,50 +426,47 @@ class _MaiYenAutoAwayTaskHandler extends TaskHandler {
         } catch (_) {}
       }
 
-      if (user == null || user.uid != uid) {
-        return;
+      if (user == null || user.uid != config.uid) {
+        return false;
       }
 
       final sessionIdentity =
           await SingleDeviceSessionService.currentSessionIdentityIfActive(
-            uid: uid,
+            uid: config.uid,
           );
 
       if (sessionIdentity == null) {
-        return;
+        return false;
       }
 
-      // Giữ session còn sống khi foreground service Auto Away vẫn chạy.
-      // Nếu điện thoại shutdown / hết pin, heartbeat này sẽ dừng,
-      // backend có thể chuyển vị trí thành unknown sau ngưỡng stale.
       await AccountSessionService.touchFromBackground(
-        uid: uid,
+        uid: config.uid,
         sessionId: sessionIdentity.sessionId,
       );
 
-      final locationServiceEnabled =
-          await Geolocator.isLocationServiceEnabled();
+      final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
       final permission = await Geolocator.checkPermission();
 
       if (!locationServiceEnabled || permission != LocationPermission.always) {
-        return;
+        return false;
       }
 
-      // Dùng lại logic hiện có: lấy vị trí hiện tại và tự fallback
-      // sang last-known position còn mới nếu GPS tạm thời timeout.
       await AutoAwayService.refreshPresenceForHomes(
-        uid: uid,
-        homes: homes,
+        uid: config.uid,
+        homes: config.homes,
         event: event,
       );
+
+      return true;
     } catch (error) {
-      safeDebugPrint('AUTO_AWAY_FOREGROUND_TASK_HEARTBEAT_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_RECOVERY_HEARTBEAT_ERROR: $error');
+      return false;
     } finally {
       _heartbeatRunning = false;
     }
   }
 
-  Future<void> _ensureFirebaseReady() async {
+  static Future<void> _ensureFirebaseReady() async {
     if (_firebaseReady) {
       return;
     }
@@ -421,21 +484,78 @@ class _MaiYenAutoAwayTaskHandler extends TaskHandler {
             : AndroidProvider.debug,
       );
     } catch (error) {
-      safeDebugPrint('AUTO_AWAY_FOREGROUND_TASK_APP_CHECK_ERROR: $error');
+      safeDebugPrint('AUTO_AWAY_RECOVERY_APP_CHECK_ERROR: $error');
     }
 
     _firebaseReady = true;
   }
+}
 
-  Map<String, dynamic> _asMap(Object? value) {
-    if (value is Map<String, dynamic>) {
-      return Map<String, dynamic>.from(value);
+class _MaiYenAutoAwayTaskHandler extends TaskHandler {
+  final List<Timer> _recoveryTimers = <Timer>[];
+
+  @override
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
+    DartPluginRegistrant.ensureInitialized();
+
+    await _StoredAutoAwayHeartbeatRunner.run(
+      event: 'foreground_task_started_${starter.name}',
+    );
+
+    // On reboot the first callback can arrive before Firebase Auth and the
+    // credential-protected user store are fully available. Retry after unlock
+    // windows instead of waiting for the normal five-minute cycle.
+    _scheduleRecoveryRetry(
+      delay: const Duration(seconds: 30),
+      event: 'foreground_task_recovery_30s',
+    );
+    _scheduleRecoveryRetry(
+      delay: const Duration(minutes: 2),
+      event: 'foreground_task_recovery_2m',
+    );
+  }
+
+  @override
+  void onRepeatEvent(DateTime timestamp) {
+    unawaited(
+      _StoredAutoAwayHeartbeatRunner.run(
+        event: 'foreground_task_heartbeat',
+      ),
+    );
+  }
+
+  @override
+  void onReceiveData(Object data) {
+    if (data is Map && data['action'] == 'refresh_now') {
+      unawaited(
+        _StoredAutoAwayHeartbeatRunner.run(
+          event: 'foreground_task_config_changed',
+        ),
+      );
     }
+  }
 
-    if (value is Map) {
-      return value.map((key, item) => MapEntry(key.toString(), item));
+  @override
+  Future<void> onDestroy(DateTime timestamp, bool isTimeout) async {
+    for (final timer in _recoveryTimers) {
+      timer.cancel();
     }
+    _recoveryTimers.clear();
+  }
 
-    return <String, dynamic>{};
+  @override
+  void onNotificationPressed() {
+    FlutterForegroundTask.launchApp();
+  }
+
+  void _scheduleRecoveryRetry({
+    required Duration delay,
+    required String event,
+  }) {
+    _recoveryTimers.add(
+      Timer(delay, () {
+        unawaited(_StoredAutoAwayHeartbeatRunner.run(event: event));
+      }),
+    );
   }
 }

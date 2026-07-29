@@ -7,6 +7,7 @@ import '../helpers/firebase_paths.dart';
 import '../localization/app_language_controller.dart';
 import 'installation_id_service.dart';
 import 'notification_service.dart';
+import 'platform/platform_auto_away_task_service.dart';
 import 'platform/ios/ios_notification_config.dart';
 import 'single_device_session_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
@@ -274,6 +275,13 @@ class FCMService {
       }
 
       final type = message.data['type']?.toString() ?? '';
+
+      if (type == 'presence_recovery') {
+        await PlatformAutoAwayTaskService.recoverNow(
+          event: 'fcm_presence_recovery_foreground',
+        );
+        return;
+      }
 
       if (type == 'hub_update_available' || type == 'hub_update') {
         // HomePage đã có banner realtime. Không tạo thêm notification khi app

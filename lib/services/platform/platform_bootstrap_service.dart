@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,6 +20,14 @@ class PlatformBootstrapService {
 
     AndroidAutoAwayForegroundTaskService.initCommunicationPort();
     AndroidAutoAwayForegroundTaskService.initialize();
+
+    // Do not block the first frame/GPS startup. The recovery path validates the
+    // stored account/session before writing anything.
+    unawaited(
+      AndroidAutoAwayForegroundTaskService.recoverFromStoredConfig(
+        event: 'app_start_recovery',
+      ),
+    );
   }
 
   static Future<void> activateAppCheck() async {

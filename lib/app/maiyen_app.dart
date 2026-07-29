@@ -11,6 +11,7 @@ import '../pages/fullscreen_alarm_page.dart';
 import '../pages/profile_setup_page.dart';
 import '../config/brand_config.dart';
 import '../services/notification_service.dart';
+import '../services/platform/platform_auto_away_task_service.dart';
 import '../services/account_session_service.dart';
 import '../services/auto_away_service.dart';
 import '../services/fcm_service.dart';
@@ -172,6 +173,15 @@ class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
       );
 
       AutoAwayService.activateForSignedInUser(user.uid);
+
+      unawaited(
+        PlatformAutoAwayTaskService.recoverNow(
+          event: 'app_resumed_recovery',
+        ).catchError((Object error) {
+          safeDebugPrint('AUTO_AWAY_RESUME_RECOVERY_ERROR: $error');
+          return false;
+        }),
+      );
 
       // [DÙNG CHUNG] Đối chiếu incident với Firebase mỗi khi app resume.
       // Đây là lớp bảo vệ bắt buộc cho iOS vì silent push có thể bị trì hoãn.

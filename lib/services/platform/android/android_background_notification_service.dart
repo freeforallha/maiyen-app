@@ -11,6 +11,7 @@ import '../../../config/brand_config.dart';
 import '../../../localization/app_strings.dart';
 import '../../../localization/hub_update_strings.dart';
 import '../../notification_service.dart';
+import 'android_auto_away_foreground_task_service.dart';
 import 'android_notification_config.dart';
 import '../../../config/maiyen_identifiers.dart';
 
@@ -226,6 +227,15 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  final type = message.data['type']?.toString() ?? '';
+
+  if (type == 'presence_recovery') {
+    await AndroidAutoAwayForegroundTaskService.recoverFromStoredConfig(
+      event: 'fcm_presence_recovery_background',
+    );
+    return;
+  }
+
   await localNotif.initialize(
     const InitializationSettings(
       android: AndroidNotificationConfig.initializationSettings,
@@ -238,8 +248,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     localNotif,
     strings: strings,
   );
-
-  final type = message.data['type']?.toString() ?? '';
 
   if (type == 'hub_update_available' || type == 'hub_update') {
     await _showBackgroundHubUpdateNotification(message.data, strings);

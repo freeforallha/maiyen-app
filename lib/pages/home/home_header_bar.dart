@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../maiyen_theme.dart';
+import '../../widgets/maiyen_wordmark.dart';
 
 class HomeHeaderBar extends StatelessWidget {
   const HomeHeaderBar({
@@ -68,25 +69,12 @@ class HomeHeaderBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 29,
-                        height: 1,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -1.1,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Mai",
-                          style: TextStyle(color: MaiYenColors.primary),
-                        ),
-                        TextSpan(
-                          text: "Yen",
-                          style: TextStyle(color: MaiYenColors.textPrimary),
-                        ),
-                      ],
-                    ),
+                  child: const MaiYenWordmark(
+                    suffix: 'Yen',
+                    fontSize: 29,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -1.1,
+                    leafSize: 28,
                   ),
                 ),
               ),

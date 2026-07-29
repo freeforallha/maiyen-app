@@ -1,4 +1,4 @@
-﻿name: maiyen_app
+name: maiyen_app
 description: "MaiYen smart home safety and security application."
 publish_to: 'none'
 
@@ -71,5 +71,3 @@ flutter:
     - assets/maiyen_mark.png
     - assets/maiyen_logo.png
     - assets/maiyen_splash.png
-    - assets/maiyen_wordmark_leaf_exact.png
-

@@ -31,6 +31,16 @@ class PlatformAutoAwayTaskService {
     );
   }
 
+  static Future<bool> recoverNow({required String event}) async {
+    if (!_isAndroid) {
+      return false;
+    }
+
+    return AndroidAutoAwayForegroundTaskService.recoverFromStoredConfig(
+      event: event,
+    );
+  }
+
   static Future<void> stop() async {
     if (!_isAndroid) {
       return;

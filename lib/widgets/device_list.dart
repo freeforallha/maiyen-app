@@ -11,6 +11,7 @@ import '../helpers/home_helper.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../maiyen_theme.dart';
+import '../navigation/maiyen_navigation.dart';
 import '../services/notification_service.dart';
 import '../sheets/device_alarm_policy_sheet.dart';
 import '../config/maiyen_identifiers.dart';
@@ -1201,9 +1202,54 @@ class _DeviceListState extends State<DeviceList> {
     required double itemHeight,
     required double spacing,
   }) {
+    // Giữ cách đọc quen thuộc theo từng cụm 2 cột x 2 hàng:
+    // 0 1 | 4 5 | ...
+    // 2 3 | 6 7 | ...
+    // Khi vượt quá 4 thiết bị, cụm tiếp theo kéo dài sang bên phải.
+    final pageIndex = index ~/ 4;
+    final indexInPage = index % 4;
+    final column = (pageIndex * 2) + (indexInPage % 2);
+    final row = indexInPage ~/ 2;
+
     return Offset(
-      (index % 2) * (itemWidth + spacing),
-      (index ~/ 2) * (itemHeight + spacing),
+      column * (itemWidth + spacing),
+      row * (itemHeight + spacing),
+    );
+  }
+
+  int _twoRowHorizontalColumnCount(int itemCount) {
+    if (itemCount <= 0) {
+      return 0;
+    }
+
+    final fullPages = itemCount ~/ 4;
+    final remainder = itemCount % 4;
+    final remainderColumns = remainder == 0
+        ? 0
+        : remainder == 1
+        ? 1
+        : 2;
+
+    return (fullPages * 2) + remainderColumns;
+  }
+
+  Widget _horizontalDeviceFade({required Widget child}) {
+    return ShaderMask(
+      shaderCallback: (rect) {
+        return const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Colors.transparent,
+            Colors.white,
+            Colors.white,
+            Colors.transparent,
+          ],
+          stops: [0.0, 0.025, 0.93, 1.0],
+        ).createShader(rect);
+      },
+      blendMode: BlendMode.dstIn,
+      child: child,
     );
   }
 
@@ -2542,46 +2588,70 @@ class _DeviceListState extends State<DeviceList> {
     required bool compact,
     required AppStrings strings,
   }) {
-    final rows = <Widget>[];
+    if (groups.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
-    for (var index = 0; index < groups.length; index += 2) {
-      final firstGroup = groups[index];
-      final hasSecondGroup = index + 1 < groups.length;
-      final secondGroup = hasSecondGroup ? groups[index + 1] : null;
+    final itemHeight =
+        (compact ? 70.0 : 75.0) + (strings.isBurmese ? 1.0 : 0.0);
+    final rowCount = groups.length <= 2 ? 1 : 2;
+    final columnCount = _twoRowHorizontalColumnCount(groups.length);
+    final sectionHeight =
+        (rowCount * itemHeight) + ((rowCount - 1) * spacing);
+    final sectionWidth =
+        (columnCount * itemWidth) + ((columnCount - 1) * spacing);
 
-      rows.add(
-        IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _infrastructureTypeGroupCard(
-                type: firstGroup.key,
-                entries: firstGroup.value,
+    final content = SizedBox(
+      width: sectionWidth,
+      height: sectionHeight,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          for (var index = 0; index < groups.length; index++)
+            Positioned(
+              left: _deviceGridOffsetForIndex(
+                index: index,
+                itemWidth: itemWidth,
+                itemHeight: itemHeight,
+                spacing: spacing,
+              ).dx,
+              top: _deviceGridOffsetForIndex(
+                index: index,
+                itemWidth: itemWidth,
+                itemHeight: itemHeight,
+                spacing: spacing,
+              ).dy,
+              width: itemWidth,
+              height: itemHeight,
+              child: _infrastructureTypeGroupCard(
+                type: groups[index].key,
+                entries: groups[index].value,
                 itemWidth: itemWidth,
                 compact: compact,
                 strings: strings,
               ),
-              if (hasSecondGroup) ...[
-                SizedBox(width: spacing),
-                _infrastructureTypeGroupCard(
-                  type: secondGroup!.key,
-                  entries: secondGroup.value,
-                  itemWidth: itemWidth,
-                  compact: compact,
-                  strings: strings,
-                ),
-              ],
-            ],
-          ),
-        ),
-      );
+            ),
+        ],
+      ),
+    );
 
-      if (index + 2 < groups.length) {
-        rows.add(SizedBox(height: spacing));
-      }
+    if (groups.length <= 4) {
+      return content;
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: rows);
+    return SizedBox(
+      height: sectionHeight,
+      child: _horizontalDeviceFade(
+        child: SingleChildScrollView(
+          key: PageStorageKey<String>(
+            "infrastructure-horizontal-${widget.homeId}-$selectedRoomId",
+          ),
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.only(right: 34),
+          child: content,
+        ),
+      ),
+    );
   }
 
   String _sirenAlertStatusText(AppStrings strings) {
@@ -2748,19 +2818,22 @@ class _DeviceListState extends State<DeviceList> {
     final visibleEntries = canReorder
         ? _dragPreviewEntries(sectionKey, entries)
         : entries;
-    final totalRows = (visibleEntries.length / 2).ceil();
+    final rowCount = visibleEntries.length <= 2 ? 1 : 2;
+    final columnCount = _twoRowHorizontalColumnCount(visibleEntries.length);
     final sectionHeight = visibleEntries.isEmpty
         ? 0.0
-        : (totalRows * itemHeight) + ((totalRows - 1) * spacing);
+        : (rowCount * itemHeight) + ((rowCount - 1) * spacing);
+    final sectionWidth = visibleEntries.isEmpty
+        ? 0.0
+        : (columnCount * itemWidth) + ((columnCount - 1) * spacing);
     final gridKey = _sectionGridKey(sectionKey);
 
-    if (!canReorder) {
+    Widget buildStaticContent() {
       return SizedBox(
-        key: ValueKey(
-          "device-section-static-${widget.homeId}-$selectedRoomId-$sectionKey",
-        ),
+        width: sectionWidth,
         height: sectionHeight,
         child: Stack(
+          key: gridKey,
           clipBehavior: Clip.none,
           children: [
             for (var index = 0; index < visibleEntries.length; index++)
@@ -2779,16 +2852,12 @@ class _DeviceListState extends State<DeviceList> {
                 ).dy,
                 width: itemWidth,
                 height: itemHeight,
-                child: SizedBox(
-                  width: itemWidth,
-                  height: itemHeight,
-                  child: _deviceGridItem(
-                    sectionKey: sectionKey,
-                    entry: visibleEntries[index],
-                    itemWidth: itemWidth,
-                    compact: compact,
-                    strings: strings,
-                  ),
+                child: _deviceGridItem(
+                  sectionKey: sectionKey,
+                  entry: visibleEntries[index],
+                  itemWidth: itemWidth,
+                  compact: compact,
+                  strings: strings,
                 ),
               ),
           ],
@@ -2796,39 +2865,74 @@ class _DeviceListState extends State<DeviceList> {
       );
     }
 
-    final activeDraggingDeviceId = _draggingSectionKey == sectionKey
-        ? _draggingDeviceId
-        : null;
-    final paintEntries = <MapEntry<String, dynamic>>[
-      ...visibleEntries.where((entry) => entry.key != activeDraggingDeviceId),
-      if (activeDraggingDeviceId != null)
-        ...visibleEntries.where((entry) => entry.key == activeDraggingDeviceId),
-    ];
+    Widget buildAnimatedContent() {
+      final activeDraggingDeviceId = _draggingSectionKey == sectionKey
+          ? _draggingDeviceId
+          : null;
+      final paintEntries = <MapEntry<String, dynamic>>[
+        ...visibleEntries.where(
+          (entry) => entry.key != activeDraggingDeviceId,
+        ),
+        if (activeDraggingDeviceId != null)
+          ...visibleEntries.where(
+            (entry) => entry.key == activeDraggingDeviceId,
+          ),
+      ];
+
+      return SizedBox(
+        width: sectionWidth,
+        height: sectionHeight,
+        child: Stack(
+          key: gridKey,
+          clipBehavior: Clip.none,
+          children: [
+            for (final entry in paintEntries)
+              _animatedPositionedDeviceCard(
+                sectionKey: sectionKey,
+                entry: entry,
+                index: visibleEntries.indexWhere(
+                  (visibleEntry) => visibleEntry.key == entry.key,
+                ),
+                itemWidth: itemWidth,
+                itemHeight: itemHeight,
+                spacing: spacing,
+                compact: compact,
+                strings: strings,
+                sourceEntries: entries,
+              ),
+          ],
+        ),
+      );
+    }
+
+    final content = canReorder
+        ? buildAnimatedContent()
+        : buildStaticContent();
+
+    if (visibleEntries.length <= 4) {
+      return SizedBox(
+        key: ValueKey(
+          "device-section-${canReorder ? 'animated' : 'static'}-${widget.homeId}-$selectedRoomId-$sectionKey",
+        ),
+        height: sectionHeight,
+        child: content,
+      );
+    }
 
     return SizedBox(
       key: ValueKey(
-        "device-section-animated-${widget.homeId}-$selectedRoomId-$sectionKey",
+        "device-section-horizontal-${widget.homeId}-$selectedRoomId-$sectionKey",
       ),
       height: sectionHeight,
-      child: Stack(
-        key: gridKey,
-        clipBehavior: Clip.none,
-        children: [
-          for (final entry in paintEntries)
-            _animatedPositionedDeviceCard(
-              sectionKey: sectionKey,
-              entry: entry,
-              index: visibleEntries.indexWhere(
-                (visibleEntry) => visibleEntry.key == entry.key,
-              ),
-              itemWidth: itemWidth,
-              itemHeight: itemHeight,
-              spacing: spacing,
-              compact: compact,
-              strings: strings,
-              sourceEntries: entries,
-            ),
-        ],
+      child: _horizontalDeviceFade(
+        child: SingleChildScrollView(
+          key: PageStorageKey<String>(
+            "device-horizontal-${widget.homeId}-$selectedRoomId-$sectionKey",
+          ),
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.only(right: 34),
+          child: content,
+        ),
       ),
     );
   }
@@ -2853,45 +2957,355 @@ class _DeviceListState extends State<DeviceList> {
     );
   }
 
+  Future<void> _openDeviceCategoryPage({
+    required String groupName,
+    required String title,
+    required List<MapEntry<String, dynamic>> entries,
+  }) async {
+    if (entries.isEmpty || !mounted) {
+      return;
+    }
+
+    final initialDevices = <String, dynamic>{
+      for (final entry in entries) entry.key: entry.value,
+    };
+    final devicesRef = FirebaseDatabase.instance.ref(
+      "accounts/$_ownerUid/homes/$_homeId/devices",
+    );
+
+    await MaiYenNavigation.pushChildPage<void>(
+      context: context,
+      routeName: "device_category_${_sectionKeyForGroup(groupName)}",
+      builder: (pageContext) {
+        final strings = AppStrings.of(pageContext);
+
+        return ColoredBox(
+          color: MaiYenColors.background,
+          child: StreamBuilder<DatabaseEvent>(
+            stream: devicesRef.onValue,
+            builder: (context, snapshot) {
+              final sourceDevices = snapshot.hasData
+                  ? safeMap(snapshot.data?.snapshot.value)
+                  : initialDevices;
+              final categoryEntries = sourceDevices.entries.where((entry) {
+                final device = safeMap(entry.value);
+                final type = device["type"]?.toString() ?? "unknown";
+
+                if (getDeviceGroup(type) != groupName) {
+                  return false;
+                }
+
+                if (selectedRoomId == "overview") {
+                  return true;
+                }
+
+                final roomId =
+                    device["roomId"]?.toString().trim() ?? "unassigned";
+
+                return roomId == selectedRoomId;
+              }).toList();
+
+              _sortDeviceEntries(
+                _sectionKeyForGroup(groupName),
+                categoryEntries,
+              );
+
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossAxisCount = constraints.maxWidth >= 720
+                      ? 9
+                      : constraints.maxWidth >= 520
+                      ? 7
+                      : 5;
+
+                  return CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 14),
+                        sliver: SliverToBoxAdapter(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    height: 1.05,
+                                    fontWeight: FontWeight.w900,
+                                    color: MaiYenColors.textPrimary,
+                                    letterSpacing: -0.45,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Container(
+                                constraints: const BoxConstraints(
+                                  minWidth: 38,
+                                  minHeight: 32,
+                                ),
+                                alignment: Alignment.center,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: MaiYenColors.primarySoft,
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  categoryEntries.length.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    height: 1,
+                                    fontWeight: FontWeight.w900,
+                                    color: MaiYenColors.primaryDark,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (categoryEntries.isEmpty)
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Center(
+                            child: Text(
+                              strings.t("Không có thiết bị"),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: MaiYenColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(12, 0, 12, 28),
+                          sliver: SliverGrid(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  mainAxisSpacing: 6,
+                                  crossAxisSpacing: 6,
+                                  childAspectRatio: 1,
+                                ),
+                            delegate: SliverChildBuilderDelegate((
+                              context,
+                              index,
+                            ) {
+                              final entry = categoryEntries[index];
+
+                              return _deviceCategorySquareCard(
+                                id: entry.key,
+                                device: safeMap(entry.value),
+                                strings: strings,
+                              );
+                            }, childCount: categoryEntries.length),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _deviceCategorySquareCard({
+    required String id,
+    required Map<String, dynamic> device,
+    required AppStrings strings,
+  }) {
+    final type = device["type"]?.toString().trim().toLowerCase() ?? "unknown";
+    final rawName = device["name"]?.toString().trim() ?? "";
+    final displayName = rawName.isEmpty ? id : rawName;
+    final statusText = getMainStatus(device, strings);
+    final connectionStatus = getConnectionStatus(device);
+    final connectionColor = getConnectionColor(connectionStatus);
+    final emergencyIsActive = _isEmergencyDeviceActiveForUi(id, device);
+    final pulseColor = _sirenAlertPulseDanger
+        ? MaiYenColors.danger
+        : MaiYenColors.warning;
+    final accentColor = emergencyIsActive
+        ? pulseColor
+        : getAccentColor(device);
+    final cardColor = emergencyIsActive
+        ? pulseColor.withValues(alpha: _sirenAlertPulseDanger ? 0.20 : 0.15)
+        : MaiYenColors.surface;
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () => onTapDevice(id),
+        borderRadius: BorderRadius.circular(12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 420),
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.fromLTRB(4, 3, 4, 3),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: accentColor.withValues(
+                alpha: emergencyIsActive ? 0.95 : 0.62,
+              ),
+              width: emergencyIsActive ? 1.5 : 1.15,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: accentColor.withValues(
+                  alpha: emergencyIsActive ? 0.20 : 0.055,
+                ),
+                blurRadius: emergencyIsActive ? 14 : 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: connectionColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 23,
+                      height: 23,
+                      decoration: BoxDecoration(
+                        color: accentColor.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Icon(
+                        getDeviceIcon(type),
+                        size: 13,
+                        color: accentColor,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      displayName,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 8.2,
+                        height: 1.0,
+                        fontWeight: FontWeight.w900,
+                        color: MaiYenColors.textPrimary,
+                        letterSpacing: -0.12,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      statusText,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 7.0,
+                        height: 1.0,
+                        fontWeight: FontWeight.w800,
+                        color: accentColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _sectionHeader({
     required String title,
     required int count,
     required bool showAddButton,
+    VoidCallback? onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(top: 0, bottom: 7),
       child: Row(
         children: [
           Expanded(
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: title,
-                    style: const TextStyle(
-                      fontSize: 14.5,
-                      height: 1,
-                      fontWeight: FontWeight.w800,
-                      color: MaiYenColors.textPrimary,
-                      letterSpacing: -0.15,
-                    ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(10),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: title,
+                                style: const TextStyle(
+                                  fontSize: 14.5,
+                                  height: 1,
+                                  fontWeight: FontWeight.w800,
+                                  color: MaiYenColors.textPrimary,
+                                  letterSpacing: -0.15,
+                                ),
+                              ),
+                              TextSpan(
+                                text: " ($count)",
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  height: 1,
+                                  fontWeight: FontWeight.w700,
+                                  color: MaiYenColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (onTap != null) ...[
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          size: 20,
+                          color: MaiYenColors.textSecondary,
+                        ),
+                      ],
+                    ],
                   ),
-                  TextSpan(
-                    text: " ($count)",
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1,
-                      fontWeight: FontWeight.w700,
-                      color: MaiYenColors.textSecondary,
-                    ),
-                  ),
-                ],
+                ),
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (showAddButton) _addDeviceButton(),
+          if (showAddButton) ...[
+            const SizedBox(width: 6),
+            _addDeviceButton(),
+          ],
         ],
       ),
     );
@@ -2948,6 +3362,13 @@ class _DeviceListState extends State<DeviceList> {
                         title: strings.t("An ninh ra/vào"),
                         count: securityEntries.length,
                         showAddButton: true,
+                        onTap: () {
+                          _openDeviceCategoryPage(
+                            groupName: "An ninh ra/vào",
+                            title: strings.t("An ninh ra/vào"),
+                            entries: securityEntries,
+                          );
+                        },
                       )
                     else
                       Align(
@@ -2974,6 +3395,13 @@ class _DeviceListState extends State<DeviceList> {
                         title: strings.t("Nguy hiểm khẩn cấp"),
                         count: emergencyEntries.length,
                         showAddButton: false,
+                        onTap: () {
+                          _openDeviceCategoryPage(
+                            groupName: "Nguy hiểm khẩn cấp",
+                            title: strings.t("Nguy hiểm khẩn cấp"),
+                            entries: emergencyEntries,
+                          );
+                        },
                       ),
                       _reorderableDeviceSection(
                         groupName: "Nguy hiểm khẩn cấp",
@@ -2990,6 +3418,13 @@ class _DeviceListState extends State<DeviceList> {
                         title: strings.t("Điều khiển & hạ tầng"),
                         count: infrastructureEntries.length,
                         showAddButton: false,
+                        onTap: () {
+                          _openDeviceCategoryPage(
+                            groupName: "Điều khiển & hạ tầng",
+                            title: strings.t("Điều khiển & hạ tầng"),
+                            entries: infrastructureEntries,
+                          );
+                        },
                       ),
                       _infrastructureTypeGrid(
                         groups: infrastructureTypeGroups,
