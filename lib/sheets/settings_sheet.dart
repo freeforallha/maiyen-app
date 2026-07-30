@@ -9,6 +9,84 @@ import '../navigation/maiyen_navigation.dart';
 import '../services/platform/platform_auto_away_task_service.dart';
 import 'hub_info_sheet.dart';
 
+bool _settingsBool(dynamic raw) {
+  if (raw is bool) {
+    return raw;
+  }
+
+  if (raw is num) {
+    return raw != 0;
+  }
+
+  final value = raw?.toString().trim().toLowerCase() ?? '';
+  return value == 'true' || value == '1' || value == 'yes' || value == 'on';
+}
+
+class _HubUpdateAttentionTrailing extends StatelessWidget {
+  const _HubUpdateAttentionTrailing({
+    required this.ownerUid,
+    required this.homeId,
+  });
+
+  final String ownerUid;
+  final String homeId;
+
+  @override
+  Widget build(BuildContext context) {
+    final cleanOwnerUid = ownerUid.trim();
+    final cleanHomeId = homeId.trim();
+
+    if (cleanOwnerUid.isEmpty || cleanHomeId.isEmpty) {
+      return const Icon(
+        Icons.chevron_right_rounded,
+        color: MaiYenColors.textSecondary,
+      );
+    }
+
+    final updateAvailableRef = FirebaseDatabase.instance.ref(
+      'accounts/$cleanOwnerUid/homes/$cleanHomeId/hubStatus/updateAvailable',
+    );
+
+    return StreamBuilder<DatabaseEvent>(
+      stream: updateAvailableRef.onValue,
+      builder: (context, snapshot) {
+        final needsAttention = _settingsBool(snapshot.data?.snapshot.value);
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (needsAttention) ...[
+              Container(
+                width: 22,
+                height: 22,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: MaiYenColors.danger,
+                  shape: BoxShape.circle,
+                ),
+                child: const Text(
+                  '!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    height: 1,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+            ],
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: MaiYenColors.textSecondary,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
 String _languageSubtitle(String code) {
   switch (code) {
     case "vi":
@@ -759,6 +837,10 @@ void showSettingsSheet({
                   title: "${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)",
                   subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
                   color: MaiYenColors.primaryDark,
+                  trailing: _HubUpdateAttentionTrailing(
+                    ownerUid: ownerUid,
+                    homeId: homeId,
+                  ),
                   onTap: () {
                     showHubInfoSheet(
                       context: managementContext,
@@ -1022,6 +1104,10 @@ void showSettingsSheet({
                       title: strings.t("Quản lý nhà"),
                       subtitle: strings.t("Chuyển quyền chủ nhà hoặc xoá nhà"),
                       color: const Color(0xFF7656C8),
+                      trailing: _HubUpdateAttentionTrailing(
+                        ownerUid: ownerUid,
+                        homeId: homeId,
+                      ),
                       onTap: () {
                         showHomeManagementSheet(sheetContext);
                       },

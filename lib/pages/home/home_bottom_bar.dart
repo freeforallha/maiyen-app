@@ -8,6 +8,7 @@ class HomeBottomBar extends StatelessWidget {
     required this.addHomeTooltip,
     required this.unreadChatCount,
     required this.inviteCount,
+    this.hubUpdateAttention = false,
     required this.onAddHome,
     required this.onOpenChat,
     required this.onOpenAlarm,
@@ -17,6 +18,7 @@ class HomeBottomBar extends StatelessWidget {
   final String addHomeTooltip;
   final int unreadChatCount;
   final int inviteCount;
+  final bool hubUpdateAttention;
   final VoidCallback onAddHome;
   final VoidCallback onOpenChat;
   final VoidCallback onOpenAlarm;
@@ -119,7 +121,7 @@ class HomeBottomBar extends StatelessWidget {
                     ),
                     onPressed: onOpenSettings,
                   ),
-                  if (inviteCount > 0)
+                  if (inviteCount > 0 || hubUpdateAttention)
                     Positioned(
                       right: 2,
                       top: 2,
@@ -141,7 +143,7 @@ class HomeBottomBar extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          "$inviteCount",
+                          inviteCount > 0 ? "$inviteCount" : "!",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,

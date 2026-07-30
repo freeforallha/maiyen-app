@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/localization/app_strings.dart';
-import 'package:safehome_app/services/notification_service.dart';
+import 'package:maiyen_app/localization/app_strings.dart';
+import 'package:maiyen_app/services/notification_service.dart';
 
 void main() {
   final strings = AppStrings.fromLocale(const Locale('en'));

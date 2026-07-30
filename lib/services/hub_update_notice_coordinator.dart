@@ -134,7 +134,10 @@ class HubUpdateNoticeCoordinator {
 
         final ownerUid = ownerUidForHome(homeId, home).trim();
 
-        if (ownerUid.isEmpty) {
+        // Chỉ chủ nhà được thấy thông báo có phiên bản Hub mới.
+        // Member/Admin vẫn xem được trạng thái Hub khi được phép, nhưng
+        // không bị làm phiền bởi banner yêu cầu xử lý của chủ nhà.
+        if (ownerUid.isEmpty || ownerUid != uid.trim()) {
           continue;
         }
 
@@ -227,10 +230,16 @@ class HubUpdateNoticeCoordinator {
     }
 
     final color = critical ? MaiYenColors.warning : MaiYenColors.primary;
+    final bottomSafeInset = MediaQuery.paddingOf(context).bottom;
+    final bottomBarBottomInset = bottomSafeInset > 10.0
+        ? bottomSafeInset
+        : 10.0;
+    final noticeBottomMargin = bottomBarBottomInset + 68.0 + 12.0;
+
     final controller = messenger.showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+        margin: EdgeInsets.fromLTRB(14, 12, 14, noticeBottomMargin),
         padding: EdgeInsets.zero,
         elevation: 10,
         backgroundColor: MaiYenColors.surface,
