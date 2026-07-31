@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/localization/app_strings.dart';
-import 'package:safehome_app/services/notification_service.dart';
-import 'package:safehome_app/services/platform/android/android_notification_config.dart';
-import 'package:safehome_app/services/platform/ios/ios_notification_config.dart';
+import 'package:maiyen_app/localization/app_strings.dart';
+import 'package:maiyen_app/services/notification_service.dart';
+import 'package:maiyen_app/services/platform/android/android_notification_config.dart';
+import 'package:maiyen_app/services/platform/ios/ios_notification_config.dart';
 
 void main() {
   final strings = AppStrings.fromLocale(const Locale('en'));
@@ -134,10 +134,7 @@ void main() {
           details.categoryIdentifier,
           IosNotificationConfig.emergencyAlarmCategoryId,
         );
-        expect(
-          details.threadIdentifier,
-          'safehome_alarm_home_needs_sanitizing',
-        );
+        expect(details.threadIdentifier, 'maiyen_alarm_home_needs_sanitizing');
         expect(details.presentSound, isTrue);
         expect(details.interruptionLevel, InterruptionLevel.timeSensitive);
       },

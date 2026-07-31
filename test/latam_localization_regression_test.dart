@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/localization/app_language_controller.dart';
+import 'package:maiyen_app/localization/app_language_controller.dart';
 
 const _removedCodes = {'gn', 'qu', 'ay', 'ht'};
 const _removedLanguageNames = {

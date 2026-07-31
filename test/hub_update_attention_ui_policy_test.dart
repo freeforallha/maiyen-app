@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+String _readSource(String path) {
+  return File(path).readAsStringSync().replaceAll('\r\n', '\n');
+}
+
 void main() {
-  final coordinator = File(
+  final coordinator = _readSource(
     'lib/services/hub_update_notice_coordinator.dart',
-  ).readAsStringSync();
-  final settings = File('lib/sheets/settings_sheet.dart').readAsStringSync();
+  );
+  final settings = _readSource('lib/sheets/settings_sheet.dart');
 
   test('thông báo Hub update nằm phía trên HomeBottomBar', () {
     expect(coordinator, contains('final noticeBottomMargin ='));
@@ -22,10 +26,7 @@ void main() {
   });
 
   test('badge Hub update chỉ nghe đúng field updateAvailable', () {
-    expect(
-      settings,
-      contains('hubStatus/updateAvailable'),
-    );
+    expect(settings, contains('hubStatus/updateAvailable'));
     expect(settings, contains('class _HubUpdateAttentionTrailing'));
     expect(settings, contains("child: const Text(\n                  '!',"));
   });

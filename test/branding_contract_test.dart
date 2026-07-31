@@ -1,18 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/config/brand_config.dart';
+import 'package:maiyen_app/config/brand_config.dart';
 
 void main() {
   test('MaiYen display branding contract stays compatible', () {
     expect(BrandConfig.appName, 'MaiYen');
     expect(BrandConfig.appNameUppercase, 'MAIYEN');
-    expect(BrandConfig.sloganVi, 'Người giữ nhà');
+    expect(BrandConfig.sloganVi, 'Vẹn nguyên tổ ấm');
     expect(BrandConfig.defaultHubName, 'MaiYen Hub');
-    expect(
-      BrandConfig.mapUserAgent,
-      'MaiYen/1.1.0 (com.myfamily.safehome)',
-    );
+    expect(BrandConfig.mapUserAgent, 'MaiYen/1.1.0 (com.myfamily.maiyen)');
 
     final manifest = File(
       'android/app/src/main/AndroidManifest.xml',

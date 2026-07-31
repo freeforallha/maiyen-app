@@ -102,7 +102,7 @@ class HomePairingService {
 
         try {
           await FirebaseDatabase.instance
-              .ref(FirebasePaths.homeJoinRequest(homeId, uid))
+              .ref(FirebasePaths.joinRequest(ownerUid, homeId, uid))
               .set(requestData);
           sentCount++;
         } catch (e) {
@@ -165,7 +165,7 @@ class HomePairingService {
       };
 
       await FirebaseDatabase.instance
-          .ref(FirebasePaths.homeJoinRequest(homeId, uid))
+          .ref(FirebasePaths.joinRequest(ownerUid, homeId, uid))
           .set(requestData);
 
       return const HomeScannedQrResult(

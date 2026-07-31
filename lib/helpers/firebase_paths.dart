@@ -44,10 +44,11 @@ class FirebasePaths {
 
   static String shareRequests(String uid) => "accounts/$uid/shareRequests";
 
-  static String homeJoinRequests(String homeId) => "home_join_requests/$homeId";
-
-  static String homeJoinRequest(String homeId, String targetUid) =>
-      "home_join_requests/$homeId/$targetUid";
+  static String joinRequest(
+    String ownerUid,
+    String homeId,
+    String targetUid,
+  ) => "accounts/$ownerUid/shareRequests/${homeId}_$targetUid";
 
   static String shareRequest(String uid, String homeId) =>
       "accounts/$uid/shareRequests/$homeId";

@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:safehome_app/config/system_version.dart';
-import 'package:safehome_app/localization/app_strings.dart';
-import 'package:safehome_app/localization/system_version_strings.dart';
+import 'package:maiyen_app/config/system_version.dart';
+import 'package:maiyen_app/localization/app_strings.dart';
+import 'package:maiyen_app/localization/system_version_strings.dart';
 
 void main() {
   test('pubspec and runtime app versions stay synchronized', () {

@@ -108,9 +108,7 @@ Future<bool?> showShareRequestSheet({
           }
         }
 
-        final updates = <String, Object?>{
-          FirebasePaths.homeJoinRequest(homeId, targetUid): null,
-        };
+        final updates = <String, Object?>{};
 
         for (final approverUid in approverUids) {
           updates["accounts/$approverUid/shareRequests/$requestKey"] = null;

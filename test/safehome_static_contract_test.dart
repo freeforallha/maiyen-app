@@ -19,7 +19,7 @@ void main() {
         'lib/services/platform/android/android_background_notification_service.dart',
       ).readAsStringSync();
       mainActivitySource = File(
-        'android/app/src/main/kotlin/com/myfamily/safehome/MainActivity.kt',
+        'android/app/src/main/kotlin/com/myfamily/maiyen/MainActivity.kt',
       ).readAsStringSync();
       appDelegateSource = File(
         'ios/Runner/AppDelegate.swift',
@@ -68,29 +68,48 @@ void main() {
     test(
       'local notification tap and cold-start payload routes stay registered',
       () {
-        for (final payload in [
-          'home_chat::',
+        final routingSource = [
+          notificationSource,
+          File(
+            'lib/services/notification/notification_navigation_part.dart',
+          ).readAsStringSync(),
+          File(
+            'lib/services/notification/notification_payload_codec.dart',
+          ).readAsStringSync(),
+          File(
+            'lib/services/notification/notification_alarm_delivery_part.dart',
+          ).readAsStringSync(),
+          File(
+            'lib/services/notification/notification_bootstrap_part.dart',
+          ).readAsStringSync(),
+          File(
+            'lib/services/notification/notification_alarm_session_part.dart',
+          ).readAsStringSync(),
+        ].join('\n');
+
+        for (final contract in [
+          '_notificationServiceHomeChatPayload',
+          '_notificationServiceRequestOpenHomeChat',
+          "encodePayload('home_chat'",
+          "decodePayload('home_chat'",
           'priority_alarm::',
           'alarm_siren',
           'alarm_summary|',
-          'alarm',
+          "payload == 'alarm'",
           'open_home',
           'schedule_notification',
           'schedule_notification::',
           'schedule_notification|',
+          'onDidReceiveNotificationResponse',
+          'getNotificationAppLaunchDetails',
+          "_notificationServiceAlarmRouteName = 'fullscreen_alarm'",
         ]) {
-          expect(notificationSource, contains(payload));
+          expect(
+            routingSource,
+            contains(contract),
+            reason: 'Missing notification route contract: $contract',
+          );
         }
-
-        expect(
-          notificationSource,
-          contains('onDidReceiveNotificationResponse'),
-        );
-        expect(notificationSource, contains('getNotificationAppLaunchDetails'));
-        expect(
-          notificationSource,
-          contains("alarmRouteName = 'fullscreen_alarm'"),
-        );
       },
     );
 
@@ -188,11 +207,21 @@ void main() {
       );
       expect(
         File(
-          'android/app/src/main/res/drawable/ic_stat_safehome.xml',
+          'android/app/src/main/res/drawable/ic_stat_maiyen.xml',
         ).existsSync(),
         isTrue,
       );
 
+      final dartIdentifiers = File(
+        'lib/config/maiyen_identifiers.dart',
+      ).readAsStringSync();
+      final nativeIdentifiers = File(
+        'android/app/src/main/kotlin/com/myfamily/maiyen/'
+        'MaiYenNativeIdentifiers.kt',
+      ).readAsStringSync();
+      final mainActivitySource = File(
+        'android/app/src/main/kotlin/com/myfamily/maiyen/MainActivity.kt',
+      ).readAsStringSync();
       final dartChannelFiles = [
         File(
           'lib/services/platform/android/android_alarm_permission_service.dart',
@@ -201,16 +230,19 @@ void main() {
           'lib/services/platform/android/android_auto_away_system_service.dart',
         ),
       ];
-      final nativeChannel = RegExp(r'private val channelName = "([^"]+)"')
-          .firstMatch(
-            File(
-              'android/app/src/main/kotlin/com/myfamily/safehome/MainActivity.kt',
-            ).readAsStringSync(),
-          )!
-          .group(1);
+
+      expect(dartIdentifiers, contains("'maiyen/native_alarm_permission'"));
+      expect(nativeIdentifiers, contains('"maiyen/native_alarm_permission"'));
+      expect(
+        mainActivitySource,
+        contains('MaiYenNativeIdentifiers.NATIVE_ALARM_PERMISSION_CHANNEL'),
+      );
 
       for (final file in dartChannelFiles) {
-        expect(file.readAsStringSync(), contains("'$nativeChannel'"));
+        expect(
+          file.readAsStringSync(),
+          contains('MaiYenIdentifiers.androidNativeAlarmPermissionChannel'),
+        );
       }
 
       final entitlements = File(
