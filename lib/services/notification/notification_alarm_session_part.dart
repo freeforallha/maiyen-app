@@ -4,7 +4,9 @@ const String _notificationServiceAlarmRouteName = 'fullscreen_alarm';
 
 bool _alarmPageOpen = false;
 
-final ValueNotifier<int> _notificationServiceAlarmRevision = ValueNotifier<int>(0);
+final ValueNotifier<int> _notificationServiceAlarmRevision = ValueNotifier<int>(
+  0,
+);
 
 final List<Map<String, dynamic>> _notificationServiceActiveAlarmItems = [];
 
@@ -22,7 +24,8 @@ void _notificationServiceMarkAlarmPageOpened({
 
   if (alarmItemsJson.trim().isNotEmpty) {
     _addAlarmItems(alarmItemsJson);
-    _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+    _notificationServiceLastAlarmItemsJson =
+        _notificationServiceActiveAlarmItems.isEmpty
         ? alarmItemsJson
         : jsonEncode(_notificationServiceActiveAlarmItems);
   }
@@ -115,13 +118,11 @@ void _openPendingAlarmPage() {
 
   final strings = _strings;
 
+  final presentation = buildAlarmNotificationPresentation(data, strings);
+
   _notificationServiceOpenAlarmPage(
-    title: _notificationServiceLocalizedNotificationTitle(
-      data['title']?.toString() ?? '',
-      strings,
-      '🚨 ${BrandConfig.appName}',
-    ),
-    body: _notificationServiceLocalizedAlarmBodyForData(data, strings),
+    title: presentation.title,
+    body: presentation.body,
     alarmItemsJson: data['alarmItemsJson']?.toString() ?? '',
     incidentId: data['incidentId']?.toString() ?? '',
     receiverUid: data['receiverUid']?.toString() ?? '',
@@ -166,8 +167,10 @@ void _notificationServiceOpenAlarmPage({
   };
 
   if (_activeAlarmIncidentContexts.isEmpty) {
-    _notificationServiceLastAlarmEventCategory = _notificationServiceNormalizedIncidentEventCategory(incidentData);
-    _notificationServiceLastAlarmLevel = _notificationServiceNormalizedIncidentAlarmLevel(incidentData);
+    _notificationServiceLastAlarmEventCategory =
+        _notificationServiceNormalizedIncidentEventCategory(incidentData);
+    _notificationServiceLastAlarmLevel =
+        _notificationServiceNormalizedIncidentAlarmLevel(incidentData);
   } else {
     _syncAlarmPresentationFromActiveIncidents();
   }
@@ -177,14 +180,14 @@ void _notificationServiceOpenAlarmPage({
     // Thay toàn bộ item của incident thay vì chỉ cộng dồn, nếu không một
     // cửa đã xử lý có thể còn nằm trên máy Owner khi incident khác vẫn active.
     _notificationServiceActiveAlarmItems.removeWhere(
-      (item) =>
-          item['incidentId']?.toString().trim() == incidentId.trim(),
+      (item) => item['incidentId']?.toString().trim() == incidentId.trim(),
     );
   }
 
   _addAlarmItems(alarmItemsJson, incidentId: incidentId);
 
-  _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+  _notificationServiceLastAlarmItemsJson =
+      _notificationServiceActiveAlarmItems.isEmpty
       ? alarmItemsJson
       : jsonEncode(_notificationServiceActiveAlarmItems);
 
@@ -223,7 +226,9 @@ void _notificationServiceOpenAlarmPage({
   navigator
       .push(
         MaterialPageRoute(
-          settings: const RouteSettings(name: _notificationServiceAlarmRouteName),
+          settings: const RouteSettings(
+            name: _notificationServiceAlarmRouteName,
+          ),
           builder: (_) => FullscreenAlarmPage(
             title: title,
             body: _notificationServiceLastAlarmBody,
@@ -236,7 +241,9 @@ void _notificationServiceOpenAlarmPage({
       .whenComplete(_notificationServiceMarkAlarmPageClosed);
 }
 
-void _notificationServiceClearActiveAlarms({bool clearIncidentContexts = true}) {
+void _notificationServiceClearActiveAlarms({
+  bool clearIncidentContexts = true,
+}) {
   _notificationServiceActiveAlarmItems.clear();
   _notificationServiceLastAlarmItemsJson = '';
   _notificationServiceLastAlarmBody = _strings.alarmBody;
@@ -279,9 +286,7 @@ Future<void> _notificationServiceShowSafetyReminder({
   );
 
   final effectiveIsSafe = _currentReminderIsSafe();
-  final effectiveReason = effectiveIsSafe
-      ? ''
-      : _currentReminderReason();
+  final effectiveReason = effectiveIsSafe ? '' : _currentReminderReason();
   final notificationTitle = strings.safetyReminderNotificationTitle(
     homeTitle: _notificationServiceLastScheduleTitle.trim().isEmpty
         ? BrandConfig.appName

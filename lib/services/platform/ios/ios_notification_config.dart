@@ -23,10 +23,8 @@ class IosNotificationConfig {
       MaiYenIdentifiers.iosEmergencyAlarmCategoryId;
   static const String reminderCategoryId =
       MaiYenIdentifiers.iosReminderCategoryId;
-  static const String sensorCategoryId =
-      MaiYenIdentifiers.iosSensorCategoryId;
-  static const String chatCategoryId =
-      MaiYenIdentifiers.iosChatCategoryId;
+  static const String sensorCategoryId = MaiYenIdentifiers.iosSensorCategoryId;
+  static const String chatCategoryId = MaiYenIdentifiers.iosChatCategoryId;
 
   static const DarwinInitializationSettings initializationSettings =
       DarwinInitializationSettings(
@@ -59,6 +57,9 @@ class IosNotificationConfig {
         data['alarmFlowType']?.toString().trim().toLowerCase() ?? '';
     final alarmLevel =
         data['alarmLevel']?.toString().trim().toLowerCase() ?? '';
+    final presentationStage =
+        data['alarmNotificationStage']?.toString().trim().toLowerCase() ?? '';
+    final isRepeat = presentationStage == 'repeat';
     final isEmergency =
         eventCategory == 'emergency' ||
         flowType == 'emergency' ||
@@ -76,7 +77,9 @@ class IosNotificationConfig {
       presentSound: playSound,
       sound: playSound ? 'default' : null,
       badgeNumber: 1,
-      categoryIdentifier: isEmergency
+      categoryIdentifier: isRepeat
+          ? reminderCategoryId
+          : isEmergency
           ? emergencyAlarmCategoryId
           : securityAlarmCategoryId,
       threadIdentifier: MaiYenIdentifiers.iosAlarmThreadId(homeId),

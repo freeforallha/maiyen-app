@@ -214,10 +214,7 @@ Map<String, dynamic> deviceAlarmScheduleToFirebaseMap(
   Map<String, dynamic> schedule, {
   required bool personal,
 }) {
-  final normalized = normalizeDeviceAlarmSchedule(
-    schedule,
-    personal: personal,
-  );
+  final normalized = normalizeDeviceAlarmSchedule(schedule, personal: personal);
 
   return {
     'enabled': normalized['enabled'] == true,
@@ -278,6 +275,22 @@ Map<String, Map<String, dynamic>> cloneDeviceAlarmSchedules(
   for (final entry in schedules.entries)
     entry.key: Map<String, dynamic>.from(entry.value),
 };
+
+Map<String, Map<String, dynamic>>
+buildSafePersonalSchedulesWhenLeavingHomeSchedule(
+  Map<String, Map<String, dynamic>> commonSchedules,
+) {
+  final cloned = cloneDeviceAlarmSchedules(commonSchedules);
+
+  if (cloned.isNotEmpty) {
+    return cloned;
+  }
+
+  return {
+    'schedule_${DateTime.now().microsecondsSinceEpoch}':
+        defaultDeviceAlarmSchedule(personal: true),
+  };
+}
 
 Map<String, Map<String, dynamic>> normalizeEffectivePersonalAlarmSchedules({
   required Map<String, dynamic> customDevice,
@@ -486,6 +499,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             legacyFullscreenEnabled: policy.fullscreenEnabled,
           );
 
+      var repairSilentPersonalConfiguration = false;
+
       setState(() {
         _enabled = policy.enabled;
         _notificationEnabled = policy.notificationEnabled;
@@ -505,22 +520,35 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
           commonSchedules: _commonSchedules,
           legacyFullscreenEnabled: policy.fullscreenEnabled,
         );
+
+        if (_isSecurity && !_followHomeSchedule && _personalSchedules.isEmpty) {
+          // Dữ liệu cũ có thể đã lưu "không theo lịch chung" nhưng không có
+          // lịch cá nhân. Giữ ý định dùng lịch riêng, đồng thời tạo một lịch
+          // an toàn để thiết bị không rơi vào trạng thái hoàn toàn im lặng.
+          _personalSchedules =
+              buildSafePersonalSchedulesWhenLeavingHomeSchedule(
+                _commonSchedules,
+              );
+          repairSilentPersonalConfiguration = true;
+        }
+
         _personalNotificationEnabled = _followHomeSchedule
             ? policy.notificationEnabled
             : personalPreferences.notificationEnabled;
         _personalFullscreenEnabled = personalPreferences.fullscreenEnabled;
         _loading = false;
       });
+
+      if (repairSilentPersonalConfiguration) {
+        _queueAutoSave(immediate: true);
+      }
     } catch (_) {
       if (!mounted) return;
       setState(() => _loading = false);
     }
   }
 
-  void _change(
-    VoidCallback action, {
-    bool immediate = false,
-  }) {
+  void _change(VoidCallback action, {bool immediate = false}) {
     setState(() {
       action();
       _syncPersonalWithHomeIfNeeded();
@@ -537,9 +565,14 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   void _setFollowHomeSchedule(bool value) {
     _change(() {
       _followHomeSchedule = value;
+
       if (!value) {
-        // Lịch đang phản chiếu từ nhà không được biến thành lịch cá nhân độc lập.
-        _personalSchedules = <String, Map<String, dynamic>>{};
+        // Khi rời lịch chung, dùng lịch chung hiện tại làm điểm bắt đầu. Nếu
+        // nhà chưa có lịch, tạo một lịch cá nhân mặc định đang bật. Nhờ đó
+        // thao tác này không bao giờ tạo cấu hình không có lịch báo động.
+        _personalSchedules = buildSafePersonalSchedulesWhenLeavingHomeSchedule(
+          _commonSchedules,
+        );
       }
     }, immediate: true);
   }
@@ -634,10 +667,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       // Backend luôn lấy lịch mới nhất từ nhà và tránh dữ liệu trùng/lỗi thời.
       updates['$personalPath/alarmSchedules'] = _followHomeSchedule
           ? null
-          : _firebaseScheduleMap(
-              _personalSchedules,
-              personal: true,
-            );
+          : _firebaseScheduleMap(_personalSchedules, personal: true);
       updates['$personalPath/alarm'] = null;
       updates['$personalPath/alarmPreferences'] =
           DevicePersonalAlarmPreferences(
@@ -772,10 +802,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     }, immediate: true);
   }
 
-  void _deleteSchedule({
-    required bool personal,
-    required String scheduleId,
-  }) {
+  void _deleteSchedule({required bool personal, required String scheduleId}) {
     final uiKey = _scheduleUiKey(personal, scheduleId);
     _change(() {
       final schedules = personal ? _personalSchedules : _commonSchedules;
@@ -791,8 +818,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     required Map<String, dynamic> schedule,
     required String field,
   }) async {
-    final raw = schedule[field]?.toString() ??
-        (field == 'start' ? '23:00' : '06:00');
+    final raw =
+        schedule[field]?.toString() ?? (field == 'start' ? '23:00' : '06:00');
     final parts = raw.split(':');
     final selected = await showTimePicker(
       context: context,
@@ -810,9 +837,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     if (value == schedule[otherField]?.toString()) {
       showTopToast(
         context,
-        AppStrings.of(context).t(
-          'Giờ bắt đầu và kết thúc không được trùng nhau',
-        ),
+        AppStrings.of(
+          context,
+        ).t('Giờ bắt đầu và kết thúc không được trùng nhau'),
         color: MaiYenColors.warning,
         icon: Icons.schedule_rounded,
       );
@@ -991,19 +1018,13 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     ),
     value: _globalEnabled,
     enabled: widget.canEditCommon && !_isEmergency,
-    onChanged: (value) => _change(
-      () => _enabled = value,
-      immediate: true,
-    ),
+    onChanged: (value) => _change(() => _enabled = value, immediate: true),
   );
 
   Widget _alarmChannelsCard(AppStrings strings) {
     final isIos = defaultTargetPlatform == TargetPlatform.iOS;
 
-    Widget sectionLabel({
-      required IconData icon,
-      required String title,
-    }) {
+    Widget sectionLabel({required IconData icon, required String title}) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 11, 14, 3),
         child: Row(
@@ -1038,9 +1059,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         onChanged: enabled ? onChanged : null,
         secondary: Icon(
           icon,
-          color: value
-              ? MaiYenColors.primary
-              : MaiYenColors.textSecondary,
+          color: value ? MaiYenColors.primary : MaiYenColors.textSecondary,
         ),
         title: Text(
           title,
@@ -1101,10 +1120,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             title: strings.t('Thông báo báo động'),
             value: _notificationEnabled,
             enabled: widget.canEditCommon,
-            onChanged: (value) => _change(
-              () => _notificationEnabled = value,
-              immediate: true,
-            ),
+            onChanged: (value) =>
+                _change(() => _notificationEnabled = value, immediate: true),
           ),
           const Divider(height: 1, indent: 12, endIndent: 12),
           channelSwitch(
@@ -1113,10 +1130,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             subtitle: strings.physicalSirenSharedAlarmOnlyNote,
             value: _physicalSirenEnabled,
             enabled: widget.canEditCommon,
-            onChanged: (value) => _change(
-              () => _physicalSirenEnabled = value,
-              immediate: true,
-            ),
+            onChanged: (value) =>
+                _change(() => _physicalSirenEnabled = value, immediate: true),
           ),
           const Divider(height: 1, indent: 12, endIndent: 12),
           sectionLabel(
@@ -1232,9 +1247,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
               child: Text(
-                lockedToHome
-                    ? strings.t('Chưa cài đặt')
-                    : strings.t('Thêm'),
+                lockedToHome ? strings.t('Chưa cài đặt') : strings.t('Thêm'),
                 style: const TextStyle(
                   fontSize: 12.5,
                   color: MaiYenColors.textSecondary,
@@ -1382,10 +1395,10 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                   _hasDuplicateScheduleTime(
                                     personal: personal,
                                     scheduleId: scheduleId,
-                                    start: schedule['start']?.toString() ??
+                                    start:
+                                        schedule['start']?.toString() ??
                                         '23:00',
-                                    end: schedule['end']?.toString() ??
-                                        '06:00',
+                                    end: schedule['end']?.toString() ?? '06:00',
                                   )) {
                                 _showDuplicateScheduleToast();
                                 return;
@@ -1440,8 +1453,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                             Expanded(
                               child: _timeButton(
                                 label: strings.t('Giờ bắt đầu'),
-                                value:
-                                    schedule['start']?.toString() ?? '23:00',
+                                value: schedule['start']?.toString() ?? '23:00',
                                 onTap: () => _pickTime(
                                   personal: personal,
                                   scheduleId: scheduleId,
@@ -1641,9 +1653,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       onChanged: enabled ? onChanged : null,
       secondary: Icon(
         icon,
-        color: enabled
-            ? MaiYenColors.primary
-            : MaiYenColors.textSecondary,
+        color: enabled ? MaiYenColors.primary : MaiYenColors.textSecondary,
       ),
       title: Text(
         title,
@@ -1684,16 +1694,12 @@ Widget _noticeCard({
       Expanded(
         child: Text(
           text,
-          style: const TextStyle(
-            height: 1.35,
-            color: MaiYenColors.textPrimary,
-          ),
+          style: const TextStyle(height: 1.35, color: MaiYenColors.textPrimary),
         ),
       ),
     ],
   ),
 );
-
 
 int _normalizeRepeatMinutes(Object? raw) {
   final parsed = raw is num ? raw.toInt() : int.tryParse(raw?.toString() ?? '');

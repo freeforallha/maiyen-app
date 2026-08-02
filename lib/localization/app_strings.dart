@@ -2332,10 +2332,7 @@ class AppStrings {
     ru: 'Откройте MaiYen, чтобы проверить сейчас.',
 
     es: "Abre MaiYen para revisar ahora.",
-    fr: _fr(
-      vi: "Mở MaiYen để kiểm tra ngay.",
-      en: "Open MaiYen to check now.",
-    ),
+    fr: _fr(vi: "Mở MaiYen để kiểm tra ngay.", en: "Open MaiYen to check now."),
   );
 
   String homeChatNewMessages(int count) => choose(
@@ -2514,10 +2511,7 @@ class AppStrings {
     de: 'MaiYen Alarm Vollbild',
     ru: 'MaiYen тревога на весь экран',
     es: "MaiYen alarma pantalla completa",
-    fr: _fr(
-      vi: "MaiYen báo động toàn màn hình",
-      en: "MaiYen Alarm Fullscreen",
-    ),
+    fr: _fr(vi: "MaiYen báo động toàn màn hình", en: "MaiYen Alarm Fullscreen"),
     th: "สัญญาณเตือน ของ MaiYen แบบเต็มหน้าจอ",
     ms: "Penggera skrin penuh MaiYen",
     lo: "ສັນຍານເຕືອນໄພ MaiYen ເຕັມຈໍ",
@@ -2557,10 +2551,7 @@ class AppStrings {
     de: 'MaiYen Notfall-Priorität',
     ru: 'MaiYen экстренный приоритет',
     es: "MaiYen prioridad de emergencia",
-    fr: _fr(
-      vi: "MaiYen cảnh báo khẩn cấp",
-      en: "MaiYen Emergency Priority",
-    ),
+    fr: _fr(vi: "MaiYen cảnh báo khẩn cấp", en: "MaiYen Emergency Priority"),
     th: "การแจ้งเตือนฉุกเฉินของ MaiYen",
     ms: "Amaran kecemasan MaiYen",
     lo: "ການເຕືອນສຸກເສີນ MaiYen",
@@ -2642,10 +2633,7 @@ class AppStrings {
     de: 'MaiYen Erinnerung Priorität',
     ru: 'MaiYen напоминание с приоритетом',
     es: "MaiYen recordatorio prioritario",
-    fr: _fr(
-      vi: "MaiYen nhắc nhở ưu tiên cao",
-      en: "MaiYen Reminder Priority",
-    ),
+    fr: _fr(vi: "MaiYen nhắc nhở ưu tiên cao", en: "MaiYen Reminder Priority"),
     th: "การเตือนความจำ ของ MaiYen ลำดับความสำคัญสูง",
     ms: "Peringatan MaiYen keutamaan tinggi",
     lo: "ການເຕືອນຄວາມຈຳ MaiYen ຄວາມສຳຄັນສູງ",
@@ -4026,8 +4014,7 @@ class AppStrings {
       }
     }
 
-    if (type == "share_request_denied" ||
-        type == "join_request_denied") {
+    if (type == "share_request_denied" || type == "join_request_denied") {
       final actorName = _firstNotificationString(item, const [
         "actorName",
         "memberName",
@@ -4053,9 +4040,7 @@ class AppStrings {
     }
 
     if (type == "member_removed") {
-      final actorName = _firstNotificationString(item, const [
-        "actorName",
-      ]);
+      final actorName = _firstNotificationString(item, const ["actorName"]);
       final actor = actorName.isNotEmpty ? actorName : t("Chủ nhà");
       return resolvedHomeName.isNotEmpty
           ? "$actor • ${t("Đã xoá thành viên")}: $resolvedHomeName"
@@ -4063,9 +4048,7 @@ class AppStrings {
     }
 
     if (type == "alarm_pause_cancelled") {
-      final actorName = _firstNotificationString(item, const [
-        "actorName",
-      ]);
+      final actorName = _firstNotificationString(item, const ["actorName"]);
       return actorName.isNotEmpty
           ? "$actorName • ${t("Báo động đã hoạt động trở lại")}"
           : t("Báo động đã hoạt động trở lại");
@@ -4603,8 +4586,7 @@ class AppStrings {
   }
 
   bool _isMembershipRequestAcceptedNotification(String type) {
-    return type == "share_request_accepted" ||
-        type == "join_request_accepted";
+    return type == "share_request_accepted" || type == "join_request_accepted";
   }
 
   bool _isAlarmSettingChangedNotification(String type) {
@@ -5056,6 +5038,8 @@ class AppStrings {
     ...azDynamicStrings,
   };
 
+  bool get isVietnamese => _activeTranslations == null;
+
   String t(String vi) {
     final key = _translationAliases[vi] ?? vi;
     final translations = _activeTranslations;
@@ -5151,13 +5135,15 @@ class AppStrings {
     id: "Saat diaktifkan, jadwal pribadi dan notifikasi alarm otomatis mengikuti jadwal bersama rumah.",
     th: "เมื่อเปิดใช้งาน ตารางส่วนตัวและการแจ้งเตือนสัญญาณเตือนจะซิงค์ตามตารางร่วมของบ้านโดยอัตโนมัติ",
     ms: "Apabila dihidupkan, jadual peribadi dan pemberitahuan penggera akan disegerakkan secara automatik dengan jadual bersama rumah.",
-    fil: "Kapag naka-on, awtomatikong susunod ang personal mong iskedyul at alarm notification sa shared schedule ng bahay.",
+    fil:
+        "Kapag naka-on, awtomatikong susunod ang personal mong iskedyul at alarm notification sa shared schedule ng bahay.",
     km: "នៅពេលបើក កាលវិភាគផ្ទាល់ខ្លួន និងការជូនដំណឹងអាសន្ននឹងធ្វើសមកាលកម្មដោយស្វ័យប្រវត្តិតាមកាលវិភាគរួមរបស់ផ្ទះ។",
     my: "ဖွင့်ထားပါက ကိုယ်ပိုင်အချိန်ဇယားနှင့် အချက်ပေးအသိပေးချက်များသည် အိမ်၏ မျှဝေထားသောအချိန်ဇယားနှင့် အလိုအလျောက် တစ်ပြေးညီဖြစ်မည်။",
     lo: "ເມື່ອເປີດໃຊ້ ຕາຕະລາງສ່ວນຕົວ ແລະ ການແຈ້ງເຕືອນຈະຊິງຕາມຕາຕະລາງຮ່ວມຂອງເຮືອນອັດຕະໂນມັດ.",
     ta: "இதை இயக்கினால், உங்கள் தனிப்பட்ட அட்டவணையும் அலாரம் அறிவிப்புகளும் வீட்டின் பொது அட்டவணையுடன் தானாக ஒத்திசைக்கப்படும்.",
     pt: "Quando ativado, o seu horário pessoal e as notificações de alarme seguem automaticamente o horário compartilhado da casa.",
-    tet: "Bainhira ativa, oráriu pesoál no notifikasaun alarme sei sinkroniza automatikamente ho oráriu komún uma nian.",
+    tet:
+        "Bainhira ativa, oráriu pesoál no notifikasaun alarme sei sinkroniza automatikamente ho oráriu komún uma nian.",
     it: "Quando è attivo, il programma personale e le notifiche di allarme seguono automaticamente il programma condiviso della casa.",
     pl: "Po włączeniu osobisty harmonogram i powiadomienia alarmowe będą automatycznie synchronizowane ze wspólnym harmonogramem domu.",
     nl: "Wanneer dit is ingeschakeld, volgen je persoonlijke schema en alarmmeldingen automatisch het gedeelde huisschema.",
@@ -5179,7 +5165,8 @@ class AppStrings {
     da: "Når den er aktiveret, synkroniseres din personlige tidsplan og alarmnotifikationer automatisk med hjemmets fælles tidsplan.",
     nb: "Når dette er slått på, synkroniseres din personlige tidsplan og alarmvarsler automatisk med hjemmets felles tidsplan.",
     fi: "Kun tämä on käytössä, henkilökohtainen aikataulu ja hälytysilmoitukset synkronoidaan automaattisesti kodin yhteiseen aikatauluun.",
-    isLang: "Þegar þetta er virkt samstillast persónuleg áætlun og viðvaranatilkynningar sjálfkrafa við sameiginlega áætlun heimilisins.",
+    isLang:
+        "Þegar þetta er virkt samstillast persónuleg áætlun og viðvaranatilkynningar sjálfkrafa við sameiginlega áætlun heimilisins.",
     et: "Kui see on sisse lülitatud, sünkroonitakse isiklik ajakava ja häireteavitused automaatselt kodu ühise ajakavaga.",
     lv: "Kad tas ir ieslēgts, personīgais grafiks un trauksmes paziņojumi tiek automātiski sinhronizēti ar mājas kopīgo grafiku.",
     lt: "Įjungus, asmeninis tvarkaraštis ir pavojaus pranešimai automatiškai sinchronizuojami su bendru namų tvarkaraščiu.",
@@ -5188,7 +5175,8 @@ class AppStrings {
     be: "Пасля ўключэння асабісты расклад і апавяшчэнні трывогі аўтаматычна сінхранізуюцца з агульным раскладам дома.",
     lb: "Wann aktivéiert, ginn Äre perséinleche Plang an Alarmnotifikatiounen automatesch mam gemeinsame Plang vum Haus synchroniséiert.",
     ca: "Quan està activat, l’horari personal i les notificacions d’alarma se sincronitzen automàticament amb l’horari compartit de la llar.",
-    cnr: "Kada je uključeno, lični raspored i obavještenja alarma automatski se usklađuju sa zajedničkim rasporedom doma.",
+    cnr:
+        "Kada je uključeno, lični raspored i obavještenja alarma automatski se usklađuju sa zajedničkim rasporedom doma.",
     hy: "Միացնելու դեպքում անձնական ժամանակացույցը և ահազանգի ծանուցումները ավտոմատ կհամաժամացվեն տան ընդհանուր ժամանակացույցի հետ։",
     ka: "ჩართვისას პირადი განრიგი და განგაშის შეტყობინებები ავტომატურად სინქრონდება სახლის საერთო განრიგთან.",
     az: "Aktiv olduqda şəxsi cədvəl və həyəcan bildirişləri evin ümumi cədvəli ilə avtomatik sinxronlaşdırılır.",
@@ -5263,13 +5251,15 @@ class AppStrings {
     id: "Hapus semua jadwal alarm yang dapat Anda kelola? Pengaturan notifikasi, sirene fisik, dan layar penuh tetap disimpan.",
     th: "ลบตารางสัญญาณเตือนทั้งหมดที่คุณจัดการได้หรือไม่ การตั้งค่าการแจ้งเตือน ไซเรนจริง และเต็มหน้าจอจะยังคงอยู่",
     ms: "Padam semua jadual penggera yang boleh anda urus? Tetapan pemberitahuan, siren fizikal dan skrin penuh akan dikekalkan.",
-    fil: "Tanggalin ang lahat ng iskedyul ng alarm na maaari mong pamahalaan? Mananatili ang notification, physical siren, at fullscreen settings.",
+    fil:
+        "Tanggalin ang lahat ng iskedyul ng alarm na maaari mong pamahalaan? Mananatili ang notification, physical siren, at fullscreen settings.",
     km: "លុបកាលវិភាគសំឡេងរោទិ៍ទាំងអស់ដែលអ្នកអាចគ្រប់គ្រងឬ? ការកំណត់ជូនដំណឹង ស៊ីរ៉ែនពិត និងពេញអេក្រង់នឹងត្រូវរក្សាទុក។",
     my: "သင်စီမံနိုင်သော အချက်ပေးအချိန်ဇယားအားလုံးကို ဖျက်မလား။ အသိပေးချက်၊ ရုပ်ပိုင်းဆိုင်ရာไซရင်နှင့် မျက်နှာပြင်အပြည့် ဆက်တင်များကို ထိန်းသိမ်းထားမည်။",
     lo: "ລຶບຕາຕະລາງແຈ້ງເຕືອນທັງໝົດທີ່ທ່ານຈັດການໄດ້ບໍ? ການຕັ້ງຄ່າແຈ້ງເຕືອນ, ໄຊເຣນຈິງ ແລະ ເຕັມຈໍຈະຖືກຮັກສາໄວ້.",
     ta: "நீங்கள் நிர்வகிக்கக்கூடிய அனைத்து அலாரம் அட்டவணைகளையும் நீக்கவா? அறிவிப்பு, உடல் சைரன் மற்றும் முழுத்திரை அமைப்புகள் பாதுகாக்கப்படும்.",
     pt: "Excluir todos os horários de alarme que você pode gerenciar? As configurações de notificação, sirene física e tela inteira serão mantidas.",
-    tet: "Apaga oráriu alarme hotu ne'ebé ita bele jere? Konfigurasaun notifikasaun, sirene físika no tela tomak sei hela.",
+    tet:
+        "Apaga oráriu alarme hotu ne'ebé ita bele jere? Konfigurasaun notifikasaun, sirene físika no tela tomak sei hela.",
     it: "Eliminare tutti i programmi di allarme che puoi gestire? Le impostazioni di notifica, sirena fisica e schermo intero saranno mantenute.",
     pl: "Usunąć wszystkie harmonogramy alarmu, którymi możesz zarządzać? Ustawienia powiadomień, syreny fizycznej i pełnego ekranu zostaną zachowane.",
     nl: "Alle alarmschema’s verwijderen die je kunt beheren? Instellingen voor meldingen, fysieke sirene en volledig scherm blijven behouden.",
@@ -5291,7 +5281,8 @@ class AppStrings {
     da: "Slet alle alarmplaner, du kan administrere? Indstillinger for notifikationer, fysisk sirene og fuld skærm bevares.",
     nb: "Slette alle alarmplaner du kan administrere? Innstillinger for varsler, fysisk sirene og fullskjerm beholdes.",
     fi: "Poistetaanko kaikki hallinnoimasi hälytysaikataulut? Ilmoitus-, fyysisen sireenin ja koko näytön asetukset säilytetään.",
-    isLang: "Eyða öllum viðvörunaráætlunum sem þú getur stjórnað? Stillingar tilkynninga, líkamlegrar sírenu og fullskjás verða varðveittar.",
+    isLang:
+        "Eyða öllum viðvörunaráætlunum sem þú getur stjórnað? Stillingar tilkynninga, líkamlegrar sírenu og fullskjás verða varðveittar.",
     et: "Kas kustutada kõik hallatavad häireajakavad? Teavituse, füüsilise sireeni ja täisekraani seaded säilivad.",
     lv: "Dzēst visus trauksmes grafikus, kurus varat pārvaldīt? Paziņojumu, fiziskās sirēnas un pilnekrāna iestatījumi tiks saglabāti.",
     lt: "Ištrinti visus jūsų valdomus pavojaus tvarkaraščius? Pranešimų, fizinės sirenos ir viso ekrano nustatymai bus išsaugoti.",
@@ -5300,7 +5291,8 @@ class AppStrings {
     be: "Выдаліць усе расклады трывогі, якімі вы можаце кіраваць? Налады апавяшчэнняў, фізічнай сірэны і поўнаэкраннага рэжыму захаваюцца.",
     lb: "All Alarmpläng läschen, déi Dir verwalte kënnt? Astellunge fir Notifikatiounen, physesch Siren a Vollbild bleiwen erhalen.",
     ca: "Vols suprimir tots els horaris d’alarma que pots gestionar? Es conservaran els ajustos de notificació, sirena física i pantalla completa.",
-    cnr: "Izbrisati sve rasporede alarma kojima možete upravljati? Postavke obavještenja, fizičke sirene i cijelog ekrana ostaće sačuvane.",
+    cnr:
+        "Izbrisati sve rasporede alarma kojima možete upravljati? Postavke obavještenja, fizičke sirene i cijelog ekrana ostaće sačuvane.",
     hy: "Ջնջե՞լ ահազանգի բոլոր ժամանակացույցերը, որոնք կարող եք կառավարել։ Ծանուցման, ֆիզիկական շչակի և ամբողջ էկրանի կարգավորումները կպահպանվեն։",
     ka: "წაიშალოს ყველა განგაშის განრიგი, რომლის მართვაც შეგიძლიათ? შეტყობინების, ფიზიკური სირენისა და სრულეკრანიანი რეჟიმის პარამეტრები შენარჩუნდება.",
     az: "İdarə edə bildiyiniz bütün həyəcan cədvəlləri silinsin? Bildiriş, fiziki siren və tam ekran parametrləri saxlanılacaq.",
@@ -5541,7 +5533,6 @@ class AppStrings {
   String get notifications => t("Danh sách thông báo");
   String get notificationSettings => t("Cài đặt thông báo");
 
-
   String get sosAcknowledgeConfirmationTitle => choose(
     vi: "Xác nhận cảnh báo SOS?",
     en: "Acknowledge the SOS alert?",
@@ -5611,13 +5602,15 @@ class AppStrings {
     id: "Konfirmasikan hanya setelah memeriksa situasi. Tindakan ini hanya berlaku untuk akun Anda.",
     th: "ยืนยันหลังจากตรวจสอบสถานการณ์แล้วเท่านั้น การดำเนินการนี้มีผลเฉพาะกับบัญชีของคุณ",
     ms: "Sahkan hanya selepas memeriksa keadaan. Tindakan ini hanya terpakai pada akaun anda.",
-    fil: "Kumpirmahin lamang matapos suriin ang sitwasyon. Nalalapat lamang ang kilos na ito sa iyong account.",
+    fil:
+        "Kumpirmahin lamang matapos suriin ang sitwasyon. Nalalapat lamang ang kilos na ito sa iyong account.",
     km: "បញ្ជាក់តែបន្ទាប់ពីបានពិនិត្យស្ថានការណ៍។ សកម្មភាពនេះអនុវត្តតែលើគណនីរបស់អ្នកប៉ុណ្ណោះ។",
     my: "အခြေအနေကို စစ်ဆေးပြီးမှသာ အတည်ပြုပါ။ ဤလုပ်ဆောင်ချက်သည် သင့်အကောင့်အတွက်သာ သက်ရောက်သည်။",
     lo: "ຢືນຢັນຫຼັງຈາກກວດສະຖານະການແລ້ວເທົ່ານັ້ນ. ການດຳເນີນການນີ້ມີຜົນສະເພາະກັບບັນຊີຂອງທ່ານ.",
     ta: "நிலையைச் சரிபார்த்த பிறகே உறுதிப்படுத்தவும். இந்தச் செயல் உங்கள் கணக்கிற்கு மட்டும் பொருந்தும்.",
     pt: "Confirme apenas depois de verificar a situação. Esta ação aplica-se apenas à sua conta.",
-    tet: "Konfirma deit depois haree situasaun. Asaun ida-ne’e aplika deit ba ita-nia konta.",
+    tet:
+        "Konfirma deit depois haree situasaun. Asaun ida-ne’e aplika deit ba ita-nia konta.",
     it: "Conferma solo dopo aver verificato la situazione. Questa azione si applica solo al tuo account.",
     pl: "Potwierdź dopiero po sprawdzeniu sytuacji. Ta czynność dotyczy tylko Twojego konta.",
     nl: "Bevestig pas nadat je de situatie hebt gecontroleerd. Deze actie geldt alleen voor jouw account.",
@@ -5639,7 +5632,8 @@ class AppStrings {
     da: "Bekræft først, når du har kontrolleret situationen. Handlingen gælder kun for din konto.",
     nb: "Bekreft først etter at du har kontrollert situasjonen. Handlingen gjelder bare kontoen din.",
     fi: "Vahvista vasta tilanteen tarkistamisen jälkeen. Tämä toiminto koskee vain tiliäsi.",
-    isLang: "Staðfestu aðeins eftir að hafa kannað aðstæður. Aðgerðin gildir aðeins fyrir reikninginn þinn.",
+    isLang:
+        "Staðfestu aðeins eftir að hafa kannað aðstæður. Aðgerðin gildir aðeins fyrir reikninginn þinn.",
     et: "Kinnitage alles pärast olukorra kontrollimist. See toiming kehtib ainult teie kontole.",
     lv: "Apstipriniet tikai pēc situācijas pārbaudes. Šī darbība attiecas tikai uz jūsu kontu.",
     lt: "Patvirtinkite tik patikrinę situaciją. Šis veiksmas taikomas tik jūsų paskyrai.",
@@ -5648,7 +5642,8 @@ class AppStrings {
     be: "Пацвярджайце толькі пасля праверкі сітуацыі. Гэта дзеянне прымяняецца толькі да вашага ўліковага запісу.",
     lb: "Bestätegt eréischt nodeems Dir d'Situatioun iwwerpréift hutt. Dës Aktioun gëllt nëmme fir Äre Kont.",
     ca: "Confirmeu només després de comprovar la situació. Aquesta acció només s’aplica al vostre compte.",
-    cnr: "Potvrdite tek nakon provjere situacije. Ova radnja važi samo za vaš nalog.",
+    cnr:
+        "Potvrdite tek nakon provjere situacije. Ova radnja važi samo za vaš nalog.",
     hy: "Հաստատեք միայն իրավիճակը ստուգելուց հետո։ Այս գործողությունը կիրառվում է միայն ձեր հաշվի համար։",
     ka: "დაადასტურეთ მხოლოდ სიტუაციის შემოწმების შემდეგ. ეს მოქმედება მხოლოდ თქვენს ანგარიშზე ვრცელდება.",
     az: "Yalnız vəziyyəti yoxladıqdan sonra təsdiqləyin. Bu əməliyyat yalnız hesabınıza tətbiq olunur.",

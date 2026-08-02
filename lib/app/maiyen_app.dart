@@ -97,6 +97,9 @@ class MaiYenApp extends StatefulWidget {
 
 class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
   StreamSubscription<User?>? _authSessionSubscription;
+  Timer? _presenceRecoveryRetry30s;
+  Timer? _presenceRecoveryRetry2m;
+  String _presenceRecoveryUid = '';
   @override
   void initState() {
     super.initState();
@@ -107,10 +110,13 @@ class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
     _authSessionSubscription = FirebaseAuth.instance.authStateChanges().listen(
       (user) {
         if (user == null) {
+          _stopSignedInPresenceRecovery();
           unawaited(AccountSessionService.deactivateLocal());
           unawaited(SingleDeviceSessionService.stopActiveSessionListener());
           return;
         }
+
+        _scheduleSignedInPresenceRecovery(user.uid);
       },
       onError: (Object error) {
         safeDebugPrint('ACCOUNT_SESSION_AUTH_LISTENER_ERROR: $error');
@@ -120,6 +126,64 @@ class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
     // Chỉ xoá Reminder khi app được mở mới hoàn toàn.
     // Không xoá khi chỉ bật lại màn hình.
     unawaited(NotificationService.stopReminderNotification());
+  }
+
+  void _scheduleSignedInPresenceRecovery(String uid) {
+    final cleanUid = uid.trim();
+
+    if (cleanUid.isEmpty) {
+      return;
+    }
+
+    _stopSignedInPresenceRecovery();
+    _presenceRecoveryUid = cleanUid;
+
+    AutoAwayService.activateForSignedInUser(cleanUid);
+    _runSignedInPresenceRecovery(
+      uid: cleanUid,
+      event: 'auth_state_signed_in_recovery',
+    );
+
+    _presenceRecoveryRetry30s = Timer(const Duration(seconds: 30), () {
+      _runSignedInPresenceRecovery(
+        uid: cleanUid,
+        event: 'auth_state_signed_in_recovery_30s',
+      );
+    });
+
+    _presenceRecoveryRetry2m = Timer(const Duration(minutes: 2), () {
+      _runSignedInPresenceRecovery(
+        uid: cleanUid,
+        event: 'auth_state_signed_in_recovery_2m',
+      );
+    });
+  }
+
+  void _runSignedInPresenceRecovery({
+    required String uid,
+    required String event,
+  }) {
+    if (_presenceRecoveryUid != uid ||
+        FirebaseAuth.instance.currentUser?.uid != uid) {
+      return;
+    }
+
+    unawaited(
+      PlatformAutoAwayTaskService.recoverNow(event: event).catchError((
+        Object error,
+      ) {
+        safeDebugPrint('AUTO_AWAY_SIGNED_IN_RECOVERY_ERROR: $error');
+        return false;
+      }),
+    );
+  }
+
+  void _stopSignedInPresenceRecovery() {
+    _presenceRecoveryRetry30s?.cancel();
+    _presenceRecoveryRetry30s = null;
+    _presenceRecoveryRetry2m?.cancel();
+    _presenceRecoveryRetry2m = null;
+    _presenceRecoveryUid = '';
   }
 
   @override
@@ -194,6 +258,7 @@ class _MaiYenAppState extends State<MaiYenApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _stopSignedInPresenceRecovery();
     unawaited(_authSessionSubscription?.cancel());
     super.dispose();
   }

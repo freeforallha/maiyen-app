@@ -20,13 +20,9 @@ Future<void> _notificationServiceShowPriorityAlarmNotification({
 
   final strings = _strings;
 
-  final title = _notificationServiceLocalizedNotificationTitle(
-    alarmData['title']?.toString() ?? '',
-    strings,
-    strings.priorityAlarmNotificationTitle(),
-  );
-
-  final body = _notificationServiceLocalizedAlarmBodyForData(alarmData, strings);
+  final presentation = buildAlarmNotificationPresentation(alarmData, strings);
+  final title = presentation.title;
+  final body = presentation.body;
 
   final payload = 'priority_alarm::${jsonEncode(alarmData)}';
 
@@ -34,6 +30,7 @@ Future<void> _notificationServiceShowPriorityAlarmNotification({
     title: title,
     body: body,
     strings: strings,
+    data: alarmData,
   );
 
   final iosDetails = IosNotificationConfig.alarmDetails(
@@ -72,10 +69,11 @@ Future<void> _notificationServiceHandlePriorityAlarmOpened(
   await _notificationServiceReconcileActiveAlarmIncidents();
 }
 
-Future<void> _notificationServiceHandleAlarmResolved(Map<String, dynamic> data) async {
+Future<void> _notificationServiceHandleAlarmResolved(
+  Map<String, dynamic> data,
+) async {
   final incidentId = data['incidentId']?.toString().trim() ?? '';
-  final action =
-      data['resolutionAction']?.toString().trim().isNotEmpty == true
+  final action = data['resolutionAction']?.toString().trim().isNotEmpty == true
       ? data['resolutionAction'].toString().trim()
       : data['action']?.toString().trim() ?? 'resolved';
   final incidentStatus =
@@ -93,7 +91,8 @@ Future<void> _notificationServiceHandleAlarmResolved(Map<String, dynamic> data) 
   }
 
   _syncAlarmPresentationFromActiveIncidents();
-  _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+  _notificationServiceLastAlarmItemsJson =
+      _notificationServiceActiveAlarmItems.isEmpty
       ? ''
       : jsonEncode(_notificationServiceActiveAlarmItems);
 
@@ -160,8 +159,7 @@ Future<bool> _notificationServiceReconcileActiveAlarmIncidents() async {
       }
 
       final incident = Map<String, dynamic>.from(rawIncident);
-      final status =
-          incident['status']?.toString().trim().toLowerCase() ?? '';
+      final status = incident['status']?.toString().trim().toLowerCase() ?? '';
       final expireAt =
           int.tryParse(incident['expireAt']?.toString() ?? '') ?? 0;
       final isExpired =
@@ -189,8 +187,7 @@ Future<bool> _notificationServiceReconcileActiveAlarmIncidents() async {
       final previousItemsJson = jsonEncode(
         _notificationServiceActiveAlarmItems
             .where(
-              (item) =>
-                  item['incidentId']?.toString().trim() == incidentId,
+              (item) => item['incidentId']?.toString().trim() == incidentId,
             )
             .toList(),
       );
@@ -214,8 +211,7 @@ Future<bool> _notificationServiceReconcileActiveAlarmIncidents() async {
         'ownerUid': incident['ownerUid']?.toString() ?? '',
         'homeId': incident['homeId']?.toString() ?? '',
         'alarmFlowType': incident['flowType']?.toString() ?? 'security',
-        'eventCategory':
-            incident['eventCategory']?.toString() ?? 'security',
+        'eventCategory': incident['eventCategory']?.toString() ?? 'security',
         'alarmLevel': incident['alarmLevel']?.toString() ?? 'alarm',
         'incidentStatus': 'active',
       });
@@ -227,7 +223,8 @@ Future<bool> _notificationServiceReconcileActiveAlarmIncidents() async {
   }
 
   if (removedAny || contentChanged) {
-    _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+    _notificationServiceLastAlarmItemsJson =
+        _notificationServiceActiveAlarmItems.isEmpty
         ? ''
         : jsonEncode(_notificationServiceActiveAlarmItems);
   }
@@ -245,7 +242,9 @@ Future<bool> _notificationServiceReconcileActiveAlarmIncidents() async {
   return _activeAlarmIncidentContexts.isNotEmpty;
 }
 
-Future<bool> _notificationServiceHandleAlarmNotificationPayload(String payload) async {
+Future<bool> _notificationServiceHandleAlarmNotificationPayload(
+  String payload,
+) async {
   final priorityData = _decodeAlarmPayload(payload, 'priority_alarm');
 
   if (priorityData != null) {
@@ -288,12 +287,9 @@ Future<void> _notificationServiceOpenAlarmFromData(
   _notificationServiceRememberAlarmIncident(alarmData);
 
   final type = alarmData['type']?.toString().trim().toLowerCase() ?? '';
-  final stage =
-      alarmData['alarmStage']?.toString().trim().toLowerCase() ?? '';
+  final stage = alarmData['alarmStage']?.toString().trim().toLowerCase() ?? '';
   final opensFullscreen =
-      type == 'alarm_siren' ||
-      stage == 'siren' ||
-      stage == 'fullscreen_siren';
+      type == 'alarm_siren' || stage == 'siren' || stage == 'fullscreen_siren';
 
   if (opensFullscreen) {
     final firstPresentation = _markAlarmDeliveryPresented(alarmData);
@@ -307,20 +303,20 @@ Future<void> _notificationServiceOpenAlarmFromData(
 
   final strings = _strings;
 
+  final presentation = buildAlarmNotificationPresentation(alarmData, strings);
+
   _notificationServiceOpenAlarmPage(
-    title: _notificationServiceLocalizedNotificationTitle(
-      alarmData['title']?.toString() ?? '',
-      strings,
-      '🚨 ${BrandConfig.appName}',
-    ),
-    body: _notificationServiceLocalizedAlarmBodyForData(alarmData, strings),
+    title: presentation.title,
+    body: presentation.body,
     alarmItemsJson: _alarmItemsJsonFromData(alarmData),
     incidentId: alarmData['incidentId']?.toString() ?? '',
     receiverUid: alarmData['receiverUid']?.toString() ?? '',
     ownerUid: alarmData['ownerUid']?.toString() ?? '',
     homeId: alarmData['homeId']?.toString() ?? '',
     flowType: alarmData['alarmFlowType']?.toString() ?? '',
-    eventCategory: _notificationServiceNormalizedIncidentEventCategory(alarmData),
+    eventCategory: _notificationServiceNormalizedIncidentEventCategory(
+      alarmData,
+    ),
     alarmLevel: _notificationServiceNormalizedIncidentAlarmLevel(alarmData),
   );
 }
@@ -330,7 +326,9 @@ Future<void> _notificationServiceOpenAlarmFromData(
 /// incident đang active của tài khoản để giữ đúng mô hình gom nhiều nhà và
 /// nhiều Alarm giống Android.
 
-Future<void> _notificationServiceOpenIosAlarmFromData(Map<String, dynamic> data) async {
+Future<void> _notificationServiceOpenIosAlarmFromData(
+  Map<String, dynamic> data,
+) async {
   final alarmData = await _notificationServiceValidateIncomingAlarmData(data);
 
   if (alarmData == null) {
@@ -340,8 +338,7 @@ Future<void> _notificationServiceOpenIosAlarmFromData(Map<String, dynamic> data)
 
   await _notificationServiceOpenAlarmFromData(alarmData, validate: false);
   await _hydrateIosActiveAlarmIncidents(
-    preserveIncidentId:
-        alarmData['incidentId']?.toString().trim() ?? '',
+    preserveIncidentId: alarmData['incidentId']?.toString().trim() ?? '',
   );
 }
 
@@ -382,8 +379,7 @@ Future<void> _hydrateIosActiveAlarmIncidents({
       }
 
       final incident = Map<String, dynamic>.from(rawIncident);
-      final status =
-          incident['status']?.toString().trim().toLowerCase() ?? '';
+      final status = incident['status']?.toString().trim().toLowerCase() ?? '';
 
       if (status != 'active') {
         continue;
@@ -448,7 +444,8 @@ Future<void> _hydrateIosActiveAlarmIncidents({
 
     if (mergedAny || staleIncidentIds.isNotEmpty) {
       _syncAlarmPresentationFromActiveIncidents();
-      _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+      _notificationServiceLastAlarmItemsJson =
+          _notificationServiceActiveAlarmItems.isEmpty
           ? ''
           : jsonEncode(_notificationServiceActiveAlarmItems);
       _notificationServiceAlarmRevision.value++;

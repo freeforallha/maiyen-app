@@ -16,6 +16,7 @@ import '../pages/fullscreen_alarm_page.dart';
 import 'platform/android/android_notification_config.dart';
 import 'platform/ios/ios_notification_config.dart';
 import 'notification/notification_incident_normalizer.dart';
+import 'notification/notification_alarm_presentation.dart';
 import 'notification/notification_payload_codec.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 import '../config/maiyen_identifiers.dart';
@@ -33,9 +34,11 @@ final FlutterLocalNotificationsPlugin localNotif =
     FlutterLocalNotificationsPlugin();
 
 class NotificationService {
-  static ValueNotifier<Map<String, String>?> get chatOpenRequest => _notificationServiceChatOpenRequest;
+  static ValueNotifier<Map<String, String>?> get chatOpenRequest =>
+      _notificationServiceChatOpenRequest;
 
-  static ValueNotifier<Map<String, String>?> get hubUpdateOpenRequest => _notificationServiceHubUpdateOpenRequest;
+  static ValueNotifier<Map<String, String>?> get hubUpdateOpenRequest =>
+      _notificationServiceHubUpdateOpenRequest;
 
   static String hubUpdatePayload({
     required String homeId,
@@ -44,11 +47,11 @@ class NotificationService {
     required String releaseId,
   }) {
     return _notificationServiceHubUpdatePayload(
-          homeId: homeId,
-          homeName: homeName,
-          ownerUid: ownerUid,
-          releaseId: releaseId,
-        );
+      homeId: homeId,
+      homeName: homeName,
+      ownerUid: ownerUid,
+      releaseId: releaseId,
+    );
   }
 
   static int hubUpdateNotificationId(String homeId) {
@@ -70,11 +73,11 @@ class NotificationService {
     required String messageId,
   }) {
     return _notificationServiceHomeChatPayload(
-          homeId: homeId,
-          homeName: homeName,
-          ownerUid: ownerUid,
-          messageId: messageId,
-        );
+      homeId: homeId,
+      homeName: homeName,
+      ownerUid: ownerUid,
+      messageId: messageId,
+    );
   }
 
   static int homeChatNotificationId(String homeId) {
@@ -97,19 +100,40 @@ class NotificationService {
     _notificationServiceRequestOpenHomeChat(rawData);
   }
 
-  static const int emergencyNotificationId = _notificationServiceEmergencyNotificationId;
+  static const int emergencyNotificationId =
+      _notificationServiceEmergencyNotificationId;
 
-  static const int alarmNotificationId = _notificationServiceAlarmNotificationId;
+  static const int alarmNotificationId =
+      _notificationServiceAlarmNotificationId;
 
-  static ValueNotifier<int> get alarmResolvedRevision => _notificationServiceAlarmResolvedRevision;
+  static ValueNotifier<int> get alarmResolvedRevision =>
+      _notificationServiceAlarmResolvedRevision;
 
-  static bool get hasActiveAlarmIncidents => _notificationServiceHasActiveAlarmIncidents;
+  static bool get hasActiveAlarmIncidents =>
+      _notificationServiceHasActiveAlarmIncidents;
 
   static Future<Map<String, dynamic>?> validateIncomingAlarmData(
     Map<String, dynamic> rawData, {
     bool updateLocalState = true,
   }) {
-    return _notificationServiceValidateIncomingAlarmData(rawData, updateLocalState: updateLocalState);
+    return _notificationServiceValidateIncomingAlarmData(
+      rawData,
+      updateLocalState: updateLocalState,
+    );
+  }
+
+  static String localizedAlarmTitleForData(
+    Map<String, dynamic> data,
+    AppStrings strings,
+  ) {
+    return _notificationServiceLocalizedAlarmTitleForData(data, strings);
+  }
+
+  static AlarmNotificationPresentation alarmPresentationForData(
+    Map<String, dynamic> data,
+    AppStrings strings,
+  ) {
+    return buildAlarmNotificationPresentation(data, strings);
   }
 
   static String localizedAlarmBodyForData(
@@ -125,10 +149,10 @@ class NotificationService {
     String fallback,
   ) {
     return _notificationServiceLocalizedNotificationTitle(
-          rawTitle,
-          strings,
-          fallback,
-        );
+      rawTitle,
+      strings,
+      fallback,
+    );
   }
 
   static String normalizedIncidentEventCategory(Map<String, dynamic> data) {
@@ -158,7 +182,10 @@ class NotificationService {
     required String action,
     String incidentId = '',
   }) {
-    return _notificationServiceResolveActiveAlarmIncidents(action: action, incidentId: incidentId);
+    return _notificationServiceResolveActiveAlarmIncidents(
+      action: action,
+      incidentId: incidentId,
+    );
   }
 
   static Future<bool> muteActiveHomeSirens({String incidentId = ''}) {
@@ -171,9 +198,7 @@ class NotificationService {
     return _notificationServiceShowPriorityAlarmNotification(data: data);
   }
 
-  static Future<void> handlePriorityAlarmOpened(
-    Map<String, dynamic> data,
-  ) {
+  static Future<void> handlePriorityAlarmOpened(Map<String, dynamic> data) {
     return _notificationServiceHandlePriorityAlarmOpened(data);
   }
 
@@ -229,29 +254,40 @@ class NotificationService {
   }
 
   static String get lastScheduleBody => _notificationServiceLastScheduleBody;
-  static set lastScheduleBody(String value) => _notificationServiceLastScheduleBody = value;
+  static set lastScheduleBody(String value) =>
+      _notificationServiceLastScheduleBody = value;
 
   static String get lastScheduleTitle => _notificationServiceLastScheduleTitle;
-  static set lastScheduleTitle(String value) => _notificationServiceLastScheduleTitle = value;
+  static set lastScheduleTitle(String value) =>
+      _notificationServiceLastScheduleTitle = value;
 
-  static String get lastReminderItemsJson => _notificationServiceLastReminderItemsJson;
-  static set lastReminderItemsJson(String value) => _notificationServiceLastReminderItemsJson = value;
+  static String get lastReminderItemsJson =>
+      _notificationServiceLastReminderItemsJson;
+  static set lastReminderItemsJson(String value) =>
+      _notificationServiceLastReminderItemsJson = value;
 
-  static String get lastAlarmItemsJson => _notificationServiceLastAlarmItemsJson;
-  static set lastAlarmItemsJson(String value) => _notificationServiceLastAlarmItemsJson = value;
+  static String get lastAlarmItemsJson =>
+      _notificationServiceLastAlarmItemsJson;
+  static set lastAlarmItemsJson(String value) =>
+      _notificationServiceLastAlarmItemsJson = value;
 
   static String get lastAlarmBody => _notificationServiceLastAlarmBody;
-  static set lastAlarmBody(String value) => _notificationServiceLastAlarmBody = value;
+  static set lastAlarmBody(String value) =>
+      _notificationServiceLastAlarmBody = value;
 
-  static String get lastAlarmEventCategory => _notificationServiceLastAlarmEventCategory;
-  static set lastAlarmEventCategory(String value) => _notificationServiceLastAlarmEventCategory = value;
+  static String get lastAlarmEventCategory =>
+      _notificationServiceLastAlarmEventCategory;
+  static set lastAlarmEventCategory(String value) =>
+      _notificationServiceLastAlarmEventCategory = value;
 
   static String get lastAlarmLevel => _notificationServiceLastAlarmLevel;
-  static set lastAlarmLevel(String value) => _notificationServiceLastAlarmLevel = value;
+  static set lastAlarmLevel(String value) =>
+      _notificationServiceLastAlarmLevel = value;
 
   static const String reminderRouteName = _notificationServiceReminderRouteName;
 
-  static ValueNotifier<int> get reminderRevision => _notificationServiceReminderRevision;
+  static ValueNotifier<int> get reminderRevision =>
+      _notificationServiceReminderRevision;
 
   static void markReminderPageClosed() {
     _notificationServiceMarkReminderPageClosed();
@@ -264,11 +300,11 @@ class NotificationService {
     String reminderItemsJson = "",
   }) {
     _notificationServiceOpenOrMergeReminderPage(
-          title: title,
-          body: body,
-          isSafe: isSafe,
-          reminderItemsJson: reminderItemsJson,
-        );
+      title: title,
+      body: body,
+      isSafe: isSafe,
+      reminderItemsJson: reminderItemsJson,
+    );
   }
 
   static Future<void> init() {
@@ -277,9 +313,11 @@ class NotificationService {
 
   static const String alarmRouteName = _notificationServiceAlarmRouteName;
 
-  static ValueNotifier<int> get alarmRevision => _notificationServiceAlarmRevision;
+  static ValueNotifier<int> get alarmRevision =>
+      _notificationServiceAlarmRevision;
 
-  static List<Map<String, dynamic>> get activeAlarmItems => _notificationServiceActiveAlarmItems;
+  static List<Map<String, dynamic>> get activeAlarmItems =>
+      _notificationServiceActiveAlarmItems;
 
   static void markAlarmPageOpened({
     String body = '',
@@ -288,11 +326,11 @@ class NotificationService {
     String alarmLevel = '',
   }) {
     _notificationServiceMarkAlarmPageOpened(
-          body: body,
-          alarmItemsJson: alarmItemsJson,
-          eventCategory: eventCategory,
-          alarmLevel: alarmLevel,
-        );
+      body: body,
+      alarmItemsJson: alarmItemsJson,
+      eventCategory: eventCategory,
+      alarmLevel: alarmLevel,
+    );
   }
 
   static void markAlarmPageClosed() {
@@ -312,23 +350,23 @@ class NotificationService {
     String alarmLevel = '',
   }) {
     _notificationServiceOpenAlarmPage(
-          title: title,
-          body: body,
-          alarmItemsJson: alarmItemsJson,
-          incidentId: incidentId,
-          receiverUid: receiverUid,
-          ownerUid: ownerUid,
-          homeId: homeId,
-          flowType: flowType,
-          eventCategory: eventCategory,
-          alarmLevel: alarmLevel,
-        );
+      title: title,
+      body: body,
+      alarmItemsJson: alarmItemsJson,
+      incidentId: incidentId,
+      receiverUid: receiverUid,
+      ownerUid: ownerUid,
+      homeId: homeId,
+      flowType: flowType,
+      eventCategory: eventCategory,
+      alarmLevel: alarmLevel,
+    );
   }
 
   static void clearActiveAlarms({bool clearIncidentContexts = true}) {
     _notificationServiceClearActiveAlarms(
-          clearIncidentContexts: clearIncidentContexts,
-        );
+      clearIncidentContexts: clearIncidentContexts,
+    );
   }
 
   static Future<void> showSafetyReminder({
@@ -339,12 +377,11 @@ class NotificationService {
     bool forceShow = false,
   }) {
     return _notificationServiceShowSafetyReminder(
-          isSafe: isSafe,
-          reason: reason,
-          reminderItemsJson: reminderItemsJson,
-          title: title,
-          forceShow: forceShow,
-        );
+      isSafe: isSafe,
+      reason: reason,
+      reminderItemsJson: reminderItemsJson,
+      title: title,
+      forceShow: forceShow,
+    );
   }
-
 }

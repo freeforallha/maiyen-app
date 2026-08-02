@@ -33,12 +33,11 @@ Future<void> _initInternal() async {
   // [iOS] Tắt hiển thị APNs tự động khi app đang foreground.
   // onMessage bên dưới sẽ tạo đúng một local notification đã bản địa hoá.
   // Android không bị ảnh hưởng bởi tuỳ chọn này.
-  await FirebaseMessaging.instance
-      .setForegroundNotificationPresentationOptions(
-        alert: false,
-        badge: false,
-        sound: false,
-      );
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: false,
+    badge: false,
+    sound: false,
+  );
 
   await localNotif.initialize(
     const InitializationSettings(
@@ -72,9 +71,14 @@ Future<void> _initInternal() async {
             : '';
         final alarmData = {'body': rawBody, 'alarmItemsJson': alarmItems};
 
+        final presentation = buildAlarmNotificationPresentation(
+          alarmData,
+          strings,
+        );
+
         _notificationServiceOpenAlarmPage(
-          title: '🚨 ${BrandConfig.appName}',
-          body: _notificationServiceLocalizedAlarmBodyForData(alarmData, strings),
+          title: presentation.title,
+          body: presentation.body,
           alarmItemsJson: alarmItems,
         );
 
@@ -88,9 +92,14 @@ Future<void> _initInternal() async {
           'alarmItemsJson': _notificationServiceLastAlarmItemsJson,
         };
 
+        final presentation = buildAlarmNotificationPresentation(
+          alarmData,
+          strings,
+        );
+
         _notificationServiceOpenAlarmPage(
-          title: '🚨 ${BrandConfig.appName}',
-          body: _notificationServiceLocalizedAlarmBodyForData(alarmData, strings),
+          title: presentation.title,
+          body: presentation.body,
           alarmItemsJson: _notificationServiceLastAlarmItemsJson,
         );
 
@@ -119,7 +128,9 @@ Future<void> _initInternal() async {
 
     final handledAlarm = handledHubUpdate || handledChat
         ? false
-        : await _notificationServiceHandleAlarmNotificationPayload(launchPayload);
+        : await _notificationServiceHandleAlarmNotificationPayload(
+            launchPayload,
+          );
 
     if (!handledHubUpdate &&
         !handledChat &&

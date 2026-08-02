@@ -15,8 +15,7 @@ import 'android_auto_away_foreground_task_service.dart';
 import 'android_notification_config.dart';
 import '../../../config/maiyen_identifiers.dart';
 
-const String _languageStorageKey =
-    MaiYenIdentifiers.languageStorageKey;
+const String _languageStorageKey = MaiYenIdentifiers.languageStorageKey;
 const Set<String> _supportedLanguageCodes = {
   'vi',
   'en',
@@ -281,11 +280,10 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (type == 'emergency_notification' ||
       type == 'alarm_detected' ||
       type == 'alarm') {
-    final validatedData =
-        await NotificationService.validateIncomingAlarmData(
-          message.data,
-          updateLocalState: false,
-        );
+    final validatedData = await NotificationService.validateIncomingAlarmData(
+      message.data,
+      updateLocalState: false,
+    );
 
     if (validatedData == null) {
       // Bỏ qua payload cũ. Không hủy notification khác vì tài khoản có thể
@@ -308,16 +306,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     // trong background isolate. Việc chờ network tại đây có thể khiến Android
     // kết thúc handler trước khi local notification có fullScreenIntent được tạo.
     // Khi Activity mở, NotificationService vẫn xác minh incident với Firebase.
-    await _showBackgroundFullscreenAlarm(
-      alarmData,
-      message.notification,
-    );
+    await _showBackgroundFullscreenAlarm(alarmData, message.notification);
   }
 }
 
-bool _shouldPresentFullscreenAlarmImmediately(
-  Map<String, dynamic> data,
-) {
+bool _shouldPresentFullscreenAlarmImmediately(Map<String, dynamic> data) {
   final status = data['incidentStatus']?.toString().trim().toLowerCase() ?? '';
 
   if (status.isNotEmpty && status != 'active') {
@@ -337,13 +330,12 @@ bool _shouldPresentFullscreenAlarmImmediately(
 
 Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {
   final strings = await _backgroundStrings();
-  final title = NotificationService.localizedNotificationTitle(
-    data['title']?.toString() ?? '',
+  final presentation = NotificationService.alarmPresentationForData(
+    data,
     strings,
-    strings.priorityAlarmNotificationTitle(),
   );
-
-  final body = NotificationService.localizedAlarmBodyForData(data, strings);
+  final title = presentation.title;
+  final body = presentation.body;
 
   final payload = 'priority_alarm::${jsonEncode(data)}';
 
@@ -358,6 +350,7 @@ Future<void> _showBackgroundPriorityAlarm(Map<String, dynamic> data) async {
         title: title,
         body: body,
         strings: strings,
+        data: data,
       ),
     ),
     payload: payload,
@@ -369,13 +362,6 @@ Future<void> _showBackgroundFullscreenAlarm(
   RemoteNotification? notification,
 ) async {
   final strings = await _backgroundStrings();
-  final title = NotificationService.localizedNotificationTitle(
-    data['title']?.toString().trim().isNotEmpty == true
-        ? data['title'].toString()
-        : notification?.title?.toString() ?? '',
-    strings,
-    strings.priorityAlarmNotificationTitle(),
-  );
   final bodyData = Map<String, dynamic>.from(data);
 
   if (bodyData['body']?.toString().trim().isNotEmpty != true &&
@@ -383,7 +369,12 @@ Future<void> _showBackgroundFullscreenAlarm(
     bodyData['body'] = notification!.body!.trim();
   }
 
-  final body = NotificationService.localizedAlarmBodyForData(bodyData, strings);
+  final presentation = NotificationService.alarmPresentationForData(
+    bodyData,
+    strings,
+  );
+  final title = presentation.title;
+  final body = presentation.body;
 
   final payload = 'alarm_siren::${jsonEncode(data)}';
 

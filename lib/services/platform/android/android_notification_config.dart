@@ -18,18 +18,20 @@ class AndroidNotificationConfig {
   static const RawResourceAndroidNotificationSound _alarmSirenSound =
       RawResourceAndroidNotificationSound('alarm_siren');
 
-  static const alarmChannelId =
-      MaiYenIdentifiers.androidAlarmChannelId;
+  static const alarmChannelId = MaiYenIdentifiers.androidAlarmChannelId;
   static const alarmFullscreenChannelId =
       MaiYenIdentifiers.androidAlarmFullscreenChannelId;
   static const emergencyPriorityChannelId =
       MaiYenIdentifiers.androidEmergencyPriorityChannelId;
+  static const securityPriorityChannelId =
+      MaiYenIdentifiers.androidSecurityPriorityChannelId;
+  static const alarmRepeatChannelId =
+      MaiYenIdentifiers.androidAlarmRepeatChannelId;
   static const scheduleFullscreenChannelId =
       MaiYenIdentifiers.androidScheduleFullscreenChannelId;
   static const reminderPriorityChannelId =
       MaiYenIdentifiers.androidReminderPriorityChannelId;
-  static const chatChannelId =
-      MaiYenIdentifiers.androidChatChannelId;
+  static const chatChannelId = MaiYenIdentifiers.androidChatChannelId;
   static const sensorNotificationChannelId =
       MaiYenIdentifiers.androidSensorNotificationChannelId;
   static const hubUpdateChannelId = 'maiyen_hub_updates_v1';
@@ -99,6 +101,27 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    final securityPriorityChannel = AndroidNotificationChannel(
+      securityPriorityChannelId,
+      strings.t('BÁO ĐỘNG'),
+      description: strings.t('An ninh ra/vào'),
+      importance: Importance.max,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    final alarmRepeatChannel = AndroidNotificationChannel(
+      alarmRepeatChannelId,
+      strings.isVietnamese
+          ? 'Nhắc nhở lại báo động'
+          : strings.t('Lặp lại cảnh báo'),
+      description: strings.t('Sự cố vẫn đang được theo dõi.'),
+      importance: Importance.max,
+      playSound: true,
+      enableVibration: true,
+      vibrationPattern: Int64List.fromList([0, 250, 180, 250, 500, 250]),
+    );
+
     final scheduleFullscreenChannel = AndroidNotificationChannel(
       scheduleFullscreenChannelId,
       strings.androidScheduleFullscreenChannelName(),
@@ -148,6 +171,8 @@ class AndroidNotificationConfig {
     await androidPlugin?.createNotificationChannel(alarmChannel);
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
+    await androidPlugin?.createNotificationChannel(securityPriorityChannel);
+    await androidPlugin?.createNotificationChannel(alarmRepeatChannel);
     await androidPlugin?.createNotificationChannel(scheduleFullscreenChannel);
     await androidPlugin?.createNotificationChannel(reminderChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
@@ -163,6 +188,15 @@ class AndroidNotificationConfig {
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
+
+    final alarmChannel = AndroidNotificationChannel(
+      alarmChannelId,
+      strings.alarmNotification,
+      description: strings.androidAlarmChannelDescription(),
+      importance: Importance.high,
+      playSound: false,
+      enableVibration: true,
+    );
 
     final alarmFullscreenChannel = AndroidNotificationChannel(
       alarmFullscreenChannelId,
@@ -182,6 +216,27 @@ class AndroidNotificationConfig {
       importance: Importance.max,
       playSound: true,
       enableVibration: true,
+    );
+
+    final securityPriorityChannel = AndroidNotificationChannel(
+      securityPriorityChannelId,
+      strings.t('BÁO ĐỘNG'),
+      description: strings.t('An ninh ra/vào'),
+      importance: Importance.max,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    final alarmRepeatChannel = AndroidNotificationChannel(
+      alarmRepeatChannelId,
+      strings.isVietnamese
+          ? 'Nhắc nhở lại báo động'
+          : strings.t('Lặp lại cảnh báo'),
+      description: strings.t('Sự cố vẫn đang được theo dõi.'),
+      importance: Importance.max,
+      playSound: true,
+      enableVibration: true,
+      vibrationPattern: Int64List.fromList([0, 250, 180, 250, 500, 250]),
     );
 
     final reminderPriorityChannel = AndroidNotificationChannel(
@@ -222,8 +277,11 @@ class AndroidNotificationConfig {
       enableVibration: true,
     );
 
+    await androidPlugin?.createNotificationChannel(alarmChannel);
     await androidPlugin?.createNotificationChannel(alarmFullscreenChannel);
     await androidPlugin?.createNotificationChannel(emergencyPriorityChannel);
+    await androidPlugin?.createNotificationChannel(securityPriorityChannel);
+    await androidPlugin?.createNotificationChannel(alarmRepeatChannel);
     await androidPlugin?.createNotificationChannel(reminderPriorityChannel);
     await androidPlugin?.createNotificationChannel(chatChannel);
     await androidPlugin?.createNotificationChannel(sensorNotificationChannel);
@@ -259,20 +317,70 @@ class AndroidNotificationConfig {
     required String title,
     required String body,
     required AppStrings strings,
+    Map<String, dynamic> data = const <String, dynamic>{},
   }) {
+    final presentationStage =
+        data['alarmNotificationStage']?.toString().trim().toLowerCase() ?? '';
+    final alarmStage =
+        data['alarmStage']?.toString().trim().toLowerCase() ?? '';
+    final flowType =
+        data['alarmFlowType']?.toString().trim().toLowerCase() ?? '';
+    final eventCategory =
+        data['eventCategory']?.toString().trim().toLowerCase() ?? '';
+    final alarmLevel =
+        data['alarmLevel']?.toString().trim().toLowerCase() ?? '';
+    final isRepeat = presentationStage == 'repeat';
+    final isDetected =
+        presentationStage == 'detected' || alarmStage == 'detected';
+    final isLegacyEmergencyDefault = data.isEmpty;
+    final isEmergency =
+        isLegacyEmergencyDefault ||
+        flowType == 'emergency' ||
+        eventCategory == 'emergency' ||
+        alarmLevel == 'emergency';
+
+    final channelId = isRepeat
+        ? alarmRepeatChannelId
+        : isDetected
+        ? alarmChannelId
+        : isEmergency
+        ? emergencyPriorityChannelId
+        : securityPriorityChannelId;
+    final channelName = isRepeat
+        ? (strings.isVietnamese
+              ? 'Nhắc nhở lại báo động'
+              : strings.t('Lặp lại cảnh báo'))
+        : isDetected
+        ? strings.alarmNotification
+        : isEmergency
+        ? strings.androidEmergencyPriorityChannelName()
+        : strings.t('BÁO ĐỘNG');
+    final channelDescription = isRepeat
+        ? strings.t('Sự cố vẫn đang được theo dõi.')
+        : isDetected
+        ? strings.androidAlarmChannelDescription()
+        : isEmergency
+        ? strings.androidEmergencyPriorityChannelDescription()
+        : strings.t('An ninh ra/vào');
+
     return AndroidNotificationDetails(
-      emergencyPriorityChannelId,
-      strings.androidEmergencyPriorityChannelName(),
-      channelDescription: strings.androidEmergencyPriorityChannelDescription(),
+      channelId,
+      channelName,
+      channelDescription: channelDescription,
       visibility: NotificationVisibility.public,
-      importance: Importance.max,
-      priority: Priority.max,
-      category: AndroidNotificationCategory.alarm,
+      importance: isDetected ? Importance.high : Importance.max,
+      priority: isDetected ? Priority.high : Priority.max,
+      category: isRepeat
+          ? AndroidNotificationCategory.reminder
+          : AndroidNotificationCategory.alarm,
       autoCancel: false,
-      ongoing: true,
+      ongoing: !isDetected,
       fullScreenIntent: false,
-      playSound: true,
+      playSound: !isDetected,
       enableVibration: true,
+      vibrationPattern: isRepeat
+          ? Int64List.fromList([0, 250, 180, 250, 500, 250])
+          : null,
       onlyAlertOnce: false,
       styleInformation: BigTextStyleInformation(
         body,
@@ -301,9 +409,9 @@ class AndroidNotificationConfig {
       playSound: true,
       sound: _alarmSirenSound,
       audioAttributesUsage: AudioAttributesUsage.alarm,
-      additionalFlags: Int32List.fromList(
-        const <int>[_notificationFlagInsistent],
-      ),
+      additionalFlags: Int32List.fromList(const <int>[
+        _notificationFlagInsistent,
+      ]),
       enableVibration: true,
       onlyAlertOnce: false,
       styleInformation: BigTextStyleInformation(

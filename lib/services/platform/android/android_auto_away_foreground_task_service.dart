@@ -161,11 +161,12 @@ class AndroidAutoAwayForegroundTaskService {
     }
 
     if (await FlutterForegroundTask.isRunningService) {
-      if (configChanged) {
-        FlutterForegroundTask.sendDataToTask(const <String, dynamic>{
-          'action': 'refresh_now',
-        });
-      }
+      // Luôn yêu cầu heartbeat ngay khi App vừa đồng bộ lại cấu hình sau
+      // đăng nhập/resume. Không chỉ dựa vào việc JSON cấu hình có thay đổi,
+      // vì service có thể còn sống nhưng handler vị trí đã bỏ lỡ callback.
+      FlutterForegroundTask.sendDataToTask(const <String, dynamic>{
+        'action': 'refresh_now',
+      });
 
       return;
     }
@@ -179,9 +180,7 @@ class AndroidAutoAwayForegroundTaskService {
   /// background isolate. It both repairs a stopped foreground service and runs
   /// one immediate presence confirmation, so stale members do not have to wait
   /// for the next five-minute service tick.
-  static Future<bool> recoverFromStoredConfig({
-    required String event,
-  }) {
+  static Future<bool> recoverFromStoredConfig({required String event}) {
     if (!_isAndroid) {
       return Future<bool>.value(false);
     }
@@ -382,10 +381,7 @@ class AndroidAutoAwayForegroundTaskService {
 }
 
 class _StoredAutoAwayTaskConfig {
-  const _StoredAutoAwayTaskConfig({
-    required this.uid,
-    required this.homes,
-  });
+  const _StoredAutoAwayTaskConfig({required this.uid, required this.homes});
 
   final String uid;
   final Map<String, dynamic> homes;
@@ -444,7 +440,8 @@ class _StoredAutoAwayHeartbeatRunner {
         sessionId: sessionIdentity.sessionId,
       );
 
-      final locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+      final locationServiceEnabled =
+          await Geolocator.isLocationServiceEnabled();
       final permission = await Geolocator.checkPermission();
 
       if (!locationServiceEnabled || permission != LocationPermission.always) {
@@ -518,9 +515,7 @@ class _MaiYenAutoAwayTaskHandler extends TaskHandler {
   @override
   void onRepeatEvent(DateTime timestamp) {
     unawaited(
-      _StoredAutoAwayHeartbeatRunner.run(
-        event: 'foreground_task_heartbeat',
-      ),
+      _StoredAutoAwayHeartbeatRunner.run(event: 'foreground_task_heartbeat'),
     );
   }
 

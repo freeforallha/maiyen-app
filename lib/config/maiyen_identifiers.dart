@@ -62,6 +62,9 @@ class MaiYenIdentifiers {
       'maiyen_alarm_fullscreen_v2';
   static const String androidEmergencyPriorityChannelId =
       'maiyen_emergency_priority_v1';
+  static const String androidSecurityPriorityChannelId =
+      'maiyen_security_priority_v1';
+  static const String androidAlarmRepeatChannelId = 'maiyen_alarm_repeat_v1';
   static const String androidScheduleFullscreenChannelId =
       'maiyen_schedule_fullscreen_v1';
   static const String androidReminderPriorityChannelId =
@@ -81,10 +84,8 @@ class MaiYenIdentifiers {
   // iOS notification categories và thread identifiers.
   static const String iosCriticalAlertsDartDefine =
       'MAIYEN_IOS_CRITICAL_ALERTS';
-  static const String iosSecurityAlarmCategoryId =
-      'MAIYEN_SECURITY_ALARM';
-  static const String iosEmergencyAlarmCategoryId =
-      'MAIYEN_EMERGENCY_ALARM';
+  static const String iosSecurityAlarmCategoryId = 'MAIYEN_SECURITY_ALARM';
+  static const String iosEmergencyAlarmCategoryId = 'MAIYEN_EMERGENCY_ALARM';
   static const String iosReminderCategoryId = 'MAIYEN_REMINDER';
   static const String iosSensorCategoryId = 'MAIYEN_SENSOR';
   static const String iosChatCategoryId = 'MAIYEN_CHAT';

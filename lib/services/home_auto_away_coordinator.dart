@@ -99,15 +99,16 @@ class HomeAutoAwayCoordinator {
           now.difference(lastConfirmAt) >= _androidForegroundConfirmInterval;
 
       if (hasEnabledHome && canConfirm) {
-        _lastAndroidForegroundConfirmAt = now;
-
         try {
           await AutoAwayService.refreshPresenceForHomes(
             uid: uid,
             homes: homes,
             event: 'android_foreground_confirm',
           );
+          _lastAndroidForegroundConfirmAt = DateTime.now();
         } catch (error) {
+          // Không khóa cửa sổ retry khi lần xác nhận đầu tiên sau đăng nhập lỗi.
+          // Auth/session hoặc Firebase có thể chưa sẵn sàng trong frame đầu.
           safeDebugPrint('AUTO_AWAY_ANDROID_FOREGROUND_CONFIRM_ERROR: $error');
         }
       }

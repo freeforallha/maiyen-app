@@ -4,10 +4,10 @@ const int _notificationServiceEmergencyNotificationId = 999997;
 
 const int _notificationServiceAlarmNotificationId = 999999;
 
-final Map<String, Map<String, String>> _activeAlarmIncidentContexts =
-    {};
+final Map<String, Map<String, String>> _activeAlarmIncidentContexts = {};
 
-final ValueNotifier<int> _notificationServiceAlarmResolvedRevision = ValueNotifier<int>(0);
+final ValueNotifier<int> _notificationServiceAlarmResolvedRevision =
+    ValueNotifier<int>(0);
 
 Timer? _pendingAlarmOpenTimer;
 
@@ -29,10 +29,7 @@ const int _alarmDeliveryDedupeMaxEntries = 300;
 bool get _notificationServiceHasActiveAlarmIncidents =>
     _activeAlarmIncidentContexts.isNotEmpty;
 
-Map<String, dynamic>? _decodeAlarmPayload(
-  String payload,
-  String prefix,
-) {
+Map<String, dynamic>? _decodeAlarmPayload(String payload, String prefix) {
   return NotificationPayloadCodec.decodePayload(prefix, payload);
 }
 
@@ -43,18 +40,15 @@ String _alarmDeliveryKey(Map<String, dynamic> data) {
     return direct;
   }
 
-  final itemKeys = _alarmItemsFromData(data)
-      .map((item) {
-        return [
-          item['incidentId'] ?? data['incidentId'] ?? '',
-          item['homeId'] ?? data['homeId'] ?? '',
-          item['deviceId'] ?? '',
-          item['type'] ?? '',
-          item['reason'] ?? '',
-        ].join('|');
-      })
-      .toList()
-    ..sort();
+  final itemKeys = _alarmItemsFromData(data).map((item) {
+    return [
+      item['incidentId'] ?? data['incidentId'] ?? '',
+      item['homeId'] ?? data['homeId'] ?? '',
+      item['deviceId'] ?? '',
+      item['type'] ?? '',
+      item['reason'] ?? '',
+    ].join('|');
+  }).toList()..sort();
 
   return [
     data['receiverUid'] ?? '',
@@ -118,7 +112,8 @@ bool _dropAlarmIncidentLocally(String incidentId) {
 
   if (removedContext || removedItems) {
     _syncAlarmPresentationFromActiveIncidents();
-    _notificationServiceLastAlarmItemsJson = _notificationServiceActiveAlarmItems.isEmpty
+    _notificationServiceLastAlarmItemsJson =
+        _notificationServiceActiveAlarmItems.isEmpty
         ? ''
         : jsonEncode(_notificationServiceActiveAlarmItems);
   }
@@ -127,8 +122,7 @@ bool _dropAlarmIncidentLocally(String incidentId) {
 }
 
 Future<String> _restoredAlarmUserUid() async {
-  final immediateUid =
-      FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
+  final immediateUid = FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
 
   if (immediateUid.isNotEmpty) {
     return immediateUid;
@@ -138,10 +132,7 @@ Future<String> _restoredAlarmUserUid() async {
     final restoredUser = await FirebaseAuth.instance
         .authStateChanges()
         .firstWhere((user) => user != null)
-        .timeout(
-          const Duration(seconds: 2),
-          onTimeout: () => null,
-        );
+        .timeout(const Duration(seconds: 2), onTimeout: () => null);
 
     return restoredUser?.uid.trim() ?? '';
   } catch (_) {
@@ -149,9 +140,7 @@ Future<String> _restoredAlarmUserUid() async {
   }
 }
 
-bool _isUnverifiedAlarmPayloadStale(
-  Map<String, dynamic> data,
-) {
+bool _isUnverifiedAlarmPayloadStale(Map<String, dynamic> data) {
   final sentAt = int.tryParse(data['sentAt']?.toString() ?? '') ?? 0;
 
   if (sentAt <= 0) {
@@ -211,14 +200,11 @@ Future<Map<String, dynamic>?> _notificationServiceValidateIncomingAlarmData(
   }
 
   final currentUid = await _restoredAlarmUserUid();
-  final payloadReceiverUid =
-      data['receiverUid']?.toString().trim() ?? '';
+  final payloadReceiverUid = data['receiverUid']?.toString().trim() ?? '';
 
-  if (
-    currentUid.isNotEmpty &&
-    payloadReceiverUid.isNotEmpty &&
-    payloadReceiverUid != currentUid
-  ) {
+  if (currentUid.isNotEmpty &&
+      payloadReceiverUid.isNotEmpty &&
+      payloadReceiverUid != currentUid) {
     if (updateLocalState && incidentId.isNotEmpty) {
       _dropAlarmIncidentLocally(incidentId);
     }
@@ -262,8 +248,7 @@ Future<Map<String, dynamic>?> _notificationServiceValidateIncomingAlarmData(
       }
 
       final incident = Map<String, dynamic>.from(rawIncident);
-      final status =
-          incident['status']?.toString().trim().toLowerCase() ?? '';
+      final status = incident['status']?.toString().trim().toLowerCase() ?? '';
       final expireAt =
           int.tryParse(incident['expireAt']?.toString() ?? '') ?? 0;
       final isExpired =
@@ -274,8 +259,7 @@ Future<Map<String, dynamic>?> _notificationServiceValidateIncomingAlarmData(
           ) ??
           0;
 
-      final incomingType =
-          data['type']?.toString().trim().toLowerCase() ?? '';
+      final incomingType = data['type']?.toString().trim().toLowerCase() ?? '';
       final incomingStage =
           data['alarmStage']?.toString().trim().toLowerCase() ?? '';
       final requestsFullscreen =
@@ -354,9 +338,7 @@ Future<Map<String, dynamic>?> _notificationServiceValidateIncomingAlarmData(
       freshData['alarmLevel'] =
           incident['alarmLevel']?.toString() ??
           freshData['alarmLevel']?.toString() ??
-          (freshData['alarmFlowType'] == 'emergency'
-              ? 'emergency'
-              : 'alarm');
+          (freshData['alarmFlowType'] == 'emergency' ? 'emergency' : 'alarm');
       freshData['alarmStage'] =
           incident['stage']?.toString() ??
           freshData['alarmStage']?.toString() ??
@@ -417,9 +399,7 @@ List<Map<String, dynamic>> _alarmItemsFromValue(dynamic value) {
   return const [];
 }
 
-List<Map<String, dynamic>> _alarmItemsFromData(
-  Map<String, dynamic> data,
-) {
+List<Map<String, dynamic>> _alarmItemsFromData(Map<String, dynamic> data) {
   final directItems = _alarmItemsFromValue(data['alarmItems']);
 
   if (directItems.isNotEmpty) {
@@ -463,8 +443,7 @@ List<Map<String, dynamic>> _alarmItemsFromData(
 String _alarmConditionKey(Map<String, dynamic> item) {
   final homeId = item['homeId']?.toString().trim() ?? '';
   final deviceId = item['deviceId']?.toString().trim() ?? '';
-  final deviceName =
-      item['deviceName']?.toString().trim().isNotEmpty == true
+  final deviceName = item['deviceName']?.toString().trim().isNotEmpty == true
       ? item['deviceName'].toString().trim()
       : item['name']?.toString().trim() ?? '';
   final type = item['type']?.toString().trim() ?? '';
@@ -501,6 +480,13 @@ String _alarmItemsJsonFromData(Map<String, dynamic> data) {
   return items.isEmpty ? '' : jsonEncode(items);
 }
 
+String _notificationServiceLocalizedAlarmTitleForData(
+  Map<String, dynamic> data,
+  AppStrings strings,
+) {
+  return buildAlarmNotificationPresentation(data, strings).title;
+}
+
 String _notificationServiceLocalizedAlarmBodyForData(
   Map<String, dynamic> data,
   AppStrings strings,
@@ -509,8 +495,7 @@ String _notificationServiceLocalizedAlarmBodyForData(
   final lines = <String>[];
 
   for (final item in items) {
-    final deviceName =
-        item['deviceName']?.toString().trim().isNotEmpty == true
+    final deviceName = item['deviceName']?.toString().trim().isNotEmpty == true
         ? item['deviceName'].toString().trim()
         : item['name']?.toString().trim() ?? '';
     final reason = item['reason']?.toString().trim() ?? '';
@@ -580,11 +565,15 @@ String _notificationServiceLocalizedNotificationTitle(
   return strings.t(cleanTitle);
 }
 
-String _notificationServiceNormalizedIncidentEventCategory(Map<String, dynamic> data) {
+String _notificationServiceNormalizedIncidentEventCategory(
+  Map<String, dynamic> data,
+) {
   return NotificationIncidentNormalizer.eventCategory(data);
 }
 
-String _notificationServiceNormalizedIncidentAlarmLevel(Map<String, dynamic> data) {
+String _notificationServiceNormalizedIncidentAlarmLevel(
+  Map<String, dynamic> data,
+) {
   return NotificationIncidentNormalizer.alarmLevel(data);
 }
 

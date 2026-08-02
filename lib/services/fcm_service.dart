@@ -192,10 +192,7 @@ class FCMService {
     }
 
     if (token != null) {
-      await _saveTokenWhenSessionReady(
-        uid: cleanUid,
-        token: token,
-      );
+      await _saveTokenWhenSessionReady(uid: cleanUid, token: token);
     }
 
     if (_activeUid != cleanUid) {
@@ -215,10 +212,7 @@ class FCMService {
         }
 
         try {
-          await _saveTokenWhenSessionReady(
-            uid: targetUid,
-            token: newToken,
-          );
+          await _saveTokenWhenSessionReady(uid: targetUid, token: newToken);
         } catch (error) {
           safeDebugPrint('PUSH_REGISTRATION_REFRESH_SAVE_ERROR: $error');
         }
@@ -294,7 +288,8 @@ class FCMService {
         return;
       }
 
-      if (type == 'sensor_notification') {
+      if (type == 'sensor_notification' ||
+          type == 'home_unprotected_daily_warning') {
         await NotificationService.showSensorNotification(data: message.data);
         return;
       }
