@@ -49,6 +49,38 @@ bool isSecurityAlarmPolicyDevice(String deviceType) {
   return _securityAlarmDeviceTypes.contains(deviceType.trim().toLowerCase());
 }
 
+Future<String> resolveAlarmHomeOwnerUid({
+  required String suppliedOwnerUid,
+  required String currentUid,
+  required String homeId,
+}) async {
+  final supplied = suppliedOwnerUid.trim();
+  final current = currentUid.trim();
+  final normalizedHomeId = homeId.trim();
+
+  if (current.isNotEmpty && normalizedHomeId.isNotEmpty) {
+    try {
+      final snapshot = await FirebaseDatabase.instance
+          .ref(
+            'accounts/$current/sharedHomes/$normalizedHomeId/ownerUid',
+          )
+          .get();
+      final sharedOwnerUid = snapshot.value?.toString().trim() ?? '';
+      if (sharedOwnerUid.isNotEmpty) {
+        return sharedOwnerUid;
+      }
+    } catch (_) {
+      // The caller may still have a valid owner UID from the loaded home.
+    }
+  }
+
+  if (supplied.isNotEmpty) {
+    return supplied;
+  }
+
+  return current;
+}
+
 class DeviceAlarmPolicySettings {
   final bool enabled;
   final bool notificationEnabled;
@@ -419,6 +451,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   bool _saving = false;
   bool _dirty = false;
   bool _saveAgain = false;
+  late String _resolvedOwnerUid;
 
   String get _currentUid =>
       FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
@@ -429,6 +462,9 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   @override
   void initState() {
     super.initState();
+    _resolvedOwnerUid = widget.ownerUid.trim().isNotEmpty
+        ? widget.ownerUid.trim()
+        : _currentUid;
     final initialPolicy = DeviceAlarmPolicySettings.fromDevice(
       device: widget.initialDevice,
       deviceType: widget.deviceType,
@@ -477,19 +513,37 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
 
   Future<void> _load() async {
     try {
-      final results = await Future.wait<DataSnapshot>([
-        FirebaseDatabase.instance
-            .ref(
-              'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/${widget.deviceId}',
-            )
-            .get(),
-        FirebaseDatabase.instance
-            .ref('accounts/$_currentUid/customRules/${widget.homeId}')
-            .get(),
-      ]);
+      final resolvedOwnerUid = await resolveAlarmHomeOwnerUid(
+        suppliedOwnerUid: widget.ownerUid,
+        currentUid: _currentUid,
+        homeId: widget.homeId,
+      );
+
+      Object? rawDevice;
+      Object? rawCustomHome;
+
+      try {
+        rawDevice = (await FirebaseDatabase.instance
+                .ref(
+                  'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices/${widget.deviceId}',
+                )
+                .get())
+            .value;
+      } catch (_) {
+        rawDevice = null;
+      }
+
+      try {
+        rawCustomHome = (await FirebaseDatabase.instance
+                .ref('accounts/$_currentUid/customRules/${widget.homeId}')
+                .get())
+            .value;
+      } catch (_) {
+        rawCustomHome = null;
+      }
+
       if (!mounted) return;
 
-      final rawDevice = results[0].value;
       final device = rawDevice is Map
           ? Map<String, dynamic>.from(rawDevice)
           : Map<String, dynamic>.from(widget.initialDevice);
@@ -497,7 +551,6 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
         device: device,
         deviceType: widget.deviceType,
       );
-      final rawCustomHome = results[1].value;
       final customHome = rawCustomHome is Map
           ? Map<String, dynamic>.from(rawCustomHome)
           : const <String, dynamic>{};
@@ -520,6 +573,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       var repairSilentPersonalConfiguration = false;
 
       setState(() {
+        _resolvedOwnerUid = resolvedOwnerUid;
         _enabled = policy.enabled;
         _notificationEnabled = policy.notificationEnabled;
         _physicalSirenEnabled = policy.physicalSirenEnabled;
@@ -659,7 +713,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   Map<String, Object?> _buildUpdates() {
     final updates = <String, Object?>{};
     final baseDevicePath =
-        'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/${widget.deviceId}';
+        'accounts/$_resolvedOwnerUid/homes/${widget.homeId}/devices/${widget.deviceId}';
     final personalPath =
         'accounts/$_currentUid/customRules/${widget.homeId}/devices/${widget.deviceId}';
 

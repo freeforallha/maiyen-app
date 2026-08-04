@@ -268,6 +268,20 @@ String _alarmWeekdayFullLabel(int day, AppStrings strings) {
   }
 }
 
+Map<String, dynamic> _normalizeAlarmDeviceCollection(Object? rawValue) {
+  final source = safeMap(rawValue);
+  final normalized = <String, dynamic>{};
+
+  for (final entry in source.entries) {
+    final device = safeMap(entry.value);
+    if (device.isNotEmpty) {
+      normalized[entry.key] = device;
+    }
+  }
+
+  return normalized;
+}
+
 class AlarmDeviceSheet extends StatefulWidget {
   final String ownerUid;
   final String homeId;
@@ -292,6 +306,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   String legacyAlarmMode = 'home';
   bool loading = true;
   bool applyingAll = false;
+  late String _resolvedOwnerUid;
 
   String get currentUid =>
       FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
@@ -299,36 +314,61 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
   @override
   void initState() {
     super.initState();
-    devices = Map<String, dynamic>.from(widget.devices);
+    _resolvedOwnerUid = widget.ownerUid.trim().isNotEmpty
+        ? widget.ownerUid.trim()
+        : currentUid;
+    devices = _normalizeAlarmDeviceCollection(widget.devices);
     _reload();
   }
 
   Future<void> _reload() async {
     try {
-      final results = await Future.wait<DataSnapshot>([
-        FirebaseDatabase.instance
-            .ref('accounts/${widget.ownerUid}/homes/${widget.homeId}/devices')
-            .get(),
-        FirebaseDatabase.instance
-            .ref('accounts/$currentUid/customRules/${widget.homeId}')
-            .get(),
-      ]);
+      final resolvedOwnerUid = await resolveAlarmHomeOwnerUid(
+        suppliedOwnerUid: widget.ownerUid,
+        currentUid: currentUid,
+        homeId: widget.homeId,
+      );
+
+      Object? rawDevices;
+      Object? rawCustomHome;
+
+      try {
+        rawDevices = (await FirebaseDatabase.instance
+                .ref(
+                  'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices',
+                )
+                .get())
+            .value;
+      } catch (_) {
+        rawDevices = null;
+      }
+
+      try {
+        rawCustomHome = (await FirebaseDatabase.instance
+                .ref('accounts/$currentUid/customRules/${widget.homeId}')
+                .get())
+            .value;
+      } catch (_) {
+        rawCustomHome = null;
+      }
 
       if (!mounted) return;
 
-      final rawDevices = results[0].value;
-      final rawCustomHome = results[1].value;
-      final customHome = rawCustomHome is Map
-          ? Map<String, dynamic>.from(rawCustomHome)
-          : const <String, dynamic>{};
+      final remoteDevices = _normalizeAlarmDeviceCollection(rawDevices);
+      final customHome = safeMap(rawCustomHome);
       final rawCustomDevices = customHome['devices'];
+
       setState(() {
-        if (rawDevices is Map) {
-          devices = Map<String, dynamic>.from(rawDevices);
+        _resolvedOwnerUid = resolvedOwnerUid;
+
+        // Keep the already visible home snapshot when a direct Firebase read
+        // temporarily returns no value. This prevents a valid device list from
+        // being replaced by an empty state during iOS cold start/resume.
+        if (remoteDevices.isNotEmpty || devices.isEmpty) {
+          devices = remoteDevices;
         }
-        customDevices = rawCustomDevices is Map
-            ? Map<String, dynamic>.from(rawCustomDevices)
-            : {};
+
+        customDevices = _normalizeAlarmDeviceCollection(rawCustomDevices);
         legacyAlarmMode =
             (customHome['alarmMode'] ?? customHome['mode'] ?? 'home')
                 .toString();
@@ -342,9 +382,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
   List<MapEntry<String, dynamic>> get securityDevices {
     return devices.entries.where((entry) {
-      final value = entry.value;
-      if (value is! Map) return false;
-      return isSecurityDeviceType(value['type']);
+      final device = safeMap(entry.value);
+      return device.isNotEmpty && isSecurityDeviceType(device['type']);
     }).toList();
   }
 
@@ -430,7 +469,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     final realId = _realDeviceId(key, device);
     await showDeviceAlarmPolicySheet(
       context: context,
-      ownerUid: widget.ownerUid,
+      ownerUid: _resolvedOwnerUid,
       homeId: widget.homeId,
       deviceId: realId,
       deviceName: device['name']?.toString().trim().isNotEmpty == true
@@ -632,7 +671,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     scheduleId,
                   );
                   final basePath =
-                      'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId';
+                      'accounts/$_resolvedOwnerUid/homes/${widget.homeId}/devices/$realId';
                   updates['$basePath/alarmSchedules'] = {
                     for (final schedule in existing.entries)
                       schedule.key: deviceAlarmScheduleToFirebaseMap(
@@ -1024,7 +1063,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
 
         if (widget.canManageHome) {
           final commonPath =
-              'accounts/${widget.ownerUid}/homes/${widget.homeId}/devices/$realId';
+              'accounts/$_resolvedOwnerUid/homes/${widget.homeId}/devices/$realId';
           updates['$commonPath/alarmSchedules'] = null;
           updates['$commonPath/alarm'] = null;
         }
