@@ -8,8 +8,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
+import android.util.Log
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -17,8 +20,49 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
 
+    private val flutterUiHealthHandler = Handler(Looper.getMainLooper())
+    private var mainFlutterEngine: FlutterEngine? = null
+
+    private val flutterUiHealthCheck = Runnable {
+        if (isFinishing ||
+            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed) ||
+            !hasWindowFocus()
+        ) {
+            return@Runnable
+        }
+
+        val engine = mainFlutterEngine
+        val dartRunning = engine?.dartExecutor?.isExecutingDart == true
+        val flutterUiVisible = engine?.renderer?.isDisplayingFlutterUi == true
+
+        if (dartRunning && flutterUiVisible) {
+            intent?.removeExtra(WHITE_SCREEN_RECOVERY_EXTRA)
+            return@Runnable
+        }
+
+        if (intent?.getBooleanExtra(WHITE_SCREEN_RECOVERY_EXTRA, false) == true) {
+            Log.e(
+                WHITE_SCREEN_GUARD_TAG,
+                "Flutter UI is still unavailable after one Activity recovery; " +
+                    "recovery loop blocked."
+            )
+            return@Runnable
+        }
+
+        Log.e(
+            WHITE_SCREEN_GUARD_TAG,
+            "Flutter UI did not render after resume " +
+                "(dartRunning=$dartRunning, flutterUiVisible=$flutterUiVisible). " +
+                "Recreating MainActivity once."
+        )
+
+        intent?.putExtra(WHITE_SCREEN_RECOVERY_EXTRA, true)
+        recreate()
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        mainFlutterEngine = flutterEngine
 
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -70,6 +114,9 @@ class MainActivity : FlutterActivity() {
                         isBootReceiverConfirmedForCurrentBoot()
                     )
                 }
+                "moveTaskToBack" -> {
+                    result.success(moveTaskToBack(true))
+                }
                 "getDeviceManufacturer" -> {
                     result.success(
                         Build.MANUFACTURER
@@ -100,6 +147,38 @@ class MainActivity : FlutterActivity() {
         if (!isAlarmLaunchIntent(intent) || !isAlarmScreenLaunch()) {
             disableAlarmScreenMode()
         }
+
+        flutterUiHealthHandler.removeCallbacks(flutterUiHealthCheck)
+        flutterUiHealthHandler.postDelayed(
+            flutterUiHealthCheck,
+            WHITE_SCREEN_RECOVERY_DELAY_MS
+        )
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        if (!hasFocus) {
+            flutterUiHealthHandler.removeCallbacks(flutterUiHealthCheck)
+            return
+        }
+
+        flutterUiHealthHandler.removeCallbacks(flutterUiHealthCheck)
+        flutterUiHealthHandler.postDelayed(
+            flutterUiHealthCheck,
+            WHITE_SCREEN_RECOVERY_DELAY_MS
+        )
+    }
+
+    override fun onPause() {
+        flutterUiHealthHandler.removeCallbacks(flutterUiHealthCheck)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        flutterUiHealthHandler.removeCallbacks(flutterUiHealthCheck)
+        mainFlutterEngine = null
+        super.onDestroy()
     }
 
     private fun syncAlarmScreenMode(launchIntent: Intent?) {
@@ -334,5 +413,12 @@ class MainActivity : FlutterActivity() {
         }
 
         startActivity(settingsIntent)
+    }
+
+    companion object {
+        private const val WHITE_SCREEN_GUARD_TAG = "MaiYenWhiteScreenGuard"
+        private const val WHITE_SCREEN_RECOVERY_EXTRA =
+            "maiyen_white_screen_recovery_attempted"
+        private const val WHITE_SCREEN_RECOVERY_DELAY_MS = 8000L
     }
 }

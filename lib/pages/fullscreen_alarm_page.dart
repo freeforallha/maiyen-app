@@ -8,10 +8,11 @@ import 'package:flutter/services.dart';
 
 import '../app/maiyen_app.dart';
 import '../config/brand_config.dart';
+import '../config/maiyen_identifiers.dart';
+import '../helpers/debug_log.dart';
 import '../helpers/top_toast.dart';
 import '../localization/app_strings.dart';
 import '../services/notification_service.dart';
-import '../config/maiyen_identifiers.dart';
 
 class FullscreenAlarmPage extends StatefulWidget {
   final String title;
@@ -56,6 +57,42 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
   late String currentAlarmLevel;
   bool _isMutingHomeSiren = false;
   bool get isReminder => widget.silentMode;
+
+  static const MethodChannel _nativeAppChannel = MethodChannel(
+    MaiYenIdentifiers.androidNativeAlarmPermissionChannel,
+  );
+
+  Future<void> _closePageWithoutDestroyingEngine() async {
+    if (!mounted) {
+      return;
+    }
+
+    final navigator = Navigator.of(context);
+
+    if (navigator.canPop()) {
+      navigator.pop();
+      return;
+    }
+
+    // Fullscreen Alarm/Reminder có thể đang là route gốc khi Android mở app
+    // từ fullScreenIntent. Không đóng Activity native vì sẽ hủy FlutterEngine
+    // trong khi các foreground service vẫn giữ
+    // process Android sống, từ đó lần mở sau có thể chỉ còn màn hình trắng.
+    navigator.pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const AuthGate()),
+    );
+
+    if (!Platform.isAndroid) {
+      return;
+    }
+
+    try {
+      await Future<void>.delayed(const Duration(milliseconds: 120));
+      await _nativeAppChannel.invokeMethod<bool>('moveTaskToBack');
+    } catch (error) {
+      safeDebugPrint('ANDROID_MOVE_TASK_TO_BACK_ERROR: $error');
+    }
+  }
 
   bool get isSafeReminder {
     if (!isReminder) {
@@ -171,11 +208,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
 
     if (!mounted) return;
 
-    final navigator = Navigator.of(context);
-
-    if (navigator.canPop()) {
-      navigator.pop();
-    }
+    await _closePageWithoutDestroyingEngine();
   }
 
   void _showAlarmActionError() {
@@ -297,7 +330,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
         t.cancel();
 
         if (mounted) {
-          SystemNavigator.pop();
+          unawaited(_closePageWithoutDestroyingEngine());
         }
 
         return;
@@ -656,13 +689,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       return;
     }
 
-    navigator.pushReplacement(MaterialPageRoute(builder: (_) => AuthGate()));
+    navigator.pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const AuthGate()),
+    );
   }
 
   Future<void> closeReminder() async {
     timer?.cancel();
     await stopAlarmSound();
-    SystemNavigator.pop();
+
+    if (!mounted) return;
+
+    await _closePageWithoutDestroyingEngine();
   }
 
   Future<void> confirmStopAlarm(BuildContext context) async {
@@ -717,7 +755,9 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     NotificationService.clearActiveAlarms();
     await NotificationService.stopAllAlarmNotifications();
 
-    SystemNavigator.pop();
+    if (!mounted) return;
+
+    await _closePageWithoutDestroyingEngine();
   }
 
   Widget _buildFadedScrollArea({required Widget child}) {

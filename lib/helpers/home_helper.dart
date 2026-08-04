@@ -19,6 +19,137 @@ const double environmentWarningHumidityPercent = 90;
 
 const int emergencyStatusHoldMs = 5 * 60 * 1000;
 
+Map<String, int> resolveAutoAwayPresenceDisplayCounts(dynamic rawHome) {
+  final home = safeMap(rawHome);
+  final autoAway = safeMap(home["autoAway"]);
+  final presenceSummary = safeMap(home["presenceSummary"]);
+  final memberPresenceStatus = safeMap(home["memberPresenceStatus"]);
+
+  int summaryCount(String key) {
+    return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
+  }
+
+  final configuredParticipantUids = safeMap(autoAway["participantUids"]).entries
+      .where((entry) => entry.value == true)
+      .map((entry) => entry.key.toString().trim())
+      .where((uid) => uid.isNotEmpty)
+      .toSet();
+
+  final flaggedParticipantUids = memberPresenceStatus.entries
+      .where((entry) {
+        final status = safeMap(entry.value);
+        return status["autoAwayParticipant"] == true;
+      })
+      .map((entry) => entry.key.toString().trim())
+      .where((uid) => uid.isNotEmpty)
+      .toSet();
+
+  final selectedParticipantUids = <String>{};
+
+  if (configuredParticipantUids.isNotEmpty) {
+    selectedParticipantUids.addAll(configuredParticipantUids);
+  } else if (flaggedParticipantUids.isNotEmpty) {
+    selectedParticipantUids.addAll(flaggedParticipantUids);
+  } else {
+    // Nhà cũ chưa có participantUids tiếp tục dùng toàn bộ thành viên.
+    selectedParticipantUids.addAll(
+      memberPresenceStatus.keys
+          .map((uid) => uid.toString().trim())
+          .where((uid) => uid.isNotEmpty),
+    );
+  }
+
+  var totalMemberCount = summaryCount("totalMemberCount");
+
+  if (memberPresenceStatus.length > totalMemberCount) {
+    totalMemberCount = memberPresenceStatus.length;
+  }
+
+  if (selectedParticipantUids.length > totalMemberCount) {
+    totalMemberCount = selectedParticipantUids.length;
+  }
+
+  var participantCount = selectedParticipantUids.length;
+  final summaryParticipantCount = summaryCount("participantCount");
+
+  if (participantCount <= 0 && summaryParticipantCount > 0) {
+    participantCount = summaryParticipantCount;
+  }
+
+  if (participantCount <= 0 && totalMemberCount > 0) {
+    participantCount = totalMemberCount;
+  }
+
+  var insideCount = 0;
+  var outsideCount = 0;
+  var unknownCount = 0;
+
+  if (selectedParticipantUids.isNotEmpty) {
+    for (final participantUid in selectedParticipantUids) {
+      final status = safeMap(memberPresenceStatus[participantUid]);
+      final state =
+          status["state"]?.toString().trim().toLowerCase() ?? "unknown";
+
+      if (state == "inside") {
+        insideCount++;
+      } else if (state == "outside") {
+        outsideCount++;
+      } else {
+        unknownCount++;
+      }
+    }
+  } else {
+    final hasParticipantBreakdown =
+        presenceSummary.containsKey("participantInsideCount") ||
+        presenceSummary.containsKey("participantOutsideCount") ||
+        presenceSummary.containsKey("participantUnknownCount");
+
+    if (hasParticipantBreakdown) {
+      insideCount = summaryCount("participantInsideCount");
+      outsideCount = summaryCount("participantOutsideCount");
+      unknownCount = summaryCount("participantUnknownCount");
+    } else if (participantCount == totalMemberCount) {
+      insideCount = summaryCount("insideCount");
+      outsideCount = summaryCount("outsideCount");
+      unknownCount = summaryCount("unknownCount");
+    } else {
+      // Không có danh tính hoặc breakdown của nhóm được chọn thì không được
+      // gán nhầm trạng thái của thành viên ngoài nhóm vào số liệu hiển thị.
+      unknownCount = participantCount;
+    }
+  }
+
+  if (insideCount < 0) {
+    insideCount = 0;
+  }
+
+  if (outsideCount < 0) {
+    outsideCount = 0;
+  }
+
+  if (insideCount > participantCount) {
+    insideCount = participantCount;
+  }
+
+  final remainingAfterInside = participantCount - insideCount;
+
+  if (outsideCount > remainingAfterInside) {
+    outsideCount = remainingAfterInside;
+  }
+
+  // Unknown luôn là phần còn lại của chính nhóm được chọn. Cách này tránh
+  // hiển thị tổng lớn hơn mẫu số khi dữ liệu backend đang chuyển trạng thái.
+  unknownCount = participantCount - insideCount - outsideCount;
+
+  return <String, int>{
+    "insideCount": insideCount,
+    "outsideCount": outsideCount,
+    "unknownCount": unknownCount,
+    "participantCount": participantCount,
+    "totalMemberCount": totalMemberCount,
+  };
+}
+
 const Set<String> emergencyStatusDeviceTypes = {
   "smoke",
   "heat",
@@ -393,9 +524,7 @@ bool isSirenConnectedForUi(Map<String, dynamic> device) {
     return true;
   }
 
-  final maxAge = Duration(
-    minutes: (heartbeatLimitHours("siren") * 60).round(),
-  );
+  final maxAge = Duration(minutes: (heartbeatLimitHours("siren") * 60).round());
 
   return age <= maxAge;
 }
@@ -430,8 +559,7 @@ bool isConfirmedSirenActiveForUi(Map<String, dynamic> device) {
 
   // MQTT broker nhận lệnh chưa chứng minh còi đã kêu. Chỉ hiển thị trạng thái
   // đang bật khi có packet trạng thái thật mới hơn lệnh điều khiển gần nhất.
-  return reportedAt > 0 &&
-      (commandedAt <= 0 || reportedAt >= commandedAt);
+  return reportedAt > 0 && (commandedAt <= 0 || reportedAt >= commandedAt);
 }
 
 String normalizeSecurityMode(dynamic value) {
@@ -506,10 +634,7 @@ Set<int> _normalizeAlarmScheduleDays(dynamic rawDays) {
   return days;
 }
 
-bool _isAlarmScheduleActiveNow(
-  Map<String, dynamic> schedule,
-  DateTime now,
-) {
+bool _isAlarmScheduleActiveNow(Map<String, dynamic> schedule, DateTime now) {
   if (schedule["enabled"] != true) {
     return false;
   }
@@ -545,9 +670,7 @@ bool _isAlarmScheduleActiveNow(
   ).contains(scheduleWeekday);
 }
 
-List<Map<String, dynamic>> _deviceAlarmSchedules(
-  Map<String, dynamic> device,
-) {
+List<Map<String, dynamic>> _deviceAlarmSchedules(Map<String, dynamic> device) {
   final schedules = <Map<String, dynamic>>[];
   final rawSchedules = device["alarmSchedules"];
 
@@ -581,10 +704,7 @@ List<Map<String, dynamic>> _deviceAlarmSchedules(
   return schedules;
 }
 
-bool isNowInAlarmTime(
-  Map<String, dynamic> device, {
-  DateTime? now,
-}) {
+bool isNowInAlarmTime(Map<String, dynamic> device, {DateTime? now}) {
   final alarmPolicy = safeMap(device["alarmPolicy"]);
 
   // Thiết bị đã rời hệ thống báo động thì cửa mở chỉ là trạng thái chú ý.
@@ -594,9 +714,9 @@ bool isNowInAlarmTime(
 
   final currentTime = now ?? DateTime.now();
 
-  return _deviceAlarmSchedules(device).any(
-    (schedule) => _isAlarmScheduleActiveNow(schedule, currentTime),
-  );
+  return _deviceAlarmSchedules(
+    device,
+  ).any((schedule) => _isAlarmScheduleActiveNow(schedule, currentTime));
 }
 
 bool _hasTrueFlag(Map<String, dynamic> device, List<String> keys) {
@@ -1073,65 +1193,41 @@ Map<String, dynamic> getHomeOverallStatus(dynamic rawHome) {
   // Chỉ đánh giá vị trí thành viên khi nhà đã đặt vị trí
   // và đang bật tính năng tự động nhận biết ra/vào nhà.
   if (presenceTrackingEnabled) {
-    final presenceSummary = safeMap(home["presenceSummary"]);
+    final displayCounts = resolveAutoAwayPresenceDisplayCounts(home);
+    final insideCount = displayCounts["insideCount"] ?? 0;
+    final outsideCount = displayCounts["outsideCount"] ?? 0;
+    final unknownCount = displayCounts["unknownCount"] ?? 0;
+    final participantCount = displayCounts["participantCount"] ?? 0;
+    final totalMemberCount = displayCounts["totalMemberCount"] ?? 0;
 
-    int summaryCount(String key) {
-      return int.tryParse(presenceSummary[key]?.toString() ?? "") ?? 0;
-    }
-
-    final insideCount = summaryCount("insideCount");
-    final outsideCount = summaryCount("outsideCount");
-    final unknownCount = summaryCount("unknownCount");
-
-    final summaryTotalMemberCount = summaryCount("totalMemberCount");
-    final totalMemberCount = summaryTotalMemberCount > 0
-        ? summaryTotalMemberCount
-        : insideCount + outsideCount + unknownCount;
-
-    var participantCount = summaryCount("participantCount");
-
-    // Tương thích trong lúc backend mới chưa kịp ghi participantCount:
-    // tạm suy ra số thành viên được chọn từ memberPresenceStatus.
-    if (participantCount <= 0) {
-      final memberPresenceStatus = safeMap(home["memberPresenceStatus"]);
-
-      participantCount = memberPresenceStatus.values.where((rawStatus) {
-        final status = safeMap(rawStatus);
-        return status["autoAwayParticipant"] == true;
-      }).length;
-    }
-
-    // UI luôn dùng tổng thành viên thật làm mẫu số.
-    // Auto Away backend vẫn dùng known/eligible riêng để quyết định bật Bảo vệ.
-    if (totalMemberCount > 0) {
+    // Các dòng vị trí trong StatusPanel và Tổng hợp trạng thái chỉ phản ánh
+    // đúng nhóm thành viên được chọn để xác định Tự động bảo vệ.
+    if (participantCount > 0) {
       final insideText =
-          "Thành viên đang ở trong nhà: $insideCount/$totalMemberCount";
+          "Thành viên đang ở trong nhà: $insideCount/$participantCount";
       final outsideText =
-          "Thành viên đang ở ngoài: $outsideCount/$totalMemberCount";
+          "Thành viên đang ở ngoài: $outsideCount/$participantCount";
       final unknownText =
-          "Thành viên chưa xác định vị trí: $unknownCount/$totalMemberCount";
+          "Thành viên chưa xác định vị trí: $unknownCount/$participantCount";
 
-      presencePanelLines.addAll([insideText, outsideText, unknownText]);
-
-      // Số người trong/ngoài nhà là thông tin tổng quan, không phải lỗi.
+      presencePanelLines.add(insideText);
       safeSummary.insert(0, insideText);
 
       if (outsideCount > 0) {
+        presencePanelLines.add(outsideText);
         safeSummary.add(outsideText);
       }
 
       if (unknownCount > 0) {
+        presencePanelLines.add(unknownText);
         presenceWarnings.add(unknownText);
       }
     }
 
-    if (participantCount > 0) {
-      final participantTotal = totalMemberCount >= participantCount
-          ? totalMemberCount
-          : participantCount;
+    if (totalMemberCount > 0) {
       final participantSummaryText =
           "Số thành viên dùng để xác định mở Tự động bảo vệ: "
-          "$participantCount/$participantTotal";
+          "$participantCount/$totalMemberCount";
 
       presencePanelLines.add(participantSummaryText);
       safeSummary.add(participantSummaryText);
