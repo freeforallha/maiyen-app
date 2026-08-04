@@ -454,7 +454,25 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   @override
   void dispose() {
     _autoSaveTimer?.cancel();
+    _flushPendingChangesOnDispose();
     super.dispose();
+  }
+
+  void _flushPendingChangesOnDispose() {
+    if (_currentUid.isEmpty || (!_dirty && !_saveAgain && !_saving)) return;
+
+    final updates = _buildUpdates();
+    _dirty = false;
+    _saveAgain = false;
+
+    // Không chặn thao tác vuốt Back của iOS. Nếu người dùng rời trang trước
+    // khi debounce tự lưu chạy, vẫn gửi bản cập nhật cuối cùng lên Firebase.
+    unawaited(
+      FirebaseDatabase.instance.ref().update(updates).then<void>(
+        (_) {},
+        onError: (Object _, StackTrace __) {},
+      ),
+    );
   }
 
   Future<void> _load() async {
@@ -689,17 +707,6 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     return updates;
   }
 
-  Future<bool> _handleWillPop() async {
-    _autoSaveTimer?.cancel();
-
-    while (_saving) {
-      await Future<void>.delayed(const Duration(milliseconds: 40));
-    }
-
-    if (!_dirty) return true;
-    return _flushAutoSave();
-  }
-
   Map<String, Object?>? _firebaseScheduleMap(
     Map<String, Map<String, dynamic>> schedules, {
     required bool personal,
@@ -871,19 +878,17 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     final strings = AppStrings.of(context);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
-    return WillPopScope(
-      onWillPop: _handleWillPop,
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).height * 0.94,
-        ),
-        decoration: const BoxDecoration(
-          color: MaiYenColors.background,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.94,
+      ),
+      decoration: const BoxDecoration(
+        color: MaiYenColors.background,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
             padding: EdgeInsets.fromLTRB(18, 16, 18, 20 + bottomInset),
             child: _loading
                 ? const Padding(
@@ -918,14 +923,22 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                                   personal: false,
                                 ),
                                 const SizedBox(height: 14),
-                                _scheduleCollection(
-                                  strings: strings,
-                                  title: strings.t('Lịch cho cá nhân tôi'),
-                                  schedules: _personalSchedules,
-                                  enabled: !_followHomeSchedule,
-                                  personal: true,
-                                  lockedToHome: _followHomeSchedule,
-                                ),
+                                if (_followHomeSchedule)
+                                  _noticeCard(
+                                    icon: Icons.sync_rounded,
+                                    text: strings.t(
+                                      'Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.',
+                                    ),
+                                    color: MaiYenColors.primary,
+                                  )
+                                else
+                                  _scheduleCollection(
+                                    strings: strings,
+                                    title: strings.t('Lịch cho cá nhân tôi'),
+                                    schedules: _personalSchedules,
+                                    enabled: true,
+                                    personal: true,
+                                  ),
                               ],
                             ),
                           ),
@@ -945,8 +958,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                   ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _header(AppStrings strings) => Row(

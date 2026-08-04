@@ -386,11 +386,10 @@ void showDeviceDetail({
                                 legacyPhysicalSirenEnabled:
                                     alarmPolicy.physicalSirenEnabled,
                               );
-                              final personalAlarms =
+                              final storedPersonalAlarms =
                                   normalizeEffectivePersonalAlarmSchedules(
                                     customDevice: personalDevice,
                                     legacyAlarmMode: legacyAlarmMode,
-                                    commonSchedules: commonAlarms,
                                     legacyFullscreenEnabled:
                                         alarmPolicy.fullscreenEnabled,
                                   );
@@ -414,10 +413,26 @@ void showDeviceDetail({
                                         : personalPreferences.notificationEnabled,
                                 personalFullscreenEnabled:
                                     personalPreferences.fullscreenEnabled,
+                                commonAlarmSummary:
+                                    _deviceAlarmScheduleSummary(
+                                      commonAlarms,
+                                      strings,
+                                    ),
+                                personalAlarmSummary:
+                                    personalPreferences.followHomeSchedule
+                                    ? strings.t('Theo nhà')
+                                    : _deviceAlarmScheduleSummary(
+                                        storedPersonalAlarms,
+                                        strings,
+                                      ),
                                 commonAlarmEnabled:
                                     hasEnabledDeviceAlarmSchedules(commonAlarms),
                                 personalAlarmEnabled:
-                                    hasEnabledDeviceAlarmSchedules(personalAlarms),
+                                    personalPreferences.followHomeSchedule
+                                    ? hasEnabledDeviceAlarmSchedules(commonAlarms)
+                                    : hasEnabledDeviceAlarmSchedules(
+                                        storedPersonalAlarms,
+                                      ),
                                 onTap: () async {
                                   await showDeviceAlarmPolicySheet(
                                     context: context,
@@ -928,12 +943,29 @@ Widget _sectionHeading({
   );
 }
 
+String _deviceAlarmScheduleSummary(
+  Map<String, Map<String, dynamic>> schedules,
+  AppStrings strings,
+) {
+  final enabled = schedules.values
+      .where((schedule) => schedule['enabled'] == true)
+      .toList(growable: false);
+
+  if (enabled.isEmpty) return strings.t('Chưa cài đặt');
+
+  final first = enabled.first;
+  final suffix = enabled.length > 1 ? ' (+${enabled.length - 1})' : '';
+  return '${first['start']} → ${first['end']}$suffix';
+}
+
 Widget _alarmSettingsSummary({
   required AppStrings strings,
   required DeviceAlarmPolicySettings settings,
   required bool isEmergency,
   required bool personalNotificationEnabled,
   required bool personalFullscreenEnabled,
+  required String commonAlarmSummary,
+  required String personalAlarmSummary,
   required bool commonAlarmEnabled,
   required bool personalAlarmEnabled,
   required VoidCallback onTap,
@@ -1026,9 +1058,7 @@ Widget _alarmSettingsSummary({
           row(
             icon: Icons.home_rounded,
             title: strings.t("Báo động chung"),
-            value: strings.t(
-              commonAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
-            ),
+            value: commonAlarmSummary,
             color: commonAlarmEnabled
                 ? MaiYenColors.primary
                 : MaiYenColors.textSecondary,
@@ -1037,9 +1067,7 @@ Widget _alarmSettingsSummary({
           row(
             icon: Icons.person_rounded,
             title: strings.t("Báo động cá nhân"),
-            value: strings.t(
-              personalAlarmEnabled ? "Đã cài đặt" : "Chưa cài đặt",
-            ),
+            value: personalAlarmSummary,
             color: personalAlarmEnabled
                 ? MaiYenColors.primary
                 : MaiYenColors.textSecondary,

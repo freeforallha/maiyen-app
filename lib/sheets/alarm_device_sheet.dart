@@ -410,17 +410,6 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
     );
   }
 
-  Map<String, Map<String, dynamic>> _effectivePersonalSchedules(
-    String key,
-    Map<String, dynamic> device,
-  ) {
-    final preferences = _personalPreferences(key, device);
-    if (preferences.followHomeSchedule) {
-      return cloneDeviceAlarmSchedules(_commonSchedules(key, device));
-    }
-    return _storedPersonalSchedules(key, device);
-  }
-
   String _scheduleSummary(
     Map<String, Map<String, dynamic>> schedules,
     AppStrings strings,
@@ -1197,9 +1186,19 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           deviceType: device['type']?.toString() ?? 'door',
                         );
                         final common = _commonSchedules(key, device);
-                        final personal = _effectivePersonalSchedules(key, device);
-                        final commonEnabled = hasEnabledDeviceAlarmSchedules(common);
-                        final personalEnabled = hasEnabledDeviceAlarmSchedules(personal);
+                        final preferences = _personalPreferences(key, device);
+                        final storedPersonal = _storedPersonalSchedules(
+                          key,
+                          device,
+                        );
+                        final commonEnabled =
+                            hasEnabledDeviceAlarmSchedules(common);
+                        final personalEnabled = preferences.followHomeSchedule
+                            ? commonEnabled
+                            : hasEnabledDeviceAlarmSchedules(storedPersonal);
+                        final personalSummary = preferences.followHomeSchedule
+                            ? strings.t('Theo nhà')
+                            : _scheduleSummary(storedPersonal, strings);
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 10),
@@ -1276,7 +1275,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                         _scopeSummaryLine(
                                           icon: Icons.person_rounded,
                                           label: strings.t('Cá nhân'),
-                                          value: _scheduleSummary(personal, strings),
+                                          value: personalSummary,
                                           active: personalEnabled,
                                         ),
                                       ],
