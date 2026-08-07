@@ -653,10 +653,7 @@ extension _Actions on _MaiYenState {
       return;
     }
 
-    final code = await openQRScanner(
-      context,
-      mode: MaiYenQrScanMode.joinHome,
-    );
+    final code = await openQRScanner(context, mode: MaiYenQrScanMode.joinHome);
 
     if (!mounted || code == null || code.trim().isEmpty) {
       return;
@@ -665,9 +662,7 @@ extension _Actions on _MaiYenState {
     final value = code.trim();
 
     if (!value.startsWith(MaiYenIdentifiers.joinHomeQrPrefix) &&
-        !value.startsWith(
-          MaiYenIdentifiers.joinMultipleHomesQrPrefix,
-        )) {
+        !value.startsWith(MaiYenIdentifiers.joinMultipleHomesQrPrefix)) {
       showTopToast(
         context,
         _strings.t("QR này không phải mã xin gia nhập nhà"),
@@ -1714,5 +1709,4 @@ extension _Actions on _MaiYenState {
       onLogout: logout,
     );
   }
-
 }

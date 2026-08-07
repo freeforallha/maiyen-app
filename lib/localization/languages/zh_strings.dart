@@ -593,8 +593,7 @@ const Map<String, String> zhStrings = {
   "Chạy nền ổn định": "后台运行看起来稳定",
   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.":
       "某些 Android 手机在开启电池优化时可能延迟警报。",
-  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.":
-      "手机较少可能延迟 MaiYen警报。",
+  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.": "手机较少可能延迟 MaiYen警报。",
   "Chưa tắt tối ưu pin": "尚未关闭电池优化",
   "Tối ưu pin không chặn ứng dụng": "电池优化未阻止应用",
   "Auto rời khỏi nhà cần quyền vị trí luôn luôn để chạy ổn định.":

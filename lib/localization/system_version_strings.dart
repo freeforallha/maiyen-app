@@ -448,5 +448,4 @@ extension SystemVersionStrings on AppStrings {
     ka: 'შეუთავსებელი',
     az: 'Uyğun deyil',
   );
-
 }

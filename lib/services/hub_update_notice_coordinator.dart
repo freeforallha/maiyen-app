@@ -122,8 +122,7 @@ class HubUpdateNoticeCoordinator {
             parseDeviceBool(hubStatus['updateAvailable']) == true;
         final updateAgentStatus =
             hubStatus['updateAgentStatus']?.toString().trim() ?? '';
-        final releaseId =
-            hubStatus['latestReleaseId']?.toString().trim() ?? '';
+        final releaseId = hubStatus['latestReleaseId']?.toString().trim() ?? '';
 
         if (!updateAvailable ||
             updateAgentStatus != 'ready' ||
@@ -141,8 +140,7 @@ class HubUpdateNoticeCoordinator {
           continue;
         }
 
-        final preferenceKey =
-            '$_preferencePrefix.$uid.$ownerUid.$homeId';
+        final preferenceKey = '$_preferencePrefix.$uid.$ownerUid.$homeId';
         final seenReleaseId = preferences.getString(preferenceKey) ?? '';
 
         if (seenReleaseId == releaseId) {
@@ -181,8 +179,7 @@ class HubUpdateNoticeCoordinator {
 
   bool _hasPendingRequest(Map<String, dynamic> home, String releaseId) {
     final request = safeMap(home['hubUpdateRequest']);
-    final requestReleaseId =
-        request['releaseId']?.toString().trim() ?? '';
+    final requestReleaseId = request['releaseId']?.toString().trim() ?? '';
     final requestStatus = request['status']?.toString().trim() ?? '';
 
     return requestReleaseId == releaseId &&
@@ -303,11 +300,7 @@ class HubUpdateNoticeCoordinator {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: color,
-                    size: 25,
-                  ),
+                  Icon(Icons.chevron_right_rounded, color: color, size: 25),
                 ],
               ),
             ),

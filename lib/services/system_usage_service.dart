@@ -4,8 +4,7 @@ import '../config/maiyen_identifiers.dart';
 class SystemUsageService {
   const SystemUsageService._();
 
-  static const String _lastOpenAtKey =
-      MaiYenIdentifiers.lastOpenAtStorageKey;
+  static const String _lastOpenAtKey = MaiYenIdentifiers.lastOpenAtStorageKey;
   static const String _previousOpenAtKey =
       MaiYenIdentifiers.previousOpenAtStorageKey;
   static const int _newSessionGapMs = 30 * 60 * 1000;

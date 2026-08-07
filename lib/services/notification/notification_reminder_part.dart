@@ -1,6 +1,8 @@
 part of '../notification_service.dart';
 
-String _notificationServiceLastScheduleBody = _strings.safetyReminderBody(isSafe: true);
+String _notificationServiceLastScheduleBody = _strings.safetyReminderBody(
+  isSafe: true,
+);
 
 String _notificationServiceLastScheduleTitle = _strings.defaultHomeName();
 
@@ -22,7 +24,8 @@ const Duration _reminderMergeWindow = Duration(seconds: 12);
 
 int _lastReminderMergeAt = 0;
 
-final ValueNotifier<int> _notificationServiceReminderRevision = ValueNotifier<int>(0);
+final ValueNotifier<int> _notificationServiceReminderRevision =
+    ValueNotifier<int>(0);
 
 void _notificationServiceMarkReminderPageClosed() {
   _reminderPageOpen = false;
@@ -31,7 +34,9 @@ void _notificationServiceMarkReminderPageClosed() {
 void _resetReminderSession() {
   _notificationServiceLastReminderItemsJson = '';
   _notificationServiceLastScheduleTitle = _strings.defaultHomeName();
-  _notificationServiceLastScheduleBody = _strings.safetyReminderBody(isSafe: true);
+  _notificationServiceLastScheduleBody = _strings.safetyReminderBody(
+    isSafe: true,
+  );
   _lastReminderMergeAt = 0;
   _notificationServiceReminderRevision.value++;
 }
@@ -113,17 +118,12 @@ void _mergeReminderSession({
       }
     }
 
-    return {
-      'homeId': homeId,
-      'homeName': homeName,
-      'reasons': reasons,
-    };
+    return {'homeId': homeId, 'homeName': homeName, 'reasons': reasons};
   }
 
   String itemKey(Map<String, dynamic> item) {
     final homeId = item['homeId']?.toString().trim() ?? '';
-    final homeName =
-        item['homeName']?.toString().trim().toLowerCase() ?? '';
+    final homeName = item['homeName']?.toString().trim().toLowerCase() ?? '';
 
     return homeId.isNotEmpty ? homeId : homeName;
   }
@@ -156,7 +156,9 @@ void _mergeReminderSession({
       : strings.scheduledReminder;
 
   if (!hasUnsafe) {
-    _notificationServiceLastScheduleBody = strings.safetyReminderBody(isSafe: true);
+    _notificationServiceLastScheduleBody = strings.safetyReminderBody(
+      isSafe: true,
+    );
     return;
   }
 
@@ -167,8 +169,7 @@ void _mergeReminderSession({
 
     if (reasons is! List || reasons.isEmpty) continue;
 
-    final homeName =
-        item['homeName']?.toString() ?? strings.defaultHomeName();
+    final homeName = item['homeName']?.toString() ?? strings.defaultHomeName();
 
     issueLines.add('$homeName: ${reasons.join(', ')}');
   }
@@ -191,13 +192,14 @@ String _currentReminderReason() {
   final strings = _strings;
   final lines = <String>[];
 
-  for (final item in _decodeReminderItems(_notificationServiceLastReminderItemsJson)) {
+  for (final item in _decodeReminderItems(
+    _notificationServiceLastReminderItemsJson,
+  )) {
     final reasons = item['reasons'];
 
     if (reasons is! List || reasons.isEmpty) continue;
 
-    final homeName =
-        item['homeName']?.toString().trim().isNotEmpty == true
+    final homeName = item['homeName']?.toString().trim().isNotEmpty == true
         ? item['homeName'].toString().trim()
         : strings.defaultHomeName();
 
@@ -235,7 +237,9 @@ void _notificationServiceOpenOrMergeReminderPage({
   navigator
       .push(
         MaterialPageRoute(
-          settings: const RouteSettings(name: _notificationServiceReminderRouteName),
+          settings: const RouteSettings(
+            name: _notificationServiceReminderRouteName,
+          ),
           builder: (_) => FullscreenAlarmPage(
             title: _notificationServiceLastScheduleTitle,
             body: _notificationServiceLastScheduleBody,

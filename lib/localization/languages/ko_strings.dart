@@ -483,8 +483,7 @@ const Map<String, String> koStrings = {
   "Cảnh báo toàn màn hình": "전체 화면 경고",
   "Cảnh báo có thể không hiển thị nếu thông báo bị tắt.":
       "알림이 꺼져 있으면 경고가 표시되지 않을 수 있습니다.",
-  "Điện thoại có thể nhận thông báo MaiYen.":
-      "이 휴대폰은 MaiYen 알림을 받을 수 있습니다.",
+  "Điện thoại có thể nhận thông báo MaiYen.": "이 휴대폰은 MaiYen 알림을 받을 수 있습니다.",
   "Chưa bật thông báo": "알림이 꺼져 있음",
   "Đã bật thông báo": "알림이 켜져 있음",
   "Hệ thống: Sẵn sàng": "시스템: 준비됨",

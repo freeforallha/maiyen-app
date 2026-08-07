@@ -892,8 +892,7 @@ const Map<String, String> skStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Upozornenie vypnite až po kontrole situácie v dome.\n\nNaozaj chcete upozornenie vypnúť?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen zistil upozornenie",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Otvorte MaiYen a ihneď všetko skontrolujte.",
+  "Mở MaiYen để kiểm tra ngay.": "Otvorte MaiYen a ihneď všetko skontrolujte.",
   "\$count tin nhắn mới": "\$count nových správ",
   "Tin nhắn HomeChat": "Správy HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName poslal(a) správu",

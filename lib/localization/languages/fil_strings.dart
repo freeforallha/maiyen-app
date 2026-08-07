@@ -918,8 +918,7 @@ const Map<String, String> filStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "I-off lamang ang alerto pagkatapos suriin ang kalagayan ng bahay.\n\nSigurado ka bang gusto mong i-off ang alerto?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 May natukoy na alerto ang MaiYen",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Buksan ang MaiYen upang suriin ito ngayon.",
+  "Mở MaiYen để kiểm tra ngay.": "Buksan ang MaiYen upang suriin ito ngayon.",
   "\$count tin nhắn mới": "\$count bagong mensahe",
   "Tin nhắn HomeChat": "Mensahe sa HomeChat",
   "\$senderName đã gửi một tin nhắn": "Nagpadala ng mensahe si \$senderName",

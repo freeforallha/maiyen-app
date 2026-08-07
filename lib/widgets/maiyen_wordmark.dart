@@ -51,9 +51,7 @@ class MaiYenWordmark extends StatelessWidget {
               },
               child: Text(
                 'Mai',
-                style: textStyle.copyWith(
-                  color: Colors.white,
-                ),
+                style: textStyle.copyWith(color: Colors.white),
               ),
             ),
             Transform.translate(

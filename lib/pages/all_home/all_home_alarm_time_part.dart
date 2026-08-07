@@ -1,7 +1,10 @@
 part of '../all_home_page.dart';
 
 extension _AllHomeAlarmTimePart on _AllHomeState {
-  Future<String?> _inputSelectedHomesAlarmTime(String title, String initial) async {
+  Future<String?> _inputSelectedHomesAlarmTime(
+    String title,
+    String initial,
+  ) async {
     final parts = initial.split(":");
 
     String hourText = parts.isNotEmpty ? parts[0].padLeft(2, "0") : "23";

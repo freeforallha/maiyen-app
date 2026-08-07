@@ -34,8 +34,7 @@ const Map<String, String> etDynamicStrings = {
   "MaiYen nhắc nhở toàn màn hình": "MaiYen'i täisekraani meeldetuletus",
   "Nhắc nhở MaiYen toàn màn hình không âm thanh":
       "Helitu MaiYen'i täisekraani meeldetuletus",
-  "MaiYen nhắc nhở ưu tiên cao":
-      "MaiYen'i kõrge prioriteediga meeldetuletus",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen'i kõrge prioriteediga meeldetuletus",
   "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
       "Kõrge prioriteediga MaiYen'i meeldetuletus ilma täisekraanita",
   "Tin nhắn mới trong các nhà MaiYen": "Uued sõnumid MaiYen'i kodudes",

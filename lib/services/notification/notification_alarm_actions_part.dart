@@ -20,9 +20,7 @@ void _syncAlarmPresentationFromActiveIncidents() {
     return;
   }
 
-  final hasAlarm = contexts.any(
-    (context) => context['alarmLevel'] == 'alarm',
-  );
+  final hasAlarm = contexts.any((context) => context['alarmLevel'] == 'alarm');
 
   _notificationServiceLastAlarmEventCategory = 'security';
   _notificationServiceLastAlarmLevel = hasAlarm ? 'alarm' : 'warning';
@@ -42,14 +40,15 @@ void _notificationServiceRememberAlarmIncident(Map<String, dynamic> data) {
 
   final currentUid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  final receiverUid =
-      data['receiverUid']?.toString().trim().isNotEmpty == true
+  final receiverUid = data['receiverUid']?.toString().trim().isNotEmpty == true
       ? data['receiverUid'].toString().trim()
       : currentUid;
 
   final ownerUid = data['ownerUid']?.toString().trim() ?? '';
   final homeId = data['homeId']?.toString().trim() ?? '';
-  final eventCategory = _notificationServiceNormalizedIncidentEventCategory(data);
+  final eventCategory = _notificationServiceNormalizedIncidentEventCategory(
+    data,
+  );
   final alarmLevel = _notificationServiceNormalizedIncidentAlarmLevel(data);
   final flowType = data['alarmFlowType']?.toString().trim().isNotEmpty == true
       ? data['alarmFlowType'].toString().trim()
@@ -297,7 +296,9 @@ Future<bool> _notificationServiceResolveActiveAlarmIncidents({
   return true;
 }
 
-Future<bool> _notificationServiceMuteActiveHomeSirens({String incidentId = ''}) async {
+Future<bool> _notificationServiceMuteActiveHomeSirens({
+  String incidentId = '',
+}) async {
   final targets = <Map<String, String>>[];
 
   if (incidentId.trim().isNotEmpty) {

@@ -50,15 +50,11 @@ Future<Map<String, String>?> showRenameHomeSheet({
                     fillColor: MaiYenColors.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        color: MaiYenColors.border,
-                      ),
+                      borderSide: const BorderSide(color: MaiYenColors.border),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        color: MaiYenColors.border,
-                      ),
+                      borderSide: const BorderSide(color: MaiYenColors.border),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),

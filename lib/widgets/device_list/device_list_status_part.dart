@@ -139,10 +139,7 @@ extension _Status on _DeviceListState {
   }
 
   String _localOrderPrefsKey({required String uid, required String homeId}) {
-    return MaiYenIdentifiers.deviceOrderStorageKey(
-      uid: uid,
-      homeId: homeId,
-    );
+    return MaiYenIdentifiers.deviceOrderStorageKey(uid: uid, homeId: homeId);
   }
 
   Future<void> _loadLocalDeviceOrder({
@@ -925,5 +922,4 @@ extension _Status on _DeviceListState {
           MapEntry(sectionKey, Map<String, int>.from(sectionOrders)),
     );
   }
-
 }

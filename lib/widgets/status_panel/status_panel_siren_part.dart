@@ -290,5 +290,4 @@ extension _StatusPanelSirenPart on _StatusPanelState {
       ),
     );
   }
-
 }

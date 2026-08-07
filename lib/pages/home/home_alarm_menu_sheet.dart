@@ -5,7 +5,6 @@ import '../../localization/app_strings.dart';
 import '../../maiyen_theme.dart';
 import '../../navigation/maiyen_navigation.dart';
 
-
 int? _resolveAlarmPauseMenuEndAt(Map<String, dynamic> pause) {
   final directEndAt = int.tryParse(pause['endAt']?.toString() ?? '');
   if (directEndAt != null && directEndAt > 0) return directEndAt;
@@ -13,9 +12,7 @@ int? _resolveAlarmPauseMenuEndAt(Map<String, dynamic> pause) {
   final dateParts = (pause['date']?.toString() ?? '').split('-');
   final startParts = (pause['start']?.toString() ?? '').split(':');
   final endParts = (pause['end']?.toString() ?? '').split(':');
-  if (dateParts.length != 3 ||
-      startParts.length != 2 ||
-      endParts.length != 2) {
+  if (dateParts.length != 3 || startParts.length != 2 || endParts.length != 2) {
     return null;
   }
 
@@ -76,7 +73,8 @@ Future<void> showHomeAlarmMenuSheet({
           alarmScheduleText != strings.t('Tắt') &&
           alarmScheduleText != strings.t('Chưa thiết lập thời gian');
       final pauseEndAt = _resolveAlarmPauseMenuEndAt(alarmPauseToday);
-      final pauseActive = alarmPauseToday.isNotEmpty &&
+      final pauseActive =
+          alarmPauseToday.isNotEmpty &&
           (pauseEndAt == null ||
               pauseEndAt > DateTime.now().millisecondsSinceEpoch);
 

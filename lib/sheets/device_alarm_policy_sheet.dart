@@ -61,9 +61,7 @@ Future<String> resolveAlarmHomeOwnerUid({
   if (current.isNotEmpty && normalizedHomeId.isNotEmpty) {
     try {
       final snapshot = await FirebaseDatabase.instance
-          .ref(
-            'accounts/$current/sharedHomes/$normalizedHomeId/ownerUid',
-          )
+          .ref('accounts/$current/sharedHomes/$normalizedHomeId/ownerUid')
           .get();
       final sharedOwnerUid = snapshot.value?.toString().trim() ?? '';
       if (sharedOwnerUid.isNotEmpty) {
@@ -125,12 +123,14 @@ class DevicePersonalAlarmPreferences {
   final bool notificationEnabled;
   final bool fullscreenEnabled;
   final bool followHomeSchedule;
+  final String vibrationStrongAlertLevel;
   final int scheduleModelVersion;
 
   const DevicePersonalAlarmPreferences({
     required this.notificationEnabled,
     required this.fullscreenEnabled,
     this.followHomeSchedule = true,
+    this.vibrationStrongAlertLevel = 'alarm',
     this.scheduleModelVersion = deviceAlarmScheduleModelVersion,
   });
 
@@ -148,6 +148,16 @@ class DevicePersonalAlarmPreferences {
     final parsedVersion = rawVersion is num
         ? rawVersion.toInt()
         : int.tryParse(rawVersion?.toString() ?? '');
+    final rawVibrationStrongAlertLevel =
+        preferences['vibrationStrongAlertLevel']
+            ?.toString()
+            .trim()
+            .toLowerCase();
+    final vibrationStrongAlertLevel =
+        rawVibrationStrongAlertLevel == 'warning' ||
+            rawVibrationStrongAlertLevel == 'alarm'
+        ? rawVibrationStrongAlertLevel!
+        : 'alarm';
 
     return DevicePersonalAlarmPreferences(
       notificationEnabled: preferences['notificationEnabled'] is bool
@@ -159,6 +169,7 @@ class DevicePersonalAlarmPreferences {
       followHomeSchedule: preferences['followHomeSchedule'] is bool
           ? preferences['followHomeSchedule'] == true
           : true,
+      vibrationStrongAlertLevel: vibrationStrongAlertLevel,
       scheduleModelVersion: parsedVersion ?? 1,
     );
   }
@@ -167,6 +178,7 @@ class DevicePersonalAlarmPreferences {
     'notificationEnabled': notificationEnabled,
     'fullscreenEnabled': fullscreenEnabled,
     'followHomeSchedule': followHomeSchedule,
+    'vibrationStrongAlertLevel': vibrationStrongAlertLevel,
     'scheduleModelVersion': deviceAlarmScheduleModelVersion,
   };
 }
@@ -439,6 +451,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
   late bool _legacyFullscreenEnabled;
   late bool _personalNotificationEnabled;
   late bool _personalFullscreenEnabled;
+  late String _vibrationStrongAlertLevel;
   late bool _followHomeSchedule;
   late Map<String, Map<String, dynamic>> _commonSchedules;
   late Map<String, Map<String, dynamic>> _personalSchedules;
@@ -457,6 +470,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       FirebaseAuth.instance.currentUser?.uid ?? widget.ownerUid;
   bool get _isEmergency => isEmergencyAlarmPolicyDevice(widget.deviceType);
   bool get _isSecurity => isSecurityAlarmPolicyDevice(widget.deviceType);
+  bool get _isVibration =>
+      widget.deviceType.trim().toLowerCase() == 'vibration';
   bool get _globalEnabled => _isEmergency || _enabled;
 
   @override
@@ -475,6 +490,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     _legacyFullscreenEnabled = initialPolicy.fullscreenEnabled;
     _personalNotificationEnabled = true;
     _personalFullscreenEnabled = initialPolicy.fullscreenEnabled;
+    _vibrationStrongAlertLevel = 'alarm';
     _followHomeSchedule = true;
     _commonSchedules = normalizeDeviceAlarmSchedules(
       rawSchedules: widget.initialDevice['alarmSchedules'],
@@ -504,10 +520,10 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     // Không chặn thao tác vuốt Back của iOS. Nếu người dùng rời trang trước
     // khi debounce tự lưu chạy, vẫn gửi bản cập nhật cuối cùng lên Firebase.
     unawaited(
-      FirebaseDatabase.instance.ref().update(updates).then<void>(
-        (_) {},
-        onError: (Object _, StackTrace __) {},
-      ),
+      FirebaseDatabase.instance
+          .ref()
+          .update(updates)
+          .then<void>((_) {}, onError: (Object _, StackTrace __) {}),
     );
   }
 
@@ -523,21 +539,23 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       Object? rawCustomHome;
 
       try {
-        rawDevice = (await FirebaseDatabase.instance
-                .ref(
-                  'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices/${widget.deviceId}',
-                )
-                .get())
-            .value;
+        rawDevice =
+            (await FirebaseDatabase.instance
+                    .ref(
+                      'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices/${widget.deviceId}',
+                    )
+                    .get())
+                .value;
       } catch (_) {
         rawDevice = null;
       }
 
       try {
-        rawCustomHome = (await FirebaseDatabase.instance
-                .ref('accounts/$_currentUid/customRules/${widget.homeId}')
-                .get())
-            .value;
+        rawCustomHome =
+            (await FirebaseDatabase.instance
+                    .ref('accounts/$_currentUid/customRules/${widget.homeId}')
+                    .get())
+                .value;
       } catch (_) {
         rawCustomHome = null;
       }
@@ -608,6 +626,8 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             ? policy.notificationEnabled
             : personalPreferences.notificationEnabled;
         _personalFullscreenEnabled = personalPreferences.fullscreenEnabled;
+        _vibrationStrongAlertLevel =
+            personalPreferences.vibrationStrongAlertLevel;
         _loading = false;
       });
 
@@ -748,6 +768,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
                 : _personalNotificationEnabled,
             fullscreenEnabled: _personalFullscreenEnabled,
             followHomeSchedule: _followHomeSchedule,
+            vibrationStrongAlertLevel: _vibrationStrongAlertLevel,
           ).toFirebaseMap();
     } else {
       updates['$personalPath/alarmPreferences'] =
@@ -755,6 +776,7 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
             notificationEnabled: _personalNotificationEnabled,
             fullscreenEnabled: _personalFullscreenEnabled,
             followHomeSchedule: _followHomeSchedule,
+            vibrationStrongAlertLevel: _vibrationStrongAlertLevel,
           ).toFirebaseMap();
     }
 
@@ -943,76 +965,76 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
       child: SafeArea(
         top: false,
         child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(18, 16, 18, 20 + bottomInset),
-            child: _loading
-                ? const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 56),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _header(strings),
-                      const SizedBox(height: 18),
-                      _participationCard(strings),
+          padding: EdgeInsets.fromLTRB(18, 16, 18, 20 + bottomInset),
+          child: _loading
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 56),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _header(strings),
+                    const SizedBox(height: 18),
+                    _participationCard(strings),
+                    const SizedBox(height: 14),
+                    _alarmChannelsCard(strings),
+                    if (defaultTargetPlatform == TargetPlatform.iOS) ...[
+                      const SizedBox(height: 10),
+                      const IosAlarmPlatformNotice(),
+                    ],
+                    if (_isSecurity) ...[
                       const SizedBox(height: 14),
-                      _alarmChannelsCard(strings),
-                      if (defaultTargetPlatform == TargetPlatform.iOS) ...[
-                        const SizedBox(height: 10),
-                        const IosAlarmPlatformNotice(),
-                      ],
-                      if (_isSecurity) ...[
-                        const SizedBox(height: 14),
-                        Opacity(
-                          opacity: _globalEnabled ? 1 : 0.48,
-                          child: IgnorePointer(
-                            ignoring: !_globalEnabled,
-                            child: Column(
-                              children: [
+                      Opacity(
+                        opacity: _globalEnabled ? 1 : 0.48,
+                        child: IgnorePointer(
+                          ignoring: !_globalEnabled,
+                          child: Column(
+                            children: [
+                              _scheduleCollection(
+                                strings: strings,
+                                title: strings.t('Lịch chung cho nhà'),
+                                schedules: _commonSchedules,
+                                enabled: widget.canEditCommon,
+                                personal: false,
+                              ),
+                              const SizedBox(height: 14),
+                              if (_followHomeSchedule)
+                                _noticeCard(
+                                  icon: Icons.sync_rounded,
+                                  text: strings.t(
+                                    'Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.',
+                                  ),
+                                  color: MaiYenColors.primary,
+                                )
+                              else
                                 _scheduleCollection(
                                   strings: strings,
-                                  title: strings.t('Lịch chung cho nhà'),
-                                  schedules: _commonSchedules,
-                                  enabled: widget.canEditCommon,
-                                  personal: false,
+                                  title: strings.t('Lịch cho cá nhân tôi'),
+                                  schedules: _personalSchedules,
+                                  enabled: true,
+                                  personal: true,
                                 ),
-                                const SizedBox(height: 14),
-                                if (_followHomeSchedule)
-                                  _noticeCard(
-                                    icon: Icons.sync_rounded,
-                                    text: strings.t(
-                                      'Báo động đang sử dụng chế độ Theo nhà.\n\nBạn sẽ nhận cảnh báo theo lịch báo động chung do Chủ nhà hoặc Quản trị viên thiết lập.',
-                                    ),
-                                    color: MaiYenColors.primary,
-                                  )
-                                else
-                                  _scheduleCollection(
-                                    strings: strings,
-                                    title: strings.t('Lịch cho cá nhân tôi'),
-                                    schedules: _personalSchedules,
-                                    enabled: true,
-                                    personal: true,
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                      ],
-                      if (!widget.canEditCommon) ...[
-                        const SizedBox(height: 12),
-                        _noticeCard(
-                          icon: Icons.lock_outline_rounded,
-                          text: strings.t(
-                            'Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.',
-                          ),
-                          color: MaiYenColors.warning,
-                        ),
-                      ],
+                      ),
                     ],
-                  ),
-          ),
+                    if (!widget.canEditCommon) ...[
+                      const SizedBox(height: 12),
+                      _noticeCard(
+                        icon: Icons.lock_outline_rounded,
+                        text: strings.t(
+                          'Chỉ chủ nhà và quản trị viên có thể thay đổi phần chung cho nhà.',
+                        ),
+                        color: MaiYenColors.warning,
+                      ),
+                    ],
+                  ],
+                ),
         ),
-      );
+      ),
+    );
   }
 
   Widget _header(AppStrings strings) => Row(
@@ -1086,6 +1108,102 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
     enabled: widget.canEditCommon && !_isEmergency,
     onChanged: (value) => _change(() => _enabled = value, immediate: true),
   );
+
+  Future<void> _chooseVibrationStrongAlertLevel(AppStrings strings) async {
+    final selected = await MaiYenNavigation.showModalSheet<String>(
+      context: context,
+      useRootNavigator: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        Widget option({
+          required String value,
+          required String title,
+          required String subtitle,
+          required IconData icon,
+        }) {
+          final selectedNow = _vibrationStrongAlertLevel == value;
+
+          return ListTile(
+            leading: Icon(
+              icon,
+              color: selectedNow
+                  ? MaiYenColors.primary
+                  : MaiYenColors.textSecondary,
+            ),
+            title: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.w800,
+                color: MaiYenColors.textPrimary,
+              ),
+            ),
+            subtitle: Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: MaiYenColors.textSecondary,
+              ),
+            ),
+            trailing: selectedNow
+                ? const Icon(
+                    Icons.check_circle_rounded,
+                    color: MaiYenColors.primary,
+                  )
+                : const Icon(Icons.circle_outlined),
+            onTap: () => Navigator.of(sheetContext).pop(value),
+          );
+        }
+
+        return Material(
+          color: MaiYenColors.surface,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  strings.vibrationStrongAlertLevelTitle,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    color: MaiYenColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  strings.vibrationStrongAlertLevelDescription,
+                  style: const TextStyle(
+                    color: MaiYenColors.textSecondary,
+                    height: 1.35,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                option(
+                  value: 'warning',
+                  title: '${strings.t('Cần chú ý')} (3/8s)',
+                  subtitle: strings.vibrationWarningStrongAlertDescription,
+                  icon: Icons.warning_amber_rounded,
+                ),
+                const Divider(height: 1),
+                option(
+                  value: 'alarm',
+                  title: '${strings.t('Báo động')} (5/15s)',
+                  subtitle: strings.vibrationAlarmStrongAlertDescription,
+                  icon: Icons.notifications_active_rounded,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (selected == null || !mounted) return;
+
+    _change(() => _vibrationStrongAlertLevel = selected, immediate: true);
+  }
 
   Widget _alarmChannelsCard(AppStrings strings) {
     final isIos = defaultTargetPlatform == TargetPlatform.iOS;
@@ -1243,6 +1361,35 @@ class _DeviceAlarmPolicySheetState extends State<_DeviceAlarmPolicySheet> {
               immediate: true,
             ),
           ),
+          if (_isVibration) ...[
+            const Divider(height: 1, indent: 12, endIndent: 12),
+            ListTile(
+              leading: const Icon(
+                Icons.tune_rounded,
+                color: MaiYenColors.primary,
+              ),
+              title: Text(
+                strings.vibrationStrongAlertLevelTitle,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: MaiYenColors.textPrimary,
+                ),
+              ),
+              subtitle: Text(
+                _vibrationStrongAlertLevel == 'warning'
+                    ? '${strings.t('Cần chú ý')} (3/8s)'
+                    : '${strings.t('Báo động')} (5/15s)',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: MaiYenColors.textSecondary,
+                ),
+              ),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+              visualDensity: VisualDensity.compact,
+              onTap: () => _chooseVibrationStrongAlertLevel(strings),
+            ),
+          ],
         ],
       ),
     );

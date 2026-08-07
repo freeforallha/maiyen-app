@@ -450,10 +450,29 @@ bool isRecentDeviceEvent(
   return ageMs >= 0 && ageMs <= withinMs;
 }
 
+String vibrationRiskLevel(Map<String, dynamic> device) {
+  final value =
+      device["vibration_risk_level"]?.toString().trim().toLowerCase() ?? "";
+
+  if ({"none", "light", "attention", "warning", "alarm"}.contains(value)) {
+    return value;
+  }
+
+  return "";
+}
+
 bool isVibrationEventActive(
   Map<String, dynamic> device, {
   int withinMs = 15 * 1000,
 }) {
+  final riskLevel = vibrationRiskLevel(device);
+
+  // Backend Vibration Intelligence v1 là nguồn ưu tiên. Rung đơn lẻ hoặc
+  // hai xung gần nhau không được nâng trạng thái nhà thành cảnh báo.
+  if (riskLevel.isNotEmpty) {
+    return riskLevel == "warning" || riskLevel == "alarm";
+  }
+
   final now = DateTime.now().millisecondsSinceEpoch;
   final activeUntil =
       int.tryParse(device["vibration_active_until"]?.toString() ?? "") ?? 0;
@@ -933,6 +952,7 @@ Map<String, dynamic> evaluateDeviceStatus(
 
   final action = device["action"]?.toString().trim().toLowerCase() ?? "";
 
+  final vibrationRisk = type == "vibration" ? vibrationRiskLevel(device) : "";
   final vibrationActive = type == "vibration" && isVibrationEventActive(device);
 
   final glassBreakActive =
@@ -941,10 +961,23 @@ Map<String, dynamic> evaluateDeviceStatus(
           (isRecentDeviceEvent(device) &&
               (action.contains("glass") || action.contains("break"))));
 
-  if (vibrationActive || glassBreakActive) {
-    final issue = glassBreakActive
-        ? "Phát hiện kính vỡ"
-        : "Phát hiện rung/chấn động";
+  if (vibrationActive) {
+    const issue = "Phát hiện rung/chấn động";
+
+    // 3 xung/8 giây chỉ là Cần chú ý; chưa được biến thành Nguy hiểm dù
+    // nhà đang trong Mode Bảo vệ hoặc đúng lịch Alarm. Chỉ mức alarm
+    // (>=5 xung/15 giây) mới đi vào nhánh Nguy hiểm.
+    if (vibrationRisk == "warning") {
+      warningIssues.add(issue);
+    } else if (isArmedMode || isNowInAlarmTime(device)) {
+      dangerIssues.add(issue);
+    } else {
+      warningIssues.add(issue);
+    }
+  }
+
+  if (glassBreakActive) {
+    const issue = "Phát hiện kính vỡ";
 
     if (isArmedMode || isNowInAlarmTime(device)) {
       dangerIssues.add(issue);

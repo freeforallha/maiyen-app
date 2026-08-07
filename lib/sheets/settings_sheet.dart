@@ -281,9 +281,7 @@ Future<void> _showLanguageSheet(BuildContext context) async {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: selected
-                    ? MaiYenColors.primary
-                    : MaiYenColors.border,
+                color: selected ? MaiYenColors.primary : MaiYenColors.border,
                 width: selected ? 1.4 : 0.9,
               ),
             ),
@@ -834,7 +832,8 @@ void showSettingsSheet({
 
                 tile(
                   icon: Icons.hub_rounded,
-                  title: "${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)",
+                  title:
+                      "${strings.t('Hub trung tâm')} ${BrandConfig.appName} (HUB)",
                   subtitle: "${strings.t('Tình trạng')} • Device ID • Wi-Fi",
                   color: MaiYenColors.primaryDark,
                   trailing: _HubUpdateAttentionTrailing(
@@ -930,9 +929,8 @@ void showSettingsSheet({
                                         color: MaiYenColors.primarySoft,
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: MaiYenColors.primary.withValues(
-                                            alpha: 0.18,
-                                          ),
+                                          color: MaiYenColors.primary
+                                              .withValues(alpha: 0.18),
                                         ),
                                       ),
                                       child: const Icon(
@@ -1070,7 +1068,9 @@ void showSettingsSheet({
                     tile(
                       icon: Icons.location_on_rounded,
                       title: strings.t("Tự động Bảo vệ khi rời nhà"),
-                      subtitle: strings.t("Đặt vị trí nhà và bật bảo vệ tự động"),
+                      subtitle: strings.t(
+                        "Đặt vị trí nhà và bật bảo vệ tự động",
+                      ),
                       color: const Color(0xFF2F8F6B),
                       onTap: () {
                         openChild(onAutoAway);

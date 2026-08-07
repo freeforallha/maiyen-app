@@ -199,9 +199,7 @@ Future<bool?> showShareListSheet({
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-              color: online
-                  ? MaiYenColors.safe
-                  : MaiYenColors.textSecondary,
+              color: online ? MaiYenColors.safe : MaiYenColors.textSecondary,
               shape: BoxShape.circle,
             ),
           ),
@@ -230,9 +228,7 @@ Future<bool?> showShareListSheet({
           child: Icon(
             hasPhone ? Icons.phone_rounded : Icons.phone_disabled_rounded,
             size: 23,
-            color: hasPhone
-                ? MaiYenColors.safe
-                : MaiYenColors.textSecondary,
+            color: hasPhone ? MaiYenColors.safe : MaiYenColors.textSecondary,
           ),
         ),
       ),
@@ -562,7 +558,9 @@ Future<bool?> showShareListSheet({
                                                 type: "member_removed",
                                                 category: "member",
                                                 severity: "warning",
-                                                title: strings.t("Đã xoá thành viên"),
+                                                title: strings.t(
+                                                  "Đã xoá thành viên",
+                                                ),
                                                 message:
                                                     "$name • ${strings.t("Đã xoá thành viên")}",
                                                 entityType: "member",

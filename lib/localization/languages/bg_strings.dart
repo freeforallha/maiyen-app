@@ -908,8 +908,7 @@ const Map<String, String> bgStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Спрете предупреждението само след като проверите състоянието на дома.\n\nСигурни ли сте, че искате да спрете предупреждението?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen откри предупреждение",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Отворете MaiYen, за да проверите веднага.",
+  "Mở MaiYen để kiểm tra ngay.": "Отворете MaiYen, за да проверите веднага.",
   "\$count tin nhắn mới": "\$count нови съобщения",
   "Tin nhắn HomeChat": "Съобщение в HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName изпрати съобщение",

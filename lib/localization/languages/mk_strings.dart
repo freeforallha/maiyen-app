@@ -907,8 +907,7 @@ const Map<String, String> mkStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Исклучете го предупредувањето само откако проверите состојбата на домот.\n\nДали сте сигурни дека искате да Исклучете го предупредувањето?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen откри предупредување",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Отворете MaiYen, за да проверите веднага.",
+  "Mở MaiYen để kiểm tra ngay.": "Отворете MaiYen, за да проверите веднага.",
   "\$count tin nhắn mới": "\$count нови пораки",
   "Tin nhắn HomeChat": "Порака во HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName изпрати порака",

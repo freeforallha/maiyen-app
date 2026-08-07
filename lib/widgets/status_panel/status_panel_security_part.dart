@@ -62,9 +62,7 @@ extension _StatusPanelSecurityPart on _StatusPanelState {
                           color: MaiYenColors.surface,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: MaiYenColors.primary.withValues(
-                              alpha: 0.28,
-                            ),
+                            color: MaiYenColors.primary.withValues(alpha: 0.28),
                           ),
                         ),
                         child: Row(
@@ -279,5 +277,4 @@ extension _StatusPanelSecurityPart on _StatusPanelState {
       ),
     );
   }
-
 }

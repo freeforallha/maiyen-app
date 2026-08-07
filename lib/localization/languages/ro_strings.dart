@@ -914,8 +914,7 @@ const Map<String, String> roStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Oprește alerta numai după ce ai verificat starea locuinței.\n\nSigur vrei să oprești alerta?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen a detectat o alertă",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Deschide MaiYen pentru a verifica imediat.",
+  "Mở MaiYen để kiểm tra ngay.": "Deschide MaiYen pentru a verifica imediat.",
   "\$count tin nhắn mới": "\$count mesaje noi",
   "Tin nhắn HomeChat": "Mesaj HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName a trimis un mesaj",

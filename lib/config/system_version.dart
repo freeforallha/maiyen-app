@@ -1,8 +1,4 @@
-enum ProtocolCompatibility {
-  unknown,
-  compatible,
-  incompatible,
-}
+enum ProtocolCompatibility { unknown, compatible, incompatible }
 
 class SystemVersionConfig {
   SystemVersionConfig._();
@@ -15,8 +11,7 @@ class SystemVersionConfig {
   static const String protocolVersion = '1.0.0';
   static const int supportedProtocolMajor = 1;
 
-  static const String appVersionDisplay =
-      '$appVersionName+$appBuildNumber';
+  static const String appVersionDisplay = '$appVersionName+$appBuildNumber';
 
   static int? versionMajor(String? rawVersion) {
     final clean = rawVersion?.trim() ?? '';
@@ -66,8 +61,7 @@ class HubSystemVersionInfo {
   final int? versionSchemaVersion;
 
   factory HubSystemVersionInfo.fromHubStatus(Map<String, dynamic> hubStatus) {
-    String readText(String key) =>
-        hubStatus[key]?.toString().trim() ?? '';
+    String readText(String key) => hubStatus[key]?.toString().trim() ?? '';
 
     final rawSchemaVersion = hubStatus['versionSchemaVersion'];
 

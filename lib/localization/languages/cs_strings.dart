@@ -884,8 +884,7 @@ const Map<String, String> csStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Výstrahu vypněte až po kontrole situace v domě.\n\nOpravdu chcete výstrahu vypnout?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen zjistil výstrahu",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Otevřete MaiYen a ihned vše zkontrolujte.",
+  "Mở MaiYen để kiểm tra ngay.": "Otevřete MaiYen a ihned vše zkontrolujte.",
   "\$count tin nhắn mới": "\$count nových zpráv",
   "Tin nhắn HomeChat": "Zprávy HomeChat",
   "\$senderName đã gửi một tin nhắn": "\$senderName poslal(a) zprávu",

@@ -62,8 +62,7 @@ Future<void> _notificationServiceShowChatNotification({
   final rawTitle = data["title"]?.toString().trim() ?? "";
   final rawBody = data["body"]?.toString().trim() ?? "";
 
-  final unreadCount =
-      int.tryParse(data["unreadCount"]?.toString() ?? "1") ?? 1;
+  final unreadCount = int.tryParse(data["unreadCount"]?.toString() ?? "1") ?? 1;
 
   final title = rawTitle.isNotEmpty
       ? _notificationServiceLocalizedExactTextOrRaw(rawTitle, strings)
@@ -113,7 +112,10 @@ Future<void> _notificationServiceStopEmergencyNotification() async {
 }
 
 Future<void> _notificationServiceStopAllAlarmNotifications() async {
-  await Future.wait([_notificationServiceStopAlarmNotification(), _notificationServiceStopEmergencyNotification()]);
+  await Future.wait([
+    _notificationServiceStopAlarmNotification(),
+    _notificationServiceStopEmergencyNotification(),
+  ]);
 }
 
 Future<void> _notificationServiceStopReminderNotification() async {

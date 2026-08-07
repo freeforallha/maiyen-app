@@ -131,7 +131,6 @@ class _StatusPanelState extends State<StatusPanel> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) => _buildStatusPanel(context);
 }

@@ -533,5 +533,4 @@ extension _Navigation on _MaiYenState {
         return false;
     }
   }
-
 }

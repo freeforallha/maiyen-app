@@ -499,9 +499,7 @@ class _SystemHealthSnapshot {
               ? strings.t("Tối ưu pin không chặn ứng dụng")
               : strings.t("Chưa tắt tối ưu pin"),
           message: batteryUnrestricted
-              ? strings.t(
-                  "Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.",
-                )
+              ? strings.t("Điện thoại ít có khả năng trì hoãn cảnh báo MaiYen.")
               : strings.t(
                   "Một số máy Android có thể trì hoãn cảnh báo nếu tối ưu pin còn bật.",
                 ),

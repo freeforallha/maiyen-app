@@ -361,12 +361,7 @@ Future<void> showHomeAutoAwaySheet({
                                       });
                                     },
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  12,
-                                  8,
-                                  8,
-                                  8,
-                                ),
+                                padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
                                 child: Row(
                                   children: [
                                     const Icon(

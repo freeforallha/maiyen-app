@@ -50,7 +50,6 @@ String _formatHubDateTime(dynamic rawValue) {
       '${dateTime.year} ${twoDigits(dateTime.hour)}:${twoDigits(dateTime.minute)}';
 }
 
-
 String _hubInfoString(dynamic rawValue) {
   return rawValue?.toString().trim() ?? '';
 }
@@ -69,9 +68,9 @@ Future<void> _requestHubUpdate({
   final currentUid = FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
 
   if (currentUid.isEmpty || currentUid != ownerUid) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(strings.hubUpdateOwnerOnlyText)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(strings.hubUpdateOwnerOnlyText)));
     return;
   }
 
@@ -121,17 +120,17 @@ Future<void> _requestHubUpdate({
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(strings.hubUpdateRequestSentText)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(strings.hubUpdateRequestSentText)));
   } catch (_) {
     if (!context.mounted) {
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(strings.hubUpdateRequestFailedText)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(strings.hubUpdateRequestFailedText)));
   }
 }
 
@@ -223,14 +222,12 @@ void showHubInfoSheet({
             };
             final compatibilityIcon = switch (compatibility) {
               ProtocolCompatibility.compatible => Icons.verified_rounded,
-              ProtocolCompatibility.incompatible =>
-                Icons.error_outline_rounded,
+              ProtocolCompatibility.incompatible => Icons.error_outline_rounded,
               ProtocolCompatibility.unknown => Icons.help_outline_rounded,
             };
 
-            String versionOrUnknown(String version) => version.isEmpty
-                ? strings.t('Chưa cập nhật')
-                : version;
+            String versionOrUnknown(String version) =>
+                version.isEmpty ? strings.t('Chưa cập nhật') : version;
 
             final currentUid =
                 FirebaseAuth.instance.currentUser?.uid.trim() ?? '';
@@ -257,13 +254,9 @@ void showHubInfoSheet({
             final updateRequest = _hubInfoMap(home['hubUpdateRequest']);
             final updateResult = _hubInfoMap(home['hubUpdateStatus']);
 
-            final requestReleaseId = _hubInfoString(
-              updateRequest['releaseId'],
-            );
+            final requestReleaseId = _hubInfoString(updateRequest['releaseId']);
             final requestStatus = _hubInfoString(updateRequest['status']);
-            final resultReleaseId = _hubInfoString(
-              updateResult['releaseId'],
-            );
+            final resultReleaseId = _hubInfoString(updateResult['releaseId']);
             final resultStatus = _hubInfoString(updateResult['status']);
 
             const completedStatusVisibleDuration = Duration(minutes: 15);
@@ -275,23 +268,16 @@ void showHubInfoSheet({
               updateResult['finishedAt'],
             )?.toLocal();
 
-            bool isRecentCompletedStatus(
-              String status,
-              DateTime? finishedAt,
-            ) {
+            bool isRecentCompletedStatus(String status, DateTime? finishedAt) {
               if (status != 'success' || finishedAt == null) {
                 return false;
               }
 
               final age = now.difference(finishedAt);
-              return !age.isNegative &&
-                  age <= completedStatusVisibleDuration;
+              return !age.isNegative && age <= completedStatusVisibleDuration;
             }
 
-            bool isRelevantFinalStatus(
-              String status,
-              DateTime? finishedAt,
-            ) {
+            bool isRelevantFinalStatus(String status, DateTime? finishedAt) {
               if (status == 'success') {
                 return isRecentCompletedStatus(status, finishedAt);
               }
@@ -324,9 +310,7 @@ void showHubInfoSheet({
               activeUpdateReleaseId = requestReleaseId;
             }
 
-            final updatePending = _isHubUpdatePendingStatus(
-              activeUpdateStatus,
-            );
+            final updatePending = _isHubUpdatePendingStatus(activeUpdateStatus);
             final updateCompletedForLatest =
                 activeUpdateStatus == 'success' &&
                 activeUpdateReleaseId == latestReleaseId;
@@ -592,23 +576,17 @@ void showHubInfoSheet({
                       _HubInfoRow(
                         icon: Icons.dns_rounded,
                         label: strings.backendVersionLabel,
-                        value: versionOrUnknown(
-                          versionInfo.backendVersion,
-                        ),
+                        value: versionOrUnknown(versionInfo.backendVersion),
                       ),
                       _HubInfoRow(
                         icon: Icons.developer_board_rounded,
                         label: strings.hubFirmwareVersionLabel,
-                        value: versionOrUnknown(
-                          versionInfo.hubFirmwareVersion,
-                        ),
+                        value: versionOrUnknown(versionInfo.hubFirmwareVersion),
                       ),
                       _HubInfoRow(
                         icon: Icons.lan_rounded,
                         label: strings.protocolVersionLabel,
-                        value: versionOrUnknown(
-                          versionInfo.protocolVersion,
-                        ),
+                        value: versionOrUnknown(versionInfo.protocolVersion),
                       ),
                       _HubInfoRow(
                         icon: compatibilityIcon,
@@ -768,8 +746,7 @@ class _HubUpdateCard extends StatelessWidget {
                         height: 1.25,
                       ),
                     ),
-                    if (description.isNotEmpty &&
-                        description != title) ...[
+                    if (description.isNotEmpty && description != title) ...[
                       const SizedBox(height: 5),
                       Text(
                         description,
@@ -789,10 +766,7 @@ class _HubUpdateCard extends StatelessWidget {
           if (hasVersionDetails) ...[
             const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 color: MaiYenColors.background,
                 borderRadius: BorderRadius.circular(14),
@@ -800,10 +774,7 @@ class _HubUpdateCard extends StatelessWidget {
               child: Column(
                 children: [
                   if (releaseId.isNotEmpty)
-                    _HubUpdateVersionLine(
-                      label: 'Release',
-                      value: releaseId,
-                    ),
+                    _HubUpdateVersionLine(label: 'Release', value: releaseId),
                   if (backendVersion.isNotEmpty)
                     _HubUpdateVersionLine(
                       label: backendLabel,
@@ -847,9 +818,7 @@ class _HubUpdateCard extends StatelessWidget {
                   ? const SizedBox(
                       width: 17,
                       height: 17,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.2,
-                      ),
+                      child: CircularProgressIndicator(strokeWidth: 2.2),
                     )
                   : const Icon(Icons.system_update_alt_rounded),
               label: Text(
@@ -866,10 +835,7 @@ class _HubUpdateCard extends StatelessWidget {
 }
 
 class _HubUpdateVersionLine extends StatelessWidget {
-  const _HubUpdateVersionLine({
-    required this.label,
-    required this.value,
-  });
+  const _HubUpdateVersionLine({required this.label, required this.value});
 
   final String label;
   final String value;

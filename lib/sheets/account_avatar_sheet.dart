@@ -892,9 +892,7 @@ class _DeleteAccountConfirmSheetState
                           width: 54,
                           height: 54,
                           decoration: BoxDecoration(
-                            color: MaiYenColors.danger.withValues(
-                              alpha: 0.10,
-                            ),
+                            color: MaiYenColors.danger.withValues(alpha: 0.10),
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: const Icon(

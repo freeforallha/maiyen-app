@@ -418,10 +418,7 @@ extension _Realtime on _MaiYenState {
     );
   }
 
-  String _hubUpdateNoticeOwnerUid(
-    String homeId,
-    Map<String, dynamic> home,
-  ) {
+  String _hubUpdateNoticeOwnerUid(String homeId, Map<String, dynamic> home) {
     if (home['_shared'] == true) {
       return home['_ownerUid']?.toString().trim() ?? '';
     }
@@ -670,5 +667,4 @@ extension _Realtime on _MaiYenState {
       },
     );
   }
-
 }

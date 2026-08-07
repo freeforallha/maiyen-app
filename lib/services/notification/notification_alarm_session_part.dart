@@ -131,6 +131,7 @@ void _openPendingAlarmPage() {
     flowType: data['flowType']?.toString() ?? '',
     eventCategory: data['eventCategory']?.toString() ?? '',
     alarmLevel: data['alarmLevel']?.toString() ?? '',
+    transientStrongAlert: data['transientStrongAlert']?.toString() == 'true',
   );
 }
 
@@ -145,7 +146,60 @@ void _notificationServiceOpenAlarmPage({
   String flowType = '',
   String eventCategory = '',
   String alarmLevel = '',
+  bool transientStrongAlert = false,
 }) {
+  if (transientStrongAlert) {
+    if (_alarmPageOpen) {
+      // Một Alarm thật đang hiển thị đã có mức ưu tiên cao hơn cảnh báo rung
+      // tạm thời. Không chồng thêm một route Fullscreen thứ hai.
+      return;
+    }
+
+    final navigator = appNavigatorKey.currentState;
+
+    if (navigator == null) {
+      _pendingAlarmOpenData = {
+        'title': title,
+        'body': body,
+        'alarmItemsJson': alarmItemsJson,
+        'incidentId': '',
+        'receiverUid': receiverUid,
+        'ownerUid': ownerUid,
+        'homeId': homeId,
+        'flowType': flowType,
+        'eventCategory': eventCategory,
+        'alarmLevel': alarmLevel,
+        'transientStrongAlert': 'true',
+      };
+      _pendingAlarmOpenTimer?.cancel();
+      _pendingAlarmOpenTimer = Timer(
+        const Duration(milliseconds: 300),
+        _openPendingAlarmPage,
+      );
+      return;
+    }
+
+    _alarmPageOpen = true;
+    navigator
+        .push(
+          MaterialPageRoute(
+            settings: const RouteSettings(
+              name: _notificationServiceAlarmRouteName,
+            ),
+            builder: (_) => FullscreenAlarmPage(
+              title: title,
+              body: body,
+              alarmItemsJson: alarmItemsJson,
+              eventCategory: eventCategory,
+              alarmLevel: alarmLevel,
+              transientStrongAlert: true,
+            ),
+          ),
+        )
+        .whenComplete(_notificationServiceMarkAlarmPageClosed);
+    return;
+  }
+
   if (incidentId.trim().isNotEmpty) {
     _notificationServiceRememberAlarmIncident({
       'incidentId': incidentId,

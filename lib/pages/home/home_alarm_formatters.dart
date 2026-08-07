@@ -208,7 +208,6 @@ bool _hasEnabledScheduleValue(dynamic raw) {
   return false;
 }
 
-
 String _alarmScheduleDaysKey(dynamic rawDays) {
   final days = <int>[];
 

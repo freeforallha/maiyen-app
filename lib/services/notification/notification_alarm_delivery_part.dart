@@ -318,6 +318,8 @@ Future<void> _notificationServiceOpenAlarmFromData(
       alarmData,
     ),
     alarmLevel: _notificationServiceNormalizedIncidentAlarmLevel(alarmData),
+    transientStrongAlert:
+        alarmData['transientStrongAlert']?.toString() == 'true',
   );
 }
 

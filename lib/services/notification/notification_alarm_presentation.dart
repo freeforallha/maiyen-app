@@ -191,6 +191,7 @@ AlarmNotificationPresentation buildAlarmNotificationPresentation(
   final flowType = _cleanAlarmText(
     data['alarmFlowType'] ?? data['flowType'],
   ).toLowerCase();
+  final alarmLevel = _cleanAlarmText(data['alarmLevel']).toLowerCase();
   final lines = <String>[];
 
   for (final item in items.take(4)) {
@@ -248,8 +249,15 @@ AlarmNotificationPresentation buildAlarmNotificationPresentation(
 
     lines.add(footer.join(' · '));
   } else if (stage == 'fullscreen') {
-    final siren = strings.t('Còi báo động');
-    title = familyLabel.isEmpty ? '📢 $siren' : '📢 $siren · $familyLabel';
+    if (alarmLevel == 'warning') {
+      final attention = strings.alarmIncidentLevelLabel('warning');
+      title = familyLabel.isEmpty
+          ? '⚠️ $attention'
+          : '⚠️ $attention · $familyLabel';
+    } else {
+      final siren = strings.t('Còi báo động');
+      title = familyLabel.isEmpty ? '📢 $siren' : '📢 $siren · $familyLabel';
+    }
   } else if (stage == 'detected') {
     final attention = strings.alarmIncidentLevelLabel('warning');
     title = familyLabel.isEmpty

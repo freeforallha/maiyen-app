@@ -18,8 +18,7 @@ import 'single_device_session_service.dart';
 import 'package:maiyen_app/helpers/debug_log.dart';
 import '../config/maiyen_identifiers.dart';
 
-const String _autoAwayGeofencePrefix =
-    MaiYenIdentifiers.autoAwayGeofencePrefix;
+const String _autoAwayGeofencePrefix = MaiYenIdentifiers.autoAwayGeofencePrefix;
 
 const String _pendingPresenceEventsStorageKey =
     MaiYenIdentifiers.pendingPresenceEventsStorageKey;
@@ -126,7 +125,6 @@ Future<void> maiYenAutoAwayGeofenceCallback(
     safeDebugPrint('AUTO_AWAY_GEOFENCE_CALLBACK_ERROR: $error');
   }
 }
-
 
 class AutoAwayService {
   static bool _initialized = false;
@@ -1496,7 +1494,6 @@ class AutoAwayService {
 
     return <String, dynamic>{};
   }
-
 
   static bool _isSelectedAutoAwayParticipant(
     Map<String, dynamic> autoAway,

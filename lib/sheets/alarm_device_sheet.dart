@@ -333,21 +333,23 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
       Object? rawCustomHome;
 
       try {
-        rawDevices = (await FirebaseDatabase.instance
-                .ref(
-                  'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices',
-                )
-                .get())
-            .value;
+        rawDevices =
+            (await FirebaseDatabase.instance
+                    .ref(
+                      'accounts/$resolvedOwnerUid/homes/${widget.homeId}/devices',
+                    )
+                    .get())
+                .value;
       } catch (_) {
         rawDevices = null;
       }
 
       try {
-        rawCustomHome = (await FirebaseDatabase.instance
-                .ref('accounts/$currentUid/customRules/${widget.homeId}')
-                .get())
-            .value;
+        rawCustomHome =
+            (await FirebaseDatabase.instance
+                    .ref('accounts/$currentUid/customRules/${widget.homeId}')
+                    .get())
+                .value;
       } catch (_) {
         rawCustomHome = null;
       }
@@ -577,9 +579,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
               if (value == draft[otherField]?.toString()) {
                 showTopToast(
                   context,
-                  strings.t(
-                    'Giờ bắt đầu và kết thúc không được trùng nhau',
-                  ),
+                  strings.t('Giờ bắt đầu và kết thúc không được trùng nhau'),
                   color: MaiYenColors.warning,
                   icon: Icons.schedule_rounded,
                 );
@@ -627,8 +627,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                       device: device,
                       deviceType: device['type']?.toString() ?? 'door',
                     );
-                    final previousPreferences =
-                        _personalPreferences(key, device);
+                    final previousPreferences = _personalPreferences(
+                      key,
+                      device,
+                    );
 
                     if (personalFollowsHomeAlarm) {
                       // Không lưu bản sao lịch chung ở customRules. Backend và UI
@@ -660,16 +662,14 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                               : personalNotificationEnabled,
                           fullscreenEnabled: personalFullscreenEnabled,
                           followHomeSchedule: personalFollowsHomeAlarm,
+                          vibrationStrongAlertLevel:
+                              previousPreferences.vibrationStrongAlertLevel,
                         ).toFirebaseMap();
                     continue;
                   }
 
                   final existing = _commonSchedules(key, device);
-                  _upsertAlarmScheduleByTime(
-                    existing,
-                    normalized,
-                    scheduleId,
-                  );
+                  _upsertAlarmScheduleByTime(existing, normalized, scheduleId);
                   final basePath =
                       'accounts/$_resolvedOwnerUid/homes/${widget.homeId}/devices/$realId';
                   updates['$basePath/alarmSchedules'] = {
@@ -685,14 +685,13 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                     device: device,
                     deviceType: device['type']?.toString() ?? 'door',
                   );
-                  updates['$basePath/alarmPolicy'] =
-                      DeviceAlarmPolicySettings(
-                        enabled: commonParticipates,
-                        notificationEnabled: commonNotificationEnabled,
-                        physicalSirenEnabled: commonPhysicalSirenEnabled,
-                        // Fullscreen là lựa chọn cá nhân, giữ nguyên dữ liệu cũ.
-                        fullscreenEnabled: policy.fullscreenEnabled,
-                      ).toFirebaseMap();
+                  updates['$basePath/alarmPolicy'] = DeviceAlarmPolicySettings(
+                    enabled: commonParticipates,
+                    notificationEnabled: commonNotificationEnabled,
+                    physicalSirenEnabled: commonPhysicalSirenEnabled,
+                    // Fullscreen là lựa chọn cá nhân, giữ nguyên dữ liệu cũ.
+                    fullscreenEnabled: policy.fullscreenEnabled,
+                  ).toFirebaseMap();
                 }
 
                 await FirebaseDatabase.instance.ref().update(updates);
@@ -848,11 +847,13 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                     endIndent: 10,
                                   ),
                                   quickOptionSwitch(
-                                    icon: Theme.of(context).platform ==
+                                    icon:
+                                        Theme.of(context).platform ==
                                             TargetPlatform.iOS
                                         ? Icons.phone_iphone_rounded
                                         : Icons.phone_android_rounded,
-                                    title: Theme.of(context).platform ==
+                                    title:
+                                        Theme.of(context).platform ==
                                             TargetPlatform.iOS
                                         ? strings.t('Cảnh báo trên iOS')
                                         : strings.t('Đánh thức màn hình'),
@@ -911,7 +912,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                             color: MaiYenColors.primary.withValues(alpha: 0.07),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: MaiYenColors.primary.withValues(alpha: 0.20),
+                              color: MaiYenColors.primary.withValues(
+                                alpha: 0.20,
+                              ),
                             ),
                           ),
                           child: Row(
@@ -942,8 +945,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           onChanged: saving
                               ? null
                               : (value) => setSheetState(
-                                    () => draft['enabled'] = value,
-                                  ),
+                                  () => draft['enabled'] = value,
+                                ),
                           contentPadding: EdgeInsets.zero,
                           title: Text(
                             personal
@@ -988,9 +991,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                         _AlarmWeekdaySelector(
                           days: _normalizeAlarmDays(draft['days']),
                           enabled: !saving,
-                          onChanged: (days) => setSheetState(
-                            () => draft['days'] = days,
-                          ),
+                          onChanged: (days) =>
+                              setSheetState(() => draft['days'] = days),
                         ),
                       ],
                       const SizedBox(height: 18),
@@ -1041,9 +1043,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: MaiYenColors.danger,
-            ),
+            style: FilledButton.styleFrom(backgroundColor: MaiYenColors.danger),
             child: Text(strings.t('Xóa')),
           ),
         ],
@@ -1230,8 +1230,9 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                           key,
                           device,
                         );
-                        final commonEnabled =
-                            hasEnabledDeviceAlarmSchedules(common);
+                        final commonEnabled = hasEnabledDeviceAlarmSchedules(
+                          common,
+                        );
                         final personalEnabled = preferences.followHomeSchedule
                             ? commonEnabled
                             : hasEnabledDeviceAlarmSchedules(storedPersonal);
@@ -1285,8 +1286,8 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w900,
-                                                  color: MaiYenColors
-                                                      .textPrimary,
+                                                  color:
+                                                      MaiYenColors.textPrimary,
                                                 ),
                                               ),
                                             ),
@@ -1298,8 +1299,7 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                               size: 17,
                                               color: policy.enabled
                                                   ? MaiYenColors.safe
-                                                  : MaiYenColors
-                                                        .textSecondary,
+                                                  : MaiYenColors.textSecondary,
                                             ),
                                           ],
                                         ),
@@ -1307,7 +1307,10 @@ class _AlarmDeviceSheetState extends State<AlarmDeviceSheet> {
                                         _scopeSummaryLine(
                                           icon: Icons.home_rounded,
                                           label: strings.t('Chung cho nhà'),
-                                          value: _scheduleSummary(common, strings),
+                                          value: _scheduleSummary(
+                                            common,
+                                            strings,
+                                          ),
                                           active: commonEnabled,
                                         ),
                                         const SizedBox(height: 3),

@@ -183,8 +183,7 @@ extension _Presentation on _DeviceListState {
       deviceId: realDeviceId,
       legacyFullscreenEnabled: settings.fullscreenEnabled,
     );
-    final effectiveNotificationEnabled =
-        personalPreferences.followHomeSchedule
+    final effectiveNotificationEnabled = personalPreferences.followHomeSchedule
         ? settings.notificationEnabled
         : personalPreferences.notificationEnabled;
     final iconSize = compact ? 9.5 : 10.5;
@@ -1057,8 +1056,7 @@ extension _Presentation on _DeviceListState {
         (compact ? 70.0 : 75.0) + (strings.isBurmese ? 1.0 : 0.0);
     final rowCount = groups.length <= 2 ? 1 : 2;
     final columnCount = _twoRowHorizontalColumnCount(groups.length);
-    final sectionHeight =
-        (rowCount * itemHeight) + ((rowCount - 1) * spacing);
+    final sectionHeight = (rowCount * itemHeight) + ((rowCount - 1) * spacing);
     final sectionWidth =
         (columnCount * itemWidth) + ((columnCount - 1) * spacing);
 
@@ -1114,5 +1112,4 @@ extension _Presentation on _DeviceListState {
       ),
     );
   }
-
 }

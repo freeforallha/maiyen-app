@@ -22,6 +22,7 @@ class FullscreenAlarmPage extends StatefulWidget {
   final String reminderItemsJson;
   final String eventCategory;
   final String alarmLevel;
+  final bool transientStrongAlert;
 
   const FullscreenAlarmPage({
     super.key,
@@ -32,6 +33,7 @@ class FullscreenAlarmPage extends StatefulWidget {
     this.alarmItemsJson = "",
     this.eventCategory = "",
     this.alarmLevel = "",
+    this.transientStrongAlert = false,
   });
 
   @override
@@ -56,6 +58,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
   late String currentEventCategory;
   late String currentAlarmLevel;
   bool _isMutingHomeSiren = false;
+  bool _transientStrongAlertActive = false;
   bool get isReminder => widget.silentMode;
 
   static const MethodChannel _nativeAppChannel = MethodChannel(
@@ -155,6 +158,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     currentAlarmItemsJson = widget.alarmItemsJson;
     currentEventCategory = widget.eventCategory;
     currentAlarmLevel = widget.alarmLevel;
+    _transientStrongAlertActive = widget.transientStrongAlert;
     if (widget.silentMode) {
       _loadLatestReminderSession();
 
@@ -165,18 +169,21 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       // Không xoá notification khi Reminder tự mở fullscreen.
       startSilentTimer();
     } else {
-      NotificationService.markAlarmPageOpened(
-        body: currentAlarmBody,
-        alarmItemsJson: currentAlarmItemsJson,
-        eventCategory: currentEventCategory,
-        alarmLevel: currentAlarmLevel,
-      );
-      _loadLatestAlarmSession();
+      if (!_transientStrongAlertActive) {
+        NotificationService.markAlarmPageOpened(
+          body: currentAlarmBody,
+          alarmItemsJson: currentAlarmItemsJson,
+          eventCategory: currentEventCategory,
+          alarmLevel: currentAlarmLevel,
+        );
+        _loadLatestAlarmSession();
+      }
 
+      // Cả cảnh báo rung tạm thời cũng nghe Alarm session. Nếu rung tiếp tục
+      // tăng từ Cần chú ý lên Nguy hiểm, chính trang đang mở sẽ được nâng cấp
+      // thành Alarm thật thay vì nuốt sự kiện vì `_alarmPageOpen == true`.
       NotificationService.alarmRevision.addListener(_onAlarmSessionChanged);
-
       NotificationService.alarmResolvedRevision.addListener(_onAlarmResolved);
-
       _startAlarmMode();
     }
   }
@@ -195,6 +202,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
   void _onAlarmResolved() {
     if (!mounted ||
         widget.silentMode ||
+        _transientStrongAlertActive ||
         NotificationService.hasActiveAlarmIncidents) {
       return;
     }
@@ -312,6 +320,13 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     if (!mounted || widget.silentMode) return;
 
     setState(() {
+      // Một incident thật đến trong lúc cảnh báo rung tạm thời đang mở sẽ
+      // nâng cấp trang hiện tại sang Alarm thật. Từ đây các thao tác đóng/
+      // xác nhận dùng đầy đủ lifecycle của incident.
+      if (_transientStrongAlertActive &&
+          NotificationService.hasActiveAlarmIncidents) {
+        _transientStrongAlertActive = false;
+      }
       _loadLatestAlarmSession();
     });
   }
@@ -350,15 +365,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       NotificationService.reminderRevision.removeListener(
         _onReminderSessionChanged,
       );
-
       NotificationService.markReminderPageClosed();
     } else {
       NotificationService.alarmRevision.removeListener(_onAlarmSessionChanged);
-
       NotificationService.alarmResolvedRevision.removeListener(
         _onAlarmResolved,
       );
-
       NotificationService.markAlarmPageClosed();
     }
 
@@ -664,7 +676,7 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     timer?.cancel();
     await stopAlarmSound();
 
-    if (!widget.silentMode) {
+    if (!widget.silentMode && !_transientStrongAlertActive) {
       final acknowledged =
           await NotificationService.resolveActiveAlarmIncidents(
             action: 'check_home',
@@ -677,6 +689,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       }
 
       NotificationService.clearActiveAlarms();
+      await NotificationService.stopAllAlarmNotifications();
+    } else if (_transientStrongAlertActive) {
       await NotificationService.stopAllAlarmNotifications();
     }
 
@@ -741,6 +755,15 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
 
     timer?.cancel();
     await stopAlarmSound();
+
+    if (_transientStrongAlertActive) {
+      await NotificationService.stopAllAlarmNotifications();
+
+      if (!mounted) return;
+
+      await _closePageWithoutDestroyingEngine();
+      return;
+    }
 
     final acknowledged = await NotificationService.resolveActiveAlarmIncidents(
       action: 'stop',
@@ -1018,6 +1041,8 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
     final issueMap = buildAlarmIssueMap(type, strings);
     final nextAlarmMap = buildNextAlarmMap();
     final isEmergency = _isEmergencyAlarm(type);
+    final isWarningStrongAlert =
+        currentAlarmLevel.trim().toLowerCase() == 'warning';
 
     final repeatText = isEmergency
         ? strings.alarmEmergencyEscalationText()
@@ -1027,11 +1052,18 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
 
     final statusTitle = isEmergency
         ? strings.emergencyStatusTitle()
+        : isWarningStrongAlert
+        ? strings.t('Cần chú ý')
         : strings.unsafeStatusTitle();
 
     const unsafeAccent = Color(0xFFD62F3A);
     const emergencyAccent = Color(0xFFB71C1C);
-    final accent = isEmergency ? emergencyAccent : unsafeAccent;
+    const warningAccent = Color(0xFFF59E0B);
+    final accent = isEmergency
+        ? emergencyAccent
+        : isWarningStrongAlert
+        ? warningAccent
+        : unsafeAccent;
 
     final content = PopScope(
       canPop: false,
@@ -1301,47 +1333,49 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                         onPressed: () => openHome(context),
                       ),
                     ),
-                    SizedBox(height: compact ? 8 : 10),
-                    SizedBox(
-                      width: double.infinity,
-                      height: compact ? 46 : 49,
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          disabledForegroundColor: Colors.white.withValues(
-                            alpha: 0.62,
-                          ),
-                          side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.5),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        icon: _isMutingHomeSiren
-                            ? const SizedBox(
-                                width: 17,
-                                height: 17,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Icon(Icons.volume_off_rounded, size: 20),
-                        label: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            strings.muteHomeSirenLabel(),
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w900,
+                    if (!_transientStrongAlertActive) ...[
+                      SizedBox(height: compact ? 8 : 10),
+                      SizedBox(
+                        width: double.infinity,
+                        height: compact ? 46 : 49,
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            disabledForegroundColor: Colors.white.withValues(
+                              alpha: 0.62,
+                            ),
+                            side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.5),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           ),
+                          icon: _isMutingHomeSiren
+                              ? const SizedBox(
+                                  width: 17,
+                                  height: 17,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Icon(Icons.volume_off_rounded, size: 20),
+                          label: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              strings.muteHomeSirenLabel(),
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                          onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
                         ),
-                        onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
                       ),
-                    ),
-                    SizedBox(height: compact ? 2 : 4),
+                      SizedBox(height: compact ? 2 : 4),
+                    ],
                     TextButton.icon(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white.withValues(alpha: 0.86),
@@ -1432,7 +1466,12 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
         type == 'smoke' ||
         type == 'flood' ||
         type == 'gas';
-    final displayedLevel = isEmergency ? 'emergency' : 'alarm';
+    final isWarningStrongAlert = normalizedLevel == 'warning';
+    final displayedLevel = isEmergency
+        ? 'emergency'
+        : isWarningStrongAlert
+        ? 'warning'
+        : 'alarm';
 
     final repeatText = isEmergency
         ? strings.alarmEmergencyEscalationText()
@@ -1449,14 +1488,16 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
       _ => const Color(0xFF161616),
     };
 
-    final Color accent = switch (type) {
-      "sos" => const Color(0xFFE11D48),
-      "smoke" => const Color(0xFFF97316),
-      "flood" => const Color(0xFF0284C7),
-      "gas" => const Color(0xFF9333EA),
-      "door" => const Color(0xFFDC2626),
-      _ => const Color(0xFFEF4444),
-    };
+    final Color accent = isWarningStrongAlert
+        ? const Color(0xFFF59E0B)
+        : switch (type) {
+            "sos" => const Color(0xFFE11D48),
+            "smoke" => const Color(0xFFF97316),
+            "flood" => const Color(0xFF0284C7),
+            "gas" => const Color(0xFF9333EA),
+            "door" => const Color(0xFFDC2626),
+            _ => const Color(0xFFEF4444),
+          };
 
     return PopScope(
       canPop: false,
@@ -1709,46 +1750,49 @@ class _FullscreenAlarmPageState extends State<FullscreenAlarmPage>
                   ),
                 ),
 
-                const SizedBox(height: 12),
-
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      disabledForegroundColor: Colors.white.withValues(
-                        alpha: 0.65,
+                if (!_transientStrongAlertActive) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        disabledForegroundColor: Colors.white.withValues(
+                          alpha: 0.65,
+                        ),
+                        side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.45),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
-                      side: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.45),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    icon: _isMutingHomeSiren
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
+                      icon: _isMutingHomeSiren
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.notifications_off_rounded,
+                              size: 20,
                             ),
-                          )
-                        : const Icon(Icons.notifications_off_rounded, size: 20),
-                    label: Text(
-                      strings.muteHomeSirenLabel(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
+                      label: Text(
+                        strings.muteHomeSirenLabel(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
+                      onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
                     ),
-                    onPressed: _isMutingHomeSiren ? null : muteHomeSiren,
                   ),
-                ),
-
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                ],
 
                 TextButton.icon(
                   style: TextButton.styleFrom(

@@ -915,8 +915,7 @@ const Map<String, String> nlStrings = {
       "Schakel de waarschuwing alleen uit nadat je de situatie in huis hebt gecontroleerd.\n\nWeet je zeker dat je de waarschuwing wilt uitschakelen?",
   "🚨 MaiYen phát hiện cảnh báo":
       "🚨 MaiYen heeft een waarschuwing gedetecteerd",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Open MaiYen om dit direct te controleren.",
+  "Mở MaiYen để kiểm tra ngay.": "Open MaiYen om dit direct te controleren.",
   "\$count tin nhắn mới": "\$count nieuwe berichten",
   "Tin nhắn HomeChat": "HomeChat-berichten",
   "\$senderName đã gửi một tin nhắn": "\$senderName heeft een bericht gestuurd",

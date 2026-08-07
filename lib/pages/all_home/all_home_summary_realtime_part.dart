@@ -423,5 +423,4 @@ extension _SummaryRealtime on _AllHomeState {
       },
     );
   }
-
 }

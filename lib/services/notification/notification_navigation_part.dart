@@ -1,13 +1,14 @@
 part of '../notification_service.dart';
 
-AppStrings get _strings =>
-    AppStrings.fromLocale(appLanguageController.locale);
+AppStrings get _strings => AppStrings.fromLocale(appLanguageController.locale);
 
 final ValueNotifier<Map<String, String>?> _notificationServiceChatOpenRequest =
     ValueNotifier<Map<String, String>?>(null);
 
-final ValueNotifier<Map<String, String>?> _notificationServiceHubUpdateOpenRequest =
-    ValueNotifier<Map<String, String>?>(null);
+final ValueNotifier<Map<String, String>?>
+_notificationServiceHubUpdateOpenRequest = ValueNotifier<Map<String, String>?>(
+  null,
+);
 
 String _notificationServiceHubUpdatePayload({
   required String homeId,
@@ -27,14 +28,18 @@ int _notificationServiceHubUpdateNotificationId(String homeId) {
   return NotificationPayloadCodec.hubUpdateNotificationId(homeId);
 }
 
-Future<void> _notificationServiceCancelHubUpdateNotification(String homeId) async {
+Future<void> _notificationServiceCancelHubUpdateNotification(
+  String homeId,
+) async {
   final cleanHomeId = homeId.trim();
 
   if (cleanHomeId.isEmpty) {
     return;
   }
 
-  await localNotif.cancel(_notificationServiceHubUpdateNotificationId(cleanHomeId));
+  await localNotif.cancel(
+    _notificationServiceHubUpdateNotificationId(cleanHomeId),
+  );
 }
 
 void _notificationServiceRequestOpenHubUpdate(Map<String, dynamic> rawData) {
@@ -82,7 +87,10 @@ int _notificationServiceHomeChatNotificationId(String homeId) {
   return NotificationPayloadCodec.homeChatNotificationId(homeId);
 }
 
-String _notificationServiceLocalizedExactTextOrRaw(String raw, AppStrings strings) {
+String _notificationServiceLocalizedExactTextOrRaw(
+  String raw,
+  AppStrings strings,
+) {
   return NotificationPayloadCodec.localizedExactTextOrRaw(raw, strings);
 }
 
@@ -95,7 +103,9 @@ void _notificationServiceMarkHomeChatOpened(String homeId) {
 
   _activeHomeChatId = cleanHomeId;
 
-  unawaited(localNotif.cancel(_notificationServiceHomeChatNotificationId(cleanHomeId)));
+  unawaited(
+    localNotif.cancel(_notificationServiceHomeChatNotificationId(cleanHomeId)),
+  );
 }
 
 void _notificationServiceMarkHomeChatClosed(String homeId) {

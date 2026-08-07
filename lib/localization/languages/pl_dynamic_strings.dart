@@ -33,8 +33,7 @@ const Map<String, String> plDynamicStrings = {
   "MaiYen nhắc nhở toàn màn hình": "Pełnoekranowe przypomnienie MaiYen",
   "Nhắc nhở MaiYen toàn màn hình không âm thanh":
       "Ciche pełnoekranowe przypomnienie MaiYen",
-  "MaiYen nhắc nhở ưu tiên cao":
-      "Przypomnienie MaiYen o wysokim priorytecie",
+  "MaiYen nhắc nhở ưu tiên cao": "Przypomnienie MaiYen o wysokim priorytecie",
   "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
       "Przypomnienie MaiYen o wysokim priorytecie bez otwierania pełnego ekranu",
   "Tin nhắn mới trong các nhà MaiYen": "Nowe wiadomości w domach MaiYen",

@@ -115,9 +115,7 @@ class _HomeTabsState extends State<HomeTabs> {
       return getHomeColor(homeId);
     }
 
-    return _emergencyPulseDanger
-        ? MaiYenColors.danger
-        : MaiYenColors.warning;
+    return _emergencyPulseDanger ? MaiYenColors.danger : MaiYenColors.warning;
   }
 
   Color _homeCardBackground(String homeId) {
@@ -473,8 +471,9 @@ class _HomeTabsState extends State<HomeTabs> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: MaiYenColors.textSecondary
-                                      .withValues(alpha: 0.82),
+                                  color: MaiYenColors.textSecondary.withValues(
+                                    alpha: 0.82,
+                                  ),
                                   fontSize: 11,
                                   height: 1.05,
                                   fontWeight: FontWeight.w600,

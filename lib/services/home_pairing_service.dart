@@ -45,9 +45,7 @@ class HomePairingService {
   }) async {
     final value = code.trim();
 
-    if (value.startsWith(
-      MaiYenIdentifiers.joinMultipleHomesQrPrefix,
-    )) {
+    if (value.startsWith(MaiYenIdentifiers.joinMultipleHomesQrPrefix)) {
       final parts = value.split("|");
 
       if (parts.length != 3) {

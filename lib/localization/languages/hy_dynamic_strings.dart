@@ -34,12 +34,10 @@ const Map<String, String> hyDynamicStrings = {
   "MaiYen nhắc nhở toàn màn hình": "MaiYen-ի ամբողջէկրան հիշեցում",
   "Nhắc nhở MaiYen toàn màn hình không âm thanh":
       "MaiYen-ի անձայն ամբողջէկրան հիշեցում",
-  "MaiYen nhắc nhở ưu tiên cao":
-      "MaiYen-ի բարձր առաջնահերթությամբ հիշեցում",
+  "MaiYen nhắc nhở ưu tiên cao": "MaiYen-ի բարձր առաջնահերթությամբ հիշեցում",
   "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
       "MaiYen-ի բարձր առաջնահերթությամբ հիշեցում՝ առանց ամբողջ էկրանի",
-  "Tin nhắn mới trong các nhà MaiYen":
-      "Նոր հաղորդագրություններ MaiYen տներում",
+  "Tin nhắn mới trong các nhà MaiYen": "Նոր հաղորդագրություններ MaiYen տներում",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Այս գործողությունն այսօր կփոխի որոշ սարքերի տագնապի ժամը։\n\n«Արտակարգ վտանգ» կատեգորիայի սարքերի տագնապները և «Պաշտպանություն» ռեժիմի տագնապները չեն ազդվի այս գործառույթից։",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count վտանգավոր տուն\$suffix",

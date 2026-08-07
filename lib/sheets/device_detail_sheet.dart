@@ -377,15 +377,16 @@ void showDeviceDetail({
                                           personalHome["mode"] ??
                                           "home")
                                       .toString();
-                              final commonAlarms = normalizeDeviceAlarmSchedules(
-                                rawSchedules: device["alarmSchedules"],
-                                legacyAlarm: device["alarm"],
-                                personal: false,
-                                legacyFullscreenEnabled:
-                                    alarmPolicy.fullscreenEnabled,
-                                legacyPhysicalSirenEnabled:
-                                    alarmPolicy.physicalSirenEnabled,
-                              );
+                              final commonAlarms =
+                                  normalizeDeviceAlarmSchedules(
+                                    rawSchedules: device["alarmSchedules"],
+                                    legacyAlarm: device["alarm"],
+                                    personal: false,
+                                    legacyFullscreenEnabled:
+                                        alarmPolicy.fullscreenEnabled,
+                                    legacyPhysicalSirenEnabled:
+                                        alarmPolicy.physicalSirenEnabled,
+                                  );
                               final storedPersonalAlarms =
                                   normalizeEffectivePersonalAlarmSchedules(
                                     customDevice: personalDevice,
@@ -409,15 +410,14 @@ void showDeviceDetail({
                                 ),
                                 personalNotificationEnabled:
                                     personalPreferences.followHomeSchedule
-                                        ? alarmPolicy.notificationEnabled
-                                        : personalPreferences.notificationEnabled,
+                                    ? alarmPolicy.notificationEnabled
+                                    : personalPreferences.notificationEnabled,
                                 personalFullscreenEnabled:
                                     personalPreferences.fullscreenEnabled,
-                                commonAlarmSummary:
-                                    _deviceAlarmScheduleSummary(
-                                      commonAlarms,
-                                      strings,
-                                    ),
+                                commonAlarmSummary: _deviceAlarmScheduleSummary(
+                                  commonAlarms,
+                                  strings,
+                                ),
                                 personalAlarmSummary:
                                     personalPreferences.followHomeSchedule
                                     ? strings.t('Theo nhà')
@@ -426,10 +426,14 @@ void showDeviceDetail({
                                         strings,
                                       ),
                                 commonAlarmEnabled:
-                                    hasEnabledDeviceAlarmSchedules(commonAlarms),
+                                    hasEnabledDeviceAlarmSchedules(
+                                      commonAlarms,
+                                    ),
                                 personalAlarmEnabled:
                                     personalPreferences.followHomeSchedule
-                                    ? hasEnabledDeviceAlarmSchedules(commonAlarms)
+                                    ? hasEnabledDeviceAlarmSchedules(
+                                        commonAlarms,
+                                      )
                                     : hasEnabledDeviceAlarmSchedules(
                                         storedPersonalAlarms,
                                       ),
@@ -773,9 +777,7 @@ _DeviceDisplayStatus _getDeviceDisplayStatus(Map<String, dynamic> device) {
             ? "Đang dùng nguồn dự phòng"
             : "Nguồn điện bình thường",
         icon: Icons.battery_charging_full_rounded,
-        color: mainsPower == false
-            ? MaiYenColors.warning
-            : MaiYenColors.safe,
+        color: mainsPower == false ? MaiYenColors.warning : MaiYenColors.safe,
       );
 
     case "siren":
@@ -1028,9 +1030,7 @@ Widget _alarmSettingsSummary({
         row(
           icon: Icons.notifications_active_outlined,
           title: strings.t("Thông báo báo động"),
-          value: strings.t(
-            personalNotificationEnabled ? "Bật" : "Tắt",
-          ),
+          value: strings.t(personalNotificationEnabled ? "Bật" : "Tắt"),
           color: personalNotificationEnabled
               ? MaiYenColors.primary
               : MaiYenColors.textSecondary,
@@ -1210,10 +1210,7 @@ Future<String?> _showDeviceSelector({
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
                 child: Row(
                   children: [
-                    const Icon(
-                      Icons.hub_rounded,
-                      color: MaiYenColors.primary,
-                    ),
+                    const Icon(Icons.hub_rounded, color: MaiYenColors.primary),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -1272,13 +1269,9 @@ Future<String?> _showDeviceSelector({
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: selected
-                                  ? MaiYenColors.primary.withValues(
-                                      alpha: 0.42,
-                                    )
+                                  ? MaiYenColors.primary.withValues(alpha: 0.42)
                                   : needsAttention
-                                  ? MaiYenColors.warning.withValues(
-                                      alpha: 0.42,
-                                    )
+                                  ? MaiYenColors.warning.withValues(alpha: 0.42)
                                   : MaiYenColors.border,
                             ),
                           ),

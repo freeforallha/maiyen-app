@@ -37,8 +37,7 @@ const Map<String, String> gaDynamicStrings = {
   "MaiYen nhắc nhở ưu tiên cao": "Meabhrúchán ardtosaíochta MaiYen",
   "Nhắc nhở MaiYen ưu tiên cao, không mở toàn màn hình":
       "Meabhrúchán ardtosaíochta MaiYen gan lánscáileán",
-  "Tin nhắn mới trong các nhà MaiYen":
-      "Teachtaireachtaí nua i mbailte MaiYen",
+  "Tin nhắn mới trong các nhà MaiYen": "Teachtaireachtaí nua i mbailte MaiYen",
   "Hành động này sẽ thay đổi thời gian báo động của một số thiết bị hôm nay.\n\nBáo động của các thiết bị thuộc trường \"Nguy hiểm khẩn cấp\" và báo động ở chế độ \"Bảo vệ\" sẽ không bị ảnh hưởng bởi chức năng này.":
       "Athróidh an gníomh seo am aláraim roinnt gléasanna inniu.\n\nNí dhéanfaidh an ghné seo difear d’aláraim gléasanna sa chatagóir “Contúirt éigeandála” ná d’aláraim sa mhód “Cosaint”.",
   "🆘 \$count nhà nguy hiểm\$suffix": "🆘 \$count baile i mbaol\$suffix",

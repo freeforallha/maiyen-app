@@ -264,5 +264,4 @@ extension _StatusPanelStatusPart on _StatusPanelState {
 
     return suggestions;
   }
-
 }

@@ -888,8 +888,7 @@ const Map<String, String> srStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Isključite upozorenje tek nakon što proverite stanje doma.\n\nDa li ste sigurni da želite isključiti upozorenje?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen je otkrio upozorenje",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Otvorite MaiYen kako biste odmah proverili.",
+  "Mở MaiYen để kiểm tra ngay.": "Otvorite MaiYen kako biste odmah proverili.",
   "\$count tin nhắn mới": "\$count novih poruka",
   "Tin nhắn HomeChat": "HomeChat poruka",
   "\$senderName đã gửi một tin nhắn": "\$senderName je poslao poruku",

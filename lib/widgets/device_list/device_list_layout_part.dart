@@ -217,9 +217,7 @@ extension _Layout on _DeviceListState {
           ? _draggingDeviceId
           : null;
       final paintEntries = <MapEntry<String, dynamic>>[
-        ...visibleEntries.where(
-          (entry) => entry.key != activeDraggingDeviceId,
-        ),
+        ...visibleEntries.where((entry) => entry.key != activeDraggingDeviceId),
         if (activeDraggingDeviceId != null)
           ...visibleEntries.where(
             (entry) => entry.key == activeDraggingDeviceId,
@@ -252,9 +250,7 @@ extension _Layout on _DeviceListState {
       );
     }
 
-    final content = canReorder
-        ? buildAnimatedContent()
-        : buildStaticContent();
+    final content = canReorder ? buildAnimatedContent() : buildStaticContent();
 
     if (visibleEntries.length <= 4) {
       return SizedBox(
@@ -294,11 +290,7 @@ extension _Layout on _DeviceListState {
         child: const SizedBox(
           width: 34,
           height: 34,
-          child: Icon(
-            Icons.add_rounded,
-            size: 20,
-            color: MaiYenColors.primary,
-          ),
+          child: Icon(Icons.add_rounded, size: 20, color: MaiYenColors.primary),
         ),
       ),
     );
@@ -481,9 +473,7 @@ extension _Layout on _DeviceListState {
     final pulseColor = _sirenAlertPulseDanger
         ? MaiYenColors.danger
         : MaiYenColors.warning;
-    final accentColor = emergencyIsActive
-        ? pulseColor
-        : getAccentColor(device);
+    final accentColor = emergencyIsActive ? pulseColor : getAccentColor(device);
     final cardColor = emergencyIsActive
         ? pulseColor.withValues(alpha: _sirenAlertPulseDanger ? 0.20 : 0.15)
         : MaiYenColors.surface;
@@ -649,10 +639,7 @@ extension _Layout on _DeviceListState {
               ),
             ),
           ),
-          if (showAddButton) ...[
-            const SizedBox(width: 6),
-            _addDeviceButton(),
-          ],
+          if (showAddButton) ...[const SizedBox(width: 6), _addDeviceButton()],
         ],
       ),
     );
@@ -677,5 +664,4 @@ extension _Layout on _DeviceListState {
       ),
     );
   }
-
 }

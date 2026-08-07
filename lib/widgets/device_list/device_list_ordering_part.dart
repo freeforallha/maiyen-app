@@ -153,10 +153,7 @@ extension _Ordering on _DeviceListState {
     final column = (pageIndex * 2) + (indexInPage % 2);
     final row = indexInPage ~/ 2;
 
-    return Offset(
-      column * (itemWidth + spacing),
-      row * (itemHeight + spacing),
-    );
+    return Offset(column * (itemWidth + spacing), row * (itemHeight + spacing));
   }
 
   int _twoRowHorizontalColumnCount(int itemCount) {
@@ -481,5 +478,4 @@ extension _Ordering on _DeviceListState {
 
     return entries;
   }
-
 }

@@ -407,9 +407,7 @@ Widget _deviceGroup({
                 child: Text(
                   "$groupCount",
                   style: TextStyle(
-                    color: groupCount > 0
-                        ? color
-                        : MaiYenColors.textSecondary,
+                    color: groupCount > 0 ? color : MaiYenColors.textSecondary,
                     fontSize: 11.5,
                     fontWeight: FontWeight.w900,
                   ),
@@ -423,12 +421,10 @@ Widget _deviceGroup({
           _deviceTypeRow(
             context: context,
             devices: devices,
-            name: AppStrings.of(context).t(
-              items[index]["name"]?.toString() ?? "",
-            ),
-            types: List<String>.from(
-              items[index]["types"] ?? const <String>[],
-            ),
+            name: AppStrings.of(
+              context,
+            ).t(items[index]["name"]?.toString() ?? ""),
+            types: List<String>.from(items[index]["types"] ?? const <String>[]),
             icon: items[index]["icon"] as IconData? ?? Icons.sensors_rounded,
             accentColor: color,
             onTapDevice: onTapDevice,

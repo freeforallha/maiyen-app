@@ -95,6 +95,7 @@ import 'languages/ka_dynamic_strings.dart';
 import 'languages/az_dynamic_strings.dart';
 
 part 'auto_away_feature_strings.dart';
+part 'vibration_alert_feature_strings.dart';
 
 class AppStrings {
   final bool isEnglish;

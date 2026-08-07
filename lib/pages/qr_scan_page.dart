@@ -8,15 +8,11 @@ enum MaiYenQrScanMode { pairDevice, joinHome }
 
 bool _isJoinHomeQr(String value) {
   return value.startsWith(MaiYenIdentifiers.joinHomeQrPrefix) ||
-      value.startsWith(
-        MaiYenIdentifiers.joinMultipleHomesQrPrefix,
-      );
+      value.startsWith(MaiYenIdentifiers.joinMultipleHomesQrPrefix);
 }
 
 bool _looksLikeJoinHomeQr(String value) {
-  return value.startsWith(
-    MaiYenIdentifiers.joinHomeQrFamilyPrefix,
-  );
+  return value.startsWith(MaiYenIdentifiers.joinHomeQrFamilyPrefix);
 }
 
 Future<String?> openQRScanner(

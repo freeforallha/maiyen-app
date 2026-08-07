@@ -30,8 +30,7 @@ const Map<String, String> cnrDynamicStrings = {
   "MaiYen cảnh báo khẩn cấp": "MaiYen hitno upozorenje",
   "Cảnh báo khẩn cấp ưu tiên cao trước khi mở toàn màn hình":
       "Hitno upozorenje visokog prioriteta prije otvaranja preko cijelog zaslona",
-  "MaiYen nhắc nhở toàn màn hình":
-      "MaiYen Podsjetnik preko cijelog zaslona",
+  "MaiYen nhắc nhở toàn màn hình": "MaiYen Podsjetnik preko cijelog zaslona",
   "Nhắc nhở MaiYen toàn màn hình không âm thanh":
       "MaiYen Podsjetnik preko cijelog zaslona bez zvuka",
   "MaiYen nhắc nhở ưu tiên cao": "MaiYen Podsjetnik visokog prioriteta",

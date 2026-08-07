@@ -153,19 +153,14 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
     required Uri uri,
     required String languageCode,
   }) async {
-    final request = await client.getUrl(uri).timeout(
-      const Duration(seconds: 12),
-    );
-    request.headers.set(
-      HttpHeaders.userAgentHeader,
-      BrandConfig.mapUserAgent,
-    );
+    final request = await client
+        .getUrl(uri)
+        .timeout(const Duration(seconds: 12));
+    request.headers.set(HttpHeaders.userAgentHeader, BrandConfig.mapUserAgent);
     request.headers.set(HttpHeaders.acceptHeader, 'application/json');
     request.headers.set(HttpHeaders.acceptLanguageHeader, languageCode);
 
-    final response = await request.close().timeout(
-      const Duration(seconds: 12),
-    );
+    final response = await request.close().timeout(const Duration(seconds: 12));
 
     if (response.statusCode != HttpStatus.ok) {
       await response.drain<void>();
@@ -288,20 +283,16 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
     required String query,
     required String languageCode,
   }) async {
-    final uri = Uri.https(
-      'photon.komoot.io',
-      '/api',
-      <String, String>{
-        'q': query,
-        'limit': '10',
-        'lang': languageCode,
-        'lat': _selectedPoint.latitude.toString(),
-        'lon': _selectedPoint.longitude.toString(),
-        'zoom': '12',
-        'location_bias_scale': '0.25',
-        'dedupe': '1',
-      },
-    );
+    final uri = Uri.https('photon.komoot.io', '/api', <String, String>{
+      'q': query,
+      'limit': '10',
+      'lang': languageCode,
+      'lat': _selectedPoint.latitude.toString(),
+      'lon': _selectedPoint.longitude.toString(),
+      'zoom': '12',
+      'location_bias_scale': '0.25',
+      'dedupe': '1',
+    });
     final decoded = await _readSearchJson(
       client: client,
       uri: uri,
@@ -591,8 +582,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                   TileLayer(
                     urlTemplate:
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName:
-                        MaiYenIdentifiers.applicationId,
+                    userAgentPackageName: MaiYenIdentifiers.applicationId,
                     maxNativeZoom: 19,
                   ),
                   CircleLayer(
@@ -802,10 +792,7 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                       );
                     },
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 4,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                       child: Text(
                         '© OpenStreetMap contributors',
                         style: TextStyle(
@@ -854,7 +841,9 @@ class _HomeAutoAwayMapPageState extends State<HomeAutoAwayMapPage> {
                         child: ElevatedButton.icon(
                           onPressed: _confirm,
                           icon: const Icon(Icons.check_circle_rounded),
-                          label: Text(widget.strings.autoAwayConfirmMapLocation),
+                          label: Text(
+                            widget.strings.autoAwayConfirmMapLocation,
+                          ),
                         ),
                       ),
                     ],

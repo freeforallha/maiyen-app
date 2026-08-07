@@ -905,8 +905,7 @@ const Map<String, String> lbStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Stoppt d’Warnung eréischt nodeems Dir den Zoustand vum Doheem kontrolléiert hutt.\n\nSidd Dir sécher, datt Dir d’Warnung stoppe wëllt?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen huet eng Warnung erkannt",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Maacht MaiYen op, fir elo ze kontrolléieren.",
+  "Mở MaiYen để kiểm tra ngay.": "Maacht MaiYen op, fir elo ze kontrolléieren.",
   "\$count tin nhắn mới": "\$count nei Messagen",
   "Tin nhắn HomeChat": "HomeChat-Message",
   "\$senderName đã gửi một tin nhắn": "\$senderName huet e Message geschéckt",

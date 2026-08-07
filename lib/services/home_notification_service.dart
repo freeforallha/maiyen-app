@@ -267,9 +267,7 @@ class HomeNotificationService {
       final resultSnap = await resultRef.get();
 
       if (resultSnap.value is Map) {
-        final result = Map<String, dynamic>.from(
-          resultSnap.value as Map,
-        );
+        final result = Map<String, dynamic>.from(resultSnap.value as Map);
         final status = result["status"]?.toString() ?? "";
 
         if (status == "completed") {
@@ -278,8 +276,7 @@ class HomeNotificationService {
 
         if (status == "rejected" || status == "failed") {
           throw StateError(
-            result["reason"]?.toString() ??
-                "Backend từ chối Home Notification",
+            result["reason"]?.toString() ?? "Backend từ chối Home Notification",
           );
         }
       }
@@ -287,9 +284,7 @@ class HomeNotificationService {
       await Future<void>.delayed(const Duration(milliseconds: 150));
     }
 
-    throw TimeoutException(
-      "Quá thời gian chờ backend xử lý Home Notification",
-    );
+    throw TimeoutException("Quá thời gian chờ backend xử lý Home Notification");
   }
 
   static Future<Set<String>> homeRecipientUids({

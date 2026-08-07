@@ -451,5 +451,4 @@ extension _StatusPanelSummaryPart on _StatusPanelState {
       ),
     );
   }
-
 }

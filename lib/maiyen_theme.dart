@@ -161,24 +161,15 @@ class MaiYenTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: MaiYenColors.primary,
-            width: 1.4,
-          ),
+          borderSide: const BorderSide(color: MaiYenColors.primary, width: 1.4),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: MaiYenColors.danger,
-            width: 1.2,
-          ),
+          borderSide: const BorderSide(color: MaiYenColors.danger, width: 1.2),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: MaiYenColors.danger,
-            width: 1.4,
-          ),
+          borderSide: const BorderSide(color: MaiYenColors.danger, width: 1.4),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

@@ -7,8 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/maiyen_identifiers.dart';
 
 class AppLanguageController extends ChangeNotifier {
-  static const String _storageKey =
-      MaiYenIdentifiers.languageStorageKey;
+  static const String _storageKey = MaiYenIdentifiers.languageStorageKey;
   static const Set<String> supportedCodes = {
     "vi",
     "en",

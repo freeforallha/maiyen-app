@@ -101,7 +101,10 @@ extension _AllHomeBulkAlarmPart on _AllHomeState {
     int selectedAlarmRepeatMinutes = 30;
 
     if (action == "reminder") {
-      final time = await _inputSelectedHomesAlarmTime(_strings.t("Giờ nhắc nhở"), "22:30");
+      final time = await _inputSelectedHomesAlarmTime(
+        _strings.t("Giờ nhắc nhở"),
+        "22:30",
+      );
       if (time == null) return;
 
       for (final homeId in selectedHomes) {
@@ -240,7 +243,9 @@ extension _AllHomeBulkAlarmPart on _AllHomeState {
               : _strings.allHomeAlarmAppliedText(
                   updatedDevices: updatedDevices,
                   updatedHomes: updatedHomes,
-                  repeatLabel: _selectedHomesAlarmRepeatLabel(selectedAlarmRepeatMinutes),
+                  repeatLabel: _selectedHomesAlarmRepeatLabel(
+                    selectedAlarmRepeatMinutes,
+                  ),
                   skippedHomes: skippedHomes,
                 ),
         ),

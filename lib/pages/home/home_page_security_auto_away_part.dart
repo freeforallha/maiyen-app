@@ -301,7 +301,9 @@ extension _SecurityAutoAway on _MaiYenState {
     }
 
     try {
-      final membersSnap = await db.ref(FirebasePaths.sharedByHome(homeId)).get();
+      final membersSnap = await db
+          .ref(FirebasePaths.sharedByHome(homeId))
+          .get();
       final membersData = asStringMap(membersSnap.value);
 
       for (final entry in membersData.entries) {
@@ -343,7 +345,9 @@ extension _SecurityAutoAway on _MaiYenState {
       var ownerPhotoUrl = ownerUid == uid ? userPhotoUrl.trim() : '';
 
       try {
-        final ownerDirectorySnap = await db.ref('userDirectory/$ownerUid').get();
+        final ownerDirectorySnap = await db
+            .ref('userDirectory/$ownerUid')
+            .get();
         final ownerDirectory = asStringMap(ownerDirectorySnap.value);
         final directoryName = ownerDirectory['name']?.toString().trim() ?? '';
         final directoryEmail = ownerDirectory['email']?.toString().trim() ?? '';
@@ -409,9 +413,9 @@ extension _SecurityAutoAway on _MaiYenState {
     }
 
     members.sort((first, second) {
-      final roleCompare = roleOrder(first.role).compareTo(
-        roleOrder(second.role),
-      );
+      final roleCompare = roleOrder(
+        first.role,
+      ).compareTo(roleOrder(second.role));
 
       if (roleCompare != 0) {
         return roleCompare;
@@ -595,11 +599,12 @@ extension _SecurityAutoAway on _MaiYenState {
             );
           },
       onSave: (data) async {
-        final allowedParticipantUids = members
-            .map((member) => member.uid.trim())
-            .where((memberUid) => memberUid.isNotEmpty)
-            .toSet()
-          ..add(ownerUid);
+        final allowedParticipantUids =
+            members
+                .map((member) => member.uid.trim())
+                .where((memberUid) => memberUid.isNotEmpty)
+                .toSet()
+              ..add(ownerUid);
 
         // Chỉ ghi các UID đang thật sự thuộc nhà. Việc này loại bỏ UID cũ
         // còn sót trong cấu hình trước đây và tránh Firebase Rules từ chối cả
@@ -619,7 +624,8 @@ extension _SecurityAutoAway on _MaiYenState {
 
         final currentUserParticipates = normalizedParticipantUids.contains(uid);
         final hasLocation = data.latitude != null && data.longitude != null;
-        final sortedParticipantUids = normalizedParticipantUids.toList()..sort();
+        final sortedParticipantUids = normalizedParticipantUids.toList()
+          ..sort();
         final clientUpdatedAt = DateTime.now().millisecondsSinceEpoch;
         final autoAwayData = <String, Object?>{
           'enabled': data.enabled,
@@ -692,12 +698,8 @@ extension _SecurityAutoAway on _MaiYenState {
                     ? _strings.autoAwaySavedPermissionRequired
                     : data.enabled
                     ? _strings.autoAwayEnabledForSelectedParticipants
-                    : _strings.t(
-                        'Đã tắt tự động Bảo vệ khi mọi người rời nhà',
-                      ),
-                color: permissionRequired
-                    ? Colors.orange
-                    : MaiYenColors.safe,
+                    : _strings.t('Đã tắt tự động Bảo vệ khi mọi người rời nhà'),
+                color: permissionRequired ? Colors.orange : MaiYenColors.safe,
                 icon: permissionRequired
                     ? Icons.location_disabled_rounded
                     : Icons.check_circle_rounded,
@@ -784,5 +786,4 @@ extension _SecurityAutoAway on _MaiYenState {
       homesProvider: () => homes,
     );
   }
-
 }

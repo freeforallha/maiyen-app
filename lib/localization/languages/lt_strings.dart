@@ -887,8 +887,7 @@ const Map<String, String> ltStrings = {
   "Chỉ tắt cảnh báo khi bạn đã kiểm tra tình trạng trong nhà.\n\nBạn chắc chắn muốn tắt cảnh báo?":
       "Sustabdykite perspėjimą tik patikrinę namų būklę.\n\nAr tikrai norite sustabdyti perspėjimą?",
   "🚨 MaiYen phát hiện cảnh báo": "🚨 MaiYen aptiko pavojų",
-  "Mở MaiYen để kiểm tra ngay.":
-      "Atidarykite MaiYen ir patikrinkite dabar.",
+  "Mở MaiYen để kiểm tra ngay.": "Atidarykite MaiYen ir patikrinkite dabar.",
   "\$count tin nhắn mới": "\$count naujų žinučių",
   "Tin nhắn HomeChat": "HomeChat žinutė",
   "\$senderName đã gửi một tin nhắn": "\$senderName išsiuntė žinutę",
